@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/wa_light_gray"
+    android:gravity="center"
+    android:padding="20dp"
+    android:textDirection="locale"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".views.activity.LockScreenActivity"
+    tools:showIn="@layout/activity_lock_screen">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/info_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:contentDescription="@string/app_name"
+                android:src="@mipmap/ic_launcher"
+                android:text="@string/create_pass_info"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/phone"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_below="@+id/info_text"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ic_phonelink_lock_black_24dp"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/phone"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
+
+                    <!--<android.support.design.widget.TextInputLayout-->
+                        <!--android:id="@+id/new_passphrase_layout"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_margin="5dp">-->
+
+                        <!--<EditText-->
+                            <!--android:id="@+id/new_passphrase"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:ems="10"-->
+                            <!--android:hint="@string/lock_screen_passphrase_not_set_enter"-->
+                            <!--android:imeOptions="actionNext"-->
+                            <!--android:inputType="textPassword" />-->
+                    <!--</android.support.design.widget.TextInputLayout>-->
+
+                    <!--<android.support.design.widget.TextInputLayout-->
+                        <!--android:id="@+id/confirm_passphrase_layout"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_margin="5dp">-->
+
+                        <!--<EditText-->
+                            <!--android:id="@+id/confirm_passphrase"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:ems="10"-->
+                            <!--android:hint="@string/lock_screen_passphrase_not_set_confirm"-->
+                            <!--android:inputType="textPassword" />-->
+                    <!--</android.support.design.widget.TextInputLayout>-->
+
+                    <Button
+                        android:id="@+id/button_create"
+                        style="@style/ButtonTextSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:background="@drawable/button_pressed"
+                        android:text="@string/lock_screen_create_pattern" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp">
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="@string/lock_screen_passphrase_hint"
+                            android:imeOptions="actionGo"
+                            android:inputType="textPassword" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <Button
+                        style="@style/ButtonTextSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:background="@drawable/button_pressed"
+                        android:text="@string/lock_screen_open" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+</RelativeLayout>

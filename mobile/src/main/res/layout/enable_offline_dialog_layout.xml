@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <LinearLayout style="@style/VerticalLinearLayout">
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/offline_mode_switch"
+            style="@style/SettingsTextViewSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/ra_offline_mode_dialog_title" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="@string/ra_offline_mode_dialog_description" />
+    </LinearLayout>
+
+</LinearLayout>

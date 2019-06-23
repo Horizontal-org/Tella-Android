@@ -1,0 +1,85 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/wa_light_gray"
+    android:animateLayoutChanges="true"
+    tools:context="rs.readahead.washington.mobile.views.fragment.BlankFormsListFragment">
+
+    <ScrollView
+        android:id="@+id/form_lists"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/wa_transparent"
+            android:paddingBottom="@dimen/fab_clear_padding"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp">
+
+            <TextView
+                android:id="@+id/downloaded_forms_title"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentTop="true"
+                android:gravity="center_vertical"
+                android:text="@string/downloaded_forms"
+                android:textAlignment="center"
+                android:textColor="@color/wa_gray"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/downloadedForms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@id/downloaded_forms_title"
+                android:background="@drawable/shadow_border"
+                android:clipToPadding="false"
+                android:scrollbarStyle="outsideOverlay"
+                android:scrollbars="vertical"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+            <TextView
+                android:id="@+id/avaivable_forms_title"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/downloadedForms"
+                android:gravity="center_vertical"
+                android:text="@string/available_forms"
+                android:textAlignment="center"
+                android:textColor="@color/wa_gray"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/blankForms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@id/avaivable_forms_title"
+                android:background="@drawable/shadow_border"
+                android:clipToPadding="false"
+                android:scrollbarStyle="outsideOverlay"
+                android:scrollbars="vertical"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/blank_forms_info"
+        style="@style/ExplanatoryEmptyMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:text="@string/collect_explanatory_text"
+        android:visibility="gone" />
+</FrameLayout>

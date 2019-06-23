@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <LinearLayout style="@style/VerticalLinearLayout">
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/anonymous_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/ra_anonymous_mode"
+            android:theme="@style/SettingsTextViewBlack" />
+
+        <TextView
+            style="@style/SettingsTextViewGray"
+            android:text="@string/ra_anonymous_mode_desc" />
+    </LinearLayout>
+
+</LinearLayout>

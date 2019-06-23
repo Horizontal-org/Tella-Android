@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rs.readahead.washington.mobile.views.custom.SquareRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/gallery_card_padding"
+    android:background="@color/wa_light_gray">
+
+    <ImageView
+        android:id="@+id/mediaView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/gallery_gradient" />
+
+    <View
+        android:id="@+id/selectionDimmer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/wa_shortcut_background"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:id="@+id/checkboxOuter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/checkBox"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/gallery_checkbox_extender"
+            android:paddingEnd="@dimen/gallery_checkbox_margin"
+            android:paddingStart="@dimen/gallery_checkbox_extender"
+            android:paddingTop="@dimen/gallery_checkbox_margin"
+            android:src="@drawable/ic_check_box_off"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/remove_file"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackgroundBorderless"
+            android:padding="10dp"
+            android:src="@drawable/ic_delete"
+            android:visibility="gone"
+            tools:ignore="ContentDescription" />
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/videoInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:padding="@dimen/gallery_strip_padding">
+
+        <TextView
+            android:id="@+id/videoDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/gallery_strip_height"
+            android:layout_alignParentEnd="true"
+            android:gravity="end|center_vertical"
+            android:textSize="@dimen/gallery_video_duration_text_size"
+            android:textColor="@color/wa_white" />
+
+        <ImageView
+            android:layout_width="@dimen/gallery_strip_height"
+            android:layout_height="@dimen/gallery_strip_height"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="1dp"
+            android:layout_toStartOf="@id/videoDuration"
+            android:adjustViewBounds="true"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_videocam" />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/audioInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="@dimen/gallery_strip_padding">
+
+        <TextView
+            android:id="@+id/audioDuration"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/gallery_strip_height"
+            android:gravity="end|center_vertical"
+            android:textSize="@dimen/gallery_video_duration_text_size"
+            android:textColor="@color/wa_white" />
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/metadata_icon"
+        android:layout_width="@dimen/gallery_strip_height"
+        android:layout_height="@dimen/gallery_strip_height"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="@dimen/gallery_strip_padding"
+        android:background="?selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_gps_fixed_white_24dp"
+        android:visibility="gone"
+        tools:ignore="ContentDescription" />
+
+</rs.readahead.washington.mobile.views.custom.SquareRelativeLayout>

@@ -1,0 +1,135 @@
+apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+ext {
+    supportLibVersion = "27.1.1"
+    retrofitVersion = "2.3.0"
+    permissionDispatcherVersion = "2.4.0"
+    googlePlayServicesVersion = "16.0.0"
+    leakCanaryVersion = "1.6.2"
+    butterknifeVersion = "8.7.0"
+}
+
+android {
+    compileSdkVersion 27
+
+    defaultConfig {
+        applicationId "org.hzontal.tella"
+        minSdkVersion 17
+        targetSdkVersion 27
+        versionCode 34
+        versionName "1.5.2"
+        multiDexEnabled true
+        // vectorDrawables.useSupportLibrary = true // don't care about apk size, care about crashes
+    }
+
+    configurations.all {
+        // resolutionStrategy.force "com.android.support:exifinterface:${supportLibVersion}"
+        // resolutionStrategy.force "com.android.support:animated-vector-drawble:${supportLibVersion}"
+        // resolutionStrategy.force "com.android.support:support-v13:${supportLibVersion}"
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release {
+            debuggable false
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
+
+    implementation project(':android-libproofmode')
+    implementation 'com.madgag.spongycastle:pg:1.51.0.0'// needed for above
+
+    implementation('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+        transitive = true
+    }
+
+    implementation "com.android.support:appcompat-v7:${supportLibVersion}"
+    implementation "com.android.support:design:${supportLibVersion}"
+    implementation "com.android.support:cardview-v7:${supportLibVersion}"
+    implementation "com.android.support:support-v4:${supportLibVersion}"
+    implementation "com.android.support:recyclerview-v7:${supportLibVersion}"
+    implementation "com.android.support:exifinterface:${supportLibVersion}"
+    implementation "com.google.android.gms:play-services-location:${googlePlayServicesVersion}"
+    implementation "com.google.android.gms:play-services-maps:${googlePlayServicesVersion}"
+    implementation "com.android.support:appcompat-v7:${supportLibVersion}"
+    // implementation "com.google.android.gms:play-services-gcm:${googlePlayServicesVersion}" // android-job, optional
+    // implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+
+    implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}"
+    implementation "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
+    implementation("com.squareup.retrofit2:converter-simplexml:${retrofitVersion}") {
+        exclude group: 'xpp3', module: 'xpp3'
+        exclude group: 'stax', module: 'stax-api'
+        exclude group: 'stax', module: 'stax'
+    }
+
+    implementation("com.github.hotchemi:permissionsdispatcher:${permissionDispatcherVersion}") {
+        exclude module: "support-v13"
+    }
+
+    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:${permissionDispatcherVersion}"
+
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+    implementation 'com.squareup:tape:1.2.3' // todo: follow this, v2 should be soon
+    implementation 'com.jakewharton.timber:timber:4.6.0'
+    implementation 'net.zetetic:android-database-sqlcipher:3.5.7@aar'
+    implementation 'info.guardianproject.cacheword:cachewordlib:0.1.1'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.github.clans:fab:1.6.4'
+    implementation 'me.zhanghai.android.patternlock:library:2.1.2'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.4'
+    implementation 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
+    implementation 'com.evernote:android-job:1.1.12'
+
+    implementation "com.jakewharton:butterknife:${butterknifeVersion}"
+    annotationProcessor "com.jakewharton:butterknife-compiler:${butterknifeVersion}"
+
+    // digest auth
+    implementation 'com.burgstaller:okhttp-digest:1.15'
+
+    // collect
+    implementation "org.opendatakit:opendatakit-javarosa:2.4.0"
+    implementation 'net.sf.kxml:kxml2:2.3.0'
+    implementation "commons-io:commons-io:2.4"
+
+    // exo
+    implementation 'com.google.android.exoplayer:exoplayer:r2.5.4'
+
+    // camera
+    implementation('com.otaliastudios:cameraview:1.6.0') {
+        exclude module: "exifinterface"
+        exclude module: "animated-vector-drawble"
+    }
+
+    implementation 'com.github.apl-devs:appintro:v4.2.3'
+
+    implementation 'com.simplify:ink:1.0.2'
+
+    implementation 'com.mikhaellopez:circularimageview:3.2.0'
+
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}"
+    debugImplementation "com.squareup.leakcanary:leakcanary-support-fragment:${leakCanaryVersion}"
+
+    testImplementation 'junit:junit:4.12'
+}

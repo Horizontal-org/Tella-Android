@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:textDirection="locale"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/instanceRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="8dp"
+        android:background="@drawable/button_pressed">
+
+        <ImageButton
+            android:id="@+id/popupMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/ic_action_more_vert"
+            android:padding="8dp"
+            android:layout_marginTop="-8dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@null"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <TextView
+            android:id="@+id/name"
+            style="@style/LineTextViewBlack"
+            android:layout_toStartOf="@id/popupMenu"
+            android:lines="1"
+            android:ellipsize="end"/>
+
+        <TextView
+            android:id="@+id/organization"
+            android:layout_below="@id/name"
+            android:layout_toStartOf="@id/popupMenu"
+            android:paddingTop="2dp"
+            style="@style/LineTextViewGray"
+            android:lines="1"
+            android:ellipsize="end"/>
+
+        <TextView
+            android:id="@+id/updated"
+            android:layout_below="@id/organization"
+            android:layout_toStartOf="@id/popupMenu"
+            android:paddingTop="2dp"
+            style="@style/LineTextViewGray"
+            android:lines="1"
+            android:ellipsize="end"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/wa_gray"
+        android:layout_gravity="bottom" />
+</FrameLayout>

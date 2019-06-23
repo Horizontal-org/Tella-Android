@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="api_base_url" translatable="false">https://www.hzontal.org/rest/v1/</string>
+    <string name="upload_url" translatable="false">https://www.hzontal.org/files/</string> <!-- todo: make this version enabled -->
+    <string name="ra_media_upload_url" translatable="false">https://www.hzontal.org/media/</string> <!-- todo: make this version enabled -->
+    <string name="evidence_queue_file" translatable="false">evidence_queue.db</string>
+    <string name="ra_media_file_queue_file" translatable="false">media_file_queue.db</string>
+    <string name="config_faq_url" translatable="false">https://horizontal.gitbook.io/tella/</string>
+    <string name="config_contact_url" translatable="false">https://hzontal.org/contact</string>
+    <string name="config_privacy_url" translatable="false">https://www.hzontal.org/tella-privacy-policy</string>
+    <string name="config_licence_url" translatable="false">http://www.apache.org/licenses/LICENSE-2.0</string>
+    <string name="config_source_code_url" translatable="false">https://github.com/Hzontal/Tella</string>
+    <string name="ra_config_form_attachment_field" translatable="false">tella_attachments</string>
+    <string name="ra_config_form_attachment_url" translatable="false">https://hzontal.org/attachments/%1$s</string>
+    <string-array name="ra_lang_codes" translatable="false">
+        <item>en</item>
+        <item>es</item>
+        <item>fr</item>
+    </string-array>
+    <string name="ra_server_prefix" translatable="false">https://</string>
+    <integer name="ra_config_short_fling">300</integer>
+    <string name="tella_location_field_suffix" translatable="false">_tella_location</string>
+</resources>

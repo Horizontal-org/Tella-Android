@@ -1,0 +1,97 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background_shadow"
+    android:paddingTop="@dimen/navigation_tab_bar_padding"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".views.activity.GeneralSettingsActivity"
+    tools:showIn="@layout/activity_general_settings">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/language_settings"
+                style="@style/SettingsClickableHorizontalShadowLinearLayout"
+                android:layout_width="match_parent">
+
+                <android.support.v7.widget.AppCompatImageView
+                    style="@style/SettingsTitleImageViewStyle"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_languages" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="24dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/language"
+                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:textSize="16sp"
+                        android:textColor="@color/wa_black"
+                        android:textAlignment="center"
+                        android:gravity="center_vertical"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/ra_language" />
+
+                    <TextView
+                        android:id="@+id/lang"
+                        style="@style/SettingsTitleTextViewGray"
+                        android:textAlignment="center"
+                        android:layout_alignParentEnd="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/ra_default"/>
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout style="@style/SettingsClickableHorizontalShadowLinearLayout">
+
+                <android.support.v7.widget.AppCompatImageView
+                    style="@style/SettingsTitleImageViewStyle"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_bug_report_black_24dp" />
+
+                <LinearLayout style="@style/VerticalLinearLayout">
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/crash_report_switch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingBottom="6dp"
+                        android:text="@string/crash_reports_submit"
+                        android:theme="@style/SettingsTextViewSwitch" />
+
+                    <TextView
+                        style="@style/SettingsTextViewGray"
+                        android:layout_marginEnd="30dp"
+                        android:textAlignment="viewStart"
+                        android:paddingBottom="6dp"
+                        android:text="@string/crash_reports_submit_desc" />
+
+                    <TextView
+                        style="@style/SettingsTextViewLink"
+                        android:textAlignment="viewStart"
+                        android:visibility="gone"
+                        android:text="@string/learn_more" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</RelativeLayout>

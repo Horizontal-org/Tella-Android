@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="rs.readahead.washington.mobile.views.activity.FormSubmitActivity"
+    tools:showIn="@layout/activity_form_submit">
+
+    <rs.readahead.washington.mobile.views.custom.FormSubmitButtonView
+        android:id="@+id/submit_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone">
+    </rs.readahead.washington.mobile.views.custom.FormSubmitButtonView>
+
+    <Button
+        android:id="@+id/cancel_button"
+        style="@style/WhiteButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/ra_stop"
+        android:visibility="gone"/>
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/formDetailsContainer"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/submit_button"
+        android:clipToPadding="false"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical">
+    </android.support.v4.widget.NestedScrollView>
+
+</RelativeLayout>

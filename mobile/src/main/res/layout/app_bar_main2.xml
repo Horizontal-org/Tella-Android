@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/test"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:textDirection="locale"
+    tools:context=".views.activity.MainActivity">
+
+    <!-- <include layout="@layout/main_camera" /> -->
+    <include layout="@layout/main_background_view" />
+
+    <rs.readahead.washington.mobile.views.custom.HomeScreenGradient
+        android:id="@+id/home_screen_gradient"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/home_screen_gradient" />
+
+    <include layout="@layout/content_panic_mode_view" />
+
+    <include layout="@layout/content_panic_explain_view" />
+
+    <include layout="@layout/content_main2" />
+
+    <include layout="@layout/main_panic_seek_bar" />
+
+</FrameLayout>

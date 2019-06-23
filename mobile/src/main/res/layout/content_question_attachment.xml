@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:textDirection="locale"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="rs.readahead.washington.mobile.views.activity.QuestionAttachmentActivity"
+    tools:showIn="@layout/activity_question_attachment"
+    android:padding="@dimen/gallery_card_padding"
+    android:animateLayoutChanges="true">
+
+    <RelativeLayout
+        android:id="@+id/galleryToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin">
+
+        <TextView
+            android:id="@+id/tellaGallery"
+            style="@style/AttachmentsToolbarTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@string/ra_tella_gallery"
+            tools:ignore="RelativeOverlap" />
+
+        <ImageButton
+            android:id="@+id/popupMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="?selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_sort_dark_gray_24dp"
+            tools:ignore="ContentDescription" />
+    </RelativeLayout>
+
+    <rs.readahead.washington.mobile.views.custom.GalleryRecyclerView
+        android:id="@+id/galleryRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/galleryToolbar"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/fab_clear_padding"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/attachments_blank_list_info"
+        style="@style/ExplanatoryEmptyMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/galleryToolbar"
+        android:text="@string/gallery_empty_text"
+        android:visibility="gone"/>
+</RelativeLayout>

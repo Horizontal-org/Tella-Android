@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textDirection="locale">
+
+    <RelativeLayout
+        android:id="@+id/form_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:padding="16dp">
+
+        <ImageButton
+            android:id="@+id/dl_open_button"
+            android:layout_height="32dp"
+            android:layout_width="32dp"
+            android:background="@color/wa_transparent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:alpha=".5"
+            android:layout_marginStart="10dp"
+            android:contentDescription="@string/ra_download" />
+
+        <ImageButton
+            android:id="@+id/later_button"
+            android:layout_height="32dp"
+            android:layout_width="32dp"
+            android:background="@color/wa_transparent"
+            android:layout_toStartOf="@id/dl_open_button"
+            android:src="@drawable/ic_update_black_24dp"
+            android:alpha=".5"
+            android:layout_centerVertical="true"
+            android:visibility="gone"
+            android:layout_marginStart="10dp"
+            android:contentDescription="@string/action_update" />
+
+        <LinearLayout
+            android:id="@+id/row_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/later_button"
+            android:layout_alignParentStart="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/name"
+                style="@style/SettingsTextViewBlack"
+                android:ellipsize="end"
+                android:lines="1" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                tools:ignore="UseCompoundDrawables">
+
+                <ImageView
+                    android:id="@+id/favorites_button"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="@dimen/small_text_margin"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_pin"
+                    android:contentDescription="@null" />
+
+                <TextView
+                    android:id="@+id/organization"
+                    style="@style/SettingsTextViewGray"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:paddingTop="2dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_gravity="bottom"
+        android:background="@color/wa_gray" />
+</FrameLayout>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/panic_mode_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/wa_red"
+    android:gravity="center_horizontal"
+    android:visibility="gone">
+
+    <rs.readahead.washington.mobile.views.custom.CountdownImageView
+        android:id="@+id/countdown_timer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/countdown_5" />
+
+    <TextView
+        style="@style/PanicActiveText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/countdown_timer"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:text="@string/panic_mode_activation" />
+
+    <TextView
+        style="@style/PanicActiveText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/countdown_timer"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:text="@string/tap_anywhere_to_cancel" />
+</RelativeLayout>

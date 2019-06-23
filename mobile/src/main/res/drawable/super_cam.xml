@@ -1,0 +1,20 @@
+<vector android:height="24dp" android:viewportHeight="64.0"
+    android:viewportWidth="64.0" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#76C2AF" android:pathData="M32,32m-32,0a32,32 0,1 1,64 0a32,32 0,1 1,-64 0"/>
+    <path android:fillColor="#4F5D73" android:pathData="M31,30h11v8h-11z"/>
+    <path android:fillAlpha="0.2" android:fillColor="#231F20"
+        android:pathData="M34,50c0,1.11 -0.89,2 -2,2H16c-1.11,0 -2,-0.89 -2,-2V26c0,-1.11 0.89,-2 2,-2h16c1.11,0 2,0.89 2,2V50z" android:strokeAlpha="0.2"/>
+    <path android:fillAlpha="0.2" android:fillColor="#231F20"
+        android:pathData="M55,46c0,1.11 -0.89,2 -2,2H39c-1.11,0 -2,-0.89 -2,-2V26c0,-1.11 0.89,-2 2,-2h14c1.11,0 2,0.89 2,2V46z" android:strokeAlpha="0.2"/>
+    <path android:fillAlpha="0.2" android:fillColor="#231F20"
+        android:pathData="M31,30h11v10h-11z" android:strokeAlpha="0.2"/>
+    <path android:fillColor="#4F5D73" android:pathData="M34,48c0,1.11 -0.89,2 -2,2H16c-1.11,0 -2,-0.89 -2,-2V24c0,-1.11 0.89,-2 2,-2h16c1.11,0 2,0.89 2,2V48z"/>
+    <path android:fillColor="#4F5D73" android:pathData="M55,44c0,1.11 -0.89,2 -2,2H39c-1.11,0 -2,-0.89 -2,-2V24c0,-1.11 0.89,-2 2,-2h14c1.11,0 2,0.89 2,2V44z"/>
+    <path android:fillColor="#4F5D73" android:pathData="M24,15c-4.96,0 -9,4.04 -9,9s4.04,9 9,9s9,-4.04 9,-9S28.96,15 24,15z"/>
+    <path android:fillAlpha="0.2" android:fillColor="#231F20"
+        android:pathData="M18.5,42.5m-2.5,0a2.5,2.5 0,1 1,5 0a2.5,2.5 0,1 1,-5 0" android:strokeAlpha="0.2"/>
+    <path android:fillColor="#C75C5C" android:pathData="M18.5,40.5m-2.5,0a2.5,2.5 0,1 1,5 0a2.5,2.5 0,1 1,-5 0"/>
+    <path android:fillAlpha="0.2" android:fillColor="#231F20"
+        android:pathData="M24,14c-6.63,0 -12,5.37 -12,12s5.37,12 12,12s12,-5.37 12,-12S30.63,14 24,14zM24,35c-4.96,0 -9,-4.04 -9,-9s4.04,-9 9,-9s9,4.04 9,9S28.96,35 24,35z" android:strokeAlpha="0.2"/>
+    <path android:fillColor="#E0E0D1" android:pathData="M24,12c-6.63,0 -12,5.37 -12,12s5.37,12 12,12s12,-5.37 12,-12S30.63,12 24,12zM24,33c-4.96,0 -9,-4.04 -9,-9s4.04,-9 9,-9s9,4.04 9,9S28.96,33 24,33z"/>
+</vector>

@@ -1,0 +1,16 @@
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+/.idea/
+/projectFilesBackup/
+.DS_Store
+/build
+/captures
+java_pid18084.hprof
+
+# Google Maps API keys
+/mobile/src/debug/res/values/google_maps_api.xml
+/mobile/src/main/res/values/google_maps_api.xml
+/mobile/src/release/res/values/google_maps_api.xml

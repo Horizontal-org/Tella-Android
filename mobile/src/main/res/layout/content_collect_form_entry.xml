@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:textDirection="locale"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="rs.readahead.washington.mobile.views.activity.CollectFormEntryActivity"
+    tools:showIn="@layout/activity_collect_form_entry">
+
+    <LinearLayout
+        android:id="@+id/button_bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/wa_button_gray"
+        android:paddingTop="0.5dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/prevSection"
+            style="@style/YellowButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="0.5dp"
+            android:layout_weight="1"
+            android:text="@string/previous_section"/>
+
+        <Button
+            android:id="@+id/nextSection"
+            style="@style/YellowButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/next_section"/>
+
+        <rs.readahead.washington.mobile.views.custom.FormSubmitButtonView
+            android:id="@+id/submit_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true">
+        </rs.readahead.washington.mobile.views.custom.FormSubmitButtonView>
+
+        <Button
+            android:id="@+id/cancel_button"
+            style="@style/WhiteButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/ra_stop"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/screenFormView"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/button_bottom_layout"
+        android:clipToPadding="false"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical">
+    </android.support.v4.widget.NestedScrollView>
+</RelativeLayout>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:enabled="false"
+        android:title="@string/sort_by" />
+    <group
+        android:id="@+id/sort"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/newest"
+            android:title="@string/newest_to_oldest" />
+        <item
+            android:id="@+id/oldest"
+            android:title="@string/oldest_to_newest" />
+    </group>
+</menu>

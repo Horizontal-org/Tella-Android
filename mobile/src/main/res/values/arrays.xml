@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="countdown_array">
+        <item>@drawable/countdown_0</item>
+        <item>@drawable/countdown_1</item>
+        <item>@drawable/countdown_2</item>
+        <item>@drawable/countdown_3</item>
+        <item>@drawable/countdown_4</item>
+        <item>@drawable/countdown_5</item>
+    </array>
+</resources>

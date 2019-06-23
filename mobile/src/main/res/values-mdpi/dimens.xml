@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="intro_header_text_size">20sp</dimen>
+    <dimen name="intro_title_text_size">18sp</dimen>
+    <dimen name="intro_text_size">14sp</dimen>
+    <dimen name="intro_link_text_size">16sp</dimen>
+</resources>

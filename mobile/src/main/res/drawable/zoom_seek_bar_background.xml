@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:left="16dip" android:right="16dip" android:drawable="@drawable/zoom_seek_bar_progress"/>
+</layer-list>

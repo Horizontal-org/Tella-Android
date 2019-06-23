@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="@drawable/button_pressed_transparent">
+
+    <ImageView
+        android:id="@+id/shortcut_image"
+        style="@style/NavigationTabImage"
+        android:contentDescription="@null"
+        android:configChanges="orientation|screenSize" />
+
+    <TextView
+        android:id="@+id/shortcut_text"
+        style="@style/NavigationTabText"
+        android:layout_below="@+id/shortcut_image" />
+</RelativeLayout>

@@ -1,0 +1,177 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background_shadow"
+    android:paddingTop="@dimen/navigation_tab_bar_padding"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="rs.readahead.washington.mobile.views.activity.DocumentationSettingsActivity"
+    tools:showIn="@layout/activity_documentation_settings">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout style="@style/SettingsClickableHorizontalShadowLinearLayout">
+
+                <android.support.v7.widget.AppCompatImageView
+                    style="@style/SettingsTitleImageViewStyle"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_gps_not_fixed_black_24dp" />
+
+                <LinearLayout style="@style/VerticalLinearLayout">
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/anonymous_switch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingBottom="6dp"
+                        android:text="@string/ra_anonymous_mode"
+                        android:theme="@style/SettingsTextViewSwitch" />
+
+                    <TextView
+                        style="@style/SettingsTextViewGray"
+                        android:layout_marginEnd="30dp"
+                        android:paddingBottom="6dp"
+                        android:text="@string/ra_anonymous_mode_desc"
+                        android:textAlignment="viewStart" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/SettingsClickableVerticalShadowDocumentationLinerLayout"
+                android:animateLayoutChanges="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="2dp">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        style="@style/SettingsTitleImageViewStyle"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_collect_menu" />
+
+                    <LinearLayout style="@style/VerticalLinearLayout">
+
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/collect_switch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="@string/enable_collect"
+                            android:theme="@style/SettingsTextViewSwitch" />
+
+                        <TextView
+                            android:id="@+id/enable_collect_info"
+                            style="@style/SettingsTextViewGray"
+                            android:text="@string/enable_collect_info" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/servers_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <!--
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="2dp">
+
+                            <android.support.v7.widget.AppCompatImageView
+                                style="@style/SettingsTitleImageViewStyle"
+                                android:layout_gravity="center_vertical"
+                                android:src="@drawable/assignment_black_24dp" />
+
+                            <LinearLayout style="@style/VerticalLinearLayout">
+
+                                <TextView
+                                    style="@style/SettingsTextViewTitleNormal"
+                                    android:paddingBottom="6dp"
+                                    android:text="@string/collect_servers"
+                                    android:textAlignment="viewStart" />
+
+                                <TextView
+                                    android:id="@+id/collect_servers_info"
+                                    style="@style/SettingsTextViewGray"
+                                    android:text="@string/manage_collect_servers"
+                                    android:textAlignment="viewStart" />
+                            </LinearLayout>
+                        </LinearLayout>  -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <View style="@style/SettingsMainShadowLine" />
+
+                        <LinearLayout
+                            android:id="@+id/collect_servers_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical" />
+
+                        <TextView
+                            android:id="@+id/add_server"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center_vertical"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:text="@string/add_server"
+                            android:textAlignment="center"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:visibility="visible" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/offline_switch_layout"
+                style="@style/SettingsClickableHorizontalShadowLinearLayout">
+
+                <android.support.v7.widget.AppCompatImageView
+                    style="@style/SettingsTitleImageViewStyle"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_cloud_off_white_24dp"
+                    android:tint="@color/wa_black" />
+
+                <LinearLayout style="@style/VerticalLinearLayout">
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/offline_mode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingBottom="6dp"
+                        android:text="@string/offline_mode"
+                        android:theme="@style/SettingsTextViewSwitch" />
+
+                    <TextView
+                        style="@style/SettingsTextViewGray"
+                        android:layout_marginEnd="30dp"
+                        android:paddingBottom="6dp"
+                        android:text="@string/offline_mode_info"
+                        android:textAlignment="viewStart" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</RelativeLayout>
