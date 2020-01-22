@@ -3,7 +3,7 @@ TELLA
 Tella is a documentation app for Android. It is designed specifically for activists, human rights defenders, and journalists who face high risks of digital and physical repression.
 
 Download link on the Google Play Store: https://play.google.com/store/apps/details?id=org.hzontal.tella
-Submit improvement and feature request: https://community.tella-app.org
+Submit improvement and feature request: https://github.com/H0rizontal/Tella/issues
 Contact us for questions, suggestions, or deployment support: contact@tella-app.org
 
 Tella is a documentation app for Android. In challenging environments--with limited or no internet connectivity or in the face of repression--Tella makes it easier and safer to document events, whether that’s violence, human rights violations, corruption, or electoral fraud.
