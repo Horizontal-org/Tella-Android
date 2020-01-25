@@ -16,10 +16,13 @@ import android.location.LocationManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
+
+import android.provider.Settings;
 import android.view.View;
 
 import com.google.android.gms.common.api.ApiException;
@@ -97,7 +100,6 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
 
         // Sensors
         mSensorManager = (SensorManager) getApplicationContext().getSystemService(Context.SENSOR_SERVICE);
-        //noinspection ConstantConditions
         mLight = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         mAmbientTemperature = mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
 
@@ -477,6 +479,13 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
                         if (!value.getLocation().isEmpty()) {
                             metadata.setMyLocation(value.getLocation());
                             locationGahteringChecked();
+                        }
+
+                        // skip if wifi gathering not possible in airplane mode
+                        if ((Settings.Global.getInt(getBaseContext().getContentResolver(), Settings.Global.AIRPLANE_MODE_ON, 0) != 0)
+                                && !wifiManager.isWifiEnabled() && metadata.getWifis() == null) {
+                            List<String> wifis = new ArrayList<>();
+                            metadata.setWifis(wifis);
                         }
                     }
 
