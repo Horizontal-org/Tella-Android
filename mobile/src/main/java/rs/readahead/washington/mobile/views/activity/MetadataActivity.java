@@ -16,10 +16,11 @@ import android.location.LocationManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
+import android.view.View;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -37,12 +38,8 @@ import com.google.android.gms.tasks.Task;
 import com.jakewharton.rxrelay2.PublishRelay;
 import com.jakewharton.rxrelay2.Relay;
 
-import org.witness.proofmode.util.DeviceInfo;
-
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -58,8 +55,8 @@ import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContr
 import rs.readahead.washington.mobile.presentation.entity.SensorData;
 import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.LocationUtil;
+import rs.readahead.washington.mobile.util.MetadataUtils;
 import rs.readahead.washington.mobile.util.TelephonyUtils;
-import timber.log.Timber;
 
 
 public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity implements
@@ -126,7 +123,7 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
     private List<String> getWifiStrings(List<ScanResult> results) {
         List<String> wifiStrings = new ArrayList<>(results.size());
 
-        for (ScanResult result: results) {
+        for (ScanResult result : results) {
             wifiStrings.add(result.SSID);
         }
 
@@ -214,7 +211,7 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
     }
 
     private void stopSensorListening() {
-        if (! sensorListenerRegistered) {
+        if (!sensorListenerRegistered) {
             return;
         }
 
@@ -228,7 +225,7 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
     }
 
     private synchronized void stopLocationListening() {
-        if (! locationListenerRegistered) {
+        if (!locationListenerRegistered) {
             return;
         }
 
@@ -237,7 +234,7 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
     }
 
     private synchronized void stopWifiListening() {
-        if (! wifiReceiverRegistered) {
+        if (!wifiReceiverRegistered) {
             return;
         }
 
@@ -324,7 +321,7 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
         }
     }
 
-    private void manageLocationSettings(final int requestCode, final LocationSettingsCheckDoneListener listener){
+    protected void manageLocationSettings(final int requestCode, final LocationSettingsCheckDoneListener listener) {
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
         builder.addLocationRequest(createLocationRequest());
 
@@ -393,10 +390,10 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
      */
     public Observable<MetadataHolder> observeMetadata() {
         return Observable.combineLatest(
-                    observeLocationData().startWith(MyLocation.createEmpty()),
-                    observeWifiData().startWith(Collections.<String>emptyList()),
-                    MetadataHolder::new
-                )
+                observeLocationData().startWith(MyLocation.createEmpty()),
+                observeWifiData().startWith(Collections.<String>emptyList()),
+                MetadataHolder::new
+        )
                 .filter(mh -> (!mh.getWifis().isEmpty() || !mh.getLocation().isEmpty()))
                 .take((5 * 60 * 1000) / LOCATION_REQUEST_INTERVAL) // approx max 5 min of trying limit
                 .takeUntil(mh -> !mh.getWifis().isEmpty() && !mh.getLocation().isEmpty());
@@ -411,7 +408,7 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
     }
 
     private static void acceptBetterLocation(Location location) {
-        if (! LocationUtil.isBetterLocation(location, currentBestLocation)) {
+        if (!LocationUtil.isBetterLocation(location, currentBestLocation)) {
             return;
         }
 
@@ -427,41 +424,30 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
             return;
         }
 
+        startWifiScan();
+
         final Metadata metadata = new Metadata();
 
-        // set basic metadata
         metadata.setTimestamp(System.currentTimeMillis() / 1000L);
         metadata.setAmbientTemperature(getAmbientTemperatureSensorData().hasValue() ? getAmbientTemperatureSensorData().getValue() : null);
         metadata.setLight(getLightSensorData().hasValue() ? getLightSensorData().getValue() : null);
 
-        // get simple PM metadata
-        DateFormat df = DateFormat.getDateTimeInstance(DateFormat.FULL,DateFormat.FULL);
-        metadata.setFileModified(df.format(new Date())); // do we are generating file and metadata at the same time
-        metadata.setProofGenerated(df.format(new Date()));
+        metadata.setDeviceID(MetadataUtils.getDeviceID());
+        metadata.setWifiMac(MetadataUtils.getWifiMac());
+        metadata.setIPv4(MetadataUtils.getIPv4());
+        metadata.setIPv6(MetadataUtils.getIPv6());
 
-        //if (showDeviceIds) {
-        metadata.setDeviceID(DeviceInfo.getDeviceId(getBaseContext()));
-        metadata.setWifiMac(DeviceInfo.getWifiMacAddr());
-        //}
-        metadata.setIPv4(DeviceInfo.getDeviceInfo(getBaseContext(), DeviceInfo.Device.DEVICE_IP_ADDRESS_IPV4));
-        metadata.setIPv6(DeviceInfo.getDeviceInfo(getBaseContext(), DeviceInfo.Device.DEVICE_IP_ADDRESS_IPV6));
+        metadata.setDataType(MetadataUtils.getDataType(getBaseContext()));
+        metadata.setNetwork(MetadataUtils.getNetwork(getBaseContext()));
 
-        metadata.setDataType(DeviceInfo.getDataType(getBaseContext()));
-        metadata.setNetwork(DeviceInfo.getDeviceInfo(getBaseContext(), DeviceInfo.Device.DEVICE_NETWORK));
+        metadata.setNetworkType(MetadataUtils.getNetworkType(getBaseContext()));
+        metadata.setHardware(MetadataUtils.getHardware());
+        metadata.setManufacturer(MetadataUtils.getManufacturer());
+        metadata.setScreenSize(MetadataUtils.getScreenSize(getBaseContext()));
 
-        metadata.setNetworkType(DeviceInfo.getNetworkType(getBaseContext()));
-        metadata.setHardware(DeviceInfo.getDeviceInfo(getBaseContext(), DeviceInfo.Device.DEVICE_HARDWARE_MODEL));
-        metadata.setManufacturer(DeviceInfo.getDeviceInfo(getBaseContext(), DeviceInfo.Device.DEVICE_MANUFACTURE));
-        metadata.setScreenSize(DeviceInfo.getDeviceInch(getBaseContext()));
+        metadata.setLanguage(MetadataUtils.getLanguage());
+        metadata.setLocale(MetadataUtils.getLocale());
 
-        metadata.setLanguage(DeviceInfo.getDeviceInfo(getBaseContext(), DeviceInfo.Device.DEVICE_LANGUAGE));
-        metadata.setLocale(DeviceInfo.getDeviceInfo(getBaseContext(), DeviceInfo.Device.DEVICE_LOCALE));
-
-        try {
-            metadata.setCellInfo(DeviceInfo.getCellInfo(getBaseContext()));
-        } catch (Exception e) {
-            Timber.d(e);
-        }
         // set cells
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             metadata.setCells(TelephonyUtils.getCellInfo(this));
@@ -483,12 +469,14 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
                 .subscribeWith(new DisposableObserver<MetadataHolder>() {
                     @Override
                     public void onNext(MetadataActivity.MetadataHolder value) {
-                        if (! value.getWifis().isEmpty()) {
+                        if (!value.getWifis().isEmpty()) {
                             metadata.setWifis(value.getWifis());
+                            networkGatheringChecked();
                         }
 
-                        if (! value.getLocation().isEmpty()) {
+                        if (!value.getLocation().isEmpty()) {
                             metadata.setMyLocation(value.getLocation());
+                            locationGahteringChecked();
                         }
                     }
 
@@ -516,6 +504,24 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
     protected void hideMetadataProgressBarDialog() {
         if (metadataAlertDialog != null) {
             metadataAlertDialog.dismiss();
+        }
+    }
+
+    private void networkGatheringChecked() {
+        if (metadataAlertDialog != null) {
+            //noinspection ConstantConditions
+            metadataAlertDialog.findViewById(R.id.networkProgress).setVisibility(View.GONE);
+            //noinspection ConstantConditions
+            metadataAlertDialog.findViewById(R.id.networkCheck).setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void locationGahteringChecked() {
+        if (metadataAlertDialog != null) {
+            //noinspection ConstantConditions
+            metadataAlertDialog.findViewById(R.id.locationProgress).setVisibility(View.GONE);
+            //noinspection ConstantConditions
+            metadataAlertDialog.findViewById(R.id.locationCheck).setVisibility(View.VISIBLE);
         }
     }
 
@@ -547,8 +553,8 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
         private void setWifis(final List<String> wifis) {
             this.wifis = new ArrayList<>();
 
-            for (String wifi: wifis) {
-                if (! this.wifis.contains(wifi)) {
+            for (String wifi : wifis) {
+                if (!this.wifis.contains(wifi)) {
                     this.wifis.add(wifi);
                 }
             }

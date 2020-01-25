@@ -1,8 +1,8 @@
 package rs.readahead.washington.mobile.util;
 
 import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.TextPaint;
@@ -12,6 +12,7 @@ import android.text.style.URLSpan;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.MatchResult;
 
@@ -75,6 +76,20 @@ public class StringUtils {
 
     public static boolean isTextEqual(@Nullable String str1, @Nullable String str2) {
         return TextUtils.isEmpty(str1) ? TextUtils.isEmpty(str2) : str1.equals(str2);
+    }
+
+    public static String join(String delimiter, List<String> strings) {
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = 0; i < strings.size(); i++) {
+            if (i > 0) {
+                builder.append(delimiter);
+            }
+
+            builder.append("[").append(strings.get(i)).append("]");
+        }
+
+        return builder.toString();
     }
 
     private static String markdownToHtml(String text) {

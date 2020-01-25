@@ -3,7 +3,6 @@ package rs.readahead.washington.mobile.views.activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 
 import java.security.GeneralSecurityException;
 import java.util.List;
@@ -17,6 +16,7 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.LocaleManager;
+import timber.log.Timber;
 
 
 public class NewPatternActivity extends SetPatternActivity implements ICacheWordSubscriber {
@@ -56,14 +56,11 @@ public class NewPatternActivity extends SetPatternActivity implements ICacheWord
     @Override
     protected void onConfirmed() {
         dialog = DialogsUtil.showProgressDialog(context, getString(R.string.setting_data));
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mCacheWord.setPassphrase(mNewPassphrase.toCharArray());
-                } catch (GeneralSecurityException e) {
-                    Log.e("", "CacheWord pass initialization failed: " + e.getMessage());
-                }
+        new Thread(() -> {
+            try {
+                mCacheWord.setPassphrase(mNewPassphrase.toCharArray());
+            } catch (GeneralSecurityException e) {
+                Timber.e(e, "CacheWord pass initialization failed");
             }
         }).start();
     }

@@ -7,12 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,8 +20,6 @@ import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.List;
 
@@ -64,8 +62,6 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
     ProgressBar progressBar;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.menu)
-    FloatingActionMenu fabMenu;
     @BindView(R.id.attachments_blank_list_info)
     TextView blankGalleryInfo;
 
@@ -110,8 +106,6 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
         getSelectedMediaFromIntent();
 
         presenter.getFiles(filter, sort);
-
-        updateFabMenu();
     }
 
     @Override
@@ -168,7 +162,6 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
         });
     }
 
-
     private void setupToolbar() {
         setSupportActionBar(toolbar);
 
@@ -201,32 +194,6 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
         Intent intent = new Intent(this, CameraActivity.class);
         intent.putExtra(CameraActivity.CAMERA_MODE, CameraActivity.Mode.PHOTO.name());
         startActivityForResult(intent, C.CAMERA_CAPTURE);
-    }
-
-    @OnClick(R.id.camera_capture)
-    public void recordVideoClick(View view) {
-        fabMenu.close(true);
-        startCameraCaptureActivity();
-    }
-
-    @OnClick(R.id.record_audio)
-    public void recordAudioClick(View view) {
-        fabMenu.close(true);
-        Intent intent = new Intent(this, AudioRecordActivity2.class);
-        intent.putExtra(AudioRecordActivity2.RECORDER_MODE, AudioRecordActivity2.Mode.RETURN.name());
-        startActivityForResult(intent, C.RECORDED_AUDIO);
-    }
-
-    @OnClick(R.id.import_photo_from_device)
-    public void importPhotoClick(View view) {
-        fabMenu.close(true);
-        MediaFileHandler.startSelectMediaActivity(this, "image/*", null, C.IMPORT_IMAGE);
-    }
-
-    @OnClick(R.id.import_video_from_device)
-    public void importVideoClick(View view) {
-        fabMenu.close(true);
-        MediaFileHandler.startSelectMediaActivity(this, "video/mp4", null, C.IMPORT_VIDEO);
     }
 
     @Override
@@ -351,13 +318,11 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
     @Override
     public void onImportStarted() {
         progressDialog = DialogsUtil.showProgressDialog(this, getString(R.string.ra_import_media_progress));
-        fabMenu.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void onImportEnded() {
         hideProgressDialog();
-        fabMenu.setVisibility(View.VISIBLE);
         showToast(R.string.ra_file_encrypted);
     }
 
@@ -402,29 +367,6 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
         }
     }
 
-    private void updateFabMenu() {
-        switch (filter) {
-            case AUDIO:
-                fabMenu.findViewById(R.id.record_audio).setVisibility(View.VISIBLE);
-                break;
-
-            case PHOTO:
-                fabMenu.findViewById(R.id.camera_capture).setVisibility(View.VISIBLE);
-                fabMenu.findViewById(R.id.import_photo_from_device).setVisibility(View.VISIBLE);
-                break;
-
-            case VIDEO:
-                fabMenu.findViewById(R.id.camera_capture).setVisibility(View.VISIBLE);
-                fabMenu.findViewById(R.id.import_video_from_device).setVisibility(View.VISIBLE);
-                break;
-
-            default:
-                throw new IllegalArgumentException();
-        }
-
-        fabMenu.setClosedOnTouchOutside(true);
-    }
-
     private void setCheckedSort(IMediaFileRecordRepository.Sort checkedSort, PopupMenu popup) {
         if (popup.getMenu().findItem(getSortId(checkedSort)) != null) {
             popup.getMenu().findItem(getSortId(checkedSort)).setChecked(true);
@@ -440,7 +382,6 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
                 return IMediaFileRecordRepository.Sort.NEWEST;
         }
     }
-
 
     @IdRes
     public int getSortId(IMediaFileRecordRepository.Sort sort) {

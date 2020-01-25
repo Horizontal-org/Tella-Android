@@ -7,7 +7,7 @@
     android:paddingTop="15dp">
 
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/new_person_title_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,9 +21,9 @@
             android:hint="@string/name"
             android:imeOptions="actionNext"
             android:singleLine="true" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <!--<android.support.design.widget.TextInputLayout-->
+    <!--<com.google.android.material.textfield.TextInputLayout-->
         <!--android:id="@+id/new_person_mail_layout"-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content"-->
@@ -38,9 +38,9 @@
             <!--android:imeOptions="actionNext"-->
             <!--android:inputType="textEmailAddress"-->
             <!--android:maxLines="1" />-->
-    <!--</android.support.design.widget.TextInputLayout>-->
+    <!--</com.google.android.material.textfield.TextInputLayout>-->
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/new_person_phone_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,6 +55,6 @@
             android:imeOptions="actionDone"
             android:inputType="phone"
             android:singleLine="true" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
     
 </LinearLayout>

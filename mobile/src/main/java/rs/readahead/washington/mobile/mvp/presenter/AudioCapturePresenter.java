@@ -1,12 +1,14 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
+import android.os.Build;
+import android.os.Environment;
+import android.os.StatFs;
+
 import com.crashlytics.android.Crashlytics;
 
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
@@ -32,31 +34,34 @@ public class AudioCapturePresenter implements IAudioCapturePresenterContract.IPr
     public void addMediaFile(MediaFile mediaFile) { // audio recorder creates MediaFile's file already encrypted and in place
         disposables.add(mediaFileHandler.registerMediaFile(mediaFile, MediaFileThumbnailData.NONE)
                 .subscribeOn(Schedulers.io())
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) throws Exception {
-                        view.onAddingStart();
-                    }
-                })
+                .doOnSubscribe(disposable -> view.onAddingStart())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doFinally(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        view.onAddingEnd();
-                    }
+                .doFinally(() -> view.onAddingEnd())
+                .subscribe(mediaFile1 -> view.onAddSuccess(mediaFile1.getId()), throwable -> {
+                    Crashlytics.logException(throwable);
+                    view.onAddError(throwable);
                 })
-                .subscribe(new Consumer<MediaFile>() {
-                    @Override
-                    public void accept(MediaFile mediaFile) throws Exception {
-                        view.onAddSuccess(mediaFile.getId());
+        );
+    }
+
+    @Override
+    public void checkAvailableStorage() {
+        disposables.add(Single.fromCallable(() -> {
+                    StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+                    long freeSpace;
+
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                        freeSpace = (statFs.getAvailableBlocks() * statFs.getBlockSize());
+                    } else {
+                        freeSpace = (statFs.getAvailableBlocksLong() * statFs.getBlockSizeLong());
                     }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Crashlytics.logException(throwable);
-                        view.onAddError(throwable);
-                    }
+
+                    return freeSpace;
                 })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(free -> view.onAvailableStorage(free),
+                        throwable -> view.onAvailableStorageFailed(throwable))
         );
     }
 

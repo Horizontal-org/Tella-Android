@@ -5,6 +5,7 @@ public class C {
     public static final int REQUEST_CODE_ASK_PERMISSIONS = 123;
     public static final String GOOGLE_MAPS_TEST = "maps.google.com/maps?q=";
     public static final String MEDIA_DIR = "media";
+    public static final String METADATA_DIR = "metadata";
     public static final String TMP_DIR = "tmp";
     public static final String TRAIN_DIR = "train";
     public static final String OPEN_ROSA_XML_PART_NAME = "xml_submission_file";
@@ -30,4 +31,7 @@ public class C {
     public static final String CAPTURED_MEDIA_FILE_ID = "cmfi";
     public static final String SMS_SENT = "SMS_SENT";
     public static final String SMS_DELIVERED = "SMS_DELIVERED";
+
+    //A day in milliseconds
+    public static final long DAY = 86400000;
 }

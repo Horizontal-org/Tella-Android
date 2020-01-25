@@ -16,7 +16,7 @@ package rs.readahead.washington.mobile.util;
  * limitations under the License.
  */
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.io.FilterInputStream;
 import java.io.IOException;

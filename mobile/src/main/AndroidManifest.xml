@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
 
     <application
         android:name=".MyApplication"
@@ -25,9 +26,11 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
+        android:networkSecurityConfig="@xml/configure_localhost_media_file_http_server"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
+
         <provider
             android:name=".data.provider.EncryptedFileProvider"
             android:authorities="${applicationId}.EncryptedFileProvider"
@@ -39,56 +42,10 @@
         </provider>
 
         <service
-            android:name="org.witness.proofmode.service.MediaListenerService"
-            android:enabled="true"
-            android:exported="false" />
-
-        <service
-            android:name="org.witness.proofmode.service.PhotosContentJob"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-
-        <service
-            android:name="org.witness.proofmode.service.VideosContentJob"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-
-        <service
             android:name="info.guardianproject.cacheword.CacheWordService"
             android:enabled="true"
             android:exported="false" />
 
-        <receiver
-            android:name="org.witness.proofmode.service.MediaWatcher"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.camera.NEW_PICTURE" />
-                <action android:name="android.hardware.action.NEW_PICTURE" />
-
-                <data android:mimeType="image/*" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="com.android.camera.NEW_VIDEO" />
-
-                <data android:mimeType="video/*" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.hardware.action.NEW_VIDEO" />
-
-                <data android:mimeType="video/*" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.UMS_CONNECTED" />
-                <action android:name="android.intent.action.UMS_DISCONNECTED" />
-            </intent-filter>
-        </receiver>
         <!-- <receiver
             android:name=".util.OpenPassword"
             android:enabled="true"
@@ -109,7 +66,6 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -122,7 +78,6 @@
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
@@ -134,7 +89,6 @@
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
@@ -146,7 +100,6 @@
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias> <!-- activity aliases -->
@@ -158,7 +111,6 @@
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
@@ -170,7 +122,6 @@
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
@@ -182,7 +133,6 @@
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
@@ -194,7 +144,6 @@
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
@@ -206,7 +155,6 @@
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
@@ -218,7 +166,6 @@
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
@@ -236,7 +183,6 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -333,7 +279,6 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -348,11 +293,6 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".views.activity.AttachmentsActivity"
-            android:label="@string/ra_attachments"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".views.activity.QuestionAttachmentActivity"
             android:label="@string/ra_question_attachment_activity_title"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
@@ -365,6 +305,11 @@
         <activity
             android:name=".views.activity.MetadataViewerActivity"
             android:label="@string/metadata"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".views.activity.MetadataHelpActivity"
+            android:label="@string/metadata_help"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -393,7 +338,6 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -434,6 +378,10 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.FormSubmitActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".views.activity.FileUploadingActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar"/>
 

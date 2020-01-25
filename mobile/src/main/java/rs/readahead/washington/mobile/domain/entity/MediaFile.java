@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.domain.entity;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -9,7 +9,7 @@ import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.FileUtil;
 
 
-public class MediaFile extends RawMediaFile implements Serializable {
+public class MediaFile extends RawFile implements Serializable {
     public static final MediaFile NONE = new MediaFile(-1);
 
     public enum Type {
@@ -22,7 +22,8 @@ public class MediaFile extends RawMediaFile implements Serializable {
     private Metadata metadata;
     private long duration; // milliseconds
     private Type type;
-    private long size; // bytes
+
+    private String hash;
 
     public static MediaFile newPng() {
         String uid = UUID.randomUUID().toString();
@@ -83,15 +84,15 @@ public class MediaFile extends RawMediaFile implements Serializable {
         this.duration = duration;
     }
 
-    public long getSize() {
-        return size;
-    }
-
-    public void setSize(long size) {
-        this.size = size;
-    }
-
     public Type getType() {
         return type;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
     }
 }

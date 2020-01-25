@@ -5,14 +5,14 @@
     tools:context=".views.activity.DocumentationSettingsActivity"
     tools:showIn="@layout/activity_documentation_settings">
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         style="@style/SettingsTitleImageViewStyle"
         android:layout_gravity="center_vertical"
         android:src="@drawable/ic_gps_not_fixed_black_24dp" />
 
     <LinearLayout style="@style/VerticalLinearLayout">
 
-        <android.support.v7.widget.SwitchCompat
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/anonymous_switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

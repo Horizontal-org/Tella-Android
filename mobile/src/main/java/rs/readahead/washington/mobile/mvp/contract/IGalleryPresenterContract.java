@@ -5,7 +5,9 @@ import android.net.Uri;
 
 import java.util.List;
 
+import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.presentation.entity.MediaFileThumbnailData;
 
@@ -28,6 +30,8 @@ public class IGalleryPresenterContract {
         void onExportError(Throwable error);
         void onExportStarted();
         void onExportEnded();
+        void onCountTUServersEnded(Long num);
+        void onCountTUServersFailed(Throwable throwable);
         //void onTmpVideoEncrypted(MediaFileBundle mediaFileBundle);
         //void onTmpVideoEncryptionError(Throwable error);
         Context getContext();
@@ -40,6 +44,7 @@ public class IGalleryPresenterContract {
         void addNewMediaFile(MediaFile mediaFile, MediaFileThumbnailData thumbnailData);
         void deleteMediaFiles(List<MediaFile> mediaFiles);
         void exportMediaFiles(List<MediaFile> mediaFiles);
+        void countTUServers();
         //void encryptTmpVideo(Uri uri);
     }
 }

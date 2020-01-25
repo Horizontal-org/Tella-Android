@@ -5,16 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,10 +14,19 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -44,6 +44,7 @@ import rs.readahead.washington.mobile.bus.event.GalleryFlingTopEvent;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
 import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository.Filter;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository.Sort;
@@ -59,6 +60,8 @@ import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.views.adapters.AttachmentsRecycleViewAdapter;
 import rs.readahead.washington.mobile.views.adapters.GalleryRecycleViewAdapter;
 import rs.readahead.washington.mobile.views.custom.GalleryRecyclerView;
+import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
+import rs.readahead.washington.mobile.views.fragment.TellaUploadDialogFragment;
 import rs.readahead.washington.mobile.views.interfaces.IAttachmentsMediaHandler;
 import rs.readahead.washington.mobile.views.interfaces.IGalleryMediaHandler;
 import timber.log.Timber;
@@ -66,15 +69,20 @@ import timber.log.Timber;
 
 @RuntimePermissions
 public class GalleryActivity extends MetadataActivity implements
+        TellaUploadDialogFragment.IServerMetadataChosenHandler,
         IGalleryPresenterContract.IView,
-        IGalleryMediaHandler, IAttachmentsMediaHandler {
+        IGalleryMediaHandler, IAttachmentsMediaHandler,
+        ShareDialogFragment.IShareDialogFragmentHandler {
     public static final String GALLERY_ANIMATED = "ga";
+    public static final String GALLERY_FILTER = "gf";
+    public static final String GALLERY_ALLOWS_ADDING = "gaa";
     private boolean animated = false;
+    private boolean adding = true;
 
     @BindView(R.id.galleryRecyclerView)
     GalleryRecyclerView recyclerView;
-    @BindView(R.id.menu)
-    FloatingActionMenu fabMenu;
+    @BindView(R.id.fab_button)
+    FloatingActionButton fabButton;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
     @BindView(R.id.toolbar)
@@ -100,6 +108,7 @@ public class GalleryActivity extends MetadataActivity implements
     private Filter filter = Filter.ALL;
     private Sort sort = Sort.NEWEST;
     private ViewType type = ViewType.EDIT;
+    private long numOfTUServers;
 
 
     @Override
@@ -115,7 +124,14 @@ public class GalleryActivity extends MetadataActivity implements
             animated = getIntent().getBooleanExtra(GALLERY_ANIMATED, false);
         }
 
-        updateFabMenu();
+        if (getIntent().hasExtra(GALLERY_ALLOWS_ADDING)) {
+            adding = getIntent().getBooleanExtra(GALLERY_ALLOWS_ADDING, false);
+        }
+
+        if (getIntent().hasExtra(GALLERY_FILTER)) {
+            filter = Filter.valueOf(getIntent().getStringExtra(GALLERY_FILTER));
+        }
+
         setupToolbar();
         setupFab();
 
@@ -150,8 +166,11 @@ public class GalleryActivity extends MetadataActivity implements
         attachmentsRecyclerView.setLayoutManager(attachmentsLayoutManager);
         attachmentsRecyclerView.setAdapter(attachmentsAdapter);
 
-        (attachmentsRecyclerView.getItemAnimator()).setMoveDuration(120);
-        (attachmentsRecyclerView.getItemAnimator()).setRemoveDuration(120);
+        RecyclerView.ItemAnimator animator = attachmentsRecyclerView.getItemAnimator();
+        if (animator != null) {
+            animator.setMoveDuration(120);
+            animator.setRemoveDuration(120);
+        }
 
         presenter.getFiles(filter, sort);
     }
@@ -170,8 +189,8 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     private void setupFab() {
-        if (animated) {
-            fabMenu.setVisibility(View.GONE);
+        if (animated || !adding) {
+            fabButton.hide();
         }
     }
 
@@ -179,6 +198,12 @@ public class GalleryActivity extends MetadataActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         if (selectedNum > 0) {
             getMenuInflater().inflate(R.menu.gallery_menu, menu);
+            MenuItem item = menu.findItem(R.id.menu_item_tu);
+            if (numOfTUServers > 0) {
+                item.setVisible(true);
+            } else {
+                item.setVisible(false);
+            }
         }
         return true;
     }
@@ -208,6 +233,11 @@ public class GalleryActivity extends MetadataActivity implements
                 return true;
             }
 
+            if (id == R.id.menu_item_tu && numOfTUServers > 0) {
+                uploadMediaFiles();
+                return true;
+            }
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -228,6 +258,7 @@ public class GalleryActivity extends MetadataActivity implements
         if (animated) {
             overridePendingTransition(R.anim.slide_in_up, android.R.anim.fade_out);
         }
+        presenter.countTUServers();
     }
 
     @Override
@@ -264,6 +295,9 @@ public class GalleryActivity extends MetadataActivity implements
         }
 
         hideProgressDialog();
+
+        dismissShareDialog();
+        dismissTellaUploadDialog();
 
         super.onDestroy();
     }
@@ -343,35 +377,10 @@ public class GalleryActivity extends MetadataActivity implements
                 this, request, getString(R.string.ra_media_location_permissions));
     }
 
-    @OnClick({R.id.camera_capture, R.id.record_audio, R.id.import_photo_from_device,
-            R.id.import_video_from_device, R.id.import_media_from_device})
-    public void handleFabClick(View view) {
-        int id = view.getId();
-
-        fabMenu.close(false);
-
-        switch (id) {
-            case R.id.camera_capture:
-                GalleryActivityPermissionsDispatcher.startCameraCaptureActivityWithCheck(this);
-                break;
-
-            case R.id.record_audio:
-                GalleryActivityPermissionsDispatcher.startAudioRecorderActivityWithCheck(this);
-                break;
-
-            case R.id.import_photo_from_device:
-                MediaFileHandler.startSelectMediaActivity(this, "image/*", null, C.IMPORT_IMAGE);
-                break;
-
-            case R.id.import_video_from_device:
-                MediaFileHandler.startSelectMediaActivity(this, "video/mp4", null, C.IMPORT_VIDEO);
-                break;
-
-            case R.id.import_media_from_device:
-                MediaFileHandler.startSelectMediaActivity(this, "image/*",
-                        new String[]{"image/*", "video/mp4"}, C.IMPORT_MEDIA);
-                break;
-        }
+    @OnClick(R.id.fab_button)
+    public void importMedia() {
+        MediaFileHandler.startSelectMediaActivity(this, "image/*",
+                new String[]{"image/*", "video/mp4"}, C.IMPORT_MEDIA);
     }
 
     private boolean isLocationSettingsRequestCode(int requestCode) {
@@ -425,6 +434,22 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     @Override
+    public void uploadOnServer(TellaUploadServer server, boolean metadata) {
+        List<MediaFile> selected = adapter.getSelectedMediaFiles();
+        long[] ids = new long[selected.size()];
+
+        for (int i = 0; i < selected.size(); i++) {
+            ids[i] = selected.get(i).getId();
+        }
+
+        Intent intent = new Intent(this, FileUploadingActivity.class);
+        intent.putExtra(FileUploadingActivity.SERVER_KEY, server);
+        intent.putExtra(FileUploadingActivity.FILE_KEYS, ids);
+        intent.putExtra(FileUploadingActivity.METADATA, metadata);
+        startActivity(intent);
+    }
+
+    @Override
     public void onGetFilesStart() {
     }
 
@@ -434,7 +459,7 @@ public class GalleryActivity extends MetadataActivity implements
 
     @Override
     public void onGetFilesSuccess(List<MediaFile> files) {
-        blankGalleryInfo.setVisibility(files.isEmpty() ? View.VISIBLE : View.GONE);
+        blankGalleryInfo.setVisibility((files.isEmpty() && adding) ? View.VISIBLE : View.GONE);
         adapter.setFiles(files);
     }
 
@@ -456,13 +481,13 @@ public class GalleryActivity extends MetadataActivity implements
     @Override
     public void onImportStarted() {
         progressDialog = DialogsUtil.showProgressDialog(this, getString(R.string.ra_import_media_progress));
-        fabMenu.setVisibility(View.INVISIBLE);
+        fabButton.show();
     }
 
     @Override
     public void onImportEnded() {
         hideProgressDialog();
-        fabMenu.setVisibility(View.VISIBLE);
+        fabButton.show();
         showToast(R.string.ra_file_encrypted);
     }
 
@@ -503,12 +528,22 @@ public class GalleryActivity extends MetadataActivity implements
     @Override
     public void onExportStarted() {
         progressDialog = DialogsUtil.showProgressDialog(this, getString(R.string.ra_export_media_progress));
-        fabMenu.setVisibility(View.INVISIBLE);
+        fabButton.hide();
     }
 
     @Override
     public void onExportEnded() {
         onImportEnded();
+    }
+
+    @Override
+    public void onCountTUServersEnded(Long num) {
+        numOfTUServers = num;
+        invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onCountTUServersFailed(Throwable throwable) {
     }
 
     /*@Override
@@ -525,6 +560,7 @@ public class GalleryActivity extends MetadataActivity implements
     public Context getContext() {
         return this;
     }
+
 
     @Override
     public void playMedia(MediaFile mediaFile) {
@@ -568,9 +604,21 @@ public class GalleryActivity extends MetadataActivity implements
         }
     }
 
+    @Override
+    public void sharingMediaMetadataSelected() {
+        dismissShareDialog();
+        startShareActivity(true);
+    }
+
+    @Override
+    public void sharingMediaOnlySelected() {
+        dismissShareDialog();
+        startShareActivity(false);
+    }
+
     private void showExportDialog() {
         alertDialog = DialogsUtil.showExportMediaDialog(this, (dialog, which) ->
-                GalleryActivityPermissionsDispatcher.exportMediaFilesWithCheck(GalleryActivity.this));
+                GalleryActivityPermissionsDispatcher.exportMediaFilesWithPermissionCheck(GalleryActivity.this));
     }
 
     private void showDeleteMediaDialog() {
@@ -578,7 +626,8 @@ public class GalleryActivity extends MetadataActivity implements
                 .setTitle(R.string.ra_delete_media)
                 .setMessage(R.string.ra_media_will_be_deleted)
                 .setPositiveButton(R.string.delete, (dialog, which) -> removeMediaFiles())
-                .setNegativeButton(R.string.cancel, (dialog, which) -> {})
+                .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                })
                 .setCancelable(true)
                 .show();
     }
@@ -590,9 +639,46 @@ public class GalleryActivity extends MetadataActivity implements
         clearSelection();
     }
 
-    private void shareMediaFiles() {
+    private void startShareActivity(boolean includeMetadata) {
         List<MediaFile> selected = adapter.getSelectedMediaFiles();
-        MediaFileHandler.startShareActivity(this, selected);
+
+        if (selected.size() > 1) {
+            MediaFileHandler.startShareActivity(this, selected, includeMetadata);
+        } else {
+            MediaFileHandler.startShareActivity(this, selected.get(0), includeMetadata);
+        }
+    }
+
+    private void shareMediaFiles() {
+        boolean metadata = false;
+        List<MediaFile> selected = adapter.getSelectedMediaFiles();
+
+        for (MediaFile mediaFile : selected) {
+            if (mediaFile.getMetadata() != null) {
+                metadata = true;
+                break;
+            }
+        }
+
+        if (metadata) {
+            ShareDialogFragment.newInstance().show(getSupportFragmentManager(), ShareDialogFragment.TAG);
+        } else {
+            startShareActivity(false);
+        }
+    }
+
+    private void uploadMediaFiles() {
+        boolean metadata = false;
+        List<MediaFile> selected = adapter.getSelectedMediaFiles();
+
+        for (MediaFile mediaFile : selected) {
+            if (mediaFile.getMetadata() != null) {
+                metadata = true;
+                break;
+            }
+        }
+
+        TellaUploadDialogFragment.newInstance(metadata).show(getSupportFragmentManager(), TellaUploadDialogFragment.TAG);
     }
 
     @Override
@@ -626,14 +712,18 @@ public class GalleryActivity extends MetadataActivity implements
         }
     }
 
-    private void updateFabMenu() {
-        boolean media = Build.VERSION.SDK_INT >= 19;
+    private void dismissShareDialog() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(ShareDialogFragment.TAG);
+        if (fragment instanceof ShareDialogFragment) {
+            ((ShareDialogFragment) fragment).dismiss();
+        }
+    }
 
-        fabMenu.findViewById(R.id.import_photo_from_device).setVisibility(media ? View.GONE : View.VISIBLE);
-        fabMenu.findViewById(R.id.import_video_from_device).setVisibility(media ? View.GONE : View.VISIBLE);
-        fabMenu.findViewById(R.id.import_media_from_device).setVisibility(media ? View.VISIBLE : View.GONE);
-
-        fabMenu.setClosedOnTouchOutside(true);
+    private void dismissTellaUploadDialog() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(TellaUploadDialogFragment.TAG);
+        if (fragment instanceof TellaUploadDialogFragment) {
+            ((TellaUploadDialogFragment) fragment).dismiss();
+        }
     }
 
     private void addAttachmentsAttachment(MediaFile mediaFile) {
@@ -718,13 +808,11 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     public Sort getGallerySort(final int id) {
-        switch (id) {
-            case R.id.oldest:
-                return Sort.OLDEST;
-
-            default:
-                return Sort.NEWEST;
+        if (id == R.id.oldest) {
+            return Sort.OLDEST;
         }
+
+        return Sort.NEWEST;
     }
 
     @IdRes
@@ -752,12 +840,10 @@ public class GalleryActivity extends MetadataActivity implements
 
     @IdRes
     public int getSortId(Sort sort) {
-        switch (sort) {
-            case OLDEST:
-                return R.id.oldest;
-
-            default:
-                return R.id.newest;
+        if (sort == Sort.OLDEST) {
+            return R.id.oldest;
         }
+
+        return R.id.newest;
     }
 }

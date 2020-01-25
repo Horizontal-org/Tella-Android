@@ -1,9 +1,10 @@
 package rs.readahead.washington.mobile.views.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.SwitchCompat;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
@@ -15,18 +16,23 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
+import rs.readahead.washington.mobile.mvp.contract.IProtectionSettingsPresenterContract;
+import rs.readahead.washington.mobile.mvp.presenter.ProtectionSettingsPresenter;
 import rs.readahead.washington.mobile.util.CamouflageManager;
 
 
-public class ProtectionSettingsActivity extends CacheWordSubscriberBaseActivity implements CompoundButton.OnCheckedChangeListener {
-    //@BindView(R.id.show_camera_preview)
-    //SwitchCompat cameraPreviewSwitch;
+public class ProtectionSettingsActivity extends CacheWordSubscriberBaseActivity implements CompoundButton.OnCheckedChangeListener,
+        IProtectionSettingsPresenterContract.IView {
     @BindView(R.id.camouflage_setting)
     TextView camouflageSetting;
     @BindView(R.id.quick_exit_switch)
     SwitchCompat quickExitSwitch;
     @BindView(R.id.quick_exit_settings_layout)
     View quickExitSettings;
+    @BindView(R.id.delete_draft_submitted_forms_view)
+    View deleteFormsView;
+    @BindView(R.id.delete_server_settings_view)
+    View deleteSettingsView;
     @BindView(R.id.delete_gallery)
     CheckBox deleteGallery;
     @BindView(R.id.delete_forms)
@@ -36,8 +42,10 @@ public class ProtectionSettingsActivity extends CacheWordSubscriberBaseActivity 
     @BindView(R.id.delete_tella)
     CheckBox deleteTella;
 
-    private static final String defaultAlias = SplashActivity.class.getCanonicalName();
     private CamouflageManager cm = CamouflageManager.getInstance();
+    private long numOfCollectServers = 0;
+    private ProtectionSettingsPresenter presenter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +56,8 @@ public class ProtectionSettingsActivity extends CacheWordSubscriberBaseActivity 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //setupCameraPreviewSwitch();
+        presenter = new ProtectionSettingsPresenter(this);
+
         setupQuickExitSwitch();
         setupQuickExitSettingsView();
         setupQuickExitCheckboxes();
@@ -63,6 +72,7 @@ public class ProtectionSettingsActivity extends CacheWordSubscriberBaseActivity 
     protected void onResume() {
         super.onResume();
 
+        countCollectServers();
         setCamouflageOption();
     }
 
@@ -76,16 +86,54 @@ public class ProtectionSettingsActivity extends CacheWordSubscriberBaseActivity 
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onDestroy() {
+        destroyPresenter();
+        super.onDestroy();
+    }
+
     @OnClick(R.id.camouflage_settings)
     public void manage(View view) {
         startActivity(new Intent(this, CamouflageAliasActivity.class));
     }
-/*
-    private void setupCameraPreviewSwitch() {
-        cameraPreviewSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> Preferences.setCameraPreviewEnabled(isChecked));
-        cameraPreviewSwitch.setChecked(Preferences.isCameraPreviewEnabled());
+
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()) {
+            case R.id.delete_forms:
+                deleteFormsCheck(isChecked);
+                break;
+            case R.id.delete_gallery:
+                deleteGalleryCheck(isChecked);
+                break;
+            case R.id.delete_server_settings:
+                deleteServerSettingsCheck(isChecked);
+                break;
+            case R.id.delete_tella:
+                deleteTellaCheck(isChecked);
+                break;
+        }
     }
-*/
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    @Override
+    public void onCountCollectServersEnded(long num) {
+        numOfCollectServers = num;
+        if (quickExitSettings.getVisibility() == View.VISIBLE && num > 0) {
+            deleteFormsView.setVisibility(View.VISIBLE);
+            deleteSettingsView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onCountCollectServersFailed(Throwable throwable) {
+    }
+
     private void setupQuickExitSwitch() {
         quickExitSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             Preferences.setQuickExit(isChecked);
@@ -97,6 +145,10 @@ public class ProtectionSettingsActivity extends CacheWordSubscriberBaseActivity 
         if (Preferences.isQuickExit()) {
             quickExitSwitch.setChecked(true);
             quickExitSettings.setVisibility(View.VISIBLE);
+            if (numOfCollectServers == 0) {
+                deleteFormsView.setVisibility(View.GONE);
+                deleteSettingsView.setVisibility(View.GONE);
+            }
         } else {
             quickExitSwitch.setChecked(false);
             quickExitSettings.setVisibility(View.GONE);
@@ -122,24 +174,6 @@ public class ProtectionSettingsActivity extends CacheWordSubscriberBaseActivity 
             camouflageSetting.setText(R.string.ra_default);
         } else {
             camouflageSetting.setText(cm.getLauncherName(this));
-        }
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()) {
-            case R.id.delete_forms:
-                deleteFormsCheck(isChecked);
-                break;
-            case R.id.delete_gallery:
-                deleteGalleryCheck(isChecked);
-                break;
-            case R.id.delete_server_settings:
-                deleteServerSettingsCheck(isChecked);
-                break;
-            case R.id.delete_tella:
-                deleteTellaCheck(isChecked);
-                break;
         }
     }
 
@@ -188,6 +222,19 @@ public class ProtectionSettingsActivity extends CacheWordSubscriberBaseActivity 
             deleteFormsCheck(false);
             deleteForms.setClickable(true);
             deleteForms.setAlpha((float) 1);
+        }
+    }
+
+    private void countCollectServers() {
+        if (presenter != null) {
+            presenter.countCollectServers();
+        }
+    }
+
+    private void destroyPresenter() {
+        if (presenter != null) {
+            presenter.destroy();
+            presenter = null;
         }
     }
 }

@@ -9,7 +9,7 @@
     tools:context="rs.readahead.washington.mobile.views.activity.DocumentationSettingsActivity"
     tools:showIn="@layout/activity_documentation_settings">
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -20,14 +20,14 @@
 
             <LinearLayout style="@style/SettingsClickableHorizontalShadowLinearLayout">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     style="@style/SettingsTitleImageViewStyle"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/ic_gps_not_fixed_black_24dp" />
 
                 <LinearLayout style="@style/VerticalLinearLayout">
 
-                    <android.support.v7.widget.SwitchCompat
+                    <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/anonymous_switch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -56,25 +56,25 @@
                     android:paddingStart="20dp"
                     android:paddingEnd="2dp">
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         style="@style/SettingsTitleImageViewStyle"
                         android:layout_gravity="center_vertical"
                         android:src="@drawable/ic_collect_menu" />
 
                     <LinearLayout style="@style/VerticalLinearLayout">
 
-                        <android.support.v7.widget.SwitchCompat
+                        <androidx.appcompat.widget.SwitchCompat
                             android:id="@+id/collect_switch"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
-                            android:text="@string/enable_collect"
+                            android:text="@string/connect_to_servers"
                             android:theme="@style/SettingsTextViewSwitch" />
 
                         <TextView
                             android:id="@+id/enable_collect_info"
                             style="@style/SettingsTextViewGray"
-                            android:text="@string/enable_collect_info" />
+                            android:text="@string/manage_connections_to_servers" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -91,7 +91,7 @@
                             android:paddingStart="20dp"
                             android:paddingEnd="2dp">
 
-                            <android.support.v7.widget.AppCompatImageView
+                            <androidx.appcompat.widget.AppCompatImageView
                                 style="@style/SettingsTitleImageViewStyle"
                                 android:layout_gravity="center_vertical"
                                 android:src="@drawable/assignment_black_24dp" />
@@ -146,7 +146,7 @@
                 android:id="@+id/offline_switch_layout"
                 style="@style/SettingsClickableHorizontalShadowLinearLayout">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     style="@style/SettingsTitleImageViewStyle"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/ic_cloud_off_white_24dp"
@@ -154,7 +154,7 @@
 
                 <LinearLayout style="@style/VerticalLinearLayout">
 
-                    <android.support.v7.widget.SwitchCompat
+                    <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/offline_mode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -173,5 +173,5 @@
             </LinearLayout>
 
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 </RelativeLayout>

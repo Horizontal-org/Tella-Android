@@ -2,13 +2,10 @@ package rs.readahead.washington.mobile.views.dialog;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -19,9 +16,21 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.security.ProviderInstaller;
+import com.google.android.material.textfield.TextInputLayout;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.net.UnknownHostException;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -32,6 +41,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
 import rs.readahead.washington.mobile.mvp.contract.ICheckOdkServerContract;
 import rs.readahead.washington.mobile.mvp.presenter.CheckOdkServerPresenter;
 import rs.readahead.washington.mobile.util.ViewUtil;
+import timber.log.Timber;
 
 
 public class CollectServerDialogFragment extends DialogFragment implements
@@ -62,12 +72,14 @@ public class CollectServerDialogFragment extends DialogFragment implements
     ProgressBar progressBar;
     @BindView(R.id.internet_error)
     TextView internetError;
-
+    @BindView(R.id.server_input)
+    View serverInput;
 
     private Unbinder unbinder;
     private boolean validated = true;
     private CheckOdkServerPresenter presenter;
     private AlertDialog dialog;
+    private boolean securityProviderUpgradeAttempted = false;
 
     public interface CollectServerDialogHandler {
         void onCollectServerDialogCreate(CollectServer server);
@@ -80,7 +92,7 @@ public class CollectServerDialogFragment extends DialogFragment implements
 
         Bundle args = new Bundle();
         if (server == null) {
-            args.putInt(TITLE_KEY, R.string.ra_add_collect_server);
+            args.putInt(TITLE_KEY, R.string.add_server);
         } else {
             args.putInt(TITLE_KEY, R.string.ra_server_settings);
             args.putSerializable(ID_KEY, server.getId());
@@ -132,7 +144,7 @@ public class CollectServerDialogFragment extends DialogFragment implements
             button.setOnClickListener(view -> {
                 validate();
                 if (validated) {
-                    presenter.checkServer(copyFields(new CollectServer(serverId)), false);
+                    checkServer(copyFields(new CollectServer(serverId)), false);
                 }
             });
 
@@ -140,7 +152,7 @@ public class CollectServerDialogFragment extends DialogFragment implements
             button.setOnClickListener(view -> {
                 validate();
                 if (validated) {
-                    presenter.checkServer(copyFields(new CollectServer(serverId)), true);
+                    checkServer(copyFields(new CollectServer(serverId)), true);
                 }
             });
             button.setVisibility(View.GONE);
@@ -151,7 +163,7 @@ public class CollectServerDialogFragment extends DialogFragment implements
     }
 
     @Override
-    public void onDismiss(DialogInterface dialog) {
+    public void onDismiss(@NotNull DialogInterface dialog) {
         super.onDismiss(dialog);
         unbinder.unbind();
         if (presenter != null) {
@@ -208,6 +220,32 @@ public class CollectServerDialogFragment extends DialogFragment implements
         dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setVisibility(enabled ? View.VISIBLE : View.GONE);
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setText(
                 getString(enabled ? R.string.ra_save_anyway : R.string.ok));
+    }
+
+    @Override
+    public Context getContext() {
+        return getActivity();
+    }
+
+    private void checkServer(@NonNull CollectServer server,  boolean connectionRequired) {
+        // lets go with sync solution as this will not influence UX too much here
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1 &&
+                !securityProviderUpgradeAttempted && getContext() != null) {
+            try {
+                ProviderInstaller.installIfNeeded(getContext());
+            } catch (GooglePlayServicesRepairableException e) {
+                GoogleApiAvailability.getInstance()
+                        .showErrorNotification(getContext(), e.getConnectionStatusCode());
+                securityProviderUpgradeAttempted = true;
+                return;
+            } catch (GooglePlayServicesNotAvailableException e) {
+                Timber.d(e);
+            }
+        }
+
+        if (presenter != null) {
+            presenter.checkServer(server, connectionRequired);
+        }
     }
 
     private void validate() {

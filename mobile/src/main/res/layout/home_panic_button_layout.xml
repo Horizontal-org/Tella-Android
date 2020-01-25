@@ -3,19 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/arrow_3"
         style="@style/PanicArrowStyle"
         android:layout_alignParentTop="true"
         android:src="@drawable/short_arrow_up" />
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/arrow_2"
         style="@style/PanicArrowStyle"
         android:layout_below="@+id/arrow_3"
         android:src="@drawable/short_arrow_up" />
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/arrow_1"
         style="@style/PanicArrowStyle"
         android:layout_below="@+id/arrow_2"

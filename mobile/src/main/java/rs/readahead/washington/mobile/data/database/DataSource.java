@@ -5,7 +5,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
-import android.support.annotation.Nullable;
+import android.os.Build;
+import android.os.Environment;
+import android.os.StatFs;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -28,6 +30,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import androidx.annotation.Nullable;
 import io.reactivex.Completable;
 import io.reactivex.CompletableTransformer;
 import io.reactivex.Maybe;
@@ -41,6 +44,7 @@ import rs.readahead.washington.mobile.data.entity.mapper.EntityMapper;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.Metadata;
+import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.TrustedPerson;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
@@ -54,17 +58,18 @@ import rs.readahead.washington.mobile.domain.exception.NotFountException;
 import rs.readahead.washington.mobile.domain.repository.ICollectFormsRepository;
 import rs.readahead.washington.mobile.domain.repository.ICollectServersRepository;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
+import rs.readahead.washington.mobile.domain.repository.IServersRepository;
+import rs.readahead.washington.mobile.domain.repository.ITellaUploadServersRepository;
 import rs.readahead.washington.mobile.media.MediaFileBundle;
 import rs.readahead.washington.mobile.presentation.entity.MediaFileThumbnailData;
 import rs.readahead.washington.mobile.util.FileUtil;
 import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
 
-public class DataSource implements ICollectServersRepository, ICollectFormsRepository,
+public class DataSource implements IServersRepository, ITellaUploadServersRepository, ICollectServersRepository, ICollectFormsRepository,
         IMediaFileRecordRepository {
     private static DataSource dataSource;
     private SQLiteDatabase database;
-    private static Gson gson = new GsonBuilder().create();
 
     final private SingleTransformer schedulersTransformer =
             observable -> observable.subscribeOn(Schedulers.io())
@@ -119,8 +124,26 @@ public class DataSource implements ICollectServersRepository, ICollectFormsRepos
     }
 
     @Override
+    public Single<List<TellaUploadServer>> listTellaUploadServers() {
+        return Single.fromCallable(() -> dataSource.getTUServers())
+                .compose(applySchedulers());
+    }
+
+    @Override
     public Single<CollectServer> createCollectServer(final CollectServer server) {
         return Single.fromCallable(() -> dataSource.createServer(server))
+                .compose(applySchedulers());
+    }
+
+    @Override
+    public Single<TellaUploadServer> createTellaUploadServer(final TellaUploadServer server) {
+        return Single.fromCallable(() -> dataSource.createTUServer(server))
+                .compose(applySchedulers());
+    }
+
+    @Override
+    public Single<TellaUploadServer> updateTellaUploadServer(TellaUploadServer server) {
+        return Single.fromCallable(() -> dataSource.updateTUServer(server))
                 .compose(applySchedulers());
     }
 
@@ -137,9 +160,23 @@ public class DataSource implements ICollectServersRepository, ICollectFormsRepos
     }
 
     @Override
+    public Single<TellaUploadServer> getTellaUploadServer(final long id) {
+        return Single.fromCallable(() -> getTUServer(id))
+                .compose(applySchedulers());
+    }
+
+    @Override
     public Completable removeCollectServer(final long id) {
         return Completable.fromCallable((Callable<Void>) () -> {
             dataSource.removeServer(id);
+            return null;
+        }).compose(applyCompletableSchedulers());
+    }
+
+    @Override
+    public Completable removeTUServer(final long id) {
+        return Completable.fromCallable((Callable<Void>) () -> {
+            dataSource.removeTUServerDB(id);
             return null;
         }).compose(applyCompletableSchedulers());
     }
@@ -151,9 +188,15 @@ public class DataSource implements ICollectServersRepository, ICollectFormsRepos
     }
 
     @Override
-    public Completable deleteCollectModule() {
+    public Single<Long> countTUServers() {
+        return Single.fromCallable(() -> dataSource.countDBTUServers())
+                .compose(applySchedulers());
+    }
+
+    @Override
+    public Completable deleteAllServers() {
         return Completable.fromCallable((Callable<Void>) () -> {
-            dataSource.deleteCollect();
+            dataSource.deleteAllServersDB();
             return null;
         }).compose(applyCompletableSchedulers());
     }
@@ -342,6 +385,7 @@ public class DataSource implements ICollectServersRepository, ICollectFormsRepos
                 values.put(D.C_SIZE, mediaFile.getSize());
             }
             values.put(D.C_ANONYMOUS, mediaFile.isAnonymous() ? 1 : 0);
+            values.put(D.C_HASH, mediaFile.getHash());
 
             mediaFile.setId(database.insert(D.T_MEDIA_FILE, null, values));
 
@@ -359,6 +403,39 @@ public class DataSource implements ICollectServersRepository, ICollectFormsRepos
 
     private long countDBCollectServers() {
         return net.sqlcipher.DatabaseUtils.queryNumEntries(database, D.T_COLLECT_SERVER);
+    }
+
+    private long countDBTUServers() {
+        return net.sqlcipher.DatabaseUtils.queryNumEntries(database, D.T_TELLA_UPLOAD_SERVER);
+    }
+
+    private List<TellaUploadServer> getTUServers() {
+        Cursor cursor = null;
+        List<TellaUploadServer> servers = new ArrayList<>();
+
+        try {
+            cursor = database.query(
+                    D.T_TELLA_UPLOAD_SERVER,
+                    new String[]{D.C_ID, D.C_NAME, D.C_URL, D.C_USERNAME, D.C_PASSWORD, D.C_CHECKED},
+                    null,
+                    null,
+                    null, null,
+                    D.C_ID + " ASC",
+                    null);
+
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                TellaUploadServer tuServer = cursorToTellaUploadServer(cursor);
+                servers.add(tuServer);
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return servers;
     }
 
     private List<CollectServer> getServers() {
@@ -407,6 +484,25 @@ public class DataSource implements ICollectServersRepository, ICollectFormsRepos
         }
 
         return CollectServer.NONE;
+    }
+
+    @Nullable
+    private TellaUploadServer getTUServer(long id) {
+        try (Cursor cursor = database.query(
+                D.T_TELLA_UPLOAD_SERVER,
+                new String[]{D.C_ID, D.C_NAME, D.C_URL, D.C_USERNAME, D.C_PASSWORD, D.C_CHECKED},
+                D.C_ID + "= ?",
+                new String[]{Long.toString(id)},
+                null, null, null, null)) {
+
+            if (cursor.moveToFirst()) {
+                return cursorToTellaUploadServer(cursor);
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        }
+
+        return TellaUploadServer.NONE;
     }
 
     @Nullable
@@ -540,6 +636,19 @@ public class DataSource implements ICollectServersRepository, ICollectFormsRepos
         values.put(D.C_CHECKED, server.isChecked() ? 1 : 0);
 
         server.setId(database.insert(D.T_COLLECT_SERVER, null, values));
+
+        return server;
+    }
+
+    private TellaUploadServer createTUServer(final TellaUploadServer server) {
+        ContentValues values = new ContentValues();
+        values.put(D.C_NAME, server.getName());
+        values.put(D.C_URL, server.getUrl());
+        values.put(D.C_USERNAME, server.getUsername());
+        values.put(D.C_PASSWORD, server.getPassword());
+        values.put(D.C_CHECKED, server.isChecked() ? 1 : 0);
+
+        server.setId(database.insert(D.T_TELLA_UPLOAD_SERVER, null, values));
 
         return server;
     }
@@ -693,7 +802,8 @@ public class DataSource implements ICollectServersRepository, ICollectFormsRepos
                             D.C_CREATED,
                             D.C_DURATION,
                             D.C_ANONYMOUS,
-                            D.C_SIZE},
+                            D.C_SIZE,
+                            D.C_HASH},
                     cn(D.T_MEDIA_FILE, D.C_ID) + " IN (" + TextUtils.join(", ", stringIds) + ")",
                     null, null, null, null
             );
@@ -729,7 +839,8 @@ public class DataSource implements ICollectServersRepository, ICollectFormsRepos
                             D.C_CREATED,
                             D.C_DURATION,
                             D.C_ANONYMOUS,
-                            D.C_SIZE},
+                            D.C_SIZE,
+                            D.C_HASH},
                     cn(D.T_MEDIA_FILE, D.C_ID) + " = ?",
                     new String[]{Long.toString(id)},
                     null, null, null, null
@@ -765,7 +876,8 @@ public class DataSource implements ICollectServersRepository, ICollectFormsRepos
                             D.C_CREATED,
                             D.C_DURATION,
                             D.C_ANONYMOUS,
-                            D.C_SIZE
+                            D.C_SIZE,
+                            D.C_HASH
                     },
                     cn(D.T_MEDIA_FILE, D.C_UID) + " = ?",
                     new String[]{uid},
@@ -801,7 +913,8 @@ public class DataSource implements ICollectServersRepository, ICollectFormsRepos
                             D.C_CREATED,
                             D.C_DURATION,
                             D.C_ANONYMOUS,
-                            D.C_SIZE},
+                            D.C_SIZE,
+                            D.C_HASH},
                     null,
                     null,
                     null, null, D.C_ID + " DESC", "1"
@@ -929,6 +1042,7 @@ public class DataSource implements ICollectServersRepository, ICollectFormsRepos
                             D.C_DURATION,
                             D.C_ANONYMOUS,
                             D.C_SIZE,
+                            D.C_HASH,
                             cn(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE, D.C_STATUS, D.A_FORM_MEDIA_FILE_STATUS)},
                     cn(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE, D.C_COLLECT_FORM_INSTANCE_ID) + "= ?",
                     null, null, null, null
@@ -1049,7 +1163,8 @@ public class DataSource implements ICollectServersRepository, ICollectFormsRepos
                             D.C_CREATED,
                             D.C_DURATION,
                             D.C_ANONYMOUS,
-                            D.C_SIZE},
+                            D.C_SIZE,
+                            D.C_HASH},
                     null, null, null,
                     D.C_CREATED + " " + order,
                     null
@@ -1279,6 +1394,23 @@ public class DataSource implements ICollectServersRepository, ICollectFormsRepos
         return server;
     }
 
+    private TellaUploadServer updateTUServer(final TellaUploadServer server) {
+        ContentValues values = new ContentValues();
+        values.put(D.C_NAME, server.getName());
+        values.put(D.C_URL, server.getUrl());
+        values.put(D.C_USERNAME, server.getUsername());
+        values.put(D.C_PASSWORD, server.getPassword());
+        values.put(D.C_CHECKED, server.isChecked() ? 1 : 0);
+
+        database.update(D.T_TELLA_UPLOAD_SERVER, values, D.C_ID + "= ?", new String[]{Long.toString(server.getId())});
+
+        return server;
+    }
+
+    private void removeTUServerDB(long id) {
+        database.delete(D.T_TELLA_UPLOAD_SERVER, D.C_ID + " = ?", new String[]{Long.toString(id)});
+    }
+
     private void removeServer(long id) {
         try {
             database.beginTransaction();
@@ -1303,6 +1435,7 @@ public class DataSource implements ICollectServersRepository, ICollectFormsRepos
         deleteTable(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE);
         //deleteTable(D.T_MEDIA_FILE);
         deleteTable(D.T_COLLECT_SERVER);
+        deleteTable(D.T_TELLA_UPLOAD_SERVER);
     }
 
     public void deleteContacts() {
@@ -1315,11 +1448,12 @@ public class DataSource implements ICollectServersRepository, ICollectFormsRepos
         deleteTable(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE);
     }
 
-    public void deleteCollect() {
+    private void deleteAllServersDB() {
         deleteTable(D.T_COLLECT_BLANK_FORM);
         deleteTable(D.T_COLLECT_FORM_INSTANCE);
         deleteTable(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE);
         deleteTable(D.T_COLLECT_SERVER);
+        deleteTable(D.T_TELLA_UPLOAD_SERVER);
     }
 
     public void deleteMediaFiles() {
@@ -1401,6 +1535,18 @@ public class DataSource implements ICollectServersRepository, ICollectFormsRepos
         return collectServer;
     }
 
+    private TellaUploadServer cursorToTellaUploadServer(Cursor cursor) {
+        TellaUploadServer server = new TellaUploadServer();
+        server.setId(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID)));
+        server.setName(cursor.getString(cursor.getColumnIndexOrThrow(D.C_NAME)));
+        server.setUrl(cursor.getString(cursor.getColumnIndexOrThrow(D.C_URL)));
+        server.setUsername(cursor.getString(cursor.getColumnIndexOrThrow(D.C_USERNAME)));
+        server.setPassword(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PASSWORD)));
+        server.setChecked(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_CHECKED)) > 0);
+
+        return server;
+    }
+
     private OdkForm cursorToOdkForm(Cursor cursor) {
         OdkForm odkForm = new OdkForm();
         odkForm.setFormID(cursor.getString(cursor.getColumnIndexOrThrow(D.C_FORM_ID)));
@@ -1453,8 +1599,7 @@ public class DataSource implements ICollectServersRepository, ICollectFormsRepos
         mediaFile.setDuration(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_DURATION)));
         mediaFile.setSize(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_SIZE)));
         mediaFile.setAnonymous(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_ANONYMOUS)) == 1);
-
-        // todo: MediaFile.Builder
+        mediaFile.setHash(cursor.getString(cursor.getColumnIndexOrThrow(D.C_HASH)));
 
         return mediaFile;
     }

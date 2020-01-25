@@ -12,8 +12,8 @@ class D {
     /* DATABASE */
     static final String DATABASE_NAME = "tella.db";
     // 1=start,2=form media file status,3=updated flag in xforms
-    // 4=xml form part status
-    static final int DATABASE_VERSION = 4;
+    // 4=xml form part status,5=media file hash,6=tella upload server
+    static final int DATABASE_VERSION = 6;
 
     /* DATABASE TABLES */
     static final String T_TRUSTED_PERSON = "t_trusted_person";
@@ -23,6 +23,7 @@ class D {
     static final String T_MEDIA_FILE = "t_media_file";
     static final String T_COLLECT_FORM_INSTANCE_MEDIA_FILE = "t_collect_xform_instance_media_file";
     static final String T_SETTINGS = "t_settings";
+    static final String T_TELLA_UPLOAD_SERVER = "t_tella_upload_server";
 
     /* DATABASE COLUMNS */
     static final String C_ID = "c_id";

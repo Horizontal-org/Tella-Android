@@ -53,13 +53,8 @@ public class EntityMapper {
             entity.setWifiMac(metadata.getWifiMac());
             entity.setNotes(metadata.getNotes());
             entity.setDeviceID(metadata.getDeviceID());
-            entity.setLocationTime(metadata.getLocationTime());
-            entity.setFileModified(metadata.getFileModified());
-            entity.setProofGenerated(metadata.getProofGenerated());
-            entity.setFilePath(metadata.getFilePath());
             entity.setLocale(metadata.getLocale());
             entity.setFileHashSHA256(metadata.getFileHashSHA256());
-            entity.setCellInfo(metadata.getCellInfo());
         }
 
         return entity;
@@ -90,13 +85,8 @@ public class EntityMapper {
             metadata.setWifiMac(metadataEntity.getWifiMac());
             metadata.setNotes(metadataEntity.getNotes());
             metadata.setDeviceID(metadataEntity.getDeviceID());
-            metadata.setLocationTime(metadataEntity.getLocationTime());
-            metadata.setFileModified(metadataEntity.getFileModified());
-            metadata.setProofGenerated(metadataEntity.getProofGenerated());
-            metadata.setFilePath(metadataEntity.getFilePath());
             metadata.setLocale(metadataEntity.getLocale());
             metadata.setFileHashSHA256(metadataEntity.getFileHashSHA256());
-            metadata.setCellInfo(metadataEntity.getCellInfo());
         }
 
         return metadata;

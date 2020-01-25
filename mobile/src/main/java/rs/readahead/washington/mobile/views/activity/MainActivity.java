@@ -8,10 +8,12 @@ import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
@@ -23,7 +25,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import org.javarosa.core.model.FormDef;
-import org.witness.proofmode.ProofMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -121,8 +122,6 @@ public class MainActivity extends MetadataActivity implements
 
         // todo: check this..
         //SafetyNetCheck.setApiKey(getString(R.string.share_in_report));
-
-        ProofMode.init(this);
     }
 
     private void initSetup() {
@@ -216,9 +215,9 @@ public class MainActivity extends MetadataActivity implements
     void onContainerClicked() {
         if (PermissionUtil.checkPermission(this, Manifest.permission.CAMERA)) {
             if (Preferences.isAnonymousMode()) {
-                MainActivityPermissionsDispatcher.switchToCameraModeAnonymousWithCheck(this);
+                MainActivityPermissionsDispatcher.switchToCameraModeAnonymousWithPermissionCheck(this);
             } else {
-                MainActivityPermissionsDispatcher.switchToCameraModeLocationWithCheck(this);
+                MainActivityPermissionsDispatcher.switchToCameraModeLocationWithPermissionCheck(this);
             }
         }
     }
@@ -228,7 +227,7 @@ public class MainActivity extends MetadataActivity implements
         if (Preferences.isAnonymousMode()) {
             startAudioRecorderActivityAnonymous();
         } else {
-            MainActivityPermissionsDispatcher.startAudioRecorderActivityLocationWithCheck(this);
+            MainActivityPermissionsDispatcher.startAudioRecorderActivityLocationWithPermissionCheck(this);
         }
     }
 
@@ -263,7 +262,7 @@ public class MainActivity extends MetadataActivity implements
 
     private void startAudioRecordActivityWithLocationChecked() {
         Intent intent = new Intent(this, AudioRecordActivity2.class);
-        intent.putExtra(AudioRecordActivity2.RECORDER_MODE, AudioRecordActivity2.Mode.RETURN.name());
+        intent.putExtra(AudioRecordActivity2.RECORDER_MODE, AudioRecordActivity2.Mode.STAND.name());
         startActivityForResult(intent, C.RECORDED_AUDIO);
     }
 
@@ -334,7 +333,7 @@ public class MainActivity extends MetadataActivity implements
         if (Preferences.isAnonymousMode()) {
             startGalleryActivity(animated);
         } else {
-            MainActivityPermissionsDispatcher.startGalleryActivityWithCheck(this, animated);
+            MainActivityPermissionsDispatcher.startGalleryActivityWithPermissionCheck(this, animated);
         }
     }
 
@@ -604,7 +603,7 @@ public class MainActivity extends MetadataActivity implements
         if (Preferences.isAnonymousMode()) {
             startCollectFormEntryActivity(); // no need to check for permissions, as location won't be turned on
         } else {
-            MainActivityPermissionsDispatcher.startCollectFormEntryActivityWithCheck(this);
+            MainActivityPermissionsDispatcher.startCollectFormEntryActivityWithPermissionCheck(this);
         }
     }
 

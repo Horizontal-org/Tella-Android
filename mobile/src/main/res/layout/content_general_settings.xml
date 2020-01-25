@@ -9,7 +9,7 @@
     tools:context=".views.activity.GeneralSettingsActivity"
     tools:showIn="@layout/activity_general_settings">
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true">
@@ -24,7 +24,7 @@
                 style="@style/SettingsClickableHorizontalShadowLinearLayout"
                 android:layout_width="match_parent">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     style="@style/SettingsTitleImageViewStyle"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/ic_languages" />
@@ -60,14 +60,14 @@
 
             <LinearLayout style="@style/SettingsClickableHorizontalShadowLinearLayout">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     style="@style/SettingsTitleImageViewStyle"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/ic_bug_report_black_24dp" />
 
                 <LinearLayout style="@style/VerticalLinearLayout">
 
-                    <android.support.v7.widget.SwitchCompat
+                    <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/crash_report_switch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -93,5 +93,5 @@
 
 
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 </RelativeLayout>

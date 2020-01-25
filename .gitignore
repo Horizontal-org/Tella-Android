@@ -9,6 +9,7 @@
 /build
 /captures
 java_pid18084.hprof
+/mobile/release/
 
 # Google Maps API keys
 /mobile/src/debug/res/values/google_maps_api.xml

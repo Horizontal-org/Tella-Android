@@ -1,37 +1,32 @@
 package rs.readahead.washington.mobile;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleObserver;
-import android.arch.lifecycle.OnLifecycleEvent;
-import android.arch.lifecycle.ProcessLifecycleOwner;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.StrictMode;
-import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.multidex.MultiDexApplication;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.multidex.MultiDexApplication;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.evernote.android.job.JobManager;
 import com.squareup.leakcanary.LeakCanary;
 
-import org.witness.proofmode.ProofMode;
-
 import java.lang.ref.WeakReference;
-import java.util.concurrent.Callable;
 
 import info.guardianproject.cacheword.CacheWordHandler;
 import info.guardianproject.cacheword.ICacheWordSubscriber;
 import info.guardianproject.cacheword.ICachedSecrets;
 import io.fabric.sdk.android.Fabric;
-import io.reactivex.Completable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
-import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.bus.TellaBus;
 import rs.readahead.washington.mobile.data.rest.BaseApi;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
@@ -118,9 +113,6 @@ public class MyApplication extends MultiDexApplication implements ICacheWordSubs
         // Collect
         PropertyManager mgr = new PropertyManager();
         JavaRosa.initializeJavaRosa(mgr);
-
-        // ProofMode
-        prepareProofmode();
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
@@ -250,18 +242,7 @@ public class MyApplication extends MultiDexApplication implements ICacheWordSubs
     }
 
     private void configureCrashlytics() {
-        CrashlyticsCore core = new CrashlyticsCore.Builder().disabled(Preferences.isSubmittingCrashReports()).build();
+        CrashlyticsCore core = new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG || !Preferences.isSubmittingCrashReports()).build();
         Fabric.with(this, new Crashlytics.Builder().core(core).build());
-    }
-
-    private void prepareProofmode() {
-        Completable.fromCallable((Callable<Void>) () -> {
-            PreferenceManager.getDefaultSharedPreferences(this).edit()
-                    .putBoolean("trackMobileNetwork", true)
-                    .apply();
-            return null;
-        }).subscribeOn(Schedulers.io()).subscribe();
-
-        ProofMode.init(this);
     }
 }

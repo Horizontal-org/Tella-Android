@@ -1,8 +1,8 @@
 package rs.readahead.washington.mobile.data.repository;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.core.model.FormDef;
@@ -113,7 +113,7 @@ public class OpenRosaRepository implements IOpenRosaRepository {
             XFormSerializingVisitor serializer = new XFormSerializingVisitor();
             ByteArrayPayload payload = (ByteArrayPayload) serializer.createSerializedPayload(formInstance, getSubmissionDataReference(formDef));
 
-            parts.put("xml_submission_file\"; filename=\"" + instance.getInstanceName() + ".xml", // wtf, OkHttp3 :)
+            parts.put(getPartKey(C.OPEN_ROSA_XML_PART_NAME, C.OPEN_ROSA_XML_PART_NAME + ".xml"),
                     RequestBody.create(MediaType.parse("text/xml"), IOUtils.toByteArray(payload.getPayloadStream())));
 
             // add attachment parts
@@ -155,7 +155,7 @@ public class OpenRosaRepository implements IOpenRosaRepository {
             XFormSerializingVisitor serializer = new XFormSerializingVisitor();
             ByteArrayPayload payload = (ByteArrayPayload) serializer.createSerializedPayload(formInstance, getSubmissionDataReference(formDef));
 
-            parts.put(getPartKey(C.OPEN_ROSA_XML_PART_NAME, instance.getInstanceName() + ".xml"),
+            parts.put(getPartKey(C.OPEN_ROSA_XML_PART_NAME, C.OPEN_ROSA_XML_PART_NAME + ".xml"),
                     RequestBody.create(MediaType.parse("text/xml"), IOUtils.toByteArray(payload.getPayloadStream())));
 
             if (attachment != null) {

@@ -1,25 +1,21 @@
 package rs.readahead.washington.mobile.util;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.SwitchCompat;
-import android.text.TextUtils;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.TextView;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
-import rs.readahead.washington.mobile.domain.entity.TrustedPerson;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
-import rs.readahead.washington.mobile.views.activity.OnTrustedPersonInteractionListener;
+import rs.readahead.washington.mobile.domain.entity.ServerType;
 import rs.readahead.washington.mobile.views.custom.CameraPreviewAnonymousButton;
 
 
@@ -90,14 +86,14 @@ public class DialogsUtil {
     }
 
     public static AlertDialog showThreeOptionDialogWithTitle(Context context, String message, String title, String positiveButton, String neutralButton, String negativeButton,
-                                                           DialogInterface.OnClickListener okListener, DialogInterface.OnClickListener neutralListener, DialogInterface.OnClickListener cancelListener) {
+                                                             DialogInterface.OnClickListener okListener, DialogInterface.OnClickListener neutralListener, DialogInterface.OnClickListener cancelListener) {
         return new AlertDialog.Builder(context)
                 .setMessage(message)
                 .setTitle(title)
                 .setPositiveButton(positiveButton, okListener)
                 .setNeutralButton(neutralButton, neutralListener)
                 .setNegativeButton(negativeButton, cancelListener)
-                .setCancelable(true)
+                .setCancelable(false)
                 .show();
     }
 
@@ -116,11 +112,20 @@ public class DialogsUtil {
                 .show();
     }
 
+    public static ProgressDialog showLightProgressDialog(Context context, String text) {
+        ProgressDialog dialog = new ProgressDialog(context, R.style.BrightBackgroundDarkLettersDialogTheme);
+        dialog.setIndeterminate(true);
+        dialog.setMessage(text);
+        dialog.setCancelable(true);
+        dialog.show();
+        return dialog;
+    }
+
     public static ProgressDialog showProgressDialog(Context context, String text) {
         ProgressDialog dialog = new ProgressDialog(context);
         dialog.setIndeterminate(true);
         dialog.setMessage(text);
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);
         dialog.show();
         return dialog;
     }
@@ -137,12 +142,41 @@ public class DialogsUtil {
         metadataSwitch.setChecked(!Preferences.isAnonymousMode());
 
         builder.setView(view)
-                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Preferences.setAnonymousMode(!metadataSwitch.isChecked());
-                        metadataCameraButton.displayDrawable();
-                    }
+                .setPositiveButton(R.string.save, (dialog, which) -> {
+                    Preferences.setAnonymousMode(!metadataSwitch.isChecked());
+                    metadataCameraButton.displayDrawable();
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .setCancelable(true);
+
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        return alertDialog;
+    }
+
+    public interface ServerChosenListener {
+        void onChoice(ServerType serverType);
+    }
+
+    public static AlertDialog showServerChoosingDialog(final Context context, ServerChosenListener listener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater inflater = LayoutInflater.from(context);
+
+        @SuppressLint("InflateParams")
+        View view = inflater.inflate(R.layout.choose_server_dialog_layout, null);
+        builder.setView(view);
+
+        RadioButton odk = view.findViewById(R.id.radio_odk);
+        RadioButton directUpload = view.findViewById(R.id.radio_direct);
+
+        odk.setChecked(true);
+        directUpload.setChecked(false);
+
+        builder.setView(view)
+                .setTitle(R.string.what_type_of_server)
+                .setPositiveButton(R.string.next_section, (dialog, which) -> {
+                    listener.onChoice(odk.isChecked() ? ServerType.ODK_COLLECT : ServerType.TELLA_UPLOAD);
                 })
                 .setNegativeButton(R.string.cancel, null)
                 .setCancelable(true);
@@ -163,8 +197,18 @@ public class DialogsUtil {
                 cancelListener);
     }
 
-    public static AlertDialog showExitOnFinalDialog(Context context, DialogInterface.OnClickListener okListener,
+    public static AlertDialog showExitFileUploadDialog(Context context, DialogInterface.OnClickListener okListener,
                                                        DialogInterface.OnClickListener cancelListener) {
+        return DialogsUtil.showDialog(context,
+                context.getString(R.string.exit_cancel_upload),
+                context.getString(R.string.ok),
+                context.getString(R.string.cancel),
+                okListener,
+                cancelListener);
+    }
+
+    public static AlertDialog showExitOnFinalDialog(Context context, DialogInterface.OnClickListener okListener,
+                                                    DialogInterface.OnClickListener cancelListener) {
         return DialogsUtil.showDialog(context,
                 context.getString(R.string.ra_exit_will_stop_submission),
                 context.getString(R.string.ra_exit),
@@ -203,8 +247,7 @@ public class DialogsUtil {
     }
 
     public static AlertDialog showMetadataProgressBarDialog(Context context, DialogInterface.OnClickListener listener) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.BrightBackgroundDarkLettersDialogTheme);
         LayoutInflater inflater = LayoutInflater.from(context);
 
         @SuppressLint("InflateParams")
@@ -220,7 +263,45 @@ public class DialogsUtil {
         return alertDialog;
     }
 
-    public static void showTrustedContactDialog(int title, final Context context, final TrustedPerson trustedPerson, final OnTrustedPersonInteractionListener listener) {
+    public static AlertDialog showFormUpdatingDialog(Context context, DialogInterface.OnClickListener listener, int stringRes) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        LayoutInflater inflater = LayoutInflater.from(context);
+
+        @SuppressLint("InflateParams")
+        View view = inflater.inflate(R.layout.form_updating_dialog_layout, null);
+        TextView text = view.findViewById(R.id.progress_text);
+        text.setText(stringRes);
+        builder.setView(view)
+                .setNegativeButton(R.string.cancel, listener)
+                .setCancelable(false);
+
+
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        return alertDialog;
+    }
+
+    public static AlertDialog showCollectRefreshProgressDialog(Context context, DialogInterface.OnClickListener listener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        LayoutInflater inflater = LayoutInflater.from(context);
+
+        @SuppressLint("InflateParams")
+        View view = inflater.inflate(R.layout.collect_refresh_dialog_layout, null);
+        builder.setView(view)
+                .setNegativeButton(R.string.cancel, listener)
+                .setCancelable(false);
+
+
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        return alertDialog;
+    }
+
+/*    public static void showTrustedContactDialog(int title, final Context context, final TrustedPerson trustedPerson, final OnTrustedPersonInteractionListener listener) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         Activity activity = (Activity) context;
@@ -250,44 +331,38 @@ public class DialogsUtil {
         ViewUtil.setDialogSoftInputModeVisible(alertDialog);
 
         alertDialog.setCancelable(true);
-        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                Button button = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String nameText = name.getText().toString();
-                        phoneLayout.setError(null);
-                        titleLayout.setError(null);
+        alertDialog.setOnShowListener(dialog -> {
+            Button button = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            button.setOnClickListener(v -> {
+                String nameText = name.getText().toString();
+                phoneLayout.setError(null);
+                titleLayout.setError(null);
 
-                        String phoneNumberText = phoneNumber.getText().toString();
-                        if (nameText.length() > 0) {
-                            if (phoneNumberText.length() > 0) {
+                String phoneNumberText = phoneNumber.getText().toString();
+                if (nameText.length() > 0) {
+                    if (phoneNumberText.length() > 0) {
 
-                                TrustedPerson person = new TrustedPerson();
-                                if (!TextUtils.isEmpty(trustedPerson.getName())) {
-                                    person.setColumnId(trustedPerson.getColumnId());
-                                }
-                                person.setName(nameText);
-                                person.setPhoneNumber(phoneNumberText);
-                                listener.onTrustedPersonInteraction(person);
-
-                                alertDialog.dismiss();
-                            } else {
-                                phoneLayout.setError(context.getString(R.string.empty_field_error));
-                                phoneLayout.requestFocus();
-                            }
-                        } else {
-                            titleLayout.setError(context.getString(R.string.empty_field_error));
-                            titleLayout.requestFocus();
+                        TrustedPerson person = new TrustedPerson();
+                        if (!TextUtils.isEmpty(trustedPerson.getName())) {
+                            person.setColumnId(trustedPerson.getColumnId());
                         }
+                        person.setName(nameText);
+                        person.setPhoneNumber(phoneNumberText);
+                        listener.onTrustedPersonInteraction(person);
+
+                        alertDialog.dismiss();
+                    } else {
+                        phoneLayout.setError(context.getString(R.string.empty_field_error));
+                        phoneLayout.requestFocus();
                     }
-                });
-            }
+                } else {
+                    titleLayout.setError(context.getString(R.string.empty_field_error));
+                    titleLayout.requestFocus();
+                }
+            });
         });
         alertDialog.show();
-    }
+    }*/
 
     public static AlertDialog showFormInstanceDeleteDialog(
             @NonNull Context context,
@@ -312,10 +387,7 @@ public class DialogsUtil {
         return new AlertDialog.Builder(context)
                 .setMessage(msgResId)
                 .setPositiveButton(R.string.delete, listener)
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
+                .setNegativeButton(R.string.cancel, (dialog, which) -> {
                 })
                 .setCancelable(true)
                 .show();
@@ -326,10 +398,7 @@ public class DialogsUtil {
                 .setTitle(R.string.ra_save_to_device_storage)
                 .setMessage(R.string.ra_saving_outside_tella_message)
                 .setPositiveButton(R.string.save, listener)
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
+                .setNegativeButton(R.string.cancel, (dialog, which) -> {
                 })
                 .setCancelable(true)
                 .show();

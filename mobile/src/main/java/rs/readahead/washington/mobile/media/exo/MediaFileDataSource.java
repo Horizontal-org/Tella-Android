@@ -2,8 +2,8 @@ package rs.readahead.washington.mobile.media.exo;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
@@ -20,18 +20,23 @@ import rs.readahead.washington.mobile.media.MediaFileHandler;
 class MediaFileDataSource implements DataSource {
     private final Context context;
     private final MediaFile mediaFile;
-    private final @Nullable TransferListener<? super DataSource> listener;
+    private final @Nullable TransferListener listener;
 
     private Uri uri;
     private InputStream inputSteam;
-
+    private DataSpec dataSpec = new DataSpec(uri);
 
     MediaFileDataSource(@NonNull Context context,
                         @NonNull MediaFile mediaFile,
-                        @Nullable TransferListener<? super DataSource> listener) {
+                        @Nullable TransferListener listener) {
         this.context = context;
         this.mediaFile = mediaFile;
         this.listener = listener;
+    }
+
+    @Override
+    public void addTransferListener(TransferListener transferListener) {
+
     }
 
     @Override
@@ -46,7 +51,7 @@ class MediaFileDataSource implements DataSource {
         }
 
         if (listener != null) {
-            listener.onTransferStart(this, dataSpec);
+            listener.onTransferStart(this, dataSpec, false);
         }
 
         long skipped = inputSteam.skip(dataSpec.position);
@@ -70,7 +75,7 @@ class MediaFileDataSource implements DataSource {
         int read = inputSteam.read(buffer, offset, readLength);
 
         if (read > 0 && listener != null) {
-            listener.onBytesTransferred(this, read);
+            listener.onBytesTransferred(this, dataSpec, false, read);
         }
 
         return read;

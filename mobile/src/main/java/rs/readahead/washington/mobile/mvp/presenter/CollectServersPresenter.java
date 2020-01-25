@@ -28,7 +28,7 @@ public class CollectServersPresenter implements ICollectServersPresenterContract
         this.view = view;
     }
 
-    public void getServers() {
+    public void getCollectServers() {
         disposables.add(cacheWordDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -95,23 +95,6 @@ public class CollectServersPresenter implements ICollectServersPresenterContract
                             view.onRemoveServerError(throwable);
                         })
         );
-    }
-
-    @Override
-    public void deleteCollect() {
-        disposables.add(cacheWordDataSource.getDataSource()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMapCompletable(DataSource::deleteCollectModule)
-                .subscribe(
-                        () -> view.onCollectDeleted(),
-                        throwable -> {
-                            Crashlytics.logException(throwable);
-                            view.onCollectDeletedError(throwable);
-                        }
-                )
-        );
-
     }
 
     @Override

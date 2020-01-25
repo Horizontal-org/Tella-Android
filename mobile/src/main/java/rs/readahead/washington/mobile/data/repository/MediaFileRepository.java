@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.data.repository;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.util.Collection;
 

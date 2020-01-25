@@ -4,10 +4,13 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,13 +43,15 @@ import rs.readahead.washington.mobile.mvp.presenter.MediaFileViewerPresenter;
 import rs.readahead.washington.mobile.presentation.entity.MediaFileLoaderModel;
 import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.PermissionUtil;
+import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
 
 import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
 
 
 @RuntimePermissions
 public class PhotoViewerActivity extends CacheWordSubscriberBaseActivity implements
-        IMediaFileViewerPresenterContract.IView {
+        IMediaFileViewerPresenterContract.IView,
+        ShareDialogFragment.IShareDialogFragmentHandler {
     public static final String VIEW_PHOTO = "vp";
     public static final String NO_ACTIONS = "na";
 
@@ -100,7 +105,7 @@ public class PhotoViewerActivity extends CacheWordSubscriberBaseActivity impleme
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!actionsDisabled && showActions) {
             getMenuInflater().inflate(R.menu.photo_view_menu, menu);
-            if (mediaFile.getMetadata() != null){
+            if (mediaFile.getMetadata() != null) {
                 MenuItem item = menu.findItem(R.id.menu_item_metadata);
                 item.setVisible(true);
             }
@@ -119,9 +124,7 @@ public class PhotoViewerActivity extends CacheWordSubscriberBaseActivity impleme
         }
 
         if (id == R.id.menu_item_share) {
-            if (mediaFile != null) {
-                MediaFileHandler.startShareActivity(this, mediaFile);
-            }
+            shareMediaFile();
             return true;
         }
 
@@ -152,6 +155,8 @@ public class PhotoViewerActivity extends CacheWordSubscriberBaseActivity impleme
         if (alertDialog != null && alertDialog.isShowing()) {
             alertDialog.dismiss();
         }
+
+        dismissShareDialog();
 
         super.onDestroy();
     }
@@ -228,9 +233,48 @@ public class PhotoViewerActivity extends CacheWordSubscriberBaseActivity impleme
         return this;
     }
 
+    @Override
+    public void sharingMediaMetadataSelected() {
+        dismissShareDialog();
+        startShareActivity(true);
+    }
+
+    @Override
+    public void sharingMediaOnlySelected() {
+        dismissShareDialog();
+        startShareActivity(false);
+    }
+
+    private void shareMediaFile() {
+        if (mediaFile == null) {
+            return;
+        }
+
+        if (mediaFile.getMetadata() != null) {
+            ShareDialogFragment.newInstance().show(getSupportFragmentManager(), ShareDialogFragment.TAG);
+        } else {
+            startShareActivity(false);
+        }
+    }
+
+    private void startShareActivity(boolean includeMetadata) {
+        if (mediaFile == null) {
+            return;
+        }
+
+        MediaFileHandler.startShareActivity(this, mediaFile, includeMetadata);
+    }
+
+    private void dismissShareDialog() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(ShareDialogFragment.TAG);
+        if (fragment instanceof ShareDialogFragment) {
+            ((ShareDialogFragment) fragment).dismiss();
+        }
+    }
+
     private void showExportDialog() {
         alertDialog = DialogsUtil.showExportMediaDialog(this, (dialog, which) ->
-                PhotoViewerActivityPermissionsDispatcher.exportMediaFileWithCheck(PhotoViewerActivity.this));
+                PhotoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(PhotoViewerActivity.this));
     }
 
     private void showDeleteMediaDialog() {
@@ -242,7 +286,8 @@ public class PhotoViewerActivity extends CacheWordSubscriberBaseActivity impleme
                         presenter.deleteMediaFiles(mediaFile);
                     }
                 })
-                .setNegativeButton(R.string.cancel, (dialog, which) -> {})
+                .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                })
                 .setCancelable(true)
                 .show();
     }

@@ -15,7 +15,7 @@ package rs.readahead.washington.mobile.views.collect.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.text.Selection;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -85,6 +85,7 @@ public class StringWidget extends QuestionWidget {
             answer.setEnabled(false);
             answer.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
             answer.setFocusable(false);
+            answer.setVisibility(GONE);
         }
 
         addAnswerView(answer);

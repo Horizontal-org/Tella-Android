@@ -27,10 +27,6 @@ public class ExoEventListener implements Player.EventListener {
     }
 
     @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest) {
-    }
-
-    @Override
     public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
     }
 
@@ -40,10 +36,6 @@ public class ExoEventListener implements Player.EventListener {
 
     @Override
     public void onPlayerError(ExoPlaybackException error) {
-    }
-
-    @Override
-    public void onPositionDiscontinuity() {
     }
 
     @Override

@@ -27,7 +27,7 @@
             android:text="@string/selected_files" />
     </FrameLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/attachmentsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="100dp"
@@ -37,7 +37,7 @@
         android:scrollbars="none"
         android:orientation="horizontal"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:visibility="gone"/>
 
     <RelativeLayout

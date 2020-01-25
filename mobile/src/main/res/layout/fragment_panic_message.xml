@@ -7,7 +7,7 @@
     android:textDirection="locale"
     tools:context="rs.readahead.washington.mobile.views.fragment.PanicMessageFragment">
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/wa_white"
@@ -35,7 +35,7 @@
                     android:textSize="14sp"
                     android:layout_marginBottom="15dp"/>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/panic_message_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -53,13 +53,13 @@
                         android:textColor="@color/wa_black"
                         android:textSize="14sp"
                         android:textStyle="bold"/>
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
             <!--<View style="@style/SettingsMainLine"/>  android:layout_marginTop="10dp"-->
 
-            <android.support.v7.widget.SwitchCompat
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/geolocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
                 android:text="@string/panic_message_geolocation"
                 android:textSize="14sp"/>
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 
 </RelativeLayout>

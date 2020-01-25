@@ -14,7 +14,7 @@
 package rs.readahead.washington.mobile.views.collect.widgets;
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatCheckBox;
+import androidx.appcompat.widget.AppCompatCheckBox;
 import android.text.method.LinkMovementMethod;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;

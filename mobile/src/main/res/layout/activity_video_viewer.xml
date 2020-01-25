@@ -13,7 +13,7 @@
         android:layout_gravity="center"
         android:gravity="center"/>
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/player_toolbar"
         style="@style/AppTheme.NoActionBarToolbar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"

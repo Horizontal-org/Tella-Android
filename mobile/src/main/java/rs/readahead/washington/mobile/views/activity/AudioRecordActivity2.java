@@ -1,28 +1,26 @@
 package rs.readahead.washington.mobile.views.activity;
 
 import android.Manifest;
+import android.animation.AnimatorInflater;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.SystemClock;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
-import android.widget.SeekBar;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -36,7 +34,7 @@ import permissions.dispatcher.RuntimePermissions;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.Metadata;
-import rs.readahead.washington.mobile.media.AudioPlayer;
+import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.media.AudioRecorder;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IAudioCapturePresenterContract;
@@ -45,13 +43,15 @@ import rs.readahead.washington.mobile.mvp.presenter.AudioCapturePresenter;
 import rs.readahead.washington.mobile.mvp.presenter.MetadataAttacher;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.PermissionUtil;
+import rs.readahead.washington.mobile.util.StringUtils;
 
 
 @RuntimePermissions
 public class AudioRecordActivity2 extends MetadataActivity implements
+        AudioRecorder.AudioRecordInterface,
         IAudioCapturePresenterContract.IView,
         IMetadataAttachPresenterContract.IView {
-    private static final String TIME_FORMAT = "%02d : %02d";
+    private static final String TIME_FORMAT = "%02d:%02d:%02d";
     public static String RECORDER_MODE = "rm";
 
     @BindView(R.id.record_audio)
@@ -60,19 +60,19 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     ImageButton mPlay;
     @BindView(R.id.stop_audio)
     ImageButton mStop;
-    @BindView(R.id.evidence)
-    AppCompatButton mEvidence;
     @BindView(R.id.audio_time)
     TextView mTimer;
-    @BindView(R.id.audio_seek_bar)
-    SeekBar mSeekBar;
-    @BindView(R.id.recording_progress)
-    ProgressBar mProgressBar;
-    @BindView(R.id.recording_info)
-    TextView mInfo;
+    @BindView(R.id.free_space)
+    TextView freeSpace;
+    @BindView(R.id.red_dot)
+    ImageView redDot;
 
-    private Handler durationHandler;
-    private long startTime = 0L;
+    private ObjectAnimator animator;
+
+    private boolean notRecording;
+
+    private static final long UPDATE_SPACE_TIME_MS = 60000;
+    private long lastUpdateTime;
 
     // handling MediaFile
     private MediaFile handlingMediaFile;
@@ -84,9 +84,6 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     private CompositeDisposable disposable = new CompositeDisposable();
     private AlertDialog rationaleDialog;
 
-    // playing
-    private AudioPlayer audioPlayer;
-    private AudioPlayer.Listener audioPlayerListener;
 
     public enum Mode {
         COLLECT, // todo: mode is return/stand, add another one for view msgs settings
@@ -115,46 +112,26 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         presenter = new AudioCapturePresenter(this);
         metadataAttacher = new MetadataAttacher(this);
 
+        notRecording = true;
+
         mode = Mode.STAND;
         if (getIntent().hasExtra(RECORDER_MODE)) {
             mode = Mode.valueOf(getIntent().getStringExtra(RECORDER_MODE));
         }
 
-        if (mode == Mode.COLLECT) {
-            mEvidence.setText(R.string.attach_audio_to_the_form);
-        }
+        animator = (ObjectAnimator) AnimatorInflater.loadAnimator(AudioRecordActivity2.this, R.animator.fade_in);
 
+        mTimer.setText(timeToString(0));
         disableStop();
-        disablePlay();
+    }
 
-        durationHandler = new Handler();
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-        audioPlayerListener = new AudioPlayer.Listener() {
-            private int duration;
-
-            @Override
-            public void onStart(int duration) {
-                this.duration = duration;
-                //mSeekBar.setMax(duration);
-                //mSeekBar.setClickable(false);
-                mProgressBar.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onStop() {
-                stopPlayer();
-            }
-
-            @Override
-            public void onProgress(int currentPosition) {
-                int timeRemaining = duration - currentPosition;
-
-                mTimer.setText(String.format(Locale.ROOT, TIME_FORMAT, TimeUnit.MILLISECONDS.toMinutes(timeRemaining),
-                        TimeUnit.MILLISECONDS.toSeconds(timeRemaining) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeRemaining))));
-                //mSeekBar.setProgress(currentPosition);
-                //todo: show play progress on mProgressBar
-            }
-        };
+        if (presenter != null) {
+            presenter.checkAvailableStorage();
+        }
     }
 
     @Override
@@ -169,20 +146,21 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick({R.id.record_audio, R.id.play_audio, R.id.stop_audio, R.id.evidence})
+    @OnClick({R.id.record_audio, R.id.play_audio, R.id.stop_audio})//, R.id.evidence
     public void manageClick(View view) {
         switch (view.getId()) {
             case R.id.record_audio:
-                AudioRecordActivity2PermissionsDispatcher.handleRecordWithCheck(this);
+                if (notRecording) {
+                    AudioRecordActivity2PermissionsDispatcher.handleRecordWithPermissionCheck(this);
+                } else {
+                    handlePause();
+                }
                 break;
             case R.id.play_audio:
-                handlePlay();
+                openRecordings();
                 break;
             case R.id.stop_audio:
                 handleStop();
-                break;
-            case R.id.evidence:
-                returnData();
                 break;
         }
     }
@@ -190,8 +168,6 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
-        stopPlayer();
 
         setResult(Activity.RESULT_CANCELED);
         finish();
@@ -216,10 +192,10 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     @Override
     protected void onDestroy() {
+        animator.end();
+        animator = null;
         disposable.dispose();
         cancelRecorder();
-        stopPlayer();
-        audioPlayerListener = null;
         stopPresenter();
 
         super.onDestroy();
@@ -241,28 +217,23 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     @NeedsPermission(Manifest.permission.RECORD_AUDIO)
     void handleRecord() {
-        mInfo.setText(getString(R.string.recording));
+        notRecording = false;
 
-        mProgressBar.setVisibility(View.VISIBLE);
-        //mSeekBar.setVisibility(View.GONE);
-        mEvidence.setVisibility(View.GONE);
+        if (audioRecorder == null) {   //first start or restart
+            disablePlay();
+            handlingMediaFile = null;
+            cancelRecorder();
+
+            audioRecorder = new AudioRecorder(this, this);
+            disposable.add(audioRecorder.startRecording()
+                    .subscribe(this::onRecordingStopped, throwable -> onRecordingError())
+            );
+        } else {
+            canclePauseRecorder();
+        }
 
         disableRecord();
         enableStop();
-        disablePlay();
-
-        handlingMediaFile = null;
-
-        cancelRecorder();
-
-        audioRecorder = new AudioRecorder(this);
-        disposable.add(audioRecorder.startRecording()
-                .subscribe(this::onRecordingStopped, throwable -> onRecordingError())
-        );
-
-        startTime = SystemClock.uptimeMillis();
-        durationHandler.postDelayed(updateProgressBarTime, 0);
-        //showToast(R.string.recording_started);
     }
 
     @OnShowRationale(Manifest.permission.RECORD_AUDIO)
@@ -290,6 +261,15 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     }
 
     @Override
+    public void onAvailableStorage(long memory) {
+        updateStorageSpaceLeft(memory);
+    }
+
+    @Override
+    public void onAvailableStorageFailed(Throwable throwable) {
+    }
+
+    @Override
     public void onMetadataAttached(long mediaFileId, @Nullable Metadata metadata) {
         Intent intent = new Intent();
 
@@ -300,9 +280,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         }
 
         setResult(Activity.RESULT_OK, intent);
-        disablePlay();
-        mEvidence.setVisibility(View.GONE);
-        mTimer.setText(String.format(Locale.ROOT, TIME_FORMAT, 0, 0));
+        mTimer.setText(timeToString(0));
 
         if (mode != Mode.STAND) {
             finish();
@@ -315,41 +293,33 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     }
 
     @Override
+    public void onDurationUpdate(long duration) {
+        runOnUiThread(() -> mTimer.setText(timeToString(duration)));
+
+        if (duration > UPDATE_SPACE_TIME_MS + lastUpdateTime) {
+            lastUpdateTime += UPDATE_SPACE_TIME_MS;
+
+            if (presenter != null) {
+                presenter.checkAvailableStorage();
+            }
+        }
+    }
+
+    @Override
     public Context getContext() {
         return this;
     }
 
     private void handleStop() {
+        notRecording = true;
         stopRecorder();
-        stopPlayer();
     }
 
-    private void handlePlay() {
-        if (handlingMediaFile == null) {
-            return;
-        }
-
-        mProgressBar.setVisibility(View.GONE);
-        //mSeekBar.setVisibility(View.VISIBLE);
-        mInfo.setText(getString(R.string.recording_play));
-        mEvidence.setEnabled(false);
-
-        disableRecord();
-        enableStop();
-        disablePlay();
-
-        audioPlayer = new AudioPlayer(this, audioPlayerListener);
-        audioPlayer.play(handlingMediaFile);
+    private void handlePause() {
+        pauseRecorder();
+        enableRecord();
+        notRecording = true;
     }
-
-    private Runnable updateProgressBarTime = new Runnable() {
-        public void run() {
-            long elapsed = SystemClock.uptimeMillis() - startTime;
-            mTimer.setText(String.format(Locale.ROOT, TIME_FORMAT, TimeUnit.MILLISECONDS.toMinutes(elapsed),
-                    TimeUnit.MILLISECONDS.toSeconds(elapsed) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(elapsed))));
-            durationHandler.postDelayed(this, 0);
-        }
-    };
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
     private void onRecordingStopped(MediaFile mediaFile) {
@@ -360,7 +330,6 @@ public class AudioRecordActivity2 extends MetadataActivity implements
             disablePlay();
             enableRecord();
 
-            mEvidence.setVisibility(View.GONE);
         } else {
             handlingMediaFile = mediaFile;
             handlingMediaFile.setSize(MediaFileHandler.getSize(getContext(), mediaFile));
@@ -369,14 +338,8 @@ public class AudioRecordActivity2 extends MetadataActivity implements
             enablePlay();
             enableRecord();
 
-            mInfo.setText("");
-            mEvidence.setVisibility(View.VISIBLE);
-
-            //showToast(R.string.recorded_successfully);
+            returnData();
         }
-
-        durationHandler.removeCallbacks(updateProgressBarTime);
-        mProgressBar.setVisibility(View.GONE);
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
@@ -387,20 +350,8 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         disablePlay();
         enableRecord();
 
-        durationHandler.removeCallbacks(updateProgressBarTime);
-        mProgressBar.setVisibility(View.GONE);
-        mTimer.setText(String.format(Locale.ROOT, TIME_FORMAT, 0, 0));
+        mTimer.setText(timeToString(0));
         showToast(R.string.recorded_unsuccessfully);
-    }
-
-    private void onPlayerStop() {
-        mEvidence.setEnabled(true);
-        //mSeekBar.setProgress(duration);
-        mProgressBar.setVisibility(View.GONE);
-        mInfo.setText("");
-        enableRecord();
-        disableStop();
-        enablePlay();
     }
 
     private void returnData() {
@@ -410,11 +361,19 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     }
 
     private void disableRecord() {
-        disableButton(mRecord);
+        mRecord.setBackground(getContext().getResources().getDrawable(R.drawable.white_circle_background));
+        mRecord.setImageResource(R.drawable.ic_pause_black_24dp);
+        redDot.setVisibility(View.VISIBLE);
+
+        animator.setTarget(redDot);
+        animator.start();
     }
 
     private void enableRecord() {
-        enableButton(mRecord);
+        mRecord.setBackground(getContext().getResources().getDrawable(R.drawable.audio_record_button_background));
+        mRecord.setImageResource(R.drawable.ic_mic_white);
+        redDot.setVisibility(View.GONE);
+        animator.end();
     }
 
     private void disablePlay() {
@@ -440,21 +399,32 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     private void disableButton(ImageButton button) {
         button.setEnabled(false);
-        button.setAlpha(.3f);
+        button.setAlpha(.2f);
     }
 
-    private void stopPlayer() {
-        if (audioPlayer != null) {
-            audioPlayer.stop();
-            audioPlayer = null;
-            onPlayerStop();
-        }
+    private void openRecordings() {
+        Intent intent = new Intent(this, GalleryActivity.class);
+        intent.putExtra(GalleryActivity.GALLERY_FILTER, IMediaFileRecordRepository.Filter.AUDIO.name());
+        intent.putExtra(GalleryActivity.GALLERY_ALLOWS_ADDING, false);
+        startActivity(intent);
     }
 
     private void stopRecorder() {
         if (audioRecorder != null) {
             audioRecorder.stopRecording();
             audioRecorder = null;
+        }
+    }
+
+    private void pauseRecorder() {
+        if (audioRecorder != null) {
+            audioRecorder.pauseRecording();
+        }
+    }
+
+    private void canclePauseRecorder() {
+        if (audioRecorder != null) {
+            audioRecorder.cancelPause();
         }
     }
 
@@ -469,6 +439,33 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         if (presenter != null) {
             presenter.destroy();
             presenter = null;
+        }
+    }
+
+    private String timeToString(long duration) {
+        return String.format(Locale.ROOT, TIME_FORMAT,
+                TimeUnit.MILLISECONDS.toHours(duration),
+                TimeUnit.MILLISECONDS.toMinutes(duration) -
+                        TimeUnit.MINUTES.toMinutes(TimeUnit.MILLISECONDS.toHours(duration)),
+                TimeUnit.MILLISECONDS.toSeconds(duration) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)));
+    }
+
+
+    private void updateStorageSpaceLeft(long memoryLeft) {
+        double timeMinutes = memoryLeft / 262144.0; // 4 minutes --> 1MB approximation/1024*256
+        // todo: move this (262144.0) number to recorder to provide
+
+        int days = (int) (timeMinutes / 1440);
+        int hours = (int) ((timeMinutes - days * 1440) / 60);
+        int minutes = (int) (timeMinutes - days * 1440 - hours * 60);
+
+        String spaceLeft = StringUtils.getFileSize(memoryLeft);
+
+        if (days < 1 && hours < 12) {
+            freeSpace.setText(getString(R.string.hours_minutes_and_space_left, hours, minutes, spaceLeft));
+        } else {
+            freeSpace.setText(getString(R.string.days_hours_and_space_left, days, hours, spaceLeft));
         }
     }
 }

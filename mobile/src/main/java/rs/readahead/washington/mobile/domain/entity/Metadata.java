@@ -27,12 +27,7 @@ public final class Metadata implements Serializable {
     private String wifiMac;
     private String notes;
     private String deviceID;
-    private String locationTime;
-    private String fileModified;
-    private String proofGenerated;
-    private String filePath;
-    private String fileHashSHA256;
-    private String cellInfo;
+    private String fileHashSHA256; // todo: remove this one day
 
     public Metadata() {
     }
@@ -116,38 +111,6 @@ public final class Metadata implements Serializable {
 
     public void setWifiMac(String wifiMac) {
         this.wifiMac = wifiMac;
-    }
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
-    public String getProofGenerated() {
-        return proofGenerated;
-    }
-
-    public void setProofGenerated(String proofGenerated) {
-        this.proofGenerated = proofGenerated;
-    }
-
-    public String getFileModified() {
-        return fileModified;
-    }
-
-    public void setFileModified(String fileModified) {
-        this.fileModified = fileModified;
-    }
-
-    public String getLocationTime() {
-        return locationTime;
-    }
-
-    public void setLocationTime(String locationTime) {
-        this.locationTime = locationTime;
     }
 
     public String getDeviceID() {
@@ -244,13 +207,5 @@ public final class Metadata implements Serializable {
 
     public void setFileHashSHA256(String fileHashSHA256) {
         this.fileHashSHA256 = fileHashSHA256;
-    }
-
-    public String getCellInfo() {
-        return cellInfo;
-    }
-
-    public void setCellInfo(String cellInfo) {
-        this.cellInfo = cellInfo;
     }
 }

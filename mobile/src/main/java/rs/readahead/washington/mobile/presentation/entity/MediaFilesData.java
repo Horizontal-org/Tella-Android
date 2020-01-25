@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.presentation.entity;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;

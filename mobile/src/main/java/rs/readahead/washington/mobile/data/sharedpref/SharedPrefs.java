@@ -3,7 +3,7 @@ package rs.readahead.washington.mobile.data.sharedpref;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.util.concurrent.Callable;
 
@@ -43,6 +43,8 @@ public class SharedPrefs {
     static final String OFFLINE_MODE = "offline_mode";
     static final String QUICK_EXIT_BUTTON = "quick_exit_button";
     static final String COLLECT_OPTION = "collect_option";
+    static final String INSTALLATION_ID = "installation_id";
+    static final String LAST_COLLECT_REFRESH = "last_collect_refresh";
 
     private static SharedPrefs instance;
     private SharedPreferences pref;
@@ -170,6 +172,19 @@ public class SharedPrefs {
     float setFloat(final String name, final float value) {
         return Single.fromCallable(() -> {
             editor.putFloat(name, value);
+            editor.apply();
+            return value;
+        }).subscribeOn(Schedulers.io()).blockingGet();
+    }
+
+    long getLong(final String name, final long def) {
+        return Single.fromCallable(() -> pref.getLong(name, def))
+                .subscribeOn(Schedulers.io()).blockingGet();
+    }
+
+    long setLong(final String name, final long value) {
+        return Single.fromCallable(() -> {
+            editor.putLong(name, value);
             editor.apply();
             return value;
         }).subscribeOn(Schedulers.io()).blockingGet();

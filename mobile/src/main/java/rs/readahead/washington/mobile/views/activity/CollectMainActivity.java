@@ -1,18 +1,21 @@
 package rs.readahead.washington.mobile.views.activity;
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
+
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.Menu;
@@ -42,13 +45,10 @@ import rs.readahead.washington.mobile.bus.event.CollectFormSubmissionErrorEvent;
 import rs.readahead.washington.mobile.bus.event.CollectFormSubmitStoppedEvent;
 import rs.readahead.washington.mobile.bus.event.CollectFormSubmittedEvent;
 import rs.readahead.washington.mobile.bus.event.DeleteFormInstanceEvent;
-import rs.readahead.washington.mobile.bus.event.DownloadBlankFormEntryEvent;
 import rs.readahead.washington.mobile.bus.event.ReSubmitFormInstanceEvent;
-import rs.readahead.washington.mobile.bus.event.RemoveFormFromBlankFormListEvent;
 import rs.readahead.washington.mobile.bus.event.ShowBlankFormEntryEvent;
 import rs.readahead.washington.mobile.bus.event.ShowFormInstanceEntryEvent;
 import rs.readahead.washington.mobile.bus.event.ToggleBlankFormPinnedEvent;
-import rs.readahead.washington.mobile.bus.event.UpdateBlankFormEntryEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
@@ -77,6 +77,11 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
     private EventCompositeDisposable disposables;
     private CollectMainPresenter presenter;
     private CollectCreateFormControllerPresenter formControllerPresenter;
+    private AlertDialog alertDialog;
+    private ViewPager mViewPager;
+    private ViewPagerAdapter adapter;
+    private long numOfCollectServers = 0;
+    int blankFragmentPosition;
 
     @BindView(R.id.fab)
     FloatingActionButton fab;
@@ -88,15 +93,6 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
     View noServersView;
     @BindView(R.id.blank_forms_text)
     TextView blankFormsText;
-
-
-    private AlertDialog alertDialog;
-    private ProgressDialog progressDialog;
-
-    private ViewPager mViewPager;
-    private ViewPagerAdapter adapter;
-    private long numOfCollectServers = 0;
-    int blankFragmentPosition;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -126,8 +122,12 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
         tabLayout.setupWithViewPager(mViewPager);
 
         fab.setOnClickListener(view -> {
-            if (mViewPager.getCurrentItem() == blankFragmentPosition) {
-                getBlankFormsListFragment().refreshBlankForms();
+            if (MyApplication.isConnectedToInternet(getContext())) {
+                if (mViewPager.getCurrentItem() == blankFragmentPosition) {
+                    getBlankFormsListFragment().refreshBlankForms();
+                }
+            } else {
+                showToast(getString(R.string.not_connected_message));
             }
         });
 
@@ -157,22 +157,10 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
                 showFormEntry(event.getForm());
             }
         });
-        disposables.wire(DownloadBlankFormEntryEvent.class, new EventObserver<DownloadBlankFormEntryEvent>() {
-            @Override
-            public void onNext(DownloadBlankFormEntryEvent event) {
-                downloadFormEntry(event.getForm());
-            }
-        });
         disposables.wire(ToggleBlankFormPinnedEvent.class, new EventObserver<ToggleBlankFormPinnedEvent>() {
             @Override
             public void onNext(ToggleBlankFormPinnedEvent event) {
                 toggleFormFavorite(event.getForm());
-            }
-        });
-        disposables.wire(RemoveFormFromBlankFormListEvent.class, new EventObserver<RemoveFormFromBlankFormListEvent>() {
-            @Override
-            public void onNext(RemoveFormFromBlankFormListEvent event) {
-                removeFormDefinition(event.getForm());
             }
         });
         disposables.wire(ShowFormInstanceEntryEvent.class, new EventObserver<ShowFormInstanceEntryEvent>() {
@@ -235,13 +223,6 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
                 reSubmitFormInstance(event.getInstance());
             }
         });
-        disposables.wire(UpdateBlankFormEntryEvent.class, new EventObserver<UpdateBlankFormEntryEvent>() {
-            @Override
-            public void onNext(UpdateBlankFormEntryEvent event) {
-                updateFormEntry(event.getForm());
-            }
-        });
-
     }
 
     @Override
@@ -271,8 +252,6 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
 
         stopPresenter();
         stopCreateFormControllerPresenter();
-        hideProgressDialog();
-
         super.onDestroy();
     }
 
@@ -313,16 +292,6 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
     }
 
     @Override
-    public void onDownloadBlankFormDefSuccess(CollectForm collectForm, FormDef formDef) {
-        ((BlankFormsListFragment) adapter.getItem(1)).updateForm(collectForm);
-    }
-
-    @Override
-    public void onUpdateBlankFormDefSuccess(CollectForm collectForm, FormDef formDef) {
-        ((BlankFormsListFragment) adapter.getItem(1)).updateDownloadedFormList();
-    }
-
-    @Override
     public void onInstanceFormDefSuccess(CollectFormInstance instance) {
         startCreateInstanceFormControllerPresenter(instance);
     }
@@ -338,7 +307,7 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
         if (Preferences.isAnonymousMode()) {
             startCollectFormEntryActivity(); // no need to check for permissions, as location won't be turned on
         } else {
-            CollectMainActivityPermissionsDispatcher.startCollectFormEntryActivityWithCheck(this);
+            CollectMainActivityPermissionsDispatcher.startCollectFormEntryActivityWithPermissionCheck(this);
         }
     }
 
@@ -399,16 +368,6 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
         Timber.d(throwable, getClass().getName());
     }
 
-    @Override
-    public void onBlankFormDefRemoved() {
-
-    }
-
-    @Override
-    public void onBlankFormDefRemoveError(Throwable error) {
-
-    }
-
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     public void startCollectFormEntryActivity() {
         startActivity(new Intent(this, CollectFormEntryActivity.class));
@@ -435,31 +394,8 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void downloadFormEntry(CollectForm form) {
-        if (MyApplication.isConnectedToInternet(getContext())) {
-            startDownloadFormDefPresenter(form);
-        } else {
-            showToast(R.string.not_connected_message);
-        }
-    }
-
-    @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void updateFormEntry(CollectForm form) {
-        if (MyApplication.isConnectedToInternet(getContext())) {
-            startUpdateFormDefPresenter(form);
-        } else {
-            showToast(R.string.not_connected_message);
-        }
-    }
-
-    @SuppressWarnings("MethodOnlyUsedFromInnerClass")
     private void toggleFormFavorite(CollectForm form) {
         presenter.toggleFavorite(form);
-    }
-
-    @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void removeFormDefinition(CollectForm form) {
-        presenter.removeBlankFormDef(form);
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
@@ -480,7 +416,8 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
         alertDialog = new AlertDialog.Builder(this)
                 .setMessage(R.string.ra_cancel_pending_form_msg)
                 .setPositiveButton(R.string.discard, (dialog, which) -> presenter.deleteFormInstance(instanceId))
-                .setNegativeButton(R.string.cancel, (dialog, which) -> {})
+                .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                })
                 .setCancelable(true)
                 .show();
     }
@@ -499,14 +436,6 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
         presenter.getBlankFormDef(form);
     }
 
-    private void startDownloadFormDefPresenter(CollectForm form) {
-        presenter.downloadBlankFormDef(form);
-    }
-
-    private void startUpdateFormDefPresenter(CollectForm form) {
-        presenter.updateBlankFormDef(form);
-    }
-
     private void startGetInstanceFormDefPresenter(long instanceId) {
         presenter.getInstanceFormDef(instanceId);
     }
@@ -515,13 +444,6 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
         if (presenter != null) {
             presenter.destroy();
             presenter = null;
-        }
-    }
-
-    private void hideProgressDialog() {
-        if (progressDialog != null) {
-            progressDialog.dismiss();
-            progressDialog = null;
         }
     }
 
@@ -549,7 +471,6 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
         adapter.addFragment(DraftFormsListFragment.newInstance(), getString(R.string.ra_draft));
         adapter.addFragment(BlankFormsListFragment.newInstance(), getString(R.string.ra_blank));
         adapter.addFragment(SubmittedFormsListFragment.newInstance(), getString(R.string.ra_submitted));
-
         blankFragmentPosition = getFragmentPosition(FormListFragment.Type.BLANK);
     }
 
@@ -573,7 +494,6 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
                 return (T) fragment;
             }
         }
-
         throw new IllegalArgumentException();
     }
 
@@ -584,7 +504,6 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
                 return i;
             }
         }
-
         throw new IllegalArgumentException();
     }
 
@@ -595,5 +514,17 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
 
     private void startCollectHelp() {
         startActivity(new Intent(CollectMainActivity.this, CollectHelpActivity.class));
+    }
+
+    public void hideFab() {
+        if (fab != null) {
+            fab.setVisibility(View.GONE);
+        }
+    }
+
+    public void showFab() {
+        if (fab != null) {
+            fab.setVisibility(View.VISIBLE);
+        }
     }
 }

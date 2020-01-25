@@ -12,6 +12,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import androidx.annotation.Nullable;
+
 
 public class Util {
     private Util() {}
@@ -21,6 +23,18 @@ public class Util {
             throw new ArithmeticException("integer overflow");
         }
         return (int) value;
+    }
+
+    public static long parseLong(@Nullable String value, long defaultValue) {
+        if (value == null) {
+            return defaultValue;
+        }
+
+        try {
+            return Long.parseLong(value);
+        } catch (Exception e) {
+            return defaultValue;
+        }
     }
 
     public static String getVideoDuration(int seconds) {
@@ -55,7 +69,7 @@ public class Util {
         return getDateTimeString(timestamp, "dd-MM-yyyy HH:mm");
     }
 
-    private static String getDateTimeString(long timestamp, @SuppressWarnings("SameParameterValue") String format) {
+    public static String getDateTimeString(long timestamp, @SuppressWarnings("SameParameterValue") String format) {
         try {
             return new SimpleDateFormat(format, Locale.US).format(new Date(timestamp));
         } catch (Exception e) {

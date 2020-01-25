@@ -1,7 +1,7 @@
 package rs.readahead.washington.mobile.data.sharedpref;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -179,6 +179,23 @@ public class Preferences {
         setString(SharedPrefs.PANIC_MESSAGE, value);
     }
 
+    @Nullable
+    public static String getInstallationId() {
+        return getString(SharedPrefs.INSTALLATION_ID, null);
+    }
+
+    public static void setInstallationId(@Nullable String value) {
+        setString(SharedPrefs.INSTALLATION_ID, value);
+    }
+
+    @Nullable
+    public static long getLastCollectRefresh() {
+        return getLong(SharedPrefs.LAST_COLLECT_REFRESH, 0);
+    }
+
+    public static void setLastCollectRefresh(@Nullable long value) {
+        setLong(SharedPrefs.LAST_COLLECT_REFRESH, value);
+    }
 
     private static boolean getBoolean(String name, boolean def) {
         Boolean value = bCache.get(name);
@@ -212,6 +229,14 @@ public class Preferences {
 
     private static void setFloat(@NonNull String name, float value) {
         sharedPrefs.setFloat(name, value);
+    }
+
+    private static long getLong(@NonNull String name, long def) {
+        return sharedPrefs.getLong(name, def);
+    }
+
+    private static void setLong(@NonNull String name, long value) {
+        sharedPrefs.setLong(name, value);
     }
 
     private Preferences() {

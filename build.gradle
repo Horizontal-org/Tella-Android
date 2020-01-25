@@ -1,4 +1,6 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+ext {
+    var = '4.7.1'
+}// Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
     repositories {
@@ -12,10 +14,10 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.1'
+        classpath 'com.android.tools.build:gradle:3.4.2'
 
         // fabric.io
-        classpath 'io.fabric.tools:gradle:1.+'
+        classpath 'io.fabric.tools:gradle:1.31.0'
     }
 }
 
@@ -29,12 +31,11 @@ allprojects {
             name 'Google'
         }
         maven { url 'https://jitpack.io' }
-        maven { url "https://raw.githubusercontent.com/guardianproject/gpmaven/master" }
     }
 
     project.ext {
         // these are common variables used in */build.gradle
-        buildToolsVersion="28.0.3"
+        buildToolsVersion="28.0.0"
     }
 }
 

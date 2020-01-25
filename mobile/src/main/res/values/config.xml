@@ -9,13 +9,16 @@
     <string name="config_contact_url" translatable="false">https://hzontal.org/contact</string>
     <string name="config_privacy_url" translatable="false">https://www.hzontal.org/tella-privacy-policy</string>
     <string name="config_licence_url" translatable="false">http://www.apache.org/licenses/LICENSE-2.0</string>
-    <string name="config_source_code_url" translatable="false">https://github.com/Hzontal/Tella</string>
+    <string name="config_source_code_url" translatable="false">https://github.com/H0rizontal/Tella</string>
     <string name="ra_config_form_attachment_field" translatable="false">tella_attachments</string>
     <string name="ra_config_form_attachment_url" translatable="false">https://hzontal.org/attachments/%1$s</string>
     <string-array name="ra_lang_codes" translatable="false">
+        <item>be</item>
         <item>en</item>
         <item>es</item>
         <item>fr</item>
+        <item>pt</item>
+        <item>ru</item>
     </string-array>
     <string name="ra_server_prefix" translatable="false">https://</string>
     <integer name="ra_config_short_fling">300</integer>

@@ -3,11 +3,15 @@ package rs.readahead.washington.mobile.views.activity;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,24 +43,35 @@ import rs.readahead.washington.mobile.mvp.presenter.MediaFileViewerPresenter;
 import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.util.ThreadUtil;
+import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
 import timber.log.Timber;
+
+import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
 
 @RuntimePermissions
 public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implements
         IAudioPlayPresenterContract.IView,
-        IMediaFileViewerPresenterContract.IView {
+        IMediaFileViewerPresenterContract.IView,
+        ShareDialogFragment.IShareDialogFragmentHandler {
     public static final String PLAY_MEDIA_FILE = "pmf";
     public static final String PLAY_MEDIA_FILE_ID_KEY = "pmfik";
     public static final String NO_ACTIONS = "na";
-
-    private static final String TIME_FORMAT = "%02d : %02d";
+    private static final String TIME_FORMAT = "%02d:%02d:%02d";
 
     @BindView(R.id.play_audio)
     ImageButton mPlay;
-    @BindView(R.id.stop_audio)
-    ImageButton mStop;
+    @BindView(R.id.rwd_button)
+    ImageButton mRwd;
+    @BindView(R.id.fwd_button)
+    ImageButton mFwd;
     @BindView(R.id.audio_time)
     TextView mTimer;
+    @BindView(R.id.duration)
+    TextView mDuration;
+    @BindView(R.id.forward)
+    View forward;
+    @BindView(R.id.rewind)
+    View rewind;
 
     private AudioPlayPresenter presenter;
     private MediaFile handlingMediaFile;
@@ -69,6 +84,8 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
     private boolean actionsDisabled = false;
     private AlertDialog alertDialog;
     private ProgressDialog progressDialog;
+
+    private boolean paused = true;
 
 
     @Override
@@ -87,34 +104,34 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
         }
 
         viewerPresenter = new MediaFileViewerPresenter(this);
-        disableStop();
-        disablePlay();
+        enablePlay();
 
         if (getIntent().hasExtra(NO_ACTIONS)) {
             actionsDisabled = true;
         }
 
         audioPlayerListener = new AudioPlayer.Listener() {
-            private int duration;
 
             @Override
             public void onStart(int duration) {
-                this.duration = duration;
+                mDuration.setText(timeToString(duration));
             }
 
             @Override
             public void onStop() {
                 stopPlayer();
+                paused = true;
+                enablePlay();
+                showTimeRemaining(0);
             }
 
             @Override
             public void onProgress(int currentPosition) {
-                showTimeRemaining(duration - currentPosition);
+                showTimeRemaining(currentPosition);
             }
 
             private void showTimeRemaining(int left) {
-                mTimer.setText(String.format(Locale.ROOT, TIME_FORMAT, TimeUnit.MILLISECONDS.toMinutes(left),
-                        TimeUnit.MILLISECONDS.toSeconds(left) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(left))));
+                mTimer.setText(timeToString(left));
             }
         };
 
@@ -136,6 +153,11 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!actionsDisabled && showActions) {
             getMenuInflater().inflate(R.menu.audio_view_menu, menu);
+
+            if (handlingMediaFile != null && handlingMediaFile.getMetadata() != null) {
+                MenuItem item = menu.findItem(R.id.menu_item_metadata);
+                item.setVisible(true);
+            }
         }
 
         return super.onCreateOptionsMenu(menu);
@@ -151,9 +173,7 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
         }
 
         if (id == R.id.menu_item_share) {
-            if (handlingMediaFile != null) {
-                MediaFileHandler.startShareActivity(this, handlingMediaFile);
-            }
+            shareMediaFile();
             return true;
         }
 
@@ -167,17 +187,30 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
             return true;
         }
 
+        if (id == R.id.menu_item_metadata) {
+            showMetadata();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick({R.id.play_audio, R.id.stop_audio})
+    @OnClick({R.id.play_audio, R.id.fwd_button, R.id.rwd_button})
     public void manageClick(View view) {
+        int SEEK_DELAY = 15000;
         switch (view.getId()) {
             case R.id.play_audio:
-                handlePlay();
+                if (paused) {
+                    handlePlay();
+                } else {
+                    handlePause();
+                }
                 break;
-            case R.id.stop_audio:
-                handleStop();
+            case R.id.rwd_button:
+                audioPlayer.rwd(SEEK_DELAY);
+                break;
+            case R.id.fwd_button:
+                audioPlayer.ffwd(SEEK_DELAY);
                 break;
         }
     }
@@ -197,7 +230,7 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
     @Override
     protected void onPause() {
         super.onPause();
-        stopPlayer();
+        handlePause();
     }
 
     @Override
@@ -218,6 +251,8 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
             viewerPresenter.destroy();
             viewerPresenter = null;
         }
+
+        dismissShareDialog();
 
         super.onDestroy();
     }
@@ -251,7 +286,7 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
     @Override
     public void onMediaFileSuccess(MediaFile mediaFile) {
         handlingMediaFile = mediaFile;
-        handlePlay();
+        //handlePlay();
 
         if (!actionsDisabled) {
             showActions = true;
@@ -300,9 +335,48 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
         return this;
     }
 
+    @Override
+    public void sharingMediaMetadataSelected() {
+        dismissShareDialog();
+        startShareActivity(true);
+    }
+
+    @Override
+    public void sharingMediaOnlySelected() {
+        dismissShareDialog();
+        startShareActivity(false);
+    }
+
+    private void shareMediaFile() {
+        if (handlingMediaFile == null) {
+            return;
+        }
+
+        if (handlingMediaFile.getMetadata() != null) {
+            ShareDialogFragment.newInstance().show(getSupportFragmentManager(), ShareDialogFragment.TAG);
+        } else {
+            startShareActivity(false);
+        }
+    }
+
+    private void startShareActivity(boolean includeMetadata) {
+        if (handlingMediaFile == null) {
+            return;
+        }
+
+        MediaFileHandler.startShareActivity(this, handlingMediaFile, includeMetadata);
+    }
+
+    private void dismissShareDialog() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(ShareDialogFragment.TAG);
+        if (fragment instanceof ShareDialogFragment) {
+            ((ShareDialogFragment) fragment).dismiss();
+        }
+    }
+
     private void showExportDialog() {
         alertDialog = DialogsUtil.showExportMediaDialog(this, (dialog, which) ->
-                AudioPlayActivityPermissionsDispatcher.exportMediaFileWithCheck(AudioPlayActivity.this));
+                AudioPlayActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(AudioPlayActivity.this));
     }
 
     private void showDeleteMediaDialog() {
@@ -314,56 +388,69 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
                         viewerPresenter.deleteMediaFiles(handlingMediaFile);
                     }
                 })
-                .setNegativeButton(R.string.cancel, (dialog, which) -> {})
+                .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                })
                 .setCancelable(true)
                 .show();
     }
 
-    private void handleStop() {
+    /*private void handleStop() {
         stopPlayer();
-    }
+    }*/
 
     private void handlePlay() {
         if (handlingMediaFile == null) {
             return;
         }
 
-        enableStop();
-        disablePlay();
+        if (audioPlayer != null) {
+            audioPlayer.resume();
+        } else {
+            audioPlayer = new AudioPlayer(this, audioPlayerListener);
+            audioPlayer.play(handlingMediaFile);
+        }
 
-        audioPlayer = new AudioPlayer(this, audioPlayerListener);
-        audioPlayer.play(handlingMediaFile);
+        paused = false;
+        disablePlay();
+    }
+
+    private void handlePause() {
+        if (handlingMediaFile == null) {
+            return;
+        }
+
+        enablePlay();
+        paused = true;
+
+        if (audioPlayer != null) {
+            audioPlayer.pause();
+        }
     }
 
     private void onPlayerStop() {
-        disableStop();
         enablePlay();
     }
 
     private void disablePlay() {
-        disableButton(mPlay);
+        mPlay.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_pause_black_24dp));
+        enableButton(forward, mFwd);
+        enableButton(rewind, mRwd);
     }
 
     private void enablePlay() {
-        enableButton(mPlay);
+        mPlay.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+        disableButton(forward, mFwd);
+        disableButton(rewind, mRwd);
     }
 
-    private void disableStop() {
-        disableButton(mStop);
+    private void enableButton(View view, ImageButton button) {
+        button.setClickable(true);
+        view.setAlpha(1f);
     }
 
-    private void enableStop() {
-        enableButton(mStop);
-    }
-
-    private void enableButton(ImageButton button) {
-        button.setEnabled(true);
-        button.setAlpha(1f);
-    }
-
-    private void disableButton(ImageButton button) {
-        button.setEnabled(false);
-        button.setAlpha(.3f);
+    private void disableButton(View view, ImageButton button) {
+        button.setClickable(false);
+        view.setAlpha(.3f);
     }
 
     private void stopPlayer() {
@@ -379,5 +466,20 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
             progressDialog.dismiss();
             progressDialog = null;
         }
+    }
+
+    private void showMetadata() {
+        Intent viewMetadata = new Intent(this, MetadataViewerActivity.class);
+        viewMetadata.putExtra(VIEW_METADATA, handlingMediaFile);
+        startActivity(viewMetadata);
+    }
+
+    private String timeToString(long duration) {
+        return String.format(Locale.ROOT, TIME_FORMAT,
+                TimeUnit.MILLISECONDS.toHours(duration),
+                TimeUnit.MILLISECONDS.toMinutes(duration) -
+                        TimeUnit.MINUTES.toMinutes(TimeUnit.MILLISECONDS.toHours(duration)),
+                TimeUnit.MILLISECONDS.toSeconds(duration) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)));
     }
 }

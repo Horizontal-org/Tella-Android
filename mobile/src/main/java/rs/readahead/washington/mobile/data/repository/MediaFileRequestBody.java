@@ -1,13 +1,13 @@
 package rs.readahead.washington.mobile.data.repository;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.internal.Util;
@@ -15,23 +15,23 @@ import okio.BufferedSink;
 import okio.Okio;
 import okio.Source;
 import rs.readahead.washington.mobile.domain.entity.IProgressListener;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.util.FileUtil;
 import timber.log.Timber;
 
 
 public class MediaFileRequestBody extends RequestBody {
-    private final MediaFile mediaFile;
+    protected final RawFile mediaFile;
+    protected final Context context;
     private final MediaType contentType;
-    private final Context context;
     private final IProgressListener listener;
 
-    MediaFileRequestBody(Context context, MediaFile mediaFile) {
+    MediaFileRequestBody(Context context, RawFile mediaFile) {
         this(context, mediaFile, null);
     }
 
-    MediaFileRequestBody(Context context, MediaFile mediaFile, @Nullable IProgressListener progressListener) {
+    MediaFileRequestBody(Context context, RawFile mediaFile, @Nullable IProgressListener progressListener) {
         String filename = mediaFile.getFileName();
         String mime = FileUtil.getMimeType(filename);
 
@@ -58,16 +58,17 @@ public class MediaFileRequestBody extends RequestBody {
 
     @Override
     public void writeTo(@NonNull BufferedSink sink) throws IOException {
-        InputStream is = MediaFileHandler.getStream(context, mediaFile);
-
-        if (is == null) {
-            Timber.d("MediaFileHandler.getStream(%s) returned null", mediaFile.getUid());
-            return;
-        }
-
         Source source = null;
+        InputStream is = null;
 
         try {
+            is = getInputStream();
+
+            if (is == null) {
+                Timber.d("MediaFileHandler.getStream(%s) returned null", mediaFile.getUid());
+                return;
+            }
+
             source = Okio.source(is);
 
             // writeAll method from RealBufferedSink
@@ -87,6 +88,10 @@ public class MediaFileRequestBody extends RequestBody {
             Util.closeQuietly(source);
             Util.closeQuietly(is);
         }
+    }
+
+    protected InputStream getInputStream() throws IOException {
+        return MediaFileHandler.getStream(context, mediaFile);
     }
 
     /* final class CountingSink extends ForwardingSink {

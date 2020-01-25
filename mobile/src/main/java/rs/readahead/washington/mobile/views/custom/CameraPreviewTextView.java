@@ -2,7 +2,7 @@ package rs.readahead.washington.mobile.views.custom;
 
 import android.Manifest;
 import android.content.Context;
-import android.support.v7.widget.AppCompatTextView;
+import androidx.appcompat.widget.AppCompatTextView;
 import android.util.AttributeSet;
 
 import rs.readahead.washington.mobile.R;

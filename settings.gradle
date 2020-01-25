@@ -1,1 +1,1 @@
-include ':mobile', ':android-libproofmode'
+include ':mobile'

@@ -1,9 +1,11 @@
 package rs.readahead.washington.mobile.views.fragment;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,46 +17,56 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.javarosa.core.model.FormDef;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.bus.event.DownloadBlankFormEntryEvent;
-import rs.readahead.washington.mobile.bus.event.RemoveFormFromBlankFormListEvent;
 import rs.readahead.washington.mobile.bus.event.ShowBlankFormEntryEvent;
 import rs.readahead.washington.mobile.bus.event.ToggleBlankFormPinnedEvent;
-import rs.readahead.washington.mobile.bus.event.UpdateBlankFormEntryEvent;
+import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.ListFormResult;
+import rs.readahead.washington.mobile.javarosa.FormUtils;
 import rs.readahead.washington.mobile.mvp.contract.ICollectBlankFormListPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CollectBlankFormListPresenter;
+import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.DialogsUtil;
+import rs.readahead.washington.mobile.views.activity.CollectMainActivity;
 import timber.log.Timber;
 
 
 public class BlankFormsListFragment extends FormListFragment implements
         ICollectBlankFormListPresenterContract.IView {
+    @BindView(R.id.blankFormView)
+    View blankFormView;
     @BindView(R.id.blankForms)
     LinearLayout availableFormsListView;
     @BindView(R.id.downloadedForms)
     LinearLayout downloadedFormsListView;
     @BindView(R.id.avaivable_forms_title)
-    TextView avaivableFormsTitle;
+    TextView availableFormsTitle;
     @BindView(R.id.downloaded_forms_title)
     TextView downloadedFormsTitle;
     @BindView(R.id.blank_forms_info)
     TextView blankFormsInfo;
+    @BindView(R.id.banner)
+    TextView banner;
 
     private CollectBlankFormListPresenter presenter;
     private Unbinder unbinder;
     private List<CollectForm> availableForms;
     private List<CollectForm> downloadedForms;
-    private ProgressDialog progressDialog;
+    private AlertDialog alertDialog;
+    private int noUpdatedForms = 0;
+    private boolean silentFormUpdates = false;
 
     public static BlankFormsListFragment newInstance() {
         return new BlankFormsListFragment();
@@ -84,18 +96,18 @@ public class BlankFormsListFragment extends FormListFragment implements
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        listBlankForms();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        listBlankForms();
     }
 
     @Override
     public void onDestroy() {
         destroyPresenter();
-        hideProgressDialog();
+        hideAlertDialog();
         super.onDestroy();
     }
 
@@ -107,31 +119,120 @@ public class BlankFormsListFragment extends FormListFragment implements
 
     @Override
     public void showBlankFormRefreshLoading() {
-        progressDialog = DialogsUtil.showProgressDialog(getActivity(), getString(R.string.ra_getting_blank_forms));
+        if (alertDialog != null) return;
+        if (getActivity() != null) {
+            ((CollectMainActivity) getActivity()).hideFab();
+        }
+        if (!silentFormUpdates) {
+            alertDialog = DialogsUtil.showCollectRefreshProgressDialog(getContext(), (dialog, which) -> presenter.userCancel());
+        }
+    }
+
+    private void showBlankFormDownloadingDialog(int progressText) {
+        if (alertDialog != null) return;
+        if (getActivity() != null) {
+            ((CollectMainActivity) getActivity()).hideFab();
+        }
+        alertDialog = DialogsUtil.showFormUpdatingDialog(getContext(), (dialog, which) -> presenter.userCancel(), progressText);
     }
 
     @Override
     public void hideBlankFormRefreshLoading() {
-        hideProgressDialog();
+        Preferences.setLastCollectRefresh(System.currentTimeMillis());
+        if (silentFormUpdates) {
+            silentFormUpdates = false;
+        }
+        hideAlertDialog();
+    }
+
+    @Override
+    public void onDownloadBlankFormDefSuccess(CollectForm collectForm) {
+        updateForm(collectForm);
+    }
+
+    @Override
+    public void onDownloadBlankFormDefStart() {
+        showBlankFormDownloadingDialog(R.string.download_in_progress);
+    }
+
+    @Override
+    public void onDownloadBlankFormDefEnd() {
+        hideAlertDialog();
+        Toast.makeText(getActivity(), R.string.download_completed, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onUpdateBlankFormDefStart() {
+        showBlankFormDownloadingDialog(R.string.update_in_progress);
+    }
+
+    @Override
+    public void onUpdateBlankFormDefEnd() {
+        hideAlertDialog();
+        Toast.makeText(getActivity(), R.string.update_completed, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBlankFormDefRemoved() {
+        updateFormViews();
+    }
+
+    @Override
+    public void onBlankFormDefRemoveError(Throwable error) {
+    }
+
+    @Override
+    public void onUpdateBlankFormDefSuccess(CollectForm collectForm, FormDef formDef) {
+        noUpdatedForms -= 1;
+        showBanner();
+        updateDownloadedFormList();
+    }
+
+    @Override
+    public void onUserCancel() {
+        hideAlertDialog();
+        Toast.makeText(getActivity(), R.string.canceled, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onFormDefError(Throwable error) {
+        String errorMessage = FormUtils.getFormDefErrorMessage(Objects.requireNonNull(getContext()), error);
+        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onBlankFormsListResult(ListFormResult listFormResult) {
+        updateFormLists(listFormResult);
+        showBanner();
+        updateFormViews();
+        if (getContext() != null && MyApplication.isConnectedToInternet(getContext()) && checkIfDayHasPassed()) {
+            silentFormUpdates = true;
+            refreshBlankForms();
+        }
+    }
+
+    private void updateFormLists(ListFormResult listFormResult) {
+        noUpdatedForms = 0;
+        blankFormView.setVisibility(View.VISIBLE);
         downloadedForms.clear();
         availableForms.clear();
         blankFormsInfo.setVisibility(listFormResult.getForms().isEmpty() ? View.VISIBLE : View.GONE);
         for (CollectForm form : listFormResult.getForms()) {
             if (form.isDownloaded()) {
                 downloadedForms.add(form);
+                if (form.isUpdated()) {
+                    noUpdatedForms += 1;
+                }
             } else {
                 availableForms.add(form);
             }
         }
-        updateFormViews();
         // todo: make this multiply errors friendly
-        for (IErrorBundle error : listFormResult.getErrors()) {
-            Toast.makeText(getActivity(), String.format("%s %s", getString(R.string.ra_error_getting_forms), error.getServerName()), Toast.LENGTH_SHORT).show();
-            Timber.d(error.getException(), getClass().getName());
+        if (!silentFormUpdates) {
+            for (IErrorBundle error : listFormResult.getErrors()) {
+                Toast.makeText(getActivity(), String.format("%s %s", getString(R.string.ra_error_getting_forms), error.getServerName()), Toast.LENGTH_SHORT).show();
+                Timber.d(error.getException(), getClass().getName());
+            }
         }
     }
 
@@ -142,10 +243,12 @@ public class BlankFormsListFragment extends FormListFragment implements
 
     @Override
     public void onNoConnectionAvailable() {
-        Toast.makeText(getActivity(), R.string.ra_no_connection_available, Toast.LENGTH_SHORT).show();
+        if (!silentFormUpdates) {
+            Toast.makeText(getActivity(), R.string.ra_no_connection_available, Toast.LENGTH_SHORT).show();
+        }
     }
 
-    public void updateDownloadedFormList() {
+    private void updateDownloadedFormList() {
         updateFormViews();
     }
 
@@ -161,7 +264,7 @@ public class BlankFormsListFragment extends FormListFragment implements
         }
     }
 
-    public void updateForm(CollectForm form) {
+    private void updateForm(CollectForm form) {
         availableForms.remove(form);
         downloadedForms.add(form);
         updateFormViews();
@@ -170,7 +273,7 @@ public class BlankFormsListFragment extends FormListFragment implements
     private void setViewsVisibility() {
         downloadedFormsTitle.setVisibility(downloadedForms.size() > 0 ? View.VISIBLE : View.GONE);
         downloadedFormsListView.setVisibility(downloadedForms.size() > 0 ? View.VISIBLE : View.GONE);
-        avaivableFormsTitle.setVisibility(availableForms.size() > 0 ? View.VISIBLE : View.GONE);
+        availableFormsTitle.setVisibility(availableForms.size() > 0 ? View.VISIBLE : View.GONE);
         availableFormsListView.setVisibility(availableForms.size() > 0 ? View.VISIBLE : View.GONE);
     }
 
@@ -182,10 +285,13 @@ public class BlankFormsListFragment extends FormListFragment implements
         setViewsVisibility();
     }
 
-    private void hideProgressDialog() {
-        if (progressDialog != null) {
-            progressDialog.dismiss();
-            progressDialog = null;
+    private void hideAlertDialog() {
+        if (alertDialog != null) {
+            alertDialog.dismiss();
+            alertDialog = null;
+        }
+        if (getActivity() != null) {
+            ((CollectMainActivity) getActivity()).showFab();
         }
     }
 
@@ -213,13 +319,13 @@ public class BlankFormsListFragment extends FormListFragment implements
         LayoutInflater inflater = LayoutInflater.from(getContext());
         FrameLayout item = (FrameLayout) inflater.inflate(R.layout.blank_collect_form_row, null);
 
-        ViewGroup row = ButterKnife.findById(item, R.id.form_row);
-        TextView name = ButterKnife.findById(item, R.id.name);
-        TextView organization = ButterKnife.findById(item, R.id.organization);
-        ImageButton dlOpenButton = ButterKnife.findById(item, R.id.dl_open_button);
-        ImageView pinnedIcon = ButterKnife.findById(item, R.id.favorites_button);
-        View rowLayout = ButterKnife.findById(item, R.id.row_layout);
-        ImageButton updateButton = ButterKnife.findById(item, R.id.later_button);
+        ViewGroup row = item.findViewById(R.id.form_row);
+        TextView name = item.findViewById(R.id.name);
+        TextView organization = item.findViewById(R.id.organization);
+        ImageButton dlOpenButton = item.findViewById(R.id.dl_open_button);
+        ImageView pinnedIcon = item.findViewById(R.id.favorites_button);
+        View rowLayout = item.findViewById(R.id.row_layout);
+        ImageButton updateButton = item.findViewById(R.id.later_button);
 
         if (collectForm != null) {
             name.setText(collectForm.getForm().getName());
@@ -231,13 +337,27 @@ public class BlankFormsListFragment extends FormListFragment implements
                 rowLayout.setOnClickListener(view -> MyApplication.bus().post(new ShowBlankFormEntryEvent(collectForm)));
                 if (collectForm.isUpdated()) {
                     updateButton.setVisibility(View.VISIBLE);
-                    updateButton.setOnClickListener(view -> MyApplication.bus().post(new UpdateBlankFormEntryEvent(collectForm)));
+                    updateButton.setOnClickListener(view -> {
+                        if (MyApplication.isConnectedToInternet(Objects.requireNonNull(getContext()))) {
+                            presenter.updateBlankFormDef(collectForm);
+                        } else {
+                            // todo: (djm) handle this in presenter
+                            Toast.makeText(getActivity(), R.string.not_connected_message, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 } else {
                     updateButton.setVisibility(View.GONE);
                 }
             } else {
                 dlOpenButton.setImageDrawable(row.getContext().getResources().getDrawable(R.drawable.ic_cloud_download_black_24dp));
-                dlOpenButton.setOnClickListener(view -> MyApplication.bus().post(new DownloadBlankFormEntryEvent(collectForm)));
+                dlOpenButton.setOnClickListener(view -> {
+                    if (MyApplication.isConnectedToInternet(Objects.requireNonNull(getContext()))) {
+                        presenter.downloadBlankFormDef(collectForm);
+                    } else {
+                        // todo: (djm) handle this in presenter
+                        Toast.makeText(getActivity(), R.string.not_connected_message, Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             if (collectForm.isPinned()) {
@@ -250,7 +370,7 @@ public class BlankFormsListFragment extends FormListFragment implements
         return item;
     }
 
-    void showDownloadedPopupMenu(CollectForm collectForm, ViewGroup row, ImageButton dlOpenButton) {
+    private void showDownloadedPopupMenu(CollectForm collectForm, ViewGroup row, ImageButton dlOpenButton) {
         PopupMenu popup = new PopupMenu(row.getContext(), dlOpenButton);
         popup.inflate(R.menu.collect_server_item_menu);
 
@@ -268,7 +388,7 @@ public class BlankFormsListFragment extends FormListFragment implements
                     break;
                 case R.id.removeForm:
                     downloadedForms.remove(collectForm);
-                    MyApplication.bus().post(new RemoveFormFromBlankFormListEvent(collectForm));
+                    presenter.removeBlankFormDef(collectForm);
                     updateFormViews();
                     break;
             }
@@ -276,5 +396,18 @@ public class BlankFormsListFragment extends FormListFragment implements
         });
 
         popup.show();
+    }
+
+    private boolean checkIfDayHasPassed() {
+        long lastRefresh = Preferences.getLastCollectRefresh();
+        return System.currentTimeMillis() - lastRefresh > C.DAY;
+    }
+
+    private void showBanner() {
+        if (noUpdatedForms > 0) {
+            banner.setVisibility(View.VISIBLE);
+        } else {
+            banner.setVisibility(View.GONE);
+        }
     }
 }

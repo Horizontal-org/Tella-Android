@@ -1,7 +1,7 @@
 package rs.readahead.washington.mobile.presentation.entity;
 
-import android.support.annotation.DrawableRes;
-import android.support.annotation.StringRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.StringRes;
 
 
 public class CamouflageOption {

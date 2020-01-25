@@ -43,6 +43,12 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
         // DBv4
         db.execSQL(alterTableCollectFormInstanceAddFormPartStatus());
+
+        // DBv5
+        db.execSQL(alterTableMediaFileAddHash());
+
+        // DBv6
+        db.execSQL(createTableTellaUploadServer());
     }
 
     @Override
@@ -57,6 +63,12 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
             case 3:
                 db.execSQL(alterTableCollectFormInstanceAddFormPartStatus());
+
+            case 4:
+                db.execSQL(alterTableMediaFileAddHash());
+
+            case 5:
+                db.execSQL(createTableTellaUploadServer());
         }
     }
 
@@ -168,6 +180,23 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
     private String alterTableCollectFormInstanceAddFormPartStatus() {
         return "ALTER TABLE " + sq(D.T_COLLECT_FORM_INSTANCE) + " ADD COLUMN " +
                 cddl(D.C_FORM_PART_STATUS, D.INTEGER, true) + " DEFAULT 0";
+    }
+
+    private String alterTableMediaFileAddHash() {
+        return "ALTER TABLE " + sq(D.T_MEDIA_FILE) + " ADD COLUMN " +
+                cddl(D.C_HASH, D.INTEGER, false);
+    }
+
+
+    private String createTableTellaUploadServer() {
+        return "CREATE TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_NAME, D.TEXT) + " , " +
+                cddl(D.C_URL, D.TEXT) + " , " +
+                cddl(D.C_USERNAME, D.TEXT) + " , " +
+                cddl(D.C_PASSWORD, D.TEXT) + " , " +
+                cddl(D.C_CHECKED, D.INTEGER, true) + " DEFAULT 0" +
+                ");";
     }
 
     private static String objQuote(String str) {

@@ -6,7 +6,7 @@
     android:textDirection="locale"
     tools:context="rs.readahead.washington.mobile.views.fragment.SubmittedFormsListFragment">
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/submittFormInstances"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"

@@ -20,15 +20,12 @@ public class ICollectServersPresenterContract {
         void onRemoveServerError(Throwable throwable);
         void onUpdatedServer(CollectServer server);
         void onUpdateServerError(Throwable throwable);
-        void onCollectDeleted();
-        void onCollectDeletedError(Throwable throwable);
     }
 
     public interface IPresenter extends IBasePresenter {
-        void getServers();
+        void getCollectServers();
         void create(CollectServer server);
         void update(CollectServer server);
         void remove(CollectServer server);
-        void deleteCollect();
     }
 }

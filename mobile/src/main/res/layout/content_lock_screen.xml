@@ -12,7 +12,7 @@
     tools:context=".views.activity.LockScreenActivity"
     tools:showIn="@layout/activity_lock_screen">
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -56,7 +56,7 @@
                     android:layout_gravity="center"
                     android:orientation="vertical">
 
-                    <!--<android.support.design.widget.TextInputLayout-->
+                    <!--<com.google.android.material.textfield.TextInputLayout-->
                         <!--android:id="@+id/new_passphrase_layout"-->
                         <!--android:layout_width="match_parent"-->
                         <!--android:layout_height="wrap_content"-->
@@ -70,9 +70,9 @@
                             <!--android:hint="@string/lock_screen_passphrase_not_set_enter"-->
                             <!--android:imeOptions="actionNext"-->
                             <!--android:inputType="textPassword" />-->
-                    <!--</android.support.design.widget.TextInputLayout>-->
+                    <!--</com.google.android.material.textfield.TextInputLayout>-->
 
-                    <!--<android.support.design.widget.TextInputLayout-->
+                    <!--<com.google.android.material.textfield.TextInputLayout-->
                         <!--android:id="@+id/confirm_passphrase_layout"-->
                         <!--android:layout_width="match_parent"-->
                         <!--android:layout_height="wrap_content"-->
@@ -85,7 +85,7 @@
                             <!--android:ems="10"-->
                             <!--android:hint="@string/lock_screen_passphrase_not_set_confirm"-->
                             <!--android:inputType="textPassword" />-->
-                    <!--</android.support.design.widget.TextInputLayout>-->
+                    <!--</com.google.android.material.textfield.TextInputLayout>-->
 
                     <Button
                         android:id="@+id/button_create"
@@ -104,7 +104,7 @@
                     android:orientation="vertical"
                     android:visibility="gone">
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp">
@@ -116,7 +116,7 @@
                             android:hint="@string/lock_screen_passphrase_hint"
                             android:imeOptions="actionGo"
                             android:inputType="textPassword" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <Button
                         style="@style/ButtonTextSmall"
@@ -129,5 +129,5 @@
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 </RelativeLayout>

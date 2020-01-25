@@ -6,10 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 
@@ -45,13 +46,15 @@ import rs.readahead.washington.mobile.mvp.contract.IMediaFileViewerPresenterCont
 import rs.readahead.washington.mobile.mvp.presenter.MediaFileViewerPresenter;
 import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.PermissionUtil;
+import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
 
 import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
 
 @RuntimePermissions
 public class VideoViewerActivity extends CacheWordSubscriberBaseActivity implements
         PlaybackControlView.VisibilityListener,
-        IMediaFileViewerPresenterContract.IView {
+        IMediaFileViewerPresenterContract.IView,
+        ShareDialogFragment.IShareDialogFragmentHandler {
     public static final String VIEW_VIDEO = "vv";
     public static final String NO_ACTIONS = "na";
 
@@ -151,6 +154,8 @@ public class VideoViewerActivity extends CacheWordSubscriberBaseActivity impleme
             presenter.destroy();
         }
 
+        dismissShareDialog();
+
         super.onDestroy();
     }
 
@@ -220,7 +225,7 @@ public class VideoViewerActivity extends CacheWordSubscriberBaseActivity impleme
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
     private void showExportDialog() {
         alertDialog = DialogsUtil.showExportMediaDialog(this, (dialog, which) ->
-                VideoViewerActivityPermissionsDispatcher.exportMediaFileWithCheck(VideoViewerActivity.this));
+                VideoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(VideoViewerActivity.this));
     }
 
     @Override
@@ -229,6 +234,45 @@ public class VideoViewerActivity extends CacheWordSubscriberBaseActivity impleme
         simpleExoPlayerView.showController();
         // If the event was not handled then see if the player view can handle it as a media key event.
         return super.dispatchKeyEvent(event) || simpleExoPlayerView.dispatchMediaKeyEvent(event);
+    }
+
+    @Override
+    public void sharingMediaMetadataSelected() {
+        dismissShareDialog();
+        startShareActivity(true);
+    }
+
+    @Override
+    public void sharingMediaOnlySelected() {
+        dismissShareDialog();
+        startShareActivity(false);
+    }
+
+    private void shareMediaFile() {
+        if (mediaFile == null) {
+            return;
+        }
+
+        if (mediaFile.getMetadata() != null) {
+            ShareDialogFragment.newInstance().show(getSupportFragmentManager(), ShareDialogFragment.TAG);
+        } else {
+            startShareActivity(false);
+        }
+    }
+
+    private void startShareActivity(boolean includeMetadata) {
+        if (mediaFile == null) {
+            return;
+        }
+
+        MediaFileHandler.startShareActivity(this, mediaFile, includeMetadata);
+    }
+
+    private void dismissShareDialog() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(ShareDialogFragment.TAG);
+        if (fragment instanceof ShareDialogFragment) {
+            ((ShareDialogFragment) fragment).dismiss();
+        }
     }
 
     private void initializePlayer() {
@@ -311,9 +355,7 @@ public class VideoViewerActivity extends CacheWordSubscriberBaseActivity impleme
             }
 
             toolbar.getMenu().findItem(R.id.menu_item_share).setOnMenuItemClickListener(item -> {
-                if (mediaFile != null) {
-                    MediaFileHandler.startShareActivity(VideoViewerActivity.this, mediaFile);
-                }
+                shareMediaFile();
                 return false;
             });
 

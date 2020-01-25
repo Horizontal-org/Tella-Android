@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.ImageView;
@@ -143,6 +143,7 @@ public class CameraActivity extends MetadataActivity implements
 
         setupCameraView();
         setupCameraModeButton();
+        setupImagePreview();
     }
 
     @Override
@@ -201,7 +202,7 @@ public class CameraActivity extends MetadataActivity implements
 
     @Override
     public void onAddingStart() {
-        progressDialog = DialogsUtil.showProgressDialog(this, getString(R.string.ra_import_media_progress));
+        progressDialog = DialogsUtil.showLightProgressDialog(this, getString(R.string.ra_import_media_progress));
     }
 
     @Override
@@ -213,9 +214,10 @@ public class CameraActivity extends MetadataActivity implements
     @Override
     public void onAddSuccess(MediaFileBundle bundle) {
         capturedMediaFile = bundle.getMediaFile();
-        Glide.with(this).load(bundle.getMediaFileThumbnailData().getData()).into(previewView);
+        if (intentMode != IntentMode.COLLECT) {
+            Glide.with(this).load(bundle.getMediaFileThumbnailData().getData()).into(previewView);
+        }
         attachMediaFileMetadata(capturedMediaFile.getId(), metadataAttacher);
-
     }
 
     @Override
@@ -255,20 +257,26 @@ public class CameraActivity extends MetadataActivity implements
         durationView.rotateView(rotation);
         captureButton.rotateView(rotation);
         //resolutionButton.rotateView(rotation);
-        previewView.animate().rotation(rotation).start();
+        if (intentMode != IntentMode.COLLECT) {
+            previewView.animate().rotation(rotation).start();
+        }
     }
 
     @Override
     public void onLastMediaFileSuccess(MediaFile mediaFile) {
-        glide.load(new MediaFileLoaderModel(mediaFile, MediaFileLoaderModel.LoadType.THUMBNAIL))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(previewView);
+        if (intentMode != IntentMode.COLLECT) {
+            glide.load(new MediaFileLoaderModel(mediaFile, MediaFileLoaderModel.LoadType.THUMBNAIL))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(previewView);
+        }
     }
 
     @Override
     public void onLastMediaFileError(Throwable throwable) {
-        previewView.setImageResource(R.drawable.white);
+        if (intentMode != IntentMode.COLLECT) {
+            previewView.setImageResource(R.drawable.white);
+        }
     }
 
     @Override
@@ -481,6 +489,12 @@ public class CameraActivity extends MetadataActivity implements
             switchButton.displayFrontCamera();
         } else {
             switchButton.displayBackCamera();
+        }
+    }
+
+    private void setupImagePreview() {
+        if (intentMode == IntentMode.COLLECT) {
+            previewView.setVisibility(View.GONE);
         }
     }
 

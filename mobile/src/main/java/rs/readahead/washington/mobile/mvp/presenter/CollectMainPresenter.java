@@ -16,22 +16,19 @@ import rs.readahead.washington.mobile.data.repository.OpenRosaRepository;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
-import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
-import rs.readahead.washington.mobile.domain.repository.IOpenRosaRepository;
 import rs.readahead.washington.mobile.mvp.contract.ICollectMainPresenterContract;
 
 
 public class CollectMainPresenter implements ICollectMainPresenterContract.IPresenter {
-    private IOpenRosaRepository odkRepository;
     private ICollectMainPresenterContract.IView view;
     private CacheWordDataSource cacheWordDataSource;
     private CompositeDisposable disposables = new CompositeDisposable();
 
 
     public CollectMainPresenter(ICollectMainPresenterContract.IView view) {
-        this.odkRepository = new OpenRosaRepository();
+        new OpenRosaRepository();
         this.view = view;
         this.cacheWordDataSource = new CacheWordDataSource(view.getContext().getApplicationContext());
     }
@@ -46,54 +43,6 @@ public class CollectMainPresenter implements ICollectMainPresenterContract.IPres
                 )
                 .subscribe(
                         formDef -> view.onGetBlankFormDefSuccess(form, formDef),
-                        throwable -> {
-                            Crashlytics.logException(throwable);
-                            view.onFormDefError(throwable);
-                        }
-                )
-        );
-    }
-
-    @Override
-    public void downloadBlankFormDef(final CollectForm form) {
-        disposables.add(cacheWordDataSource.getDataSource()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMap((Function<DataSource, ObservableSource<CollectServer>>) dataSource ->
-                        dataSource.getCollectServer(form.getServerId()).toObservable()
-                ).flatMap((Function<CollectServer, ObservableSource<FormDef>>) server ->
-                        odkRepository.getFormDef(server, form).toObservable()
-                ).flatMap((Function<FormDef, ObservableSource<FormDef>>) formDef ->
-                        cacheWordDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<FormDef>>) dataSource ->
-                            dataSource.updateBlankFormDef(form, formDef).toObservable()
-                        )
-                )
-                .subscribe(
-                        formDef -> view.onDownloadBlankFormDefSuccess(form, formDef),
-                        throwable -> {
-                            Crashlytics.logException(throwable);
-                            view.onFormDefError(throwable);
-                        }
-                )
-        );
-    }
-
-    @Override
-    public void updateBlankFormDef(final CollectForm form) {
-        disposables.add(cacheWordDataSource.getDataSource()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMap((Function<DataSource, ObservableSource<CollectServer>>) dataSource ->
-                        dataSource.getCollectServer(form.getServerId()).toObservable()
-                ).flatMap((Function<CollectServer, ObservableSource<FormDef>>) server ->
-                        odkRepository.getFormDef(server, form).toObservable()
-                ).flatMap((Function<FormDef, ObservableSource<FormDef>>) formDef ->
-                        cacheWordDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<FormDef>>) dataSource ->
-                                dataSource.updateBlankCollectFormDef(form, formDef).toObservable()
-                        )
-                )
-                .subscribe(
-                        formDef -> view.onUpdateBlankFormDefSuccess(form, formDef),
                         throwable -> {
                             Crashlytics.logException(throwable);
                             view.onFormDefError(throwable);
@@ -190,19 +139,5 @@ public class CollectMainPresenter implements ICollectMainPresenterContract.IPres
         }
 
         return instance;
-    }
-
-    @Override
-    public void removeBlankFormDef(CollectForm form) {
-        disposables.add(cacheWordDataSource.getDataSource()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMapCompletable(dataSource -> dataSource.removeBlankFormDef(form))
-                .subscribe(() -> view.onBlankFormDefRemoved(),
-                        throwable -> {
-                            Crashlytics.logException(throwable);
-                            view.onBlankFormDefRemoveError(throwable);
-                        })
-        );
     }
 }

@@ -1,7 +1,6 @@
 package rs.readahead.washington.mobile.domain.repository;
 
 import java.util.List;
-
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
@@ -14,5 +13,4 @@ public interface ICollectServersRepository {
     Single<CollectServer> getCollectServer(long id);
     Completable removeCollectServer(long id);
     Single<Long> countCollectServers();
-    Completable deleteCollectModule();
 }

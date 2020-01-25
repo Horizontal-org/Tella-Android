@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context="rs.readahead.washington.mobile.views.fragment.DraftFormsListFragment">
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/draftFormInstances"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"

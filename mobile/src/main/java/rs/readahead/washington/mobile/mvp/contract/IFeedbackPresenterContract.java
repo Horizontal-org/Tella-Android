@@ -1,7 +1,7 @@
 package rs.readahead.washington.mobile.mvp.contract;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import rs.readahead.washington.mobile.domain.entity.Feedback;
 

@@ -8,6 +8,7 @@ import com.crashlytics.android.Crashlytics;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
@@ -17,11 +18,14 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.data.database.DataSource;
+import rs.readahead.washington.mobile.data.upload.TUSClient;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IGalleryPresenterContract;
 import rs.readahead.washington.mobile.presentation.entity.MediaFileThumbnailData;
+import timber.log.Timber;
 
 
 public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
@@ -151,66 +155,19 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
         );
     }
 
-    /*@Override
-    public void encryptTmpVideo(final Uri uri) {
-        disposables.add(Observable
-                .fromCallable(new Callable<MediaFileBundle>() {
-                    @Override
-                    public MediaFileBundle call() throws Exception {
-                        MediaFileBundle mediaFileBundle = MediaFileHandler.importVideoUri(view.getContext(), uri);
-                        view.getContext().getContentResolver().delete(uri, null, null);
-                        PermissionUtil.revokeUriPermissions(view.getContext(), uri);
-
-                        return mediaFileBundle;
-                    }
-                })
-                .subscribeOn(Schedulers.computation())
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) throws Exception {
-                        view.onImportStarted(); // share this for now..
-                    }
-                })
+    @Override
+    public void countTUServers() {
+        disposables.add(cacheWordDataSource.getDataSource()
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doFinally(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        view.onImportEnded(); // share this for now..
-                    }
-                })
-                .subscribe(new Consumer<MediaFileBundle>() {
-                    @Override
-                    public void accept(MediaFileBundle mediaFileBundle) throws Exception {
-                        view.onTmpVideoEncrypted(mediaFileBundle);
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Crashlytics.logException(throwable);
-                        view.onTmpVideoEncryptionError(throwable);
-                    }
-                })
+                .flatMapSingle((Function<DataSource, SingleSource<Long>>) DataSource::countTUServers)
+                .subscribe(
+                        num -> view.onCountTUServersEnded(num),
+                        throwable -> {
+                            Crashlytics.logException(throwable);
+                            view.onCountTUServersFailed(throwable);
+                        }
+                )
         );
-    }*/
-
-    /*@SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void checkMediaFolder(Context context, List<MediaFile> mediaFilesFromDb) {
-        //List<String> mediaFilesFromDir = listMediaFiles(context);
-        // todo: check in separate thread that disk and db are in sync..
-        // todo: if not, call getFiles() (?)
-    }*/
-
-    /*private List<String> listMediaFiles(Context context) {
-        File mediaPath = new File(context.getFilesDir(), C.MEDIA_DIR);
-        File[] files = mediaPath.listFiles();
-        List<String> fileList = new ArrayList<>(files.length);
-
-        for (File file: files) {
-            if (! file.isDirectory()) {
-                fileList.add(file.getName());
-            }
-        }
-
-        return fileList;
-    }*/
+    }
 }

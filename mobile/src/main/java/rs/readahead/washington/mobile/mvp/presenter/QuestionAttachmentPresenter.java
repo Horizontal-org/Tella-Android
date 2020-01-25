@@ -1,7 +1,7 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
 import android.net.Uri;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.crashlytics.android.Crashlytics;
 

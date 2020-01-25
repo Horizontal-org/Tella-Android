@@ -11,7 +11,7 @@
     tools:context="rs.readahead.washington.mobile.views.activity.ProtectionSettingsActivity"
     tools:showIn="@layout/activity_protection_settings">
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -21,37 +21,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-<!--
-            <LinearLayout style="@style/SettingsClickableHorizontalShadowLinearLayout">
 
-                <android.support.v7.widget.AppCompatImageView
-                    style="@style/SettingsTitleImageViewStyle"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_menu_camera" />
-
-                <LinearLayout style="@style/VerticalLinearLayout">
-
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/show_camera_preview"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:gravity="center_vertical"
-                        android:text="@string/enable_camera_preview"
-                        android:theme="@style/SettingsTextViewSwitch" />
-
-                    <TextView
-                        style="@style/SettingsTextViewGray"
-                        android:text="@string/enable_camera_preview_desc" />
-                </LinearLayout>
-            </LinearLayout>
--->
             <LinearLayout
                 android:id="@+id/camouflage_settings"
                 style="@style/SettingsClickableHorizontalShadowLinearLayout"
                 android:layout_width="match_parent">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     style="@style/SettingsTitleImageViewStyle"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/ic_incognito" />
@@ -81,7 +57,8 @@
                         android:layout_alignParentEnd="true"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="@string/ra_default"/>
+                        android:text="@string/ra_default"
+                        tools:ignore="RelativeOverlap" />
                 </RelativeLayout>
             </LinearLayout>
 
@@ -96,14 +73,14 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         style="@style/SettingsTitleImageViewStyle"
                         android:layout_gravity="center_vertical"
                         android:src="@drawable/ic_warning_black_24dp" />
 
                     <LinearLayout style="@style/VerticalLinearLayout">
 
-                        <android.support.v7.widget.SwitchCompat
+                        <androidx.appcompat.widget.SwitchCompat
                             android:id="@+id/quick_exit_switch"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -157,6 +134,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/delete_draft_submitted_forms_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingBottom="10dp"
@@ -190,6 +168,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/delete_server_settings_view"
                         android:layout_width="match_parent"
                         android:paddingBottom="10dp"
                         android:layout_height="wrap_content"
@@ -259,5 +238,5 @@
             </LinearLayout>
 
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 </RelativeLayout>

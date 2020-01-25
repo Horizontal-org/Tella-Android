@@ -6,7 +6,7 @@
     android:orientation="horizontal">
 
     <LinearLayout style="@style/VerticalLinearLayout">
-        <android.support.v7.widget.SwitchCompat
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/offline_mode_switch"
             style="@style/SettingsTextViewSwitch"
             android:layout_width="match_parent"

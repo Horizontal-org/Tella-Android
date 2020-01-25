@@ -5,7 +5,8 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -22,9 +23,13 @@ public class AudioPlayer {
     private MediaFileHttpServer mediaFileHttpServer;
     private ProgressEventHandler progressEventHandler;
 
+    private int pausedTime = 0;
+
     public interface Listener {
         void onStart(int duration);
+
         void onStop();
+
         void onProgress(int currentPosition);
     }
 
@@ -46,55 +51,75 @@ public class AudioPlayer {
             mediaPlayer.setDataSource(context, mediaFileHttpServer.getUri());
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
-            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-                    synchronized (AudioPlayer.this) {
-                        if (mediaPlayer == null) return;
-                        mediaPlayer.start();
-                    }
-
-                    notifyOnStart(mediaPlayer.getDuration());
-                    progressEventHandler.sendEmptyMessage(0);
+            mediaPlayer.setOnPreparedListener(mp -> {
+                synchronized (AudioPlayer.this) {
+                    if (mediaPlayer == null) return;
+                    mediaPlayer.start();
+                    mediaPlayer.seekTo(pausedTime);
                 }
+
+                notifyOnStart(mediaPlayer.getDuration());
+                progressEventHandler.sendEmptyMessage(0);
             });
 
-            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    synchronized (AudioPlayer.this) {
-                        if (mediaFileHttpServer != null) {
-                            mediaFileHttpServer.stop();
-                            mediaFileHttpServer = null;
-                        }
+            mediaPlayer.setOnCompletionListener(mp -> {
+                synchronized (AudioPlayer.this) {
+                    if (mediaFileHttpServer != null) {
+                        mediaFileHttpServer.stop();
+                        mediaFileHttpServer = null;
                     }
-
-                    notifyOnStop();
-                    progressEventHandler.removeMessages(0);
                 }
+
+                notifyOnStop();
+                progressEventHandler.removeMessages(0);
             });
 
-            mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-                @Override
-                public boolean onError(MediaPlayer mp, int what, int extra) {
-                    synchronized (AudioPlayer.this) {
-                        if (mediaFileHttpServer != null) {
-                            mediaFileHttpServer.stop();
-                            mediaFileHttpServer = null;
-                        }
+            mediaPlayer.setOnErrorListener((mp, what, extra) -> {
+                synchronized (AudioPlayer.this) {
+                    if (mediaFileHttpServer != null) {
+                        mediaFileHttpServer.stop();
+                        mediaFileHttpServer = null;
                     }
-
-                    notifyOnStop();
-                    progressEventHandler.removeMessages(0);
-
-                    return true;
                 }
+
+                notifyOnStop();
+                progressEventHandler.removeMessages(0);
+
+                return true;
             });
 
             mediaPlayer.prepareAsync();
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void ffwd(int delay) {
+        if (mediaPlayer != null) {
+            mediaPlayer.seekTo(mediaPlayer.getCurrentPosition() + delay);
+        }
+    }
+
+    public void rwd(int delay) {
+        if (mediaPlayer != null) {
+            mediaPlayer.seekTo(mediaPlayer.getCurrentPosition() - delay);
+        }
+    }
+
+    public void pause() {
+        if (mediaPlayer != null) {
+            mediaPlayer.pause();
+            pausedTime = getCurrentPosition();
+        }
+    }
+
+    public void resume() {
+        if (mediaPlayer != null) {
+            mediaPlayer.start();
+            mediaPlayer.seekTo(pausedTime);
+            notifyOnStart(mediaPlayer.getDuration());
+            progressEventHandler.sendEmptyMessage(0);
         }
     }
 
@@ -137,31 +162,16 @@ public class AudioPlayer {
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
     private void notifyOnStart(final int duration) {
-        ThreadUtil.runOnMain(new Runnable() {
-            @Override
-            public void run() {
-                getListener().onStart(duration);
-            }
-        });
+        ThreadUtil.runOnMain(() -> getListener().onStart(duration));
     }
 
     private void notifyOnStop() {
-        ThreadUtil.runOnMain(new Runnable() {
-            @Override
-            public void run() {
-                getListener().onStop();
-            }
-        });
+        ThreadUtil.runOnMain(() -> getListener().onStop());
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
     private void notifyOnProgress(final int currentPosition) {
-        ThreadUtil.runOnMain(new Runnable() {
-            @Override
-            public void run() {
-                getListener().onProgress(currentPosition);
-            }
-        });
+        ThreadUtil.runOnMain(() -> getListener().onProgress(currentPosition));
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")

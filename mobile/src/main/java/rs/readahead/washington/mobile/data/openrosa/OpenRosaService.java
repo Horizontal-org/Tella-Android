@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.data.openrosa;
 
-import android.support.annotation.NonNull;
+import android.os.Build;
 
 import com.burgstaller.okhttp.AuthenticationCacheInterceptor;
 import com.burgstaller.okhttp.CachingAuthenticatorDecorator;
@@ -17,25 +17,34 @@ import java.io.IOException;
 import java.net.CookieManager;
 import java.net.Proxy;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.net.ssl.X509TrustManager;
+
+import androidx.annotation.NonNull;
+import okhttp3.ConnectionSpec;
 import okhttp3.CookieJar;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.TlsVersion;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import rs.readahead.washington.mobile.BuildConfig;
 import rs.readahead.washington.mobile.data.http.QuotePreservingCookieJar;
+import rs.readahead.washington.mobile.data.repository.TLSSocketFactory;
+import timber.log.Timber;
 
 
 public class OpenRosaService {
@@ -57,6 +66,29 @@ public class OpenRosaService {
     // todo: keep it like this for now, lets see what we need..
     public static synchronized OpenRosaService newInstance(String username, String password) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+        // enable TLS 1.2 explicitly (allow androids < 5.1 to use it)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
+            try {
+                TLSSocketFactory tlsSocketFactory = new TLSSocketFactory();
+                X509TrustManager trustManager = tlsSocketFactory.getTrustManager();
+
+                if (trustManager != null) {
+                    builder.sslSocketFactory(tlsSocketFactory, trustManager);
+
+                    List<ConnectionSpec> specs = new ArrayList<>();
+                    specs.add(new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+                            .tlsVersions(TlsVersion.TLS_1_2)
+                            .build());
+                    specs.add(ConnectionSpec.COMPATIBLE_TLS);
+                    specs.add(ConnectionSpec.CLEARTEXT);
+
+                    builder.connectionSpecs(specs);
+                }
+            } catch (Exception e) {
+                Timber.d(e);
+            }
+        }
 
         Credentials credentials = new Credentials(username, password);
         final DigestAuthenticator digestAuthenticator = new DigestAuthenticator(credentials);

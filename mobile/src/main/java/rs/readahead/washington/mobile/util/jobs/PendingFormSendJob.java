@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.util.jobs;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobRequest;
@@ -125,7 +125,7 @@ public class PendingFormSendJob extends Job {
                 .setBackoffCriteria(10_000L, JobRequest.BackoffPolicy.LINEAR)
                 .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
                 .setRequirementsEnforced(true)
-                .setPersisted(true) // android.Manifest.permission.RECEIVE_BOOT_COMPLETED
+                //.setPersisted(true) // android.Manifest.permission.RECEIVE_BOOT_COMPLETED
                 .setUpdateCurrent(true) // also, jobs will sync them self while running
                 .build()
                 .schedule();

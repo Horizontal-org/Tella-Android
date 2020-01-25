@@ -574,4 +574,75 @@
         <item name="android:textAlignment">center</item>
         <item name="android:padding">2dp</item>
     </style>
+
+    <style name="DialogFragmentTitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">@dimen/activity_vertical_margin</item>
+        <item name="android:paddingBottom">@dimen/activity_vertical_margin</item>
+        <item name="android:paddingStart">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingEnd">@dimen/activity_horizontal_margin</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/wa_black</item>
+    </style>
+
+    <style name="DialogFragmentText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingStart">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingEnd">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingBottom">@dimen/activity_vertical_margin</item>
+    </style>
+
+    <style name="DialogFragmentLine">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.5dp</item>
+        <item name="android:background">@color/wa_gray</item>
+    </style>
+
+    <style name="DialogVerticalFragmentLine">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">0.5dp</item>
+        <item name="android:background">@color/wa_gray</item>
+    </style>
+
+    <style name="DialogFragmentBottomButtonLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingTop">@dimen/activity_vertical_margin</item>
+        <item name="android:paddingBottom">@dimen/activity_vertical_margin</item>
+        <item name="android:paddingStart">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingEnd">@dimen/activity_horizontal_margin</item>
+    </style>
+
+    <style name="DialogFragmentBottomButtonImage">
+        <item name="android:layout_width">28dp</item>
+        <item name="android:layout_height">28dp</item>
+        <item name="android:alpha">.6</item>
+    </style>
+
+    <style name="DialogFragmentBottomButtonText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/wa_black</item>
+        <item name="android:paddingStart">@dimen/activity_vertical_margin</item>
+    </style>
+
+    <style name="MetadataGatheringDialogImage">
+        <item name="android:layout_width">36dp</item>
+        <item name="android:layout_height">36dp</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
+    <style name="BrightBackgroundDarkLettersDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:background">@color/wa_light_gray</item>
+        <item name="android:textColor">@color/wa_darker_gray</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

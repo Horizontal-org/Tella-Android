@@ -26,6 +26,7 @@
     <color name="wa_map_fragment_background">#ECE9E0</color>
     <color name="background_shadow">#00CCCCCC</color>
     <color name="purple_link">#763568</color>
+    <color name="light_yellow">#ffe600</color>
 
     <color name="colorPrimary">@color/wa_black</color>
     <color name="colorPrimaryDark">@color/wa_dark_gray</color>

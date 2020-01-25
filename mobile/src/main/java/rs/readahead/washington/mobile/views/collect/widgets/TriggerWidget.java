@@ -15,7 +15,7 @@ package rs.readahead.washington.mobile.views.collect.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.v7.widget.AppCompatCheckBox;
+import androidx.appcompat.widget.AppCompatCheckBox;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;

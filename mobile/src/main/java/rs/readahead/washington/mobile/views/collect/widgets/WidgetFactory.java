@@ -14,7 +14,7 @@
 package rs.readahead.washington.mobile.views.collect.widgets;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;

@@ -2,19 +2,19 @@ package rs.readahead.washington.mobile.mvp.presenter;
 
 import com.crashlytics.android.Crashlytics;
 
+import org.javarosa.core.model.FormDef;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import info.guardianproject.cacheword.CacheWordHandler;
-import info.guardianproject.cacheword.ICacheWordSubscriber;
 import io.reactivex.ObservableSource;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subjects.AsyncSubject;
 import rs.readahead.washington.mobile.MyApplication;
+import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.repository.OpenRosaRepository;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
@@ -27,30 +27,27 @@ import rs.readahead.washington.mobile.mvp.contract.ICollectBlankFormListPresente
 
 
 public class CollectBlankFormListPresenter implements
-        ICollectBlankFormListPresenterContract.IPresenter,
-        ICacheWordSubscriber {
+        ICollectBlankFormListPresenterContract.IPresenter {
     private IOpenRosaRepository odkRepository;
     private ICollectBlankFormListPresenterContract.IView view;
-    private CacheWordHandler cacheWordHandler;
     private CompositeDisposable disposables = new CompositeDisposable();
-    private AsyncSubject<DataSource> asyncDataSource = AsyncSubject.create();
+    private CacheWordDataSource cacheWordDataSource;
 
 
     public CollectBlankFormListPresenter(ICollectBlankFormListPresenterContract.IView view) {
         this.odkRepository = new OpenRosaRepository();
         this.view = view;
-        this.cacheWordHandler = new CacheWordHandler(view.getContext().getApplicationContext(), this);
-
-        cacheWordHandler.connectToService();
+        this.cacheWordDataSource = new CacheWordDataSource(view.getContext().getApplicationContext());
     }
 
     @Override
     public void refreshBlankForms() {
-        disposables.add(asyncDataSource
+        disposables.add(cacheWordDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> view.showBlankFormRefreshLoading())
-                .flatMap((Function<DataSource, ObservableSource<List<CollectServer>>>) dataSource -> dataSource.listCollectServers().toObservable())
+                .flatMap((Function<DataSource, ObservableSource<List<CollectServer>>>) dataSource ->
+                        dataSource.listCollectServers().toObservable())
                 .flatMap((Function<List<CollectServer>, ObservableSource<ListFormResult>>) servers -> {
                     if (servers.isEmpty()) {
                         return Single.just(new ListFormResult()).toObservable();
@@ -84,7 +81,7 @@ public class CollectBlankFormListPresenter implements
                     }).toObservable();
                 })
                 .flatMap((Function<ListFormResult, ObservableSource<ListFormResult>>)
-                        listFormResult -> asyncDataSource.flatMap((Function<DataSource, ObservableSource<ListFormResult>>)
+                        listFormResult -> cacheWordDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<ListFormResult>>)
                                 dataSource -> dataSource.updateBlankForms(listFormResult).toObservable()))
                 .doFinally(() -> view.hideBlankFormRefreshLoading())
                 .subscribe(listFormResult -> {
@@ -105,10 +102,9 @@ public class CollectBlankFormListPresenter implements
         );
     }
 
-
     @Override
     public void listBlankForms() {
-        disposables.add(asyncDataSource
+        disposables.add(cacheWordDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap((Function<DataSource, ObservableSource<List<CollectForm>>>)
@@ -119,31 +115,80 @@ public class CollectBlankFormListPresenter implements
     }
 
     @Override
+    public void removeBlankFormDef(CollectForm form) {
+        disposables.add(cacheWordDataSource.getDataSource()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMapCompletable(dataSource -> dataSource.removeBlankFormDef(form))
+                .subscribe(() -> view.onBlankFormDefRemoved(),
+                        throwable -> {
+                            Crashlytics.logException(throwable);
+                            view.onBlankFormDefRemoveError(throwable);
+                        })
+        );
+    }
+
+    @Override
+    public void downloadBlankFormDef(final CollectForm form) {
+        disposables.add(cacheWordDataSource.getDataSource()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> view.onDownloadBlankFormDefStart())
+                .flatMap((Function<DataSource, ObservableSource<CollectServer>>) dataSource ->
+                        dataSource.getCollectServer(form.getServerId()).toObservable()
+                ).flatMap((Function<CollectServer, ObservableSource<FormDef>>) server ->
+                        odkRepository.getFormDef(server, form).toObservable()
+                ).flatMap((Function<FormDef, ObservableSource<FormDef>>) formDef ->
+                        cacheWordDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<FormDef>>) dataSource ->
+                                dataSource.updateBlankFormDef(form, formDef).toObservable()
+                        )
+                )
+                .doFinally(() -> view.onDownloadBlankFormDefEnd())
+                .subscribe(
+                        formDef -> view.onDownloadBlankFormDefSuccess(form),
+                        throwable -> {
+                            Crashlytics.logException(throwable);
+                            view.onFormDefError(throwable);
+                        }
+                )
+        );
+    }
+
+    @Override
+    public void updateBlankFormDef(final CollectForm form) {
+        disposables.add(cacheWordDataSource.getDataSource()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> view.onUpdateBlankFormDefStart())
+                .flatMap((Function<DataSource, ObservableSource<CollectServer>>) dataSource ->
+                        dataSource.getCollectServer(form.getServerId()).toObservable()
+                ).flatMap((Function<CollectServer, ObservableSource<FormDef>>) server ->
+                        odkRepository.getFormDef(server, form).toObservable()
+                ).flatMap((Function<FormDef, ObservableSource<FormDef>>) formDef ->
+                        cacheWordDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<FormDef>>) dataSource ->
+                                dataSource.updateBlankCollectFormDef(form, formDef).toObservable()
+                        )
+                )
+                .doFinally(() -> view.onUpdateBlankFormDefEnd())
+                .subscribe(
+                        formDef -> view.onUpdateBlankFormDefSuccess(form, formDef),
+                        throwable -> {
+                            Crashlytics.logException(throwable);
+                            view.onFormDefError(throwable);
+                        }
+                )
+        );
+    }
+
+    public void userCancel(){
+        disposables.clear();
+        view.onUserCancel();
+    }
+
+    @Override
     public void destroy() {
-        if (cacheWordHandler != null) {
-            cacheWordHandler.disconnectFromService();
-        }
         disposables.dispose();
+        cacheWordDataSource.dispose();
         view = null;
-    }
-
-    @Override
-    public void onCacheWordUninitialized() {
-    }
-
-    @Override
-    public void onCacheWordLocked() {
-    }
-
-    @Override
-    public void onCacheWordOpened() {
-        if (view != null) {
-            DataSource dataSource = DataSource.getInstance(view.getContext(), cacheWordHandler.getEncryptionKey());
-            asyncDataSource.onNext(dataSource);
-            asyncDataSource.onComplete();
-        }
-
-        cacheWordHandler.disconnectFromService();
-        cacheWordHandler = null;
     }
 }
