@@ -15,6 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -412,6 +413,7 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
 
         paused = false;
         disablePlay();
+        disableSleep();
     }
 
     private void handlePause() {
@@ -425,6 +427,7 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
         if (audioPlayer != null) {
             audioPlayer.pause();
         }
+        enableSleep();
     }
 
     private void onPlayerStop() {
@@ -481,5 +484,13 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
                         TimeUnit.MINUTES.toMinutes(TimeUnit.MILLISECONDS.toHours(duration)),
                 TimeUnit.MILLISECONDS.toSeconds(duration) -
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)));
+    }
+
+    private void disableSleep(){
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    private void enableSleep(){
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 }
