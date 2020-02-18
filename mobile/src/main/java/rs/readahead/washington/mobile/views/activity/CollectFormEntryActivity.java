@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -620,12 +621,14 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     public void showFormSubmitLoading(CollectFormInstance instance) {
         invalidateOptionsMenu();
         endView.clearPartsProgress(instance);
+        disableScreenTimeout();
     }
 
     @Override
     public void hideFormSubmitLoading() {
         setToolbarIcon();
         invalidateOptionsMenu();
+        enableScreenTimeout();
     }
 
     @Override
@@ -1034,5 +1037,13 @@ public class CollectFormEntryActivity extends MetadataActivity implements
             progressDialog.dismiss();
             progressDialog = null;
         }
+    }
+
+    private void disableScreenTimeout() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    private void enableScreenTimeout() {
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 }

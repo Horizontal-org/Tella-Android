@@ -2,12 +2,15 @@ package rs.readahead.washington.mobile.views.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+
 import androidx.core.widget.NestedScrollView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -121,7 +124,8 @@ public class FormSubmitActivity extends CacheWordSubscriberBaseActivity implemen
         if (formReSubmitter != null && formReSubmitter.isReSubmitting()) {
             DialogsUtil.showExitWithSubmitDialog(this,
                     (dialog, which) -> super.onBackPressed(),
-                    (dialog, which) -> {});
+                    (dialog, which) -> {
+                    });
         } else {
             super.onBackPressed();
         }
@@ -194,6 +198,7 @@ public class FormSubmitActivity extends CacheWordSubscriberBaseActivity implemen
         invalidateOptionsMenu();
         hideFormSubmitButton();
         showFormCancelButton();
+        disableScreenTimeout();
 
         if (endView != null) {
             endView.clearPartsProgress(instance);
@@ -202,6 +207,7 @@ public class FormSubmitActivity extends CacheWordSubscriberBaseActivity implemen
 
     @Override
     public void hideReFormSubmitLoading() {
+        enableScreenTimeout();
         invalidateOptionsMenu();
     }
 
@@ -325,5 +331,13 @@ public class FormSubmitActivity extends CacheWordSubscriberBaseActivity implemen
             formReSubmitter.destroy();
             formReSubmitter = null;
         }
+    }
+
+    private void disableScreenTimeout() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    private void enableScreenTimeout() {
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 }
