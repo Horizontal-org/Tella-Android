@@ -413,7 +413,7 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
 
         paused = false;
         disablePlay();
-        disableSleep();
+        disableScreenTimeout();
     }
 
     private void handlePause() {
@@ -427,7 +427,7 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
         if (audioPlayer != null) {
             audioPlayer.pause();
         }
-        enableSleep();
+        enableScreenTimeout();
     }
 
     private void onPlayerStop() {
@@ -461,7 +461,7 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
             audioPlayer.stop();
             audioPlayer = null;
             onPlayerStop();
-            enableSleep();
+            enableScreenTimeout();
         }
     }
 
@@ -487,11 +487,11 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)));
     }
 
-    private void disableSleep(){
+    private void disableScreenTimeout() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
-    private void enableSleep(){
+    private void enableScreenTimeout() {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 }
