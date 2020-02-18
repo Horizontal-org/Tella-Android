@@ -461,6 +461,7 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
             audioPlayer.stop();
             audioPlayer = null;
             onPlayerStop();
+            enableSleep();
         }
     }
 
