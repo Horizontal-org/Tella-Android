@@ -105,6 +105,15 @@ public class Preferences {
         setString(SharedPrefs.APP_ALIAS_NAME, value);
     }
 
+    @Nullable
+    public static String getVideoResolution() {
+        return getString(SharedPrefs.VIDEO_RESOLUTION, null);
+    }
+
+    public static void setVideoResolution(@NonNull String value) {
+        setString(SharedPrefs.VIDEO_RESOLUTION, value);
+    }
+
     public static String getSecretPassword() {
         return getString(SharedPrefs.SECRET_PASSWORD, "");
     }

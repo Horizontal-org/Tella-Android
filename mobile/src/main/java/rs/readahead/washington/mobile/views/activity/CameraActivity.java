@@ -5,8 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+
 import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.ImageView;
@@ -48,9 +51,11 @@ import rs.readahead.washington.mobile.mvp.presenter.MetadataAttacher;
 import rs.readahead.washington.mobile.presentation.entity.MediaFileLoaderModel;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.DialogsUtil;
+import rs.readahead.washington.mobile.util.VideoResolutionManager;
 import rs.readahead.washington.mobile.views.custom.CameraCaptureButton;
 import rs.readahead.washington.mobile.views.custom.CameraDurationTextView;
 import rs.readahead.washington.mobile.views.custom.CameraFlashButton;
+import rs.readahead.washington.mobile.views.custom.CameraResolutionButton;
 import rs.readahead.washington.mobile.views.custom.CameraSwitchButton;
 
 
@@ -73,8 +78,6 @@ public class CameraActivity extends MetadataActivity implements
     CameraDurationTextView durationView;
     @BindView(R.id.camera_zoom)
     SeekBar mSeekBar;
-    /*@BindView(R.id.resolution)
-    CameraResolutionButton resolutionButton;*/
     @BindView(R.id.video_line)
     View videoLine;
     @BindView(R.id.photo_line)
@@ -85,6 +88,8 @@ public class CameraActivity extends MetadataActivity implements
     TextView photoModeText;
     @BindView(R.id.video_text)
     TextView videoModeText;
+    @BindView(R.id.resolutionButton)
+    CameraResolutionButton resolutionButton;
 
     private CameraPresenter presenter;
     private MetadataAttacher metadataAttacher;
@@ -96,6 +101,8 @@ public class CameraActivity extends MetadataActivity implements
     private OrientationEventListener mOrientationEventListener;
     private int zoomLevel = 0;
     private MediaFile capturedMediaFile;
+    private AlertDialog videoQualityDialog;
+    private VideoResolutionManager videoResolutionManager;
 
     public enum Mode {
         PHOTO,
@@ -136,6 +143,8 @@ public class CameraActivity extends MetadataActivity implements
             intentMode = IntentMode.valueOf(getIntent().getStringExtra(INTENT_MODE));
         }
 
+        videoResolutionManager = VideoResolutionManager.getInstance();
+
         CacheWordDataSource cacheWordDataSource = new CacheWordDataSource(getContext());
         MediaFileHandler mediaFileHandler = new MediaFileHandler(cacheWordDataSource);
         MediaFileUrlLoader glideLoader = new MediaFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
@@ -155,6 +164,8 @@ public class CameraActivity extends MetadataActivity implements
         startLocationMetadataListening();
 
         cameraView.start();
+        setVideoQuality();
+
         mSeekBar.setProgress(zoomLevel);
         setCameraZoom();
 
@@ -191,6 +202,7 @@ public class CameraActivity extends MetadataActivity implements
         super.onDestroy();
         stopPresenter();
         hideProgressDialog();
+        hideVideoResolutionDialog();
         cameraView.destroy();
     }
 
@@ -256,7 +268,9 @@ public class CameraActivity extends MetadataActivity implements
         flashButton.rotateView(rotation);
         durationView.rotateView(rotation);
         captureButton.rotateView(rotation);
-        //resolutionButton.rotateView(rotation);
+        if (mode != Mode.PHOTO) {
+            resolutionButton.rotateView(rotation);
+        }
         if (intentMode != IntentMode.COLLECT) {
             previewView.animate().rotation(rotation).start();
         }
@@ -291,11 +305,13 @@ public class CameraActivity extends MetadataActivity implements
         } else {
 
             switchButton.setVisibility(videoRecording ? View.VISIBLE : View.GONE);
+            resolutionButton.setVisibility(videoRecording ? View.VISIBLE : View.GONE);
             if (videoRecording) {
                 if (System.currentTimeMillis() - lastClickTime >= CLICK_DELAY) {
                     cameraView.stopCapturingVideo();
                     videoRecording = false;
                     switchButton.setVisibility(View.VISIBLE);
+                    resolutionButton.setVisibility(View.VISIBLE);
                 }
             } else {
                 lastClickTime = System.currentTimeMillis();
@@ -306,6 +322,7 @@ public class CameraActivity extends MetadataActivity implements
                 durationView.start();
                 videoRecording = true;
                 switchButton.setVisibility(View.GONE);
+                resolutionButton.setVisibility(View.GONE);
             }
         }
     }
@@ -381,6 +398,11 @@ public class CameraActivity extends MetadataActivity implements
         zoomLevel = 0;
         mSeekBar.setProgress(0);
         setCameraZoom();
+    }
+
+    @OnClick(R.id.resolutionButton)
+    public void chooseVideoResolution() {
+        videoQualityDialog = DialogsUtil.showVideoResolutionDialog(this, (dialog, which) -> setVideoQuality());
     }
 
     private void setCameraZoom() {
@@ -559,6 +581,7 @@ public class CameraActivity extends MetadataActivity implements
         photoLine.setVisibility(View.VISIBLE);
         photoModeText.setAlpha(1f);
         videoModeText.setAlpha(modeLocked ? 0.1f : 0.5f);
+        resolutionButton.setVisibility(View.GONE);
     }
 
     private void setVideoActive() {
@@ -566,5 +589,19 @@ public class CameraActivity extends MetadataActivity implements
         photoLine.setVisibility(View.GONE);
         videoModeText.setAlpha(1);
         photoModeText.setAlpha(modeLocked ? 0.1f : 0.5f);
+        resolutionButton.setVisibility(View.VISIBLE);
+    }
+
+    private void hideVideoResolutionDialog() {
+        if (videoQualityDialog != null) {
+            videoQualityDialog.dismiss();
+            videoQualityDialog = null;
+        }
+    }
+
+    private void setVideoQuality() {
+        if (cameraView != null) {
+            cameraView.setVideoQuality(videoResolutionManager.getVideoQuality());
+        }
     }
 }

@@ -25,11 +25,13 @@
             android:focusable="true"
             tools:ignore="ContentDescription" />
 
-        <!--<rs.readahead.washington.mobile.views.custom.CameraResolutionButton
-            android:id="@+id/resolution"
-            android:layout_toStartOf="@+id/switchButton"
-            android:src="@drawable/ic_tune_white"
-            tools:ignore="RelativeOverlap" /> -->
+        <rs.readahead.washington.mobile.views.custom.CameraResolutionButton
+            android:id="@+id/resolutionButton"
+            android:background="@color/wa_black"
+            android:visibility="gone"
+            style="@style/CameraTopImageStyle"
+            android:layout_toStartOf="@id/switchButton"
+            android:layout_marginStart="32dp"/>
 
         <rs.readahead.washington.mobile.views.custom.CameraSwitchButton
             android:id="@+id/switchButton"
