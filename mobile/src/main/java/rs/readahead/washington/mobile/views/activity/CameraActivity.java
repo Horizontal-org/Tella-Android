@@ -143,7 +143,7 @@ public class CameraActivity extends MetadataActivity implements
             intentMode = IntentMode.valueOf(getIntent().getStringExtra(INTENT_MODE));
         }
 
-        videoResolutionManager = VideoResolutionManager.getInstance();
+        videoResolutionManager = new VideoResolutionManager();
 
         CacheWordDataSource cacheWordDataSource = new CacheWordDataSource(getContext());
         MediaFileHandler mediaFileHandler = new MediaFileHandler(cacheWordDataSource);
@@ -402,7 +402,7 @@ public class CameraActivity extends MetadataActivity implements
 
     @OnClick(R.id.resolutionButton)
     public void chooseVideoResolution() {
-        videoQualityDialog = DialogsUtil.showVideoResolutionDialog(this, (dialog, which) -> setVideoQuality());
+        videoQualityDialog = DialogsUtil.showVideoResolutionDialog(this, (dialog, which) -> setVideoQuality(), videoResolutionManager);
     }
 
     private void setCameraZoom() {

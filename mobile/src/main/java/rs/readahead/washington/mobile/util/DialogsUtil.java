@@ -412,11 +412,9 @@ public class DialogsUtil {
                 .show();
     }
 
-    public static AlertDialog showVideoResolutionDialog(Context context, @NonNull DialogInterface.OnClickListener listener) {
+    public static AlertDialog showVideoResolutionDialog(Context context, @NonNull DialogInterface.OnClickListener listener, VideoResolutionManager videoResolutionManager) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.BrightBackgroundDarkLettersDialogTheme);
         LayoutInflater inflater = LayoutInflater.from(context);
-
-        VideoResolutionManager videoResolutionManager = VideoResolutionManager.getInstance();
 
         String checkedKey = videoResolutionManager.getVideoQualityOptionKey();
 
