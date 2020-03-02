@@ -192,7 +192,7 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
     @NeedsPermission({Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO})
     public void startCameraCaptureActivity() {
         Intent intent = new Intent(this, CameraActivity.class);
-        intent.putExtra(CameraActivity.CAMERA_MODE, CameraActivity.Mode.PHOTO.name());
+        intent.putExtra(CameraActivity.CAMERA_MODE, CameraActivity.CameraMode.PHOTO.name());
         startActivityForResult(intent, C.CAMERA_CAPTURE);
     }
 

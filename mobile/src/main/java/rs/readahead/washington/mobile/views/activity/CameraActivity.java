@@ -3,7 +3,9 @@ package rs.readahead.washington.mobile.views.activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PointF;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,13 +26,16 @@ import com.otaliastudios.cameraview.CameraException;
 import com.otaliastudios.cameraview.CameraListener;
 import com.otaliastudios.cameraview.CameraOptions;
 import com.otaliastudios.cameraview.CameraView;
-import com.otaliastudios.cameraview.Facing;
-import com.otaliastudios.cameraview.Flash;
-import com.otaliastudios.cameraview.Gesture;
-import com.otaliastudios.cameraview.GestureAction;
-import com.otaliastudios.cameraview.SessionType;
+import com.otaliastudios.cameraview.PictureResult;
+import com.otaliastudios.cameraview.VideoResult;
+import com.otaliastudios.cameraview.controls.Facing;
+import com.otaliastudios.cameraview.controls.Flash;
+import com.otaliastudios.cameraview.controls.Mode;
+import com.otaliastudios.cameraview.gesture.Gesture;
+import com.otaliastudios.cameraview.gesture.GestureAction;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Set;
 
 import butterknife.BindView;
@@ -93,7 +98,7 @@ public class CameraActivity extends MetadataActivity implements
 
     private CameraPresenter presenter;
     private MetadataAttacher metadataAttacher;
-    private Mode mode;
+    private CameraMode mode;
     private boolean modeLocked;
     private IntentMode intentMode;
     private boolean videoRecording;
@@ -104,7 +109,7 @@ public class CameraActivity extends MetadataActivity implements
     private AlertDialog videoQualityDialog;
     private VideoResolutionManager videoResolutionManager;
 
-    public enum Mode {
+    public enum CameraMode {
         PHOTO,
         VIDEO
     }
@@ -132,9 +137,9 @@ public class CameraActivity extends MetadataActivity implements
         presenter = new CameraPresenter(this);
         metadataAttacher = new MetadataAttacher(this);
 
-        mode = Mode.PHOTO;
+        mode = CameraMode.PHOTO;
         if (getIntent().hasExtra(CAMERA_MODE)) {
-            mode = Mode.valueOf(getIntent().getStringExtra(CAMERA_MODE));
+            mode = CameraMode.valueOf(getIntent().getStringExtra(CAMERA_MODE));
             modeLocked = true;
         }
 
@@ -163,7 +168,7 @@ public class CameraActivity extends MetadataActivity implements
 
         startLocationMetadataListening();
 
-        cameraView.start();
+        cameraView.open();
         setVideoQuality();
 
         mSeekBar.setProgress(zoomLevel);
@@ -189,7 +194,7 @@ public class CameraActivity extends MetadataActivity implements
             captureButton.performClick();
         }
 
-        cameraView.stop();
+        cameraView.close();
     }
 
     @Override
@@ -268,7 +273,7 @@ public class CameraActivity extends MetadataActivity implements
         flashButton.rotateView(rotation);
         durationView.rotateView(rotation);
         captureButton.rotateView(rotation);
-        if (mode != Mode.PHOTO) {
+        if (mode != CameraMode.PHOTO) {
             resolutionButton.rotateView(rotation);
         }
         if (intentMode != IntentMode.COLLECT) {
@@ -300,15 +305,16 @@ public class CameraActivity extends MetadataActivity implements
 
     @OnClick(R.id.captureButton)
     void onCaptureClicked() {
-        if (cameraView.getSessionType() == SessionType.PICTURE) {
-            cameraView.capturePicture();
+        if (cameraView.getMode() == com.otaliastudios.cameraview.controls.Mode.PICTURE) {
+            cameraView.takePicture();
         } else {
 
             switchButton.setVisibility(videoRecording ? View.VISIBLE : View.GONE);
             resolutionButton.setVisibility(videoRecording ? View.VISIBLE : View.GONE);
             if (videoRecording) {
                 if (System.currentTimeMillis() - lastClickTime >= CLICK_DELAY) {
-                    cameraView.stopCapturingVideo();
+                    cameraView.stopVideo();
+                    //cameraView.stopCapturingVideo();
                     videoRecording = false;
                     switchButton.setVisibility(View.VISIBLE);
                     resolutionButton.setVisibility(View.VISIBLE);
@@ -317,7 +323,7 @@ public class CameraActivity extends MetadataActivity implements
                 lastClickTime = System.currentTimeMillis();
                 TempMediaFile tmp = TempMediaFile.newMp4();
                 File file = MediaFileHandler.getTempFile(this, tmp);
-                cameraView.startCapturingVideo(file);
+                cameraView.takeVideo(file);
                 captureButton.displayStopVideo();
                 durationView.start();
                 videoRecording = true;
@@ -337,7 +343,7 @@ public class CameraActivity extends MetadataActivity implements
             return;
         }
 
-        if (cameraView.getSessionType() == SessionType.PICTURE) {
+        if (cameraView.getMode() == com.otaliastudios.cameraview.controls.Mode.PICTURE) {
             return;
         }
 
@@ -347,8 +353,8 @@ public class CameraActivity extends MetadataActivity implements
 
         setPhotoActive();
         captureButton.displayPhotoButton();
-        cameraView.setSessionType(SessionType.PICTURE);
-        mode = CameraActivity.Mode.PHOTO;
+        cameraView.setMode(com.otaliastudios.cameraview.controls.Mode.PICTURE);
+        mode = CameraMode.PHOTO;
 
         resetZoom();
         lastClickTime = System.currentTimeMillis();
@@ -364,15 +370,15 @@ public class CameraActivity extends MetadataActivity implements
             return;
         }
 
-        if (cameraView.getSessionType() == SessionType.VIDEO) {
+        if (cameraView.getMode() == com.otaliastudios.cameraview.controls.Mode.VIDEO) {
             return;
         }
 
-        cameraView.setSessionType(SessionType.VIDEO);
+        cameraView.setMode(com.otaliastudios.cameraview.controls.Mode.VIDEO);
         turnFlashDown();
         captureButton.displayVideoButton();
         setVideoActive();
-        mode = CameraActivity.Mode.VIDEO;
+        mode = CameraMode.VIDEO;
 
         resetZoom();
         lastClickTime = System.currentTimeMillis();
@@ -432,28 +438,31 @@ public class CameraActivity extends MetadataActivity implements
     }
 
     private void setupCameraView() {
-        if (mode == Mode.PHOTO) {
-            cameraView.setSessionType(SessionType.PICTURE);
+        if (mode == CameraMode.PHOTO) {
+            cameraView.setMode(com.otaliastudios.cameraview.controls.Mode.PICTURE);
             captureButton.displayPhotoButton();
         } else {
-            cameraView.setSessionType(SessionType.VIDEO);
+            cameraView.setMode(com.otaliastudios.cameraview.controls.Mode.VIDEO);
             captureButton.displayVideoButton();
         }
 
         //cameraView.setEnabled(PermissionUtil.checkPermission(this, Manifest.permission.CAMERA));
-        cameraView.mapGesture(Gesture.TAP, GestureAction.FOCUS_WITH_MARKER);
+        cameraView.mapGesture(Gesture.TAP, GestureAction.AUTO_FOCUS);
+        cameraView.mapGesture(Gesture.PINCH, GestureAction.ZOOM);
 
         setOrientationListener();
 
         cameraView.addCameraListener(new CameraListener() {
             @Override
-            public void onPictureTaken(byte[] jpeg) {
-                presenter.addJpegPhoto(jpeg);
+            public void onPictureTaken(PictureResult result) {
+                //byte[] jpeg
+                presenter.addJpegPhoto(result.getData());
             }
 
             @Override
-            public void onVideoTaken(File video) {
-                showConfirmVideoView(video);
+            public void onVideoTaken(VideoResult result) {
+                //File video
+                showConfirmVideoView(result.getFile());
             }
 
             @Override
@@ -479,6 +488,14 @@ public class CameraActivity extends MetadataActivity implements
                 // options object has info
                 super.onCameraOpened(options);
             }
+
+            @Override
+            public void onZoomChanged(float newValue, @NonNull float[] bounds, @Nullable PointF[] fingers) {
+                mSeekBar.setProgress((int) newValue * 100);
+                // newValue: the new zoom value
+                // bounds: this is always [0, 1]
+                // fingers: if caused by touch gestures, these is the fingers position
+            }
         });
 
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -499,7 +516,7 @@ public class CameraActivity extends MetadataActivity implements
     }
 
     private void setupCameraModeButton() {
-        if (cameraView.getSessionType() == SessionType.PICTURE) {
+        if (cameraView.getMode() == com.otaliastudios.cameraview.controls.Mode.PICTURE) {
             setPhotoActive();
         } else {
             setVideoActive();
@@ -520,7 +537,7 @@ public class CameraActivity extends MetadataActivity implements
         }
     }
 
-    private void setupCameraFlashButton(final Set<Flash> supported) {
+    private void setupCameraFlashButton(final Collection<Flash> supported) {
         if (cameraView.getFlash() == Flash.AUTO) {
             flashButton.displayFlashAuto();
         } else if (cameraView.getFlash() == Flash.OFF) {
@@ -530,7 +547,7 @@ public class CameraActivity extends MetadataActivity implements
         }
 
         flashButton.setOnClickListener(view -> {
-            if (cameraView.getSessionType() == SessionType.VIDEO) {
+            if (cameraView.getMode() == com.otaliastudios.cameraview.controls.Mode.VIDEO) {
                 if (cameraView.getFlash() == Flash.OFF && supported.contains(Flash.TORCH)) {
                     flashButton.displayFlashOn();
                     cameraView.setFlash(Flash.TORCH);
@@ -601,7 +618,7 @@ public class CameraActivity extends MetadataActivity implements
 
     private void setVideoQuality() {
         if (cameraView != null) {
-            cameraView.setVideoQuality(videoResolutionManager.getVideoQuality());
+            cameraView.setVideoSize(videoResolutionManager.getVideoSize());
         }
     }
 }
