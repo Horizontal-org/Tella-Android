@@ -3,9 +3,7 @@ package rs.readahead.washington.mobile.views.activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PointF;
 import android.hardware.SensorManager;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,13 +28,13 @@ import com.otaliastudios.cameraview.PictureResult;
 import com.otaliastudios.cameraview.VideoResult;
 import com.otaliastudios.cameraview.controls.Facing;
 import com.otaliastudios.cameraview.controls.Flash;
-import com.otaliastudios.cameraview.controls.Mode;
 import com.otaliastudios.cameraview.gesture.Gesture;
 import com.otaliastudios.cameraview.gesture.GestureAction;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.Collection;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -147,8 +145,6 @@ public class CameraActivity extends MetadataActivity implements
         if (getIntent().hasExtra(INTENT_MODE)) {
             intentMode = IntentMode.valueOf(getIntent().getStringExtra(INTENT_MODE));
         }
-
-        videoResolutionManager = new VideoResolutionManager();
 
         CacheWordDataSource cacheWordDataSource = new CacheWordDataSource(getContext());
         MediaFileHandler mediaFileHandler = new MediaFileHandler(cacheWordDataSource);
@@ -408,7 +404,9 @@ public class CameraActivity extends MetadataActivity implements
 
     @OnClick(R.id.resolutionButton)
     public void chooseVideoResolution() {
-        videoQualityDialog = DialogsUtil.showVideoResolutionDialog(this, (dialog, which) -> setVideoQuality(), videoResolutionManager);
+        if (videoResolutionManager != null) {
+            videoQualityDialog = DialogsUtil.showVideoResolutionDialog(this, (dialog, which) -> setVideoQuality(), videoResolutionManager);
+        }
     }
 
     private void setCameraZoom() {
@@ -448,20 +446,18 @@ public class CameraActivity extends MetadataActivity implements
 
         //cameraView.setEnabled(PermissionUtil.checkPermission(this, Manifest.permission.CAMERA));
         cameraView.mapGesture(Gesture.TAP, GestureAction.AUTO_FOCUS);
-        cameraView.mapGesture(Gesture.PINCH, GestureAction.ZOOM);
+        //cameraView.mapGesture(Gesture.PINCH, GestureAction.ZOOM);
 
         setOrientationListener();
 
         cameraView.addCameraListener(new CameraListener() {
             @Override
-            public void onPictureTaken(PictureResult result) {
-                //byte[] jpeg
+            public void onPictureTaken(@NotNull PictureResult result) {
                 presenter.addJpegPhoto(result.getData());
             }
 
             @Override
-            public void onVideoTaken(VideoResult result) {
-                //File video
+            public void onVideoTaken(@NotNull VideoResult result) {
                 showConfirmVideoView(result.getFile());
             }
 
@@ -471,7 +467,7 @@ public class CameraActivity extends MetadataActivity implements
             }
 
             @Override
-            public void onCameraOpened(CameraOptions options) {
+            public void onCameraOpened(@NotNull CameraOptions options) {
                 if (options.getSupportedFacing().size() < 2) {
                     switchButton.setVisibility(View.GONE);
                 } else {
@@ -485,16 +481,12 @@ public class CameraActivity extends MetadataActivity implements
                     flashButton.setVisibility(View.VISIBLE);
                     setupCameraFlashButton(options.getSupportedFlash());
                 }
+
+                if (options.getSupportedVideoSizes().size() > 0) {
+                    videoResolutionManager = new VideoResolutionManager(options.getSupportedVideoSizes());
+                }
                 // options object has info
                 super.onCameraOpened(options);
-            }
-
-            @Override
-            public void onZoomChanged(float newValue, @NonNull float[] bounds, @Nullable PointF[] fingers) {
-                mSeekBar.setProgress((int) newValue * 100);
-                // newValue: the new zoom value
-                // bounds: this is always [0, 1]
-                // fingers: if caused by touch gestures, these is the fingers position
             }
         });
 
@@ -606,7 +598,9 @@ public class CameraActivity extends MetadataActivity implements
         photoLine.setVisibility(View.GONE);
         videoModeText.setAlpha(1);
         photoModeText.setAlpha(modeLocked ? 0.1f : 0.5f);
-        resolutionButton.setVisibility(View.VISIBLE);
+        if (videoResolutionManager != null) {
+            resolutionButton.setVisibility(View.VISIBLE);
+        }
     }
 
     private void hideVideoResolutionDialog() {
@@ -617,7 +611,7 @@ public class CameraActivity extends MetadataActivity implements
     }
 
     private void setVideoQuality() {
-        if (cameraView != null) {
+        if (cameraView != null && videoResolutionManager != null) {
             cameraView.setVideoSize(videoResolutionManager.getVideoSize());
         }
     }
