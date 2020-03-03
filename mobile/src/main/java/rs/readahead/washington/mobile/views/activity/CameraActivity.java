@@ -3,9 +3,7 @@ package rs.readahead.washington.mobile.views.activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PointF;
 import android.hardware.SensorManager;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,13 +28,13 @@ import com.otaliastudios.cameraview.PictureResult;
 import com.otaliastudios.cameraview.VideoResult;
 import com.otaliastudios.cameraview.controls.Facing;
 import com.otaliastudios.cameraview.controls.Flash;
-import com.otaliastudios.cameraview.controls.Mode;
 import com.otaliastudios.cameraview.gesture.Gesture;
 import com.otaliastudios.cameraview.gesture.GestureAction;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.Collection;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -448,19 +446,18 @@ public class CameraActivity extends MetadataActivity implements
 
         //cameraView.setEnabled(PermissionUtil.checkPermission(this, Manifest.permission.CAMERA));
         cameraView.mapGesture(Gesture.TAP, GestureAction.AUTO_FOCUS);
-        cameraView.mapGesture(Gesture.PINCH, GestureAction.ZOOM);
+        //cameraView.mapGesture(Gesture.PINCH, GestureAction.ZOOM);
 
         setOrientationListener();
 
         cameraView.addCameraListener(new CameraListener() {
             @Override
-            public void onPictureTaken(PictureResult result) {
-                //byte[] jpeg
+            public void onPictureTaken(@NotNull PictureResult result) {
                 presenter.addJpegPhoto(result.getData());
             }
 
             @Override
-            public void onVideoTaken(VideoResult result) {
+            public void onVideoTaken(@NotNull VideoResult result) {
                 //File video
                 showConfirmVideoView(result.getFile());
             }
@@ -471,7 +468,7 @@ public class CameraActivity extends MetadataActivity implements
             }
 
             @Override
-            public void onCameraOpened(CameraOptions options) {
+            public void onCameraOpened(@NotNull CameraOptions options) {
                 if (options.getSupportedFacing().size() < 2) {
                     switchButton.setVisibility(View.GONE);
                 } else {
@@ -489,13 +486,13 @@ public class CameraActivity extends MetadataActivity implements
                 super.onCameraOpened(options);
             }
 
-            @Override
+           /* @Override
             public void onZoomChanged(float newValue, @NonNull float[] bounds, @Nullable PointF[] fingers) {
                 mSeekBar.setProgress((int) newValue * 100);
                 // newValue: the new zoom value
                 // bounds: this is always [0, 1]
                 // fingers: if caused by touch gestures, these is the fingers position
-            }
+            }*/
         });
 
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -607,6 +604,7 @@ public class CameraActivity extends MetadataActivity implements
         videoModeText.setAlpha(1);
         photoModeText.setAlpha(modeLocked ? 0.1f : 0.5f);
         resolutionButton.setVisibility(View.VISIBLE);
+        setVideoQuality();
     }
 
     private void hideVideoResolutionDialog() {
