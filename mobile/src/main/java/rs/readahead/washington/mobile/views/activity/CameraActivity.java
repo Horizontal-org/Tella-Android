@@ -30,6 +30,7 @@ import com.otaliastudios.cameraview.controls.Facing;
 import com.otaliastudios.cameraview.controls.Flash;
 import com.otaliastudios.cameraview.gesture.Gesture;
 import com.otaliastudios.cameraview.gesture.GestureAction;
+import com.otaliastudios.cameraview.size.SizeSelector;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -316,6 +317,7 @@ public class CameraActivity extends MetadataActivity implements
                     resolutionButton.setVisibility(View.VISIBLE);
                 }
             } else {
+                setVideoQuality();
                 lastClickTime = System.currentTimeMillis();
                 TempMediaFile tmp = TempMediaFile.newMp4();
                 File file = MediaFileHandler.getTempFile(this, tmp);
@@ -405,7 +407,7 @@ public class CameraActivity extends MetadataActivity implements
     @OnClick(R.id.resolutionButton)
     public void chooseVideoResolution() {
         if (videoResolutionManager != null) {
-            videoQualityDialog = DialogsUtil.showVideoResolutionDialog(this, (dialog, which) -> setVideoQuality(), videoResolutionManager);
+            videoQualityDialog = DialogsUtil.showVideoResolutionDialog(this, this::setVideoSize, videoResolutionManager);
         }
     }
 
@@ -613,6 +615,14 @@ public class CameraActivity extends MetadataActivity implements
     private void setVideoQuality() {
         if (cameraView != null && videoResolutionManager != null) {
             cameraView.setVideoSize(videoResolutionManager.getVideoSize());
+        }
+    }
+
+    private void setVideoSize(SizeSelector videoSize) {
+        if (cameraView != null) {
+            cameraView.setVideoSize(videoSize);
+            cameraView.close();
+            cameraView.open();
         }
     }
 }

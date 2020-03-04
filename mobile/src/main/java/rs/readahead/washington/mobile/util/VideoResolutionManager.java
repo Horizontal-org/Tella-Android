@@ -28,8 +28,8 @@ public class VideoResolutionManager {
         if (sizes.contains( new Size(720, 1280))) {
             options.put("medium", new VideoResolutionOption("medium",SizeSelectors.and(SizeSelectors.maxHeight(1280), SizeSelectors.maxWidth(720)), R.string.video_quality_medium));
         }
-        if (sizes.contains( new Size(480, 720))) {
-            options.put("low", new VideoResolutionOption("low",SizeSelectors.and(SizeSelectors.maxHeight(720), SizeSelectors.maxWidth(480)), R.string.video_quality_low));
+        if (sizes.contains( new Size(480, 640))) {
+            options.put("low", new VideoResolutionOption("low",SizeSelectors.and(SizeSelectors.maxHeight(640), SizeSelectors.maxWidth(480)), R.string.video_quality_low));
         }
     }
 
@@ -39,6 +39,10 @@ public class VideoResolutionManager {
         } else {
             return Objects.requireNonNull(options.get(Preferences.getVideoResolution())).getVideoQuality();
         }
+    }
+
+    SizeSelector getVideoSize(String key) {
+        return Objects.requireNonNull(options.get(key)).getVideoQuality();
     }
 
     ArrayList<VideoResolutionOption> getOptionsList() {
