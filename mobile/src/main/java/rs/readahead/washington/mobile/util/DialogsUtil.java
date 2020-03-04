@@ -446,7 +446,6 @@ public class DialogsUtil {
                     String key = (String) radioButton.getTag();
                     videoResolutionManager.putVideoQualityOption(key);
                     consumer.accept(videoResolutionManager.getVideoSize(key));
-                    //listener.onClick(dialog, which);
                 })
                 .setNegativeButton(R.string.cancel, (dialog, which) -> {
                 })
