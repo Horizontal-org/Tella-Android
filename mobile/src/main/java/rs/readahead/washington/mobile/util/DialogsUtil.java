@@ -16,6 +16,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.otaliastudios.cameraview.size.SizeSelector;
+
 import java.util.ArrayList;
 
 import rs.readahead.washington.mobile.R;
@@ -412,7 +414,11 @@ public class DialogsUtil {
                 .show();
     }
 
-    public static AlertDialog showVideoResolutionDialog(Context context, @NonNull DialogInterface.OnClickListener listener, VideoResolutionManager videoResolutionManager) {
+    public interface VideoSizeConsumer {
+        void accept(SizeSelector size);
+    }
+
+    public static AlertDialog showVideoResolutionDialog(Context context, VideoSizeConsumer consumer, VideoResolutionManager videoResolutionManager) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.BrightBackgroundDarkLettersDialogTheme);
         LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -439,7 +445,8 @@ public class DialogsUtil {
                     AppCompatRadioButton radioButton = radioGroup.findViewById(checkedRadioButtonId);
                     String key = (String) radioButton.getTag();
                     videoResolutionManager.putVideoQualityOption(key);
-                    listener.onClick(dialog, which);
+                    consumer.accept(videoResolutionManager.getVideoSize(key));
+                    //listener.onClick(dialog, which);
                 })
                 .setNegativeButton(R.string.cancel, (dialog, which) -> {
                 })

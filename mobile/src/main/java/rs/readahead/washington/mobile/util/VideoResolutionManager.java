@@ -1,10 +1,11 @@
 package rs.readahead.washington.mobile.util;
 
-import com.otaliastudios.cameraview.size.AspectRatio;
+import com.otaliastudios.cameraview.size.Size;
 import com.otaliastudios.cameraview.size.SizeSelector;
 import com.otaliastudios.cameraview.size.SizeSelectors;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Objects;
@@ -15,29 +16,21 @@ import rs.readahead.washington.mobile.presentation.entity.VideoResolutionOption;
 
 
 public class VideoResolutionManager {
-    private static VideoResolutionManager instance;
-    private static final VideoResolutionOption defaultResolution = new VideoResolutionOption("highest",
-            SizeSelectors.or(SizeSelectors.and(SizeSelectors.aspectRatio(AspectRatio.of(4, 3), 0), SizeSelectors.biggest())),R.string.video_quality_very_high);
+    private static final VideoResolutionOption defaultResolution = new VideoResolutionOption("highest", SizeSelectors.biggest(), R.string.video_quality_very_high);
     private HashMap<String, VideoResolutionOption> options;
 
-    public VideoResolutionManager() {
+    public VideoResolutionManager(Collection<Size> sizes) {
         options = new LinkedHashMap<>();
-        options.put("highest", new VideoResolutionOption("highest",
-                SizeSelectors.or(SizeSelectors.and(SizeSelectors.maxWidth(3840), SizeSelectors.maxHeight(2160)),
-                        SizeSelectors.aspectRatio(AspectRatio.of(16, 9), 0), SizeSelectors.biggest()),
-                R.string.video_quality_very_high));
-        options.put("high", new VideoResolutionOption("high",
-                SizeSelectors.or(SizeSelectors.and(SizeSelectors.maxWidth(1920), SizeSelectors.maxHeight(1080)),
-                        SizeSelectors.aspectRatio(AspectRatio.of(16, 9), 0), SizeSelectors.biggest()),
-                R.string.video_quality_high));
-        options.put("medium", new VideoResolutionOption("medium",
-                SizeSelectors.or(SizeSelectors.and(SizeSelectors.maxWidth(1280), SizeSelectors.maxHeight(720)),
-                        SizeSelectors.aspectRatio(AspectRatio.of(16, 9), 0), SizeSelectors.biggest()),
-                R.string.video_quality_medium));
-        options.put("low", new VideoResolutionOption("low",
-                SizeSelectors.or(SizeSelectors.and(SizeSelectors.maxWidth(640), SizeSelectors.maxHeight(480)),
-                        SizeSelectors.aspectRatio(AspectRatio.of(4, 3), 0), SizeSelectors.biggest()),
-                R.string.video_quality_low));
+        options.put("highest", defaultResolution);
+        if (sizes.contains( new Size(1080, 1920))) {
+            options.put("high", new VideoResolutionOption("high",SizeSelectors.and(SizeSelectors.maxHeight(1920), SizeSelectors.maxWidth(1080)), R.string.video_quality_high));
+        }
+        if (sizes.contains( new Size(720, 1280))) {
+            options.put("medium", new VideoResolutionOption("medium",SizeSelectors.and(SizeSelectors.maxHeight(1280), SizeSelectors.maxWidth(720)), R.string.video_quality_medium));
+        }
+        if (sizes.contains( new Size(480, 640))) {
+            options.put("low", new VideoResolutionOption("low",SizeSelectors.and(SizeSelectors.maxHeight(640), SizeSelectors.maxWidth(480)), R.string.video_quality_low));
+        }
     }
 
     public SizeSelector getVideoSize() {
@@ -46,6 +39,10 @@ public class VideoResolutionManager {
         } else {
             return Objects.requireNonNull(options.get(Preferences.getVideoResolution())).getVideoQuality();
         }
+    }
+
+    SizeSelector getVideoSize(String key) {
+        return Objects.requireNonNull(options.get(key)).getVideoQuality();
     }
 
     ArrayList<VideoResolutionOption> getOptionsList() {
