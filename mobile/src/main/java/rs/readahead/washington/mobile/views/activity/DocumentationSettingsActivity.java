@@ -129,8 +129,7 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
 
     @OnClick(R.id.add_server)
     public void manage(View view) {
-        showCollectServerDialog(null);
-        //showChooseServerDialog();
+        showChooseServerDialog();
     }
 
     @Override
@@ -274,7 +273,7 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
         return this;
     }
 
-    /*private void showChooseServerDialog() {
+    private void showChooseServerDialog() {
         dialog = DialogsUtil.showServerChoosingDialog(this,
                 serverType -> {
                     if (serverType == ServerType.ODK_COLLECT) {
@@ -284,7 +283,7 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
                     }
                     dialog.dismiss();
                 });
-    }*/
+    }
 
     private void editCollectServer(CollectServer server) {
         showCollectServerDialog(server);
