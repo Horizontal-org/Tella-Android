@@ -28,6 +28,7 @@ import com.otaliastudios.cameraview.PictureResult;
 import com.otaliastudios.cameraview.VideoResult;
 import com.otaliastudios.cameraview.controls.Facing;
 import com.otaliastudios.cameraview.controls.Flash;
+import com.otaliastudios.cameraview.controls.Mode;
 import com.otaliastudios.cameraview.gesture.Gesture;
 import com.otaliastudios.cameraview.gesture.GestureAction;
 import com.otaliastudios.cameraview.size.SizeSelector;
@@ -302,7 +303,7 @@ public class CameraActivity extends MetadataActivity implements
 
     @OnClick(R.id.captureButton)
     void onCaptureClicked() {
-        if (cameraView.getMode() == com.otaliastudios.cameraview.controls.Mode.PICTURE) {
+        if (cameraView.getMode() == Mode.PICTURE) {
             cameraView.takePicture();
         } else {
 
@@ -311,7 +312,6 @@ public class CameraActivity extends MetadataActivity implements
             if (videoRecording) {
                 if (System.currentTimeMillis() - lastClickTime >= CLICK_DELAY) {
                     cameraView.stopVideo();
-                    //cameraView.stopCapturingVideo();
                     videoRecording = false;
                     switchButton.setVisibility(View.VISIBLE);
                     resolutionButton.setVisibility(View.VISIBLE);
@@ -341,7 +341,7 @@ public class CameraActivity extends MetadataActivity implements
             return;
         }
 
-        if (cameraView.getMode() == com.otaliastudios.cameraview.controls.Mode.PICTURE) {
+        if (cameraView.getMode() == Mode.PICTURE) {
             return;
         }
 
@@ -351,7 +351,7 @@ public class CameraActivity extends MetadataActivity implements
 
         setPhotoActive();
         captureButton.displayPhotoButton();
-        cameraView.setMode(com.otaliastudios.cameraview.controls.Mode.PICTURE);
+        cameraView.setMode(Mode.PICTURE);
         mode = CameraMode.PHOTO;
 
         resetZoom();
@@ -368,11 +368,11 @@ public class CameraActivity extends MetadataActivity implements
             return;
         }
 
-        if (cameraView.getMode() == com.otaliastudios.cameraview.controls.Mode.VIDEO) {
+        if (cameraView.getMode() == Mode.VIDEO) {
             return;
         }
 
-        cameraView.setMode(com.otaliastudios.cameraview.controls.Mode.VIDEO);
+        cameraView.setMode(Mode.VIDEO);
         turnFlashDown();
         captureButton.displayVideoButton();
         setVideoActive();
@@ -439,16 +439,15 @@ public class CameraActivity extends MetadataActivity implements
 
     private void setupCameraView() {
         if (mode == CameraMode.PHOTO) {
-            cameraView.setMode(com.otaliastudios.cameraview.controls.Mode.PICTURE);
+            cameraView.setMode(Mode.PICTURE);
             captureButton.displayPhotoButton();
         } else {
-            cameraView.setMode(com.otaliastudios.cameraview.controls.Mode.VIDEO);
+            cameraView.setMode(Mode.VIDEO);
             captureButton.displayVideoButton();
         }
 
         //cameraView.setEnabled(PermissionUtil.checkPermission(this, Manifest.permission.CAMERA));
         cameraView.mapGesture(Gesture.TAP, GestureAction.AUTO_FOCUS);
-        //cameraView.mapGesture(Gesture.PINCH, GestureAction.ZOOM);
 
         setOrientationListener();
 
@@ -510,7 +509,7 @@ public class CameraActivity extends MetadataActivity implements
     }
 
     private void setupCameraModeButton() {
-        if (cameraView.getMode() == com.otaliastudios.cameraview.controls.Mode.PICTURE) {
+        if (cameraView.getMode() == Mode.PICTURE) {
             setPhotoActive();
         } else {
             setVideoActive();
@@ -541,7 +540,7 @@ public class CameraActivity extends MetadataActivity implements
         }
 
         flashButton.setOnClickListener(view -> {
-            if (cameraView.getMode() == com.otaliastudios.cameraview.controls.Mode.VIDEO) {
+            if (cameraView.getMode() == Mode.VIDEO) {
                 if (cameraView.getFlash() == Flash.OFF && supported.contains(Flash.TORCH)) {
                     flashButton.displayFlashOn();
                     cameraView.setFlash(Flash.TORCH);
