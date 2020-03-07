@@ -23,14 +23,14 @@ public class VideoResolutionManager {
     public VideoResolutionManager(Collection<Size> sizes) {
         options = new LinkedHashMap<>();
         options.put("highest", defaultResolution);
-        if (sizes.contains( new Size(1080, 1920))) {
-            options.put("high", new VideoResolutionOption("high",SizeSelectors.and(SizeSelectors.aspectRatio(AspectRatio.of(9, 16), 0), SizeSelectors.maxHeight(1920), SizeSelectors.maxWidth(1080)), R.string.video_quality_high));
+        if (sizes.contains(new Size(1080, 1920))) {
+            options.put("high", new VideoResolutionOption("high", SizeSelectors.and(SizeSelectors.aspectRatio(AspectRatio.of(9, 16), 0), SizeSelectors.maxHeight(1920), SizeSelectors.maxWidth(1080)), R.string.video_quality_high));
         }
-        if (sizes.contains( new Size(720, 1280))) {
-            options.put("medium", new VideoResolutionOption("medium",SizeSelectors.and(SizeSelectors.aspectRatio(AspectRatio.of(9, 16), 0),SizeSelectors.maxHeight(1280), SizeSelectors.maxWidth(720)), R.string.video_quality_medium));
+        if (sizes.contains(new Size(720, 1280))) {
+            options.put("medium", new VideoResolutionOption("medium", SizeSelectors.and(SizeSelectors.aspectRatio(AspectRatio.of(9, 16), 0), SizeSelectors.maxHeight(1280), SizeSelectors.maxWidth(720)), R.string.video_quality_medium));
         }
-        if (sizes.contains( new Size(480, 640))) {
-            options.put("low", new VideoResolutionOption("low",SizeSelectors.and(SizeSelectors.aspectRatio(AspectRatio.of(3, 4), 0), SizeSelectors.maxHeight(640), SizeSelectors.maxWidth(480)), R.string.video_quality_low));
+        if (sizes.contains(new Size(480, 640))) {
+            options.put("low", new VideoResolutionOption("low", SizeSelectors.and(SizeSelectors.aspectRatio(AspectRatio.of(3, 4), 0), SizeSelectors.maxHeight(640), SizeSelectors.maxWidth(480)), R.string.video_quality_low));
         }
     }
 
