@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.presentation.entity;
 
 import com.otaliastudios.cameraview.size.SizeSelector;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 
 public class VideoResolutionOption {
@@ -9,7 +10,7 @@ public class VideoResolutionOption {
     private SizeSelector videoSize;
     private int stringResId;
 
-    public VideoResolutionOption(String alias, SizeSelector videoSize, @StringRes int stringResId) {
+    public VideoResolutionOption(@NonNull String alias, @NonNull SizeSelector videoSize, @StringRes int stringResId) {
         this.alias = alias;
         this.videoSize = videoSize;
         this.stringResId = stringResId;

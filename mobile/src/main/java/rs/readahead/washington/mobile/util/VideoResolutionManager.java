@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Objects;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
@@ -35,15 +34,31 @@ public class VideoResolutionManager {
     }
 
     public SizeSelector getVideoSize() {
-        if (Preferences.getVideoResolution() == null) {
-            return defaultResolution.getVideoQuality();
+        VideoResolutionOption option;
+        if (options.containsKey(Preferences.getVideoResolution()) && options.get(Preferences.getVideoResolution()) != null) {
+            option = options.get(Preferences.getVideoResolution());
+            if (option != null) {
+                return option.getVideoQuality();
+            } else {
+                return defaultResolution.getVideoQuality();
+            }
         } else {
-            return Objects.requireNonNull(options.get(Preferences.getVideoResolution())).getVideoQuality();
+            return defaultResolution.getVideoQuality();
         }
     }
 
     SizeSelector getVideoSize(String key) {
-        return Objects.requireNonNull(options.get(key)).getVideoQuality();
+        VideoResolutionOption option;
+        if (options.containsKey(key)) {
+            option = options.get(key);
+            if (option != null) {
+                return option.getVideoQuality();
+            } else {
+                return defaultResolution.getVideoQuality();
+            }
+        } else {
+            return defaultResolution.getVideoQuality();
+        }
     }
 
     ArrayList<VideoResolutionOption> getOptionsList() {
