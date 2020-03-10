@@ -4,18 +4,27 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.AppCompatRadioButton;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import com.otaliastudios.cameraview.size.SizeSelector;
+
+import java.util.ArrayList;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
 import rs.readahead.washington.mobile.domain.entity.ServerType;
+import rs.readahead.washington.mobile.presentation.entity.VideoResolutionOption;
 import rs.readahead.washington.mobile.views.custom.CameraPreviewAnonymousButton;
 
 
@@ -393,6 +402,7 @@ public class DialogsUtil {
                 .show();
     }
 
+
     public static AlertDialog showExportMediaDialog(@NonNull Context context, @NonNull DialogInterface.OnClickListener listener) {
         return new AlertDialog.Builder(context)
                 .setTitle(R.string.ra_save_to_device_storage)
@@ -402,5 +412,48 @@ public class DialogsUtil {
                 })
                 .setCancelable(true)
                 .show();
+    }
+
+    public interface VideoSizeConsumer {
+        void accept(SizeSelector size);
+    }
+
+    public static AlertDialog showVideoResolutionDialog(Context context, VideoSizeConsumer consumer, VideoResolutionManager videoResolutionManager) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.BrightBackgroundDarkLettersDialogTheme);
+        LayoutInflater inflater = LayoutInflater.from(context);
+
+        String checkedKey = videoResolutionManager.getVideoQualityOptionKey();
+
+        @SuppressLint("InflateParams")
+        View view = inflater.inflate(R.layout.video_resolution_setting_dialog, null);
+        RadioGroup radioGroup = view.findViewById(R.id.radio_group);
+
+        ArrayList<VideoResolutionOption> optionKeys = videoResolutionManager.getOptionsList();
+        for (int i = 0; i < optionKeys.size(); i++) {
+            AppCompatRadioButton button = (AppCompatRadioButton) inflater.inflate(R.layout.video_resolution_dialog_radio_button_item, null);
+            button.setTag(optionKeys.get(i).getVideoQualityKey());
+            button.setText(optionKeys.get(i).getVideoQualityStringResourceId());
+            radioGroup.addView(button);
+            if (checkedKey.equals(optionKeys.get(i).getVideoQualityKey())) {
+                button.setChecked(true);
+            }
+        }
+
+        builder.setView(view)
+                .setPositiveButton(R.string.next_section, (dialog, which) -> {
+                    int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
+                    AppCompatRadioButton radioButton = radioGroup.findViewById(checkedRadioButtonId);
+                    String key = (String) radioButton.getTag();
+                    videoResolutionManager.putVideoQualityOption(key);
+                    consumer.accept(videoResolutionManager.getVideoSize(key));
+                })
+                .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                })
+                .setCancelable(false);
+
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        return alertDialog;
     }
 }

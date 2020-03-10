@@ -138,7 +138,7 @@ public class ImageWidget extends MediaFileBinaryWidget {
 
             activity.startActivityForResult(new Intent(getContext(), CameraActivity.class)
                             .putExtra(CameraActivity.INTENT_MODE, CameraActivity.IntentMode.COLLECT.name())
-                            .putExtra(CameraActivity.CAMERA_MODE, CameraActivity.Mode.PHOTO.name()),
+                            .putExtra(CameraActivity.CAMERA_MODE, CameraActivity.CameraMode.PHOTO.name()),
                     C.MEDIA_FILE_ID
             );
         } catch (Exception e) {
