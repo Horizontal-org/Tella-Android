@@ -23,42 +23,18 @@ public class VideoResolutionManager {
         options = new LinkedHashMap<>();
         options.put("highest", defaultResolution);
         if (sizes.contains(new Size(1080, 1920))) {
-            options.put("high", new VideoResolutionOption("high", SizeSelectors.and(SizeSelectors.aspectRatio(AspectRatio.of(9, 16), 0), SizeSelectors.maxHeight(1920), SizeSelectors.maxWidth(1080)), R.string.video_quality_high));
+            addVideoOption(1080, 1920, 9, 16, "high", R.string.video_quality_high);
         }
         if (sizes.contains(new Size(720, 1280))) {
-            options.put("medium", new VideoResolutionOption("medium", SizeSelectors.and(SizeSelectors.aspectRatio(AspectRatio.of(9, 16), 0), SizeSelectors.maxHeight(1280), SizeSelectors.maxWidth(720)), R.string.video_quality_medium));
+            addVideoOption(720, 1280, 9, 16, "medium", R.string.video_quality_medium);
         }
         if (sizes.contains(new Size(480, 640))) {
-            options.put("low", new VideoResolutionOption("low", SizeSelectors.and(SizeSelectors.aspectRatio(AspectRatio.of(3, 4), 0), SizeSelectors.maxHeight(640), SizeSelectors.maxWidth(480)), R.string.video_quality_low));
+            addVideoOption(480, 640, 3, 4, "low", R.string.video_quality_low);
         }
     }
 
     public SizeSelector getVideoSize() {
-        VideoResolutionOption option;
-        if (options.containsKey(Preferences.getVideoResolution()) && options.get(Preferences.getVideoResolution()) != null) {
-            option = options.get(Preferences.getVideoResolution());
-            if (option != null) {
-                return option.getVideoQuality();
-            } else {
-                return defaultResolution.getVideoQuality();
-            }
-        } else {
-            return defaultResolution.getVideoQuality();
-        }
-    }
-
-    SizeSelector getVideoSize(String key) {
-        VideoResolutionOption option;
-        if (options.containsKey(key)) {
-            option = options.get(key);
-            if (option != null) {
-                return option.getVideoQuality();
-            } else {
-                return defaultResolution.getVideoQuality();
-            }
-        } else {
-            return defaultResolution.getVideoQuality();
-        }
+        return getVideoSize(Preferences.getVideoResolution());
     }
 
     ArrayList<VideoResolutionOption> getOptionsList() {
@@ -71,5 +47,18 @@ public class VideoResolutionManager {
 
     void putVideoQualityOption(String key) {
         Preferences.setVideoResolution(key);
+    }
+
+    SizeSelector getVideoSize(String key) {
+        VideoResolutionOption option = options.get(key);
+        return option != null ? option.getVideoQuality() : getDefaultVideoResolution();
+    }
+
+    private SizeSelector getDefaultVideoResolution() {
+        return defaultResolution.getVideoQuality();
+    }
+
+    private void addVideoOption(int width, int height, int aspectX, int aspectY, String resolutionName, int resOptionStringId) {
+        options.put(resolutionName, new VideoResolutionOption(resolutionName, SizeSelectors.and(SizeSelectors.aspectRatio(AspectRatio.of(aspectX, aspectY), 0), SizeSelectors.maxHeight(height), SizeSelectors.maxWidth(width)), resOptionStringId));
     }
 }
