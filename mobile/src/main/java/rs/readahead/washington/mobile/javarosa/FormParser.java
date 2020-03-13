@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.javarosa;
 
 import androidx.annotation.NonNull;
+
 import android.text.TextUtils;
 
 import com.crashlytics.android.Crashlytics;
@@ -30,7 +31,8 @@ public class FormParser implements IFormParserContract.IFormParser {
     private FormEntryPrompt[] prompts;
     private FormEntryCaption[] groups;
 
-    private String locationFieldSuffix;
+    private String locationFieldPrefix;
+    private String metadataFieldPrefix;
 
     private enum Direction {
         PREVIOUS,
@@ -42,7 +44,8 @@ public class FormParser implements IFormParserContract.IFormParser {
     public FormParser(IFormParserContract.IView suppliedView) {
         this.view = suppliedView;
         this.formController = FormController.getActive();
-        this.locationFieldSuffix = suppliedView.getContext().getString(R.string.tella_location_field_suffix);
+        this.locationFieldPrefix = suppliedView.getContext().getString(R.string.tella_location_field_prefix);
+        this.metadataFieldPrefix = suppliedView.getContext().getString(R.string.tella_metadata_field_prefix);
     }
 
     @Override
@@ -143,7 +146,15 @@ public class FormParser implements IFormParserContract.IFormParser {
                     } else {
                         cfv.clearBinaryData(formIndex);
                     }
+                    break;
 
+                case METADATA:
+                    if (metadata != null && metadata.getMetadataText() != null) {
+                        String answer = metadata.getMetadataText();
+                        cfv.setBinaryData(formIndex, answer);
+                    } else {
+                        cfv.clearBinaryData(formIndex);
+                    }
                     break;
             }
         });
@@ -248,12 +259,15 @@ public class FormParser implements IFormParserContract.IFormParser {
         }
 
         FormEntryPrompt[] prompts = formController.getQuestionPrompts();
-        for (FormEntryPrompt fep: prompts) {
+        for (FormEntryPrompt fep : prompts) {
             try {
                 String fepName = fep.getIndex().getReference().getNameLast();
-
-                if (isGeoPoint(fep) && (binaryName + locationFieldSuffix).equals(fepName)) {
+                if (isGeoPoint(fep) && (locationFieldPrefix + binaryName).equals(fepName)) {
                     function.found(MetadataFieldFunction.Type.LOCATION, fep.getIndex());
+                    break;
+                }
+                if (isTextField(fep) && (metadataFieldPrefix + binaryName).equals(fepName)) {
+                    function.found(MetadataFieldFunction.Type.METADATA, fep.getIndex());
                     break;
                 }
             } catch (Exception e) {
@@ -267,9 +281,15 @@ public class FormParser implements IFormParserContract.IFormParser {
                 fep.getDataType() == Constants.DATATYPE_GEOPOINT;
     }
 
+    private boolean isTextField(FormEntryPrompt fep) {
+        return fep.getControlType() == Constants.CONTROL_INPUT &&
+                fep.getDataType() == Constants.DATATYPE_TEXT;
+    }
+
     private interface MetadataFieldFunction {
         enum Type {
-            LOCATION
+            LOCATION,
+            METADATA
         }
 
         void found(Type type, FormIndex formIndex);

@@ -65,7 +65,7 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
 
         try {
             readonlyOverride = formEntryPrompt.getIndex().getReference().getNameLast()
-                    .toLowerCase().endsWith(context.getString(R.string.tella_location_field_suffix));
+                    .toLowerCase().endsWith(context.getString(R.string.tella_location_field_prefix));
         } catch (Exception ignored) {}
 
         appearance = formEntryPrompt.getAppearanceHint();

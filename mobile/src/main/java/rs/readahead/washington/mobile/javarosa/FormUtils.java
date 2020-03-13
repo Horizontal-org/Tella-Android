@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.model.xform.XFormSerializingVisitor;
 
 import java.io.IOException;
@@ -26,6 +27,18 @@ import rs.readahead.washington.mobile.util.StringUtils;
 
 
 public class FormUtils {
+    public static boolean isTellaLocationHiddenField(Context context, FormEntryPrompt fep) {
+        String locationFieldPrefix = context.getString(R.string.tella_location_field_prefix);
+        String fepName = fep.getIndex().getReference().getNameLast();
+        return (fepName.startsWith(locationFieldPrefix));
+    }
+
+    public static boolean isTellaMetadataHiddenField(Context context, FormEntryPrompt fep) {
+        String metadataFieldPrefix = context.getString(R.string.tella_metadata_field_prefix);
+        String fepName = fep.getIndex().getReference().getNameLast();
+        return (fepName.startsWith(metadataFieldPrefix));
+    }
+
     public static long getFormPayloadSize(@NonNull CollectFormInstance instance) {
         try {
             FormDef formDef = instance.getFormDef();

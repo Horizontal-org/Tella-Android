@@ -1,7 +1,13 @@
 package rs.readahead.washington.mobile.domain.entity;
 
+import android.text.TextUtils;
+
+import com.google.gson.Gson;
+
 import java.io.Serializable;
 import java.util.List;
+
+import rs.readahead.washington.mobile.R;
 
 
 public final class Metadata implements Serializable {
@@ -207,5 +213,10 @@ public final class Metadata implements Serializable {
 
     public void setFileHashSHA256(String fileHashSHA256) {
         this.fileHashSHA256 = fileHashSHA256;
+    }
+
+    public String getMetadataText() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }

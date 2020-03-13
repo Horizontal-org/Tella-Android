@@ -22,5 +22,6 @@
     </string-array>
     <string name="ra_server_prefix" translatable="false">https://</string>
     <integer name="ra_config_short_fling">300</integer>
-    <string name="tella_location_field_suffix" translatable="false">_tella_location</string>
+    <string name="tella_location_field_prefix" translatable="false">_geometadata_</string>
+    <string name="tella_metadata_field_prefix" translatable="false">_textmetadata_</string>
 </resources>

@@ -15,7 +15,10 @@ package rs.readahead.washington.mobile.views.collect.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+
 import android.text.Selection;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -134,5 +137,14 @@ public class StringWidget extends QuestionWidget {
     public void cancelLongPress() {
         super.cancelLongPress();
         answer.cancelLongPress();
+    }
+
+    @Override
+    public String setBinaryData(@NonNull Object data) {
+        String answerText = (String) data;
+
+        answer.setText(answerText);
+
+        return answerText;
     }
 }
