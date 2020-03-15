@@ -522,4 +522,10 @@
     <string name="minus15">-15s</string>
     <string name="days_hours_and_space_left">%1$d days %2$d hours (%3$s) left</string>
     <string name="hours_minutes_and_space_left">%1$d hours %2$d min (%3$s) left</string>
+    <string name="video_quality">Video quality</string>
+    <string name="video_quality_info">The higher the quality, the larger video file will be.</string>
+    <string name="video_quality_very_high">Highest possible</string>
+    <string name="video_quality_high">High (~1080p)</string>
+    <string name="video_quality_medium">Medium (~720p)</string>
+    <string name="video_quality_low">Low (~480p)</string>
 </resources>

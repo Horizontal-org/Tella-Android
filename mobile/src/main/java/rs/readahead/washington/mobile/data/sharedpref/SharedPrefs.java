@@ -45,6 +45,7 @@ public class SharedPrefs {
     static final String COLLECT_OPTION = "collect_option";
     static final String INSTALLATION_ID = "installation_id";
     static final String LAST_COLLECT_REFRESH = "last_collect_refresh";
+    static final String VIDEO_RESOLUTION = "video_resolution";
 
     private static SharedPrefs instance;
     private SharedPreferences pref;
