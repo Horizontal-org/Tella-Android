@@ -206,6 +206,31 @@ public class Preferences {
         setLong(SharedPrefs.LAST_COLLECT_REFRESH, value);
     }
 
+    @Nullable
+    public static long getAutoUploadServerId() {
+        return getLong(SharedPrefs.AUTO_UPLOAD_SERVER, -1);
+    }
+
+    public static void setAutoUploadServerId(@Nullable long value) {
+        setLong(SharedPrefs.AUTO_UPLOAD_SERVER, value);
+    }
+
+    public static boolean isAutoUploadEnabled() {
+        return getBoolean(SharedPrefs.AUTO_UPLOAD, false);
+    }
+
+    public static void setAutoUpload(boolean value) {
+        setBoolean(SharedPrefs.AUTO_UPLOAD, value);
+    }
+
+    public static boolean isAutoDeleteEnabled() {
+        return getBoolean(SharedPrefs.AUTO_DELETE, false);
+    }
+
+    public static void setAutoDelete(boolean value) {
+        setBoolean(SharedPrefs.AUTO_DELETE, value);
+    }
+
     private static boolean getBoolean(String name, boolean def) {
         Boolean value = bCache.get(name);
 

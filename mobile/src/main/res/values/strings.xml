@@ -510,7 +510,7 @@
     <string name="manage_connections_to_servers">Manage your connection to servers to send data.</string>
     <string name="disconnect_servers">Disconnect server(s)</string>
     <string name="disconnect_servers_info">Would you like to delete your server connections altogether, or simply hide them? Hiding will keep server information in memory so that you can easily reconnect and submit data to the server(s).</string>
-    <string name="delete_tus_server_info">If you delete this server, you will no longer be able to send file.</string>
+    <string name="delete_tus_server_info">If you delete this server, you will no longer be able to upload files</string>
     <string name="send_files_to">Send files to</string>
     <string name="files">files</string>
     <string name="sending">Sending</string>
@@ -532,4 +532,6 @@
     <string name="auto_upload_info_text">Upload your files to your Direct Upload server as soon as they are captured (photos, videos, or audio recordings) or imported into Tella.</string>
     <string name="auto_delete">Auto-delete</string>
     <string name="auto_delete_info_text">If activated, Tella will automatically delete the files uploaded as soon as the upload is complete.</string>
+    <string name="pick_auto_upload_server">Pick the server to auto-upload your files</string>
+    <string name="delete_auto_tus_server_info">If you delete this server, you will no longer be able to upload files</string>
 </resources>

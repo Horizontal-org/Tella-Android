@@ -144,6 +144,7 @@
 
 
             <LinearLayout
+                android:id="@+id/auto_upload_switch_view"
                 style="@style/SettingsClickableVerticalShadowDocumentationLinerLayout"
                 android:animateLayoutChanges="true">
 
@@ -181,6 +182,7 @@
                     android:id="@+id/upload_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:orientation="vertical">
 
                         <View style="@style/SettingsMainShadowLine" />
@@ -209,7 +211,8 @@
                                 android:layout_width="wrap_content"
                                 android:gravity="center_vertical"
                                 android:textAlignment="center"
-                                android:text="@string/ra_server_name" />
+                                android:text="@string/ra_server_name"
+                                tools:ignore="RelativeOverlap" />
                         </RelativeLayout>
 
                         <View style="@style/SettingsMainShadowLine" />
