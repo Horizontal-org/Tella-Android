@@ -7,6 +7,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.data.database.DataSource;
+import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.mvp.contract.IServersPresenterContract;
 
 
@@ -35,6 +36,22 @@ public class ServersPresenter implements IServersPresenterContract.IPresenter {
                         }
                 )
         );
+    }
+
+    @Override
+    public void removeAutoUploadServersSettings() {
+        Preferences.setAutoUpload(false);
+        Preferences.setAutoUploadServerId(-1);
+    }
+
+    @Override
+    public long getAutoUploadServerId() {
+        return Preferences.getAutoUploadServerId();
+    }
+
+    @Override
+    public void setAutoUploadServerId(long id) {
+        Preferences.setAutoUploadServerId(id);
     }
 
     @Override

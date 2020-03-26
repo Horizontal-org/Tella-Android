@@ -341,7 +341,7 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
     }
 
     private void setAutoUploadServer(TellaUploadServer server) {
-        Preferences.setAutoUploadServerId(server.getId());
+        serversPresenter.setAutoUploadServerId(server.getId());
         autoUploadServerName.setText(server.getName());
     }
 
@@ -365,15 +365,14 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
     }
 
     private void removeTUServer(final TellaUploadServer server) {
-        if (server.getId() == Preferences.getAutoUploadServerId()) {
+        if (server.getId() == serversPresenter.getAutoUploadServerId()) {
             dialog = DialogsUtil.showDialog(this,
                     getString(R.string.delete_auto_tus_server_info),
                     getString(R.string.delete),
                     getString(R.string.cancel),
                     (dialog, which) -> {
                         tellaUploadServersPresenter.remove(server);
-                        if (server.getId() == Preferences.getAutoUploadServerId()) {
-                            Preferences.setAutoUploadServerId(-1);
+                        if (server.getId() == serversPresenter.getAutoUploadServerId()) {
                             turnOffAutoUpload();
                         }
                         dialog.dismiss();
@@ -392,8 +391,7 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
 
     private void turnOffAutoUpload() {
         autoUploadSwitch.setChecked(false);
-        Preferences.setAutoUpload(false);
-        Preferences.setAutoUploadServerId(-1);
+        serversPresenter.removeAutoUploadServersSettings();
         autoUploadSettingsView.setVisibility(View.GONE);
     }
 
@@ -557,19 +555,22 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
     }
 
     private void setupAutoUploadView() {
-        if (Preferences.isAutoUploadEnabled()) {
-            autoUploadSettingsView.setVisibility(View.VISIBLE);
+        if (!Preferences.isAutoUploadEnabled()) {
+            return;
+        }
 
-            if (Preferences.getAutoUploadServerId() == -1) {  // check if auto upload server is set
-                if (tuServers.size() == 1) {
-                    setAutoUploadServer(tuServers.get(0));
-                } else
-                    showChooseAutoUploadServerDialog(tuServers);
+        autoUploadSettingsView.setVisibility(View.VISIBLE);
+
+        if (serversPresenter.getAutoUploadServerId() == -1) {  // check if auto upload server is set
+            if (tuServers.size() == 1) {
+                setAutoUploadServer(tuServers.get(0));
             } else {
-                for (int i = 0; i < tuServers.size(); i++) {
-                    if (tuServers.get(i).getId() == Preferences.getAutoUploadServerId()) {
-                        setAutoUploadServer(tuServers.get(i));
-                    }
+                showChooseAutoUploadServerDialog(tuServers);
+            }
+        } else {
+            for (int i = 0; i < tuServers.size(); i++) {
+                if (tuServers.get(i).getId() == serversPresenter.getAutoUploadServerId()) {
+                    setAutoUploadServer(tuServers.get(i));
                 }
             }
         }
