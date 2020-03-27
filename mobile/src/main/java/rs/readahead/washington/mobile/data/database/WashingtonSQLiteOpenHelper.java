@@ -49,6 +49,9 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
         // DBv6
         db.execSQL(createTableTellaUploadServer());
+
+        // DBv7
+        db.execSQL(alterTableMediaFileAddUploaded());
     }
 
     @Override
@@ -69,6 +72,9 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
             case 5:
                 db.execSQL(createTableTellaUploadServer());
+
+            case 6:
+                db.execSQL(alterTableMediaFileAddUploaded());
         }
     }
 
@@ -197,6 +203,11 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_PASSWORD, D.TEXT) + " , " +
                 cddl(D.C_CHECKED, D.INTEGER, true) + " DEFAULT 0" +
                 ");";
+    }
+
+    private String alterTableMediaFileAddUploaded() {
+        return "ALTER TABLE " + sq(D.T_MEDIA_FILE) + " ADD COLUMN " +
+                cddl(D.C_UPLOADED, D.INTEGER, true) + " DEFAULT 0";
     }
 
     private static String objQuote(String str) {
