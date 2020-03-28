@@ -90,10 +90,10 @@ public class GeoPointHiddenWidget extends QuestionWidget {
         String[] sa = locationString.split(" ");
 
         MyLocation myLocation = new MyLocation();
-        myLocation.setLatitude(Double.valueOf(sa[0]));
-        myLocation.setLongitude(Double.valueOf(sa[1]));
-        myLocation.setAltitude(Double.valueOf(sa[2]));
-        myLocation.setAccuracy(Float.valueOf(sa[3]));
+        myLocation.setLatitude(Double.parseDouble(sa[0]));
+        myLocation.setLongitude(Double.parseDouble(sa[1]));
+        myLocation.setAltitude(Double.parseDouble(sa[2]));
+        myLocation.setAccuracy(Float.parseFloat(sa[3]));
 
         return myLocation;
     }

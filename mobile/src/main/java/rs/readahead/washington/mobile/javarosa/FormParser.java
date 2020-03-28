@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.gson.Gson;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormIndex;
@@ -149,8 +150,8 @@ public class FormParser implements IFormParserContract.IFormParser {
                     break;
 
                 case METADATA:
-                    if (metadata != null && metadata.getMetadataText() != null) {
-                        String answer = metadata.getMetadataText();
+                    if (metadata != null) {
+                        String answer = new Gson().toJson(metadata);
                         cfv.setBinaryData(formIndex, answer);
                     } else {
                         cfv.clearBinaryData(formIndex);

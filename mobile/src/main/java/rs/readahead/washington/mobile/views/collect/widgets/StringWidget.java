@@ -129,10 +129,4 @@ public class StringWidget extends QuestionWidget {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         return !event.isAltPressed() && super.onKeyDown(keyCode, event);
     }
-
-    @Override
-    public void cancelLongPress() {
-        super.cancelLongPress();
-        answer.cancelLongPress();
-    }
 }

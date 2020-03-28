@@ -57,16 +57,10 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
     private String appearance;
     private LocationGettingPresenter locationGettingPresenter;
     private boolean locationGathering;
-    private boolean readonlyOverride;
 
 
     public GeoPointWidget(Context context, @NonNull FormEntryPrompt formEntryPrompt) {
         super(context, formEntryPrompt);
-
-        try {
-            readonlyOverride = formEntryPrompt.getIndex().getReference().getNameLast()
-                    .toLowerCase().endsWith(context.getString(R.string.tella_location_field_prefix));
-        } catch (Exception ignored) {}
 
         appearance = formEntryPrompt.getAppearanceHint();
         if (TextUtils.isEmpty(appearance)) {
@@ -302,10 +296,10 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
         String[] sa = locationString.split(" ");
 
         MyLocation myLocation = new MyLocation();
-        myLocation.setLatitude(Double.valueOf(sa[0]));
-        myLocation.setLongitude(Double.valueOf(sa[1]));
-        myLocation.setAltitude(Double.valueOf(sa[2]));
-        myLocation.setAccuracy(Float.valueOf(sa[3]));
+        myLocation.setLatitude(Double.parseDouble(sa[0]));
+        myLocation.setLongitude(Double.parseDouble(sa[1]));
+        myLocation.setAltitude(Double.parseDouble(sa[2]));
+        myLocation.setAccuracy(Float.parseFloat(sa[3]));
 
         return myLocation;
     }
@@ -320,6 +314,6 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean isReadonly() {
-        return readonlyOverride || formEntryPrompt.isReadOnly();
+        return formEntryPrompt.isReadOnly();
     }
 }

@@ -21,8 +21,8 @@ import org.javarosa.form.api.FormEntryPrompt;
 
 import java.util.Locale;
 
-import static rs.readahead.washington.mobile.javarosa.FormUtils.isTellaLocationHiddenField;
-import static rs.readahead.washington.mobile.javarosa.FormUtils.isTellaMetadataHiddenField;
+import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.javarosa.FormUtils;
 
 
 /**
@@ -49,11 +49,11 @@ public class WidgetFactory {
         appearance = appearance.toLowerCase(Locale.ENGLISH);
 
         QuestionWidget questionWidget;
-        if (isTellaLocationHiddenField(context, fep)) {
+        if (FormUtils.doesTheFieldBeginWith(fep, context.getString(R.string.tella_location_field_prefix))) {
             return new GeoPointHiddenWidget(context, fep);
         }
 
-        if (isTellaMetadataHiddenField(context, fep)) {
+        if (FormUtils.doesTheFieldBeginWith(fep, context.getString(R.string.tella_metadata_field_prefix))) {
             return new StringHiddenWidget(context, fep);
         }
 

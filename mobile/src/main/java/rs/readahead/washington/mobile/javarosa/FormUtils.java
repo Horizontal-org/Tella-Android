@@ -27,16 +27,10 @@ import rs.readahead.washington.mobile.util.StringUtils;
 
 
 public class FormUtils {
-    public static boolean isTellaLocationHiddenField(Context context, FormEntryPrompt fep) {
-        String locationFieldPrefix = context.getString(R.string.tella_location_field_prefix);
-        String fepName = fep.getIndex().getReference().getNameLast();
-        return (fepName.startsWith(locationFieldPrefix));
-    }
 
-    public static boolean isTellaMetadataHiddenField(Context context, FormEntryPrompt fep) {
-        String metadataFieldPrefix = context.getString(R.string.tella_metadata_field_prefix);
+    public static boolean doesTheFieldBeginWith(FormEntryPrompt fep, String prefix) {
         String fepName = fep.getIndex().getReference().getNameLast();
-        return (fepName.startsWith(metadataFieldPrefix));
+        return fepName.startsWith(prefix);
     }
 
     public static long getFormPayloadSize(@NonNull CollectFormInstance instance) {
