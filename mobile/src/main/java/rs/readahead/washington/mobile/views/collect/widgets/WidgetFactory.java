@@ -39,16 +39,6 @@ public class WidgetFactory {
      */
     @NonNull
     public static QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context, boolean readOnlyOverride) {
-        // get appearance hint and clean it up so it is lower case and never null...
-        String appearance = fep.getAppearanceHint();
-        if (appearance == null) {
-            appearance = "";
-        }
-
-        // for now, all appearance tags are in english...
-        appearance = appearance.toLowerCase(Locale.ENGLISH);
-
-        QuestionWidget questionWidget;
         if (FormUtils.doesTheFieldBeginWith(fep, context.getString(R.string.tella_location_field_prefix))) {
             return new GeoPointHiddenWidget(context, fep);
         }
@@ -56,6 +46,15 @@ public class WidgetFactory {
         if (FormUtils.doesTheFieldBeginWith(fep, context.getString(R.string.tella_metadata_field_prefix))) {
             return new StringHiddenWidget(context, fep);
         }
+
+        // get appearance hint and clean it up so it is lower case and never null...
+        String appearance = fep.getAppearanceHint();
+        if (appearance == null) {
+            appearance = "";
+        }
+        // for now, all appearance tags are in english...
+        appearance = appearance.toLowerCase(Locale.ENGLISH);
+        QuestionWidget questionWidget;
 
         switch (fep.getControlType()) {
             case Constants.CONTROL_SELECT_ONE:
