@@ -16,21 +16,21 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.4.2'
 
-        // fabric.io
-        classpath 'io.fabric.tools:gradle:1.31.0'
+        classpath 'io.fabric.tools:gradle:1.31.2'
+        classpath 'com.google.gms:google-services:4.3.3'
     }
 }
 
 allprojects {
     repositories {
         jcenter()
-        // fabric.io
         maven { url 'https://maven.fabric.io/public' }
         maven {
             url 'https://maven.google.com/'
             name 'Google'
         }
         maven { url 'https://jitpack.io' }
+        google()  // Google's Maven repository
     }
 
     project.ext {
