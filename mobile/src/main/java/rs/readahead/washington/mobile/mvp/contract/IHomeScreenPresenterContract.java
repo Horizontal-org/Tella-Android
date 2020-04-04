@@ -14,11 +14,14 @@ public class IHomeScreenPresenterContract {
         void onPhoneListLoadError(Throwable throwable);
         void getCollectFormSuccess(CollectForm form, FormDef formDef);
         void onCollectFormError(Throwable throwable);
+        void onCountTUServersEnded(Long num);
+        void onCountTUServersFailed(Throwable throwable);
     }
 
     public interface IPresenter extends IBasePresenter {
         void executePanicMode();
         void loadPhoneList();
         void getCollectForm (String formId);
+        void countTUServers();
     }
 }

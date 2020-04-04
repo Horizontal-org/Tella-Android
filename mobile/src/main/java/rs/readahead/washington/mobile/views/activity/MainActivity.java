@@ -16,6 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.OrientationEventListener;
 import android.view.View;
@@ -71,25 +72,18 @@ public class MainActivity extends MetadataActivity implements
     CountdownImageView countdownImage;
     @BindView(R.id.camera_tools_container)
     View cameraToolsContainer;
-    @BindView(R.id.main_container)
-    View mainView;
-    @BindView(R.id.home_screen_gradient)
+     @BindView(R.id.home_screen_gradient)
     HomeScreenGradient homeScreenGradient;
+    @BindView(R.id.nav_bar_holder)
+    LinearLayout navBarHolder;
     @BindView(R.id.panic_seek)
     SeekBar panicSeekBar;
     @BindView(R.id.panic_bar)
     LinearLayout panicSeekBarView;
-    @BindView(R.id.tab_button_collect)
-    View buttonCollect;
-    @BindView(R.id.tab_button_gallery)
-    View buttonGallery;
-    @BindView(R.id.nav_bar)
-    View navigationBar;
     @BindView(R.id.link)
     TextView setPanicTextView;
     @BindView(R.id.background)
     View background;
-
 
     private boolean mExit = false;
     private Handler handler;
@@ -170,24 +164,6 @@ public class MainActivity extends MetadataActivity implements
         offlineMenuIcon.setVisible(Preferences.isCollectServersLayout());
         if (settingsMenuItem != null) {
             settingsMenuItem.setShowAsAction(Preferences.isCollectServersLayout() ? MenuItem.SHOW_AS_ACTION_NEVER : MenuItem.SHOW_AS_ACTION_IF_ROOM);
-        }
-    }
-
-    @OnClick({R.id.tab_button_record, R.id.tab_button_collect, R.id.tab_button_gallery})
-    void onBottomNavigationTabClick(View view) {
-        switch (view.getId()) {
-            case R.id.tab_button_record:
-                onMicrophoneClicked();
-                break;
-
-            case R.id.tab_button_collect:
-                startCollectActivity();
-                break;
-
-            case R.id.tab_button_gallery:
-                showGallery(false);
-                break;
-
         }
     }
 
@@ -337,6 +313,9 @@ public class MainActivity extends MetadataActivity implements
         }
     }
 
+    private void startUploadsActivity() {
+    }
+
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     public void startGalleryActivity(boolean animated) {
         startActivity(new Intent(MainActivity.this, GalleryActivity.class)
@@ -350,6 +329,8 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         if (!isLocationSettingsRequestCode(requestCode) && resultCode != RESULT_OK) {
             return; // user canceled evidence acquiring
         }
@@ -490,7 +471,7 @@ public class MainActivity extends MetadataActivity implements
         isPhoneListEmpty = false;
 
         setupPanicView();
-        setupButtonsTab();
+        homeScreenPresenter.countTUServers();
 
         startLocationMetadataListening();
 
@@ -547,13 +528,13 @@ public class MainActivity extends MetadataActivity implements
 
     private void hideMainControls() {
         cameraToolsContainer.setVisibility(View.GONE);
-        navigationBar.setVisibility(View.GONE);
+        navBarHolder.setVisibility(View.GONE);
         toolbar.setVisibility(View.GONE);
     }
 
     private void showMainControls() {
         cameraToolsContainer.setVisibility(View.VISIBLE);
-        navigationBar.setVisibility(View.VISIBLE);
+        navBarHolder.setVisibility(View.VISIBLE);
         toolbar.setVisibility(View.VISIBLE);
     }
     /*//@OnShowRationale(Manifest.permission.SEND_SMS)
@@ -634,6 +615,15 @@ public class MainActivity extends MetadataActivity implements
     @Override
     public void onCollectFormError(Throwable throwable) {
         showToast(R.string.shortcut_collect_form_not_loaded);
+    }
+
+    @Override
+    public void onCountTUServersEnded(Long num) {
+        setupButtonsTab(num);
+    }
+
+    @Override
+    public void onCountTUServersFailed(Throwable throwable) {
     }
 
     private void stopPresenter() {
@@ -756,14 +746,46 @@ public class MainActivity extends MetadataActivity implements
         }
     }
 
-    private void setupButtonsTab() {
-        if (Preferences.isCollectServersLayout()) {
-            buttonCollect.setVisibility(View.VISIBLE);
-            buttonCollect.setBackground(getContext().getResources().getDrawable(R.drawable.round_left_button_background));
-            buttonGallery.setBackground(getContext().getResources().getDrawable(R.drawable.central_button_background));
+    private void setupButtonsTab(long numOfTUS) {
+        LinearLayout navbar;
+        LayoutInflater inflater = LayoutInflater.from(this);
+
+        if (Preferences.isCollectServersLayout() && numOfTUS > 0) {
+            navbar = (LinearLayout) inflater.inflate(R.layout.main_navigation_table_layout, null);
         } else {
+            navbar = (LinearLayout) inflater.inflate(R.layout.main_navigation_row_layout, null);
+        }
+
+        View buttonCollect = navbar.findViewById(R.id.tab_button_collect);
+        View buttonRecord = navbar.findViewById(R.id.tab_button_record);
+        View buttonUploads = navbar.findViewById(R.id.tab_button_uploads);
+        View buttonGallery = navbar.findViewById(R.id.tab_button_gallery);
+
+        buttonGallery.setOnClickListener(v -> showGallery(false));
+        buttonCollect.setOnClickListener(v -> startCollectActivity());
+        buttonRecord.setOnClickListener(v -> onMicrophoneClicked());
+        buttonUploads.setOnClickListener(v -> startUploadsActivity());
+
+        navBarHolder.removeAllViews();
+        navBarHolder.addView(navbar);
+
+        if (!Preferences.isCollectServersLayout() && numOfTUS == 0) { //row layout of 2
             buttonCollect.setVisibility(View.GONE);
-            buttonGallery.setBackground(getContext().getResources().getDrawable(R.drawable.round_left_button_background));
+            buttonUploads.setVisibility(View.GONE);
+            return;
+        }
+
+        if (Preferences.isCollectServersLayout() && numOfTUS == 0) {  //nav layout of 3 with collect
+            buttonGallery.setBackground(getResources().getDrawable(R.drawable.central_button_background));
+            buttonCollect.setBackground(getResources().getDrawable(R.drawable.round_left_button_background));
+            buttonUploads.setVisibility(View.GONE);
+            return;
+        }
+
+        if (!Preferences.isCollectServersLayout() && numOfTUS > 0) { //nav layout of 3 with uploads
+            buttonCollect.setVisibility(View.GONE);
+            buttonRecord.setBackground(getResources().getDrawable(R.drawable.central_button_background));
+            buttonUploads.setBackground(getResources().getDrawable(R.drawable.round_right_button_background));
         }
     }
 }

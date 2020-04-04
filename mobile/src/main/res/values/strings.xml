@@ -534,4 +534,5 @@
     <string name="auto_delete_info_text">If activated, Tella will automatically delete the files uploaded as soon as the upload is complete.</string>
     <string name="pick_auto_upload_server">Pick the server to auto-upload your files</string>
     <string name="delete_auto_tus_server_info">If you delete this server, you will no longer be able to upload files</string>
+    <string name="uploads">Uploads</string>
 </resources>

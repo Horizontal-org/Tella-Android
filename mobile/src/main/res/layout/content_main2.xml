@@ -12,69 +12,12 @@
     tools:showIn="@layout/app_bar_main2">
 
     <LinearLayout
-        android:id="@+id/nav_bar"
+        android:id="@+id/nav_bar_holder"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/navigation_tab_height"
-        android:baselineAligned="false"
-        android:gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_marginBottom="@dimen/navigation_tab_margin_bottom"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:alpha="1"
-        android:visibility="visible"
-        android:weightSum="4">
-
-        <RelativeLayout
-            android:id="@+id/tab_button_collect"
-            style="@style/NavigationTabLayout"
-            android:background="@drawable/round_left_button_background">
-
-            <ImageView
-                android:id="@+id/collect_image"
-                style="@style/NavigationTabImage"
-                android:contentDescription="@null"
-                android:src="@drawable/main_collect" />
-
-            <TextView
-                style="@style/NavigationTabText"
-                android:layout_below="@+id/collect_image"
-                android:text="@string/ra_collect" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/tab_button_gallery"
-            style="@style/NavigationTabLayout"
-            android:background="@drawable/central_button_background">
-
-            <ImageView
-                android:id="@+id/gallery_image"
-                style="@style/NavigationTabImage"
-                android:contentDescription="@null"
-                android:src="@drawable/gallery_white" />
-
-            <TextView
-                style="@style/NavigationTabText"
-                android:layout_below="@+id/gallery_image"
-                android:text="@string/ra_gallery" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/tab_button_record"
-            style="@style/NavigationTabLayout"
-            android:background="@drawable/round_right_button_background">
-
-            <ImageView
-                android:id="@+id/microphone"
-                style="@style/NavigationTabImage"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_mic_white" />
-
-            <TextView
-                style="@style/NavigationTabText"
-                android:layout_below="@+id/microphone"
-                android:text="@string/ra_record" />
-        </RelativeLayout>
-    </LinearLayout>
+        android:layout_alignParentBottom="true"/>
 
     <LinearLayout
         android:id="@+id/camera_overlay"
@@ -82,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="60dp"
         android:background="@android:color/transparent"
-        android:layout_above="@id/nav_bar"
+        android:layout_above="@id/nav_bar_holder"
         android:orientation="vertical">
 
         <ImageView

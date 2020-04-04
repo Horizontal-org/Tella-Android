@@ -3,7 +3,8 @@ package rs.readahead.washington.mobile.mvp.presenter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import androidx.annotation.NonNull;
+
+import com.crashlytics.android.Crashlytics;
 
 import org.javarosa.core.model.FormDef;
 
@@ -23,8 +24,6 @@ import rs.readahead.washington.mobile.data.sharedpref.SharedPrefs;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IHomeScreenPresenterContract;
-import rs.readahead.washington.mobile.presentation.entity.Shortcut;
-import rs.readahead.washington.mobile.presentation.entity.ShortcutPosition;
 
 
 public class HomeScreenPresenter implements IHomeScreenPresenterContract.IPresenter {
@@ -225,6 +224,22 @@ public class HomeScreenPresenter implements IHomeScreenPresenterContract.IPresen
                 })
                 .subscribe(formHolder -> view.getCollectFormSuccess(formHolder.collectForm, formHolder.formDef),
                         throwable -> view.onCollectFormError(throwable)
+                )
+        );
+    }
+
+    @Override
+    public void countTUServers() {
+        disposable.add(cacheWordDataSource.getDataSource()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMapSingle((Function<DataSource, SingleSource<Long>>) DataSource::countTUServers)
+                .subscribe(
+                        num -> view.onCountTUServersEnded(num),
+                        throwable -> {
+                            Crashlytics.logException(throwable);
+                            view.onCountTUServersFailed(throwable);
+                        }
                 )
         );
     }
