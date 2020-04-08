@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.gson.Gson;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormIndex;
@@ -23,6 +22,8 @@ import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.odk.exception.JavaRosaException;
 import rs.readahead.washington.mobile.views.collect.CollectFormView;
 import timber.log.Timber;
+
+import static rs.readahead.washington.mobile.javarosa.FormUtils.formatMetadataFormString;
 
 
 public class FormParser implements IFormParserContract.IFormParser {
@@ -151,7 +152,7 @@ public class FormParser implements IFormParserContract.IFormParser {
 
                 case METADATA:
                     if (metadata != null) {
-                        String answer = new Gson().toJson(metadata);
+                        String answer = formatMetadataFormString(metadata, cfv.getContext());
                         cfv.setBinaryData(formIndex, answer);
                     } else {
                         cfv.clearBinaryData(formIndex);

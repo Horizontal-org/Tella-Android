@@ -52,6 +52,7 @@ import io.reactivex.observers.DisposableObserver;
 import io.reactivex.subjects.BehaviorSubject;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
+import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.Metadata;
 import rs.readahead.washington.mobile.domain.entity.MyLocation;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
@@ -419,10 +420,10 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
     }
 
     // UI stuff
-    protected void attachMediaFileMetadata(final long mediaFileId, final IMetadataAttachPresenterContract.IPresenter metadataAttacher) {
+    protected void attachMediaFileMetadata(final MediaFile mediaFile, final IMetadataAttachPresenterContract.IPresenter metadataAttacher) {
         // skip metadata if anonymous mode..
         if (Preferences.isAnonymousMode()) {
-            metadataAttacher.attachMetadata(mediaFileId, null);
+            metadataAttacher.attachMetadata(mediaFile.getId(), null);
             return;
         }
 
@@ -430,7 +431,9 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
 
         final Metadata metadata = new Metadata();
 
-        metadata.setTimestamp(System.currentTimeMillis() / 1000L);
+        metadata.setFileName(mediaFile.getFileName());
+        metadata.setFileHashSHA256(mediaFile.getHash());
+        metadata.setTimestamp(System.currentTimeMillis());
         metadata.setAmbientTemperature(getAmbientTemperatureSensorData().hasValue() ? getAmbientTemperatureSensorData().getValue() : null);
         metadata.setLight(getLightSensorData().hasValue() ? getLightSensorData().getValue() : null);
 
@@ -457,7 +460,7 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
 
         // if location gathering is not possible skip it
         if (!isLocationProviderEnabled()) {
-            metadataAttacher.attachMetadata(mediaFileId, metadata);
+            metadataAttacher.attachMetadata(mediaFile.getId(), metadata);
             return;
         }
 
@@ -496,7 +499,7 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
 
                     @Override
                     public void onComplete() {
-                        metadataAttacher.attachMetadata(mediaFileId, metadata);
+                        metadataAttacher.attachMetadata(mediaFile.getId(), metadata);
                     }
                 })
         );

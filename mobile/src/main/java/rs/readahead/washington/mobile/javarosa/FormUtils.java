@@ -1,8 +1,10 @@
 package rs.readahead.washington.mobile.javarosa;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import android.text.TextUtils;
 
 import org.javarosa.core.model.FormDef;
@@ -21,9 +23,11 @@ import java.util.Locale;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.IErrorCode;
+import rs.readahead.washington.mobile.domain.entity.Metadata;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaResponse;
 import rs.readahead.washington.mobile.util.StringUtils;
+import rs.readahead.washington.mobile.util.Util;
 
 
 public class FormUtils {
@@ -66,8 +70,8 @@ public class FormUtils {
 
     public static String getFormSubmitSuccessMessage(Context context, OpenRosaResponse response) {
         List<String> texts = new ArrayList<>();
-        for (OpenRosaResponse.Message msg: response.getMessages()) {
-            if (! TextUtils.isEmpty(msg.getText())) {
+        for (OpenRosaResponse.Message msg : response.getMessages()) {
+            if (!TextUtils.isEmpty(msg.getText())) {
                 texts.add(msg.getText());
             }
         }
@@ -76,7 +80,7 @@ public class FormUtils {
         boolean hasMessages = texts.size() > 0;
         messages = hasMessages ? TextUtils.join("; ", texts) : "";
 
-        switch(response.getStatusCode()) {
+        switch (response.getStatusCode()) {
             case OpenRosaResponse.StatusCode.FORM_RECEIVED:
                 if (hasMessages) {
                     successMessage = context.getString(R.string.ra_form_received_reply) + messages;
@@ -110,7 +114,7 @@ public class FormUtils {
         if (error instanceof IErrorBundle) {
             IErrorBundle errorBundle = (IErrorBundle) error;
 
-            switch(errorBundle.getCode()) {
+            switch (errorBundle.getCode()) {
                 case IErrorCode.UNAUTHORIZED:
                     errorMessage = String.format(context.getString(R.string.ra_error_submitting_form_tmp),
                             context.getString(R.string.ra_unauthorized));
@@ -135,7 +139,7 @@ public class FormUtils {
         if (error instanceof IErrorBundle) {
             IErrorBundle errorBundle = (IErrorBundle) error;
 
-            switch(errorBundle.getCode()) {
+            switch (errorBundle.getCode()) {
                 case IErrorCode.NOT_FOUND:
                     errorMessage = String.format(context.getString(R.string.ra_error_get_form_def_tmp),
                             context.getString(R.string.ra_not_found));
@@ -147,5 +151,54 @@ public class FormUtils {
         }
 
         return errorMessage;
+    }
+
+    static String formatMetadataFormString(Metadata metadata, Context context) {
+        String delimiter = " // ";
+        String answer = "";
+
+        answer = answer.concat(formatedMetadataItem(context.getString(R.string.filename),metadata.getFileName())+ delimiter);
+        answer = answer.concat(formatedMetadataItem(context.getString(R.string.filehash),
+                metadata.getFileHashSHA256() != null ? metadata.getFileHashSHA256() : context.getString(R.string.not_available)) + delimiter);
+        answer = answer.concat(formatedMetadataItem(context.getString(R.string.file_modified),
+                Util.getDateTimeString(metadata.getTimestamp(), "dd-MM-yyyy HH:mm:ss Z")) + delimiter);
+        answer = answer.concat(formatedMetadataItem(context.getString(R.string.manufacturer), metadata.getManufacturer()) + delimiter);
+        answer = answer.concat(formatedMetadataItem(context.getString(R.string.screen_size), metadata.getScreenSize()) + delimiter);
+        answer = answer.concat(formatedMetadataItem(context.getString(R.string.language), metadata.getLanguage()) + delimiter);
+        answer = answer.concat(formatedMetadataItem(context.getString(R.string.locale), metadata.getLocale()) + delimiter);
+        answer = answer.concat(formatedMetadataItem(context.getString(R.string.connection_status), metadata.getNetwork()) + delimiter);
+        answer = answer.concat(formatedMetadataItem(context.getString(R.string.network_type), metadata.getNetworkType()) + delimiter);
+        answer = answer.concat(formatedMetadataItem(context.getString(R.string.wifi_mac), metadata.getWifiMac()) + delimiter);
+        answer = answer.concat(formatedMetadataItem(context.getString(R.string.ipv4), metadata.getIPv4()) + delimiter);
+        answer = answer.concat(formatedMetadataItem(context.getString(R.string.ipv6), metadata.getIPv6()) + delimiter);
+        if (metadata.getMyLocation() != null) {
+            answer = answer.concat(formatedMetadataItem(context.getString(R.string.location) + '.' + context.getString(R.string.latitude),
+                    metadata.getMyLocation().getLatitude() + delimiter));
+            answer = answer.concat(formatedMetadataItem(context.getString(R.string.location) + '.' + context.getString(R.string.longitude),
+                    metadata.getMyLocation().getLongitude() + delimiter));
+            answer = answer.concat(formatedMetadataItem(context.getString(R.string.location) + '.' + context.getString(R.string.altitude),
+                    metadata.getMyLocation().getAltitude() + delimiter));
+            answer = answer.concat(formatedMetadataItem(context.getString(R.string.location) + '.' + context.getString(R.string.accuracy),
+                    metadata.getMyLocation().getAccuracy() + delimiter));
+            answer = answer.concat(formatedMetadataItem(context.getString(R.string.location) + '.' + context.getString(R.string.time),
+                    Util.getDateTimeString(metadata.getMyLocation().getTimestamp(), "dd-MM-yyyy HH:mm:ss Z") + delimiter));
+            answer = answer.concat(formatedMetadataItem(context.getString(R.string.location) + '.' + context.getString(R.string.location_provider),
+                    metadata.getMyLocation().getProvider() + delimiter));
+            answer = answer.concat(formatedMetadataItem(context.getString(R.string.location) + '.' + context.getString(R.string.location_speed),
+                    metadata.getMyLocation().getSpeed() + delimiter));
+        } else {
+            answer = answer.concat(formatedMetadataItem(context.getString(R.string.location), context.getString(R.string.not_available)) + delimiter);
+        }
+        String cells = StringUtils.join(", ", metadata.getCells());
+        answer = answer.concat(formatedMetadataItem(context.getString(R.string.cell_info), cells) + delimiter);
+        answer = answer.concat(formatedMetadataItem(context.getString(R.string.ra_wifi_info),
+                metadata.getWifis() != null ? TextUtils.join(", ", metadata.getWifis()) : context.getString(R.string.not_available)));
+
+        return answer;
+    }
+
+    private static String formatedMetadataItem(String name, CharSequence value) {
+        String delimiter = " : ";
+        return name + delimiter + value;
     }
 }
