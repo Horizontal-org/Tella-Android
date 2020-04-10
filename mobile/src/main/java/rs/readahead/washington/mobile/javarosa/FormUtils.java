@@ -1,10 +1,6 @@
 package rs.readahead.washington.mobile.javarosa;
 
 import android.content.Context;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import android.text.TextUtils;
 
 import org.javarosa.core.model.FormDef;
@@ -17,13 +13,18 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.IErrorCode;
 import rs.readahead.washington.mobile.domain.entity.Metadata;
+import rs.readahead.washington.mobile.domain.entity.MyLocation;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaResponse;
 import rs.readahead.washington.mobile.util.StringUtils;
@@ -31,6 +32,8 @@ import rs.readahead.washington.mobile.util.Util;
 
 
 public class FormUtils {
+    private static final String FORM_METADATA_PROPERTY_DELIMITER = " // ";
+    private static final String FORM_METADATA_PROPERTY_TIME_FORMAT = "dd-MM-yyyy HH:mm:ss Z";
 
     public static boolean doesTheFieldBeginWith(FormEntryPrompt fep, String prefix) {
         String fepName = fep.getIndex().getReference().getNameLast();
@@ -139,6 +142,7 @@ public class FormUtils {
         if (error instanceof IErrorBundle) {
             IErrorBundle errorBundle = (IErrorBundle) error;
 
+            //noinspection SwitchStatementWithTooFewBranches
             switch (errorBundle.getCode()) {
                 case IErrorCode.NOT_FOUND:
                     errorMessage = String.format(context.getString(R.string.ra_error_get_form_def_tmp),
@@ -153,52 +157,63 @@ public class FormUtils {
         return errorMessage;
     }
 
-    static String formatMetadataFormString(Metadata metadata, Context context) {
-        String delimiter = " // ";
-        String answer = "";
+    static String formatMetadata(Context context, Metadata metadata) {
+        List<String> mds = new LinkedList<>();
 
-        answer = answer.concat(formatedMetadataItem(context.getString(R.string.filename),metadata.getFileName())+ delimiter);
-        answer = answer.concat(formatedMetadataItem(context.getString(R.string.filehash),
-                metadata.getFileHashSHA256() != null ? metadata.getFileHashSHA256() : context.getString(R.string.not_available)) + delimiter);
-        answer = answer.concat(formatedMetadataItem(context.getString(R.string.file_modified),
-                Util.getDateTimeString(metadata.getTimestamp(), "dd-MM-yyyy HH:mm:ss Z")) + delimiter);
-        answer = answer.concat(formatedMetadataItem(context.getString(R.string.manufacturer), metadata.getManufacturer()) + delimiter);
-        answer = answer.concat(formatedMetadataItem(context.getString(R.string.screen_size), metadata.getScreenSize()) + delimiter);
-        answer = answer.concat(formatedMetadataItem(context.getString(R.string.language), metadata.getLanguage()) + delimiter);
-        answer = answer.concat(formatedMetadataItem(context.getString(R.string.locale), metadata.getLocale()) + delimiter);
-        answer = answer.concat(formatedMetadataItem(context.getString(R.string.connection_status), metadata.getNetwork()) + delimiter);
-        answer = answer.concat(formatedMetadataItem(context.getString(R.string.network_type), metadata.getNetworkType()) + delimiter);
-        answer = answer.concat(formatedMetadataItem(context.getString(R.string.wifi_mac), metadata.getWifiMac()) + delimiter);
-        answer = answer.concat(formatedMetadataItem(context.getString(R.string.ipv4), metadata.getIPv4()) + delimiter);
-        answer = answer.concat(formatedMetadataItem(context.getString(R.string.ipv6), metadata.getIPv6()) + delimiter);
-        if (metadata.getMyLocation() != null) {
-            answer = answer.concat(formatedMetadataItem(context.getString(R.string.location) + '.' + context.getString(R.string.latitude),
-                    metadata.getMyLocation().getLatitude() + delimiter));
-            answer = answer.concat(formatedMetadataItem(context.getString(R.string.location) + '.' + context.getString(R.string.longitude),
-                    metadata.getMyLocation().getLongitude() + delimiter));
-            answer = answer.concat(formatedMetadataItem(context.getString(R.string.location) + '.' + context.getString(R.string.altitude),
-                    metadata.getMyLocation().getAltitude() + delimiter));
-            answer = answer.concat(formatedMetadataItem(context.getString(R.string.location) + '.' + context.getString(R.string.accuracy),
-                    metadata.getMyLocation().getAccuracy() + delimiter));
-            answer = answer.concat(formatedMetadataItem(context.getString(R.string.location) + '.' + context.getString(R.string.time),
-                    Util.getDateTimeString(metadata.getMyLocation().getTimestamp(), "dd-MM-yyyy HH:mm:ss Z") + delimiter));
-            answer = answer.concat(formatedMetadataItem(context.getString(R.string.location) + '.' + context.getString(R.string.location_provider),
-                    metadata.getMyLocation().getProvider() + delimiter));
-            answer = answer.concat(formatedMetadataItem(context.getString(R.string.location) + '.' + context.getString(R.string.location_speed),
-                    metadata.getMyLocation().getSpeed() + delimiter));
-        } else {
-            answer = answer.concat(formatedMetadataItem(context.getString(R.string.location), context.getString(R.string.not_available)) + delimiter);
-        }
-        String cells = StringUtils.join(", ", metadata.getCells());
-        answer = answer.concat(formatedMetadataItem(context.getString(R.string.cell_info), cells) + delimiter);
-        answer = answer.concat(formatedMetadataItem(context.getString(R.string.ra_wifi_info),
-                metadata.getWifis() != null ? TextUtils.join(", ", metadata.getWifis()) : context.getString(R.string.not_available)));
+        mds.add(mdSingleProperty(context, R.string.filename, metadata.getFileName()));
+        mds.add(mdSingleProperty(context, R.string.filehash, metadata.getFileHashSHA256()));
+        mds.add(mdSingleProperty(context, R.string.file_modified, Util.getDateTimeString(metadata.getTimestamp(), FORM_METADATA_PROPERTY_TIME_FORMAT)));
+        mds.add(mdSingleProperty(context, R.string.manufacturer, metadata.getManufacturer()));
+        mds.add(mdSingleProperty(context, R.string.screen_size, metadata.getScreenSize()));
+        mds.add(mdSingleProperty(context, R.string.language, metadata.getLanguage()));
+        mds.add(mdSingleProperty(context, R.string.locale, metadata.getLocale()));
+        mds.add(mdSingleProperty(context, R.string.connection_status, metadata.getNetwork()));
+        mds.add(mdSingleProperty(context, R.string.network_type, metadata.getNetworkType()));
+        mds.add(mdSingleProperty(context, R.string.wifi_mac, metadata.getWifiMac()));
+        mds.add(mdSingleProperty(context, R.string.ipv4, metadata.getIPv4()));
+        mds.add(mdSingleProperty(context, R.string.ipv6, metadata.getIPv6()));
+        mds.add(mdLocationProperties(context, metadata.getMyLocation()));
+        mds.add(mdListProperty(context, R.string.cell_info, metadata.getCells(), true));
+        mds.add(mdListProperty(context, R.string.ra_wifi_info, metadata.getWifis(), false));
 
-        return answer;
+        return TextUtils.join(FORM_METADATA_PROPERTY_DELIMITER, mds);
     }
 
-    private static String formatedMetadataItem(String name, CharSequence value) {
-        String delimiter = " : ";
-        return name + delimiter + value;
+    private static String mdSingleProperty(@NonNull Context context, @NonNull String name, @Nullable String value) {
+        return String.format(Locale.ROOT, "%s: %s", name, !TextUtils.isEmpty(value) ? value : context.getString(R.string.not_available));
+    }
+
+    private static String mdSingleProperty(@NonNull Context context, @StringRes int nameResId, @Nullable String value) {
+        return mdSingleProperty(context, context.getString(nameResId), value);
+    }
+
+    private static String mdListProperty(@NonNull Context context, @StringRes int nameResId, @Nullable List<String> values, boolean group) {
+        return mdSingleProperty(context, nameResId, (values != null && values.size() > 0) ?
+                String.format(Locale.ROOT, "[%s]", group ? StringUtils.join(", ", values) : TextUtils.join(", ", values)) :
+                null);
+    }
+
+    private static String mdObjectProperty(@NonNull Context context, @NonNull String objectName, @StringRes int nameResId, @Nullable String value) {
+        return mdSingleProperty(context, String.format(Locale.ROOT, "%s.%s", objectName, context.getString(nameResId)), value);
+    }
+
+    private static String mdLocationProperties(@NonNull Context context, @Nullable MyLocation location) {
+        if (location == null) {
+            return mdSingleProperty(context, R.string.location, null);
+        }
+
+        String objName = context.getString(R.string.location);
+
+        List<String> ls = new LinkedList<>();
+
+        ls.add(mdObjectProperty(context, objName, R.string.latitude, Double.toString(location.getLatitude())));
+        ls.add(mdObjectProperty(context, objName, R.string.longitude, Double.toString(location.getLongitude())));
+        ls.add(mdObjectProperty(context, objName, R.string.altitude, location.getAltitude() != null ? location.getAltitude().toString() : null));
+        ls.add(mdObjectProperty(context, objName, R.string.accuracy, location.getAccuracy() != null ? location.getAccuracy().toString() : null));
+        ls.add(mdObjectProperty(context, objName, R.string.time, Util.getDateTimeString(location.getTimestamp(), FORM_METADATA_PROPERTY_TIME_FORMAT)));
+        ls.add(mdObjectProperty(context, objName, R.string.location_provider, location.getProvider()));
+        ls.add(mdObjectProperty(context, objName, R.string.location_speed, location.getSpeed() != null ? location.getSpeed().toString() : null));
+
+        return TextUtils.join(FORM_METADATA_PROPERTY_DELIMITER, ls);
     }
 }

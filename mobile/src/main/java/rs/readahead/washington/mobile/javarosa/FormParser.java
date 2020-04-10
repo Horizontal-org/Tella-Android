@@ -23,8 +23,6 @@ import rs.readahead.washington.mobile.odk.exception.JavaRosaException;
 import rs.readahead.washington.mobile.views.collect.CollectFormView;
 import timber.log.Timber;
 
-import static rs.readahead.washington.mobile.javarosa.FormUtils.formatMetadataFormString;
-
 
 public class FormParser implements IFormParserContract.IFormParser {
     private IFormParserContract.IView view;
@@ -152,8 +150,7 @@ public class FormParser implements IFormParserContract.IFormParser {
 
                 case METADATA:
                     if (metadata != null) {
-                        String answer = formatMetadataFormString(metadata, cfv.getContext());
-                        cfv.setBinaryData(formIndex, answer);
+                        cfv.setBinaryData(formIndex, FormUtils.formatMetadata(cfv.getContext(), metadata));
                     } else {
                         cfv.clearBinaryData(formIndex);
                     }
