@@ -232,7 +232,7 @@ public class CameraActivity extends MetadataActivity implements
         if (intentMode != IntentMode.COLLECT) {
             Glide.with(this).load(bundle.getMediaFileThumbnailData().getData()).into(previewView);
         }
-        attachMediaFileMetadata(capturedMediaFile.getId(), metadataAttacher);
+        attachMediaFileMetadata(capturedMediaFile, metadataAttacher);
     }
 
     @Override
@@ -244,6 +244,7 @@ public class CameraActivity extends MetadataActivity implements
     public void onMetadataAttached(long mediaFileId, @Nullable Metadata metadata) {
         Intent data = new Intent();
         if (intentMode == IntentMode.COLLECT) {
+            capturedMediaFile.setMetadata(metadata);
             data.putExtra(MEDIA_FILE_KEY, capturedMediaFile);
         } else {
             data.putExtra(C.CAPTURED_MEDIA_FILE_ID, mediaFileId);

@@ -1,31 +1,45 @@
 package rs.readahead.washington.mobile.javarosa;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.text.TextUtils;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.model.xform.XFormSerializingVisitor;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.IErrorCode;
+import rs.readahead.washington.mobile.domain.entity.Metadata;
+import rs.readahead.washington.mobile.domain.entity.MyLocation;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaResponse;
 import rs.readahead.washington.mobile.util.StringUtils;
+import rs.readahead.washington.mobile.util.Util;
 
 
 public class FormUtils {
+    private static final String FORM_METADATA_PROPERTY_DELIMITER = " // ";
+    private static final String FORM_METADATA_PROPERTY_TIME_FORMAT = "dd-MM-yyyy HH:mm:ss Z";
+
+    public static boolean doesTheFieldBeginWith(FormEntryPrompt fep, String prefix) {
+        String fepName = fep.getIndex().getReference().getNameLast();
+        return fepName.startsWith(prefix);
+    }
+
     public static long getFormPayloadSize(@NonNull CollectFormInstance instance) {
         try {
             FormDef formDef = instance.getFormDef();
@@ -59,8 +73,8 @@ public class FormUtils {
 
     public static String getFormSubmitSuccessMessage(Context context, OpenRosaResponse response) {
         List<String> texts = new ArrayList<>();
-        for (OpenRosaResponse.Message msg: response.getMessages()) {
-            if (! TextUtils.isEmpty(msg.getText())) {
+        for (OpenRosaResponse.Message msg : response.getMessages()) {
+            if (!TextUtils.isEmpty(msg.getText())) {
                 texts.add(msg.getText());
             }
         }
@@ -69,7 +83,7 @@ public class FormUtils {
         boolean hasMessages = texts.size() > 0;
         messages = hasMessages ? TextUtils.join("; ", texts) : "";
 
-        switch(response.getStatusCode()) {
+        switch (response.getStatusCode()) {
             case OpenRosaResponse.StatusCode.FORM_RECEIVED:
                 if (hasMessages) {
                     successMessage = context.getString(R.string.ra_form_received_reply) + messages;
@@ -103,7 +117,7 @@ public class FormUtils {
         if (error instanceof IErrorBundle) {
             IErrorBundle errorBundle = (IErrorBundle) error;
 
-            switch(errorBundle.getCode()) {
+            switch (errorBundle.getCode()) {
                 case IErrorCode.UNAUTHORIZED:
                     errorMessage = String.format(context.getString(R.string.ra_error_submitting_form_tmp),
                             context.getString(R.string.ra_unauthorized));
@@ -128,7 +142,8 @@ public class FormUtils {
         if (error instanceof IErrorBundle) {
             IErrorBundle errorBundle = (IErrorBundle) error;
 
-            switch(errorBundle.getCode()) {
+            //noinspection SwitchStatementWithTooFewBranches
+            switch (errorBundle.getCode()) {
                 case IErrorCode.NOT_FOUND:
                     errorMessage = String.format(context.getString(R.string.ra_error_get_form_def_tmp),
                             context.getString(R.string.ra_not_found));
@@ -140,5 +155,65 @@ public class FormUtils {
         }
 
         return errorMessage;
+    }
+
+    static String formatMetadata(Context context, Metadata metadata) {
+        List<String> mds = new LinkedList<>();
+
+        mds.add(mdSingleProperty(context, R.string.filename, metadata.getFileName()));
+        mds.add(mdSingleProperty(context, R.string.filehash, metadata.getFileHashSHA256()));
+        mds.add(mdSingleProperty(context, R.string.file_modified, Util.getDateTimeString(metadata.getTimestamp(), FORM_METADATA_PROPERTY_TIME_FORMAT)));
+        mds.add(mdSingleProperty(context, R.string.manufacturer, metadata.getManufacturer()));
+        mds.add(mdSingleProperty(context, R.string.screen_size, metadata.getScreenSize()));
+        mds.add(mdSingleProperty(context, R.string.language, metadata.getLanguage()));
+        mds.add(mdSingleProperty(context, R.string.locale, metadata.getLocale()));
+        mds.add(mdSingleProperty(context, R.string.connection_status, metadata.getNetwork()));
+        mds.add(mdSingleProperty(context, R.string.network_type, metadata.getNetworkType()));
+        mds.add(mdSingleProperty(context, R.string.wifi_mac, metadata.getWifiMac()));
+        mds.add(mdSingleProperty(context, R.string.ipv4, metadata.getIPv4()));
+        mds.add(mdSingleProperty(context, R.string.ipv6, metadata.getIPv6()));
+        mds.add(mdLocationProperties(context, metadata.getMyLocation()));
+        mds.add(mdListProperty(context, R.string.cell_info, metadata.getCells(), true));
+        mds.add(mdListProperty(context, R.string.ra_wifi_info, metadata.getWifis(), false));
+
+        return TextUtils.join(FORM_METADATA_PROPERTY_DELIMITER, mds);
+    }
+
+    private static String mdSingleProperty(@NonNull Context context, @NonNull String name, @Nullable String value) {
+        return String.format(Locale.ROOT, "%s: %s", name, !TextUtils.isEmpty(value) ? value : context.getString(R.string.not_available));
+    }
+
+    private static String mdSingleProperty(@NonNull Context context, @StringRes int nameResId, @Nullable String value) {
+        return mdSingleProperty(context, context.getString(nameResId), value);
+    }
+
+    private static String mdListProperty(@NonNull Context context, @StringRes int nameResId, @Nullable List<String> values, boolean group) {
+        return mdSingleProperty(context, nameResId, (values != null && values.size() > 0) ?
+                String.format(Locale.ROOT, "[%s]", group ? StringUtils.join(", ", values) : TextUtils.join(", ", values)) :
+                null);
+    }
+
+    private static String mdObjectProperty(@NonNull Context context, @NonNull String objectName, @StringRes int nameResId, @Nullable String value) {
+        return mdSingleProperty(context, String.format(Locale.ROOT, "%s.%s", objectName, context.getString(nameResId)), value);
+    }
+
+    private static String mdLocationProperties(@NonNull Context context, @Nullable MyLocation location) {
+        if (location == null) {
+            return mdSingleProperty(context, R.string.location, null);
+        }
+
+        String objName = context.getString(R.string.location);
+
+        List<String> ls = new LinkedList<>();
+
+        ls.add(mdObjectProperty(context, objName, R.string.latitude, Double.toString(location.getLatitude())));
+        ls.add(mdObjectProperty(context, objName, R.string.longitude, Double.toString(location.getLongitude())));
+        ls.add(mdObjectProperty(context, objName, R.string.altitude, location.getAltitude() != null ? location.getAltitude().toString() : null));
+        ls.add(mdObjectProperty(context, objName, R.string.accuracy, location.getAccuracy() != null ? location.getAccuracy().toString() : null));
+        ls.add(mdObjectProperty(context, objName, R.string.time, Util.getDateTimeString(location.getTimestamp(), FORM_METADATA_PROPERTY_TIME_FORMAT)));
+        ls.add(mdObjectProperty(context, objName, R.string.location_provider, location.getProvider()));
+        ls.add(mdObjectProperty(context, objName, R.string.location_speed, location.getSpeed() != null ? location.getSpeed().toString() : null));
+
+        return TextUtils.join(FORM_METADATA_PROPERTY_DELIMITER, ls);
     }
 }
