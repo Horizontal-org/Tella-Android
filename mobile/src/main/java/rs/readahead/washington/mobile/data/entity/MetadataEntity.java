@@ -84,6 +84,9 @@ public class MetadataEntity {
     @SerializedName("cellInfo")
     private String cellInfo;
 
+    @SerializedName("fileName")
+    private String fileName;
+
     public List<String> getCells() {
         return cells;
     }
@@ -266,6 +269,14 @@ public class MetadataEntity {
 
     public void setCellInfo(String cellInfo) {
         this.cellInfo = cellInfo;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public Float getAmbientTemperature() {

@@ -55,6 +55,7 @@ public class EntityMapper {
             entity.setDeviceID(metadata.getDeviceID());
             entity.setLocale(metadata.getLocale());
             entity.setFileHashSHA256(metadata.getFileHashSHA256());
+            entity.setFileName(metadata.getFileName());
         }
 
         return entity;
@@ -87,6 +88,7 @@ public class EntityMapper {
             metadata.setDeviceID(metadataEntity.getDeviceID());
             metadata.setLocale(metadataEntity.getLocale());
             metadata.setFileHashSHA256(metadataEntity.getFileHashSHA256());
+            metadata.setFileName(metadataEntity.getFileName());
         }
 
         return metadata;

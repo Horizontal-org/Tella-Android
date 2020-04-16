@@ -5,8 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+
 import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,14 +24,19 @@ import com.otaliastudios.cameraview.CameraException;
 import com.otaliastudios.cameraview.CameraListener;
 import com.otaliastudios.cameraview.CameraOptions;
 import com.otaliastudios.cameraview.CameraView;
-import com.otaliastudios.cameraview.Facing;
-import com.otaliastudios.cameraview.Flash;
-import com.otaliastudios.cameraview.Gesture;
-import com.otaliastudios.cameraview.GestureAction;
-import com.otaliastudios.cameraview.SessionType;
+import com.otaliastudios.cameraview.PictureResult;
+import com.otaliastudios.cameraview.VideoResult;
+import com.otaliastudios.cameraview.controls.Facing;
+import com.otaliastudios.cameraview.controls.Flash;
+import com.otaliastudios.cameraview.controls.Mode;
+import com.otaliastudios.cameraview.gesture.Gesture;
+import com.otaliastudios.cameraview.gesture.GestureAction;
+import com.otaliastudios.cameraview.size.SizeSelector;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.Set;
+import java.util.Collection;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,9 +56,11 @@ import rs.readahead.washington.mobile.mvp.presenter.MetadataAttacher;
 import rs.readahead.washington.mobile.presentation.entity.MediaFileLoaderModel;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.DialogsUtil;
+import rs.readahead.washington.mobile.util.VideoResolutionManager;
 import rs.readahead.washington.mobile.views.custom.CameraCaptureButton;
 import rs.readahead.washington.mobile.views.custom.CameraDurationTextView;
 import rs.readahead.washington.mobile.views.custom.CameraFlashButton;
+import rs.readahead.washington.mobile.views.custom.CameraResolutionButton;
 import rs.readahead.washington.mobile.views.custom.CameraSwitchButton;
 
 
@@ -73,8 +83,6 @@ public class CameraActivity extends MetadataActivity implements
     CameraDurationTextView durationView;
     @BindView(R.id.camera_zoom)
     SeekBar mSeekBar;
-    /*@BindView(R.id.resolution)
-    CameraResolutionButton resolutionButton;*/
     @BindView(R.id.video_line)
     View videoLine;
     @BindView(R.id.photo_line)
@@ -85,10 +93,12 @@ public class CameraActivity extends MetadataActivity implements
     TextView photoModeText;
     @BindView(R.id.video_text)
     TextView videoModeText;
+    @BindView(R.id.resolutionButton)
+    CameraResolutionButton resolutionButton;
 
     private CameraPresenter presenter;
     private MetadataAttacher metadataAttacher;
-    private Mode mode;
+    private CameraMode mode;
     private boolean modeLocked;
     private IntentMode intentMode;
     private boolean videoRecording;
@@ -96,8 +106,10 @@ public class CameraActivity extends MetadataActivity implements
     private OrientationEventListener mOrientationEventListener;
     private int zoomLevel = 0;
     private MediaFile capturedMediaFile;
+    private AlertDialog videoQualityDialog;
+    private VideoResolutionManager videoResolutionManager;
 
-    public enum Mode {
+    public enum CameraMode {
         PHOTO,
         VIDEO
     }
@@ -125,9 +137,9 @@ public class CameraActivity extends MetadataActivity implements
         presenter = new CameraPresenter(this);
         metadataAttacher = new MetadataAttacher(this);
 
-        mode = Mode.PHOTO;
+        mode = CameraMode.PHOTO;
         if (getIntent().hasExtra(CAMERA_MODE)) {
-            mode = Mode.valueOf(getIntent().getStringExtra(CAMERA_MODE));
+            mode = CameraMode.valueOf(getIntent().getStringExtra(CAMERA_MODE));
             modeLocked = true;
         }
 
@@ -154,7 +166,9 @@ public class CameraActivity extends MetadataActivity implements
 
         startLocationMetadataListening();
 
-        cameraView.start();
+        cameraView.open();
+        setVideoQuality();
+
         mSeekBar.setProgress(zoomLevel);
         setCameraZoom();
 
@@ -178,7 +192,7 @@ public class CameraActivity extends MetadataActivity implements
             captureButton.performClick();
         }
 
-        cameraView.stop();
+        cameraView.close();
     }
 
     @Override
@@ -191,6 +205,7 @@ public class CameraActivity extends MetadataActivity implements
         super.onDestroy();
         stopPresenter();
         hideProgressDialog();
+        hideVideoResolutionDialog();
         cameraView.destroy();
     }
 
@@ -217,7 +232,7 @@ public class CameraActivity extends MetadataActivity implements
         if (intentMode != IntentMode.COLLECT) {
             Glide.with(this).load(bundle.getMediaFileThumbnailData().getData()).into(previewView);
         }
-        attachMediaFileMetadata(capturedMediaFile.getId(), metadataAttacher);
+        attachMediaFileMetadata(capturedMediaFile, metadataAttacher);
     }
 
     @Override
@@ -229,6 +244,7 @@ public class CameraActivity extends MetadataActivity implements
     public void onMetadataAttached(long mediaFileId, @Nullable Metadata metadata) {
         Intent data = new Intent();
         if (intentMode == IntentMode.COLLECT) {
+            capturedMediaFile.setMetadata(metadata);
             data.putExtra(MEDIA_FILE_KEY, capturedMediaFile);
         } else {
             data.putExtra(C.CAPTURED_MEDIA_FILE_ID, mediaFileId);
@@ -256,7 +272,9 @@ public class CameraActivity extends MetadataActivity implements
         flashButton.rotateView(rotation);
         durationView.rotateView(rotation);
         captureButton.rotateView(rotation);
-        //resolutionButton.rotateView(rotation);
+        if (mode != CameraMode.PHOTO) {
+            resolutionButton.rotateView(rotation);
+        }
         if (intentMode != IntentMode.COLLECT) {
             previewView.animate().rotation(rotation).start();
         }
@@ -286,26 +304,30 @@ public class CameraActivity extends MetadataActivity implements
 
     @OnClick(R.id.captureButton)
     void onCaptureClicked() {
-        if (cameraView.getSessionType() == SessionType.PICTURE) {
-            cameraView.capturePicture();
+        if (cameraView.getMode() == Mode.PICTURE) {
+            cameraView.takePicture();
         } else {
 
             switchButton.setVisibility(videoRecording ? View.VISIBLE : View.GONE);
+            resolutionButton.setVisibility(videoRecording ? View.VISIBLE : View.GONE);
             if (videoRecording) {
                 if (System.currentTimeMillis() - lastClickTime >= CLICK_DELAY) {
-                    cameraView.stopCapturingVideo();
+                    cameraView.stopVideo();
                     videoRecording = false;
                     switchButton.setVisibility(View.VISIBLE);
+                    resolutionButton.setVisibility(View.VISIBLE);
                 }
             } else {
+                setVideoQuality();
                 lastClickTime = System.currentTimeMillis();
                 TempMediaFile tmp = TempMediaFile.newMp4();
                 File file = MediaFileHandler.getTempFile(this, tmp);
-                cameraView.startCapturingVideo(file);
+                cameraView.takeVideo(file);
                 captureButton.displayStopVideo();
                 durationView.start();
                 videoRecording = true;
                 switchButton.setVisibility(View.GONE);
+                resolutionButton.setVisibility(View.GONE);
             }
         }
     }
@@ -320,7 +342,7 @@ public class CameraActivity extends MetadataActivity implements
             return;
         }
 
-        if (cameraView.getSessionType() == SessionType.PICTURE) {
+        if (cameraView.getMode() == Mode.PICTURE) {
             return;
         }
 
@@ -330,8 +352,8 @@ public class CameraActivity extends MetadataActivity implements
 
         setPhotoActive();
         captureButton.displayPhotoButton();
-        cameraView.setSessionType(SessionType.PICTURE);
-        mode = CameraActivity.Mode.PHOTO;
+        cameraView.setMode(Mode.PICTURE);
+        mode = CameraMode.PHOTO;
 
         resetZoom();
         lastClickTime = System.currentTimeMillis();
@@ -347,15 +369,15 @@ public class CameraActivity extends MetadataActivity implements
             return;
         }
 
-        if (cameraView.getSessionType() == SessionType.VIDEO) {
+        if (cameraView.getMode() == Mode.VIDEO) {
             return;
         }
 
-        cameraView.setSessionType(SessionType.VIDEO);
+        cameraView.setMode(Mode.VIDEO);
         turnFlashDown();
         captureButton.displayVideoButton();
         setVideoActive();
-        mode = CameraActivity.Mode.VIDEO;
+        mode = CameraMode.VIDEO;
 
         resetZoom();
         lastClickTime = System.currentTimeMillis();
@@ -381,6 +403,13 @@ public class CameraActivity extends MetadataActivity implements
         zoomLevel = 0;
         mSeekBar.setProgress(0);
         setCameraZoom();
+    }
+
+    @OnClick(R.id.resolutionButton)
+    public void chooseVideoResolution() {
+        if (videoResolutionManager != null) {
+            videoQualityDialog = DialogsUtil.showVideoResolutionDialog(this, this::setVideoSize, videoResolutionManager);
+        }
     }
 
     private void setCameraZoom() {
@@ -410,28 +439,28 @@ public class CameraActivity extends MetadataActivity implements
     }
 
     private void setupCameraView() {
-        if (mode == Mode.PHOTO) {
-            cameraView.setSessionType(SessionType.PICTURE);
+        if (mode == CameraMode.PHOTO) {
+            cameraView.setMode(Mode.PICTURE);
             captureButton.displayPhotoButton();
         } else {
-            cameraView.setSessionType(SessionType.VIDEO);
+            cameraView.setMode(Mode.VIDEO);
             captureButton.displayVideoButton();
         }
 
         //cameraView.setEnabled(PermissionUtil.checkPermission(this, Manifest.permission.CAMERA));
-        cameraView.mapGesture(Gesture.TAP, GestureAction.FOCUS_WITH_MARKER);
+        cameraView.mapGesture(Gesture.TAP, GestureAction.AUTO_FOCUS);
 
         setOrientationListener();
 
         cameraView.addCameraListener(new CameraListener() {
             @Override
-            public void onPictureTaken(byte[] jpeg) {
-                presenter.addJpegPhoto(jpeg);
+            public void onPictureTaken(@NotNull PictureResult result) {
+                presenter.addJpegPhoto(result.getData());
             }
 
             @Override
-            public void onVideoTaken(File video) {
-                showConfirmVideoView(video);
+            public void onVideoTaken(@NotNull VideoResult result) {
+                showConfirmVideoView(result.getFile());
             }
 
             @Override
@@ -440,7 +469,7 @@ public class CameraActivity extends MetadataActivity implements
             }
 
             @Override
-            public void onCameraOpened(CameraOptions options) {
+            public void onCameraOpened(@NotNull CameraOptions options) {
                 if (options.getSupportedFacing().size() < 2) {
                     switchButton.setVisibility(View.GONE);
                 } else {
@@ -453,6 +482,10 @@ public class CameraActivity extends MetadataActivity implements
                 } else {
                     flashButton.setVisibility(View.VISIBLE);
                     setupCameraFlashButton(options.getSupportedFlash());
+                }
+
+                if (options.getSupportedVideoSizes().size() > 0) {
+                    videoResolutionManager = new VideoResolutionManager(options.getSupportedVideoSizes());
                 }
                 // options object has info
                 super.onCameraOpened(options);
@@ -477,7 +510,7 @@ public class CameraActivity extends MetadataActivity implements
     }
 
     private void setupCameraModeButton() {
-        if (cameraView.getSessionType() == SessionType.PICTURE) {
+        if (cameraView.getMode() == Mode.PICTURE) {
             setPhotoActive();
         } else {
             setVideoActive();
@@ -498,7 +531,7 @@ public class CameraActivity extends MetadataActivity implements
         }
     }
 
-    private void setupCameraFlashButton(final Set<Flash> supported) {
+    private void setupCameraFlashButton(final Collection<Flash> supported) {
         if (cameraView.getFlash() == Flash.AUTO) {
             flashButton.displayFlashAuto();
         } else if (cameraView.getFlash() == Flash.OFF) {
@@ -508,7 +541,7 @@ public class CameraActivity extends MetadataActivity implements
         }
 
         flashButton.setOnClickListener(view -> {
-            if (cameraView.getSessionType() == SessionType.VIDEO) {
+            if (cameraView.getMode() == Mode.VIDEO) {
                 if (cameraView.getFlash() == Flash.OFF && supported.contains(Flash.TORCH)) {
                     flashButton.displayFlashOn();
                     cameraView.setFlash(Flash.TORCH);
@@ -559,6 +592,7 @@ public class CameraActivity extends MetadataActivity implements
         photoLine.setVisibility(View.VISIBLE);
         photoModeText.setAlpha(1f);
         videoModeText.setAlpha(modeLocked ? 0.1f : 0.5f);
+        resolutionButton.setVisibility(View.GONE);
     }
 
     private void setVideoActive() {
@@ -566,5 +600,29 @@ public class CameraActivity extends MetadataActivity implements
         photoLine.setVisibility(View.GONE);
         videoModeText.setAlpha(1);
         photoModeText.setAlpha(modeLocked ? 0.1f : 0.5f);
+        if (videoResolutionManager != null) {
+            resolutionButton.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void hideVideoResolutionDialog() {
+        if (videoQualityDialog != null) {
+            videoQualityDialog.dismiss();
+            videoQualityDialog = null;
+        }
+    }
+
+    private void setVideoQuality() {
+        if (cameraView != null && videoResolutionManager != null) {
+            cameraView.setVideoSize(videoResolutionManager.getVideoSize());
+        }
+    }
+
+    private void setVideoSize(SizeSelector videoSize) {
+        if (cameraView != null) {
+            cameraView.setVideoSize(videoSize);
+            cameraView.close();
+            cameraView.open();
+        }
     }
 }

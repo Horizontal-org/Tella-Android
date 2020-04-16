@@ -136,7 +136,7 @@ public class VideoWidget extends MediaFileBinaryWidget {
 
             activity.startActivityForResult(new Intent(getContext(), CameraActivity.class)
                             .putExtra(CameraActivity.INTENT_MODE, CameraActivity.IntentMode.COLLECT.name())
-                            .putExtra(CameraActivity.CAMERA_MODE, CameraActivity.Mode.VIDEO.name()),
+                            .putExtra(CameraActivity.CAMERA_MODE, CameraActivity.CameraMode.VIDEO.name()),
                     C.MEDIA_FILE_ID
             );
         } catch (Exception e) {
