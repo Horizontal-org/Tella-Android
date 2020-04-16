@@ -94,7 +94,6 @@
     <string name="today">Today</string>
     <string name="title_not_included">Title is not included</string>
     <string name="title_activity_security">Lock screen</string>
-    <string name="title_activity_about_help">About &amp; Help</string>
     <string name="title_activity_collect_main">Collect</string>
     <string name="ra_title_activity_collect_settings">Collect Settings</string>
     <string name="tap_anywhere_to_open_camera">Tap anywhere to open camera</string>
