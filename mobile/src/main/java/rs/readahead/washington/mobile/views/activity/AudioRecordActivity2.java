@@ -260,8 +260,8 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     }
 
     @Override
-    public void onAddSuccess(long mediaFileId) {
-        attachMediaFileMetadata(mediaFileId, metadataAttacher);
+    public void onAddSuccess(MediaFile mediaFile) {
+        attachMediaFileMetadata(mediaFile, metadataAttacher);
         showToast(String.format(getString(R.string.recorded_successfully), getString(R.string.app_name)));
     }
 

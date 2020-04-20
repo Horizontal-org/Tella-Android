@@ -7,7 +7,7 @@ import java.util.List;
 public final class Metadata implements Serializable {
     private List<String> cells; // sync
     private List<String> wifis; // async
-    private long timestamp; // sync, UTC unix timestamp
+    private long timestamp; // sync, UTC millisecond timestamp
     private Float ambientTemperature; // semi-sync, nullable
     private Float light; // semi-sync, nullable
     private MyLocation myLocation; // async, nullable
