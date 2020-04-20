@@ -44,8 +44,6 @@
     <string name="location_info">Location: %1$s</string>
     <string name="licence">License</string>
     <string name="ra_manage_servers">Manage servers</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="name">Name</string>
     <string name="not_included">Not included</string>
     <string name="ok">OK</string>
@@ -92,7 +90,6 @@
     <string name="title_activity_lock_screen">Tella Security</string>
     <string name="title_activity_audio_record">Record Audio</string>
     <string name="today">Today</string>
-    <string name="title_not_included">Title is not included</string>
     <string name="title_activity_security">Lock screen</string>
     <string name="title_activity_about_help">About &amp; Help</string>
     <string name="title_activity_collect_main">Collect</string>
@@ -535,4 +532,24 @@
     <string name="pick_auto_upload_server">Pick the server to auto-upload your files</string>
     <string name="delete_auto_tus_server_info">If you delete this server, you will no longer be able to upload files</string>
     <string name="uploads">Uploads</string>
+    <string name="uploading">Uploading…</string>
+    <string name="started">Started</string>
+    <string name="more_details">More details</string>
+    <plurals name="file">
+        <item quantity="one">%d file</item>
+        <item quantity="other">%d files</item>
+    </plurals>
+    <plurals name="files_uploaded">
+        <item quantity="one">%d file uploaded</item>
+        <item quantity="other">%d files uploaded</item>
+    </plurals>
+    <plurals name="minutes_left">
+        <item quantity="one">%d minute left</item>
+        <item quantity="other">%d minutes left</item>
+    </plurals>
+    <string name="clear_upload_history_dialog">Are you sure you want to clear the upload history?</string>
+    <string name="stop_upload_dialog">Are you sure you want to stop the upload?</string>
+    <string name="upload_information">Upload information</string>
+    <string name="number_of_files">Number of files</string>
+    <string name="date_started">Date started</string>
 </resources>
