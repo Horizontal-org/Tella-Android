@@ -299,9 +299,25 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
-    public Completable setUploadingStatus(final List<MediaFile> mediaFiles, UploadStatus status) {
+    public Completable setUploadStatus(final long mediaFileId, UploadStatus status) {
         return Completable.fromCallable((Callable<Void>) () -> {
-            setUploadingStatusDb(mediaFiles, status);
+            setUploadStatusDb(mediaFileId, status);
+            return null;
+        }).compose(applyCompletableSchedulers());
+    }
+
+    @Override
+    public Completable setUploadReschedule(final long mediaFileId) {
+        return Completable.fromCallable((Callable<Void>) () -> {
+            setUploadRescheduleDb(mediaFileId);
+            return null;
+        }).compose(applyCompletableSchedulers());
+    }
+
+    @Override
+    public Completable setUploadedAmount(final long mediaFileId, long uploadedAmount) {
+        return Completable.fromCallable((Callable<Void>) () -> {
+            setUploadedAmountDb(mediaFileId, uploadedAmount);
             return null;
         }).compose(applyCompletableSchedulers());
     }
@@ -975,32 +991,49 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     private void scheduleUploadMediaFileDb(List<MediaFile> mediaFiles) {
-
         for (MediaFile mediaFile : mediaFiles) {
             ContentValues values = new ContentValues();
             values.put(D.C_MEDIA_FILE_ID, mediaFile.getId());
             values.put(D.C_UPDATED, Util.currentTimestamp());
-            values.put(D.C_STATUS, 2);
+            values.put(D.C_STATUS, UploadStatus.SCHEDULED.ordinal());
             values.put(D.C_SIZE, mediaFile.getSize());
-            values.put(D.C_UPLOADED, 0);
             values.put(D.C_SET, 0);
 
             long id = database.insertWithOnConflict(
                     D.T_MEDIA_FILE_UPLOADS,
                     null,
                     values,
-                    SQLiteDatabase.CONFLICT_IGNORE);
+                    SQLiteDatabase.CONFLICT_REPLACE);
         }
     }
 
-    private void setUploadingStatusDb(List<MediaFile> mediaFiles, UploadStatus status) {
+    private void setUploadRescheduleDb(long mediaFileId) {
+
+        ContentValues values = new ContentValues();
+        values.put(D.C_STATUS, UploadStatus.SCHEDULED.ordinal());
+        values.put(D.C_RETRY_COUNT, D.C_RETRY_COUNT + 1);
+        values.put(D.C_UPDATED, Util.currentTimestamp());
+
+        database.update(D.T_MEDIA_FILE_UPLOADS, values, D.C_MEDIA_FILE_ID + " = ?",
+                new String[]{Long.toString(mediaFileId)});
+    }
+
+    private void setUploadStatusDb(long mediaFileId, UploadStatus status) {
+
         ContentValues values = new ContentValues();
         values.put(D.C_STATUS, status.ordinal());
 
-        for (MediaFile file : mediaFiles) {
-            database.update(D.T_MEDIA_FILE_UPLOADS, values, D.C_MEDIA_FILE_ID + " = ?",
-                    new String[]{Long.toString(file.getId())});
-        }
+        database.update(D.T_MEDIA_FILE_UPLOADS, values, D.C_MEDIA_FILE_ID + " = ?",
+                new String[]{Long.toString(mediaFileId)});
+    }
+
+    private void setUploadedAmountDb(long mediaFileId, long amount) {
+
+        ContentValues values = new ContentValues();
+        values.put(D.C_UPLOADED, amount);
+
+        database.update(D.T_MEDIA_FILE_UPLOADS, values, D.C_MEDIA_FILE_ID + " = ?",
+                new String[]{Long.toString(mediaFileId)});
     }
 
     private MediaFile attachMediaFileMetadataDb(long mediaFileId, @Nullable Metadata metadata) throws NotFountException {
@@ -1261,7 +1294,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                             cn(D.T_MEDIA_FILE, D.C_HASH, D.C_HASH)},
                     cn(D.T_MEDIA_FILE_UPLOADS, D.C_STATUS) + "=" + status.ordinal(),
                     null, null,
-                    cn(D.T_MEDIA_FILE_UPLOADS, D.C_ID) + " DESC",
+                    cn(D.T_MEDIA_FILE_UPLOADS, D.C_RETRY_COUNT) + " ASC",
                     null
 
             );

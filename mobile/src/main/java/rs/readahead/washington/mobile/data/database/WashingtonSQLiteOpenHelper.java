@@ -171,11 +171,12 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
     private String createTableMediaFileUploads() {
         return "CREATE TABLE " + sq(D.T_MEDIA_FILE_UPLOADS) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
-                cddl(D.C_MEDIA_FILE_ID, D.INTEGER, false) + " , " +
+                cddl(D.C_MEDIA_FILE_ID, D.INTEGER, false) + " UNIQUE, " +
                 cddl(D.C_UPDATED, D.INTEGER, true) + " , " +
                 cddl(D.C_STATUS, D.INTEGER, true) + " , " +
                 cddl(D.C_SIZE, D.INTEGER) + " , " +
-                cddl(D.C_UPLOADED, D.INTEGER) + " , " +
+                cddl(D.C_UPLOADED, D.INTEGER) + " DEFAULT 0, " +
+                cddl(D.C_RETRY_COUNT, D.INTEGER) + " DEFAULT 0, " +
                 cddl(D.C_SET, D.INTEGER) + " , " +
                 "FOREIGN KEY(" + sq(D.C_MEDIA_FILE_ID) + ") REFERENCES " +
                 sq(D.T_MEDIA_FILE) + "(" + sq(D.C_ID) + ") ON DELETE SET NULL" +

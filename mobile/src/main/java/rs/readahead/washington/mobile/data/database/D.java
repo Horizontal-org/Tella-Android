@@ -66,6 +66,7 @@ class D {
     static final String C_FORM_PART_STATUS = "c_form_part_status";
     static final String C_UPLOADED = "c_uploaded";
     static final String C_SET = "c_set";
+    static final String C_RETRY_COUNT = "c_retry_count";
 
     static final String A_SERVER_NAME = "a_server_name";
     static final String A_COLLECT_BLANK_FORM_ID = "a_collect_blank_xform_id";

@@ -9,12 +9,14 @@ import rs.readahead.washington.mobile.domain.entity.MediaFile;
 public interface ITellaUploadsRepository {
     Completable scheduleUploadMediaFiles(List<MediaFile> mediafiles);
     Single<List<MediaFile>> getUploadMediaFiles(UploadStatus status);
-    Completable setUploadingStatus(List<MediaFile> mediafiles, UploadStatus status);
+    Completable setUploadStatus(long mediaFileId, UploadStatus status);
+    Completable setUploadReschedule(long mediaFileId);
+    Completable setUploadedAmount(long mediaFileId, long uploadedAmount);
 
-
-   enum UploadStatus {
+    enum UploadStatus {
         UPLOADED,
         UPLOADING,
-        SCHEDULED;
+        SCHEDULED,
+        ERROR;
     }
 }

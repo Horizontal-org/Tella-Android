@@ -8,12 +8,10 @@ import com.evernote.android.job.JobRequest;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.Flowable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
@@ -22,14 +20,17 @@ import rs.readahead.washington.mobile.domain.entity.KeyBundle;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
+import rs.readahead.washington.mobile.domain.exception.NoConnectivityException;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
+import rs.readahead.washington.mobile.media.MediaFileHandler;
 import timber.log.Timber;
 
 public class TellaUploadJob extends Job {
     static final String TAG = "TellaUploadJob";
     private static boolean running = false;
     private Job.Result exitResult = null;
-    private CompositeDisposable disposables = new CompositeDisposable();
+    private HashMap<String, MediaFile> fileMap = new HashMap<>();
+    private DataSource dataSource;
 
     @NonNull
     @Override
@@ -48,32 +49,33 @@ public class TellaUploadJob extends Job {
             return exit(Job.Result.RESCHEDULE);
         }
 
-        DataSource dataSource = DataSource.getInstance(getContext(), key);
-        TellaUploadServer server = dataSource.getTellaUploadServer(Preferences.getAutoUploadServerId()).blockingGet();
-
+        dataSource = DataSource.getInstance(getContext(), key);
         List<MediaFile> mediaFiles = dataSource.getUploadMediaFiles(ITellaUploadsRepository.UploadStatus.SCHEDULED).blockingGet();
-        final TUSClient tusClient = new TUSClient(getContext(), server.getUrl(), server.getUsername(), server.getPassword());
 
         if (mediaFiles.size() == 0) {
             return exit(Job.Result.SUCCESS);
         }
 
-        dataSource.setUploadingStatus(mediaFiles, ITellaUploadsRepository.UploadStatus.UPLOADING).blockingAwait();
+        TellaUploadServer server = dataSource.getTellaUploadServer(Preferences.getAutoUploadServerId()).blockingGet();
+        if (server == TellaUploadServer.NONE){
+            return exit(Result.FAILURE);
+        }
+        final TUSClient tusClient = new TUSClient(getContext(), server.getUrl(), server.getUsername(), server.getPassword());
 
-        disposables.add(Flowable.fromIterable(mediaFiles)
+        for (MediaFile file : mediaFiles) {
+            fileMap.put(String.valueOf(file.getFileName()), file);
+        }
+
+        Flowable.fromIterable(mediaFiles)
                 .flatMap(tusClient::upload)
-                .subscribeOn(Schedulers.single())
-                .doOnSubscribe(progressInfo -> onJobSubscribe())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnComplete(this::onJobCompleted)
-                .doFinally(this::onJobFinalized)
-                .subscribe(this::updateProgress, throwable -> {
+                .blockingSubscribe(this::updateProgress, throwable -> {
+                    if (throwable instanceof NoConnectivityException) {
+                        exitResult = Result.RESCHEDULE;
+                        return;
+                    }
                     Timber.d(throwable);
                     Crashlytics.logException(throwable);
-                })
-        );
-
-        dataSource.setUploadingStatus(mediaFiles, ITellaUploadsRepository.UploadStatus.UPLOADED).blockingAwait();
+                });
 
         if (exitResult != null) {
             exit(exitResult);
@@ -113,15 +115,47 @@ public class TellaUploadJob extends Job {
                 .schedule();
     }
 
-    private void onJobCompleted() {
-    }
-
     private void updateProgress(UploadProgressInfo progressInfo) {
+
+        if (fileMap.get(progressInfo.name) == null) return;
+
+        MediaFile mediaFile = fileMap.get(progressInfo.name);
+        assert mediaFile != null;
+
+        switch (progressInfo.status) {
+
+            case STARTED:
+                dataSource.setUploadStatus(mediaFile.getId(), ITellaUploadsRepository.UploadStatus.UPLOADING).blockingAwait();
+                break;
+
+            case OK:
+                dataSource.setUploadedAmount(mediaFile.getId(), progressInfo.current).blockingAwait();
+                break;
+
+            case FINISHED:
+                dataSource.setUploadStatus(mediaFile.getId(), ITellaUploadsRepository.UploadStatus.UPLOADED).blockingAwait();
+                if (Preferences.isAutoDeleteEnabled()) {
+                    autoDeleteMediaFile(mediaFile);
+                }
+                break;
+
+            case CONFLICT:
+                dataSource.setUploadStatus(mediaFile.getId(), ITellaUploadsRepository.UploadStatus.UPLOADED).blockingAwait();
+                break;
+
+            case ERROR:
+                dataSource.setUploadReschedule(mediaFile.getId()).blockingAwait();
+                break;
+
+            default:
+                dataSource.setUploadStatus(mediaFile.getId(), ITellaUploadsRepository.UploadStatus.ERROR).blockingAwait();
+                break;
+        }
     }
 
-    private void onJobFinalized() {
-    }
-
-    private void onJobSubscribe() {
+    private void autoDeleteMediaFile(MediaFile mediaFile) {
+        MediaFile deleted = dataSource.deleteMediaFile(mediaFile, mediaFile1 ->
+                MediaFileHandler.deleteMediaFile(getContext(), mediaFile1)).blockingGet();
+        Timber.d("Deleted file %s", deleted.getFileName());
     }
 }
