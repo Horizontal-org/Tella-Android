@@ -132,15 +132,12 @@ public class TellaUploadJob extends Job {
                 dataSource.setUploadedAmount(mediaFile.getId(), progressInfo.current).blockingAwait();
                 break;
 
+            case CONFLICT:
             case FINISHED:
                 dataSource.setUploadStatus(mediaFile.getId(), ITellaUploadsRepository.UploadStatus.UPLOADED).blockingAwait();
                 if (Preferences.isAutoDeleteEnabled()) {
                     autoDeleteMediaFile(mediaFile);
                 }
-                break;
-
-            case CONFLICT:
-                dataSource.setUploadStatus(mediaFile.getId(), ITellaUploadsRepository.UploadStatus.UPLOADED).blockingAwait();
                 break;
 
             case ERROR:
