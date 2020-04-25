@@ -26,7 +26,6 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         // we have started from version 1
 
         // DBv1
-        db.execSQL(createTableTrustedPerson());
         db.execSQL(createTableCollectServer());
         db.execSQL(createTableMediaFile());
         db.execSQL(createTableCollectBlankForm());
@@ -70,14 +69,6 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
             case 5:
                 db.execSQL(createTableTellaUploadServer());
         }
-    }
-
-    private String createTableTrustedPerson() {
-        return "CREATE TABLE " + sq(D.T_TRUSTED_PERSON) + "(" +
-                sq(D.C_ID) + D.INTEGER + " PRIMARY KEY AUTOINCREMENT, " +
-                sq(D.C_MAIL) + D.TEXT + " , " +
-                sq(D.C_PHONE) + D.TEXT + " , " +
-                sq(D.C_NAME) + D.TEXT + ");";
     }
 
     private String createTableCollectServer() {

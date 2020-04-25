@@ -617,25 +617,6 @@ public class MainActivity extends MetadataActivity implements
         return this;
     }
 
-    @Override
-    public void onPhoneListLoaded(boolean isListEmpty) {
-        isPhoneListEmpty = isListEmpty;
-    }
-
-    @Override
-    public void onPhoneListLoadError(Throwable throwable) {
-    }
-
-    @Override
-    public void getCollectFormSuccess(CollectForm form, FormDef formDef) {
-        startCreateFormControllerPresenter(form, formDef);
-    }
-
-    @Override
-    public void onCollectFormError(Throwable throwable) {
-        showToast(R.string.shortcut_collect_form_not_loaded);
-    }
-
     private void stopPresenter() {
         if (homeScreenPresenter != null) {
             homeScreenPresenter.destroy();
@@ -733,19 +714,6 @@ public class MainActivity extends MetadataActivity implements
                 // handle rotation for tablets;
             }
         };
-    }
-
-    private void startCreateFormControllerPresenter(CollectForm form, FormDef formDef) {
-        stopCreateFormControllerPresenter();
-        formControllerPresenter = new CollectCreateFormControllerPresenter(this);
-        formControllerPresenter.createFormController(form, formDef);
-    }
-
-    private void stopCreateFormControllerPresenter() {
-        if (formControllerPresenter != null) {
-            formControllerPresenter.destroy();
-            formControllerPresenter = null;
-        }
     }
 
     private void resetSeekBar(SeekBar seekbar) {

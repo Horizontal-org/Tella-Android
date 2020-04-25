@@ -317,7 +317,6 @@
     <string name="crash_reports_submit">Share crash reports</string>
     <string name="crash_reports_submit_desc">Crash reports help us improve Tella. They are automatically sent and include data such as device model and Android version.</string>
     <string name="enable_camera_preview">Homescreen camera preview</string>
-    <string name="enable_camera_preview_desc">In some contexts, the homescreen camera preview may attract unwarranted attention. Disable if this presents a risk.</string>
     <string name="ra_add_group_dialog_positive">Add group</string>
     <string name="ra_leaving_repeat_ask">Add One More Group?</string>
     <string name="ra_entering_repeat_ask">Add New Group?</string>
