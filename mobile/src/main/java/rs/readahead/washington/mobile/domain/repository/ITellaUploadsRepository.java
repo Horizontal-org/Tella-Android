@@ -17,6 +17,6 @@ public interface ITellaUploadsRepository {
         UPLOADED,
         UPLOADING,
         SCHEDULED,
-        ERROR;
+        ERROR
     }
 }

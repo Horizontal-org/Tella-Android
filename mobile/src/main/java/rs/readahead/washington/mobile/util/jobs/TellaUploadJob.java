@@ -57,7 +57,7 @@ public class TellaUploadJob extends Job {
         }
 
         TellaUploadServer server = dataSource.getTellaUploadServer(Preferences.getAutoUploadServerId()).blockingGet();
-        if (server == TellaUploadServer.NONE){
+        if (server == TellaUploadServer.NONE) {
             return exit(Result.FAILURE);
         }
         final TUSClient tusClient = new TUSClient(getContext(), server.getUrl(), server.getUsername(), server.getPassword());
