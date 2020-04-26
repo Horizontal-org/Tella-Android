@@ -104,6 +104,7 @@ public class VideoViewerActivity extends CacheWordSubscriberBaseActivity impleme
 
     @Override
     public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
         releasePlayer();
         shouldAutoPlay = true;
         clearResumePosition();

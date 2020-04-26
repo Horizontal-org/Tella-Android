@@ -261,6 +261,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (!isLocationSettingsRequestCode(requestCode) && resultCode != RESULT_OK) {
             formParser.stopWaitingBinaryData(); // remove info about waiting index
             return;
