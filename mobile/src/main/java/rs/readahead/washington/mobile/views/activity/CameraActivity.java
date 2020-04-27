@@ -36,8 +36,8 @@ import com.otaliastudios.cameraview.size.SizeSelector;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -62,7 +62,6 @@ import rs.readahead.washington.mobile.presentation.entity.MediaFileLoaderModel;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.VideoResolutionManager;
-import rs.readahead.washington.mobile.util.jobs.TellaUploadJob;
 import rs.readahead.washington.mobile.views.custom.CameraCaptureButton;
 import rs.readahead.washington.mobile.views.custom.CameraDurationTextView;
 import rs.readahead.washington.mobile.views.custom.CameraFlashButton;
@@ -647,8 +646,7 @@ public class CameraActivity extends MetadataActivity implements
 
     private void scheduleFileUpload(MediaFile mediaFile) {
         if (Preferences.isAutoUploadEnabled()) {
-            List<MediaFile> upload = new ArrayList<>();
-            upload.add(mediaFile);
+            List<MediaFile> upload = Collections.singletonList(mediaFile);
             uploadPresenter.scheduleUploadMediaFiles(upload);
         } else {
             onMediaFilesUploadScheduled();

@@ -13,7 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -50,7 +50,6 @@ import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadPresenter;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.util.StringUtils;
-import rs.readahead.washington.mobile.util.jobs.TellaUploadJob;
 
 
 @RuntimePermissions
@@ -491,8 +490,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     private void scheduleFileUpload(MediaFile mediaFile) {
         if (Preferences.isAutoUploadEnabled()) {
-            List<MediaFile> upload = new ArrayList<>();
-            upload.add(mediaFile);
+            List<MediaFile> upload = Collections.singletonList(mediaFile);
             uploadPresenter.scheduleUploadMediaFiles(upload);
         } else {
             onMediaFilesUploadScheduled();
