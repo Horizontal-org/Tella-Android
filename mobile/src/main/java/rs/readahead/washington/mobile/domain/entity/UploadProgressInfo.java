@@ -5,6 +5,7 @@ public class UploadProgressInfo {
     public long current;
     public long size;
     public Status status;
+    public long fileId;
 
     public enum Status {
         UNKNOWN,
@@ -17,14 +18,19 @@ public class UploadProgressInfo {
         UNKNOWN_HOST,
     }
 
-    public UploadProgressInfo(String name, long current, long size) {
-        this(name, current, size, Status.OK);
-    }
-
-    public UploadProgressInfo(String name, long current, long size, Status status) {
-        this.name = name;
+    public UploadProgressInfo(RawFile file, long current, long size) {
+        this.name = file.getFileName();
+        this.fileId = file.getId();
         this.current = current;
         this.size = size;
+        this.status = Status.OK;
+    }
+
+    public UploadProgressInfo(RawFile file, long current, Status status) {
+        this.name = file.getFileName();
+        this.fileId = file.getId();
+        this.current = current;
+        this.size = file.getSize();
         this.status = status;
     }
 }

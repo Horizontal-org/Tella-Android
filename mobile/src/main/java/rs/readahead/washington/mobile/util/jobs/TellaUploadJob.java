@@ -25,11 +25,13 @@ import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import timber.log.Timber;
 
+import static rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository.UploadStatus.*;
+
 public class TellaUploadJob extends Job {
     static final String TAG = "TellaUploadJob";
     private static boolean running = false;
     private Job.Result exitResult = null;
-    private HashMap<String, MediaFile> fileMap = new HashMap<>();
+    private HashMap<Long, MediaFile> fileMap = new HashMap<>();
     private DataSource dataSource;
 
     @NonNull
@@ -63,7 +65,7 @@ public class TellaUploadJob extends Job {
         final TUSClient tusClient = new TUSClient(getContext(), server.getUrl(), server.getUsername(), server.getPassword());
 
         for (MediaFile file : mediaFiles) {
-            fileMap.put(String.valueOf(file.getFileName()), file);
+            fileMap.put(file.getId(), file);
         }
 
         Flowable.fromIterable(mediaFiles)
@@ -116,31 +118,27 @@ public class TellaUploadJob extends Job {
     }
 
     private void updateProgress(UploadProgressInfo progressInfo) {
-        if (fileMap.get(progressInfo.name) == null) return;
-
-        MediaFile mediaFile = fileMap.get(progressInfo.name);
-        assert mediaFile != null;
-
         switch (progressInfo.status) {
             case STARTED:
             case OK:
-                dataSource.setUploadStatus(mediaFile.getId(), ITellaUploadsRepository.UploadStatus.UPLOADING, progressInfo.current,false).blockingAwait();
+                dataSource.setUploadStatus(progressInfo.fileId, UPLOADING, progressInfo.current, false).blockingAwait();
                 break;
 
             case CONFLICT:
             case FINISHED:
-                dataSource.setUploadStatus(mediaFile.getId(), ITellaUploadsRepository.UploadStatus.UPLOADED, progressInfo.current, false).blockingAwait();
+                dataSource.setUploadStatus(progressInfo.fileId, UPLOADED, progressInfo.current, false).blockingAwait();
                 if (Preferences.isAutoDeleteEnabled()) {
+                    MediaFile mediaFile = fileMap.get(progressInfo.fileId);
                     autoDeleteMediaFile(mediaFile);
                 }
                 break;
 
             case ERROR:
-                dataSource.setUploadStatus(mediaFile.getId(), ITellaUploadsRepository.UploadStatus.SCHEDULED, progressInfo.current, true).blockingAwait();
+                dataSource.setUploadStatus(progressInfo.fileId, SCHEDULED, progressInfo.current, true).blockingAwait();
                 break;
 
             default:
-                dataSource.setUploadStatus(mediaFile.getId(), ITellaUploadsRepository.UploadStatus.ERROR, progressInfo.current, true).blockingAwait();
+                dataSource.setUploadStatus(progressInfo.fileId, ERROR, progressInfo.current, true).blockingAwait();
                 break;
         }
     }

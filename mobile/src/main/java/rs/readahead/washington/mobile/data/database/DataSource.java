@@ -991,10 +991,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }
     }
 
-    private void setUploadStatusDb(long mediaFileId, UploadStatus status, long UploadedSize, boolean retry) {
+    private void setUploadStatusDb(long mediaFileId, UploadStatus status, long uploadedSize, boolean retry) {
         ContentValues values = new ContentValues();
         values.put(D.C_STATUS, status.ordinal());
-        values.put(D.C_UPLOADED, UploadedSize);
+        values.put(D.C_UPLOADED, uploadedSize);
         values.put(D.C_UPDATED, Util.currentTimestamp());
         if (retry){
             values.put(D.C_RETRY_COUNT, D.C_RETRY_COUNT + 1);
