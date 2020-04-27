@@ -293,31 +293,15 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     @Override
     public Completable scheduleUploadMediaFiles(final List<MediaFile> mediaFiles) {
         return Completable.fromCallable((Callable<Void>) () -> {
-            scheduleUploadMediaFileDb(mediaFiles);
+            scheduleUploadMediaFilesDb(mediaFiles);
             return null;
         }).compose(applyCompletableSchedulers());
     }
 
     @Override
-    public Completable setUploadStatus(final long mediaFileId, UploadStatus status) {
+    public Completable setUploadStatus(final long mediaFileId, UploadStatus status, long uploadedSize, boolean retry) {
         return Completable.fromCallable((Callable<Void>) () -> {
-            setUploadStatusDb(mediaFileId, status);
-            return null;
-        }).compose(applyCompletableSchedulers());
-    }
-
-    @Override
-    public Completable setUploadReschedule(final long mediaFileId) {
-        return Completable.fromCallable((Callable<Void>) () -> {
-            setUploadRescheduleDb(mediaFileId);
-            return null;
-        }).compose(applyCompletableSchedulers());
-    }
-
-    @Override
-    public Completable setUploadedAmount(final long mediaFileId, long uploadedAmount) {
-        return Completable.fromCallable((Callable<Void>) () -> {
-            setUploadedAmountDb(mediaFileId, uploadedAmount);
+            setUploadStatusDb(mediaFileId, status, uploadedSize, retry);
             return null;
         }).compose(applyCompletableSchedulers());
     }
@@ -990,7 +974,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }
     }
 
-    private void scheduleUploadMediaFileDb(List<MediaFile> mediaFiles) {
+    private void scheduleUploadMediaFilesDb(List<MediaFile> mediaFiles) {
         for (MediaFile mediaFile : mediaFiles) {
             ContentValues values = new ContentValues();
             values.put(D.C_MEDIA_FILE_ID, mediaFile.getId());
@@ -999,40 +983,24 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             values.put(D.C_SIZE, mediaFile.getSize());
             values.put(D.C_SET, 0);
 
-            long id = database.insertWithOnConflict(
-                    D.T_MEDIA_FILE_UPLOADS,
+            database.insertWithOnConflict(
+                    D.T_MEDIA_FILE_UPLOAD,
                     null,
                     values,
                     SQLiteDatabase.CONFLICT_REPLACE);
         }
     }
 
-    private void setUploadRescheduleDb(long mediaFileId) {
-
-        ContentValues values = new ContentValues();
-        values.put(D.C_STATUS, UploadStatus.SCHEDULED.ordinal());
-        values.put(D.C_RETRY_COUNT, D.C_RETRY_COUNT + 1);
-        values.put(D.C_UPDATED, Util.currentTimestamp());
-
-        database.update(D.T_MEDIA_FILE_UPLOADS, values, D.C_MEDIA_FILE_ID + " = ?",
-                new String[]{Long.toString(mediaFileId)});
-    }
-
-    private void setUploadStatusDb(long mediaFileId, UploadStatus status) {
-
+    private void setUploadStatusDb(long mediaFileId, UploadStatus status, long UploadedSize, boolean retry) {
         ContentValues values = new ContentValues();
         values.put(D.C_STATUS, status.ordinal());
+        values.put(D.C_UPLOADED, UploadedSize);
+        values.put(D.C_UPDATED, Util.currentTimestamp());
+        if (retry){
+            values.put(D.C_RETRY_COUNT, D.C_RETRY_COUNT + 1);
+        }
 
-        database.update(D.T_MEDIA_FILE_UPLOADS, values, D.C_MEDIA_FILE_ID + " = ?",
-                new String[]{Long.toString(mediaFileId)});
-    }
-
-    private void setUploadedAmountDb(long mediaFileId, long amount) {
-
-        ContentValues values = new ContentValues();
-        values.put(D.C_UPLOADED, amount);
-
-        database.update(D.T_MEDIA_FILE_UPLOADS, values, D.C_MEDIA_FILE_ID + " = ?",
+        database.update(D.T_MEDIA_FILE_UPLOAD, values, D.C_MEDIA_FILE_ID + " = ?",
                 new String[]{Long.toString(mediaFileId)});
     }
 
@@ -1278,11 +1246,11 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         try {
             final String query = SQLiteQueryBuilder.buildQueryString(
                     false,
-                    D.T_MEDIA_FILE_UPLOADS +
+                    D.T_MEDIA_FILE_UPLOAD +
                             " JOIN " + D.T_MEDIA_FILE + " ON " +
-                            cn(D.T_MEDIA_FILE_UPLOADS, D.C_MEDIA_FILE_ID) + " = " + cn(D.T_MEDIA_FILE, D.C_ID),
+                            cn(D.T_MEDIA_FILE_UPLOAD, D.C_MEDIA_FILE_ID) + " = " + cn(D.T_MEDIA_FILE, D.C_ID),
                     new String[]{
-                            cn(D.T_MEDIA_FILE_UPLOADS, D.C_MEDIA_FILE_ID, D.A_MEDIA_FILE_ID),
+                            cn(D.T_MEDIA_FILE_UPLOAD, D.C_MEDIA_FILE_ID, D.A_MEDIA_FILE_ID),
                             cn(D.T_MEDIA_FILE, D.C_PATH, D.C_PATH),
                             cn(D.T_MEDIA_FILE, D.C_UID, D.C_UID),
                             cn(D.T_MEDIA_FILE, D.C_FILE_NAME, D.C_FILE_NAME),
@@ -1292,18 +1260,17 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                             cn(D.T_MEDIA_FILE, D.C_ANONYMOUS, D.C_ANONYMOUS),
                             cn(D.T_MEDIA_FILE, D.C_SIZE, D.C_SIZE),
                             cn(D.T_MEDIA_FILE, D.C_HASH, D.C_HASH)},
-                    cn(D.T_MEDIA_FILE_UPLOADS, D.C_STATUS) + "=" + status.ordinal(),
+                    cn(D.T_MEDIA_FILE_UPLOAD, D.C_STATUS) + "=" + status.ordinal(),
                     null, null,
-                    cn(D.T_MEDIA_FILE_UPLOADS, D.C_RETRY_COUNT) + " ASC",
+                    cn(D.T_MEDIA_FILE_UPLOAD, D.C_RETRY_COUNT) + " ASC",
                     null
-
             );
             cursor = database.rawQuery(query, null);
-
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 MediaFile mediaFile = cursorToMediaFile(cursor);
                 mediaFiles.add(mediaFile);
             }
+
         } catch (Exception e) {
             Timber.d(e, getClass().getName());
         } finally {

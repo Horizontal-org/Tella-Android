@@ -311,7 +311,6 @@ public class CameraActivity extends MetadataActivity implements
 
     @Override
     public void onMediaFilesUploadScheduled() {
-        TellaUploadJob.scheduleJob();
         if (intentMode != IntentMode.STAND) {
             finish();
         }

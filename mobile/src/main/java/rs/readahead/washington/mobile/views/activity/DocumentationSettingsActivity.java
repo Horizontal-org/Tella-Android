@@ -571,6 +571,7 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
             for (int i = 0; i < tuServers.size(); i++) {
                 if (tuServers.get(i).getId() == serversPresenter.getAutoUploadServerId()) {
                     setAutoUploadServer(tuServers.get(i));
+                    break;
                 }
             }
         }

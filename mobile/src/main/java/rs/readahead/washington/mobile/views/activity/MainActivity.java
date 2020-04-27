@@ -471,7 +471,8 @@ public class MainActivity extends MetadataActivity implements
         isPhoneListEmpty = false;
 
         setupPanicView();
-        homeScreenPresenter.countTUServers();
+        setupButtonsTab(0); //Temporary until we add uploads monitoring activity
+        //homeScreenPresenter.countTUServers();
 
         startLocationMetadataListening();
 

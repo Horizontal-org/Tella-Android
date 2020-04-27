@@ -169,7 +169,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
     }
 
     private String createTableMediaFileUploads() {
-        return "CREATE TABLE " + sq(D.T_MEDIA_FILE_UPLOADS) + " (" +
+        return "CREATE TABLE " + sq(D.T_MEDIA_FILE_UPLOAD) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_MEDIA_FILE_ID, D.INTEGER, false) + " UNIQUE, " +
                 cddl(D.C_UPDATED, D.INTEGER, true) + " , " +

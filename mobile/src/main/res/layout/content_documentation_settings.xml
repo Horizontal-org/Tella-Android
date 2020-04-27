@@ -142,7 +142,6 @@
                 </LinearLayout>
             </LinearLayout>
 
-
             <LinearLayout
                 android:id="@+id/auto_upload_switch_view"
                 style="@style/SettingsClickableVerticalShadowDocumentationLinerLayout"

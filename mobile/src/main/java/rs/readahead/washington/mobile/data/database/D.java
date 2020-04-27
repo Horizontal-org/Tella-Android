@@ -24,7 +24,7 @@ class D {
     static final String T_COLLECT_FORM_INSTANCE_MEDIA_FILE = "t_collect_xform_instance_media_file";
     static final String T_SETTINGS = "t_settings";
     static final String T_TELLA_UPLOAD_SERVER = "t_tella_upload_server";
-    static final String T_MEDIA_FILE_UPLOADS = "t_media_file_uploads";
+    static final String T_MEDIA_FILE_UPLOAD = "t_media_file_upload";
 
     /* DATABASE COLUMNS */
     static final String C_ID = "c_id";

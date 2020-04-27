@@ -320,7 +320,6 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     @Override
     public void onMediaFilesUploadScheduled() {
-        TellaUploadJob.scheduleJob();
         if (mode != Mode.STAND) {
             finish();
         }

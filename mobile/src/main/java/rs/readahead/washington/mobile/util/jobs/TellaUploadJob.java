@@ -116,36 +116,31 @@ public class TellaUploadJob extends Job {
     }
 
     private void updateProgress(UploadProgressInfo progressInfo) {
-
         if (fileMap.get(progressInfo.name) == null) return;
 
         MediaFile mediaFile = fileMap.get(progressInfo.name);
         assert mediaFile != null;
 
         switch (progressInfo.status) {
-
             case STARTED:
-                dataSource.setUploadStatus(mediaFile.getId(), ITellaUploadsRepository.UploadStatus.UPLOADING).blockingAwait();
-                break;
-
             case OK:
-                dataSource.setUploadedAmount(mediaFile.getId(), progressInfo.current).blockingAwait();
+                dataSource.setUploadStatus(mediaFile.getId(), ITellaUploadsRepository.UploadStatus.UPLOADING, progressInfo.current,false).blockingAwait();
                 break;
 
             case CONFLICT:
             case FINISHED:
-                dataSource.setUploadStatus(mediaFile.getId(), ITellaUploadsRepository.UploadStatus.UPLOADED).blockingAwait();
+                dataSource.setUploadStatus(mediaFile.getId(), ITellaUploadsRepository.UploadStatus.UPLOADED, progressInfo.current, false).blockingAwait();
                 if (Preferences.isAutoDeleteEnabled()) {
                     autoDeleteMediaFile(mediaFile);
                 }
                 break;
 
             case ERROR:
-                dataSource.setUploadReschedule(mediaFile.getId()).blockingAwait();
+                dataSource.setUploadStatus(mediaFile.getId(), ITellaUploadsRepository.UploadStatus.SCHEDULED, progressInfo.current, true).blockingAwait();
                 break;
 
             default:
-                dataSource.setUploadStatus(mediaFile.getId(), ITellaUploadsRepository.UploadStatus.ERROR).blockingAwait();
+                dataSource.setUploadStatus(mediaFile.getId(), ITellaUploadsRepository.UploadStatus.ERROR, progressInfo.current, true).blockingAwait();
                 break;
         }
     }

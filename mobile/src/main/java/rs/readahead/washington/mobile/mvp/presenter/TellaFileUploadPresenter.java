@@ -10,6 +10,7 @@ import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadPresenterContract;
+import rs.readahead.washington.mobile.util.jobs.TellaUploadJob;
 
 
 public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContract.IPresenter {
@@ -37,7 +38,10 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapCompletable(dataSource -> dataSource.scheduleUploadMediaFiles(mediaFiles))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> view.onMediaFilesUploadScheduled(), throwable -> {
+                .subscribe(() -> {
+                    TellaUploadJob.scheduleJob();
+                    view.onMediaFilesUploadScheduled();
+                }, throwable -> {
                     Crashlytics.logException(throwable);
                     view.onMediaFilesUploadScheduleError(throwable);
                 })
