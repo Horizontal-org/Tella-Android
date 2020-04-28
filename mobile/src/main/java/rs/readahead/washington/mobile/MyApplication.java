@@ -38,6 +38,7 @@ import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.util.LocaleManager;
 import rs.readahead.washington.mobile.util.jobs.PendingFormSendJob;
 import rs.readahead.washington.mobile.util.jobs.TellaJobCreator;
+import rs.readahead.washington.mobile.util.jobs.TellaUploadJob;
 import rs.readahead.washington.mobile.views.activity.ExitActivity;
 import rs.readahead.washington.mobile.views.activity.LockScreenActivity;
 import rs.readahead.washington.mobile.views.activity.MainActivity;
@@ -183,6 +184,7 @@ public class MyApplication extends MultiDexApplication implements ICacheWordSubs
 
         // fire up jobs that need CacheWord secret - they will quit if nothing to do..
         PendingFormSendJob.scheduleJob();
+        TellaUploadJob.scheduleJob();
     }
 
     @Nullable

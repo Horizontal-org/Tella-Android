@@ -12,5 +12,8 @@ public class IServersPresenterContract {
 
     public interface IPresenter extends IBasePresenter {
         void deleteServers();
+        void removeAutoUploadServersSettings();
+        long getAutoUploadServerId();
+        void setAutoUploadServerId(long id);
     }
 }

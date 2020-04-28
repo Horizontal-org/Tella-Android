@@ -37,12 +37,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.Metadata;
 import rs.readahead.washington.mobile.domain.entity.TempMediaFile;
@@ -51,8 +54,10 @@ import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.MediaFileUrlLoader;
 import rs.readahead.washington.mobile.mvp.contract.ICameraPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
+import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CameraPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.MetadataAttacher;
+import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadPresenter;
 import rs.readahead.washington.mobile.presentation.entity.MediaFileLoaderModel;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.DialogsUtil;
@@ -66,6 +71,7 @@ import rs.readahead.washington.mobile.views.custom.CameraSwitchButton;
 
 public class CameraActivity extends MetadataActivity implements
         ICameraPresenterContract.IView,
+        ITellaFileUploadPresenterContract.IView,
         IMetadataAttachPresenterContract.IView {
     public static String CAMERA_MODE = "cm";
     public static String INTENT_MODE = "im";
@@ -97,6 +103,7 @@ public class CameraActivity extends MetadataActivity implements
     CameraResolutionButton resolutionButton;
 
     private CameraPresenter presenter;
+    private TellaFileUploadPresenter uploadPresenter;
     private MetadataAttacher metadataAttacher;
     private CameraMode mode;
     private boolean modeLocked;
@@ -135,6 +142,7 @@ public class CameraActivity extends MetadataActivity implements
         ButterKnife.bind(this);
 
         presenter = new CameraPresenter(this);
+        uploadPresenter = new TellaFileUploadPresenter(this);
         metadataAttacher = new MetadataAttacher(this);
 
         mode = CameraMode.PHOTO;
@@ -251,9 +259,7 @@ public class CameraActivity extends MetadataActivity implements
         }
         setResult(RESULT_OK, data);
 
-        if (intentMode != IntentMode.STAND) {
-            finish();
-        }
+        scheduleFileUpload(capturedMediaFile);
     }
 
     @Override
@@ -300,6 +306,18 @@ public class CameraActivity extends MetadataActivity implements
     @Override
     public Context getContext() {
         return this;
+    }
+
+    @Override
+    public void onMediaFilesUploadScheduled() {
+        if (intentMode != IntentMode.STAND) {
+            finish();
+        }
+    }
+
+    @Override
+    public void onMediaFilesUploadScheduleError(Throwable throwable) {
+
     }
 
     @OnClick(R.id.captureButton)
@@ -623,6 +641,15 @@ public class CameraActivity extends MetadataActivity implements
             cameraView.setVideoSize(videoSize);
             cameraView.close();
             cameraView.open();
+        }
+    }
+
+    private void scheduleFileUpload(MediaFile mediaFile) {
+        if (Preferences.isAutoUploadEnabled()) {
+            List<MediaFile> upload = Collections.singletonList(mediaFile);
+            uploadPresenter.scheduleUploadMediaFiles(upload);
+        } else {
+            onMediaFilesUploadScheduled();
         }
     }
 }

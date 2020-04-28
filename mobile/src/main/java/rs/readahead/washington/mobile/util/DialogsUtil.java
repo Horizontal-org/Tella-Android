@@ -19,9 +19,11 @@ import android.widget.TextView;
 import com.otaliastudios.cameraview.size.SizeSelector;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
+import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
 import rs.readahead.washington.mobile.domain.entity.ServerType;
 import rs.readahead.washington.mobile.presentation.entity.VideoResolutionOption;
@@ -430,7 +432,7 @@ public class DialogsUtil {
 
         ArrayList<VideoResolutionOption> optionKeys = videoResolutionManager.getOptionsList();
         for (int i = 0; i < optionKeys.size(); i++) {
-            AppCompatRadioButton button = (AppCompatRadioButton) inflater.inflate(R.layout.video_resolution_dialog_radio_button_item, null);
+            AppCompatRadioButton button = (AppCompatRadioButton) inflater.inflate(R.layout.dialog_radio_button_item, null);
             button.setTag(optionKeys.get(i).getVideoQualityKey());
             button.setText(optionKeys.get(i).getVideoQualityStringResourceId());
             radioGroup.addView(button);
@@ -449,6 +451,42 @@ public class DialogsUtil {
                 })
                 .setNegativeButton(R.string.cancel, (dialog, which) -> {
                 })
+                .setCancelable(false);
+
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        return alertDialog;
+    }
+
+    public interface autoUploadServerConsumer {
+        void accept(TellaUploadServer server);
+    }
+
+    public static AlertDialog chooseAutoUploadServerDialog(Context context, autoUploadServerConsumer consumer, List<TellaUploadServer> tellaUploadServers, @NonNull DialogInterface.OnClickListener listener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.BrightBackgroundDarkLettersDialogTheme);
+        LayoutInflater inflater = LayoutInflater.from(context);
+
+        @SuppressLint("InflateParams")
+        View view = inflater.inflate(R.layout.choose_auto_upload_server_dialog, null);
+        RadioGroup radioGroup = view.findViewById(R.id.radio_group);
+
+        for (int i = 0; i < tellaUploadServers.size(); i++) {
+            AppCompatRadioButton button = (AppCompatRadioButton) inflater.inflate(R.layout.dialog_radio_button_item, null);
+            button.setTag(i);
+            button.setText(tellaUploadServers.get(i).getName());
+            radioGroup.addView(button);
+        }
+
+        builder.setView(view)
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
+                    int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
+                    AppCompatRadioButton radioButton = radioGroup.findViewById(checkedRadioButtonId);
+
+                    TellaUploadServer tellaUploadServer = tellaUploadServers.get((int) radioButton.getTag());
+                    consumer.accept(tellaUploadServer);
+                })
+                .setNegativeButton(R.string.cancel, listener)
                 .setCancelable(false);
 
         final AlertDialog alertDialog = builder.create();

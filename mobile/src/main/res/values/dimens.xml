@@ -24,7 +24,9 @@
     <dimen name="navigation_tab_bar_padding">2dp</dimen>
     <dimen name="camera_overlay_buttom_margin">270dp</dimen>
     <dimen name="navigation_tab_margin_bottom">120dp</dimen>
-    <dimen name="navigation_tab_height">80dp</dimen>
+    <dimen name="navigation_row_height">80dp</dimen>
+    <dimen name="navigation_table">240dp</dimen>
+    <dimen name="navigation_table_cell_height">120dp</dimen>
     <dimen name="navigation_panic_height">50dp</dimen>
     <dimen name="settings_title_height">70dp</dimen>
     <dimen name="settings_title_height_short">65dp</dimen>

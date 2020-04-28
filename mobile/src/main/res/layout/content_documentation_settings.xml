@@ -143,6 +143,107 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/auto_upload_switch_view"
+                style="@style/SettingsClickableVerticalShadowDocumentationLinerLayout"
+                android:animateLayoutChanges="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="2dp">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        style="@style/SettingsTitleImageViewStyle"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_cloud_upload_black_24dp"
+                        android:tint="@color/wa_black"/>
+
+                    <LinearLayout style="@style/VerticalLinearLayout">
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/auto_upload_switch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="@string/auto_upload_to_server"
+                            android:theme="@style/SettingsTextViewSwitch" />
+
+                        <TextView
+                            android:id="@+id/auto_upload_info"
+                            style="@style/SettingsTextViewGray"
+                            android:text="@string/auto_upload_info_text" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/upload_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:orientation="vertical">
+
+                        <View style="@style/SettingsMainShadowLine" />
+
+                        <RelativeLayout
+                            android:id="@+id/selected_upload_server_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:paddingStart="62dp"
+                            android:paddingEnd="26dp"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_height="match_parent"
+                                android:layout_width="wrap_content"
+                                android:gravity="center_vertical"
+                                android:layout_alignParentStart="true"
+                                android:textSize="16sp"
+                                android:textAlignment="center"
+                                android:textColor="@color/wa_black"
+                                android:text="@string/server" />
+                            <TextView
+                                android:id="@+id/server_name"
+                                android:layout_alignParentEnd="true"
+                                android:layout_height="match_parent"
+
+                                android:layout_width="wrap_content"
+                                android:gravity="center_vertical"
+                                android:textAlignment="center"
+                                android:text="@string/ra_server_name"
+                                tools:ignore="RelativeOverlap" />
+                        </RelativeLayout>
+
+                        <View style="@style/SettingsMainShadowLine" />
+
+                        <LinearLayout
+                            android:id="@+id/auto_delete_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingStart="48dp"
+                            android:paddingEnd="2dp">
+
+                            <LinearLayout style="@style/VerticalLinearLayout">
+
+                                <androidx.appcompat.widget.SwitchCompat
+                                    android:id="@+id/auto_delete_switch"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:text="@string/auto_delete"
+                                    android:theme="@style/SettingsTextViewSwitch" />
+
+                                <TextView
+                                    android:id="@+id/auto_delete_info"
+                                    style="@style/SettingsTextViewGray"
+                                    android:text="@string/auto_delete_info_text" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/offline_switch_layout"
                 style="@style/SettingsClickableHorizontalShadowLinearLayout">
 
