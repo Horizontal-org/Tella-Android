@@ -1,7 +1,5 @@
 package rs.readahead.washington.mobile.util.jobs;
 
-import androidx.annotation.NonNull;
-
 import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobRequest;
@@ -11,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import io.reactivex.Flowable;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
@@ -21,11 +20,10 @@ import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.domain.exception.NoConnectivityException;
-import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import timber.log.Timber;
 
-import static rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository.UploadStatus.*;
+import static rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository.UploadStatus;
 
 public class TellaUploadJob extends Job {
     static final String TAG = "TellaUploadJob";
@@ -52,7 +50,7 @@ public class TellaUploadJob extends Job {
         }
 
         dataSource = DataSource.getInstance(getContext(), key);
-        List<MediaFile> mediaFiles = dataSource.getUploadMediaFiles(ITellaUploadsRepository.UploadStatus.SCHEDULED).blockingGet();
+        List<MediaFile> mediaFiles = dataSource.getUploadMediaFiles(UploadStatus.SCHEDULED).blockingGet();
 
         if (mediaFiles.size() == 0) {
             return exit(Job.Result.SUCCESS);
@@ -62,6 +60,7 @@ public class TellaUploadJob extends Job {
         if (server == TellaUploadServer.NONE) {
             return exit(Result.FAILURE);
         }
+
         final TUSClient tusClient = new TUSClient(getContext(), server.getUrl(), server.getUsername(), server.getPassword());
 
         for (MediaFile file : mediaFiles) {
@@ -121,31 +120,31 @@ public class TellaUploadJob extends Job {
         switch (progressInfo.status) {
             case STARTED:
             case OK:
-                dataSource.setUploadStatus(progressInfo.fileId, UPLOADING, progressInfo.current, false).blockingAwait();
+                dataSource.setUploadStatus(progressInfo.fileId, UploadStatus.UPLOADING, progressInfo.current, false).blockingAwait();
                 break;
 
             case CONFLICT:
             case FINISHED:
-                dataSource.setUploadStatus(progressInfo.fileId, UPLOADED, progressInfo.current, false).blockingAwait();
+                dataSource.setUploadStatus(progressInfo.fileId, UploadStatus.UPLOADED, progressInfo.current, false).blockingAwait();
                 if (Preferences.isAutoDeleteEnabled()) {
-                    MediaFile mediaFile = fileMap.get(progressInfo.fileId);
-                    autoDeleteMediaFile(mediaFile);
+                    deleteMediaFile(progressInfo.fileId);
                 }
                 break;
 
             case ERROR:
-                dataSource.setUploadStatus(progressInfo.fileId, SCHEDULED, progressInfo.current, true).blockingAwait();
+                dataSource.setUploadStatus(progressInfo.fileId, UploadStatus.SCHEDULED, progressInfo.current, true).blockingAwait();
                 break;
 
             default:
-                dataSource.setUploadStatus(progressInfo.fileId, ERROR, progressInfo.current, true).blockingAwait();
+                dataSource.setUploadStatus(progressInfo.fileId, UploadStatus.ERROR, progressInfo.current, true).blockingAwait();
                 break;
         }
     }
 
-    private void autoDeleteMediaFile(MediaFile mediaFile) {
-        MediaFile deleted = dataSource.deleteMediaFile(mediaFile, mediaFile1 ->
-                MediaFileHandler.deleteMediaFile(getContext(), mediaFile1)).blockingGet();
+    private void deleteMediaFile(long id) {
+        MediaFile deleted = dataSource.deleteMediaFile(fileMap.get(id), m ->
+                MediaFileHandler.deleteMediaFile(getContext(), m)).blockingGet();
+
         Timber.d("Deleted file %s", deleted.getFileName());
     }
 }
