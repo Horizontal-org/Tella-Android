@@ -43,6 +43,9 @@ public class SharedPrefs {
     static final String INSTALLATION_ID = "installation_id";
     static final String LAST_COLLECT_REFRESH = "last_collect_refresh";
     static final String VIDEO_RESOLUTION = "video_resolution";
+    static final String AUTO_UPLOAD_SERVER = "auto_upload_server";
+    static final String AUTO_UPLOAD = "auto_upload";
+    static final String AUTO_DELETE = "auto_delete";
 
     private static SharedPrefs instance;
     private SharedPreferences pref;

@@ -13,6 +13,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -21,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -32,6 +35,7 @@ import permissions.dispatcher.OnShowRationale;
 import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.Metadata;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
@@ -39,8 +43,10 @@ import rs.readahead.washington.mobile.media.AudioRecorder;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IAudioCapturePresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
+import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.AudioCapturePresenter;
 import rs.readahead.washington.mobile.mvp.presenter.MetadataAttacher;
+import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadPresenter;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.util.StringUtils;
@@ -50,6 +56,7 @@ import rs.readahead.washington.mobile.util.StringUtils;
 public class AudioRecordActivity2 extends MetadataActivity implements
         AudioRecorder.AudioRecordInterface,
         IAudioCapturePresenterContract.IView,
+        ITellaFileUploadPresenterContract.IView,
         IMetadataAttachPresenterContract.IView {
     private static final String TIME_FORMAT = "%02d:%02d:%02d";
     public static String RECORDER_MODE = "rm";
@@ -79,6 +86,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     // recording
     private AudioRecorder audioRecorder;
+    private TellaFileUploadPresenter uploadPresenter;
     private AudioCapturePresenter presenter;
     private MetadataAttacher metadataAttacher;
     private CompositeDisposable disposable = new CompositeDisposable();
@@ -110,6 +118,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         }
 
         presenter = new AudioCapturePresenter(this);
+        uploadPresenter = new TellaFileUploadPresenter(this);
         metadataAttacher = new MetadataAttacher(this);
 
         notRecording = true;
@@ -282,9 +291,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         setResult(Activity.RESULT_OK, intent);
         mTimer.setText(timeToString(0));
 
-        if (mode != Mode.STAND) {
-            finish();
-        }
+        scheduleFileUpload(handlingMediaFile);
     }
 
     @Override
@@ -308,6 +315,18 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     @Override
     public Context getContext() {
         return this;
+    }
+
+    @Override
+    public void onMediaFilesUploadScheduled() {
+        if (mode != Mode.STAND) {
+            finish();
+        }
+    }
+
+    @Override
+    public void onMediaFilesUploadScheduleError(Throwable throwable) {
+
     }
 
     private void handleStop() {
@@ -466,6 +485,15 @@ public class AudioRecordActivity2 extends MetadataActivity implements
             freeSpace.setText(getString(R.string.hours_minutes_and_space_left, hours, minutes, spaceLeft));
         } else {
             freeSpace.setText(getString(R.string.days_hours_and_space_left, days, hours, spaceLeft));
+        }
+    }
+
+    private void scheduleFileUpload(MediaFile mediaFile) {
+        if (Preferences.isAutoUploadEnabled()) {
+            List<MediaFile> upload = Collections.singletonList(mediaFile);
+            uploadPresenter.scheduleUploadMediaFiles(upload);
+        } else {
+            onMediaFilesUploadScheduled();
         }
     }
 }
