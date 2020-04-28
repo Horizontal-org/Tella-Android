@@ -11,6 +11,9 @@ public class TellaJobCreator implements JobCreator {
             case PendingFormSendJob.TAG:
                 return new PendingFormSendJob();
 
+            case TellaUploadJob.TAG:
+                return new TellaUploadJob();
+
             default:
                 return null;
         }

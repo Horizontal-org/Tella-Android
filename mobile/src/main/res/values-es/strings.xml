@@ -528,4 +528,31 @@ del formulario</string>
     <string name="video_quality_high">High (~1080p)</string>
     <string name="video_quality_medium">Medium (~720p)</string>
     <string name="video_quality_low">Low (~480p)</string>
+    <string name="auto_upload_to_server">Auto-upload to server</string>
+    <string name="auto_upload_info_text">Upload your files to your Direct Upload server as soon as they are captured (photos, videos, or audio recordings) or imported into Tella.</string>
+    <string name="auto_delete">Auto-delete</string>
+    <string name="auto_delete_info_text">If activated, Tella will automatically delete the files uploaded as soon as the upload is complete.</string>
+    <string name="pick_auto_upload_server">Pick the server to auto-upload your files</string>
+    <string name="delete_auto_tus_server_info">If you delete this server, you will no longer be able to upload files</string>
+    <string name="uploads">Uploads</string>
+    <string name="uploading">Uploading…</string>
+    <string name="started">Started</string>
+    <string name="more_details">More details</string>
+    <plurals name="file">
+        <item quantity="one">%d file</item>
+        <item quantity="other">%d files</item>
+    </plurals>
+    <plurals name="files_uploaded">
+        <item quantity="one">%d file uploaded</item>
+        <item quantity="other">%d files uploaded</item>
+    </plurals>
+    <plurals name="minutes_left">
+        <item quantity="one">%d minute left</item>
+        <item quantity="other">%d minutes left</item>
+    </plurals>
+    <string name="clear_upload_history_dialog">Are you sure you want to clear the upload history?</string>
+    <string name="stop_upload_dialog">Are you sure you want to stop the upload?</string>
+    <string name="upload_information">Upload information</string>
+    <string name="number_of_files">Number of files</string>
+    <string name="date_started">Date started</string>
 </resources>

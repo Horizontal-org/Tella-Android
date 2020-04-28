@@ -526,14 +526,22 @@
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="NavigationTabLayout">
+    <style name="NavigationElement">
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="android:padding">@dimen/navigation_tab_bar_padding</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_weight">1</item>
         <item name="android:gravity">center</item>
+    </style>
+
+    <style name="NavigationRowElement" parent="NavigationElement">
+        <item name="android:layout_height">@dimen/navigation_row_height</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="NavigationTableElement" parent="NavigationElement">
+        <item name="android:layout_height">@dimen/navigation_table_cell_height</item>
+        <item name="android:layout_width">@dimen/navigation_table_cell_height</item>
     </style>
 
     <style name="PanicActiveText">
@@ -646,7 +654,7 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="VideoResolutionDialogRadioButton">
+    <style name="DialogRadioButtonStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/wa_darker_gray</item>
