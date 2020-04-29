@@ -71,14 +71,6 @@ public class MainActivity extends MetadataActivity implements
     SeekBar panicSeekBar;
     @BindView(R.id.panic_bar)
     LinearLayout panicSeekBarView;
-    @BindView(R.id.tab_button_collect)
-    View buttonCollect;
-    @BindView(R.id.tab_button_gallery)
-    View buttonGallery;
-    @BindView(R.id.nav_bar)
-    View navigationBar;
-    @BindView(R.id.link)
-    TextView setPanicTextView;
     @BindView(R.id.background)
     View background;
 
@@ -90,7 +82,7 @@ public class MainActivity extends MetadataActivity implements
     private HomeScreenPresenter homeScreenPresenter;
     private ProgressDialog progressDialog;
     private OrientationEventListener mOrientationEventListener;
-    private boolean isPhoneListEmpty;
+
     private int timerDuration;
     private MenuItem settingsMenuItem;
 
@@ -407,8 +399,6 @@ public class MainActivity extends MetadataActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-
-        isPhoneListEmpty = false;
 
         setupPanicView();
         setupButtonsTab(0); //Temporary until we add uploads monitoring activity

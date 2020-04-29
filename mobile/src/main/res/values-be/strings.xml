@@ -205,6 +205,7 @@
     <string name="ra_add_another_repeat">Дадаць яшчэ адну суполку \" %s \"?</string>
     <string name="ra_add_repeat">Дадаць новую суполку \" %s \"?</string>
     <string name="ra_do_not_add_group">Не дадаваць</string>
+    <string name="ra_question_attachment_activity_title">Select file</string>
     <string name="recorded_successfully">Аўдыёзапіс быў захаваны ў вашай %s галерэі.</string>
     <string name="title_activity_location_map">Месцазнаходжанне</string>
     <string name="ra_capture_location">Зафіксаваць геалакацыю</string>
@@ -380,14 +381,20 @@
     <string name="more_details">More details</string>
     <plurals name="file">
         <item quantity="one">%d file</item>
+        <item quantity="few">%d files</item>
+        <item quantity="many">%d files</item>
         <item quantity="other">%d files</item>
     </plurals>
     <plurals name="files_uploaded">
         <item quantity="one">%d file uploaded</item>
+        <item quantity="few">%d files uploaded</item>
+        <item quantity="many">%d files uploaded</item>
         <item quantity="other">%d files uploaded</item>
     </plurals>
     <plurals name="minutes_left">
         <item quantity="one">%d minute left</item>
+        <item quantity="few">%d minutes left</item>
+        <item quantity="many">%d minutes left</item>
         <item quantity="other">%d minutes left</item>
     </plurals>
     <string name="clear_upload_history_dialog">Are you sure you want to clear the upload history?</string>
