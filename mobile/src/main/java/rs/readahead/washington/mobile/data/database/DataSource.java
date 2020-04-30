@@ -43,7 +43,6 @@ import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.Metadata;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
-import rs.readahead.washington.mobile.domain.entity.TrustedPerson;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
@@ -1522,17 +1521,12 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     public void deleteDatabase() {
-        deleteTable(D.T_TRUSTED_PERSON);
         deleteTable(D.T_COLLECT_BLANK_FORM);
         deleteTable(D.T_COLLECT_FORM_INSTANCE);
         deleteTable(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE);
         //deleteTable(D.T_MEDIA_FILE);
         deleteTable(D.T_COLLECT_SERVER);
         deleteTable(D.T_TELLA_UPLOAD_SERVER);
-    }
-
-    public void deleteContacts() {
-        deleteTable(D.T_TRUSTED_PERSON);
     }
 
     public void deleteForms() {
@@ -1552,69 +1546,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     public void deleteMediaFiles() {
         deleteTable(D.T_MEDIA_FILE);
     }
-
-    public void insertTrusted(TrustedPerson trustedPerson) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(D.C_MAIL, trustedPerson.getMail());
-        contentValues.put(D.C_NAME, trustedPerson.getName());
-        contentValues.put(D.C_PHONE, trustedPerson.getPhoneNumber());
-
-        database.insert(D.T_TRUSTED_PERSON, null, contentValues);
-    }
-
-    public void updateTrusted(TrustedPerson trustedPerson) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(D.C_MAIL, trustedPerson.getMail());
-        contentValues.put(D.C_NAME, trustedPerson.getName());
-        contentValues.put(D.C_PHONE, trustedPerson.getPhoneNumber());
-
-        database.update(D.T_TRUSTED_PERSON, contentValues, D.C_ID + " = ? ", new String[]{String.valueOf(trustedPerson.getColumnId())});
-    }
-
-    public void deleteTrusted(int columnId) {
-        database.delete(D.T_TRUSTED_PERSON, D.C_ID + " = ?", new String[]{String.valueOf(columnId)});
-    }
-
-    public List<TrustedPerson> getAllTrusted() {
-        List<TrustedPerson> trustedPersons = new ArrayList<>();
-
-        Cursor cursor = database.query(D.T_TRUSTED_PERSON, null, null, null, null, null, null);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            trustedPersons.add(cursorToTrusted(cursor));
-            cursor.moveToNext();
-        }
-        cursor.close();
-
-        return trustedPersons;
-    }
-
-    public List<String> getTrustedPhones() {
-        List<String> trustedPersonsPhones = new ArrayList<>();
-
-        Cursor cursor = database.query(D.T_TRUSTED_PERSON, new String[]{D.C_PHONE},
-                D.C_PHONE + " IS NOT NULL OR " + D.C_PHONE + " != ''", null, null, null, null);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            trustedPersonsPhones.add(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PHONE)));
-            cursor.moveToNext();
-        }
-        cursor.close();
-
-        return trustedPersonsPhones;
-    }
-
-    private TrustedPerson cursorToTrusted(Cursor cursor) {
-        TrustedPerson trustedPerson = new TrustedPerson();
-
-        trustedPerson.setColumnId(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_ID)));
-        trustedPerson.setName(cursor.getString(cursor.getColumnIndexOrThrow(D.C_NAME)));
-        trustedPerson.setMail(cursor.getString(cursor.getColumnIndexOrThrow(D.C_MAIL)));
-        trustedPerson.setPhoneNumber(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PHONE)));
-
-        return trustedPerson;
-    }
-
 
     private CollectServer cursorToCollectServer(Cursor cursor) {
         CollectServer collectServer = new CollectServer();

@@ -237,7 +237,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.AboutHelpActivity"
-            android:label="@string/title_activity_about_help"
+            android:label="@string/about_n_help"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

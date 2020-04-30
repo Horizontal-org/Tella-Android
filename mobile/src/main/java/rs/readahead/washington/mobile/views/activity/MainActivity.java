@@ -14,8 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.OrientationEventListener;
@@ -23,9 +21,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
-import android.widget.TextView;
-
-import org.javarosa.core.model.FormDef;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,11 +38,9 @@ import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.Metadata;
-import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.mvp.contract.ICollectCreateFormControllerContract;
 import rs.readahead.washington.mobile.mvp.contract.IHomeScreenPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
-import rs.readahead.washington.mobile.mvp.presenter.CollectCreateFormControllerPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.HomeScreenPresenter;
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.util.C;
@@ -66,8 +59,6 @@ public class MainActivity extends MetadataActivity implements
     Toolbar toolbar;
     @BindView(R.id.panic_mode_view)
     RelativeLayout panicCountdownView;
-    @BindView(R.id.panic_explain_view)
-    LinearLayout panicExplainView;
     @BindView(R.id.countdown_timer)
     CountdownImageView countdownImage;
     @BindView(R.id.camera_tools_container)
@@ -80,8 +71,6 @@ public class MainActivity extends MetadataActivity implements
     SeekBar panicSeekBar;
     @BindView(R.id.panic_bar)
     LinearLayout panicSeekBarView;
-    @BindView(R.id.link)
-    TextView setPanicTextView;
     @BindView(R.id.background)
     View background;
 
@@ -91,10 +80,9 @@ public class MainActivity extends MetadataActivity implements
     private EventCompositeDisposable disposables;
     private AlertDialog alertDialog;
     private HomeScreenPresenter homeScreenPresenter;
-    private CollectCreateFormControllerPresenter formControllerPresenter;
     private ProgressDialog progressDialog;
     private OrientationEventListener mOrientationEventListener;
-    private boolean isPhoneListEmpty;
+
     private int timerDuration;
     private MenuItem settingsMenuItem;
 
@@ -123,10 +111,6 @@ public class MainActivity extends MetadataActivity implements
         setupPanicSeek();
 
         setOrientationListener();
-
-        setPanicTextView.setText(Html.fromHtml(getString(R.string.set_panic_mode_link)));
-        setPanicTextView.setMovementMethod(LinkMovementMethod.getInstance());
-        setPanicTextView.setLinkTextColor(getResources().getColor(R.color.wa_light_gray));
 
         disposables = MyApplication.bus().createCompositeDisposable();
         disposables.wire(LocaleChangedEvent.class, new EventObserver<LocaleChangedEvent>() {
@@ -169,12 +153,6 @@ public class MainActivity extends MetadataActivity implements
 
     @OnClick(R.id.panic_mode_view)
     void onPanicClicked() {
-        hidePanicScreens();
-        stopPanicking();
-    }
-
-    @OnClick(R.id.panic_explain_view)
-    void onExplainClicked() {
         hidePanicScreens();
         stopPanicking();
     }
@@ -351,51 +329,6 @@ public class MainActivity extends MetadataActivity implements
         }
     }
 
-    /*private BroadcastReceiver torStatusReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            //if (TextUtils.equals(intent.getAction(), OrbotHelper.ACTION_STATUS)) {
-            //    String status = intent.getStringExtra(OrbotHelper.EXTRA_STATUS);
-            //    // TODO: See what is going on with TOR
-            //    boolean enabled = status.equals(OrbotHelper.STATUS_ON);
-            //}
-        }
-    };*/
-
-    /*private void handleOrbot() {
-        // todo: for now we don't want to ask for TOR at application first start
-        SharedPrefs.getInstance().setAskForTorOnStart(false);
-
-        if (SharedPrefs.getInstance().isTorModeActive()) {
-            //checkNetworkSecurity();
-        } else if (SharedPrefs.getInstance().askForTorOnStart()) {
-            DialogsUtil.showMessageOKCancelWithTitle(this, getString(R.string.orbot_activation),
-                    getString(R.string.attention), getString(R.string.ok), getString(R.string.cancel),
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //checkNetworkSecurity();
-                            dialog.dismiss();
-                        }
-                    },
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            SharedPrefs.getInstance().setAskForTorOnStart(false);
-                            dialog.dismiss();
-                        }
-                    });
-        }
-    }*/
-
-    /*private void checkNetworkSecurity() {
-        if (OrbotHelper.isOrbotInstalled(this)) {
-            OrbotHelper.requestStartTor(this);
-            SharedPrefs.getInstance().setToreModeActive(true);
-        } else
-            DialogsUtil.showOrbotDialog(this);
-    }*/
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -432,7 +365,7 @@ public class MainActivity extends MetadataActivity implements
     }
 
     private boolean maybeClosePanic() {
-        if (panicCountdownView.getVisibility() == View.VISIBLE || panicExplainView.getVisibility() == View.VISIBLE) {
+        if (panicCountdownView.getVisibility() == View.VISIBLE) {
             stopPanicking();
             hidePanicScreens();
         }
@@ -466,9 +399,6 @@ public class MainActivity extends MetadataActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-
-        //homeScreenPresenter.loadPhoneList();
-        isPhoneListEmpty = false;
 
         setupPanicView();
         setupButtonsTab(0); //Temporary until we add uploads monitoring activity
@@ -517,14 +447,9 @@ public class MainActivity extends MetadataActivity implements
         hideMainControls();
 
         // really show panic screen
-        if (isPhoneListEmpty) {
-            panicExplainView.setVisibility(View.VISIBLE);
-            panicExplainView.setAlpha(1);
-        } else {
-            panicCountdownView.setVisibility(View.VISIBLE);
-            panicCountdownView.setAlpha(1);
-            countdownImage.start(timerDuration, this::executePanicMode);
-        }
+        panicCountdownView.setVisibility(View.VISIBLE);
+        panicCountdownView.setAlpha(1);
+        countdownImage.start(timerDuration, this::executePanicMode);
     }
 
     private void hideMainControls() {
@@ -538,19 +463,6 @@ public class MainActivity extends MetadataActivity implements
         navBarHolder.setVisibility(View.VISIBLE);
         toolbar.setVisibility(View.VISIBLE);
     }
-    /*//@OnShowRationale(Manifest.permission.SEND_SMS)
-    void onShowPanicScreensRationale(final PermissionRequest request) {
-        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_sms));
-    }
-
-    //@OnPermissionDenied(Manifest.permission.SEND_SMS)
-    void onShowPanicScreensPermissionDenied() {
-        hidePanicScreens();
-    }
-
-    //@OnNeverAskAgain(Manifest.permission.SEND_SMS)
-    void onShowPanicScreensNeverAskAgain() {
-    }*/
 
     void executePanicMode() {
         try {
@@ -597,34 +509,6 @@ public class MainActivity extends MetadataActivity implements
     @Override
     public Context getContext() {
         return this;
-    }
-
-    @Override
-    public void onPhoneListLoaded(boolean isListEmpty) {
-        isPhoneListEmpty = isListEmpty;
-    }
-
-    @Override
-    public void onPhoneListLoadError(Throwable throwable) {
-    }
-
-    @Override
-    public void getCollectFormSuccess(CollectForm form, FormDef formDef) {
-        startCreateFormControllerPresenter(form, formDef);
-    }
-
-    @Override
-    public void onCollectFormError(Throwable throwable) {
-        showToast(R.string.shortcut_collect_form_not_loaded);
-    }
-
-    @Override
-    public void onCountTUServersEnded(Long num) {
-        setupButtonsTab(num);
-    }
-
-    @Override
-    public void onCountTUServersFailed(Throwable throwable) {
     }
 
     private void stopPresenter() {
@@ -683,22 +567,14 @@ public class MainActivity extends MetadataActivity implements
 
         setupPanicView();
 
-        if (isPhoneListEmpty) {
-            panicExplainView.setVisibility(View.GONE);
-        } else {
-            panicCountdownView.setVisibility(View.GONE);
-        }
+        panicCountdownView.setVisibility(View.GONE);
     }
 
     private void blendPanicScreens(int i) {
         toolbar.setAlpha((float) (100 - i) / 100);
         cameraToolsContainer.setAlpha((float) (100 - i) / 100);
         background.setAlpha((float) i / 100);
-        if (isPhoneListEmpty) {
-            panicExplainView.setVisibility(i == 100 ? View.VISIBLE : View.GONE);
-        } else {
-            panicCountdownView.setVisibility(i == 100 ? View.VISIBLE : View.GONE);
-        }
+        panicCountdownView.setVisibility(i == 100 ? View.VISIBLE : View.GONE);
         panicSeekBarView.setVisibility(i == 100 ? View.INVISIBLE : View.VISIBLE);
     }
 
@@ -724,19 +600,6 @@ public class MainActivity extends MetadataActivity implements
                 // handle rotation for tablets;
             }
         };
-    }
-
-    private void startCreateFormControllerPresenter(CollectForm form, FormDef formDef) {
-        stopCreateFormControllerPresenter();
-        formControllerPresenter = new CollectCreateFormControllerPresenter(this);
-        formControllerPresenter.createFormController(form, formDef);
-    }
-
-    private void stopCreateFormControllerPresenter() {
-        if (formControllerPresenter != null) {
-            formControllerPresenter.destroy();
-            formControllerPresenter = null;
-        }
     }
 
     private void resetSeekBar(SeekBar seekbar) {
