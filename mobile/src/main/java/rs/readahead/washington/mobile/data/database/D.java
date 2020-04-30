@@ -16,7 +16,6 @@ class D {
     static final int DATABASE_VERSION = 7;
 
     /* DATABASE TABLES */
-    static final String T_TRUSTED_PERSON = "t_trusted_person";
     static final String T_COLLECT_SERVER = "t_collect_server";
     static final String T_COLLECT_BLANK_FORM = "t_collect_blank_xform";
     static final String T_COLLECT_FORM_INSTANCE = "t_collect_xform_instance";

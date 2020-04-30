@@ -6,8 +6,6 @@ import androidx.annotation.Nullable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import rs.readahead.washington.mobile.presentation.entity.ShortcutPosition;
-
 
 public class Preferences {
     private static SharedPrefs sharedPrefs = SharedPrefs.getInstance();
@@ -146,29 +144,8 @@ public class Preferences {
         setBoolean(SharedPrefs.ERASE_GALLERY, value);
     }
 
-    @Nullable
-    public static String getShortcutJson(@NonNull ShortcutPosition position) {
-        return getString(SharedPrefs.SHORTCUT_POSITION_PREFIX + position.name(), null);
-    }
-
-    public static void setShortcutJson(@NonNull ShortcutPosition position, @NonNull String json) {
-        setString(SharedPrefs.SHORTCUT_POSITION_PREFIX + position.name(), json);
-    }
-
     public static float getLocationAccuracyThreshold() {
         return getFloat(SharedPrefs.LOCATION_ACCURACY_THRESHOLD, 5f);
-    }
-
-    public static void setLocationAccuracyThreshold(float threshold) {
-        setFloat(SharedPrefs.LOCATION_ACCURACY_THRESHOLD, threshold);
-    }
-
-    public static boolean isWiFiAttachments() {
-        return getBoolean(SharedPrefs.WIFI_ATTACHMENTS, false);
-    }
-
-    public static void setWiFiAttachments(boolean value) {
-        setBoolean(SharedPrefs.WIFI_ATTACHMENTS, value);
     }
 
     public static boolean isOfflineMode() {

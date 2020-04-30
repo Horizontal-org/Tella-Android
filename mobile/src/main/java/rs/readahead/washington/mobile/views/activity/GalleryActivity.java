@@ -390,6 +390,7 @@ public class GalleryActivity extends MetadataActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (!isLocationSettingsRequestCode(requestCode) && resultCode != RESULT_OK) {
             return; // user canceled evidence acquiring
         }
