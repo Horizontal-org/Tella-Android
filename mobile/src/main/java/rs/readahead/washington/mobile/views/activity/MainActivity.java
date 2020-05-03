@@ -401,8 +401,7 @@ public class MainActivity extends MetadataActivity implements
         super.onResume();
 
         setupPanicView();
-        setupButtonsTab(0); //Temporary until we add uploads monitoring activity
-        //homeScreenPresenter.countTUServers();
+        homeScreenPresenter.countTUServers();
 
         startLocationMetadataListening();
 
@@ -509,6 +508,15 @@ public class MainActivity extends MetadataActivity implements
     @Override
     public Context getContext() {
         return this;
+    }
+
+    @Override
+    public void onCountTUServersEnded(Long num) {
+        setupButtonsTab(num);
+    }
+
+    @Override
+    public void onCountTUServersFailed(Throwable throwable) {
     }
 
     private void stopPresenter() {
