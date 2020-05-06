@@ -18,8 +18,6 @@
 
 8. [Contact us](#contact)
 
-9. [Credits](#credits)
-
 ## Overview
 
 Tella is a documentation app for Android. In challenging environments--with limited or no internet connectivity or in the face of repression--Tella makes it easier and safer to document events, whether that’s violence, human rights violations, corruption, or electoral fraud.
@@ -83,6 +81,12 @@ Tella is currently available only on Android. You can [download it](https://play
 
 ## Tech & frameworks used
 
+This software uses the following open source packages:
+- [SQLCipher](https://github.com/sqlcipher/sqlcipher) for our encrypted database.
+- [CacheWord](https://guardianproject.info/code/cacheword/) for passphrase caching and management.
+- [ODK JavaRosa](https://github.com/getodk/javarosa) to work with XForms.
+- [CameraView](https://github.com/natario1/CameraView), [ExoPlayer](https://github.com/google/ExoPlayer), [RxJava](https://github.com/ReactiveX/RxJava), [OkHttp](https://github.com/square/okhttp), [Retrofit](https://github.com/square/retrofit), [PermissionDispatcher](https://github.com/permissions-dispatcher/PermissionsDispatcher), [PatternLock](https://github.com/zhanghai/PatternLock) and a lot of other excellent [libraries](https://github.com/Horizontal-org/Tella-Android/blob/master/mobile/build.gradle) helping all of us in Android application development.
+
 ## Contributing to the code
 
 **Step 1: Get familiar with Tella.** The best way is simply to download Tella play with it and try the different features, or [read our documentation here](https://docs.tella-app.org).
@@ -107,9 +111,3 @@ We love hearing from users, designers, and developers! If you have any question,
 
 You can create an issue [here on our Github](https://github.com/H0rizontal/Tella/issues) or email us at contact@tella-app.org. 
 
-## Credits
-This software uses the following open source packages:
-- [SQLCipher](https://github.com/sqlcipher/sqlcipher) for our encrypted database.
-- [CacheWord](https://guardianproject.info/code/cacheword/) for passphrase caching and management.
-- [ODK JavaRosa](https://github.com/getodk/javarosa) to work with XForms.
-- [CameraView](https://github.com/natario1/CameraView), [ExoPlayer](https://github.com/google/ExoPlayer), [RxJava](https://github.com/ReactiveX/RxJava), [OkHttp](https://github.com/square/okhttp), [Retrofit](https://github.com/square/retrofit), [PermissionDispatcher](https://github.com/permissions-dispatcher/PermissionsDispatcher), [PatternLock](https://github.com/zhanghai/PatternLock) and a lot of other excellent [libraries](https://github.com/Horizontal-org/Tella-Android/blob/master/mobile/build.gradle) helping all of us in Android application development.
