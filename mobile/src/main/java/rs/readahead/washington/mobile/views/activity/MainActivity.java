@@ -292,6 +292,7 @@ public class MainActivity extends MetadataActivity implements
     }
 
     private void startUploadsActivity() {
+        startActivity(new Intent(MainActivity.this, UploadsActivity.class));
     }
 
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
