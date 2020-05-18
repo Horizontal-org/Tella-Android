@@ -60,6 +60,7 @@ import rs.readahead.washington.mobile.domain.repository.ITellaUploadServersRepos
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 import rs.readahead.washington.mobile.media.MediaFileBundle;
 import rs.readahead.washington.mobile.presentation.entity.MediaFileThumbnailData;
+import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.FileUtil;
 import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
@@ -974,19 +975,55 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     private void scheduleUploadMediaFilesDb(List<MediaFile> mediaFiles) {
-        for (MediaFile mediaFile : mediaFiles) {
-            ContentValues values = new ContentValues();
-            values.put(D.C_MEDIA_FILE_ID, mediaFile.getId());
-            values.put(D.C_UPDATED, Util.currentTimestamp());
-            values.put(D.C_STATUS, UploadStatus.SCHEDULED.ordinal());
-            values.put(D.C_SIZE, mediaFile.getSize());
-            values.put(D.C_SET, 0);
+        Cursor cursor = null;
+        long lastSet = 0;
+        long newSet;
+        long lastUpdate = 0;
 
-            database.insertWithOnConflict(
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
                     D.T_MEDIA_FILE_UPLOAD,
+                    new String[]{
+                            "MAX (" + D.C_UPDATED + ")",
+                            "MAX (" + D.C_SET + ")"},
                     null,
-                    values,
-                    SQLiteDatabase.CONFLICT_REPLACE);
+                    null, null, null, null
+            );
+
+            cursor = database.rawQuery(query, null);
+
+            if (cursor.moveToFirst()) {
+                lastUpdate = cursor.getLong(cursor.getColumnIndexOrThrow("MAX (" + D.C_UPDATED + ")"));
+                lastSet = cursor.getLong(cursor.getColumnIndexOrThrow("MAX (" + D.C_SET + ")"));
+            }
+
+            if (Util.currentTimestamp() - lastUpdate > C.HOUR) {
+                newSet = lastSet + 1;
+            } else {
+                newSet = lastSet;
+            }
+
+            for (MediaFile mediaFile : mediaFiles) {
+                ContentValues values = new ContentValues();
+                values.put(D.C_MEDIA_FILE_ID, mediaFile.getId());
+                values.put(D.C_UPDATED, Util.currentTimestamp());
+                values.put(D.C_STATUS, UploadStatus.SCHEDULED.ordinal());
+                values.put(D.C_SIZE, mediaFile.getSize());
+                values.put(D.C_SET, newSet);
+
+                database.insertWithOnConflict(
+                        D.T_MEDIA_FILE_UPLOAD,
+                        null,
+                        values,
+                        SQLiteDatabase.CONFLICT_REPLACE);
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
     }
 

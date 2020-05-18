@@ -34,4 +34,7 @@ public class C {
 
     //A day in milliseconds
     public static final long DAY = 86400000;
+
+    //An hour in milliseconds
+    public static final long HOUR = 3600000;
 }
