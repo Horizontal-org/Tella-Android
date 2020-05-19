@@ -7,12 +7,15 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
@@ -20,8 +23,10 @@ import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent;
 import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
+import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadPresenter;
+import rs.readahead.washington.mobile.views.adapters.UploadSection;
 import timber.log.Timber;
 
 public class UploadsActivity extends BaseActivity implements
@@ -36,6 +41,7 @@ public class UploadsActivity extends BaseActivity implements
     private TellaFileUploadPresenter presenter;
     private CacheWordDataSource cacheWordDataSource;
     private EventCompositeDisposable disposables;
+    private SectionedRecyclerViewAdapter sectionAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +64,11 @@ public class UploadsActivity extends BaseActivity implements
                 updateProgress(event.getProgress());
             }
         });
+
+        sectionAdapter = new SectionedRecyclerViewAdapter();
+        final RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 5);
+        uploadsRecyclerView.setLayoutManager(mLayoutManager);
+        uploadsRecyclerView.setAdapter(sectionAdapter);
 
         presenter.getFileUploadInstances();
     }
@@ -107,9 +118,15 @@ public class UploadsActivity extends BaseActivity implements
 
     @Override
     public void onGetFileUploadInstancesSuccess(List<FileUploadInstance> instances) {
+        List<MediaFile> files = new ArrayList<>();
+
         for (FileUploadInstance instance : instances) {
             Timber.d("++++ monitoring instance id %s, file uid %s, file name %s", instance.getId(), instance.getMediaFile().getUid(), instance.getMediaFile().getFileName());
+            files.add(instance.getMediaFile());
         }
+
+        sectionAdapter.addSection(new UploadSection(files));
+        sectionAdapter.notifyDataSetChanged();
     }
 
     @Override
