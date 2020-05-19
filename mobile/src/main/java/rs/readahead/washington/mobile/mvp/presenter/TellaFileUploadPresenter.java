@@ -4,14 +4,15 @@ import com.crashlytics.android.Crashlytics;
 
 import java.util.List;
 
+import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import rs.readahead.washington.mobile.data.database.DataSource;
+import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadPresenterContract;
-import rs.readahead.washington.mobile.util.jobs.TellaUploadJob;
-
 
 public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContract.IPresenter {
     private ITellaFileUploadPresenterContract.IView view;
@@ -32,18 +33,19 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
     }
 
     @Override
-    public void scheduleUploadMediaFiles(final List<MediaFile> mediaFiles) {
+    public void getFileUploadInstances()  {
         disposables.add(cacheWordDataSource.getDataSource()
+                .flatMapSingle((Function<DataSource, SingleSource<List<FileUploadInstance>>>) dataSource ->
+                        dataSource.getFileUploadInstances())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMapCompletable(dataSource -> dataSource.scheduleUploadMediaFiles(mediaFiles))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {
-                    TellaUploadJob.scheduleJob();
-                    view.onMediaFilesUploadScheduled();
+                //.doOnSubscribe(disposable -> view.())
+                //.doFinally(() -> view.())
+                .subscribe(filesUploadInstances -> {
+                    view.onGetFileUploadInstancesSuccess(filesUploadInstances);
                 }, throwable -> {
                     Crashlytics.logException(throwable);
-                    view.onMediaFilesUploadScheduleError(throwable);
+                    view.onGetFileUploadInstancesError(throwable);
                 })
         );
     }

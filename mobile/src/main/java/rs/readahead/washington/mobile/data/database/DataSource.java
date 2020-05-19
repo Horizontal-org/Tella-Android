@@ -39,6 +39,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.data.entity.MetadataEntity;
 import rs.readahead.washington.mobile.data.entity.mapper.EntityMapper;
+import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.Metadata;
@@ -322,6 +323,11 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
     public Single<List<MediaFile>> listMediaFiles(final Filter filter, final Sort sort) {
         return Single.fromCallable(() -> getMediaFiles(filter, sort))
+                .compose(applySchedulers());
+    }
+
+    public Single<List<FileUploadInstance>> getFileUploadInstances() {
+        return Single.fromCallable(() -> getFileUploadInstancesDB())
                 .compose(applySchedulers());
     }
 
@@ -1032,7 +1038,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         values.put(D.C_STATUS, status.ordinal());
         values.put(D.C_UPLOADED, uploadedSize);
         values.put(D.C_UPDATED, Util.currentTimestamp());
-        if (retry){
+        if (retry) {
             values.put(D.C_RETRY_COUNT, D.C_RETRY_COUNT + 1);
         }
 
@@ -1107,6 +1113,49 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         if (count != 1) {
             throw new NotFountException();
         }
+    }
+
+    private List<FileUploadInstance> getFileUploadInstancesDB() {
+        List<FileUploadInstance> instances = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_MEDIA_FILE_UPLOAD,
+                    new String[]{
+                            D.C_ID,
+                            D.C_MEDIA_FILE_ID,
+                            D.C_UPDATED,
+                            D.C_STATUS,
+                            D.C_SIZE,
+                            D.C_UPLOADED,
+                            D.C_RETRY_COUNT,
+                            D.C_SET},
+                    null,
+                    null, null, null, null
+            );
+
+            cursor = database.rawQuery(query, null);
+
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                FileUploadInstance instance = cursorToFileUploadInstance(cursor);
+
+                MediaFile mediaFile = getMediaFileFromDb(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_MEDIA_FILE_ID)));
+                instance.setMediaFile(mediaFile);
+
+                instances.add(instance);
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+
+        return instances;
     }
 
     private List<FormMediaFile> getFormInstanceMediaFilesFromDb(long instanceId) {
@@ -1663,6 +1712,20 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         mediaFile.setHash(cursor.getString(cursor.getColumnIndexOrThrow(D.C_HASH)));
 
         return mediaFile;
+    }
+
+    private FileUploadInstance cursorToFileUploadInstance(Cursor cursor) {
+        FileUploadInstance instance = new FileUploadInstance();
+        instance.setId(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID)));
+        int statusOrdinal = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_STATUS));
+        instance.setStatus(UploadStatus.values()[statusOrdinal]);
+        instance.setSize(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_SIZE)));
+        instance.setUploaded(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_UPLOADED)));
+        instance.setUpdated(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_UPDATED)));
+        instance.setRetryCount(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_RETRY_COUNT)));
+        instance.setSet(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_SET)));
+
+        return instance;
     }
 
     private static String createSQLInsert(final String tableName, final String[] columnNames) {

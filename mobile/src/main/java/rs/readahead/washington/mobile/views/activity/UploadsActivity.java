@@ -20,11 +20,12 @@ import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent;
 import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
-import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadsPresenterContract;
-import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadsPresenter;
+import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadPresenterContract;
+import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadPresenter;
+import timber.log.Timber;
 
 public class UploadsActivity extends BaseActivity implements
-        ITellaFileUploadsPresenterContract.IView {
+        ITellaFileUploadPresenterContract.IView {
     @BindView(R.id.uploadsRecyclerView)
     RecyclerView uploadsRecyclerView;
     @BindView(R.id.uploadInfo)
@@ -32,7 +33,7 @@ public class UploadsActivity extends BaseActivity implements
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    private TellaFileUploadsPresenter presenter;
+    private TellaFileUploadPresenter presenter;
     private CacheWordDataSource cacheWordDataSource;
     private EventCompositeDisposable disposables;
 
@@ -43,7 +44,7 @@ public class UploadsActivity extends BaseActivity implements
         setContentView(R.layout.activity_uploads);
         ButterKnife.bind(this);
 
-        presenter = new TellaFileUploadsPresenter(this);
+        presenter = new TellaFileUploadPresenter(this);
 
         setupToolbar();
 
@@ -106,7 +107,9 @@ public class UploadsActivity extends BaseActivity implements
 
     @Override
     public void onGetFileUploadInstancesSuccess(List<FileUploadInstance> instances) {
-
+        for (FileUploadInstance instance : instances) {
+            Timber.d("++++ monitoring instance id %s, file uid %s, file name %s", instance.getId(), instance.getMediaFile().getUid(), instance.getMediaFile().getFileName());
+        }
     }
 
     @Override

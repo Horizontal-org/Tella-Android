@@ -4,16 +4,16 @@ import android.content.Context;
 
 import java.util.List;
 
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 
 public class ITellaFileUploadPresenterContract {
     public interface IView {
+        void onGetFileUploadInstancesSuccess(List<FileUploadInstance> instances);
+        void onGetFileUploadInstancesError(Throwable error);
         Context getContext();
-        void onMediaFilesUploadScheduled();
-        void onMediaFilesUploadScheduleError(Throwable throwable);
     }
 
     public interface IPresenter extends IBasePresenter {
-        void scheduleUploadMediaFiles(List<MediaFile> files);
+        void getFileUploadInstances();
     }
 }

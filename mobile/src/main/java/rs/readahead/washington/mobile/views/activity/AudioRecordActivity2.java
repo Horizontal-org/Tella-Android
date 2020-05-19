@@ -43,10 +43,10 @@ import rs.readahead.washington.mobile.media.AudioRecorder;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IAudioCapturePresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
-import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadPresenterContract;
+import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.AudioCapturePresenter;
 import rs.readahead.washington.mobile.mvp.presenter.MetadataAttacher;
-import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadPresenter;
+import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulePresenter;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.util.StringUtils;
@@ -56,7 +56,7 @@ import rs.readahead.washington.mobile.util.StringUtils;
 public class AudioRecordActivity2 extends MetadataActivity implements
         AudioRecorder.AudioRecordInterface,
         IAudioCapturePresenterContract.IView,
-        ITellaFileUploadPresenterContract.IView,
+        ITellaFileUploadSchedulePresenterContract.IView,
         IMetadataAttachPresenterContract.IView {
     private static final String TIME_FORMAT = "%02d:%02d:%02d";
     public static String RECORDER_MODE = "rm";
@@ -86,7 +86,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     // recording
     private AudioRecorder audioRecorder;
-    private TellaFileUploadPresenter uploadPresenter;
+    private TellaFileUploadSchedulePresenter uploadPresenter;
     private AudioCapturePresenter presenter;
     private MetadataAttacher metadataAttacher;
     private CompositeDisposable disposable = new CompositeDisposable();
@@ -118,7 +118,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         }
 
         presenter = new AudioCapturePresenter(this);
-        uploadPresenter = new TellaFileUploadPresenter(this);
+        uploadPresenter = new TellaFileUploadSchedulePresenter(this);
         metadataAttacher = new MetadataAttacher(this);
 
         notRecording = true;
