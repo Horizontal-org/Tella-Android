@@ -24,6 +24,7 @@ import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent;
 import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadPresenter;
 import rs.readahead.washington.mobile.views.adapters.UploadSection;
@@ -66,8 +67,20 @@ public class UploadsActivity extends BaseActivity implements
         });
 
         sectionAdapter = new SectionedRecyclerViewAdapter();
-        final RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 5);
-        uploadsRecyclerView.setLayoutManager(mLayoutManager);
+        final GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 5);
+
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(final int position) {
+                if (sectionAdapter.getSectionItemViewType(position) == SectionedRecyclerViewAdapter.VIEW_TYPE_HEADER ||
+                        sectionAdapter.getSectionItemViewType(position) == SectionedRecyclerViewAdapter.VIEW_TYPE_FOOTER) {
+                    return 5;
+                }
+                return 1;
+            }
+        });
+
+        uploadsRecyclerView.setLayoutManager(gridLayoutManager);
         uploadsRecyclerView.setAdapter(sectionAdapter);
 
         presenter.getFileUploadInstances();
@@ -119,13 +132,19 @@ public class UploadsActivity extends BaseActivity implements
     @Override
     public void onGetFileUploadInstancesSuccess(List<FileUploadInstance> instances) {
         List<MediaFile> files = new ArrayList<>();
+        long set = instances.get(0).getSet();
 
         for (FileUploadInstance instance : instances) {
-            Timber.d("++++ monitoring instance id %s, file uid %s, file name %s", instance.getId(), instance.getMediaFile().getUid(), instance.getMediaFile().getFileName());
+            if (set != instance.getSet()) {
+                sectionAdapter.addSection(new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), files));
+                sectionAdapter.notifyDataSetChanged();
+
+                set = instance.getSet();
+                files = new ArrayList<>();
+            }
             files.add(instance.getMediaFile());
         }
-
-        sectionAdapter.addSection(new UploadSection(files));
+        sectionAdapter.addSection(new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), files)); // add last set
         sectionAdapter.notifyDataSetChanged();
     }
 
@@ -139,7 +158,7 @@ public class UploadsActivity extends BaseActivity implements
         return this;
     }
 
-    private void updateProgress(long progress){
+    private void updateProgress(long progress) {
         runOnUiThread(() -> uploadInfo.setText(String.valueOf(progress)));
     }
 }

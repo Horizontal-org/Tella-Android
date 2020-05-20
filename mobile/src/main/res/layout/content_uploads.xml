@@ -9,6 +9,7 @@
     android:textDirection="locale"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="rs.readahead.washington.mobile.views.activity.UploadsActivity"
+    android:background="@color/wa_light_gray"
     tools:showIn="@layout/activity_uploads">
 
     <TextView
@@ -27,8 +28,7 @@
         android:orientation="horizontal"
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="none"
-        android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 </RelativeLayout>

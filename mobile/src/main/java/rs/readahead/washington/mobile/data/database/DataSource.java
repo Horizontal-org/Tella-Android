@@ -1133,7 +1133,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                             D.C_RETRY_COUNT,
                             D.C_SET},
                     null,
-                    null, null, null, null
+                    null, null, D.C_SET + " DESC", null
             );
 
             cursor = database.rawQuery(query, null);
