@@ -2,10 +2,13 @@ package rs.readahead.washington.mobile.views.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,17 +26,19 @@ import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent;
 import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
+import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadPresenter;
 import rs.readahead.washington.mobile.views.adapters.UploadSection;
 
 public class UploadsActivity extends BaseActivity implements
+        UploadSection.StopUploadListener,
         ITellaFileUploadPresenterContract.IView {
     @BindView(R.id.uploadsRecyclerView)
     RecyclerView uploadsRecyclerView;
-    @BindView(R.id.uploadInfo)
-    TextView uploadInfo;
+    @BindView(R.id.empty_uploads_text)
+    TextView emptyInfo;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -41,6 +46,8 @@ public class UploadsActivity extends BaseActivity implements
     private CacheWordDataSource cacheWordDataSource;
     private EventCompositeDisposable disposables;
     private SectionedRecyclerViewAdapter sectionAdapter;
+    private AlertDialog alertDialog;
+    private boolean uploadsExist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +107,12 @@ public class UploadsActivity extends BaseActivity implements
             onBackPressed();
             return true;
         }
+
+        if (id == R.id.menu_item_clear) {
+            showClearHistoryDialog();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -114,6 +127,10 @@ public class UploadsActivity extends BaseActivity implements
             disposables.dispose();
         }
 
+        if (alertDialog != null) {
+            alertDialog.dismiss();
+        }
+
         cacheWordDataSource.dispose();
         stopPresenter();
         super.onDestroy();
@@ -126,6 +143,15 @@ public class UploadsActivity extends BaseActivity implements
         presenter.getFileUploadInstances();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (uploadsExist) {
+            getMenuInflater().inflate(R.menu.uploads_menu, menu);
+        }
+
+        return true;
+    }
+
     private void stopPresenter() {
         if (presenter != null) {
             presenter.destroy();
@@ -136,10 +162,17 @@ public class UploadsActivity extends BaseActivity implements
     public void onGetFileUploadInstancesSuccess(List<FileUploadInstance> instances) {
         List<FileUploadInstance> setInstances = new ArrayList<>();
         long set = instances.get(0).getSet();
+        this.uploadsExist = instances.size() > 0;
+
+        if (uploadsExist) {
+            emptyInfo.setVisibility(View.GONE);
+        } else {
+            emptyInfo.setVisibility(View.VISIBLE);
+        }
 
         for (FileUploadInstance instance : instances) {
             if (set != instance.getSet()) {
-                sectionAdapter.addSection(new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), setInstances));
+                sectionAdapter.addSection(new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), setInstances, this));
                 sectionAdapter.notifyDataSetChanged();
 
                 set = instance.getSet();
@@ -147,8 +180,9 @@ public class UploadsActivity extends BaseActivity implements
             }
             setInstances.add(instance);
         }
-        sectionAdapter.addSection(new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), setInstances)); // add last set
+        sectionAdapter.addSection(new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), setInstances, this)); // add last set
         sectionAdapter.notifyDataSetChanged();
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -157,11 +191,43 @@ public class UploadsActivity extends BaseActivity implements
     }
 
     @Override
+    public void onFileUploadInstancesDeleted() {
+        sectionAdapter.removeAllSections();
+        presenter.getFileUploadInstances();
+    }
+
+    @Override
+    public void onFileUploadInstancesDeletionError(Throwable throwable) {
+
+    }
+
+    @Override
     public Context getContext() {
         return this;
     }
 
+    @Override
+    public void clearScheduled() {
+        presenter.deleteFileUploadInstances(ITellaUploadsRepository.UploadStatus.SCHEDULED);
+        runOnUiThread(() -> uploadsRecyclerView.removeAllViews());
+    }
+
+    private void showClearHistoryDialog() {
+        alertDialog = new AlertDialog.Builder(this)
+                .setMessage(R.string.clear_upload_history_dialog)
+                .setPositiveButton(R.string.clear, (dialog, which) -> clearHistory())
+                .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                })
+                .setCancelable(true)
+                .show();
+    }
+
     private void updateProgress(long progress) {
-        runOnUiThread(() -> uploadInfo.setText(String.valueOf(progress)));
+        //runOnUiThread(() -> uploadInfo.setText(String.valueOf(progress)));
+    }
+
+    private void clearHistory() {
+        presenter.deleteFileUploadInstances(ITellaUploadsRepository.UploadStatus.UPLOADED);
+        runOnUiThread(() -> uploadsRecyclerView.removeAllViews());// bad & temporary solution to refresh
     }
 }

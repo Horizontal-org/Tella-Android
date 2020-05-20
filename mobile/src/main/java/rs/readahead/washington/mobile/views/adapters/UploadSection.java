@@ -36,6 +36,7 @@ public class UploadSection extends Section {
     private boolean isUploadFinished;
     private MediaFileUrlLoader glideLoader;
     private long started;
+    private StopUploadListener stopUploadListener;
 
     /**
      * Create a Section object based on {@link SectionParameters}.
@@ -46,7 +47,7 @@ public class UploadSection extends Section {
         super(sectionParameters);
     }
 
-    public UploadSection(Context context, MediaFileHandler mediaFileHandler, @NonNull final List<FileUploadInstance> instances) {
+    public UploadSection(Context context, MediaFileHandler mediaFileHandler, @NonNull final List<FileUploadInstance> instances, @NonNull StopUploadListener stopUploadListener) {
         super(SectionParameters.builder()
                 .itemResourceId(R.layout.upload_section_item)
                 .headerResourceId(R.layout.upload_section_header)
@@ -55,6 +56,7 @@ public class UploadSection extends Section {
                 .failedResourceId(R.layout.upload_empty_layout)
                 .build());
         this.glideLoader = new MediaFileUrlLoader(context.getApplicationContext(), mediaFileHandler);
+        this.stopUploadListener = stopUploadListener;
         this.instances = instances;
         this.numberOfUploads = instances.size();
         this.isUploadFinished = true;
@@ -119,8 +121,11 @@ public class UploadSection extends Section {
         String started = holder.itemView.getContext().getResources().getString(R.string.started) + ' ' + Util.getDateTimeString(this.started);
         if (isUploadFinished) {
             headerHolder.title.setText(holder.itemView.getContext().getResources().getQuantityString(R.plurals.files_uploaded, numberOfUploads, numberOfUploads));
+            headerHolder.clearHistory.setVisibility(View.GONE);
         } else {
             headerHolder.title.setText(holder.itemView.getContext().getResources().getString(R.string.uploading));
+            headerHolder.clearHistory.setVisibility(View.VISIBLE);
+            headerHolder.clearHistory.setOnClickListener(v -> stopUploadListener.clearScheduled());
         }
         headerHolder.startedText.setText(started);
     }
@@ -148,12 +153,14 @@ public class UploadSection extends Section {
     static class HeaderViewHolder extends RecyclerView.ViewHolder {
         final TextView title;
         final TextView startedText;
+        final ImageView clearHistory;
 
         HeaderViewHolder(@NonNull final View view) {
             super(view);
 
             title = view.findViewById(R.id.header_text);
             startedText = view.findViewById(R.id.started_text);
+            clearHistory = view.findViewById(R.id.stop_outlined);
         }
     }
 
@@ -165,5 +172,9 @@ public class UploadSection extends Section {
 
             title = view.findViewById(R.id.footer_text);
         }
+    }
+
+    public interface StopUploadListener {
+        void clearScheduled();
     }
 }

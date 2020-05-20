@@ -12,6 +12,7 @@ import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
+import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadPresenterContract;
 
 public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContract.IPresenter {
@@ -35,18 +36,30 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
     @Override
     public void getFileUploadInstances()  {
         disposables.add(cacheWordDataSource.getDataSource()
-                .flatMapSingle((Function<DataSource, SingleSource<List<FileUploadInstance>>>) dataSource ->
-                        dataSource.getFileUploadInstances())
+                .flatMapSingle((Function<DataSource, SingleSource<List<FileUploadInstance>>>) DataSource::getFileUploadInstances)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 //.doOnSubscribe(disposable -> view.())
                 //.doFinally(() -> view.())
-                .subscribe(filesUploadInstances -> {
-                    view.onGetFileUploadInstancesSuccess(filesUploadInstances);
-                }, throwable -> {
+                .subscribe(filesUploadInstances -> view.onGetFileUploadInstancesSuccess(filesUploadInstances), throwable -> {
                     Crashlytics.logException(throwable);
                     view.onGetFileUploadInstancesError(throwable);
                 })
         );
     }
+
+    @Override
+    public void deleteFileUploadInstances(ITellaUploadsRepository.UploadStatus status) {
+        disposables.add(cacheWordDataSource.getDataSource()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstances(status))
+                .subscribe(() -> view.onFileUploadInstancesDeleted(),
+                        throwable -> {
+                            Crashlytics.logException(throwable);
+                            view.onFileUploadInstancesDeletionError(throwable);
+                        })
+        );
+    }
+
 }

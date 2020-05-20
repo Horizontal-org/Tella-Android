@@ -202,6 +202,14 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
+    public Completable deleteFileUploadInstances(UploadStatus status) {
+        return Completable.fromCallable((Callable<Void>) () -> {
+            dataSource.deleteFileUploadInstancesDB(status);
+            return null;
+        }).compose(applyCompletableSchedulers());
+    }
+
+    @Override
     public Single<List<CollectForm>> listBlankForms() {
         return Single.fromCallable(() -> dataSource.getBlankCollectForms())
                 .compose(applySchedulers());
@@ -1114,6 +1122,11 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         if (count != 1) {
             throw new NotFountException();
         }
+    }
+
+    @SuppressWarnings("MethodOnlyUsedFromInnerClass")
+    private void deleteFileUploadInstancesDB(UploadStatus status){
+        int count = database.delete(D.T_MEDIA_FILE_UPLOAD, D.C_STATUS + " = ?", new String[]{Integer.toString(status.ordinal())});
     }
 
     private List<FileUploadInstance> getFileUploadInstancesDB() {

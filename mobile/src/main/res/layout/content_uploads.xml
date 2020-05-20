@@ -13,17 +13,19 @@
     tools:showIn="@layout/activity_uploads">
 
     <TextView
-        android:id="@+id/uploadInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:text="@string/uploading" />
+        android:id="@+id/empty_uploads_text"
+        android:layout_width="match_parent"
+        android:paddingTop="100dp"
+        android:layout_height="match_parent"
+        android:textAlignment="center"
+        android:textColor="@color/primaryTextColor"
+        android:text="@string/no_information_to_show" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/uploadsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/uploadInfo"
+        android:layout_below="@id/empty_uploads_text"
         android:clipToPadding="false"
         android:orientation="horizontal"
         android:scrollbarStyle="outsideOverlay"
