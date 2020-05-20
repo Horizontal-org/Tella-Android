@@ -8,6 +8,7 @@ public class FileUploadInstance implements Serializable {
     private long id;
     private MediaFile mediaFile;
     private long updated;
+    private long started;
     private UploadStatus status;
     private long size;
     private long uploaded;
@@ -37,6 +38,14 @@ public class FileUploadInstance implements Serializable {
 
     public void setUpdated(long updated) {
         this.updated = updated;
+    }
+
+    public long getStarted() {
+        return started;
+    }
+
+    public void setStarted(long started) {
+        this.started = started;
     }
 
     public UploadStatus getStatus() {

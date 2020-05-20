@@ -36,5 +36,5 @@ public class C {
     public static final long DAY = 86400000;
 
     //An hour in milliseconds
-    public static final long HOUR = 3600000;
+    public static final long UPLOAD_SET_DURATION = 3600000;
 }

@@ -19,17 +19,23 @@ import java.util.List;
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.MediaFileUrlLoader;
 import rs.readahead.washington.mobile.presentation.entity.MediaFileLoaderModel;
-import rs.readahead.washington.mobile.views.interfaces.IGalleryMediaHandler;
-import timber.log.Timber;
+import rs.readahead.washington.mobile.util.Util;
 
 public class UploadSection extends Section {
     private List<MediaFile> files = new ArrayList<>();
+    private List<FileUploadInstance> instances = new ArrayList<>();
+    private int numberOfUploads;
+    private long totalSize;
+    private long totalUploaded;
+    private boolean isUploadFinished;
     private MediaFileUrlLoader glideLoader;
-    private IGalleryMediaHandler galleryMediaHandler;
+    private long started;
 
     /**
      * Create a Section object based on {@link SectionParameters}.
@@ -40,7 +46,7 @@ public class UploadSection extends Section {
         super(sectionParameters);
     }
 
-    public UploadSection(Context context, MediaFileHandler mediaFileHandler, @NonNull final List<MediaFile> files) {
+    public UploadSection(Context context, MediaFileHandler mediaFileHandler, @NonNull final List<FileUploadInstance> instances) {
         super(SectionParameters.builder()
                 .itemResourceId(R.layout.upload_section_item)
                 .headerResourceId(R.layout.upload_section_header)
@@ -49,7 +55,21 @@ public class UploadSection extends Section {
                 .failedResourceId(R.layout.upload_empty_layout)
                 .build());
         this.glideLoader = new MediaFileUrlLoader(context.getApplicationContext(), mediaFileHandler);
-        this.files = files;
+        this.instances = instances;
+        this.numberOfUploads = instances.size();
+        this.isUploadFinished = true;
+        this.started = instances.get(0).getStarted();
+        for (FileUploadInstance instance : instances) {
+            this.files.add(instance.getMediaFile());
+            totalSize += instance.getSize();
+            totalUploaded += instance.getUploaded();
+            if (instance.getStatus() != ITellaUploadsRepository.UploadStatus.UPLOADED) {
+                this.isUploadFinished = false;
+            }
+            if (instance.getStarted() < this.started) {
+                this.started = instance.getStarted();
+            }
+        }
     }
 
     @Override
@@ -96,7 +116,13 @@ public class UploadSection extends Section {
     @Override
     public void onBindHeaderViewHolder(final RecyclerView.ViewHolder holder) {
         final HeaderViewHolder headerHolder = (HeaderViewHolder) holder;
-        headerHolder.title.setText(holder.itemView.getContext().getResources().getString(R.string.uploading));
+        String started = holder.itemView.getContext().getResources().getString(R.string.started) + ' ' + Util.getDateTimeString(this.started);
+        if (isUploadFinished) {
+            headerHolder.title.setText(holder.itemView.getContext().getResources().getQuantityString(R.plurals.files_uploaded, numberOfUploads, numberOfUploads));
+        } else {
+            headerHolder.title.setText(holder.itemView.getContext().getResources().getString(R.string.uploading));
+        }
+        headerHolder.startedText.setText(started);
     }
 
     @Override
@@ -121,11 +147,13 @@ public class UploadSection extends Section {
 
     static class HeaderViewHolder extends RecyclerView.ViewHolder {
         final TextView title;
+        final TextView startedText;
 
         HeaderViewHolder(@NonNull final View view) {
             super(view);
 
             title = view.findViewById(R.id.header_text);
+            startedText = view.findViewById(R.id.started_text);
         }
     }
 

@@ -1004,7 +1004,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 lastSet = cursor.getLong(cursor.getColumnIndexOrThrow("MAX (" + D.C_SET + ")"));
             }
 
-            if (Util.currentTimestamp() - lastUpdate > C.HOUR) {
+            if (Util.currentTimestamp() - lastUpdate > C.UPLOAD_SET_DURATION) {
                 newSet = lastSet + 1;
             } else {
                 newSet = lastSet;
@@ -1014,6 +1014,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 ContentValues values = new ContentValues();
                 values.put(D.C_MEDIA_FILE_ID, mediaFile.getId());
                 values.put(D.C_UPDATED, Util.currentTimestamp());
+                values.put(D.C_CREATED, Util.currentTimestamp());
                 values.put(D.C_STATUS, UploadStatus.SCHEDULED.ordinal());
                 values.put(D.C_SIZE, mediaFile.getSize());
                 values.put(D.C_SET, newSet);
@@ -1127,6 +1128,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                             D.C_ID,
                             D.C_MEDIA_FILE_ID,
                             D.C_UPDATED,
+                            D.C_CREATED,
                             D.C_STATUS,
                             D.C_SIZE,
                             D.C_UPLOADED,
@@ -1722,6 +1724,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         instance.setSize(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_SIZE)));
         instance.setUploaded(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_UPLOADED)));
         instance.setUpdated(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_UPDATED)));
+        instance.setStarted(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_CREATED)));
         instance.setRetryCount(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_RETRY_COUNT)));
         instance.setSet(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_SET)));
 

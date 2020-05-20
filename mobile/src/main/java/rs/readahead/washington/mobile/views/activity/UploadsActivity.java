@@ -23,12 +23,10 @@ import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent;
 import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadPresenter;
 import rs.readahead.washington.mobile.views.adapters.UploadSection;
-import timber.log.Timber;
 
 public class UploadsActivity extends BaseActivity implements
         ITellaFileUploadPresenterContract.IView {
@@ -82,8 +80,6 @@ public class UploadsActivity extends BaseActivity implements
 
         uploadsRecyclerView.setLayoutManager(gridLayoutManager);
         uploadsRecyclerView.setAdapter(sectionAdapter);
-
-        presenter.getFileUploadInstances();
     }
 
     private void setupToolbar() {
@@ -123,6 +119,13 @@ public class UploadsActivity extends BaseActivity implements
         super.onDestroy();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sectionAdapter.removeAllSections();
+        presenter.getFileUploadInstances();
+    }
+
     private void stopPresenter() {
         if (presenter != null) {
             presenter.destroy();
@@ -131,20 +134,20 @@ public class UploadsActivity extends BaseActivity implements
 
     @Override
     public void onGetFileUploadInstancesSuccess(List<FileUploadInstance> instances) {
-        List<MediaFile> files = new ArrayList<>();
+        List<FileUploadInstance> setInstances = new ArrayList<>();
         long set = instances.get(0).getSet();
 
         for (FileUploadInstance instance : instances) {
             if (set != instance.getSet()) {
-                sectionAdapter.addSection(new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), files));
+                sectionAdapter.addSection(new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), setInstances));
                 sectionAdapter.notifyDataSetChanged();
 
                 set = instance.getSet();
-                files = new ArrayList<>();
+                setInstances = new ArrayList<>();
             }
-            files.add(instance.getMediaFile());
+            setInstances.add(instance);
         }
-        sectionAdapter.addSection(new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), files)); // add last set
+        sectionAdapter.addSection(new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), setInstances)); // add last set
         sectionAdapter.notifyDataSetChanged();
     }
 
