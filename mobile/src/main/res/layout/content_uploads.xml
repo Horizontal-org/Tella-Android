@@ -15,7 +15,7 @@
     <TextView
         android:id="@+id/empty_uploads_text"
         android:layout_width="match_parent"
-        android:paddingTop="100dp"
+        android:paddingTop="120dp"
         android:layout_height="match_parent"
         android:textAlignment="center"
         android:textColor="@color/primaryTextColor"

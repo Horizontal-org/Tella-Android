@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.github.luizgrp.sectionedrecyclerviewadapter.SectionAdapter;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
@@ -33,7 +35,7 @@ import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadPresenter;
 import rs.readahead.washington.mobile.views.adapters.UploadSection;
 
 public class UploadsActivity extends BaseActivity implements
-        UploadSection.StopUploadListener,
+        UploadSection.UploadSectionListener,
         ITellaFileUploadPresenterContract.IView {
     @BindView(R.id.uploadsRecyclerView)
     RecyclerView uploadsRecyclerView;
@@ -45,7 +47,7 @@ public class UploadsActivity extends BaseActivity implements
     private TellaFileUploadPresenter presenter;
     private CacheWordDataSource cacheWordDataSource;
     private EventCompositeDisposable disposables;
-    private SectionedRecyclerViewAdapter sectionAdapter;
+    private SectionedRecyclerViewAdapter sectionedAdapter;
     private AlertDialog alertDialog;
     private boolean uploadsExist;
 
@@ -71,14 +73,14 @@ public class UploadsActivity extends BaseActivity implements
             }
         });
 
-        sectionAdapter = new SectionedRecyclerViewAdapter();
+        sectionedAdapter = new SectionedRecyclerViewAdapter();
         final GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 5);
 
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(final int position) {
-                if (sectionAdapter.getSectionItemViewType(position) == SectionedRecyclerViewAdapter.VIEW_TYPE_HEADER ||
-                        sectionAdapter.getSectionItemViewType(position) == SectionedRecyclerViewAdapter.VIEW_TYPE_FOOTER) {
+                if (sectionedAdapter.getSectionItemViewType(position) == SectionedRecyclerViewAdapter.VIEW_TYPE_HEADER ||
+                        sectionedAdapter.getSectionItemViewType(position) == SectionedRecyclerViewAdapter.VIEW_TYPE_FOOTER) {
                     return 5;
                 }
                 return 1;
@@ -86,7 +88,7 @@ public class UploadsActivity extends BaseActivity implements
         });
 
         uploadsRecyclerView.setLayoutManager(gridLayoutManager);
-        uploadsRecyclerView.setAdapter(sectionAdapter);
+        uploadsRecyclerView.setAdapter(sectionedAdapter);
     }
 
     private void setupToolbar() {
@@ -139,7 +141,7 @@ public class UploadsActivity extends BaseActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        sectionAdapter.removeAllSections();
+        sectionedAdapter.removeAllSections();
         presenter.getFileUploadInstances();
     }
 
@@ -172,16 +174,16 @@ public class UploadsActivity extends BaseActivity implements
 
         for (FileUploadInstance instance : instances) {
             if (set != instance.getSet()) {
-                sectionAdapter.addSection(new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), setInstances, this));
-                sectionAdapter.notifyDataSetChanged();
+                sectionedAdapter.addSection(new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), setInstances, this));
+                sectionedAdapter.notifyDataSetChanged();
 
                 set = instance.getSet();
                 setInstances = new ArrayList<>();
             }
             setInstances.add(instance);
         }
-        sectionAdapter.addSection(new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), setInstances, this)); // add last set
-        sectionAdapter.notifyDataSetChanged();
+        sectionedAdapter.addSection(new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), setInstances, this)); // add last set
+        sectionedAdapter.notifyDataSetChanged();
         invalidateOptionsMenu();
     }
 
@@ -192,7 +194,7 @@ public class UploadsActivity extends BaseActivity implements
 
     @Override
     public void onFileUploadInstancesDeleted() {
-        sectionAdapter.removeAllSections();
+        sectionedAdapter.removeAllSections();
         presenter.getFileUploadInstances();
     }
 
@@ -210,6 +212,28 @@ public class UploadsActivity extends BaseActivity implements
     public void clearScheduled() {
         presenter.deleteFileUploadInstances(ITellaUploadsRepository.UploadStatus.SCHEDULED);
         runOnUiThread(() -> uploadsRecyclerView.removeAllViews());
+    }
+
+    @Override
+    public void onHeaderRootViewClicked(@NonNull UploadSection section) {
+        final SectionAdapter sectionAdapter = sectionedAdapter.getAdapterForSection(section);
+
+        // store info of current section state before changing its state
+        final boolean wasExpanded = section.isExpanded();
+        final int previousItemsTotal = section.getContentItemsTotal();
+
+        section.setExpanded(!wasExpanded);
+        sectionAdapter.notifyHeaderChanged();
+
+        if (wasExpanded) {
+            sectionAdapter.notifyItemRangeRemoved(0, previousItemsTotal);
+        } else {
+            sectionAdapter.notifyAllItemsInserted();
+        }
+    }
+
+    @Override
+    public void onItemRootViewClicked(@NonNull UploadSection section, int itemAdapterPosition) {
     }
 
     private void showClearHistoryDialog() {
