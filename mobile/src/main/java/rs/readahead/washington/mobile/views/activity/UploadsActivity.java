@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.views.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +34,7 @@ import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadPresenter;
 import rs.readahead.washington.mobile.views.adapters.UploadSection;
+
 
 public class UploadsActivity extends BaseActivity implements
         UploadSection.UploadSectionListener,
@@ -174,7 +176,7 @@ public class UploadsActivity extends BaseActivity implements
 
         for (FileUploadInstance instance : instances) {
             if (set != instance.getSet()) {
-                sectionedAdapter.addSection(new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), setInstances, this));
+                sectionedAdapter.addSection(new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), setInstances, this, set));
                 sectionedAdapter.notifyDataSetChanged();
 
                 set = instance.getSet();
@@ -182,7 +184,7 @@ public class UploadsActivity extends BaseActivity implements
             }
             setInstances.add(instance);
         }
-        sectionedAdapter.addSection(new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), setInstances, this)); // add last set
+        sectionedAdapter.addSection(new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), setInstances, this, set)); // add last set
         sectionedAdapter.notifyDataSetChanged();
         invalidateOptionsMenu();
     }
@@ -215,6 +217,11 @@ public class UploadsActivity extends BaseActivity implements
     }
 
     @Override
+    public void showUploadInformation(long set) {
+        startUploadInformationActivity(set);
+    }
+
+    @Override
     public void onHeaderRootViewClicked(@NonNull UploadSection section) {
         final SectionAdapter sectionAdapter = sectionedAdapter.getAdapterForSection(section);
 
@@ -234,6 +241,12 @@ public class UploadsActivity extends BaseActivity implements
 
     @Override
     public void onItemRootViewClicked(@NonNull UploadSection section, int itemAdapterPosition) {
+    }
+
+    private void startUploadInformationActivity(long set) {
+        Intent intent = new Intent(this, UploadInformationActivity.class);
+        intent.putExtra(UploadInformationActivity.SECTION_SET, set);
+        startActivity(intent);
     }
 
     private void showClearHistoryDialog() {

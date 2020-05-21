@@ -37,10 +37,11 @@ public class UploadSection extends Section {
     private boolean expanded = false;
     private MediaFileUrlLoader glideLoader;
     private long started;
+    private long set;
     private UploadSectionListener uploadSectionListener;
     private FooterViewHolder footer;
 
-    public UploadSection(Context context, MediaFileHandler mediaFileHandler, @NonNull final List<FileUploadInstance> instances, @NonNull UploadSectionListener uploadSectionListener) {
+    public UploadSection(Context context, MediaFileHandler mediaFileHandler, @NonNull final List<FileUploadInstance> instances, @NonNull UploadSectionListener uploadSectionListener, Long set) {
         super(SectionParameters.builder()
                 .itemResourceId(R.layout.upload_section_item)
                 .headerResourceId(R.layout.upload_section_header)
@@ -51,6 +52,7 @@ public class UploadSection extends Section {
         this.glideLoader = new MediaFileUrlLoader(context.getApplicationContext(), mediaFileHandler);
         this.uploadSectionListener = uploadSectionListener;
         this.instances = instances;
+        this.set = set;
         this.numberOfUploads = instances.size();
         this.isUploadFinished = true;
         this.started = instances.get(0).getStarted();
@@ -136,6 +138,7 @@ public class UploadSection extends Section {
         final FooterViewHolder footerHolder = (FooterViewHolder) holder;
         this.footer = footerHolder;
         footerHolder.fTitle.setText(holder.itemView.getContext().getResources().getString(R.string.more_details));
+        footerHolder.fTitle.setOnClickListener(v -> uploadSectionListener.showUploadInformation(this.set));
         footerHolder.fTitle.setVisibility(View.GONE);
     }
 
@@ -186,6 +189,7 @@ public class UploadSection extends Section {
 
     public interface UploadSectionListener {
         void clearScheduled();
+        void showUploadInformation(final long set);
         void onHeaderRootViewClicked(@NonNull final UploadSection section);
         void onItemRootViewClicked(@NonNull final UploadSection section, final int itemAdapterPosition);
     }

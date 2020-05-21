@@ -314,8 +314,23 @@
         <activity
             android:name=".views.activity.UploadsActivity"
             android:label="@string/uploads"
+            android:parentActivityName=".views.activity.MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="rs.readahead.washington.mobile.views.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".views.activity.UploadInformationActivity"
+            android:label="@string/upload_information"
+            android:parentActivityName=".views.activity.UploadsActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="rs.readahead.washington.mobile.views.activity.UploadsActivity" />
+        </activity>
         <activity
             android:name=".views.activity.MetadataHelpActivity"
             android:label="@string/metadata_help"
