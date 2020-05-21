@@ -89,7 +89,7 @@ public class UploadSection extends Section {
         final MediaFile mediaFile = files.get(position);
         UploadViewHolder holder = (UploadViewHolder) vholder;
 
-        if (mediaFile.getType() == MediaFile.Type.IMAGE) {
+        if (mediaFile.getType() == MediaFile.Type.IMAGE || mediaFile.getType() == MediaFile.Type.VIDEO) {
             Glide.with(holder.mediaView.getContext())
                     .using(glideLoader)
                     .load(new MediaFileLoaderModel(mediaFile, MediaFileLoaderModel.LoadType.THUMBNAIL))
@@ -100,13 +100,6 @@ public class UploadSection extends Section {
             Drawable drawable = VectorDrawableCompat.create(holder.itemView.getContext().getResources(),
                     R.drawable.ic_mic_gray, null);
             holder.mediaView.setImageDrawable(drawable);
-        } else if (mediaFile.getType() == MediaFile.Type.VIDEO) {
-            Glide.with(holder.mediaView.getContext())
-                    .using(glideLoader)
-                    .load(new MediaFileLoaderModel(mediaFile, MediaFileLoaderModel.LoadType.THUMBNAIL))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(holder.mediaView);
         }
     }
 
@@ -118,7 +111,7 @@ public class UploadSection extends Section {
     @Override
     public void onBindHeaderViewHolder(final RecyclerView.ViewHolder holder) {
         final HeaderViewHolder headerHolder = (HeaderViewHolder) holder;
-        String started = holder.itemView.getContext().getResources().getString(R.string.started) + ' ' + Util.getDateTimeString(this.started);
+        String started = holder.itemView.getContext().getResources().getString(R.string.started) + ' ' + Util.getDateTimeString(this.started, "dd/MM/yyyy h:mm a");
         if (isUploadFinished) {
             headerHolder.title.setText(holder.itemView.getContext().getResources().getQuantityString(R.plurals.files_uploaded, numberOfUploads, numberOfUploads));
             headerHolder.clearHistory.setVisibility(View.GONE);
