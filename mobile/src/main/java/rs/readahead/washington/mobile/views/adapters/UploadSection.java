@@ -13,7 +13,6 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section;
@@ -28,7 +27,6 @@ import rs.readahead.washington.mobile.presentation.entity.MediaFileLoaderModel;
 import rs.readahead.washington.mobile.util.Util;
 
 public class UploadSection extends Section {
-    private List<MediaFile> files = new ArrayList<>();
     private List<FileUploadInstance> instances;
     private int numberOfUploads;
     private long totalSize;
@@ -57,7 +55,6 @@ public class UploadSection extends Section {
         this.isUploadFinished = true;
         this.started = instances.get(0).getStarted();
         for (FileUploadInstance instance : instances) {
-            this.files.add(instance.getMediaFile());
             totalSize += instance.getSize();
             totalUploaded += instance.getUploaded();
             if (instance.getStatus() != ITellaUploadsRepository.UploadStatus.UPLOADED) {
@@ -81,10 +78,13 @@ public class UploadSection extends Section {
 
     @Override
     public void onBindItemViewHolder(final RecyclerView.ViewHolder vholder, int position) {
-        final MediaFile mediaFile = files.get(position);
+        final MediaFile mediaFile = instances.get(position).getMediaFile();
         UploadViewHolder itemHolder = (UploadViewHolder) vholder;
 
-        if (mediaFile.getType() == MediaFile.Type.IMAGE || mediaFile.getType() == MediaFile.Type.VIDEO) {
+        if (mediaFile == null) {
+            itemHolder.mediaView.setImageDrawable(itemHolder.mediaView.getContext().getResources().getDrawable(R.drawable.uploaded_empty_file));
+            itemHolder.mediaView.setAlpha((float) 0.5);
+        } else if (mediaFile.getType() == MediaFile.Type.IMAGE || mediaFile.getType() == MediaFile.Type.VIDEO) {
             Glide.with(itemHolder.mediaView.getContext())
                     .using(glideLoader)
                     .load(new MediaFileLoaderModel(mediaFile, MediaFileLoaderModel.LoadType.THUMBNAIL))

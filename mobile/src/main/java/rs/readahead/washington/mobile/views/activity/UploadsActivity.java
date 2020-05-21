@@ -52,6 +52,7 @@ public class UploadsActivity extends BaseActivity implements
     private SectionedRecyclerViewAdapter sectionedAdapter;
     private AlertDialog alertDialog;
     private boolean uploadsExist;
+    private final int spanCount = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,14 +77,14 @@ public class UploadsActivity extends BaseActivity implements
         });
 
         sectionedAdapter = new SectionedRecyclerViewAdapter();
-        final GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 5);
+        final GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), spanCount);
 
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(final int position) {
                 if (sectionedAdapter.getSectionItemViewType(position) == SectionedRecyclerViewAdapter.VIEW_TYPE_HEADER ||
                         sectionedAdapter.getSectionItemViewType(position) == SectionedRecyclerViewAdapter.VIEW_TYPE_FOOTER) {
-                    return 5;
+                    return spanCount;
                 }
                 return 1;
             }

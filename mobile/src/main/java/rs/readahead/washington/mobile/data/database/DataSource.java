@@ -1155,10 +1155,12 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 FileUploadInstance instance = cursorToFileUploadInstance(cursor);
-
-                MediaFile mediaFile = getMediaFileFromDb(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_MEDIA_FILE_ID)));
-                instance.setMediaFile(mediaFile);
-
+                try {
+                    MediaFile mediaFile = getMediaFileFromDb(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_MEDIA_FILE_ID)));
+                    instance.setMediaFile(mediaFile);
+                } catch (NotFountException e) {
+                    Timber.d(e, getClass().getName());
+                }
                 instances.add(instance);
             }
         } catch (Exception e) {
