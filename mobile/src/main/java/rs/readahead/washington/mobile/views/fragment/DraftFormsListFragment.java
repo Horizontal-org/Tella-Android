@@ -34,7 +34,6 @@ public class DraftFormsListFragment extends FormListFragment implements
     private CollectDraftFormInstanceRecycleViewAdapter adapter;
     private CollectFormInstanceListPresenter presenter;
 
-
     public static DraftFormsListFragment newInstance() {
         return new DraftFormsListFragment();
     }

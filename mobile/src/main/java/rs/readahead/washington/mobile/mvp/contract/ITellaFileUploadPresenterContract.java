@@ -18,6 +18,9 @@ public class ITellaFileUploadPresenterContract {
 
     public interface IPresenter extends IBasePresenter {
         void getFileUploadInstances();
+        void getFileUploadInstances(long set);
+        void deleteFileUploadInstance(long id);
+        void deleteFileUploadInstances(long set);
         void deleteFileUploadInstances(ITellaUploadsRepository.UploadStatus status);
     }
 }

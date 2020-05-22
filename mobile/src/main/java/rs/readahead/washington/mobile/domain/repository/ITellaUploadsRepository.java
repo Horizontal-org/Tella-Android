@@ -11,6 +11,8 @@ public interface ITellaUploadsRepository {
     Single<List<MediaFile>> getUploadMediaFiles(UploadStatus status);
     Completable setUploadStatus(long mediaFileId, UploadStatus status, long uploadedSize, boolean retry);
     Completable deleteFileUploadInstances(UploadStatus status);
+    Completable deleteFileUploadInstances(long set);
+    Completable deleteFileUploadInstance(long id);
 
     enum UploadStatus {
         UNKNOWN,

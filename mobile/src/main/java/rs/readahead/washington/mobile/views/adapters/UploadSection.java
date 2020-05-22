@@ -38,6 +38,7 @@ public class UploadSection extends Section {
     private long set;
     private UploadSectionListener uploadSectionListener;
     private FooterViewHolder footer;
+    private Context context;
 
     public UploadSection(Context context, MediaFileHandler mediaFileHandler, @NonNull final List<FileUploadInstance> instances, @NonNull UploadSectionListener uploadSectionListener, Long set) {
         super(SectionParameters.builder()
@@ -47,6 +48,7 @@ public class UploadSection extends Section {
                 .emptyResourceId(R.layout.upload_empty_layout)
                 .failedResourceId(R.layout.upload_empty_layout)
                 .build());
+        this.context = context;
         this.glideLoader = new MediaFileUrlLoader(context.getApplicationContext(), mediaFileHandler);
         this.uploadSectionListener = uploadSectionListener;
         this.instances = instances;
@@ -82,7 +84,7 @@ public class UploadSection extends Section {
         UploadViewHolder itemHolder = (UploadViewHolder) vholder;
 
         if (mediaFile == null) {
-            itemHolder.mediaView.setImageDrawable(itemHolder.mediaView.getContext().getResources().getDrawable(R.drawable.uploaded_empty_file));
+            itemHolder.mediaView.setImageDrawable(context.getResources().getDrawable(R.drawable.uploaded_empty_file));
             itemHolder.mediaView.setAlpha((float) 0.5);
         } else if (mediaFile.getType() == MediaFile.Type.IMAGE || mediaFile.getType() == MediaFile.Type.VIDEO) {
             Glide.with(itemHolder.mediaView.getContext())
@@ -92,7 +94,7 @@ public class UploadSection extends Section {
                     .skipMemoryCache(true)
                     .into(itemHolder.mediaView);
         } else if (mediaFile.getType() == MediaFile.Type.AUDIO) {
-            Drawable drawable = VectorDrawableCompat.create(itemHolder.itemView.getContext().getResources(),
+            Drawable drawable = VectorDrawableCompat.create(context.getResources(),
                     R.drawable.ic_mic_gray, null);
             itemHolder.mediaView.setImageDrawable(drawable);
         }
@@ -110,16 +112,17 @@ public class UploadSection extends Section {
     @Override
     public void onBindHeaderViewHolder(final RecyclerView.ViewHolder holder) {
         final HeaderViewHolder headerHolder = (HeaderViewHolder) holder;
-        String started = holder.itemView.getContext().getResources().getString(R.string.started) + ": " + Util.getDateTimeString(this.started, "dd/MM/yyyy h:mm a");
+
         if (isUploadFinished) {
-            headerHolder.title.setText(holder.itemView.getContext().getResources().getQuantityString(R.plurals.files_uploaded, numberOfUploads, numberOfUploads));
+            headerHolder.title.setText(context.getResources().getQuantityString(R.plurals.files_uploaded, numberOfUploads, numberOfUploads));
             headerHolder.clearHistory.setVisibility(View.GONE);
         } else {
-            headerHolder.title.setText(holder.itemView.getContext().getResources().getString(R.string.uploading));
+            headerHolder.title.setText(context.getResources().getString(R.string.uploading));
             headerHolder.clearHistory.setVisibility(View.VISIBLE);
             headerHolder.clearHistory.setOnClickListener(v -> uploadSectionListener.clearScheduled());
         }
-        headerHolder.startedText.setText(started);
+
+        headerHolder.startedText.setText(String.format("%s: %s", context.getResources().getString(R.string.started), Util.getDateTimeString(this.started, "dd/MM/yyyy h:mm a")));
 
         headerHolder.itemView.setOnClickListener(v -> {
                     uploadSectionListener.onHeaderRootViewClicked(this);
@@ -137,7 +140,7 @@ public class UploadSection extends Section {
     public void onBindFooterViewHolder(final RecyclerView.ViewHolder holder) {
         final FooterViewHolder footerHolder = (FooterViewHolder) holder;
         this.footer = footerHolder;
-        footerHolder.fTitle.setText(holder.itemView.getContext().getResources().getString(R.string.more_details));
+        footerHolder.fTitle.setText(context.getResources().getString(R.string.more_details));
         footerHolder.fTitle.setOnClickListener(v -> uploadSectionListener.showUploadInformation(this.set));
         footerHolder.fTitle.setVisibility(View.GONE);
     }
@@ -176,7 +179,7 @@ public class UploadSection extends Section {
     }
 
     private void toggleFooter() {
-        footer.fTitle.setVisibility(footer.fTitle.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+        footer.fTitle.setVisibility(isExpanded() ? View.VISIBLE : View.GONE);
     }
 
     public boolean isExpanded() {

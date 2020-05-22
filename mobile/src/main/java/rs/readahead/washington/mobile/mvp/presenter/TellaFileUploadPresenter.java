@@ -39,12 +39,51 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
                 .flatMapSingle((Function<DataSource, SingleSource<List<FileUploadInstance>>>) DataSource::getFileUploadInstances)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                //.doOnSubscribe(disposable -> view.())
-                //.doFinally(() -> view.())
                 .subscribe(filesUploadInstances -> view.onGetFileUploadInstancesSuccess(filesUploadInstances), throwable -> {
                     Crashlytics.logException(throwable);
                     view.onGetFileUploadInstancesError(throwable);
                 })
+        );
+    }
+
+    @Override
+    public void getFileUploadInstances(long set) {
+        disposables.add(cacheWordDataSource.getDataSource()
+                .flatMapSingle((Function<DataSource, SingleSource<List<FileUploadInstance>>>) dataSource -> dataSource.getFileUploadInstances(set))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(filesUploadInstances -> view.onGetFileUploadInstancesSuccess(filesUploadInstances), throwable -> {
+                    Crashlytics.logException(throwable);
+                    view.onGetFileUploadInstancesError(throwable);
+                })
+        );
+    }
+
+    @Override
+    public void deleteFileUploadInstance(long id) {
+        disposables.add(cacheWordDataSource.getDataSource()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstance(id))
+                .subscribe(() -> view.onFileUploadInstancesDeleted(),
+                        throwable -> {
+                            Crashlytics.logException(throwable);
+                            view.onFileUploadInstancesDeletionError(throwable);
+                        })
+        );
+    }
+
+    @Override
+    public void deleteFileUploadInstances(long set) {
+        disposables.add(cacheWordDataSource.getDataSource()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstances(set))
+                .subscribe(() -> view.onFileUploadInstancesDeleted(),
+                        throwable -> {
+                            Crashlytics.logException(throwable);
+                            view.onFileUploadInstancesDeletionError(throwable);
+                        })
         );
     }
 

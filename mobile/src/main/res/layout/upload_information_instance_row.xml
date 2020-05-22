@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textDirection="locale">
+
+    <LinearLayout
+        android:id="@+id/instanceRow"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:weightSum="6"
+        android:layout_gravity="center_vertical"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/mediaView"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:contentDescription="@null"
+            android:padding="2dp" />
+
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="4.3"
+            android:padding="6dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/name"
+                android:visibility="gone"
+                style="@style/LineTextViewBlack"
+                android:ellipsize="end"
+                android:lines="1" />
+
+            <TextView
+                android:id="@+id/type"
+                style="@style/LineTextViewGray"
+                android:ellipsize="end"
+                android:textSize="12sp"
+                android:lines="1"
+                android:paddingTop="2dp" />
+
+            <TextView
+                android:id="@+id/size"
+                style="@style/LineTextViewGray"
+                android:ellipsize="end"
+                android:textSize="12sp"
+                android:lines="1"
+                android:paddingTop="2dp" />
+
+            <TextView
+                android:id="@+id/hash"
+                style="@style/LineTextViewGray"
+                android:ellipsize="end"
+                android:textSize="12sp"
+                android:lines="2"
+                android:paddingTop="2dp" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/uploadIndicator"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="0.7"
+            android:alpha="0.5"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:contentDescription="@null"
+            android:focusable="true"
+            android:padding="6dp"
+            android:src="@drawable/ic_error" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_gravity="bottom"
+        android:background="@color/wa_gray" />
+</FrameLayout>

@@ -402,4 +402,5 @@
     <string name="date_started">Date started</string>
     <string name="clear">Clear</string>
     <string name="no_information_to_show">There is no information to show here.</string>
+    <string name="completed">Completed</string>
 </resources>

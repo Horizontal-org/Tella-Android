@@ -210,6 +210,22 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
+    public Completable deleteFileUploadInstances(long set) {
+        return Completable.fromCallable((Callable<Void>) () -> {
+            dataSource.deleteFileUploadInstancesDB(set);
+            return null;
+        }).compose(applyCompletableSchedulers());
+    }
+
+    @Override
+    public Completable deleteFileUploadInstance(long id) {
+        return Completable.fromCallable((Callable<Void>) () -> {
+            dataSource.deleteFileUploadInstanceDB(id);
+            return null;
+        }).compose(applyCompletableSchedulers());
+    }
+
+    @Override
     public Single<List<CollectForm>> listBlankForms() {
         return Single.fromCallable(() -> dataSource.getBlankCollectForms())
                 .compose(applySchedulers());
@@ -335,7 +351,12 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     public Single<List<FileUploadInstance>> getFileUploadInstances() {
-        return Single.fromCallable(() -> getFileUploadInstancesDB())
+        return Single.fromCallable(this::getFileUploadInstancesDB)
+                .compose(applySchedulers());
+    }
+
+    public Single<List<FileUploadInstance>> getFileUploadInstances(long set) {
+        return Single.fromCallable(() -> getFileUploadInstancesDB(set))
                 .compose(applySchedulers());
     }
 
@@ -1129,6 +1150,16 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         int count = database.delete(D.T_MEDIA_FILE_UPLOAD, D.C_STATUS + " = ?", new String[]{Integer.toString(status.ordinal())});
     }
 
+    @SuppressWarnings("MethodOnlyUsedFromInnerClass")
+    private void deleteFileUploadInstancesDB(Long set){
+        int count = database.delete(D.T_MEDIA_FILE_UPLOAD, D.C_SET + " = ?", new String[]{Long.toString(set)});
+    }
+
+    @SuppressWarnings("MethodOnlyUsedFromInnerClass")
+    private void deleteFileUploadInstanceDB(Long id){
+        int count = database.delete(D.T_MEDIA_FILE_UPLOAD, D.C_ID + " = ?", new String[]{Long.toString(id)});
+    }
+
     private List<FileUploadInstance> getFileUploadInstancesDB() {
         List<FileUploadInstance> instances = new ArrayList<>();
         Cursor cursor = null;
@@ -1171,6 +1202,50 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             }
         }
 
+        return instances;
+    }
+
+    private List<FileUploadInstance> getFileUploadInstancesDB(long set) {
+        List<FileUploadInstance> instances = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_MEDIA_FILE_UPLOAD,
+                    new String[]{
+                            D.C_ID,
+                            D.C_MEDIA_FILE_ID,
+                            D.C_UPDATED,
+                            D.C_CREATED,
+                            D.C_STATUS,
+                            D.C_SIZE,
+                            D.C_UPLOADED,
+                            D.C_RETRY_COUNT,
+                            D.C_SET},
+                    D.C_SET + "= ?",
+                    null, null, D.C_SET + " DESC", null
+            );
+
+            cursor = database.rawQuery(query,  new String[]{Long.toString(set)});
+
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                FileUploadInstance instance = cursorToFileUploadInstance(cursor);
+                try {
+                    MediaFile mediaFile = getMediaFileFromDb(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_MEDIA_FILE_ID)));
+                    instance.setMediaFile(mediaFile);
+                } catch (NotFountException e) {
+                    Timber.d(e, getClass().getName());
+                }
+                instances.add(instance);
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
 
         return instances;
     }
