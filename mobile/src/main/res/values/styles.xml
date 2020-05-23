@@ -311,6 +311,11 @@
         <item name="android:textColor">@color/wa_dialog_gray</item>
     </style>
 
+    <style name="UploadInfoTextViewGray" parent="@style/LineTextView">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/wa_gray</item>
+    </style>
+
     <style name="LineTextView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

@@ -7,7 +7,7 @@
     <LinearLayout
         android:id="@+id/instanceRow"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="110dp"
         android:weightSum="6"
         android:layout_gravity="center_vertical"
         android:padding="8dp">
@@ -37,26 +37,22 @@
 
             <TextView
                 android:id="@+id/type"
-                style="@style/LineTextViewGray"
+                style="@style/UploadInfoTextViewGray"
                 android:ellipsize="end"
-                android:textSize="12sp"
                 android:lines="1"
                 android:paddingTop="2dp" />
 
             <TextView
                 android:id="@+id/size"
-                style="@style/LineTextViewGray"
+                style="@style/UploadInfoTextViewGray"
                 android:ellipsize="end"
-                android:textSize="12sp"
                 android:lines="1"
                 android:paddingTop="2dp" />
 
             <TextView
                 android:id="@+id/hash"
-                style="@style/LineTextViewGray"
+                style="@style/UploadInfoTextViewGray"
                 android:ellipsize="end"
-                android:textSize="12sp"
-                android:lines="2"
                 android:paddingTop="2dp" />
 
         </LinearLayout>

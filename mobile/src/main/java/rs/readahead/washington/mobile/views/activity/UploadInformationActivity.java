@@ -182,7 +182,7 @@ public class UploadInformationActivity extends BaseActivity implements
 
     @Override
     public void onFileUploadInstancesDeleted() {
-
+        presenter.getFileUploadInstances(set);
     }
 
     @Override

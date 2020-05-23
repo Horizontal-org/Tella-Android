@@ -28,7 +28,6 @@ import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.MediaFileUrlLoader;
 import rs.readahead.washington.mobile.presentation.entity.MediaFileLoaderModel;
 import rs.readahead.washington.mobile.util.FileUtil;
-import timber.log.Timber;
 
 public class UploadInformationRecycleViewAdapter extends RecyclerView.Adapter<UploadInformationRecycleViewAdapter.ViewHolder> {
     private List<FileUploadInstance> instances = Collections.emptyList();
@@ -55,7 +54,7 @@ public class UploadInformationRecycleViewAdapter extends RecyclerView.Adapter<Up
 
         final Context context = holder.name.getContext();
 
-        holder.size.setText(FileUtil.getFileSizeString(instance.getSize()));
+        holder.size.setText(String.format(context.getString(R.string.file_size), FileUtil.getFileSizeString(instance.getSize())));
 
         if (instance.getStatus() == ITellaUploadsRepository.UploadStatus.UPLOADED) {
             holder.uploadIndicator.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_check_circle_green));
@@ -66,8 +65,8 @@ public class UploadInformationRecycleViewAdapter extends RecyclerView.Adapter<Up
 
         if (instance.getMediaFile() != null) {
             holder.name.setText(instance.getMediaFile().getFileName());
-            holder.hash.setText(instance.getMediaFile().getHash());
-            holder.type.setText(instance.getMediaFile().getType().name());
+            holder.hash.setText(String.format("%s: %s", context.getString(R.string.filehash), instance.getMediaFile().getHash()));
+            holder.type.setText(String.format("%s: %s", context.getString(R.string.file_type), instance.getMediaFile().getType().name()));
             if (instance.getMediaFile().getType() == MediaFile.Type.IMAGE || instance.getMediaFile().getType() == MediaFile.Type.VIDEO) {
                 Glide.with(holder.mediaView.getContext())
                         .using(glideLoader)
