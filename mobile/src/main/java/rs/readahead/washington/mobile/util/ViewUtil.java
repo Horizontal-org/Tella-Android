@@ -2,6 +2,8 @@ package rs.readahead.washington.mobile.util;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.Drawable;
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
@@ -15,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 
 public class ViewUtil {
@@ -67,6 +70,19 @@ public class ViewUtil {
         } else if (motionEvent.getAction() == MotionEvent.ACTION_UP || motionEvent.getAction() == MotionEvent.ACTION_CANCEL) {
             view.setAlpha(1f);
         }
+    }
+
+    public static void setGrayScale(ImageView v) {
+        ColorMatrix matrix = new ColorMatrix();
+        matrix.setSaturation(0);
+        ColorMatrixColorFilter cf = new ColorMatrixColorFilter(matrix);
+        v.setColorFilter(cf);
+        v.setImageAlpha(128);
+    }
+
+    public static void setColored(ImageView v) {
+        v.setColorFilter(null);
+        v.setImageAlpha(255);
     }
 
     private ViewUtil() {}

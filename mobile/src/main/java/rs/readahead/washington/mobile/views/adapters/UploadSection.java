@@ -25,6 +25,7 @@ import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.MediaFileUrlLoader;
 import rs.readahead.washington.mobile.presentation.entity.MediaFileLoaderModel;
 import rs.readahead.washington.mobile.util.Util;
+import rs.readahead.washington.mobile.util.ViewUtil;
 
 public class UploadSection extends Section {
     private List<FileUploadInstance> instances;
@@ -97,6 +98,10 @@ public class UploadSection extends Section {
             Drawable drawable = VectorDrawableCompat.create(context.getResources(),
                     R.drawable.ic_mic_gray, null);
             itemHolder.mediaView.setImageDrawable(drawable);
+        }
+
+        if (instances.get(position).getStatus() != ITellaUploadsRepository.UploadStatus.UPLOADED) {
+            ViewUtil.setGrayScale(itemHolder.mediaView);
         }
 
         itemHolder.itemView.setOnClickListener(v ->

@@ -28,6 +28,7 @@ import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.MediaFileUrlLoader;
 import rs.readahead.washington.mobile.presentation.entity.MediaFileLoaderModel;
 import rs.readahead.washington.mobile.util.FileUtil;
+import rs.readahead.washington.mobile.util.ViewUtil;
 
 public class UploadInformationRecycleViewAdapter extends RecyclerView.Adapter<UploadInformationRecycleViewAdapter.ViewHolder> {
     private List<FileUploadInstance> instances = Collections.emptyList();
@@ -56,13 +57,6 @@ public class UploadInformationRecycleViewAdapter extends RecyclerView.Adapter<Up
 
         holder.size.setText(String.format(context.getString(R.string.file_size), FileUtil.getFileSizeString(instance.getSize())));
 
-        if (instance.getStatus() == ITellaUploadsRepository.UploadStatus.UPLOADED) {
-            holder.uploadIndicator.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_check_circle_green));
-        } else {
-            holder.uploadIndicator.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_stop_circle_outline));
-            holder.uploadIndicator.setOnClickListener(v -> uploadInformationInterface.clearUpload(instance.getId()));
-        }
-
         if (instance.getMediaFile() != null) {
             holder.name.setText(instance.getMediaFile().getFileName());
             holder.hash.setText(String.format("%s: %s", context.getString(R.string.filehash), instance.getMediaFile().getHash()));
@@ -83,6 +77,16 @@ public class UploadInformationRecycleViewAdapter extends RecyclerView.Adapter<Up
             holder.mediaView.setImageDrawable(context.getResources().getDrawable(R.drawable.uploaded_empty_file));
             holder.mediaView.setAlpha((float) 0.5);
         }
+
+        if (instance.getStatus() == ITellaUploadsRepository.UploadStatus.UPLOADED) {
+            holder.uploadIndicator.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_check_circle_green));
+        } else {
+            holder.uploadIndicator.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_stop_circle_outline));
+            holder.uploadIndicator.setOnClickListener(v -> uploadInformationInterface.clearUpload(instance.getId()));
+
+            ViewUtil.setGrayScale(holder.mediaView);
+        }
+
     }
 
     @Override
