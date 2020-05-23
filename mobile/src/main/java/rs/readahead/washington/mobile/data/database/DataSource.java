@@ -1014,12 +1014,14 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         long lastSet = 0;
         long newSet;
         long lastUpdate = 0;
+        int maxStatus = 0;
 
         try {
             final String query = SQLiteQueryBuilder.buildQueryString(
                     false,
                     D.T_MEDIA_FILE_UPLOAD,
                     new String[]{
+                            "MAX (" + D.C_STATUS + ")",
                             "MAX (" + D.C_UPDATED + ")",
                             "MAX (" + D.C_SET + ")"},
                     null,
@@ -1031,9 +1033,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             if (cursor.moveToFirst()) {
                 lastUpdate = cursor.getLong(cursor.getColumnIndexOrThrow("MAX (" + D.C_UPDATED + ")"));
                 lastSet = cursor.getLong(cursor.getColumnIndexOrThrow("MAX (" + D.C_SET + ")"));
+                maxStatus = cursor.getInt(cursor.getColumnIndexOrThrow("MAX (" + D.C_STATUS + ")"));
             }
-
-            if (Util.currentTimestamp() - lastUpdate > C.UPLOAD_SET_DURATION) {
+            if (Util.currentTimestamp() - lastUpdate > C.UPLOAD_SET_DURATION && maxStatus < UploadStatus.UPLOADING.ordinal()) {
                 newSet = lastSet + 1;
             } else {
                 newSet = lastSet;

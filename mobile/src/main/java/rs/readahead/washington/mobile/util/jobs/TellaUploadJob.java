@@ -138,7 +138,7 @@ public class TellaUploadJob extends Job {
                 break;
 
             default:
-                dataSource.setUploadStatus(progressInfo.fileId, UploadStatus.ERROR, progressInfo.current, true).blockingAwait();
+                dataSource.setUploadStatus(progressInfo.fileId, UploadStatus.UNKNOWN, progressInfo.current, true).blockingAwait();
                 break;
         }
         postProgressEvent(progressInfo.current);
