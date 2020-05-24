@@ -107,6 +107,12 @@ public class UploadsActivity extends BaseActivity implements
 
         uploadsRecyclerView.setLayoutManager(gridLayoutManager);
         uploadsRecyclerView.setAdapter(sectionedAdapter);
+
+        RecyclerView.ItemAnimator animator = uploadsRecyclerView.getItemAnimator();
+        if (animator != null) {
+            animator.setMoveDuration(0);
+            animator.setRemoveDuration(0);
+        }
     }
 
     private void setupToolbar() {
@@ -259,7 +265,6 @@ public class UploadsActivity extends BaseActivity implements
     public void onHeaderRootViewClicked(@NonNull UploadSection section) {
         final SectionAdapter sectionAdapter = sectionedAdapter.getAdapterForSection(section);
 
-        // store info of current section state before changing its state
         final boolean wasExpanded = section.isExpanded();
         final int previousItemsTotal = section.getContentItemsTotal();
 
