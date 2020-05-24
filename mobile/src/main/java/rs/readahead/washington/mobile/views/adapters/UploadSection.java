@@ -30,8 +30,6 @@ import rs.readahead.washington.mobile.util.ViewUtil;
 public class UploadSection extends Section {
     private List<FileUploadInstance> instances;
     private int numberOfUploads;
-    private long totalSize;
-    private long totalUploaded;
     private boolean isUploadFinished;
     private boolean expanded = false;
     private MediaFileUrlLoader glideLoader;
@@ -58,10 +56,9 @@ public class UploadSection extends Section {
         this.isUploadFinished = true;
         this.started = instances.get(0).getStarted();
         for (FileUploadInstance instance : instances) {
-            totalSize += instance.getSize();
-            totalUploaded += instance.getUploaded();
             if (instance.getStatus() != ITellaUploadsRepository.UploadStatus.UPLOADED) {
                 this.isUploadFinished = false;
+                this.expanded = true;
             }
             if (instance.getStarted() < this.started) {
                 this.started = instance.getStarted();
@@ -118,22 +115,18 @@ public class UploadSection extends Section {
     public void onBindHeaderViewHolder(final RecyclerView.ViewHolder holder) {
         final HeaderViewHolder headerHolder = (HeaderViewHolder) holder;
 
-        if (isUploadFinished) {
-            headerHolder.title.setText(context.getResources().getQuantityString(R.plurals.files_uploaded, numberOfUploads, numberOfUploads));
-            headerHolder.clearHistory.setVisibility(View.GONE);
-        } else {
-            headerHolder.title.setText(context.getResources().getString(R.string.uploading));
-            headerHolder.clearHistory.setVisibility(View.VISIBLE);
-            headerHolder.clearHistory.setOnClickListener(v -> uploadSectionListener.clearScheduled());
-        }
-
         headerHolder.startedText.setText(String.format("%s: %s", context.getResources().getString(R.string.started), Util.getDateTimeString(this.started, "dd/MM/yyyy h:mm a")));
 
-        headerHolder.itemView.setOnClickListener(v -> {
-                    uploadSectionListener.onHeaderRootViewClicked(this);
-                    toggleFooter();
-                }
-        );
+        if (isUploadFinished) {
+            headerHolder.title.setText(context.getResources().getQuantityString(R.plurals.files_uploaded, numberOfUploads, numberOfUploads));
+            headerHolder.itemView.setOnClickListener(v -> {
+                uploadSectionListener.onHeaderRootViewClicked(this);
+                toggleFooter();
+            });
+        } else {
+            headerHolder.title.setVisibility(View.GONE);
+            headerHolder.startedText.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -147,7 +140,11 @@ public class UploadSection extends Section {
         this.footer = footerHolder;
         footerHolder.fTitle.setText(context.getResources().getString(R.string.more_details));
         footerHolder.fTitle.setOnClickListener(v -> uploadSectionListener.showUploadInformation(this.set));
-        footerHolder.fTitle.setVisibility(View.GONE);
+        if (isUploadFinished) {
+            footerHolder.fTitle.setVisibility(View.GONE);
+        } else {
+            footerHolder.fTitle.setVisibility(View.VISIBLE);
+        }
     }
 
     static class UploadViewHolder extends RecyclerView.ViewHolder {
@@ -162,14 +159,12 @@ public class UploadSection extends Section {
     static class HeaderViewHolder extends RecyclerView.ViewHolder {
         final TextView title;
         final TextView startedText;
-        final ImageView clearHistory;
 
         HeaderViewHolder(@NonNull final View view) {
             super(view);
 
             title = view.findViewById(R.id.header_text);
             startedText = view.findViewById(R.id.started_text);
-            clearHistory = view.findViewById(R.id.stop_outlined);
         }
     }
 

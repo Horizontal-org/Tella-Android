@@ -77,7 +77,7 @@ public class UploadInformationActivity extends BaseActivity implements
         if (getIntent().hasExtra(SECTION_SET)) {
             this.set = getIntent().getLongExtra(SECTION_SET, 0);
             if (set != 0) {
-                presenter.getFileUploadInstances(set);
+                presenter.getFileUploadSetInstances(set);
             }
         }
     }
@@ -126,7 +126,7 @@ public class UploadInformationActivity extends BaseActivity implements
 
     @Override
     protected void onResume() {
-        presenter.getFileUploadInstances(set);
+        presenter.getFileUploadSetInstances(set);
         super.onResume();
     }
 
@@ -169,10 +169,20 @@ public class UploadInformationActivity extends BaseActivity implements
     }
 
     @Override
-    public void onGetFileUploadInstancesSuccess(List<FileUploadInstance> instances) {
+    public void onGetFileUploadSetInstancesSuccess(List<FileUploadInstance> instances) {
         this.instances = instances;
         adapter.setInstances(instances);
         updateView();
+    }
+
+    @Override
+    public void onGetFileUploadSetInstancesError(Throwable error) {
+
+    }
+
+    @Override
+    public void onGetFileUploadInstancesSuccess(List<FileUploadInstance> instances) {
+
     }
 
     @Override
@@ -182,7 +192,7 @@ public class UploadInformationActivity extends BaseActivity implements
 
     @Override
     public void onFileUploadInstancesDeleted() {
-        presenter.getFileUploadInstances(set);
+        presenter.getFileUploadSetInstances(set);
     }
 
     @Override

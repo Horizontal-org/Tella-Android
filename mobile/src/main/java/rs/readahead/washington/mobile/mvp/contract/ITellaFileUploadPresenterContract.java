@@ -11,14 +11,16 @@ public class ITellaFileUploadPresenterContract {
     public interface IView {
         void onGetFileUploadInstancesSuccess(List<FileUploadInstance> instances);
         void onGetFileUploadInstancesError(Throwable error);
+        void onGetFileUploadSetInstancesSuccess(List<FileUploadInstance> instances);
+        void onGetFileUploadSetInstancesError(Throwable error);
         void onFileUploadInstancesDeleted();
         void onFileUploadInstancesDeletionError(Throwable throwable);
         Context getContext();
     }
 
     public interface IPresenter extends IBasePresenter {
-        void getFileUploadInstances();
-        void getFileUploadInstances(long set);
+        void getFileUploadSetInstances();
+        void getFileUploadSetInstances(long set);
         void deleteFileUploadInstance(long id);
         void deleteFileUploadInstances(long set);
         void deleteFileUploadInstances(ITellaUploadsRepository.UploadStatus status);

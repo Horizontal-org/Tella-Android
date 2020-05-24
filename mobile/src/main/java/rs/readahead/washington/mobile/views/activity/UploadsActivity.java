@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,6 +34,7 @@ import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadPresenter;
+import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.views.adapters.UploadSection;
 
 
@@ -45,6 +47,16 @@ public class UploadsActivity extends BaseActivity implements
     TextView emptyInfo;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.header_status_bar)
+    View headerStatus;
+    @BindView(R.id.header_text)
+    TextView headerText;
+    @BindView(R.id.status_text)
+    TextView statusText;
+    @BindView(R.id.started_text)
+    TextView startedText;
+    @BindView(R.id.stop_outlined)
+    ImageView stopOutlined;
 
     private TellaFileUploadPresenter presenter;
     private CacheWordDataSource cacheWordDataSource;
@@ -53,6 +65,9 @@ public class UploadsActivity extends BaseActivity implements
     private AlertDialog alertDialog;
     private boolean uploadsExist;
     private final int spanCount = 5;
+    private long uploadingSet;
+    private long lastUpdateTimeStamp = 0;
+    private long lastUploadedSize = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +87,7 @@ public class UploadsActivity extends BaseActivity implements
         disposables.wire(FileUploadProgressEvent.class, new EventObserver<FileUploadProgressEvent>() {
             @Override
             public void onNext(FileUploadProgressEvent event) {
-                updateProgress(event.getProgress());
+                onProgressUpdateEvent(event.getProgress());
             }
         });
 
@@ -145,7 +160,7 @@ public class UploadsActivity extends BaseActivity implements
     protected void onResume() {
         super.onResume();
         sectionedAdapter.removeAllSections();
-        presenter.getFileUploadInstances();
+        presenter.getFileUploadSetInstances();
     }
 
     @Override
@@ -166,6 +181,7 @@ public class UploadsActivity extends BaseActivity implements
     @Override
     public void onGetFileUploadInstancesSuccess(List<FileUploadInstance> instances) {
         List<FileUploadInstance> setInstances = new ArrayList<>();
+        boolean uploaded = true;
         long set = instances.get(0).getSet();
         this.uploadsExist = instances.size() > 0;
 
@@ -176,10 +192,17 @@ public class UploadsActivity extends BaseActivity implements
         }
 
         for (FileUploadInstance instance : instances) {
+            if (instance.getStatus().ordinal() > ITellaUploadsRepository.UploadStatus.UPLOADED.ordinal()) {
+                uploaded = false; // if any of instances in the set is not uploaded -> set is not uploaded
+                uploadingSet = set;
+            }
             if (set != instance.getSet()) {
                 sectionedAdapter.addSection(new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), setInstances, this, set));
                 sectionedAdapter.notifyDataSetChanged();
-
+                if (!uploaded) {
+                    setUploadingHeader(setInstances);
+                }
+                uploaded = true;
                 set = instance.getSet();
                 setInstances = new ArrayList<>();
             }
@@ -196,9 +219,19 @@ public class UploadsActivity extends BaseActivity implements
     }
 
     @Override
+    public void onGetFileUploadSetInstancesSuccess(List<FileUploadInstance> instances) {
+        updateProgressStatus(instances);
+    }
+
+    @Override
+    public void onGetFileUploadSetInstancesError(Throwable error) {
+
+    }
+
+    @Override
     public void onFileUploadInstancesDeleted() {
         sectionedAdapter.removeAllSections();
-        presenter.getFileUploadInstances();
+        presenter.getFileUploadSetInstances();
     }
 
     @Override
@@ -260,8 +293,71 @@ public class UploadsActivity extends BaseActivity implements
                 .show();
     }
 
-    private void updateProgress(long progress) {
-        //runOnUiThread(() -> uploadInfo.setText(String.valueOf(progress)));
+    private void onProgressUpdateEvent(long progress) {
+        presenter.getFileUploadSetInstances(uploadingSet);
+    }
+
+    private void setUploadingHeader(List<FileUploadInstance> instances) {
+        long started = instances.get(0).getStarted();
+        lastUpdateTimeStamp = instances.get(0).getUpdated();
+        lastUploadedSize = 0;
+        headerStatus.setVisibility(View.VISIBLE);
+        for (FileUploadInstance instance : instances) {
+            if (instance.getStarted() < started) {
+                started = instance.getStarted();
+            }
+            if (instance.getUpdated() > lastUpdateTimeStamp) {
+                lastUpdateTimeStamp = instance.getUpdated();
+            }
+            lastUploadedSize += instance.getUploaded();
+        }
+        startedText.setText(String.format("%s: %s", getContext().getResources().getString(R.string.started), Util.getDateTimeString(started, "dd/MM/yyyy h:mm a")));
+        statusText.setText(String.format("%s, %s",
+                getContext().getResources().getQuantityString(R.plurals.file, instances.size(), instances.size()), getContext().getResources().getString(R.string.connecting)));
+    }
+
+    private void updateProgressStatus(List<FileUploadInstance> instances) {
+        boolean updateFinished = true;
+        long total = 0;
+        long uploaded = 0;
+        long newUpdateTimestamp = 0;
+        for (FileUploadInstance instance : instances) {
+            if (instance.getStatus() != ITellaUploadsRepository.UploadStatus.UPLOADED) {
+                updateFinished = false;
+            }
+            if (instance.getUpdated() > newUpdateTimestamp) {
+                newUpdateTimestamp = instance.getUpdated();
+            }
+            uploaded += instance.getUploaded();
+            total += instance.getSize();
+        }
+        if (updateFinished) {
+            stopOutlined.setVisibility(View.GONE);
+            headerText.setText(getContext().getResources().getQuantityString(R.plurals.files_uploaded, instances.size(), instances.size()));
+            statusText.setVisibility(View.GONE);
+            //uploadingSection ref
+        }
+        long progressDifference = uploaded - lastUploadedSize;
+        long timeDifference = newUpdateTimestamp - lastUpdateTimeStamp;
+        long remainingUpload = total - uploaded;
+        long projectedRemaininigTime = (remainingUpload * timeDifference) / progressDifference;
+
+        if ( timeDifference < 0) {
+            return;
+        }
+        if (projectedRemaininigTime > 60000) {
+            int minutes = (int) projectedRemaininigTime / 60000;
+            statusText.setText(String.format("%s, %s",
+                    getContext().getResources().getQuantityString(R.plurals.file, instances.size(), instances.size()),
+                    getContext().getResources().getQuantityString(R.plurals.minutes_left, minutes, minutes)));
+        } else {
+            statusText.setText(String.format("%s, %s",
+                    getContext().getResources().getQuantityString(R.plurals.file, instances.size(), instances.size()),
+                    getContext().getResources().getString(R.string.less_than_a_minute_left)));
+        }
+
+        lastUpdateTimeStamp = newUpdateTimestamp;
+        lastUploadedSize = uploaded;
     }
 
     private void clearHistory() {

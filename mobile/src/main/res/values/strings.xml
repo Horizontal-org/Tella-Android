@@ -396,4 +396,6 @@
     <string name="no_information_to_show">There is no information to show here.</string>
     <string name="completed">Completed</string>
     <string name="file_type">File type</string>
+    <string name="connecting">connecting…</string>
+    <string name="less_than_a_minute_left">less than a minute left</string>
 </resources>

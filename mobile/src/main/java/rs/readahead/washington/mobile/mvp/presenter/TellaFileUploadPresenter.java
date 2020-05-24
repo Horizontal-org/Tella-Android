@@ -34,7 +34,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
     }
 
     @Override
-    public void getFileUploadInstances()  {
+    public void getFileUploadSetInstances()  {
         disposables.add(cacheWordDataSource.getDataSource()
                 .flatMapSingle((Function<DataSource, SingleSource<List<FileUploadInstance>>>) DataSource::getFileUploadInstances)
                 .subscribeOn(Schedulers.io())
@@ -47,14 +47,14 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
     }
 
     @Override
-    public void getFileUploadInstances(long set) {
+    public void getFileUploadSetInstances(long set) {
         disposables.add(cacheWordDataSource.getDataSource()
                 .flatMapSingle((Function<DataSource, SingleSource<List<FileUploadInstance>>>) dataSource -> dataSource.getFileUploadInstances(set))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(filesUploadInstances -> view.onGetFileUploadInstancesSuccess(filesUploadInstances), throwable -> {
+                .subscribe(filesUploadInstances -> view.onGetFileUploadSetInstancesSuccess(filesUploadInstances), throwable -> {
                     Crashlytics.logException(throwable);
-                    view.onGetFileUploadInstancesError(throwable);
+                    view.onGetFileUploadSetInstancesError(throwable);
                 })
         );
     }

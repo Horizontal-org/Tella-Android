@@ -75,7 +75,7 @@ public class UploadInformationRecycleViewAdapter extends RecyclerView.Adapter<Up
             }
         } else {
             holder.mediaView.setImageDrawable(context.getResources().getDrawable(R.drawable.uploaded_empty_file));
-            holder.mediaView.setAlpha((float) 0.5);
+            holder.mediaView.setAlpha((float) 0.4);
         }
 
         if (instance.getStatus() == ITellaUploadsRepository.UploadStatus.UPLOADED) {

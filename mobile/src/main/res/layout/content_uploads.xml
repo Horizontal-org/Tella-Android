@@ -12,25 +12,91 @@
     android:background="@color/wa_light_gray"
     tools:showIn="@layout/activity_uploads">
 
-    <TextView
-        android:id="@+id/empty_uploads_text"
+    <RelativeLayout
+        android:id="@+id/header_status_bar"
         android:layout_width="match_parent"
-        android:paddingTop="120dp"
-        android:layout_height="match_parent"
-        android:textAlignment="center"
         android:visibility="gone"
-        android:textColor="@color/primaryTextColor"
-        android:text="@string/no_information_to_show" />
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_height="70dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="16dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:weightSum="2"
+            android:orientation="vertical"
+            tools:ignore="RelativeOverlap">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:padding="2dp">
+
+                <TextView
+                    android:id="@+id/header_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimary"
+                    android:text="@string/uploading" />
+
+                <TextView
+                    android:id="@+id/status_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/connecting"
+                    android:textColor="@color/wa_gray" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/started_text"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:padding="2dp"
+                android:textColor="@color/wa_gray" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/stop_outlined"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_marginStart="12dp"
+            android:alpha="0.5"
+            android:padding="5dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_stop_circle_outline"
+            android:contentDescription="@string/ra_stop" />
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/uploadsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/empty_uploads_text"
+        android:layout_below="@id/header_status_bar"
         android:clipToPadding="false"
         android:orientation="horizontal"
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="none"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    <TextView
+        android:id="@+id/empty_uploads_text"
+        android:layout_width="match_parent"
+        android:layout_below="@id/uploadsRecyclerView"
+        android:paddingTop="120dp"
+        android:layout_height="match_parent"
+        android:textAlignment="center"
+        android:visibility="gone"
+        android:textColor="@color/primaryTextColor"
+        android:text="@string/no_information_to_show" />
 </RelativeLayout>
