@@ -21,6 +21,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionAdapter;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 import rs.readahead.washington.mobile.MyApplication;
@@ -66,6 +67,7 @@ public class UploadsActivity extends BaseActivity implements
     private boolean uploadsExist;
     private final int spanCount = 5;
     private long uploadingSet;
+    private UploadSection uploadingSection;
     private long lastUpdateTimeStamp = 0;
     private long lastUploadedSize = 0;
 
@@ -203,10 +205,12 @@ public class UploadsActivity extends BaseActivity implements
                 uploadingSet = set;
             }
             if (set != instance.getSet()) {
-                sectionedAdapter.addSection(new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), setInstances, this, set));
+                UploadSection section = new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), setInstances, this, set);
+                sectionedAdapter.addSection(section);
                 sectionedAdapter.notifyDataSetChanged();
                 if (!uploaded) {
                     setUploadingHeader(setInstances);
+                    uploadingSection = section;
                 }
                 uploaded = true;
                 set = instance.getSet();
@@ -236,6 +240,7 @@ public class UploadsActivity extends BaseActivity implements
 
     @Override
     public void onFileUploadInstancesDeleted() {
+        headerStatus.setVisibility(View.GONE);
         sectionedAdapter.removeAllSections();
         presenter.getFileUploadSetInstances();
     }
@@ -250,7 +255,17 @@ public class UploadsActivity extends BaseActivity implements
         return this;
     }
 
-    @Override
+    @OnClick(R.id.stop_outlined)
+    public void showClearScheduledDialog() {
+        alertDialog = new AlertDialog.Builder(this)
+                .setMessage(R.string.stop_upload_dialog)
+                .setPositiveButton(R.string.clear, (dialog, which) -> clearScheduled())
+                .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                })
+                .setCancelable(true)
+                .show();
+    }
+
     public void clearScheduled() {
         presenter.deleteFileUploadInstances(ITellaUploadsRepository.UploadStatus.SCHEDULED);
         runOnUiThread(() -> uploadsRecyclerView.removeAllViews());

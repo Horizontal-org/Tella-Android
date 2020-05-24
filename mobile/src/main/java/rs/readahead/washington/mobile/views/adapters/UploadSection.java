@@ -191,7 +191,6 @@ public class UploadSection extends Section {
     }
 
     public interface UploadSectionListener {
-        void clearScheduled();
         void showUploadInformation(final long set);
         void onHeaderRootViewClicked(@NonNull final UploadSection section);
         void onItemRootViewClicked(@NonNull final UploadSection section, final int itemAdapterPosition);
