@@ -31,6 +31,7 @@ import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent;
 import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
+import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadPresenterContract;
@@ -165,8 +166,8 @@ public class UploadsActivity extends BaseActivity implements
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         sectionedAdapter.removeAllSections();
         presenter.getFileUploadSetInstances();
     }
@@ -218,7 +219,12 @@ public class UploadsActivity extends BaseActivity implements
             }
             setInstances.add(instance);
         }
-        sectionedAdapter.addSection(new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), setInstances, this, set)); // add last set
+        UploadSection section = new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), setInstances, this, set);
+        if (!uploaded) {
+            setUploadingHeader(setInstances);
+            uploadingSection = section;
+        }
+        sectionedAdapter.addSection(section); // add last set
         sectionedAdapter.notifyDataSetChanged();
         invalidateOptionsMenu();
     }
@@ -267,7 +273,7 @@ public class UploadsActivity extends BaseActivity implements
     }
 
     public void clearScheduled() {
-        presenter.deleteFileUploadInstances(ITellaUploadsRepository.UploadStatus.SCHEDULED);
+        presenter.deleteFileUploadInstancesNotInStatus(ITellaUploadsRepository.UploadStatus.UPLOADED);
         runOnUiThread(() -> uploadsRecyclerView.removeAllViews());
     }
 
@@ -313,7 +319,7 @@ public class UploadsActivity extends BaseActivity implements
                 .show();
     }
 
-    private void onProgressUpdateEvent(long progress) {
+    private void onProgressUpdateEvent(UploadProgressInfo progress) {
         presenter.getFileUploadSetInstances(uploadingSet);
     }
 
@@ -381,7 +387,7 @@ public class UploadsActivity extends BaseActivity implements
     }
 
     private void clearHistory() {
-        presenter.deleteFileUploadInstances(ITellaUploadsRepository.UploadStatus.UPLOADED);
+        presenter.deleteFileUploadInstancesInStatus(ITellaUploadsRepository.UploadStatus.UPLOADED);
         runOnUiThread(() -> uploadsRecyclerView.removeAllViews());// bad & temporary solution to refresh
     }
 }

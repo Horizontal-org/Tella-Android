@@ -141,7 +141,7 @@ public class TellaUploadJob extends Job {
                 dataSource.setUploadStatus(progressInfo.fileId, UploadStatus.UNKNOWN, progressInfo.current, true).blockingAwait();
                 break;
         }
-        postProgressEvent(progressInfo.current);
+        postProgressEvent(progressInfo);
     }
 
     private void deleteMediaFile(long id) {
@@ -151,7 +151,7 @@ public class TellaUploadJob extends Job {
         Timber.d("Deleted file %s", deleted.getFileName());
     }
 
-    private void postProgressEvent(long progress) {
+    private void postProgressEvent(UploadProgressInfo progress) {
         ThreadUtil.runOnMain(() -> MyApplication.bus().post(new FileUploadProgressEvent(progress)));
     }
 }

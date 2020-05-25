@@ -88,11 +88,25 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
     }
 
     @Override
-    public void deleteFileUploadInstances(ITellaUploadsRepository.UploadStatus status) {
+    public void deleteFileUploadInstancesInStatus(ITellaUploadsRepository.UploadStatus status) {
         disposables.add(cacheWordDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstances(status))
+                .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstancesInStatus(status))
+                .subscribe(() -> view.onFileUploadInstancesDeleted(),
+                        throwable -> {
+                            Crashlytics.logException(throwable);
+                            view.onFileUploadInstancesDeletionError(throwable);
+                        })
+        );
+    }
+
+    @Override
+    public void deleteFileUploadInstancesNotInStatus(ITellaUploadsRepository.UploadStatus status) {
+        disposables.add(cacheWordDataSource.getDataSource()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstancesNotInStatus(status))
                 .subscribe(() -> view.onFileUploadInstancesDeleted(),
                         throwable -> {
                             Crashlytics.logException(throwable);

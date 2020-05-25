@@ -23,6 +23,7 @@ public class ITellaFileUploadPresenterContract {
         void getFileUploadSetInstances(long set);
         void deleteFileUploadInstance(long id);
         void deleteFileUploadInstances(long set);
-        void deleteFileUploadInstances(ITellaUploadsRepository.UploadStatus status);
+        void deleteFileUploadInstancesInStatus(ITellaUploadsRepository.UploadStatus status);
+        void deleteFileUploadInstancesNotInStatus(ITellaUploadsRepository.UploadStatus status);
     }
 }

@@ -202,9 +202,17 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
-    public Completable deleteFileUploadInstances(UploadStatus status) {
+    public Completable deleteFileUploadInstancesInStatus(UploadStatus status) {
         return Completable.fromCallable((Callable<Void>) () -> {
-            dataSource.deleteFileUploadInstancesDB(status);
+            dataSource.deleteFileUploadInstancesInStatusDB(status);
+            return null;
+        }).compose(applyCompletableSchedulers());
+    }
+
+    @Override
+    public Completable deleteFileUploadInstancesNotInStatus(UploadStatus status) {
+        return Completable.fromCallable((Callable<Void>) () -> {
+            dataSource.deleteFileUploadInstancesNotInStatusDB(status);
             return null;
         }).compose(applyCompletableSchedulers());
     }
@@ -1148,8 +1156,13 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void deleteFileUploadInstancesDB(UploadStatus status){
+    private void deleteFileUploadInstancesInStatusDB(UploadStatus status){
         int count = database.delete(D.T_MEDIA_FILE_UPLOAD, D.C_STATUS + " = ?", new String[]{Integer.toString(status.ordinal())});
+    }
+
+    @SuppressWarnings("MethodOnlyUsedFromInnerClass")
+    private void deleteFileUploadInstancesNotInStatusDB(UploadStatus status){
+        int count = database.delete(D.T_MEDIA_FILE_UPLOAD, D.C_STATUS + " <> ?", new String[]{Integer.toString(status.ordinal())});
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")

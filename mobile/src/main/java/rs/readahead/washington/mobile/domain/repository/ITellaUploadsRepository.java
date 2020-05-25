@@ -10,7 +10,8 @@ public interface ITellaUploadsRepository {
     Completable scheduleUploadMediaFiles(List<MediaFile> mediafiles);
     Single<List<MediaFile>> getUploadMediaFiles(UploadStatus status);
     Completable setUploadStatus(long mediaFileId, UploadStatus status, long uploadedSize, boolean retry);
-    Completable deleteFileUploadInstances(UploadStatus status);
+    Completable deleteFileUploadInstancesInStatus(UploadStatus status);
+    Completable deleteFileUploadInstancesNotInStatus(UploadStatus status);
     Completable deleteFileUploadInstances(long set);
     Completable deleteFileUploadInstance(long id);
 

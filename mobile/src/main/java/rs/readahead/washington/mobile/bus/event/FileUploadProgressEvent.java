@@ -1,15 +1,16 @@
 package rs.readahead.washington.mobile.bus.event;
 
 import rs.readahead.washington.mobile.bus.IEvent;
+import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 
 public class FileUploadProgressEvent implements IEvent {
-    private long progress;
+    private UploadProgressInfo progress;
 
-    public FileUploadProgressEvent(long progress) {
+    public FileUploadProgressEvent(UploadProgressInfo progress) {
         this.progress = progress;
     }
 
-    public long getProgress() {
+    public UploadProgressInfo getProgress() {
         return progress;
     }
 }
