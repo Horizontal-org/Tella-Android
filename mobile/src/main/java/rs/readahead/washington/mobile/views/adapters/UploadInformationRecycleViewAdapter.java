@@ -14,6 +14,7 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.github.lzyzsd.circleprogress.DonutProgress;
 
 import java.util.Collections;
 import java.util.List;
@@ -34,12 +35,10 @@ public class UploadInformationRecycleViewAdapter extends RecyclerView.Adapter<Up
     private List<FileUploadInstance> instances = Collections.emptyList();
     private MediaFileUrlLoader glideLoader;
     private UploadInformationInterface uploadInformationInterface;
-    private long set;
 
-    public UploadInformationRecycleViewAdapter(Context context, MediaFileHandler mediaFileHandler, @NonNull UploadInformationInterface uploadInformationInterface, long set) {
+    public UploadInformationRecycleViewAdapter(Context context, MediaFileHandler mediaFileHandler, @NonNull UploadInformationInterface uploadInformationInterface) {
         this.glideLoader = new MediaFileUrlLoader(context.getApplicationContext(), mediaFileHandler);
         this.uploadInformationInterface = uploadInformationInterface;
-        this.set = set;
     }
 
     @NonNull
@@ -78,13 +77,20 @@ public class UploadInformationRecycleViewAdapter extends RecyclerView.Adapter<Up
             holder.mediaView.setAlpha((float) 0.4);
         }
 
+        ViewUtil.setGrayScale(holder.mediaView);
+
         if (instance.getStatus() == ITellaUploadsRepository.UploadStatus.UPLOADED) {
             holder.uploadIndicator.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_check_circle_green));
+            holder.uploadIndicator.setPadding(0, 0, 0, 0);
+            holder.donutProgress.setVisibility(View.GONE);
+            ViewUtil.setColored(holder.mediaView);
         } else {
-            holder.uploadIndicator.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_stop_circle_outline));
-            holder.uploadIndicator.setOnClickListener(v -> uploadInformationInterface.clearUpload(instance.getId()));
-
-            ViewUtil.setGrayScale(holder.mediaView);
+            int progress = (int) (instance.getUploaded() * 100 / instance.getSize());
+            holder.donutProgress.setVisibility(View.VISIBLE);
+            holder.donutProgress.setProgress(progress);
+            holder.uploadIndicator.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_stop_black_24dp));
+            holder.uploadIndicator.setPadding(15, 15, 15, 15);
+            holder.donutProgress.setOnClickListener(v -> uploadInformationInterface.clearUpload(instance.getId()));
         }
 
     }
@@ -118,6 +124,8 @@ public class UploadInformationRecycleViewAdapter extends RecyclerView.Adapter<Up
         TextView hash;
         @BindView(R.id.uploadIndicator)
         ImageView uploadIndicator;
+        @BindView(R.id.donut_progress)
+        DonutProgress donutProgress;
 
         ViewHolder(View itemView) {
             super(itemView);
