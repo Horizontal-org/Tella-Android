@@ -21,8 +21,11 @@ import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
+import rs.readahead.washington.mobile.bus.EventObserver;
+import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent;
 import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
+import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadPresenterContract;
@@ -51,8 +54,6 @@ public class UploadInformationActivity extends BaseActivity implements
 
     private TellaFileUploadPresenter presenter;
     private UploadInformationRecycleViewAdapter adapter;
-    private CacheWordDataSource cacheWordDataSource;
-    private EventCompositeDisposable disposables;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +62,19 @@ public class UploadInformationActivity extends BaseActivity implements
         setContentView(R.layout.activity_upload_information);
         ButterKnife.bind(this);
 
-        cacheWordDataSource = new CacheWordDataSource(this);
+        CacheWordDataSource cacheWordDataSource = new CacheWordDataSource(this);
 
-        disposables = MyApplication.bus().createCompositeDisposable();
+        EventCompositeDisposable disposables = MyApplication.bus().createCompositeDisposable();
 
-        adapter = new UploadInformationRecycleViewAdapter(this, new MediaFileHandler(cacheWordDataSource),this, set);
+        disposables.wire(FileUploadProgressEvent.class, new EventObserver<FileUploadProgressEvent>() {
+            @Override
+            public void onNext(FileUploadProgressEvent event) {
+                onProgressUpdateEvent(event.getProgress());
+            }
+        });
+
+
+        adapter = new UploadInformationRecycleViewAdapter(this, new MediaFileHandler(cacheWordDataSource),this);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(adapter);
@@ -78,7 +87,7 @@ public class UploadInformationActivity extends BaseActivity implements
             this.set = getIntent().getLongExtra(SECTION_SET, 0);
             if (set != 0) {
                 presenter.getFileUploadSetInstances(set);
-            }
+            } else onBackPressed();
         }
     }
 
@@ -169,10 +178,10 @@ public class UploadInformationActivity extends BaseActivity implements
     }
 
     @Override
-    public void onGetFileUploadSetInstancesSuccess(List<FileUploadInstance> instances) {
-        this.instances = instances;
+    public void onGetFileUploadSetInstancesSuccess(List<FileUploadInstance> newInstances) {
+        this.instances = newInstances;
         adapter.setInstances(instances);
-        updateView();
+        updateHeaderView(instances);
     }
 
     @Override
@@ -210,8 +219,23 @@ public class UploadInformationActivity extends BaseActivity implements
         showClearUploadDialog(id);
     }
 
+    private void onProgressUpdateEvent(UploadProgressInfo progress) {
+        for(int i=0; i<instances.size(); i++){
+            if (instances.get(i).getMediaFile().getFileName().equals(progress.name)){
+                if (progress.status == UploadProgressInfo.Status.FINISHED){
+                    instances.get(i).setStatus(ITellaUploadsRepository.UploadStatus.UPLOADED);
+                } else {
+                    instances.get(i).setUploaded(progress.current);
+                    instances.get(i).setSize(progress.size);
+                }
+                adapter.notifyItemChanged(i);
+                break;
+            }
+        }
+    }
+
     @SuppressLint("DefaultLocale")
-    private void updateView() {
+    private void updateHeaderView(List<FileUploadInstance> instances) {
         long timeStarted = instances.get(0).getStarted();
         long timeCompleted = instances.get(0).getUpdated();
         boolean completed = true;

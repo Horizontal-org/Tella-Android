@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:textDirection="locale">
 
     <LinearLayout
@@ -24,7 +25,7 @@
         <LinearLayout
             android:layout_height="match_parent"
             android:layout_width="0dp"
-            android:layout_weight="4.3"
+            android:layout_weight="4.1"
             android:padding="6dp"
             android:orientation="vertical">
 
@@ -55,18 +56,36 @@
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/uploadIndicator"
-            android:layout_height="match_parent"
+        <FrameLayout
             android:layout_width="0dp"
-            android:layout_weight="0.7"
-            android:alpha="0.5"
-            android:background="@android:color/transparent"
-            android:clickable="true"
-            android:contentDescription="@null"
-            android:focusable="true"
-            android:padding="6dp"
-            android:src="@drawable/ic_error" />
+            android:layout_height="match_parent"
+            android:layout_weight="0.9"
+            android:alpha="0.4"
+            android:padding="6dp">
+
+            <ImageView
+                android:id="@+id/uploadIndicator"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:layout_gravity="center"
+                android:clickable="true"
+                android:contentDescription="@null"
+                android:focusable="true"
+                android:src="@drawable/ic_error" />
+
+            <com.github.lzyzsd.circleprogress.DonutProgress
+                android:id="@+id/donut_progress"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                custom:donut_unfinished_color="@color/wa_black"
+                custom:donut_finished_color="@color/wa_black"
+                custom:donut_finished_stroke_width="4dp"
+                custom:donut_unfinished_stroke_width="2dp"
+                custom:donut_show_text="false"
+                custom:donut_progress="0" />
+        </FrameLayout>
     </LinearLayout>
 
     <View
