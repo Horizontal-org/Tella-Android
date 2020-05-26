@@ -89,7 +89,7 @@ public class UploadInformationRecycleViewAdapter extends RecyclerView.Adapter<Up
             holder.donutProgress.setVisibility(View.VISIBLE);
             holder.donutProgress.setProgress(progress);
             holder.uploadIndicator.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_stop_black_24dp));
-            holder.uploadIndicator.setPadding(15, 15, 15, 15);
+            holder.uploadIndicator.setPadding(20, 20, 20, 20);
             holder.donutProgress.setOnClickListener(v -> uploadInformationInterface.clearUpload(instance.getId()));
         }
 

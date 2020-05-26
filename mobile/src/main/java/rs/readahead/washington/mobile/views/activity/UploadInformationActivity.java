@@ -246,6 +246,9 @@ public class UploadInformationActivity extends BaseActivity implements
 
     private void onProgressUpdateEvent(UploadProgressInfo progress) {
         for (int i = 0; i < instances.size(); i++) {
+            if (instances.get(i).getMediaFile() == null) {
+                continue;
+            }
             if (instances.get(i).getMediaFile().getFileName().equals(progress.name)) {
                 if (progress.status == UploadProgressInfo.Status.FINISHED) {
                     instances.get(i).setStatus(ITellaUploadsRepository.UploadStatus.UPLOADED);
