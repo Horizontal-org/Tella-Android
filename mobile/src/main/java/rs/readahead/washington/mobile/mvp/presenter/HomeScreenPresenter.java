@@ -91,6 +91,22 @@ public class HomeScreenPresenter implements IHomeScreenPresenterContract.IPresen
     }
 
     @Override
+    public void countCollectServers() {
+        disposable.add(cacheWordDataSource.getDataSource()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMapSingle((Function<DataSource, SingleSource<Long>>) DataSource::countCollectServers)
+                .subscribe(
+                        num -> view.onCountCollectServersEnded(num),
+                        throwable -> {
+                            Crashlytics.logException(throwable);
+                            view.onCountCollectServersFailed(throwable);
+                        }
+                )
+        );
+    }
+
+    @Override
     public void destroy() {
         disposable.dispose();
         cacheWordDataSource.dispose();

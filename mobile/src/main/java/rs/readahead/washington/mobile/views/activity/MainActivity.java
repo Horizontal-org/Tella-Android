@@ -63,7 +63,7 @@ public class MainActivity extends MetadataActivity implements
     CountdownImageView countdownImage;
     @BindView(R.id.camera_tools_container)
     View cameraToolsContainer;
-     @BindView(R.id.home_screen_gradient)
+    @BindView(R.id.home_screen_gradient)
     HomeScreenGradient homeScreenGradient;
     @BindView(R.id.nav_bar_holder)
     LinearLayout navBarHolder;
@@ -84,6 +84,7 @@ public class MainActivity extends MetadataActivity implements
     private OrientationEventListener mOrientationEventListener;
 
     private int timerDuration;
+    private long numOfCollectServers;
     private MenuItem settingsMenuItem;
 
     @Override
@@ -402,7 +403,7 @@ public class MainActivity extends MetadataActivity implements
         super.onResume();
 
         setupPanicView();
-        homeScreenPresenter.countTUServers();
+        homeScreenPresenter.countCollectServers();
 
         startLocationMetadataListening();
 
@@ -520,6 +521,17 @@ public class MainActivity extends MetadataActivity implements
     public void onCountTUServersFailed(Throwable throwable) {
     }
 
+    @Override
+    public void onCountCollectServersEnded(Long num) {
+        this.numOfCollectServers = num;
+        homeScreenPresenter.countTUServers();
+    }
+
+    @Override
+    public void onCountCollectServersFailed(Throwable throwable) {
+
+    }
+
     private void stopPresenter() {
         if (homeScreenPresenter != null) {
             homeScreenPresenter.destroy();
@@ -623,7 +635,7 @@ public class MainActivity extends MetadataActivity implements
         LinearLayout navbar;
         LayoutInflater inflater = LayoutInflater.from(this);
 
-        if (Preferences.isCollectServersLayout() && numOfTUS > 0) {
+        if (numOfCollectServers > 0 && numOfTUS > 0) {
             navbar = (LinearLayout) inflater.inflate(R.layout.main_navigation_table_layout, null);
         } else {
             navbar = (LinearLayout) inflater.inflate(R.layout.main_navigation_row_layout, null);
@@ -642,20 +654,20 @@ public class MainActivity extends MetadataActivity implements
         navBarHolder.removeAllViews();
         navBarHolder.addView(navbar);
 
-        if (!Preferences.isCollectServersLayout() && numOfTUS == 0) { //row layout of 2
+        if (numOfCollectServers == 0 && numOfTUS == 0) { //row layout of 2
             buttonCollect.setVisibility(View.GONE);
             buttonUploads.setVisibility(View.GONE);
             return;
         }
 
-        if (Preferences.isCollectServersLayout() && numOfTUS == 0) {  //nav layout of 3 with collect
+        if (numOfCollectServers > 0 && numOfTUS == 0) {  //nav layout of 3 with collect
             buttonGallery.setBackground(getResources().getDrawable(R.drawable.central_button_background));
             buttonCollect.setBackground(getResources().getDrawable(R.drawable.round_left_button_background));
             buttonUploads.setVisibility(View.GONE);
             return;
         }
 
-        if (!Preferences.isCollectServersLayout() && numOfTUS > 0) { //nav layout of 3 with uploads
+        if (numOfCollectServers == 0 && numOfTUS > 0) { //nav layout of 3 with uploads
             buttonCollect.setVisibility(View.GONE);
             buttonRecord.setBackground(getResources().getDrawable(R.drawable.central_button_background));
             buttonUploads.setBackground(getResources().getDrawable(R.drawable.round_right_button_background));
