@@ -18,6 +18,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_marginStart="14dp"
             android:background="@android:color/transparent"
             android:contentDescription="@null"
             android:padding="2dp" />
@@ -59,6 +60,7 @@
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginEnd="14dp"
             android:layout_weight="0.9"
             android:alpha="0.4"
             android:padding="6dp">
