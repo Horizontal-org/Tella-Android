@@ -93,6 +93,7 @@ public class UploadInformationRecycleViewAdapter extends RecyclerView.Adapter<Up
             holder.donutProgress.setOnClickListener(v -> uploadInformationInterface.clearUpload(instance.getId()));
         }
 
+        holder.mediaView.setOnClickListener(v -> uploadInformationInterface.onMediaViewItemClicked(instance.getMediaFile()));
     }
 
     @Override
@@ -107,6 +108,7 @@ public class UploadInformationRecycleViewAdapter extends RecyclerView.Adapter<Up
 
     public interface UploadInformationInterface {
         void clearUpload(final long id);
+        void onMediaViewItemClicked(MediaFile mediaFile);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

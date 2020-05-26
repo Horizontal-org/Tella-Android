@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.views.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +26,7 @@ import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent;
 import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
+import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
@@ -74,7 +76,7 @@ public class UploadInformationActivity extends BaseActivity implements
         });
 
 
-        adapter = new UploadInformationRecycleViewAdapter(this, new MediaFileHandler(cacheWordDataSource),this);
+        adapter = new UploadInformationRecycleViewAdapter(this, new MediaFileHandler(cacheWordDataSource), this);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(adapter);
@@ -219,10 +221,31 @@ public class UploadInformationActivity extends BaseActivity implements
         showClearUploadDialog(id);
     }
 
+    @Override
+    public void onMediaViewItemClicked(MediaFile mediaFile) {
+        playMedia(mediaFile);
+    }
+
+    private void playMedia(MediaFile mediaFile) {
+        if (mediaFile.getType() == MediaFile.Type.IMAGE) {
+            Intent intent = new Intent(this, PhotoViewerActivity.class);
+            intent.putExtra(PhotoViewerActivity.VIEW_PHOTO, mediaFile);
+            startActivity(intent);
+        } else if (mediaFile.getType() == MediaFile.Type.AUDIO) {
+            Intent intent = new Intent(this, AudioPlayActivity.class);
+            intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, mediaFile.getId());
+            startActivity(intent);
+        } else if (mediaFile.getType() == MediaFile.Type.VIDEO) {
+            Intent intent = new Intent(this, VideoViewerActivity.class);
+            intent.putExtra(VideoViewerActivity.VIEW_VIDEO, mediaFile);
+            startActivity(intent);
+        }
+    }
+
     private void onProgressUpdateEvent(UploadProgressInfo progress) {
-        for(int i=0; i<instances.size(); i++){
-            if (instances.get(i).getMediaFile().getFileName().equals(progress.name)){
-                if (progress.status == UploadProgressInfo.Status.FINISHED){
+        for (int i = 0; i < instances.size(); i++) {
+            if (instances.get(i).getMediaFile().getFileName().equals(progress.name)) {
+                if (progress.status == UploadProgressInfo.Status.FINISHED) {
                     instances.get(i).setStatus(ITellaUploadsRepository.UploadStatus.UPLOADED);
                 } else {
                     instances.get(i).setUploaded(progress.current);

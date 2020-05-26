@@ -102,7 +102,7 @@ public class UploadSection extends Section {
         }
 
         itemHolder.itemView.setOnClickListener(v ->
-                uploadSectionListener.onItemRootViewClicked(this, itemHolder.getAdapterPosition())
+                uploadSectionListener.onItemRootViewClicked(mediaFile)
         );
     }
 
@@ -193,6 +193,6 @@ public class UploadSection extends Section {
     public interface UploadSectionListener {
         void showUploadInformation(final long set);
         void onHeaderRootViewClicked(@NonNull final UploadSection section);
-        void onItemRootViewClicked(@NonNull final UploadSection section, final int itemAdapterPosition);
+        void onItemRootViewClicked(MediaFile mediaFile);
     }
 }

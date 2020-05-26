@@ -31,6 +31,7 @@ import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent;
 import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
+import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
@@ -300,7 +301,24 @@ public class UploadsActivity extends BaseActivity implements
     }
 
     @Override
-    public void onItemRootViewClicked(@NonNull UploadSection section, int itemAdapterPosition) {
+    public void onItemRootViewClicked(MediaFile mediaFile) {
+        playMedia(mediaFile);
+    }
+
+    private void playMedia(MediaFile mediaFile) {
+        if (mediaFile.getType() == MediaFile.Type.IMAGE) {
+            Intent intent = new Intent(this, PhotoViewerActivity.class);
+            intent.putExtra(PhotoViewerActivity.VIEW_PHOTO, mediaFile);
+            startActivity(intent);
+        } else if (mediaFile.getType() == MediaFile.Type.AUDIO) {
+            Intent intent = new Intent(this, AudioPlayActivity.class);
+            intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, mediaFile.getId());
+            startActivity(intent);
+        } else if (mediaFile.getType() == MediaFile.Type.VIDEO) {
+            Intent intent = new Intent(this, VideoViewerActivity.class);
+            intent.putExtra(VideoViewerActivity.VIEW_VIDEO, mediaFile);
+            startActivity(intent);
+        }
     }
 
     private void startUploadInformationActivity(long set) {

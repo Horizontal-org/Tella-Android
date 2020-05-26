@@ -112,11 +112,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return (MaybeTransformer<T, T>) schedulersMaybeTransformer;
     }
 
-    /* public Single<List<String>> getTrustedPhonesList() {
-        return Single.fromCallable(this::getTrustedPhones)
-                .compose(applySchedulers());
-    } */
-
     @Override
     public Single<List<CollectServer>> listCollectServers() {
         return Single.fromCallable(() -> dataSource.getServers())
