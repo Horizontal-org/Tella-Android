@@ -166,8 +166,8 @@ public class UploadInformationActivity extends BaseActivity implements
 
     private void showClearHistoryDialog() {
         alertDialog = new androidx.appcompat.app.AlertDialog.Builder(this)
-                .setMessage(R.string.clear_upload_history_dialog)
-                .setPositiveButton(R.string.clear, (dialog, which) -> clearUploadInformation())
+                .setMessage(R.string.confirm_delete_upload_information)
+                .setPositiveButton(R.string.delete, (dialog, which) -> clearUploadInformation())
                 .setNegativeButton(R.string.cancel, (dialog, which) -> {
                 })
                 .setCancelable(true)
