@@ -18,6 +18,7 @@ import java.util.List;
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
@@ -31,7 +32,7 @@ public class UploadSection extends Section {
     private List<FileUploadInstance> instances;
     private int numberOfUploads;
     private boolean isUploadFinished;
-    private boolean expanded = false;
+    private boolean expanded = !Preferences.isAutoDeleteEnabled();
     private MediaFileUrlLoader glideLoader;
     private long started;
     private long set;
@@ -140,10 +141,11 @@ public class UploadSection extends Section {
         this.footer = footerHolder;
         footerHolder.fTitle.setText(context.getResources().getString(R.string.more_details));
         footerHolder.fTitle.setOnClickListener(v -> uploadSectionListener.showUploadInformation(this.set));
-        if (isUploadFinished) {
-            footerHolder.fTitle.setVisibility(View.GONE);
-        } else {
+
+        if (expanded) {
             footerHolder.fTitle.setVisibility(View.VISIBLE);
+        } else {
+            footerHolder.fTitle.setVisibility(View.GONE);
         }
     }
 

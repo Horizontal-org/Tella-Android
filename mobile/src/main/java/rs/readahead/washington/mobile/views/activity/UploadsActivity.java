@@ -302,7 +302,9 @@ public class UploadsActivity extends BaseActivity implements
 
     @Override
     public void onItemRootViewClicked(MediaFile mediaFile) {
-        playMedia(mediaFile);
+        if (mediaFile != null) {
+            playMedia(mediaFile);
+        }
     }
 
     private void playMedia(MediaFile mediaFile) {

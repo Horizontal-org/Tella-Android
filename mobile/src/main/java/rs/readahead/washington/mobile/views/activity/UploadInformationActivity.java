@@ -223,7 +223,9 @@ public class UploadInformationActivity extends BaseActivity implements
 
     @Override
     public void onMediaViewItemClicked(MediaFile mediaFile) {
-        playMedia(mediaFile);
+        if (mediaFile != null) {
+            playMedia(mediaFile);
+        }
     }
 
     private void playMedia(MediaFile mediaFile) {
