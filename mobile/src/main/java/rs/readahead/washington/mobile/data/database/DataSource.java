@@ -1689,6 +1689,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
     private void removeTUServerDB(long id) {
         database.delete(D.T_TELLA_UPLOAD_SERVER, D.C_ID + " = ?", new String[]{Long.toString(id)});
+        deleteTable(D.T_MEDIA_FILE_UPLOAD);
     }
 
     private void removeServer(long id) {
@@ -1715,6 +1716,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         //deleteTable(D.T_MEDIA_FILE);
         deleteTable(D.T_COLLECT_SERVER);
         deleteTable(D.T_TELLA_UPLOAD_SERVER);
+        deleteTable(D.T_MEDIA_FILE_UPLOAD);
     }
 
     public void deleteForms() {
@@ -1729,6 +1731,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         deleteTable(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE);
         deleteTable(D.T_COLLECT_SERVER);
         deleteTable(D.T_TELLA_UPLOAD_SERVER);
+        deleteTable(D.T_MEDIA_FILE_UPLOAD);
     }
 
     public void deleteMediaFiles() {
