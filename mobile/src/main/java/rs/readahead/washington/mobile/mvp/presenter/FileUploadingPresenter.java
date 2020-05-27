@@ -87,6 +87,22 @@ public class FileUploadingPresenter implements IFileUploadingPresenterContract.I
     }
 
     @Override
+    public void logUploadedFile(RawFile rawFile) {
+        disposables.add(cacheWordDataSource.getDataSource()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMapCompletable(dataSource -> dataSource.logUploadedFile(rawFile))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                    view.onLogUploadedFileSuccess();
+                }, throwable -> {
+                    Crashlytics.logException(throwable);
+                    view.onLogUploadedFileError(throwable);
+                })
+        );
+    }
+
+    @Override
     public void destroy() {
         disposables.dispose();
         cacheWordDataSource.dispose();

@@ -43,6 +43,7 @@ import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.Metadata;
+import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
@@ -322,6 +323,14 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     public Completable scheduleUploadMediaFiles(final List<MediaFile> mediaFiles) {
         return Completable.fromCallable((Callable<Void>) () -> {
             scheduleUploadMediaFilesDb(mediaFiles);
+            return null;
+        }).compose(applyCompletableSchedulers());
+    }
+
+    @Override
+    public Completable logUploadedFile(final RawFile rawFile) {
+        return Completable.fromCallable((Callable<Void>) () -> {
+            logUploadedFileDb(rawFile);
             return null;
         }).compose(applyCompletableSchedulers());
     }
@@ -1012,7 +1021,56 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }
     }
 
+    private void logUploadedFileDb(RawFile file) {
+        try {
+
+            long set = calculateCurrentFileUploadSet();
+
+                ContentValues values = new ContentValues();
+                values.put(D.C_MEDIA_FILE_ID, file.getId());
+                values.put(D.C_UPDATED, Util.currentTimestamp());
+                values.put(D.C_CREATED, Util.currentTimestamp());
+                values.put(D.C_STATUS, UploadStatus.UPLOADED.ordinal());
+                values.put(D.C_SIZE, file.getSize());
+                values.put(D.C_SET, set);
+
+                database.insertWithOnConflict(
+                        D.T_MEDIA_FILE_UPLOAD,
+                        null,
+                        values,
+                        SQLiteDatabase.CONFLICT_REPLACE);
+
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        }
+    }
+
     private void scheduleUploadMediaFilesDb(List<MediaFile> mediaFiles) {
+        try {
+
+            long set = calculateCurrentFileUploadSet();
+
+            for (MediaFile mediaFile : mediaFiles) {
+                ContentValues values = new ContentValues();
+                values.put(D.C_MEDIA_FILE_ID, mediaFile.getId());
+                values.put(D.C_UPDATED, Util.currentTimestamp());
+                values.put(D.C_CREATED, Util.currentTimestamp());
+                values.put(D.C_STATUS, UploadStatus.SCHEDULED.ordinal());
+                values.put(D.C_SIZE, mediaFile.getSize());
+                values.put(D.C_SET, set);
+
+                database.insertWithOnConflict(
+                        D.T_MEDIA_FILE_UPLOAD,
+                        null,
+                        values,
+                        SQLiteDatabase.CONFLICT_REPLACE);
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        }
+    }
+
+    private long calculateCurrentFileUploadSet() {
         Cursor cursor = null;
         long lastSet = 0;
         long newSet;
@@ -1044,21 +1102,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 newSet = lastSet;
             }
 
-            for (MediaFile mediaFile : mediaFiles) {
-                ContentValues values = new ContentValues();
-                values.put(D.C_MEDIA_FILE_ID, mediaFile.getId());
-                values.put(D.C_UPDATED, Util.currentTimestamp());
-                values.put(D.C_CREATED, Util.currentTimestamp());
-                values.put(D.C_STATUS, UploadStatus.SCHEDULED.ordinal());
-                values.put(D.C_SIZE, mediaFile.getSize());
-                values.put(D.C_SET, newSet);
-
-                database.insertWithOnConflict(
-                        D.T_MEDIA_FILE_UPLOAD,
-                        null,
-                        values,
-                        SQLiteDatabase.CONFLICT_REPLACE);
-            }
+            return newSet;
         } catch (Exception e) {
             Timber.d(e, getClass().getName());
         } finally {
@@ -1066,6 +1110,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 cursor.close();
             }
         }
+
+        return lastSet;
     }
 
     private void setUploadStatusDb(long mediaFileId, UploadStatus status, long uploadedSize, boolean retry) {
