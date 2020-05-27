@@ -15,10 +15,11 @@
 
         <ImageView
             android:id="@+id/mediaView"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
             android:layout_marginStart="14dp"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:contentDescription="@null"
             android:padding="2dp" />
@@ -26,7 +27,8 @@
         <LinearLayout
             android:layout_height="match_parent"
             android:layout_width="0dp"
-            android:layout_weight="4.1"
+            android:layout_weight="5"
+            android:layout_marginStart="6dp"
             android:padding="6dp"
             android:orientation="vertical">
 
@@ -61,7 +63,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginEnd="14dp"
-            android:layout_weight="0.9"
+            android:layout_weight="1"
             android:alpha="0.4"
             android:padding="6dp">
 
