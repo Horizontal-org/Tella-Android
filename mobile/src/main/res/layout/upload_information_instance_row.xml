@@ -15,8 +15,8 @@
 
         <ImageView
             android:id="@+id/mediaView"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
+            android:layout_width="68dp"
+            android:layout_height="68dp"
             android:layout_marginStart="14dp"
             android:scaleType="centerCrop"
             android:layout_gravity="center_vertical"
@@ -27,7 +27,7 @@
         <LinearLayout
             android:layout_height="match_parent"
             android:layout_width="0dp"
-            android:layout_weight="5"
+            android:layout_weight="4.9"
             android:layout_marginStart="6dp"
             android:padding="6dp"
             android:orientation="vertical">
@@ -62,15 +62,15 @@
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginEnd="14dp"
-            android:layout_weight="1"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1.1"
             android:alpha="0.4"
             android:padding="6dp">
 
             <ImageView
                 android:id="@+id/uploadIndicator"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
                 android:background="@android:color/transparent"
                 android:layout_gravity="center"
                 android:clickable="true"
@@ -80,8 +80,8 @@
 
             <com.github.lzyzsd.circleprogress.DonutProgress
                 android:id="@+id/donut_progress"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
                 android:layout_gravity="center"
                 custom:donut_unfinished_color="@color/wa_black"
                 custom:donut_finished_color="@color/wa_black"
