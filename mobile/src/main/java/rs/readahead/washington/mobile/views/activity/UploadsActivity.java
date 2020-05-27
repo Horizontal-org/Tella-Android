@@ -170,7 +170,7 @@ public class UploadsActivity extends BaseActivity implements
     protected void onStart() {
         super.onStart();
         sectionedAdapter.removeAllSections();
-        presenter.getFileUploadSetInstances();
+        presenter.getFileUploadInstances();
     }
 
     @Override
@@ -249,7 +249,7 @@ public class UploadsActivity extends BaseActivity implements
     public void onFileUploadInstancesDeleted() {
         headerStatus.setVisibility(View.GONE);
         sectionedAdapter.removeAllSections();
-        presenter.getFileUploadSetInstances();
+        presenter.getFileUploadInstances();
     }
 
     @Override

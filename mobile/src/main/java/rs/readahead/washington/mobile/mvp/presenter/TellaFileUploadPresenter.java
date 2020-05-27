@@ -34,7 +34,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
     }
 
     @Override
-    public void getFileUploadSetInstances()  {
+    public void getFileUploadInstances()  {
         disposables.add(cacheWordDataSource.getDataSource()
                 .flatMapSingle((Function<DataSource, SingleSource<List<FileUploadInstance>>>) DataSource::getFileUploadInstances)
                 .subscribeOn(Schedulers.io())
