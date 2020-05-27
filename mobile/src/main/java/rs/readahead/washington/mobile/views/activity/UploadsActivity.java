@@ -366,8 +366,12 @@ public class UploadsActivity extends BaseActivity implements
         boolean updateFinished = true;
         long total = 0;
         long uploaded = 0;
+        long started = instances.get(0).getStarted();
         long newUpdateTimestamp = 0;
         for (FileUploadInstance instance : instances) {
+            if (instance.getStarted() < started) {
+                started = instance.getStarted();
+            }
             if (instance.getStatus() != ITellaUploadsRepository.UploadStatus.UPLOADED) {
                 updateFinished = false;
             }
@@ -380,7 +384,9 @@ public class UploadsActivity extends BaseActivity implements
         if (updateFinished) {
             stopOutlined.setVisibility(View.GONE);
             headerText.setText(getContext().getResources().getQuantityString(R.plurals.files_uploaded, instances.size(), instances.size()));
-            statusText.setVisibility(View.GONE);
+            statusText.setText(String.format("%s: %s", getContext().getResources().getString(R.string.started), Util.getDateTimeString(started, "dd/MM/yyyy h:mm a")));
+            startedText.setVisibility(View.GONE);
+            sectionedAdapter.notifyDataSetChanged();
             //uploadingSection ref
         }
         long progressDifference = uploaded - lastUploadedSize;
