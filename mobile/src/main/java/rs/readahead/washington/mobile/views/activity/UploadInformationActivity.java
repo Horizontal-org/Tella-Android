@@ -35,7 +35,7 @@ import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadPresenter;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.views.adapters.UploadInformationRecycleViewAdapter;
 
-public class UploadInformationActivity extends BaseActivity implements
+public class UploadInformationActivity extends CacheWordSubscriberBaseActivity implements
         ITellaFileUploadPresenterContract.IView, UploadInformationRecycleViewAdapter.UploadInformationInterface {
     public static final String SECTION_SET = "SET";
 

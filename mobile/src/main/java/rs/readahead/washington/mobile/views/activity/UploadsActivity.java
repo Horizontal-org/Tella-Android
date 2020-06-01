@@ -41,7 +41,7 @@ import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.views.adapters.UploadSection;
 
 
-public class UploadsActivity extends BaseActivity implements
+public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
         UploadSection.UploadSectionListener,
         ITellaFileUploadPresenterContract.IView {
     @BindView(R.id.uploadsRecyclerView)
