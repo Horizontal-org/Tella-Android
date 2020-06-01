@@ -120,10 +120,6 @@ public class UploadSection extends Section {
 
         if (isUploadFinished) {
             headerHolder.title.setText(context.getResources().getQuantityString(R.plurals.files_uploaded, numberOfUploads, numberOfUploads));
-            headerHolder.itemView.setOnClickListener(v -> {
-                uploadSectionListener.onHeaderRootViewClicked(this);
-                toggleFooter();
-            });
         } else {
             headerHolder.title.setVisibility(View.GONE);
             headerHolder.startedText.setVisibility(View.GONE);
@@ -180,21 +176,8 @@ public class UploadSection extends Section {
         }
     }
 
-    private void toggleFooter() {
-        footer.fTitle.setVisibility(isExpanded() ? View.VISIBLE : View.GONE);
-    }
-
-    public boolean isExpanded() {
-        return expanded;
-    }
-
-    public void setExpanded(final boolean expanded) {
-        this.expanded = expanded;
-    }
-
     public interface UploadSectionListener {
         void showUploadInformation(final long set);
-        void onHeaderRootViewClicked(@NonNull final UploadSection section);
         void onItemRootViewClicked(MediaFile mediaFile);
     }
 }

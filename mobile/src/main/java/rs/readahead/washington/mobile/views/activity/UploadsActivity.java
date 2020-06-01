@@ -284,23 +284,6 @@ public class UploadsActivity extends BaseActivity implements
     }
 
     @Override
-    public void onHeaderRootViewClicked(@NonNull UploadSection section) {
-        final SectionAdapter sectionAdapter = sectionedAdapter.getAdapterForSection(section);
-
-        final boolean wasExpanded = section.isExpanded();
-        final int previousItemsTotal = section.getContentItemsTotal();
-
-        section.setExpanded(!wasExpanded);
-        sectionAdapter.notifyHeaderChanged();
-
-        if (wasExpanded) {
-            sectionAdapter.notifyItemRangeRemoved(0, previousItemsTotal);
-        } else {
-            sectionAdapter.notifyAllItemsInserted();
-        }
-    }
-
-    @Override
     public void onItemRootViewClicked(MediaFile mediaFile) {
         if (mediaFile != null) {
             playMedia(mediaFile);
