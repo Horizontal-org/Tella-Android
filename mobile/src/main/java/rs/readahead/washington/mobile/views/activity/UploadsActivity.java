@@ -30,6 +30,7 @@ import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent;
 import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
@@ -38,6 +39,7 @@ import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadPresenter;
 import rs.readahead.washington.mobile.util.Util;
+import rs.readahead.washington.mobile.util.jobs.TellaUploadJob;
 import rs.readahead.washington.mobile.views.adapters.UploadSection;
 
 
@@ -117,6 +119,8 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
             animator.setMoveDuration(0);
             animator.setRemoveDuration(0);
         }
+
+        setupStopResumeButton();
     }
 
     private void setupToolbar() {
@@ -202,7 +206,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
         }
 
         for (FileUploadInstance instance : instances) {
-            if (instance.getStatus().ordinal() > ITellaUploadsRepository.UploadStatus.UPLOADED.ordinal()) {
+            if (instance.getStatus().ordinal() > ITellaUploadsRepository.UploadStatus.UPLOADED.ordinal() && uploaded) {
                 uploaded = false; // if any of instances in the set is not uploaded -> set is not uploaded
                 uploadingSet = set;
             }
@@ -263,10 +267,18 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
     }
 
     @OnClick(R.id.stop_outlined)
+    public void onStopClicked() {
+        if (Preferences.isAutoUploadPaused()) {
+            resumeUpload();
+        } else {
+            showClearScheduledDialog();
+        }
+    }
+
     public void showClearScheduledDialog() {
         alertDialog = new AlertDialog.Builder(this)
                 .setMessage(R.string.stop_upload_dialog)
-                .setPositiveButton(R.string.clear, (dialog, which) -> clearScheduled())
+                .setPositiveButton(R.string.ra_stop, (dialog, which) -> pauseUpload())
                 .setNegativeButton(R.string.cancel, (dialog, which) -> {
                 })
                 .setCancelable(true)
@@ -306,6 +318,28 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
         }
     }
 
+    private void pauseUpload() {
+        Preferences.setAutoUploadPased(true);
+        statusText.setText(getContext().getResources().getString(R.string.stopped));
+        stopOutlined.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_refresh_black_24dp));
+    }
+
+    private void resumeUpload() {
+        Preferences.setAutoUploadPased(false);
+        statusText.setText(getContext().getResources().getString(R.string.connecting));
+        stopOutlined.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_stop_circle_outline));
+        TellaUploadJob.scheduleJob();
+    }
+
+    private void setupStopResumeButton() {
+        if (Preferences.isAutoUploadPaused()) {
+            stopOutlined.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_refresh_black_24dp));
+            statusText.setText(getContext().getResources().getString(R.string.stopped));
+        } else {
+            stopOutlined.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_stop_circle_outline));
+        }
+    }
+
     private void startUploadInformationActivity(long set) {
         Intent intent = new Intent(this, UploadInformationActivity.class);
         intent.putExtra(UploadInformationActivity.SECTION_SET, set);
@@ -341,8 +375,13 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
             lastUploadedSize += instance.getUploaded();
         }
         startedText.setText(String.format("%s: %s", getContext().getResources().getString(R.string.started), Util.getDateTimeString(started, "dd/MM/yyyy h:mm a")));
-        statusText.setText(String.format("%s, %s",
-                getContext().getResources().getQuantityString(R.plurals.file, instances.size(), instances.size()), getContext().getResources().getString(R.string.connecting)));
+        if (Preferences.isAutoUploadPaused()) {
+            statusText.setText(String.format("%s, %s",
+                    getContext().getResources().getQuantityString(R.plurals.file, instances.size(), instances.size()), getContext().getResources().getString(R.string.stopped)));
+        } else {
+            statusText.setText(String.format("%s, %s",
+                    getContext().getResources().getQuantityString(R.plurals.file, instances.size(), instances.size()), getContext().getResources().getString(R.string.connecting)));
+        }
     }
 
     private void updateProgressStatus(List<FileUploadInstance> instances) {

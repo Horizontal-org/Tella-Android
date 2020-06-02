@@ -37,7 +37,7 @@ public class TellaUploadJob extends Job {
     @NonNull
     @Override
     protected Job.Result onRunJob(@NotNull Job.Params params) {
-        if (!enter()) {
+        if (!enter() || Preferences.isAutoUploadPaused()) {
             return Job.Result.SUCCESS;
         }
 
