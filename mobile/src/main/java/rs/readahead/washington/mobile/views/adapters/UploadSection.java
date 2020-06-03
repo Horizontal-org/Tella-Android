@@ -122,6 +122,8 @@ public class UploadSection extends Section {
 
         if (isUploadFinished) {
             headerHolder.title.setText(context.getResources().getQuantityString(R.plurals.files_uploaded, numberOfUploads, numberOfUploads));
+            headerHolder.title.setVisibility(View.VISIBLE);
+            headerHolder.startedText.setVisibility(View.VISIBLE);
         } else {
             headerHolder.title.setVisibility(View.GONE);
             headerHolder.startedText.setVisibility(View.GONE);
