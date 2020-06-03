@@ -100,6 +100,8 @@ public class UploadSection extends Section {
 
         if (instances.get(position).getStatus() != ITellaUploadsRepository.UploadStatus.UPLOADED) {
             ViewUtil.setGrayScale(itemHolder.mediaView);
+        } else {
+            ViewUtil.setColored(itemHolder.mediaView);
         }
 
         itemHolder.itemView.setOnClickListener(v ->
