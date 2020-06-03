@@ -405,10 +405,12 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
         }
         if (updateFinished) {
             stopOutlined.setVisibility(View.GONE);
-            headerText.setText(getContext().getResources().getQuantityString(R.plurals.files_uploaded, instances.size(), instances.size()));
+            headerStatus.setVisibility(View.GONE);
+            /*headerText.setText(getContext().getResources().getQuantityString(R.plurals.files_uploaded, instances.size(), instances.size()));
             statusText.setText(String.format("%s: %s", getContext().getResources().getString(R.string.started), Util.getDateTimeString(started, "dd/MM/yyyy h:mm a")));
-            startedText.setVisibility(View.GONE);
-            sectionedAdapter.notifyDataSetChanged();
+            startedText.setVisibility(View.GONE);*/
+            sectionedAdapter.removeAllSections();
+            presenter.getFileUploadInstances();
             //uploadingSection ref
         }
         long progressDifference = uploaded - lastUploadedSize;
