@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
@@ -22,7 +21,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.github.luizgrp.sectionedrecyclerviewadapter.SectionAdapter;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
@@ -74,6 +72,17 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
     private UploadSection uploadingSection;
     private long lastUpdateTimeStamp = 0;
     private long lastUploadedSize = 0;
+
+    //
+    private List<FileUploadInstance> uploadnigList;
+    private static final long REFRESH_TIME_MS = 300;
+    private boolean updateFinished = true;
+    private long total = 0;
+    private long uploaded = 0;
+    private long started = 0;
+    private long newUpdateTimestamp = 0;
+    private long uploadAddition = 0;
+    private String uploadingFileName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,26 +220,14 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
                 uploadingSet = set;
             }
             if (set != instance.getSet()) {
-                UploadSection section = new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), setInstances, this, set);
-                sectionedAdapter.addSection(section);
-                sectionedAdapter.notifyDataSetChanged();
-                if (!uploaded) {
-                    setUploadingHeader(setInstances);
-                    uploadingSection = section;
-                }
+                insertSection(setInstances, uploaded, set);
                 uploaded = true;
                 set = instance.getSet();
                 setInstances = new ArrayList<>();
             }
             setInstances.add(instance);
         }
-        UploadSection section = new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), setInstances, this, set);
-        if (!uploaded) {
-            setUploadingHeader(setInstances);
-            uploadingSection = section;
-        }
-        sectionedAdapter.addSection(section); // add last set
-        sectionedAdapter.notifyDataSetChanged();
+        insertSection(setInstances, uploaded, set);
         invalidateOptionsMenu();
     }
 
@@ -241,7 +238,9 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
 
     @Override
     public void onGetFileUploadSetInstancesSuccess(List<FileUploadInstance> instances) {
-        updateProgressStatus(instances);
+        uploadnigList = instances;
+        refreshUploadingProgressData();
+        //updateProgressStatus(instances);
     }
 
     @Override
@@ -283,11 +282,6 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
                 })
                 .setCancelable(true)
                 .show();
-    }
-
-    public void clearScheduled() {
-        presenter.deleteFileUploadInstancesNotInStatus(ITellaUploadsRepository.UploadStatus.UPLOADED);
-        runOnUiThread(() -> uploadsRecyclerView.removeAllViews());
     }
 
     @Override
@@ -340,6 +334,19 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
         }
     }
 
+
+    private void insertSection(List<FileUploadInstance> setInstances, boolean uploaded, long set) {
+        UploadSection section = new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), setInstances, this, set);
+        if (!uploaded) {
+            setUploadingHeader(setInstances);
+            uploadingSection = section;
+            uploadnigList = setInstances;
+            refreshUploadingProgressData();
+        }
+        sectionedAdapter.addSection(section);
+        sectionedAdapter.notifyDataSetChanged();
+    }
+
     private void startUploadInformationActivity(long set) {
         Intent intent = new Intent(this, UploadInformationActivity.class);
         intent.putExtra(UploadInformationActivity.SECTION_SET, set);
@@ -357,7 +364,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
     }
 
     private void onProgressUpdateEvent(UploadProgressInfo progress) {
-        presenter.getFileUploadSetInstances(uploadingSet);
+        setProgressView(progress);
     }
 
     private void setUploadingHeader(List<FileUploadInstance> instances) {
@@ -384,13 +391,12 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
         }
     }
 
-    private void updateProgressStatus(List<FileUploadInstance> instances) {
-        boolean updateFinished = true;
-        long total = 0;
-        long uploaded = 0;
-        long started = instances.get(0).getStarted();
-        long newUpdateTimestamp = 0;
-        for (FileUploadInstance instance : instances) {
+    private void refreshUploadingProgressData() {
+        started = uploadnigList.get(0).getStarted();
+        total = 0;
+        uploaded = 0;
+
+        for (FileUploadInstance instance : uploadnigList) {
             if (instance.getStarted() < started) {
                 started = instance.getStarted();
             }
@@ -400,44 +406,89 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
             if (instance.getUpdated() > newUpdateTimestamp) {
                 newUpdateTimestamp = instance.getUpdated();
             }
-            uploaded += instance.getUploaded();
+
+            if (instance.getStatus() == ITellaUploadsRepository.UploadStatus.UPLOADED) {
+                uploaded += instance.getSize();
+            } else {
+                uploaded += instance.getUploaded();
+            }
+
             total += instance.getSize();
         }
+    }
+
+    private void setProgressView(UploadProgressInfo progress) {
+        long projectedRemaininigTime = 90000000;
+        long now = Util.currentTimestamp();
+
+        if (now - lastUpdateTimeStamp < REFRESH_TIME_MS && progress.status != UploadProgressInfo.Status.FINISHED) {
+            return;
+        }
+
+        if (progress.status == UploadProgressInfo.Status.STARTED) {
+            return;
+        }
+
+        if (progress.status == UploadProgressInfo.Status.FINISHED) {
+            //color file
+        }
+
+        if (uploadingFileName.equals(progress.name)) {
+            uploaded = uploaded - uploadAddition + progress.current;
+        } else {
+            uploaded += progress.current;
+        }
+
+        uploadAddition = progress.current;
+
+
         if (updateFinished) {
             stopOutlined.setVisibility(View.GONE);
             headerStatus.setVisibility(View.GONE);
-            /*headerText.setText(getContext().getResources().getQuantityString(R.plurals.files_uploaded, instances.size(), instances.size()));
-            statusText.setText(String.format("%s: %s", getContext().getResources().getString(R.string.started), Util.getDateTimeString(started, "dd/MM/yyyy h:mm a")));
-            startedText.setVisibility(View.GONE);*/
             sectionedAdapter.removeAllSections();
             presenter.getFileUploadInstances();
-            //uploadingSection ref
-        }
-        long progressDifference = uploaded - lastUploadedSize;
-        long timeDifference = newUpdateTimestamp - lastUpdateTimeStamp;
-        long remainingUpload = total - uploaded;
-        long projectedRemaininigTime = (remainingUpload * timeDifference) / progressDifference;
-
-        if ( timeDifference < 0) {
             return;
         }
-        if (projectedRemaininigTime > 60000) {
+
+        long progressDifference = uploaded - lastUploadedSize;
+        long timeDifference = now - lastUpdateTimeStamp;
+
+        lastUploadedSize = uploaded;
+        lastUpdateTimeStamp = now;
+
+        long remainingUpload = total - uploaded;
+
+        if (uploaded >= total) {
+            stopOutlined.setVisibility(View.GONE);
+            headerStatus.setVisibility(View.GONE);
+            sectionedAdapter.removeAllSections();
+            presenter.getFileUploadInstances();
+            return;
+        }
+
+        if (progressDifference > 0) {
+            projectedRemaininigTime = (remainingUpload * timeDifference) / progressDifference;
+        }
+
+        if (projectedRemaininigTime > 3600000) {
+            statusText.setText(String.format("%s, %s",
+                    getContext().getResources().getQuantityString(R.plurals.file, uploadnigList.size(), uploadnigList.size()),
+                    getContext().getResources().getString(R.string.more_than_an_hour_left)));
+        } else if (projectedRemaininigTime > 60000) {
             int minutes = (int) projectedRemaininigTime / 60000;
             statusText.setText(String.format("%s, %s",
-                    getContext().getResources().getQuantityString(R.plurals.file, instances.size(), instances.size()),
+                    getContext().getResources().getQuantityString(R.plurals.file, uploadnigList.size(), uploadnigList.size()),
                     getContext().getResources().getQuantityString(R.plurals.minutes_left, minutes, minutes)));
         } else {
             statusText.setText(String.format("%s, %s",
-                    getContext().getResources().getQuantityString(R.plurals.file, instances.size(), instances.size()),
+                    getContext().getResources().getQuantityString(R.plurals.file, uploadnigList.size(), uploadnigList.size()),
                     getContext().getResources().getString(R.string.less_than_a_minute_left)));
         }
-
-        lastUpdateTimeStamp = newUpdateTimestamp;
-        lastUploadedSize = uploaded;
     }
 
     private void clearHistory() {
         presenter.deleteFileUploadInstancesInStatus(ITellaUploadsRepository.UploadStatus.UPLOADED);
-        runOnUiThread(() -> uploadsRecyclerView.removeAllViews());// bad & temporary solution to refresh
+        uploadsRecyclerView.removeAllViews();
     }
 }
+
