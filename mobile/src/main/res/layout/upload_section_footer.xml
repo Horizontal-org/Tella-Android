@@ -15,9 +15,9 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:textColor="@color/wa_gray"
-        android:paddingTop="2dp"
-        android:paddingBottom="12dp"
-        android:layout_marginEnd="15dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="8dp"
+        android:layout_marginEnd="20dp"
         tools:text="@string/more_details"/>
 
     <View

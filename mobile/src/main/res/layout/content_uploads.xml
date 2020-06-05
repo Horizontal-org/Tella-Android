@@ -80,6 +80,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/header_status_bar"
         android:clipToPadding="false"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:orientation="horizontal"
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="none"

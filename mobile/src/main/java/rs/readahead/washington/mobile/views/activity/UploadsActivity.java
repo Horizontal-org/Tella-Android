@@ -38,6 +38,7 @@ import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadPresenterCont
 import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadPresenter;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.util.jobs.TellaUploadJob;
+import rs.readahead.washington.mobile.views.adapters.SectionItemOffset;
 import rs.readahead.washington.mobile.views.adapters.UploadSection;
 
 
@@ -72,6 +73,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
     private UploadSection uploadingSection;
     private long lastUpdateTimeStamp = 0;
     private long lastUploadedSize = 0;
+    private static final int spacing = 50; // 50px
 
     //
     private List<FileUploadInstance> uploadnigList;
@@ -122,12 +124,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
 
         uploadsRecyclerView.setLayoutManager(gridLayoutManager);
         uploadsRecyclerView.setAdapter(sectionedAdapter);
-
-        RecyclerView.ItemAnimator animator = uploadsRecyclerView.getItemAnimator();
-        if (animator != null) {
-            animator.setMoveDuration(0);
-            animator.setRemoveDuration(0);
-        }
+        uploadsRecyclerView.addItemDecoration(new SectionItemOffset(spacing));
 
         setupStopResumeButton();
     }
@@ -240,7 +237,6 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
     public void onGetFileUploadSetInstancesSuccess(List<FileUploadInstance> instances) {
         uploadnigList = instances;
         refreshUploadingProgressData();
-        //updateProgressStatus(instances);
     }
 
     @Override
