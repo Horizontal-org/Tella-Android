@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
@@ -20,7 +19,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
@@ -78,14 +76,10 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
 
     //
     private List<FileUploadInstance> uploadnigList;
-    private static final long REFRESH_TIME_MS = 300;
-    private boolean updateFinished = true;
+    private static final long REFRESH_TIME_MS = 500;
     private long total = 0;
     private long uploaded = 0;
-    private long started = 0;
     private long newUpdateTimestamp = 0;
-    private long uploadAddition = 0;
-    private String uploadingFileName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -318,7 +312,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
     private void resumeUpload() {
         Preferences.setAutoUploadPased(false);
         statusText.setText(getContext().getResources().getString(R.string.connecting));
-        stopOutlined.setProgress(0);
+        setProgress();
         stopOutlined.donutProgress.setOnClickListener(v -> onStopClicked());
         TellaUploadJob.scheduleJob();
     }
@@ -329,7 +323,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
             stopOutlined.button.setOnClickListener(v -> onStopClicked());
             statusText.setText(getContext().getResources().getString(R.string.stopped));
         } else {
-            stopOutlined.setProgress(0);
+            setProgress();
             stopOutlined.donutProgress.setOnClickListener(v -> onStopClicked());
         }
     }
@@ -364,7 +358,11 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
     }
 
     private void onProgressUpdateEvent(UploadProgressInfo progress) {
-        setProgressView(progress);
+        long now = Util.currentTimestamp();
+        if (now - lastUpdateTimeStamp < REFRESH_TIME_MS) {   //&& progress.status != UploadProgressInfo.Status.FINISHED
+            return;
+        }
+        presenter.getFileUploadSetInstances(uploadingSet);
     }
 
     private void setUploadingHeader(List<FileUploadInstance> instances) {
@@ -392,17 +390,22 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
     }
 
     private void refreshUploadingProgressData() {
-        started = uploadnigList.get(0).getStarted();
+        long started = uploadnigList.get(0).getStarted();
+        boolean updateFinished = true;
         total = 0;
         uploaded = 0;
 
-        for (FileUploadInstance instance : uploadnigList) {
+        for (int i = 0; i < uploadnigList.size(); i++) {
+            FileUploadInstance instance = uploadnigList.get(i);
             if (instance.getStarted() < started) {
                 started = instance.getStarted();
             }
             if (instance.getStatus() != ITellaUploadsRepository.UploadStatus.UPLOADED) {
                 updateFinished = false;
+            } else {
+                sectionedAdapter.notifyDataSetChanged();
             }
+
             if (instance.getUpdated() > newUpdateTimestamp) {
                 newUpdateTimestamp = instance.getUpdated();
             }
@@ -415,38 +418,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
 
             total += instance.getSize();
         }
-    }
-
-    private void setProgressView(UploadProgressInfo progress) {
-        long projectedRemaininigTime = 90000000;
-        long now = Util.currentTimestamp();
-
-        if (now - lastUpdateTimeStamp < REFRESH_TIME_MS && progress.status != UploadProgressInfo.Status.FINISHED) {
-            return;
-        }
-
-        if (progress.status == UploadProgressInfo.Status.STARTED) {
-            return;
-        }
-
-        if (progress.status == UploadProgressInfo.Status.FINISHED) {
-            for (int i = 0; i < uploadnigList.size(); i++) {
-                FileUploadInstance instance = uploadnigList.get(i);
-                if (instance.getMediaFile().getFileName().equals(progress.name)) {
-                    instance.setStatus(ITellaUploadsRepository.UploadStatus.UPLOADED);
-                    if (uploadsRecyclerView.getAdapter() == null) return;
-                    //uploadsRecyclerView.getAdapter().notifyItemChanged(i + 1);
-                }
-            }
-        }
-
-        if (uploadingFileName.equals(progress.name)) {
-            uploaded = uploaded - uploadAddition + progress.current;
-        } else {
-            uploaded += progress.current;
-        }
-
-        uploadAddition = progress.current;
+        setProgress();
 
         if (updateFinished) {
             stopOutlined.setVisibility(View.GONE);
@@ -456,45 +428,49 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
             return;
         }
 
-        long progressDifference = uploaded - lastUploadedSize;
-        long timeDifference = now - lastUpdateTimeStamp;
+        long now = Util.currentTimestamp();
 
+        if (lastUploadedSize > 0){
+            long progressDifference = uploaded - lastUploadedSize;
+            long timeDifference = now - lastUpdateTimeStamp;
+            long remainingUpload = total - uploaded;
+            long projectedRemaininigTime = 3600001;
+
+            if (progressDifference > 0) {
+                projectedRemaininigTime = (remainingUpload * timeDifference) / progressDifference;
+            }
+
+            if (projectedRemaininigTime > 3600000) {
+                statusText.setText(String.format("%s, %s",
+                        getContext().getResources().getQuantityString(R.plurals.file, uploadnigList.size(), uploadnigList.size()),
+                        getContext().getResources().getString(R.string.more_than_an_hour_left)));
+            } else if (projectedRemaininigTime > 60000) {
+                int minutes = (int) projectedRemaininigTime / 60000;
+                statusText.setText(String.format("%s, %s",
+                        getContext().getResources().getQuantityString(R.plurals.file, uploadnigList.size(), uploadnigList.size()),
+                        getContext().getResources().getQuantityString(R.plurals.minutes_left, minutes, minutes)));
+            } else {
+                statusText.setText(String.format("%s, %s",
+                        getContext().getResources().getQuantityString(R.plurals.file, uploadnigList.size(), uploadnigList.size()),
+                        getContext().getResources().getString(R.string.less_than_a_minute_left)));
+            }
+        }
         lastUploadedSize = uploaded;
         lastUpdateTimeStamp = now;
-
-        long remainingUpload = total - uploaded;
-
-        if (uploaded >= total) {
-            stopOutlined.setVisibility(View.GONE);
-            headerStatus.setVisibility(View.GONE);
-            sectionedAdapter.removeAllSections();
-            presenter.getFileUploadInstances();
-            return;
-        }
-
-        if (progressDifference > 0) {
-            projectedRemaininigTime = (remainingUpload * timeDifference) / progressDifference;
-        }
-
-        if (projectedRemaininigTime > 3600000) {
-            statusText.setText(String.format("%s, %s",
-                    getContext().getResources().getQuantityString(R.plurals.file, uploadnigList.size(), uploadnigList.size()),
-                    getContext().getResources().getString(R.string.more_than_an_hour_left)));
-        } else if (projectedRemaininigTime > 60000) {
-            int minutes = (int) projectedRemaininigTime / 60000;
-            statusText.setText(String.format("%s, %s",
-                    getContext().getResources().getQuantityString(R.plurals.file, uploadnigList.size(), uploadnigList.size()),
-                    getContext().getResources().getQuantityString(R.plurals.minutes_left, minutes, minutes)));
-        } else {
-            statusText.setText(String.format("%s, %s",
-                    getContext().getResources().getQuantityString(R.plurals.file, uploadnigList.size(), uploadnigList.size()),
-                    getContext().getResources().getString(R.string.less_than_a_minute_left)));
-        }
     }
 
     private void clearHistory() {
         presenter.deleteFileUploadInstancesInStatus(ITellaUploadsRepository.UploadStatus.UPLOADED);
         uploadsRecyclerView.removeAllViews();
+    }
+
+    private void setProgress(){
+        if (total > 0) {
+            int progress = (int) (uploaded * 100 / total);
+            stopOutlined.setProgress(progress);
+        } else {
+            stopOutlined.setProgress(0);
+        }
     }
 }
 
