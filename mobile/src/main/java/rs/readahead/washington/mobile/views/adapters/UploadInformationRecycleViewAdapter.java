@@ -14,7 +14,6 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.github.lzyzsd.circleprogress.DonutProgress;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,6 +29,7 @@ import rs.readahead.washington.mobile.media.MediaFileUrlLoader;
 import rs.readahead.washington.mobile.presentation.entity.MediaFileLoaderModel;
 import rs.readahead.washington.mobile.util.FileUtil;
 import rs.readahead.washington.mobile.util.ViewUtil;
+import rs.readahead.washington.mobile.views.custom.StopResumeUploadButton;
 
 public class UploadInformationRecycleViewAdapter extends RecyclerView.Adapter<UploadInformationRecycleViewAdapter.ViewHolder> {
     private List<FileUploadInstance> instances = Collections.emptyList();
@@ -80,17 +80,12 @@ public class UploadInformationRecycleViewAdapter extends RecyclerView.Adapter<Up
         ViewUtil.setGrayScale(holder.mediaView);
 
         if (instance.getStatus() == ITellaUploadsRepository.UploadStatus.UPLOADED) {
-            holder.uploadIndicator.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_check_circle_green));
-            holder.uploadIndicator.setPadding(0, 0, 0, 0);
-            holder.donutProgress.setVisibility(View.GONE);
+            holder.stopResumeUploadButton.setUploaded();
             ViewUtil.setColored(holder.mediaView);
         } else {
             int progress = (int) (instance.getUploaded() * 100 / instance.getSize());
-            holder.donutProgress.setVisibility(View.VISIBLE);
-            holder.donutProgress.setProgress(progress);
-            holder.uploadIndicator.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_stop_black_24dp));
-            holder.uploadIndicator.setPadding(20, 20, 20, 20);
-            holder.donutProgress.setOnClickListener(v -> uploadInformationInterface.clearUpload(instance.getId()));
+            holder.stopResumeUploadButton.setProgress(progress);
+            holder.stopResumeUploadButton.donutProgress.setOnClickListener(v -> uploadInformationInterface.clearUpload(instance.getId()));
         }
 
         holder.mediaView.setOnClickListener(v -> uploadInformationInterface.onMediaViewItemClicked(instance.getMediaFile()));
@@ -124,10 +119,8 @@ public class UploadInformationRecycleViewAdapter extends RecyclerView.Adapter<Up
         TextView size;
         @BindView(R.id.hash)
         TextView hash;
-        @BindView(R.id.uploadIndicator)
-        ImageView uploadIndicator;
-        @BindView(R.id.donut_progress)
-        DonutProgress donutProgress;
+        @BindView(R.id.stop_button)
+        StopResumeUploadButton stopResumeUploadButton;
 
         ViewHolder(View itemView) {
             super(itemView);

@@ -40,6 +40,7 @@ import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.util.jobs.TellaUploadJob;
 import rs.readahead.washington.mobile.views.adapters.SectionItemOffset;
 import rs.readahead.washington.mobile.views.adapters.UploadSection;
+import rs.readahead.washington.mobile.views.custom.StopResumeUploadButton;
 
 
 public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
@@ -60,7 +61,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
     @BindView(R.id.started_text)
     TextView startedText;
     @BindView(R.id.stop_outlined)
-    ImageView stopOutlined;
+    StopResumeUploadButton stopOutlined;
 
     private TellaFileUploadPresenter presenter;
     private CacheWordDataSource cacheWordDataSource;
@@ -261,7 +262,6 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
         return this;
     }
 
-    @OnClick(R.id.stop_outlined)
     public void onStopClicked() {
         if (Preferences.isAutoUploadPaused()) {
             resumeUpload();
@@ -311,22 +311,26 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
     private void pauseUpload() {
         Preferences.setAutoUploadPased(true);
         statusText.setText(getContext().getResources().getString(R.string.stopped));
-        stopOutlined.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_refresh_black_24dp));
+        stopOutlined.setStopped();
+        stopOutlined.button.setOnClickListener(v -> onStopClicked());
     }
 
     private void resumeUpload() {
         Preferences.setAutoUploadPased(false);
         statusText.setText(getContext().getResources().getString(R.string.connecting));
-        stopOutlined.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_stop_circle_outline));
+        stopOutlined.setProgress(0);
+        stopOutlined.donutProgress.setOnClickListener(v -> onStopClicked());
         TellaUploadJob.scheduleJob();
     }
 
     private void setupStopResumeButton() {
         if (Preferences.isAutoUploadPaused()) {
-            stopOutlined.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_refresh_black_24dp));
+            stopOutlined.setStopped();
+            stopOutlined.button.setOnClickListener(v -> onStopClicked());
             statusText.setText(getContext().getResources().getString(R.string.stopped));
         } else {
-            stopOutlined.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_stop_circle_outline));
+            stopOutlined.setProgress(0);
+            stopOutlined.donutProgress.setOnClickListener(v -> onStopClicked());
         }
     }
 
@@ -426,7 +430,14 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
         }
 
         if (progress.status == UploadProgressInfo.Status.FINISHED) {
-            //color file
+            for (int i = 0; i < uploadnigList.size(); i++) {
+                FileUploadInstance instance = uploadnigList.get(i);
+                if (instance.getMediaFile().getFileName().equals(progress.name)) {
+                    instance.setStatus(ITellaUploadsRepository.UploadStatus.UPLOADED);
+                    if (uploadsRecyclerView.getAdapter() == null) return;
+                    //uploadsRecyclerView.getAdapter().notifyItemChanged(i + 1);
+                }
+            }
         }
 
         if (uploadingFileName.equals(progress.name)) {
@@ -436,7 +447,6 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
         }
 
         uploadAddition = progress.current;
-
 
         if (updateFinished) {
             stopOutlined.setVisibility(View.GONE);

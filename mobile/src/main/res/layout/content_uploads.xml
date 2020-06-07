@@ -62,16 +62,14 @@
                 android:textColor="@color/wa_gray" />
         </LinearLayout>
 
-        <ImageView
+        <rs.readahead.washington.mobile.views.custom.StopResumeUploadButton
             android:id="@+id/stop_outlined"
             android:layout_width="46dp"
             android:layout_height="46dp"
             android:layout_marginStart="12dp"
-            android:alpha="0.5"
-            android:padding="5dp"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/ic_stop_circle_outline"
-            android:contentDescription="@string/ra_stop" />
+            android:clickable="true"
+            android:focusable="true" />
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView

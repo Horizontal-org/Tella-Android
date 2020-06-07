@@ -87,9 +87,6 @@ public class UploadInformationActivity extends CacheWordSubscriberBaseActivity i
 
         if (getIntent().hasExtra(SECTION_SET)) {
             this.set = getIntent().getLongExtra(SECTION_SET, 0);
-            if (set != 0) {
-                presenter.getFileUploadSetInstances(set);
-            } else onBackPressed();
         }
     }
 
@@ -137,7 +134,11 @@ public class UploadInformationActivity extends CacheWordSubscriberBaseActivity i
 
     @Override
     protected void onResume() {
-        presenter.getFileUploadSetInstances(set);
+        if (set != 0) {
+            presenter.getFileUploadSetInstances(set);
+        } else {
+            onBackPressed();
+        }
         super.onResume();
     }
 
@@ -245,6 +246,9 @@ public class UploadInformationActivity extends CacheWordSubscriberBaseActivity i
     }
 
     private void onProgressUpdateEvent(UploadProgressInfo progress) {
+        if (instances == null) {
+            return;
+        }
         for (int i = 0; i < instances.size(); i++) {
             if (instances.get(i).getMediaFile() == null) {
                 continue;
