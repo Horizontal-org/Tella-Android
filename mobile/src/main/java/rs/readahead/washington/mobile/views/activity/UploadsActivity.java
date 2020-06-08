@@ -99,7 +99,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
         disposables.wire(FileUploadProgressEvent.class, new EventObserver<FileUploadProgressEvent>() {
             @Override
             public void onNext(FileUploadProgressEvent event) {
-                onProgressUpdateEvent(event.getProgress());
+                onProgressUpdateEvent();
             }
         });
 
@@ -195,6 +195,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
 
     @Override
     public void onGetFileUploadInstancesSuccess(List<FileUploadInstance> instances) {
+        sectionedAdapter.removeAllSections();
         List<FileUploadInstance> setInstances = new ArrayList<>();
         boolean uploaded = true;
         long set = instances.get(0).getSet();
@@ -357,7 +358,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
                 .show();
     }
 
-    private void onProgressUpdateEvent(UploadProgressInfo progress) {
+    private void onProgressUpdateEvent() {
         long now = Util.currentTimestamp();
         if (now - lastUpdateTimeStamp < REFRESH_TIME_MS) {   //&& progress.status != UploadProgressInfo.Status.FINISHED
             return;
@@ -434,7 +435,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
             long progressDifference = uploaded - lastUploadedSize;
             long timeDifference = now - lastUpdateTimeStamp;
             long remainingUpload = total - uploaded;
-            long projectedRemaininigTime = 3600001;
+            long projectedRemaininigTime = 0;
 
             if (progressDifference > 0) {
                 projectedRemaininigTime = (remainingUpload * timeDifference) / progressDifference;
@@ -449,7 +450,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
                 statusText.setText(String.format("%s, %s",
                         getContext().getResources().getQuantityString(R.plurals.file, uploadnigList.size(), uploadnigList.size()),
                         getContext().getResources().getQuantityString(R.plurals.minutes_left, minutes, minutes)));
-            } else {
+            } else if (projectedRemaininigTime > 0){
                 statusText.setText(String.format("%s, %s",
                         getContext().getResources().getQuantityString(R.plurals.file, uploadnigList.size(), uploadnigList.size()),
                         getContext().getResources().getString(R.string.less_than_a_minute_left)));

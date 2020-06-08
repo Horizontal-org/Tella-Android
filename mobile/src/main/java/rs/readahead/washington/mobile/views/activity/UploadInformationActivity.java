@@ -279,7 +279,7 @@ public class UploadInformationActivity extends CacheWordSubscriberBaseActivity i
             }
         }
         numberOfFilesText.setText(String.format("%s: %d", getContext().getResources().getString(R.string.number_of_files), instances.size()));
-        startedText.setText(String.format("%s: %s", getContext().getResources().getString(R.string.started), Util.getDateTimeString(timeStarted, "dd/MM/yyyy h:mm a")));
+        startedText.setText(String.format("%s: %s", getContext().getResources().getString(R.string.date_started), Util.getDateTimeString(timeStarted, "dd/MM/yyyy h:mm a")));
         completedText.setText(String.format("%s: %s", getContext().getResources().getString(R.string.completed), Util.getDateTimeString(timeCompleted, "dd/MM/yyyy h:mm a")));
         completedText.setVisibility(completed ? View.VISIBLE : View.GONE);
     }
