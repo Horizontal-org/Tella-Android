@@ -68,7 +68,6 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
     private boolean uploadsExist;
     private final int spanCount = 5;
     private long uploadingSet;
-    private UploadSection uploadingSection;
     private long lastUpdateTimeStamp = 0;
     private long lastUploadedSize = 0;
     private static final int spacing = 50; // 50px
@@ -330,12 +329,10 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
         }
     }
 
-
     private void insertSection(List<FileUploadInstance> setInstances, boolean uploaded, long set) {
         UploadSection section = new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), setInstances, this, set);
         if (!uploaded) {
             setUploadingHeader(setInstances);
-            uploadingSection = section;
             uploadnigList = setInstances;
             refreshUploadingProgressData();
         }

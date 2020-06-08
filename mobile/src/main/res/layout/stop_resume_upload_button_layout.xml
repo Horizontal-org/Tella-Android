@@ -16,7 +16,7 @@
         android:clickable="true"
         android:contentDescription="@null"
         android:focusable="true"
-        android:src="@drawable/ic_error" />
+        android:src="@drawable/ic_stop_black_24dp" />
 
     <com.github.lzyzsd.circleprogress.DonutProgress
         android:id="@+id/donut_progress"

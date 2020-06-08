@@ -37,7 +37,6 @@ public class UploadSection extends Section {
     private long started;
     private long set;
     private UploadSectionListener uploadSectionListener;
-    private FooterViewHolder footer;
     private Context context;
 
     public UploadSection(Context context, MediaFileHandler mediaFileHandler, @NonNull final List<FileUploadInstance> instances, @NonNull UploadSectionListener uploadSectionListener, Long set) {
@@ -138,7 +137,6 @@ public class UploadSection extends Section {
     @Override
     public void onBindFooterViewHolder(final RecyclerView.ViewHolder holder) {
         final FooterViewHolder footerHolder = (FooterViewHolder) holder;
-        this.footer = footerHolder;
         footerHolder.fTitle.setText(context.getResources().getString(R.string.more_details));
         footerHolder.fTitle.setOnClickListener(v -> uploadSectionListener.showUploadInformation(this.set));
 
