@@ -29,7 +29,6 @@ import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
-import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadPresenterContract;
@@ -73,6 +72,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
     private long lastUpdateTimeStamp = 0;
     private long lastUploadedSize = 0;
     private static final int spacing = 50; // 50px
+    private boolean uploadFinished;
 
     //
     private List<FileUploadInstance> uploadnigList;
@@ -196,6 +196,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
     @Override
     public void onGetFileUploadInstancesSuccess(List<FileUploadInstance> instances) {
         sectionedAdapter.removeAllSections();
+        headerStatus.setVisibility(View.GONE);
         List<FileUploadInstance> setInstances = new ArrayList<>();
         boolean uploaded = true;
         long set = instances.get(0).getSet();
@@ -360,13 +361,16 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
 
     private void onProgressUpdateEvent() {
         long now = Util.currentTimestamp();
-        if (now - lastUpdateTimeStamp < REFRESH_TIME_MS) {   //&& progress.status != UploadProgressInfo.Status.FINISHED
+        if (now - lastUpdateTimeStamp < REFRESH_TIME_MS && lastUpdateTimeStamp > 0) {   //&& progress.status != UploadProgressInfo.Status.FINISHED
             return;
         }
         presenter.getFileUploadSetInstances(uploadingSet);
     }
 
     private void setUploadingHeader(List<FileUploadInstance> instances) {
+        if (uploadFinished) {
+            return;
+        }
         long started = instances.get(0).getStarted();
         lastUpdateTimeStamp = instances.get(0).getUpdated();
         lastUploadedSize = 0;
@@ -392,7 +396,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
 
     private void refreshUploadingProgressData() {
         long started = uploadnigList.get(0).getStarted();
-        boolean updateFinished = true;
+        uploadFinished = true;
         total = 0;
         uploaded = 0;
 
@@ -402,7 +406,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
                 started = instance.getStarted();
             }
             if (instance.getStatus() != ITellaUploadsRepository.UploadStatus.UPLOADED) {
-                updateFinished = false;
+                uploadFinished = false;
             } else {
                 sectionedAdapter.notifyDataSetChanged();
             }
@@ -421,17 +425,16 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
         }
         setProgress();
 
-        if (updateFinished) {
+        if (uploadFinished) {
             stopOutlined.setVisibility(View.GONE);
             headerStatus.setVisibility(View.GONE);
-            sectionedAdapter.removeAllSections();
             presenter.getFileUploadInstances();
             return;
         }
 
         long now = Util.currentTimestamp();
 
-        if (lastUploadedSize > 0){
+        if (lastUploadedSize > 0) {
             long progressDifference = uploaded - lastUploadedSize;
             long timeDifference = now - lastUpdateTimeStamp;
             long remainingUpload = total - uploaded;
@@ -450,7 +453,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
                 statusText.setText(String.format("%s, %s",
                         getContext().getResources().getQuantityString(R.plurals.file, uploadnigList.size(), uploadnigList.size()),
                         getContext().getResources().getQuantityString(R.plurals.minutes_left, minutes, minutes)));
-            } else if (projectedRemaininigTime > 0){
+            } else if (projectedRemaininigTime > 0) {
                 statusText.setText(String.format("%s, %s",
                         getContext().getResources().getQuantityString(R.plurals.file, uploadnigList.size(), uploadnigList.size()),
                         getContext().getResources().getString(R.string.less_than_a_minute_left)));
@@ -465,7 +468,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
         uploadsRecyclerView.removeAllViews();
     }
 
-    private void setProgress(){
+    private void setProgress() {
         if (total > 0) {
             int progress = (int) (uploaded * 100 / total);
             stopOutlined.setProgress(progress);

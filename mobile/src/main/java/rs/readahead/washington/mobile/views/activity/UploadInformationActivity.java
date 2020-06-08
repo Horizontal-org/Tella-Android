@@ -182,6 +182,10 @@ public class UploadInformationActivity extends CacheWordSubscriberBaseActivity i
 
     @Override
     public void onGetFileUploadSetInstancesSuccess(List<FileUploadInstance> newInstances) {
+        if (newInstances.size() == 0) {
+            onBackPressed();
+        }
+
         this.instances = newInstances;
         adapter.setInstances(instances);
         updateHeaderView(instances);
