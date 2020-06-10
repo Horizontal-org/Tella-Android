@@ -88,28 +88,6 @@
                     android:text="@string/collect_help_connectivity" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/save_data_help"
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                tools:ignore="UseCompoundDrawables">
-
-                <ImageView
-                    style="@style/SettingsImageViewStyle"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_settings_black"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:id="@+id/data_help"
-                    style="@style/CollectHelpMessage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/save_data" />
-            </LinearLayout>
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </FrameLayout>

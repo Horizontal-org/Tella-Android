@@ -21,8 +21,6 @@ public class CollectHelpActivity extends CacheWordSubscriberBaseActivity {
     TextView mCollectServerTextView;
     @BindView(R.id.odk_help)
     TextView mODKTextView;
-    @BindView(R.id.data_help)
-    TextView mSaveDataTextView;
 
 
     @Override
@@ -47,10 +45,6 @@ public class CollectHelpActivity extends CacheWordSubscriberBaseActivity {
         mODKTextView.setText(Html.fromHtml(getString(R.string.collect_help_odk)));
         mODKTextView.setMovementMethod(LinkMovementMethod.getInstance());
         StringUtils.stripUnderlines(mODKTextView);
-
-        mSaveDataTextView.setText(Html.fromHtml(getString(R.string.save_data)));
-        mSaveDataTextView.setMovementMethod(LinkMovementMethod.getInstance());
-        StringUtils.stripUnderlines(mSaveDataTextView);
     }
 
     @Override

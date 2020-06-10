@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Tella</string>
-    <string name="action_search">Buscar</string>
-    <string name="action_add">Añadir</string>
     <string name="action_update">Actualizar</string>
     <string name="about_n_help">Acerca de &amp; Ayuda</string>
     <string name="about_n_help_info">FAQ, Contacto, Política de Privacidad y Licencia</string>
@@ -54,7 +52,6 @@
     <string name="ra_server_name">Nombre del servidor</string>
     <string name="ra_server_url">URL del servidor</string>
     <string name="ra_submitted">Enviado</string>
-    <string name="save_data"><![CDATA[Para guardar datos del celular, la evidencia multimedia puede ser enviada por separado usando WiFi (ver <a href=\"tella_scheme://open.general.settings.activity\">ajustes</a>).]]></string>
     <string name="tap_anywhere_to_cancel">Toca en cualquier lugar para cancelar</string>
     <string name="title_activity_lock_screen">Seguridad de Tella</string>
     <string name="title_activity_audio_record">Grabar audio</string>
@@ -130,7 +127,6 @@
     <string name="ra_camera_preview">Para mostrar una vista previa de tu cámara, Tella necesita acceso a tu cámara.</string>
     <string name="ra_enable_camera_preview">Habilitar vista previa de la cámara</string>
     <string name="ra_general">General</string>
-    <string name="ra_contact_settings">Contacto</string>
     <string name="your_draft_will_be_lost">Tu borrador se perderá</string>
     <string name="save_and_exit">GUARDAR Y SALIR</string>
     <string name="exit_anyway">SALIR DE TODAS MANERAS</string>
@@ -148,7 +144,6 @@
     <string name="audio">Audio</string>
     <string name="ra_exit">Salir</string>
     <string name="camouflage">Camuflaje</string>
-    <string name="camouflage_settings_info">Ocultar Tella en tu dispositivo</string>
     <string name="ra_save_anyway">Guardar de todos modos</string>
     <string name="ra_collect_server_wrong_credentials">Credenciales incorrectas, por favor, comprueba el nombre de usuario y la contraseña</string>
     <string name="ra_unknown_host">No hay dirección asociada con el nombre de host</string>

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">Tella</string>
-    <string name="action_search">Пошук</string>
-    <string name="action_add">Дадаць</string>
     <string name="action_update">Абнавіць</string>
     <string name="about_n_help">Аб дадатку &amp; Даведка</string>
     <string name="about_n_help_info">Частыя пытанні, Кантакты, Палітыка прыватнасці і Ліцэнзія</string>
@@ -55,7 +53,6 @@
     <string name="ra_server_name">Імя сервера</string>
     <string name="ra_server_url">URL сервера</string>
     <string name="ra_submitted">Адпраўлена</string>
-    <string name="save_data"><![CDATA[Для эканоміі расходавання мабільнага інтэрнэту мультымедыя доказы могуць быць адпраўлены асобна праз WiFi (гл. <a href=\"tella_scheme://open.general.settings.activity\"> налады </a> ).]]></string>
     <string name="tap_anywhere_to_cancel">Націсніце ў любым месцы, каб адмяніць</string>
     <string name="title_activity_lock_screen">Бяспека</string>
     <string name="title_activity_audio_record">Запісаць аўдыё</string>
@@ -131,7 +128,6 @@
     <string name="ra_camera_preview">Для папярэдняга прагляду дадатку патрабуецца доступ да вашай камеры.</string>
     <string name="ra_enable_camera_preview">Дазволіць папярэдні прагляд праз камеру</string>
     <string name="ra_general">Агульныя</string>
-    <string name="ra_contact_settings">Кантакт</string>
     <string name="your_draft_will_be_lost">Ваш чарнавік будзе страчаны.</string>
     <string name="save_and_exit">Захаваць і выйсці</string>
     <string name="exit_anyway">Выхад у любым выпадку</string>
@@ -149,7 +145,6 @@
     <string name="audio">Аўдыё</string>
     <string name="ra_exit">Выхад</string>
     <string name="camouflage">Маскіроўка</string>
-    <string name="camouflage_settings_info">Схаваць Tella на вашай прыладзе</string>
     <string name="ra_save_anyway">Захаваць у любым выпадку</string>
     <string name="ra_collect_server_wrong_credentials">Няправільныя ўліковыя дадзеныя, калі ласка, праверце імя карыстальніка і пароль</string>
     <string name="ra_unknown_host">Адрас, звязаны з імем хаста, адсутнічае.</string>

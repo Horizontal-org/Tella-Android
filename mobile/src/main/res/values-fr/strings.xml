@@ -4,8 +4,6 @@
         <item quantity="other">%d éléments</item>
     </plurals>
     <string name="app_name">Tella</string>
-    <string name="action_search">Rechercher</string>
-    <string name="action_add">Ajouter</string>
     <string name="action_update">Mettre à jour</string>
     <string name="about_n_help">À propos &amp; Aide</string>
     <string name="about_n_help_info">FAQ, contact, politique de confidentialité et licence</string>
@@ -59,7 +57,6 @@
     <string name="ra_server_name">Nom du serveur</string>
     <string name="ra_server_url">URL du serveur</string>
     <string name="ra_submitted">Envoyé</string>
-    <string name="save_data"><![CDATA[Pour économiser les données cellulaires, les preuves multimédia peuvent être envoyées séparément via Wi-Fi (voir <a href=\"tella_scheme://open.general.settings.activity\"> paramètres </a> ).]]></string>
     <string name="tap_anywhere_to_cancel">Appuyez n\'importe où pour annuler</string>
     <string name="title_activity_lock_screen">Tella sécurité</string>
     <string name="title_activity_audio_record">Enregistrer audio</string>
@@ -135,7 +132,6 @@
     <string name="ra_camera_preview">Pour afficher l\'aperçu de la caméra, Tella a besoin d\'accéder à votre appareil photo.</string>
     <string name="ra_enable_camera_preview">Activer l\'aperçu de la caméra</string>
     <string name="ra_general">Général</string>
-    <string name="ra_contact_settings">Contact</string>
     <string name="your_draft_will_be_lost">Votre brouillon sera perdu.</string>
     <string name="save_and_exit">ENREGISTRER ET QUITTER</string>
     <string name="exit_anyway">SORTIR QUAND MÊME</string>
@@ -153,7 +149,6 @@
     <string name="audio">Audio</string>
     <string name="ra_exit">Sortir</string>
     <string name="camouflage">Camouflage</string>
-    <string name="camouflage_settings_info">Masquer Tella sur votre appareil</string>
     <string name="ra_save_anyway">Enregistrer quand même</string>
     <string name="ra_collect_server_wrong_credentials">Mauvais identifiants, veuillez vérifier le nom d\'utilisateur et mot de passe</string>
     <string name="ra_unknown_host">Aucune adresse associée au nom d\'hôte</string>

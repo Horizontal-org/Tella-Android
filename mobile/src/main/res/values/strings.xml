@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Tella</string>
-
     <string name="action_update">Update</string>
     <string name="about_n_help">About &amp; Help</string>
     <string name="about_n_help_info">FAQ, Contact, Privacy Policy and Licence</string>
@@ -54,7 +53,6 @@
     <string name="ra_server_name">Server name</string>
     <string name="ra_server_url">Server URL</string>
     <string name="ra_submitted">Submitted</string>
-    <string name="save_data"><![CDATA[To save cellular data, multimedia evidence can be sent separately over WiFi (see <a href=\"tella_scheme://open.general.settings.activity\">settings</a>).]]></string>
     <string name="tap_anywhere_to_cancel">Tap anywhere to cancel</string>
     <string name="title_activity_lock_screen">Tella Security</string>
     <string name="title_activity_audio_record">Record Audio</string>
@@ -147,7 +145,6 @@
     <string name="audio">Audio</string>
     <string name="ra_exit">Exit</string>
     <string name="camouflage">Camouflage</string>
-    <string name="camouflage_settings_info">Hide Tella on your device</string>
     <string name="ra_save_anyway">Save anyway</string>
     <string name="ra_collect_server_wrong_credentials">Wrong credentials, please check username and password</string>
     <string name="ra_unknown_host">No address associated with hostname</string>
