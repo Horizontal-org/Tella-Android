@@ -93,7 +93,6 @@
         android:paddingTop="120dp"
         android:layout_height="match_parent"
         android:textAlignment="center"
-        android:visibility="gone"
         android:textColor="@color/primaryTextColor"
         android:text="@string/no_information_to_show" />
 </RelativeLayout>
