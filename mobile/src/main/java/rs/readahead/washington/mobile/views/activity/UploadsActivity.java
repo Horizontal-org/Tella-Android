@@ -203,7 +203,9 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
 
         if (uploadsExist) {
             emptyInfo.setVisibility(View.GONE);
+            uploadsRecyclerView.setVisibility(View.VISIBLE);
         } else {
+            uploadsRecyclerView.setVisibility(View.GONE);
             emptyInfo.setVisibility(View.VISIBLE);
         }
 
