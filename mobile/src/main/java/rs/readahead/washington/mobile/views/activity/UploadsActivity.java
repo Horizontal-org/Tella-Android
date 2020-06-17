@@ -29,6 +29,7 @@ import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadPresenterContract;
@@ -98,7 +99,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
         disposables.wire(FileUploadProgressEvent.class, new EventObserver<FileUploadProgressEvent>() {
             @Override
             public void onNext(FileUploadProgressEvent event) {
-                onProgressUpdateEvent();
+                onProgressUpdateEvent(event.getProgress());
             }
         });
 
@@ -358,9 +359,9 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
                 .show();
     }
 
-    private void onProgressUpdateEvent() {
+    private void onProgressUpdateEvent(UploadProgressInfo progress) {
         long now = Util.currentTimestamp();
-        if (now - lastUpdateTimeStamp < REFRESH_TIME_MS && lastUpdateTimeStamp > 0) {   //&& progress.status != UploadProgressInfo.Status.FINISHED
+        if (now - lastUpdateTimeStamp < REFRESH_TIME_MS && lastUpdateTimeStamp > 0 && progress.status != UploadProgressInfo.Status.FINISHED) {   //
             return;
         }
         presenter.getFileUploadSetInstances(uploadingSet);
