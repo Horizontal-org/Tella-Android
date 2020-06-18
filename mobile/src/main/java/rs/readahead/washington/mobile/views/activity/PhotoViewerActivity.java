@@ -47,6 +47,7 @@ import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
 
+import static rs.readahead.washington.mobile.util.C.MIN_DISTANCE;
 import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
 
 
@@ -69,8 +70,7 @@ public class PhotoViewerActivity extends CacheWordSubscriberBaseActivity impleme
     private boolean showActions = false;
     private boolean actionsDisabled = false;
     private AlertDialog alertDialog;
-    private float xStart = 0, xEnd = 0;
-    private static float MIN_DISTANCE = 150;
+    private float xStart = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,7 +166,7 @@ public class PhotoViewerActivity extends CacheWordSubscriberBaseActivity impleme
     }
 
     public boolean onTouchEvent(MotionEvent event) {
-
+        float xEnd;
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 xStart = event.getX();
@@ -174,7 +174,6 @@ public class PhotoViewerActivity extends CacheWordSubscriberBaseActivity impleme
             case MotionEvent.ACTION_UP:
                 xEnd = event.getX();
                 float deltaX = xEnd - xStart;
-
                 if (Math.abs(deltaX) > MIN_DISTANCE) {
                     // swipe Left to Right
                     if (xEnd > xStart) {
@@ -184,7 +183,6 @@ public class PhotoViewerActivity extends CacheWordSubscriberBaseActivity impleme
                     }
                 }
                 xStart = 0;
-                xEnd = 0;
                 break;
         }
         return super.onTouchEvent(event);
@@ -269,10 +267,12 @@ public class PhotoViewerActivity extends CacheWordSubscriberBaseActivity impleme
             Intent intent = new Intent(this, AudioPlayActivity.class);
             intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, mediaFile.getId());
             startActivity(intent);
+            this.finish();
         } else if (mediaFile.getType() == MediaFile.Type.VIDEO) {
             Intent intent = new Intent(this, VideoViewerActivity.class);
             intent.putExtra(VideoViewerActivity.VIEW_VIDEO, mediaFile);
             startActivity(intent);
+            this.finish();
         }
     }
 

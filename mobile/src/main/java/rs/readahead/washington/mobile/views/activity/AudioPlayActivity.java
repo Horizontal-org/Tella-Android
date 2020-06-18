@@ -14,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -35,6 +36,7 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.media.AudioPlayer;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IAudioPlayPresenterContract;
@@ -47,6 +49,7 @@ import rs.readahead.washington.mobile.util.ThreadUtil;
 import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
 import timber.log.Timber;
 
+import static rs.readahead.washington.mobile.util.C.MIN_DISTANCE;
 import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
 
 @RuntimePermissions
@@ -58,6 +61,7 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
     public static final String PLAY_MEDIA_FILE_ID_KEY = "pmfik";
     public static final String NO_ACTIONS = "na";
     private static final String TIME_FORMAT = "%02d:%02d:%02d";
+    private float xStart = 0;
 
     @BindView(R.id.play_audio)
     ImageButton mPlay;
@@ -258,6 +262,30 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
         super.onDestroy();
     }
 
+    public boolean onTouchEvent(MotionEvent event) {
+        float xEnd;
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                xStart = event.getX();
+                break;
+            case MotionEvent.ACTION_UP:
+                xEnd = event.getX();
+                float deltaX = xEnd - xStart;
+
+                if (Math.abs(deltaX) > MIN_DISTANCE) {
+                    stopPlayer();
+                    if (xEnd > xStart) {
+                        viewerPresenter.getMediaFile(handlingMediaFile.getId(), IMediaFileRecordRepository.Direction.NEXT);
+                    } else {
+                        viewerPresenter.getMediaFile(handlingMediaFile.getId(), IMediaFileRecordRepository.Direction.PREVIOUS);
+                    }
+                }
+                xStart = 0;
+                break;
+        }
+        return super.onTouchEvent(event);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -333,7 +361,25 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
 
     @Override
     public void onGetMediaFileSuccess(MediaFile mediaFile) {
-
+        if (mediaFile == null) {
+            return;
+        }
+        if (mediaFile.getType() == MediaFile.Type.AUDIO) {
+            Intent intent = new Intent(this, AudioPlayActivity.class);
+            intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, mediaFile.getId());
+            startActivity(intent);
+            this.finish();
+        } else if (mediaFile.getType() == MediaFile.Type.IMAGE) {
+            Intent intent = new Intent(this, PhotoViewerActivity.class);
+            intent.putExtra(PhotoViewerActivity.VIEW_PHOTO, mediaFile);
+            startActivity(intent);
+            this.finish();
+        } else if (mediaFile.getType() == MediaFile.Type.VIDEO) {
+            Intent intent = new Intent(this, VideoViewerActivity.class);
+            intent.putExtra(VideoViewerActivity.VIEW_VIDEO, mediaFile);
+            startActivity(intent);
+            this.finish();
+        }
     }
 
     @Override

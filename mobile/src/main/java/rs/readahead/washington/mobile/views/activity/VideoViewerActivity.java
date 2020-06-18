@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -39,6 +40,7 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.exo.ExoEventListener;
 import rs.readahead.washington.mobile.media.exo.MediaFileDataSourceFactory;
@@ -48,6 +50,7 @@ import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
 
+import static rs.readahead.washington.mobile.util.C.MIN_DISTANCE;
 import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
 
 @RuntimePermissions
@@ -77,7 +80,7 @@ public class VideoViewerActivity extends CacheWordSubscriberBaseActivity impleme
     private MediaFileViewerPresenter presenter;
     private AlertDialog alertDialog;
     private ProgressDialog progressDialog;
-
+    private float xStart = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -160,6 +163,30 @@ public class VideoViewerActivity extends CacheWordSubscriberBaseActivity impleme
         super.onDestroy();
     }
 
+    public boolean onTouchEvent(MotionEvent event) {
+        float xEnd;
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                xStart = event.getX();
+                break;
+            case MotionEvent.ACTION_UP:
+                xEnd = event.getX();
+                float deltaX = xEnd - xStart;
+                if (Math.abs(deltaX) > MIN_DISTANCE) {
+                    onStop();
+                    releasePlayer();
+                    if (xEnd > xStart) {
+                        presenter.getMediaFile(mediaFile.getId(), IMediaFileRecordRepository.Direction.NEXT);
+                    } else {
+                        presenter.getMediaFile(mediaFile.getId(), IMediaFileRecordRepository.Direction.PREVIOUS);
+                    }
+                }
+                xStart = 0;
+                break;
+        }
+        return super.onTouchEvent(event);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -220,7 +247,24 @@ public class VideoViewerActivity extends CacheWordSubscriberBaseActivity impleme
 
     @Override
     public void onGetMediaFileSuccess(MediaFile mediaFile) {
-
+        if (mediaFile == null) {
+            return;
+        }
+        if (mediaFile.getType() == MediaFile.Type.VIDEO) {
+            Intent intent = new Intent(this, VideoViewerActivity.class);
+            intent.putExtra(VideoViewerActivity.VIEW_VIDEO, mediaFile);
+            startActivity(intent);
+        } else if (mediaFile.getType() == MediaFile.Type.AUDIO) {
+            Intent intent = new Intent(this, AudioPlayActivity.class);
+            intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, mediaFile.getId());
+            startActivity(intent);
+            this.finish();
+        } else if (mediaFile.getType() == MediaFile.Type.IMAGE) {
+            Intent intent = new Intent(this, PhotoViewerActivity.class);
+            intent.putExtra(PhotoViewerActivity.VIEW_PHOTO, mediaFile);
+            startActivity(intent);
+            this.finish();
+        }
     }
 
     @Override

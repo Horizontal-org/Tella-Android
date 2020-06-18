@@ -34,4 +34,7 @@ public class C {
 
     //A day in milliseconds
     public static final long DAY = 86400000;
+
+    //Swipe detect distance
+    public static float MIN_DISTANCE = 150;
 }
