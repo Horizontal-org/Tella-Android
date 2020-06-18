@@ -13,6 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -36,6 +37,7 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
 import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.MediaFileUrlLoader;
 import rs.readahead.washington.mobile.mvp.contract.IMediaFileViewerPresenterContract;
@@ -67,6 +69,8 @@ public class PhotoViewerActivity extends CacheWordSubscriberBaseActivity impleme
     private boolean showActions = false;
     private boolean actionsDisabled = false;
     private AlertDialog alertDialog;
+    private float xStart = 0, xEnd = 0;
+    private static float MIN_DISTANCE = 150;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,6 +165,31 @@ public class PhotoViewerActivity extends CacheWordSubscriberBaseActivity impleme
         super.onDestroy();
     }
 
+    public boolean onTouchEvent(MotionEvent event) {
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                xStart = event.getX();
+                break;
+            case MotionEvent.ACTION_UP:
+                xEnd = event.getX();
+                float deltaX = xEnd - xStart;
+
+                if (Math.abs(deltaX) > MIN_DISTANCE) {
+                    // swipe Left to Right
+                    if (xEnd > xStart) {
+                        presenter.getMediaFile(mediaFile.getId(), IMediaFileRecordRepository.Direction.NEXT);
+                    } else {
+                        presenter.getMediaFile(mediaFile.getId(), IMediaFileRecordRepository.Direction.PREVIOUS);
+                    }
+                }
+                xStart = 0;
+                xEnd = 0;
+                break;
+        }
+        return super.onTouchEvent(event);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -226,6 +255,30 @@ public class PhotoViewerActivity extends CacheWordSubscriberBaseActivity impleme
     @Override
     public void onMediaFileDeletionError(Throwable throwable) {
         showToast(R.string.ra_media_deleted_error);
+    }
+
+    @Override
+    public void onGetMediaFileSuccess(MediaFile mediaFile) {
+        if (mediaFile == null) {
+            return;
+        }
+        if (mediaFile.getType() == MediaFile.Type.IMAGE) {
+            this.mediaFile = mediaFile;
+            showGalleryImage(mediaFile);
+        } else if (mediaFile.getType() == MediaFile.Type.AUDIO) {
+            Intent intent = new Intent(this, AudioPlayActivity.class);
+            intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, mediaFile.getId());
+            startActivity(intent);
+        } else if (mediaFile.getType() == MediaFile.Type.VIDEO) {
+            Intent intent = new Intent(this, VideoViewerActivity.class);
+            intent.putExtra(VideoViewerActivity.VIEW_VIDEO, mediaFile);
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onGetMediaFileError(Throwable throwable) {
+
     }
 
     @Override

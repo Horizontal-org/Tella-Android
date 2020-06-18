@@ -360,6 +360,12 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
+    public Single<MediaFile> getMediaFile(final long id, Direction direction) {
+        return Single.fromCallable(() -> getMediaFileFromDb(id, direction))
+                .compose(applySchedulers());
+    }
+
+    @Override
     public Single<MediaFile> getMediaFile(final String uid) {
         return Single.fromCallable(() -> getMediaFileFromDb(uid))
                 .compose(applySchedulers());
@@ -1236,6 +1242,48 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }
 
         return mediaFiles;
+    }
+
+    private MediaFile getMediaFileFromDb(final long mediaFileId, final Direction direction) {
+        Cursor cursor = null;
+        MediaFile mediaFile = null;
+
+        String order = (direction == Direction.PREVIOUS ? " DESC" : " ASC");
+        String where =  (direction == Direction.NEXT ? " > " + mediaFileId : " < " + mediaFileId);
+
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_MEDIA_FILE,
+                    new String[]{
+                            cn(D.T_MEDIA_FILE, D.C_ID, D.A_MEDIA_FILE_ID),
+                            D.C_PATH,
+                            D.C_UID,
+                            D.C_FILE_NAME,
+                            D.C_METADATA,
+                            D.C_CREATED,
+                            D.C_DURATION,
+                            D.C_ANONYMOUS,
+                            D.C_SIZE,
+                            D.C_HASH},
+                    cn(D.T_MEDIA_FILE, D.C_ID) + where,
+                    null, null, cn(D.T_MEDIA_FILE, D.C_ID) + order,
+                    null
+            );
+
+            cursor = database.rawQuery(query, null);
+            cursor.moveToNext();
+            mediaFile = cursorToMediaFile(cursor);
+
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return mediaFile;
     }
 
     private List<MediaFile> getUploadMediaFilesDB(final UploadStatus status) {

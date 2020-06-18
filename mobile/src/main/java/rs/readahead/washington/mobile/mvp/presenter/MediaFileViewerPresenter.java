@@ -5,11 +5,15 @@ import com.crashlytics.android.Crashlytics;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Completable;
+import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IMediaFileViewerPresenterContract;
 
@@ -53,6 +57,22 @@ public class MediaFileViewerPresenter implements IMediaFileViewerPresenterContra
                 .subscribe(() -> view.onMediaFileDeleted(), throwable -> {
                     Crashlytics.logException(throwable);
                     view.onMediaFileDeletionError(throwable);
+                })
+        );
+    }
+
+    @Override
+    public void getMediaFile(long mediaFileId, IMediaFileRecordRepository.Direction direction) {
+        disposables.add(cacheWordDataSource.getDataSource()
+                .flatMapSingle((Function<DataSource, SingleSource<MediaFile>>) dataSource ->
+                        dataSource.getMediaFile(mediaFileId, direction))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mediaFile -> {
+                    view.onGetMediaFileSuccess(mediaFile);
+                }, throwable -> {
+                    Crashlytics.logException(throwable);
+                    view.onGetMediaFileError(throwable);
                 })
         );
     }

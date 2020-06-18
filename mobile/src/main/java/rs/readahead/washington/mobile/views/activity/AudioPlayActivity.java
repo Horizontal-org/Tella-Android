@@ -332,6 +332,16 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
     }
 
     @Override
+    public void onGetMediaFileSuccess(MediaFile mediaFile) {
+
+    }
+
+    @Override
+    public void onGetMediaFileError(Throwable throwable) {
+
+    }
+
+    @Override
     public Context getContext() {
         return this;
     }

@@ -23,6 +23,7 @@ public interface IMediaFileRecordRepository {
     Single<List<MediaFile>> getMediaFiles(long[] ids);
     Single<MediaFile> getMediaFile(long id);
     Single<MediaFile> getMediaFile(final String uid);
+    Single<MediaFile> getMediaFile(long id, Direction direction);
     Single<MediaFile> getLastMediaFile();
     Single<MediaFile> deleteMediaFile(MediaFile mediaFile, IMediaFileDeleter deleter);
 
@@ -38,5 +39,10 @@ public interface IMediaFileRecordRepository {
     enum Sort {
         NEWEST,
         OLDEST
+    }
+
+    enum Direction {
+        NEXT,
+        PREVIOUS
     }
 }

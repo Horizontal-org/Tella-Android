@@ -219,6 +219,16 @@ public class VideoViewerActivity extends CacheWordSubscriberBaseActivity impleme
     }
 
     @Override
+    public void onGetMediaFileSuccess(MediaFile mediaFile) {
+
+    }
+
+    @Override
+    public void onGetMediaFileError(Throwable throwable) {
+
+    }
+
+    @Override
     public Context getContext() {
         return this;
     }
