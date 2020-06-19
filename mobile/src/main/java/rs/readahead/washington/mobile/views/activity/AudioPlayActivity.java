@@ -264,24 +264,19 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
 
     public boolean onTouchEvent(MotionEvent event) {
         float xEnd;
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                xStart = event.getX();
-                break;
-            case MotionEvent.ACTION_UP:
-                xEnd = event.getX();
-                float deltaX = xEnd - xStart;
-
-                if (Math.abs(deltaX) > MIN_DISTANCE) {
-                    stopPlayer();
-                    if (xEnd > xStart) {
-                        viewerPresenter.getMediaFile(handlingMediaFile.getId(), IMediaFileRecordRepository.Direction.NEXT);
-                    } else {
-                        viewerPresenter.getMediaFile(handlingMediaFile.getId(), IMediaFileRecordRepository.Direction.PREVIOUS);
-                    }
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            xEnd = event.getX();
+            float deltaX = xEnd - xStart;
+            if (Math.abs(deltaX) > MIN_DISTANCE) {
+                if (xEnd > xStart) {
+                    viewerPresenter.getMediaFile(handlingMediaFile.getId(), IMediaFileRecordRepository.Direction.NEXT);
+                } else {
+                    viewerPresenter.getMediaFile(handlingMediaFile.getId(), IMediaFileRecordRepository.Direction.PREVIOUS);
                 }
-                xStart = 0;
-                break;
+            }
+            xStart = 0;
+        } else if (xStart == 0) {
+            xStart = event.getX();
         }
         return super.onTouchEvent(event);
     }

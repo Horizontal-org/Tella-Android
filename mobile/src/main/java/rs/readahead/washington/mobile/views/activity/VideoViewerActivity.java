@@ -6,11 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -165,24 +167,21 @@ public class VideoViewerActivity extends CacheWordSubscriberBaseActivity impleme
 
     public boolean onTouchEvent(MotionEvent event) {
         float xEnd;
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                xStart = event.getX();
-                break;
-            case MotionEvent.ACTION_UP:
-                xEnd = event.getX();
-                float deltaX = xEnd - xStart;
-                if (Math.abs(deltaX) > MIN_DISTANCE) {
-                    onStop();
-                    releasePlayer();
-                    if (xEnd > xStart) {
-                        presenter.getMediaFile(mediaFile.getId(), IMediaFileRecordRepository.Direction.NEXT);
-                    } else {
-                        presenter.getMediaFile(mediaFile.getId(), IMediaFileRecordRepository.Direction.PREVIOUS);
-                    }
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            xEnd = event.getX();
+            float deltaX = xEnd - xStart;
+            if (Math.abs(deltaX) > MIN_DISTANCE) {
+                onStop();
+                releasePlayer();
+                if (xEnd > xStart) {
+                    presenter.getMediaFile(mediaFile.getId(), IMediaFileRecordRepository.Direction.NEXT);
+                } else {
+                    presenter.getMediaFile(mediaFile.getId(), IMediaFileRecordRepository.Direction.PREVIOUS);
                 }
-                xStart = 0;
-                break;
+            }
+            xStart = 0;
+        } else if (xStart == 0) {
+            xStart = event.getX();
         }
         return super.onTouchEvent(event);
     }

@@ -167,29 +167,27 @@ public class PhotoViewerActivity extends CacheWordSubscriberBaseActivity impleme
 
     public boolean onTouchEvent(MotionEvent event) {
         float xEnd;
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                xStart = event.getX();
-                break;
-            case MotionEvent.ACTION_UP:
-                xEnd = event.getX();
-                float deltaX = xEnd - xStart;
-                if (Math.abs(deltaX) > MIN_DISTANCE) {
-                    // swipe Left to Right
-                    if (xEnd > xStart) {
-                        presenter.getMediaFile(mediaFile.getId(), IMediaFileRecordRepository.Direction.NEXT);
-                    } else {
-                        presenter.getMediaFile(mediaFile.getId(), IMediaFileRecordRepository.Direction.PREVIOUS);
-                    }
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            xEnd = event.getX();
+            float deltaX = xEnd - xStart;
+            if (Math.abs(deltaX) > MIN_DISTANCE) {
+                if (xEnd > xStart) {
+                    presenter.getMediaFile(mediaFile.getId(), IMediaFileRecordRepository.Direction.NEXT);
+                } else {
+                    presenter.getMediaFile(mediaFile.getId(), IMediaFileRecordRepository.Direction.PREVIOUS);
                 }
-                xStart = 0;
-                break;
+            }
+            xStart = 0;
+        } else if (xStart == 0) {
+            xStart = event.getX();
         }
         return super.onTouchEvent(event);
     }
 
+
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         PhotoViewerActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
