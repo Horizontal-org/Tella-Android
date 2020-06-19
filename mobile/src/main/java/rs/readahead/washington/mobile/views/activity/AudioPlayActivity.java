@@ -363,18 +363,17 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
             Intent intent = new Intent(this, AudioPlayActivity.class);
             intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, mediaFile.getId());
             startActivity(intent);
-            this.finish();
         } else if (mediaFile.getType() == MediaFile.Type.IMAGE) {
             Intent intent = new Intent(this, PhotoViewerActivity.class);
             intent.putExtra(PhotoViewerActivity.VIEW_PHOTO, mediaFile);
             startActivity(intent);
-            this.finish();
         } else if (mediaFile.getType() == MediaFile.Type.VIDEO) {
             Intent intent = new Intent(this, VideoViewerActivity.class);
             intent.putExtra(VideoViewerActivity.VIEW_VIDEO, mediaFile);
             startActivity(intent);
-            this.finish();
         }
+        this.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        this.finish();
     }
 
     @Override

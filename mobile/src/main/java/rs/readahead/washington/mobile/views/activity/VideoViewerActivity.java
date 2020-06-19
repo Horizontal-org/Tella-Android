@@ -171,8 +171,6 @@ public class VideoViewerActivity extends CacheWordSubscriberBaseActivity impleme
             xEnd = event.getX();
             float deltaX = xEnd - xStart;
             if (Math.abs(deltaX) > MIN_DISTANCE) {
-                onStop();
-                releasePlayer();
                 if (xEnd > xStart) {
                     presenter.getMediaFile(mediaFile.getId(), IMediaFileRecordRepository.Direction.NEXT);
                 } else {
@@ -257,13 +255,13 @@ public class VideoViewerActivity extends CacheWordSubscriberBaseActivity impleme
             Intent intent = new Intent(this, AudioPlayActivity.class);
             intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, mediaFile.getId());
             startActivity(intent);
-            this.finish();
         } else if (mediaFile.getType() == MediaFile.Type.IMAGE) {
             Intent intent = new Intent(this, PhotoViewerActivity.class);
             intent.putExtra(PhotoViewerActivity.VIEW_PHOTO, mediaFile);
             startActivity(intent);
-            this.finish();
         }
+        this.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        this.finish();
     }
 
     @Override
