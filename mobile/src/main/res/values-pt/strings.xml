@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">Tella</string>
-    <string name="action_search">Procurar</string>
-    <string name="action_add">Adicionar</string>
     <string name="action_update">Atualizar</string>
     <string name="about_n_help">Sobre e Ajuda</string>
     <string name="about_n_help_info">Perguntas Frequentes, Contato, Política de Privacidade e Licença</string>
@@ -55,7 +53,6 @@
     <string name="ra_server_name">Nome do servidor</string>
     <string name="ra_server_url">Servidor URL</string>
     <string name="ra_submitted">Submetido</string>
-    <string name="save_data"><![CDATA[Para salvar dados de celular, as evidências multimídia podem ser enviadas separadamente por Wi-Fi (consulte <a href=\"tella_scheme://open.general.settings.activity\"> settings </a> ).]]></string>
     <string name="tap_anywhere_to_cancel">Toque em qualquer lugar para cancelar</string>
     <string name="title_activity_lock_screen">Segurança Tella</string>
     <string name="title_activity_audio_record">Gravar audio</string>
@@ -132,7 +129,6 @@
     <string name="ra_camera_preview">Para mostrar a pre-visualização da câmera, Tella precisa acessar sua câmera.</string>
     <string name="ra_enable_camera_preview">Ativar pré-visualização da câmera</string>
     <string name="ra_general">Geral</string>
-    <string name="ra_contact_settings">Contato</string>
     <string name="your_draft_will_be_lost">Seu rascunho será perdido.</string>
     <string name="save_and_exit">SALVAR E SAIR</string>
     <string name="exit_anyway">SAIR DE QUALQUER FORMA</string>
@@ -150,7 +146,6 @@
     <string name="audio">Áudio</string>
     <string name="ra_exit">Saída</string>
     <string name="camouflage">Camuflagem</string>
-    <string name="camouflage_settings_info">Ocultar Tella no seu aparelho celular</string>
     <string name="ra_save_anyway">Salvar de qualquer maneira</string>
     <string name="ra_collect_server_wrong_credentials">Credenciais incorretas, verifique usuário e senha</string>
     <string name="ra_unknown_host">Nenhum endereço associado ao nome do usuário</string>

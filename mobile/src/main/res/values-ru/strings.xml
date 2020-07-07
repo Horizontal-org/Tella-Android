@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">Tella</string>
-    <string name="action_search">Поиск</string>
-    <string name="action_add">Добавить</string>
     <string name="action_update">Обновить</string>
     <string name="about_n_help">О приложении &amp; Справка</string>
     <string name="about_n_help_info">Часто задаваемые вопросы, Контакты, Политика приватности и Лицензия</string>
@@ -56,7 +54,6 @@
     <string name="ra_server_name">Имя сервера</string>
     <string name="ra_server_url">URL сервера</string>
     <string name="ra_submitted">Отправлено</string>
-    <string name="save_data"><![CDATA[Для экономии расходования мобильного интернета мультимедиа доказательства могут быть отправлены отдельно через WiFi(см. <a href=\"tella_scheme://open.general.settings.activity\">настройки</a>).]]></string>
     <string name="tap_anywhere_to_cancel">Нажмите в любом месте, чтобы отменить</string>
     <string name="title_activity_lock_screen">Безопасность</string>
     <string name="title_activity_audio_record">Записать аудио</string>
@@ -132,7 +129,6 @@
     <string name="ra_camera_preview">Для предварительного просмотра приложению требуется доступ к вашей камере.</string>
     <string name="ra_enable_camera_preview">Разрешить предварительный просмотр через камеру</string>
     <string name="ra_general">Общие</string>
-    <string name="ra_contact_settings">Контакт</string>
     <string name="your_draft_will_be_lost">Ваш черновик не будет сохранен.</string>
     <string name="save_and_exit">СОХРАНИТЬ И ВЫЙТИ</string>
     <string name="exit_anyway">ВЫЙТИ ВСЕ РАВНО </string>
@@ -150,7 +146,6 @@
     <string name="audio">Аудио</string>
     <string name="ra_exit">Выход</string>
     <string name="camouflage">Маскировка</string>
-    <string name="camouflage_settings_info">Скрыть Tella на вашем устройстве</string>
     <string name="ra_save_anyway">Сохранить в любом случае</string>
     <string name="ra_collect_server_wrong_credentials">Неправильные учетные данные, пожалуйста, проверьте имя пользователя и пароль</string>
     <string name="ra_unknown_host">Адрес, связанный с именем хоста, отсутствует.</string>
