@@ -8,8 +8,8 @@ assignees: ''
 ---
 
 ## What is changing? 
-*(Please include as many details as possible)*
-
+<!-- Please include as many details as possible) -->
+-  
 
 ## How will this impact users?
 
@@ -21,7 +21,7 @@ assignees: ''
 
 
 ## Context
-Link to associated PRs or issues from other repos here.
+<!-- Link to associated PRs or issues. -->
 
 1.
 1.
