@@ -64,7 +64,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
         disposables.add(cacheWordDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstance(id))
+                .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstanceById(id))
                 .subscribe(() -> view.onFileUploadInstancesDeleted(),
                         throwable -> {
                             Crashlytics.logException(throwable);
@@ -78,7 +78,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
         disposables.add(cacheWordDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstances(set))
+                .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstancesBySet(set))
                 .subscribe(() -> view.onFileUploadInstancesDeleted(),
                         throwable -> {
                             Crashlytics.logException(throwable);

@@ -34,6 +34,7 @@ public class SectionItemOffset extends RecyclerView.ItemDecoration {
             outRect.right = -spacing;
         }
     }
+
 }
 
 

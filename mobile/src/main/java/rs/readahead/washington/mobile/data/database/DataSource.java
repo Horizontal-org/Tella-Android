@@ -214,17 +214,17 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
-    public Completable deleteFileUploadInstances(long set) {
+    public Completable deleteFileUploadInstancesBySet(long set) {
         return Completable.fromCallable((Callable<Void>) () -> {
-            dataSource.deleteFileUploadInstancesDB(set);
+            dataSource.deleteFileUploadInstancesBySetDB(set);
             return null;
         }).compose(applyCompletableSchedulers());
     }
 
     @Override
-    public Completable deleteFileUploadInstance(long id) {
+    public Completable deleteFileUploadInstanceById(long id) {
         return Completable.fromCallable((Callable<Void>) () -> {
-            dataSource.deleteFileUploadInstanceDB(id);
+            dataSource.deleteFileUploadInstanceByIdDB(id);
             return null;
         }).compose(applyCompletableSchedulers());
     }
@@ -1023,22 +1023,21 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
     private void logUploadedFileDb(RawFile file) {
         try {
-
             long set = calculateCurrentFileUploadSet();
 
-                ContentValues values = new ContentValues();
-                values.put(D.C_MEDIA_FILE_ID, file.getId());
-                values.put(D.C_UPDATED, Util.currentTimestamp());
-                values.put(D.C_CREATED, Util.currentTimestamp());
-                values.put(D.C_STATUS, UploadStatus.UPLOADED.ordinal());
-                values.put(D.C_SIZE, file.getSize());
-                values.put(D.C_SET, set);
+            ContentValues values = new ContentValues();
+            values.put(D.C_MEDIA_FILE_ID, file.getId());
+            values.put(D.C_UPDATED, Util.currentTimestamp());
+            values.put(D.C_CREATED, Util.currentTimestamp());
+            values.put(D.C_STATUS, UploadStatus.UPLOADED.ordinal());
+            values.put(D.C_SIZE, file.getSize());
+            values.put(D.C_SET, set);
 
-                database.insertWithOnConflict(
-                        D.T_MEDIA_FILE_UPLOAD,
-                        null,
-                        values,
-                        SQLiteDatabase.CONFLICT_REPLACE);
+            database.insertWithOnConflict(
+                    D.T_MEDIA_FILE_UPLOAD,
+                    null,
+                    values,
+                    SQLiteDatabase.CONFLICT_REPLACE);
 
         } catch (Exception e) {
             Timber.d(e, getClass().getName());
@@ -1208,12 +1207,12 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void deleteFileUploadInstancesDB(Long set){
+    private void deleteFileUploadInstancesBySetDB(long set){
         int count = database.delete(D.T_MEDIA_FILE_UPLOAD, D.C_SET + " = ?", new String[]{Long.toString(set)});
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void deleteFileUploadInstanceDB(Long id){
+    private void deleteFileUploadInstanceByIdDB(long id){
         int count = database.delete(D.T_MEDIA_FILE_UPLOAD, D.C_ID + " = ?", new String[]{Long.toString(id)});
     }
 

@@ -12,6 +12,7 @@ import androidx.appcompat.widget.AppCompatRadioButton;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -362,8 +363,9 @@ public class DialogsUtil {
         LayoutInflater inflater = LayoutInflater.from(context);
 
         @SuppressLint("InflateParams")
-        View view = inflater.inflate(R.layout.choose_auto_upload_server_dialog, null);
-        RadioGroup radioGroup = view.findViewById(R.id.radio_group);
+        View dialogView = inflater.inflate(R.layout.choose_auto_upload_server_dialog, null);
+        RadioGroup radioGroup = dialogView.findViewById(R.id.radio_group);
+        TextView errorMessage = dialogView.findViewById(R.id.error_message);
 
         for (int i = 0; i < tellaUploadServers.size(); i++) {
             AppCompatRadioButton button = (AppCompatRadioButton) inflater.inflate(R.layout.dialog_radio_button_item, null);
@@ -372,18 +374,27 @@ public class DialogsUtil {
             radioGroup.addView(button);
         }
 
-        builder.setView(view)
-                .setPositiveButton(R.string.ok, (dialog, which) -> {
-                    int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
-                    AppCompatRadioButton radioButton = radioGroup.findViewById(checkedRadioButtonId);
+        final AlertDialog alertDialog = builder.setView(dialogView)
+                .setPositiveButton(R.string.ok, null)
+                .setNegativeButton(R.string.cancel, listener)
+                .setCancelable(false)
+                .create();
 
+        alertDialog.setOnShowListener(dialog -> {
+            Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+            button.setOnClickListener(view -> {
+                int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
+                if (checkedRadioButtonId > 0) {
+                    AppCompatRadioButton radioButton = radioGroup.findViewById(checkedRadioButtonId);
                     TellaUploadServer tellaUploadServer = tellaUploadServers.get((int) radioButton.getTag());
                     consumer.accept(tellaUploadServer);
-                })
-                .setNegativeButton(R.string.cancel, listener)
-                .setCancelable(false);
+                } else {
+                    errorMessage.setVisibility(View.VISIBLE);
+                }
+            });
+            radioGroup.setOnCheckedChangeListener((group, checkedId) -> errorMessage.setVisibility(View.GONE));
+        });
 
-        final AlertDialog alertDialog = builder.create();
         alertDialog.show();
 
         return alertDialog;

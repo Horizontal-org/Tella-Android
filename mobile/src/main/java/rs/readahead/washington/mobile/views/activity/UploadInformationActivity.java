@@ -54,6 +54,7 @@ public class UploadInformationActivity extends CacheWordSubscriberBaseActivity i
     private long set;
     private List<FileUploadInstance> instances;
 
+    private CacheWordDataSource cacheWordDataSource;
     private TellaFileUploadPresenter presenter;
     private UploadInformationRecycleViewAdapter adapter;
 
@@ -64,7 +65,7 @@ public class UploadInformationActivity extends CacheWordSubscriberBaseActivity i
         setContentView(R.layout.activity_upload_information);
         ButterKnife.bind(this);
 
-        CacheWordDataSource cacheWordDataSource = new CacheWordDataSource(this);
+        cacheWordDataSource = new CacheWordDataSource(this);
 
         EventCompositeDisposable disposables = MyApplication.bus().createCompositeDisposable();
 
@@ -127,6 +128,8 @@ public class UploadInformationActivity extends CacheWordSubscriberBaseActivity i
         if (alertDialog != null) {
             alertDialog.dismiss();
         }
+
+        cacheWordDataSource.dispose();
 
         stopPresenter();
         super.onDestroy();

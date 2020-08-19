@@ -28,4 +28,16 @@
         android:orientation="vertical">
     </RadioGroup>
 
+    <TextView
+        android:id="@+id/error_message"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="@string/settings.docu_error_must.select.auto.upload.server"
+        android:textColor="@color/wa_red_light"
+        android:textSize="@dimen/intro_link_text_size" />
+
 </LinearLayout>
