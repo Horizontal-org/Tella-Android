@@ -28,6 +28,7 @@ import com.otaliastudios.cameraview.PictureResult;
 import com.otaliastudios.cameraview.VideoResult;
 import com.otaliastudios.cameraview.controls.Facing;
 import com.otaliastudios.cameraview.controls.Flash;
+import com.otaliastudios.cameraview.controls.Grid;
 import com.otaliastudios.cameraview.controls.Mode;
 import com.otaliastudios.cameraview.gesture.Gesture;
 import com.otaliastudios.cameraview.gesture.GestureAction;
@@ -65,6 +66,7 @@ import rs.readahead.washington.mobile.util.VideoResolutionManager;
 import rs.readahead.washington.mobile.views.custom.CameraCaptureButton;
 import rs.readahead.washington.mobile.views.custom.CameraDurationTextView;
 import rs.readahead.washington.mobile.views.custom.CameraFlashButton;
+import rs.readahead.washington.mobile.views.custom.CameraGridButton;
 import rs.readahead.washington.mobile.views.custom.CameraResolutionButton;
 import rs.readahead.washington.mobile.views.custom.CameraSwitchButton;
 
@@ -79,6 +81,8 @@ public class CameraActivity extends MetadataActivity implements
 
     @BindView(R.id.camera)
     CameraView cameraView;
+    @BindView(R.id.gridButton)
+    CameraGridButton gridButton;
     @BindView(R.id.switchButton)
     CameraSwitchButton switchButton;
     @BindView(R.id.flashButton)
@@ -274,6 +278,7 @@ public class CameraActivity extends MetadataActivity implements
 
     @Override
     public void rotateViews(int rotation) {
+        gridButton.rotateView(rotation);
         switchButton.rotateView(rotation);
         flashButton.rotateView(rotation);
         durationView.rotateView(rotation);
@@ -325,13 +330,14 @@ public class CameraActivity extends MetadataActivity implements
         if (cameraView.getMode() == Mode.PICTURE) {
             cameraView.takePicture();
         } else {
-
+            gridButton.setVisibility(videoRecording ? View.VISIBLE : View.GONE);
             switchButton.setVisibility(videoRecording ? View.VISIBLE : View.GONE);
             resolutionButton.setVisibility(videoRecording ? View.VISIBLE : View.GONE);
             if (videoRecording) {
                 if (System.currentTimeMillis() - lastClickTime >= CLICK_DELAY) {
                     cameraView.stopVideo();
                     videoRecording = false;
+                    gridButton.setVisibility(View.VISIBLE);
                     switchButton.setVisibility(View.VISIBLE);
                     resolutionButton.setVisibility(View.VISIBLE);
                 }
@@ -344,6 +350,7 @@ public class CameraActivity extends MetadataActivity implements
                 captureButton.displayStopVideo();
                 durationView.start();
                 videoRecording = true;
+                gridButton.setVisibility(View.GONE);
                 switchButton.setVisibility(View.GONE);
                 resolutionButton.setVisibility(View.GONE);
             }
@@ -399,6 +406,17 @@ public class CameraActivity extends MetadataActivity implements
 
         resetZoom();
         lastClickTime = System.currentTimeMillis();
+    }
+
+    @OnClick(R.id.gridButton)
+    void onGridClicked() {
+        if (cameraView.getGrid() == Grid.DRAW_3X3) {
+            cameraView.setGrid(Grid.OFF);
+            gridButton.displayGridOff();
+        } else {
+            cameraView.setGrid(Grid.DRAW_3X3);
+            gridButton.displayGridOn();
+        }
     }
 
     @OnClick(R.id.switchButton)
@@ -488,6 +506,13 @@ public class CameraActivity extends MetadataActivity implements
 
             @Override
             public void onCameraOpened(@NotNull CameraOptions options) {
+                if (options.supports(Grid.DRAW_3X3)) {
+                    gridButton.setVisibility(View.VISIBLE);
+                    setUpCameraGridButton();
+                } else {
+                    gridButton.setVisibility(View.GONE);
+                }
+
                 if (options.getSupportedFacing().size() < 2) {
                     switchButton.setVisibility(View.GONE);
                 } else {
@@ -532,6 +557,14 @@ public class CameraActivity extends MetadataActivity implements
             setPhotoActive();
         } else {
             setVideoActive();
+        }
+    }
+
+    private void setUpCameraGridButton() {
+        if (cameraView.getGrid() == Grid.DRAW_3X3) {
+            gridButton.displayGridOn();
+        } else {
+            gridButton.displayGridOff();
         }
     }
 

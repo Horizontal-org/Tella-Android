@@ -30,8 +30,14 @@
             android:background="@color/wa_black"
             android:visibility="gone"
             style="@style/CameraTopImageStyle"
-            android:layout_toStartOf="@id/switchButton"
+            android:layout_toStartOf="@id/gridButton"
             android:layout_marginStart="32dp"/>
+
+        <rs.readahead.washington.mobile.views.custom.CameraGridButton
+            android:id="@+id/gridButton"
+            style="@style/CameraTopImageStyle"
+            android:layout_marginStart="32dp"
+            android:layout_toStartOf="@id/switchButton" />
 
         <rs.readahead.washington.mobile.views.custom.CameraSwitchButton
             android:id="@+id/switchButton"
