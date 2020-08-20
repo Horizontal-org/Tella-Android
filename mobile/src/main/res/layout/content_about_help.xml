@@ -65,7 +65,7 @@
 
             <TextView
                 style="@style/SettingsTextViewAbout"
-                android:text="@string/ra_tutorial" />
+                android:text="@string/settings.about_select_tutorial" />
         </LinearLayout>
 
         <View style="@style/SettingsMainLine" />
@@ -130,7 +130,7 @@
 
             <TextView
                 style="@style/SettingsTextViewAbout"
-                android:text="@string/licenses" />
+                android:text="@string/settings.about_select_licenses" />
         </LinearLayout>
 
         <View style="@style/SettingsMainLine" />

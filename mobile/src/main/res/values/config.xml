@@ -27,4 +27,6 @@
     <string name="start_time" translatable="false">00:00:00</string>
     <string name="title_activity_lock_screen" translatable="false">Tella Security</string>
     <string name="title_activity_security" translatable="false">Lock screen</string>
+    <string name="title_activity_location_map" translatable="false">Location</string>
+    <string name="signature" translatable="false">Signature</string>
 </resources>

@@ -152,7 +152,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
             }
         });
 
-        endView = new CollectFormEndView(this, R.string.ra_reached_the_end);
+        endView = new CollectFormEndView(this, R.string.collect_end_heading);
 
         disposables = MyApplication.bus().createCompositeDisposable();
         disposables.wire(FormAttachmentsUpdatedEvent.class, new EventObserver<FormAttachmentsUpdatedEvent>() {
@@ -340,7 +340,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
     void showFineLocationRationale(final PermissionRequest request) {
-        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.ra_question_widget_location_permissions));
+        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_GPS));
     }
 
     @OnPermissionDenied(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -600,10 +600,8 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         switch (instance.getStatus()) {
             case UNKNOWN:
             case DRAFT:
-                return getString(R.string.collect_toast_draft_saved);
-
             default:
-                return getString(R.string.ra_form_saved);
+                return getString(R.string.collect_toast_draft_saved);
         }
     }
 
@@ -644,14 +642,14 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     @Override
     public void formSubmitOfflineMode() {
-        Toast.makeText(getApplicationContext(), R.string.ra_form_send_submission_offline, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), R.string.collect_end_toast_saved_for_later, Toast.LENGTH_LONG).show();
         MyApplication.bus().post(new CollectFormSubmittedEvent());
         finish();
     }
 
     @Override
     public void formSubmitNoConnectivity() {
-        Toast.makeText(getApplicationContext(), R.string.ra_form_send_submission_pending, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), R.string.collect_end_toast_notification_form_not_sent_no_connection, Toast.LENGTH_LONG).show();
         MyApplication.bus().post(new CollectFormSubmittedEvent());
         finish();
     }
@@ -691,7 +689,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     @Override
     public void formPartsSubmitEnded(CollectFormInstance instance) {
-        Toast.makeText(getApplicationContext(), getString(R.string.ra_form_submitted), Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.collect_toast_form_submitted), Toast.LENGTH_LONG).show();
         MyApplication.bus().post(new CollectFormSubmittedEvent());
         finish();
     }
@@ -714,7 +712,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     @Override
     public void saveForLaterFormInstanceSuccess() {
-        Toast.makeText(getApplicationContext(), R.string.ra_form_send_submission_for_later, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), R.string.collect_toast_form_saved_for_later_submission, Toast.LENGTH_LONG).show();
         MyApplication.bus().post(new CollectFormSubmittedEvent());
         finish();
     }
@@ -765,7 +763,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     @Override
     public void onMediaFileAddError(Throwable error) {
-        showToast(R.string.ra_media_form_attach_error);
+        showToast(R.string.collect_toast_fail_attaching_file_to_form);
         Timber.d(error, getClass().getName());
     }
 
@@ -777,19 +775,19 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     @Override
     public void onImportError(Throwable error) {
-        showToast(R.string.ra_import_media_error);
+        showToast(R.string.gallery_toast_fail_importing_file);
         Timber.d(error, getClass().getName());
     }
 
     @Override
     public void onImportStarted() {
-        progressDialog = DialogsUtil.showProgressDialog(this, getString(R.string.ra_import_media_progress));
+        progressDialog = DialogsUtil.showProgressDialog(this, getString(R.string.gallery_dialog_expl_encrypting));
     }
 
     @Override
     public void onImportEnded() {
         hideProgressDialog();
-        showToast(R.string.ra_file_encrypted);
+        showToast(R.string.gallery_toast_file_encrypted);
     }
 
     @Override
@@ -816,17 +814,17 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         }
 
         alertDialog = new AlertDialog.Builder(this)
-                .setPositiveButton(R.string.ra_add_group_dialog_positive, (dialog, which) -> formParser.executeRepeat())
-                .setNegativeButton(R.string.ra_do_not_add_group, (dialog, which) -> formParser.cancelRepeat())
+                .setPositiveButton(R.string.collect_form_dialog_action_add_group, (dialog, which) -> formParser.executeRepeat())
+                .setNegativeButton(R.string.collect_form_dialog_action_dont_add_group, (dialog, which) -> formParser.cancelRepeat())
                 .setCancelable(false)
                 .create();
 
         if (lastRepeatCount > 0) {
-            alertDialog.setTitle(getString(R.string.ra_leaving_repeat_ask));
-            alertDialog.setMessage(getString(R.string.ra_add_another_repeat, groupText));
+            alertDialog.setTitle(getString(R.string.collect_form_dialog_title_add_group));
+            alertDialog.setMessage(getString(R.string.collect_form_dialog_expl_create_additional_group, groupText));
         } else {
-            alertDialog.setTitle(getString(R.string.ra_entering_repeat_ask));
-            alertDialog.setMessage(getString(R.string.ra_add_repeat, groupText));
+            alertDialog.setTitle(getString(R.string.collect_form_dialog_action_add_first_group));
+            alertDialog.setMessage(getString(R.string.collect_form_dialog_expl_create_first_group, groupText));
         }
 
         alertDialog.show();
@@ -981,13 +979,13 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     }
 
     private void showFormChangedDialog() {
-        String message = getString(R.string.your_draft_will_be_lost);
+        String message = getString(R.string.collect_form_exit_dialog_expl);
 
         alertDialog = DialogsUtil.showMessageOKCancelWithTitle(this,
                 message,
                 getString(R.string.collect_form_exit_unsaved_dialog_title),
-                getString(R.string.save_and_exit),
-                getString(R.string.exit_anyway),
+                getString(R.string.collect_form_exit_dialog_action_save_exit),
+                getString(R.string.collect_form_exit_dialog_action_exit_anyway),
                 (dialog, which) -> {
                     if (formSaver != null) {
                         formSaver.saveActiveFormInstanceOnExit();

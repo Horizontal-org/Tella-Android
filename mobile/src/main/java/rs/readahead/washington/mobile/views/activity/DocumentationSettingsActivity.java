@@ -97,7 +97,7 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.documentation);
+            actionBar.setTitle(R.string.settings_docu_app_bar);
         }
 
         setupAnonymousSwitch();
@@ -288,7 +288,7 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
         listView.removeAllViews();
         turnOffAutoUpload();
         setupCollectSettingsView();
-        showToast(R.string.deleted_servers_and_forms);
+        showToast(R.string.settings_docu_toast_disconnect_servers_delete);
     }
 
     @Override
@@ -518,7 +518,7 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
         dialog = DialogsUtil.showThreeOptionDialogWithTitle(this,
                 message,
                 getString(R.string.disconnect_servers),
-                getString(R.string.hide),
+                getString(R.string.settings_docu_dialog_action_hide),
                 getString(R.string.action_cancel),
                 getString(R.string.action_delete),
                 (dialog, which) -> {  //hide

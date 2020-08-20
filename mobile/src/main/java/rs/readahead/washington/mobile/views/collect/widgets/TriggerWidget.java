@@ -44,7 +44,7 @@ public class TriggerWidget extends QuestionWidget {
 
         triggerButton = new AppCompatCheckBox(getContext());
         triggerButton.setId(QuestionWidget.newUniqueId());
-        triggerButton.setText(getContext().getString(R.string.trigger));
+        triggerButton.setText(getContext().getString(R.string.collect_form_acknowledge_select_expl));
         triggerButton.setEnabled(!prompt.isReadOnly());
 
         triggerButton.setOnClickListener(new View.OnClickListener() {

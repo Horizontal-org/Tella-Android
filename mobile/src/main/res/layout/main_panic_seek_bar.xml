@@ -30,7 +30,7 @@
             android:layout_gravity="bottom|center"
             android:background="@drawable/rounded_transparent_background"
             android:gravity="center"
-            android:text="@string/ra_panic"
+            android:text="@string/home_action.label_quick.delete"
             android:textAllCaps="true"
             android:textColor="@color/wa_gray"
             android:textSize="15sp" />

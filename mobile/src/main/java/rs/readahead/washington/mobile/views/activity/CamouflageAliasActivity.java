@@ -39,7 +39,7 @@ public class CamouflageAliasActivity extends CacheWordSubscriberBaseActivity {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.change_appearance);
+            getSupportActionBar().setTitle(R.string.settings_camo_app_bar);
         }
 
         adapter = new CamouflageRecycleViewAdapter();

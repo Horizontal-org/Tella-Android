@@ -261,7 +261,7 @@ public class FileUploadingActivity extends CacheWordSubscriberBaseActivity imple
 
         String filesNumber;
         if (num == 1) {
-            filesNumber = num + " " + getString(R.string.file);
+            filesNumber = num + " " + getString(R.string.verification_info_subheading_file_metadata);
         } else {
             filesNumber = num + " " + getString(R.string.files);
         }

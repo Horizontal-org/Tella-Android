@@ -143,7 +143,7 @@ public class DialogsUtil {
 
         builder.setView(view)
                 .setTitle(R.string.what_type_of_server)
-                .setPositiveButton(R.string.next_section, (dialog, which) -> {
+                .setPositiveButton(R.string.collect_form_action_next_section, (dialog, which) -> {
                     listener.onChoice(odk.isChecked() ? ServerType.ODK_COLLECT : ServerType.TELLA_UPLOAD);
                 })
                 .setNegativeButton(R.string.action_cancel, null)
@@ -158,7 +158,7 @@ public class DialogsUtil {
     public static AlertDialog showExitWithSubmitDialog(Context context, DialogInterface.OnClickListener okListener,
                                                        DialogInterface.OnClickListener cancelListener) {
         return DialogsUtil.showDialog(context,
-                context.getString(R.string.ra_exit_will_stop_submission),
+                context.getString(R.string.collect_end_exit_dialog_expl),
                 context.getString(R.string.action_ok),
                 context.getString(R.string.action_cancel),
                 okListener,
@@ -178,8 +178,8 @@ public class DialogsUtil {
     public static AlertDialog showExitOnFinalDialog(Context context, DialogInterface.OnClickListener okListener,
                                                     DialogInterface.OnClickListener cancelListener) {
         return DialogsUtil.showDialog(context,
-                context.getString(R.string.ra_exit_will_stop_submission),
-                context.getString(R.string.ra_exit),
+                context.getString(R.string.collect_end_exit_dialog_expl),
+                context.getString(R.string.action_exit),
                 context.getString(R.string.action_cancel),
                 okListener,
                 cancelListener);
@@ -275,18 +275,10 @@ public class DialogsUtil {
             @NonNull DialogInterface.OnClickListener listener) {
         int msgResId;
 
-        switch (status) {
-            case SUBMITTED:
-                msgResId = R.string.ra_delete_cloned_form;
-                break;
-
-            case DRAFT:
-                msgResId = R.string.ra_delete_draft_form;
-                break;
-
-            default:
-                msgResId = R.string.ra_delete_form;
-                break;
+        if (status == CollectFormInstanceStatus.SUBMITTED) {
+            msgResId = R.string.collect_dialog_text_delete_sent_form;
+        } else {
+            msgResId = R.string.collect_dialog_text_delete_draft_form;
         }
 
         return new AlertDialog.Builder(context)
@@ -301,8 +293,8 @@ public class DialogsUtil {
 
     public static AlertDialog showExportMediaDialog(@NonNull Context context, @NonNull DialogInterface.OnClickListener listener) {
         return new AlertDialog.Builder(context)
-                .setTitle(R.string.ra_save_to_device_storage)
-                .setMessage(R.string.ra_saving_outside_tella_message)
+                .setTitle(R.string.gallery_save_to_device_dialog_title)
+                .setMessage(R.string.gallery_save_to_device_dialog_expl)
                 .setPositiveButton(R.string.action_save, listener)
                 .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
                 })
@@ -336,7 +328,7 @@ public class DialogsUtil {
         }
 
         builder.setView(view)
-                .setPositiveButton(R.string.next_section, (dialog, which) -> {
+                .setPositiveButton(R.string.collect_form_action_next_section, (dialog, which) -> {
                     int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
                     AppCompatRadioButton radioButton = radioGroup.findViewById(checkedRadioButtonId);
                     String key = (String) radioButton.getTag();

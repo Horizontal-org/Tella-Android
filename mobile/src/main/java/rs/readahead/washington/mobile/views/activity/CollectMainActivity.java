@@ -127,7 +127,7 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
                     getBlankFormsListFragment().refreshBlankForms();
                 }
             } else {
-                showToast(getString(R.string.not_connected_message));
+                showToast(getString(R.string.collect_blank_toast_not_connected));
             }
         });
 
@@ -146,7 +146,7 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
             }
         });
 
-        blankFormsText.setText(Html.fromHtml(getString(R.string.collect_servers_info)));
+        blankFormsText.setText(Html.fromHtml(getString(R.string.collect_expl_not_connected_to_server)));
         blankFormsText.setMovementMethod(LinkMovementMethod.getInstance());
         StringUtils.stripUnderlines(blankFormsText);
 
@@ -328,7 +328,7 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
 
     @Override
     public void onFormInstanceDeleteSuccess() {
-        Toast.makeText(this, R.string.ra_form_deleted, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.collect_toast_form_deleted, Toast.LENGTH_SHORT).show();
         getSubmittedFormsListFragment().listSubmittedForms();
         getDraftFormsListFragment().listDraftForms();
     }
@@ -414,8 +414,8 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
     private void showCancelPendingFormDialog(final long instanceId) {
         alertDialog = new AlertDialog.Builder(this)
-                .setMessage(R.string.ra_cancel_pending_form_msg)
-                .setPositiveButton(R.string.discard, (dialog, which) -> presenter.deleteFormInstance(instanceId))
+                .setMessage(R.string.collect_sent_dialog_expl_discard_unsent_form)
+                .setPositiveButton(R.string.action_discard, (dialog, which) -> presenter.deleteFormInstance(instanceId))
                 .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
                 })
                 .setCancelable(true)

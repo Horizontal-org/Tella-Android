@@ -54,7 +54,7 @@
             android:background="@color/wa_light_gray"
             android:padding="5dp"
             android:src="@drawable/ic_fast_rewind_black_24dp"
-            android:contentDescription="@string/ra_record"/>
+            android:contentDescription="@string/action_record"/>
         <TextView
             android:id="@+id/minus15"
             android:layout_width="match_parent"
@@ -82,7 +82,7 @@
             android:background="@drawable/white_circle_background"
             android:padding="5dp"
             android:src="@drawable/ic_play_arrow_black_24dp"
-            android:contentDescription="@string/ra_play"/>
+            android:contentDescription="@string/action_play"/>
 
     </LinearLayout>
 
@@ -106,7 +106,7 @@
             android:background="@color/wa_light_gray"
             android:padding="5dp"
             android:src="@drawable/ic_fast_forward_black_24dp"
-            android:contentDescription="@string/ra_play"/>
+            android:contentDescription="@string/action_play"/>
         <TextView
             android:id="@+id/plus15"
             android:layout_width="match_parent"

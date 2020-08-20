@@ -31,7 +31,7 @@
 
                 <TextView
                     style="@style/SettingsTextViewTitle"
-                    android:text="@string/ra_general" />
+                    android:text="@string/settings_select_general" />
 
             </LinearLayout>
 
@@ -48,7 +48,7 @@
 
                 <TextView
                     style="@style/SettingsTextViewTitle"
-                    android:text="@string/documentation" />
+                    android:text="@string/settings.gen_select_documentation" />
 
             </LinearLayout>
 
@@ -104,7 +104,7 @@
 
                 <TextView
                     style="@style/SettingsTextViewTitle"
-                    android:text="@string/protection" />
+                    android:text="@string/settings.gen_select_protection" />
 
             </LinearLayout>
 

@@ -70,7 +70,7 @@ public class LocationMapActivity extends CacheWordSubscriberBaseActivity impleme
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.ra_capture_location);
+            actionBar.setTitle(R.string.collect_form_geopoint_app_bar);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_close_white);
         }
 
@@ -174,7 +174,7 @@ public class LocationMapActivity extends CacheWordSubscriberBaseActivity impleme
         LatLng latLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
 
         if (selectedMarker == null) {
-            selectedMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(getString(R.string.ra_selected_location)));
+            selectedMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(getString(R.string.collect_form_geopoint_marker_content_desc)));
         } else {
             selectedMarker.setPosition(latLng);
         }

@@ -58,7 +58,7 @@
         <TextView
             style="@style/NavigationTabText"
             android:layout_below="@+id/microphone"
-            android:text="@string/ra_record" />
+            android:text="@string/action_record" />
     </RelativeLayout>
 
     <RelativeLayout

@@ -351,13 +351,13 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
     }
 
     private void showGpsMetadataDialog(final int requestCode, final LocationSettingsCheckDoneListener listener) {
-        String message = getString(R.string.gps_metadata_dialog_info);
+        String message = getString(R.string.verification_prompt_dialog_expl);
 
         locationAlertDialog = DialogsUtil.showMessageOKCancelWithTitle(this,
                 message,
                 getString(R.string.verification_prompt_dialog_title),
-                getString(R.string.ignore),
-                getString(R.string.turn_on_gps),
+                getString(R.string.verification_prompt_action_ignore),
+                getString(R.string.verification_prompt_action_enable_GPS),
                 (dialog, which) -> {  //ignore
                     dialog.dismiss();
                     listener.onContinue();

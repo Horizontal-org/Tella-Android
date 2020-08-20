@@ -93,7 +93,7 @@ public class SignatureActivity extends CacheWordSubscriberBaseActivity implement
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.put_your_signature);
+            actionBar.setTitle(R.string.collect_form_signature_app_bar);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_close_white);
         }
     }
@@ -112,13 +112,13 @@ public class SignatureActivity extends CacheWordSubscriberBaseActivity implement
 
     @Override
     public void onAddingStart() {
-        progressDialog = DialogsUtil.showProgressDialog(this, getString(R.string.ra_import_media_progress));
+        progressDialog = DialogsUtil.showProgressDialog(this, getString(R.string.gallery_dialog_expl_encrypting));
     }
 
     @Override
     public void onAddingEnd() {
         hideProgressDialog();
-        showToast(R.string.ra_file_encrypted);
+        showToast(R.string.gallery_toast_file_encrypted);
     }
 
     @Override
@@ -129,7 +129,7 @@ public class SignatureActivity extends CacheWordSubscriberBaseActivity implement
 
     @Override
     public void onAddError(Throwable error) {
-        showToast(R.string.error_saving_signature);
+        showToast(R.string.collect_form_signature_toast_fail_saving);
     }
 
     @Override

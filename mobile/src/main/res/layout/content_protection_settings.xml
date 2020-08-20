@@ -48,7 +48,7 @@
                         android:textAlignment="center"
                         android:gravity="center_vertical"
                         android:layout_alignParentStart="true"
-                        android:text="@string/camouflage" />
+                        android:text="@string/settings.prot_select_camouflage" />
 
                     <TextView
                         android:id="@+id/camouflage_setting"
@@ -57,7 +57,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="@string/ra_default"
+                        android:text="@string/settings.lang_select_default"
                         tools:ignore="RelativeOverlap" />
                 </RelativeLayout>
             </LinearLayout>
@@ -85,12 +85,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
-                            android:text="@string/quick_exit_switch"
+                            android:text="@string/settings.prot_quick.delete_action"
                             android:theme="@style/SettingsTextViewSwitch" />
 
                         <TextView
                             style="@style/SettingsTextViewGray"
-                            android:text="@string/quick_exit_info" />
+                            android:text="@string/settings.prot_quick.delete_action.expl" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -115,13 +115,13 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/delete_gallery"
+                                android:text="@string/settings.prot_select_delete.gallery"
                                 android:textColor="@color/wa_black"
                                 android:textSize="16sp" />
 
                             <TextView
                                 style="@style/SettingsTextViewGray"
-                                android:text="@string/delete_gallery_info" />
+                                android:text="@string/settings.prot_select.expl_delete.gallery" />
                         </LinearLayout>
 
                         <CheckBox
@@ -149,13 +149,13 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/delete_forms"
+                                android:text="@string/settings.prot_select_delete.forms"
                                 android:textColor="@color/wa_black"
                                 android:textSize="16sp" />
 
                             <TextView
                                 style="@style/SettingsTextViewGray"
-                                android:text="@string/delete_forms_info" />
+                                android:text="@string/settings.prot_select.expl_delete.forms" />
                         </LinearLayout>
 
                         <CheckBox
@@ -183,13 +183,13 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/delete_server_settings"
+                                android:text="@string/settings.prot_select_delete.servers"
                                 android:textColor="@color/wa_black"
                                 android:textSize="16sp" />
 
                             <TextView
                                 style="@style/SettingsTextViewGray"
-                                android:text="@string/delete_server_settings_info" />
+                                android:text="@string/settings.prot_select.expl_delete.servers" />
                         </LinearLayout>
 
                         <CheckBox
@@ -216,13 +216,13 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/delete_tella"
+                                android:text="@string/settings.prot_select_delete.app"
                                 android:textColor="@color/wa_black"
                                 android:textSize="16sp" />
 
                             <TextView
                                 style="@style/SettingsTextViewGray"
-                                android:text="@string/delete_tella_info" />
+                                android:text="@string/settings.prot_select.expl_delete.app" />
                         </LinearLayout>
 
                         <CheckBox

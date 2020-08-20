@@ -53,13 +53,13 @@
             style="@style/DialogFragmentTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/share_dialog_title" />
+            android:text="@string/verification.share_dialog.title" />
 
         <TextView
             style="@style/DialogFragmentText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/share_dialog_text" />
+            android:text="@string/verification.share_dialog.expl" />
 
 
         <RadioGroup
@@ -76,14 +76,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="@string/share_dialog_btn_metadata"/>
+                android:text="@string/verification.share_select_media.and.verification"/>
 
             <RadioButton
                 android:id="@+id/media_only"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="@string/share_dialog_btn_only_media"/>
+                android:text="@string/verification.share_select_only.media"/>
 
         </RadioGroup>
     </LinearLayout>
@@ -113,7 +113,7 @@
             android:id="@+id/next"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/next_section"
+            android:text="@string/collect.form_action_next.section"
             android:layout_weight=".5"
             android:textAlignment="center"
             android:background="@color/wa_white"

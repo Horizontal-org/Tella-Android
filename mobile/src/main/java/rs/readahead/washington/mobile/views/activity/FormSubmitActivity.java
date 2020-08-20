@@ -173,14 +173,14 @@ public class FormSubmitActivity extends CacheWordSubscriberBaseActivity implemen
 
     @Override
     public void formResubmitOfflineMode() {
-        Toast.makeText(this, R.string.ra_form_send_submission_offline, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.collect_end_toast_saved_for_later, Toast.LENGTH_LONG).show();
         MyApplication.bus().post(new CollectFormSubmittedEvent());
         finish();
     }
 
     @Override
     public void formReSubmitNoConnectivity() {
-        Toast.makeText(this, R.string.ra_form_send_submission_pending, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.collect_end_toast_notification_form_not_sent_no_connection, Toast.LENGTH_LONG).show();
         MyApplication.bus().post(new CollectFormSubmittedEvent());
         finish();
     }
@@ -239,7 +239,7 @@ public class FormSubmitActivity extends CacheWordSubscriberBaseActivity implemen
 
     @Override
     public void formPartsResubmitEnded(CollectFormInstance instance) {
-        Toast.makeText(this, getString(R.string.ra_form_submitted), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.collect_toast_form_submitted), Toast.LENGTH_LONG).show();
         MyApplication.bus().post(new CollectFormSubmittedEvent());
         finish();
     }
@@ -259,7 +259,7 @@ public class FormSubmitActivity extends CacheWordSubscriberBaseActivity implemen
 
     @Override
     public void onGetFormInstanceError(Throwable throwable) {
-        Toast.makeText(this, R.string.ra_error_loading_form_instance, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.collect_toast_fail_loading_form_instance, Toast.LENGTH_LONG).show();
         finish();
     }
 
@@ -270,7 +270,7 @@ public class FormSubmitActivity extends CacheWordSubscriberBaseActivity implemen
 
     private void showFormEndView(boolean offline) {
         endView = new CollectFormEndView(this,
-                instance.getStatus() == CollectFormInstanceStatus.SUBMITTED ? R.string.ra_form_submitted : R.string.ra_submit);
+                instance.getStatus() == CollectFormInstanceStatus.SUBMITTED ? R.string.collect_end_heading_confirmation_form_submitted : R.string.collect_end_action_submit);
         endView.setInstance(this.instance, offline);
         endViewContainer.removeAllViews();
         endViewContainer.addView(endView);

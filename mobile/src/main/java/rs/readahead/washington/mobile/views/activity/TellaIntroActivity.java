@@ -67,29 +67,29 @@ public class TellaIntroActivity extends AppIntro implements ICacheWordSubscriber
         addSlide(IntroFragment.newInstance(new IntroPage(
                 R.string.app_name,
                 R.drawable.tella_white,
-                R.string.ra_intro_title1,
-                R.string.ra_intro_text1
+                R.string.onboard_intro_subheading,
+                R.string.onboard_into_expl
         )));
 
         addSlide(IntroFragment.newInstance(new IntroPage(
-                R.string.camouflage,
+                R.string.onboard_camo_heading,
                 R.drawable.ic_lock_white_24dp,
-                R.string.ra_intro_title2,
-                R.string.ra_intro_text2
+                R.string.onboard_camo_subheading,
+                R.string.onboard_camo_expl
         )));
 
         addSlide(IntroFragment.newInstance(new IntroPage(
                 R.string.onboard_collect_heading,
                 R.drawable.main_collect,
-                R.string.ra_intro_title4,
-                R.string.ra_intro_text4
+                R.string.onboard_collect_subheading,
+                R.string.onboard_collect_expl
         )));
 
         addSlide(IntroFragment.newInstance(new IntroPage(
-                R.string.ra_panic,
+                R.string.onboard_del_heading,
                 R.drawable.ic_report_problem_white_24dp,
-                R.string.ra_intro_title5,
-                R.string.ra_intro_text5
+                R.string.onboard_del_subheading,
+                R.string.onboard_del_expl
         )));
 
         if (permissionSlideEnabled) {
@@ -102,7 +102,7 @@ public class TellaIntroActivity extends AppIntro implements ICacheWordSubscriber
         setSeparatorColor(getResources().getColor(R.color.wa_gray));
 
         if (!fromAbout) {
-            setDoneText(getString(R.string.ra_start));
+            setDoneText(getString(R.string.onboard_perm_action_start_app));
         }
     }
 
@@ -164,7 +164,7 @@ public class TellaIntroActivity extends AppIntro implements ICacheWordSubscriber
     })
     void showPermissionsRationale(final PermissionRequest request) {
         alertDialog = PermissionUtil.showRationale(
-                this, request, getString(R.string.ra_intro_permission_rationale));
+                this, request, getString(R.string.onboard_perm_dialog_expl_grant_permissions));
     }
 
     @OnPermissionDenied({
@@ -348,7 +348,7 @@ public class TellaIntroActivity extends AppIntro implements ICacheWordSubscriber
 
             TextView li = view.findViewById(R.id.link);
 
-            SpannableString content = new SpannableString(getString(R.string.ra_grant_permissions));
+            SpannableString content = new SpannableString(getString(R.string.onboard_perm_action_grant_permissions));
             content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
             li.setText(content);
             li.setOnClickListener(v -> askPermissions());

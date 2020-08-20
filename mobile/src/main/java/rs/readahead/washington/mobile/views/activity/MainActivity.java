@@ -228,17 +228,17 @@ public class MainActivity extends MetadataActivity implements
 
     @OnShowRationale(Manifest.permission.CAMERA)
     void showCameraRationale(final PermissionRequest request) {
-        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.ra_camera_preview));
+        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_camera));
     }
 
     @OnShowRationale({Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO})
     void showCameraAndAudioRationale(final PermissionRequest request) {
-        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.ra_camera_rationale));
+        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_camera_mic));
     }
 
     @OnShowRationale({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO})
     void showLocationCameraAndAudioRationale(final PermissionRequest request) {
-        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.ra_camera_rationale));
+        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_camera_mic));
     }
 
     @OnPermissionDenied(Manifest.permission.CAMERA)

@@ -76,12 +76,12 @@ public class CollectFormEndView extends FrameLayout {
         TextView formElementsView = findViewById(R.id.formElements);
         TextView formSizeView = findViewById(R.id.formSize);
 
-        formElementsView.setText(getResources().getQuantityString(R.plurals.ra_form_elements_count, formElements, formElements));
+        formElementsView.setText(getResources().getQuantityString(R.plurals.collect_end_meta_number_of_elements, formElements, formElements));
         formSizeView.setText(FileUtil.getFileSizeString(formSize));
     }
 
     public void showUploadProgress(String partName) {
-        titleView.setText(R.string.ra_submitting);
+        titleView.setText(R.string.collect_end_heading_submitting);
         subTitleView.setVisibility(GONE);
 
         ViewGroup layout = findViewWithTag(partName);
@@ -124,7 +124,7 @@ public class CollectFormEndView extends FrameLayout {
         ImageView iconView = layout.findViewById(R.id.partIcon);
         CheckBox uploadCheck = layout.findViewById(R.id.partCheckBox);
 
-        nameView.setText(R.string.ra_form_data);
+        nameView.setText(R.string.collect_end_item_form_data);
         sizeView.setText(FileUtil.getFileSizeString(size));
         iconView.setImageResource(R.drawable.ic_assignment_black_24dp);
 

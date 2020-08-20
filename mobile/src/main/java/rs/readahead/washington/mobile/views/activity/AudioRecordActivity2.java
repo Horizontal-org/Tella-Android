@@ -261,12 +261,12 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     @Override
     public void onAddSuccess(MediaFile mediaFile) {
         attachMediaFileMetadata(mediaFile, metadataAttacher);
-        showToast(String.format(getString(R.string.recorded_successfully), getString(R.string.app_name)));
+        showToast(String.format(getString(R.string.recorder_toast_recording_saved), getString(R.string.app_name)));
     }
 
     @Override
     public void onAddError(Throwable error) {
-        showToast(R.string.ra_capture_error);
+        showToast(R.string.gallery_toast_fail_saving_file);
     }
 
     @Override
@@ -296,7 +296,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     @Override
     public void onMetadataAttachError(Throwable throwable) {
-        showToast(R.string.ra_capture_error);
+        showToast(R.string.gallery_toast_fail_saving_file);
     }
 
     @Override

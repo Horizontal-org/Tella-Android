@@ -163,13 +163,13 @@ public class BlankFormsListFragment extends FormListFragment implements
 
     @Override
     public void onUpdateBlankFormDefStart() {
-        showBlankFormDownloadingDialog(R.string.update_in_progress);
+        showBlankFormDownloadingDialog(R.string.collect_blank_dialog_expl_updating_form_definitions);
     }
 
     @Override
     public void onUpdateBlankFormDefEnd() {
         hideAlertDialog();
-        Toast.makeText(getActivity(), R.string.update_completed, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), R.string.collect_blank_toast_form_definition_updated, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -191,7 +191,7 @@ public class BlankFormsListFragment extends FormListFragment implements
     @Override
     public void onUserCancel() {
         hideAlertDialog();
-        Toast.makeText(getActivity(), R.string.canceled, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), R.string.collect_blank_toast_refresh_canceled, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -244,7 +244,7 @@ public class BlankFormsListFragment extends FormListFragment implements
     @Override
     public void onNoConnectionAvailable() {
         if (!silentFormUpdates) {
-            Toast.makeText(getActivity(), R.string.ra_no_connection_available, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.collect_toast_fail_not_connected, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -342,7 +342,7 @@ public class BlankFormsListFragment extends FormListFragment implements
                             presenter.updateBlankFormDef(collectForm);
                         } else {
                             // todo: (djm) handle this in presenter
-                            Toast.makeText(getActivity(), R.string.not_connected_message, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), R.string.collect_blank_toast_not_connected, Toast.LENGTH_SHORT).show();
                         }
                     });
                 } else {
@@ -355,7 +355,7 @@ public class BlankFormsListFragment extends FormListFragment implements
                         presenter.downloadBlankFormDef(collectForm);
                     } else {
                         // todo: (djm) handle this in presenter
-                        Toast.makeText(getActivity(), R.string.not_connected_message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.collect_blank_toast_not_connected, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -375,9 +375,9 @@ public class BlankFormsListFragment extends FormListFragment implements
         popup.inflate(R.menu.collect_server_item_menu);
 
         if (collectForm.isPinned()) {
-            popup.getMenu().findItem(R.id.pin_server).setTitle(R.string.unpin_server);
+            popup.getMenu().findItem(R.id.pin_server).setTitle(R.string.collect_blank_action_unpin);
         } else {
-            popup.getMenu().findItem(R.id.pin_server).setTitle(R.string.pin_server);
+            popup.getMenu().findItem(R.id.pin_server).setTitle(R.string.collect_blank_action_pin);
         }
 
         popup.setOnMenuItemClickListener(item -> {

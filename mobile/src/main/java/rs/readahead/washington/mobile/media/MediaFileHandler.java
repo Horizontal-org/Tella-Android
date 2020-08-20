@@ -133,7 +133,7 @@ public class MediaFileHandler {
             activity.startActivityForResult(intent, requestCode);
         } catch (ActivityNotFoundException e) {
             Timber.d(e, activity.getClass().getName());
-            Toast.makeText(activity, R.string.ra_error_opening_phone_gallery, Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, R.string.gallery_toast_fail_import, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -630,7 +630,7 @@ public class MediaFileHandler {
         shareIntent.putExtra(Intent.EXTRA_STREAM, mediaFileUri);
         shareIntent.setType(FileUtil.getMimeType(mediaFile.getFileName()));
 
-        context.startActivity(Intent.createChooser(shareIntent, context.getText(R.string.ra_share)));
+        context.startActivity(Intent.createChooser(shareIntent, context.getText(R.string.action_share)));
     }
 
     public static void startShareActivity(Context context, List<MediaFile> mediaFiles, boolean includeMetadata) {
@@ -652,7 +652,7 @@ public class MediaFileHandler {
         shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
         shareIntent.setType("*/*");
 
-        context.startActivity(Intent.createChooser(shareIntent, context.getText(R.string.ra_share)));
+        context.startActivity(Intent.createChooser(shareIntent, context.getText(R.string.action_share)));
     }
 
     private static String getMetadataFilename(MediaFile mediaFile) {

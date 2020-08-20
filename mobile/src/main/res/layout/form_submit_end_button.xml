@@ -17,7 +17,7 @@
             style="@style/YellowButtonText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/submit_form"
+            android:text="@string/collect.end_action_submit.form"
             android:layout_gravity="center_vertical"/>
 
         <ImageView

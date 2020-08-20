@@ -75,7 +75,7 @@
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/password"
+                    android:hint="@string/settings.docu_add.server_field_password"
                     android:imeOptions="actionDone"
                     android:inputType="textPassword"
                     android:maxLines="1" />
@@ -86,7 +86,7 @@
                 style="@style/TextValidationError"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/ra_collect_server_no_connection"
+                android:text="@string/settings.docu_error_no.internet"
                 android:visibility="gone"
                 android:focusable="true"
                 android:focusableInTouchMode="true"/>

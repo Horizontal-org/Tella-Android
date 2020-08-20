@@ -238,19 +238,19 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
         MyLocation myLocation = parseLocationString();
 
         latitude.setVisibility(VISIBLE);
-        latitude.setText(String.format(getContext().getString(R.string.ra_latitude_arg),
+        latitude.setText(String.format(getContext().getString(R.string.collect_form_geopoint_meta_latitude),
                 LocationUtil.printCoordinate(myLocation.getLatitude(), true)));
 
         longitude.setVisibility(VISIBLE);
-        longitude.setText(String.format(getContext().getString(R.string.ra_longitude_arg),
+        longitude.setText(String.format(getContext().getString(R.string.collect_form_geopoint_meta_longitude),
                 LocationUtil.printCoordinate(myLocation.getLongitude(), false)));
 
         altitude.setVisibility(VISIBLE);
-        altitude.setText(String.format(getContext().getString(R.string.ra_altitude_arg),
+        altitude.setText(String.format(getContext().getString(R.string.collect_form_geopoint_meta_altitude),
                 String.format(Locale.ROOT, "%.02f", myLocation.getAltitude())));
 
         accuracy.setVisibility(VISIBLE);
-        accuracy.setText(String.format(getContext().getString(R.string.ra_accuracy_arg),
+        accuracy.setText(String.format(getContext().getString(R.string.collect_form_geopoint_meta_accuracy),
                 myLocation.getAccuracy().toString()));
     }
 

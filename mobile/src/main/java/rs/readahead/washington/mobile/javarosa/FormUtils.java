@@ -120,24 +120,24 @@ public class FormUtils {
             switch (errorBundle.getCode()) {
                 case IErrorCode.UNAUTHORIZED:
                     errorMessage = String.format(context.getString(R.string.collect_toast_fail_form_submission_generic),
-                            context.getString(R.string.ra_unauthorized));
+                            context.getString(R.string.collect_toast_fail_submission_unauthorized));
                     break;
 
                 case IErrorCode.PAYLOAD_TOO_LARGE_413:
                     errorMessage = String.format(context.getString(R.string.collect_toast_fail_form_submission_generic),
-                            context.getString(R.string.ra_submitted_data_too_large));
+                            context.getString(R.string.collect_toast_fail_data_too_large));
                     break;
             }
         } else if (error instanceof SocketTimeoutException) {
             errorMessage = String.format(context.getString(R.string.collect_toast_fail_form_submission_generic),
-                    context.getString(R.string.ra_internet_conection_too_weak));
+                    context.getString(R.string.collect_toast_fail_connection_too_weak));
         }
 
         return errorMessage;
     }
 
     public static String getFormDefErrorMessage(Context context, Throwable error) {
-        String errorMessage = context.getString(R.string.ra_error_get_form_def);
+        String errorMessage = context.getString(R.string.collect_toast_fail_fetch_form_from_server_unknown_error);
 
         if (error instanceof IErrorBundle) {
             IErrorBundle errorBundle = (IErrorBundle) error;
@@ -145,13 +145,13 @@ public class FormUtils {
             //noinspection SwitchStatementWithTooFewBranches
             switch (errorBundle.getCode()) {
                 case IErrorCode.NOT_FOUND:
-                    errorMessage = String.format(context.getString(R.string.ra_error_get_form_def_tmp),
-                            context.getString(R.string.ra_not_found));
+                    errorMessage = String.format(context.getString(R.string.collect_toast_fail_fetch_form_from_server_display_error),
+                            context.getString(R.string.collect_toast_reason_fail_fetch_form_from_server));
                     break;
             }
         } else if (error instanceof SocketTimeoutException) {
             errorMessage = String.format(context.getString(R.string.collect_toast_fail_form_submission_generic),
-                    context.getString(R.string.ra_internet_conection_too_weak));
+                    context.getString(R.string.collect_toast_fail_connection_too_weak));
         }
 
         return errorMessage;
@@ -160,27 +160,27 @@ public class FormUtils {
     static String formatMetadata(Context context, Metadata metadata) {
         List<String> mds = new LinkedList<>();
 
-        mds.add(mdSingleProperty(context, R.string.filename, metadata.getFileName()));
-        mds.add(mdSingleProperty(context, R.string.filehash, metadata.getFileHashSHA256()));
-        mds.add(mdSingleProperty(context, R.string.file_modified, Util.getDateTimeString(metadata.getTimestamp(), FORM_METADATA_PROPERTY_TIME_FORMAT)));
-        mds.add(mdSingleProperty(context, R.string.manufacturer, metadata.getManufacturer()));
-        mds.add(mdSingleProperty(context, R.string.screen_size, metadata.getScreenSize()));
-        mds.add(mdSingleProperty(context, R.string.language, metadata.getLanguage()));
-        mds.add(mdSingleProperty(context, R.string.locale, metadata.getLocale()));
-        mds.add(mdSingleProperty(context, R.string.connection_status, metadata.getNetwork()));
-        mds.add(mdSingleProperty(context, R.string.network_type, metadata.getNetworkType()));
-        mds.add(mdSingleProperty(context, R.string.wifi_mac, metadata.getWifiMac()));
-        mds.add(mdSingleProperty(context, R.string.ipv4, metadata.getIPv4()));
-        mds.add(mdSingleProperty(context, R.string.ipv6, metadata.getIPv6()));
+        mds.add(mdSingleProperty(context, R.string.verification_info_field_filename, metadata.getFileName()));
+        mds.add(mdSingleProperty(context, R.string.verification_info_field_hash, metadata.getFileHashSHA256()));
+        mds.add(mdSingleProperty(context, R.string.verification_info_field_file_modified, Util.getDateTimeString(metadata.getTimestamp(), FORM_METADATA_PROPERTY_TIME_FORMAT)));
+        mds.add(mdSingleProperty(context, R.string.verification_info_field_manufacturer, metadata.getManufacturer()));
+        mds.add(mdSingleProperty(context, R.string.verification_info_field_screen_size, metadata.getScreenSize()));
+        mds.add(mdSingleProperty(context, R.string.verification_info_field_language, metadata.getLanguage()));
+        mds.add(mdSingleProperty(context, R.string.verification_info_field_locale, metadata.getLocale()));
+        mds.add(mdSingleProperty(context, R.string.verification_info_field_connection_status, metadata.getNetwork()));
+        mds.add(mdSingleProperty(context, R.string.verification_info_field_network_type, metadata.getNetworkType()));
+        mds.add(mdSingleProperty(context, R.string.verification_info_field_wifi_mac, metadata.getWifiMac()));
+        mds.add(mdSingleProperty(context, R.string.verification_info_field_ipv4, metadata.getIPv4()));
+        mds.add(mdSingleProperty(context, R.string.verification_info_field_ipv6, metadata.getIPv6()));
         mds.add(mdLocationProperties(context, metadata.getMyLocation()));
-        mds.add(mdListProperty(context, R.string.cell_info, metadata.getCells(), true));
-        mds.add(mdListProperty(context, R.string.ra_wifi_info, metadata.getWifis(), false));
+        mds.add(mdListProperty(context, R.string.verification_info_field_cell_towers, metadata.getCells(), true));
+        mds.add(mdListProperty(context, R.string.verification_info_wifi, metadata.getWifis(), false));
 
         return TextUtils.join(FORM_METADATA_PROPERTY_DELIMITER, mds);
     }
 
     private static String mdSingleProperty(@NonNull Context context, @NonNull String name, @Nullable String value) {
-        return String.format(Locale.ROOT, "%s: %s", name, !TextUtils.isEmpty(value) ? value : context.getString(R.string.not_available));
+        return String.format(Locale.ROOT, "%s: %s", name, !TextUtils.isEmpty(value) ? value : context.getString(R.string.verification_info_field_metadata_not_available));
     }
 
     private static String mdSingleProperty(@NonNull Context context, @StringRes int nameResId, @Nullable String value) {
@@ -199,20 +199,20 @@ public class FormUtils {
 
     private static String mdLocationProperties(@NonNull Context context, @Nullable MyLocation location) {
         if (location == null) {
-            return mdSingleProperty(context, R.string.location, null);
+            return mdSingleProperty(context, R.string.verification_collecting_list_item_location, null);
         }
 
-        String objName = context.getString(R.string.location);
+        String objName = context.getString(R.string.verification_collecting_list_item_location);
 
         List<String> ls = new LinkedList<>();
 
-        ls.add(mdObjectProperty(context, objName, R.string.latitude, Double.toString(location.getLatitude())));
-        ls.add(mdObjectProperty(context, objName, R.string.longitude, Double.toString(location.getLongitude())));
-        ls.add(mdObjectProperty(context, objName, R.string.altitude, location.getAltitude() != null ? location.getAltitude().toString() : null));
-        ls.add(mdObjectProperty(context, objName, R.string.accuracy, location.getAccuracy() != null ? location.getAccuracy().toString() : null));
-        ls.add(mdObjectProperty(context, objName, R.string.time, Util.getDateTimeString(location.getTimestamp(), FORM_METADATA_PROPERTY_TIME_FORMAT)));
-        ls.add(mdObjectProperty(context, objName, R.string.location_provider, location.getProvider()));
-        ls.add(mdObjectProperty(context, objName, R.string.location_speed, location.getSpeed() != null ? location.getSpeed().toString() : null));
+        ls.add(mdObjectProperty(context, objName, R.string.verification_info_field_latitude, Double.toString(location.getLatitude())));
+        ls.add(mdObjectProperty(context, objName, R.string.verification_info_field_longitude, Double.toString(location.getLongitude())));
+        ls.add(mdObjectProperty(context, objName, R.string.verification_info_field_altitude, location.getAltitude() != null ? location.getAltitude().toString() : null));
+        ls.add(mdObjectProperty(context, objName, R.string.verification_info_field_accuracy, location.getAccuracy() != null ? location.getAccuracy().toString() : null));
+        ls.add(mdObjectProperty(context, objName, R.string.verification_info_field_location_time, Util.getDateTimeString(location.getTimestamp(), FORM_METADATA_PROPERTY_TIME_FORMAT)));
+        ls.add(mdObjectProperty(context, objName, R.string.verification_info_field_location_provider, location.getProvider()));
+        ls.add(mdObjectProperty(context, objName, R.string.verification_info_field_location_speed, location.getSpeed() != null ? location.getSpeed().toString() : null));
 
         return TextUtils.join(FORM_METADATA_PROPERTY_DELIMITER, ls);
     }
