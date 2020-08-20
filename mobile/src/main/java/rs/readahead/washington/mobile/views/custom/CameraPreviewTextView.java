@@ -25,7 +25,7 @@ public class CameraPreviewTextView extends AppCompatTextView {
 
     private void init() {
         if (PermissionUtil.checkPermission(getContext(), Manifest.permission.CAMERA)) {
-            setText(R.string.tap_anywhere_to_open_camera);
+            setText(R.string.home_action_expl_camera);
         } else {
             setText(R.string.ra_enable_camera_preview);
         }

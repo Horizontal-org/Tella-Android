@@ -182,7 +182,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.SettingsActivity"
-            android:label="@string/settings"
+            android:label="@string/settings_app.bar"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -212,7 +212,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.AudioRecordActivity2"
-            android:label="@string/title_activity_audio_record"
+            android:label="@string/recorder_app.bar"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -237,12 +237,12 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.AboutHelpActivity"
-            android:label="@string/about_n_help"
+            android:label="@string/settings.about_app.bar"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.CollectMainActivity"
-            android:label="@string/title_activity_collect_main"
+            android:label="@string/collect_app.bar"
             android:parentActivityName=".views.activity.MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar">
@@ -303,7 +303,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.GalleryActivity"
-            android:label="@string/ra_gallery"
+            android:label="@string/gallery_app.bar"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

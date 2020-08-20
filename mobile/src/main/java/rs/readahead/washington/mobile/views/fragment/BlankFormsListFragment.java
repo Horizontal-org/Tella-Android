@@ -152,13 +152,13 @@ public class BlankFormsListFragment extends FormListFragment implements
 
     @Override
     public void onDownloadBlankFormDefStart() {
-        showBlankFormDownloadingDialog(R.string.download_in_progress);
+        showBlankFormDownloadingDialog(R.string.collect_dialog_text_download_progress);
     }
 
     @Override
     public void onDownloadBlankFormDefEnd() {
         hideAlertDialog();
-        Toast.makeText(getActivity(), R.string.download_completed, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), R.string.collect_toast_download_completed, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -230,7 +230,7 @@ public class BlankFormsListFragment extends FormListFragment implements
         // todo: make this multiply errors friendly
         if (!silentFormUpdates) {
             for (IErrorBundle error : listFormResult.getErrors()) {
-                Toast.makeText(getActivity(), String.format("%s %s", getString(R.string.ra_error_getting_forms), error.getServerName()), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), String.format("%s %s", getString(R.string.collect_blank_toast_fail_updating_form_list), error.getServerName()), Toast.LENGTH_SHORT).show();
                 Timber.d(error.getException(), getClass().getName());
             }
         }

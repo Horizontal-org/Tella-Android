@@ -84,7 +84,7 @@ public class TellaUploadServerDialogFragment extends DialogFragment implements
         if (server == null) {
             args.putInt(TITLE_KEY, R.string.add_server);
         } else {
-            args.putInt(TITLE_KEY, R.string.ra_server_settings);
+            args.putInt(TITLE_KEY, R.string.settings_docu_dialog_title_tus_server_settings);
             args.putSerializable(ID_KEY, server.getId());
             args.putSerializable(OBJECT_KEY, server);
         }
@@ -120,9 +120,9 @@ public class TellaUploadServerDialogFragment extends DialogFragment implements
         dialog = new AlertDialog.Builder(Objects.requireNonNull(getActivity()))
                 .setTitle(title)
                 .setView(dialogView)
-                .setPositiveButton(R.string.ok, null)
+                .setPositiveButton(R.string.action_ok, null)
                 .setNeutralButton(R.string.ra_try_again, null)
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .create();
 
         ViewUtil.setDialogSoftInputModeVisible(dialog);
@@ -215,7 +215,7 @@ public class TellaUploadServerDialogFragment extends DialogFragment implements
     public void setSaveAnyway(boolean enabled) {
         dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setVisibility(enabled ? View.VISIBLE : View.GONE);
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setText(
-                getString(enabled ? R.string.ra_save_anyway : R.string.ok));
+                getString(enabled ? R.string.ra_save_anyway : R.string.action_ok));
     }
 
     private void validate() {
@@ -232,7 +232,7 @@ public class TellaUploadServerDialogFragment extends DialogFragment implements
         layout.setError(null);
 
         if (TextUtils.isEmpty(field.getText().toString())) {
-            layout.setError(getString(R.string.empty_field_error));
+            layout.setError(getString(R.string.settings_text_empty_field));
             validated = false;
         }
     }
@@ -243,7 +243,7 @@ public class TellaUploadServerDialogFragment extends DialogFragment implements
         layout.setError(null);
 
         if (TextUtils.isEmpty(url)) {
-            layout.setError(getString(R.string.empty_field_error));
+            layout.setError(getString(R.string.settings_text_empty_field));
             validated = false;
         } else {
             url = url.trim();

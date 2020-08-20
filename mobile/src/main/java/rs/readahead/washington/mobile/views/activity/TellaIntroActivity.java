@@ -79,7 +79,7 @@ public class TellaIntroActivity extends AppIntro implements ICacheWordSubscriber
         )));
 
         addSlide(IntroFragment.newInstance(new IntroPage(
-                R.string.ra_collect,
+                R.string.onboard_collect_heading,
                 R.drawable.main_collect,
                 R.string.ra_intro_title4,
                 R.string.ra_intro_text4
@@ -98,7 +98,7 @@ public class TellaIntroActivity extends AppIntro implements ICacheWordSubscriber
 
         showStatusBar(true);
         showSkipButton(true);
-        setSkipText(getString(R.string.skip));
+        setSkipText(getString(R.string.action_skip));
         setSeparatorColor(getResources().getColor(R.color.wa_gray));
 
         if (!fromAbout) {

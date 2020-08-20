@@ -86,24 +86,24 @@ public class FormUtils {
         switch (response.getStatusCode()) {
             case OpenRosaResponse.StatusCode.FORM_RECEIVED:
                 if (hasMessages) {
-                    successMessage = context.getString(R.string.ra_form_received_reply) + messages;
+                    successMessage = context.getString(R.string.collect_toast_server_response_form_received) + messages;
                 } else {
-                    successMessage = context.getString(R.string.ra_form_received_no_reply);
+                    successMessage = context.getString(R.string.collect_toast_server_reply_form_received_no_detail);
                 }
                 break;
 
             case OpenRosaResponse.StatusCode.ACCEPTED:
                 if (hasMessages) {
-                    successMessage = context.getString(R.string.ra_form_accepted_reply) + messages;
+                    successMessage = context.getString(R.string.collect_toast_server_reply_form_accepted_with_detail) + messages;
                 } else {
-                    successMessage = context.getString(R.string.ra_form_accepted_no_reply);
+                    successMessage = context.getString(R.string.collect_toast_server_reply_form_accepted_no_detail);
                 }
                 break;
 
             case OpenRosaResponse.StatusCode.UNUSED:
             default:
                 successMessage = String.format(Locale.US,
-                        context.getString(R.string.ra_form_unused_reply),
+                        context.getString(R.string.settings_docu_toast_server_not_odk),
                         response.getStatusCode());
                 break;
         }
@@ -112,24 +112,24 @@ public class FormUtils {
     }
 
     public static String getFormSubmitErrorMessage(Context context, Throwable error) {
-        String errorMessage = context.getString(R.string.ra_error_submitting_form);
+        String errorMessage = context.getString(R.string.collect_toast_fail_sending_form);
 
         if (error instanceof IErrorBundle) {
             IErrorBundle errorBundle = (IErrorBundle) error;
 
             switch (errorBundle.getCode()) {
                 case IErrorCode.UNAUTHORIZED:
-                    errorMessage = String.format(context.getString(R.string.ra_error_submitting_form_tmp),
+                    errorMessage = String.format(context.getString(R.string.collect_toast_fail_form_submission_generic),
                             context.getString(R.string.ra_unauthorized));
                     break;
 
                 case IErrorCode.PAYLOAD_TOO_LARGE_413:
-                    errorMessage = String.format(context.getString(R.string.ra_error_submitting_form_tmp),
+                    errorMessage = String.format(context.getString(R.string.collect_toast_fail_form_submission_generic),
                             context.getString(R.string.ra_submitted_data_too_large));
                     break;
             }
         } else if (error instanceof SocketTimeoutException) {
-            errorMessage = String.format(context.getString(R.string.ra_error_submitting_form_tmp),
+            errorMessage = String.format(context.getString(R.string.collect_toast_fail_form_submission_generic),
                     context.getString(R.string.ra_internet_conection_too_weak));
         }
 
@@ -150,7 +150,7 @@ public class FormUtils {
                     break;
             }
         } else if (error instanceof SocketTimeoutException) {
-            errorMessage = String.format(context.getString(R.string.ra_error_submitting_form_tmp),
+            errorMessage = String.format(context.getString(R.string.collect_toast_fail_form_submission_generic),
                     context.getString(R.string.ra_internet_conection_too_weak));
         }
 

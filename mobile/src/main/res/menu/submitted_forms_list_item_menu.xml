@@ -5,5 +5,5 @@
         android:title="@string/ra_edit_to_resend"/>
     <item
         android:id="@+id/delete"
-        android:title="@string/delete"/>
+        android:title="@string/action_delete"/>
 </menu>

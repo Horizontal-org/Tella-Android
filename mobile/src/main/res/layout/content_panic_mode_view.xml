@@ -24,7 +24,7 @@
         android:layout_above="@id/countdown_timer"
         android:layout_centerHorizontal="true"
         android:textAlignment="center"
-        android:text="@string/panic_mode_activation" />
+        android:text="@string/homescreen_heading_quick.delete" />
 
     <TextView
         style="@style/PanicActiveText"
@@ -33,5 +33,5 @@
         android:layout_below="@id/countdown_timer"
         android:layout_centerHorizontal="true"
         android:textAlignment="center"
-        android:text="@string/tap_anywhere_to_cancel" />
+        android:text="@string/home_expl_cancel.quick.delete" />
 </RelativeLayout>

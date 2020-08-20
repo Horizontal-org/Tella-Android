@@ -74,7 +74,7 @@ public class FileUploadingActivity extends CacheWordSubscriberBaseActivity imple
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.send);
+            actionBar.setTitle(R.string.upload_app_bar_upload_screen);
         }
 
         long[] ids;
@@ -84,7 +84,7 @@ public class FileUploadingActivity extends CacheWordSubscriberBaseActivity imple
             server = (TellaUploadServer) getIntent().getSerializableExtra(SERVER_KEY);
             metadata = getIntent().getBooleanExtra(METADATA, false);
         } else {
-            showToast(R.string.error);
+            showToast(R.string.gallery_toast_fail_finding_metadata_to_upload);
             finish();
             return;
         }
@@ -182,7 +182,7 @@ public class FileUploadingActivity extends CacheWordSubscriberBaseActivity imple
 
     @Override
     public void onGetMediaFilesError(Throwable error) {
-        Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.gallery_toast_fail_finding_file_to_upload, Toast.LENGTH_SHORT).show();
     }
 
     @Override

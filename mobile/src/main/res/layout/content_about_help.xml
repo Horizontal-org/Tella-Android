@@ -49,7 +49,7 @@
                 style="@style/SettingsTextViewAbout"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="@string/copyright" />
+                android:text="@string/settings_text_copyright" />
         </LinearLayout>
 
         <View style="@style/SettingsMainLine" />
@@ -81,7 +81,7 @@
             <TextView
                 android:id="@+id/faq"
                 style="@style/SettingsTextViewAbout"
-                android:text="@string/faq"
+                android:text="@string/settings.about_list.item_faq"
                 android:textAllCaps="true" />
         </LinearLayout>
 
@@ -98,7 +98,7 @@
 
             <TextView
                 style="@style/SettingsTextViewAbout"
-                android:text="@string/contact_us" />
+                android:text="@string/settings_menu.item_contact" />
         </LinearLayout>
 
         <View style="@style/SettingsMainLine" />
@@ -114,7 +114,7 @@
 
             <TextView
                 style="@style/SettingsTextViewAbout"
-                android:text="@string/privacy_policy" />
+                android:text="@string/settings.about_list.item_privacy.policy" />
         </LinearLayout>
 
         <View style="@style/SettingsMainLine" />
@@ -146,7 +146,7 @@
 
             <TextView
                 style="@style/SettingsTextViewAbout"
-                android:text="@string/source_code" />
+                android:text="@string/settings_list.item_code" />
         </LinearLayout>
 
 

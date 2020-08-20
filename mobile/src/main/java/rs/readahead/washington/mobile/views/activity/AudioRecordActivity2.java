@@ -113,7 +113,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setTitle(R.string.title_activity_audio_record);
+            actionBar.setTitle(R.string.recorder_app_bar);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
@@ -247,7 +247,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     @OnShowRationale(Manifest.permission.RECORD_AUDIO)
     void showRecordAudioRationale(final PermissionRequest request) {
-        rationaleDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_audio));
+        rationaleDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_mic));
     }
 
     @Override
@@ -370,7 +370,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         enableRecord();
 
         mTimer.setText(timeToString(0));
-        showToast(R.string.recorded_unsuccessfully);
+        showToast(R.string.recorder_toast_fail_recording);
     }
 
     private void returnData() {

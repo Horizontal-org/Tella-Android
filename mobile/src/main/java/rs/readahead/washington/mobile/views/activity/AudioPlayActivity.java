@@ -384,12 +384,12 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
         alertDialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.ra_delete_media)
                 .setMessage(R.string.ra_media_will_be_deleted)
-                .setPositiveButton(R.string.delete, (dialog, which) -> {
+                .setPositiveButton(R.string.action_delete, (dialog, which) -> {
                     if (viewerPresenter != null && handlingMediaFile != null) {
                         viewerPresenter.deleteMediaFiles(handlingMediaFile);
                     }
                 })
-                .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
                 })
                 .setCancelable(true)
                 .show();

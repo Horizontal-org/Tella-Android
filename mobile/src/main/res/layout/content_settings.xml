@@ -121,7 +121,7 @@
 
                 <TextView
                     style="@style/SettingsTextViewTitle"
-                    android:text="@string/about_n_help" />
+                    android:text="@string/settings.gen_select_about" />
 
             </LinearLayout>
 

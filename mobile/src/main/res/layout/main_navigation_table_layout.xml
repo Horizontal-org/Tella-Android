@@ -28,7 +28,7 @@
             <TextView
                 style="@style/NavigationTabText"
                 android:layout_below="@+id/collect_image"
-                android:text="@string/ra_collect" />
+                android:text="@string/home_collect.button" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -45,7 +45,7 @@
             <TextView
                 style="@style/NavigationTabText"
                 android:layout_below="@+id/gallery_image"
-                android:text="@string/ra_gallery" />
+                android:text="@string/home_gallery.button" />
         </RelativeLayout>
     </LinearLayout>
 

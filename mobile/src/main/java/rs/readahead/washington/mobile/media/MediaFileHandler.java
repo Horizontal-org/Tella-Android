@@ -122,6 +122,11 @@ public class MediaFileHandler {
             }
         }
 
+        //if (Build.VERSION.SDK_INT >= 18) {
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            Timber.d("+++++ get multiple");
+       // }
+
         intent.setAction(Intent.ACTION_GET_CONTENT);
 
         try {

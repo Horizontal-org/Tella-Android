@@ -355,7 +355,7 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
 
         locationAlertDialog = DialogsUtil.showMessageOKCancelWithTitle(this,
                 message,
-                getString(R.string.attention),
+                getString(R.string.verification_prompt_dialog_title),
                 getString(R.string.ignore),
                 getString(R.string.turn_on_gps),
                 (dialog, which) -> {  //ignore

@@ -181,7 +181,7 @@ public class GalleryActivity extends MetadataActivity implements
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.ra_gallery);
+            actionBar.setTitle(R.string.gallery_app_bar);
             if (animated) {
                 actionBar.setHomeAsUpIndicator(R.drawable.ic_close_white);
             }
@@ -374,7 +374,7 @@ public class GalleryActivity extends MetadataActivity implements
     @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
     void showFineLocationRationale(final PermissionRequest request) {
         alertDialog = PermissionUtil.showRationale(
-                this, request, getString(R.string.ra_media_location_permissions));
+                this, request, getString(R.string.permission_dialog_expl_GPS));
     }
 
     @OnClick(R.id.fab_button)
@@ -596,7 +596,7 @@ public class GalleryActivity extends MetadataActivity implements
             if (selectedNum > 0) {
                 getSupportActionBar().setTitle(String.valueOf(selectedNum));
             } else {
-                getSupportActionBar().setTitle(R.string.ra_gallery);
+                getSupportActionBar().setTitle(R.string.gallery_app_bar);
             }
         }
 
@@ -626,8 +626,8 @@ public class GalleryActivity extends MetadataActivity implements
         alertDialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.ra_delete_media)
                 .setMessage(R.string.ra_media_will_be_deleted)
-                .setPositiveButton(R.string.delete, (dialog, which) -> removeMediaFiles())
-                .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                .setPositiveButton(R.string.action_delete, (dialog, which) -> removeMediaFiles())
+                .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
                 })
                 .setCancelable(true)
                 .show();

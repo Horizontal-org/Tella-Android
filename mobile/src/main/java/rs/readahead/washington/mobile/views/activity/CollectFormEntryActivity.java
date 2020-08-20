@@ -554,7 +554,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     @Override
     public void formParseError(Throwable error) {
-        showToast(R.string.ra_form_parse_error);
+        showToast(R.string.collect_toast_fail_parsing_form);
     }
 
     @Override
@@ -600,7 +600,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         switch (instance.getStatus()) {
             case UNKNOWN:
             case DRAFT:
-                return getString(R.string.ra_draft_saved);
+                return getString(R.string.collect_toast_draft_saved);
 
             default:
                 return getString(R.string.ra_form_saved);
@@ -708,7 +708,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     public void formConstraintViolation(FormIndex formIndex, String errorString) {
         if (currentScreenView instanceof CollectFormView) {
             ((CollectFormView) currentScreenView).setValidationConstraintText(formIndex, errorString);
-            showToast(getString(R.string.ra_answers_validation_errors));
+            showToast(getString(R.string.collect_form_toast_validation_generic_error));
         }
     }
 
@@ -985,7 +985,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
         alertDialog = DialogsUtil.showMessageOKCancelWithTitle(this,
                 message,
-                getString(R.string.attention),
+                getString(R.string.collect_form_exit_unsaved_dialog_title),
                 getString(R.string.save_and_exit),
                 getString(R.string.exit_anyway),
                 (dialog, which) -> {

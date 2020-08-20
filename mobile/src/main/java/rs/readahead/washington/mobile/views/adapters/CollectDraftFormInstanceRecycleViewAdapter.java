@@ -40,7 +40,7 @@ public class CollectDraftFormInstanceRecycleViewAdapter extends RecyclerView.Ada
 
         holder.name.setText(instance.getInstanceName());
         holder.organization.setText(instance.getServerName());
-        holder.updated.setText(String.format(context.getString(R.string.ra_updated_with_param),
+        holder.updated.setText(String.format(context.getString(R.string.collect_draft_meta_date_updated),
                 Util.getDateTimeString(instance.getUpdated())));
         holder.instanceRow.setOnClickListener(new View.OnClickListener() {
             @Override

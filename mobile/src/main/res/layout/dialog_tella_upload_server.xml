@@ -27,7 +27,7 @@
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/ra_server_name"
+                    android:hint="@string/settings.docu_field_server.name"
                     android:imeOptions="actionNext"
                     android:inputType="textCapSentences"
                     android:maxLines="1" />
@@ -42,7 +42,7 @@
                     android:id="@+id/url"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/ra_server_url"
+                    android:hint="@string/settings.docu_field_server.url"
                     android:imeOptions="actionNext"
                     android:inputType="textUri"
                     android:maxLines="1"
@@ -59,7 +59,7 @@
                     android:id="@+id/username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/ra_username"
+                    android:hint="@string/settings.docu_field_username"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLines="1" />

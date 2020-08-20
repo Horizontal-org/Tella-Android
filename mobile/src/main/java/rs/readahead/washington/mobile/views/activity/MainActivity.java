@@ -223,7 +223,7 @@ public class MainActivity extends MetadataActivity implements
     @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
     void showFineLocationRationale(final PermissionRequest request) {
         alertDialog = PermissionUtil.showRationale(
-                this, request, getString(R.string.ra_media_location_permissions));
+                this, request, getString(R.string.permission_dialog_expl_GPS));
     }
 
     @OnShowRationale(Manifest.permission.CAMERA)
@@ -357,7 +357,7 @@ public class MainActivity extends MetadataActivity implements
     private boolean checkIfShouldExit() {
         if (!mExit) {
             mExit = true;
-            showToast(R.string.exit);
+            showToast(R.string.home_toast_back_exit);
             handler.postDelayed(() -> mExit = false, 3 * 1000);
             return false;
         }
