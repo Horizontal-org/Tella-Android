@@ -391,18 +391,19 @@
         <item quantity="many">%d minutes left</item>
     </plurals>
     <string name="clear_upload_history_dialog">Are you sure you want to clear the upload history?</string>
-    <string name="stop_upload_dialog">Are you sure you want to stop the upload?</string>
-    <string name="upload_information">Upload information</string>
-    <string name="number_of_files">Number of files</string>
-    <string name="date_started">Date started</string>
-    <string name="clear">Clear</string>
-    <string name="no_information_to_show">There is no information to show here.</string>
-    <string name="completed">Completed</string>
-    <string name="file_type">File type</string>
-    <string name="connecting">connecting…</string>
-    <string name="less_than_a_minute_left">less than a minute left</string>
-    <string name="confirm_delete_upload_information">Are you sure you want to delete the upload information?</string>
-    <string name="stopped">Stopped</string>
-    <string name="more_than_an_hour_left">more than an hour left</string>
+    <string name="upload.main_stop.upload_dialog.exp">Are you sure you want to stop the upload?</string>
+    <string name="upload.info_stop.upload_dialog.expl">Are you sure you want to stop the upload?</string>
+    <string name="upload_info_app.bar">Upload information</string>
+    <string name="upload_info_heading_number.of.files">Number of files</string>
+    <string name="upload_info_heading_date.started">Date started</string>
+    <string name="upload_main_dialog_action_clear">Clear</string>
+    <string name="upload_main_empty_info">There is no information to show here.</string>
+    <string name="upload_info_heading_num.of.files.completed">Completed</string>
+    <string name="upload_info_file.type">File type</string>
+    <string name="upload_main_heading.connecting">connecting…</string>
+    <string name="upload_info_heading.minute.left">less than a minute left</string>
+    <string name="upload_info_dialog.expl_clear.upload">Are you sure you want to delete the upload information?</string>
+    <string name="upload_main_heading.stopped">Stopped</string>
+    <string name="upload_main_heading.hour.left">more than an hour left</string>
     <string name="settings.docu_error_must.select.auto.upload.server">You must select a server</string>
 </resources>

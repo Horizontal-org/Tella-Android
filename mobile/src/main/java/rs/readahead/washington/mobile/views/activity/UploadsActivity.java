@@ -270,7 +270,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
 
     public void showClearScheduledDialog() {
         alertDialog = new AlertDialog.Builder(this)
-                .setMessage(R.string.stop_upload_dialog)
+                .setMessage(R.string.upload_main_stop_upload_dialog_exp)
                 .setPositiveButton(R.string.ra_stop, (dialog, which) -> pauseUpload())
                 .setNegativeButton(R.string.cancel, (dialog, which) -> {
                 })
@@ -308,14 +308,14 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
 
     private void pauseUpload() {
         Preferences.setAutoUploadPased(true);
-        statusText.setText(getContext().getResources().getString(R.string.stopped));
+        statusText.setText(getContext().getResources().getString(R.string.upload_main_heading_stopped));
         stopOutlined.setStopped();
         stopOutlined.button.setOnClickListener(v -> onStopClicked());
     }
 
     private void resumeUpload() {
         Preferences.setAutoUploadPased(false);
-        statusText.setText(getContext().getResources().getString(R.string.connecting));
+        statusText.setText(getContext().getResources().getString(R.string.upload_main_heading_connecting));
         setProgress();
         stopOutlined.donutProgress.setOnClickListener(v -> onStopClicked());
         TellaUploadJob.scheduleJob();
@@ -325,7 +325,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
         if (Preferences.isAutoUploadPaused()) {
             stopOutlined.setStopped();
             stopOutlined.button.setOnClickListener(v -> onStopClicked());
-            statusText.setText(getContext().getResources().getString(R.string.stopped));
+            statusText.setText(getContext().getResources().getString(R.string.upload_main_heading_stopped));
         } else {
             setProgress();
             stopOutlined.donutProgress.setOnClickListener(v -> onStopClicked());
@@ -352,7 +352,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
     private void showClearHistoryDialog() {
         alertDialog = new AlertDialog.Builder(this)
                 .setMessage(R.string.clear_upload_history_dialog)
-                .setPositiveButton(R.string.clear, (dialog, which) -> clearHistory())
+                .setPositiveButton(R.string.upload_main_dialog_action_clear, (dialog, which) -> clearHistory())
                 .setNegativeButton(R.string.cancel, (dialog, which) -> {
                 })
                 .setCancelable(true)
@@ -387,10 +387,10 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
         startedText.setText(String.format("%s: %s", getContext().getResources().getString(R.string.started), Util.getDateTimeString(started, "dd/MM/yyyy h:mm a")));
         if (Preferences.isAutoUploadPaused()) {
             statusText.setText(String.format("%s, %s",
-                    getContext().getResources().getQuantityString(R.plurals.file, instances.size(), instances.size()), getContext().getResources().getString(R.string.stopped)));
+                    getContext().getResources().getQuantityString(R.plurals.file, instances.size(), instances.size()), getContext().getResources().getString(R.string.upload_main_heading_stopped)));
         } else {
             statusText.setText(String.format("%s, %s",
-                    getContext().getResources().getQuantityString(R.plurals.file, instances.size(), instances.size()), getContext().getResources().getString(R.string.connecting)));
+                    getContext().getResources().getQuantityString(R.plurals.file, instances.size(), instances.size()), getContext().getResources().getString(R.string.upload_main_heading_connecting)));
         }
     }
 
@@ -447,7 +447,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
             if (projectedRemaininigTime > 3600000) {
                 statusText.setText(String.format("%s, %s",
                         getContext().getResources().getQuantityString(R.plurals.file, uploadnigList.size(), uploadnigList.size()),
-                        getContext().getResources().getString(R.string.more_than_an_hour_left)));
+                        getContext().getResources().getString(R.string.upload_main_heading_hour_left)));
             } else if (projectedRemaininigTime > 60000) {
                 int minutes = (int) projectedRemaininigTime / 60000;
                 statusText.setText(String.format("%s, %s",
@@ -456,7 +456,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
             } else if (projectedRemaininigTime > 0) {
                 statusText.setText(String.format("%s, %s",
                         getContext().getResources().getQuantityString(R.plurals.file, uploadnigList.size(), uploadnigList.size()),
-                        getContext().getResources().getString(R.string.less_than_a_minute_left)));
+                        getContext().getResources().getString(R.string.upload_info_heading_minute_left)));
             }
         }
         lastUploadedSize = uploaded;

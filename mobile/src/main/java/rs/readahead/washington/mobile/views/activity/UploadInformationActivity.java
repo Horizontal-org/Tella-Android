@@ -97,7 +97,7 @@ public class UploadInformationActivity extends CacheWordSubscriberBaseActivity i
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.upload_information);
+            actionBar.setTitle(R.string.upload_info_app_bar);
         }
     }
 
@@ -160,8 +160,8 @@ public class UploadInformationActivity extends CacheWordSubscriberBaseActivity i
 
     private void showClearUploadDialog(long id) {
         alertDialog = new androidx.appcompat.app.AlertDialog.Builder(this)
-                .setMessage(R.string.stop_upload_dialog)
-                .setPositiveButton(R.string.clear, (dialog, which) -> presenter.deleteFileUploadInstance(id))
+                .setMessage(R.string.upload_info_stop_upload_dialog_expl)
+                .setPositiveButton(R.string.upload_main_dialog_action_clear, (dialog, which) -> presenter.deleteFileUploadInstance(id))
                 .setNegativeButton(R.string.cancel, (dialog, which) -> {
                 })
                 .setCancelable(true)
@@ -170,7 +170,7 @@ public class UploadInformationActivity extends CacheWordSubscriberBaseActivity i
 
     private void showClearHistoryDialog() {
         alertDialog = new androidx.appcompat.app.AlertDialog.Builder(this)
-                .setMessage(R.string.confirm_delete_upload_information)
+                .setMessage(R.string.upload_info_dialog_expl_clear_upload)
                 .setPositiveButton(R.string.delete, (dialog, which) -> clearUploadInformation())
                 .setNegativeButton(R.string.cancel, (dialog, which) -> {
                 })
@@ -285,9 +285,9 @@ public class UploadInformationActivity extends CacheWordSubscriberBaseActivity i
                 completed = false;
             }
         }
-        numberOfFilesText.setText(String.format("%s: %d", getContext().getResources().getString(R.string.number_of_files), instances.size()));
-        startedText.setText(String.format("%s: %s", getContext().getResources().getString(R.string.date_started), Util.getDateTimeString(timeStarted, "dd/MM/yyyy h:mm a")));
-        completedText.setText(String.format("%s: %s", getContext().getResources().getString(R.string.completed), Util.getDateTimeString(timeCompleted, "dd/MM/yyyy h:mm a")));
+        numberOfFilesText.setText(String.format("%s: %d", getContext().getResources().getString(R.string.upload_info_heading_number_of_files), instances.size()));
+        startedText.setText(String.format("%s: %s", getContext().getResources().getString(R.string.upload_info_heading_date_started), Util.getDateTimeString(timeStarted, "dd/MM/yyyy h:mm a")));
+        completedText.setText(String.format("%s: %s", getContext().getResources().getString(R.string.upload_info_heading_num_of_files_completed), Util.getDateTimeString(timeCompleted, "dd/MM/yyyy h:mm a")));
         completedText.setVisibility(completed ? View.VISIBLE : View.GONE);
     }
 }

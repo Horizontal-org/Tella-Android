@@ -4,6 +4,6 @@
 
     <item
         android:id="@+id/menu_item_clear"
-        android:title="@string/clear"
+        android:title="@string/upload_main_dialog_action_clear"
         app:showAsAction="always" />
 </menu>
