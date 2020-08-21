@@ -85,7 +85,7 @@
             <TextView
                 style="@style/NavigationTabText"
                 android:layout_below="@+id/uploads"
-                android:text="@string/uploads" />
+                android:text="@string/home_upload.button" />
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

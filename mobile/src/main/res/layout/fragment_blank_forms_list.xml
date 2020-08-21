@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/light_yellow"
-            android:text="@string/blank_forms_list_banner"
+            android:text="@string/collect.blank_banner_forms.updated"
             android:padding="16dp"
             android:textAlignment="center"
             android:textColor="@color/wa_gray"

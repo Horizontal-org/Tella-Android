@@ -71,7 +71,7 @@
                 android:id="@+id/fileUploadedInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/ra_file_already_on_server"
+                android:text="@string/gallery.upload_sent_meta_file.already.on.server"
                 android:visibility="gone"/>
         </LinearLayout>
 

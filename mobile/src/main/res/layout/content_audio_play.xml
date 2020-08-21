@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/minus15"
+            android:text="@string/play.audio_action.expl_minus15s"
             android:textColor="@color/wa_black"
             android:textSize="14sp" />
     </LinearLayout>
@@ -112,7 +112,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/plus15"
+            android:text="@string/play.audio_action.expl_plus15s"
             android:textColor="@color/wa_black"
             android:textSize="14sp" />
     </LinearLayout>

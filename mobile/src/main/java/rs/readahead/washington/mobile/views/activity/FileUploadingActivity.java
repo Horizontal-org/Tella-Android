@@ -89,7 +89,7 @@ public class FileUploadingActivity extends CacheWordSubscriberBaseActivity imple
             return;
         }
 
-        statusText.setText(String.format("%s %s", getString(R.string.send_files_to), server.getName()));
+        statusText.setText(String.format("%s %s", getString(R.string.gallery_upload_heading), server.getName()));
 
         presenter = new FileUploadingPresenter(this);
         presenter.getMediaFiles(ids, metadata);
@@ -187,7 +187,7 @@ public class FileUploadingActivity extends CacheWordSubscriberBaseActivity imple
 
     @Override
     public void onMediaFilesUploadStarted() {
-        statusText.setText(R.string.sending);
+        statusText.setText(R.string.gallery_upload_sending_heading);
         sendButton.setVisibility(View.GONE);
         uploading = true;
         toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
@@ -230,9 +230,9 @@ public class FileUploadingActivity extends CacheWordSubscriberBaseActivity imple
         if (!this.mediaFiles.isEmpty()) {
             setRemainingErrors();
             sendButton.setVisibility(View.VISIBLE);
-            sendButton.setText(R.string.retry);
+            sendButton.setText(R.string.gallery_upload_action_try_uploading_again);
         } else {
-            statusText.setText(R.string.files_successfully_sent);
+            statusText.setText(R.string.gallery_upload_sent_heading);
         }
 
         uploading = false;
@@ -263,7 +263,7 @@ public class FileUploadingActivity extends CacheWordSubscriberBaseActivity imple
         if (num == 1) {
             filesNumber = num + " " + getString(R.string.verification_info_subheading_file_metadata);
         } else {
-            filesNumber = num + " " + getString(R.string.files);
+            filesNumber = num + " " + getString(R.string.gallery_upload_meta_number_of_files);
         }
 
         filesNum.setText(filesNumber);

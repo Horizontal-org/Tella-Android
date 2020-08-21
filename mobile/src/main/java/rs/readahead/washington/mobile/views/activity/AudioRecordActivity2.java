@@ -482,9 +482,9 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         String spaceLeft = StringUtils.getFileSize(memoryLeft);
 
         if (days < 1 && hours < 12) {
-            freeSpace.setText(getString(R.string.hours_minutes_and_space_left, hours, minutes, spaceLeft));
+            freeSpace.setText(getString(R.string.recorder_meta_space_available_hours, hours, minutes, spaceLeft));
         } else {
-            freeSpace.setText(getString(R.string.days_hours_and_space_left, days, hours, spaceLeft));
+            freeSpace.setText(getString(R.string.recorder_meta_space_available_days, days, hours, spaceLeft));
         }
     }
 

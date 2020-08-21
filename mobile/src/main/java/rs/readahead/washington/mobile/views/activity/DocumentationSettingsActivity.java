@@ -367,7 +367,7 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
     private void removeTUServer(final TellaUploadServer server) {
         if (server.getId() == serversPresenter.getAutoUploadServerId()) {
             dialog = DialogsUtil.showDialog(this,
-                    getString(R.string.delete_auto_tus_server_info),
+                    getString(R.string.settings_docu_delete_upload_server_dialog_expl),
                     getString(R.string.action_delete),
                     getString(R.string.action_cancel),
                     (dialog, which) -> {
@@ -379,7 +379,7 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
                     }, null);
         } else {
             dialog = DialogsUtil.showDialog(this,
-                    getString(R.string.delete_tus_server_info),
+                    getString(R.string.settings_docu_delete_tus_server_dialog_expl),
                     getString(R.string.action_delete),
                     getString(R.string.action_cancel),
                     (dialog, which) -> {
@@ -513,11 +513,11 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
     }
 
     private void showCollectDisableDialog() {
-        String message = getString(R.string.disconnect_servers_info);
+        String message = getString(R.string.settings_docu_connect_to_servers_disable_dialog_expl);
 
         dialog = DialogsUtil.showThreeOptionDialogWithTitle(this,
                 message,
-                getString(R.string.disconnect_servers),
+                getString(R.string.settings_docu_disable_servers_dialog_title),
                 getString(R.string.settings_docu_dialog_action_hide),
                 getString(R.string.action_cancel),
                 getString(R.string.action_delete),

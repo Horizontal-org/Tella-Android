@@ -142,7 +142,7 @@ public class DialogsUtil {
         directUpload.setChecked(false);
 
         builder.setView(view)
-                .setTitle(R.string.what_type_of_server)
+                .setTitle(R.string.settings_docu_add_server_selection_dialog_title)
                 .setPositiveButton(R.string.collect_form_action_next_section, (dialog, which) -> {
                     listener.onChoice(odk.isChecked() ? ServerType.ODK_COLLECT : ServerType.TELLA_UPLOAD);
                 })
@@ -168,7 +168,7 @@ public class DialogsUtil {
     public static AlertDialog showExitFileUploadDialog(Context context, DialogInterface.OnClickListener okListener,
                                                        DialogInterface.OnClickListener cancelListener) {
         return DialogsUtil.showDialog(context,
-                context.getString(R.string.exit_cancel_upload),
+                context.getString(R.string.gallery_upload_exit_dialog_expl),
                 context.getString(R.string.action_ok),
                 context.getString(R.string.action_cancel),
                 okListener,
