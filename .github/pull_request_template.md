@@ -1,4 +1,4 @@
-Pull requests should be opened against the `master` branch. For more information on contributing to Tella documentation, see the [Contributor Guidelines]().
+Pull requests should be opened against the `develop` branch. For more information on contributing to Tella documentation, see the [Contributor Guidelines](contributing/contributor_guide.md).
 
 ## Type of change
 
@@ -6,9 +6,9 @@ Pull requests should be opened against the `master` branch. For more information
 
 
 **Select the type of change(s) made in this pull request:**
-- [ ] Bug fix *(non-breaking change which fixes an issue)*
-- [ ] New feature *(non-breaking change which adds functionality)*
-- [ ] Documentation *(change or fix to documentation)*
+- [] Bug fix *(non-breaking change which fixes an issue)*
+- [] New feature *(non-breaking change which adds functionality)*
+- [] Documentation *(change or fix to documentation)*
 
 ---------------------------------------------------------------------------------------------------------
 
