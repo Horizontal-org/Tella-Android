@@ -17,8 +17,8 @@ assignees: ''
 
 ## To which release does this apply?
 
-- [] Current release
-- [] Future release 
+- [ ] Current release
+- [ ] Future release 
 
 
 ## Additional context
