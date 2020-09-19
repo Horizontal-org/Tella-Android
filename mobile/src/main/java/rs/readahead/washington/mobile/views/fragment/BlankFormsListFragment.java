@@ -244,7 +244,7 @@ public class BlankFormsListFragment extends FormListFragment implements
     @Override
     public void onNoConnectionAvailable() {
         if (!silentFormUpdates) {
-            Toast.makeText(getActivity(), R.string.collect_toast_fail_not_connected, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.collect_blank_toast_not_connected, Toast.LENGTH_SHORT).show();
         }
     }
 

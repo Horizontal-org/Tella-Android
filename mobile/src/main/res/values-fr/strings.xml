@@ -27,12 +27,9 @@
     <string name="settings_text_empty.field">Ce champ ne peut pas être vide.</string>
     <string name="home_toast_back.exit">Appuyez à nouveau pour quitter</string>
     <string name="settings.docu_toast_fail.load.list.connected.servers">Erreur en essayant d\'obtenir la liste de serveurs. Veuillez réessayer.</string>
-    <string name="settings.docu_toast_fail.create.odk.server">Erreur lors de la création des paramètres du serveur. Veuillez réessayer.</string>
-    <string name="settings.docu_toast_fail.create.tus.server">Erreur lors de la création des paramètres du serveur. Veuillez réessayer.</string>
-    <string name="settings.docu_toast_fail.update.odk.server">Erreur lors de la mise à jour des paramètres du serveur. Veuillez réessayer.</string>
-    <string name="settings.docu_toast_fail.update.tus.server">Erreur lors de la mise à jour des paramètres du serveur. Veuillez réessayer.</string>
-    <string name="settings.docu_toast_fail.delete.odk.server">Erreur lors de la suppression des paramètres du serveur. Veuillez réessayer.</string>
-    <string name="settings.docu_toast_fail.delete.tus.server">Erreur lors de la suppression des paramètres du serveur. Veuillez réessayer.</string>
+    <string name="settings.docu_toast_fail.create.server">Erreur lors de la création des paramètres du serveur. Veuillez réessayer.</string>
+    <string name="settings.docu_toast_fail.update.server">Erreur lors de la mise à jour des paramètres du serveur. Veuillez réessayer.</string>
+    <string name="settings.docu_toast_fail.delete.server">Erreur lors de la suppression des paramètres du serveur. Veuillez réessayer.</string>
     <string name="settings.about_list.item_faq">FAQ</string>
     <string name="gallery_app.bar">Galerie</string>
     <string name="home_gallery.button">Galerie</string>
@@ -140,7 +137,6 @@
     <string name="collect.form_exit_dialog.expl">Votre brouillon sera perdu.</string>
     <string name="collect.form_exit_dialog.action_save.exit">ENREGISTRER ET QUITTER</string>
     <string name="collect.form_exit_dialog.action_exit.anyway">SORTIR QUAND MÊME</string>
-    <string name="collect_toast_fail.not.connected">Aucune connexion disponible</string>
     <string name="settings.docu_error_not.valid.URL">Le champ n\'est pas une URL valide</string>
     <string name="home_action.label_quick.delete">Suppression</string>
     <string name="onboard.del_heading">Suppression</string>
@@ -355,7 +351,7 @@
     <string name="settings.docu_connect.to.servers_enable_action.expl">Manage your connection to servers to send data.</string>
     <string name="settings.docu_disable.servers_dialog.title">Disconnect server(s)</string>
     <string name="settings.docu_connect.to.servers_disable_dialog.expl">Would you like to delete your server connections altogether, or simply hide them? Hiding will keep server information in memory so that you can easily reconnect and submit data to the server(s).</string>
-    <string name="settings.docu_delete.tus.server_dialog.expl">If you delete this server, you will no longer be able to send file.</string>
+    <string name="settings.docu_delete.auto.server_dialog.expl">If you delete this server, you will no longer be able to send file.</string>
     <string name="gallery.upload_heading">Send files to</string>
     <string name="gallery.upload_meta_number.of.files">files</string>
     <string name="gallery.upload_sending_heading">Sending</string>

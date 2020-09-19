@@ -23,12 +23,9 @@
     <string name="settings_text_empty.field">Гэта поле не павінна заставацца пустым.</string>
     <string name="home_toast_back.exit">Націсніце кнопку назад яшчэ раз, каб выйсці</string>
     <string name="settings.docu_toast_fail.load.list.connected.servers">Пры спробе атрымаць спіс сервераў адбылася памылка. Калі ласка, паспрабуйце яшчэ раз.</string>
-    <string name="settings.docu_toast_fail.create.odk.server">Пры стварэнні налады сервера адбылася памылка. Калі ласка, паспрабуйце яшчэ раз.</string>
-    <string name="settings.docu_toast_fail.create.tus.server">Пры стварэнні налады сервера адбылася памылка. Калі ласка, паспрабуйце яшчэ раз.</string>
-    <string name="settings.docu_toast_fail.update.odk.server">Пры спробе аднавіць налады сервера адбылася памылка. Калі ласка, паспрабуйце яшчэ раз.</string>
-    <string name="settings.docu_toast_fail.update.tus.server">Пры спробе аднавіць налады сервера адбылася памылка. Калі ласка, паспрабуйце яшчэ раз.</string>
-    <string name="settings.docu_toast_fail.delete.odk.server">Пры спробе выдаліць налады сервера адбылася памылка. Калі ласка, паспрабуйце яшчэ раз.</string>
-    <string name="settings.docu_toast_fail.delete.tus.server">Пры спробе выдаліць налады сервера адбылася памылка. Калі ласка, паспрабуйце яшчэ раз.</string>
+    <string name="settings.docu_toast_fail.create.server">Пры стварэнні налады сервера адбылася памылка. Калі ласка, паспрабуйце яшчэ раз.</string>
+    <string name="settings.docu_toast_fail.update.server">Пры спробе аднавіць налады сервера адбылася памылка. Калі ласка, паспрабуйце яшчэ раз.</string>
+    <string name="settings.docu_toast_fail.delete.server">Пры спробе выдаліць налады сервера адбылася памылка. Калі ласка, паспрабуйце яшчэ раз.</string>
     <string name="settings.about_list.item_faq">Частыя пытанні</string>
     <string name="gallery_app.bar">Галерэя</string>
     <string name="home_gallery.button">Галерэя</string>
@@ -137,7 +134,6 @@
     <string name="collect.form_exit_dialog.expl">Ваш чарнавік будзе страчаны.</string>
     <string name="collect.form_exit_dialog.action_save.exit">Захаваць і выйсці</string>
     <string name="collect.form_exit_dialog.action_exit.anyway">Выхад у любым выпадку</string>
-    <string name="collect_toast_fail.not.connected">Падключэнне адсутнічае</string>
     <string name="settings.docu_error_not.valid.URL">Поле не з\'яўляецца дапушчальным URL-адрасам</string>
     <string name="home_action.label_quick.delete">Выдаліць</string>
     <string name="onboard.del_heading">Выдаліць</string>
@@ -358,7 +354,7 @@
     <string name="settings.docu_connect.to.servers_enable_action.expl">Manage your connection to servers to send data.</string>
     <string name="settings.docu_disable.servers_dialog.title">Адключыць сервер(ы)</string>
     <string name="settings.docu_connect.to.servers_disable_dialog.expl">Ці хочаце вы выдаліць злучэнні з серверам альбо проста схаваць іх? Схаванне дазволіць захаваць інфармацыю пра сервер у памяці, каб можна было лёгка злучыць і перадаваць дадзеныя на сервер (ы).</string>
-    <string name="settings.docu_delete.tus.server_dialog.expl">Калі вы выдаліце гэты сервер, вы больш не зможаце адпраўляць файл.</string>
+    <string name="settings.docu_delete.auto.server_dialog.expl">Калі вы выдаліце гэты сервер, вы больш не зможаце адпраўляць файл.</string>
     <string name="gallery.upload_heading">Адправіць файлы на</string>
     <string name="gallery.upload_meta_number.of.files">Файлы</string>
     <string name="gallery.upload_sending_heading">Адпраўка справаздачы</string>

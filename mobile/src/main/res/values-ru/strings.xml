@@ -23,12 +23,9 @@
     <string name="settings_text_empty.field">Это поле не должно оставаться незаполненным.</string>
     <string name="home_toast_back.exit">Нажмите кнопку назад еще раз, чтобы выйти</string>
     <string name="settings.docu_toast_fail.load.list.connected.servers">При попытке получить список серверов произошла ошибка. Пожалуйста, повторите попытку.</string>
-    <string name="settings.docu_toast_fail.create.odk.server">При создании настроек сервера произошла ошибка. Пожалуйста, повторите попытку.</string>
-    <string name="settings.docu_toast_fail.create.tus.server">При создании настроек сервера произошла ошибка. Пожалуйста, повторите попытку.</string>
-    <string name="settings.docu_toast_fail.update.odk.server">При попытке обновить настройки сервера произошла ошибка. Пожалуйста, повторите попытку.</string>
-    <string name="settings.docu_toast_fail.update.tus.server">При попытке обновить настройки сервера произошла ошибка. Пожалуйста, повторите попытку.</string>
-    <string name="settings.docu_toast_fail.delete.odk.server">При попытке удалить настройки сервера произошла ошибка. Пожалуйста, повторите попытку.</string>
-    <string name="settings.docu_toast_fail.delete.tus.server">При попытке удалить настройки сервера произошла ошибка. Пожалуйста, повторите попытку.</string>
+    <string name="settings.docu_toast_fail.create.server">При создании настроек сервера произошла ошибка. Пожалуйста, повторите попытку.</string>
+    <string name="settings.docu_toast_fail.update.server">При попытке обновить настройки сервера произошла ошибка. Пожалуйста, повторите попытку.</string>
+    <string name="settings.docu_toast_fail.delete.server">При попытке удалить настройки сервера произошла ошибка. Пожалуйста, повторите попытку.</string>
     <string name="settings.about_list.item_faq">Часто задаваемые вопросы</string>
     <string name="gallery_app.bar">Галерея</string>
     <string name="home_gallery.button">Галерея</string>
@@ -138,7 +135,6 @@
     <string name="collect.form_exit_dialog.expl">Ваш черновик не будет сохранен.</string>
     <string name="collect.form_exit_dialog.action_save.exit">СОХРАНИТЬ И ВЫЙТИ</string>
     <string name="collect.form_exit_dialog.action_exit.anyway">ВЫЙТИ ВСЕ РАВНО </string>
-    <string name="collect_toast_fail.not.connected">Нет доступного соединения</string>
     <string name="settings.docu_error_not.valid.URL">Поле не является действительным URL-адресом веб-сайта</string>
     <string name="home_action.label_quick.delete">Удалить</string>
     <string name="onboard.del_heading">Удалить</string>
@@ -359,7 +355,7 @@
     <string name="settings.docu_connect.to.servers_enable_action.expl">Управлять подключением к серверам для отправки данных.</string>
     <string name="settings.docu_disable.servers_dialog.title">Отсоединить сервер (а)</string>
     <string name="settings.docu_connect.to.servers_disable_dialog.expl">Вы хотите полностью удалить соединения с сервером или просто скрыть их? Скрытие сохранит информацию о сервере в памяти, так что Вы сможете легко восстановить соединение и отправить данные на сервер (а).</string>
-    <string name="settings.docu_delete.tus.server_dialog.expl">Если Вы удалите этот сервер, то больше не сможете отправлять файл.</string>
+    <string name="settings.docu_delete.auto.server_dialog.expl">Если Вы удалите этот сервер, то больше не сможете отправлять файл.</string>
     <string name="gallery.upload_heading">Отправлять файлы в</string>
     <string name="gallery.upload_meta_number.of.files">Файлы</string>
     <string name="gallery.upload_sending_heading">Отправка</string>

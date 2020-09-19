@@ -23,12 +23,9 @@
     <string name="settings_text_empty.field">Este campo não pode estar vazio.</string>
     <string name="home_toast_back.exit">Pressione o botão voltar novamente para sair</string>
     <string name="settings.docu_toast_fail.load.list.connected.servers">Erro ao tentar obter a lista de servidores. Por favor, tente novamente.</string>
-    <string name="settings.docu_toast_fail.create.odk.server">Erro ao criar configurações do servidor. Por favor, tente novamente.</string>
-    <string name="settings.docu_toast_fail.create.tus.server">Erro ao criar configurações do servidor. Por favor, tente novamente.</string>
-    <string name="settings.docu_toast_fail.update.odk.server">Erro ao atualizar as configurações do servidor. Por favor, tente novamente.</string>
-    <string name="settings.docu_toast_fail.update.tus.server">Erro ao atualizar as configurações do servidor. Por favor, tente novamente.</string>
-    <string name="settings.docu_toast_fail.delete.odk.server">Erro ao remover as configurações do servidor. Por favor, tente novamente.</string>
-    <string name="settings.docu_toast_fail.delete.tus.server">Erro ao remover as configurações do servidor. Por favor, tente novamente.</string>
+    <string name="settings.docu_toast_fail.create.server">Erro ao criar configurações do servidor. Por favor, tente novamente.</string>
+    <string name="settings.docu_toast_fail.update.server">Erro ao atualizar as configurações do servidor. Por favor, tente novamente.</string>
+    <string name="settings.docu_toast_fail.delete.server">Erro ao remover as configurações do servidor. Por favor, tente novamente.</string>
     <string name="settings.about_list.item_faq">Perguntas frequentes</string>
     <string name="gallery_app.bar">Galeria</string>
     <string name="home_gallery.button">Galeria</string>
@@ -137,7 +134,6 @@
     <string name="collect.form_exit_dialog.expl">Seu rascunho será perdido.</string>
     <string name="collect.form_exit_dialog.action_save.exit">SALVAR E SAIR</string>
     <string name="collect.form_exit_dialog.action_exit.anyway">SAIR DE QUALQUER FORMA</string>
-    <string name="collect_toast_fail.not.connected">Nenhuma conexão disponível</string>
     <string name="settings.docu_error_not.valid.URL">O campo não é um URL da web válido</string>
     <string name="home_action.label_quick.delete">Apagar</string>
     <string name="onboard.del_heading">Apagar</string>
@@ -356,7 +352,7 @@
     <string name="settings.docu_connect.to.servers_enable_action.expl">Gerencie sua conexão com servidores para enviar dados.</string>
     <string name="settings.docu_disable.servers_dialog.title">Desconectar servidor (es)</string>
     <string name="settings.docu_connect.to.servers_disable_dialog.expl">Gostaria de apagar as conexões do servidor completamente, ou somente escondê-las? Ao esconder, você irá manter as informações na memória, podendo facilmente reconectar e enviar dados para o(s) servidor(es).</string>
-    <string name="settings.docu_delete.tus.server_dialog.expl">Se você apagar este servidor, não poderá mais enviar arquivo.</string>
+    <string name="settings.docu_delete.auto.server_dialog.expl">Se você apagar este servidor, não poderá mais enviar arquivo.</string>
     <string name="gallery.upload_heading">Enviar arquivos para</string>
     <string name="gallery.upload_meta_number.of.files">Arquivos</string>
     <string name="gallery.upload_sending_heading">Enviando</string>

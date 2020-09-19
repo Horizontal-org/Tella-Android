@@ -197,7 +197,7 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
 
     @Override
     public void onCreateTUServerError(Throwable throwable) {
-        showToast(R.string.settings_docu_toast_fail_create_tus_server);
+        showToast(R.string.settings_docu_toast_fail_create_server);
     }
 
     @Override
@@ -217,7 +217,7 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
 
     @Override
     public void onRemoveTUServerError(Throwable throwable) {
-        showToast(R.string.settings_docu_toast_fail_delete_tus_server);
+        showToast(R.string.settings_docu_toast_fail_delete_server);
     }
 
     @Override
@@ -233,7 +233,7 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
 
     @Override
     public void onUpdateTUServerError(Throwable throwable) {
-        showToast(R.string.settings_docu_toast_fail_update_tus_server);
+        showToast(R.string.settings_docu_toast_fail_update_server);
     }
 
     @Override
@@ -261,7 +261,7 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
 
     @Override
     public void onCreateCollectServerError(Throwable throwable) {
-        showToast(R.string.settings_docu_toast_fail_create_odk_server);
+        showToast(R.string.settings_docu_toast_fail_create_server);
     }
 
     @Override
@@ -278,7 +278,7 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
 
     @Override
     public void onUpdateServerError(Throwable throwable) {
-        showToast(R.string.settings_docu_toast_fail_update_odk_server);
+        showToast(R.string.settings_docu_toast_fail_update_server);
     }
 
     @Override
@@ -305,7 +305,7 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
 
     @Override
     public void onRemoveServerError(Throwable throwable) {
-        showToast(R.string.settings_docu_toast_fail_delete_odk_server);
+        showToast(R.string.settings_docu_toast_fail_delete_server);
     }
 
     @Override
@@ -379,7 +379,7 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
                     }, null);
         } else {
             dialog = DialogsUtil.showDialog(this,
-                    getString(R.string.settings_docu_delete_tus_server_dialog_expl),
+                    getString(R.string.settings_docu_delete_auto_server_dialog_expl),
                     getString(R.string.action_delete),
                     getString(R.string.action_cancel),
                     (dialog, which) -> {
