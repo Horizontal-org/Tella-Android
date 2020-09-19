@@ -23,12 +23,9 @@
     <string name="settings_text_empty.field">This field cannot be empty.</string>
     <string name="home_toast_back.exit">Press back button again to exit</string>
     <string name="settings.docu_toast_fail.load.list.connected.servers">Error trying to get servers list. Please try again.</string>
-    <string name="settings.docu_toast_fail.create.odk.server">Error creating server settings. Please try again.</string>
-    <string name="settings.docu_toast_fail.create.tus.server">Error creating server settings. Please try again.</string>
-    <string name="settings.docu_toast_fail.update.odk.server">Error updating server settings. Please try again.</string>
-    <string name="settings.docu_toast_fail.update.tus.server">Error updating server settings. Please try again.</string>
-    <string name="settings.docu_toast_fail.delete.odk.server">Error removing server settings. Please try again.</string>
-    <string name="settings.docu_toast_fail.delete.tus.server">Error removing server settings. Please try again.</string>
+    <string name="settings.docu_toast_fail.create.server">Error creating server settings. Please try again.</string>
+    <string name="settings.docu_toast_fail.update.server">Error updating server settings. Please try again.</string>
+    <string name="settings.docu_toast_fail.delete.server">Error removing server settings. Please try again.</string>
     <string name="settings.about_list.item_faq">faq</string>
     <string name="gallery_app.bar">Gallery</string>
     <string name="home_gallery.button">Gallery</string>
@@ -136,7 +133,6 @@
     <string name="collect.form_exit_dialog.expl">Your draft will be lost.</string>
     <string name="collect.form_exit_dialog.action_save.exit">SAVE AND EXIT</string>
     <string name="collect.form_exit_dialog.action_exit.anyway">EXIT ANYWAY</string>
-    <string name="collect_toast_fail.not.connected">No connection available</string>
     <string name="settings.docu_error_not.valid.URL">Field is not valid web URL</string>
     <string name="home_action.label_quick.delete">Delete</string>
     <string name="onboard.del_heading">Delete</string>
@@ -355,7 +351,7 @@
     <string name="settings.docu_connect.to.servers_enable_action.expl">Manage your connection to servers to send data.</string>
     <string name="settings.docu_disable.servers_dialog.title">Disconnect server(s)</string>
     <string name="settings.docu_connect.to.servers_disable_dialog.expl">Would you like to delete your server connections altogether, or simply hide them? Hiding will keep server information in memory so that you can easily reconnect and submit data to the server(s).</string>
-    <string name="settings.docu_delete.tus.server_dialog.expl">If you delete this server, you will no longer be able to upload files</string>
+    <string name="settings.docu_delete.auto.server_dialog.expl">If you delete this server, you will no longer be able to upload files</string>
     <string name="gallery.upload_heading">Send files to</string>
     <string name="gallery.upload_meta_number.of.files">files</string>
     <string name="gallery.upload_sending_heading">Sending</string>
