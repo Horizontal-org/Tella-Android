@@ -375,7 +375,6 @@
     <string name="settings.docu_delete.upload.server_dialog.expl">If you delete this server, you will no longer be able to upload files</string>
     <string name="home_upload.button">Uploads</string>
     <string name="upload.main_meta_status.upload">Uploading…</string>
-    <string name="upload.main_meta_upload.start">Started</string>
     <string name="upload.main_action_more.details">More details</string>
     <plurals name="upload.main_meta_number.of.files">
         <item quantity="one">%d file</item>
@@ -400,5 +399,5 @@
     <string name="upload.info_stop.upload_dialog.expl">Are you sure you want to stop the upload?</string>
     <string name="upload.info_app.bar">Upload information</string>
     <string name="upload.info_meta_number.of.files">Number of files</string>
-    <string name="upload.info_meta_date.started">Date started</string>
+    <string name="upload_meta_date.started">Date started</string>
 </resources>
