@@ -93,7 +93,7 @@ public class MetadataHelpActivity extends CacheWordSubscriberBaseActivity {
         metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_device_id_expl), getResources().getString(R.string.verification_info_field_device_id) + colon));
         metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_screen_size_expl), getResources().getString(R.string.verification_info_field_screen_size) + colon));
         metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_language_expl), getResources().getString(R.string.verification_info_field_language) + colon));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_help_locale_expl), getResources().getString(R.string.verification_info_field_locale) + colon));
+        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_locale_expl), getResources().getString(R.string.verification_info_field_locale) + colon));
         metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_connection_status_expl), getResources().getString(R.string.verification_info_field_connection_status) + colon));
         metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_network_type_expl), getResources().getString(R.string.verification_info_field_network_type) + colon));
         metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_wifi_mac_expl), getResources().getString(R.string.verification_info_field_wifi_mac) + colon));

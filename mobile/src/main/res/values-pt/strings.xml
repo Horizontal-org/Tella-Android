@@ -75,7 +75,7 @@
     <string name="collect.end_action_save.send.later">Salvar formulário</string>
     <string name="collect_action.desc_save.form">Salvar formulário</string>
     <string name="collect.end_action.desc_save.send.later">Salvar formulário</string>
-    <string name="pl_confirm">Confirmar</string>
+    <string name="action.desc_confirm">Confirmar</string>
     <string name="collect.end_action_submit.form">Enviar o formulário</string>
     <string name="collect.form_action_previous.section">Anterior</string>
     <string name="collect.form_action_next.section">Próximo</string>
@@ -108,7 +108,10 @@
         <item quantity="other">%1$d arquivos apagados.</item>
     </plurals>
     <string name="gallery_toast_fail.deleting.files">Erro ao apagar arquivos. Alguns arquivos não foram excluídos.</string>
-    <string name="gallery_toast_files.exported">%1$d arquivo exportado</string>
+    <plurals name="gallery_toast_files.exported">
+        <item quantity="one">%1$d arquivo exportado</item>
+        <item quantity="other">%1$d files exported</item>
+    </plurals>
     <string name="gallery_delete.files_dialog.title">Apagar arquivo?</string>
     <string name="gallery_delete.files_dialog.expl">O arquivo selecionado será apagado permanentemente da sua galeria.</string>
     <string name="gallery_save.to.device_dialog.title">Salvar na galeria do seu aparelho celular?</string>
@@ -193,10 +196,10 @@
     <string name="settings.gen_crash.reports_action">Compartilhar relatórios de falhas</string>
     <string name="settings.gen_crash.reports_action.expl">Os relatórios de falhas nos ajudam a melhorar o aplicativo Tella. Eles são enviados automaticamente e incluem dados como modelo do aparelho e versão do Android.</string>
     <string name="collect.form_dialog.action_add.group">Adicionar grupo</string>
-    <string name="collect.form_dialog.title_add.group">Adicionar mais um grupo?</string>
-    <string name="collect.form_dialog.action_add.first.group">Adicionar novo grupo?</string>
-    <string name="collect.form_dialog.expl_create.additional.group">Adicionar outro grupo \" %s \"?</string>
-    <string name="collect.form_dialog.expl_create.first.group">Adicionar um novo grupo \" %s \"?</string>
+    <string name="collect.form_dialog.title_add.additional.group">Add another \"%s\"?</string>
+    <string name="collect.form_dialog.title_add.first.group">Add \"%s\"?</string>
+    <string name="collect.form_dialog.expl_add.additional.group">Adicionar outro grupo \" %s \"?</string>
+    <string name="collect.form_dialog.expl_add.first.group">Adicionar um novo grupo \" %s \"?</string>
     <string name="collect.form_dialog.action_dont.add.group">Não adicione</string>
     <string name="collect.form_select.attachment_app.bar">Selecionar arquivo</string>
     <string name="recorder_toast_recording.saved">A gravação de áudio foi salva na sua galeria %s</string>
@@ -323,7 +326,7 @@
     <string name="verification.info_device.id.expl">Um número único que identifica o aparelho celular Android.</string>
     <string name="verification.info_screen.size.expl">O tamanho exato da tela do aparelho celular.</string>
     <string name="verification.info_language.expl">O idioma em que o sistema operacional do dispositivo está definido.</string>
-    <string name="verification.help_locale.expl">A região geográfica em que o dispositivo está definido.</string>
+    <string name="verification.info_locale.expl">A região geográfica em que o dispositivo está definido.</string>
     <string name="verification.info_connection.status.expl">Se o dispositivo está conectado ou desconectado à Internet.</string>
     <string name="verification.info_network.type.expl">Se o aparelho celular estiver ligado à Internet, mostra se está ligado a uma rede Wi-Fi ou a uma rede móvel.</string>
     <string name="verification.info_wifi.mac.expl">Um identificador exclusivo para o conector Wi-Fi do aparelho celular.</string>
@@ -347,7 +350,7 @@
     <string name="settings.docu_disable.servers_dialog.title">Desconectar servidor (es)</string>
     <string name="settings.docu_connect.to.servers_disable_dialog.expl">Gostaria de apagar as conexões do servidor completamente, ou somente escondê-las? Ao esconder, você irá manter as informações na memória, podendo facilmente reconectar e enviar dados para o(s) servidor(es).</string>
     <string name="settings.docu_delete.auto.server_dialog.expl">Se você apagar este servidor, não poderá mais enviar arquivo.</string>
-    <string name="gallery.upload_heading">Enviar arquivos para</string>
+    <string name="gallery.upload_heading">Enviar arquivos para \"%s\"</string>
     <string name="gallery.upload_meta_number.of.files">Arquivos</string>
     <string name="gallery.upload_sending_heading">Enviando</string>
     <string name="gallery.upload_sent_heading">Todos os arquivos foram enviados com sucesso</string>

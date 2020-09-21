@@ -515,11 +515,10 @@ public class GalleryActivity extends MetadataActivity implements
 
     @Override
     public void onMediaExported(int num) {
-        showToast(String.format(getString(R.string.gallery_toast_files_exported), num));
+        showToast(getResources().getQuantityString((R.plurals.gallery_toast_files_exported), num, num));
     }
 
     @Override
-
     public void onExportError(Throwable error) {
         showToast(R.string.gallery_toast_fail_exporting_to_device);
         Timber.d(error, getClass().getName());
@@ -533,7 +532,8 @@ public class GalleryActivity extends MetadataActivity implements
 
     @Override
     public void onExportEnded() {
-        onImportEnded();
+        hideProgressDialog();
+        fabButton.show();
     }
 
     @Override

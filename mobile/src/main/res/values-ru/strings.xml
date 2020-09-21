@@ -76,7 +76,7 @@
     <string name="collect_action.desc_save.form">При обработке данной формы произошла ошибка</string>
     <string name="collect.end_action.desc_save.send.later">При обработке данной формы произошла ошибка</string>
     <string name="collect.end_action_save.send.later">Сохранить форму</string>
-    <string name="pl_confirm">Подтвердить</string>
+    <string name="action.desc_confirm">Подтвердить</string>
     <string name="collect.end_action_submit.form">Отправить форму</string>
     <string name="collect.form_action_previous.section">Предыдущий раздел</string>
     <string name="collect.form_action_next.section">Следующий раздел</string>
@@ -109,7 +109,12 @@
         <item quantity="many">%1$d Мультимедиа файлы удалены</item>
     </plurals>
     <string name="gallery_toast_fail.deleting.files">Ошибка при удалении файлов. Некоторые мультимедиа файлы не удалены. </string>
-    <string name="gallery_toast_files.exported">%1$d Мультимедиа файлы экспортированы</string>
+    <plurals name="gallery_toast_files.exported">
+        <item quantity="one">%1$d file exported</item>
+        <item quantity="few">%1$d file exported</item>
+        <item quantity="many">%1$d Мультимедиа файлы экспортированы</item>
+        <item quantity="other">%1$d Мультимедиа файлы экспортированы</item>
+    </plurals>
     <string name="gallery_delete.files_dialog.title">Удалить мультимедиа файлы?</string>
     <string name="gallery_delete.files_dialog.expl">Выбранные мультимедиа файлы будут удалены из вашей галереи.</string>
     <string name="gallery_save.to.device_dialog.title">Сохранить в хранилище устройства</string>
@@ -194,10 +199,10 @@
     <string name="settings.gen_crash.reports_action">Поделиться отчетами о сбоях</string>
     <string name="settings.gen_crash.reports_action.expl">Отчеты о сбоях помогают нам улучшить Tella. Они отправляются автоматически и содержат такие данные, как модель устройства и версия Android.</string>
     <string name="collect.form_dialog.action_add.group">Добавить группу</string>
-    <string name="collect.form_dialog.title_add.group">Добавить еще одну группу?</string>
-    <string name="collect.form_dialog.action_add.first.group">Добавить новую группу?</string>
-    <string name="collect.form_dialog.expl_create.additional.group">Добавить еще одну группу \"%s\"?</string>
-    <string name="collect.form_dialog.expl_create.first.group">Добавить новую группу \"%s\"?</string>
+    <string name="collect.form_dialog.title_add.additional.group">Add another \"%s\"?</string>
+    <string name="collect.form_dialog.title_add.first.group">Add \"%s\"?</string>
+    <string name="collect.form_dialog.expl_add.additional.group">Добавить еще одну группу \"%s\"?</string>
+    <string name="collect.form_dialog.expl_add.first.group">Добавить новую группу \"%s\"?</string>
     <string name="collect.form_dialog.action_dont.add.group">Не добавлять</string>
     <string name="collect.form_select.attachment_app.bar">Выберите файл</string>
     <string name="recorder_toast_recording.saved">Аудиозапись была сохранена в вашей  %s галерее.</string>
@@ -326,7 +331,7 @@
     <string name="verification.info_device.id.expl">Уникальный номер, идентифицирующий устройство Android.</string>
     <string name="verification.info_screen.size.expl">Точный размер экрана устройства.</string>
     <string name="verification.info_language.expl">Язык, на котором установлена операционная система устройства.</string>
-    <string name="verification.help_locale.expl">Географический регион, в котором находится устройство.</string>
+    <string name="verification.info_locale.expl">Географический регион, в котором находится устройство.</string>
     <string name="verification.info_connection.status.expl">Подключено ли устройство к Интернету или нет.</string>
     <string name="verification.info_network.type.expl">Если устройство подключено к Интернету, указывает, подключено ли оно к сети Wi-Fi или к сотовой сети.</string>
     <string name="verification.info_wifi.mac.expl">Уникальный идентификатор разъема Wi-Fi устройства.</string>
@@ -350,7 +355,7 @@
     <string name="settings.docu_disable.servers_dialog.title">Отсоединить сервер (а)</string>
     <string name="settings.docu_connect.to.servers_disable_dialog.expl">Вы хотите полностью удалить соединения с сервером или просто скрыть их? Скрытие сохранит информацию о сервере в памяти, так что Вы сможете легко восстановить соединение и отправить данные на сервер (а).</string>
     <string name="settings.docu_delete.auto.server_dialog.expl">Если Вы удалите этот сервер, то больше не сможете отправлять файл.</string>
-    <string name="gallery.upload_heading">Отправлять файлы в</string>
+    <string name="gallery.upload_heading">Отправлять файлы в \"%s\"</string>
     <string name="gallery.upload_meta_number.of.files">Файлы</string>
     <string name="gallery.upload_sending_heading">Отправка</string>
     <string name="gallery.upload_sent_heading">Все файлы были успешно отправлены</string>

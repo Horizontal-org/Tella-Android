@@ -75,7 +75,7 @@
     <string name="collect.end_action_save.send.later">Захаваць форму</string>
     <string name="collect_action.desc_save.form">Захаваць форму</string>
     <string name="collect.end_action.desc_save.send.later">Захаваць форму</string>
-    <string name="pl_confirm">Пацвердзіць</string>
+    <string name="action.desc_confirm">Пацвердзіць</string>
     <string name="collect.end_action_submit.form">Адправіць форму</string>
     <string name="collect.form_action_previous.section">Папярэдняя частка</string>
     <string name="collect.form_action_next.section">Наступная частка</string>
@@ -108,7 +108,12 @@
         <item quantity="many">%1$d Мультымедыя файлы выдалены</item>
     </plurals>
     <string name="gallery_toast_fail.deleting.files">Памылка пры выдаленні файлаў. Некаторыя мультымедыя файлы не выдалены.</string>
-    <string name="gallery_toast_files.exported">%1$d Мультымедыя файлы экспартаваныя</string>
+    <plurals name="gallery_toast_files.exported">
+        <item quantity="one">%1$d file exported</item>
+        <item quantity="few">%1$d file exported</item>
+        <item quantity="many">%1$d file exported</item>
+        <item quantity="other">%1$d Мультымедыя файлы экспартаваныя</item>
+    </plurals>
     <string name="gallery_delete.files_dialog.title">Выдаліць мультымедыя файлы?</string>
     <string name="gallery_delete.files_dialog.expl">Абраныя мультымедыя файлы будуць выдаленыя з вашай галерэі.</string>
     <string name="gallery_save.to.device_dialog.title">Захаваць у сховішча прылады</string>
@@ -193,10 +198,10 @@
     <string name="settings.gen_crash.reports_action">Падзяліцца справаздачамі аб збоях</string>
     <string name="settings.gen_crash.reports_action.expl">Справаздачы аб збоях дапамагаюць нам палепшыць Tella. Яны адпраўляюцца аўтаматычна і ўтрымліваюць такія дадзеныя, як мадэль прылады і версія Android.</string>
     <string name="collect.form_dialog.action_add.group">дадаць суполку</string>
-    <string name="collect.form_dialog.title_add.group">Дадаць яшчэ адну суполку?</string>
-    <string name="collect.form_dialog.action_add.first.group">Дадаць новую суполку?</string>
-    <string name="collect.form_dialog.expl_create.additional.group">Дадаць яшчэ адну суполку \" %s \"?</string>
-    <string name="collect.form_dialog.expl_create.first.group">Дадаць новую суполку \" %s \"?</string>
+    <string name="collect.form_dialog.title_add.additional.group">Add another \"%s\"?</string>
+    <string name="collect.form_dialog.title_add.first.group">Add \"%s\"?</string>
+    <string name="collect.form_dialog.expl_add.additional.group">Дадаць яшчэ адну суполку \" %s \"?</string>
+    <string name="collect.form_dialog.expl_add.first.group">Дадаць новую суполку \" %s \"?</string>
     <string name="collect.form_dialog.action_dont.add.group">Не дадаваць</string>
     <string name="collect.form_select.attachment_app.bar">Select file</string>
     <string name="recorder_toast_recording.saved">Аўдыёзапіс быў захаваны ў вашай %s галерэі.</string>
@@ -325,7 +330,7 @@
     <string name="verification.info_device.id.expl">Унікальны нумар, які ідэнтыфікуе прыладу Android.</string>
     <string name="verification.info_screen.size.expl">Дакладны памер экрана прылады.</string>
     <string name="verification.info_language.expl">Мова, на якім усталявана аперацыйная сістэма прылады.</string>
-    <string name="verification.help_locale.expl">Геаграфічны рэгіён усталяваны.</string>
+    <string name="verification.info_locale.expl">Геаграфічны рэгіён усталяваны.</string>
     <string name="verification.info_connection.status.expl">Прылада падключана ці адключана ад Інтэрнэту.</string>
     <string name="verification.info_network.type.expl">Калі прылада падключана да Інтэрнэту, паказвае, ці будзе гэта сетка Wi-Fi або сотавая сетка.</string>
     <string name="verification.info_wifi.mac.expl">Унікальны ідэнтыфікатар прылады для злучэння з Wi-Fi.</string>
@@ -349,7 +354,7 @@
     <string name="settings.docu_disable.servers_dialog.title">Адключыць сервер(ы)</string>
     <string name="settings.docu_connect.to.servers_disable_dialog.expl">Ці хочаце вы выдаліць злучэнні з серверам альбо проста схаваць іх? Схаванне дазволіць захаваць інфармацыю пра сервер у памяці, каб можна было лёгка злучыць і перадаваць дадзеныя на сервер (ы).</string>
     <string name="settings.docu_delete.auto.server_dialog.expl">Калі вы выдаліце гэты сервер, вы больш не зможаце адпраўляць файл.</string>
-    <string name="gallery.upload_heading">Адправіць файлы на</string>
+    <string name="gallery.upload_heading">Адправіць файлы на \"%s\"</string>
     <string name="gallery.upload_meta_number.of.files">Файлы</string>
     <string name="gallery.upload_sending_heading">Адпраўка справаздачы</string>
     <string name="gallery.upload_sent_heading">Усе файлы паспяхова адпраўлены</string>

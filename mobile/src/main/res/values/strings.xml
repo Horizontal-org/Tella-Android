@@ -75,7 +75,7 @@
     <string name="collect.end_action_save.send.later">Save form</string>
     <string name="collect_action.desc_save.form">Save form</string>
     <string name="collect.end_action.desc_save.send.later">Save form</string>
-    <string name="pl_confirm">Confirm</string>
+    <string name="action.desc_confirm">Confirm</string>
     <string name="collect.end_action_submit.form">Submit Form</string>
     <string name="collect.form_action_previous.section">Previous</string>
     <string name="collect.form_action_next.section">Next</string>
@@ -107,7 +107,10 @@
         <item quantity="other">%1$d files deleted.</item>
     </plurals>
     <string name="gallery_toast_fail.deleting.files">Error deleting files. Some files have not been deleted.</string>
-    <string name="gallery_toast_files.exported">%1$d file exported</string>
+    <plurals name="gallery_toast_files.exported">
+        <item quantity="one">%1$d file exported</item>
+        <item quantity="other">%1$d files exported</item>
+    </plurals>
     <string name="gallery_delete.files_dialog.title">Delete file?</string>
     <string name="gallery_delete.files_dialog.expl">The selected file will be permanently deleted from your gallery.</string>
     <string name="gallery_save.to.device_dialog.title">Save to device gallery?</string>
@@ -189,10 +192,10 @@
     <string name="settings.gen_crash.reports_action">Share crash reports</string>
     <string name="settings.gen_crash.reports_action.expl">Crash reports help us improve Tella. They are automatically sent and include data such as device model and Android version.</string>
     <string name="collect.form_dialog.action_add.group">Add group</string>
-    <string name="collect.form_dialog.title_add.group">Add One More Group?</string>
-    <string name="collect.form_dialog.action_add.first.group">Add New Group?</string>
-    <string name="collect.form_dialog.expl_create.additional.group">Add another \"%s\" group?</string>
-    <string name="collect.form_dialog.expl_create.first.group">Add a new \"%s\" group?</string>
+    <string name="collect.form_dialog.title_add.additional.group">Add another \"%s\"?</string>
+    <string name="collect.form_dialog.title_add.first.group">Add \"%s\"?</string>
+    <string name="collect.form_dialog.expl_add.additional.group">Add another \"%s\" group?</string>
+    <string name="collect.form_dialog.expl_add.first.group">Add a new \"%s\" group?</string>
     <string name="collect.form_dialog.action_dont.add.group">Do not add</string>
     <string name="collect.form_select.attachment_app.bar">Select file</string>
     <string name="recorder_toast_recording.saved">The audio recording was saved to your %s gallery</string>
@@ -322,7 +325,7 @@
     <string name="verification.info_device.id.expl">A unique number identifying the Android device.</string>
     <string name="verification.info_screen.size.expl">The exact screen size of the device.</string>
     <string name="verification.info_language.expl">The language the device\'s operating system is set to.</string>
-    <string name="verification.help_locale.expl">The geographic region the device is set to.</string>
+    <string name="verification.info_locale.expl">The geographic region the device is set to.</string>
     <string name="verification.info_connection.status.expl">Whether the device is connected or disconnected to the internet.</string>
     <string name="verification.info_network.type.expl">If the device is connected to the internet, specifies whether it is to a WiFi network or to a cellular network.</string>
     <string name="verification.info_wifi.mac.expl">A unique identifier to the device\'s Wi-Fi connector.</string>
@@ -346,7 +349,7 @@
     <string name="settings.docu_disable.servers_dialog.title">Disconnect server(s)</string>
     <string name="settings.docu_connect.to.servers_disable_dialog.expl">Would you like to delete your server connections altogether, or simply hide them? Hiding will keep server information in memory so that you can easily reconnect and submit data to the server(s).</string>
     <string name="settings.docu_delete.auto.server_dialog.expl">If you delete this server, you will no longer be able to upload files</string>
-    <string name="gallery.upload_heading">Send files to</string>
+    <string name="gallery.upload_heading">Send files to \"%s\"</string>
     <string name="gallery.upload_meta_number.of.files">files</string>
     <string name="gallery.upload_sending_heading">Sending</string>
     <string name="gallery.upload_sent_heading">All files have been successfully sent</string>

@@ -75,7 +75,7 @@
     <string name="collect.end_action_save.send.later">Guardar formulario</string>
     <string name="collect_action.desc_save.form">Guardar formulario</string>
     <string name="collect.end_action.desc_save.send.later">Guardar formulario</string>
-    <string name="pl_confirm">Confirmar</string>
+    <string name="action.desc_confirm">Confirmar</string>
     <string name="collect.end_action_submit.form">Enviar formulario</string>
     <string name="collect.form_action_previous.section">Anterior</string>
     <string name="collect.form_action_next.section">Siguiente</string>
@@ -107,7 +107,10 @@
         <item quantity="other">%1$d archivo borrado.</item>
     </plurals>
     <string name="gallery_toast_fail.deleting.files">Error al eliminar archivo. Algunos archivos no fueron borrados.</string>
-    <string name="gallery_toast_files.exported">%1$d archivo exportado</string>
+    <plurals name="gallery_toast_files.exported">
+        <item quantity="one">%1$d file exported</item>
+        <item quantity="other">%1$d archivo exportado</item>
+    </plurals>
     <string name="gallery_delete.files_dialog.title">¿Borrar archivo?</string>
     <string name="gallery_delete.files_dialog.expl">El archivo seleccionado será borrado de manera permanente de tu galería.</string>
     <string name="gallery_save.to.device_dialog.title">¿Guardar en la galería del dispositivo?</string>
@@ -192,10 +195,10 @@
     <string name="settings.gen_crash.reports_action">Compartir informes de fallos</string>
     <string name="settings.gen_crash.reports_action.expl">Los informes de fallos nos ayudan a mejorar Tella. Se envían automáticamente e incluyen datos como el modelo del dispositivo y la versión de Android.</string>
     <string name="collect.form_dialog.action_add.group">Añadir grupo</string>
-    <string name="collect.form_dialog.title_add.group">¿Añadir un Grupo más?</string>
-    <string name="collect.form_dialog.action_add.first.group">¿Añadir un nuevo Grupo?</string>
-    <string name="collect.form_dialog.expl_create.additional.group">Añadir otro grupo \"%s\"?</string>
-    <string name="collect.form_dialog.expl_create.first.group">Añadir un nuevo grupo \"%s\"?</string>
+    <string name="collect.form_dialog.title_add.additional.group">Add another \"%s\"?</string>
+    <string name="collect.form_dialog.title_add.first.group">Add \"%s\"?</string>
+    <string name="collect.form_dialog.expl_add.additional.group">Añadir otro grupo \"%s\"?</string>
+    <string name="collect.form_dialog.expl_add.first.group">Añadir un nuevo grupo \"%s\"?</string>
     <string name="collect.form_dialog.action_dont.add.group">No añadir</string>
     <string name="collect.form_select.attachment_app.bar">Seleccionar archivo</string>
     <string name="recorder_toast_recording.saved">La grabación de audio se guardó en la galería %s</string>
@@ -322,7 +325,7 @@
     <string name="verification.info_device.id.expl">A unique number identifying the Android device.</string>
     <string name="verification.info_screen.size.expl">The exact screen size of the device.</string>
     <string name="verification.info_language.expl">The language the device\'s operating system is set to.</string>
-    <string name="verification.help_locale.expl">The geographic region the device is set to.</string>
+    <string name="verification.info_locale.expl">The geographic region the device is set to.</string>
     <string name="verification.info_connection.status.expl">Whether the device is connected or disconnected to the internet.</string>
     <string name="verification.info_network.type.expl">If the device is connected to the internet, specifies whether it is to a WiFi network or to a cellular network.</string>
     <string name="verification.info_wifi.mac.expl">A unique identifier to the device\'s Wi-Fi connector.</string>
@@ -346,7 +349,7 @@
     <string name="settings.docu_disable.servers_dialog.title">Disconnect server(s)</string>
     <string name="settings.docu_connect.to.servers_disable_dialog.expl">Would you like to delete your server connections altogether, or simply hide them? Hiding will keep server information in memory so that you can easily reconnect and submit data to the server(s).</string>
     <string name="settings.docu_delete.auto.server_dialog.expl">If you delete this server, you will no longer be able to send file.</string>
-    <string name="gallery.upload_heading">Send files to</string>
+    <string name="gallery.upload_heading">Send files to \"%s\"</string>
     <string name="gallery.upload_meta_number.of.files">files</string>
     <string name="gallery.upload_sending_heading">Sending</string>
     <string name="gallery.upload_sent_heading">All files have been successfully sent</string>

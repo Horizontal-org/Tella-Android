@@ -55,7 +55,6 @@ import rs.readahead.washington.mobile.domain.entity.MyLocation;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaPartResponse;
-import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaResponse;
 import rs.readahead.washington.mobile.javarosa.FormParser;
 import rs.readahead.washington.mobile.javarosa.FormSaver;
 import rs.readahead.washington.mobile.javarosa.FormSubmitter;
@@ -820,11 +819,11 @@ public class CollectFormEntryActivity extends MetadataActivity implements
                 .create();
 
         if (lastRepeatCount > 0) {
-            alertDialog.setTitle(getString(R.string.collect_form_dialog_title_add_group));
-            alertDialog.setMessage(getString(R.string.collect_form_dialog_expl_create_additional_group, groupText));
+            alertDialog.setTitle(getString(R.string.collect_form_dialog_title_add_additional_group, groupText));
+            alertDialog.setMessage(getString(R.string.collect_form_dialog_expl_add_additional_group, groupText));
         } else {
-            alertDialog.setTitle(getString(R.string.collect_form_dialog_action_add_first_group));
-            alertDialog.setMessage(getString(R.string.collect_form_dialog_expl_create_first_group, groupText));
+            alertDialog.setTitle(getString(R.string.collect_form_dialog_title_add_first_group));
+            alertDialog.setMessage(getString(R.string.collect_form_dialog_expl_add_first_group, groupText));
         }
 
         alertDialog.show();

@@ -89,7 +89,7 @@ public class FileUploadingActivity extends CacheWordSubscriberBaseActivity imple
             return;
         }
 
-        statusText.setText(String.format("%s %s", getString(R.string.gallery_upload_heading), server.getName()));
+        statusText.setText(getString(R.string.gallery_upload_heading, server.getName()));
 
         presenter = new FileUploadingPresenter(this);
         presenter.getMediaFiles(ids, metadata);
