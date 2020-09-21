@@ -10,7 +10,6 @@
     <string name="action_cancel">Cancelar</string>
     <string name="lock_set.pattern_expl">Para garantir máxima segurança, crie seu padrão de bloqueio do aplicativo. Esse padrão será usado para desbloquear o aplicativo Tella cada vez que você acessar, para que ninguém, exceto você, possa acessar seus dados. O padrão deve conter pelo menos 6 pontos.</string>
     <string name="settings_menu.item_contact">Fale conosco</string>
-    <string name="settings_text_copyright">Direitos autorais © 2019 Horizontal</string>
     <string name="home_collect.button">Coletar</string>
     <string name="onboard_collect_heading">Coletar</string>
     <string name="collect_dialog.text_download.progress">Download em andamento....</string>

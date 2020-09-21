@@ -10,7 +10,6 @@
     <string name="lock_set.pattern_expl">In order to ensure maximum security, please create your application lock pattern. This pattern will be used for unlocking
         the Tella app on every run, so nobody except you can access your data. The pattern must contain at least 6 dots. </string>
     <string name="settings_menu.item_contact">Contact us</string>
-    <string name="settings_text_copyright">Copyright © 2019 Horizontal</string>
     <string name="home_collect.button">Collect</string>
     <string name="onboard_collect_heading">Collect</string>
     <string name="collect_dialog.text_download.progress">Download in progress…</string>

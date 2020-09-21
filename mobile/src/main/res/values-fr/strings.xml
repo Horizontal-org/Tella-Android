@@ -14,7 +14,6 @@
     <string name="lock_set.pattern_expl">Afin de garantir une sécurité maximale, créez votre schéma de verrouillage d’application. Ce schéma sera utilisé pour déverrouiller
  l\'application Tella à chaque exécution, pour que personne ne puisse accéder à vos données. Le schéma doit contenir au moins 6 points.</string>
     <string name="settings_menu.item_contact">Contactez-nous</string>
-    <string name="settings_text_copyright">Copyright © 2019 Horizontal</string>
     <string name="home_collect.button">Collecte</string>
    <string name="onboard_collect_heading">Collecte</string>
     <string name="collect_dialog.text_download.progress">Téléchargement en cours…</string>

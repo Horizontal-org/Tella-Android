@@ -44,12 +44,6 @@
                 android:layout_height="80dp"
                 android:contentDescription="@string/app_name"
                 android:src="@drawable/tella_icon" />
-
-            <TextView
-                style="@style/SettingsTextViewAbout"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="@string/settings_text_copyright" />
         </LinearLayout>
 
         <View style="@style/SettingsMainLine" />
