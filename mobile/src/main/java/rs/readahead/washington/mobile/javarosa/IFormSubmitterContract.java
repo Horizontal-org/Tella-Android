@@ -14,7 +14,7 @@ public interface IFormSubmitterContract {
         void formPartSubmitError(Throwable error);
         void formSubmitOfflineMode();
         void formSubmitNoConnectivity();
-        void formSubmitSuccess(CollectFormInstance instance, OpenRosaResponse response);
+        //void formSubmitSuccess(CollectFormInstance instance, OpenRosaResponse response);
         void formPartSubmitStart(CollectFormInstance instance, String partName);
         void formPartUploadProgress(String partName, float pct);
         void formPartSubmitSuccess(CollectFormInstance instance, OpenRosaPartResponse response);
@@ -29,7 +29,7 @@ public interface IFormSubmitterContract {
 
     interface IFormSubmitter extends IBasePresenter {
         void submitActiveFormInstance(String name);
-        void submitFormInstance(CollectFormInstance instance);
+        //void submitFormInstance(CollectFormInstance instance);
         void submitFormInstanceGranular(final CollectFormInstance instance);
         void saveForLaterFormInstance(String name);
         void userStopSubmission();

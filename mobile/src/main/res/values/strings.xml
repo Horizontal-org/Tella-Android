@@ -66,11 +66,6 @@
     <string name="collect_toast_draft.saved">Draft saved</string>
     <string name="collect_toast_fail.sending.form">Error submitting form</string>
     <string name="collect_toast_fail.form.submission.generic">Error submitting form: %s</string>
-    <string name="collect_toast_server.response.form.received">Form received. Server replied: </string>
-    <string name="collect_toast_server.reply.form.received.no.detail">Form received.</string>
-    <string name="collect_toast_server.reply.form.accepted.with.detail">Form accepted, do not try to resubmit. Server replied: </string>
-    <string name="collect_toast_server.reply.form.accepted.no.detail">Form accepted, do not try to resubmit.</string>
-    <string name="settings.docu_toast_server.not.odk">Received response is not from ODK-compliant server (%d). Check your server URL settings and make sure proxy servers are not involved.</string>
     <string name="collect.form_toast_validation.generic.error">There were validation errors in answers</string>
     <string name="permission_dialog.expl_GPS">In order to include your location in media metadata, Tella needs permission to access your GPS location.</string>
     <string name="collect.form_action_select.time">Select time</string>

@@ -66,11 +66,6 @@
     <string name="collect_toast_draft.saved">Rascunho salvo</string>
     <string name="collect_toast_fail.sending.form">Erro ao enviar o formulário</string>
     <string name="collect_toast_fail.form.submission.generic">Erro ao enviar o formulário: %s</string>
-    <string name="collect_toast_server.response.form.received">Formulário recebido. O servidor respondeu:</string>
-    <string name="collect_toast_server.reply.form.received.no.detail">Formulário recebido.</string>
-    <string name="collect_toast_server.reply.form.accepted.with.detail">Formulário aceito, não tente reenviar. O servidor respondeu:</string>
-    <string name="collect_toast_server.reply.form.accepted.no.detail">Formulário aceito, não tente reenviar.</string>
-    <string name="settings.docu_toast_server.not.odk">A resposta recebida não é do servidor compatível com ODK ( %d ). Verifique as configurações de URL do servidor e verifique se os servidores proxy não estão envolvidos.</string>
     <string name="collect.form_toast_validation.generic.error">Ocorreram erros de validação nas respostas</string>
     <string name="permission_dialog.expl_GPS">Para incluir sua localização nos metadados da mídia, Tella precisa de permissão para acessar sua localização pelo GPS.</string>
     <string name="collect.form_action_select.time">Selecione a hora</string>

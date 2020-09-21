@@ -70,11 +70,6 @@
     <string name="collect_toast_draft.saved">Brouillon enregistré</string>
     <string name="collect_toast_fail.sending.form">Erreur envoi formulaire</string>
     <string name="collect_toast_fail.form.submission.generic">Erreur de l\'envoie du formulaire: %s</string>
-    <string name="collect_toast_server.response.form.received">Formulaire reçu. Le serveur a répondu:</string>
-    <string name="collect_toast_server.reply.form.received.no.detail">Formulaire reçu.</string>
-    <string name="collect_toast_server.reply.form.accepted.with.detail">Formulaire accepté, n\'essayez pas d\'envoyer à nouveau. Le serveur a répondu:</string>
-    <string name="collect_toast_server.reply.form.accepted.no.detail">Forme acceptée, ne pas essayer de le renvoyer.</string>
-    <string name="settings.docu_toast_server.not.odk">La réponse reçue ne provient pas d\'un serveur compatible avec ODK ( %d ). Vérifiez les paramètres d\'URL de votre serveur et assurez-vous que les serveurs proxy ne sont pas impliqués.</string>
     <string name="collect.form_toast_validation.generic.error">Il y avait des erreurs de validation dans les réponses</string>
     <string name="permission_dialog.expl_GPS">Pour inclure votre localisation dans les métadonnées du fichier, Tella doit avoir l\'autorisation d\'accéder à votre position GPS.</string>
     <string name="collect.form_action_select.time">Sélectionnez l\'heure</string>

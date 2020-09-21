@@ -12,7 +12,6 @@ import org.javarosa.model.xform.XFormSerializingVisitor;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.security.MessageDigest;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -26,7 +25,6 @@ import rs.readahead.washington.mobile.domain.entity.IErrorCode;
 import rs.readahead.washington.mobile.domain.entity.Metadata;
 import rs.readahead.washington.mobile.domain.entity.MyLocation;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
-import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaResponse;
 import rs.readahead.washington.mobile.util.StringUtils;
 import rs.readahead.washington.mobile.util.Util;
 
@@ -69,46 +67,6 @@ public class FormUtils {
         }
 
         return null;
-    }
-
-    public static String getFormSubmitSuccessMessage(Context context, OpenRosaResponse response) {
-        List<String> texts = new ArrayList<>();
-        for (OpenRosaResponse.Message msg : response.getMessages()) {
-            if (!TextUtils.isEmpty(msg.getText())) {
-                texts.add(msg.getText());
-            }
-        }
-
-        String messages, successMessage;
-        boolean hasMessages = texts.size() > 0;
-        messages = hasMessages ? TextUtils.join("; ", texts) : "";
-
-        switch (response.getStatusCode()) {
-            case OpenRosaResponse.StatusCode.FORM_RECEIVED:
-                if (hasMessages) {
-                    successMessage = context.getString(R.string.collect_toast_server_response_form_received) + messages;
-                } else {
-                    successMessage = context.getString(R.string.collect_toast_server_reply_form_received_no_detail);
-                }
-                break;
-
-            case OpenRosaResponse.StatusCode.ACCEPTED:
-                if (hasMessages) {
-                    successMessage = context.getString(R.string.collect_toast_server_reply_form_accepted_with_detail) + messages;
-                } else {
-                    successMessage = context.getString(R.string.collect_toast_server_reply_form_accepted_no_detail);
-                }
-                break;
-
-            case OpenRosaResponse.StatusCode.UNUSED:
-            default:
-                successMessage = String.format(Locale.US,
-                        context.getString(R.string.settings_docu_toast_server_not_odk),
-                        response.getStatusCode());
-                break;
-        }
-
-        return successMessage;
     }
 
     public static String getFormSubmitErrorMessage(Context context, Throwable error) {

@@ -654,7 +654,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         finish();
     }
 
-    @Override
+    /*@Override
     public void formSubmitSuccess(CollectFormInstance instance, OpenRosaResponse response) {
         String successMessage = FormUtils.getFormSubmitSuccessMessage(this, response);
 
@@ -662,7 +662,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
         MyApplication.bus().post(new CollectFormSubmittedEvent());
         finish();
-    }
+    }*/
 
     @Override
     public void formPartSubmitStart(CollectFormInstance instance, String partName) {

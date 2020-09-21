@@ -66,11 +66,6 @@
     <string name="collect_toast_draft.saved">Чарнавік паспяхова захаваны</string>
     <string name="collect_toast_fail.sending.form">Памылка пры адпраўленні формы</string>
     <string name="collect_toast_fail.form.submission.generic">Памылка пры адпраўленні формы: %s</string>
-    <string name="collect_toast_server.response.form.received">Форма атрымана. Сервер адказаў:</string>
-    <string name="collect_toast_server.reply.form.received.no.detail">Форма атрымана.</string>
-    <string name="collect_toast_server.reply.form.accepted.with.detail">Форма прынята, не спрабуйце адправіць яшчэ раз. Сервер адказаў:</string>
-    <string name="collect_toast_server.reply.form.accepted.no.detail">Форма прынята, не спрабуйце адправіць яшчэ раз.</string>
-    <string name="settings.docu_toast_server.not.odk">Атрыманы адказ не адпавядае фармату сервера Open Rosa ( %d ). Праверце URL-налады Вашага сервера і пераканайцеся, што проксі-сервера не былі ўцягнутыя.</string>
     <string name="collect.form_toast_validation.generic.error">Пры праверцы адказаў выяўлены памылкі</string>
     <string name="permission_dialog.expl_GPS">Каб уключыць у метададзеныя медыя-файлаў ваша месцазнаходжанне, дазвольце доступ да інфармацыі пра месцазнаходжанне.</string>
     <string name="collect.form_action_select.time">Абраць час</string>

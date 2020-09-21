@@ -67,11 +67,6 @@
     <string name="collect_toast_draft.saved">Черновик успешно сохранен</string>
     <string name="collect_toast_fail.sending.form">Ошибка при отправлении формы</string>
     <string name="collect_toast_fail.form.submission.generic">Ошибка при отправлении формы: %s</string>
-    <string name="collect_toast_server.response.form.received">Форма получена. Сервер ответил:</string>
-    <string name="collect_toast_server.reply.form.received.no.detail">Форма получена.</string>
-    <string name="collect_toast_server.reply.form.accepted.with.detail">Форма принята, не пытайтесь отправить еще раз. Сервер ответил:</string>
-    <string name="collect_toast_server.reply.form.accepted.no.detail">Форма принята, не пытайтесь отправить еще раз.</string>
-    <string name="settings.docu_toast_server.not.odk">Полученный ответ не соответствует формату сервера Open Rosa (%d). Проверьте URL -настройки Вашего сервера и убедитесь, что прокси-сервера не были вовлечены.</string>
     <string name="collect.form_toast_validation.generic.error">При проверке ответов обнаружены ошибки</string>
     <string name="permission_dialog.expl_GPS">Чтобы включить в метаданные медиа-файлов ваше местонахождение, разрешите доступ к информации о местонахождении.</string>
     <string name="collect.form_action_select.time">Выбрать время</string>
