@@ -22,7 +22,7 @@
 
 Tella is a documentation app for Android. In challenging environments--with limited or no internet connectivity or in the face of repression--Tella makes it easier and safer to document events, whether that’s violence, human rights violations, corruption, or electoral fraud.
 
-| [![Camouflage](docs/Camouflage.gif)](https://hzontal.org/tella)  | [![Encrypting](docs/Encrypting.gif)](https://hzontal.org/tella) | [![Collecting data](docs/data_collection.gif)](https://hzontal.org/tella) |
+| [![Camouflage](Camouflage.gif)](https://hzontal.org/tella)  | [![Encrypting](Encrypting.gif)](https://hzontal.org/tella) | [![Collecting data](data_collection.gif)](https://hzontal.org/tella) |
 |:---:|:---:|:---:|
 | Tella camouflaged as a calculator | Taking and encrypting a photo | Collecting data |
 
