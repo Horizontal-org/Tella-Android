@@ -12,21 +12,15 @@
 
 5. [Tech & frameworks used](#tech-used)
 
-6. [Contributing to the code](#contributing)
+6. [Contributing Guidelines](#contributing)
 
-7. [Translating the app](#translating)
+7. [Contact us](#contact)
 
-8. [Contact us](#contact)
-
-9. [Credits](#credits)
+8. [Credits](#credits)
 
 ## Overview
 
 Tella is a documentation app for Android. In challenging environments--with limited or no internet connectivity or in the face of repression--Tella makes it easier and safer to document events, whether that’s violence, human rights violations, corruption, or electoral fraud.
-
-| [![Camouflage](Camouflage.gif)](https://hzontal.org/tella)  | [![Encrypting](Encrypting.gif)](https://hzontal.org/tella) | [![Collecting data](data_collection.gif)](https://hzontal.org/tella) |
-|:---:|:---:|:---:|
-| Tella camouflaged as a calculator | Taking and encrypting a photo | Collecting data |
 
 Tella:
 - encrypts photo, video, and audio files in a separate gallery so it cannot be accessed from the phone's regular gallery or file explorer
@@ -83,7 +77,7 @@ Tella is currently available only on Android. You can [download it](https://play
 
 ## Tech & frameworks used
 
-## Contributing to the code
+## Contributing guidelines
 
 **Step 1: Get familiar with Tella.** The best way is simply to download Tella play with it and try the different features, or [read our documentation here](https://docs.tella-app.org).
 
@@ -96,11 +90,6 @@ Tella is currently available only on Android. You can [download it](https://play
 **Step 5: Code away!** Feel free to discuss any questions on the issues as needed, and we will get back to you! Don't forget to write some tests to verify your code. Commit your changes locally, using descriptive messages and please be sure to note the parts of the app that are affected by this commit.
 
 **Step 6: Pushing your branch and creating a pull request** Push your branch up and create a pull request. Please indicate which issue your PR addresses in the title.
-
-## Translating the app
-Tella is currently available in Belarusian, English, French, Portuguese, Russian, and Spanish. We are always looking to translate Tella into more languages. 
-
-If you are interested in adding a new language, or if you noticed a mistake in our translation, you can join [the Tella project on Transifex](https://www.transifex.com/otf/tella/dashboard/) and contribute from there. 
 
 ## Contact us
 We love hearing from users, designers, and developers! If you have any question, ideas or suggestions on how we can improve or what new features we should add, or if you need support deploying Tella, don't hesitate to reach out!
