@@ -200,7 +200,7 @@
     <string name="settings.gen_crash.reports_action.expl">Les rapports de bug nous aident à améliorer la Tella. Ils sont envoyés automatiquement et incluent des données telles que le modèle de votre appareil et la version Android.</string>
     <string name="collect.form_dialog.action_add.group">Ajouter un groupe</string>
     <string name="collect.form_dialog.title_add.additional.group">Add another \"%s\"?</string>
-    <string name="collect.form_dialog.title_add.first.group">Add \"%s\"?</string>
+    <string name="collect.form_dialog.action_add.first.group">Add \"%s\"?</string>
     <string name="collect.form_dialog.expl_add.additional.group">Ajouter un autre groupe \" %s \"?</string>
     <string name="collect.form_dialog.expl_add.first.group">Ajouter un nouveau groupe \" %s \"?</string>
     <string name="collect.form_dialog.action_dont.add.group">Ne pas ajouter</string>

@@ -315,7 +315,8 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
 
     private void resumeUpload() {
         Preferences.setAutoUploadPased(false);
-        statusText.setText(getContext().getResources().getString(R.string.upload_main_heading_connecting));
+        headerText.setText(getContext().getResources().getString(R.string.upload_main_meta_status_atempting));
+        statusText.setText("");
         setProgress();
         stopOutlined.donutProgress.setOnClickListener(v -> onStopClicked());
         TellaUploadJob.scheduleJob();
@@ -386,11 +387,11 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
         }
         startedText.setText(String.format("%s: %s", getContext().getResources().getString(R.string.upload_meta_date_started), Util.getDateTimeString(started, "dd/MM/yyyy h:mm a")));
         if (Preferences.isAutoUploadPaused()) {
-            statusText.setText(String.format("%s, %s",
+            statusText.setText(String.format("%s %s",
                     getContext().getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instances.size(), instances.size()), getContext().getResources().getString(R.string.upload_main_heading_stopped)));
         } else {
-            statusText.setText(String.format("%s, %s",
-                    getContext().getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instances.size(), instances.size()), getContext().getResources().getString(R.string.upload_main_heading_connecting)));
+            statusText.setText(String.format("%s %s",
+                    getContext().getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instances.size(), instances.size()), ""));
         }
     }
 
@@ -458,6 +459,8 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
                         getContext().getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, uploadnigList.size(), uploadnigList.size()),
                         getContext().getResources().getString(R.string.upload_info_heading_minute_left)));
             }
+
+            headerText.setText(R.string.upload_main_meta_status_upload);
         }
         lastUploadedSize = uploaded;
         lastUpdateTimeStamp = now;

@@ -199,7 +199,7 @@
     <string name="settings.gen_crash.reports_action.expl">Справаздачы аб збоях дапамагаюць нам палепшыць Tella. Яны адпраўляюцца аўтаматычна і ўтрымліваюць такія дадзеныя, як мадэль прылады і версія Android.</string>
     <string name="collect.form_dialog.action_add.group">дадаць суполку</string>
     <string name="collect.form_dialog.title_add.additional.group">Add another \"%s\"?</string>
-    <string name="collect.form_dialog.title_add.first.group">Add \"%s\"?</string>
+    <string name="collect.form_dialog.action_add.first.group">Add \"%s\"?</string>
     <string name="collect.form_dialog.expl_add.additional.group">Дадаць яшчэ адну суполку \" %s \"?</string>
     <string name="collect.form_dialog.expl_add.first.group">Дадаць новую суполку \" %s \"?</string>
     <string name="collect.form_dialog.action_dont.add.group">Не дадаваць</string>

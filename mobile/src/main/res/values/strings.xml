@@ -397,7 +397,7 @@
     <string name="upload_main_empty_info">There is no information to show here.</string>
     <string name="upload_info_heading_num.of.files.completed">Completed</string>
     <string name="upload_info_file.type">File type</string>
-    <string name="upload_main_heading.connecting">connecting…</string>
+    <string name="upload.main_meta_status.atempting">Attempting to connect</string>
     <string name="upload_info_heading.minute.left">less than a minute left</string>
     <string name="upload_info_dialog.expl_clear.upload">Are you sure you want to delete the upload information?</string>stopped
     <string name="upload_main_heading.stopped">Stopped</string>
