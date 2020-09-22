@@ -5,19 +5,19 @@
     <item
         android:id="@+id/nav_exit"
         android:icon="@drawable/ic_cancel_white_24dp"
-        android:title="@string/ra_exit"
+        android:title="@string/home_action.desc_quick.exit"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
 
     <item
         android:id="@+id/nav_offline_mode"
         android:icon="@drawable/ic_cloud_queue_white_24dp"
-        android:title="@string/ra_offline_mode"
+        android:title="@string/collect.form_action.desc_offline"
         app:showAsAction="never"/>
 
     <item
         android:id="@+id/nav_settings"
         android:icon="@drawable/ic_settings_white"
-        android:title="@string/settings"
+        android:title="@string/settings_app.bar"
         app:showAsAction="never"/>
 </menu>

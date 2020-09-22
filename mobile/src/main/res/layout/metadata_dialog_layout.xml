@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:text="@string/gathering_metadata_progress"
+        android:text="@string/verification.collecting_dialog.expl"
         android:textColor="@color/wa_darker_gray" />
 
     <LinearLayout
@@ -25,7 +25,7 @@
 
         <ImageView
             style="@style/MetadataGatheringDialogImage"
-            android:contentDescription="@string/device_identification"
+            android:contentDescription="@string/verification.collecting_list.item_device"
             android:src="@drawable/ic_check_circle_green" />
 
         <TextView
@@ -34,7 +34,7 @@
             android:layout_gravity="center"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:text="@string/device_identification"
+            android:text="@string/verification.collecting_list.item_device"
             android:textColor="@color/wa_darker_gray" />
     </LinearLayout>
 
@@ -53,7 +53,7 @@
         <ImageView
             android:id="@+id/locationCheck"
             style="@style/MetadataGatheringDialogImage"
-            android:contentDescription="@string/location"
+            android:contentDescription="@string/verification.collecting_list.item_location"
             android:src="@drawable/ic_check_circle_green"
             android:visibility="gone" />
 
@@ -63,7 +63,7 @@
             android:layout_gravity="center_vertical"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:text="@string/location"
+            android:text="@string/verification.collecting_list.item_location"
             android:textColor="@color/wa_darker_gray" />
 
     </LinearLayout>
@@ -83,7 +83,7 @@
         <ImageView
             android:id="@+id/networkCheck"
             style="@style/MetadataGatheringDialogImage"
-            android:contentDescription="@string/network_information"
+            android:contentDescription="@string/verification.collecting_list.item_network"
             android:src="@drawable/ic_check_circle_green"
             android:visibility="gone" />
 
@@ -93,7 +93,7 @@
             android:layout_gravity="center_vertical"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:text="@string/network_information"
+            android:text="@string/verification.collecting_list.item_network"
             android:textColor="@color/wa_darker_gray" />
     </LinearLayout>
 </LinearLayout>

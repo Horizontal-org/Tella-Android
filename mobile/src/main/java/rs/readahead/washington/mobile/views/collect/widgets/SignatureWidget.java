@@ -209,6 +209,6 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
     }
 
     private void showMediaFileInfo() {
-        fileSize.setText(String.format(getResources().getString(R.string.file_size), FileUtil.getFileSizeString(mediaFile.getSize())));
+        fileSize.setText(String.format(getResources().getString(R.string.collect_form_meta_file_size), FileUtil.getFileSizeString(mediaFile.getSize())));
     }
 }

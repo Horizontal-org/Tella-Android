@@ -113,7 +113,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setTitle(R.string.title_activity_audio_record);
+            actionBar.setTitle(R.string.recorder_app_bar);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
@@ -247,7 +247,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     @OnShowRationale(Manifest.permission.RECORD_AUDIO)
     void showRecordAudioRationale(final PermissionRequest request) {
-        rationaleDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_audio));
+        rationaleDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_mic));
     }
 
     @Override
@@ -261,12 +261,12 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     @Override
     public void onAddSuccess(MediaFile mediaFile) {
         attachMediaFileMetadata(mediaFile, metadataAttacher);
-        showToast(String.format(getString(R.string.recorded_successfully), getString(R.string.app_name)));
+        showToast(String.format(getString(R.string.recorder_toast_recording_saved), getString(R.string.app_name)));
     }
 
     @Override
     public void onAddError(Throwable error) {
-        showToast(R.string.ra_capture_error);
+        showToast(R.string.gallery_toast_fail_saving_file);
     }
 
     @Override
@@ -296,7 +296,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     @Override
     public void onMetadataAttachError(Throwable throwable) {
-        showToast(R.string.ra_capture_error);
+        showToast(R.string.gallery_toast_fail_saving_file);
     }
 
     @Override
@@ -370,7 +370,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         enableRecord();
 
         mTimer.setText(timeToString(0));
-        showToast(R.string.recorded_unsuccessfully);
+        showToast(R.string.recorder_toast_fail_recording);
     }
 
     private void returnData() {
@@ -482,9 +482,9 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         String spaceLeft = StringUtils.getFileSize(memoryLeft);
 
         if (days < 1 && hours < 12) {
-            freeSpace.setText(getString(R.string.hours_minutes_and_space_left, hours, minutes, spaceLeft));
+            freeSpace.setText(getString(R.string.recorder_meta_space_available_hours, hours, minutes, spaceLeft));
         } else {
-            freeSpace.setText(getString(R.string.days_hours_and_space_left, days, hours, spaceLeft));
+            freeSpace.setText(getString(R.string.recorder_meta_space_available_days, days, hours, spaceLeft));
         }
     }
 

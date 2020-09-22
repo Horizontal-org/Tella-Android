@@ -97,7 +97,7 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.documentation);
+            actionBar.setTitle(R.string.settings_docu_app_bar);
         }
 
         setupAnonymousSwitch();
@@ -192,12 +192,12 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
             setupAutoUploadSwitch();
         }
 
-        showToast(R.string.ra_server_created);
+        showToast(R.string.settings_docu_toast_server_created);
     }
 
     @Override
     public void onCreateTUServerError(Throwable throwable) {
-        showToast(R.string.ra_collect_server_remove_error);
+        showToast(R.string.settings_docu_toast_fail_create_server);
     }
 
     @Override
@@ -212,12 +212,12 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
         }
 
         createServerViews(servers);
-        showToast(R.string.ra_server_removed);
+        showToast(R.string.settings_docu_toast_server_deleted);
     }
 
     @Override
     public void onRemoveTUServerError(Throwable throwable) {
-        showToast(R.string.ra_collect_server_remove_error);
+        showToast(R.string.settings_docu_toast_fail_delete_server);
     }
 
     @Override
@@ -227,13 +227,13 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
             servers.set(i, server);
             listView.removeViewAt(i);
             listView.addView(getServerItem(server), i);
-            showToast(R.string.ra_server_updated);
+            showToast(R.string.settings_docu_toast_server_updated);
         }
     }
 
     @Override
     public void onUpdateTUServerError(Throwable throwable) {
-        showToast(R.string.ra_collect_server_update_error);
+        showToast(R.string.settings_docu_toast_fail_update_server);
     }
 
     @Override
@@ -245,7 +245,7 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
 
     @Override
     public void onLoadServersError(Throwable throwable) {
-        showToast(R.string.ra_collect_server_load_error);
+        showToast(R.string.settings_docu_toast_fail_load_list_connected_servers);
     }
 
     @Override
@@ -253,15 +253,15 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
         servers.add(server);
         listView.addView(getServerItem(server), servers.indexOf(server));
 
-        showToast(R.string.ra_server_created);
+        showToast(R.string.settings_docu_toast_server_created);
         if (MyApplication.isConnectedToInternet(this)) {
             refreshPresenter.refreshBlankForms();
         }
     }
 
     @Override
-    public void onCreateServerError(Throwable throwable) {
-        showToast(R.string.ra_collect_server_create_error);
+    public void onCreateCollectServerError(Throwable throwable) {
+        showToast(R.string.settings_docu_toast_fail_create_server);
     }
 
     @Override
@@ -272,13 +272,13 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
             servers.set(i, server);
             listView.removeViewAt(i);
             listView.addView(getServerItem(server), i);
-            showToast(R.string.ra_server_updated);
+            showToast(R.string.settings_docu_toast_server_updated);
         }
     }
 
     @Override
     public void onUpdateServerError(Throwable throwable) {
-        showToast(R.string.ra_collect_server_update_error);
+        showToast(R.string.settings_docu_toast_fail_update_server);
     }
 
     @Override
@@ -288,7 +288,7 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
         listView.removeAllViews();
         turnOffAutoUpload();
         setupCollectSettingsView();
-        showToast(R.string.deleted_servers_and_forms);
+        showToast(R.string.settings_docu_toast_disconnect_servers_delete);
     }
 
     @Override
@@ -300,12 +300,12 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
         servers.remove(server);
         listView.removeAllViews();
         createServerViews(servers);
-        showToast(R.string.ra_server_removed);
+        showToast(R.string.settings_docu_toast_server_deleted);
     }
 
     @Override
     public void onRemoveServerError(Throwable throwable) {
-        showToast(R.string.ra_collect_server_remove_error);
+        showToast(R.string.settings_docu_toast_fail_delete_server);
     }
 
     @Override
@@ -355,9 +355,9 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
 
     private void removeCollectServer(final CollectServer server) {
         dialog = DialogsUtil.showDialog(this,
-                getString(R.string.ra_server_remove_confirmation_text),
-                getString(R.string.ra_remove),
-                getString(R.string.cancel),
+                getString(R.string.settings_docu_delete_server_dialog_expl),
+                getString(R.string.action_remove),
+                getString(R.string.action_cancel),
                 (dialog, which) -> {
                     collectServersPresenter.remove(server);
                     dialog.dismiss();
@@ -367,9 +367,9 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
     private void removeTUServer(final TellaUploadServer server) {
         if (server.getId() == serversPresenter.getAutoUploadServerId()) {
             dialog = DialogsUtil.showDialog(this,
-                    getString(R.string.delete_auto_tus_server_info),
-                    getString(R.string.delete),
-                    getString(R.string.cancel),
+                    getString(R.string.settings_docu_delete_upload_server_dialog_expl),
+                    getString(R.string.action_delete),
+                    getString(R.string.action_cancel),
                     (dialog, which) -> {
                         tellaUploadServersPresenter.remove(server);
                         if (server.getId() == serversPresenter.getAutoUploadServerId()) {
@@ -379,9 +379,9 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
                     }, null);
         } else {
             dialog = DialogsUtil.showDialog(this,
-                    getString(R.string.delete_tus_server_info),
-                    getString(R.string.delete),
-                    getString(R.string.cancel),
+                    getString(R.string.settings_docu_delete_auto_server_dialog_expl),
+                    getString(R.string.action_delete),
+                    getString(R.string.action_cancel),
                     (dialog, which) -> {
                         tellaUploadServersPresenter.remove(server);
                         dialog.dismiss();
@@ -513,14 +513,14 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
     }
 
     private void showCollectDisableDialog() {
-        String message = getString(R.string.disconnect_servers_info);
+        String message = getString(R.string.settings_docu_connect_to_servers_disable_dialog_expl);
 
         dialog = DialogsUtil.showThreeOptionDialogWithTitle(this,
                 message,
-                getString(R.string.disconnect_servers),
-                getString(R.string.hide),
-                getString(R.string.cancel),
-                getString(R.string.delete),
+                getString(R.string.settings_docu_disable_servers_dialog_title),
+                getString(R.string.settings_docu_dialog_action_hide),
+                getString(R.string.action_cancel),
+                getString(R.string.action_delete),
                 (dialog, which) -> {  //hide
                     Preferences.setCollectServersLayout(false);
                     setupCollectSettingsView();

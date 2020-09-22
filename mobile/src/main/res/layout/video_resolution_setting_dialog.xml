@@ -16,7 +16,7 @@
         android:layout_weight="1"
         android:gravity="start"
         android:padding="16dp"
-        android:text="@string/video_quality"
+        android:text="@string/camera_video.resolution_dialog.title"
         android:textColor="@color/wa_darker_gray"
         android:textSize="@dimen/intro_link_text_size"
         android:textStyle="bold" />
@@ -30,7 +30,7 @@
         android:gravity="start"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:text="@string/video_quality_info"
+        android:text="@string/camera_video.resolution_dialog.expl"
         android:textColor="@color/wa_gray"
         android:textSize="@dimen/intro_text_size" />
 

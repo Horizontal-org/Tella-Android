@@ -55,7 +55,7 @@ public class CollectServersPresenter implements ICollectServersPresenterContract
                 .subscribe(server1 -> view.onCreatedServer(server1),
                         throwable -> {
                             Crashlytics.logException(throwable);
-                            view.onCreateServerError(throwable);
+                            view.onCreateCollectServerError(throwable);
                         })
         );
     }

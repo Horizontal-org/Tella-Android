@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top"
         android:visibility="gone"
-        android:text="@string/map_location_info" />
+        android:text="@string/collect.form_geopoint_banner_touch.map.select.location" />
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"

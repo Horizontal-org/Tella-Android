@@ -12,13 +12,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:text="@string/ra_offline_mode_dialog_title" />
+            android:text="@string/offline_dialog.title" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="@string/ra_offline_mode_dialog_description" />
+            android:text="@string/offline_dialog.expl" />
     </LinearLayout>
 
 </LinearLayout>

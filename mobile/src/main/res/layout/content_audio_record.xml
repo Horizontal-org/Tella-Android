@@ -44,7 +44,7 @@
         android:layout_height="18dp"
         android:layout_below="@+id/free_space"
         android:layout_centerHorizontal="true"
-        android:contentDescription="@string/recording"
+        android:contentDescription="@string/recorder_content.desc_blinking.red.dot"
         android:layout_margin="20dp"
         android:gravity="center"
         android:visibility="gone"
@@ -70,7 +70,7 @@
             android:background="@drawable/white_circle_background"
             android:padding="5dp"
             android:src="@drawable/ic_stop_light_red"
-            android:contentDescription="@string/ra_stop"/>
+            android:contentDescription="@string/action_stop"/>
     </LinearLayout>
 
     <LinearLayout
@@ -89,7 +89,7 @@
             android:background="@drawable/audio_record_button_background"
             android:padding="5dp"
             android:src="@drawable/ic_mic_white"
-            android:contentDescription="@string/ra_record"/>
+            android:contentDescription="@string/action_record"/>
     </LinearLayout>
 
     <LinearLayout
@@ -111,7 +111,7 @@
             android:background="@drawable/white_circle_background"
             android:padding="5dp"
             android:src="@drawable/ic_headset_black_24dp"
-            android:contentDescription="@string/ra_play"/>
+            android:contentDescription="@string/action_play"/>
     </LinearLayout>
 
 </RelativeLayout>

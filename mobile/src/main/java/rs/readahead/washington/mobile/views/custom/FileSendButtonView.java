@@ -26,7 +26,7 @@ public class FileSendButtonView extends FrameLayout {
 
     private void inflateView() {
         inflate(getContext(), R.layout.file_send_button, this);
-        this.setText(R.string.send);
+        this.setText(R.string.upload_action_upload_files);
     }
 
     public void setText(int textId){

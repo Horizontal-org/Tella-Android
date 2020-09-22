@@ -27,7 +27,7 @@
         android:gravity="center_horizontal"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:visibility="gone"
-        android:text="@string/unchecked_items"
+        android:text="@string/collect.end_subheading.expl_unchecked.items"
         android:textColor="@color/wa_gray"/>
 
     <LinearLayout

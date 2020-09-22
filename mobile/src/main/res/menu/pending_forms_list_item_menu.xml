@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/edit"
-        android:title="@string/ra_edit_to_resend"/>
+        android:title="@string/collect.sent_action_edit.to.resend"/>
     <item
         android:id="@+id/discard"
-        android:title="@string/discard"/>
+        android:title="@string/action_discard"/>
 </menu>
