@@ -30,7 +30,7 @@
             android:layout_gravity="start"
             android:textAlignment="textStart"
             android:textColor="@color/colorPrimary"
-            tools:text="@string/upload_info_heading_number.of.files"/>
+            tools:text="@string/upload_info_meta_number_of_files"/>
 
         <TextView
             android:id="@+id/started_text"

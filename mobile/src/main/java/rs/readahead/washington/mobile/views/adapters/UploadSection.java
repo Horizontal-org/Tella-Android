@@ -117,10 +117,10 @@ public class UploadSection extends Section {
     public void onBindHeaderViewHolder(final RecyclerView.ViewHolder holder) {
         final HeaderViewHolder headerHolder = (HeaderViewHolder) holder;
 
-        headerHolder.startedText.setText(String.format("%s: %s", context.getResources().getString(R.string.started), Util.getDateTimeString(this.started, "dd/MM/yyyy h:mm a")));
+        headerHolder.startedText.setText(String.format("%s: %s", context.getResources().getString(R.string.upload_meta_date_started), Util.getDateTimeString(this.started, "dd/MM/yyyy h:mm a")));
 
         if (isUploadFinished) {
-            headerHolder.title.setText(context.getResources().getQuantityString(R.plurals.files_uploaded, numberOfUploads, numberOfUploads));
+            headerHolder.title.setText(context.getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files_uploaded, numberOfUploads, numberOfUploads));
             headerHolder.title.setVisibility(View.VISIBLE);
             headerHolder.startedText.setVisibility(View.VISIBLE);
         } else {
@@ -137,7 +137,7 @@ public class UploadSection extends Section {
     @Override
     public void onBindFooterViewHolder(final RecyclerView.ViewHolder holder) {
         final FooterViewHolder footerHolder = (FooterViewHolder) holder;
-        footerHolder.fTitle.setText(context.getResources().getString(R.string.more_details));
+        footerHolder.fTitle.setText(context.getResources().getString(R.string.upload_main_action_more_details));
         footerHolder.fTitle.setOnClickListener(v -> uploadSectionListener.showUploadInformation(this.set));
 
         if (expanded) {

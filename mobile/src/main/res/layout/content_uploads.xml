@@ -43,7 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorPrimary"
-                    android:text="@string/uploading" />
+                    android:text="@string/upload.main_meta_status.upload" />
 
                 <TextView
                     android:id="@+id/status_text"

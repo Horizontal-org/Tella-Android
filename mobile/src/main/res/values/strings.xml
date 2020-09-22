@@ -393,11 +393,7 @@
     <string name="upload.info_app.bar">Upload information</string>
     <string name="upload.info_meta_number.of.files">Number of files</string>
     <string name="upload_meta_date.started">Date started</string>
-    <string name="clear_upload_history_dialog">Are you sure you want to clear the upload history?</string>
-    <string name="upload.main_stop.upload_dialog.exp">Are you sure you want to stop the upload?</string>
 
-    <string name="upload_info_heading_number.of.files">Number of files</string>
-    <string name="upload_info_heading_date.started">Date started</string>
     <string name="upload_main_dialog_action_clear">Clear</string>
     <string name="upload_main_empty_info">There is no information to show here.</string>
     <string name="upload_info_heading_num.of.files.completed">Completed</string>

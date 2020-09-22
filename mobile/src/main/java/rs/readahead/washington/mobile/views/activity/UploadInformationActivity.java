@@ -162,7 +162,7 @@ public class UploadInformationActivity extends CacheWordSubscriberBaseActivity i
         alertDialog = new androidx.appcompat.app.AlertDialog.Builder(this)
                 .setMessage(R.string.upload_info_stop_upload_dialog_expl)
                 .setPositiveButton(R.string.upload_main_dialog_action_clear, (dialog, which) -> presenter.deleteFileUploadInstance(id))
-                .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
                 })
                 .setCancelable(true)
                 .show();
@@ -171,8 +171,8 @@ public class UploadInformationActivity extends CacheWordSubscriberBaseActivity i
     private void showClearHistoryDialog() {
         alertDialog = new androidx.appcompat.app.AlertDialog.Builder(this)
                 .setMessage(R.string.upload_info_dialog_expl_clear_upload)
-                .setPositiveButton(R.string.delete, (dialog, which) -> clearUploadInformation())
-                .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                .setPositiveButton(R.string.action_delete, (dialog, which) -> clearUploadInformation())
+                .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
                 })
                 .setCancelable(true)
                 .show();
@@ -285,8 +285,8 @@ public class UploadInformationActivity extends CacheWordSubscriberBaseActivity i
                 completed = false;
             }
         }
-        numberOfFilesText.setText(String.format("%s: %d", getContext().getResources().getString(R.string.upload_info_heading_number_of_files), instances.size()));
-        startedText.setText(String.format("%s: %s", getContext().getResources().getString(R.string.upload_info_heading_date_started), Util.getDateTimeString(timeStarted, "dd/MM/yyyy h:mm a")));
+        numberOfFilesText.setText(String.format("%s: %d", getContext().getResources().getString(R.string.upload_info_meta_number_of_files), instances.size()));
+        startedText.setText(String.format("%s: %s", getContext().getResources().getString(R.string.upload_meta_date_started), Util.getDateTimeString(timeStarted, "dd/MM/yyyy h:mm a")));
         completedText.setText(String.format("%s: %s", getContext().getResources().getString(R.string.upload_info_heading_num_of_files_completed), Util.getDateTimeString(timeCompleted, "dd/MM/yyyy h:mm a")));
         completedText.setVisibility(completed ? View.VISIBLE : View.GONE);
     }
