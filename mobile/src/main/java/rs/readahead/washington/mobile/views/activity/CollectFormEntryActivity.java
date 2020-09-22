@@ -822,7 +822,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
             alertDialog.setTitle(getString(R.string.collect_form_dialog_title_add_additional_group, groupText));
             alertDialog.setMessage(getString(R.string.collect_form_dialog_expl_add_additional_group, groupText));
         } else {
-            alertDialog.setTitle(getString(R.string.collect_form_dialog_title_add_first_group));
+            alertDialog.setTitle(getString(R.string.collect_form_dialog_action_add_first_group, groupText));
             alertDialog.setMessage(getString(R.string.collect_form_dialog_expl_add_first_group, groupText));
         }
 
