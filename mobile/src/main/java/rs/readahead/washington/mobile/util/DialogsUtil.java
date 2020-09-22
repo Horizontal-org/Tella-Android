@@ -37,8 +37,8 @@ public class DialogsUtil {
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(context);
         builder.setMessage(message);
-        builder.setPositiveButton(R.string.ok, okListener);
-        builder.setNegativeButton(R.string.cancel, null);
+        builder.setPositiveButton(R.string.action_ok, okListener);
+        builder.setNegativeButton(R.string.action_cancel, null);
         builder.setCancelable(true);
         builder.show();
     }
@@ -111,11 +111,11 @@ public class DialogsUtil {
         metadataSwitch.setChecked(!Preferences.isAnonymousMode());
 
         builder.setView(view)
-                .setPositiveButton(R.string.save, (dialog, which) -> {
+                .setPositiveButton(R.string.action_save, (dialog, which) -> {
                     Preferences.setAnonymousMode(!metadataSwitch.isChecked());
                     metadataCameraButton.displayDrawable();
                 })
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .setCancelable(true);
 
         final AlertDialog alertDialog = builder.create();
@@ -143,11 +143,11 @@ public class DialogsUtil {
         directUpload.setChecked(false);
 
         builder.setView(view)
-                .setTitle(R.string.what_type_of_server)
-                .setPositiveButton(R.string.next_section, (dialog, which) -> {
+                .setTitle(R.string.settings_docu_add_server_selection_dialog_title)
+                .setPositiveButton(R.string.collect_form_action_next_section, (dialog, which) -> {
                     listener.onChoice(odk.isChecked() ? ServerType.ODK_COLLECT : ServerType.TELLA_UPLOAD);
                 })
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .setCancelable(true);
 
         final AlertDialog alertDialog = builder.create();
@@ -159,9 +159,9 @@ public class DialogsUtil {
     public static AlertDialog showExitWithSubmitDialog(Context context, DialogInterface.OnClickListener okListener,
                                                        DialogInterface.OnClickListener cancelListener) {
         return DialogsUtil.showDialog(context,
-                context.getString(R.string.ra_exit_will_stop_submission),
-                context.getString(R.string.ok),
-                context.getString(R.string.cancel),
+                context.getString(R.string.collect_end_exit_dialog_expl),
+                context.getString(R.string.action_ok),
+                context.getString(R.string.action_cancel),
                 okListener,
                 cancelListener);
     }
@@ -169,9 +169,9 @@ public class DialogsUtil {
     public static AlertDialog showExitFileUploadDialog(Context context, DialogInterface.OnClickListener okListener,
                                                        DialogInterface.OnClickListener cancelListener) {
         return DialogsUtil.showDialog(context,
-                context.getString(R.string.exit_cancel_upload),
-                context.getString(R.string.ok),
-                context.getString(R.string.cancel),
+                context.getString(R.string.gallery_upload_exit_dialog_expl),
+                context.getString(R.string.action_ok),
+                context.getString(R.string.action_cancel),
                 okListener,
                 cancelListener);
     }
@@ -179,9 +179,9 @@ public class DialogsUtil {
     public static AlertDialog showExitOnFinalDialog(Context context, DialogInterface.OnClickListener okListener,
                                                     DialogInterface.OnClickListener cancelListener) {
         return DialogsUtil.showDialog(context,
-                context.getString(R.string.ra_exit_will_stop_submission),
-                context.getString(R.string.ra_exit),
-                context.getString(R.string.cancel),
+                context.getString(R.string.collect_end_exit_dialog_expl),
+                context.getString(R.string.action_exit),
+                context.getString(R.string.action_cancel),
                 okListener,
                 cancelListener);
     }
@@ -201,12 +201,12 @@ public class DialogsUtil {
         offlineSwitch.setChecked(Preferences.isOfflineMode());
 
         builder.setView(view)
-                .setPositiveButton(R.string.save, (dialog, which) -> {
+                .setPositiveButton(R.string.action_save, (dialog, which) -> {
                     boolean offline = offlineSwitch.isChecked();
                     Preferences.setOfflineMode(offline);
                     consumer.accept(offline);
                 })
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .setCancelable(true);
 
         final AlertDialog alertDialog = builder.create();
@@ -222,7 +222,7 @@ public class DialogsUtil {
         @SuppressLint("InflateParams")
         View view = inflater.inflate(R.layout.metadata_dialog_layout, null);
         builder.setView(view)
-                .setNegativeButton(R.string.skip, listener)
+                .setNegativeButton(R.string.action_skip, listener)
                 .setCancelable(false);
 
 
@@ -242,7 +242,7 @@ public class DialogsUtil {
         TextView text = view.findViewById(R.id.progress_text);
         text.setText(stringRes);
         builder.setView(view)
-                .setNegativeButton(R.string.cancel, listener)
+                .setNegativeButton(R.string.action_cancel, listener)
                 .setCancelable(false);
 
 
@@ -260,7 +260,7 @@ public class DialogsUtil {
         @SuppressLint("InflateParams")
         View view = inflater.inflate(R.layout.collect_refresh_dialog_layout, null);
         builder.setView(view)
-                .setNegativeButton(R.string.cancel, listener)
+                .setNegativeButton(R.string.action_cancel, listener)
                 .setCancelable(false);
 
 
@@ -276,24 +276,16 @@ public class DialogsUtil {
             @NonNull DialogInterface.OnClickListener listener) {
         int msgResId;
 
-        switch (status) {
-            case SUBMITTED:
-                msgResId = R.string.ra_delete_cloned_form;
-                break;
-
-            case DRAFT:
-                msgResId = R.string.ra_delete_draft_form;
-                break;
-
-            default:
-                msgResId = R.string.ra_delete_form;
-                break;
+        if (status == CollectFormInstanceStatus.SUBMITTED) {
+            msgResId = R.string.collect_dialog_text_delete_sent_form;
+        } else {
+            msgResId = R.string.collect_dialog_text_delete_draft_form;
         }
 
         return new AlertDialog.Builder(context)
                 .setMessage(msgResId)
-                .setPositiveButton(R.string.delete, listener)
-                .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                .setPositiveButton(R.string.action_delete, listener)
+                .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
                 })
                 .setCancelable(true)
                 .show();
@@ -302,10 +294,10 @@ public class DialogsUtil {
 
     public static AlertDialog showExportMediaDialog(@NonNull Context context, @NonNull DialogInterface.OnClickListener listener) {
         return new AlertDialog.Builder(context)
-                .setTitle(R.string.ra_save_to_device_storage)
-                .setMessage(R.string.ra_saving_outside_tella_message)
-                .setPositiveButton(R.string.save, listener)
-                .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                .setTitle(R.string.gallery_save_to_device_dialog_title)
+                .setMessage(R.string.gallery_save_to_device_dialog_expl)
+                .setPositiveButton(R.string.action_save, listener)
+                .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
                 })
                 .setCancelable(true)
                 .show();
@@ -337,14 +329,14 @@ public class DialogsUtil {
         }
 
         builder.setView(view)
-                .setPositiveButton(R.string.next_section, (dialog, which) -> {
+                .setPositiveButton(R.string.collect_form_action_next_section, (dialog, which) -> {
                     int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
                     AppCompatRadioButton radioButton = radioGroup.findViewById(checkedRadioButtonId);
                     String key = (String) radioButton.getTag();
                     videoResolutionManager.putVideoQualityOption(key);
                     consumer.accept(videoResolutionManager.getVideoSize(key));
                 })
-                .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
                 })
                 .setCancelable(false);
 
@@ -375,8 +367,8 @@ public class DialogsUtil {
         }
 
         final AlertDialog alertDialog = builder.setView(dialogView)
-                .setPositiveButton(R.string.ok, null)
-                .setNegativeButton(R.string.cancel, listener)
+                .setPositiveButton(R.string.action_ok, null)
+                .setNegativeButton(R.string.action_cancel, listener)
                 .setCancelable(false)
                 .create();
 

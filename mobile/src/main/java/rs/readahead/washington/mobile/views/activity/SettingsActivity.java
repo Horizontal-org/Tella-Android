@@ -34,7 +34,7 @@ public class SettingsActivity extends CacheWordSubscriberBaseActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.settings);
+            actionBar.setTitle(R.string.settings_app_bar);
         }
 
         disposables = MyApplication.bus().createCompositeDisposable();

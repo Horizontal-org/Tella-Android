@@ -104,7 +104,7 @@ public class MetadataViewerActivity extends CacheWordSubscriberBaseActivity {
 
         dataName.setText(name);
         if (value == null || value.length() < 1) {
-            dataValue.setText(R.string.not_available);
+            dataValue.setText(R.string.verification_info_field_metadata_not_available);
         } else {
             dataValue.setText(value);
         }
@@ -117,53 +117,53 @@ public class MetadataViewerActivity extends CacheWordSubscriberBaseActivity {
             return;
         }
 
-        metadataList.addView(createMetadataTitle(R.string.file));
+        metadataList.addView(createMetadataTitle(R.string.verification_info_subheading_file_metadata));
         metadataList.addView(createMetadataItem(metadata.getFileName() != null ?
-                metadata.getFileName() : mediaFile.getFileName(), getResources().getString(R.string.filename)));
-        metadataList.addView(createMetadataItem(mediaFile.getPath(), getResources().getString(R.string.file_path)));
+                metadata.getFileName() : mediaFile.getFileName(), getResources().getString(R.string.verification_info_field_filename)));
+        metadataList.addView(createMetadataItem(mediaFile.getPath(), getResources().getString(R.string.verification_info_field_file_path)));
 
         metadataList.addView(createMetadataItem(mediaFile.getHash() != null ?
-                mediaFile.getHash() : metadata.getFileHashSHA256(), getResources().getString(R.string.filehash)));
+                mediaFile.getHash() : metadata.getFileHashSHA256(), getResources().getString(R.string.verification_info_field_hash)));
         metadataList.addView(createMetadataItem(
-                Util.getDateTimeString(mediaFile.getCreated(), "dd-MM-yyyy HH:mm:ss Z"), getResources().getString(R.string.file_modified)));
+                Util.getDateTimeString(mediaFile.getCreated(), "dd-MM-yyyy HH:mm:ss Z"), getResources().getString(R.string.verification_info_field_file_modified)));
 
-        metadataList.addView(createMetadataTitle(R.string.device));
-        metadataList.addView(createMetadataItem(metadata.getManufacturer(), getResources().getString(R.string.manufacturer)));
-        metadataList.addView(createMetadataItem(metadata.getHardware(), getResources().getString(R.string.hardware)));
-        metadataList.addView(createMetadataItem(metadata.getDeviceID(), getResources().getString(R.string.device_id)));
-        metadataList.addView(createMetadataItem(metadata.getScreenSize(), getResources().getString(R.string.screen_size)));
-        metadataList.addView(createMetadataItem(metadata.getLanguage(), getResources().getString(R.string.language)));
-        metadataList.addView(createMetadataItem(metadata.getLocale(), getResources().getString(R.string.locale)));
-        metadataList.addView(createMetadataItem(metadata.getNetwork(), getResources().getString(R.string.connection_status)));
-        metadataList.addView(createMetadataItem(metadata.getNetworkType(), getResources().getString(R.string.network_type)));
-        metadataList.addView(createMetadataItem(metadata.getWifiMac(), getResources().getString(R.string.wifi_mac)));
-        metadataList.addView(createMetadataItem(metadata.getIPv4(), getResources().getString(R.string.ipv4)));
-        metadataList.addView(createMetadataItem(metadata.getIPv6(), getResources().getString(R.string.ipv6)));
+        metadataList.addView(createMetadataTitle(R.string.verification_info_subheading_device_metadata));
+        metadataList.addView(createMetadataItem(metadata.getManufacturer(), getResources().getString(R.string.verification_info_field_manufacturer)));
+        metadataList.addView(createMetadataItem(metadata.getHardware(), getResources().getString(R.string.verification_info_field_hardware)));
+        metadataList.addView(createMetadataItem(metadata.getDeviceID(), getResources().getString(R.string.verification_info_field_device_id)));
+        metadataList.addView(createMetadataItem(metadata.getScreenSize(), getResources().getString(R.string.verification_info_field_screen_size)));
+        metadataList.addView(createMetadataItem(metadata.getLanguage(), getResources().getString(R.string.verification_info_field_language)));
+        metadataList.addView(createMetadataItem(metadata.getLocale(), getResources().getString(R.string.verification_info_field_locale)));
+        metadataList.addView(createMetadataItem(metadata.getNetwork(), getResources().getString(R.string.verification_info_field_connection_status)));
+        metadataList.addView(createMetadataItem(metadata.getNetworkType(), getResources().getString(R.string.verification_info_field_network_type)));
+        metadataList.addView(createMetadataItem(metadata.getWifiMac(), getResources().getString(R.string.verification_info_field_wifi_mac)));
+        metadataList.addView(createMetadataItem(metadata.getIPv4(), getResources().getString(R.string.verification_info_field_ipv4)));
+        metadataList.addView(createMetadataItem(metadata.getIPv6(), getResources().getString(R.string.verification_info_field_ipv6)));
 
-        metadataList.addView(createMetadataTitle(R.string.context));
+        metadataList.addView(createMetadataTitle(R.string.verification_info_subheading_context_metadata));
 
         if (metadata.getMyLocation() != null) {
-            metadataList.addView(createMetadataItem(getLocationString(metadata.getMyLocation()), getResources().getString(R.string.location)));
-            metadataList.addView(createMetadataItem(metadata.getMyLocation().getProvider(), getResources().getString(R.string.location_provider)));
-            metadataList.addView(createMetadataItem(metadata.getMyLocation().getSpeed().toString(), getResources().getString(R.string.location_speed)));
+            metadataList.addView(createMetadataItem(getLocationString(metadata.getMyLocation()), getResources().getString(R.string.verification_info_field_location)));
+            metadataList.addView(createMetadataItem(metadata.getMyLocation().getProvider(), getResources().getString(R.string.verification_info_field_location_provider)));
+            metadataList.addView(createMetadataItem(metadata.getMyLocation().getSpeed().toString(), getResources().getString(R.string.verification_info_field_location_speed)));
         } else {
-            metadataList.addView(createMetadataItem(getString(R.string.not_available), getResources().getString(R.string.location)));
+            metadataList.addView(createMetadataItem(getString(R.string.verification_info_field_metadata_not_available), getResources().getString(R.string.verification_info_field_location)));
         }
 
         String cells = StringUtils.join(", ", metadata.getCells());
-        metadataList.addView(createMetadataItem(cells, getResources().getString(R.string.cell_info)));
+        metadataList.addView(createMetadataItem(cells, getResources().getString(R.string.verification_info_field_cell_towers)));
 
         metadataList.addView(createMetadataItem(
-                metadata.getWifis() != null ? TextUtils.join(", ", metadata.getWifis()) : getString(R.string.not_available),
-                getString(R.string.ra_wifi_info)));
+                metadata.getWifis() != null ? TextUtils.join(", ", metadata.getWifis()) : getString(R.string.verification_info_field_metadata_not_available),
+                getString(R.string.verification_info_wifi)));
     }
 
     private String getLocationString(MyLocation myLocation) {
-        return getString(R.string.latitude) + ": " + myLocation.getLatitude() + '\n' +
-                getString(R.string.longitude) + ": " + myLocation.getLongitude() + '\n' +
-                getString(R.string.altitude) + ": " + myLocation.getAltitude() + '\n' +
-                getString(R.string.accuracy) + ": " + myLocation.getAccuracy().toString() + '\n' +
-                getString(R.string.time) + ": " + Util.getDateTimeString(myLocation.getTimestamp(), "dd-MM-yyyy HH:mm:ss Z");
+        return getString(R.string.verification_info_field_latitude) + ": " + myLocation.getLatitude() + '\n' +
+                getString(R.string.verification_info_field_longitude) + ": " + myLocation.getLongitude() + '\n' +
+                getString(R.string.verification_info_field_altitude) + ": " + myLocation.getAltitude() + '\n' +
+                getString(R.string.verification_info_field_accuracy) + ": " + myLocation.getAccuracy().toString() + '\n' +
+                getString(R.string.verification_info_field_location_time) + ": " + Util.getDateTimeString(myLocation.getTimestamp(), "dd-MM-yyyy HH:mm:ss Z");
     }
 
     private void startMetadataHelp() {

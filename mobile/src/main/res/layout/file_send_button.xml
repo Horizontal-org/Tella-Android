@@ -17,7 +17,7 @@
             style="@style/YellowButtonText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/send"
+            android:text="@string/upload_action_upload.files"
             android:layout_gravity="center_vertical"/>
 
         <ImageView

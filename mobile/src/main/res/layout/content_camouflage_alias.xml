@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top|center_horizontal"
-            android:text="@string/select_name_and_logo" />
+            android:text="@string/settings.camo_heading" />
 
         <TextView
             android:id="@+id/camouflage_info"
@@ -30,7 +30,7 @@
             android:paddingEnd="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/camouflage_info" />
+            android:text="@string/settings.camo_expl" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

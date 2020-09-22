@@ -18,6 +18,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="20dp"
-        android:text="@string/ra_getting_blank_forms"
+        android:text="@string/collect_dialog.expl_downloading.blank.forms"
         android:textColor="@color/wa_black"/>
 </LinearLayout>

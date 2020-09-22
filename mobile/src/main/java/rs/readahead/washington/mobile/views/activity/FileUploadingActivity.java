@@ -74,7 +74,7 @@ public class FileUploadingActivity extends CacheWordSubscriberBaseActivity imple
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.send);
+            actionBar.setTitle(R.string.upload_app_bar_upload_screen);
         }
 
         long[] ids;
@@ -84,12 +84,12 @@ public class FileUploadingActivity extends CacheWordSubscriberBaseActivity imple
             server = (TellaUploadServer) getIntent().getSerializableExtra(SERVER_KEY);
             metadata = getIntent().getBooleanExtra(METADATA, false);
         } else {
-            showToast(R.string.error);
+            showToast(R.string.gallery_toast_fail_finding_metadata_to_upload);
             finish();
             return;
         }
 
-        statusText.setText(String.format("%s %s", getString(R.string.send_files_to), server.getName()));
+        statusText.setText(getString(R.string.gallery_upload_heading, server.getName()));
 
         presenter = new FileUploadingPresenter(this);
         presenter.getMediaFiles(ids, metadata);
@@ -182,7 +182,7 @@ public class FileUploadingActivity extends CacheWordSubscriberBaseActivity imple
 
     @Override
     public void onGetMediaFilesError(Throwable error) {
-        Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.gallery_toast_fail_finding_file_to_upload, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -197,7 +197,7 @@ public class FileUploadingActivity extends CacheWordSubscriberBaseActivity imple
 
     @Override
     public void onMediaFilesUploadStarted() {
-        statusText.setText(R.string.sending);
+        statusText.setText(R.string.gallery_upload_sending_heading);
         sendButton.setVisibility(View.GONE);
         uploading = true;
         toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
@@ -241,9 +241,9 @@ public class FileUploadingActivity extends CacheWordSubscriberBaseActivity imple
         if (!this.mediaFiles.isEmpty()) {
             setRemainingErrors();
             sendButton.setVisibility(View.VISIBLE);
-            sendButton.setText(R.string.retry);
+            sendButton.setText(R.string.gallery_upload_action_try_uploading_again);
         } else {
-            statusText.setText(R.string.files_successfully_sent);
+            statusText.setText(R.string.gallery_upload_sent_heading);
         }
 
         uploading = false;
@@ -272,9 +272,9 @@ public class FileUploadingActivity extends CacheWordSubscriberBaseActivity imple
 
         String filesNumber;
         if (num == 1) {
-            filesNumber = num + " " + getString(R.string.file);
+            filesNumber = num + " " + getString(R.string.verification_info_subheading_file_metadata);
         } else {
-            filesNumber = num + " " + getString(R.string.files);
+            filesNumber = num + " " + getString(R.string.gallery_upload_meta_number_of_files);
         }
 
         filesNum.setText(filesNumber);

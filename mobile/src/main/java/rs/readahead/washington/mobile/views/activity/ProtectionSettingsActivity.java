@@ -64,7 +64,7 @@ public class ProtectionSettingsActivity extends CacheWordSubscriberBaseActivity 
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.protection);
+            getSupportActionBar().setTitle(R.string.settings_prot_app_bar);
         }
     }
 
@@ -171,7 +171,7 @@ public class ProtectionSettingsActivity extends CacheWordSubscriberBaseActivity 
 
     private void setCamouflageOption() {
         if (cm.isDefaultLauncherActivityAlias()) {
-            camouflageSetting.setText(R.string.ra_default);
+            camouflageSetting.setText(R.string.settings_lang_select_default);
         } else {
             camouflageSetting.setText(cm.getLauncherName(this));
         }

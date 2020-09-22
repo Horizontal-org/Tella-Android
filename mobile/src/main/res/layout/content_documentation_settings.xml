@@ -33,14 +33,14 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:paddingBottom="6dp"
-                        android:text="@string/ra_anonymous_mode"
+                        android:text="@string/settings.docu_verification_action"
                         android:theme="@style/SettingsTextViewSwitch" />
 
                     <TextView
                         style="@style/SettingsTextViewGray"
                         android:layout_marginEnd="30dp"
                         android:paddingBottom="6dp"
-                        android:text="@string/ra_anonymous_mode_desc"
+                        android:text="@string/settings.docu_verification_action.expl"
                         android:textAlignment="viewStart" />
                 </LinearLayout>
             </LinearLayout>
@@ -68,13 +68,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
-                            android:text="@string/connect_to_servers"
+                            android:text="@string/settings.docu_connect.to.servers_enable_action"
                             android:theme="@style/SettingsTextViewSwitch" />
 
                         <TextView
                             android:id="@+id/enable_collect_info"
                             style="@style/SettingsTextViewGray"
-                            android:text="@string/manage_connections_to_servers" />
+                            android:text="@string/settings.docu_connect.to.servers_enable_action.expl" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -133,7 +133,7 @@
                             android:clickable="true"
                             android:focusable="true"
                             android:gravity="center_vertical"
-                            android:text="@string/add_server"
+                            android:text="@string/settings.docu_add.server_dialog.title"
                             android:textAlignment="center"
                             android:textSize="16sp"
                             android:textStyle="bold"
@@ -167,13 +167,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
-                            android:text="@string/auto_upload_to_server"
+                            android:text="@string/settings.docu_auto.upload_action"
                             android:theme="@style/SettingsTextViewSwitch" />
 
                         <TextView
                             android:id="@+id/auto_upload_info"
                             style="@style/SettingsTextViewGray"
-                            android:text="@string/auto_upload_info_text" />
+                            android:text="@string/settings.docu_auto.upload_action.expl" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -201,7 +201,7 @@
                                 android:textSize="16sp"
                                 android:textAlignment="center"
                                 android:textColor="@color/wa_black"
-                                android:text="@string/server" />
+                                android:text="@string/settings.docu_auto.upload.server.selection_select" />
                             <TextView
                                 android:id="@+id/server_name"
                                 android:layout_alignParentEnd="true"
@@ -210,7 +210,7 @@
                                 android:layout_width="wrap_content"
                                 android:gravity="center_vertical"
                                 android:textAlignment="center"
-                                android:text="@string/ra_server_name"
+                                android:text="@string/settings.docu_field_server.name"
                                 tools:ignore="RelativeOverlap" />
                         </RelativeLayout>
 
@@ -231,13 +231,13 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="center_vertical"
-                                    android:text="@string/auto_delete"
+                                    android:text="@string/settings.docu_auto.delete_action"
                                     android:theme="@style/SettingsTextViewSwitch" />
 
                                 <TextView
                                     android:id="@+id/auto_delete_info"
                                     style="@style/SettingsTextViewGray"
-                                    android:text="@string/auto_delete_info_text" />
+                                    android:text="@string/settings.docu_auto.delete_action.expl" />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -261,14 +261,14 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:paddingBottom="6dp"
-                        android:text="@string/offline_mode"
+                        android:text="@string/offline_dialog.title"
                         android:theme="@style/SettingsTextViewSwitch" />
 
                     <TextView
                         style="@style/SettingsTextViewGray"
                         android:layout_marginEnd="30dp"
                         android:paddingBottom="6dp"
-                        android:text="@string/offline_mode_info"
+                        android:text="@string/offline_dialog.expl"
                         android:textAlignment="viewStart" />
                 </LinearLayout>
             </LinearLayout>

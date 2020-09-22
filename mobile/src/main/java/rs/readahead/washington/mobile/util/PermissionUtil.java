@@ -77,13 +77,13 @@ public class PermissionUtil {
         final Activity activity = (Activity) context;
 
         return new AlertDialog.Builder(activity)
-                .setPositiveButton(activity.getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                .setPositiveButton(activity.getResources().getString(R.string.action_ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         request.proceed();
                     }
                 })
-                .setNegativeButton(activity.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                .setNegativeButton(activity.getResources().getString(R.string.action_cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         request.cancel();

@@ -16,20 +16,20 @@ import rs.readahead.washington.mobile.presentation.entity.VideoResolutionOption;
 
 
 public class VideoResolutionManager {
-    private static final VideoResolutionOption defaultResolution = new VideoResolutionOption("highest", SizeSelectors.biggest(), R.string.video_quality_very_high);
+    private static final VideoResolutionOption defaultResolution = new VideoResolutionOption("highest", SizeSelectors.biggest(), R.string.camera_video_resolution_select_highest);
     private HashMap<String, VideoResolutionOption> options;
 
     public VideoResolutionManager(Collection<Size> sizes) {
         options = new LinkedHashMap<>();
         options.put("highest", defaultResolution);
         if (sizes.contains(new Size(1080, 1920))) {
-            addVideoOption(1080, 1920, 9, 16, "high", R.string.video_quality_high);
+            addVideoOption(1080, 1920, 9, 16, "high", R.string.camera_video_resolution_select_1080p);
         }
         if (sizes.contains(new Size(720, 1280))) {
-            addVideoOption(720, 1280, 9, 16, "medium", R.string.video_quality_medium);
+            addVideoOption(720, 1280, 9, 16, "medium", R.string.camera_video_resolution_select_720p);
         }
         if (sizes.contains(new Size(480, 640))) {
-            addVideoOption(480, 640, 3, 4, "low", R.string.video_quality_low);
+            addVideoOption(480, 640, 3, 4, "low", R.string.camera_video_resolution_select_480p);
         }
     }
 

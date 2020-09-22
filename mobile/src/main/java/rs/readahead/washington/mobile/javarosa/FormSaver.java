@@ -186,7 +186,7 @@ public class FormSaver implements IFormSaverContract.IFormSaver,
                 if (constraintText == null) {
                     constraintText = formController.getQuestionPrompt(constraint.index).getSpecialFormQuestionText("constraintMsg");
                     if (constraintText == null) {
-                        constraintText = view.getContext().getString(R.string.ra_odk_invalid_answer_error);
+                        constraintText = view.getContext().getString(R.string.collect_form_toast_validation_error);
                     }
                 }
                 break;
@@ -196,7 +196,7 @@ public class FormSaver implements IFormSaverContract.IFormSaver,
                 if (constraintText == null) {
                     constraintText = formController.getQuestionPrompt(constraint.index).getSpecialFormQuestionText("requiredMsg");
                     if (constraintText == null) {
-                        constraintText = view.getContext().getString(R.string.ra_odk_required_answer_error);
+                        constraintText = view.getContext().getString(R.string.collect_form_error_response_mandatory);
                     }
                 }
                 break;

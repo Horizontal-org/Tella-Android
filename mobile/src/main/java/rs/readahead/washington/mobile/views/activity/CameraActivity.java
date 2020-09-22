@@ -229,13 +229,13 @@ public class CameraActivity extends MetadataActivity implements
 
     @Override
     public void onAddingStart() {
-        progressDialog = DialogsUtil.showLightProgressDialog(this, getString(R.string.ra_import_media_progress));
+        progressDialog = DialogsUtil.showLightProgressDialog(this, getString(R.string.gallery_dialog_expl_encrypting));
     }
 
     @Override
     public void onAddingEnd() {
         hideProgressDialog();
-        showToast(R.string.ra_file_encrypted);
+        showToast(R.string.gallery_toast_file_encrypted);
     }
 
     @Override
@@ -249,7 +249,7 @@ public class CameraActivity extends MetadataActivity implements
 
     @Override
     public void onAddError(Throwable error) {
-        showToast(R.string.ra_capture_error);
+        showToast(R.string.gallery_toast_fail_saving_file);
     }
 
     @Override

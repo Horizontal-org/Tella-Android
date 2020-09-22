@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="0.5dp"
             android:layout_weight="1"
-            android:text="@string/previous_section"/>
+            android:text="@string/collect.form_action_previous.section"/>
 
         <Button
             android:id="@+id/nextSection"
@@ -33,7 +33,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/next_section"/>
+            android:text="@string/collect.form_action_next.section"/>
 
         <rs.readahead.washington.mobile.views.custom.FormSubmitButtonView
             android:id="@+id/submit_button"
@@ -50,7 +50,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/ra_stop"
+            android:text="@string/action_stop"
             android:visibility="gone"/>
     </LinearLayout>
 

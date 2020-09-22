@@ -45,7 +45,7 @@
                         android:textAlignment="center"
                         android:gravity="center_vertical"
                         android:layout_alignParentStart="true"
-                        android:text="@string/ra_language" />
+                        android:text="@string/settings.gen_select_language" />
 
                     <TextView
                         android:id="@+id/lang"
@@ -54,7 +54,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="@string/ra_default"/>
+                        android:text="@string/settings.lang_select_default"/>
                 </RelativeLayout>
             </LinearLayout>
 
@@ -73,7 +73,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:paddingBottom="6dp"
-                        android:text="@string/crash_reports_submit"
+                        android:text="@string/settings.gen_crash.reports_action"
                         android:theme="@style/SettingsTextViewSwitch" />
 
                     <TextView
@@ -81,13 +81,13 @@
                         android:layout_marginEnd="30dp"
                         android:textAlignment="viewStart"
                         android:paddingBottom="6dp"
-                        android:text="@string/crash_reports_submit_desc" />
+                        android:text="@string/settings.gen_crash.reports_action.expl" />
 
                     <TextView
                         style="@style/SettingsTextViewLink"
                         android:textAlignment="viewStart"
                         android:visibility="gone"
-                        android:text="@string/learn_more" />
+                        android:text="@string/action_learn.more" />
                 </LinearLayout>
             </LinearLayout>
 

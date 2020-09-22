@@ -55,7 +55,7 @@ public class NewPatternActivity extends SetPatternActivity implements ICacheWord
 
     @Override
     protected void onConfirmed() {
-        dialog = DialogsUtil.showProgressDialog(context, getString(R.string.setting_data));
+        dialog = DialogsUtil.showProgressDialog(context, getString(R.string.lock_dialog_expl_save_pattern));
         new Thread(() -> {
             try {
                 mCacheWord.setPassphrase(mNewPassphrase.toCharArray());

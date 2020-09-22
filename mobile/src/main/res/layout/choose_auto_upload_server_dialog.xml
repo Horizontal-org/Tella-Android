@@ -15,7 +15,7 @@
         android:layout_weight="1"
         android:gravity="start"
         android:padding="16dp"
-        android:text="@string/pick_auto_upload_server"
+        android:text="@string/settings.docu_choose.auto.upload.server_dialog.expl"
         android:textColor="@color/wa_darker_gray"
         android:textSize="@dimen/intro_link_text_size"
         android:textStyle="bold" />

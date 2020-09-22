@@ -65,7 +65,7 @@ public class FormSubmitter implements IFormSubmitterContract.IFormSubmitter {
         // submitFormInstance(instance);
         submitFormInstanceGranular(instance);
     }
-
+/*
     @Override
     public void submitFormInstance(final CollectFormInstance instance) {
         final boolean offlineMode = Preferences.isOfflineMode();
@@ -93,9 +93,9 @@ public class FormSubmitter implements IFormSubmitterContract.IFormSubmitter {
                 .doFinally(() -> view.hideFormSubmitLoading())
                 .subscribe(openRosaResponse -> {
                     // start attachment upload process
-                    /* if (hasAttachments(instance)) {
-                        updateMediaFilesQueue(instance.getMediaFiles());
-                    } */
+                    // if (hasAttachments(instance)) {
+                     //   updateMediaFilesQueue(instance.getMediaFiles());
+                   // }
 
                     view.formSubmitSuccess(instance, openRosaResponse);
                 }, throwable -> {
@@ -110,7 +110,7 @@ public class FormSubmitter implements IFormSubmitterContract.IFormSubmitter {
                     }
                 })
         );
-    }
+    }*/
 
     @Override
     public void submitFormInstanceGranular(final CollectFormInstance instance) {

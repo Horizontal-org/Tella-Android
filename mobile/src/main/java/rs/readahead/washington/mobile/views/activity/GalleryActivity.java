@@ -149,8 +149,7 @@ public class GalleryActivity extends MetadataActivity implements
         disposables.wire(MediaFileDeletedEvent.class, new EventObserver<MediaFileDeletedEvent>() {
             @Override
             public void onNext(MediaFileDeletedEvent event) {
-                showToast(R.string.ra_single_media_deleted_msg);
-                presenter.getFiles(filter, sort);
+                onMediaFilesDeleted(1);
             }
         });
 
@@ -181,7 +180,7 @@ public class GalleryActivity extends MetadataActivity implements
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.ra_gallery);
+            actionBar.setTitle(R.string.gallery_app_bar);
             if (animated) {
                 actionBar.setHomeAsUpIndicator(R.drawable.ic_close_white);
             }
@@ -363,18 +362,18 @@ public class GalleryActivity extends MetadataActivity implements
 
     @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void showWriteExternalStorageRationale(final PermissionRequest request) {
-        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.ra_media_export_rationale));
+        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_device_storage));
     }
 
     @OnShowRationale({Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO})
     void showCameraAndAudioRationale(final PermissionRequest request) {
-        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.ra_camera_rationale));
+        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_camera_mic));
     }
 
     @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
     void showFineLocationRationale(final PermissionRequest request) {
         alertDialog = PermissionUtil.showRationale(
-                this, request, getString(R.string.ra_media_location_permissions));
+                this, request, getString(R.string.permission_dialog_expl_GPS));
     }
 
     @OnClick(R.id.fab_button)
@@ -475,13 +474,13 @@ public class GalleryActivity extends MetadataActivity implements
 
     @Override
     public void onImportError(Throwable error) {
-        showToast(R.string.ra_import_media_error);
+        showToast(R.string.gallery_toast_fail_importing_file);
         Timber.d(error, getClass().getName());
     }
 
     @Override
     public void onImportStarted() {
-        progressDialog = DialogsUtil.showProgressDialog(this, getString(R.string.ra_import_media_progress));
+        progressDialog = DialogsUtil.showProgressDialog(this, getString(R.string.gallery_dialog_expl_encrypting));
         fabButton.show();
     }
 
@@ -489,12 +488,12 @@ public class GalleryActivity extends MetadataActivity implements
     public void onImportEnded() {
         hideProgressDialog();
         fabButton.show();
-        showToast(R.string.ra_file_encrypted);
+        showToast(R.string.gallery_toast_file_encrypted);
     }
 
     @Override
     public void onMediaFilesAdded(MediaFile mediaFile) {
-        showToast(R.string.ra_media_added_to_gallery);
+        showToast(R.string.gallery_toast_file_imported_from_device);
         presenter.getFiles(filter, sort);
     }
 
@@ -505,36 +504,36 @@ public class GalleryActivity extends MetadataActivity implements
 
     @Override
     public void onMediaFilesDeleted(int num) {
-        showToast(String.format(getString(R.string.ra_media_deleted_msg), num));
+        showToast(getResources().getQuantityString(R.plurals.gallery_toast_files_deleted, num, num));
         presenter.getFiles(filter, sort);
     }
 
     @Override
     public void onMediaFilesDeletionError(Throwable throwable) {
-        showToast(R.string.ra_media_deleted_error);
+        showToast(R.string.gallery_toast_fail_deleting_files);
     }
 
     @Override
     public void onMediaExported(int num) {
-        showToast(String.format(getString(R.string.ra_media_export_msg), num));
+        showToast(getResources().getQuantityString((R.plurals.gallery_toast_files_exported), num, num));
     }
 
     @Override
-
     public void onExportError(Throwable error) {
-        showToast(R.string.ra_media_export_error);
+        showToast(R.string.gallery_toast_fail_exporting_to_device);
         Timber.d(error, getClass().getName());
     }
 
     @Override
     public void onExportStarted() {
-        progressDialog = DialogsUtil.showProgressDialog(this, getString(R.string.ra_export_media_progress));
+        progressDialog = DialogsUtil.showProgressDialog(this, getString(R.string.gallery_save_to_device_dialog_progress_expl));
         fabButton.hide();
     }
 
     @Override
     public void onExportEnded() {
-        onImportEnded();
+        hideProgressDialog();
+        fabButton.show();
     }
 
     @Override
@@ -596,7 +595,7 @@ public class GalleryActivity extends MetadataActivity implements
             if (selectedNum > 0) {
                 getSupportActionBar().setTitle(String.valueOf(selectedNum));
             } else {
-                getSupportActionBar().setTitle(R.string.ra_gallery);
+                getSupportActionBar().setTitle(R.string.gallery_app_bar);
             }
         }
 
@@ -624,10 +623,10 @@ public class GalleryActivity extends MetadataActivity implements
 
     private void showDeleteMediaDialog() {
         alertDialog = new AlertDialog.Builder(this)
-                .setTitle(R.string.ra_delete_media)
-                .setMessage(R.string.ra_media_will_be_deleted)
-                .setPositiveButton(R.string.delete, (dialog, which) -> removeMediaFiles())
-                .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                .setTitle(R.string.gallery_delete_files_dialog_title)
+                .setMessage(R.string.gallery_delete_files_dialog_expl)
+                .setPositiveButton(R.string.action_delete, (dialog, which) -> removeMediaFiles())
+                .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
                 })
                 .setCancelable(true)
                 .show();

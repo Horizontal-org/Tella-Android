@@ -28,7 +28,7 @@
                 android:layout_marginBottom="20dp"
                 android:contentDescription="@string/app_name"
                 android:src="@mipmap/ic_launcher"
-                android:text="@string/create_pass_info"
+                android:text="@string/lock_set.pattern_expl"
                 android:textSize="16sp" />
 
             <ImageView
@@ -37,16 +37,16 @@
                 android:layout_height="80dp"
                 android:layout_below="@+id/info_text"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="20dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
                 android:src="@drawable/ic_phonelink_lock_black_24dp"
                 tools:ignore="ContentDescription" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignParentBottom="true"
                 android:layout_below="@+id/phone"
+                android:layout_alignParentBottom="true"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -57,34 +57,34 @@
                     android:orientation="vertical">
 
                     <!--<com.google.android.material.textfield.TextInputLayout-->
-                        <!--android:id="@+id/new_passphrase_layout"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_margin="5dp">-->
+                    <!--android:id="@+id/new_passphrase_layout"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_margin="5dp">-->
 
-                        <!--<EditText-->
-                            <!--android:id="@+id/new_passphrase"-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:ems="10"-->
-                            <!--android:hint="@string/lock_screen_passphrase_not_set_enter"-->
-                            <!--android:imeOptions="actionNext"-->
-                            <!--android:inputType="textPassword" />-->
+                    <!--<EditText-->
+                    <!--android:id="@+id/new_passphrase"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:ems="10"-->
+                    <!--android:hint="@string/lock_screen_passphrase_not_set_enter"-->
+                    <!--android:imeOptions="actionNext"-->
+                    <!--android:inputType="textPassword" />-->
                     <!--</com.google.android.material.textfield.TextInputLayout>-->
 
                     <!--<com.google.android.material.textfield.TextInputLayout-->
-                        <!--android:id="@+id/confirm_passphrase_layout"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_margin="5dp">-->
+                    <!--android:id="@+id/confirm_passphrase_layout"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_margin="5dp">-->
 
-                        <!--<EditText-->
-                            <!--android:id="@+id/confirm_passphrase"-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:ems="10"-->
-                            <!--android:hint="@string/lock_screen_passphrase_not_set_confirm"-->
-                            <!--android:inputType="textPassword" />-->
+                    <!--<EditText-->
+                    <!--android:id="@+id/confirm_passphrase"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:ems="10"-->
+                    <!--android:hint="@string/lock_screen_passphrase_not_set_confirm"-->
+                    <!--android:inputType="textPassword" />-->
                     <!--</com.google.android.material.textfield.TextInputLayout>-->
 
                     <Button
@@ -94,7 +94,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="15dp"
                         android:background="@drawable/button_pressed"
-                        android:text="@string/lock_screen_create_pattern" />
+                        android:text="@string/onboarding_action_create.pattern" />
 
                 </LinearLayout>
 
@@ -103,28 +103,28 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:visibility="gone">
+                    <!--
+                                        <com.google.android.material.textfield.TextInputLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_margin="5dp">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp">
+                                            <EditText
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:ems="10"
+                                                android:hint="@string/lock_screen_passphrase_hint"
+                                                android:imeOptions="actionGo"
+                                                android:inputType="textPassword" />
+                                        </com.google.android.material.textfield.TextInputLayout>
 
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:hint="@string/lock_screen_passphrase_hint"
-                            android:imeOptions="actionGo"
-                            android:inputType="textPassword" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <Button
-                        style="@style/ButtonTextSmall"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="15dp"
-                        android:background="@drawable/button_pressed"
-                        android:text="@string/lock_screen_open" />
+                                        <Button
+                                            style="@style/ButtonTextSmall"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_margin="15dp"
+                                            android:background="@drawable/button_pressed"
+                                            android:text="@string/lock_screen_open" /> -->
 
                 </LinearLayout>
             </LinearLayout>

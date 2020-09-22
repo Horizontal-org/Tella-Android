@@ -28,7 +28,7 @@
             <TextView
                 style="@style/NavigationTabText"
                 android:layout_below="@+id/collect_image"
-                android:text="@string/ra_collect" />
+                android:text="@string/home_collect.button" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -45,7 +45,7 @@
             <TextView
                 style="@style/NavigationTabText"
                 android:layout_below="@+id/gallery_image"
-                android:text="@string/ra_gallery" />
+                android:text="@string/home_gallery.button" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -68,7 +68,7 @@
             <TextView
                 style="@style/NavigationTabText"
                 android:layout_below="@+id/microphone"
-                android:text="@string/ra_record" />
+                android:text="@string/action_record" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -85,7 +85,7 @@
             <TextView
                 style="@style/NavigationTabText"
                 android:layout_below="@+id/uploads"
-                android:text="@string/uploads" />
+                android:text="@string/home_upload.button" />
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

@@ -6,6 +6,6 @@
         android:id="@+id/help_item"
         android:icon="@drawable/ic_help_white_24px"
         android:orderInCategory="100"
-        android:title="@string/metadata_help"
+        android:title="@string/gallery_action.desc_metadata.help"
         app:showAsAction="always" />
 </menu>

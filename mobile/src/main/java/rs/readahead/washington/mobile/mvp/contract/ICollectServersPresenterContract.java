@@ -15,7 +15,7 @@ public class ICollectServersPresenterContract {
         void onServersLoaded(List<CollectServer> servers);
         void onLoadServersError(Throwable throwable);
         void onCreatedServer(CollectServer server);
-        void onCreateServerError(Throwable throwable);
+        void onCreateCollectServerError(Throwable throwable);
         void onRemovedServer(CollectServer server);
         void onRemoveServerError(Throwable throwable);
         void onUpdatedServer(CollectServer server);

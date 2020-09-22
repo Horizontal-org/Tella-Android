@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/light_yellow"
-            android:text="@string/blank_forms_list_banner"
+            android:text="@string/collect.blank_banner_forms.updated"
             android:padding="16dp"
             android:textAlignment="center"
             android:textColor="@color/wa_gray"
@@ -48,7 +48,7 @@
                     android:layout_height="50dp"
                     android:layout_alignParentTop="true"
                     android:gravity="center_vertical"
-                    android:text="@string/downloaded_forms"
+                    android:text="@string/collect.blank_subheading_downloaded.forms"
                     android:textAlignment="center"
                     android:textColor="@color/wa_gray"
                     android:textSize="16sp"
@@ -73,7 +73,7 @@
                     android:layout_height="50dp"
                     android:layout_below="@id/downloadedForms"
                     android:gravity="center_vertical"
-                    android:text="@string/available_forms"
+                    android:text="@string/collect.blank_subheading_forms.on.servers"
                     android:textAlignment="center"
                     android:textColor="@color/wa_gray"
                     android:textSize="16sp"
@@ -102,7 +102,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:text="@string/collect_explanatory_text"
+        android:text="@string/collect.blank_expl_no.forms"
         android:visibility="gone" />
 
 </FrameLayout>

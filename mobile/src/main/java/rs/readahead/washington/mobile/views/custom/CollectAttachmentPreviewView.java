@@ -148,7 +148,7 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
     public void onGetMediaFileError(Throwable error) {
         thumbGradient.setVisibility(VISIBLE);
         thumbView.setImageResource(R.drawable.ic_error);
-        Toast.makeText(getContext(), getResources().getText(R.string.collect_attachment_load_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), getResources().getText(R.string.collect_form_toast_fail_load_attachment), Toast.LENGTH_LONG).show();
         audioInfo.setVisibility(GONE);
         videoInfo.setVisibility(GONE);
     }
@@ -161,8 +161,8 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
     }
 
     private void showMediaFileInfo() {
-        fileName.setText(String.format(getResources().getString(R.string.file_name), mediaFile.getFileName()));
-        fileSize.setText(String.format(getResources().getString(R.string.file_size), FileUtil.getFileSizeString(mediaFile.getSize())));
+        fileName.setText(String.format(getResources().getString(R.string.collect_form_attachment_meta_file_name), mediaFile.getFileName()));
+        fileSize.setText(String.format(getResources().getString(R.string.collect_form_meta_file_size), FileUtil.getFileSizeString(mediaFile.getSize())));
     }
 
     private void showVideoViewerActivity() {

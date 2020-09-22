@@ -78,7 +78,7 @@
             android:name=".views.activity.AliasEasyCam"
             android:enabled="false"
             android:icon="@mipmap/easy_cam_round"
-            android:label="@string/easy_cam"
+            android:label="@string/settings.camo_camera1"
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -89,7 +89,7 @@
             android:name=".views.activity.AliasSuperCam"
             android:enabled="false"
             android:icon="@mipmap/super_camera_round"
-            android:label="@string/super_cam"
+            android:label="@string/settings.camo_camera2"
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -100,7 +100,7 @@
             android:name=".views.activity.AliasCameraPro"
             android:enabled="false"
             android:icon="@mipmap/camera_pro_round"
-            android:label="@string/camera_pro"
+            android:label="@string/settings.camo_camera3"
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -111,7 +111,7 @@
             android:name=".views.activity.AliasCamera"
             android:enabled="false"
             android:icon="@mipmap/camera_round"
-            android:label="@string/camera"
+            android:label="@string/settings.camo_camera4"
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -122,7 +122,7 @@
             android:name=".views.activity.AliasWeather"
             android:enabled="false"
             android:icon="@mipmap/weather_round"
-            android:label="@string/weather"
+            android:label="@string/settings.camo_weather1"
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -133,7 +133,7 @@
             android:name=".views.activity.AliasWeatherNow"
             android:enabled="false"
             android:icon="@mipmap/weather_now_round"
-            android:label="@string/weather_now"
+            android:label="@string/settings.camo_weather3"
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -144,7 +144,7 @@
             android:name=".views.activity.AliasLocalWeather"
             android:enabled="false"
             android:icon="@mipmap/local_weather_round"
-            android:label="@string/local_weather"
+            android:label="@string/settings.camo_weather2"
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -155,7 +155,7 @@
             android:name=".views.activity.AliasCalculator"
             android:enabled="false"
             android:icon="@mipmap/calculator_round"
-            android:label="@string/calculator"
+            android:label="@string/settings.camo_calculator2"
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -166,7 +166,7 @@
             android:name=".views.activity.AliasEasyMath"
             android:enabled="false"
             android:icon="@mipmap/easy_math_round"
-            android:label="@string/easy_math"
+            android:label="@string/settings.camo_calculator1"
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -182,7 +182,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.SettingsActivity"
-            android:label="@string/settings"
+            android:label="@string/settings_app.bar"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -197,7 +197,7 @@
         </activity>
         <activity
             android:name=".views.activity.CamouflageAliasActivity"
-            android:label="@string/change_appearance"
+            android:label="@string/settings.camo_app.bar"
             android:parentActivityName=".views.activity.ProtectionSettingsActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar">
@@ -212,12 +212,12 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.AudioRecordActivity2"
-            android:label="@string/title_activity_audio_record"
+            android:label="@string/recorder_app.bar"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.ProtectionSettingsActivity"
-            android:label="@string/protection"
+            android:label="@string/settings.prot_app.bar"
             android:parentActivityName=".views.activity.SettingsActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar">
@@ -237,12 +237,12 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.AboutHelpActivity"
-            android:label="@string/about_n_help"
+            android:label="@string/settings.about_app.bar"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.CollectMainActivity"
-            android:label="@string/title_activity_collect_main"
+            android:label="@string/collect_app.bar"
             android:parentActivityName=".views.activity.MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar">
@@ -252,7 +252,7 @@
         </activity>
         <activity
             android:name=".views.activity.CollectHelpActivity"
-            android:label="@string/collect_help"
+            android:label="@string/collect.help_app.bar"
             android:parentActivityName=".views.activity.DocumentationSettingsActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar">
@@ -273,7 +273,7 @@
         </activity>
         <activity
             android:name=".views.activity.DocumentationSettingsActivity"
-            android:label="@string/documentation"
+            android:label="@string/settings.docu_app.bar"
             android:parentActivityName=".views.activity.SettingsActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar">
@@ -298,17 +298,17 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".views.activity.QuestionAttachmentActivity"
-            android:label="@string/ra_question_attachment_activity_title"
+            android:label="@string/collect.form_select.attachment_app.bar"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.GalleryActivity"
-            android:label="@string/ra_gallery"
+            android:label="@string/gallery_app.bar"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.MetadataViewerActivity"
-            android:label="@string/metadata"
+            android:label="@string/verification.info_app.bar"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -333,7 +333,7 @@
         </activity>
         <activity
             android:name=".views.activity.MetadataHelpActivity"
-            android:label="@string/metadata_help"
+            android:label="@string/verification.help.info_app.bar"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -342,17 +342,17 @@
             android:theme="@style/PhotoViewerTheme.NoActionBar" />
         <activity
             android:name=".views.activity.AudioPlayActivity"
-            android:label="@string/ra_title_activity_audio_play"
+            android:label="@string/play.audio_app.bar"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.LanguageSettingsActivity"
-            android:label="@string/title_activity_language_settings"
+            android:label="@string/settings.lang_app.bar"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.GeneralSettingsActivity"
-            android:label="@string/ra_general"
+            android:label="@string/settings_select_general"
             android:parentActivityName=".views.activity.SettingsActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar">

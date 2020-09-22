@@ -35,10 +35,10 @@ public class AboutHelpActivity extends CacheWordSubscriberBaseActivity {
 
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.about_n_help);
+            actionBar.setTitle(R.string.settings_about_app_bar);
         }
 
-        version.setText(String.format("%s %s", getString(R.string.version), BuildConfig.VERSION_NAME));
+        version.setText(String.format("%s %s", getString(R.string.settings_about_app_version), BuildConfig.VERSION_NAME));
     }
 
     @Override

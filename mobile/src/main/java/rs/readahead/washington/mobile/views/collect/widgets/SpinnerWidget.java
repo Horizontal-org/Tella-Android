@@ -63,7 +63,7 @@ public class SpinnerWidget extends QuestionWidget {
         spinner = view.findViewById(R.id.spinner);
 
         choices = new String[items.size()];
-        choices[0] = context.getString(R.string.ra_select_one_answer);
+        choices[0] = context.getString(R.string.collect_form_ranking_action_select_answer);
         for (int i = 1; i < items.size(); i++) {
             choices[i] = prompt.getSelectChoiceText(items.get(i));
         }
@@ -152,7 +152,7 @@ public class SpinnerWidget extends QuestionWidget {
             TextView tv = convertView.findViewById(android.R.id.text1);
             tv.setPadding(7, 5, 7, 5);
 
-            tv.setText(position == 0 ? context.getString(R.string.ra_clear_selection) : items[position]);
+            tv.setText(position == 0 ? context.getString(R.string.collect_form_ranking_action_clear_selection) : items[position]);
 
             if (spinner.getSelectedItemPosition() == position && position > 0) {
                 tv.setTypeface(null, Typeface.BOLD);

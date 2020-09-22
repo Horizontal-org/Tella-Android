@@ -42,7 +42,7 @@ public class SecurityActivity extends ConfirmPatternActivity implements ICacheWo
 
     @Override
     protected boolean isPatternCorrect(List<PatternView.Cell> pattern) {
-        dialog = DialogsUtil.showProgressDialog(this, getString(R.string.setting_data));
+        dialog = DialogsUtil.showProgressDialog(this, getString(R.string.lock_dialog_expl_unlock_app));
 
         try {
             mCacheWord.setPassphrase(PatternUtils.patternToSha1String(pattern).toCharArray());
