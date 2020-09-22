@@ -378,6 +378,7 @@ public class DialogsUtil {
                 int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
                 if (checkedRadioButtonId > 0) {
                     AppCompatRadioButton radioButton = radioGroup.findViewById(checkedRadioButtonId);
+
                     TellaUploadServer tellaUploadServer = tellaUploadServers.get((int) radioButton.getTag());
                     consumer.accept(tellaUploadServer);
                 } else {

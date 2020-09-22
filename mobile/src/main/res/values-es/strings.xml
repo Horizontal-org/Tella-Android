@@ -394,7 +394,7 @@
     <string name="upload.info_meta_number.of.files">Number of files</string>
     <string name="upload_meta_date.started">Date started</string>
     <string name="clear_upload_history_dialog">Are you sure you want to clear the upload history?</string>
-/* new */
+
     <string name="upload_info_heading_number.of.files">Number of files</string>
     <string name="upload_info_heading_date.started">Date started</string>
     <string name="upload_main_dialog_action_clear">Clear</string>

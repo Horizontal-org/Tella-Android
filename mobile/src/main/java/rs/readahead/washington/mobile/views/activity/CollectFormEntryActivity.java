@@ -653,16 +653,6 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         finish();
     }
 
-    /*@Override
-    public void formSubmitSuccess(CollectFormInstance instance, OpenRosaResponse response) {
-        String successMessage = FormUtils.getFormSubmitSuccessMessage(this, response);
-
-        Toast.makeText(getApplicationContext(), successMessage, Toast.LENGTH_LONG).show();
-
-        MyApplication.bus().post(new CollectFormSubmittedEvent());
-        finish();
-    }*/
-
     @Override
     public void formPartSubmitStart(CollectFormInstance instance, String partName) {
         endView.showUploadProgress(partName);
