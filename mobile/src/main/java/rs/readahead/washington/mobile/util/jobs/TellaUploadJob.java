@@ -12,6 +12,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import io.reactivex.Flowable;
 import rs.readahead.washington.mobile.MyApplication;
+import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.data.upload.TUSClient;
@@ -21,6 +22,7 @@ import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.domain.exception.NoConnectivityException;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
+import rs.readahead.washington.mobile.util.ThreadUtil;
 import timber.log.Timber;
 
 import static rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository.UploadStatus;
@@ -35,7 +37,7 @@ public class TellaUploadJob extends Job {
     @NonNull
     @Override
     protected Job.Result onRunJob(@NotNull Job.Params params) {
-        if (!enter()) {
+        if (!enter() || Preferences.isAutoUploadPaused()) {
             return Job.Result.SUCCESS;
         }
 
@@ -136,9 +138,10 @@ public class TellaUploadJob extends Job {
                 break;
 
             default:
-                dataSource.setUploadStatus(progressInfo.fileId, UploadStatus.ERROR, progressInfo.current, true).blockingAwait();
+                dataSource.setUploadStatus(progressInfo.fileId, UploadStatus.UNKNOWN, progressInfo.current, true).blockingAwait();
                 break;
         }
+        postProgressEvent(progressInfo);
     }
 
     private void deleteMediaFile(long id) {
@@ -146,5 +149,9 @@ public class TellaUploadJob extends Job {
                 MediaFileHandler.deleteMediaFile(getContext(), m)).blockingGet();
 
         Timber.d("Deleted file %s", deleted.getFileName());
+    }
+
+    private void postProgressEvent(UploadProgressInfo progress) {
+        ThreadUtil.runOnMain(() -> MyApplication.bus().post(new FileUploadProgressEvent(progress)));
     }
 }

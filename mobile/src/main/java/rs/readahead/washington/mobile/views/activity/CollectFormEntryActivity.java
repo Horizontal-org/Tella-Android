@@ -653,16 +653,6 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         finish();
     }
 
-    /*@Override
-    public void formSubmitSuccess(CollectFormInstance instance, OpenRosaResponse response) {
-        String successMessage = FormUtils.getFormSubmitSuccessMessage(this, response);
-
-        Toast.makeText(getApplicationContext(), successMessage, Toast.LENGTH_LONG).show();
-
-        MyApplication.bus().post(new CollectFormSubmittedEvent());
-        finish();
-    }*/
-
     @Override
     public void formPartSubmitStart(CollectFormInstance instance, String partName) {
         endView.showUploadProgress(partName);
@@ -822,7 +812,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
             alertDialog.setTitle(getString(R.string.collect_form_dialog_title_add_additional_group, groupText));
             alertDialog.setMessage(getString(R.string.collect_form_dialog_expl_add_additional_group, groupText));
         } else {
-            alertDialog.setTitle(getString(R.string.collect_form_dialog_title_add_first_group));
+            alertDialog.setTitle(getString(R.string.collect_form_dialog_action_add_first_group, groupText));
             alertDialog.setMessage(getString(R.string.collect_form_dialog_expl_add_first_group, groupText));
         }
 

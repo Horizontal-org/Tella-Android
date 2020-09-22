@@ -55,10 +55,10 @@ import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.MediaFileUrlLoader;
 import rs.readahead.washington.mobile.mvp.contract.ICameraPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
-import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadPresenterContract;
+import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CameraPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.MetadataAttacher;
-import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadPresenter;
+import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulePresenter;
 import rs.readahead.washington.mobile.presentation.entity.MediaFileLoaderModel;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.DialogsUtil;
@@ -73,7 +73,7 @@ import rs.readahead.washington.mobile.views.custom.CameraSwitchButton;
 
 public class CameraActivity extends MetadataActivity implements
         ICameraPresenterContract.IView,
-        ITellaFileUploadPresenterContract.IView,
+        ITellaFileUploadSchedulePresenterContract.IView,
         IMetadataAttachPresenterContract.IView {
     public static String CAMERA_MODE = "cm";
     public static String INTENT_MODE = "im";
@@ -107,7 +107,7 @@ public class CameraActivity extends MetadataActivity implements
     CameraResolutionButton resolutionButton;
 
     private CameraPresenter presenter;
-    private TellaFileUploadPresenter uploadPresenter;
+    private TellaFileUploadSchedulePresenter uploadPresenter;
     private MetadataAttacher metadataAttacher;
     private CameraMode mode;
     private boolean modeLocked;
@@ -146,7 +146,7 @@ public class CameraActivity extends MetadataActivity implements
         ButterKnife.bind(this);
 
         presenter = new CameraPresenter(this);
-        uploadPresenter = new TellaFileUploadPresenter(this);
+        uploadPresenter = new TellaFileUploadSchedulePresenter(this);
         metadataAttacher = new MetadataAttacher(this);
 
         mode = CameraMode.PHOTO;

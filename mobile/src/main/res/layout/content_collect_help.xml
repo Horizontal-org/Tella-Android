@@ -87,6 +87,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/collect.help_expl_no.internet" />
             </LinearLayout>
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </FrameLayout>

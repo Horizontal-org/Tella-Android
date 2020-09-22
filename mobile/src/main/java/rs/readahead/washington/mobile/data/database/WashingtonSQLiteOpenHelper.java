@@ -164,6 +164,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_MEDIA_FILE_ID, D.INTEGER, false) + " UNIQUE, " +
                 cddl(D.C_UPDATED, D.INTEGER, true) + " , " +
+                cddl(D.C_CREATED, D.INTEGER, true) + " , " +
                 cddl(D.C_STATUS, D.INTEGER, true) + " , " +
                 cddl(D.C_SIZE, D.INTEGER) + " , " +
                 cddl(D.C_UPLOADED, D.INTEGER) + " DEFAULT 0, " +

@@ -196,8 +196,16 @@ public class Preferences {
         return getBoolean(SharedPrefs.AUTO_UPLOAD, false);
     }
 
+    public static boolean isAutoUploadPaused() {
+        return getBoolean(SharedPrefs.AUTO_UPLOAD_PAUSED, false);
+    }
+
     public static void setAutoUpload(boolean value) {
         setBoolean(SharedPrefs.AUTO_UPLOAD, value);
+    }
+
+    public static void setAutoUploadPased(boolean value) {
+        setBoolean(SharedPrefs.AUTO_UPLOAD_PAUSED, value);
     }
 
     public static boolean isAutoDeleteEnabled() {

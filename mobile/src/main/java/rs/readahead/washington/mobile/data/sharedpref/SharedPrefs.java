@@ -46,6 +46,7 @@ public class SharedPrefs {
     static final String AUTO_UPLOAD_SERVER = "auto_upload_server";
     static final String AUTO_UPLOAD = "auto_upload";
     static final String AUTO_DELETE = "auto_delete";
+    static final String AUTO_UPLOAD_PAUSED = "auto_upload_paused";
 
     private static SharedPrefs instance;
     private SharedPreferences pref;

@@ -15,6 +15,8 @@ public class IFileUploadingPresenterContract {
         void onMediaFilesUploadEnded();
         void onGetMediaFilesSuccess(List<RawFile> mediaFiles);
         void onGetMediaFilesError(Throwable error);
+        void onLogUploadedFileSuccess();
+        void onLogUploadedFileError(Throwable error);
         Context getContext();
     }
 
@@ -22,5 +24,6 @@ public class IFileUploadingPresenterContract {
         void getMediaFiles(final long[] ids, boolean metadata);
         void uploadMediaFiles(TellaUploadServer server, List<RawFile> mediaFiles, boolean metadata);
         void stopUploading();
+        void logUploadedFile(RawFile rawFile);
     }
 }

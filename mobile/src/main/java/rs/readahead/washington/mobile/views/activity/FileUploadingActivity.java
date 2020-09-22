@@ -186,6 +186,16 @@ public class FileUploadingActivity extends CacheWordSubscriberBaseActivity imple
     }
 
     @Override
+    public void onLogUploadedFileSuccess() {
+
+    }
+
+    @Override
+    public void onLogUploadedFileError(Throwable error) {
+
+    }
+
+    @Override
     public void onMediaFilesUploadStarted() {
         statusText.setText(R.string.gallery_upload_sending_heading);
         sendButton.setVisibility(View.GONE);
@@ -216,6 +226,7 @@ public class FileUploadingActivity extends CacheWordSubscriberBaseActivity imple
 
             case FINISHED:
                 setFileUploaded(layout);
+                presenter.logUploadedFile(this.mediaFiles.get(progressInfo.name));
                 this.mediaFiles.remove(progressInfo.name);
                 break;
 
