@@ -43,14 +43,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorPrimary"
-                    android:text="@string/upload.main_meta_status.upload" />
+                    android:text="@string/upload.main_meta_status.attempting" />
 
                 <TextView
                     android:id="@+id/status_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:text="@string/upload_main_heading.connecting"
+                    android:text=""
                     android:textColor="@color/wa_gray" />
             </LinearLayout>
 
@@ -94,5 +94,5 @@
         android:layout_height="match_parent"
         android:textAlignment="center"
         android:textColor="@color/primaryTextColor"
-        android:text="@string/upload_main_empty_info" />
+        android:text="@string/upload.main_nothing.to.show" />
 </RelativeLayout>

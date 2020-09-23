@@ -73,6 +73,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
     private long lastUploadedSize = 0;
     private static final int spacing = 50; // 50px
     private boolean uploadFinished;
+    private int numOfUploadingInstances;
 
     //
     private List<FileUploadInstance> uploadnigList;
@@ -121,7 +122,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
         uploadsRecyclerView.setAdapter(sectionedAdapter);
         uploadsRecyclerView.addItemDecoration(new SectionItemOffset(spacing));
 
-        setupStopResumeButton();
+
     }
 
     private void setupToolbar() {
@@ -196,6 +197,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
     @Override
     public void onGetFileUploadInstancesSuccess(List<FileUploadInstance> instances) {
         sectionedAdapter.removeAllSections();
+        numOfUploadingInstances = instances.size();
         headerStatus.setVisibility(View.GONE);
         List<FileUploadInstance> setInstances = new ArrayList<>();
         boolean uploaded = true;
@@ -225,6 +227,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
         }
         insertSection(setInstances, uploaded, set);
         invalidateOptionsMenu();
+        setupStopResumeButton();
     }
 
     @Override
@@ -308,14 +311,16 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
 
     private void pauseUpload() {
         Preferences.setAutoUploadPased(true);
-        statusText.setText(getContext().getResources().getString(R.string.upload_main_heading_stopped));
+        headerText.setText(getContext().getResources().getString(R.string.upload_main_meta_status_stopped));
+        statusText.setText(String.format("%s",
+                getContext().getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, numOfUploadingInstances, numOfUploadingInstances)));
         stopOutlined.setStopped();
         stopOutlined.button.setOnClickListener(v -> onStopClicked());
     }
 
     private void resumeUpload() {
         Preferences.setAutoUploadPased(false);
-        statusText.setText(getContext().getResources().getString(R.string.upload_main_heading_connecting));
+        headerText.setText(getContext().getResources().getString(R.string.upload_main_meta_status_attempting));
         setProgress();
         stopOutlined.donutProgress.setOnClickListener(v -> onStopClicked());
         TellaUploadJob.scheduleJob();
@@ -325,7 +330,9 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
         if (Preferences.isAutoUploadPaused()) {
             stopOutlined.setStopped();
             stopOutlined.button.setOnClickListener(v -> onStopClicked());
-            statusText.setText(getContext().getResources().getString(R.string.upload_main_heading_stopped));
+            headerText.setText(getContext().getResources().getString(R.string.upload_main_meta_status_stopped));
+            statusText.setText(String.format("%s",
+                    getContext().getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, numOfUploadingInstances, numOfUploadingInstances)));
         } else {
             setProgress();
             stopOutlined.donutProgress.setOnClickListener(v -> onStopClicked());
@@ -386,11 +393,11 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
         }
         startedText.setText(String.format("%s: %s", getContext().getResources().getString(R.string.upload_meta_date_started), Util.getDateTimeString(started, "dd/MM/yyyy h:mm a")));
         if (Preferences.isAutoUploadPaused()) {
-            statusText.setText(String.format("%s, %s",
-                    getContext().getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instances.size(), instances.size()), getContext().getResources().getString(R.string.upload_main_heading_stopped)));
+            statusText.setText(String.format("%s %s",
+                    getContext().getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instances.size(), instances.size()), getContext().getResources().getString(R.string.upload_main_meta_status_stopped)));
         } else {
-            statusText.setText(String.format("%s, %s",
-                    getContext().getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instances.size(), instances.size()), getContext().getResources().getString(R.string.upload_main_heading_connecting)));
+            statusText.setText(String.format("%s %s",
+                    getContext().getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instances.size(), instances.size()), ""));
         }
     }
 
@@ -441,13 +448,14 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
             long projectedRemaininigTime = 0;
 
             if (progressDifference > 0) {
+                headerText.setText(R.string.upload_main_meta_status_uploading);
                 projectedRemaininigTime = (remainingUpload * timeDifference) / progressDifference;
             }
 
             if (projectedRemaininigTime > 3600000) {
                 statusText.setText(String.format("%s, %s",
                         getContext().getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, uploadnigList.size(), uploadnigList.size()),
-                        getContext().getResources().getString(R.string.upload_main_heading_hour_left)));
+                        getContext().getResources().getString(R.string.upload_main_meta_more_hour_left)));
             } else if (projectedRemaininigTime > 60000) {
                 int minutes = (int) projectedRemaininigTime / 60000;
                 statusText.setText(String.format("%s, %s",
@@ -456,7 +464,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
             } else if (projectedRemaininigTime > 0) {
                 statusText.setText(String.format("%s, %s",
                         getContext().getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, uploadnigList.size(), uploadnigList.size()),
-                        getContext().getResources().getString(R.string.upload_info_heading_minute_left)));
+                        getContext().getResources().getString(R.string.upload_main_meta_less_minute_left)));
             }
         }
         lastUploadedSize = uploaded;

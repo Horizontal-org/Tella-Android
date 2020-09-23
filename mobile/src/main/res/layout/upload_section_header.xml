@@ -17,7 +17,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true"
         android:textColor="@color/colorPrimary"
-        tools:text="@string/uploading" />
+        tools:text="@string/upload.main_meta_status.attempting" />
 
     <TextView
         android:id="@+id/started_text"

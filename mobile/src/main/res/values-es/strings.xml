@@ -9,7 +9,6 @@
     <string name="action_cancel">Cancelar</string>
     <string name="lock_set.pattern_expl">Para garantizar la máxima seguridad, por favor cree su patrón de bloqueo de la aplicación. Este patrón se utilizará para desbloquear la aplicación Tella en cada ejecución, de tal manera que nadie excepto usted puede acceder a sus datos. El patrón debe contener al menos 6 puntos.</string>
     <string name="settings_menu.item_contact">Contáctenos</string>
-    <string name="settings_text_copyright">Copyright © 2019 Horizontal</string>
     <string name="home_collect.button">Recopilar</string>
     <string name="onboard_collect_heading">Recopilar</string>
     <string name="collect_dialog.text_download.progress">Descarga en curso…</string>
@@ -196,7 +195,7 @@
     <string name="settings.gen_crash.reports_action.expl">Los informes de fallos nos ayudan a mejorar Tella. Se envían automáticamente e incluyen datos como el modelo del dispositivo y la versión de Android.</string>
     <string name="collect.form_dialog.action_add.group">Añadir grupo</string>
     <string name="collect.form_dialog.title_add.additional.group">Add another \"%s\"?</string>
-    <string name="collect.form_dialog.title_add.first.group">Add \"%s\"?</string>
+    <string name="collect.form_dialog.action_add.first.group">Add \"%s\"?</string>
     <string name="collect.form_dialog.expl_add.additional.group">Añadir otro grupo \"%s\"?</string>
     <string name="collect.form_dialog.expl_add.first.group">Añadir un nuevo grupo \"%s\"?</string>
     <string name="collect.form_dialog.action_dont.add.group">No añadir</string>
@@ -373,7 +372,7 @@
     <string name="settings.docu_choose.auto.upload.server_dialog.expl">Pick the server to auto-upload your files</string>
     <string name="settings.docu_delete.upload.server_dialog.expl">If you delete this server, you will no longer be able to upload files</string>
     <string name="home_upload.button">Uploads</string>
-    <string name="upload.main_meta_status.upload">Uploading…</string>
+    <string name="upload.main_meta_status.uploading">Uploading…</string>
     <string name="upload.main_action_more.details">More details</string>
     <plurals name="upload.main_meta_number.of.files">
         <item quantity="one">%d file</item>
@@ -393,18 +392,15 @@
     <string name="upload.info_app.bar">Upload information</string>
     <string name="upload.info_meta_number.of.files">Number of files</string>
     <string name="upload_meta_date.started">Date started</string>
-    <string name="clear_upload_history_dialog">Are you sure you want to clear the upload history?</string>
 
-    <string name="upload_info_heading_number.of.files">Number of files</string>
-    <string name="upload_info_heading_date.started">Date started</string>
-    <string name="upload_main_dialog_action_clear">Clear</string>
-    <string name="upload_main_empty_info">There is no information to show here.</string>
-    <string name="upload_info_heading_num.of.files.completed">Completed</string>
-    <string name="upload_info_file.type">File type</string>
-    <string name="upload_main_heading.connecting">connecting…</string>
-    <string name="upload_info_heading.minute.left">less than a minute left</string>
-    <string name="upload_info_dialog.expl_clear.upload">Are you sure you want to delete the upload information?</string>
-    <string name="upload_main_heading.stopped">Stopped</string>
-    <string name="upload_main_heading.hour.left">more than an hour left</string>
+    <string name="upload.main_dialog.action_clear">Clear</string>
+    <string name="upload.main_nothing.to.show">There is no information to show here.</string>
+    <string name="upload.info_meta_date.completed">Completed</string>
+    <string name="upload.main_meta_status.attempting">Attempting to connect</string>
+    <string name="upload.info_meta_file.type">File type</string>
+    <string name="upload.main_meta_less.minute.left">less than a minute left</string>
+    <string name="upload.info_dialog.expl_delete.upload">Are you sure you want to delete the upload information?</string>
+    <string name="upload.main_meta_status.stopped">Stopped</string>
+    <string name="upload.main_meta_more.hour.left">more than an hour left</string>
     <string name="settings.docu_error_must.select.auto.upload.server">You must select a server</string>
 </resources>

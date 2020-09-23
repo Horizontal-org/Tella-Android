@@ -45,7 +45,7 @@
             android:layout_gravity="start"
             android:textAlignment="textStart"
             android:textColor="@color/colorPrimary"
-            tools:text="@string/started"/>
+            tools:text="@string/upload_meta_date.started"/>
 
         <TextView
             android:id="@+id/completed_text"
@@ -61,7 +61,7 @@
             android:textAlignment="textStart"
             android:visibility="gone"
             android:textColor="@color/colorPrimary"
-            tools:text="@string/started"/>
+            tools:text="@string/upload_meta_date.started"/>
 
         <View
             android:layout_marginTop="12dp"
