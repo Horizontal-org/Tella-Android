@@ -170,7 +170,7 @@ public class UploadInformationActivity extends CacheWordSubscriberBaseActivity i
 
     private void showClearHistoryDialog() {
         alertDialog = new androidx.appcompat.app.AlertDialog.Builder(this)
-                .setMessage(R.string.upload_info_dialog_expl_clear_upload)
+                .setMessage(R.string.upload_info_dialog_expl_delete_upload)
                 .setPositiveButton(R.string.action_delete, (dialog, which) -> clearUploadInformation())
                 .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
                 })
@@ -287,7 +287,7 @@ public class UploadInformationActivity extends CacheWordSubscriberBaseActivity i
         }
         numberOfFilesText.setText(String.format("%s: %d", getContext().getResources().getString(R.string.upload_info_meta_number_of_files), instances.size()));
         startedText.setText(String.format("%s: %s", getContext().getResources().getString(R.string.upload_meta_date_started), Util.getDateTimeString(timeStarted, "dd/MM/yyyy h:mm a")));
-        completedText.setText(String.format("%s: %s", getContext().getResources().getString(R.string.upload_info_heading_num_of_files_completed), Util.getDateTimeString(timeCompleted, "dd/MM/yyyy h:mm a")));
+        completedText.setText(String.format("%s: %s", getContext().getResources().getString(R.string.upload_info_meta_date_completed), Util.getDateTimeString(timeCompleted, "dd/MM/yyyy h:mm a")));
         completedText.setVisibility(completed ? View.VISIBLE : View.GONE);
     }
 }

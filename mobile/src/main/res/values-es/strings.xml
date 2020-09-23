@@ -372,7 +372,7 @@
     <string name="settings.docu_choose.auto.upload.server_dialog.expl">Pick the server to auto-upload your files</string>
     <string name="settings.docu_delete.upload.server_dialog.expl">If you delete this server, you will no longer be able to upload files</string>
     <string name="home_upload.button">Uploads</string>
-    <string name="upload.main_meta_status.upload">Uploading…</string>
+    <string name="upload.main_meta_status.uploading">Uploading…</string>
     <string name="upload.main_action_more.details">More details</string>
     <plurals name="upload.main_meta_number.of.files">
         <item quantity="one">%d file</item>
@@ -393,13 +393,14 @@
     <string name="upload.info_meta_number.of.files">Number of files</string>
     <string name="upload_meta_date.started">Date started</string>
 
-    <string name="upload_main_dialog_action_clear">Clear</string>
-    <string name="upload_main_empty_info">There is no information to show here.</string>
-    <string name="upload_info_heading_num.of.files.completed">Completed</string>
-    <string name="upload_info_file.type">File type</string>
-    <string name="upload_info_heading.minute.left">less than a minute left</string>
-    <string name="upload_info_dialog.expl_clear.upload">Are you sure you want to delete the upload information?</string>
-    <string name="upload_main_heading.stopped">Stopped</string>
-    <string name="upload_main_heading.hour.left">more than an hour left</string>
+    <string name="upload.main_dialog.action_clear">Clear</string>
+    <string name="upload.main_nothing.to.show">There is no information to show here.</string>
+    <string name="upload.info_meta_date.completed">Completed</string>
+    <string name="upload.main_meta_status.attempting">Attempting to connect</string>
+    <string name="upload.info_meta_file.type">File type</string>
+    <string name="upload.main_meta_less.minute.left">less than a minute left</string>
+    <string name="upload.info_dialog.expl_delete.upload">Are you sure you want to delete the upload information?</string>
+    <string name="upload.main_meta_status.stopped">Stopped</string>
+    <string name="upload.main_meta_more.hour.left">more than an hour left</string>
     <string name="settings.docu_error_must.select.auto.upload.server">You must select a server</string>
 </resources>

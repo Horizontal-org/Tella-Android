@@ -308,14 +308,14 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
 
     private void pauseUpload() {
         Preferences.setAutoUploadPased(true);
-        statusText.setText(getContext().getResources().getString(R.string.upload_main_heading_stopped));
+        statusText.setText(getContext().getResources().getString(R.string.upload_main_meta_status_stopped));
         stopOutlined.setStopped();
         stopOutlined.button.setOnClickListener(v -> onStopClicked());
     }
 
     private void resumeUpload() {
         Preferences.setAutoUploadPased(false);
-        headerText.setText(getContext().getResources().getString(R.string.upload_main_meta_status_atempting));
+        headerText.setText(getContext().getResources().getString(R.string.upload_main_meta_status_attempting));
         statusText.setText("");
         setProgress();
         stopOutlined.donutProgress.setOnClickListener(v -> onStopClicked());
@@ -326,7 +326,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
         if (Preferences.isAutoUploadPaused()) {
             stopOutlined.setStopped();
             stopOutlined.button.setOnClickListener(v -> onStopClicked());
-            statusText.setText(getContext().getResources().getString(R.string.upload_main_heading_stopped));
+            statusText.setText(getContext().getResources().getString(R.string.upload_main_meta_status_stopped));
         } else {
             setProgress();
             stopOutlined.donutProgress.setOnClickListener(v -> onStopClicked());
@@ -388,7 +388,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
         startedText.setText(String.format("%s: %s", getContext().getResources().getString(R.string.upload_meta_date_started), Util.getDateTimeString(started, "dd/MM/yyyy h:mm a")));
         if (Preferences.isAutoUploadPaused()) {
             statusText.setText(String.format("%s %s",
-                    getContext().getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instances.size(), instances.size()), getContext().getResources().getString(R.string.upload_main_heading_stopped)));
+                    getContext().getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instances.size(), instances.size()), getContext().getResources().getString(R.string.upload_main_meta_status_stopped)));
         } else {
             statusText.setText(String.format("%s %s",
                     getContext().getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instances.size(), instances.size()), ""));
@@ -448,7 +448,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
             if (projectedRemaininigTime > 3600000) {
                 statusText.setText(String.format("%s, %s",
                         getContext().getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, uploadnigList.size(), uploadnigList.size()),
-                        getContext().getResources().getString(R.string.upload_main_heading_hour_left)));
+                        getContext().getResources().getString(R.string.upload_main_meta_more_hour_left)));
             } else if (projectedRemaininigTime > 60000) {
                 int minutes = (int) projectedRemaininigTime / 60000;
                 statusText.setText(String.format("%s, %s",
@@ -457,10 +457,10 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
             } else if (projectedRemaininigTime > 0) {
                 statusText.setText(String.format("%s, %s",
                         getContext().getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, uploadnigList.size(), uploadnigList.size()),
-                        getContext().getResources().getString(R.string.upload_info_heading_minute_left)));
+                        getContext().getResources().getString(R.string.upload_main_meta_less_minute_left)));
             }
 
-            headerText.setText(R.string.upload_main_meta_status_upload);
+            headerText.setText(R.string.upload_main_meta_status_uploading);
         }
         lastUploadedSize = uploaded;
         lastUpdateTimeStamp = now;

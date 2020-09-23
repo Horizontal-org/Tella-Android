@@ -59,7 +59,7 @@ public class UploadInformationRecycleViewAdapter extends RecyclerView.Adapter<Up
         if (instance.getMediaFile() != null) {
             holder.name.setText(instance.getMediaFile().getFileName());
             holder.hash.setText(String.format("%s: %s", context.getString(R.string.verification_info_field_hash), instance.getMediaFile().getHash()));
-            holder.type.setText(String.format("%s: %s", context.getString(R.string.upload_info_file_type), instance.getMediaFile().getType().name()));
+            holder.type.setText(String.format("%s: %s", context.getString(R.string.upload_info_meta_file_type), instance.getMediaFile().getType().name()));
             if (instance.getMediaFile().getType() == MediaFile.Type.IMAGE || instance.getMediaFile().getType() == MediaFile.Type.VIDEO) {
                 Glide.with(holder.mediaView.getContext())
                         .using(glideLoader)
