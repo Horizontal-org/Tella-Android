@@ -413,4 +413,5 @@
     <string name="upload.main_meta_status.stopped">Stopped</string>
     <string name="upload.main_meta_more.hour.left">more than an hour left</string>
     <string name="settings.docu_error_must.select.auto.upload.server">You must select a server</string>
+    <string name="upload.main_dialog.title_clear.history">Clear upload history?</string>
 </resources>
