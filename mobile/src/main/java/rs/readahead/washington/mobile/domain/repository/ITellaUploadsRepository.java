@@ -9,6 +9,7 @@ import rs.readahead.washington.mobile.domain.entity.RawFile;
 
 public interface ITellaUploadsRepository {
     Completable scheduleUploadMediaFiles(List<MediaFile> mediafiles);
+    Completable scheduleUploadMediaFilesWithPriority(List<MediaFile> mediafiles);
     Completable logUploadedFile(RawFile file);
     Single<List<MediaFile>> getUploadMediaFiles(UploadStatus status);
     Completable setUploadStatus(long mediaFileId, UploadStatus status, long uploadedSize, boolean retry);

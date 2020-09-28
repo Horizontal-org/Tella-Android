@@ -328,6 +328,14 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
+    public Completable scheduleUploadMediaFilesWithPriority(final List<MediaFile> mediaFiles) {
+        return Completable.fromCallable((Callable<Void>) () -> {
+            scheduleUploadMediaFilesWithPriorityDb(mediaFiles);
+            return null;
+        }).compose(applyCompletableSchedulers());
+    }
+
+    @Override
     public Completable logUploadedFile(final RawFile rawFile) {
         return Completable.fromCallable((Callable<Void>) () -> {
             logUploadedFileDb(rawFile);
@@ -1044,6 +1052,33 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }
     }
 
+    private void scheduleUploadMediaFilesWithPriorityDb(List<MediaFile> mediaFiles) {
+        try {
+
+            long set = calculateCurrentFileUploadSet();
+            int retries = getMaxRetries(); //make sure that these files are taken first from the set
+
+            for (MediaFile mediaFile : mediaFiles) {
+                ContentValues values = new ContentValues();
+                values.put(D.C_MEDIA_FILE_ID, mediaFile.getId());
+                values.put(D.C_UPDATED, Util.currentTimestamp());
+                values.put(D.C_CREATED, Util.currentTimestamp());
+                values.put(D.C_STATUS, UploadStatus.SCHEDULED.ordinal());
+                values.put(D.C_SIZE, mediaFile.getSize());
+                values.put(D.C_SET, set);
+                values.put(D.C_RETRY_COUNT, retries);
+
+                database.insertWithOnConflict(
+                        D.T_MEDIA_FILE_UPLOAD,
+                        null,
+                        values,
+                        SQLiteDatabase.CONFLICT_REPLACE);
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        }
+    }
+
     private void scheduleUploadMediaFilesDb(List<MediaFile> mediaFiles) {
         try {
 
@@ -1111,6 +1146,38 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }
 
         return lastSet;
+    }
+
+    private int getMaxRetries() {
+        Cursor cursor = null;
+        int maxRetries = 1;
+
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_MEDIA_FILE_UPLOAD,
+                    new String[]{
+                            "MAX (" + D.C_RETRY_COUNT + ")"},
+                    null,
+                    null, null, null, null
+            );
+
+            cursor = database.rawQuery(query, null);
+
+            if (cursor.moveToFirst()) {
+                maxRetries = cursor.getInt(cursor.getColumnIndexOrThrow("MAX (" + D.C_RETRY_COUNT + ")"));
+            }
+
+            return maxRetries + 1;
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return maxRetries + 1;
     }
 
     private void setUploadStatusDb(long mediaFileId, UploadStatus status, long uploadedSize, boolean retry) {

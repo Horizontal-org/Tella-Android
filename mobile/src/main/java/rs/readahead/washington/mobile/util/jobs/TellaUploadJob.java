@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.util.jobs;
 
 import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.Job;
+import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 
 import org.jetbrains.annotations.NotNull;
@@ -11,6 +12,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import io.reactivex.Flowable;
+import io.reactivex.disposables.Disposable;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent;
 import rs.readahead.washington.mobile.data.database.DataSource;
@@ -116,6 +118,10 @@ public class TellaUploadJob extends Job {
                 .setUpdateCurrent(true) // also, jobs will sync them self while running
                 .build()
                 .schedule();
+    }
+
+    public static void cancelJob(){
+        JobManager.instance().cancelAllForTag(TellaUploadJob.TAG);
     }
 
     private void updateProgress(UploadProgressInfo progressInfo) {
