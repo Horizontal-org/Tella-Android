@@ -12,7 +12,6 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import io.reactivex.Flowable;
-import io.reactivex.disposables.Disposable;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent;
 import rs.readahead.washington.mobile.data.database.DataSource;
@@ -58,10 +57,6 @@ public class TellaUploadJob extends Job {
 
         if (mediaFiles.size() == 0) {
             return exit(Result.SUCCESS);
-        }
-
-        for (MediaFile file : mediaFiles){
-            Timber.d("++++ file id, uid %s, %s, %s", file.getId(), file.getUid(), file.getType());
         }
 
         TellaUploadServer server = dataSource.getTellaUploadServer(Preferences.getAutoUploadServerId()).blockingGet();
@@ -129,7 +124,6 @@ public class TellaUploadJob extends Job {
     }
 
     private void updateProgress(UploadProgressInfo progressInfo) {
-        Timber.d("++++ fileid, status %s, %s", progressInfo.fileId, progressInfo.status );
         switch (progressInfo.status) {
             case STARTED:
             case OK:

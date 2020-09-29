@@ -166,16 +166,6 @@ public class DialogsUtil {
                 cancelListener);
     }
 
-    public static AlertDialog showExitFileUploadDialog(Context context, DialogInterface.OnClickListener okListener,
-                                                       DialogInterface.OnClickListener cancelListener) {
-        return DialogsUtil.showDialog(context,
-                context.getString(R.string.gallery_upload_exit_dialog_expl),
-                context.getString(R.string.action_ok),
-                context.getString(R.string.action_cancel),
-                okListener,
-                cancelListener);
-    }
-
     public static AlertDialog showExitOnFinalDialog(Context context, DialogInterface.OnClickListener okListener,
                                                     DialogInterface.OnClickListener cancelListener) {
         return DialogsUtil.showDialog(context,
