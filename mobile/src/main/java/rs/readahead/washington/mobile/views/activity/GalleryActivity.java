@@ -50,7 +50,9 @@ import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordReposito
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository.Sort;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IGalleryPresenterContract;
+import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.GalleryPresenter;
+import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulePresenter;
 import rs.readahead.washington.mobile.presentation.entity.MediaFileThumbnailData;
 import rs.readahead.washington.mobile.presentation.entity.ViewType;
 import rs.readahead.washington.mobile.util.C;
@@ -71,6 +73,7 @@ import timber.log.Timber;
 public class GalleryActivity extends MetadataActivity implements
         TellaUploadDialogFragment.IServerMetadataChosenHandler,
         IGalleryPresenterContract.IView,
+        ITellaFileUploadSchedulePresenterContract.IView,
         IGalleryMediaHandler, IAttachmentsMediaHandler,
         ShareDialogFragment.IShareDialogFragmentHandler {
     public static final String GALLERY_ANIMATED = "ga";
@@ -96,6 +99,7 @@ public class GalleryActivity extends MetadataActivity implements
 
     private GalleryRecycleViewAdapter adapter;
     private GalleryPresenter presenter;
+    private TellaFileUploadSchedulePresenter uploadPresenter;
     private CacheWordDataSource cacheWordDataSource;
     private EventCompositeDisposable disposables;
 
@@ -119,6 +123,7 @@ public class GalleryActivity extends MetadataActivity implements
         ButterKnife.bind(this);
 
         presenter = new GalleryPresenter(this);
+        uploadPresenter = new TellaFileUploadSchedulePresenter(this);
 
         if (getIntent().hasExtra(GALLERY_ANIMATED)) {
             animated = getIntent().getBooleanExtra(GALLERY_ANIMATED, false);
@@ -287,7 +292,7 @@ public class GalleryActivity extends MetadataActivity implements
         }
 
         cacheWordDataSource.dispose();
-        stopPresenter();
+        stopPresenters();
 
         if (alertDialog != null) {
             alertDialog.dismiss();
@@ -561,6 +566,18 @@ public class GalleryActivity extends MetadataActivity implements
         return this;
     }
 
+    @Override
+    public void onMediaFilesUploadScheduled() {
+        clearSelection();
+        Intent intent = new Intent(this, UploadsActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onMediaFilesUploadScheduleError(Throwable throwable) {
+
+    }
+
 
     @Override
     public void playMedia(MediaFile mediaFile) {
@@ -671,14 +688,16 @@ public class GalleryActivity extends MetadataActivity implements
         boolean metadata = false;
         List<MediaFile> selected = adapter.getSelectedMediaFiles();
 
-        for (MediaFile mediaFile : selected) {
+       uploadPresenter.scheduleUploadMediaFilesWithPriority(selected);
+
+      /*  for (MediaFile mediaFile : selected) {
             if (mediaFile.getMetadata() != null) {
                 metadata = true;
                 break;
             }
         }
 
-        TellaUploadDialogFragment.newInstance(metadata).show(getSupportFragmentManager(), TellaUploadDialogFragment.TAG);
+        TellaUploadDialogFragment.newInstance(metadata).show(getSupportFragmentManager(), TellaUploadDialogFragment.TAG);*/
     }
 
     @Override
@@ -699,9 +718,13 @@ public class GalleryActivity extends MetadataActivity implements
         updateAttachmentsVisibility();
     }
 
-    private void stopPresenter() {
+    private void stopPresenters() {
         if (presenter != null) {
             presenter.destroy();
+        }
+
+        if (uploadPresenter != null) {
+            uploadPresenter.destroy();
         }
     }
 

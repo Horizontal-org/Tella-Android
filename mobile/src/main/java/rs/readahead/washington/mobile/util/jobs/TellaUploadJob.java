@@ -38,26 +38,30 @@ public class TellaUploadJob extends Job {
 
     @NonNull
     @Override
-    protected Job.Result onRunJob(@NotNull Job.Params params) {
+    protected Result onRunJob(@NotNull Job.Params params) {
         if (!enter() || Preferences.isAutoUploadPaused()) {
-            return Job.Result.SUCCESS;
+            return Result.SUCCESS;
         }
 
         KeyBundle keyBundle = MyApplication.getKeyBundle();
         if (keyBundle == null) { // CacheWord is unavailable
-            return exit(Job.Result.RESCHEDULE);
+            return exit(Result.RESCHEDULE);
         }
 
         byte[] key = keyBundle.getKey();
         if (key == null) { // key disappeared
-            return exit(Job.Result.RESCHEDULE);
+            return exit(Result.RESCHEDULE);
         }
 
         dataSource = DataSource.getInstance(getContext(), key);
         List<MediaFile> mediaFiles = dataSource.getUploadMediaFiles(UploadStatus.SCHEDULED).blockingGet();
 
         if (mediaFiles.size() == 0) {
-            return exit(Job.Result.SUCCESS);
+            return exit(Result.SUCCESS);
+        }
+
+        for (MediaFile file : mediaFiles){
+            Timber.d("++++ file id, uid %s, %s, %s", file.getId(), file.getUid(), file.getType());
         }
 
         TellaUploadServer server = dataSource.getTellaUploadServer(Preferences.getAutoUploadServerId()).blockingGet();
@@ -86,7 +90,7 @@ public class TellaUploadJob extends Job {
             exit(exitResult);
         }
 
-        return exit(Job.Result.SUCCESS);
+        return exit(Result.SUCCESS);
     }
 
     @Override
@@ -125,6 +129,7 @@ public class TellaUploadJob extends Job {
     }
 
     private void updateProgress(UploadProgressInfo progressInfo) {
+        Timber.d("++++ fileid, status %s, %s", progressInfo.fileId, progressInfo.status );
         switch (progressInfo.status) {
             case STARTED:
             case OK:
