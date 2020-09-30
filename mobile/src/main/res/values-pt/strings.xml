@@ -17,8 +17,6 @@
     <string name="action_delete">Apagar</string>
     <string name="collect.draft_tab.title">Rascunho</string>
     <string name="collect.blank_action_download.form">Baixar</string>
-    <string name="gallery_toast_fail.finding.metadata.to.upload">Erro</string>
-    <string name="gallery_toast.fail.finding.file.to.upload">Error</string>
     <string name="settings_text_empty.field">Este campo não pode estar vazio.</string>
     <string name="home_toast_back.exit">Pressione o botão voltar novamente para sair</string>
     <string name="settings.docu_toast_fail.load.list.connected.servers">Erro ao tentar obter a lista de servidores. Por favor, tente novamente.</string>
@@ -40,7 +38,6 @@
     <string name="action_remove">Remover</string>
     <string name="settings_app.bar">Configurações</string>
     <string name="upload_action_upload.files">Enviar</string>
-    <string name="upload_app.bar_upload.screen">Enviar</string>
     <string name="action_save">Salvar</string>
     <string name="lock_dialog.expl_save.pattern">Configurando dados …</string>
     <string name="lock_dialog.expl_unlock.app">Configurando dados …</string>
@@ -339,8 +336,6 @@
     <string name="verification.info_wifi.expl">O nome de todas as redes Wi-Fi nas proximidades do aparelho celular.</string>
     <string name="collect.blank_banner_forms.updated">Alguns formulários foram atualizados. Toque no botão de atualização para receber a versão mais recente.</string>
     <string name="settings.docu_auto.upload.server.selection_select">Servidor</string>
-    <string name="gallery.upload_dialog.title_select.server">Servidor</string>
-    <string name="settings.docu_auto.upload.server.selection_dialog.expl">Em qual servidor você gostaria de fazer o upload dos arquivos?</string>
     <string name="settings.docu_add.server.selection_dialog.title">Que tipo de servidor?</string>
     <string name="settings.docu_add.server_dialog.select_odk">Kit de dados abertos (ODK)</string>
     <string name="settings.docu_add.server_dialog.expl">Selecione o tipo de servidor que você deseja se conectar. Se você não tiver certeza, pergunte à organização que coordena o trabalho de documentação.</string>
@@ -350,13 +345,6 @@
     <string name="settings.docu_disable.servers_dialog.title">Desconectar servidor (es)</string>
     <string name="settings.docu_connect.to.servers_disable_dialog.expl">Gostaria de apagar as conexões do servidor completamente, ou somente escondê-las? Ao esconder, você irá manter as informações na memória, podendo facilmente reconectar e enviar dados para o(s) servidor(es).</string>
     <string name="settings.docu_delete.auto.server_dialog.expl">Se você apagar este servidor, não poderá mais enviar arquivo.</string>
-    <string name="gallery.upload_heading">Enviar arquivos para \"%s\"</string>
-    <string name="gallery.upload_meta_number.of.files">Arquivos</string>
-    <string name="gallery.upload_sending_heading">Enviando</string>
-    <string name="gallery.upload_sent_heading">Todos os arquivos foram enviados com sucesso</string>
-    <string name="gallery.upload_action_try.uploading.again">Tentar de novo</string>
-    <string name="gallery.upload_exit_dialog.expl">Sair cancelará o upload.</string>
-    <string name="gallery.upload_sent_meta_file.already.on.server">Arquivo já no servidor</string>
     <string name="play.audio_action.expl_plus15s">+15s</string>
     <string name="play.audio_action.expl_minus15s">-15s</string>
     <string name="recorder_meta_space.available.days">%1$d days %2$d hours (%3$s) left</string>
