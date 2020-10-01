@@ -44,6 +44,7 @@ import rs.readahead.washington.mobile.bus.event.GalleryFlingTopEvent;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
 import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository.Filter;
@@ -446,12 +447,14 @@ public class GalleryActivity extends MetadataActivity implements
         for (int i = 0; i < selected.size(); i++) {
             ids[i] = selected.get(i).getId();
         }
+        Timber.d("++++ getFiles with metadata> %b", metadata);
+        uploadPresenter.getMediaFiles(ids, metadata);
 
-        Intent intent = new Intent(this, FileUploadingActivity.class);
+        /*Intent intent = new Intent(this, FileUploadingActivity.class);
         intent.putExtra(FileUploadingActivity.SERVER_KEY, server);
         intent.putExtra(FileUploadingActivity.FILE_KEYS, ids);
         intent.putExtra(FileUploadingActivity.METADATA, metadata);
-        startActivity(intent);
+        startActivity(intent);*/
     }
 
     @Override
@@ -578,6 +581,21 @@ public class GalleryActivity extends MetadataActivity implements
 
     }
 
+    @Override
+    public void onGetMediaFilesSuccess(List<RawFile> mediaFiles) {
+        for (RawFile file : mediaFiles){
+            Timber.d("++++ scheduling %s, size %d, uid %s", file.getId(), file.getSize(), file.getUid());
+        }
+        uploadPresenter.scheduleUploadMediaFilesWithPriority(mediaFiles);
+        Intent intent = new Intent(this, UploadsActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onGetMediaFilesError(Throwable error) {
+
+    }
+
 
     @Override
     public void playMedia(MediaFile mediaFile) {
@@ -688,16 +706,16 @@ public class GalleryActivity extends MetadataActivity implements
         boolean metadata = false;
         List<MediaFile> selected = adapter.getSelectedMediaFiles();
 
-       uploadPresenter.scheduleUploadMediaFilesWithPriority(selected);
+      //
 
-      /*  for (MediaFile mediaFile : selected) {
+        for (MediaFile mediaFile : selected) {
             if (mediaFile.getMetadata() != null) {
                 metadata = true;
                 break;
             }
         }
 
-        TellaUploadDialogFragment.newInstance(metadata).show(getSupportFragmentManager(), TellaUploadDialogFragment.TAG);*/
+        TellaUploadDialogFragment.newInstance(metadata).show(getSupportFragmentManager(), TellaUploadDialogFragment.TAG);
     }
 
     @Override

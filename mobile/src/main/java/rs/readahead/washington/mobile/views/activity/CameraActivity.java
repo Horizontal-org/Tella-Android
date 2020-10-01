@@ -49,6 +49,7 @@ import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.Metadata;
+import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.entity.TempMediaFile;
 import rs.readahead.washington.mobile.media.MediaFileBundle;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
@@ -322,6 +323,16 @@ public class CameraActivity extends MetadataActivity implements
 
     @Override
     public void onMediaFilesUploadScheduleError(Throwable throwable) {
+
+    }
+
+    @Override
+    public void onGetMediaFilesSuccess(List<RawFile> mediaFiles) {
+
+    }
+
+    @Override
+    public void onGetMediaFilesError(Throwable error) {
 
     }
 
