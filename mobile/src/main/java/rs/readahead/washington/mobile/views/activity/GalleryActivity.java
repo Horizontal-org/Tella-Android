@@ -448,7 +448,11 @@ public class GalleryActivity extends MetadataActivity implements
             ids[i] = selected.get(i).getId();
         }
         Timber.d("++++ getFiles with metadata> %b", metadata);
-        uploadPresenter.getMediaFiles(ids, metadata);
+
+        uploadPresenter.scheduleUploadMediaFilesWithPriority(selected);
+        Intent intent = new Intent(this, UploadsActivity.class);
+        startActivity(intent);
+
 
         /*Intent intent = new Intent(this, FileUploadingActivity.class);
         intent.putExtra(FileUploadingActivity.SERVER_KEY, server);
@@ -583,12 +587,7 @@ public class GalleryActivity extends MetadataActivity implements
 
     @Override
     public void onGetMediaFilesSuccess(List<RawFile> mediaFiles) {
-        for (RawFile file : mediaFiles){
-            Timber.d("++++ scheduling %s, size %d, uid %s", file.getId(), file.getSize(), file.getUid());
-        }
-        uploadPresenter.scheduleUploadMediaFilesWithPriority(mediaFiles);
-        Intent intent = new Intent(this, UploadsActivity.class);
-        startActivity(intent);
+
     }
 
     @Override

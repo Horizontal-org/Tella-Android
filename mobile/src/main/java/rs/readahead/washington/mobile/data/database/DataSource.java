@@ -328,7 +328,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
-    public Completable scheduleUploadMediaFilesWithPriority(final List<RawFile> mediaFiles) {
+    public Completable scheduleUploadMediaFilesWithPriority(final List<MediaFile> mediaFiles) {
         return Completable.fromCallable((Callable<Void>) () -> {
             scheduleUploadMediaFilesWithPriorityDb(mediaFiles);
             return null;
@@ -1052,13 +1052,13 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }
     }
 
-    private void scheduleUploadMediaFilesWithPriorityDb(List<RawFile> mediaFiles) {
+    private void scheduleUploadMediaFilesWithPriorityDb(List<MediaFile> mediaFiles) {
         try {
 
             long set = calculateCurrentFileUploadSet();
             int retries = getMaxRetries(); //make sure that these files are taken first from the set
 
-            for (RawFile mediaFile : mediaFiles) {
+            for (MediaFile mediaFile : mediaFiles) {
                 ContentValues values = new ContentValues();
                 values.put(D.C_MEDIA_FILE_ID, mediaFile.getId());
                 values.put(D.C_UPDATED, Util.currentTimestamp());

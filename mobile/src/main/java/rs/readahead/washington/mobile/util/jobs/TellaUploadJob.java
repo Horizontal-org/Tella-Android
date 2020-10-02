@@ -7,6 +7,7 @@ import com.evernote.android.job.JobRequest;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,6 +21,7 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.data.upload.TUSClient;
 import rs.readahead.washington.mobile.domain.entity.KeyBundle;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.domain.exception.NoConnectivityException;
@@ -56,12 +58,30 @@ public class TellaUploadJob extends Job {
         dataSource = DataSource.getInstance(getContext(), key);
         List<MediaFile> mediaFiles = dataSource.getUploadMediaFiles(UploadStatus.SCHEDULED).blockingGet();
 
-        if (mediaFiles.size() == 0) {
+        //detect if there are files for manual upload. Put only them for upload to the first of manually selected upload servers.
+
+        boolean metadata = true;
+        List<RawFile> rawFiles = new ArrayList<>(mediaFiles.size() * (metadata ? 2 : 1));
+        for (MediaFile mediaFile: mediaFiles) {
+            rawFiles.add(mediaFile);
+
+            if (metadata) {
+                try {
+                    Timber.d("+++++ adding metadata for file %s", mediaFile.getFileName());
+                    rawFiles.add(MediaFileHandler.maybeCreateMetadataMediaFile(getContext(), mediaFile));
+                } catch (Exception e) {
+                    Timber.d(e);
+                }
+            }
+        }
+
+        if (rawFiles.size() == 0) {
             return exit(Result.SUCCESS);
         }
 
-        for (MediaFile file : mediaFiles){
-            Timber.d("++++ file id, uid %s, %s, %s", file.getId(), file.getUid(), file.getType());
+        for (RawFile file : rawFiles){
+            Timber.d("++++ files to upload: ");
+            Timber.d("++++ file id, uid %s, %s", file.getId(), file.getFileName());
         }
 
         TellaUploadServer server = dataSource.getTellaUploadServer(Preferences.getAutoUploadServerId()).blockingGet();
@@ -72,10 +92,10 @@ public class TellaUploadJob extends Job {
         final TUSClient tusClient = new TUSClient(getContext(), server.getUrl(), server.getUsername(), server.getPassword());
 
         for (MediaFile file : mediaFiles) {
-            fileMap.put(file.getId(), file);
+            fileMap.put(file.getId(), file);   // put files in map to delete only in case of Auto-upload!!!
         }
 
-        Flowable.fromIterable(mediaFiles)
+        Flowable.fromIterable(rawFiles)
                 .flatMap(tusClient::upload)
                 .blockingSubscribe(this::updateProgress, throwable -> {
                     if (throwable instanceof NoConnectivityException) {

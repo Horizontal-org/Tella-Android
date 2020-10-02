@@ -56,7 +56,7 @@ public class TellaFileUploadSchedulePresenter implements ITellaFileUploadSchedul
     }
 
     @Override
-    public void scheduleUploadMediaFilesWithPriority(final List<RawFile> mediaFiles) {
+    public void scheduleUploadMediaFilesWithPriority(final List<MediaFile> mediaFiles) {
         disposables.add(cacheWordDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
