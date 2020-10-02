@@ -54,7 +54,7 @@
     <string name="settings.docu_toast_server.deleted">Serveur supprimé</string>
     <string name="settings.docu_toast_server.created">Serveur créé</string>
     <string name="settings.docu_toast_server.updated">Serveur mis à jour</string>
-    <string name="settings.docu_dialog.title_odk.server.settings">Paramètres du serveur</string>
+    <string name="settings.docu_dialog.title_server.settings">Paramètres du serveur</string>
     <string name="settings.docu_dialog.title_tus.server.settings">Paramètres du serveur</string>
     <string name="settings.docu_field_server.name">Nom du serveur</string>
     <string name="settings.docu_field_server.url">URL du serveur</string>
@@ -80,7 +80,6 @@
     <string name="collect_toast_fail.parsing.form">Une erreur s\'est produite lors de l\'analyse de ce formulaire.</string>
     <string name="collect.end_action_save.send.later">Enregistrer le formulaire</string>
     <string name="action.desc_confirm">Confirmer</string>
-    <string name="collect.end_action_submit.form">Envoyer le formulaire</string>
     <string name="collect.form_action_previous.section">Précédent</string>
     <string name="collect.form_action_next.section">Suivant</string>
     <string name="action_stop">Arrêter</string>

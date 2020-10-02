@@ -51,7 +51,7 @@
     <string name="settings.docu_toast_server.deleted">Сервер удален.</string>
     <string name="settings.docu_toast_server.created">Сервер успешно создан.</string>
     <string name="settings.docu_toast_server.updated">Сервер успешно обновлен.</string>
-    <string name="settings.docu_dialog.title_odk.server.settings">Настройки сервера</string>
+    <string name="settings.docu_dialog.title_server.settings">Настройки сервера</string>
     <string name="settings.docu_dialog.title_tus.server.settings">Настройки сервера</string>
     <string name="settings.docu_field_server.name">Имя сервера</string>
     <string name="settings.docu_field_server.url">URL сервера</string>
@@ -77,7 +77,6 @@
     <string name="collect.end_action.desc_save.send.later">При обработке данной формы произошла ошибка</string>
     <string name="collect.end_action_save.send.later">Сохранить форму</string>
     <string name="action.desc_confirm">Подтвердить</string>
-    <string name="collect.end_action_submit.form">Отправить форму</string>
     <string name="collect.form_action_previous.section">Предыдущий раздел</string>
     <string name="collect.form_action_next.section">Следующий раздел</string>
     <string name="action_stop">Остановить</string>

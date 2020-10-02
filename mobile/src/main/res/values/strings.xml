@@ -49,8 +49,7 @@
     <string name="settings.docu_toast_server.deleted">Server deleted.</string>
     <string name="settings.docu_toast_server.created">Server created.</string>
     <string name="settings.docu_toast_server.updated">Server updated.</string>
-    <string name="settings.docu_dialog.title_odk.server.settings">Server settings</string>
-    <string name="settings.docu_dialog.title_tus.server.settings">Server settings</string>
+    <string name="settings.docu_dialog.title_server.settings">Server settings</string>
     <string name="settings.docu_field_server.name">Server name</string>
     <string name="settings.docu_field_server.url">Server URL</string>
     <string name="collect.sent_tab.title">Submitted</string>
@@ -75,7 +74,6 @@
     <string name="collect_action.desc_save.form">Save form</string>
     <string name="collect.end_action.desc_save.send.later">Save form</string>
     <string name="action.desc_confirm">Confirm</string>
-    <string name="collect.end_action_submit.form">Submit Form</string>
     <string name="collect.form_action_previous.section">Previous</string>
     <string name="collect.form_action_next.section">Next</string>
     <string name="action_stop">Stop</string>
