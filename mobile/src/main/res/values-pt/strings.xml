@@ -17,8 +17,8 @@
     <string name="action_delete">Apagar</string>
     <string name="collect.draft_tab.title">Rascunho</string>
     <string name="collect.blank_action_download.form">Baixar</string>
-    <string name="gallery_toast_fail.finding.metadata.to.upload">Erro</string>
-    <string name="gallery_toast.fail.finding.file.to.upload">Error</string>
+    <string name="upload_toast_fail.finding.metadata.to.upload">Erro</string>
+    <string name="upload_toast.fail.finding.file.to.upload">Error</string>
     <string name="settings_text_empty.field">Este campo não pode estar vazio.</string>
     <string name="home_toast_back.exit">Pressione o botão voltar novamente para sair</string>
     <string name="settings.docu_toast_fail.load.list.connected.servers">Erro ao tentar obter a lista de servidores. Por favor, tente novamente.</string>
@@ -339,7 +339,7 @@
     <string name="verification.info_wifi.expl">O nome de todas as redes Wi-Fi nas proximidades do aparelho celular.</string>
     <string name="collect.blank_banner_forms.updated">Alguns formulários foram atualizados. Toque no botão de atualização para receber a versão mais recente.</string>
     <string name="settings.docu_auto.upload.server.selection_select">Servidor</string>
-    <string name="gallery.upload_dialog.title_select.server">Servidor</string>
+    <string name="upload_dialog.title_select.server">Servidor</string>
     <string name="settings.docu_auto.upload.server.selection_dialog.expl">Em qual servidor você gostaria de fazer o upload dos arquivos?</string>
     <string name="settings.docu_add.server.selection_dialog.title">Que tipo de servidor?</string>
     <string name="settings.docu_add.server_dialog.select_odk">Kit de dados abertos (ODK)</string>
@@ -405,4 +405,6 @@
     <string name="upload.main_meta_status.stopped">Stopped</string>
     <string name="upload.main_meta_more.hour.left">more than an hour left</string>
     <string name="settings.docu_error_must.select.auto.upload.server">You must select a server</string>
+    <string name="settings.docu_auto.upload.metadata_action">Include verification information</string>
+    <string name="settings.docu_auto.upload.metadata_action.expl">If your files include verification information, it will automatically be uploaded alongside your files</string>
 </resources>

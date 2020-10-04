@@ -13,7 +13,7 @@ class D {
     static final String DATABASE_NAME = "tella.db";
     // 1=start,2=form media file status,3=updated flag in xforms
     // 4=xml form part status,5=media file hash,6=tella upload server,7=file uploads table
-    static final int DATABASE_VERSION = 7;
+    static final int DATABASE_VERSION = 8;
 
     /* DATABASE TABLES */
     static final String T_COLLECT_SERVER = "t_collect_server";
@@ -66,6 +66,10 @@ class D {
     static final String C_UPLOADED = "c_uploaded";
     static final String C_SET = "c_set";
     static final String C_RETRY_COUNT = "c_retry_count";
+    static final String C_INCLUDE_METADATA = "c_include_metadata";
+    static final String C_SERVER_ID = "c_server_id";
+    static final String C_MANUAL_UPLOAD = "c_manual_upload";
+
 
     static final String A_SERVER_NAME = "a_server_name";
     static final String A_COLLECT_BLANK_FORM_ID = "a_collect_blank_xform_id";

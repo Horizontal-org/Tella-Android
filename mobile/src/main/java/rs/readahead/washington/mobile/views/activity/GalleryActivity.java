@@ -447,12 +447,9 @@ public class GalleryActivity extends MetadataActivity implements
         for (int i = 0; i < selected.size(); i++) {
             ids[i] = selected.get(i).getId();
         }
-        Timber.d("++++ getFiles with metadata> %b", metadata);
+        Timber.d("++++ getFiles with metadata> %b, serverID> %d", metadata, server.getId());
 
-        uploadPresenter.scheduleUploadMediaFilesWithPriority(selected);
-        Intent intent = new Intent(this, UploadsActivity.class);
-        startActivity(intent);
-
+        uploadPresenter.scheduleUploadMediaFilesWithPriority(selected, server.getId(), metadata);
 
         /*Intent intent = new Intent(this, FileUploadingActivity.class);
         intent.putExtra(FileUploadingActivity.SERVER_KEY, server);

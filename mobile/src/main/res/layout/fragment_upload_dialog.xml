@@ -20,7 +20,7 @@
             style="@style/DialogFragmentTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/gallery.upload_dialog.title_select.server" />
+            android:text="@string/upload_dialog.title_select.server" />
 
         <TextView
             style="@style/DialogFragmentText"

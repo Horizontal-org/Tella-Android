@@ -16,8 +16,8 @@
     <string name="action_delete">Delete</string>
     <string name="collect.draft_tab.title">Draft</string>
     <string name="collect.blank_action_download.form">Download</string>
-    <string name="gallery_toast_fail.finding.metadata.to.upload">There was an error locating the file\'s verification information. Please try again. </string>
-    <string name="gallery_toast.fail.finding.file.to.upload">There was an error locating the file to upload. Please try again. </string>
+    <string name="upload_toast_fail.finding.metadata.to.upload">There was an error locating the file\'s verification information. Please try again. </string>
+    <string name="upload_toast.fail.finding.file.to.upload">There was an error locating the file to upload. Please try again. </string>
     <string name="settings_text_empty.field">This field cannot be empty.</string>
     <string name="home_toast_back.exit">Press the \"Back\" button again to exit the app.</string>
     <string name="settings.docu_toast_fail.load.list.connected.servers">There was an error loading the list of servers. Please try again. </string>
@@ -39,7 +39,6 @@
     <string name="action_remove">Remove</string>
     <string name="settings_app.bar">Settings</string>
     <string name="upload_action_upload.files">Send</string>
-    <string name="upload_app.bar_upload.screen">Upload</string>
     <string name="action_save">Save</string>
     <string name="lock_dialog.expl_save.pattern">Saving your lock pattern</string>
     <string name="lock_dialog.expl_unlock.app">Unlocking Tella</string>
@@ -337,7 +336,7 @@
     <string name="verification.info_wifi.expl">The name of all Wi-Fi networks in the vicinity of the device.</string>
     <string name="collect.blank_banner_forms.updated">Some forms have been updated. Tap the update button next to the forms to get the latest version.</string>
     <string name="settings.docu_auto.upload.server.selection_select">Server</string>
-    <string name="gallery.upload_dialog.title_select.server">Server selection</string>
+    <string name="upload_dialog.title_select.server">Server selection</string>
     <string name="settings.docu_auto.upload.server.selection_dialog.expl">Which server would you like to upload the files to?</string>
     <string name="settings.docu_add.server.selection_dialog.title">What type of server?</string>
     <string name="settings.docu_add.server_dialog.select_odk">Open Data Kit (ODK)</string>
@@ -348,13 +347,6 @@
     <string name="settings.docu_disable.servers_dialog.title">Disconnect servers</string>
     <string name="settings.docu_connect.to.servers_disable_dialog.expl">Would you like to delete your server connections altogether, or simply hide them? Hiding will keep server information in memory so that you can easily reconnect and submit data to the servers.</string>
     <string name="settings.docu_delete.auto.server_dialog.expl">If you delete this server, your files will no longer be auto-uploaded. </string>
-    <string name="gallery.upload_heading">Send files to \"%s\"</string>
-    <string name="gallery.upload_meta_number.of.files">files</string>
-    <string name="gallery.upload_sending_heading">Uploading</string>
-    <string name="gallery.upload_sent_heading">All files have been successfully uploaded.</string>
-    <string name="gallery.upload_action_try.uploading.again">Try again</string>
-    <string name="gallery.upload_exit_dialog.expl">Exiting will cancel the upload.</string>
-    <string name="gallery.upload_sent_meta_file.already.on.server">File already on server</string>
     <string name="play.audio_action.expl_plus15s">+15s</string>
     <string name="play.audio_action.expl_minus15s">-15s</string>
     <string name="recorder_meta_space.available.days">%1$d days %2$d hours (%3$s) left</string>
@@ -403,4 +395,6 @@
     <string name="upload.main_meta_status.stopped">Stopped,</string>
     <string name="upload.main_meta_more.hour.left">more than an hour left</string>
     <string name="settings.docu_error_must.select.auto.upload.server">You must select a server</string>
+    <string name="settings.docu_auto.upload.metadata_action">Include verification information</string>
+    <string name="settings.docu_auto.upload.metadata_action.expl">If your files include verification information, it will automatically be uploaded alongside your files</string>
 </resources>

@@ -19,6 +19,7 @@ import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.data.upload.TUSClient;
+import rs.readahead.washington.mobile.domain.entity.FileUploadBundle;
 import rs.readahead.washington.mobile.domain.entity.KeyBundle;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.RawFile;
@@ -55,20 +56,31 @@ public class TellaUploadJob extends Job {
             return exit(Result.RESCHEDULE);
         }
 
+        Timber.d("+++++ Upload job started");
+
         dataSource = DataSource.getInstance(getContext(), key);
-        List<MediaFile> mediaFiles = dataSource.getUploadMediaFiles(UploadStatus.SCHEDULED).blockingGet();
+        List<FileUploadBundle> fileUploadBundles = dataSource.getFileUploadBundles(UploadStatus.SCHEDULED).blockingGet();
 
         //detect if there are files for manual upload. Put only them for upload to the first of manually selected upload servers.
 
+
         boolean metadata = true;
-        List<RawFile> rawFiles = new ArrayList<>(mediaFiles.size() * (metadata ? 2 : 1));
-        for (MediaFile mediaFile: mediaFiles) {
-            rawFiles.add(mediaFile);
+        List<RawFile> rawFiles = new ArrayList<>(fileUploadBundles.size() * (metadata ? 2 : 1));
+        for (FileUploadBundle fileUploadBundle: fileUploadBundles) {
+            rawFiles.add(fileUploadBundle.getMediaFile());
+
+            Timber.d("+++++ FileUploadBundle server id %d", fileUploadBundle.getServerId());
+            Timber.d("+++++ FileUploadBundle is metdtaaa   %b", fileUploadBundle.isIncludeMetdata());
+            Timber.d("+++++ FileUploadBundle is manual   %b", fileUploadBundle.isManualUpload());
+
+            if (!fileUploadBundle.isManualUpload()){
+                fileMap.put(fileUploadBundle.getMediaFile().getId(), fileUploadBundle.getMediaFile());
+            }
 
             if (metadata) {
                 try {
-                    Timber.d("+++++ adding metadata for file %s", mediaFile.getFileName());
-                    rawFiles.add(MediaFileHandler.maybeCreateMetadataMediaFile(getContext(), mediaFile));
+                    Timber.d("+++++ adding metadata for file %s", fileUploadBundle.getMediaFile().getFileName());
+                    rawFiles.add(MediaFileHandler.maybeCreateMetadataMediaFile(getContext(), fileUploadBundle.getMediaFile()));
                 } catch (Exception e) {
                     Timber.d(e);
                 }
@@ -91,9 +103,9 @@ public class TellaUploadJob extends Job {
 
         final TUSClient tusClient = new TUSClient(getContext(), server.getUrl(), server.getUsername(), server.getPassword());
 
-        for (MediaFile file : mediaFiles) {
+      /* for (MediaFile file : mediaFiles) {
             fileMap.put(file.getId(), file);   // put files in map to delete only in case of Auto-upload!!!
-        }
+        }*/
 
         Flowable.fromIterable(rawFiles)
                 .flatMap(tusClient::upload)

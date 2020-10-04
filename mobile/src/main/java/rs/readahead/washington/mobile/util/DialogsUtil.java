@@ -169,7 +169,7 @@ public class DialogsUtil {
     public static AlertDialog showExitFileUploadDialog(Context context, DialogInterface.OnClickListener okListener,
                                                        DialogInterface.OnClickListener cancelListener) {
         return DialogsUtil.showDialog(context,
-                context.getString(R.string.gallery_upload_exit_dialog_expl),
+                "Gallery upload",
                 context.getString(R.string.action_ok),
                 context.getString(R.string.action_cancel),
                 okListener,

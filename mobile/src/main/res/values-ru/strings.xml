@@ -17,8 +17,8 @@
     <string name="action_delete">Удалить</string>
     <string name="collect.draft_tab.title">Черновик</string>
     <string name="collect.blank_action_download.form">Загрузить</string>
-    <string name="gallery_toast_fail.finding.metadata.to.upload">Ошибка</string>
-    <string name="gallery_toast.fail.finding.file.to.upload">Error</string>
+    <string name="upload_toast_fail.finding.metadata.to.upload">Ошибка</string>
+    <string name="upload_toast.fail.finding.file.to.upload">Error</string>
     <string name="settings_text_empty.field">Это поле не должно оставаться незаполненным.</string>
     <string name="home_toast_back.exit">Нажмите кнопку назад еще раз, чтобы выйти</string>
     <string name="settings.docu_toast_fail.load.list.connected.servers">При попытке получить список серверов произошла ошибка. Пожалуйста, повторите попытку.</string>
@@ -344,7 +344,7 @@
     <string name="verification.info_wifi.expl">Название всех сетей Wi-Fi в непосредственной близости от устройства.</string>
     <string name="collect.blank_banner_forms.updated">Некоторые формы были обновлены. Нажмите кнопку обновления, чтобы получить последнюю версию.</string>
     <string name="settings.docu_auto.upload.server.selection_select">Сервер</string>
-    <string name="gallery.upload_dialog.title_select.server">Сервер</string>
+    <string name="upload_dialog.title_select.server">Сервер</string>
     <string name="settings.docu_auto.upload.server.selection_dialog.expl">На какой сервер Вы хотите загрузить файлы?</string>
     <string name="settings.docu_add.server.selection_dialog.title">Какой тип сервера?</string>
     <string name="settings.docu_add.server_dialog.select_odk">Набор открытых данных (НОД)</string>
@@ -413,4 +413,6 @@
     <string name="upload.main_meta_status.stopped">Stopped</string>
     <string name="upload.main_meta_more.hour.left">more than an hour left</string>
     <string name="settings.docu_error_must.select.auto.upload.server">You must select a server</string>
+    <string name="settings.docu_auto.upload.metadata_action">Include verification information</string>
+    <string name="settings.docu_auto.upload.metadata_action.expl">If your files include verification information, it will automatically be uploaded alongside your files</string>
 </resources>

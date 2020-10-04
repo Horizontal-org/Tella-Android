@@ -39,6 +39,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.data.entity.MetadataEntity;
 import rs.readahead.washington.mobile.data.entity.mapper.EntityMapper;
+import rs.readahead.washington.mobile.domain.entity.FileUploadBundle;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
@@ -328,9 +329,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
-    public Completable scheduleUploadMediaFilesWithPriority(final List<MediaFile> mediaFiles) {
+    public Completable scheduleUploadMediaFilesWithPriority(final List<MediaFile> mediaFiles, long uploadServerId, boolean metadata) {
         return Completable.fromCallable((Callable<Void>) () -> {
-            scheduleUploadMediaFilesWithPriorityDb(mediaFiles);
+            scheduleUploadMediaFilesWithPriorityDb(mediaFiles, uploadServerId, metadata);
             return null;
         }).compose(applyCompletableSchedulers());
     }
@@ -382,6 +383,11 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
     public Single<List<MediaFile>> getUploadMediaFiles(final UploadStatus status) {
         return Single.fromCallable(() -> getUploadMediaFilesDB(status))
+                .compose(applySchedulers());
+    }
+
+    public Single<List<FileUploadBundle>> getFileUploadBundles(final UploadStatus status) {
+        return Single.fromCallable(() -> getFileUploadBundlesDB(status))
                 .compose(applySchedulers());
     }
 
@@ -1052,7 +1058,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }
     }
 
-    private void scheduleUploadMediaFilesWithPriorityDb(List<MediaFile> mediaFiles) {
+    private void scheduleUploadMediaFilesWithPriorityDb(List<MediaFile> mediaFiles, long uploadServerId, boolean metadata) {
         try {
 
             long set = calculateCurrentFileUploadSet();
@@ -1064,6 +1070,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 values.put(D.C_UPDATED, Util.currentTimestamp());
                 values.put(D.C_CREATED, Util.currentTimestamp());
                 values.put(D.C_STATUS, UploadStatus.SCHEDULED.ordinal());
+                values.put(D.C_INCLUDE_METADATA, metadata ? 1 : 0);
+                values.put(D.C_MANUAL_UPLOAD, 1 );
+                values.put(D.C_SERVER_ID, uploadServerId );
+                values.put(D.C_SIZE, mediaFile.getSize());
                 values.put(D.C_SIZE, mediaFile.getSize());
                 values.put(D.C_SET, set);
                 values.put(D.C_RETRY_COUNT, retries);
@@ -1582,6 +1592,54 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return mediaFiles;
     }
 
+    private List<FileUploadBundle> getFileUploadBundlesDB(final UploadStatus status) {
+        Timber.d("+++++ getFileUploadBundlesDB");
+        Cursor cursor = null;
+        List<FileUploadBundle> fileUploadBundles = new ArrayList<>();
+
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_MEDIA_FILE_UPLOAD +
+                            " JOIN " + D.T_MEDIA_FILE + " ON " +
+                            cn(D.T_MEDIA_FILE_UPLOAD, D.C_MEDIA_FILE_ID) + " = " + cn(D.T_MEDIA_FILE, D.C_ID),
+                    new String[]{
+                            cn(D.T_MEDIA_FILE_UPLOAD, D.C_MEDIA_FILE_ID, D.A_MEDIA_FILE_ID),
+                            cn(D.T_MEDIA_FILE_UPLOAD, D.C_INCLUDE_METADATA, D.C_INCLUDE_METADATA),
+                            cn(D.T_MEDIA_FILE_UPLOAD, D.C_SERVER_ID, D.C_SERVER_ID),
+                            cn(D.T_MEDIA_FILE_UPLOAD, D.C_MANUAL_UPLOAD, D.C_MANUAL_UPLOAD),
+                            cn(D.T_MEDIA_FILE, D.C_PATH, D.C_PATH),
+                            cn(D.T_MEDIA_FILE, D.C_UID, D.C_UID),
+                            cn(D.T_MEDIA_FILE, D.C_FILE_NAME, D.C_FILE_NAME),
+                            cn(D.T_MEDIA_FILE, D.C_METADATA, D.C_METADATA),
+                            cn(D.T_MEDIA_FILE, D.C_CREATED, D.C_CREATED),
+                            cn(D.T_MEDIA_FILE, D.C_DURATION, D.C_DURATION),
+                            cn(D.T_MEDIA_FILE, D.C_ANONYMOUS, D.C_ANONYMOUS),
+                            cn(D.T_MEDIA_FILE, D.C_SIZE, D.C_SIZE),
+                            cn(D.T_MEDIA_FILE, D.C_HASH, D.C_HASH)},
+                    cn(D.T_MEDIA_FILE_UPLOAD, D.C_STATUS) + "=" + status.ordinal(),
+                    null, null,
+                    cn(D.T_MEDIA_FILE_UPLOAD, D.C_RETRY_COUNT) + " ASC",
+                    null
+            );
+            cursor = database.rawQuery(query, null);
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                FileUploadBundle fileUploadBundle = cursorToFileUplodBundle(cursor);
+                fileUploadBundles.add(fileUploadBundle);
+            }
+
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return fileUploadBundles;
+    }
+
+
     private FormDef updateCollectFormDef(CollectForm form, FormDef formDef) {
         try {
             ContentValues values = new ContentValues();
@@ -1931,6 +1989,31 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
         return mediaFile;
     }
+
+    private FileUploadBundle cursorToFileUplodBundle(Cursor cursor) {
+        String path = cursor.getString(cursor.getColumnIndexOrThrow(D.C_PATH));
+        String uid = cursor.getString(cursor.getColumnIndexOrThrow(D.C_UID));
+        String fileName = cursor.getString(cursor.getColumnIndexOrThrow(D.C_FILE_NAME));
+        MetadataEntity metadataEntity = new Gson().fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_METADATA)), MetadataEntity.class);
+
+        MediaFile mediaFile = new MediaFile(path, uid, fileName, FileUtil.getMediaFileType(fileName));
+        mediaFile.setId(cursor.getLong(cursor.getColumnIndexOrThrow(D.A_MEDIA_FILE_ID)));
+        mediaFile.setMetadata(new EntityMapper().transform(metadataEntity));
+        mediaFile.setCreated(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_CREATED)));
+        mediaFile.setDuration(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_DURATION)));
+        mediaFile.setSize(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_SIZE)));
+        mediaFile.setAnonymous(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_ANONYMOUS)) == 1);
+        mediaFile.setHash(cursor.getString(cursor.getColumnIndexOrThrow(D.C_HASH)));
+
+        FileUploadBundle fileUploadBundle = new FileUploadBundle(mediaFile);
+
+        fileUploadBundle.setIncludeMetadata(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_INCLUDE_METADATA)) == 1);
+        fileUploadBundle.setManualUpload(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_MANUAL_UPLOAD)) == 1);
+        fileUploadBundle.setServerId(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_SERVER_ID)));
+
+        return fileUploadBundle;
+    }
+
 
     private FileUploadInstance cursorToFileUploadInstance(Cursor cursor) {
         FileUploadInstance instance = new FileUploadInstance();
