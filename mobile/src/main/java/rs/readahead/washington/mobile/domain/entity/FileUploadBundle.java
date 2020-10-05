@@ -9,13 +9,6 @@ public class FileUploadBundle implements Serializable {
     private boolean includeMetadata;
     private boolean manualUpload;
 
-    public FileUploadBundle(MediaFile mediaFile, long serverId, boolean includeMetadata, boolean manualUpload) {
-        this.mediaFile = mediaFile;
-        this.serverId = serverId;
-        this.includeMetadata = includeMetadata;
-        this.manualUpload = manualUpload;
-    }
-
     public FileUploadBundle(MediaFile mediaFile) {
         this.mediaFile = mediaFile;
     }

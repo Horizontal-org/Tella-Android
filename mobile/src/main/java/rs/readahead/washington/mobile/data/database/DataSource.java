@@ -382,11 +382,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 .compose(applySchedulers());
     }
 
-    public Single<List<MediaFile>> getUploadMediaFiles(final UploadStatus status) {
-        return Single.fromCallable(() -> getUploadMediaFilesDB(status))
-                .compose(applySchedulers());
-    }
-
     public Single<List<FileUploadBundle>> getFileUploadBundles(final UploadStatus status) {
         return Single.fromCallable(() -> getFileUploadBundlesDB(status))
                 .compose(applySchedulers());
@@ -1600,7 +1595,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     private List<FileUploadBundle> getFileUploadBundlesDB(final UploadStatus status) {
-        Timber.d("+++++ getFileUploadBundlesDB");
         Cursor cursor = null;
         List<FileUploadBundle> fileUploadBundles = new ArrayList<>();
 

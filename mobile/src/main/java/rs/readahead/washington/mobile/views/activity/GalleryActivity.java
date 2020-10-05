@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -442,20 +443,8 @@ public class GalleryActivity extends MetadataActivity implements
     @Override
     public void uploadOnServer(TellaUploadServer server, boolean metadata) {
         List<MediaFile> selected = adapter.getSelectedMediaFiles();
-        long[] ids = new long[selected.size()];
-
-        for (int i = 0; i < selected.size(); i++) {
-            ids[i] = selected.get(i).getId();
-        }
-        Timber.d("++++ getFiles with metadata> %b, serverID> %d", metadata, server.getId());
 
         uploadPresenter.scheduleUploadMediaFilesWithPriority(selected, server.getId(), metadata);
-
-        /*Intent intent = new Intent(this, FileUploadingActivity.class);
-        intent.putExtra(FileUploadingActivity.SERVER_KEY, server);
-        intent.putExtra(FileUploadingActivity.FILE_KEYS, ids);
-        intent.putExtra(FileUploadingActivity.METADATA, metadata);
-        startActivity(intent);*/
     }
 
     @Override
@@ -701,8 +690,6 @@ public class GalleryActivity extends MetadataActivity implements
     private void uploadMediaFiles() {
         boolean metadata = false;
         List<MediaFile> selected = adapter.getSelectedMediaFiles();
-
-      //
 
         for (MediaFile mediaFile : selected) {
             if (mediaFile.getMetadata() != null) {
