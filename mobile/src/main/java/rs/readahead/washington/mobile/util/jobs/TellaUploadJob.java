@@ -61,23 +61,32 @@ public class TellaUploadJob extends Job {
         dataSource = DataSource.getInstance(getContext(), key);
         List<FileUploadBundle> fileUploadBundles = dataSource.getFileUploadBundles(UploadStatus.SCHEDULED).blockingGet();
 
-        //detect if there are files for manual upload. Put only them for upload to the first of manually selected upload servers.
+        if (fileUploadBundles.size() == 0) {
+            return exit(Result.SUCCESS);
+        }
 
+        //First upload has highest priority, we are going to upload just to that server
+        long serverId = fileUploadBundles.get(0).getServerId();
 
-        boolean metadata = true;
-        List<RawFile> rawFiles = new ArrayList<>(fileUploadBundles.size() * (metadata ? 2 : 1));
+        List<RawFile> rawFiles = new ArrayList<>();
         for (FileUploadBundle fileUploadBundle: fileUploadBundles) {
-            rawFiles.add(fileUploadBundle.getMediaFile());
+
+            if (fileUploadBundle.getServerId() != serverId) {
+                continue;
+            } else {
+                rawFiles.add(fileUploadBundle.getMediaFile());
+            }
 
             Timber.d("+++++ FileUploadBundle server id %d", fileUploadBundle.getServerId());
             Timber.d("+++++ FileUploadBundle is metdtaaa   %b", fileUploadBundle.isIncludeMetdata());
             Timber.d("+++++ FileUploadBundle is manual   %b", fileUploadBundle.isManualUpload());
 
             if (!fileUploadBundle.isManualUpload()){
+                Timber.d("+++++ file not manual %s", fileUploadBundle.getMediaFile().getFileName());
                 fileMap.put(fileUploadBundle.getMediaFile().getId(), fileUploadBundle.getMediaFile());
             }
 
-            if (metadata) {
+            if (fileUploadBundle.isIncludeMetdata()) {
                 try {
                     Timber.d("+++++ adding metadata for file %s", fileUploadBundle.getMediaFile().getFileName());
                     rawFiles.add(MediaFileHandler.maybeCreateMetadataMediaFile(getContext(), fileUploadBundle.getMediaFile()));
@@ -85,10 +94,6 @@ public class TellaUploadJob extends Job {
                     Timber.d(e);
                 }
             }
-        }
-
-        if (rawFiles.size() == 0) {
-            return exit(Result.SUCCESS);
         }
 
         for (RawFile file : rawFiles){

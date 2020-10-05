@@ -39,6 +39,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.data.entity.MetadataEntity;
 import rs.readahead.washington.mobile.data.entity.mapper.EntityMapper;
+import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.FileUploadBundle;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
@@ -1063,6 +1064,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             long set = calculateCurrentFileUploadSet();
             int retries = getMaxRetries(); //make sure that these files are taken first from the set
+            int manualUpload = 1;
 
             for (MediaFile mediaFile : mediaFiles) {
                 ContentValues values = new ContentValues();
@@ -1071,9 +1073,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 values.put(D.C_CREATED, Util.currentTimestamp());
                 values.put(D.C_STATUS, UploadStatus.SCHEDULED.ordinal());
                 values.put(D.C_INCLUDE_METADATA, metadata ? 1 : 0);
-                values.put(D.C_MANUAL_UPLOAD, 1 );
+                values.put(D.C_MANUAL_UPLOAD, manualUpload);
                 values.put(D.C_SERVER_ID, uploadServerId );
-                values.put(D.C_SIZE, mediaFile.getSize());
                 values.put(D.C_SIZE, mediaFile.getSize());
                 values.put(D.C_SET, set);
                 values.put(D.C_RETRY_COUNT, retries);
@@ -1094,12 +1095,18 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             long set = calculateCurrentFileUploadSet();
 
+            int metadata = Preferences.isMetadataAutoUpload()? 1 : 0;
+            long uploadServerId = Preferences.getAutoUploadServerId();
+
             for (MediaFile mediaFile : mediaFiles) {
                 ContentValues values = new ContentValues();
                 values.put(D.C_MEDIA_FILE_ID, mediaFile.getId());
                 values.put(D.C_UPDATED, Util.currentTimestamp());
                 values.put(D.C_CREATED, Util.currentTimestamp());
                 values.put(D.C_STATUS, UploadStatus.SCHEDULED.ordinal());
+                values.put(D.C_INCLUDE_METADATA, metadata);
+                values.put(D.C_MANUAL_UPLOAD, 0 );
+                values.put(D.C_SERVER_ID, uploadServerId );
                 values.put(D.C_SIZE, mediaFile.getSize());
                 values.put(D.C_SET, set);
 
