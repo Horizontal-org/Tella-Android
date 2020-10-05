@@ -40,7 +40,6 @@
     <string name="action_remove">Remover</string>
     <string name="settings_app.bar">Configurações</string>
     <string name="upload_action_upload.files">Enviar</string>
-    <string name="upload_app.bar_upload.screen">Enviar</string>
     <string name="action_save">Salvar</string>
     <string name="lock_dialog.expl_save.pattern">Configurando dados …</string>
     <string name="lock_dialog.expl_unlock.app">Configurando dados …</string>
@@ -350,13 +349,6 @@
     <string name="settings.docu_disable.servers_dialog.title">Desconectar servidor (es)</string>
     <string name="settings.docu_connect.to.servers_disable_dialog.expl">Gostaria de apagar as conexões do servidor completamente, ou somente escondê-las? Ao esconder, você irá manter as informações na memória, podendo facilmente reconectar e enviar dados para o(s) servidor(es).</string>
     <string name="settings.docu_delete.auto.server_dialog.expl">Se você apagar este servidor, não poderá mais enviar arquivo.</string>
-    <string name="gallery.upload_heading">Enviar arquivos para \"%s\"</string>
-    <string name="gallery.upload_meta_number.of.files">Arquivos</string>
-    <string name="gallery.upload_sending_heading">Enviando</string>
-    <string name="gallery.upload_sent_heading">Todos os arquivos foram enviados com sucesso</string>
-    <string name="gallery.upload_action_try.uploading.again">Tentar de novo</string>
-    <string name="gallery.upload_exit_dialog.expl">Sair cancelará o upload.</string>
-    <string name="gallery.upload_sent_meta_file.already.on.server">Arquivo já no servidor</string>
     <string name="play.audio_action.expl_plus15s">+15s</string>
     <string name="play.audio_action.expl_minus15s">-15s</string>
     <string name="recorder_meta_space.available.days">%1$d days %2$d hours (%3$s) left</string>

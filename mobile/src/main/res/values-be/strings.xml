@@ -40,7 +40,6 @@
     <string name="action_remove">Выдаліць</string>
     <string name="settings_app.bar">Налады</string>
     <string name="upload_action_upload.files">Адправіць</string>
-    <string name="upload_app.bar_upload.screen">Адправіць</string>
     <string name="action_save">Захаваць</string>
     <string name="lock_dialog.expl_save.pattern">Налада дадзеных у працэсе …</string>
     <string name="lock_dialog.expl_unlock.app">Налада дадзеных у працэсе …</string>
@@ -354,13 +353,6 @@
     <string name="settings.docu_disable.servers_dialog.title">Адключыць сервер(ы)</string>
     <string name="settings.docu_connect.to.servers_disable_dialog.expl">Ці хочаце вы выдаліць злучэнні з серверам альбо проста схаваць іх? Схаванне дазволіць захаваць інфармацыю пра сервер у памяці, каб можна было лёгка злучыць і перадаваць дадзеныя на сервер (ы).</string>
     <string name="settings.docu_delete.auto.server_dialog.expl">Калі вы выдаліце гэты сервер, вы больш не зможаце адпраўляць файл.</string>
-    <string name="gallery.upload_heading">Адправіць файлы на \"%s\"</string>
-    <string name="gallery.upload_meta_number.of.files">Файлы</string>
-    <string name="gallery.upload_sending_heading">Адпраўка справаздачы</string>
-    <string name="gallery.upload_sent_heading">Усе файлы паспяхова адпраўлены</string>
-    <string name="gallery.upload_action_try.uploading.again">Паспрабуйце яшчэ раз</string>
-    <string name="gallery.upload_exit_dialog.expl">Выхад скасуе загрузку.</string>
-    <string name="gallery.upload_sent_meta_file.already.on.server">Файл ужо на серверы</string>
     <string name="play.audio_action.expl_plus15s">+15s</string>
     <string name="play.audio_action.expl_minus15s">-15s</string>
     <string name="recorder_meta_space.available.days">%1$d дзён %2$d гадзін (%3$s) засталося</string>

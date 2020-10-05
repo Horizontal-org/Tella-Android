@@ -39,7 +39,6 @@
     <string name="action_remove">Eliminar</string>
     <string name="settings_app.bar">Configuración</string>
     <string name="upload_action_upload.files">Enviar</string>
-    <string name="upload_app.bar_upload.screen">Enviar</string>
     <string name="action_save">Guardar</string>
     <string name="lock_dialog.expl_save.pattern">Configuración de datos…</string>
     <string name="lock_dialog.expl_unlock.app">Configuración de datos…</string>
@@ -348,13 +347,6 @@
     <string name="settings.docu_disable.servers_dialog.title">Disconnect server(s)</string>
     <string name="settings.docu_connect.to.servers_disable_dialog.expl">Would you like to delete your server connections altogether, or simply hide them? Hiding will keep server information in memory so that you can easily reconnect and submit data to the server(s).</string>
     <string name="settings.docu_delete.auto.server_dialog.expl">If you delete this server, you will no longer be able to send file.</string>
-    <string name="gallery.upload_heading">Send files to \"%s\"</string>
-    <string name="gallery.upload_meta_number.of.files">files</string>
-    <string name="gallery.upload_sending_heading">Sending</string>
-    <string name="gallery.upload_sent_heading">All files have been successfully sent</string>
-    <string name="gallery.upload_action_try.uploading.again">Retry</string>
-    <string name="gallery.upload_exit_dialog.expl">Exiting will cancel the upload.</string>
-    <string name="gallery.upload_sent_meta_file.already.on.server">File already on server</string>
     <string name="play.audio_action.expl_plus15s">+15s</string>
     <string name="play.audio_action.expl_minus15s">-15s</string>
     <string name="recorder_meta_space.available.days">%1$d days %2$d hours (%3$s) left</string>

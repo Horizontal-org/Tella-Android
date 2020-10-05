@@ -193,6 +193,9 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
         if (tuServers.size() == 1) {
             autoUploadSwitchView.setVisibility(View.VISIBLE);
             setupAutoUploadSwitch();
+            if (serversPresenter.getAutoUploadServerId() == -1) {
+                setAutoUploadServer(tuServers.get(0));
+            }
         }
 
         showToast(R.string.settings_docu_toast_server_created);

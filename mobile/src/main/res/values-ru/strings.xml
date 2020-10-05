@@ -41,7 +41,6 @@
     <string name="action_remove">Удалить</string>
     <string name="settings_app.bar">Настройки</string>
     <string name="upload_action_upload.files">Отправить</string>
-    <string name="upload_app.bar_upload.screen">Отправить</string>
     <string name="action_save">Сохранить</string>
     <string name="lock_dialog.expl_save.pattern">Настройка данных в процессе…</string>
     <string name="lock_dialog.expl_unlock.app">Настройка данных в процессе…</string>
@@ -355,13 +354,6 @@
     <string name="settings.docu_disable.servers_dialog.title">Отсоединить сервер (а)</string>
     <string name="settings.docu_connect.to.servers_disable_dialog.expl">Вы хотите полностью удалить соединения с сервером или просто скрыть их? Скрытие сохранит информацию о сервере в памяти, так что Вы сможете легко восстановить соединение и отправить данные на сервер (а).</string>
     <string name="settings.docu_delete.auto.server_dialog.expl">Если Вы удалите этот сервер, то больше не сможете отправлять файл.</string>
-    <string name="gallery.upload_heading">Отправлять файлы в \"%s\"</string>
-    <string name="gallery.upload_meta_number.of.files">Файлы</string>
-    <string name="gallery.upload_sending_heading">Отправка</string>
-    <string name="gallery.upload_sent_heading">Все файлы были успешно отправлены</string>
-    <string name="gallery.upload_action_try.uploading.again">Повторить</string>
-    <string name="gallery.upload_exit_dialog.expl">Выход отменит загрузку.</string>
-    <string name="gallery.upload_sent_meta_file.already.on.server">Формы доступны на сервере</string>
     <string name="play.audio_action.expl_plus15s">+15s</string>
     <string name="play.audio_action.expl_minus15s">-15s</string>
     <string name="recorder_meta_space.available.days">%1$d дней %2$d часов (%3$s) оставшееся</string>
