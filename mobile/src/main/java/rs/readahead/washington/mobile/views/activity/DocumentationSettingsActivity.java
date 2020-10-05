@@ -16,6 +16,7 @@ import java.util.List;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 
@@ -72,8 +73,10 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
     SwitchCompat autoUploadSwitch;
     @BindView(R.id.auto_upload_switch_view)
     View autoUploadSwitchView;
-    @BindView(R.id.auto_delete_switch)
-    SwitchCompat autoDeleteSwitch;
+    @BindView(R.id.auto_delete_check)
+    AppCompatCheckBox autoDeleteCheck;
+    @BindView(R.id.metadata_check)
+    AppCompatCheckBox metadataCheck;
 
 
     private ServersPresenter serversPresenter;
@@ -104,7 +107,7 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
         setupCollectSwitch();
         setupOfflineSwitch();
         setupCollectSettingsView();
-        setupAutoDeleteSwitch();
+        setupAutoDeleteAndMetadataUploadCheck();
 
         servers = new ArrayList<>();
         tuServers = new ArrayList<>();
@@ -437,9 +440,11 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
         anonymousSwitch.setChecked(!Preferences.isAnonymousMode());
     }
 
-    private void setupAutoDeleteSwitch() {
-        autoDeleteSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> Preferences.setAutoDelete(isChecked));
-        autoDeleteSwitch.setChecked(Preferences.isAutoDeleteEnabled());
+    private void setupAutoDeleteAndMetadataUploadCheck() {
+        autoDeleteCheck.setOnCheckedChangeListener((buttonView, isChecked) -> Preferences.setAutoDelete(isChecked));
+        autoDeleteCheck.setChecked(Preferences.isAutoDeleteEnabled());
+        metadataCheck.setOnCheckedChangeListener((buttonView, isChecked) -> Preferences.setMetadataAutoUpload(isChecked));
+        metadataCheck.setChecked(Preferences.isMetadataAutoUpload());
     }
 
     private void setupCollectSettingsView() {

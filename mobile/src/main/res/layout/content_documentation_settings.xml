@@ -214,6 +214,33 @@
                                 tools:ignore="RelativeOverlap" />
                         </RelativeLayout>
 
+                    <View style="@style/SettingsMainShadowLine" />
+
+                    <LinearLayout
+                        android:id="@+id/metadata_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingStart="48dp"
+                        android:paddingEnd="2dp">
+
+                        <LinearLayout style="@style/VerticalLinearLayout">
+                            <androidx.appcompat.widget.AppCompatCheckBox
+                                android:id="@+id/metadata_check"
+                                android:layoutDirection="rtl"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:text="@string/settings.docu_auto.upload.metadata_action"
+                                android:theme="@style/SettingsTextViewCheck" />
+
+                            <TextView
+                                android:id="@+id/metadata_info"
+                                style="@style/SettingsTextViewGray"
+                                android:text="@string/settings.docu_auto.upload.metadata_action.expl" />
+                        </LinearLayout>
+                    </LinearLayout>
+
                         <View style="@style/SettingsMainShadowLine" />
 
                         <LinearLayout
@@ -225,14 +252,14 @@
                             android:paddingEnd="2dp">
 
                             <LinearLayout style="@style/VerticalLinearLayout">
-
-                                <androidx.appcompat.widget.SwitchCompat
-                                    android:id="@+id/auto_delete_switch"
+                                <androidx.appcompat.widget.AppCompatCheckBox
+                                    android:id="@+id/auto_delete_check"
+                                    android:layoutDirection="rtl"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="center_vertical"
                                     android:text="@string/settings.docu_auto.delete_action"
-                                    android:theme="@style/SettingsTextViewSwitch" />
+                                    android:theme="@style/SettingsTextViewCheck" />
 
                                 <TextView
                                     android:id="@+id/auto_delete_info"
