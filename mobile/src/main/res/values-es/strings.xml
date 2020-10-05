@@ -49,7 +49,7 @@
     <string name="settings.docu_toast_server.deleted">Servidor eliminado</string>
     <string name="settings.docu_toast_server.created">Servidor creado</string>
     <string name="settings.docu_toast_server.updated">Servidor actualizado</string>
-    <string name="settings.docu_dialog.title_odk.server.settings">Configuración del servidor</string>
+    <string name="settings.docu_dialog.title_server.settings">Configuración del servidor</string>
     <string name="settings.docu_dialog.title_tus.server.settings">Configuración del servidor</string>
     <string name="settings.docu_field_server.name">Nombre del servidor</string>
     <string name="settings.docu_field_server.url">URL del servidor</string>
@@ -75,7 +75,6 @@
     <string name="collect_action.desc_save.form">Guardar formulario</string>
     <string name="collect.end_action.desc_save.send.later">Guardar formulario</string>
     <string name="action.desc_confirm">Confirmar</string>
-    <string name="collect.end_action_submit.form">Enviar formulario</string>
     <string name="collect.form_action_previous.section">Anterior</string>
     <string name="collect.form_action_next.section">Siguiente</string>
     <string name="action_stop">Detener</string>

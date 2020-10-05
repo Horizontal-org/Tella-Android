@@ -50,7 +50,7 @@
     <string name="settings.docu_toast_server.deleted">Сервер выдалены.</string>
     <string name="settings.docu_toast_server.created">Сервер паспяхова створаны.</string>
     <string name="settings.docu_toast_server.updated">Сервер паспяхова абноўлены.</string>
-    <string name="settings.docu_dialog.title_odk.server.settings">Налады сервера</string>
+    <string name="settings.docu_dialog.title_server.settings">Налады сервера</string>
     <string name="settings.docu_dialog.title_tus.server.settings">Налады сервера</string>
     <string name="settings.docu_field_server.name">Імя сервера</string>
     <string name="settings.docu_field_server.url">URL сервера</string>
@@ -76,7 +76,6 @@
     <string name="collect_action.desc_save.form">Захаваць форму</string>
     <string name="collect.end_action.desc_save.send.later">Захаваць форму</string>
     <string name="action.desc_confirm">Пацвердзіць</string>
-    <string name="collect.end_action_submit.form">Адправіць форму</string>
     <string name="collect.form_action_previous.section">Папярэдняя частка</string>
     <string name="collect.form_action_next.section">Наступная частка</string>
     <string name="action_stop">Спыніць</string>

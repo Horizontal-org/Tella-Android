@@ -84,7 +84,7 @@ public class TellaUploadServerDialogFragment extends DialogFragment implements
         if (server == null) {
             args.putInt(TITLE_KEY, R.string.settings_docu_add_server_dialog_title);
         } else {
-            args.putInt(TITLE_KEY, R.string.settings_docu_dialog_title_tus_server_settings);
+            args.putInt(TITLE_KEY, R.string.settings_docu_dialog_title_server_settings);
             args.putSerializable(ID_KEY, server.getId());
             args.putSerializable(OBJECT_KEY, server);
         }
