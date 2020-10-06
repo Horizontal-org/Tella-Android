@@ -44,13 +44,11 @@
     <string name="lock_dialog.expl_save.pattern">Configuración de datos…</string>
     <string name="lock_dialog.expl_unlock.app">Configuración de datos…</string>
     <string name="action_skip">Omitir</string>
-    <string name="settings_list.item_code">Código fuente</string>
     <string name="settings.docu_delete.server_dialog.expl">Si eliminas este servidor, todos los borradores y formularios enviados serán borrados de tu dispositivo, ¿quieres eliminarlo de todos modos?</string>
     <string name="settings.docu_toast_server.deleted">Servidor eliminado</string>
     <string name="settings.docu_toast_server.created">Servidor creado</string>
     <string name="settings.docu_toast_server.updated">Servidor actualizado</string>
     <string name="settings.docu_dialog.title_server.settings">Configuración del servidor</string>
-    <string name="settings.docu_dialog.title_tus.server.settings">Configuración del servidor</string>
     <string name="settings.docu_field_server.name">Nombre del servidor</string>
     <string name="settings.docu_field_server.url">URL del servidor</string>
     <string name="collect.sent_tab.title">Enviado</string>
@@ -289,7 +287,6 @@
         <item quantity="one">%d elemento</item>
         <item quantity="other">%d elementos</item>
     </plurals>
-    <string name="settings.about_select_licenses">Licencias</string>
     <string name="collect_toast_fail.data.too.large">El servidor rechaza su envío. Puede ser porque un archivo adjunto es más grande que el tamaño permitido.</string>
     <string name="collect.end_heading_submitting">Enviando</string>
     <string name="collect.end_exit_dialog.expl">Si sale ahora, podrá enviar los archivos restantes más tarde.</string>
@@ -391,7 +388,6 @@
     <string name="upload.info_app.bar">Upload information</string>
     <string name="upload.info_meta_number.of.files">Number of files</string>
     <string name="upload_meta_date.started">Date started</string>
-
     <string name="upload.main_dialog.action_clear">Clear</string>
     <string name="upload.main_nothing.to.show">There is no information to show here.</string>
     <string name="upload.info_meta_date.completed">Completed</string>

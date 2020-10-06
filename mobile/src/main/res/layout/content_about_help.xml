@@ -113,54 +113,5 @@
 
         <View style="@style/SettingsMainLine" />
 
-        <LinearLayout
-            android:id="@+id/licenses"
-            style="@style/SettingsTitleClickableHorizontalLinerLayout"
-            android:gravity="center_horizontal"
-            android:paddingStart="2dp"
-            android:paddingTop="@dimen/activity_about_margin"
-            android:paddingEnd="2dp"
-            android:paddingBottom="@dimen/activity_about_margin">
-
-            <TextView
-                style="@style/SettingsTextViewAbout"
-                android:text="@string/settings.about_select_licenses" />
-        </LinearLayout>
-
-        <View style="@style/SettingsMainLine" />
-
-        <LinearLayout
-            android:id="@+id/source_code"
-            style="@style/SettingsTitleClickableHorizontalLinerLayout"
-            android:gravity="center_horizontal"
-            android:paddingStart="2dp"
-            android:paddingTop="@dimen/activity_about_margin"
-            android:paddingEnd="2dp"
-            android:paddingBottom="@dimen/activity_about_margin">
-
-            <TextView
-                style="@style/SettingsTextViewAbout"
-                android:text="@string/settings_list.item_code" />
-        </LinearLayout>
-
-
-        <!-- <TextView
-            android:id="@+id/privacy"
-            style="@style/AboutText"
-            android:text="@string/privacy_policy"/>
-        <View style="@style/AboutTextSeparator"/> -->
-
-        <!-- <TextView
-            android:id="@+id/licence"
-            style="@style/AboutText"
-            android:text="@string/licence"/>
-        <View style="@style/AboutTextSeparator"/> -->
-
-        <!-- <TextView
-            android:id="@+id/source_code"
-            style="@style/AboutText"
-            android:text="@string/source_code"/>
-        <View style="@style/AboutTextSeparator"/> -->
-
     </LinearLayout>
 </ScrollView>
