@@ -43,7 +43,6 @@
     <string name="lock_dialog.expl_save.pattern">Saving your lock pattern</string>
     <string name="lock_dialog.expl_unlock.app">Unlocking Tella</string>
     <string name="action_skip">Skip</string>
-    <string name="settings_list.item_code">Source code</string>
     <string name="settings.docu_delete.server_dialog.expl">If you delete this server, all draft and submitted forms will be deleted from your device. Delete anyway?</string>
     <string name="settings.docu_toast_server.deleted">Server deleted.</string>
     <string name="settings.docu_toast_server.created">Server created.</string>
@@ -284,7 +283,6 @@
     <string name="gallery_toast_file.encrypted">File encrypted.</string>
     <string name="settings.docu_dialog.action_hide">Hide</string>
     <string name="settings.docu_toast_disconnect.servers.delete">All forms and servers have been deleted.</string>
-    <string name="settings.about_select_licenses">Licenses</string>
     <string name="collect.help_expl_not.connected.to.server"><![CDATA[To receive forms and submit data, you must first connect to a server. Ask you  organization for the server information and set up the server.]]></string>
     <string name="collect.help_expl_odk"><![CDATA[If you would like to create your own forms, <a href=\"https://hzontal.org/contact/\">contact us</a> or use <a href=\"https://opendatakit.org/help/help-for-hire/\">any service based on the Open Data Kit (ODK)</a>]]></string>
     <string name="collect.help_expl_no.internet">If you are not connected to the Internet, you can still fill forms. The data will be submitted as soon as you get online.</string>

@@ -44,7 +44,6 @@
     <string name="lock_dialog.expl_save.pattern">Configurando dados …</string>
     <string name="lock_dialog.expl_unlock.app">Configurando dados …</string>
     <string name="action_skip">Pular</string>
-    <string name="settings_list.item_code">Código fonte</string>
     <string name="settings.docu_delete.server_dialog.expl">Se você apagar este servidor, todos os rascunhos e formulários enviados serão apagados do seu aparelho celular. Apagar mesmo assim?</string>
     <string name="settings.docu_toast_server.deleted">Servidor removido</string>
     <string name="settings.docu_toast_server.created">Servidor criado</string>
@@ -289,7 +288,6 @@
         <item quantity="one">%d Um</item>
         <item quantity="other">%d Outro</item>
     </plurals>
-    <string name="settings.about_select_licenses">Licenças</string>
     <string name="collect_toast_fail.data.too.large">O servidor está rejeitando seu envio. Pode ser porque um anexo é maior que o tamanho permitido.</string>
     <string name="collect.end_heading_submitting">Enviando</string>
     <string name="collect.end_exit_dialog.expl">Se você sair agora, poderá enviar os arquivos restantes posteriormente.</string>
@@ -384,7 +382,6 @@
     <string name="upload.info_app.bar">Upload information</string>
     <string name="upload.info_meta_number.of.files">Number of files</string>
     <string name="upload_meta_date.started">Date started</string>
-
     <string name="upload.main_dialog.action_clear">Clear</string>
     <string name="upload.main_nothing.to.show">There is no information to show here.</string>
     <string name="upload.info_meta_date.completed">Completed</string>

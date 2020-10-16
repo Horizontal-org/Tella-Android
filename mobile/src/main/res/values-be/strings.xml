@@ -44,7 +44,6 @@
     <string name="lock_dialog.expl_save.pattern">Налада дадзеных у працэсе …</string>
     <string name="lock_dialog.expl_unlock.app">Налада дадзеных у працэсе …</string>
     <string name="action_skip">Прапусціць</string>
-    <string name="settings_list.item_code">Першапачатковы код</string>
     <string name="settings.docu_delete.server_dialog.expl">Калі Вы выдаліце дадзены сервер, то ўсё чарнавікі і адпраўленыя формы таксама будуць выдаленыя з Вашай прылады. Выдаліць ў любым выпадку?</string>
     <string name="settings.docu_toast_server.deleted">Сервер выдалены.</string>
     <string name="settings.docu_toast_server.created">Сервер паспяхова створаны.</string>
@@ -293,7 +292,6 @@
         <item quantity="many">Шмат</item>
         <item quantity="other">%d Іншыя</item>
     </plurals>
-    <string name="settings.about_select_licenses">Дазвалення</string>
     <string name="collect_toast_fail.data.too.large">Адхілена серверам. Магчыма, таму, што ўкладанне перавышае дазволены памер.</string>
     <string name="collect.end_heading_submitting">Адпраўка</string>
     <string name="collect.end_exit_dialog.expl">Калі зараз выйсці, вы зможаце адправіць астатнія файлы пазней.</string>
@@ -394,7 +392,6 @@
     <string name="upload.info_app.bar">Upload information</string>
     <string name="upload.info_meta_number.of.files">Number of files</string>
     <string name="upload_meta_date.started">Date started</string>
-
     <string name="upload.main_dialog.action_clear">Clear</string>
     <string name="upload.main_nothing.to.show">There is no information to show here.</string>
     <string name="upload.info_meta_date.completed">Completed</string>
