@@ -4,7 +4,7 @@
     <item
         android:id="@+id/menu_item_tu"
         android:icon="@drawable/ic_cloud_upload_white_24dp"
-        android:title="@string/action_share"
+        android:title="@string/action_upload"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menu_item_share"
