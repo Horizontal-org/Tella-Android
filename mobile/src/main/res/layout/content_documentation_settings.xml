@@ -192,6 +192,7 @@
                             android:layout_height="50dp"
                             android:paddingStart="62dp"
                             android:paddingEnd="26dp"
+                            android:visibility="gone"
                             android:orientation="horizontal">
                             <TextView
                                 android:layout_height="match_parent"

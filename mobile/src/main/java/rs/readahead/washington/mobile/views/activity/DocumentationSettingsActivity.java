@@ -77,6 +77,8 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
     AppCompatCheckBox autoDeleteCheck;
     @BindView(R.id.metadata_check)
     AppCompatCheckBox metadataCheck;
+    @BindView(R.id.selected_upload_server_layout)
+    View serverSelectLayout;
 
 
     private ServersPresenter serversPresenter;
@@ -195,6 +197,9 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
             setupAutoUploadSwitch();
         }
 
+        if (tuServers.size() > 1) {
+            serverSelectLayout.setVisibility(View.VISIBLE);
+        }
         showToast(R.string.settings_docu_toast_server_created);
     }
 
@@ -212,6 +217,10 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
         if (tuServers.size() == 0) {
             autoUploadSwitchView.setVisibility(View.GONE);
             autoUploadSettingsView.setVisibility(View.GONE);
+        }
+
+        if (tuServers.size() == 1) {
+            serverSelectLayout.setVisibility(View.GONE);
         }
 
         createServerViews(servers);
@@ -579,6 +588,12 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
                     break;
                 }
             }
+        }
+
+        if (tuServers.size() > 1) {
+            serverSelectLayout.setVisibility(View.VISIBLE);
+        } else {
+            serverSelectLayout.setVisibility(View.GONE);
         }
     }
 
