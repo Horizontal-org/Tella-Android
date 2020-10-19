@@ -403,4 +403,8 @@
     <string name="settings.docu_error_must.select.auto.upload.server">You must select a server</string>
     <string name="settings.docu_auto.upload.metadata_action">Include verification information</string>
     <string name="settings.docu_auto.upload.metadata_action.expl">If your files include verification information, it will automatically be uploaded alongside your files</string>
+    <string name="upload.main_dialog.title_clear.history">Clear upload history?</string>
+    <string name="camera_tab.title_photo">Photo</string>
+    <string name="camera_tab.title_video">Video</string>
+    <string name="action_upload">Upload</string>
 </resources>

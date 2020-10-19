@@ -152,7 +152,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/CameraModeText"
-                android:text="@string/gallery_list.items_show.only.photos"
+                android:text="@string/camera_tab.title_photo"
                 android:textAlignment="center"/>
 
             <View
@@ -176,7 +176,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/CameraModeText"
-                android:text="@string/gallery_list.items_show.only.videos"
+                android:text="@string/camera_tab.title_video"
                 android:textAlignment="center"/>
             <View
                 android:id="@+id/video_line"
