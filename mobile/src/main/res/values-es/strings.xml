@@ -38,7 +38,6 @@
     <string name="recorder_content.desc_blinking.red.dot">GRABANDO AUDIO....</string>
     <string name="action_remove">Eliminar</string>
     <string name="settings_app.bar">Configuración</string>
-    <string name="upload_action_upload.files">Enviar</string>
     <string name="action_save">Guardar</string>
     <string name="lock_dialog.expl_save.pattern">Configuración de datos…</string>
     <string name="lock_dialog.expl_unlock.app">Configuración de datos…</string>
@@ -94,7 +93,6 @@
     <string name="action_discard">Descartar</string>
     <string name="collect.end_action_submit">Enviar</string>
     <string name="gallery_toast_file.imported.from.device">Archivo añadido a la galería</string>
-    <string name="gallery_toast_file.exported">Multimedia exportado</string>
     <string name="gallery_toast_fail.exporting.to.device">Hubo un error al exportar archivos.</string>
     <string name="permission_dialog.expl_device.storage">Para exportar archivos, Tella necesita permiso de escritura en almacenamiento del dispositivo.</string>
     <plurals name="gallery_toast_files.deleted">
@@ -396,23 +394,25 @@
     <string name="camera_tab.title_photo">Photo</string>
     <string name="camera_tab.title_video">Video</string>
     <string name="action_upload">Upload</string>
-    <string name="pl_cancel">Otkazi</string>
-    <string name="pl_confirm">Potvrdi</string>
-    <string name="pl_confirm_pattern">Prevuci ponovo da bi potvrdio</string>
-    <string name="pl_continue">Produzi</string>
-    <string name="pl_draw_pattern">Nacrtaj Patern za otkljucavanje</string>
+    <string name="pl_cancel">Cancel</string>
+    <string name="pl_confirm">Confirm</string>
+    <string name="pl_confirm_pattern">Draw the pattern again to confirm</string>
+    <string name="pl_continue">Continue</string>
+    <string name="pl_draw_pattern">Draw an unlock pattern</string>
     <string name="pl_draw_pattern_to_unlock">Draw pattern to unlock</string>
     <string name="pl_forgot_pattern">Forgot pattern</string>
-    <string name="pl_pattern_confirmed">Your new unlock pattern</string>
+    <string name="pl_pattern_confirmed">This is now your pattern to unlock Tella</string>
     <string name="pl_pattern_recorded">Pattern recorded</string>
     <string name="pl_pattern_too_short">Connect at least %d dots, please redraw</string>
     <string name="pl_recording_pattern">Release finger when done</string>
     <string name="pl_redraw">Redraw</string>
-    <string name="pl_wrong_pattern">Wrong pattern, please retry</string>
+    <string name="pl_wrong_pattern">Wrong pattern, please try again</string>
     <string name="pl_access_pattern_start">Pattern started</string>
     <string name="pl_access_pattern_cleared">Pattern cleared</string>
     <string name="pl_access_pattern_cell_added">Cell added</string>
-    <string name="pl_access_pattern_cell_added_verbose">Cell <xliff:g example="3" id="cell_index">%1$d</xliff:g> added</string>
+    <string name="pl_access_pattern_cell_added_verbose">Cell <xliff:g id="cell_index" example="3">%1$d</xliff:g> added</string>
     <string name="pl_access_pattern_detected">Pattern completed</string>
-    <string name="pl_access_pattern_area">Pattern area.</string>
+    <string name="pl_access_pattern_area">Pattern area</string>
+    <string name="collect.blank_action.desc_more.options">More options</string>
+    <string name="action_next">Next</string>
 </resources>

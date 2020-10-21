@@ -333,6 +333,7 @@ public class BlankFormsListFragment extends FormListFragment implements
 
             if (collectForm.isDownloaded()) {
                 dlOpenButton.setImageDrawable(row.getContext().getResources().getDrawable(R.drawable.ic_more_vert_black_24dp));
+                dlOpenButton.setContentDescription(getString(R.string.collect_blank_action_desc_more_options));
                 dlOpenButton.setOnClickListener(view -> showDownloadedPopupMenu(collectForm, row, dlOpenButton));
                 rowLayout.setOnClickListener(view -> MyApplication.bus().post(new ShowBlankFormEntryEvent(collectForm)));
                 if (collectForm.isUpdated()) {
@@ -350,6 +351,7 @@ public class BlankFormsListFragment extends FormListFragment implements
                 }
             } else {
                 dlOpenButton.setImageDrawable(row.getContext().getResources().getDrawable(R.drawable.ic_cloud_download_black_24dp));
+                dlOpenButton.setContentDescription(getString(R.string.collect_blank_action_download_form));
                 dlOpenButton.setOnClickListener(view -> {
                     if (MyApplication.isConnectedToInternet(Objects.requireNonNull(getContext()))) {
                         presenter.downloadBlankFormDef(collectForm);

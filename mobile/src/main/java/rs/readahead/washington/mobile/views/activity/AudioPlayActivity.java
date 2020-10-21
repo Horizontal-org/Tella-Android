@@ -302,7 +302,7 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
 
     @Override
     public void onMediaExported() {
-        showToast(R.string.gallery_toast_file_exported);
+        showToast(getResources().getQuantityString((R.plurals.gallery_toast_files_exported), 1, 1));
     }
 
     @Override
