@@ -161,7 +161,7 @@ public class UploadInformationActivity extends CacheWordSubscriberBaseActivity i
     private void showClearUploadDialog(long id) {
         alertDialog = new androidx.appcompat.app.AlertDialog.Builder(this)
                 .setMessage(R.string.upload_info_stop_upload_dialog_expl)
-                .setPositiveButton(R.string.upload_main_dialog_action_clear, (dialog, which) -> presenter.deleteFileUploadInstance(id))
+                .setPositiveButton(R.string.action_stop, (dialog, which) -> presenter.deleteFileUploadInstance(id))
                 .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
                 })
                 .setCancelable(true)

@@ -144,7 +144,7 @@ public class DialogsUtil {
 
         builder.setView(view)
                 .setTitle(R.string.settings_docu_add_server_selection_dialog_title)
-                .setPositiveButton(R.string.collect_form_action_next_section, (dialog, which) -> {
+                .setPositiveButton(R.string.action_next, (dialog, which) -> {
                     listener.onChoice(odk.isChecked() ? ServerType.ODK_COLLECT : ServerType.TELLA_UPLOAD);
                 })
                 .setNegativeButton(R.string.action_cancel, null)
@@ -329,7 +329,7 @@ public class DialogsUtil {
         }
 
         builder.setView(view)
-                .setPositiveButton(R.string.collect_form_action_next_section, (dialog, which) -> {
+                .setPositiveButton(R.string.action_next, (dialog, which) -> {
                     int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
                     AppCompatRadioButton radioButton = radioGroup.findViewById(checkedRadioButtonId);
                     String key = (String) radioButton.getTag();

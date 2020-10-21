@@ -1,4 +1,5 @@
-<resources>
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Tella</string>
     <string name="collect.blank_action_update.form">Update</string>
     <string name="settings.about_app.bar">About &amp; Help</string>
@@ -38,7 +39,6 @@
     <string name="recorder_content.desc_blinking.red.dot">Recording audio</string>
     <string name="action_remove">Remove</string>
     <string name="settings_app.bar">Settings</string>
-    <string name="upload_action_upload.files">Send</string>
     <string name="action_save">Save</string>
     <string name="lock_dialog.expl_save.pattern">Saving your lock pattern</string>
     <string name="lock_dialog.expl_unlock.app">Unlocking Tella</string>
@@ -94,7 +94,6 @@
     <string name="action_discard">Discard</string>
     <string name="collect.end_action_submit">Submit</string>
     <string name="gallery_toast_file.imported.from.device">The file was added to your gallery.</string>
-    <string name="gallery_toast_file.exported">Files saved to the device. </string>
     <string name="gallery_toast_fail.exporting.to.device">There was an error exporting the files. Please try again. </string>
     <string name="permission_dialog.expl_device.storage">In order to export files, Tella needs permission to write on the device\'s storage.</string>
     <plurals name="gallery_toast_files.deleted">
@@ -103,8 +102,8 @@
     </plurals>
     <string name="gallery_toast_fail.deleting.files">There was an error deleting the files. Please try again. </string>
     <plurals name="gallery_toast_files.exported">
-        <item quantity="one">%1$d file exported</item>
-        <item quantity="other">%1$d files exported</item>
+        <item quantity="one">%1$d file saved to the device.</item>
+        <item quantity="other">%1$d files saved to the device.</item>
     </plurals>
     <string name="gallery_delete.files_dialog.title">Delete file?</string>
     <string name="gallery_delete.files_dialog.expl">The selected file will be permanently deleted from your gallery.</string>
@@ -152,7 +151,7 @@
     <string name="onboard.camo_subheading">Protection against device searches</string>
     <string name="onboard.camo_expl">Tella can be hidden on your device and any file captured in Tella or imported is automatically encrypted and stored in a hidden gallery.</string>
     <string name="onboard.collect_subheading">Easy data collection</string>
-    <string name="onboard.collect_expl">Online or offline, fill forms and surveys directly from your device. You must be linked to a sponsor organization that creates forms and manages the data.</string>
+    <string name="onboard.collect_expl">Online or offline, fill forms and surveys directly from your device. You must be linked to an organization that creates forms and manages the data.</string>
     <string name="onboard.del_subheading">Emergency data wiping</string>
     <string name="onboard.del_expl">In emergency situations, delete sensitive information from Tella in just a few seconds.</string>
     <string name="onboard.perm_action_grant.permissions">Grant permissions</string>
@@ -283,7 +282,7 @@
     <string name="gallery_toast_file.encrypted">File encrypted.</string>
     <string name="settings.docu_dialog.action_hide">Hide</string>
     <string name="settings.docu_toast_disconnect.servers.delete">All forms and servers have been deleted.</string>
-    <string name="collect.help_expl_not.connected.to.server"><![CDATA[To receive forms and submit data, you must first connect to a server. Ask you  organization for the server information and set up the server.]]></string>
+    <string name="collect.help_expl_not.connected.to.server"><![CDATA[To receive forms and submit data, you must first connect to a server. Ask your organization for the server information and set up the server.]]></string>
     <string name="collect.help_expl_odk"><![CDATA[If you would like to create your own forms, <a href=\"https://hzontal.org/contact/\">contact us</a> or use <a href=\"https://opendatakit.org/help/help-for-hire/\">any service based on the Open Data Kit (ODK)</a>]]></string>
     <string name="collect.help_expl_no.internet">If you are not connected to the Internet, you can still fill forms. The data will be submitted as soon as you get online.</string>
     <string name="collect_toast_fail.data.too.large">Your form cannot be submitted because the attachments are too large. Please attach smaller files.</string>
@@ -295,10 +294,10 @@
     <string name="collect.blank_action_pin">Pin to the top</string>
     <string name="collect.blank_subheading_forms.on.servers">Forms available on server</string>
     <string name="collect.blank_subheading_downloaded.forms">Downloaded forms</string>
-    <string name="verification.prompt_dialog.expl">Verification mode is ON but GPS is OFF. Turn ON GPS in order to capture the geolocation of your evidence.</string>
+    <string name="verification.prompt_dialog.expl">Verification mode is ON but GPS is OFF. Turn ON GPS in order to record the position of your evidence.</string>
     <string name="verification.prompt_action_ignore">Ignore</string>
     <string name="verification.prompt_action_enable.GPS">Turn on GPS</string>
-    <string name="collect.blank_dialog.expl_updating.form.definitions">Updating list of forms…</string>
+    <string name="collect.blank_dialog.expl_updating.form.definitions">Updating the list of forms…</string>
     <string name="collect.blank_toast_refresh.canceled">Update canceled.</string>
     <string name="collect.blank_toast_form.definition.updated">Update completed.</string>
     <string name="verification.share_dialog.title">Do you want to include verification information?</string>
@@ -357,10 +356,10 @@
     <string name="settings.docu_auto.upload_action.expl">Tella will upload your photos, videos, or audio recordings to the server as soon as they are recorded or imported into Tella.</string>
     <string name="settings.docu_auto.delete_action">Auto-delete</string>
     <string name="settings.docu_auto.delete_action.expl">Tella will automatically delete the files from your device as soon as they are uploaded to the server.</string>
-    <string name="settings.docu_choose.auto.upload.server_dialog.expl">Select which server to auto-upload your files to</string>
+    <string name="settings.docu_choose.auto.upload.server_dialog.expl">Which server would you like to auto-upload the files to?</string>
     <string name="settings.docu_delete.upload.server_dialog.expl">You will no longer be able to upload files to this server.</string>
     <string name="home_upload.button">Upload</string>
-    <string name="upload.main_meta_status.uploading">Uploading,</string>
+    <string name="upload.main_meta_status.uploading">Uploading</string>
     <string name="upload_meta_date.started">Started on</string>
     <string name="upload.main_action_more.details">More details</string>
     <plurals name="upload.main_meta_number.of.files">
@@ -380,21 +379,41 @@
     <string name="upload.info_stop.upload_dialog.expl">Are you sure you want to stop the upload?</string>
     <string name="upload.info_app.bar">Upload information</string>
     <string name="upload.info_meta_number.of.files">Number of files</string>
-
     <string name="upload.main_dialog.action_clear">Clear</string>
     <string name="upload.main_nothing.to.show">There is no past upload to show.</string>
     <string name="upload.info_meta_date.completed">Completed</string>
     <string name="upload.info_meta_file.type">File type</string>
-    <string name="upload.main_meta_status.attempting">Attempting to connect,</string>
+    <string name="upload.main_meta_status.attempting">Attempting to connect</string>
     <string name="upload.main_meta_less.minute.left">less than a minute left</string>
-    <string name="upload.info_dialog.expl_delete.upload">Are you sure you want to delete the upload information?</string>stopped
-    <string name="upload.main_meta_status.stopped">Stopped,</string>
+    <string name="upload.main_meta_status.stopped">Stopped</string>
     <string name="upload.main_meta_more.hour.left">more than an hour left</string>
-    <string name="settings.docu_error_must.select.auto.upload.server">You must select a server</string>
-    <string name="settings.docu_auto.upload.metadata_action">Include verification information</string>
-    <string name="settings.docu_auto.upload.metadata_action.expl">If your files include verification information, it will automatically be uploaded alongside your files</string>
+    <string name="settings.docu_error_must.select.auto.upload.server">You must select a server.</string>
+    <string name="upload.info_dialog.expl_delete.upload">Are you sure you want to delete the upload information?</string>
     <string name="upload.main_dialog.title_clear.history">Clear upload history?</string>
-    <string name="camera_tab.title_photo">Photo</string>
+    <string name="settings.docu_auto.upload.metadata_action">Include verification information</string>
+    <string name="settings.docu_auto.upload.metadata_action.expl">If your files include verification information, it will automatically be uploaded alongside your files.</string>
     <string name="camera_tab.title_video">Video</string>
+    <string name="camera_tab.title_photo">Photo</string>
     <string name="action_upload">Upload</string>
+    <string name="pl_cancel">Cancel</string>
+    <string name="pl_confirm">Confirm</string>
+    <string name="pl_confirm_pattern">Draw the pattern again to confirm</string>
+    <string name="pl_continue">Continue</string>
+    <string name="pl_draw_pattern">Draw an unlock pattern</string>
+    <string name="pl_draw_pattern_to_unlock">Draw pattern to unlock</string>
+    <string name="pl_forgot_pattern">Forgot pattern</string>
+    <string name="pl_pattern_confirmed">This is now your pattern to unlock Tella</string>
+    <string name="pl_pattern_recorded">Pattern recorded</string>
+    <string name="pl_pattern_too_short">Connect at least %d dots, please redraw</string>
+    <string name="pl_recording_pattern">Release finger when done</string>
+    <string name="pl_redraw">Redraw</string>
+    <string name="pl_wrong_pattern">Wrong pattern, please try again</string>
+    <string name="pl_access_pattern_start">Pattern started</string>
+    <string name="pl_access_pattern_cleared">Pattern cleared</string>
+    <string name="pl_access_pattern_cell_added">Cell added</string>
+    <string name="pl_access_pattern_cell_added_verbose">Cell <xliff:g id="cell_index" example="3">%1$d</xliff:g> added</string>
+    <string name="pl_access_pattern_detected">Pattern completed</string>
+    <string name="pl_access_pattern_area">Pattern area</string>
+    <string name="collect.blank_action.desc_more.options">More options</string>
+    <string name="action_next">Next</string>
 </resources>
