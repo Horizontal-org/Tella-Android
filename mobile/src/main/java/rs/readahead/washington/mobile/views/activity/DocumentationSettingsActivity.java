@@ -368,7 +368,7 @@ public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivi
     private void removeCollectServer(final CollectServer server) {
         dialog = DialogsUtil.showDialog(this,
                 getString(R.string.settings_docu_delete_server_dialog_expl),
-                getString(R.string.action_remove),
+                getString(R.string.action_delete),
                 getString(R.string.action_cancel),
                 (dialog, which) -> {
                     collectServersPresenter.remove(server);
