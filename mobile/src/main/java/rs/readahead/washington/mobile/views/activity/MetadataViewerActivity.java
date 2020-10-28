@@ -3,9 +3,11 @@ package rs.readahead.washington.mobile.views.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -131,7 +133,8 @@ public class MetadataViewerActivity extends CacheWordSubscriberBaseActivity {
         metadataList.addView(createMetadataItem(metadata.getManufacturer(), getResources().getString(R.string.verification_info_field_manufacturer)));
         metadataList.addView(createMetadataItem(metadata.getHardware(), getResources().getString(R.string.verification_info_field_hardware)));
         metadataList.addView(createMetadataItem(metadata.getDeviceID(), getResources().getString(R.string.verification_info_field_device_id)));
-        metadataList.addView(createMetadataItem(metadata.getScreenSize(), getResources().getString(R.string.verification_info_field_screen_size)));
+        metadataList.addView(createMetadataItem(metadata.getScreenSize() + getResources().getString(R.string.inches),
+                getResources().getString(R.string.verification_info_field_screen_size)));
         metadataList.addView(createMetadataItem(metadata.getLanguage(), getResources().getString(R.string.verification_info_field_language)));
         metadataList.addView(createMetadataItem(metadata.getLocale(), getResources().getString(R.string.verification_info_field_locale)));
         metadataList.addView(createMetadataItem(metadata.getNetwork(), getResources().getString(R.string.verification_info_field_connection_status)));
@@ -145,7 +148,8 @@ public class MetadataViewerActivity extends CacheWordSubscriberBaseActivity {
         if (metadata.getMyLocation() != null) {
             metadataList.addView(createMetadataItem(getLocationString(metadata.getMyLocation()), getResources().getString(R.string.verification_info_field_location)));
             metadataList.addView(createMetadataItem(metadata.getMyLocation().getProvider(), getResources().getString(R.string.verification_info_field_location_provider)));
-            metadataList.addView(createMetadataItem(metadata.getMyLocation().getSpeed().toString(), getResources().getString(R.string.verification_info_field_location_speed)));
+            metadataList.addView(createMetadataItem(metadata.getMyLocation().getSpeed().toString() + getResources().getString(R.string.meter_per_second),
+                    getResources().getString(R.string.verification_info_field_location_speed)));
         } else {
             metadataList.addView(createMetadataItem(getString(R.string.verification_info_field_metadata_not_available), getResources().getString(R.string.verification_info_field_location)));
         }
@@ -161,8 +165,8 @@ public class MetadataViewerActivity extends CacheWordSubscriberBaseActivity {
     private String getLocationString(MyLocation myLocation) {
         return getString(R.string.verification_info_field_latitude) + ": " + myLocation.getLatitude() + '\n' +
                 getString(R.string.verification_info_field_longitude) + ": " + myLocation.getLongitude() + '\n' +
-                getString(R.string.verification_info_field_altitude) + ": " + myLocation.getAltitude() + '\n' +
-                getString(R.string.verification_info_field_accuracy) + ": " + myLocation.getAccuracy().toString() + '\n' +
+                getString(R.string.verification_info_field_altitude) + ": " + myLocation.getAltitude() + getString(R.string.meter) + '\n' +
+                getString(R.string.verification_info_field_accuracy) + ": " + myLocation.getAccuracy().toString() + getString(R.string.meter) + '\n' +
                 getString(R.string.verification_info_field_location_time) + ": " + Util.getDateTimeString(myLocation.getTimestamp(), "dd-MM-yyyy HH:mm:ss Z");
     }
 

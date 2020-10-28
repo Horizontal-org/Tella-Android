@@ -29,4 +29,7 @@
     <string name="title_activity_security" translatable="false">Lock screen</string>
     <string name="title_activity_location_map" translatable="false">Location</string>
     <string name="signature" translatable="false">Signature</string>
+    <string name="meter" translatable="false">m</string>
+    <string name="meter_per_second" translatable="false">m/s</string>
+    <string name="inches" translatable="false">″</string>
 </resources>
