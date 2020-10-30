@@ -77,7 +77,7 @@ In the Tella settings, users can activate "Verification Mode". When activated, e
 
 ## How to get Tella and start using it? <a id="use-tella"></a>
 
-Tella is currently available only on Android. You can [download it](https://play.google.com/store/apps/details?id=org.hzontal.tella) from the Google Play Store or [get the APK from here](https://www.hzontal.org/tella-download) to install manually on your device.
+Tella is currently available only on Android. You can [download it](https://play.google.com/store/apps/details?id=org.hzontal.tella) from the Google Play Store or [get the APK from here](https://web.tresorit.com/l/7737s#WKoGVN82C0lQK8KSL30CuA) to install manually on your device.
 
 ## Tech & frameworks used <a id="tech-used"></a>
 
