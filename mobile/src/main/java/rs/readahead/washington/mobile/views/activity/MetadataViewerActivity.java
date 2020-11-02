@@ -52,7 +52,6 @@ public class MetadataViewerActivity extends CacheWordSubscriberBaseActivity {
         }
 
         if (getIntent().hasExtra(VIEW_METADATA)) {
-            //noinspection ConstantConditions
             MediaFile mediaFile = (MediaFile) getIntent().getExtras().get(VIEW_METADATA);
             if (mediaFile != null) {
                 this.mediaFile = mediaFile;
@@ -148,7 +147,7 @@ public class MetadataViewerActivity extends CacheWordSubscriberBaseActivity {
         if (metadata.getMyLocation() != null) {
             metadataList.addView(createMetadataItem(getLocationString(metadata.getMyLocation()), getResources().getString(R.string.verification_info_field_location)));
             metadataList.addView(createMetadataItem(metadata.getMyLocation().getProvider(), getResources().getString(R.string.verification_info_field_location_provider)));
-            metadataList.addView(createMetadataItem(metadata.getMyLocation().getSpeed().toString() + getResources().getString(R.string.meter_per_second),
+            metadataList.addView(createMetadataItem(getString(R.string.meter_per_second, metadata.getMyLocation().getSpeed()),
                     getResources().getString(R.string.verification_info_field_location_speed)));
         } else {
             metadataList.addView(createMetadataItem(getString(R.string.verification_info_field_metadata_not_available), getResources().getString(R.string.verification_info_field_location)));
@@ -165,8 +164,8 @@ public class MetadataViewerActivity extends CacheWordSubscriberBaseActivity {
     private String getLocationString(MyLocation myLocation) {
         return getString(R.string.verification_info_field_latitude) + ": " + myLocation.getLatitude() + '\n' +
                 getString(R.string.verification_info_field_longitude) + ": " + myLocation.getLongitude() + '\n' +
-                getString(R.string.verification_info_field_altitude) + ": " + myLocation.getAltitude() + getString(R.string.meter) + '\n' +
-                getString(R.string.verification_info_field_accuracy) + ": " + myLocation.getAccuracy().toString() + getString(R.string.meter) + '\n' +
+                getString(R.string.verification_info_field_altitude) + ": " + getString(R.string.meter, myLocation.getAltitude()) + '\n' +
+                getString(R.string.verification_info_field_accuracy) + ": " + getString(R.string.meter, myLocation.getAccuracy()) + '\n' +
                 getString(R.string.verification_info_field_location_time) + ": " + Util.getDateTimeString(myLocation.getTimestamp(), "dd-MM-yyyy HH:mm:ss Z");
     }
 

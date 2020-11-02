@@ -426,4 +426,6 @@
     <string name="pl_access_pattern_area">Pattern area</string>
     <string name="collect.blank_action.desc_more.options">More options</string>
     <string name="action_next">Next</string>
+    <string name="meter">%f m</string>
+    <string name="meter_per_second">%f m/s</string>
 </resources>
