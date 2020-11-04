@@ -37,6 +37,7 @@ public class TellaUploadJob extends Job {
     private Job.Result exitResult = null;
     private HashMap<Long, MediaFile> fileMap = new HashMap<>();
     private DataSource dataSource;
+    private TellaUploadServer server;
 
     @NonNull
     @Override
@@ -63,18 +64,29 @@ public class TellaUploadJob extends Job {
         }
 
         //First upload has highest priority, we are going to upload just to that server
-        long serverId = fileUploadBundles.get(0).getServerId();
+        for (FileUploadBundle fileUploadBundle : fileUploadBundles) {
+            long serverId = fileUploadBundle.getServerId();
+            server = dataSource.getTellaUploadServer(serverId).blockingGet();
+
+            if (server != TellaUploadServer.NONE) {
+                break;
+            }
+        }
+
+        if (server == TellaUploadServer.NONE) {
+            return exit(Result.FAILURE);
+        }
 
         List<RawFile> rawFiles = new ArrayList<>();
-        for (FileUploadBundle fileUploadBundle: fileUploadBundles) {
+        for (FileUploadBundle fileUploadBundle : fileUploadBundles) {
 
-            if (fileUploadBundle.getServerId() != serverId) {
+            if (fileUploadBundle.getServerId() != server.getId()) {
                 continue;
             } else {
                 rawFiles.add(fileUploadBundle.getMediaFile());
             }
 
-            if (!fileUploadBundle.isManualUpload()){
+            if (!fileUploadBundle.isManualUpload()) {
                 fileMap.put(fileUploadBundle.getMediaFile().getId(), fileUploadBundle.getMediaFile());
             }
 
@@ -85,11 +97,6 @@ public class TellaUploadJob extends Job {
                     Timber.d(e);
                 }
             }
-        }
-
-        TellaUploadServer server = dataSource.getTellaUploadServer(Preferences.getAutoUploadServerId()).blockingGet();
-        if (server == TellaUploadServer.NONE) {
-            return exit(Result.FAILURE);
         }
 
         final TUSClient tusClient = new TUSClient(getContext(), server.getUrl(), server.getUsername(), server.getPassword());
@@ -143,7 +150,7 @@ public class TellaUploadJob extends Job {
                 .schedule();
     }
 
-    public static void cancelJob(){
+    public static void cancelJob() {
         JobManager.instance().cancelAllForTag(TellaUploadJob.TAG);
     }
 
