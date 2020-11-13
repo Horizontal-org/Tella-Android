@@ -51,6 +51,11 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
         // DBv7
         db.execSQL(createTableMediaFileUploads());
+
+        //DBv8
+        db.execSQL(alterTableMediaFileUploadsAddMetadata());
+        db.execSQL(alterTableMediaFileUploadsAddManual());
+        db.execSQL(alterTableMediaFileUploadsAddServer());
     }
 
     @Override
@@ -74,6 +79,11 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
             case 6:
                 db.execSQL(createTableMediaFileUploads());
+
+            case 7:
+                db.execSQL(alterTableMediaFileUploadsAddServer());
+                db.execSQL(alterTableMediaFileUploadsAddManual());
+                db.execSQL(alterTableMediaFileUploadsAddMetadata());
         }
     }
 
@@ -173,6 +183,21 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 "FOREIGN KEY(" + sq(D.C_MEDIA_FILE_ID) + ") REFERENCES " +
                 sq(D.T_MEDIA_FILE) + "(" + sq(D.C_ID) + ") ON DELETE SET NULL" +
                 ");";
+    }
+
+    private String alterTableMediaFileUploadsAddManual() {
+        return "ALTER TABLE " + sq(D.T_MEDIA_FILE_UPLOAD) + " ADD COLUMN " +
+                cddl(D.C_MANUAL_UPLOAD, D.INTEGER, true) + " DEFAULT 0";
+    }
+
+    private String alterTableMediaFileUploadsAddServer() {
+        return "ALTER TABLE " + sq(D.T_MEDIA_FILE_UPLOAD) + " ADD COLUMN " +
+                cddl(D.C_SERVER_ID, D.INTEGER, true) + " DEFAULT 0";
+    }
+
+    private String alterTableMediaFileUploadsAddMetadata() {
+        return "ALTER TABLE " + sq(D.T_MEDIA_FILE_UPLOAD) + " ADD COLUMN " +
+                cddl(D.C_INCLUDE_METADATA, D.INTEGER, true) + " DEFAULT 0";
     }
 
     private String alterTableCollectFormInstanceMediaFileAddStatus() {

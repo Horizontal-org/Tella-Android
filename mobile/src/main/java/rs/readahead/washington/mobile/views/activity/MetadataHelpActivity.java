@@ -80,31 +80,30 @@ public class MetadataHelpActivity extends CacheWordSubscriberBaseActivity {
     }
 
     private void showMetadataHelp() {
-        String colon = String.valueOf(':');
 
         metadataList.addView(createMetadataTitle(R.string.verification_info_subheading_file_metadata));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_file_path_expl), getResources().getString(R.string.verification_info_field_file_path) + colon));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_hash_expl), getResources().getString(R.string.verification_info_field_hash) + colon));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_date_time_modified_expl), getResources().getString(R.string.verification_info_field_file_modified) + colon));
+        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_file_path_expl), getResources().getString(R.string.verification_info_field_file_path)));
+        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_hash_expl), getResources().getString(R.string.verification_info_field_hash)));
+        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_date_time_modified_expl), getResources().getString(R.string.verification_info_field_file_modified)));
 
         metadataList.addView(createMetadataTitle(R.string.verification_info_subheading_device_metadata));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_manufacturer_expl), getResources().getString(R.string.verification_info_field_manufacturer) + colon));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_device_model_expl), getResources().getString(R.string.verification_info_field_hardware) + colon));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_device_id_expl), getResources().getString(R.string.verification_info_field_device_id) + colon));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_screen_size_expl), getResources().getString(R.string.verification_info_field_screen_size) + colon));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_language_expl), getResources().getString(R.string.verification_info_field_language) + colon));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_locale_expl), getResources().getString(R.string.verification_info_field_locale) + colon));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_connection_status_expl), getResources().getString(R.string.verification_info_field_connection_status) + colon));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_network_type_expl), getResources().getString(R.string.verification_info_field_network_type) + colon));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_wifi_mac_expl), getResources().getString(R.string.verification_info_field_wifi_mac) + colon));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_ipv4_expl), getResources().getString(R.string.verification_info_field_ipv4) + colon));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_ipv6_expl), getResources().getString(R.string.verification_info_field_ipv6) + colon));
+        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_manufacturer_expl), getResources().getString(R.string.verification_info_field_manufacturer)));
+        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_device_model_expl), getResources().getString(R.string.verification_info_field_hardware)));
+        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_device_id_expl), getResources().getString(R.string.verification_info_field_device_id)));
+        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_screen_size_expl), getResources().getString(R.string.verification_info_field_screen_size)));
+        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_language_expl), getResources().getString(R.string.verification_info_field_language)));
+        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_locale_expl), getResources().getString(R.string.verification_info_field_locale)));
+        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_connection_status_expl), getResources().getString(R.string.verification_info_field_connection_status)));
+        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_network_type_expl), getResources().getString(R.string.verification_info_field_network_type)));
+        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_wifi_mac_expl), getResources().getString(R.string.verification_info_field_wifi_mac)));
+        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_ipv4_expl), getResources().getString(R.string.verification_info_field_ipv4)));
+        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_ipv6_expl), getResources().getString(R.string.verification_info_field_ipv6)));
 
         metadataList.addView(createMetadataTitle(R.string.verification_info_subheading_context_metadata));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_location_expl), getResources().getString(R.string.verification_info_field_location) + colon));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_location_provider_expl), getResources().getString(R.string.verification_info_field_location_provider) + colon));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_location_speed_expl), getResources().getString(R.string.verification_info_field_location_speed) + colon));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_cell_towers_expl), getResources().getString(R.string.verification_info_field_cell_towers) + colon));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_wifi_expl), getResources().getString(R.string.verification_info_wifi) + colon));
+        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_location_expl), getResources().getString(R.string.verification_info_field_location)));
+        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_location_provider_expl), getResources().getString(R.string.verification_info_field_location_provider)));
+        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_location_speed_expl), getResources().getString(R.string.verification_info_field_location_speed)));
+        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_cell_towers_expl), getResources().getString(R.string.verification_info_field_cell_towers)));
+        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_wifi_expl), getResources().getString(R.string.verification_info_wifi)));
     }
 }

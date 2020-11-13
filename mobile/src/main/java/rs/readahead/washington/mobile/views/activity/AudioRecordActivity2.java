@@ -38,6 +38,7 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.Metadata;
+import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.media.AudioRecorder;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
@@ -326,6 +327,16 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     @Override
     public void onMediaFilesUploadScheduleError(Throwable throwable) {
+
+    }
+
+    @Override
+    public void onGetMediaFilesSuccess(List<RawFile> mediaFiles) {
+
+    }
+
+    @Override
+    public void onGetMediaFilesError(Throwable error) {
 
     }
 

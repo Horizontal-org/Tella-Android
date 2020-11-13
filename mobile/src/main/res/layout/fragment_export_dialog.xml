@@ -74,7 +74,7 @@
             android:id="@+id/next"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/collect.form_action_next.section"
+            android:text="@string/action_next"
             android:layout_weight=".5"
             android:textAlignment="center"
             android:background="@color/wa_white"

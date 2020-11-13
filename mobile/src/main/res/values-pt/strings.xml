@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Tella</string>
     <string name="collect.blank_action_update.form">Atualizar</string>
     <string name="settings.about_app.bar">Sobre e Ajuda</string>
@@ -17,8 +17,8 @@
     <string name="action_delete">Apagar</string>
     <string name="collect.draft_tab.title">Rascunho</string>
     <string name="collect.blank_action_download.form">Baixar</string>
-    <string name="gallery_toast_fail.finding.metadata.to.upload">Erro</string>
-    <string name="gallery_toast.fail.finding.file.to.upload">Error</string>
+    <string name="upload_toast_fail.finding.metadata.to.upload">Erro</string>
+    <string name="upload_toast.fail.finding.file.to.upload">Error</string>
     <string name="settings_text_empty.field">Este campo não pode estar vazio.</string>
     <string name="home_toast_back.exit">Pressione o botão voltar novamente para sair</string>
     <string name="settings.docu_toast_fail.load.list.connected.servers">Erro ao tentar obter a lista de servidores. Por favor, tente novamente.</string>
@@ -39,8 +39,6 @@
     <string name="recorder_content.desc_blinking.red.dot">GRAVANDO ÁUDIO…</string>
     <string name="action_remove">Remover</string>
     <string name="settings_app.bar">Configurações</string>
-    <string name="upload_action_upload.files">Enviar</string>
-    <string name="upload_app.bar_upload.screen">Enviar</string>
     <string name="action_save">Salvar</string>
     <string name="lock_dialog.expl_save.pattern">Configurando dados …</string>
     <string name="lock_dialog.expl_unlock.app">Configurando dados …</string>
@@ -97,7 +95,6 @@
     <string name="action_discard">Descartar</string>
     <string name="collect.end_action_submit">Enviar</string>
     <string name="gallery_toast_file.imported.from.device">Arquivo adicionado à galeria</string>
-    <string name="gallery_toast_file.exported">Arquivos exportados</string>
     <string name="gallery_toast_fail.exporting.to.device">Ocorreu um erro ao exportar o arquivo</string>
     <string name="permission_dialog.expl_device.storage">Para exportar arquivos, Tella precisa de permissão para gravar no armazenamento do dispositivo.</string>
     <plurals name="gallery_toast_files.deleted">
@@ -335,7 +332,7 @@
     <string name="verification.info_wifi.expl">O nome de todas as redes Wi-Fi nas proximidades do aparelho celular.</string>
     <string name="collect.blank_banner_forms.updated">Alguns formulários foram atualizados. Toque no botão de atualização para receber a versão mais recente.</string>
     <string name="settings.docu_auto.upload.server.selection_select">Servidor</string>
-    <string name="gallery.upload_dialog.title_select.server">Servidor</string>
+    <string name="upload_dialog.title_select.server">Servidor</string>
     <string name="settings.docu_auto.upload.server.selection_dialog.expl">Em qual servidor você gostaria de fazer o upload dos arquivos?</string>
     <string name="settings.docu_add.server.selection_dialog.title">Que tipo de servidor?</string>
     <string name="settings.docu_add.server_dialog.select_odk">Kit de dados abertos (ODK)</string>
@@ -346,13 +343,6 @@
     <string name="settings.docu_disable.servers_dialog.title">Desconectar servidor (es)</string>
     <string name="settings.docu_connect.to.servers_disable_dialog.expl">Gostaria de apagar as conexões do servidor completamente, ou somente escondê-las? Ao esconder, você irá manter as informações na memória, podendo facilmente reconectar e enviar dados para o(s) servidor(es).</string>
     <string name="settings.docu_delete.auto.server_dialog.expl">Se você apagar este servidor, não poderá mais enviar arquivo.</string>
-    <string name="gallery.upload_heading">Enviar arquivos para \"%s\"</string>
-    <string name="gallery.upload_meta_number.of.files">Arquivos</string>
-    <string name="gallery.upload_sending_heading">Enviando</string>
-    <string name="gallery.upload_sent_heading">Todos os arquivos foram enviados com sucesso</string>
-    <string name="gallery.upload_action_try.uploading.again">Tentar de novo</string>
-    <string name="gallery.upload_exit_dialog.expl">Sair cancelará o upload.</string>
-    <string name="gallery.upload_sent_meta_file.already.on.server">Arquivo já no servidor</string>
     <string name="play.audio_action.expl_plus15s">+15s</string>
     <string name="play.audio_action.expl_minus15s">-15s</string>
     <string name="recorder_meta_space.available.days">%1$d days %2$d hours (%3$s) left</string>
@@ -400,7 +390,33 @@
     <string name="upload.main_meta_status.stopped">Stopped</string>
     <string name="upload.main_meta_more.hour.left">more than an hour left</string>
     <string name="settings.docu_error_must.select.auto.upload.server">You must select a server</string>
+    <string name="settings.docu_auto.upload.metadata_action">Include verification information</string>
+    <string name="settings.docu_auto.upload.metadata_action.expl">If your files include verification information, it will automatically be uploaded alongside your files</string>
+    <string name="upload.main_dialog.title_clear.history">Clear upload history?</string>
     <string name="camera_tab.title_photo">Photo</string>
     <string name="camera_tab.title_video">Video</string>
     <string name="action_upload">Upload</string>
+    <string name="pl_cancel">Cancel</string>
+    <string name="pl_confirm">Confirm</string>
+    <string name="pl_confirm_pattern">Draw the pattern again to confirm</string>
+    <string name="pl_continue">Continue</string>
+    <string name="pl_draw_pattern">Draw an unlock pattern</string>
+    <string name="pl_draw_pattern_to_unlock">Draw pattern to unlock</string>
+    <string name="pl_forgot_pattern">Forgot pattern</string>
+    <string name="pl_pattern_confirmed">This is now your pattern to unlock Tella</string>
+    <string name="pl_pattern_recorded">Pattern recorded</string>
+    <string name="pl_pattern_too_short">Connect at least %d dots, please redraw</string>
+    <string name="pl_recording_pattern">Release finger when done</string>
+    <string name="pl_redraw">Redraw</string>
+    <string name="pl_wrong_pattern">Wrong pattern, please try again</string>
+    <string name="pl_access_pattern_start">Pattern started</string>
+    <string name="pl_access_pattern_cleared">Pattern cleared</string>
+    <string name="pl_access_pattern_cell_added">Cell added</string>
+    <string name="pl_access_pattern_cell_added_verbose">Cell <xliff:g id="cell_index" example="3">%1$d</xliff:g> added</string>
+    <string name="pl_access_pattern_detected">Pattern completed</string>
+    <string name="pl_access_pattern_area">Pattern area</string>
+    <string name="collect.blank_action.desc_more.options">More options</string>
+    <string name="action_next">Next</string>
+    <string name="meter">%f m</string>
+    <string name="meter_per_second">%f m/s</string>
 </resources>

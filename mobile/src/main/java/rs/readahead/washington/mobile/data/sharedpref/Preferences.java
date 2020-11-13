@@ -216,6 +216,14 @@ public class Preferences {
         setBoolean(SharedPrefs.AUTO_DELETE, value);
     }
 
+    public static boolean isMetadataAutoUpload() {
+        return getBoolean(SharedPrefs.METADATA_AUTO_UPLOAD, false);
+    }
+
+    public static void setMetadataAutoUpload(boolean value) {
+        setBoolean(SharedPrefs.METADATA_AUTO_UPLOAD, value);
+    }
+
     private static boolean getBoolean(String name, boolean def) {
         Boolean value = bCache.get(name);
 

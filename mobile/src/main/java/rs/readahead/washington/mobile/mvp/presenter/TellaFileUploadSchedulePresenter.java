@@ -47,4 +47,22 @@ public class TellaFileUploadSchedulePresenter implements ITellaFileUploadSchedul
                 })
         );
     }
+
+    @Override
+    public void scheduleUploadMediaFilesWithPriority(final List<MediaFile> mediaFiles, long uploadServerId, boolean metadata) {
+        disposables.add(cacheWordDataSource.getDataSource()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMapCompletable(dataSource -> dataSource.scheduleUploadMediaFilesWithPriority(mediaFiles, uploadServerId, metadata))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                    TellaUploadJob.cancelJob();
+                    TellaUploadJob.scheduleJob();
+                    view.onMediaFilesUploadScheduled();
+                }, throwable -> {
+                    Crashlytics.logException(throwable);
+                    view.onMediaFilesUploadScheduleError(throwable);
+                })
+        );
+    }
 }

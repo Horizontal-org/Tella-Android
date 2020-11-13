@@ -253,6 +253,13 @@
         <item name="colorControlActivated">@color/wa_red_light</item>
     </style>
 
+    <style name="SettingsTextViewCheck" parent="@style/SettingsTextView">
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="colorControlActivated">@color/wa_dark_gray</item>
+    </style>
+
     <style name="SettingsTextViewTitle" parent="@style/SettingsTextView">
         <item name="android:textSize">16sp</item>
         <item name="android:paddingStart">24dp</item>

@@ -2,10 +2,12 @@ package rs.readahead.washington.mobile.util.jobs;
 
 import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.Job;
+import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,8 +18,10 @@ import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.data.upload.TUSClient;
+import rs.readahead.washington.mobile.domain.entity.FileUploadBundle;
 import rs.readahead.washington.mobile.domain.entity.KeyBundle;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.domain.exception.NoConnectivityException;
@@ -33,43 +37,71 @@ public class TellaUploadJob extends Job {
     private Job.Result exitResult = null;
     private HashMap<Long, MediaFile> fileMap = new HashMap<>();
     private DataSource dataSource;
+    private TellaUploadServer server;
 
     @NonNull
     @Override
-    protected Job.Result onRunJob(@NotNull Job.Params params) {
+    protected Result onRunJob(@NotNull Job.Params params) {
         if (!enter() || Preferences.isAutoUploadPaused()) {
-            return Job.Result.SUCCESS;
+            return Result.SUCCESS;
         }
 
         KeyBundle keyBundle = MyApplication.getKeyBundle();
         if (keyBundle == null) { // CacheWord is unavailable
-            return exit(Job.Result.RESCHEDULE);
+            return exit(Result.RESCHEDULE);
         }
 
         byte[] key = keyBundle.getKey();
         if (key == null) { // key disappeared
-            return exit(Job.Result.RESCHEDULE);
+            return exit(Result.RESCHEDULE);
         }
 
         dataSource = DataSource.getInstance(getContext(), key);
-        List<MediaFile> mediaFiles = dataSource.getUploadMediaFiles(UploadStatus.SCHEDULED).blockingGet();
+        List<FileUploadBundle> fileUploadBundles = dataSource.getFileUploadBundles(UploadStatus.SCHEDULED).blockingGet();
 
-        if (mediaFiles.size() == 0) {
-            return exit(Job.Result.SUCCESS);
+        if (fileUploadBundles.size() == 0) {
+            return exit(Result.SUCCESS);
         }
 
-        TellaUploadServer server = dataSource.getTellaUploadServer(Preferences.getAutoUploadServerId()).blockingGet();
+        //First upload has highest priority, we are going to upload just to that server
+        for (FileUploadBundle fileUploadBundle : fileUploadBundles) {
+            long serverId = fileUploadBundle.getServerId();
+            server = dataSource.getTellaUploadServer(serverId).blockingGet();
+
+            if (server != TellaUploadServer.NONE) {
+                break;
+            }
+        }
+
         if (server == TellaUploadServer.NONE) {
             return exit(Result.FAILURE);
         }
 
-        final TUSClient tusClient = new TUSClient(getContext(), server.getUrl(), server.getUsername(), server.getPassword());
+        List<RawFile> rawFiles = new ArrayList<>();
+        for (FileUploadBundle fileUploadBundle : fileUploadBundles) {
 
-        for (MediaFile file : mediaFiles) {
-            fileMap.put(file.getId(), file);
+            if (fileUploadBundle.getServerId() != server.getId()) {
+                continue;
+            } else {
+                rawFiles.add(fileUploadBundle.getMediaFile());
+            }
+
+            if (!fileUploadBundle.isManualUpload()) {
+                fileMap.put(fileUploadBundle.getMediaFile().getId(), fileUploadBundle.getMediaFile());
+            }
+
+            if (fileUploadBundle.isIncludeMetdata()) {
+                try {
+                    rawFiles.add(MediaFileHandler.maybeCreateMetadataMediaFile(getContext(), fileUploadBundle.getMediaFile()));
+                } catch (Exception e) {
+                    Timber.d(e);
+                }
+            }
         }
 
-        Flowable.fromIterable(mediaFiles)
+        final TUSClient tusClient = new TUSClient(getContext(), server.getUrl(), server.getUsername(), server.getPassword());
+
+        Flowable.fromIterable(rawFiles)
                 .flatMap(tusClient::upload)
                 .blockingSubscribe(this::updateProgress, throwable -> {
                     if (throwable instanceof NoConnectivityException) {
@@ -84,7 +116,7 @@ public class TellaUploadJob extends Job {
             exit(exitResult);
         }
 
-        return exit(Job.Result.SUCCESS);
+        return exit(Result.SUCCESS);
     }
 
     @Override
@@ -116,6 +148,10 @@ public class TellaUploadJob extends Job {
                 .setUpdateCurrent(true) // also, jobs will sync them self while running
                 .build()
                 .schedule();
+    }
+
+    public static void cancelJob() {
+        JobManager.instance().cancelAllForTag(TellaUploadJob.TAG);
     }
 
     private void updateProgress(UploadProgressInfo progressInfo) {

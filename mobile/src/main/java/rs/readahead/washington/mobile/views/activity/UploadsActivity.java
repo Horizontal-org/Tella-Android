@@ -358,6 +358,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
 
     private void showClearHistoryDialog() {
         alertDialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.upload_main_dialog_title_clear_history)
                 .setMessage(R.string.upload_main_dialog_expl_clear_history)
                 .setPositiveButton(R.string.upload_main_dialog_action_clear, (dialog, which) -> clearHistory())
                 .setNegativeButton(R.string.action_cancel, (dialog, which) -> {

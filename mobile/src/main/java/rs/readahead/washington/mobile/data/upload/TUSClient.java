@@ -150,7 +150,7 @@ public class TUSClient {
 
     @NonNull
     private String getUploadUrl(String name) {
-        return baseUrl.resolve(name).toString();
+        return baseUrl.resolve("/").resolve(name).toString();
     }
 
     private UploadProgressInfo mapThrowable(Throwable throwable, RawFile mediaFile) {
