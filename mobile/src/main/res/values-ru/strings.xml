@@ -99,8 +99,8 @@
   <string name="permission_dialog.expl_device.storage">Для экспорта мультимедиа файлов приложению требуется разрешение на доступ ко внешнему хранилищу</string>
   <plurals name="gallery_toast_files.deleted">
     <item quantity="one" tools:ignore="ImpliedQuantity">файл удален</item>
-    <item quantity="few">файлов удалены</item>
-    <item quantity="many">файлов удалены</item>
+    <item quantity="few">%1$d файлов удалены</item>
+    <item quantity="many">%1$d файлов удалены</item>
     <item quantity="other">файлы</item>
   </plurals>
   <string name="gallery_toast_fail.deleting.files">Ошибка при удалении файлов. Некоторые мультимедиа файлы не удалены</string>
