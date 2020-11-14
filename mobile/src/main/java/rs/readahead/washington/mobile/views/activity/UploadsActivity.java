@@ -392,7 +392,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
             }
             lastUploadedSize += instance.getUploaded();
         }
-        startedText.setText(String.format("%s: %s", getContext().getResources().getString(R.string.upload_meta_date_started), Util.getDateTimeString(started, "dd/MM/yyyy h:mm a")));
+        startedText.setText(String.format("%s %s", getContext().getResources().getString(R.string.upload_meta_date_started), Util.getDateTimeString(started, "dd/MM/yyyy h:mm a")));
         if (Preferences.isAutoUploadPaused()) {
             statusText.setText(String.format("%s %s",
                     getContext().getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instances.size(), instances.size()), getContext().getResources().getString(R.string.upload_main_meta_status_stopped)));

@@ -117,7 +117,7 @@ public class UploadSection extends Section {
     public void onBindHeaderViewHolder(final RecyclerView.ViewHolder holder) {
         final HeaderViewHolder headerHolder = (HeaderViewHolder) holder;
 
-        headerHolder.startedText.setText(String.format("%s: %s", context.getResources().getString(R.string.upload_meta_date_started), Util.getDateTimeString(this.started, "dd/MM/yyyy h:mm a")));
+        headerHolder.startedText.setText(String.format("%s %s", context.getResources().getString(R.string.upload_meta_date_started), Util.getDateTimeString(this.started, "dd/MM/yyyy h:mm a")));
 
         if (isUploadFinished) {
             headerHolder.title.setText(context.getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files_uploaded, numberOfUploads, numberOfUploads));
