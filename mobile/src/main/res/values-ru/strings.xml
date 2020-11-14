@@ -99,8 +99,8 @@
   <string name="permission_dialog.expl_device.storage">Для экспорта мультимедиа файлов приложению требуется разрешение на доступ ко внешнему хранилищу</string>
   <plurals name="gallery_toast_files.deleted">
     <item quantity="one" tools:ignore="ImpliedQuantity">файл удален</item>
-    <item quantity="few">файлов удалены</item>
-    <item quantity="many">файлов удалены</item>
+    <item quantity="few">%1$d файлов удалены</item>
+    <item quantity="many">%1$d файлов удалены</item>
     <item quantity="other">файлы</item>
   </plurals>
   <string name="gallery_toast_fail.deleting.files">Ошибка при удалении файлов. Некоторые мультимедиа файлы не удалены</string>
@@ -383,9 +383,9 @@
   </plurals>
   <plurals name="upload.main_meta_minutes.left">
     <item quantity="one" tools:ignore="ImpliedQuantity">минута осталась</item>
-    <item quantity="few">минут осталось</item>
-    <item quantity="many">минут осталось</item>
-    <item quantity="other">минут осталось</item>
+    <item quantity="few">%d минут осталось</item>
+    <item quantity="many">%d минут осталось</item>
+    <item quantity="other">%d минут осталось</item>
   </plurals>
   <string name="upload.main_dialog.expl_clear.history">Это удалит список прошлых загрузок.</string>
   <string name="upload.main_stop.upload_dialog.expl">Вы уверены, что хотите остановить загрузку?</string>
