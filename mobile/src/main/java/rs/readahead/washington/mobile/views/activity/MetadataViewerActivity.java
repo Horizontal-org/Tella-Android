@@ -3,11 +3,9 @@ package rs.readahead.washington.mobile.views.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
-
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;

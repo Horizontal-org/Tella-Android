@@ -383,9 +383,9 @@
   </plurals>
   <plurals name="upload.main_meta_minutes.left">
     <item quantity="one" tools:ignore="ImpliedQuantity">минута осталась</item>
-    <item quantity="few">минут осталось</item>
-    <item quantity="many">минут осталось</item>
-    <item quantity="other">минут осталось</item>
+    <item quantity="few">%d минут осталось</item>
+    <item quantity="many">%d минут осталось</item>
+    <item quantity="other">%d минут осталось</item>
   </plurals>
   <string name="upload.main_dialog.expl_clear.history">Это удалит список прошлых загрузок.</string>
   <string name="upload.main_stop.upload_dialog.expl">Вы уверены, что хотите остановить загрузку?</string>
