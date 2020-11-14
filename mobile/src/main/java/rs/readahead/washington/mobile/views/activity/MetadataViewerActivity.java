@@ -162,11 +162,11 @@ public class MetadataViewerActivity extends CacheWordSubscriberBaseActivity {
     }
 
     private String getLocationString(MyLocation myLocation) {
-        return getString(R.string.verification_info_field_latitude) + ": " + myLocation.getLatitude() + '\n' +
-                getString(R.string.verification_info_field_longitude) + ": " + myLocation.getLongitude() + '\n' +
-                getString(R.string.verification_info_field_altitude) + ": " + getString(R.string.meter, myLocation.getAltitude()) + '\n' +
-                getString(R.string.verification_info_field_accuracy) + ": " + getString(R.string.meter, myLocation.getAccuracy()) + '\n' +
-                getString(R.string.verification_info_field_location_time) + ": " + Util.getDateTimeString(myLocation.getTimestamp(), "dd-MM-yyyy HH:mm:ss Z");
+        return getString(R.string.verification_info_field_latitude) + myLocation.getLatitude() + '\n' +
+                getString(R.string.verification_info_field_longitude) + myLocation.getLongitude() + '\n' +
+                getString(R.string.verification_info_field_altitude) + getString(R.string.meter, myLocation.getAltitude()) + '\n' +
+                getString(R.string.verification_info_field_accuracy) + getString(R.string.meter, myLocation.getAccuracy()) + '\n' +
+                getString(R.string.verification_info_field_location_time) + Util.getDateTimeString(myLocation.getTimestamp(), "dd-MM-yyyy HH:mm:ss Z");
     }
 
     private void startMetadataHelp() {
