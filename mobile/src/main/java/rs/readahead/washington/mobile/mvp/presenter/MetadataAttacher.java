@@ -1,9 +1,8 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+
 import androidx.annotation.Nullable;
-
-import com.crashlytics.android.Crashlytics;
-
 import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -47,7 +46,7 @@ public class MetadataAttacher implements IMetadataAttachPresenterContract.IPrese
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        Crashlytics.logException(throwable);
+                        FirebaseCrashlytics.getInstance().recordException(throwable);
                         view.onMetadataAttachError(throwable);
                     }
                 })

@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -176,7 +176,7 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
                     .putExtra(VideoViewerActivity.VIEW_VIDEO, mediaFile)
                     .putExtra(VideoViewerActivity.NO_ACTIONS, true));
         } catch (Exception e) {
-            Crashlytics.logException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
     }
 
@@ -191,7 +191,7 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
                     .putExtra(PhotoViewerActivity.VIEW_PHOTO, mediaFile)
                     .putExtra(PhotoViewerActivity.NO_ACTIONS, true));
         } catch (Exception e) {
-            Crashlytics.logException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
     }
 
@@ -206,7 +206,7 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
                     .putExtra(AudioPlayActivity.PLAY_MEDIA_FILE, mediaFile)
                     .putExtra(AudioPlayActivity.NO_ACTIONS, true));
         } catch (Exception e) {
-            Crashlytics.logException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
     }
 }

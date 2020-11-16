@@ -1,10 +1,8 @@
 package rs.readahead.washington.mobile.javarosa;
 
-import androidx.annotation.NonNull;
-
 import android.text.TextUtils;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormIndex;
@@ -12,6 +10,7 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 
+import androidx.annotation.NonNull;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.Metadata;
@@ -241,7 +240,7 @@ public class FormParser implements IFormParserContract.IFormParser {
     }
 
     private void viewFormParseError(Throwable throwable) {
-        Crashlytics.logException(throwable);
+        FirebaseCrashlytics.getInstance().recordException(throwable);
         view.formParseError(throwable);
     }
 

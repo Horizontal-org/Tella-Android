@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.javarosa.core.model.FormDef;
 
@@ -44,7 +44,7 @@ public class CollectMainPresenter implements ICollectMainPresenterContract.IPres
                 .subscribe(
                         formDef -> view.onGetBlankFormDefSuccess(form, formDef),
                         throwable -> {
-                            Crashlytics.logException(throwable);
+                            FirebaseCrashlytics.getInstance().recordException(throwable);
                             view.onFormDefError(throwable);
                         }
                 )
@@ -61,7 +61,7 @@ public class CollectMainPresenter implements ICollectMainPresenterContract.IPres
                 ).subscribe(
                         instance -> view.onInstanceFormDefSuccess(maybeCloneInstance(instance)),
                         throwable -> {
-                            Crashlytics.logException(throwable);
+                            FirebaseCrashlytics.getInstance().recordException(throwable);
                             view.onFormDefError(throwable);
                         }
                 )
@@ -78,7 +78,7 @@ public class CollectMainPresenter implements ICollectMainPresenterContract.IPres
                 .subscribe(
                         form -> view.onToggleFavoriteSuccess(form),
                         throwable -> {
-                            Crashlytics.logException(throwable);
+                            FirebaseCrashlytics.getInstance().recordException(throwable);
                             view.onToggleFavoriteError(throwable);
                         }
                 )
@@ -94,7 +94,7 @@ public class CollectMainPresenter implements ICollectMainPresenterContract.IPres
                 .subscribe(
                         () -> view.onFormInstanceDeleteSuccess(),
                         throwable -> {
-                            Crashlytics.logException(throwable);
+                            FirebaseCrashlytics.getInstance().recordException(throwable);
                             view.onFormInstanceDeleteError(throwable);
                         }
                 )
@@ -110,7 +110,7 @@ public class CollectMainPresenter implements ICollectMainPresenterContract.IPres
                 .subscribe(
                         num -> view.onCountCollectServersEnded(num),
                         throwable -> {
-                            Crashlytics.logException(throwable);
+                            FirebaseCrashlytics.getInstance().recordException(throwable);
                             view.onCountCollectServersFailed(throwable);
                         }
                 )

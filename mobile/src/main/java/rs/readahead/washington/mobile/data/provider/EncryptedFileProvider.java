@@ -117,7 +117,7 @@ public class EncryptedFileProvider extends FileProvider {
                 out.flush();
             } catch(IOException e) {
                 Timber.e(e, getClass().getSimpleName());
-                //Crashlytics.logException(e);
+                //FirebaseCrashlytics.getInstance().recordException(e);
             } finally {
                 try {
                     if (cipherInputStream != null) cipherInputStream.close();
@@ -206,7 +206,7 @@ public class EncryptedFileProvider extends FileProvider {
                 }
             } catch(IOException e) {
                 Timber.e(e, getClass().getSimpleName());
-                //Crashlytics.logException(e);
+                //FirebaseCrashlytics.getInstance().recordException(e);
             } finally {
                 try {
                     in.close();

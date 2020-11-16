@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.List;
 
@@ -40,7 +40,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(filesUploadInstances -> view.onGetFileUploadInstancesSuccess(filesUploadInstances), throwable -> {
-                    Crashlytics.logException(throwable);
+                    FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onGetFileUploadInstancesError(throwable);
                 })
         );
@@ -53,7 +53,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(filesUploadInstances -> view.onGetFileUploadSetInstancesSuccess(filesUploadInstances), throwable -> {
-                    Crashlytics.logException(throwable);
+                    FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onGetFileUploadSetInstancesError(throwable);
                 })
         );
@@ -67,7 +67,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
                 .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstanceById(id))
                 .subscribe(() -> view.onFileUploadInstancesDeleted(),
                         throwable -> {
-                            Crashlytics.logException(throwable);
+                            FirebaseCrashlytics.getInstance().recordException(throwable);
                             view.onFileUploadInstancesDeletionError(throwable);
                         })
         );
@@ -81,7 +81,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
                 .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstancesBySet(set))
                 .subscribe(() -> view.onFileUploadInstancesDeleted(),
                         throwable -> {
-                            Crashlytics.logException(throwable);
+                            FirebaseCrashlytics.getInstance().recordException(throwable);
                             view.onFileUploadInstancesDeletionError(throwable);
                         })
         );
@@ -95,7 +95,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
                 .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstancesInStatus(status))
                 .subscribe(() -> view.onFileUploadInstancesDeleted(),
                         throwable -> {
-                            Crashlytics.logException(throwable);
+                            FirebaseCrashlytics.getInstance().recordException(throwable);
                             view.onFileUploadInstancesDeletionError(throwable);
                         })
         );
@@ -109,7 +109,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
                 .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstancesNotInStatus(status))
                 .subscribe(() -> view.onFileUploadInstancesDeleted(),
                         throwable -> {
-                            Crashlytics.logException(throwable);
+                            FirebaseCrashlytics.getInstance().recordException(throwable);
                             view.onFileUploadInstancesDeletionError(throwable);
                         })
         );

@@ -1,9 +1,9 @@
 package rs.readahead.washington.mobile.util.jobs;
 
-import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -109,7 +109,7 @@ public class TellaUploadJob extends Job {
                         return;
                     }
                     Timber.d(throwable);
-                    Crashlytics.logException(throwable);
+                    FirebaseCrashlytics.getInstance().recordException(throwable);
                 });
 
         if (exitResult != null) {
