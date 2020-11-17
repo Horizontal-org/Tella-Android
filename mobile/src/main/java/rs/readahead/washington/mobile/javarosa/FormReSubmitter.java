@@ -2,7 +2,7 @@ package rs.readahead.washington.mobile.javarosa;
 
 import android.content.Context;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,7 +90,7 @@ public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitte
                                 // PendingFormSendJob.scheduleJob();
                                 view.formReSubmitNoConnectivity();
                             } else {
-                                Crashlytics.logException(throwable);
+                                FirebaseCrashlytics.getInstance().recordException(throwable);
                                 view.formPartReSubmitError(throwable);
                             }
                         },

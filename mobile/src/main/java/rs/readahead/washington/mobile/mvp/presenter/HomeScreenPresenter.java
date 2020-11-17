@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import info.guardianproject.cacheword.CacheWordHandler;
 import io.reactivex.Completable;
@@ -83,7 +83,7 @@ public class HomeScreenPresenter implements IHomeScreenPresenterContract.IPresen
                 .subscribe(
                         num -> view.onCountTUServersEnded(num),
                         throwable -> {
-                            Crashlytics.logException(throwable);
+                            FirebaseCrashlytics.getInstance().recordException(throwable);
                             view.onCountTUServersFailed(throwable);
                         }
                 )
@@ -99,7 +99,7 @@ public class HomeScreenPresenter implements IHomeScreenPresenterContract.IPresen
                 .subscribe(
                         num -> view.onCountCollectServersEnded(num),
                         throwable -> {
-                            Crashlytics.logException(throwable);
+                            FirebaseCrashlytics.getInstance().recordException(throwable);
                             view.onCountCollectServersFailed(throwable);
                         }
                 )

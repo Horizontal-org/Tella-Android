@@ -16,7 +16,7 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.apache.commons.io.IOUtils;
 
@@ -92,7 +92,7 @@ public class MediaFileHandler {
             return FileUtil.mkdirs(tmpPath) && ret;
         } catch (Exception e) {
             Timber.e(e);
-            Crashlytics.logException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
             return false;
         }
     }
@@ -188,7 +188,7 @@ public class MediaFileHandler {
 
             MediaScannerConnection.scanFile(context, new String[]{file.toString()}, null, null);
         } catch (IOException e) {
-            Crashlytics.logException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
             throw e;
         } finally {
             FileUtil.close(is);
@@ -306,7 +306,7 @@ public class MediaFileHandler {
                 mediaFileBundle.setMediaFileThumbnailData(new MediaFileThumbnailData(thumb));
             }
         } catch (Exception e) {
-            Crashlytics.logException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
             Timber.e(e, MediaFileHandler.class.getName());
         } finally {
             try {
@@ -359,7 +359,7 @@ public class MediaFileHandler {
             mediaFile.setHash(StringUtils.hexString(os.getMessageDigest().digest()));
             mediaFile.setSize(getSize(context, mediaFile));
         } catch (Exception e) {
-            Crashlytics.logException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
             Timber.e(e, MediaFileHandler.class.getName());
         } finally {
             FileUtil.close(vis);
@@ -391,7 +391,7 @@ public class MediaFileHandler {
                 return new MediaFileThumbnailData(thumb);
             }
         } catch (Exception e) {
-            Crashlytics.logException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
             Timber.e(e, MediaFileHandler.class.getName());
         } finally {
             FileUtil.close(vis);

@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -30,7 +30,7 @@ public class ProtectionSettingsPresenter implements IProtectionSettingsPresenter
                 .subscribe(
                         num -> view.onCountCollectServersEnded(num),
                         throwable -> {
-                            Crashlytics.logException(throwable);
+                            FirebaseCrashlytics.getInstance().recordException(throwable);
                             view.onCountCollectServersFailed(throwable);
                         }
                 )
