@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
@@ -39,7 +39,7 @@ public class SignaturePresenter implements ISignaturePresenterContract.IPresente
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onAddingEnd())
                 .subscribe(mediaFile -> view.onAddSuccess(mediaFile), throwable -> {
-                    Crashlytics.logException(throwable);
+                    FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onAddError(throwable);
                 })
         );
