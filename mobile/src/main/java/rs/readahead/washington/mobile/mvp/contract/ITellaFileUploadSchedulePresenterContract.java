@@ -11,6 +11,7 @@ public class ITellaFileUploadSchedulePresenterContract {
     public interface IView {
         Context getContext();
         void onMediaFilesUploadScheduled();
+        void onMediaFilesUploadScheduledWithPriority();
         void onMediaFilesUploadScheduleError(Throwable throwable);
         void onGetMediaFilesSuccess(List<RawFile> mediaFiles);
         void onGetMediaFilesError(Throwable error);

@@ -322,6 +322,10 @@ public class CameraActivity extends MetadataActivity implements
     }
 
     @Override
+    public void onMediaFilesUploadScheduledWithPriority() {
+    }
+
+    @Override
     public void onMediaFilesUploadScheduleError(Throwable throwable) {
 
     }

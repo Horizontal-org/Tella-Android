@@ -58,7 +58,7 @@ public class TellaFileUploadSchedulePresenter implements ITellaFileUploadSchedul
                 .subscribe(() -> {
                     TellaUploadJob.cancelJob();
                     TellaUploadJob.scheduleJob();
-                    view.onMediaFilesUploadScheduled();
+                    view.onMediaFilesUploadScheduledWithPriority();
                 }, throwable -> {
                     Crashlytics.logException(throwable);
                     view.onMediaFilesUploadScheduleError(throwable);

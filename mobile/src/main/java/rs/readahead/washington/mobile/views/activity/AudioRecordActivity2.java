@@ -326,6 +326,10 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     }
 
     @Override
+    public void onMediaFilesUploadScheduledWithPriority() {
+    }
+
+    @Override
     public void onMediaFilesUploadScheduleError(Throwable throwable) {
 
     }

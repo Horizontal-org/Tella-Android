@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.IdRes;
@@ -44,6 +45,7 @@ import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.GalleryFlingTopEvent;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
 import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
@@ -493,6 +495,9 @@ public class GalleryActivity extends MetadataActivity implements
     public void onMediaFilesAdded(MediaFile mediaFile) {
         showToast(R.string.gallery_toast_file_imported_from_device);
         presenter.getFiles(filter, sort);
+        if (Preferences.isAutoUploadEnabled()) {
+            uploadPresenter.scheduleUploadMediaFiles(Collections.singletonList(mediaFile));
+        }
     }
 
     @Override
@@ -561,6 +566,10 @@ public class GalleryActivity extends MetadataActivity implements
 
     @Override
     public void onMediaFilesUploadScheduled() {
+    }
+
+    @Override
+    public void onMediaFilesUploadScheduledWithPriority() {
         clearSelection();
         Intent intent = new Intent(this, UploadsActivity.class);
         startActivity(intent);
