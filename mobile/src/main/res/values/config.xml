@@ -13,9 +13,11 @@
     <string name="ra_config_form_attachment_field" translatable="false">tella_attachments</string>
     <string name="ra_config_form_attachment_url" translatable="false">https://hzontal.org/attachments/%1$s</string>
     <string-array name="ra_lang_codes" translatable="false">
+        <item>ar</item>
         <item>be</item>
         <item>en</item>
         <item>es</item>
+        <item>in</item>
         <item>fr</item>
         <item>my</item>
         <item>pt</item>
