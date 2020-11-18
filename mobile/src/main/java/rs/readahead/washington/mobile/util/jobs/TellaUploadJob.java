@@ -42,7 +42,7 @@ public class TellaUploadJob extends Job {
     @NonNull
     @Override
     protected Result onRunJob(@NotNull Job.Params params) {
-        if (!enter() || Preferences.isAutoUploadPaused()) {
+        if (!enter() || Preferences.isAutoUploadPaused() || Preferences.isOfflineMode()) {
             return Result.SUCCESS;
         }
 
