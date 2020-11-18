@@ -42,8 +42,12 @@ public class TellaUploadJob extends Job {
     @NonNull
     @Override
     protected Result onRunJob(@NotNull Job.Params params) {
-        if (!enter() || Preferences.isAutoUploadPaused()) {
+        if (!enter()) {
             return Result.SUCCESS;
+        }
+
+        if (Preferences.isAutoUploadPaused() || Preferences.isOfflineMode()) {
+            return exit(Result.RESCHEDULE);
         }
 
         KeyBundle keyBundle = MyApplication.getKeyBundle();
@@ -113,7 +117,7 @@ public class TellaUploadJob extends Job {
                 });
 
         if (exitResult != null) {
-            exit(exitResult);
+            return exit(exitResult);
         }
 
         return exit(Result.SUCCESS);
