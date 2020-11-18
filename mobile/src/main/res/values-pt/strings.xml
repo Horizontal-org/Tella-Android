@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" xmlns:tools="http://schemas.android.com/tools">
   <string name="app_name">Tella</string>
   <string name="collect.blank_action_update.form">Atualizar</string>
   <string name="settings.about_app.bar">Sobre e Ajuda</string>
