@@ -3,7 +3,7 @@ package rs.readahead.washington.mobile.mvp.presenter;
 
 import android.net.Uri;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,7 +101,7 @@ public class AttachmentsPresenter implements IAttachmentsPresenterContract.IPres
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onImportEnded())
                 .subscribe(mediaHolder -> view.onEvidenceImported(mediaHolder), throwable -> {
-                    Crashlytics.logException(throwable);
+                    FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onImportError(throwable);
                 })
         );
@@ -116,7 +116,7 @@ public class AttachmentsPresenter implements IAttachmentsPresenterContract.IPres
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onImportEnded())
                 .subscribe(mediaHolder -> view.onEvidenceImported(mediaHolder), throwable -> {
-                    Crashlytics.logException(throwable);
+                    FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onImportError(throwable);
                 })
         );

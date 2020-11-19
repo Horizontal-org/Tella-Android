@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.List;
 
@@ -42,7 +42,7 @@ public class TellaFileUploadSchedulePresenter implements ITellaFileUploadSchedul
                     TellaUploadJob.scheduleJob();
                     view.onMediaFilesUploadScheduled();
                 }, throwable -> {
-                    Crashlytics.logException(throwable);
+                    FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onMediaFilesUploadScheduleError(throwable);
                 })
         );
@@ -60,7 +60,7 @@ public class TellaFileUploadSchedulePresenter implements ITellaFileUploadSchedul
                     TellaUploadJob.scheduleJob();
                     view.onMediaFilesUploadScheduledWithPriority();
                 }, throwable -> {
-                    Crashlytics.logException(throwable);
+                    FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onMediaFilesUploadScheduleError(throwable);
                 })
         );

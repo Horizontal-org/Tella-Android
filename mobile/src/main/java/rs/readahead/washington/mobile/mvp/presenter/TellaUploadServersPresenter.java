@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.List;
 
@@ -38,7 +38,7 @@ public class TellaUploadServersPresenter implements ITellaUploadServersPresenter
                 .doFinally(() -> view.hideLoading())
                 .subscribe(list -> view.onTUServersLoaded(list),
                         throwable -> {
-                            Crashlytics.logException(throwable);
+                            FirebaseCrashlytics.getInstance().recordException(throwable);
                             view.onLoadTUServersError(throwable);
                         })
         );
@@ -54,7 +54,7 @@ public class TellaUploadServersPresenter implements ITellaUploadServersPresenter
                 .doFinally(() -> view.hideLoading())
                 .subscribe(server1 -> view.onCreatedTUServer(server1),
                         throwable -> {
-                            Crashlytics.logException(throwable);
+                            FirebaseCrashlytics.getInstance().recordException(throwable);
                             view.onCreateTUServerError(throwable);
                         })
         );
@@ -73,7 +73,7 @@ public class TellaUploadServersPresenter implements ITellaUploadServersPresenter
                             view.onUpdatedTUServer(server1);
                         },
                         throwable -> {
-                            Crashlytics.logException(throwable);
+                            FirebaseCrashlytics.getInstance().recordException(throwable);
                             view.onUpdateTUServerError(throwable);
                         })
         );
@@ -91,7 +91,7 @@ public class TellaUploadServersPresenter implements ITellaUploadServersPresenter
                             view.onRemovedTUServer(server);
                         },
                         throwable -> {
-                            Crashlytics.logException(throwable);
+                            FirebaseCrashlytics.getInstance().recordException(throwable);
                             view.onRemoveTUServerError(throwable);
                         })
         );

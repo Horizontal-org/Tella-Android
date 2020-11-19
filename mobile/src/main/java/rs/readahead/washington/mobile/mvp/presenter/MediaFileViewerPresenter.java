@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.concurrent.Callable;
 
@@ -36,7 +36,7 @@ public class MediaFileViewerPresenter implements IMediaFileViewerPresenterContra
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onExportEnded())
                 .subscribe(() -> view.onMediaExported(), throwable -> {
-                    Crashlytics.logException(throwable);
+                    FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onExportError(throwable);
                 })
         );
@@ -51,7 +51,7 @@ public class MediaFileViewerPresenter implements IMediaFileViewerPresenterContra
                                 MediaFileHandler.deleteMediaFile(view.getContext(), mediaFile1)).toCompletable())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> view.onMediaFileDeleted(), throwable -> {
-                    Crashlytics.logException(throwable);
+                    FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onMediaFileDeletionError(throwable);
                 })
         );

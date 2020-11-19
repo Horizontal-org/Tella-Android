@@ -1,9 +1,9 @@
 package rs.readahead.washington.mobile.util.jobs;
 
-import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -42,8 +42,12 @@ public class TellaUploadJob extends Job {
     @NonNull
     @Override
     protected Result onRunJob(@NotNull Job.Params params) {
-        if (!enter() || Preferences.isAutoUploadPaused()) {
+        if (!enter()) {
             return Result.SUCCESS;
+        }
+
+        if (Preferences.isAutoUploadPaused() || Preferences.isOfflineMode()) {
+            return exit(Result.RESCHEDULE);
         }
 
         KeyBundle keyBundle = MyApplication.getKeyBundle();
@@ -109,11 +113,11 @@ public class TellaUploadJob extends Job {
                         return;
                     }
                     Timber.d(throwable);
-                    Crashlytics.logException(throwable);
+                    FirebaseCrashlytics.getInstance().recordException(throwable);
                 });
 
         if (exitResult != null) {
-            exit(exitResult);
+            return exit(exitResult);
         }
 
         return exit(Result.SUCCESS);

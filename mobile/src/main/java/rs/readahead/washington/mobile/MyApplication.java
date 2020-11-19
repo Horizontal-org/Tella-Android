@@ -1,30 +1,25 @@
 package rs.readahead.washington.mobile;
 
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleObserver;
-import androidx.lifecycle.OnLifecycleEvent;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.StrictMode;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.multidex.MultiDexApplication;
-
-import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.core.CrashlyticsCore;
 import com.evernote.android.job.JobManager;
-import com.squareup.leakcanary.LeakCanary;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.lang.ref.WeakReference;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
+import androidx.multidex.MultiDexApplication;
 import info.guardianproject.cacheword.CacheWordHandler;
 import info.guardianproject.cacheword.ICacheWordSubscriber;
 import info.guardianproject.cacheword.ICachedSecrets;
-import io.fabric.sdk.android.Fabric;
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
 import rs.readahead.washington.mobile.bus.TellaBus;
@@ -67,11 +62,6 @@ public class MyApplication extends MultiDexApplication implements ICacheWordSubs
     public void onCreate() {
         super.onCreate();
 
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            return;
-        }
-        LeakCanary.install(this);
-
         //ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
 
         if (BuildConfig.DEBUG) {
@@ -88,7 +78,7 @@ public class MyApplication extends MultiDexApplication implements ICacheWordSubs
             @Override
             public void accept(Throwable throwable) {
                 Timber.d(throwable, getClass().getName());
-                Crashlytics.logException(throwable);
+                FirebaseCrashlytics.getInstance().recordException(throwable);
             }
         });
 
@@ -244,7 +234,12 @@ public class MyApplication extends MultiDexApplication implements ICacheWordSubs
     }
 
     private void configureCrashlytics() {
-        CrashlyticsCore core = new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG || !Preferences.isSubmittingCrashReports()).build();
-        Fabric.with(this, new Crashlytics.Builder().core(core).build());
+        boolean enabled = (!BuildConfig.DEBUG && Preferences.isSubmittingCrashReports());
+
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(enabled);
+
+        if (!enabled) {
+            FirebaseCrashlytics.getInstance().deleteUnsentReports();
+        }
     }
 }
