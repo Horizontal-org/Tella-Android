@@ -167,7 +167,12 @@ public class MediaFileHandler {
             }
         }
 
-        File path = Environment.getExternalStoragePublicDirectory(envDirType);
+        File path;
+        if (Build.VERSION.SDK_INT >= 29){
+            path = context.getExternalFilesDir(envDirType);
+        }else {
+            path = Environment.getExternalStoragePublicDirectory(envDirType);
+        }
         File file = new File(path, mediaFile.getFileName());
 
         InputStream is = null;
