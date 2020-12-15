@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -44,13 +45,16 @@ import rs.readahead.washington.mobile.bus.event.GalleryFlingTopEvent;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
 import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository.Filter;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository.Sort;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IGalleryPresenterContract;
+import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.GalleryPresenter;
+import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulePresenter;
 import rs.readahead.washington.mobile.presentation.entity.MediaFileThumbnailData;
 import rs.readahead.washington.mobile.presentation.entity.ViewType;
 import rs.readahead.washington.mobile.util.C;
@@ -71,6 +75,7 @@ import timber.log.Timber;
 public class GalleryActivity extends MetadataActivity implements
         TellaUploadDialogFragment.IServerMetadataChosenHandler,
         IGalleryPresenterContract.IView,
+        ITellaFileUploadSchedulePresenterContract.IView,
         IGalleryMediaHandler, IAttachmentsMediaHandler,
         ShareDialogFragment.IShareDialogFragmentHandler {
     public static final String GALLERY_ANIMATED = "ga";
@@ -96,6 +101,7 @@ public class GalleryActivity extends MetadataActivity implements
 
     private GalleryRecycleViewAdapter adapter;
     private GalleryPresenter presenter;
+    private TellaFileUploadSchedulePresenter uploadPresenter;
     private CacheWordDataSource cacheWordDataSource;
     private EventCompositeDisposable disposables;
 
@@ -119,6 +125,7 @@ public class GalleryActivity extends MetadataActivity implements
         ButterKnife.bind(this);
 
         presenter = new GalleryPresenter(this);
+        uploadPresenter = new TellaFileUploadSchedulePresenter(this);
 
         if (getIntent().hasExtra(GALLERY_ANIMATED)) {
             animated = getIntent().getBooleanExtra(GALLERY_ANIMATED, false);
@@ -149,8 +156,7 @@ public class GalleryActivity extends MetadataActivity implements
         disposables.wire(MediaFileDeletedEvent.class, new EventObserver<MediaFileDeletedEvent>() {
             @Override
             public void onNext(MediaFileDeletedEvent event) {
-                showToast(R.string.ra_single_media_deleted_msg);
-                presenter.getFiles(filter, sort);
+                onMediaFilesDeleted(1);
             }
         });
 
@@ -181,7 +187,7 @@ public class GalleryActivity extends MetadataActivity implements
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.ra_gallery);
+            actionBar.setTitle(R.string.gallery_app_bar);
             if (animated) {
                 actionBar.setHomeAsUpIndicator(R.drawable.ic_close_white);
             }
@@ -288,7 +294,7 @@ public class GalleryActivity extends MetadataActivity implements
         }
 
         cacheWordDataSource.dispose();
-        stopPresenter();
+        stopPresenters();
 
         if (alertDialog != null) {
             alertDialog.dismiss();
@@ -363,18 +369,18 @@ public class GalleryActivity extends MetadataActivity implements
 
     @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void showWriteExternalStorageRationale(final PermissionRequest request) {
-        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.ra_media_export_rationale));
+        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_device_storage));
     }
 
     @OnShowRationale({Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO})
     void showCameraAndAudioRationale(final PermissionRequest request) {
-        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.ra_camera_rationale));
+        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_camera_mic));
     }
 
     @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
     void showFineLocationRationale(final PermissionRequest request) {
         alertDialog = PermissionUtil.showRationale(
-                this, request, getString(R.string.ra_media_location_permissions));
+                this, request, getString(R.string.permission_dialog_expl_GPS));
     }
 
     @OnClick(R.id.fab_button)
@@ -390,6 +396,7 @@ public class GalleryActivity extends MetadataActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (!isLocationSettingsRequestCode(requestCode) && resultCode != RESULT_OK) {
             return; // user canceled evidence acquiring
         }
@@ -436,17 +443,8 @@ public class GalleryActivity extends MetadataActivity implements
     @Override
     public void uploadOnServer(TellaUploadServer server, boolean metadata) {
         List<MediaFile> selected = adapter.getSelectedMediaFiles();
-        long[] ids = new long[selected.size()];
 
-        for (int i = 0; i < selected.size(); i++) {
-            ids[i] = selected.get(i).getId();
-        }
-
-        Intent intent = new Intent(this, FileUploadingActivity.class);
-        intent.putExtra(FileUploadingActivity.SERVER_KEY, server);
-        intent.putExtra(FileUploadingActivity.FILE_KEYS, ids);
-        intent.putExtra(FileUploadingActivity.METADATA, metadata);
-        startActivity(intent);
+        uploadPresenter.scheduleUploadMediaFilesWithPriority(selected, server.getId(), metadata);
     }
 
     @Override
@@ -474,13 +472,13 @@ public class GalleryActivity extends MetadataActivity implements
 
     @Override
     public void onImportError(Throwable error) {
-        showToast(R.string.ra_import_media_error);
+        showToast(R.string.gallery_toast_fail_importing_file);
         Timber.d(error, getClass().getName());
     }
 
     @Override
     public void onImportStarted() {
-        progressDialog = DialogsUtil.showProgressDialog(this, getString(R.string.ra_import_media_progress));
+        progressDialog = DialogsUtil.showProgressDialog(this, getString(R.string.gallery_dialog_expl_encrypting));
         fabButton.show();
     }
 
@@ -488,12 +486,12 @@ public class GalleryActivity extends MetadataActivity implements
     public void onImportEnded() {
         hideProgressDialog();
         fabButton.show();
-        showToast(R.string.ra_file_encrypted);
+        showToast(R.string.gallery_toast_file_encrypted);
     }
 
     @Override
     public void onMediaFilesAdded(MediaFile mediaFile) {
-        showToast(R.string.ra_media_added_to_gallery);
+        showToast(R.string.gallery_toast_file_imported_from_device);
         presenter.getFiles(filter, sort);
     }
 
@@ -504,36 +502,36 @@ public class GalleryActivity extends MetadataActivity implements
 
     @Override
     public void onMediaFilesDeleted(int num) {
-        showToast(String.format(getString(R.string.ra_media_deleted_msg), num));
+        showToast(getResources().getQuantityString(R.plurals.gallery_toast_files_deleted, num, num));
         presenter.getFiles(filter, sort);
     }
 
     @Override
     public void onMediaFilesDeletionError(Throwable throwable) {
-        showToast(R.string.ra_media_deleted_error);
+        showToast(R.string.gallery_toast_fail_deleting_files);
     }
 
     @Override
     public void onMediaExported(int num) {
-        showToast(String.format(getString(R.string.ra_media_export_msg), num));
+        showToast(getResources().getQuantityString((R.plurals.gallery_toast_files_exported), num, num));
     }
 
     @Override
-
     public void onExportError(Throwable error) {
-        showToast(R.string.ra_media_export_error);
+        showToast(R.string.gallery_toast_fail_exporting_to_device);
         Timber.d(error, getClass().getName());
     }
 
     @Override
     public void onExportStarted() {
-        progressDialog = DialogsUtil.showProgressDialog(this, getString(R.string.ra_export_media_progress));
+        progressDialog = DialogsUtil.showProgressDialog(this, getString(R.string.gallery_save_to_device_dialog_progress_expl));
         fabButton.hide();
     }
 
     @Override
     public void onExportEnded() {
-        onImportEnded();
+        hideProgressDialog();
+        fabButton.show();
     }
 
     @Override
@@ -559,6 +557,28 @@ public class GalleryActivity extends MetadataActivity implements
     @Override
     public Context getContext() {
         return this;
+    }
+
+    @Override
+    public void onMediaFilesUploadScheduled() {
+        clearSelection();
+        Intent intent = new Intent(this, UploadsActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onMediaFilesUploadScheduleError(Throwable throwable) {
+
+    }
+
+    @Override
+    public void onGetMediaFilesSuccess(List<RawFile> mediaFiles) {
+
+    }
+
+    @Override
+    public void onGetMediaFilesError(Throwable error) {
+
     }
 
 
@@ -595,7 +615,7 @@ public class GalleryActivity extends MetadataActivity implements
             if (selectedNum > 0) {
                 getSupportActionBar().setTitle(String.valueOf(selectedNum));
             } else {
-                getSupportActionBar().setTitle(R.string.ra_gallery);
+                getSupportActionBar().setTitle(R.string.gallery_app_bar);
             }
         }
 
@@ -623,10 +643,10 @@ public class GalleryActivity extends MetadataActivity implements
 
     private void showDeleteMediaDialog() {
         alertDialog = new AlertDialog.Builder(this)
-                .setTitle(R.string.ra_delete_media)
-                .setMessage(R.string.ra_media_will_be_deleted)
-                .setPositiveButton(R.string.delete, (dialog, which) -> removeMediaFiles())
-                .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                .setTitle(R.string.gallery_delete_files_dialog_title)
+                .setMessage(R.string.gallery_delete_files_dialog_expl)
+                .setPositiveButton(R.string.action_delete, (dialog, which) -> removeMediaFiles())
+                .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
                 })
                 .setCancelable(true)
                 .show();
@@ -699,9 +719,13 @@ public class GalleryActivity extends MetadataActivity implements
         updateAttachmentsVisibility();
     }
 
-    private void stopPresenter() {
+    private void stopPresenters() {
         if (presenter != null) {
             presenter.destroy();
+        }
+
+        if (uploadPresenter != null) {
+            uploadPresenter.destroy();
         }
     }
 

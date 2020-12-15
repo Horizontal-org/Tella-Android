@@ -4,21 +4,21 @@
     <item
         android:id="@+id/offlineMenuItem"
         android:orderInCategory="100"
-        android:title="@string/ra_offline_mode"
+        android:title="@string/collect.form_action.desc_offline"
         android:icon="@drawable/ic_cloud_queue_white_24dp"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/saveFormMenuItem"
         android:orderInCategory="100"
-        android:title="@string/ra_save_form"
+        android:title="@string/collect_action.desc_save.form"
         android:icon="@drawable/ic_save_white_24dp"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/saveForLaterMenuItem"
         android:orderInCategory="100"
-        android:title="@string/ra_save_form"
+        android:title="@string/collect.end_action.desc_save.send.later"
         android:icon="@drawable/later_white"
         android:visible="false"
         app:showAsAction="ifRoom" />
@@ -26,7 +26,7 @@
     <item
         android:id="@+id/deleteFormMenuItem"
         android:orderInCategory="100"
-        android:title="@string/delete"
+        android:title="@string/action_delete"
         android:icon="@drawable/ic_delete_white_24dp"
         android:visible="false"
         app:showAsAction="ifRoom" />

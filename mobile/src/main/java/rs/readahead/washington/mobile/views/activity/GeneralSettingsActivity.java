@@ -46,7 +46,7 @@ public class GeneralSettingsActivity extends CacheWordSubscriberBaseActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.ra_general);
+            actionBar.setTitle(R.string.settings_select_general);
         }
 
         disposable = new CompositeDisposable();
@@ -100,7 +100,7 @@ public class GeneralSettingsActivity extends CacheWordSubscriberBaseActivity {
     private void setLanguage() {
         String languageSetting = LocaleManager.getInstance().getLanguageSetting();
         if (languageSetting == null) {
-            langSetting.setText(R.string.ra_default);
+            langSetting.setText(R.string.settings_lang_select_default);
         } else {
             Locale locale = new Locale(languageSetting);
             langSetting.setText(StringUtils.capitalize(locale.getDisplayName(locale), locale));

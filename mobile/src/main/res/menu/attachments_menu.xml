@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_item_select"
-        android:title="@string/pl_confirm"
+        android:title="@string/action.desc_confirm"
         android:icon="@drawable/ic_check_white"
         app:showAsAction="ifRoom"/>
 </menu>

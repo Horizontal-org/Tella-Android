@@ -16,10 +16,13 @@ import android.location.LocationManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
+
+import android.provider.Settings;
 import android.view.View;
 
 import com.google.android.gms.common.api.ApiException;
@@ -49,6 +52,7 @@ import io.reactivex.observers.DisposableObserver;
 import io.reactivex.subjects.BehaviorSubject;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
+import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.Metadata;
 import rs.readahead.washington.mobile.domain.entity.MyLocation;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
@@ -97,7 +101,6 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
 
         // Sensors
         mSensorManager = (SensorManager) getApplicationContext().getSystemService(Context.SENSOR_SERVICE);
-        //noinspection ConstantConditions
         mLight = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         mAmbientTemperature = mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
 
@@ -348,13 +351,13 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
     }
 
     private void showGpsMetadataDialog(final int requestCode, final LocationSettingsCheckDoneListener listener) {
-        String message = getString(R.string.gps_metadata_dialog_info);
+        String message = getString(R.string.verification_prompt_dialog_expl);
 
         locationAlertDialog = DialogsUtil.showMessageOKCancelWithTitle(this,
                 message,
-                getString(R.string.attention),
-                getString(R.string.ignore),
-                getString(R.string.turn_on_gps),
+                getString(R.string.verification_prompt_dialog_title),
+                getString(R.string.verification_prompt_action_ignore),
+                getString(R.string.verification_prompt_action_enable_GPS),
                 (dialog, which) -> {  //ignore
                     dialog.dismiss();
                     listener.onContinue();
@@ -417,10 +420,10 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
     }
 
     // UI stuff
-    protected void attachMediaFileMetadata(final long mediaFileId, final IMetadataAttachPresenterContract.IPresenter metadataAttacher) {
+    protected void attachMediaFileMetadata(final MediaFile mediaFile, final IMetadataAttachPresenterContract.IPresenter metadataAttacher) {
         // skip metadata if anonymous mode..
         if (Preferences.isAnonymousMode()) {
-            metadataAttacher.attachMetadata(mediaFileId, null);
+            metadataAttacher.attachMetadata(mediaFile.getId(), null);
             return;
         }
 
@@ -428,7 +431,9 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
 
         final Metadata metadata = new Metadata();
 
-        metadata.setTimestamp(System.currentTimeMillis() / 1000L);
+        metadata.setFileName(mediaFile.getFileName());
+        metadata.setFileHashSHA256(mediaFile.getHash());
+        metadata.setTimestamp(System.currentTimeMillis());
         metadata.setAmbientTemperature(getAmbientTemperatureSensorData().hasValue() ? getAmbientTemperatureSensorData().getValue() : null);
         metadata.setLight(getLightSensorData().hasValue() ? getLightSensorData().getValue() : null);
 
@@ -455,7 +460,7 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
 
         // if location gathering is not possible skip it
         if (!isLocationProviderEnabled()) {
-            metadataAttacher.attachMetadata(mediaFileId, metadata);
+            metadataAttacher.attachMetadata(mediaFile.getId(), metadata);
             return;
         }
 
@@ -478,6 +483,13 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
                             metadata.setMyLocation(value.getLocation());
                             locationGahteringChecked();
                         }
+
+                        // skip if wifi gathering not possible in airplane mode
+                        if ((Settings.Global.getInt(getBaseContext().getContentResolver(), Settings.Global.AIRPLANE_MODE_ON, 0) != 0)
+                                && !wifiManager.isWifiEnabled() && metadata.getWifis() == null) {
+                            List<String> wifis = new ArrayList<>();
+                            metadata.setWifis(wifis);
+                        }
                     }
 
                     @Override
@@ -487,7 +499,7 @@ public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity i
 
                     @Override
                     public void onComplete() {
-                        metadataAttacher.attachMetadata(mediaFileId, metadata);
+                        metadataAttacher.attachMetadata(mediaFile.getId(), metadata);
                     }
                 })
         );

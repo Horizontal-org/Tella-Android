@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
-        android:text="@string/share_dialog_title" />
+        android:text="@string/verification.share_dialog.title" />
 
     <TextView
         style="@style/DialogFragmentText"
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
-        android:text="@string/share_dialog_text" />
+        android:text="@string/verification.share_dialog.expl" />
 
     <RadioGroup
         android:id="@+id/radiogroup_metadata"
@@ -38,7 +38,7 @@
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:checked="true"
-            android:text="@string/share_dialog_btn_metadata" />
+            android:text="@string/verification.share_select_media.and.verification" />
 
         <RadioButton
             android:id="@+id/share_media_only"
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:text="@string/share_dialog_btn_only_media" />
+            android:text="@string/verification.share_select_only.media" />
     </RadioGroup>
 
     <View style="@style/DialogFragmentLine" />
@@ -63,7 +63,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
-            android:text="@string/cancel"
+            android:text="@string/action_cancel"
             android:textAlignment="center"
             android:background="@color/wa_white"
             android:textStyle="bold"/>
@@ -74,7 +74,7 @@
             android:id="@+id/next"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/next_section"
+            android:text="@string/action_next"
             android:layout_weight=".5"
             android:textAlignment="center"
             android:background="@color/wa_white"

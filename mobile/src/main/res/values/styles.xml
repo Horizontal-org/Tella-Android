@@ -253,6 +253,13 @@
         <item name="colorControlActivated">@color/wa_red_light</item>
     </style>
 
+    <style name="SettingsTextViewCheck" parent="@style/SettingsTextView">
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="colorControlActivated">@color/wa_dark_gray</item>
+    </style>
+
     <style name="SettingsTextViewTitle" parent="@style/SettingsTextView">
         <item name="android:textSize">16sp</item>
         <item name="android:paddingStart">24dp</item>
@@ -311,6 +318,11 @@
         <item name="android:textColor">@color/wa_dialog_gray</item>
     </style>
 
+    <style name="UploadInfoTextViewGray" parent="@style/LineTextView">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/wa_gray</item>
+    </style>
+
     <style name="LineTextView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -367,13 +379,13 @@
         <item name="android:textAllCaps">true</item>
     </style>
 
-    <style name="ReportHelpText">
+    <style name="CollectHelpText">
         <item name="android:textSize">17sp</item>
         <item name="android:textAlignment">textStart</item>
         <item name="android:textColor">@color/wa_dark_gray</item>
     </style>
 
-    <style name="ReportHelpMessage" parent="ReportHelpText">
+    <style name="CollectHelpMessage" parent="CollectHelpText">
         <item name="android:paddingStart">16dp</item>
         <item name="android:paddingEnd">16dp</item>
         <item name="android:paddingTop">8dp</item>
@@ -410,61 +422,6 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0.2dp</item>
         <item name="android:background">@color/wa_dark_gray</item>
-    </style>
-
-    <style name="ReportInfoContainerLayout">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:orientation">horizontal</item>
-    </style>
-
-    <style name="ReportInfoImageView">
-        <item name="android:layout_width">20dp</item>
-        <item name="android:layout_height">20dp</item>
-        <item name="android:layout_gravity">center_vertical</item>
-    </style>
-
-    <style name="ReportInfoTextView" parent="TopExplanatoryLayout">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">12sp</item>
-        <item name="android:textAlignment">textStart</item>
-        <item name="android:linksClickable">true</item>
-    </style>
-
-    <style name="NewReportCompletedIndicator">
-        <item name="android:visibility">gone</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-
-    <style name="NewReportRequiredText">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:text">@string/required</item>
-    </style>
-
-    <style name="NewReportFrame">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_alignParentEnd">true</item>
-        <item name="android:layout_centerVertical">true</item>
-    </style>
-
-    <style name="NewReportTextView">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/wa_black</item>
-        <item name="android:enabled">false</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:background">@android:color/transparent</item>
-    </style>
-
-    <style name="NewReportHint">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">12sp</item>
-        <item name="android:visibility">gone</item>
     </style>
 
     <style name="RecipientTitle">
@@ -526,14 +483,22 @@
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="NavigationTabLayout">
+    <style name="NavigationElement">
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="android:padding">@dimen/navigation_tab_bar_padding</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_weight">1</item>
         <item name="android:gravity">center</item>
+    </style>
+
+    <style name="NavigationRowElement" parent="NavigationElement">
+        <item name="android:layout_height">@dimen/navigation_row_height</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="NavigationTableElement" parent="NavigationElement">
+        <item name="android:layout_height">@dimen/navigation_table_cell_height</item>
+        <item name="android:layout_width">@dimen/navigation_table_cell_height</item>
     </style>
 
     <style name="PanicActiveText">
@@ -643,6 +608,17 @@
     <style name="BrightBackgroundDarkLettersDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
         <item name="android:background">@color/wa_light_gray</item>
         <item name="android:textColor">@color/wa_darker_gray</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="DialogRadioButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/wa_darker_gray</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">2dp</item>
         <item name="android:textStyle">bold</item>
     </style>
 </resources>

@@ -2,7 +2,7 @@ package rs.readahead.washington.mobile.views.activity;
 
 import android.os.Bundle;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import info.guardianproject.cacheword.CacheWordHandler;
 import info.guardianproject.cacheword.ICacheWordSubscriber;
@@ -60,7 +60,7 @@ public abstract class CacheWordSubscriberBaseActivity extends BaseActivity imple
             MyApplication application = (MyApplication) getApplication();
             application.createCacheWordHandler();
         } catch (Throwable e) {
-            Crashlytics.logException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
     }
 }

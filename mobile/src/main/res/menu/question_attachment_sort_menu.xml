@@ -2,15 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:enabled="false"
-        android:title="@string/sort_by" />
+        android:title="@string/gallery_subheading_sort.by" />
     <group
         android:id="@+id/sort"
         android:checkableBehavior="single">
         <item
             android:id="@+id/newest"
-            android:title="@string/newest_to_oldest" />
+            android:title="@string/gallery_list.item_newest.to.oldest" />
         <item
             android:id="@+id/oldest"
-            android:title="@string/oldest_to_newest" />
+            android:title="@string/gallery_list.item_oldest.to.newest" />
     </group>
 </menu>

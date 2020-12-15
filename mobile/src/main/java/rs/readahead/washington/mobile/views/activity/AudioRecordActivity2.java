@@ -13,6 +13,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -21,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -32,15 +35,19 @@ import permissions.dispatcher.OnShowRationale;
 import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.Metadata;
+import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.media.AudioRecorder;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IAudioCapturePresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
+import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.AudioCapturePresenter;
 import rs.readahead.washington.mobile.mvp.presenter.MetadataAttacher;
+import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulePresenter;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.util.StringUtils;
@@ -50,6 +57,7 @@ import rs.readahead.washington.mobile.util.StringUtils;
 public class AudioRecordActivity2 extends MetadataActivity implements
         AudioRecorder.AudioRecordInterface,
         IAudioCapturePresenterContract.IView,
+        ITellaFileUploadSchedulePresenterContract.IView,
         IMetadataAttachPresenterContract.IView {
     private static final String TIME_FORMAT = "%02d:%02d:%02d";
     public static String RECORDER_MODE = "rm";
@@ -79,6 +87,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     // recording
     private AudioRecorder audioRecorder;
+    private TellaFileUploadSchedulePresenter uploadPresenter;
     private AudioCapturePresenter presenter;
     private MetadataAttacher metadataAttacher;
     private CompositeDisposable disposable = new CompositeDisposable();
@@ -105,11 +114,12 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setTitle(R.string.title_activity_audio_record);
+            actionBar.setTitle(R.string.recorder_app_bar);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
         presenter = new AudioCapturePresenter(this);
+        uploadPresenter = new TellaFileUploadSchedulePresenter(this);
         metadataAttacher = new MetadataAttacher(this);
 
         notRecording = true;
@@ -238,7 +248,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     @OnShowRationale(Manifest.permission.RECORD_AUDIO)
     void showRecordAudioRationale(final PermissionRequest request) {
-        rationaleDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_audio));
+        rationaleDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_mic));
     }
 
     @Override
@@ -250,14 +260,14 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     }
 
     @Override
-    public void onAddSuccess(long mediaFileId) {
-        attachMediaFileMetadata(mediaFileId, metadataAttacher);
-        showToast(String.format(getString(R.string.recorded_successfully), getString(R.string.app_name)));
+    public void onAddSuccess(MediaFile mediaFile) {
+        attachMediaFileMetadata(mediaFile, metadataAttacher);
+        showToast(String.format(getString(R.string.recorder_toast_recording_saved), getString(R.string.app_name)));
     }
 
     @Override
     public void onAddError(Throwable error) {
-        showToast(R.string.ra_capture_error);
+        showToast(R.string.gallery_toast_fail_saving_file);
     }
 
     @Override
@@ -282,14 +292,12 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         setResult(Activity.RESULT_OK, intent);
         mTimer.setText(timeToString(0));
 
-        if (mode != Mode.STAND) {
-            finish();
-        }
+        scheduleFileUpload(handlingMediaFile);
     }
 
     @Override
     public void onMetadataAttachError(Throwable throwable) {
-        showToast(R.string.ra_capture_error);
+        showToast(R.string.gallery_toast_fail_saving_file);
     }
 
     @Override
@@ -308,6 +316,28 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     @Override
     public Context getContext() {
         return this;
+    }
+
+    @Override
+    public void onMediaFilesUploadScheduled() {
+        if (mode != Mode.STAND) {
+            finish();
+        }
+    }
+
+    @Override
+    public void onMediaFilesUploadScheduleError(Throwable throwable) {
+
+    }
+
+    @Override
+    public void onGetMediaFilesSuccess(List<RawFile> mediaFiles) {
+
+    }
+
+    @Override
+    public void onGetMediaFilesError(Throwable error) {
+
     }
 
     private void handleStop() {
@@ -351,7 +381,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         enableRecord();
 
         mTimer.setText(timeToString(0));
-        showToast(R.string.recorded_unsuccessfully);
+        showToast(R.string.recorder_toast_fail_recording);
     }
 
     private void returnData() {
@@ -463,9 +493,18 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         String spaceLeft = StringUtils.getFileSize(memoryLeft);
 
         if (days < 1 && hours < 12) {
-            freeSpace.setText(getString(R.string.hours_minutes_and_space_left, hours, minutes, spaceLeft));
+            freeSpace.setText(getString(R.string.recorder_meta_space_available_hours, hours, minutes, spaceLeft));
         } else {
-            freeSpace.setText(getString(R.string.days_hours_and_space_left, days, hours, spaceLeft));
+            freeSpace.setText(getString(R.string.recorder_meta_space_available_days, days, hours, spaceLeft));
+        }
+    }
+
+    private void scheduleFileUpload(MediaFile mediaFile) {
+        if (Preferences.isAutoUploadEnabled()) {
+            List<MediaFile> upload = Collections.singletonList(mediaFile);
+            uploadPresenter.scheduleUploadMediaFiles(upload);
+        } else {
+            onMediaFilesUploadScheduled();
         }
     }
 }

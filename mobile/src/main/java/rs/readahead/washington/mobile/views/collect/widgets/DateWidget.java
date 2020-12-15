@@ -89,7 +89,7 @@ public class DateWidget extends QuestionWidget {
         nullAnswer = true;
         dateVisible = false;
         dateButton.setVisibility(VISIBLE);
-        dateButton.setText(getResources().getString(R.string.ra_select_date)); // todo: say something smart here..
+        dateButton.setText(getResources().getString(R.string.collect_form_action_select_date)); // todo: say something smart here..
         dateText.setVisibility(GONE);
         clearButton.setVisibility(GONE);
     }
@@ -145,7 +145,7 @@ public class DateWidget extends QuestionWidget {
         dateText = linearLayout.findViewById(R.id.dateText);
 
         dateButton.setId(QuestionWidget.newUniqueId());
-        dateButton.setText(getResources().getString(R.string.ra_select_date));
+        dateButton.setText(getResources().getString(R.string.collect_form_action_select_date));
         dateButton.setEnabled(!formEntryPrompt.isReadOnly());
 
         dateButton.setOnClickListener(v -> {

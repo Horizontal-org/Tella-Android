@@ -5,8 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
@@ -23,6 +21,8 @@ import org.javarosa.form.api.FormEntryPrompt;
 
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.GPSProviderRequiredEvent;
@@ -57,16 +57,10 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
     private String appearance;
     private LocationGettingPresenter locationGettingPresenter;
     private boolean locationGathering;
-    private boolean readonlyOverride;
 
 
     public GeoPointWidget(Context context, @NonNull FormEntryPrompt formEntryPrompt) {
         super(context, formEntryPrompt);
-
-        try {
-            readonlyOverride = formEntryPrompt.getIndex().getReference().getNameLast()
-                    .toLowerCase().endsWith(context.getString(R.string.tella_location_field_suffix));
-        } catch (Exception ignored) {}
 
         appearance = formEntryPrompt.getAppearanceHint();
         if (TextUtils.isEmpty(appearance)) {
@@ -233,7 +227,7 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
                     C.SELECTED_LOCATION
             );
         } catch (Exception e) {
-            Crashlytics.logException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
             FormController.getActive().setIndexWaitingForData(null);
         }
     }
@@ -244,19 +238,19 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
         MyLocation myLocation = parseLocationString();
 
         latitude.setVisibility(VISIBLE);
-        latitude.setText(String.format(getContext().getString(R.string.ra_latitude_arg),
+        latitude.setText(String.format(getContext().getString(R.string.collect_form_geopoint_meta_latitude),
                 LocationUtil.printCoordinate(myLocation.getLatitude(), true)));
 
         longitude.setVisibility(VISIBLE);
-        longitude.setText(String.format(getContext().getString(R.string.ra_longitude_arg),
+        longitude.setText(String.format(getContext().getString(R.string.collect_form_geopoint_meta_longitude),
                 LocationUtil.printCoordinate(myLocation.getLongitude(), false)));
 
         altitude.setVisibility(VISIBLE);
-        altitude.setText(String.format(getContext().getString(R.string.ra_altitude_arg),
+        altitude.setText(String.format(getContext().getString(R.string.collect_form_geopoint_meta_altitude),
                 String.format(Locale.ROOT, "%.02f", myLocation.getAltitude())));
 
         accuracy.setVisibility(VISIBLE);
-        accuracy.setText(String.format(getContext().getString(R.string.ra_accuracy_arg),
+        accuracy.setText(String.format(getContext().getString(R.string.collect_form_geopoint_meta_accuracy),
                 myLocation.getAccuracy().toString()));
     }
 
@@ -302,10 +296,10 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
         String[] sa = locationString.split(" ");
 
         MyLocation myLocation = new MyLocation();
-        myLocation.setLatitude(Double.valueOf(sa[0]));
-        myLocation.setLongitude(Double.valueOf(sa[1]));
-        myLocation.setAltitude(Double.valueOf(sa[2]));
-        myLocation.setAccuracy(Float.valueOf(sa[3]));
+        myLocation.setLatitude(Double.parseDouble(sa[0]));
+        myLocation.setLongitude(Double.parseDouble(sa[1]));
+        myLocation.setAltitude(Double.parseDouble(sa[2]));
+        myLocation.setAccuracy(Float.parseFloat(sa[3]));
 
         return myLocation;
     }
@@ -320,6 +314,6 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean isReadonly() {
-        return readonlyOverride || formEntryPrompt.isReadOnly();
+        return formEntryPrompt.isReadOnly();
     }
 }

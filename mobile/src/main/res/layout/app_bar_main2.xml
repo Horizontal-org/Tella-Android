@@ -18,8 +18,6 @@
 
     <include layout="@layout/content_panic_mode_view" />
 
-    <include layout="@layout/content_panic_explain_view" />
-
     <include layout="@layout/content_main2" />
 
     <include layout="@layout/main_panic_seek_bar" />

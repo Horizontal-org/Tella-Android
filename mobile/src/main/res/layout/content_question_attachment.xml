@@ -29,7 +29,7 @@
             android:layout_marginRight="10dp"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="@string/ra_tella_gallery"
+            android:text="@string/gallery_heading_files.from.Tella.gallery"
             tools:ignore="RelativeOverlap" />
 
         <ImageButton
@@ -67,6 +67,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/galleryToolbar"
-        android:text="@string/gallery_empty_text"
+        android:text="@string/gallery_expl_empty"
         android:visibility="gone"/>
 </RelativeLayout>

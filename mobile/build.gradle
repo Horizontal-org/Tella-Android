@@ -1,25 +1,26 @@
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 ext {
     supportLibVersion = "28.0.3"
     retrofitVersion = '2.6.1'
-    permissionDispatcherVersion = "4.5.0"
+    permissionDispatcherVersion = "4.8.0"
     googlePlayServicesVersion = "17.0.0"
-    leakCanaryVersion = '1.6.3'
+    leakCanaryVersion = '2.4'
     butterknifeVersion = '10.1.0'
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         applicationId "org.hzontal.tella"
         minSdkVersion 17
         compileSdkVersion 28
-        targetSdkVersion 28
-        versionCode 52
-        versionName "1.6.2"
+        targetSdkVersion 29
+        versionCode 61
+        versionName "1.7.0"
         multiDexEnabled true
         // vectorDrawables.useSupportLibrary = true // don't care about apk size, care about crashes
     }
@@ -54,24 +55,22 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
     // implementation 'com.madgag.spongycastle:pg:1.54.0.0'// needed for above
 
-    implementation('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
-        transitive = true
-    }
+    implementation platform('com.google.firebase:firebase-bom:26.1.0')
+    implementation 'com.google.firebase:firebase-crashlytics'
 
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    implementation 'androidx.exifinterface:exifinterface:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.exifinterface:exifinterface:1.3.0'
     implementation "com.google.android.gms:play-services-location:${googlePlayServicesVersion}"
     implementation "com.google.android.gms:play-services-maps:${googlePlayServicesVersion}"
     // implementation "com.google.android.gms:play-services-gcm:${googlePlayServicesVersion}" // android-job, optional
-    // implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
     implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
     implementation "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}"
@@ -85,7 +84,6 @@ dependencies {
     implementation("org.permissionsdispatcher:permissionsdispatcher:${permissionDispatcherVersion}") {
         exclude module: "support-v13"
     }
-
     annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:${permissionDispatcherVersion}"
 
     implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
@@ -93,11 +91,11 @@ dependencies {
     implementation "com.jakewharton.timber:timber:4.7.1"
     implementation 'net.zetetic:android-database-sqlcipher:3.5.7@aar'
     implementation 'info.guardianproject.cacheword:cachewordlib:0.1.1'
-    implementation 'com.github.bumptech.glide:glide:3.7.0' //implementation 'com.github.bumptech.glide:glide:4.9.0'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'me.zhanghai.android.patternlock:library:2.1.2'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
-    implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.19'
+    implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.1'
     implementation 'com.evernote:android-job:1.3.0-rc1'
 
     implementation "com.jakewharton:butterknife:${butterknifeVersion}"
@@ -115,22 +113,19 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer:2.10.0'
 
     // camera
-    implementation('com.otaliastudios:cameraview:1.6.0') {
+    implementation('com.otaliastudios:cameraview:2.6.1') {
         exclude module: "exifinterface"
         exclude module: "animated-vector-drawble"
     }
 
     implementation 'com.github.apl-devs:appintro:v4.2.3'
-
     implementation 'com.simplify:ink:1.0.2'
-
     implementation 'com.mikhaellopez:circularimageview:3.2.0'
+    implementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
+    implementation 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:3.2.0'
+    implementation 'com.github.lzyzsd:circleprogress:1.2.1'
 
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}"
-    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}"
-    debugImplementation "com.squareup.leakcanary:leakcanary-support-fragment:${leakCanaryVersion}"
 
-    testImplementation 'junit:junit:4.13-beta-3'
-
-    implementation 'org.apache.directory.studio:org.apache.commons.io:2.4'//import com.google.android.gms.common.util.IOUtils;
+    testImplementation 'junit:junit:4.13'
 }

@@ -25,11 +25,9 @@ public class SharedPrefs {
     static final String PANIC_GEOLOCATION = "panic_geolocation";
     static final String DELETE_SERVER_SETTINGS = "erase_everything";
     static final String ERASE_GALLERY = "erase_gallery";
-    private static final String ERASE_CONTACTS = "erase_contacts";
     static final String ERASE_FORMS = "erase_forms";
     //private static final String AUTO_SAVE_DRAFT_FORM = "auto_save_draft_form";
     private static final String LANGUAGE = "language";
-    static final String WIFI_ATTACHMENTS = "wifi_attachments";
     static final String SECRET_MODE_ENABLED = "secret_password_enabled";
     static final String DOMAIN_FRONTING = "df";
     static final String ANONYMOUS_MODE = "anonymous_mode";
@@ -38,13 +36,18 @@ public class SharedPrefs {
     static final String APP_ALIAS_NAME = "app_alias_name";
     static final String SUBMIT_CRASH_REPORTS = "submit_crash_reports";
     static final String ENABLE_CAMERA_PREVIEW = "enable_camera_preview";
-    static final String SHORTCUT_POSITION_PREFIX = "shortcut_pos_";
     static final String LOCATION_ACCURACY_THRESHOLD = "location_threshold";
     static final String OFFLINE_MODE = "offline_mode";
     static final String QUICK_EXIT_BUTTON = "quick_exit_button";
     static final String COLLECT_OPTION = "collect_option";
     static final String INSTALLATION_ID = "installation_id";
     static final String LAST_COLLECT_REFRESH = "last_collect_refresh";
+    static final String VIDEO_RESOLUTION = "video_resolution";
+    static final String AUTO_UPLOAD_SERVER = "auto_upload_server";
+    static final String AUTO_UPLOAD = "auto_upload";
+    static final String AUTO_DELETE = "auto_delete";
+    static final String METADATA_AUTO_UPLOAD = "metadata_auto_upload";
+    static final String AUTO_UPLOAD_PAUSED = "auto_upload_paused";
 
     private static SharedPrefs instance;
     private SharedPreferences pref;
@@ -104,15 +107,6 @@ public class SharedPrefs {
 
     public void setEraseGalleryActive(boolean activated) {
         editor.putBoolean(ERASE_GALLERY, activated);
-        editor.apply();
-    }
-
-    public boolean isEraseContactsActive() {
-        return pref.getBoolean(ERASE_CONTACTS, true);
-    }
-
-    public void setEraseContactsActive(boolean activated) {
-        editor.putBoolean(ERASE_CONTACTS, activated);
         editor.apply();
     }
 

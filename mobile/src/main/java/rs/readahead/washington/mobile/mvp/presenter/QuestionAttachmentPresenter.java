@@ -1,12 +1,12 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
 import android.net.Uri;
-import androidx.annotation.Nullable;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import io.reactivex.Observable;
 import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -89,7 +89,7 @@ public class QuestionAttachmentPresenter implements IQuestionAttachmentPresenter
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onImportEnded())
                 .subscribe(mediaHolder -> view.onMediaFileImported(mediaHolder), throwable -> {
-                    Crashlytics.logException(throwable);
+                    FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onImportError(throwable);
                 })
         );
@@ -104,7 +104,7 @@ public class QuestionAttachmentPresenter implements IQuestionAttachmentPresenter
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onImportEnded())
                 .subscribe(mediaHolder -> view.onMediaFileImported(mediaHolder), throwable -> {
-                    Crashlytics.logException(throwable);
+                    FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onImportError(throwable);
                 })
         );

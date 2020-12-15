@@ -88,7 +88,7 @@ public class TimeWidget extends QuestionWidget {
         nullAnswer = true;
         timeVisible = false;
         timeButton.setVisibility(VISIBLE);
-        timeButton.setText(getResources().getString(R.string.ra_select_time)); // todo: say something smart here..
+        timeButton.setText(getResources().getString(R.string.collect_form_action_select_time)); // todo: say something smart here..
         timeText.setVisibility(GONE);
         clearButton.setVisibility(GONE);
     }
@@ -139,7 +139,7 @@ public class TimeWidget extends QuestionWidget {
         timeText = linearLayout.findViewById(R.id.timeText);
 
         timeButton.setId(QuestionWidget.newUniqueId());
-        timeButton.setText(getResources().getString(R.string.ra_select_time));
+        timeButton.setText(getResources().getString(R.string.collect_form_action_select_time));
         timeButton.setEnabled(!formEntryPrompt.isReadOnly());
 
         timeButton.setOnClickListener(v -> {

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import androidx.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -16,10 +15,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.javarosa.form.api.FormEntryPrompt;
 
+import androidx.annotation.NonNull;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
@@ -132,7 +132,7 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
                     C.MEDIA_FILE_ID
             );
         } catch (Exception e) {
-            Crashlytics.logException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
             FormController.getActive().setIndexWaitingForData(null);
         }
     }
@@ -204,11 +204,11 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
                     .putExtra(PhotoViewerActivity.VIEW_PHOTO, mediaFile)
                     .putExtra(PhotoViewerActivity.NO_ACTIONS, true));
         } catch (Exception e) {
-            Crashlytics.logException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
     }
 
     private void showMediaFileInfo() {
-        fileSize.setText(String.format(getResources().getString(R.string.file_size), FileUtil.getFileSizeString(mediaFile.getSize())));
+        fileSize.setText(String.format(getResources().getString(R.string.collect_form_meta_file_size), FileUtil.getFileSizeString(mediaFile.getSize())));
     }
 }

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/navigation_row_height"
+    android:layout_alignParentBottom="true"
+    android:alpha="1"
+    android:baselineAligned="false"
+    android:gravity="center_horizontal"
+    android:orientation="horizontal"
+    android:visibility="visible"
+    android:weightSum="4">
+
+    <RelativeLayout
+        android:id="@+id/tab_button_collect"
+        style="@style/NavigationRowElement"
+        android:background="@drawable/round_left_button_background">
+
+        <ImageView
+            android:id="@+id/collect_image"
+            style="@style/NavigationTabImage"
+            android:contentDescription="@null"
+            android:src="@drawable/main_collect" />
+
+        <TextView
+            style="@style/NavigationTabText"
+            android:layout_below="@+id/collect_image"
+            android:text="@string/home_collect.button" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/tab_button_gallery"
+        style="@style/NavigationRowElement"
+        android:background="@drawable/round_left_button_background">
+
+        <ImageView
+            android:id="@+id/gallery_image"
+            style="@style/NavigationTabImage"
+            android:contentDescription="@null"
+            android:src="@drawable/gallery_white" />
+
+        <TextView
+            style="@style/NavigationTabText"
+            android:layout_below="@+id/gallery_image"
+            android:text="@string/home_gallery.button" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/tab_button_record"
+        style="@style/NavigationRowElement"
+        android:background="@drawable/round_right_button_background">
+
+        <ImageView
+            android:id="@+id/microphone"
+            style="@style/NavigationTabImage"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_mic_white" />
+
+        <TextView
+            style="@style/NavigationTabText"
+            android:layout_below="@+id/microphone"
+            android:text="@string/action_record" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/tab_button_uploads"
+        style="@style/NavigationRowElement"
+        android:background="@drawable/round_right_button_background">
+
+        <ImageView
+            android:id="@+id/uploads"
+            style="@style/NavigationTabImage"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_cloud_upload_white_24dp" />
+
+        <TextView
+            style="@style/NavigationTabText"
+            android:layout_below="@+id/uploads"
+            android:text="@string/home_upload.button" />
+    </RelativeLayout>
+</LinearLayout>

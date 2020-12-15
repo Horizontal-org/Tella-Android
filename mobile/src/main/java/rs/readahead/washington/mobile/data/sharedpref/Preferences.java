@@ -6,8 +6,6 @@ import androidx.annotation.Nullable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import rs.readahead.washington.mobile.presentation.entity.ShortcutPosition;
-
 
 public class Preferences {
     private static SharedPrefs sharedPrefs = SharedPrefs.getInstance();
@@ -105,6 +103,15 @@ public class Preferences {
         setString(SharedPrefs.APP_ALIAS_NAME, value);
     }
 
+    @Nullable
+    public static String getVideoResolution() {
+        return getString(SharedPrefs.VIDEO_RESOLUTION, null);
+    }
+
+    public static void setVideoResolution(@NonNull String value) {
+        setString(SharedPrefs.VIDEO_RESOLUTION, value);
+    }
+
     public static String getSecretPassword() {
         return getString(SharedPrefs.SECRET_PASSWORD, "");
     }
@@ -137,29 +144,8 @@ public class Preferences {
         setBoolean(SharedPrefs.ERASE_GALLERY, value);
     }
 
-    @Nullable
-    public static String getShortcutJson(@NonNull ShortcutPosition position) {
-        return getString(SharedPrefs.SHORTCUT_POSITION_PREFIX + position.name(), null);
-    }
-
-    public static void setShortcutJson(@NonNull ShortcutPosition position, @NonNull String json) {
-        setString(SharedPrefs.SHORTCUT_POSITION_PREFIX + position.name(), json);
-    }
-
     public static float getLocationAccuracyThreshold() {
         return getFloat(SharedPrefs.LOCATION_ACCURACY_THRESHOLD, 5f);
-    }
-
-    public static void setLocationAccuracyThreshold(float threshold) {
-        setFloat(SharedPrefs.LOCATION_ACCURACY_THRESHOLD, threshold);
-    }
-
-    public static boolean isWiFiAttachments() {
-        return getBoolean(SharedPrefs.WIFI_ATTACHMENTS, false);
-    }
-
-    public static void setWiFiAttachments(boolean value) {
-        setBoolean(SharedPrefs.WIFI_ATTACHMENTS, value);
     }
 
     public static boolean isOfflineMode() {
@@ -195,6 +181,47 @@ public class Preferences {
 
     public static void setLastCollectRefresh(@Nullable long value) {
         setLong(SharedPrefs.LAST_COLLECT_REFRESH, value);
+    }
+
+    @Nullable
+    public static long getAutoUploadServerId() {
+        return getLong(SharedPrefs.AUTO_UPLOAD_SERVER, -1);
+    }
+
+    public static void setAutoUploadServerId(@Nullable long value) {
+        setLong(SharedPrefs.AUTO_UPLOAD_SERVER, value);
+    }
+
+    public static boolean isAutoUploadEnabled() {
+        return getBoolean(SharedPrefs.AUTO_UPLOAD, false);
+    }
+
+    public static boolean isAutoUploadPaused() {
+        return getBoolean(SharedPrefs.AUTO_UPLOAD_PAUSED, false);
+    }
+
+    public static void setAutoUpload(boolean value) {
+        setBoolean(SharedPrefs.AUTO_UPLOAD, value);
+    }
+
+    public static void setAutoUploadPased(boolean value) {
+        setBoolean(SharedPrefs.AUTO_UPLOAD_PAUSED, value);
+    }
+
+    public static boolean isAutoDeleteEnabled() {
+        return getBoolean(SharedPrefs.AUTO_DELETE, false);
+    }
+
+    public static void setAutoDelete(boolean value) {
+        setBoolean(SharedPrefs.AUTO_DELETE, value);
+    }
+
+    public static boolean isMetadataAutoUpload() {
+        return getBoolean(SharedPrefs.METADATA_AUTO_UPLOAD, false);
+    }
+
+    public static void setMetadataAutoUpload(boolean value) {
+        setBoolean(SharedPrefs.METADATA_AUTO_UPLOAD, value);
     }
 
     private static boolean getBoolean(String name, boolean def) {

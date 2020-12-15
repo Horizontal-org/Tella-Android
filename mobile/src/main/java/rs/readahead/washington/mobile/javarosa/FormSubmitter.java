@@ -1,14 +1,14 @@
 package rs.readahead.washington.mobile.javarosa;
 
 import android.content.Context;
-import androidx.annotation.Nullable;
 import android.text.TextUtils;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Single;
@@ -30,7 +30,6 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.NegotiatedCollectServer;
 import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaPartResponse;
-import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaResponse;
 import rs.readahead.washington.mobile.domain.exception.NoConnectivityException;
 import rs.readahead.washington.mobile.domain.repository.IOpenRosaRepository;
 import rs.readahead.washington.mobile.odk.FormController;
@@ -65,7 +64,7 @@ public class FormSubmitter implements IFormSubmitterContract.IFormSubmitter {
         // submitFormInstance(instance);
         submitFormInstanceGranular(instance);
     }
-
+/*
     @Override
     public void submitFormInstance(final CollectFormInstance instance) {
         final boolean offlineMode = Preferences.isOfflineMode();
@@ -93,9 +92,9 @@ public class FormSubmitter implements IFormSubmitterContract.IFormSubmitter {
                 .doFinally(() -> view.hideFormSubmitLoading())
                 .subscribe(openRosaResponse -> {
                     // start attachment upload process
-                    /* if (hasAttachments(instance)) {
-                        updateMediaFilesQueue(instance.getMediaFiles());
-                    } */
+                    // if (hasAttachments(instance)) {
+                     //   updateMediaFilesQueue(instance.getMediaFiles());
+                   // }
 
                     view.formSubmitSuccess(instance, openRosaResponse);
                 }, throwable -> {
@@ -105,12 +104,12 @@ public class FormSubmitter implements IFormSubmitterContract.IFormSubmitter {
                         // PendingFormSendJob.scheduleJob();
                         view.formSubmitNoConnectivity();
                     } else {
-                        Crashlytics.logException(throwable);
+                        FirebaseCrashlytics.getInstance().recordException(throwable);
                         view.formSubmitError(throwable);
                     }
                 })
         );
-    }
+    }*/
 
     @Override
     public void submitFormInstanceGranular(final CollectFormInstance instance) {
@@ -153,7 +152,7 @@ public class FormSubmitter implements IFormSubmitterContract.IFormSubmitter {
                                 // PendingFormSendJob.scheduleJob();
                                 view.formSubmitNoConnectivity();
                             } else {
-                                Crashlytics.logException(throwable);
+                                FirebaseCrashlytics.getInstance().recordException(throwable);
                                 view.formPartSubmitError(throwable);
                             }
                         },

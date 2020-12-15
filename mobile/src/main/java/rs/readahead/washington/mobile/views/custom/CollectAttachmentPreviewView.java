@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -148,7 +148,7 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
     public void onGetMediaFileError(Throwable error) {
         thumbGradient.setVisibility(VISIBLE);
         thumbView.setImageResource(R.drawable.ic_error);
-        Toast.makeText(getContext(), getResources().getText(R.string.collect_attachment_load_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), getResources().getText(R.string.collect_form_toast_fail_load_attachment), Toast.LENGTH_LONG).show();
         audioInfo.setVisibility(GONE);
         videoInfo.setVisibility(GONE);
     }
@@ -161,8 +161,8 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
     }
 
     private void showMediaFileInfo() {
-        fileName.setText(String.format(getResources().getString(R.string.file_name), mediaFile.getFileName()));
-        fileSize.setText(String.format(getResources().getString(R.string.file_size), FileUtil.getFileSizeString(mediaFile.getSize())));
+        fileName.setText(String.format(getResources().getString(R.string.collect_form_attachment_meta_file_name), mediaFile.getFileName()));
+        fileSize.setText(String.format(getResources().getString(R.string.collect_form_meta_file_size), FileUtil.getFileSizeString(mediaFile.getSize())));
     }
 
     private void showVideoViewerActivity() {
@@ -176,7 +176,7 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
                     .putExtra(VideoViewerActivity.VIEW_VIDEO, mediaFile)
                     .putExtra(VideoViewerActivity.NO_ACTIONS, true));
         } catch (Exception e) {
-            Crashlytics.logException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
     }
 
@@ -191,7 +191,7 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
                     .putExtra(PhotoViewerActivity.VIEW_PHOTO, mediaFile)
                     .putExtra(PhotoViewerActivity.NO_ACTIONS, true));
         } catch (Exception e) {
-            Crashlytics.logException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
     }
 
@@ -206,7 +206,7 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
                     .putExtra(AudioPlayActivity.PLAY_MEDIA_FILE, mediaFile)
                     .putExtra(AudioPlayActivity.NO_ACTIONS, true));
         } catch (Exception e) {
-            Crashlytics.logException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
     }
 }

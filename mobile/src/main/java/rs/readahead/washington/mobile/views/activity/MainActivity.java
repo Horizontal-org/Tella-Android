@@ -14,17 +14,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
-import android.widget.TextView;
-
-import org.javarosa.core.model.FormDef;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,11 +38,9 @@ import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.Metadata;
-import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.mvp.contract.ICollectCreateFormControllerContract;
 import rs.readahead.washington.mobile.mvp.contract.IHomeScreenPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
-import rs.readahead.washington.mobile.mvp.presenter.CollectCreateFormControllerPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.HomeScreenPresenter;
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.util.C;
@@ -65,31 +59,20 @@ public class MainActivity extends MetadataActivity implements
     Toolbar toolbar;
     @BindView(R.id.panic_mode_view)
     RelativeLayout panicCountdownView;
-    @BindView(R.id.panic_explain_view)
-    LinearLayout panicExplainView;
     @BindView(R.id.countdown_timer)
     CountdownImageView countdownImage;
     @BindView(R.id.camera_tools_container)
     View cameraToolsContainer;
-    @BindView(R.id.main_container)
-    View mainView;
     @BindView(R.id.home_screen_gradient)
     HomeScreenGradient homeScreenGradient;
+    @BindView(R.id.nav_bar_holder)
+    LinearLayout navBarHolder;
     @BindView(R.id.panic_seek)
     SeekBar panicSeekBar;
     @BindView(R.id.panic_bar)
     LinearLayout panicSeekBarView;
-    @BindView(R.id.tab_button_collect)
-    View buttonCollect;
-    @BindView(R.id.tab_button_gallery)
-    View buttonGallery;
-    @BindView(R.id.nav_bar)
-    View navigationBar;
-    @BindView(R.id.link)
-    TextView setPanicTextView;
     @BindView(R.id.background)
     View background;
-
 
     private boolean mExit = false;
     private Handler handler;
@@ -97,11 +80,11 @@ public class MainActivity extends MetadataActivity implements
     private EventCompositeDisposable disposables;
     private AlertDialog alertDialog;
     private HomeScreenPresenter homeScreenPresenter;
-    private CollectCreateFormControllerPresenter formControllerPresenter;
     private ProgressDialog progressDialog;
     private OrientationEventListener mOrientationEventListener;
-    private boolean isPhoneListEmpty;
+
     private int timerDuration;
+    private long numOfCollectServers;
     private MenuItem settingsMenuItem;
 
     @Override
@@ -129,10 +112,6 @@ public class MainActivity extends MetadataActivity implements
         setupPanicSeek();
 
         setOrientationListener();
-
-        setPanicTextView.setText(Html.fromHtml(getString(R.string.set_panic_mode_link)));
-        setPanicTextView.setMovementMethod(LinkMovementMethod.getInstance());
-        setPanicTextView.setLinkTextColor(getResources().getColor(R.color.wa_light_gray));
 
         disposables = MyApplication.bus().createCompositeDisposable();
         disposables.wire(LocaleChangedEvent.class, new EventObserver<LocaleChangedEvent>() {
@@ -173,32 +152,8 @@ public class MainActivity extends MetadataActivity implements
         }
     }
 
-    @OnClick({R.id.tab_button_record, R.id.tab_button_collect, R.id.tab_button_gallery})
-    void onBottomNavigationTabClick(View view) {
-        switch (view.getId()) {
-            case R.id.tab_button_record:
-                onMicrophoneClicked();
-                break;
-
-            case R.id.tab_button_collect:
-                startCollectActivity();
-                break;
-
-            case R.id.tab_button_gallery:
-                showGallery(false);
-                break;
-
-        }
-    }
-
     @OnClick(R.id.panic_mode_view)
     void onPanicClicked() {
-        hidePanicScreens();
-        stopPanicking();
-    }
-
-    @OnClick(R.id.panic_explain_view)
-    void onExplainClicked() {
         hidePanicScreens();
         stopPanicking();
     }
@@ -269,22 +224,22 @@ public class MainActivity extends MetadataActivity implements
     @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
     void showFineLocationRationale(final PermissionRequest request) {
         alertDialog = PermissionUtil.showRationale(
-                this, request, getString(R.string.ra_media_location_permissions));
+                this, request, getString(R.string.permission_dialog_expl_GPS));
     }
 
     @OnShowRationale(Manifest.permission.CAMERA)
     void showCameraRationale(final PermissionRequest request) {
-        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.ra_camera_preview));
+        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_camera));
     }
 
     @OnShowRationale({Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO})
     void showCameraAndAudioRationale(final PermissionRequest request) {
-        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.ra_camera_rationale));
+        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_camera_mic));
     }
 
     @OnShowRationale({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO})
     void showLocationCameraAndAudioRationale(final PermissionRequest request) {
-        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.ra_camera_rationale));
+        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_camera_mic));
     }
 
     @OnPermissionDenied(Manifest.permission.CAMERA)
@@ -337,6 +292,10 @@ public class MainActivity extends MetadataActivity implements
         }
     }
 
+    private void startUploadsActivity() {
+        startActivity(new Intent(MainActivity.this, UploadsActivity.class));
+    }
+
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     public void startGalleryActivity(boolean animated) {
         startActivity(new Intent(MainActivity.this, GalleryActivity.class)
@@ -350,6 +309,8 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         if (!isLocationSettingsRequestCode(requestCode) && resultCode != RESULT_OK) {
             return; // user canceled evidence acquiring
         }
@@ -369,51 +330,6 @@ public class MainActivity extends MetadataActivity implements
                 break;
         }
     }
-
-    /*private BroadcastReceiver torStatusReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            //if (TextUtils.equals(intent.getAction(), OrbotHelper.ACTION_STATUS)) {
-            //    String status = intent.getStringExtra(OrbotHelper.EXTRA_STATUS);
-            //    // TODO: See what is going on with TOR
-            //    boolean enabled = status.equals(OrbotHelper.STATUS_ON);
-            //}
-        }
-    };*/
-
-    /*private void handleOrbot() {
-        // todo: for now we don't want to ask for TOR at application first start
-        SharedPrefs.getInstance().setAskForTorOnStart(false);
-
-        if (SharedPrefs.getInstance().isTorModeActive()) {
-            //checkNetworkSecurity();
-        } else if (SharedPrefs.getInstance().askForTorOnStart()) {
-            DialogsUtil.showMessageOKCancelWithTitle(this, getString(R.string.orbot_activation),
-                    getString(R.string.attention), getString(R.string.ok), getString(R.string.cancel),
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //checkNetworkSecurity();
-                            dialog.dismiss();
-                        }
-                    },
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            SharedPrefs.getInstance().setAskForTorOnStart(false);
-                            dialog.dismiss();
-                        }
-                    });
-        }
-    }*/
-
-    /*private void checkNetworkSecurity() {
-        if (OrbotHelper.isOrbotInstalled(this)) {
-            OrbotHelper.requestStartTor(this);
-            SharedPrefs.getInstance().setToreModeActive(true);
-        } else
-            DialogsUtil.showOrbotDialog(this);
-    }*/
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -443,7 +359,7 @@ public class MainActivity extends MetadataActivity implements
     private boolean checkIfShouldExit() {
         if (!mExit) {
             mExit = true;
-            showToast(R.string.exit);
+            showToast(R.string.home_toast_back_exit);
             handler.postDelayed(() -> mExit = false, 3 * 1000);
             return false;
         }
@@ -451,7 +367,7 @@ public class MainActivity extends MetadataActivity implements
     }
 
     private boolean maybeClosePanic() {
-        if (panicCountdownView.getVisibility() == View.VISIBLE || panicExplainView.getVisibility() == View.VISIBLE) {
+        if (panicCountdownView.getVisibility() == View.VISIBLE) {
             stopPanicking();
             hidePanicScreens();
         }
@@ -486,11 +402,8 @@ public class MainActivity extends MetadataActivity implements
     protected void onResume() {
         super.onResume();
 
-        //homeScreenPresenter.loadPhoneList();
-        isPhoneListEmpty = false;
-
         setupPanicView();
-        setupButtonsTab();
+        homeScreenPresenter.countCollectServers();
 
         startLocationMetadataListening();
 
@@ -535,40 +448,22 @@ public class MainActivity extends MetadataActivity implements
         hideMainControls();
 
         // really show panic screen
-        if (isPhoneListEmpty) {
-            panicExplainView.setVisibility(View.VISIBLE);
-            panicExplainView.setAlpha(1);
-        } else {
-            panicCountdownView.setVisibility(View.VISIBLE);
-            panicCountdownView.setAlpha(1);
-            countdownImage.start(timerDuration, this::executePanicMode);
-        }
+        panicCountdownView.setVisibility(View.VISIBLE);
+        panicCountdownView.setAlpha(1);
+        countdownImage.start(timerDuration, this::executePanicMode);
     }
 
     private void hideMainControls() {
         cameraToolsContainer.setVisibility(View.GONE);
-        navigationBar.setVisibility(View.GONE);
+        navBarHolder.setVisibility(View.GONE);
         toolbar.setVisibility(View.GONE);
     }
 
     private void showMainControls() {
         cameraToolsContainer.setVisibility(View.VISIBLE);
-        navigationBar.setVisibility(View.VISIBLE);
+        navBarHolder.setVisibility(View.VISIBLE);
         toolbar.setVisibility(View.VISIBLE);
     }
-    /*//@OnShowRationale(Manifest.permission.SEND_SMS)
-    void onShowPanicScreensRationale(final PermissionRequest request) {
-        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_sms));
-    }
-
-    //@OnPermissionDenied(Manifest.permission.SEND_SMS)
-    void onShowPanicScreensPermissionDenied() {
-        hidePanicScreens();
-    }
-
-    //@OnNeverAskAgain(Manifest.permission.SEND_SMS)
-    void onShowPanicScreensNeverAskAgain() {
-    }*/
 
     void executePanicMode() {
         try {
@@ -618,22 +513,23 @@ public class MainActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onPhoneListLoaded(boolean isListEmpty) {
-        isPhoneListEmpty = isListEmpty;
+    public void onCountTUServersEnded(Long num) {
+        setupButtonsTab(num);
     }
 
     @Override
-    public void onPhoneListLoadError(Throwable throwable) {
+    public void onCountTUServersFailed(Throwable throwable) {
     }
 
     @Override
-    public void getCollectFormSuccess(CollectForm form, FormDef formDef) {
-        startCreateFormControllerPresenter(form, formDef);
+    public void onCountCollectServersEnded(Long num) {
+        this.numOfCollectServers = num;
+        homeScreenPresenter.countTUServers();
     }
 
     @Override
-    public void onCollectFormError(Throwable throwable) {
-        showToast(R.string.shortcut_collect_form_not_loaded);
+    public void onCountCollectServersFailed(Throwable throwable) {
+
     }
 
     private void stopPresenter() {
@@ -692,22 +588,14 @@ public class MainActivity extends MetadataActivity implements
 
         setupPanicView();
 
-        if (isPhoneListEmpty) {
-            panicExplainView.setVisibility(View.GONE);
-        } else {
-            panicCountdownView.setVisibility(View.GONE);
-        }
+        panicCountdownView.setVisibility(View.GONE);
     }
 
     private void blendPanicScreens(int i) {
         toolbar.setAlpha((float) (100 - i) / 100);
         cameraToolsContainer.setAlpha((float) (100 - i) / 100);
         background.setAlpha((float) i / 100);
-        if (isPhoneListEmpty) {
-            panicExplainView.setVisibility(i == 100 ? View.VISIBLE : View.GONE);
-        } else {
-            panicCountdownView.setVisibility(i == 100 ? View.VISIBLE : View.GONE);
-        }
+        panicCountdownView.setVisibility(i == 100 ? View.VISIBLE : View.GONE);
         panicSeekBarView.setVisibility(i == 100 ? View.INVISIBLE : View.VISIBLE);
     }
 
@@ -735,19 +623,6 @@ public class MainActivity extends MetadataActivity implements
         };
     }
 
-    private void startCreateFormControllerPresenter(CollectForm form, FormDef formDef) {
-        stopCreateFormControllerPresenter();
-        formControllerPresenter = new CollectCreateFormControllerPresenter(this);
-        formControllerPresenter.createFormController(form, formDef);
-    }
-
-    private void stopCreateFormControllerPresenter() {
-        if (formControllerPresenter != null) {
-            formControllerPresenter.destroy();
-            formControllerPresenter = null;
-        }
-    }
-
     private void resetSeekBar(SeekBar seekbar) {
         if (Build.VERSION.SDK_INT >= 24) {
             seekbar.setProgress(0, true);
@@ -756,14 +631,46 @@ public class MainActivity extends MetadataActivity implements
         }
     }
 
-    private void setupButtonsTab() {
-        if (Preferences.isCollectServersLayout()) {
-            buttonCollect.setVisibility(View.VISIBLE);
-            buttonCollect.setBackground(getContext().getResources().getDrawable(R.drawable.round_left_button_background));
-            buttonGallery.setBackground(getContext().getResources().getDrawable(R.drawable.central_button_background));
+    private void setupButtonsTab(long numOfTUS) {
+        LinearLayout navbar;
+        LayoutInflater inflater = LayoutInflater.from(this);
+
+        if (numOfCollectServers > 0 && numOfTUS > 0) {
+            navbar = (LinearLayout) inflater.inflate(R.layout.main_navigation_table_layout, null);
         } else {
+            navbar = (LinearLayout) inflater.inflate(R.layout.main_navigation_row_layout, null);
+        }
+
+        View buttonCollect = navbar.findViewById(R.id.tab_button_collect);
+        View buttonRecord = navbar.findViewById(R.id.tab_button_record);
+        View buttonUploads = navbar.findViewById(R.id.tab_button_uploads);
+        View buttonGallery = navbar.findViewById(R.id.tab_button_gallery);
+
+        buttonGallery.setOnClickListener(v -> showGallery(false));
+        buttonCollect.setOnClickListener(v -> startCollectActivity());
+        buttonRecord.setOnClickListener(v -> onMicrophoneClicked());
+        buttonUploads.setOnClickListener(v -> startUploadsActivity());
+
+        navBarHolder.removeAllViews();
+        navBarHolder.addView(navbar);
+
+        if (numOfCollectServers == 0 && numOfTUS == 0) { //row layout of 2
             buttonCollect.setVisibility(View.GONE);
-            buttonGallery.setBackground(getContext().getResources().getDrawable(R.drawable.round_left_button_background));
+            buttonUploads.setVisibility(View.GONE);
+            return;
+        }
+
+        if (numOfCollectServers > 0 && numOfTUS == 0) {  //nav layout of 3 with collect
+            buttonGallery.setBackground(getResources().getDrawable(R.drawable.central_button_background));
+            buttonCollect.setBackground(getResources().getDrawable(R.drawable.round_left_button_background));
+            buttonUploads.setVisibility(View.GONE);
+            return;
+        }
+
+        if (numOfCollectServers == 0 && numOfTUS > 0) { //nav layout of 3 with uploads
+            buttonCollect.setVisibility(View.GONE);
+            buttonRecord.setBackground(getResources().getDrawable(R.drawable.central_button_background));
+            buttonUploads.setBackground(getResources().getDrawable(R.drawable.round_right_button_background));
         }
     }
 }

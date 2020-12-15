@@ -2,12 +2,15 @@ package rs.readahead.washington.mobile.views.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+
 import androidx.core.widget.NestedScrollView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -22,7 +25,6 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaPartResponse;
-import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaResponse;
 import rs.readahead.washington.mobile.javarosa.FormReSubmitter;
 import rs.readahead.washington.mobile.javarosa.FormUtils;
 import rs.readahead.washington.mobile.javarosa.IFormReSubmitterContract;
@@ -121,7 +123,8 @@ public class FormSubmitActivity extends CacheWordSubscriberBaseActivity implemen
         if (formReSubmitter != null && formReSubmitter.isReSubmitting()) {
             DialogsUtil.showExitWithSubmitDialog(this,
                     (dialog, which) -> super.onBackPressed(),
-                    (dialog, which) -> {});
+                    (dialog, which) -> {
+                    });
         } else {
             super.onBackPressed();
         }
@@ -169,22 +172,14 @@ public class FormSubmitActivity extends CacheWordSubscriberBaseActivity implemen
 
     @Override
     public void formResubmitOfflineMode() {
-        Toast.makeText(this, R.string.ra_form_send_submission_offline, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.collect_end_toast_saved_for_later, Toast.LENGTH_LONG).show();
         MyApplication.bus().post(new CollectFormSubmittedEvent());
         finish();
     }
 
     @Override
     public void formReSubmitNoConnectivity() {
-        Toast.makeText(this, R.string.ra_form_send_submission_pending, Toast.LENGTH_LONG).show();
-        MyApplication.bus().post(new CollectFormSubmittedEvent());
-        finish();
-    }
-
-    @Override
-    public void formReSubmitSuccess(CollectFormInstance instance, OpenRosaResponse response) {
-        String successMessage = FormUtils.getFormSubmitSuccessMessage(this, response);
-        Toast.makeText(this, successMessage, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.collect_end_toast_notification_form_not_sent_no_connection, Toast.LENGTH_LONG).show();
         MyApplication.bus().post(new CollectFormSubmittedEvent());
         finish();
     }
@@ -194,6 +189,7 @@ public class FormSubmitActivity extends CacheWordSubscriberBaseActivity implemen
         invalidateOptionsMenu();
         hideFormSubmitButton();
         showFormCancelButton();
+        disableScreenTimeout();
 
         if (endView != null) {
             endView.clearPartsProgress(instance);
@@ -202,6 +198,7 @@ public class FormSubmitActivity extends CacheWordSubscriberBaseActivity implemen
 
     @Override
     public void hideReFormSubmitLoading() {
+        enableScreenTimeout();
         invalidateOptionsMenu();
     }
 
@@ -233,7 +230,7 @@ public class FormSubmitActivity extends CacheWordSubscriberBaseActivity implemen
 
     @Override
     public void formPartsResubmitEnded(CollectFormInstance instance) {
-        Toast.makeText(this, getString(R.string.ra_form_submitted), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.collect_toast_form_submitted), Toast.LENGTH_LONG).show();
         MyApplication.bus().post(new CollectFormSubmittedEvent());
         finish();
     }
@@ -253,7 +250,7 @@ public class FormSubmitActivity extends CacheWordSubscriberBaseActivity implemen
 
     @Override
     public void onGetFormInstanceError(Throwable throwable) {
-        Toast.makeText(this, R.string.ra_error_loading_form_instance, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.collect_toast_fail_loading_form_instance, Toast.LENGTH_LONG).show();
         finish();
     }
 
@@ -264,7 +261,7 @@ public class FormSubmitActivity extends CacheWordSubscriberBaseActivity implemen
 
     private void showFormEndView(boolean offline) {
         endView = new CollectFormEndView(this,
-                instance.getStatus() == CollectFormInstanceStatus.SUBMITTED ? R.string.ra_form_submitted : R.string.ra_submit);
+                instance.getStatus() == CollectFormInstanceStatus.SUBMITTED ? R.string.collect_end_heading_confirmation_form_submitted : R.string.collect_end_action_submit);
         endView.setInstance(this.instance, offline);
         endViewContainer.removeAllViews();
         endViewContainer.addView(endView);
@@ -325,5 +322,13 @@ public class FormSubmitActivity extends CacheWordSubscriberBaseActivity implemen
             formReSubmitter.destroy();
             formReSubmitter = null;
         }
+    }
+
+    private void disableScreenTimeout() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    private void enableScreenTimeout() {
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 }

@@ -25,11 +25,19 @@
             android:focusable="true"
             tools:ignore="ContentDescription" />
 
-        <!--<rs.readahead.washington.mobile.views.custom.CameraResolutionButton
-            android:id="@+id/resolution"
-            android:layout_toStartOf="@+id/switchButton"
-            android:src="@drawable/ic_tune_white"
-            tools:ignore="RelativeOverlap" /> -->
+        <rs.readahead.washington.mobile.views.custom.CameraResolutionButton
+            android:id="@+id/resolutionButton"
+            android:background="@color/wa_black"
+            android:visibility="gone"
+            style="@style/CameraTopImageStyle"
+            android:layout_toStartOf="@id/gridButton"
+            android:layout_marginStart="32dp"/>
+
+        <rs.readahead.washington.mobile.views.custom.CameraGridButton
+            android:id="@+id/gridButton"
+            style="@style/CameraTopImageStyle"
+            android:layout_marginStart="32dp"
+            android:layout_toStartOf="@id/switchButton" />
 
         <rs.readahead.washington.mobile.views.custom.CameraSwitchButton
             android:id="@+id/switchButton"
@@ -144,7 +152,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/CameraModeText"
-                android:text="@string/photo"
+                android:text="@string/camera_tab.title_photo"
                 android:textAlignment="center"/>
 
             <View
@@ -168,7 +176,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/CameraModeText"
-                android:text="@string/video"
+                android:text="@string/camera_tab.title_video"
                 android:textAlignment="center"/>
             <View
                 android:id="@+id/video_line"

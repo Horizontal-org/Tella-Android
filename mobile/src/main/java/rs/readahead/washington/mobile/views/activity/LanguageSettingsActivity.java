@@ -46,7 +46,7 @@ public class LanguageSettingsActivity extends CacheWordSubscriberBaseActivity im
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.title_activity_language_settings);
+            getSupportActionBar().setTitle(R.string.settings_lang_app_bar);
         }
 
         createLangViews(LocaleManager.getInstance().getLanguageSetting());
@@ -97,8 +97,8 @@ public class LanguageSettingsActivity extends CacheWordSubscriberBaseActivity im
         item.setTag(language);
 
         if (language == null) {
-            langName.setText(R.string.ra_default);
-            langInfo.setText(R.string.ra_default_info);
+            langName.setText(R.string.settings_lang_select_default);
+            langInfo.setText(R.string.settings_lang_select_expl_default);
         } else {
             Locale locale = new Locale(language);
             langName.setText(StringUtils.capitalize(locale.getDisplayName(), locale));

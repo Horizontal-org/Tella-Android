@@ -44,12 +44,6 @@
                 android:layout_height="80dp"
                 android:contentDescription="@string/app_name"
                 android:src="@drawable/tella_icon" />
-
-            <TextView
-                style="@style/SettingsTextViewAbout"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="@string/copyright" />
         </LinearLayout>
 
         <View style="@style/SettingsMainLine" />
@@ -65,7 +59,7 @@
 
             <TextView
                 style="@style/SettingsTextViewAbout"
-                android:text="@string/ra_tutorial" />
+                android:text="@string/settings.about_select_tutorial" />
         </LinearLayout>
 
         <View style="@style/SettingsMainLine" />
@@ -81,7 +75,7 @@
             <TextView
                 android:id="@+id/faq"
                 style="@style/SettingsTextViewAbout"
-                android:text="@string/faq"
+                android:text="@string/settings.about_list.item_faq"
                 android:textAllCaps="true" />
         </LinearLayout>
 
@@ -98,7 +92,7 @@
 
             <TextView
                 style="@style/SettingsTextViewAbout"
-                android:text="@string/contact_us" />
+                android:text="@string/settings_menu.item_contact" />
         </LinearLayout>
 
         <View style="@style/SettingsMainLine" />
@@ -114,59 +108,10 @@
 
             <TextView
                 style="@style/SettingsTextViewAbout"
-                android:text="@string/privacy_policy" />
+                android:text="@string/settings.about_list.item_privacy.policy" />
         </LinearLayout>
 
         <View style="@style/SettingsMainLine" />
-
-        <LinearLayout
-            android:id="@+id/licenses"
-            style="@style/SettingsTitleClickableHorizontalLinerLayout"
-            android:gravity="center_horizontal"
-            android:paddingStart="2dp"
-            android:paddingTop="@dimen/activity_about_margin"
-            android:paddingEnd="2dp"
-            android:paddingBottom="@dimen/activity_about_margin">
-
-            <TextView
-                style="@style/SettingsTextViewAbout"
-                android:text="@string/licenses" />
-        </LinearLayout>
-
-        <View style="@style/SettingsMainLine" />
-
-        <LinearLayout
-            android:id="@+id/source_code"
-            style="@style/SettingsTitleClickableHorizontalLinerLayout"
-            android:gravity="center_horizontal"
-            android:paddingStart="2dp"
-            android:paddingTop="@dimen/activity_about_margin"
-            android:paddingEnd="2dp"
-            android:paddingBottom="@dimen/activity_about_margin">
-
-            <TextView
-                style="@style/SettingsTextViewAbout"
-                android:text="@string/source_code" />
-        </LinearLayout>
-
-
-        <!-- <TextView
-            android:id="@+id/privacy"
-            style="@style/AboutText"
-            android:text="@string/privacy_policy"/>
-        <View style="@style/AboutTextSeparator"/> -->
-
-        <!-- <TextView
-            android:id="@+id/licence"
-            style="@style/AboutText"
-            android:text="@string/licence"/>
-        <View style="@style/AboutTextSeparator"/> -->
-
-        <!-- <TextView
-            android:id="@+id/source_code"
-            style="@style/AboutText"
-            android:text="@string/source_code"/>
-        <View style="@style/AboutTextSeparator"/> -->
 
     </LinearLayout>
 </ScrollView>

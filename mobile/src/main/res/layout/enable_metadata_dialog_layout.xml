@@ -12,12 +12,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:text="@string/ra_anonymous_mode"
+            android:text="@string/settings.docu_verification_action"
             android:theme="@style/SettingsTextViewBlack" />
 
         <TextView
             style="@style/SettingsTextViewGray"
-            android:text="@string/ra_anonymous_mode_desc" />
+            android:text="@string/settings.docu_verification_action.expl" />
     </LinearLayout>
 
 </LinearLayout>

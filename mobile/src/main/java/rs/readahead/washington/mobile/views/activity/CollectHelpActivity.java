@@ -21,8 +21,6 @@ public class CollectHelpActivity extends CacheWordSubscriberBaseActivity {
     TextView mCollectServerTextView;
     @BindView(R.id.odk_help)
     TextView mODKTextView;
-    @BindView(R.id.data_help)
-    TextView mSaveDataTextView;
 
 
     @Override
@@ -37,20 +35,16 @@ public class CollectHelpActivity extends CacheWordSubscriberBaseActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.collect_help);
+            actionBar.setTitle(R.string.collect_help_app_bar);
         }
 
-        mCollectServerTextView.setText(Html.fromHtml(getString(R.string.collect_help_server_info)));
+        mCollectServerTextView.setText(Html.fromHtml(getString(R.string.collect_help_expl_not_connected_to_server)));
         mCollectServerTextView.setMovementMethod(LinkMovementMethod.getInstance());
         StringUtils.stripUnderlines(mCollectServerTextView);
 
-        mODKTextView.setText(Html.fromHtml(getString(R.string.collect_help_odk)));
+        mODKTextView.setText(Html.fromHtml(getString(R.string.collect_help_expl_odk)));
         mODKTextView.setMovementMethod(LinkMovementMethod.getInstance());
         StringUtils.stripUnderlines(mODKTextView);
-
-        mSaveDataTextView.setText(Html.fromHtml(getString(R.string.save_data)));
-        mSaveDataTextView.setMovementMethod(LinkMovementMethod.getInstance());
-        StringUtils.stripUnderlines(mSaveDataTextView);
     }
 
     @Override

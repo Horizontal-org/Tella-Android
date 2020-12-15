@@ -58,14 +58,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top|center_horizontal"
             android:textAlignment="center"
-            android:text="@string/easy_data_collection" />
+            android:text="@string/collect_no.form_heading" />
 
         <TextView
             android:id="@+id/blank_forms_text"
             style="@style/EmptyScreenExplanatoryText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/collect_servers_info" />
+            android:text="@string/collect_expl_not.connected.to.server" />
 
     </LinearLayout>
 

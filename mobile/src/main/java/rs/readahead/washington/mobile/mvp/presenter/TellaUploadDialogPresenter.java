@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class TellaUploadDialogPresenter implements ITellaUploadDialogPresenterCo
                         DataSource::listTellaUploadServers)
                 .subscribe(list -> view.onServersLoaded(list),
                         throwable -> {
-                            Crashlytics.logException(throwable);
+                            FirebaseCrashlytics.getInstance().recordException(throwable);
                             view.onServersLoadError(throwable);
                         })
         );

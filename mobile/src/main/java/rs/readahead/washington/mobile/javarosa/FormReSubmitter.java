@@ -2,7 +2,7 @@ package rs.readahead.washington.mobile.javarosa;
 
 import android.content.Context;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,6 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.NegotiatedCollectServer;
 import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaPartResponse;
-import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaResponse;
 import rs.readahead.washington.mobile.domain.exception.NoConnectivityException;
 import rs.readahead.washington.mobile.domain.repository.IOpenRosaRepository;
 import rs.readahead.washington.mobile.util.C;
@@ -48,44 +47,6 @@ public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitte
         this.context = view.getContext().getApplicationContext();
         this.openRosaRepository = new OpenRosaRepository();
         this.cacheWordDataSource = new CacheWordDataSource(context);
-    }
-
-    @Override
-    public void reSubmitFormInstance(final CollectFormInstance instance) {
-        final boolean offlineMode = Preferences.isOfflineMode();
-        final CollectFormInstanceStatus prevStatus = instance.getStatus();
-
-        disposables.add(cacheWordDataSource.getDataSource()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposable -> view.showReFormSubmitLoading(instance))
-                .flatMapSingle((Function<DataSource, SingleSource<CollectServer>>) dataSource ->
-                        setFormDef(dataSource, instance))
-                .flatMapSingle((Function<CollectServer, SingleSource<NegotiatedCollectServer>>) server ->
-                        negotiateServer(server, offlineMode))
-                .flatMapSingle((Function<NegotiatedCollectServer, SingleSource<OpenRosaResponse>>) server ->
-                        openRosaRepository.submitForm(context, server, instance))
-                .flatMap((Function<OpenRosaResponse, ObservableSource<OpenRosaResponse>>) response -> {
-                    // set form and attachments statuses
-                    setSuccessSubmissionStatuses(instance);
-                    return rxSaveSuccessInstance(instance, response);
-                })
-                .onErrorResumeNext(throwable -> {
-                    setErrorSubmissionStatuses(instance, prevStatus, throwable);
-                    return rxSaveErrorInstance(instance, throwable);
-                })
-                .doFinally(() -> view.hideReFormSubmitLoading())
-                .subscribe(openRosaResponse -> view.formReSubmitSuccess(instance, openRosaResponse), throwable -> {
-                    if (throwable instanceof OfflineModeException) {
-                        view.formResubmitOfflineMode();
-                    } else if (throwable instanceof NoConnectivityException) {
-                        view.formReSubmitNoConnectivity();
-                    } else {
-                        Crashlytics.logException(throwable);
-                        view.formReSubmitError(throwable);
-                    }
-                })
-        );
     }
 
     @Override
@@ -129,7 +90,7 @@ public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitte
                                 // PendingFormSendJob.scheduleJob();
                                 view.formReSubmitNoConnectivity();
                             } else {
-                                Crashlytics.logException(throwable);
+                                FirebaseCrashlytics.getInstance().recordException(throwable);
                                 view.formPartReSubmitError(throwable);
                             }
                         },
@@ -196,21 +157,6 @@ public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitte
                 dataSource.saveInstance(instance)
                         .toObservable()
                         .flatMap((Function<CollectFormInstance, ObservableSource<T>>) instance1 -> Observable.error(throwable)));
-    }
-
-    private void setSuccessSubmissionStatuses(CollectFormInstance instance) {
-        CollectFormInstanceStatus status = CollectFormInstanceStatus.SUBMITTED;
-
-        for (FormMediaFile mediaFile: instance.getWidgetMediaFiles()) {
-            if (mediaFile.uploading) {
-                mediaFile.status = FormMediaFileStatus.SUBMITTED;
-            } else {
-                mediaFile.status = FormMediaFileStatus.NOT_SUBMITTED;
-                status = CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS;
-            }
-        }
-
-        instance.setStatus(status);
     }
 
     private void setErrorSubmissionStatuses(CollectFormInstance instance, CollectFormInstanceStatus startStatus, Throwable throwable) {

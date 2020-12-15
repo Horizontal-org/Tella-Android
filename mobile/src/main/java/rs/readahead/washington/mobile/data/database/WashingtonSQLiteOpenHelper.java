@@ -26,7 +26,6 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         // we have started from version 1
 
         // DBv1
-        db.execSQL(createTableTrustedPerson());
         db.execSQL(createTableCollectServer());
         db.execSQL(createTableMediaFile());
         db.execSQL(createTableCollectBlankForm());
@@ -49,6 +48,14 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
         // DBv6
         db.execSQL(createTableTellaUploadServer());
+
+        // DBv7
+        db.execSQL(createTableMediaFileUploads());
+
+        //DBv8
+        db.execSQL(alterTableMediaFileUploadsAddMetadata());
+        db.execSQL(alterTableMediaFileUploadsAddManual());
+        db.execSQL(alterTableMediaFileUploadsAddServer());
     }
 
     @Override
@@ -69,15 +76,15 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
             case 5:
                 db.execSQL(createTableTellaUploadServer());
-        }
-    }
 
-    private String createTableTrustedPerson() {
-        return "CREATE TABLE " + sq(D.T_TRUSTED_PERSON) + "(" +
-                sq(D.C_ID) + D.INTEGER + " PRIMARY KEY AUTOINCREMENT, " +
-                sq(D.C_MAIL) + D.TEXT + " , " +
-                sq(D.C_PHONE) + D.TEXT + " , " +
-                sq(D.C_NAME) + D.TEXT + ");";
+            case 6:
+                db.execSQL(createTableMediaFileUploads());
+
+            case 7:
+                db.execSQL(alterTableMediaFileUploadsAddServer());
+                db.execSQL(alterTableMediaFileUploadsAddManual());
+                db.execSQL(alterTableMediaFileUploadsAddMetadata());
+        }
     }
 
     private String createTableCollectServer() {
@@ -96,12 +103,12 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_PATH, D.TEXT, true) + " , " +
                 cddl(D.C_UID, D.TEXT, true) + " , " +
                 cddl(D.C_FILE_NAME, D.TEXT, true) + " , " +
-                cddl(D.C_METADATA, D.TEXT) +" , " +
-                cddl(D.C_THUMBNAIL, D.BLOB) +" , " +
-                cddl(D.C_CREATED, D.INTEGER) +" , " +
-                cddl(D.C_DURATION, D.INTEGER) +" , " +
-                cddl(D.C_ANONYMOUS, D.INTEGER) +" , " +
-                cddl(D.C_SIZE, D.INTEGER) +" , " +
+                cddl(D.C_METADATA, D.TEXT) + " , " +
+                cddl(D.C_THUMBNAIL, D.BLOB) + " , " +
+                cddl(D.C_CREATED, D.INTEGER) + " , " +
+                cddl(D.C_DURATION, D.INTEGER) + " , " +
+                cddl(D.C_ANONYMOUS, D.INTEGER) + " , " +
+                cddl(D.C_SIZE, D.INTEGER) + " , " +
                 "UNIQUE(" + sq(D.C_UID) + ")" +
                 "UNIQUE(" + sq(D.C_PATH) + ", " + sq(D.C_FILE_NAME) + ")" +
                 ");";
@@ -115,12 +122,12 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_VERSION, D.TEXT, true) + " , " +
                 cddl(D.C_HASH, D.TEXT, true) + " , " +
                 cddl(D.C_NAME, D.TEXT, true) + " , " +
-                cddl(D.C_DOWNLOAD_URL, D.TEXT) +" , " +
-                cddl(D.C_FORM_DEF, D.BLOB) +" , " +
+                cddl(D.C_DOWNLOAD_URL, D.TEXT) + " , " +
+                cddl(D.C_FORM_DEF, D.BLOB) + " , " +
                 cddl(D.C_DOWNLOADED, D.INTEGER, true) + " DEFAULT 0 , " +
                 cddl(D.C_FAVORITE, D.INTEGER, true) + " DEFAULT 0 , " +
                 "FOREIGN KEY(" + sq(D.C_COLLECT_SERVER_ID) + ") REFERENCES " +
-                    sq(D.T_COLLECT_SERVER) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE, " +
+                sq(D.T_COLLECT_SERVER) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE, " +
                 "UNIQUE(" + sq(D.C_FORM_ID) + ") ON CONFLICT REPLACE" +
                 ");";
     }
@@ -135,9 +142,9 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_VERSION, D.TEXT, true) + " , " +
                 cddl(D.C_FORM_NAME, D.TEXT, true) + " , " +
                 cddl(D.C_INSTANCE_NAME, D.TEXT, true) + " , " +
-                cddl(D.C_FORM_DEF, D.BLOB) +" , " +
+                cddl(D.C_FORM_DEF, D.BLOB) + " , " +
                 "FOREIGN KEY(" + sq(D.C_COLLECT_SERVER_ID) + ") REFERENCES " +
-                    sq(D.T_COLLECT_SERVER) + "(" + sq(D.C_ID) + ") ON DELETE RESTRICT" +
+                sq(D.T_COLLECT_SERVER) + "(" + sq(D.C_ID) + ") ON DELETE RESTRICT" +
                 ");";
     }
 
@@ -147,9 +154,9 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_COLLECT_FORM_INSTANCE_ID, D.INTEGER, true) + " , " +
                 cddl(D.C_MEDIA_FILE_ID, D.INTEGER, true) + " , " +
                 "FOREIGN KEY(" + sq(D.C_COLLECT_FORM_INSTANCE_ID) + ") REFERENCES " +
-                    sq(D.T_COLLECT_FORM_INSTANCE) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE," +
+                sq(D.T_COLLECT_FORM_INSTANCE) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE," +
                 "FOREIGN KEY(" + sq(D.C_MEDIA_FILE_ID) + ") REFERENCES " +
-                    sq(D.T_MEDIA_FILE) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE," +
+                sq(D.T_MEDIA_FILE) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE," +
                 "UNIQUE(" + sq(D.C_COLLECT_FORM_INSTANCE_ID) + ", " + sq(D.C_MEDIA_FILE_ID) + ") ON CONFLICT IGNORE" +
                 ");";
     }
@@ -162,9 +169,40 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 " );";
     }
 
+    private String createTableMediaFileUploads() {
+        return "CREATE TABLE " + sq(D.T_MEDIA_FILE_UPLOAD) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_MEDIA_FILE_ID, D.INTEGER, false) + " UNIQUE, " +
+                cddl(D.C_UPDATED, D.INTEGER, true) + " , " +
+                cddl(D.C_CREATED, D.INTEGER, true) + " , " +
+                cddl(D.C_STATUS, D.INTEGER, true) + " , " +
+                cddl(D.C_SIZE, D.INTEGER) + " , " +
+                cddl(D.C_UPLOADED, D.INTEGER) + " DEFAULT 0, " +
+                cddl(D.C_RETRY_COUNT, D.INTEGER) + " DEFAULT 0, " +
+                cddl(D.C_SET, D.INTEGER) + " , " +
+                "FOREIGN KEY(" + sq(D.C_MEDIA_FILE_ID) + ") REFERENCES " +
+                sq(D.T_MEDIA_FILE) + "(" + sq(D.C_ID) + ") ON DELETE SET NULL" +
+                ");";
+    }
+
+    private String alterTableMediaFileUploadsAddManual() {
+        return "ALTER TABLE " + sq(D.T_MEDIA_FILE_UPLOAD) + " ADD COLUMN " +
+                cddl(D.C_MANUAL_UPLOAD, D.INTEGER, true) + " DEFAULT 0";
+    }
+
+    private String alterTableMediaFileUploadsAddServer() {
+        return "ALTER TABLE " + sq(D.T_MEDIA_FILE_UPLOAD) + " ADD COLUMN " +
+                cddl(D.C_SERVER_ID, D.INTEGER, true) + " DEFAULT 0";
+    }
+
+    private String alterTableMediaFileUploadsAddMetadata() {
+        return "ALTER TABLE " + sq(D.T_MEDIA_FILE_UPLOAD) + " ADD COLUMN " +
+                cddl(D.C_INCLUDE_METADATA, D.INTEGER, true) + " DEFAULT 0";
+    }
+
     private String alterTableCollectFormInstanceMediaFileAddStatus() {
         return "ALTER TABLE " + sq(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE) + " ADD COLUMN " +
-                 cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0";
+                cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0";
     }
 
     private String alterTableCollectServerAddChecked() {

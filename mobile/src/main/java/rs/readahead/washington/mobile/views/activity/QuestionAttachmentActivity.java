@@ -168,7 +168,7 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.ra_question_attachment_activity_title);
+            actionBar.setTitle(R.string.collect_form_select_attachment_app_bar);
         }
     }
 
@@ -192,7 +192,7 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
     @NeedsPermission({Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO})
     public void startCameraCaptureActivity() {
         Intent intent = new Intent(this, CameraActivity.class);
-        intent.putExtra(CameraActivity.CAMERA_MODE, CameraActivity.Mode.PHOTO.name());
+        intent.putExtra(CameraActivity.CAMERA_MODE, CameraActivity.CameraMode.PHOTO.name());
         startActivityForResult(intent, C.CAMERA_CAPTURE);
     }
 
@@ -223,6 +223,7 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) {
             return;
         }
@@ -300,7 +301,7 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
 
     @Override
     public void onMediaFileAddError(Throwable error) {
-        showToast(R.string.ra_media_form_attach_error);
+        showToast(R.string.collect_toast_fail_attaching_file_to_form);
         Timber.d(error, getClass().getName());
     }
 
@@ -311,19 +312,19 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
 
     @Override
     public void onImportError(Throwable error) {
-        showToast(R.string.ra_import_media_error);
+        showToast(R.string.gallery_toast_fail_importing_file);
         Timber.d(error, getClass().getName());
     }
 
     @Override
     public void onImportStarted() {
-        progressDialog = DialogsUtil.showProgressDialog(this, getString(R.string.ra_import_media_progress));
+        progressDialog = DialogsUtil.showProgressDialog(this, getString(R.string.gallery_dialog_expl_encrypting));
     }
 
     @Override
     public void onImportEnded() {
         hideProgressDialog();
-        showToast(R.string.ra_file_encrypted);
+        showToast(R.string.gallery_toast_file_encrypted);
     }
 
     @Override

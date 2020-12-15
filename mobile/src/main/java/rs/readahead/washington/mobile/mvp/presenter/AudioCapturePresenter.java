@@ -4,7 +4,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -37,8 +37,8 @@ public class AudioCapturePresenter implements IAudioCapturePresenterContract.IPr
                 .doOnSubscribe(disposable -> view.onAddingStart())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onAddingEnd())
-                .subscribe(mediaFile1 -> view.onAddSuccess(mediaFile1.getId()), throwable -> {
-                    Crashlytics.logException(throwable);
+                .subscribe(mediaFile1 -> view.onAddSuccess(mediaFile1), throwable -> {
+                    FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onAddError(throwable);
                 })
         );

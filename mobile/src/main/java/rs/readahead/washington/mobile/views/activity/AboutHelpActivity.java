@@ -35,24 +35,23 @@ public class AboutHelpActivity extends CacheWordSubscriberBaseActivity {
 
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.title_activity_about_help);
+            actionBar.setTitle(R.string.settings_about_app_bar);
         }
 
-        version.setText(String.format("%s %s", getString(R.string.version), BuildConfig.VERSION_NAME));
+        version.setText(String.format("%s %s", getString(R.string.settings_about_app_version), BuildConfig.VERSION_NAME));
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick({R.id.setup, R.id.faq, R.id.contact, R.id.privacy, R.id.licenses, R.id.source_code})
+    @OnClick({R.id.setup, R.id.faq, R.id.contact, R.id.privacy})
     public void startActivity(View view) {
         String url = null;
 
@@ -73,14 +72,6 @@ public class AboutHelpActivity extends CacheWordSubscriberBaseActivity {
 
              case R.id.privacy:
                 url = getString(R.string.config_privacy_url);
-                break;
-
-             case R.id.licenses:
-                url = getString(R.string.config_licence_url);
-                break;
-
-             case R.id.source_code:
-                url = getString(R.string.config_source_code_url);
                 break;
         }
 

@@ -104,6 +104,7 @@ public class VideoViewerActivity extends CacheWordSubscriberBaseActivity impleme
 
     @Override
     public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
         releasePlayer();
         shouldAutoPlay = true;
         clearResumePosition();
@@ -182,23 +183,23 @@ public class VideoViewerActivity extends CacheWordSubscriberBaseActivity impleme
 
     @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void showWriteExternalStorageRationale(final PermissionRequest request) {
-        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.ra_media_export_rationale));
+        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_device_storage));
     }
 
 
     @Override
     public void onMediaExported() {
-        showToast(R.string.ra_media_exported);
+        showToast(getResources().getQuantityString((R.plurals.gallery_toast_files_exported), 1, 1));
     }
 
     @Override
     public void onExportError(Throwable error) {
-        showToast(R.string.ra_media_export_error);
+        showToast(R.string.gallery_toast_fail_exporting_to_device);
     }
 
     @Override
     public void onExportStarted() {
-        progressDialog = DialogsUtil.showProgressDialog(this, getString(R.string.ra_export_media_progress));
+        progressDialog = DialogsUtil.showProgressDialog(this, getString(R.string.gallery_save_to_device_dialog_progress_expl));
     }
 
     @Override
@@ -214,7 +215,7 @@ public class VideoViewerActivity extends CacheWordSubscriberBaseActivity impleme
 
     @Override
     public void onMediaFileDeletionError(Throwable throwable) {
-        showToast(R.string.ra_media_deleted_error);
+        showToast(R.string.gallery_toast_fail_deleting_files);
     }
 
     @Override
@@ -377,14 +378,14 @@ public class VideoViewerActivity extends CacheWordSubscriberBaseActivity impleme
 
     private void showDeleteMediaDialog() {
         alertDialog = new AlertDialog.Builder(this)
-                .setTitle(R.string.ra_delete_media)
-                .setMessage(R.string.ra_media_will_be_deleted)
-                .setPositiveButton(R.string.delete, (dialog, which) -> {
+                .setTitle(R.string.gallery_delete_files_dialog_title)
+                .setMessage(R.string.gallery_delete_files_dialog_expl)
+                .setPositiveButton(R.string.action_delete, (dialog, which) -> {
                     if (mediaFile != null && presenter != null) {
                         presenter.deleteMediaFiles(mediaFile);
                     }
                 })
-                .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
                 })
                 .setCancelable(true)
                 .show();

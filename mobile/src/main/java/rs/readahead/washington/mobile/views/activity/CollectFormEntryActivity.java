@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -54,7 +55,6 @@ import rs.readahead.washington.mobile.domain.entity.MyLocation;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaPartResponse;
-import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaResponse;
 import rs.readahead.washington.mobile.javarosa.FormParser;
 import rs.readahead.washington.mobile.javarosa.FormSaver;
 import rs.readahead.washington.mobile.javarosa.FormSubmitter;
@@ -151,7 +151,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
             }
         });
 
-        endView = new CollectFormEndView(this, R.string.ra_reached_the_end);
+        endView = new CollectFormEndView(this, R.string.collect_end_heading);
 
         disposables = MyApplication.bus().createCompositeDisposable();
         disposables.wire(FormAttachmentsUpdatedEvent.class, new EventObserver<FormAttachmentsUpdatedEvent>() {
@@ -260,6 +260,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (!isLocationSettingsRequestCode(requestCode) && resultCode != RESULT_OK) {
             formParser.stopWaitingBinaryData(); // remove info about waiting index
             return;
@@ -338,7 +339,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
     void showFineLocationRationale(final PermissionRequest request) {
-        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.ra_question_widget_location_permissions));
+        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_GPS));
     }
 
     @OnPermissionDenied(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -552,7 +553,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     @Override
     public void formParseError(Throwable error) {
-        showToast(R.string.ra_form_parse_error);
+        showToast(R.string.collect_toast_fail_parsing_form);
     }
 
     @Override
@@ -598,10 +599,8 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         switch (instance.getStatus()) {
             case UNKNOWN:
             case DRAFT:
-                return getString(R.string.ra_draft_saved);
-
             default:
-                return getString(R.string.ra_form_saved);
+                return getString(R.string.collect_toast_draft_saved);
         }
     }
 
@@ -620,12 +619,14 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     public void showFormSubmitLoading(CollectFormInstance instance) {
         invalidateOptionsMenu();
         endView.clearPartsProgress(instance);
+        disableScreenTimeout();
     }
 
     @Override
     public void hideFormSubmitLoading() {
         setToolbarIcon();
         invalidateOptionsMenu();
+        enableScreenTimeout();
     }
 
     @Override
@@ -640,24 +641,14 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     @Override
     public void formSubmitOfflineMode() {
-        Toast.makeText(getApplicationContext(), R.string.ra_form_send_submission_offline, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), R.string.collect_end_toast_saved_for_later, Toast.LENGTH_LONG).show();
         MyApplication.bus().post(new CollectFormSubmittedEvent());
         finish();
     }
 
     @Override
     public void formSubmitNoConnectivity() {
-        Toast.makeText(getApplicationContext(), R.string.ra_form_send_submission_pending, Toast.LENGTH_LONG).show();
-        MyApplication.bus().post(new CollectFormSubmittedEvent());
-        finish();
-    }
-
-    @Override
-    public void formSubmitSuccess(CollectFormInstance instance, OpenRosaResponse response) {
-        String successMessage = FormUtils.getFormSubmitSuccessMessage(this, response);
-
-        Toast.makeText(getApplicationContext(), successMessage, Toast.LENGTH_LONG).show();
-
+        Toast.makeText(getApplicationContext(), R.string.collect_end_toast_notification_form_not_sent_no_connection, Toast.LENGTH_LONG).show();
         MyApplication.bus().post(new CollectFormSubmittedEvent());
         finish();
     }
@@ -687,7 +678,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     @Override
     public void formPartsSubmitEnded(CollectFormInstance instance) {
-        Toast.makeText(getApplicationContext(), getString(R.string.ra_form_submitted), Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.collect_toast_form_submitted), Toast.LENGTH_LONG).show();
         MyApplication.bus().post(new CollectFormSubmittedEvent());
         finish();
     }
@@ -704,13 +695,13 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     public void formConstraintViolation(FormIndex formIndex, String errorString) {
         if (currentScreenView instanceof CollectFormView) {
             ((CollectFormView) currentScreenView).setValidationConstraintText(formIndex, errorString);
-            showToast(getString(R.string.ra_answers_validation_errors));
+            showToast(getString(R.string.collect_form_toast_validation_generic_error));
         }
     }
 
     @Override
     public void saveForLaterFormInstanceSuccess() {
-        Toast.makeText(getApplicationContext(), R.string.ra_form_send_submission_for_later, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), R.string.collect_toast_form_saved_for_later_submission, Toast.LENGTH_LONG).show();
         MyApplication.bus().post(new CollectFormSubmittedEvent());
         finish();
     }
@@ -761,7 +752,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     @Override
     public void onMediaFileAddError(Throwable error) {
-        showToast(R.string.ra_media_form_attach_error);
+        showToast(R.string.collect_toast_fail_attaching_file_to_form);
         Timber.d(error, getClass().getName());
     }
 
@@ -773,19 +764,19 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     @Override
     public void onImportError(Throwable error) {
-        showToast(R.string.ra_import_media_error);
+        showToast(R.string.gallery_toast_fail_importing_file);
         Timber.d(error, getClass().getName());
     }
 
     @Override
     public void onImportStarted() {
-        progressDialog = DialogsUtil.showProgressDialog(this, getString(R.string.ra_import_media_progress));
+        progressDialog = DialogsUtil.showProgressDialog(this, getString(R.string.gallery_dialog_expl_encrypting));
     }
 
     @Override
     public void onImportEnded() {
         hideProgressDialog();
-        showToast(R.string.ra_file_encrypted);
+        showToast(R.string.gallery_toast_file_encrypted);
     }
 
     @Override
@@ -812,17 +803,17 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         }
 
         alertDialog = new AlertDialog.Builder(this)
-                .setPositiveButton(R.string.ra_add_group_dialog_positive, (dialog, which) -> formParser.executeRepeat())
-                .setNegativeButton(R.string.ra_do_not_add_group, (dialog, which) -> formParser.cancelRepeat())
+                .setPositiveButton(R.string.collect_form_dialog_action_add_group, (dialog, which) -> formParser.executeRepeat())
+                .setNegativeButton(R.string.collect_form_dialog_action_dont_add_group, (dialog, which) -> formParser.cancelRepeat())
                 .setCancelable(false)
                 .create();
 
         if (lastRepeatCount > 0) {
-            alertDialog.setTitle(getString(R.string.ra_leaving_repeat_ask));
-            alertDialog.setMessage(getString(R.string.ra_add_another_repeat, groupText));
+            alertDialog.setTitle(getString(R.string.collect_form_dialog_title_add_additional_group, groupText));
+            alertDialog.setMessage(getString(R.string.collect_form_dialog_expl_add_additional_group, groupText));
         } else {
-            alertDialog.setTitle(getString(R.string.ra_entering_repeat_ask));
-            alertDialog.setMessage(getString(R.string.ra_add_repeat, groupText));
+            alertDialog.setTitle(getString(R.string.collect_form_dialog_action_add_first_group, groupText));
+            alertDialog.setMessage(getString(R.string.collect_form_dialog_expl_add_first_group, groupText));
         }
 
         alertDialog.show();
@@ -977,13 +968,13 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     }
 
     private void showFormChangedDialog() {
-        String message = getString(R.string.your_draft_will_be_lost);
+        String message = getString(R.string.collect_form_exit_dialog_expl);
 
         alertDialog = DialogsUtil.showMessageOKCancelWithTitle(this,
                 message,
-                getString(R.string.attention),
-                getString(R.string.save_and_exit),
-                getString(R.string.exit_anyway),
+                getString(R.string.collect_form_exit_unsaved_dialog_title),
+                getString(R.string.collect_form_exit_dialog_action_save_exit),
+                getString(R.string.collect_form_exit_dialog_action_exit_anyway),
                 (dialog, which) -> {
                     if (formSaver != null) {
                         formSaver.saveActiveFormInstanceOnExit();
@@ -1034,5 +1025,13 @@ public class CollectFormEntryActivity extends MetadataActivity implements
             progressDialog.dismiss();
             progressDialog = null;
         }
+    }
+
+    private void disableScreenTimeout() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    private void enableScreenTimeout() {
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 }

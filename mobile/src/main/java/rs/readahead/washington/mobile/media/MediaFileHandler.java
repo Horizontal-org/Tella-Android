@@ -16,7 +16,7 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.apache.commons.io.IOUtils;
 
@@ -92,7 +92,7 @@ public class MediaFileHandler {
             return FileUtil.mkdirs(tmpPath) && ret;
         } catch (Exception e) {
             Timber.e(e);
-            Crashlytics.logException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
             return false;
         }
     }
@@ -122,13 +122,18 @@ public class MediaFileHandler {
             }
         }
 
+        //if (Build.VERSION.SDK_INT >= 18) {
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            Timber.d("+++++ get multiple");
+       // }
+
         intent.setAction(Intent.ACTION_GET_CONTENT);
 
         try {
             activity.startActivityForResult(intent, requestCode);
         } catch (ActivityNotFoundException e) {
             Timber.d(e, activity.getClass().getName());
-            Toast.makeText(activity, R.string.ra_error_opening_phone_gallery, Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, R.string.gallery_toast_fail_import, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -162,7 +167,12 @@ public class MediaFileHandler {
             }
         }
 
-        File path = Environment.getExternalStoragePublicDirectory(envDirType);
+        File path;
+        if (Build.VERSION.SDK_INT >= 29){
+            path = context.getExternalFilesDir(envDirType);
+        }else {
+            path = Environment.getExternalStoragePublicDirectory(envDirType);
+        }
         File file = new File(path, mediaFile.getFileName());
 
         InputStream is = null;
@@ -183,7 +193,7 @@ public class MediaFileHandler {
 
             MediaScannerConnection.scanFile(context, new String[]{file.toString()}, null, null);
         } catch (IOException e) {
-            Crashlytics.logException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
             throw e;
         } finally {
             FileUtil.close(is);
@@ -301,7 +311,7 @@ public class MediaFileHandler {
                 mediaFileBundle.setMediaFileThumbnailData(new MediaFileThumbnailData(thumb));
             }
         } catch (Exception e) {
-            Crashlytics.logException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
             Timber.e(e, MediaFileHandler.class.getName());
         } finally {
             try {
@@ -354,7 +364,7 @@ public class MediaFileHandler {
             mediaFile.setHash(StringUtils.hexString(os.getMessageDigest().digest()));
             mediaFile.setSize(getSize(context, mediaFile));
         } catch (Exception e) {
-            Crashlytics.logException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
             Timber.e(e, MediaFileHandler.class.getName());
         } finally {
             FileUtil.close(vis);
@@ -386,7 +396,7 @@ public class MediaFileHandler {
                 return new MediaFileThumbnailData(thumb);
             }
         } catch (Exception e) {
-            Crashlytics.logException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
             Timber.e(e, MediaFileHandler.class.getName());
         } finally {
             FileUtil.close(vis);
@@ -625,7 +635,7 @@ public class MediaFileHandler {
         shareIntent.putExtra(Intent.EXTRA_STREAM, mediaFileUri);
         shareIntent.setType(FileUtil.getMimeType(mediaFile.getFileName()));
 
-        context.startActivity(Intent.createChooser(shareIntent, context.getText(R.string.ra_share)));
+        context.startActivity(Intent.createChooser(shareIntent, context.getText(R.string.action_share)));
     }
 
     public static void startShareActivity(Context context, List<MediaFile> mediaFiles, boolean includeMetadata) {
@@ -647,7 +657,7 @@ public class MediaFileHandler {
         shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
         shareIntent.setType("*/*");
 
-        context.startActivity(Intent.createChooser(shareIntent, context.getText(R.string.ra_share)));
+        context.startActivity(Intent.createChooser(shareIntent, context.getText(R.string.action_share)));
     }
 
     private static String getMetadataFilename(MediaFile mediaFile) {

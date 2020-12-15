@@ -52,7 +52,7 @@ public class TUSClient {
         mediaFile.setFileName("test");
 
         return getStatus(mediaFile)
-                .map(aLong -> new UploadProgressInfo(mediaFile.getFileName(), 0, 0))
+                .map(aLong -> new UploadProgressInfo(mediaFile, 0, 0))
                 .onErrorReturn(throwable -> mapThrowable(throwable, mediaFile));
     }
 
@@ -86,12 +86,12 @@ public class TUSClient {
                 final String fileName = mediaFile.getFileName();
                 final UploadEmitter uploadEmitter = new UploadEmitter();
 
-                emitter.onNext(new UploadProgressInfo(fileName, skipBytes, size, UploadProgressInfo.Status.STARTED));
+                emitter.onNext(new UploadProgressInfo(mediaFile, skipBytes, UploadProgressInfo.Status.STARTED));
 
                 final Request appendRequest = new Request.Builder()
                         .url(getUploadUrl(fileName))
                         .put(new SkippableMediaFileRequestBody(context, mediaFile, skipBytes,
-                                (current, total) -> uploadEmitter.emit(emitter, fileName, skipBytes + current, size)))
+                                (current, total) -> uploadEmitter.emit(emitter, mediaFile, skipBytes + current, size)))
                         .build();
 
                 Response response = okHttpClient.newCall(appendRequest).execute();
@@ -114,7 +114,7 @@ public class TUSClient {
                     return;
                 }
 
-                emitter.onNext(new UploadProgressInfo(fileName, size, size, UploadProgressInfo.Status.FINISHED));
+                emitter.onNext(new UploadProgressInfo(mediaFile, size, UploadProgressInfo.Status.FINISHED));
 
                 emitter.onComplete();
             } catch (Exception e) {
@@ -150,7 +150,7 @@ public class TUSClient {
 
     @NonNull
     private String getUploadUrl(String name) {
-        return baseUrl.resolve(name).toString();
+        return baseUrl.resolve("/").resolve(name).toString();
     }
 
     private UploadProgressInfo mapThrowable(Throwable throwable, RawFile mediaFile) {
@@ -163,7 +163,7 @@ public class TUSClient {
             status = UploadProgressInfo.Status.UNKNOWN_HOST;
         }
 
-        return new UploadProgressInfo(mediaFile.getFileName(), 0, 0, status);
+        return new UploadProgressInfo(mediaFile, 0, status);
     }
 
     private UploadProgressInfo.Status toStatus(int code) {
@@ -191,12 +191,12 @@ public class TUSClient {
         private static final long REFRESH_TIME_MS = 500;
         private long time;
 
-        void emit(Emitter<UploadProgressInfo> emitter, String path, long current, long total) {
+        void emit(Emitter<UploadProgressInfo> emitter, RawFile file, long current, long total) {
             long now = Util.currentTimestamp();
 
             if (now - time > REFRESH_TIME_MS) {
                 time = now;
-                emitter.onNext(new UploadProgressInfo(path, current, total));
+                emitter.onNext(new UploadProgressInfo(file, current, total));
             }
         }
     }

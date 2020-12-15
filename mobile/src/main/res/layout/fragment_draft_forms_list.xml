@@ -20,6 +20,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:text="@string/collect_draft_empty_text"
+        android:text="@string/collect.draft_expl_no.forms"
         android:visibility="gone"/>
 </RelativeLayout>

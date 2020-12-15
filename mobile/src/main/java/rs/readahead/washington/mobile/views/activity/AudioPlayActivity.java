@@ -15,6 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -280,7 +281,7 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
 
     @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void showWriteExternalStorageRationale(final PermissionRequest request) {
-        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.ra_media_export_rationale));
+        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_device_storage));
     }
 
     @Override
@@ -301,17 +302,17 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
 
     @Override
     public void onMediaExported() {
-        showToast(R.string.ra_media_exported);
+        showToast(getResources().getQuantityString((R.plurals.gallery_toast_files_exported), 1, 1));
     }
 
     @Override
     public void onExportError(Throwable error) {
-        showToast(R.string.ra_media_export_error);
+        showToast(R.string.gallery_toast_fail_exporting_to_device);
     }
 
     @Override
     public void onExportStarted() {
-        progressDialog = DialogsUtil.showProgressDialog(this, getString(R.string.ra_export_media_progress));
+        progressDialog = DialogsUtil.showProgressDialog(this, getString(R.string.gallery_save_to_device_dialog_progress_expl));
     }
 
     @Override
@@ -327,7 +328,7 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
 
     @Override
     public void onMediaFileDeletionError(Throwable throwable) {
-        showToast(R.string.ra_media_deleted_error);
+        showToast(R.string.gallery_toast_fail_deleting_files);
     }
 
     @Override
@@ -381,14 +382,14 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
 
     private void showDeleteMediaDialog() {
         alertDialog = new AlertDialog.Builder(this)
-                .setTitle(R.string.ra_delete_media)
-                .setMessage(R.string.ra_media_will_be_deleted)
-                .setPositiveButton(R.string.delete, (dialog, which) -> {
+                .setTitle(R.string.gallery_delete_files_dialog_title)
+                .setMessage(R.string.gallery_delete_files_dialog_expl)
+                .setPositiveButton(R.string.action_delete, (dialog, which) -> {
                     if (viewerPresenter != null && handlingMediaFile != null) {
                         viewerPresenter.deleteMediaFiles(handlingMediaFile);
                     }
                 })
-                .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
                 })
                 .setCancelable(true)
                 .show();
@@ -412,6 +413,7 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
 
         paused = false;
         disablePlay();
+        disableScreenTimeout();
     }
 
     private void handlePause() {
@@ -425,6 +427,7 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
         if (audioPlayer != null) {
             audioPlayer.pause();
         }
+        enableScreenTimeout();
     }
 
     private void onPlayerStop() {
@@ -458,6 +461,7 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
             audioPlayer.stop();
             audioPlayer = null;
             onPlayerStop();
+            enableScreenTimeout();
         }
     }
 
@@ -481,5 +485,13 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
                         TimeUnit.MINUTES.toMinutes(TimeUnit.MILLISECONDS.toHours(duration)),
                 TimeUnit.MILLISECONDS.toSeconds(duration) -
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)));
+    }
+
+    private void disableScreenTimeout() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    private void enableScreenTimeout() {
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 }
