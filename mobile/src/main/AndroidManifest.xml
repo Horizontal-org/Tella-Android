@@ -47,6 +47,7 @@
 
         <service
             android:name="info.guardianproject.cacheword.CacheWordService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
             android:enabled="true"
             android:exported="false" />
 
