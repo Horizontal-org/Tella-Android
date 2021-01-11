@@ -17,11 +17,14 @@
         <item>be</item>
         <item>en</item>
         <item>es</item>
-        <item>in</item>
         <item>fr</item>
+        <item>in</item>
+        <item>kn</item>
+        <item>ml</item>
         <item>my</item>
         <item>pt</item>
         <item>ru</item>
+        <item>ta</item>
     </string-array>
     <string name="ra_server_prefix" translatable="false">https://</string>
     <integer name="ra_config_short_fling">300</integer>
