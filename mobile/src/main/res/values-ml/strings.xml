@@ -1,0 +1,736 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_name">Tella (റ്റെല്ല)</string>
+  <!-- The button to get the latest version of a form that was updated.  -->
+  <string name="collect.blank_action_update.form">നവീകരിക്കുക </string>
+  <!-- The screen title (in the app bar) of the "About & Help" menu, where users can read more about the app and find contact information. -->
+  <string name="settings.about_app.bar">ആമുഖം &amp; സഹായം</string>
+  <!-- In the Settings menu, the button to access the "About & Help" section. -->
+  <string name="settings.gen_select_about">ആമുഖം &amp; സഹായം</string>
+  <!-- The title of the dialog when attempting to exit a form that hasn't been saved. -->
+  <string name="collect.form_exit.unsaved_dialog.title">ഫോമിൽ നിന്ന് പുറത്തുകടക്കണോ?</string>
+  <!-- The title of the dialog when the user opens the Camera or the Recorder when they have Verification Mode activated but GPS is not activated. Verification Mode is more effective if GPS is activated. -->
+  <string name="verification_prompt_dialog_title">ജിപിഎസ് പ്രവര്‍ത്തന സജ്ജമാക്കണോ?</string>
+  <!-- The title of the tab where all the blank forms are listed. Blank forms are the empty forms that users download, fill, and submit. -->
+  <string name="collect_tab.title_blank">ശൂന്യം</string>
+  <!-- A button used throughout the app to cancel actions. -->
+  <string name="action_cancel">റദ്ദാക്കുക </string>
+  <!-- This is an explanation available when first installing the app, on the very first screen. -->
+  <string name="lock_set.pattern_expl">നിങ്ങളുടെ ഡാറ്റ മികച്ച രീതിയിൽ പരിരക്ഷിക്കുന്നതിന്, ദയവായി നിങ്ങളുടെ ആപ്ലിക്കേഷൻ പൂട്ടിന്റെ മാതൃക സൃഷ്ടിക്കുക. ആപ്ലിക്കേഷൻ പൂട്ട് തുറക്കുന്നതിനും നിങ്ങളുടെ ഡാറ്റ ഉപയോഗിക്കുന്നതിനും ഈ മാതൃക ഉപയോഗിക്കപ്പെടും. ഈ മാതൃകയിൽ കുറഞ്ഞത് 6 ബിന്ധുക്കളെങ്കിലും ഉണ്ടായിരിക്കണം.</string>
+  <!-- A menu item in the About & Help screen -->
+  <string name="settings_menu.item_contact">ഞങ്ങളെ സമാപിക്കു </string>
+  <!-- The label on the homescreen button to access the data-collection feature. -->
+  <string name="home_collect.button">ശേഖരിക്കുക</string>
+  <!-- The heading of the Onboarding screen explaining the data collection feature -->
+  <string name="onboard_collect_heading">ശേഖരിക്കുക</string>
+  <!-- The dialog informing the user that their form is being downloaded. -->
+  <string name="collect_dialog.text_download.progress">ഫോം ഡൗൺലോഡുചെയ്യുന്നു</string>
+  <!-- The dialog informing the user that their form was successfully downloaded. -->
+  <string name="collect_toast_download.completed">ഡൗണ്‍ലോഡ് പൂര്‍ത്തിയായിരിക്കുന്നു</string>
+  <!-- The generic action button used throughout the app -->
+  <string name="action_delete">നീക്കം ചെയ്യുക</string>
+  <!-- The title of the tab where draft forms are displayed. -->
+  <string name="collect.draft_tab.title">കരട്</string>
+  <!-- The button to download a form -->
+  <string name="collect.blank_action_download.form">ഡൌണ്‍ലോഡ് </string>
+  <string name="upload_toast_fail.finding.metadata.to.upload">ഫയലിന്റെ സ്ഥിരീകരണ വിവരങ്ങൾ കണ്ടെത്തുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
+  <string name="upload_toast.fail.finding.file.to.upload">അപ്‌ലോഡുചെയ്യുന്നതിന് ഫയൽ കണ്ടെത്തുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
+  <!-- An error message -->
+  <string name="settings_text_empty.field">ഈ കളം ശൂന്യമായിരിക്കരുത്.</string>
+  <!-- A toast notification informing the user that by pressing the "back" button again, they will exit the app. -->
+  <string name="home_toast_back.exit">ആപ്പില്‍ നിന്ന് പുറത്തുകടക്കാൻ \"ബാക്ക്\" ബട്ടൺ വീണ്ടും തട്ടുക</string>
+  <!-- A toast message to notify the user that Tella failed to load the list of servers. -->
+  <string name="settings.docu_toast_fail.load.list.connected.servers">സെർവറുകളുടെ പട്ടിക എടുക്കുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
+  <string name="settings.docu_toast_fail.create.server">സെർവർ ക്രമീകരണങ്ങൾ സൃഷ്ടിക്കുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
+  <string name="settings.docu_toast_fail.update.server">സെർവർ ക്രമീകരണങ്ങൾ പുതുക്കുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
+  <string name="settings.docu_toast_fail.delete.server">സെർവർ ക്രമീകരണങ്ങൾ ഇല്ലാതാക്കുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
+  <!-- The menu item, in Settings > About & Help, linking to the webpage with all the Tella FAQ. -->
+  <string name="settings.about_list.item_faq">FAQ(പൊതുവായുള്ള സംശയങ്ങള്‍)</string>
+  <!-- The title of the screen (in the app bar) for the Gallery. -->
+  <string name="gallery_app.bar">ഗാലറി</string>
+  <!-- The label of the homescreen button to access the Tella gallery. -->
+  <string name="home_gallery.button">ഗാലറി</string>
+  <!-- The action button after the user created their pattern. -->
+  <string name="onboarding_action_create.pattern">​​മാതൃക സൃഷ്ടിക്കുക</string>
+  <!-- A generic action button used throughout the app to confirm an action. -->
+  <string name="action_ok">ശരി</string>
+  <!-- An error message informing the user that the response to the form's question is invalid. For example, if the question asks for a number and the user entered letters. -->
+  <string name="collect.form_toast_validation.error">ഈ മറുപടി അസാധുവാണ്</string>
+  <!-- An error message informing the user that the response to the form's question is mandatory and that they cannot move forward without answering it. -->
+  <string name="collect.form_error_response.mandatory">ഈ മറുപടി നിർബന്ധിതമാണ്.</string>
+  <!-- The heading of the screen when Quick Delete is being activated -->
+  <string name="homescreen_heading_quick.delete">ദൃുതഗതിയില്‍ മായ്‌ചുകളയുന്ന രീതി സജീവമാക്കല്‍</string>
+  <string name="permission_dialog.expl_mic">ശബ്ദം രേഖപ്പെടുത്തുന്നതിന്, നിങ്ങളുടെ മൈക്രോഫോൺ ഉപയോഗിക്കാൻ Tella (റ്റെല്ല)യ്ക്ക് അനുമതി ആവശ്യമാണ്.</string>
+  <!-- The menu item to open the app's privacy policy from the "About & Help" menu. -->
+  <string name="settings.about_list.item_privacy.policy">സ്വകാര്യതാ നയം</string>
+  <!-- An error message shown when Tella encounters an error recording the audio. -->
+  <string name="recorder_toast_fail.recording">ശബ്ദം രേഖപ്പെടുത്തുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
+  <!-- This is the description of the blinking red dot when recording audio. It is not visible to the user unless they use the screen reader. -->
+  <string name="recorder_content.desc_blinking.red.dot">ശബ്ദം രേഖപ്പെടുത്തുന്നു</string>
+  <!-- A generic action button used across the app to remove an item from a list. -->
+  <string name="action_remove">ഒഴിവാക്കുക</string>
+  <!-- The screen title (in the app bar) in the Settings -->
+  <string name="settings_app.bar">ക്രമീകരണം</string>
+  <!-- A generic action button used across the app to save items. -->
+  <string name="action_save">സംരക്ഷിക്കുക</string>
+  <!-- A dialog that is displayed when the user sets their lock pattern after installing the app. -->
+  <string name="lock_dialog.expl_save.pattern">നിങ്ങളുടെ പൂട്ടിന്റെ മാതൃക സംരക്ഷിക്കുന്നു</string>
+  <!-- A dialog that is displayed when the user enters their pattern to unlock Tella. It's often displayed for such a short time that it is difficult to see it.  -->
+  <string name="lock_dialog.expl_unlock.app">Tella (റ്റെല്ല)യു‍ടെ പൂട്ട് തുറക്കുന്നു</string>
+  <!-- The generic action button used throughout the app -->
+  <string name="action_skip">വിട്ടുകളയുക</string>
+  <!-- The explanation in the dialog confirming the deletion of a server in the documentation Settings menu. -->
+  <string name="settings.docu_delete.server_dialog.expl">നിങ്ങൾ ഈ സെർവർ ഇല്ലാതാക്കുകയാണെങ്കിൽ, എല്ലാ കരടുകളും സമർപ്പിച്ച ഫോമുകളും നിങ്ങളുടെ ഉപകരണത്തിൽ നിന്ന് ഇല്ലാതാക്കപ്പെടും. എന്തായാലും ഇല്ലാതാക്കണോ?</string>
+  <!-- A toast message confirming the user that the server was successfully deleted. -->
+  <string name="settings.docu_toast_server.deleted">സെർവർ ഇല്ലാതാക്കി</string>
+  <!-- A toast message confirming the user that the server was successfully created. -->
+  <string name="settings.docu_toast_server.created">സെർവർ സൃഷ്‌ടിച്ചു</string>
+  <!-- A toast message confirming the user that the server was successfully updated after making edits in the server settings dialog. -->
+  <string name="settings.docu_toast_server.updated">സെർവർ പുതുക്കി</string>
+  <!-- The title of the dialog where the user enters all information about a Direct Upload or Collect server. -->
+  <string name="settings.docu_dialog.title_server.settings">സെർവർ ക്രമീകരണങ്ങൾ</string>
+  <!-- In the server settings dialog, the label of the field to enter the server name. -->
+  <string name="settings.docu_field_server.name">സെർവറിന്റെ പേര്</string>
+  <!-- In the server settings dialog, the label of the field to enter the server URL. -->
+  <string name="settings.docu_field_server.url">സെർവർ URL(യൂആര്‍എല്‍)</string>
+  <!-- In the data-collection section, the title of the tab to show forms that have already been submitted. -->
+  <string name="collect.sent_tab.title">സമര്‍പ്പിച്ചവ</string>
+  <!-- This explanatory text is used on the countdown screen when the user triggers the Quick Delete button -->
+  <string name="home_expl_cancel.quick.delete">റദ്ദാക്കാൻ എവിടെയും ടാപ്പുചെയ്യുക</string>
+  <!-- The title of the screen (in the app bar) when recording audio. -->
+  <string name="recorder_app.bar">റെക്കോഡര്‍</string>
+  <!-- The screen title (in the app bar) for the section on data-collection. -->
+  <string name="collect_app.bar">ശേഖരിക്കുക</string>
+  <!-- A prompt on the homescreen -->
+  <string name="home_action.expl_camera">ക്യാമറ തുറക്കാൻ എവിടെയും ടാപ്പുചെയ്യുക</string>
+  <!-- In the server settings dialog, the label of the field to enter the username. -->
+  <string name="settings.docu_field_username">ഉപയോക്താവിന്റെ പേർ </string>
+  <!-- In the screen showing all draft forms, this shows the date when the draft was last updated. -->
+  <string name="collect.draft_meta_date.updated">പുതുക്കപ്പെട്ടത്: %1$s</string>
+  <!-- In the "About & Help" settings page, this is used to display the version of the app. It is followed by the version number (e.g. "version 1.5.4") -->
+  <string name="settings.about_app.version">പതിപ്പ്</string>
+  <!-- A toast message notifying the user that the draft form was successfully saved. -->
+  <string name="collect_toast_draft.saved">കരട്‍രേഖ സംരക്ഷിച്ചു</string>
+  <!-- A toast message to inform the user that there was an error when submitting a form. -->
+  <string name="collect_toast_fail.sending.form">ഫോം സമർപ്പിക്കുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
+  <string name="collect_toast_fail.form.submission.generic">ഫോം സമർപ്പിക്കുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു: %s</string>
+  <!-- This error message is shown when some answers could not be validated. For example, if the answer needs to be a number and the user entered letters; or if the answer is mandatory and the user didn't answer. -->
+  <string name="collect.form_toast_validation.generic.error">ചില ഉത്തരങ്ങളിൽ മൂല്യനിർണ്ണയ പിശകുകൾ ഉണ്ടായിരുന്നു</string>
+  <string name="permission_dialog.expl_GPS">നിങ്ങളുടെ ഫയലുകൾ‌ പരിശോധിച്ചുറപ്പിക്കുന്നതിന്, Tella (റ്റെല്ല)ക്ക് നിങ്ങളുടെ സ്ഥലവിവരം രേഖപ്പെടുത്തേണ്ടതുണ്ട് അതിനായി നിങ്ങളുടെ ജി‌പി‌എസ് ഉപയോഗിക്കുന്നതിന് അനുമതി ആവശ്യമാണ്.</string>
+  <!-- The button to open the calendar widget in the Time question on a form -->
+  <string name="collect.form_action_select.time">സമയം തെരഞ്ഞെടുക്കുക</string>
+  <!-- The button to open the calendar widget in the Date question on a form -->
+  <string name="collect.form_action_select.date">തീയതി തിരഞ്ഞെടുക്കുക</string>
+  <!-- The dialog displayed while the app is downloading the blank forms from the server. -->
+  <string name="collect_dialog.expl_downloading.blank.forms">ഫോമുകൾ ഡൗൺലോഡുചെയ്യുന്നു</string>
+  <!-- This error message is displayed when Tella fails to update the list of forms. -->
+  <string name="collect.blank_toast_fail.updating.form.list">ഫോമുകളുടെ പട്ടിക പുതുക്കുന്നതില്‍ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
+  <string name="collect_toast_fail.parsing.form">ഈ ഫോം പ്രദർശിപ്പിക്കുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
+  <!-- The action button to save the form for later sending instead of submitting -->
+  <string name="collect.end_action_save.send.later">ഫോം സൂക്ഷിക്കുക</string>
+  <!-- The button to save a form as a draft. -->
+  <string name="collect_action.desc_save.form">ഫോം സൂക്ഷിക്കുക</string>
+  <!-- The button to save a form draft -->
+  <string name="collect.end_action.desc_save.send.later">ഫോം സൂക്ഷിക്കുക</string>
+  <!-- This is the content description of the action button "confirm". It is only visible when long pressing the button or using the screen reader. -->
+  <string name="action.desc_confirm">ഉറപ്പാക്കു </string>
+  <!-- The action button to move back to the previous screen/section -->
+  <string name="collect.form_action_previous.section">മുമ്പത്തേത്</string>
+  <!-- The action button to move to the next screen/section -->
+  <string name="collect.form_action_next.section">അടുത്തത്</string>
+  <!-- The generic action button used throughout the app -->
+  <string name="action_stop">നിർത്തുക</string>
+  <!-- The action button to play an audio file -->
+  <string name="action_play">പ്ലെ ചെയ്യുക</string>
+  <!-- The action button to record audio -->
+  <string name="action_record">രേഖപ്പെടുത്തുക</string>
+  <!-- The screen title (in the app bar) where the user plays an audio file. -->
+  <string name="play.audio_app.bar">ശബ്ദം പ്ലേ ചെയ്യുക</string>
+  <!-- A dialog displayed when the user tries to delete a form that was already submitted. -->
+  <string name="collect_dialog.text_delete.sent.form">നിങ്ങളുടെ ഉപകരണത്തിൽ നിന്ന് ഈ ഫോം ഇല്ലാതാക്കണമെന്ന് താങ്കൾക്ക് തീർച്ചയാണോ? ഇത് ഇതിനകം സമർപ്പിച്ചതിനാൽ, ഡാറ്റ നിങ്ങളുടെ സംഘടനയുടെ സെർവറിൽ നിലനിൽക്കും.</string>
+  <string name="collect_dialog.text_delete.draft.form">ഈ കരട് ഫോം ഇല്ലാതാക്കണമെന്ന് താങ്കൾക്ക് തീർച്ചയാണോ?</string>
+  <string name="collect_toast_form.deleted">ആ ഫോം ഇല്ലാതാക്കപ്പെട്ടതാണ്</string>
+  <!-- The button in Settings > General to select the app's language -->
+  <string name="settings.gen_select_language">ഭാഷ</string>
+  <!-- In Settings > General > Language, the explanation for the option to keep the app in the default language of the device. -->
+  <string name="settings.lang_select.expl_default">Tella (റ്റെല്ല)യെ എന്റെ ഉപകരണത്തിന്റെ അതേ ഭാഷയിൽ തന്നെ നിലനിർത്തുക</string>
+  <!-- In Settings > General > Language, the option to keep the app in the default language of the device. -->
+  <string name="settings.lang_select_default">സ്വതവേയുള്ള</string>
+  <!-- The screen title (in the app bar) where the user selects their preferred language for the app. -->
+  <string name="settings.lang_app.bar">ഭാഷ</string>
+  <!-- The action button to share a file using the Android "share" feature -->
+  <string name="action_share">പങ്കുവയ്ക്കുക</string>
+  <string name="collect_toast_fail.submission.unauthorized"> ഈ ഫോം സമർപ്പിക്കാൻ താങ്കൾക്ക് അനുമതിയില്ല. ഇതൊരു തെറ്റാണെന്ന് നിങ്ങൾ കരുതുന്നുവെങ്കിൽ, ദയവായി നിങ്ങളുടെ സംഘടനയുമായി ബന്ധപ്പെടുക</string>
+  <string name="gallery_toast_fail.importing.file"> ഫയൽ ഇറക്കുമതി ചെയ്യുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
+  <!-- The heading of the screen to inform the user that they've reached the end of the form. -->
+  <string name="collect.end_heading">ഫോമിന്റെ അവസാനം</string>
+  <!-- The toast message displayed when the user attempts to send a form but isn't connected to the internet. -->
+  <string name="collect.end_toast_notification.form.not.sent.no.connection">നിങ്ങൾ ഇന്റർനെറ്റിലേക്ക് കണക്റ്റുചെയ്‌തിട്ടില്ല. കണക്റ്റുചെയ്യുമ്പോൾ വീണ്ടും ശ്രമിക്കുക</string>
+  <string name="collect.sent_dialog.expl_discard.unsent.form">എല്ലാ ഫോമുകളോ ഭാഗങ്ങളോ അയച്ചിട്ടില്ല. നിങ്ങൾക്ക് ഇത് ഉപേക്ഷിക്കണമെന്ന് തീർച്ചയാണോ?</string>
+  <!-- The generic action button used throughout the app -->
+  <string name="action_discard">ഉപേക്ഷിക്കുക</string>
+  <!-- The action button to submit a form once filled -->
+  <string name="collect.end_action_submit">സമർപ്പിക്കുക </string>
+  <string name="gallery_toast_file.imported.from.device">നിങ്ങളുടെ ഗാലറിയിലേക്ക് ഫയൽ ചേർത്തു</string>
+  <string name="gallery_toast_fail.exporting.to.device">ഫയലുകൾ എക്‌സ്‌പോർട്ടുചെയ്യുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
+  <string name="permission_dialog.expl_device.storage">ഫയലുകൾ എക്‌സ്‌പോർട്ടുചെയ്യുന്നതിന്, ഉപകരണത്തിന്റെ സംഭരണിയിൽ എഴുതാൻ Tella (റ്റെല്ല)യ്ക്ക് അനുമതി ആവശ്യമാണ്.</string>
+  <!-- Why one has a full stop and not the other?
+
+A toast notification informing the user that their files were successfully deleted. -->
+  <plurals name="gallery_toast_files.deleted">
+    <item quantity="one">ഫയല്‍ നീക്കം ചെയ്തു</item>
+    <item quantity="other">%1$d ഫയലുകൾ നീക്കം ചെയ്തു</item>
+  </plurals>
+  <string name="gallery_toast_fail.deleting.files">ഫയലുകൾ നീക്കം ചെയ്യുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക.</string>
+  <!-- A toast notification informing the user that their files were successfully exported from Tella and saved to the device's gallery. -->
+  <plurals name="gallery_toast_files.exported">
+    <item quantity="one">%1$d ഫയല്‍ ഉപകരണത്തിലേക്ക് സൂക്ഷിചു</item>
+    <item quantity="other">%1$d ഫയലുകൾ ഉപകരണത്തിലേക്ക് സൂക്ഷിചു</item>
+  </plurals>
+  <!-- The title of the dialog to confirm the deletion of files from the gallery. -->
+  <string name="gallery_delete.files_dialog.title">ഫയൽ നീക്കം ചെയ്യണോ?</string>
+  <string name="gallery_delete.files_dialog.expl">തിരഞ്ഞെടുത്ത ഫയൽ നിങ്ങളുടെ ഗാലറിയിൽ നിന്ന് എന്നേക്കുമായി നീക്കം ചെയ്യപ്പെടും.</string>
+  <!-- The title of the dialog confirming that the user will save the file to the device's gallery -->
+  <string name="gallery_save.to.device_dialog.title">ഉപകരണത്തിന്റെ ഗാലറിയിലേക്ക് സൂക്ഷിക്കണോ?</string>
+  <!-- The explanation of the dialog warning the user about saving the file to their device's gallery. -->
+  <string name="gallery_save.to.device_dialog.expl">ഇത് Tella (റ്റെല്ല)യ്ക്ക് പുറത്ത് നിന്നും ഉപകരണത്തിന്റെ ഗാലറിയിലും മറ്റ് ആപ്പുകളിലും നിങ്ങളുടെ ഫയൽ എടുക്കാന്‍ സഹായിക്കും.</string>
+  <!-- The dialog displayed when the user imports a file into the Tella Gallery or after taking a photo/video/audio recording. -->
+  <string name="gallery_dialog.expl_encrypting">എൻക്രിപ്റ്റ് ചെയ്യുന്നു</string>
+  <!-- The dialog when saving a file to the device's gallery -->
+  <string name="gallery_save.to.device_dialog.progress.expl">ഡീക്രിപ്റ്റ് ചെയ്യുന്നു</string>
+  <string name="gallery_toast_fail.import">ഫയലുകൾ ഇറക്കുമതി ചെയ്യുന്നതിന് ഗാലറി തുറക്കുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
+  <string name="permission_dialog.expl_camera.mic">ചിത്ര, വീഡിയോ, ശബ്ദ ഫയലുകൾ പകർത്തുന്നതിന്, Tella (റ്റെല്ല)യ്ക്ക് നിങ്ങളുടെ ക്യാമറയിലേക്കും മൈക്രോഫോണിലേക്കും ആക്‌സസ്സ് ആവശ്യമാണ്.</string>
+  <string name="gallery_toast_fail.saving.file">ഫയൽ സൂക്ഷിക്കുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
+  <string name="collect_toast_fail.attaching.file.to.form">ഫയൽ കൂട്ടിചേര്‍ക്കുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
+  <string name="collect_toast_fail.fetch.form.from.server.unknown.error">ഫോം ഡൌണ്‍ലോഡ് ചെയ്യുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
+  <string name="collect_toast_fail.fetch.form.from.server.display.error">ഫോം ഡൌണ്‍ലോഡ് ചെയ്യുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു: %s</string>
+  <string name="collect_toast_reason.fail.fetch.form.from.server">ഫോം കണ്ടെത്താൻ കഴിഞ്ഞില്ല. ഇത് നിങ്ങളുടെ സംഘടനയുടെ സെർവറിൽ നിന്ന് ഇല്ലാതാക്കിയിരിക്കാം</string>
+  <!-- The heading in the Gallery, to show all the files that are in the Gallery (by contrast to the "Selected files") -->
+  <string name="gallery_heading_files.from.Tella.gallery">Tella (റ്റെല്ല)യുടെ ഗാലറി</string>
+  <string name="permission_dialog.expl_camera">ചിത്രങ്ങളും വീഡിയോകളും എടുക്കുന്നതിനായി, നിങ്ങളുടെ ക്യാമറ ഉപയോഗിക്കുന്നതിന് Tella (റ്റെല്ല)യ്ക്ക് അനുമതി ആവശ്യമാണ്.</string>
+  <!-- The menu button in Settings to access the general settings (language, share crash reports, etc) -->
+  <string name="settings_select_general">പൊതുവായത്</string>
+  <!-- The explanatory text in the dialog warning the user that exiting the form without saving will lose the draft. -->
+  <string name="collect.form_exit_dialog.expl">നിങ്ങളുടെ കരട് നഷ്‌ടപ്പെടും.</string>
+  <!-- A button in dialog when the user exits the form and decides to save before exiting. -->
+  <string name="collect.form_exit_dialog.action_save.exit">സംരക്ഷിച്ച ‍ശേഷം പുറത്തുകടക്കുക</string>
+  <!-- The action button to exit the form even if it wasn't saved -->
+  <string name="collect.form_exit_dialog.action_exit.anyway">എന്താണെങ്കിലും പുറത്തുകടക്കുക</string>
+  <!-- An error message when the user enters an invalid URL -->
+  <string name="settings.docu_error_not.valid.URL">ഇതൊരു സാധുവായ URL അല്ല.</string>
+  <!-- The label on the sliding "Quick Delete" button on the homescreen. -->
+  <string name="home_action.label_quick.delete">നീക്കം ചെയ്യുക</string>
+  <!-- The heading of the Onboarding screen on the 'Quick Delete' feature -->
+  <string name="onboard.del_heading">ദ്രുതഗതിയില്‍ നീക്കം ചെയ്യല്‍</string>
+  <!-- The text in the filtering menu to reorder the files by date -->
+  <string name="gallery_subheading_sort.by">ഇങ്ങനെ അടുക്കുക</string>
+  <!-- The text in the filtering menu to only show photos, videos, or audio recordings. -->
+  <string name="gallery_subheading_show">കാണിക്കുക</string>
+  <!-- The button to reorder files from newest to oldest -->
+  <string name="gallery_list.item_newest.to.oldest">പുതിയത് മുതൽ പഴയതിലേക്ക്</string>
+  <!-- The button to reorder files from oldest to newest -->
+  <string name="gallery_list.item_oldest.to.newest">പഴയത് മുതൽ പുതിയതിലേക്ക്</string>
+  <!-- The button to show "all" files (not just the photos, videos, or audio recordings) -->
+  <string name="gallery_list.item_show.all.files">എല്ലാം</string>
+  <!-- The button to show only photos in the Gallery -->
+  <string name="gallery_list.items_show.only.photos">ചിത്രങ്ങള്‍</string>
+  <!-- The button to show only videos in the Gallery -->
+  <string name="gallery_list.items_show.only.videos">വീഡിയോകള്‍</string>
+  <!-- The button to show only audio recordings in the Gallery -->
+  <string name="gallery_list.items_show.only.audio">ശബ്ദ രേഖകള്‍</string>
+  <!-- The generic action button used throughout the app -->
+  <string name="action_exit">പുറത്തുപോകുക </string>
+  <!-- The description of the "Quick Exit" button on the homescreen. -->
+  <string name="home_action.desc_quick.exit">പുറത്തുപോകുക </string>
+  <!-- In Settings > Protection, the button to access the Camouflage settings -->
+  <string name="settings.prot_select_camouflage">പ്രച്ഛന്നവേഷം</string>
+  <!-- The heading of the Onboarding screen explanation the Camouflage feature -->
+  <string name="onboard.camo_heading">പ്രച്ഛന്നവേഷം</string>
+  <!-- The action button to save the server settings even if there is no internet connection -->
+  <string name="settings_dialog.action_save.server.no.internet">എന്താണെങ്കിലും സൂക്ഷിക്കുക</string>
+  <string name="settings.docu_error_wrong.credentials">ഉപയോക്തനാമം അല്ലെങ്കിൽ രഹസ്യവാക്ക് തെറ്റാണ്</string>
+  <string name="settings.docu_error_domain.doesnt.exit">സെർവർ URL തെറ്റാണ്</string>
+  <!-- An error message displayed when trying to connect to the server and an unknown error makes it impossible. -->
+  <string name="settings.docu_error_unknown.connection.error">സെർവറിലേക്ക് ബന്ധപ്പെടാന്‍ ശ്രമിക്കുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു.</string>
+  <!-- The error message when the user is attempting to connect to a server but Tella cannot connect to the internet. -->
+  <string name="settings.docu_error_no.internet">നിങ്ങൾ ഇന്റർനെറ്റിലേക്ക് കണക്റ്റുചെയ്‌തിട്ടില്ല. കണക്റ്റുചെയ്യുമ്പോൾ വീണ്ടും ശ്രമിക്കുക</string>
+  <!-- The button to try again connecting to a server, if the previous attempt failed. -->
+  <string name="settings.docu_dialog.action_try.again.connecting">വീണ്ടും ശ്രമിക്കുക</string>
+  <!-- At the end of Onboarding, the button to close the Onboarding and start Tella. -->
+  <string name="onboard.perm_action_start.app">ആരംഭിക്കുക</string>
+  <!-- The subheading of the Welcome screen -->
+  <string name="onboard.intro_subheading">പ്രമാണഗ്രന്ഥവും പരിരക്ഷയും</string>
+  <string name="onboard.into_expl">തങ്ങളെത്തന്നെ അപകടത്തിലാക്കാതെ മനുഷ്യാവകാശ ലംഘനങ്ങൾ, അക്രമം, അഴിമതി എന്നിവ രേഖപ്പെടുത്താൻ Tella (റ്റെല്ല)  ആരെയും പ്രാപ്തമാക്കുന്നു.</string>
+  <!-- The subheading of the Onboarding screen on the Camouflage feature -->
+  <string name="onboard.camo_subheading">ഉപകരണ പരിശോധനകൾക്കെതിരായ പരിരക്ഷ</string>
+  <string name="onboard.camo_expl">Tella (റ്റെല്ല)യ്ക് നിങ്ങളുടെ ഉപകരണത്തിൽ മറഞ്ഞിരിക്കാം കൂടാതെ Tella (റ്റെല്ല)യിൽ പിടിച്ചതോ ഇറക്കുമതി ചെയ്തതോ ആയ ഏത് ഫയലും യാന്ത്രികമായി എൻക്രിപ്റ്റുചെയ്‌ത് ഒരു അദൃശ്യമായ ഗാലറിയിൽ സംഭരിക്കുപ്പെടും.</string>
+  <!-- The subheading of the Onboarding screen on the data collection feature -->
+  <string name="onboard.collect_subheading">ലളിതമായ ഡാറ്റ ശേഖരണം</string>
+  <string name="onboard.collect_expl">ഓൺ‌ലൈനോ ഓഫ്‌ലൈനോ, ഫോമുകളും സർവേകളും നിങ്ങളുടെ ഉപകരണത്തിൽ നിന്ന് നേരിട്ട് പൂരിപ്പിക്കാം. ഫോമുകൾ സൃഷ്ടിക്കുകയും ഡാറ്റ കൈകാര്യം ചെയ്യുകയും ചെയ്യുന്ന ഒരു സംഘടനയുമായി നിങ്ങളെ ബന്ധിപ്പിച്ചിരിക്കണം.</string>
+  <!-- The subheading of the Onboarding screen on the 'Quick Delete' feature -->
+  <string name="onboard.del_subheading">അടിയന്തിര ഡാറ്റ മായ്ക്കൽ</string>
+  <string name="onboard.del_expl">അടിയന്തിര സാഹചര്യങ്ങളിൽ, കുറച്ച് നിമിഷങ്ങൾക്കുള്ളിൽ   തന്നെ Tella (റ്റെല്ല)യിൽ നിന്ന് തന്ത്രപ്രധാനമായ വിവരങ്ങൾ ഇല്ലാതാക്കുക.</string>
+  <!-- The button to trigger the dialogs to give the app permissions (to use the camera, access device storage, etc). -->
+  <string name="onboard.perm_action_grant.permissions">അനുവാദങ്ങള്‍ നൽകുക</string>
+  <!-- The menu item in Settings > About & Help to access the tutorial. -->
+  <string name="settings.about_select_tutorial">പരിശീലനപദ്ധതി</string>
+  <string name="onboard.perm_dialog.expl_grant.permissions">ശരിയായി പ്രവർത്തിക്കുന്നതിന്, നിങ്ങൾ Tella (റ്റെല്ല)യ്ക്ക് ആവശ്യമായ അനുമതികൾ നൽകേണ്ടതുണ്ട്.</string>
+  <!-- The heading for the Onboarding screen where the user grants permissions -->
+  <string name="onboard.perm_heading">അവസാനമായി ഒരു കാര്യം</string>
+  <string name="onboard.perm_subheading">ശരിയായി പ്രവർത്തിക്കുന്നതിന്, ഇനിപ്പറയുന്നവയിലേക്ക് നിങ്ങൾ Tella (റ്റെല്ല)യെ അധികാരപ്പെടുത്തേണ്ടതുണ്ട്:</string>
+  <!-- The list of permissions requested on the last screen of the Onboarding -->
+  <string name="onboard.perm_list.permissions">• നിങ്ങളുടെ ഉപകരണത്തിലെ സംഭരണി ഉപയോഗിക്കക (Tella (റ്റെല്ല)യിൽ നിന്ന് നിങ്ങളുടെ ഉപകരണത്തിലേക്ക് ഫയലുകൾ എക്‌സ്‌പോർട്ടുചെയ്യാൻ)
+• നിങ്ങളുടെ ക്യാമറ ഉപയോഗിക്കുക (ചിത്രങ്ങളും വീഡിയോകളും പകർത്താൻ)
+• നിങ്ങളുടെ മൈക്രോഫോൺ ഉപയോഗിക്കുക (ശബ്ദം രേഖപ്പെടുത്താന്‍)
+• നിങ്ങളുടെ ജി‌പി‌എസ് ഉപയോഗിക്കുക (നിങ്ങൾ ഡാറ്റയോ മൾട്ടിമീഡിയയോ പിടിച്ചെടുക്കുമ്പോൾ നിങ്ങളുടെ സ്ഥാനം നിർണ്ണയിക്കാൻ, അവ പരിശോധിച്ചുറപ്പിക്കാൻ)</string>
+  <!-- The heading in the Gallery, to show all the files that are selected -->
+  <string name="gallery_heading_selected_files">തിരഞ്ഞെടുത്ത ഫയലുകൾ</string>
+  <string name="settings.camo_expl">നിങ്ങളുടെ ഉപകരണത്തിൽ Tella (റ്റെല്ല)യെ മികച്ച രീതിയിൽ മറയ്‌ക്കാൻ ഒരു ഇഷ്‌ടാനുസൃത ഐക്കണും പേരും തിരഞ്ഞെടുക്കുക. ശ്രദ്ധിക്കുക ആന്‍ഡ്രോയിഡ് ക്രമീകരണങ്ങളിൽ Tella (റ്റെല്ല) ഐക്കൺ ദൃശ്യമാകും .</string>
+  <!-- The name of a "fake" app to hide Tella as a camera app. -->
+  <string name="settings.camo_camera4">ക്യാമറ</string>
+  <!-- The name of a "fake" app to hide Tella as a camera app. -->
+  <string name="settings.camo_camera3">ക്യാമറപ്രോ</string>
+  <!-- The name of a "fake" app to hide Tella as a camera app. -->
+  <string name="settings.camo_camera2">സൂപ്പർക്യാം</string>
+  <!-- The name of a "fake" app to hide Tella as a camera app. -->
+  <string name="settings.camo_camera1">ഈസിക്യാം</string>
+  <!-- The description of the button to save a file from the Tella Gallery to the device's default gallery. -->
+  <string name="gallery_action.desc_save.to.device">ഉപകരണത്തിലേക്ക് സൂക്ഷിക്കുക</string>
+  <!-- The name of the feature in Settings > Documentation. -->
+  <string name="settings.docu_verification_action">പരിശോധന രീതി</string>
+  <!-- The explanation of the "Verification Mode" in Settings > Documentation -->
+  <string name="settings.docu_verification_action.expl">നിങ്ങളുടെ ഉപകരണത്തെയും സ്ഥലത്തെയും കുറിച്ചുള്ള വിവരങ്ങൾ ശേഖരിക്കുന്നതിലൂടെ നിങ്ങളുടെ മീഡിയ ഫയലുകൾ പരിശോധിച്ചുറപ്പിക്കാൻ കഴിയും.</string>
+  <!-- The heading on the Collect screen -->
+  <string name="collect_no.form_heading">ലളിതമായ ഡാറ്റ ശേഖരണം</string>
+  <string name="collect_expl_not.connected.to.server"><![CDATA[ഫോമുകൾ സ്വീകരിക്കുന്നതിനും ഡാറ്റ സമർപ്പിക്കുന്നതിനും, നിങ്ങൾ ആദ്യം അനുയോജ്യമായ ഒരു സെർവറിലേക്ക് കണക്റ്റുചെയ്യണം. സെർവർ വിവരങ്ങൾക്കായി നിങ്ങളുടെ ഓർഗനൈസേഷനോട് ചോദിക്കുക, എന്നിട്ടു <a href=\"tella_scheme://open.collect.manage.servers.activity\">ഇവിടെ സെർവർ സജ്ജമാക്കുക</a>.]]></string>
+  <string name="collect.draft_expl_no.forms">പ്രദർശിപ്പിക്കുന്നതിന് കരട് ഫോമുകളൊന്നുമില്ല.</string>
+  <string name="collect.sent_expl_no.forms">പ്രദർശിപ്പിക്കുന്നതിന് സമർപ്പിച്ച ഫോമുകളൊന്നുമില്ല.</string>
+  <!-- Explanatory text displayed when the Collect main screen doesn't display any form. -->
+  <string name="collect.blank_expl_no.forms">പ്രദർശിപ്പിക്കുന്നതിന് ഫോമുകളൊന്നുമില്ല. നിങ്ങൾ ബന്ധിപ്പിച്ചിരിക്കുന്ന സെർവറുകളിൽ ഫോമുകൾ ലഭ്യമാണോയെന്ന് പരിശോധിക്കാൻ പുതുക്കുക ബട്ടൺ ടാപ്പുചെയ്യുക.</string>
+  <!-- The screen title (in the app bar) for the Camouflage feature in Settings > Protection > Camouflage -->
+  <string name="settings.camo_app.bar">പ്രച്ഛന്നവേഷം</string>
+  <!-- The heading of the Camouflage screen where the user selects how to hide the app. -->
+  <string name="settings.camo_heading">മറ്റൊരു പേരും ലോഗോയും തിരഞ്ഞെടുക്കുക</string>
+  <string name="gallery_expl_empty">കാണിക്കാൻ ഫയലുകളൊന്നുമില്ല. ഫയലുകൾ ഇമ്പോർട്ടു ചെയ്യാൻ + ബട്ടൺ അമർത്തുക.</string>
+  <!-- The screen title (in the app bar) where the user can read some information about the Collect feature (on data collection) -->
+  <string name="collect.help_app.bar">കളക്ട് സഹായി</string>
+  <string name="collect.help_expl_intro">നിങ്ങളുടെ ഉപകരണത്തിൽ ഫോമുകളും സർവേകളും നേരിട്ട് പൂരിപ്പിച്ച് ഡാറ്റ ശേഖരിക്കുന്നതിനുള്ള ഒരു സംവിധാനമാണ് ശേഖരിക്കുക</string>
+  <!-- The toast message displayed when the user attempts to refresh the list of forms but isn't connected to the internet. -->
+  <string name="collect.blank_toast_not.connected">നിങ്ങൾ ഇന്റർനെറ്റിലേക്ക് കണക്റ്റുചെയ്‌തിട്ടില്ല. കണക്റ്റുചെയ്യുമ്പോൾ വീണ്ടും ശ്രമിക്കുക</string>
+  <!-- The switch to enable the sharing of crash reports in Settings > General -->
+  <string name="settings.gen_crash.reports_action">തകരാറിനെപ്പറ്റിയുള്ള അറിയിപ്പ് പങ്കിടുക</string>
+  <string name="settings.gen_crash.reports_action.expl">ക്രാഷ് (അപ്പ്ലിക്കേഷന്റെ പ്രവർത്തന പ്രശ്നങ്ങൾ) റിപ്പോർട്ടുകൾ റ്റെല്ലയെ മെച്ചപ്പെടുത്താൻ ഞങ്ങളെ സഹായിക്കുന്നു. അവ ഓട്ടോമാറ്റിക്കായി (യാന്ത്രികമായി) അയക്കുന്നു - അതിൽ ഉപകരണ മോഡൽ, ആൻഡ്രോയിഡ് പതിപ്പ് എന്നിവ പോലുള്ള ഡാറ്റ ഉൾപ്പെടുത്തുകയും ചെയ്യുന്നു.</string>
+  <!-- When filling forms, certain groups of questions can be filled as many times as the user wants. For example, the user can be asked to add information about as all the people they interviewed; in this case, they would create one group for each person interviewed. This is the dialog asking the user whether they want to create another group. -->
+  <string name="collect.form_dialog.action_add.group">ചേര്‍ക്കുക</string>
+  <string name="collect.form_dialog.title_add.additional.group">\"%s\" -കൂടി ചേർക്കുക?</string>
+  <string name="collect.form_dialog.action_add.first.group">\"%s\" ചേർക്കുക?</string>
+  <!-- This is the dialog that is displayed when creating additional "repeat group". A "repeat group" is a group of questions that the user can answer as many time as they want. After answering those questions, they will be asked if they want to "add another group", and so on. -->
+  <string name="collect.form_dialog.expl_add.additional.group">\"%s\" -ലെ എല്ലാ ചോദ്യങ്ങൾക്കും നിങ്ങൾക്ക് വീണ്ടും ഉത്തരം നൽകാൻ കഴിയും.</string>
+  <!-- This is the dialog that is displayed when creating a first "repeat group". A "repeat group" is a group of questions that the user can answer as many time as they want. After answering those questions, they will be asked if they want to "add another group", and so on. -->
+  <string name="collect.form_dialog.expl_add.first.group">\"%s\" എന്നതിലെ എല്ലാ ചോദ്യങ്ങൾക്കും നിങ്ങൾക്ക് ഉത്തരം നൽകാൻ കഴിയും.</string>
+  <string name="collect.form_dialog.action_dont.add.group">ചേർക്കരുത്</string>
+  <!-- The screen title (in the app bar) to select a file to attach to a form. -->
+  <string name="collect.form_select.attachment_app.bar">ഫയൽ തിരഞ്ഞെടുക്കുക</string>
+  <string name="recorder_toast_recording.saved">ഓഡിയോ റെക്കോർഡിംഗ് നിങ്ങളുടെ ഗാലറിയിൽ സേവ് ചെയ്തു</string>
+  <!-- The title (in the app bar) of the screen to record the position on the map. -->
+  <string name="collect.form_geopoint_app.bar">സ്ഥാനം റെക്കോർഡുചെയ്യുക</string>
+  <!-- The content description (only visible when long pressing the marker or using the screen reader) of the map marker. -->
+  <string name="collect.form_geopoint_marker_content.desc">സ്ഥാനം റെക്കോർഡുചെയ്‌തു</string>
+  <string name="collect.form_geopoint_meta_latitude">അക്ഷാംശം: %1$s</string>
+  <string name="collect.form_geopoint_meta_longitude">രേഖാംശം: %1$s</string>
+  <string name="collect.form_geopoint_meta_altitude">സമുദ്രനിരപ്പില്‍ നിന്നുള്ള ഉയരം: %1$s മീ</string>
+  <!-- The accuracy of the geolocation -->
+  <string name="collect.form_geopoint_meta_accuracy">കൃത്യത: %1$s മീ</string>
+  <!-- When a file is attached to a form, this field shows what the file name is on the attachment page. -->
+  <string name="collect.form_attachment_meta_file.name">ഫയല്‍ നാമം: %s</string>
+  <string name="collect.form_meta_file.size">ഫയല്‍ വലുപ്പം: %s</string>
+  <!-- A toast message when the user tries to open the attachment to a form. -->
+  <string name="collect.form_toast_fail.load.attachment">അറ്റാച്ചുമെന്റ് ലോഡുചെയ്യുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
+  <!-- A banner that informs the user on what to do to record the position on the map. -->
+  <string name="collect.form_geopoint_banner_touch.map.select.location">സ്ഥാനം റെക്കോർഡുചെയ്യാൻ 3 സെക്കൻഡ് എവിടെയെങ്കിലും  സ്‌പർശിക്കുക.</string>
+  <!-- The description of the button to access a file's verification information. -->
+  <string name="gallery_action.desc_file.metadata">സ്ഥിരീകരണ വിവരങ്ങൾ</string>
+  <!-- The screen title (in the app bar) for the screen where a file's verification information is displayed. -->
+  <string name="verification.info_app.bar">സ്ഥിരീകരണ വിവരങ്ങൾ</string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
+  <string name="verification.info_field_filename">ഫയല്‍ നാമം</string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
+  <string name="verification.info_field_file.path">ഫയല്‍ പാത</string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
+  <string name="verification.info_field_file.modified">പരിഷ്കരിച്ച ഫയല്‍ </string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
+  <string name="verification.info_field_hash">ഫയൽ ഹാഷ്</string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
+  <string name="verification.info_field_manufacturer">നിർമ്മാതാവ്</string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
+  <string name="verification.info_field_hardware">ഹാര്‍ഡ്‌വെയര്‍</string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
+  <string name="verification.info_field_device.id">ഉപകരണ ID</string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
+  <string name="verification.info_field_screen.size">സ്ക്രീന്‍ വലുപ്പം</string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
+  <string name="verification.info_field_language">ഭാഷ</string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
+  <string name="verification.info_field_locale">പ്രാദേശികത</string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
+  <string name="verification.info_field_connection.status">കണക്ഷൻ നില</string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
+  <string name="verification.info_field_network.type">നെറ്റ്‌വർക്ക് തരം</string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
+  <string name="verification.info_field_wifi.mac">Wi-Fi (വൈ-ഫൈ) MAC</string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
+  <string name="verification.info_field_ipv4">IPv4</string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
+  <string name="verification.info_field_ipv6">IPv6</string>
+  <!-- When the app is collecting the geographic location of the user -->
+  <string name="verification.collecting_list.item_location">ലൊക്കേഷൻ (സ്ഥാനം)</string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
+  <string name="verification.info_field_location">ലൊക്കേഷൻ (സ്ഥാനം)</string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
+  <string name="verification.info_field_location.provider">ലൊക്കേഷൻ (സ്ഥാന) ദാതാവ്</string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. It represents the speed at which the device is traveling, in m/s.  -->
+  <string name="verification.info_field_location.speed">ലൊക്കേഷൻ (സ്ഥാന) വേഗത</string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
+  <string name="verification.info_field_cell.towers">സെൽ വിവരം</string>
+  <!-- The name of a "fake" app to hide Tella as a weather app. -->
+  <string name="settings.camo_weather3">Weather Now (ഇപ്പോഴുത്തെ കാലാവസ്ഥ)</string>
+  <!-- The name of a "fake" app to hide Tella as a weather app. -->
+  <string name="settings.camo_weather2">Local Weather (പ്രാദേശിക കാലാവസ്ഥ)</string>
+  <!-- The name of a "fake" app to hide Tella as a calculator. -->
+  <string name="settings.camo_calculator2">Calculator (കാൽക്കുലേറ്റർ)</string>
+  <!-- The name of a "fake" app to hide Tella as a calculator. -->
+  <string name="settings.camo_calculator1">Easy Math (എളുപ്പമുള്ള കണക്ക്)</string>
+  <!-- The name of a "fake" app to hide Tella as a weather app. -->
+  <string name="settings.camo_weather1">Weather (കാലാവസ്ഥ)</string>
+  <!-- The subheading to show all the metadata on the file -->
+  <string name="verification.info_subheading_file.metadata">ഫയൽ</string>
+  <!-- The subheading to show all the metadata on the device -->
+  <string name="verification.info_subheading_device.metadata">ഉപകരണം</string>
+  <!-- The subheading to show all the metadata on the context (position, Wi-Fi networks, cellular towers) -->
+  <string name="verification.info_subheading_context.metadata">കോർട്ടെക്സ്റ് (മെറ്റാഡാറ്റ)</string>
+  <!-- This is displayed when a piece of verification information isn't available. -->
+  <string name="verification.info_field_metadata.not.available">ലഭ്യമല്ല</string>
+  <!-- The content description for the homepage background. It is never visible to the user. -->
+  <string name="home_content.desc_background">ലഭ്യമല്ല</string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
+  <string name="verification.info_field_latitude">അക്ഷാംശം:</string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
+  <string name="verification.info_field_longitude">രേഖാംശം:</string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
+  <string name="verification.info_field_altitude">ഉയരം:</string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
+  <string name="verification.info_field_accuracy">കൃത്യത:</string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
+  <string name="verification.info_field_location.time">സമയം:</string>
+  <!-- In a ranking question, this instructs the user to select an answer. -->
+  <string name="collect.form_ranking_action_select.answer">ഒരു ഉത്തരം തിരഞ്ഞെടുക്കുക</string>
+  <!-- The button to remove the answer that the user already selected. -->
+  <string name="collect.form_ranking_action_clear.selection">തിരഞ്ഞെടുപ്പ് മായ്‌ക്കുക</string>
+  <!-- The screen title (in the app bar) when the user opens the "signature" question to draw their signature. -->
+  <string name="collect.form_signature_app.bar">നിങ്ങളുടെ ഒപ്പ് വരയ്ക്കുക</string>
+  <!-- The button to open the screen to draw the signature. -->
+  <string name="collect.form_signature_action">ഇവിടെ ഒപ്പിടുക</string>
+  <!-- The description of the button to clear (delete) the signature, when the user wants to draw it again. -->
+  <string name="collect.form_signature_action_clear.signature">ഒപ്പ് മായ്‌ക്കുക</string>
+  <!-- A toast message when the user drew their signature and there was an error saving it. -->
+  <string name="collect.form_signature_toast_fail.saving">ഒപ്പ് സംരക്ഷിക്കുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
+  <!-- In some forms, the user is used to read and acknowledge instructions or legal information. This is the label of the checkbox they have to check before continuing. -->
+  <string name="collect.form_acknowledge_select.expl">ശരി. ദയവായി തുടരൂ.</string>
+  <!-- The field to show how many files are part of the form. -->
+  <plurals name="collect.end_meta_number.of.elements">
+    <item quantity="one">%d ഫയൽ</item>
+    <item quantity="other">%d ഫയലുകൾ</item>
+  </plurals>
+  <!-- The screen title (in the app bar) where the user manages their settings on documentation. -->
+  <string name="settings.docu_app.bar">ഉപയോക്തൃ മാനുവൽ</string>
+  <!-- The button in Settings to access the documentation settings -->
+  <string name="settings.gen_select_documentation">ഉപയോക്തൃ മാനുവൽ</string>
+  <!-- The screen title (in the app bar) for the Settings > Protection menu -->
+  <string name="settings.prot_app.bar">സംരക്ഷണം</string>
+  <!-- The button in Settings to access the protection settings -->
+  <string name="settings.gen_select_protection">സംരക്ഷണം</string>
+  <!-- A button to open a screen or webpage with more information -->
+  <string name="action_learn.more">കൂടുതൽ അറിയാൻ </string>
+  <!-- The button to add a connection to a server -->
+  <string name="settings.docu_add.server_dialog.title">സെര്‍വര്‍ ചേർക്കുക</string>
+  <!-- The name of the feature in Settings > Protection -->
+  <string name="settings.prot_quick.delete_action">QUICK DELETE (ദ്രുത ഇല്ലാതാക്കൽ) ബട്ടൺ സജീവമാക്കുക</string>
+  <!-- The explanation of the Quick Delete feature in Settings > Protection -->
+  <string name="settings.prot_quick.delete_action.expl">അടിയന്തിര സാഹചര്യങ്ങളിൽ Tella (റ്റെല്ല) ഡാറ്റ വേഗത്തിൽ ഇല്ലാതാക്കാൻ ഹോംസ്‌ക്രീനിൽ ഒരു സ്ലൈഡിംഗ് ബട്ടൺ കാണിക്കുന്നു.</string>
+  <!-- The checkbox to select what the 'Quick Delete' button deletes -->
+  <string name="settings.prot_select_delete.gallery">ഗ്യാലറി നീക്കം ചെയ്യുക</string>
+  <!-- In the Settings protection screen, the explanation on what "Delete gallery" will do. -->
+  <string name="settings.prot_select.expl_delete.gallery">ഇത് ടെല്ല ഗ്യാലറിയിൽ നിന്നുള്ള എല്ലാ ഫോട്ടോകളും വീഡിയോകളും ഓഡിയോ റെക്കോർഡിംഗുകളും നീക്കം ചെയ്യും.</string>
+  <!-- The checkbox to select what the 'Quick Delete' button deletes -->
+  <string name="settings.prot_select_delete.forms">ഡ്രാഫ്റ്റും സമർപ്പിച്ച ഫോമുകളും ഇല്ലാതാക്കുക</string>
+  <string name="settings.prot_select.expl_delete.forms">ഇത് ഡ്രാഫ്റ്റും സമർപ്പിച്ച ഫോമുകളും അവയിൽ അടങ്ങിയിരിക്കുന്ന എല്ലാ ഡാറ്റയും ഇല്ലാതാക്കും</string>
+  <!-- The checkbox to select what the 'Quick Delete' button deletes -->
+  <string name="settings.prot_select_delete.servers">സെർവർ ക്രമീകരണങ്ങൾ ഇല്ലാതാക്കുക</string>
+  <string name="settings.prot_select.expl_delete.servers">ഇത് സെർവറുകളിലേക്കും അവയുമായി ബന്ധപ്പെട്ട എല്ലാ ഫോമുകളിലേക്കും നിങ്ങളുടെ കണക്ഷനുകൾ ഇല്ലാതാക്കും.</string>
+  <!-- The checkbox to select what triggering the 'Quick Delete' button does -->
+  <string name="settings.prot_select_delete.app">Tella (റ്റെല്ല) ഇല്ലാതാക്കുക</string>
+  <string name="settings.prot_select.expl_delete.app">ഇത് ആപ്ലിക്കേഷനും അതിൽ അടങ്ങിയിരിക്കുന്ന ഡാറ്റയും ഇല്ലാതാക്കും. നിങ്ങളോട് ചോദിക്കും \"നിങ്ങൾക്ക് അപ്ലിക്കേഷൻ അൺഇൻസ്റ്റാൾ ചെയ്യണോ?\" നിങ്ങൾ സ്ഥിരീകരിച്ചില്ലെങ്കിൽ, Tella (റ്റെല്ല) ഇല്ലാതാക്കില്ല</string>
+  <!-- The title of the dialog to enable or disable Offline mode. -->
+  <string name="offline_dialog.title">ഓഫ്ലൈന് മോഡ്</string>
+  <!-- The explanation for Offline Mode. -->
+  <string name="offline_dialog.expl">ഓഫ്‌ലൈൻ മോഡിൽ, പിന്നീട് സമർപ്പിക്കുന്നതിനായി എല്ലാ ഡാറ്റയും സംരക്ഷിക്കുന്നു. സെല്ലുലാർ ഡാറ്റ സംരക്ഷിക്കുന്നതിനോ  അല്ലെങ്കിൽ നിങ്ങൾക്ക് ഒരു മോശം കണക്ഷൻ ഉണ്ടെങ്കിലോ ഇത് ഉപയോഗപ്രദമാണ് . ഫോമുകൾ സമർപ്പിക്കാൻ നിങ്ങൾ തയ്യാറാകുമ്പോൾ അപ്രാപ്തമാക്കുക/ഡിസേബിൾ ചെയ്യുക.</string>
+  <!-- The name of the action button to enable Offline mode from the data collection section. It is only visible when long pressing the button or when using the screen reader. -->
+  <string name="collect.form_action.desc_offline">ഓഫ്ലൈന് മോഡ്</string>
+  <!-- The menu item in the screen showing all sent forms to open a form in order to edit it and resend. -->
+  <string name="collect.sent_action_edit.to.resend">വീണ്ടും അയയ്‌ക്കാൻ എഡിറ്റുചെയ്യുക</string>
+  <!-- The toast message informing the user that the form was successfully submitted. -->
+  <string name="collect_toast_form.submitted">ഫോം സമർപ്പിച്ചു</string>
+  <!-- The heading of the screen confirming that the form was successfully submitted and displaying information about the form (size, attachments, etc) -->
+  <string name="collect.end_heading_confirmation.form.submitted">ഫോം സമർപ്പിച്ചു</string>
+  <!-- The field where the user is asked to enter their password. -->
+  <string name="settings.docu_add.server_field_password">രഹസ്യവാക്കു്</string>
+  <!-- A placeholder for the name of the app, when the app encounters an error retrieving the name of the app. -->
+  <string name="settings.camo_error_fail.retrieve.app.name">അപ്ലിക്കേഷൻ</string>
+  <string name="collect.end_toast_saved.for.later">ഓഫ്‌ലൈൻ മോഡ് സജീവമായതിനാൽ ഫോം പിന്നീടുള്ള സമർപ്പിക്കലിനായി സംരക്ഷിച്ചു</string>
+  <!-- The submissions screen shows all the different elements to be submitted. This refers to the responses to form questions (not file attachments) -->
+  <string name="collect.end_item_form.data">ഫോം പ്രതികരണങ്ങൾ</string>
+  <string name="collect_toast_fail.loading.form.instance">ഫോം ലോഡുചെയ്യുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
+  <string name="collect_toast_fail.connection.too.weak">ഫോം അയയ്‌ക്കാൻ നിങ്ങളുടെ ഇന്റർനെറ്റ് കണക്ഷൻ വളരെ ദുർബലമാണ്. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
+  <!-- The toast message informing the user that a file was successfully encrypted (after recording it or importing it into the app) -->
+  <string name="gallery_toast_file.encrypted">ഫയൽ എൻ‌ക്രിപ്റ്റ് ചെയ്തു</string>
+  <!-- The button in the dialog where the user decides whether to hide or delete the server connections. -->
+  <string name="settings.docu_dialog.action_hide">മറയ്ക്കുക</string>
+  <string name="settings.docu_toast_disconnect.servers.delete">എല്ലാ ഫോമുകളും സെർവറുകളും നീക്കം ചെയ്തു</string>
+  <string name="collect.help_expl_not.connected.to.server"><![CDATA[ഫോമുകൾ സ്വീകരിക്കുന്നതിനും ഡാറ്റ സമർപ്പിക്കുന്നതിനും, നിങ്ങൾ ആദ്യം ഒരു സെർവറിലേക്ക് കണക്റ്റുചെയ്യണം. സെർവർ വിവരങ്ങൾക്കായി നിങ്ങളുടെ ഓർഗനൈസേഷനോട് ചോദിച്ച് സെർവർ സജ്ജമാക്കുക.]]></string>
+  <string name="collect.help_expl_odk"><![CDATA[നിങ്ങളുടെ സ്വന്തം ഫോമുകൾ സൃഷ്ടിക്കാൻ നിങ്ങൾ ആഗ്രഹിക്കുന്നുവെങ്കിൽ, <a href=\"https://hzontal.org/contact/\">ഞങ്ങളെ ബന്ധപ്പെടുക</a> അല്ലെങ്കിൽ <a href=\"https://opendatakit.org/help/help-for-hire/\">ഓപ്പൺ ഡാറ്റ കിറ്റിനെ (ODK) അടിസ്ഥാനമാക്കി ഏതെങ്കിലും സേവനം ഉപയോഗിക്കുക</a>]]></string>
+  <string name="collect.help_expl_no.internet">നിങ്ങൾ ഇന്റർനെറ്റിലേക്ക് കണക്റ്റുചെയ്‌തിട്ടില്ലെങ്കിൽ, നിങ്ങൾക്ക് ഇപ്പോഴും ഫോമുകൾ പൂരിപ്പിക്കാൻ കഴിയും. നിങ്ങൾ ഓൺലൈനിൽ എത്തുമ്പോൾ തന്നെ ഡാറ്റ സമർപ്പിക്കും.</string>
+  <string name="collect_toast_fail.data.too.large">അറ്റാച്ചുമെന്റുകൾ വളരെ വലുതായതിനാൽ നിങ്ങളുടെ ഫോം സമർപ്പിക്കാൻ കഴിയില്ല. ചെറിയ ഫയലുകൾ അറ്റാച്ചുചെയ്യുക</string>
+  <!-- The heading of the final screen when filling and submitting a form, when the form is being submitted. -->
+  <string name="collect.end_heading_submitting">സമർപ്പിക്കുന്നു</string>
+  <!-- If the user wants to exit in the middle of submitting a form, with files still remaining to be uploaded, they are presented with a dialog to inform them that the submission will be stopped but that they can still submit files later. This is the text of the dialog. -->
+  <string name="collect.end_exit_dialog.expl">നിങ്ങൾ ഇപ്പോൾ പുറത്തുകടക്കുകയാണെങ്കിൽ, സമർപ്പിക്കൽ നിർത്തലാക്കുമെങ്കിലും ശേഷിക്കുന്ന ഫയലുകൾ പിന്നീട് സമർപ്പിക്കാൻ നിങ്ങൾക്ക് കഴിയും.</string>
+  <!-- After filling a form, the user has the option to either send everything (data in the form and file attachments) at once, or to send a few things immediately and the rest later. Items that are not checked are sent later. -->
+  <string name="collect.end_subheading.expl_unchecked.items">അൺചെക്ക് ചെയ്ത ഇനങ്ങൾ പിന്നീട് അയയ്ക്കുന്നതിനായി സംരക്ഷിക്കും.</string>
+  <!-- After filling a form, the user has the option to submit it immediately or save it to submit it later. This is the toast message displayed after the user taps the button to save to submit later. -->
+  <string name="collect_toast_form.saved.for.later.submission">പിന്നീട് സമർപ്പിക്കുന്നതിനായി ഫോം സംരക്ഷിച്ചു</string>
+  <!-- If a form is pinned to the top in the list of blank forms, the user can decide to unpin from the top. -->
+  <string name="collect.blank_action_unpin">മുകളിൽ നിന്ന് അൺപിൻ ചെയ്യുക</string>
+  <!-- In the list of blank forms, the user has the option to pin forms to the top to make them quickly accessible. -->
+  <string name="collect.blank_action_pin">മുകളിലേക്ക് പിന്‍ ചെയ്യുക</string>
+  <!-- The subheading to show all the forms that are available on the server and have *not* been downloaded. -->
+  <string name="collect.blank_subheading_forms.on.servers">ഫോമുകൾ സെർവറിൽ ലഭ്യമാണ് (ഡൗൺലോഡു ചെയ്‌തിട്ടില്ല)</string>
+  <!-- The subheading to show all the forms that have been downloaded from the server and are available on the device. -->
+  <string name="collect.blank_subheading_downloaded.forms">ഡൗൺലോഡ് ചെയ്ത ഫോമുകൾ</string>
+  <!-- The collection of verification information includes GPS data. When verification mode is ON but GPS is OFF, the user is prompted to enable GPS. This is the explanation in the prompt dialog. -->
+  <string name="verification.prompt_dialog.expl">വെരിഫിക്കേഷൻ (സ്ഥിരീകരണ) മോഡ് ഓണാണെങ്കിലും GPS (ജിപിഎസ്) ഓഫാണ്. നിങ്ങളുടെ തെളിവുകളുടെ സ്ഥാനം രേഖപ്പെടുത്തുന്നതിന് GPS (ജിപിഎസ്) ഓണാക്കുക.</string>
+  <!-- The collection of verification information includes GPS data. When verification mode is ON but GPS is OFF, the user is prompted to enable GPS. but has the option to ignore and continue without enabling GPS. -->
+  <string name="verification.prompt_action_ignore">അവഗണിക്കുക</string>
+  <!-- The collection of verification information includes GPS data. When verification mode is ON but GPS is OFF, the user is prompted to enable GPS. -->
+  <string name="verification.prompt_action_enable.GPS">GPS (ജിപിഎസ്) ഓണാക്കുക</string>
+  <!-- This is the dialog that is displayed to inform the user that Tella is in the process of updating the list of forms available. -->
+  <string name="collect.blank_dialog.expl_updating.form.definitions">ഫോമുകളുടെ പട്ടിക നവീകരിക്കുന്നു (അപ്‌ഡേറ്റു ചെയ്യുന്നു)…</string>
+  <!-- This is the toast message to notify the user that the update of forms was canceled, after their tapped the "Cancel" button. -->
+  <string name="collect.blank_toast_refresh.canceled">അപ്‌ഡേറ്റ് (നവീകരണം) റദ്ദാക്കി</string>
+  <!-- This is the toast message to notify the user that their forms have been successfully been updated. -->
+  <string name="collect.blank_toast_form.definition.updated">അപ്‌ഡേറ്റ് (നവീകരണം) പൂർത്തിയായി</string>
+  <!-- When uploading files that have verification information attached, the user is asked to choose whether to upload just the files, or include the verification information.
+This is the title of the dialog. -->
+  <string name="verification.share_dialog.title">വെരിഫിക്കേഷൻ (സ്ഥിരീകരണ) വിവരങ്ങൾ ഉൾപ്പെടുത്താൻ നിങ്ങൾ ആഗ്രഹിക്കുന്നുണ്ടോ?</string>
+  <!-- When uploading files that have verification information attached, the user is asked to choose whether to upload just the files, or include the verification information.
+This is the explanation of the dialog. -->
+  <string name="verification.share_dialog.expl">തിരഞ്ഞെടുത്ത ഒന്നോ അതിലധികമോ ഫയലുകളിൽ ഉപകരണം, നെറ്റ്‌വർക്ക്, ജിയോലൊക്കേഷൻ വിവരങ്ങൾ എന്നിവയുൾപ്പെടെയുള്ള വെരിഫിക്കേഷൻ (സ്ഥിരീകരണ) ഡാറ്റ അടങ്ങിയിരിക്കുന്നു. ഇത് നിങ്ങളെ അപകടത്തിലാക്കുന്നില്ലെങ്കിൽ മാത്രം പങ്കിടുക (ഷെയർ ചെയ്യുക).</string>
+  <!-- When uploading files that have verification information attached, the user is asked to choose whether to upload just the files, or include the verification information.
+This is one of the two options available -->
+  <string name="verification.share_select_media.and.verification">ഫയലുകൾ + വെരിഫിക്കേഷൻ (സ്ഥിരീകരണ) വിവരങ്ങൾ പങ്കിടുക (ഷെയർ ചെയ്യുക)</string>
+  <!-- When uploading files that have verification information attached, the user is asked to choose whether to upload just the files, or include the verification information.
+This is one of the two options available. -->
+  <string name="verification.share_select_only.media">ഫയലുകൾ മാത്രം പങ്കിടുക (ഷെയർ ചെയ്യുക)</string>
+  <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
+  <string name="verification.info_wifi">Wi-Fi (വൈ-ഫൈ) വിവരങ്ങൾ</string>
+  <!-- The category of verification information collected. -->
+  <string name="verification.collecting_list.item_device">ഉപകരണത്തിന്റെ തിരിച്ചറിയൽ വിവരങ്ങൾ</string>
+  <!-- The category of verification information collected. -->
+  <string name="verification.collecting_list.item_network">നെറ്റ്‌വർക്ക് വിവരങ്ങൾ</string>
+  <!-- This is the explanation of the dialog while Tella collects verification information to make the file verifiable. -->
+  <string name="verification.collecting_dialog.expl">നിങ്ങളുടെ ഫയൽ പരിശോധിച്ചുറപ്പിക്കാൻ Tella (റ്റെല്ല) വിവരങ്ങൾ റെക്കോർഡുചെയ്യുന്നു. ഇതിന് കുറച്ച് മിനിട്ടുകൾ എടുക്കും. മികച്ച ഫലങ്ങൾക്കായി നിങ്ങളുടെ ഉപകരണവും ആകാശവും തമ്മിലുള്ള പാതയ്ക്ക് തടസമില്ലെന്നു ഉറപ്പു വരുത്തുക.</string>
+  <!-- The title of the screen for explanations on the meaning of each piece of verification information used to make files verifiable. -->
+  <string name="verification.help.info_app.bar">വെരിഫിക്കേഷൻ (സ്ഥിരീകരണ) സഹായം</string>
+  <!-- The description of the button to open the "Verification help" screen. It is only visible when long-pressing the button or read by the screen reader. -->
+  <string name="gallery_action.desc_metadata.help">വെരിഫിക്കേഷൻ (സ്ഥിരീകരണ) സഹായം</string>
+  <!-- This is used on the screen which explains the meaning of each piece of verification information collected by Tella to make photos, videos, and audio recordings verifiable. -->
+  <string name="verification.info_file.path.expl">Tella (റ്റെല്ല) ഡയറക്ടറിയിൽ ഫയൽ എവിടെയായിരുന്നു.</string>
+  <!-- This is used on the screen which explains the meaning of each piece of verification information collected by Tella to make photos, videos, and audio recordings verifiable. -->
+  <string name="verification.info_hash.expl">ഫയൽ തിരിച്ചറിയുന്നതിനുള്ള ഒരു യൂണിക്‌ (അദ്വിതീയ) നമ്പർ.</string>
+  <!-- This is used on the screen which explains the meaning of each piece of verification information collected by Tella to make photos, videos, and audio recordings verifiable. -->
+  <string name="verification.info_date.time.modified.expl">ഉപകരണത്തിൽ ഫയൽ അവസാനമായി പരിഷ്‌ക്കരിച്ച തീയതിയും സമയവും.</string>
+  <!-- This is used on the screen which explains the meaning of each piece of verification information collected by Tella to make photos, videos, and audio recordings verifiable. -->
+  <string name="verification.info_manufacturer.expl">ഉപകരണ നിർമ്മാതാവിന്റെ പേര്.</string>
+  <!-- This is used on the screen which explains the meaning of each piece of verification information collected by Tella to make photos, videos, and audio recordings verifiable. -->
+  <string name="verification.info_device.model.expl">ഉപകരണത്തിന്റെ കൃത്യമായ മോഡൽ.</string>
+  <!-- This is used on the screen which explains the meaning of each piece of verification information collected by Tella to make photos, videos, and audio recordings verifiable. -->
+  <string name="verification.info_device.id.expl">ആന്‍ഡ്രോയിഡ് ഉപകരണം തിരിച്ചു അറിയുന്നതിനുള്ള ഒരു അദ്വിതീയ നമ്പർ.</string>
+  <!-- This is used on the screen which explains the meaning of each piece of verification information collected by Tella to make photos, videos, and audio recordings verifiable. -->
+  <string name="verification.info_screen.size.expl">ഉപകരണത്തിന്റെ കൃത്യമായ സ്‌ക്രീൻ വലുപ്പം.</string>
+  <!-- This is used on the screen which explains the meaning of each piece of verification information collected by Tella to make photos, videos, and audio recordings verifiable. -->
+  <string name="verification.info_language.expl">ഉപകരണത്തിന്റെ ഓപ്പറേറ്റിംഗ് സിസ്റ്റം സജ്ജമാക്കിയിരിക്കുന്ന ഭാഷ.</string>
+  <!-- This is used on the screen which explains the meaning of each piece of verification information collected by Tella to make photos, videos, and audio recordings verifiable. -->
+  <string name="verification.info_locale.expl">ഉപകരണം സജ്ജമാക്കിയിരിക്കുന്ന ഭൂമിശാസ്ത്രപരമായ പ്രദേശം.</string>
+  <!-- This is used on the screen which explains the meaning of each piece of verification information collected by Tella to make photos, videos, and audio recordings verifiable. -->
+  <string name="verification.info_connection.status.expl">ഉപകരണം ഇന്റർനെറ്റിലേക്ക് കണക്റ്റു ചെയ്‌തിട്ടുണ്ടോ അല്ലെങ്കിൽ വിച്ഛേദിച്ചിട്ടുണ്ടോ.</string>
+  <!-- This is used on the screen which explains the meaning of each piece of verification information collected by Tella to make photos, videos, and audio recordings verifiable. -->
+  <string name="verification.info_network.type.expl">ഉപകരണം ഇന്റർനെറ്റിലേക്ക് കണക്റ്റുചെയ്‌തിട്ടുണ്ടെങ്കിൽ, അത് ഒരു Wi-Fi (വൈ-ഫൈ) നെറ്റ്‌വർക്കിലാണോ അതോ സെല്ലുലാർ നെറ്റ്‌വർക്കിലാണോ എന്ന് വ്യക്തമാക്കുന്നു.</string>
+  <!-- This is used on the screen which explains the meaning of each piece of verification information collected by Tella to make photos, videos, and audio recordings verifiable. -->
+  <string name="verification.info_wifi.mac.expl">ഉപകരണത്തിന്റെ Wi-Fi (വൈ-ഫൈ) കണക്റ്ററിലേക്കുള്ള ഒരു അദ്വിതീയ ഐഡന്റിഫയർ.</string>
+  <!-- This is used on the screen which explains the meaning of each piece of verification information collected by Tella to make photos, videos, and audio recordings verifiable. -->
+  <string name="verification.info_ipv4.expl">ഉപകരണത്തിന്റെ ഇന്റർനെറ്റ് കണക്ഷൻ തിരിച്ചറിയുന്ന ഒരു അദ്വിതീയ വിലാസം.</string>
+  <!-- This is used on the screen which explains the meaning of each piece of verification information collected by Tella to make photos, videos, and audio recordings verifiable. -->
+  <string name="verification.info_ipv6.expl">ഉപകരണത്തിന്റെ ഇന്റർനെറ്റ് കണക്ഷനിലേക്കുള്ള  ഒരു ഏറ്റവും പുതിയ ഐഡന്റിഫയർ.</string>
+  <!-- This is used on the screen which explains the meaning of each piece of verification information collected by Tella to make photos, videos, and audio recordings verifiable. -->
+  <string name="verification.info_location.expl">ഉപകരണത്തിന്റെ കൃത്യമായ സ്ഥാനം:  ലാറ്റിറ്റിയൂഡ് (അക്ഷാംശ), ലൊൺജിറ്റ്യൂട് (രേഖാംശ) കോർഡിനേറ്റുകൾ, മീറ്ററിലെ ഉയരം, മീറ്ററിലെ അളവിന്റെ കൃത്യത, അളക്കുന്ന സമയം എന്നിവ ഉൾപ്പെടുന്നു.</string>
+  <!-- This is used on the screen which explains the meaning of each piece of verification information collected by Tella to make photos, videos, and audio recordings verifiable. -->
+  <string name="verification.info_location.provider.expl">ലൊക്കേഷൻ (സ്ഥാനം) എങ്ങനെ നിർണ്ണയിക്കപ്പെടുന്നു. \"ഫ്യൂസ്ഡ്\" എന്നാൽ ഇത് GPS-ഉം (ജിപി‌എസും), നെറ്റ്‌വർക്ക് കണക്ഷനുകളും ഉൾപ്പെടുന്ന രീതികളുടെ ഒരു മിശ്രിതമാണ് ഉപയോഗിക്കുന്നതെന്ന് അർത്ഥം.</string>
+  <!-- This is used on the screen which explains the meaning of each piece of verification information collected by Tella to make photos, videos, and audio recordings verifiable. -->
+  <string name="verification.info_location.speed.expl">ഉപകരണം ഒരു സെക്കൻഡിൽ എത്ര മീറ്റർ സഞ്ചരിക്കുന്ന എന്ന വേഗത.</string>
+  <!-- This is used on the screen which explains the meaning of each piece of verification information collected by Tella to make photos, videos, and audio recordings verifiable. -->
+  <string name="verification.info_cell.towers.expl">ഉപകരണം കണക്റ്റുചെയ്‌തിരിക്കുന്ന എല്ലാ സെൽ ടവറുകളുടെയും തിരിച്ചറിയൽ നമ്പറുകൾ.</string>
+  <!-- This is used on the screen which explains the meaning of each piece of verification information collected by Tella to make photos, videos, and audio recordings verifiable. -->
+  <string name="verification.info_wifi.expl">ഉപകരണത്തിന് സമീപമുള്ള എല്ലാ Wi-Fi (വൈ-ഫൈ) നെറ്റ്‌വർക്കുകളുടെയും പേര്.</string>
+  <!-- When some forms are updated on the server by project managers, a banner is displayed in Tella to let the user know and explain how to update their forms. -->
+  <string name="collect.blank_banner_forms.updated">ചില ഫോമുകൾ അപ്ഡേറ്റുചെയ്തിട്ടുണ്ട്. ഏറ്റവും പുതിയ പതിപ്പ് ലഭിക്കുന്നതിന് ഫോമുകൾക്ക് അടുത്തുള്ള അപ്‌ഡേറ്റ് ബട്ടൺ സ്പര്‍ശിക്കുക.</string>
+  <!-- This is the button to select which server the files should be auto-uploaded to. -->
+  <string name="settings.docu_auto.upload.server.selection_select">സെര്‍വര്‍</string>
+  <!-- If the user is connected to more than one Direct Upload server, they have to select which server to upload the files to. This is the title of the dialog asking them to select the server. -->
+  <string name="upload_dialog.title_select.server">സെര്‍വര്‍ തിരഞ്ഞെടുക്കൽ</string>
+  <!-- If the user is connected to more than one Direct Upload server, they have to select which server to upload the files to. This is the explanation in the dialog asking them to select the server. -->
+  <string name="settings.docu_auto.upload.server.selection_dialog.expl">ഏത് സെർവറിലേക്ക് ഫയലുകൾ അപ്‌ലോഡ് ചെയ്യാനാണ് നിങ്ങൾ ആഗ്രഹിക്കുന്നു?</string>
+  <!-- The title of the dialog where the user selects the type of server they want to connect to. -->
+  <string name="settings.docu_add.server.selection_dialog.title">ഏത് തരം സെർവർ?</string>
+  <!-- When connecting to a server, users have to select which of the two kinds of servers they want to connect to. "Open Data Kit" is one of the two server types. -->
+  <string name="settings.docu_add.server_dialog.select_odk">ഓപ്പൺ ഡാറ്റ കിറ്റ് (ODK)</string>
+  <!-- This is the explanation in the dialog where the users selects what server to connect to. -->
+  <string name="settings.docu_add.server_dialog.expl">നിങ്ങൾ കണക്റ്റുചെയ്യാൻ ആഗ്രഹിക്കുന്ന സെർവർ തരം തിരഞ്ഞെടുക്കുക. നിങ്ങൾക്ക് ഉറപ്പില്ലെങ്കിൽ, നിങ്ങളുടെ ഓർഗനൈസേഷനോട് ചോദിക്കുക.</string>
+  <!-- When connecting to a server, users have to select which of the two kinds of servers they want to connect to. "Direct Upload" is one of the two server types. -->
+  <string name="settings.docu_add.server_dialog.select_tus">നേരിട്ടുള്ള അപ്‌ലോഡ്</string>
+  <!-- The text next to the switch to enable the connection to servers. -->
+  <string name="settings.docu_connect.to.servers_enable_action">സെർവറുകളിലേക്ക് കണക്റ്റുചെയ്യുക</string>
+  <!-- The explanation of the settings to connect to servers. -->
+  <string name="settings.docu_connect.to.servers_enable_action.expl">ഡാറ്റ അയയ്‌ക്കുന്നതിന് സെർവറുകളിലേക്കുള്ള നിങ്ങളുടെ കണക്ഷൻ മാനേജ് ചെയ്യുക.</string>
+  <!-- The title of the dialog to disconnect servers. -->
+  <string name="settings.docu_disable.servers_dialog.title">സെർവറുകൾ വിച്ഛേദിക്കുക</string>
+  <!-- The explanation in the dialog when disabling the connection to servers. -->
+  <string name="settings.docu_connect.to.servers_disable_dialog.expl">നിങ്ങളുടെ സെർവർ കണക്ഷനുകൾ മൊത്തത്തിൽ ഇല്ലാതാക്കാൻ നിങ്ങൾ ആഗ്രഹിക്കുന്നുണ്ടോ, അല്ലെങ്കിൽ അവ മറയ്ക്കുകയാണോ? മറയ്‌ക്കുന്നത് സെർവർ വിവരങ്ങൾ മെമ്മറിയിൽ സൂക്ഷിക്കുന്നതിനാൽ നിങ്ങൾക്ക് എളുപ്പത്തിൽ വീണ്ടും കണക്റ്റുചെയ്യാനും ഡാറ്റ സെർവറുകളിൽ സമർപ്പിക്കാനും കഴിയും.</string>
+  <!-- The explanation in the dialog that is displayed when deleting an Upload server used for auto-uploading files. -->
+  <string name="settings.docu_delete.auto.server_dialog.expl">നിങ്ങൾ ഈ സെർവർ ഇല്ലാതാക്കുകയാണെങ്കിൽ, നിങ്ങളുടെ ഫയലുകൾ മേലിൽ സ്വപ്രേരിത അപ്‌ലോഡ് ചെയ്യില്ല.</string>
+  <!-- This is the label of the button in the screen to play an audio file, to move forward in the file by 15 seconds. -->
+  <string name="play.audio_action.expl_plus15s">+15 സെ</string>
+  <!-- This is the label of the button in the screen to play an audio file, to move backward in the file by 15 seconds. -->
+  <string name="play.audio_action.expl_minus15s">-15 സെ</string>
+  <!-- This is used on the screen to make an audio recording, to inform the user on how much longer they are able to record based on the amount of storage available on their device. -->
+  <string name="recorder_meta_space.available.days">%1$d ദിവസം  %2$d മണിക്കൂർ (%3$s) അവശേഷിക്കുന്നു</string>
+  <!-- This is used on the screen to make an audio recording, to inform the user on how much longer they are able to record based on the amount of storage available on their device. -->
+  <string name="recorder_meta_space.available.hours">%1$d മണിക്കൂർ  %2$d മിനിറ്റ് (%3$s) അവശേഷിക്കുന്നു</string>
+  <!-- Title of the dialog to set the video resolution. -->
+  <string name="camera_video.resolution_dialog.title">വീഡിയോ റെസലൂഷന്‍/മിഴിവ് തിരഞ്ഞെടുക്കുക</string>
+  <!-- Explanation in the dialog to set the video resolution. -->
+  <string name="camera_video.resolution_dialog.expl">ഉയർന്ന റെസല്യൂഷൻ/മിഴിവ് അർത്ഥമാക്കുന്നത് വീഡിയോ ഉയർന്ന നിലവാരമുള്ളതാണെങ്കിലും ഫയൽ വലുപ്പവും വലുതായിരിക്കും.</string>
+  <!-- One of the options that the user can select when setting the resolution of the videos they record in the Tella camera. This means "the highest possible resolution based on my device's capacity" -->
+  <string name="camera_video.resolution_select_highest">സാധ്യമായ ഏറ്റവും ഉയർന്നത്</string>
+  <!-- One of the options that the user can select when setting the resolution of the videos they record in the Tella camera. -->
+  <string name="camera_video.resolution_select_1080p">ഉയർന്നത് (1080p)</string>
+  <!-- One of the options that the user can select when setting the resolution of the videos they record in the Tella camera. -->
+  <string name="camera_video.resolution_select_720p">ഇടത്തരം (720p)</string>
+  <!-- One of the options that the user can select when setting the resolution of the videos they record in the Tella camera. -->
+  <string name="camera_video.resolution_select_480p">കുറഞ്ഞത് (480 പി)</string>
+  <!-- The name of the feature in the Settings > Documentation settings -->
+  <string name="settings.docu_auto.upload_action">സ്വപ്രേരിത അപ്‌ലോഡ്</string>
+  <!-- The explanation of the feature in the Settings menu. -->
+  <string name="settings.docu_auto.upload_action.expl">നിങ്ങളുടെ ഫോട്ടോകൾ, വീഡിയോകൾ അല്ലെങ്കിൽ ഓഡിയോ റെക്കോർഡിംഗുകൾ റെക്കോർഡുചെയ്യുകയോ Tella (റ്റെല്ല) - ലേക്ക് ഇറക്കുമതി ചെയ്യുകയോ ചെയ്താലുടൻ Tella (റ്റെല്ല)  സെർവറിലേക്ക് അപ്‌ലോഡ് ചെയ്യും.</string>
+  <!-- The label next to the switch to activate the auto-delete feature. -->
+  <string name="settings.docu_auto.delete_action">സ്വപ്രേരിതമായി ഇല്ലാതാക്കൽ</string>
+  <!-- The explanation of the auto-delete feature in the Settings menu. -->
+  <string name="settings.docu_auto.delete_action.expl">നിങ്ങളുടെ ഉപകരണത്തിൽ നിന്ന് ഫയലുകൾ സെർവറിലേക്ക് അപ്‌ലോഡ് ചെയ്തയുടനെ Tella (റ്റെല്ല) സ്വയമേവ ഇല്ലാതാക്കും.</string>
+  <!-- The explanation on the dialog to select a server to auto-upload files. -->
+  <string name="settings.docu_choose.auto.upload.server_dialog.expl">ഏത് സെർവറിലേക്കാണ് ഫയലുകൾ സ്വപ്രേരിത അപ്‌ലോഡ് ചെയ്യാൻ നിങ്ങൾ ആഗ്രഹിക്കുന്നു?</string>
+  <!-- The explanation in the dialog that is displayed when deleting an Upload server. -->
+  <string name="settings.docu_delete.upload.server_dialog.expl">നിങ്ങൾക്ക് ഇനി ഈ സെർവറിലേക്ക് ഫയലുകൾ അപ്‌ലോഡ് ചെയ്യാൻ കഴിയില്ല.</string>
+  <!-- The label for the homescreen button to access the Upload feature. -->
+  <string name="home_upload.button">അപ്‌ലോഡ്</string>
+  <!-- This is displayed to let the user that the files are being uploaded. -->
+  <string name="upload.main_meta_status.uploading">അപ്‍ലോഡ് ചെയ്യുന്നു</string>
+  <string name="upload_meta_date.started">ആരംഭിച്ചത്:</string>
+  <!-- The button to see more information about each upload. -->
+  <string name="upload.main_action_more.details">കൂടുതൽ വിശദാംശങ്ങൾ</string>
+  <plurals name="upload.main_meta_number.of.files">
+    <item quantity="one">%d ഫയൽ </item>
+    <item quantity="other">%d ഫയലുകൾ</item>
+  </plurals>
+  <!-- This is used to show how many files were uploaded -->
+  <plurals name="upload.main_meta_number.of.files.uploaded">
+    <item quantity="one">%d ഫയൽ  അപ്‌ലോഡുചെയ്‌തു</item>
+    <item quantity="other">%d ഫയലുകൾ അപ്‌ലോഡുചെയ്‌തു</item>
+  </plurals>
+  <!-- This is used to show the number of minutes left to complete the upload of files to the server. -->
+  <plurals name="upload.main_meta_minutes.left">
+    <item quantity="one">%d മിനിറ്റ് ശേഷിക്കുന്നു</item>
+    <item quantity="other">%d മിനിറ്റുകൾ  ശേഷിക്കുന്നു</item>
+  </plurals>
+  <!-- The explanation in the dialog when tapping the "clear" button in the Upload main screen. -->
+  <string name="upload.main_dialog.expl_clear.history">ഇത് പഴയ അപ്‌ലോഡുകളുടെ ലിസ്റ്റ് ഇല്ലാതാക്കും.</string>
+  <!-- A dialog displayed when the user attempts to stop the entire upload. -->
+  <string name="upload.main_stop.upload_dialog.expl">അപ്‌ലോഡ് നിർത്തണമെന്ന് നിങ്ങൾക്ക് ഉറപ്പാണോ?</string>
+  <!-- A dialog displayed when the user attempts to stop the upload of one particular file. -->
+  <string name="upload.info_stop.upload_dialog.expl">അപ്‌ലോഡ് നിർത്തണമെന്ന് നിങ്ങൾക്ക് ഉറപ്പാണോ?</string>
+  <!-- The title of the screen (in the app bar) when looking at the details of an 'upload' of files to the server. -->
+  <string name="upload.info_app.bar">അപ്‌ലോഡ് വിവരങ്ങൾ </string>
+  <!-- The field where Tella shows how many files are included in an upload. -->
+  <string name="upload.info_meta_number.of.files">ഫയലുകളുടെ എണ്ണം:</string>
+  <!-- The action button to "clear" the upload history. -->
+  <string name="upload.main_dialog.action_clear">മായ്ക്കുക</string>
+  <string name="upload.main_nothing.to.show">കാണിക്കുവാനായി പഴയ അപ്‌ലോഡുകളൊന്നുമില്ല.</string>
+  <string name="upload.info_meta_date.completed">പൂര്‍ത്തിയാക്കി</string>
+  <!-- The field to show what file is being uploaded. -->
+  <string name="upload.info_meta_file.type">ഫയൽ തരം:</string>
+  <string name="upload.main_meta_status.attempting">കണക്റ്റുചെയ്യാൻ ശ്രമിക്കുന്നു</string>
+  <!-- The description of how much time is left for the upload to complete. -->
+  <string name="upload.main_meta_less.minute.left">ഒരു മിനിറ്റിൽ താഴെ മാത്രം ശേഷിക്കുന്നു</string>
+  <string name="upload.main_meta_status.stopped">നിര്‍ത്തി</string>
+  <!-- The description of how much time is left for the upload to complete. -->
+  <string name="upload.main_meta_more.hour.left">ഒരു മണിക്കൂറിൽ കൂടുതൽ ശേഷിക്കുന്നു</string>
+  <!-- The error message notifying the user that they must select a server where their file will be auto-uploaded. -->
+  <string name="settings.docu_error_must.select.auto.upload.server">നിങ്ങൾ ഒരു സെർവർ തിരഞ്ഞെടുത്തിരിക്കണം.</string>
+  <!-- The explanation in the dialog when the user attempts to "clear" the upload information. -->
+  <string name="upload.info_dialog.expl_delete.upload">അപ്‌ലോഡ് ചെയ്‌ത വിവരങ്ങൾ ഇല്ലാതാക്കാൻ നിങ്ങൾ ആഗ്രഹിക്കുന്നുണ്ടോ?</string>
+  <!-- The title in the dialog when tapping the "clear" button in the Upload main screen. -->
+  <string name="upload.main_dialog.title_clear.history">അപ്‌ലോഡ് ചരിത്രം മായ്‌ക്കണോ?</string>
+  <string name="settings.docu_auto.upload.metadata_action">പരിശോധിച്ചുറപ്പിക്കല്‍ വിവരങ്ങള്‍ ഉൾപ്പെടുത്തുക</string>
+  <string name="settings.docu_auto.upload.metadata_action.expl">നിങ്ങളുടെ ഫയലുകളിൽ സ്ഥിരീകരണ വിവരങ്ങൾ ഉൾപ്പെടുന്നുവെങ്കിൽ, അത് നിങ്ങളുടെ ഫയലുകൾക്കൊപ്പം സ്വയമേവ അപ്‌ലോഡ് ചെയ്യപ്പെടും.</string>
+  <string name="camera_tab.title_video">വീഡിയോ</string>
+  <string name="camera_tab.title_photo">ഫോട്ടോ</string>
+  <string name="action_upload">അപ്‌ലോഡ്</string>
+  <string name="pl_cancel">റദ്ദാക്കുക </string>
+  <string name="pl_confirm">സ്ഥിരീകരിക്കുക</string>
+  <string name="pl_confirm_pattern">സ്ഥിരീകരിക്കുന്നതിനായി പാറ്റേൺ/മാതൃക ഒന്നുകൂടി വരക്കുക</string>
+  <string name="pl_continue">തുടരുക</string>
+  <string name="pl_draw_pattern">ഒരു അൺലോക്ക് പാറ്റേൺ/മാതൃക വരയ്‌ക്കുക</string>
+  <string name="pl_draw_pattern_to_unlock">അൺലോക്ക് ചെയ്യുവാനായി പാറ്റേൺ/മാതൃക  വരക്കുക</string>
+  <string name="pl_pattern_confirmed">Tella (റ്റെല്ല) അൺലോക്കുചെയ്യാനുള്ള നിങ്ങളുടെ പാറ്റേൺ/മാതൃക ഇതായിരിക്കും</string>
+  <string name="pl_pattern_recorded">പാറ്റേൺ/മാതൃക റെക്കോർഡ്‌ചെയ്തു</string>
+  <string name="pl_pattern_too_short">കുറഞ്ഞത് %d ഡോട്ടുകളെങ്കിലും കണക്ട് ചെയ്യുക, ദയവായി വീണ്ടും വരയ്ക്കുക</string>
+  <string name="pl_recording_pattern">പൂർത്തിയാകുമ്പോൾ വിരൽ മാറ്റുക</string>
+  <string name="pl_redraw">വീണ്ടും വരയ്ക്കുക</string>
+  <string name="pl_wrong_pattern">തെറ്റായ പാറ്റേൺ/മാതൃക, ദയവായി വീണ്ടും ശ്രമിക്കുക.</string>
+  <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
+  <string name="pl_access_pattern_start">പാറ്റേൺ/മാതൃക തുടങ്ങി</string>
+  <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
+  <string name="pl_access_pattern_cleared">പാറ്റേൺ/മാതൃക മായ്ച്ചു</string>
+  <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
+  <string name="pl_access_pattern_cell_added">കളം ചേർത്തു</string>
+  <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern. The screen reader will add the cell number that the user added. For example, if the user selects the bottom left cell, the screen reader will read "cell 7 added". -->
+  <string name="pl_access_pattern_cell_added_verbose"><xliff:g id="cell_index" example="3">%1$d</xliff:g> - ആം കളം ചേർത്തു</string>
+  <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
+  <string name="pl_access_pattern_detected">പാറ്റേണ്‍/മാതൃക പൂർത്തിയായി </string>
+  <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
+  <string name="pl_access_pattern_area">പാറ്റേണ്‍ ഏരിയ (മാതൃക പ്രദേശം)</string>
+  <!-- The button to get access to more options. -->
+  <string name="collect.blank_action.desc_more.options">കൂടുതൽ ഓപ്ഷനുകൾ / ഐച്ഛികങ്ങള്‍</string>
+  <string name="action_next">അടുത്തത്</string>
+  <!-- The value expressed in meters -->
+  <string name="meter">%f മീറ്റര്‍‌</string>
+  <!-- The value expressed in meters per second -->
+  <string name="meter_per_second">%f മീറ്റർ പ്രതി സെക്കൻറ്</string>
+</resources>
