@@ -16,9 +16,15 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
+import androidx.exifinterface.media.ExifInterface;
+
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.apache.commons.io.IOUtils;
+import org.hzontal.tella.keys.key.LifecycleMainKey;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -41,10 +47,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.FileProvider;
-import androidx.exifinterface.media.ExifInterface;
 import io.reactivex.Completable;
 import io.reactivex.MaybeSource;
 import io.reactivex.Observable;
@@ -54,10 +56,9 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.data.database.DataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.provider.EncryptedFileProvider;
-import rs.readahead.washington.mobile.domain.entity.KeyBundle;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.MetadataMediaFile;
 import rs.readahead.washington.mobile.domain.entity.RawFile;
@@ -71,12 +72,12 @@ import timber.log.Timber;
 
 
 public class MediaFileHandler {
-    private CacheWordDataSource cacheWordDataSource;
     private Executor executor;
+    private KeyDataSource keyDataSource;
 
 
-    public MediaFileHandler(CacheWordDataSource cacheWordDataSource) {
-        this.cacheWordDataSource = cacheWordDataSource;
+    public MediaFileHandler(KeyDataSource keyDataSource) {
+        this.keyDataSource = keyDataSource;
         this.executor = Executors.newSingleThreadExecutor();
     }
 
@@ -123,9 +124,9 @@ public class MediaFileHandler {
         }
 
         //if (Build.VERSION.SDK_INT >= 18) {
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-            Timber.d("+++++ get multiple");
-       // }
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        Timber.d("+++++ get multiple");
+        // }
 
         intent.setAction(Intent.ACTION_GET_CONTENT);
 
@@ -168,9 +169,9 @@ public class MediaFileHandler {
         }
 
         File path;
-        if (Build.VERSION.SDK_INT >= 29){
+        if (Build.VERSION.SDK_INT >= 29) {
             path = context.getExternalFilesDir(envDirType);
-        }else {
+        } else {
             path = Environment.getExternalStoragePublicDirectory(envDirType);
         }
         File file = new File(path, mediaFile.getFileName());
@@ -434,21 +435,6 @@ public class MediaFileHandler {
         return null;
     }
 
-    public Observable<MediaFileBundle> registerMediaFileBundle(final MediaFileBundle mediaFileBundle) {
-        return cacheWordDataSource.getDataSource()
-                .flatMap((Function<DataSource, ObservableSource<MediaFileBundle>>) dataSource ->
-                        dataSource.registerMediaFileBundle(mediaFileBundle).toObservable());
-    }
-
-    public Observable<MediaFile> registerMediaFile(final MediaFileBundle mediaFileBundle) {
-        return registerMediaFile(mediaFileBundle.getMediaFile(), mediaFileBundle.getMediaFileThumbnailData());
-    }
-
-    public Observable<MediaFile> registerMediaFile(final MediaFile mediaFile, final MediaFileThumbnailData thumbnailData) {
-        return cacheWordDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<MediaFile>>) dataSource ->
-                dataSource.registerMediaFile(mediaFile, thumbnailData).toObservable());
-    }
-
     @SuppressWarnings("UnusedReturnValue")
     static boolean deleteFile(Context context, @NonNull MediaFile mediaFile) {
         try {
@@ -458,34 +444,21 @@ public class MediaFileHandler {
         }
     }
 
-    /*public Single<MediaFileThumbnailData> updateThumbnail(final MediaFile mediaFile, final MediaFileThumbnailData mediaFileThumbnailData) {
-        return cacheWordDataSource.getDataSource().flatMap(new Function<DataSource, ObservableSource<MediaFileThumbnailData>>() {
-            @Override
-            public ObservableSource<MediaFileThumbnailData> apply(@NonNull DataSource dataSource) throws Exception {
-                return dataSource.updateMediaFileThumbnail(mediaFile.getId(), mediaFileThumbnailData).toObservable();
-            }
-        }).singleOrError();
-    }*/
-
     @Nullable
     public static InputStream getStream(Context context, RawFile mediaFile) {
         try {
             File file = getFile(context, mediaFile);
             FileInputStream fis = new FileInputStream(file);
-            KeyBundle keyBundle;
+            byte[] key;
 
-            if ((keyBundle = MyApplication.getKeyBundle()) == null) {
+            if ((key = MyApplication.getMainKeyHolder().get().getKey().getEncoded()) == null) {
                 return null;
             }
 
-            byte[] key = keyBundle.getKey();
-            if (key == null) {
-                return null;
-            }
 
             return EncryptedFileProvider.getDecryptedLimitedInputStream(key, fis, file);
 
-        } catch (IOException e) {
+        } catch (IOException | LifecycleMainKey.MainKeyUnavailableException e) {
             Timber.d(e, MediaFileHandler.class.getName());
         }
 
@@ -508,6 +481,15 @@ public class MediaFileHandler {
             return null;
         }
     }
+
+    /*public Single<MediaFileThumbnailData> updateThumbnail(final MediaFile mediaFile, final MediaFileThumbnailData mediaFileThumbnailData) {
+        return cacheWordDataSource.getDataSource().flatMap(new Function<DataSource, ObservableSource<MediaFileThumbnailData>>() {
+            @Override
+            public ObservableSource<MediaFileThumbnailData> apply(@NonNull DataSource dataSource) throws Exception {
+                return dataSource.updateMediaFileThumbnail(mediaFile.getId(), mediaFileThumbnailData).toObservable();
+            }
+        }).singleOrError();
+    }*/
 
     public static MetadataMediaFile maybeCreateMetadataMediaFile(Context context, MediaFile mediaFile) throws Exception {
         MetadataMediaFile mmf = MetadataMediaFile.newCSV(mediaFile);
@@ -553,21 +535,17 @@ public class MediaFileHandler {
         try {
             File file = getFile(context, mediaFile);
             FileOutputStream fos = new FileOutputStream(file);
-            KeyBundle keyBundle;
+            byte[] key;
 
-            if ((keyBundle = MyApplication.getKeyBundle()) == null) {
+            if ((key = MyApplication.getMainKeyHolder().get().getKey().getEncoded()) == null) {
                 return null;
             }
 
-            byte[] key = keyBundle.getKey();
-            if (key == null) {
-                return null;
-            }
 
             return new DigestOutputStream(EncryptedFileProvider.getEncryptedOutputStream(key, fos, file.getName()),
                     getMessageDigest());
 
-        } catch (IOException | NoSuchAlgorithmException e) {
+        } catch (IOException | NoSuchAlgorithmException | LifecycleMainKey.MainKeyUnavailableException e) {
             Timber.d(e, MediaFileHandler.class.getName());
         }
 
@@ -578,48 +556,19 @@ public class MediaFileHandler {
     private static OutputStream getMetadataOutputStream(File file) {
         try {
             FileOutputStream fos = new FileOutputStream(file);
-            KeyBundle keyBundle;
+            byte[] key;
 
-            if ((keyBundle = MyApplication.getKeyBundle()) == null) {
-                return null;
-            }
-
-            byte[] key = keyBundle.getKey();
-            if (key == null) {
+            if ((key = MyApplication.getMainKeyHolder().get().getKey().getEncoded()) == null) {
                 return null;
             }
 
             return EncryptedFileProvider.getEncryptedOutputStream(key, fos, file.getName());
 
-        } catch (IOException e) {
+        } catch (IOException | LifecycleMainKey.MainKeyUnavailableException e) {
             Timber.d(e, MediaFileHandler.class.getName());
         }
 
         return null;
-    }
-
-    @Nullable
-    InputStream getThumbnailStream(Context context, final MediaFile mediaFile) {
-        MediaFileThumbnailData thumbnailData = null;
-        InputStream inputStream = null;
-
-        try {
-            thumbnailData = getThumbnailData(mediaFile);
-        } catch (NoSuchElementException e) {
-            try {
-                thumbnailData = updateThumb(context, mediaFile);
-            } catch (Exception e1) {
-                Timber.d(e1, getClass().getName());
-            }
-        } catch (Exception e2) {
-            Timber.d(e2, getClass().getName());
-        }
-
-        if (thumbnailData != null) {
-            inputStream = new ByteArrayInputStream(thumbnailData.getData());
-        }
-
-        return inputStream;
     }
 
     public static void startShareActivity(Context context, MediaFile mediaFile, boolean includeMetadata) {
@@ -641,7 +590,7 @@ public class MediaFileHandler {
     public static void startShareActivity(Context context, List<MediaFile> mediaFiles, boolean includeMetadata) {
         ArrayList<Uri> uris = new ArrayList<>();
 
-        for (MediaFile mediaFile: mediaFiles) {
+        for (MediaFile mediaFile : mediaFiles) {
             uris.add(getEncryptedUri(context, mediaFile));
 
             if (includeMetadata && mediaFile.getMetadata() != null) {
@@ -672,61 +621,6 @@ public class MediaFileHandler {
     private static File getMetadataFile(@NonNull Context context, MediaFile mediaFile) {
         final File metadataPath = new File(context.getFilesDir(), C.METADATA_DIR);
         return new File(metadataPath, getMetadataFilename(mediaFile));
-    }
-
-    private MediaFileThumbnailData getThumbnailData(final MediaFile mediaFile) throws NoSuchElementException {
-        return cacheWordDataSource
-                .getDataSource()
-                .flatMapMaybe((Function<DataSource, MaybeSource<MediaFileThumbnailData>>) dataSource ->
-                        dataSource.getMediaFileThumbnail(mediaFile.getUid())).blockingFirst();
-    }
-
-    private MediaFileThumbnailData updateThumb(final Context context, final MediaFile mediaFile) {
-        return Observable
-                .fromCallable(() -> createThumb(context, mediaFile))
-                .subscribeOn(Schedulers.from(executor)) // creating thumbs in single thread..
-                .flatMap((Function<MediaFileThumbnailData, ObservableSource<MediaFileThumbnailData>>) mediaFileThumbnailData ->
-                        cacheWordDataSource.getDataSource()
-                                .flatMapSingle((Function<DataSource, SingleSource<MediaFileThumbnailData>>) dataSource ->
-                                        dataSource.updateMediaFileThumbnail(mediaFile.getId(), mediaFileThumbnailData)))
-                .blockingFirst();
-    }
-
-    @NonNull
-    private MediaFileThumbnailData createThumb(Context context, MediaFile mediaFile) {
-        try {
-            File file = getFile(context, mediaFile);
-            FileInputStream fis = new FileInputStream(file);
-            KeyBundle keyBundle;
-
-            if ((keyBundle = MyApplication.getKeyBundle()) == null) {
-                return MediaFileThumbnailData.NONE;
-            }
-
-            byte[] key = keyBundle.getKey();
-            if (key == null) {
-                return MediaFileThumbnailData.NONE;
-            }
-
-            InputStream inputStream = EncryptedFileProvider.getDecryptedInputStream(key, fis, file.getName()); // todo: move to limited variant
-            final Bitmap bm = BitmapFactory.decodeStream(inputStream);
-
-            Bitmap thumb;
-
-            if (mediaFile.getType() == MediaFile.Type.IMAGE) {
-                thumb = ThumbnailUtils.extractThumbnail(bm, bm.getWidth() / 10, bm.getHeight() / 10);
-            } else {
-                return MediaFileThumbnailData.NONE;
-            }
-
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            thumb.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            return new MediaFileThumbnailData(stream.toByteArray());
-        } catch (IOException e) {
-            Timber.d(e, getClass().getName());
-        }
-
-        return MediaFileThumbnailData.NONE;
     }
 
     private static Bitmap modifyOrientation(Bitmap bitmap, InputStream inputStream) throws IOException {
@@ -781,5 +675,95 @@ public class MediaFileHandler {
 
     private static MessageDigest getMessageDigest() throws NoSuchAlgorithmException {
         return MessageDigest.getInstance("SHA-256");
+    }
+
+    public Observable<MediaFileBundle> registerMediaFileBundle(final MediaFileBundle mediaFileBundle) {
+        return keyDataSource.getDataSource()
+                .flatMap((Function<DataSource, ObservableSource<MediaFileBundle>>) dataSource ->
+                        dataSource.registerMediaFileBundle(mediaFileBundle).toObservable());
+    }
+
+    public Observable<MediaFile> registerMediaFile(final MediaFileBundle mediaFileBundle) {
+        return registerMediaFile(mediaFileBundle.getMediaFile(), mediaFileBundle.getMediaFileThumbnailData());
+    }
+
+    public Observable<MediaFile> registerMediaFile(final MediaFile mediaFile, final MediaFileThumbnailData thumbnailData) {
+        return keyDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<MediaFile>>) dataSource ->
+                dataSource.registerMediaFile(mediaFile, thumbnailData).toObservable());
+    }
+
+    @Nullable
+    InputStream getThumbnailStream(Context context, final MediaFile mediaFile) {
+        MediaFileThumbnailData thumbnailData = null;
+        InputStream inputStream = null;
+
+        try {
+            thumbnailData = getThumbnailData(mediaFile);
+        } catch (NoSuchElementException e) {
+            try {
+                thumbnailData = updateThumb(context, mediaFile);
+            } catch (Exception e1) {
+                Timber.d(e1, getClass().getName());
+            }
+        } catch (Exception e2) {
+            Timber.d(e2, getClass().getName());
+        }
+
+        if (thumbnailData != null) {
+            inputStream = new ByteArrayInputStream(thumbnailData.getData());
+        }
+
+        return inputStream;
+    }
+
+    private MediaFileThumbnailData getThumbnailData(final MediaFile mediaFile) throws NoSuchElementException {
+        return keyDataSource
+                .getDataSource()
+                .flatMapMaybe((Function<DataSource, MaybeSource<MediaFileThumbnailData>>) dataSource ->
+                        dataSource.getMediaFileThumbnail(mediaFile.getUid())).blockingFirst();
+    }
+
+    private MediaFileThumbnailData updateThumb(final Context context, final MediaFile mediaFile) {
+        return Observable
+                .fromCallable(() -> createThumb(context, mediaFile))
+                .subscribeOn(Schedulers.from(executor)) // creating thumbs in single thread..
+                .flatMap((Function<MediaFileThumbnailData, ObservableSource<MediaFileThumbnailData>>) mediaFileThumbnailData ->
+                        keyDataSource.getDataSource()
+                                .flatMapSingle((Function<DataSource, SingleSource<MediaFileThumbnailData>>) dataSource ->
+                                        dataSource.updateMediaFileThumbnail(mediaFile.getId(), mediaFileThumbnailData)))
+                .blockingFirst();
+    }
+
+    @NonNull
+    private MediaFileThumbnailData createThumb(Context context, MediaFile mediaFile) {
+        try {
+            File file = getFile(context, mediaFile);
+            FileInputStream fis = new FileInputStream(file);
+            byte[] key;
+
+            if ((key = MyApplication.getMainKeyHolder().get().getKey().getEncoded()) == null) {
+                return MediaFileThumbnailData.NONE;
+            }
+
+
+            InputStream inputStream = EncryptedFileProvider.getDecryptedInputStream(key, fis, file.getName()); // todo: move to limited variant
+            final Bitmap bm = BitmapFactory.decodeStream(inputStream);
+
+            Bitmap thumb;
+
+            if (mediaFile.getType() == MediaFile.Type.IMAGE) {
+                thumb = ThumbnailUtils.extractThumbnail(bm, bm.getWidth() / 10, bm.getHeight() / 10);
+            } else {
+                return MediaFileThumbnailData.NONE;
+            }
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            thumb.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            return new MediaFileThumbnailData(stream.toByteArray());
+        } catch (IOException | LifecycleMainKey.MainKeyUnavailableException e) {
+            Timber.d(e, getClass().getName());
+        }
+
+        return MediaFileThumbnailData.NONE;
     }
 }

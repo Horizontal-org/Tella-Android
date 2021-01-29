@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import android.view.View;
+
 import android.widget.Button;
 
 import butterknife.BindView;
@@ -41,7 +41,7 @@ public class LockScreenActivity extends AppCompatActivity implements ICacheWordS
 
     @Override
     public void onCacheWordLocked() {
-        startActivity(new Intent(this, SecurityActivity.class));
+        startActivity(new Intent(this, PatternUpgradeActivity.class));
         finish();
     }
 

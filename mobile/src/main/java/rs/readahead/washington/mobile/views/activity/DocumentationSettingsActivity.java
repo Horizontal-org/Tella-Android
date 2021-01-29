@@ -44,7 +44,7 @@ import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragme
 import timber.log.Timber;
 
 
-public class DocumentationSettingsActivity extends CacheWordSubscriberBaseActivity implements
+public class DocumentationSettingsActivity extends BaseLockActivity implements
         IServersPresenterContract.IView,
         ICollectServersPresenterContract.IView,
         ITellaUploadServersPresenterContract.IView,

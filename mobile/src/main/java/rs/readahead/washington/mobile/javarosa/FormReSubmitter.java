@@ -16,8 +16,8 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.data.database.DataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.repository.OpenRosaRepository;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.IProgressListener;
@@ -36,7 +36,7 @@ import rs.readahead.washington.mobile.util.Util;
 
 public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitter {
     private IFormReSubmitterContract.IView view;
-    private CacheWordDataSource cacheWordDataSource;
+    private KeyDataSource keyDataSource;
     private CompositeDisposable disposables = new CompositeDisposable();
     private IOpenRosaRepository openRosaRepository;
     private Context context;
@@ -46,7 +46,7 @@ public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitte
         this.view = view;
         this.context = view.getContext().getApplicationContext();
         this.openRosaRepository = new OpenRosaRepository();
-        this.cacheWordDataSource = new CacheWordDataSource(context);
+        this.keyDataSource = MyApplication.getKeyDataSource();
     }
 
     @Override
@@ -54,7 +54,7 @@ public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitte
         final boolean offlineMode = Preferences.isOfflineMode();
         final CollectFormInstanceStatus startStatus = instance.getStatus();
 
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable ->
@@ -117,7 +117,6 @@ public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitte
 
     @Override
     public void destroy() {
-        cacheWordDataSource.dispose();
         disposables.dispose();
         view = null;
     }
@@ -145,7 +144,7 @@ public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitte
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
     private <T> ObservableSource<T> rxSaveSuccessInstance(final CollectFormInstance instance, final T value) {
-        return cacheWordDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<T>>) dataSource ->
+        return keyDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<T>>) dataSource ->
                 dataSource.saveInstance(instance)
                         .toObservable()
                         .flatMap((Function<CollectFormInstance, ObservableSource<T>>) instance1 -> Observable.just(value)));
@@ -153,7 +152,7 @@ public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitte
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
     private <T> ObservableSource<T> rxSaveErrorInstance(final CollectFormInstance instance, final Throwable throwable) {
-        return cacheWordDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<T>>) dataSource ->
+        return keyDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<T>>) dataSource ->
                 dataSource.saveInstance(instance)
                         .toObservable()
                         .flatMap((Function<CollectFormInstance, ObservableSource<T>>) instance1 -> Observable.error(throwable)));
@@ -210,7 +209,7 @@ public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitte
             bundles.add(new GranularResubmissionBundle(server));
         }
 
-        for (FormMediaFile attachment: instance.getWidgetMediaFiles()) {
+        for (FormMediaFile attachment : instance.getWidgetMediaFiles()) {
             if (attachment.uploading && attachment.status != FormMediaFileStatus.SUBMITTED) {
                 bundles.add(new GranularResubmissionBundle(server, attachment));
             }

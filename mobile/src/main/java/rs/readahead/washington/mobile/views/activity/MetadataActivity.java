@@ -63,7 +63,7 @@ import rs.readahead.washington.mobile.util.MetadataUtils;
 import rs.readahead.washington.mobile.util.TelephonyUtils;
 
 
-public abstract class MetadataActivity extends CacheWordSubscriberBaseActivity implements
+public abstract class MetadataActivity extends BaseLockActivity implements
         SensorEventListener {
     private static final long LOCATION_REQUEST_INTERVAL = 5000; // aggressive
 

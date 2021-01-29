@@ -16,7 +16,7 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.util.Util;
 
 
-public class AboutHelpActivity extends CacheWordSubscriberBaseActivity {
+public class AboutHelpActivity extends BaseLockActivity {
     @BindView(R.id.version)
     TextView version;
 

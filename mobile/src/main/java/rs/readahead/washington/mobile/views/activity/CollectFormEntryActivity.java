@@ -7,13 +7,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +14,12 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.form.api.FormEntryCaption;
@@ -130,7 +129,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         }
         upNavigationIcon = toolbar.getNavigationIcon();
         setToolbarIcon();
-
+        initForm();
         startPresenter();
 
         prevSectionButton.setOnClickListener(v -> showPrevScreen());
@@ -256,6 +255,13 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initForm(){
+        formSaver = new FormSaver(this);
+        formSubmitter = new FormSubmitter(this);
+        formParser = new FormParser(this);
+        formParser.parseForm();
     }
 
     @Override
@@ -454,6 +460,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         super.onDestroy();
     }
 
+    /*
     @Override
     public void onCacheWordOpened() {
         super.onCacheWordOpened();
@@ -461,7 +468,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         formSubmitter = new FormSubmitter(this);
         formParser = new FormParser(this);
         formParser.parseForm();
-    }
+    }*/
 
     @Override
     public void onBackPressed() {

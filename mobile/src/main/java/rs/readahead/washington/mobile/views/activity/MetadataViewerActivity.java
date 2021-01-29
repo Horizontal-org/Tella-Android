@@ -24,7 +24,7 @@ import rs.readahead.washington.mobile.util.StringUtils;
 import rs.readahead.washington.mobile.util.Util;
 
 
-public class MetadataViewerActivity extends CacheWordSubscriberBaseActivity {
+public class MetadataViewerActivity extends BaseLockActivity {
     public static final String VIEW_METADATA = "vm";
 
     @BindView(R.id.metadata_list)

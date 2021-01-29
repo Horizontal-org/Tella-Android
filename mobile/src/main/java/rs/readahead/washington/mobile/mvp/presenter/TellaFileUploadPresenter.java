@@ -9,8 +9,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadPresenterContract;
@@ -18,24 +19,23 @@ import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadPresenterCont
 public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContract.IPresenter {
     private ITellaFileUploadPresenterContract.IView view;
     private CompositeDisposable disposables = new CompositeDisposable();
-    private CacheWordDataSource cacheWordDataSource;
+    private KeyDataSource keyDataSource;
 
 
     public TellaFileUploadPresenter(ITellaFileUploadPresenterContract.IView view) {
         this.view = view;
-        this.cacheWordDataSource = new CacheWordDataSource(view.getContext());
+        this.keyDataSource = MyApplication.getKeyDataSource();
     }
 
     @Override
     public void destroy() {
         disposables.dispose();
-        cacheWordDataSource.dispose();
         view = null;
     }
 
     @Override
-    public void getFileUploadInstances()  {
-        disposables.add(cacheWordDataSource.getDataSource()
+    public void getFileUploadInstances() {
+        disposables.add(keyDataSource.getDataSource()
                 .flatMapSingle((Function<DataSource, SingleSource<List<FileUploadInstance>>>) DataSource::getFileUploadInstances)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -48,7 +48,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
 
     @Override
     public void getFileUploadSetInstances(long set) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .flatMapSingle((Function<DataSource, SingleSource<List<FileUploadInstance>>>) dataSource -> dataSource.getFileUploadInstances(set))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -61,7 +61,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
 
     @Override
     public void deleteFileUploadInstance(long id) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstanceById(id))
@@ -75,7 +75,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
 
     @Override
     public void deleteFileUploadInstances(long set) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstancesBySet(set))
@@ -89,7 +89,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
 
     @Override
     public void deleteFileUploadInstancesInStatus(ITellaUploadsRepository.UploadStatus status) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstancesInStatus(status))
@@ -103,7 +103,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
 
     @Override
     public void deleteFileUploadInstancesNotInStatus(ITellaUploadsRepository.UploadStatus status) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstancesNotInStatus(status))

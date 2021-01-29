@@ -4,18 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
-
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
-
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.Menu;
@@ -23,6 +11,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 
 import org.javarosa.core.model.FormDef;
 
@@ -71,18 +69,10 @@ import timber.log.Timber;
 
 
 @RuntimePermissions
-public class CollectMainActivity extends CacheWordSubscriberBaseActivity implements
+public class CollectMainActivity extends BaseLockActivity implements
         ICollectMainPresenterContract.IView,
         ICollectCreateFormControllerContract.IView {
-    private EventCompositeDisposable disposables;
-    private CollectMainPresenter presenter;
-    private CollectCreateFormControllerPresenter formControllerPresenter;
-    private AlertDialog alertDialog;
-    private ViewPager mViewPager;
-    private ViewPagerAdapter adapter;
-    private long numOfCollectServers = 0;
     int blankFragmentPosition;
-
     @BindView(R.id.fab)
     FloatingActionButton fab;
     @BindView(R.id.tabs)
@@ -93,6 +83,13 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
     View noServersView;
     @BindView(R.id.blank_forms_text)
     TextView blankFormsText;
+    private EventCompositeDisposable disposables;
+    private CollectMainPresenter presenter;
+    private CollectCreateFormControllerPresenter formControllerPresenter;
+    private AlertDialog alertDialog;
+    private ViewPager mViewPager;
+    private ViewPagerAdapter adapter;
+    private long numOfCollectServers = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

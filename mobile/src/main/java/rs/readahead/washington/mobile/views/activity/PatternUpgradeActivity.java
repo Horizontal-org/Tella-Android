@@ -21,7 +21,7 @@ import rs.readahead.washington.mobile.util.LocaleManager;
 import timber.log.Timber;
 
 
-public class SecurityActivity extends ConfirmPatternActivity implements ICacheWordSubscriber {
+public class PatternUpgradeActivity extends ConfirmPatternActivity implements ICacheWordSubscriber {
     private CacheWordHandler mCacheWord;
     private ProgressDialog dialog;
 

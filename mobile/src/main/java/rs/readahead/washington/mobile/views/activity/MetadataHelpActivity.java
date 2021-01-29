@@ -16,7 +16,7 @@ import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.R;
 
 
-public class MetadataHelpActivity extends CacheWordSubscriberBaseActivity {
+public class MetadataHelpActivity extends BaseLockActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.metadata_help_list)

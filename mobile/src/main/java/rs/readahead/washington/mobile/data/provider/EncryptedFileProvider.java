@@ -2,8 +2,11 @@ package rs.readahead.washington.mobile.data.provider;
 
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
+
+import org.hzontal.tella.keys.key.LifecycleMainKey;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,7 +34,6 @@ import javax.crypto.spec.SecretKeySpec;
 
 import rs.readahead.washington.mobile.BuildConfig;
 import rs.readahead.washington.mobile.MyApplication;
-import rs.readahead.washington.mobile.domain.entity.KeyBundle;
 import rs.readahead.washington.mobile.util.LimitedInputStream;
 import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
@@ -45,89 +47,6 @@ public class EncryptedFileProvider extends FileProvider {
     private static final String transformation2 = "AES/CTR/NoPadding";
     private static final int HASH_BYTE_SIZE = 128;
     private static final int PBKDF2_ITERATIONS = 1000;
-
-
-    @Override
-    public ParcelFileDescriptor openFile(@NonNull Uri uri, @NonNull String mode) throws FileNotFoundException {
-        ParcelFileDescriptor pfd = super.openFile(uri, mode);
-        ParcelFileDescriptor[] pipe;
-
-        try {
-            pipe = ParcelFileDescriptor.createPipe();
-
-            if ("r".equals(mode)) {
-                new ReadThread(uri.getLastPathSegment(),
-                        new ParcelFileDescriptor.AutoCloseInputStream(pfd),
-                        new ParcelFileDescriptor.AutoCloseOutputStream(pipe[1])).start();
-
-                return pipe[0];
-            }
-
-            if ("w".equals(mode) || "wt".equals(mode)) {
-                new WriteThread(uri.getLastPathSegment(),
-                        new ParcelFileDescriptor.AutoCloseInputStream(pipe[0]),
-                        new ParcelFileDescriptor.AutoCloseOutputStream(pfd)).start();
-
-                return pipe[1];
-            }
-        }
-        catch (Exception e) {
-            Timber.e(e, getClass().getSimpleName());
-            throw new FileNotFoundException("Could not open pipe for: " + uri.toString());
-        }
-
-        throw new IllegalArgumentException("Unsupported mode: " + mode);
-    }
-
-    private static class ReadThread extends Thread {
-        String filename;
-        InputStream in;
-        OutputStream out;
-
-
-        ReadThread(String filename, InputStream in, OutputStream out) {
-            this.filename = filename;
-            this.in = in;
-            this.out = out;
-        }
-
-        @Override
-        public void run() {
-            byte[] buf = new byte[8192];
-            int len;
-            InputStream cipherInputStream = null;
-
-            try {
-                KeyBundle keyBundle = MyApplication.getKeyBundle();
-                if (keyBundle == null) {
-                    throw new SecurityException();
-                }
-
-                byte[] key = keyBundle.getKey();
-                if (key == null) {
-                    throw new SecurityException();
-                }
-
-                cipherInputStream = getDecryptedInputStream(key, in, filename); // todo: move to limited variant
-
-                while ((len = cipherInputStream.read(buf)) >= 0) {
-                    out.write(buf, 0, len);
-                }
-
-                out.flush();
-            } catch(IOException e) {
-                Timber.e(e, getClass().getSimpleName());
-                //FirebaseCrashlytics.getInstance().recordException(e);
-            } finally {
-                try {
-                    if (cipherInputStream != null) cipherInputStream.close();
-                    out.close();
-                } catch (IOException e) {
-                    Timber.e(e, getClass().getSimpleName());
-                }
-            }
-        }
-    }
 
     public static InputStream getDecryptedLimitedInputStream(byte[] key, InputStream in, File file) throws IOException {
         try {
@@ -170,54 +89,6 @@ public class EncryptedFileProvider extends FileProvider {
         return new SecretKeySpec(sk.getEncoded(), "AES");
     }
 
-    private static class WriteThread extends Thread {
-        String filename;
-        InputStream in;
-        OutputStream out;
-
-
-        WriteThread(String filename, InputStream in, OutputStream out) {
-            this.filename = filename;
-            this.in = in;
-            this.out = out;
-        }
-
-        @Override
-        public void run() {
-            byte[] buf = new byte[1024];
-            int len;
-            OutputStream cos = null;
-
-            try {
-                KeyBundle keyBundle = MyApplication.getKeyBundle();
-                if (keyBundle == null) {
-                    throw new SecurityException();
-                }
-
-                byte[] key = keyBundle.getKey();
-                if (key == null) {
-                    throw new SecurityException();
-                }
-
-                cos = getEncryptedOutputStream(key, out, filename);
-
-                while ((len = in.read(buf)) >= 0) {
-                    cos.write(buf, 0, len);
-                }
-            } catch(IOException e) {
-                Timber.e(e, getClass().getSimpleName());
-                //FirebaseCrashlytics.getInstance().recordException(e);
-            } finally {
-                try {
-                    in.close();
-                    if (cos != null) cos.close();
-                } catch (IOException e) {
-                    Timber.e(e, getClass().getSimpleName());
-                }
-            }
-        }
-    }
-
     public static OutputStream getEncryptedOutputStream(byte[] key, OutputStream out, String filename) throws IOException {
         try {
             SecretKeySpec sks = createSecretKey(key, filename);
@@ -258,6 +129,122 @@ public class EncryptedFileProvider extends FileProvider {
         return ivBytes;
     }
 
+    @Override
+    public ParcelFileDescriptor openFile(@NonNull Uri uri, @NonNull String mode) throws FileNotFoundException {
+        ParcelFileDescriptor pfd = super.openFile(uri, mode);
+        ParcelFileDescriptor[] pipe;
+
+        try {
+            pipe = ParcelFileDescriptor.createPipe();
+
+            if ("r".equals(mode)) {
+                new ReadThread(uri.getLastPathSegment(),
+                        new ParcelFileDescriptor.AutoCloseInputStream(pfd),
+                        new ParcelFileDescriptor.AutoCloseOutputStream(pipe[1])).start();
+
+                return pipe[0];
+            }
+
+            if ("w".equals(mode) || "wt".equals(mode)) {
+                new WriteThread(uri.getLastPathSegment(),
+                        new ParcelFileDescriptor.AutoCloseInputStream(pipe[0]),
+                        new ParcelFileDescriptor.AutoCloseOutputStream(pfd)).start();
+
+                return pipe[1];
+            }
+        } catch (Exception e) {
+            Timber.e(e, getClass().getSimpleName());
+            throw new FileNotFoundException("Could not open pipe for: " + uri.toString());
+        }
+
+        throw new IllegalArgumentException("Unsupported mode: " + mode);
+    }
+
+    private static class ReadThread extends Thread {
+        String filename;
+        InputStream in;
+        OutputStream out;
+
+
+        ReadThread(String filename, InputStream in, OutputStream out) {
+            this.filename = filename;
+            this.in = in;
+            this.out = out;
+        }
+
+        @Override
+        public void run() {
+            byte[] buf = new byte[8192];
+            int len;
+            InputStream cipherInputStream = null;
+            byte[] key;
+            try {
+                if ((key = MyApplication.getMainKeyHolder().get().getKey().getEncoded()) == null) {
+                    throw new SecurityException();
+                }
+
+                cipherInputStream = getDecryptedInputStream(key, in, filename); // todo: move to limited variant
+
+                while ((len = cipherInputStream.read(buf)) >= 0) {
+                    out.write(buf, 0, len);
+                }
+
+                out.flush();
+            } catch (IOException | LifecycleMainKey.MainKeyUnavailableException e) {
+                Timber.e(e, getClass().getSimpleName());
+                //FirebaseCrashlytics.getInstance().recordException(e);
+            } finally {
+                try {
+                    if (cipherInputStream != null) cipherInputStream.close();
+                    out.close();
+                } catch (IOException e) {
+                    Timber.e(e, getClass().getSimpleName());
+                }
+            }
+        }
+    }
+
+    private static class WriteThread extends Thread {
+        String filename;
+        InputStream in;
+        OutputStream out;
+
+
+        WriteThread(String filename, InputStream in, OutputStream out) {
+            this.filename = filename;
+            this.in = in;
+            this.out = out;
+        }
+
+        @Override
+        public void run() {
+            byte[] buf = new byte[1024];
+            int len;
+            OutputStream cos = null;
+            byte[] key;
+            try {
+                if ((key = MyApplication.getMainKeyHolder().get().getKey().getEncoded()) == null) {
+                    throw new SecurityException();
+                }
+                cos = getEncryptedOutputStream(key, out, filename);
+
+                while ((len = in.read(buf)) >= 0) {
+                    cos.write(buf, 0, len);
+                }
+            } catch (IOException | LifecycleMainKey.MainKeyUnavailableException e) {
+                Timber.e(e, getClass().getSimpleName());
+                //FirebaseCrashlytics.getInstance().recordException(e);
+            } finally {
+                try {
+                    in.close();
+                    if (cos != null) cos.close();
+                } catch (IOException e) {
+                    Timber.e(e, getClass().getSimpleName());
+                }
+            }
+        }
+    }
+
     private static class CipherInputStreamWrapper extends CipherInputStream {
         CipherInputStreamWrapper(InputStream is, Cipher c) {
             super(is, c);
@@ -274,8 +261,7 @@ public class EncryptedFileProvider extends FileProvider {
 
         @Override
         public long skip(long skipAmount)
-                throws IOException
-        {
+                throws IOException {
             long remaining = skipAmount;
 
             if (skipAmount <= 0) {

@@ -2,14 +2,9 @@ package rs.readahead.washington.mobile.views.activity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.DrawableRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AlertDialog;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
@@ -18,11 +13,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+
 import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.ISlidePolicy;
+import com.hzontal.tella_locking_ui.ui.pattern.PatternSetActivity;
 
-import info.guardianproject.cacheword.CacheWordHandler;
-import info.guardianproject.cacheword.ICacheWordSubscriber;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -37,10 +38,8 @@ import rs.readahead.washington.mobile.util.PermissionUtil;
 
 
 @RuntimePermissions
-public class TellaIntroActivity extends AppIntro implements ICacheWordSubscriber {
+public class TellaIntroActivity extends AppIntro {
     public static final String FROM_ABOUT = "from_about";
-
-    private CacheWordHandler cacheWordHandler;
     private boolean policyRespected = false;
     private AlertDialog alertDialog;
     private boolean fromAbout;
@@ -55,7 +54,6 @@ public class TellaIntroActivity extends AppIntro implements ICacheWordSubscriber
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        cacheWordHandler = new CacheWordHandler(this);
 
         fromAbout = getIntent().getBooleanExtra(FROM_ABOUT, false);
         //permissionSlideEnabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
@@ -132,7 +130,8 @@ public class TellaIntroActivity extends AppIntro implements ICacheWordSubscriber
 
         if (!fromAbout && closeApp) {
             finish();
-            cacheWordHandler.lock();
+            MyApplication.resetKeys();
+            //  cacheWordHandler.lock();
         }
     }
 
@@ -202,13 +201,11 @@ public class TellaIntroActivity extends AppIntro implements ICacheWordSubscriber
     @Override
     protected void onResume() {
         super.onResume();
-        cacheWordHandler.connectToService();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        cacheWordHandler.disconnectFromService();
     }
 
     @Override
@@ -219,26 +216,10 @@ public class TellaIntroActivity extends AppIntro implements ICacheWordSubscriber
         }
     }
 
-    @Override
-    public void onCacheWordUninitialized() {
-        MyApplication.startLockScreenActivity(this);
-        finish();
-    }
-
-    @Override
-    public void onCacheWordLocked() {
-        MyApplication.startLockScreenActivity(this);
-        finish();
-    }
-
-    @Override
-    public void onCacheWordOpened() {
-    }
-
     private void closeTellaIntro() {
         if (!fromAbout) {
             Preferences.setFirstStart(false);
-            MyApplication.startMainActivity(this);
+            startActivity(new Intent(TellaIntroActivity.this, PatternSetActivity.class));
         }
 
         finish();
