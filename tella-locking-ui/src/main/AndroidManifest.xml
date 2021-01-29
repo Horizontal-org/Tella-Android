@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.hzontal.tella_locking_ui">
+
+    <application>
+        <activity android:name=".ui.settings.LockTypeActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.pattern.PatternSetActivity"
+                    android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.pattern.PatternUnlockActivity"
+                    android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.settings.UnlockRedirectActivity"
+                  android:screenOrientation="portrait"
+            />
+    </application>
+
+</manifest>
