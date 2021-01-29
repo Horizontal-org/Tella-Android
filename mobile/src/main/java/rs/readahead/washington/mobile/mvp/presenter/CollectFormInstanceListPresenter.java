@@ -1,34 +1,31 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
+import org.hzontal.tella.keys.key.LifecycleMainKey;
+
 import java.util.List;
 
-import info.guardianproject.cacheword.CacheWordHandler;
-import info.guardianproject.cacheword.ICacheWordSubscriber;
 import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.AsyncSubject;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.mvp.contract.ICollectFormInstanceListPresenterContract;
 
 
 public class CollectFormInstanceListPresenter implements
-        ICollectFormInstanceListPresenterContract.IPresenter,
-        ICacheWordSubscriber {
+        ICollectFormInstanceListPresenterContract.IPresenter {
     private ICollectFormInstanceListPresenterContract.IView view;
-    private CacheWordHandler cacheWordHandler;
     private CompositeDisposable disposables = new CompositeDisposable();
     private AsyncSubject<DataSource> asyncDataSource = AsyncSubject.create();
-    // todo: replace with CacheWordDatasource
 
 
     public CollectFormInstanceListPresenter(ICollectFormInstanceListPresenterContract.IView view) {
         this.view = view;
-        cacheWordHandler = new CacheWordHandler(view.getContext().getApplicationContext(), this);
-        cacheWordHandler.connectToService();
+        initDataSource();
     }
 
     @Override
@@ -55,32 +52,23 @@ public class CollectFormInstanceListPresenter implements
         );
     }
 
+    private void initDataSource() {
+        if (view != null) {
+            DataSource dataSource;
+            try {
+                dataSource = DataSource.getInstance(view.getContext(), MyApplication.getMainKeyHolder().get().getKey().getEncoded());
+                asyncDataSource.onNext(dataSource);
+                asyncDataSource.onComplete();
+            } catch (LifecycleMainKey.MainKeyUnavailableException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @Override
     public void destroy() {
-        if (cacheWordHandler != null) {
-            cacheWordHandler.disconnectFromService();
-        }
         disposables.dispose();
         view = null;
     }
 
-    @Override
-    public void onCacheWordUninitialized() {
-    }
-
-    @Override
-    public void onCacheWordLocked() {
-    }
-
-    @Override
-    public void onCacheWordOpened() {
-        if (view != null) {
-            DataSource dataSource = DataSource.getInstance(view.getContext(), cacheWordHandler.getEncryptionKey());
-            asyncDataSource.onNext(dataSource);
-            asyncDataSource.onComplete();
-        }
-
-        cacheWordHandler.disconnectFromService();
-        cacheWordHandler = null;
-    }
 }

@@ -131,7 +131,6 @@ public class TellaIntroActivity extends AppIntro {
         if (!fromAbout && closeApp) {
             finish();
             MyApplication.resetKeys();
-            //  cacheWordHandler.lock();
         }
     }
 
