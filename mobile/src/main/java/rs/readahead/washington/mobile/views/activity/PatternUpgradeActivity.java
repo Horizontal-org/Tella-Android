@@ -6,14 +6,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.hzontal.tella_locking_ui.patternlock.ConfirmPatternActivity;
+import com.hzontal.tella_locking_ui.patternlock.PatternUtils;
+import com.hzontal.tella_locking_ui.patternlock.PatternView;
+
 import java.security.GeneralSecurityException;
 import java.util.List;
 
 import info.guardianproject.cacheword.CacheWordHandler;
 import info.guardianproject.cacheword.ICacheWordSubscriber;
-import me.zhanghai.android.patternlock.ConfirmPatternActivity;
-import me.zhanghai.android.patternlock.PatternUtils;
-import me.zhanghai.android.patternlock.PatternView;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.util.DialogsUtil;

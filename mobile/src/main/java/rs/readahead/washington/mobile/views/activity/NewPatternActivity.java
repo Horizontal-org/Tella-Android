@@ -4,14 +4,15 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.hzontal.tella_locking_ui.patternlock.PatternUtils;
+import com.hzontal.tella_locking_ui.patternlock.PatternView;
+import com.hzontal.tella_locking_ui.patternlock.SetPatternActivity;
+
 import java.security.GeneralSecurityException;
 import java.util.List;
 
 import info.guardianproject.cacheword.CacheWordHandler;
 import info.guardianproject.cacheword.ICacheWordSubscriber;
-import me.zhanghai.android.patternlock.PatternUtils;
-import me.zhanghai.android.patternlock.PatternView;
-import me.zhanghai.android.patternlock.SetPatternActivity;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.util.DialogsUtil;
