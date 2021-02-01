@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.hzontal.tella_locking_ui.TellaKeysUI;
 import com.hzontal.tella_locking_ui.patternlock.ConfirmPatternActivity;
 import com.hzontal.tella_locking_ui.patternlock.PatternUtils;
 import com.hzontal.tella_locking_ui.patternlock.PatternView;
@@ -14,6 +15,7 @@ import com.hzontal.tella_locking_ui.patternlock.PatternView;
 import org.hzontal.tella.keys.MainKeyStore;
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder;
 import org.hzontal.tella.keys.config.UnlockConfig;
+import org.hzontal.tella.keys.config.UnlockRegistry;
 import org.hzontal.tella.keys.key.MainKey;
 
 import java.security.GeneralSecurityException;
@@ -24,7 +26,6 @@ import javax.crypto.spec.SecretKeySpec;
 
 import info.guardianproject.cacheword.CacheWordHandler;
 import info.guardianproject.cacheword.ICacheWordSubscriber;
-import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.LocaleManager;
@@ -56,12 +57,14 @@ public class PatternUpgradeActivity extends ConfirmPatternActivity implements IC
         try {
             mCacheWord.setPassphrase(PatternUtils.patternToSha1String(pattern).toCharArray());
             IUnlockRegistryHolder holder = (IUnlockRegistryHolder) getApplicationContext();
+            holder.getUnlockRegistry().setActiveMethod(PatternUpgradeActivity.this, UnlockRegistry.Method.TELLA_PATTERN);
             UnlockConfig config = holder.getUnlockRegistry().getActiveConfig(this);
-            MyApplication.getMainKeyStore().store(new MainKey(new SecretKeySpec(mCacheWord.getEncryptionKey(), "AES")), config.wrapper, new PBEKeySpec(PatternUtils.patternToSha1String(pattern).toCharArray()), new MainKeyStore.IMainKeyStoreCallback() {
+            TellaKeysUI.getMainKeyStore().store(new MainKey(new SecretKeySpec(mCacheWord.getEncryptionKey(), "AES")), config.wrapper, new PBEKeySpec(PatternUtils.patternToSha1String(pattern).toCharArray()), new MainKeyStore.IMainKeyStoreCallback() {
                 @Override
                 public void onSuccess(MainKey mainKey) {
                     Timber.d("** MainKey stored: %s **", mainKey);
-                    MyApplication.initKeys(mainKey);
+                    TellaKeysUI.getMainKeyHolder().set(mainKey);
+                    TellaKeysUI.getCredentialsCallback().onSuccessfulUnlock(PatternUpgradeActivity.this);
                 }
 
                 @Override
