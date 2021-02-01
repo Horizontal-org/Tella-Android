@@ -30,6 +30,7 @@ import org.hzontal.tella.keys.config.UnencryptedUnlocker;
 import org.hzontal.tella.keys.config.UnlockConfig;
 import org.hzontal.tella.keys.config.UnlockRegistry;
 import org.hzontal.tella.keys.key.LifecycleMainKey;
+import org.hzontal.tella.keys.key.MainKey;
 import org.hzontal.tella.keys.wrapper.AndroidKeyStoreWrapper;
 import org.hzontal.tella.keys.wrapper.PBEKeyWrapper;
 import org.hzontal.tella.keys.wrapper.UnencryptedKeyWrapper;
@@ -236,5 +237,9 @@ public class MyApplication extends Application implements IUnlockRegistryHolder,
     public static void resetKeys() {
         getMainKeyHolder().clear();
         TellaKeysUI.getMainKeyHolder().clear();
+    }
+    public static void initKeys(MainKey mainKey){
+        getMainKeyHolder().set(mainKey);
+        TellaKeysUI.getMainKeyHolder().set(mainKey);
     }
 }

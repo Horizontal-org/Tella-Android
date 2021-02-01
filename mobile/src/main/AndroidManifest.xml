@@ -52,11 +52,6 @@
                 android:resource="@xml/encrypted_file_paths" />
         </provider>
 
-        <service
-            android:name="info.guardianproject.cacheword.CacheWordService"
-            android:enabled="true"
-            android:exported="false" />
-
         <!-- <receiver
             android:name=".util.OpenPassword"
             android:enabled="true"
