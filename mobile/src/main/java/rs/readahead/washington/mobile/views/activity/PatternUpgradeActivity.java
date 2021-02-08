@@ -26,10 +26,12 @@ import javax.crypto.spec.SecretKeySpec;
 
 import info.guardianproject.cacheword.CacheWordHandler;
 import info.guardianproject.cacheword.ICacheWordSubscriber;
+import info.guardianproject.cacheword.PassphraseSecrets;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.LocaleManager;
 import timber.log.Timber;
+
 
 
 public class PatternUpgradeActivity extends ConfirmPatternActivity implements ICacheWordSubscriber {
@@ -55,11 +57,13 @@ public class PatternUpgradeActivity extends ConfirmPatternActivity implements IC
     protected boolean isPatternCorrect(List<PatternView.Cell> pattern) {
         dialog = DialogsUtil.showProgressDialog(this, getString(R.string.lock_dialog_expl_unlock_app));
         try {
-            mCacheWord.setPassphrase(PatternUtils.patternToSha1String(pattern).toCharArray());
+            PassphraseSecrets secrets = PassphraseSecrets.fetchSecrets(
+                    this, PatternUtils.patternToSha1String(pattern).toCharArray());
+            mCacheWord.setCachedSecrets(secrets);
             IUnlockRegistryHolder holder = (IUnlockRegistryHolder) getApplicationContext();
             holder.getUnlockRegistry().setActiveMethod(PatternUpgradeActivity.this, UnlockRegistry.Method.TELLA_PATTERN);
             UnlockConfig config = holder.getUnlockRegistry().getActiveConfig(this);
-            TellaKeysUI.getMainKeyStore().store(new MainKey(new SecretKeySpec(mCacheWord.getEncryptionKey(), "AES")), config.wrapper, new PBEKeySpec(PatternUtils.patternToSha1String(pattern).toCharArray()), new MainKeyStore.IMainKeyStoreCallback() {
+            TellaKeysUI.getMainKeyStore().store(new MainKey(new SecretKeySpec(secrets.getSecretKey().getEncoded(), "AES")), config.wrapper, new PBEKeySpec(PatternUtils.patternToSha1String(pattern).toCharArray()), new MainKeyStore.IMainKeyStoreCallback() {
                 @Override
                 public void onSuccess(MainKey mainKey) {
                     Timber.d("** MainKey stored: %s **", mainKey);
@@ -99,14 +103,12 @@ public class PatternUpgradeActivity extends ConfirmPatternActivity implements IC
     @Override
     protected void onResume() {
         super.onResume();
-        mCacheWord.connectToService();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         dismissDialog();
-        mCacheWord.disconnectFromService();
     }
 
     private void dismissDialog() {
