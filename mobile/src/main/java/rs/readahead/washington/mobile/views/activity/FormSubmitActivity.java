@@ -31,6 +31,7 @@ import rs.readahead.washington.mobile.javarosa.IFormReSubmitterContract;
 import rs.readahead.washington.mobile.mvp.contract.IFormSubmitPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.FormSubmitPresenter;
 import rs.readahead.washington.mobile.util.DialogsUtil;
+import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.collect.CollectFormEndView;
 import rs.readahead.washington.mobile.views.custom.FormSubmitButtonView;
 

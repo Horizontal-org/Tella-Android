@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.activity;
+package rs.readahead.washington.mobile.views.base_ui;
 
 import android.content.Intent;
 
@@ -7,6 +7,7 @@ import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity;
 
 import info.guardianproject.cacheword.SecretsManager;
 import rs.readahead.washington.mobile.MyApplication;
+import rs.readahead.washington.mobile.views.activity.PatternUpgradeActivity;
 
 public abstract class BaseLockActivity extends BaseActivity {
 

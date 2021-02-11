@@ -12,6 +12,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.util.StringUtils;
+import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 
 
 public class CollectHelpActivity extends BaseLockActivity {

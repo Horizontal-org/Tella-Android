@@ -14,6 +14,7 @@ import butterknife.OnClick;
 import rs.readahead.washington.mobile.BuildConfig;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.util.Util;
+import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 
 
 public class AboutHelpActivity extends BaseLockActivity {
