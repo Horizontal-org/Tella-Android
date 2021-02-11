@@ -10,8 +10,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.repository.OpenRosaRepository;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
@@ -23,19 +24,19 @@ import rs.readahead.washington.mobile.mvp.contract.ICollectMainPresenterContract
 
 public class CollectMainPresenter implements ICollectMainPresenterContract.IPresenter {
     private ICollectMainPresenterContract.IView view;
-    private CacheWordDataSource cacheWordDataSource;
+    private KeyDataSource keyDataSource;
     private CompositeDisposable disposables = new CompositeDisposable();
 
 
     public CollectMainPresenter(ICollectMainPresenterContract.IView view) {
         new OpenRosaRepository();
         this.view = view;
-        this.cacheWordDataSource = new CacheWordDataSource(view.getContext().getApplicationContext());
+        this.keyDataSource = MyApplication.getKeyDataSource();
     }
 
     @Override
     public void getBlankFormDef(final CollectForm form) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap((Function<DataSource, ObservableSource<FormDef>>) dataSource ->
@@ -53,7 +54,7 @@ public class CollectMainPresenter implements ICollectMainPresenterContract.IPres
 
     @Override
     public void getInstanceFormDef(final long instanceId) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapSingle((Function<DataSource, SingleSource<CollectFormInstance>>) dataSource ->
@@ -70,7 +71,7 @@ public class CollectMainPresenter implements ICollectMainPresenterContract.IPres
 
     @Override
     public void toggleFavorite(final CollectForm collectForm) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapSingle((Function<DataSource, SingleSource<CollectForm>>) dataSource ->
@@ -87,7 +88,7 @@ public class CollectMainPresenter implements ICollectMainPresenterContract.IPres
 
     @Override
     public void deleteFormInstance(final long id) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapCompletable(dataSource -> dataSource.deleteInstance(id))
@@ -103,7 +104,7 @@ public class CollectMainPresenter implements ICollectMainPresenterContract.IPres
 
     @Override
     public void countCollectServers() {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapSingle((Function<DataSource, SingleSource<Long>>) DataSource::countCollectServers)
@@ -120,7 +121,6 @@ public class CollectMainPresenter implements ICollectMainPresenterContract.IPres
     @Override
     public void destroy() {
         disposables.dispose();
-        cacheWordDataSource.dispose();
         view = null;
     }
 
@@ -133,7 +133,7 @@ public class CollectMainPresenter implements ICollectMainPresenterContract.IPres
             instance.setUpdated(0);
             instance.setInstanceName(instance.getFormName());
 
-            for (FormMediaFile mediaFile: instance.getWidgetMediaFiles()) {
+            for (FormMediaFile mediaFile : instance.getWidgetMediaFiles()) {
                 mediaFile.status = FormMediaFileStatus.UNKNOWN;
             }
         }

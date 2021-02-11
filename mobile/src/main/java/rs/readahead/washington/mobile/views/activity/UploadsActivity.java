@@ -25,7 +25,7 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
@@ -41,9 +41,12 @@ import rs.readahead.washington.mobile.views.adapters.UploadSection;
 import rs.readahead.washington.mobile.views.custom.StopResumeUploadButton;
 
 
-public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
+public class UploadsActivity extends BaseLockActivity implements
         UploadSection.UploadSectionListener,
         ITellaFileUploadPresenterContract.IView {
+    private static final int spacing = 50; // 50px
+    private static final long REFRESH_TIME_MS = 500;
+    private final int spanCount = 5;
     @BindView(R.id.uploadsRecyclerView)
     RecyclerView uploadsRecyclerView;
     @BindView(R.id.empty_uploads_text)
@@ -60,24 +63,19 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
     TextView startedText;
     @BindView(R.id.stop_outlined)
     StopResumeUploadButton stopOutlined;
-
     private TellaFileUploadPresenter presenter;
-    private CacheWordDataSource cacheWordDataSource;
+    private KeyDataSource keyDataSource;
     private EventCompositeDisposable disposables;
     private SectionedRecyclerViewAdapter sectionedAdapter;
     private AlertDialog alertDialog;
     private boolean uploadsExist;
-    private final int spanCount = 5;
     private long uploadingSet;
     private long lastUpdateTimeStamp = 0;
     private long lastUploadedSize = 0;
-    private static final int spacing = 50; // 50px
     private boolean uploadFinished;
     private int numOfUploadingInstances;
-
     //
     private List<FileUploadInstance> uploadnigList;
-    private static final long REFRESH_TIME_MS = 500;
     private long total = 0;
     private long uploaded = 0;
     private long newUpdateTimestamp = 0;
@@ -93,8 +91,8 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
 
         setupToolbar();
 
-        cacheWordDataSource = new CacheWordDataSource(this);
-
+        // cacheWordDataSource = new CacheWordDataSource(this);
+        keyDataSource = MyApplication.getKeyDataSource();
         disposables = MyApplication.bus().createCompositeDisposable();
 
         disposables.wire(FileUploadProgressEvent.class, new EventObserver<FileUploadProgressEvent>() {
@@ -166,8 +164,8 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
         if (alertDialog != null) {
             alertDialog.dismiss();
         }
-
-        cacheWordDataSource.dispose();
+        // TODO CHECK  dipose for new key managment library
+        //cacheWordDataSource.dispose();
         stopPresenter();
         super.onDestroy();
     }
@@ -340,7 +338,7 @@ public class UploadsActivity extends CacheWordSubscriberBaseActivity implements
     }
 
     private void insertSection(List<FileUploadInstance> setInstances, boolean uploaded, long set) {
-        UploadSection section = new UploadSection(getContext(), new MediaFileHandler(cacheWordDataSource), setInstances, this, set);
+        UploadSection section = new UploadSection(getContext(), new MediaFileHandler(keyDataSource), setInstances, this, set);
         if (!uploaded) {
             setUploadingHeader(setInstances);
             uploadnigList = setInstances;

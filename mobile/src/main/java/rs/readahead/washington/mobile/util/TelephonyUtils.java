@@ -51,9 +51,10 @@ public class TelephonyUtils {
                 }
             } else {
                 //noinspection deprecation
-                for (NeighboringCellInfo cellInfo : tm.getNeighboringCellInfo()) {
-                    addNew(list, neighboringCellInfoToString(cellInfo));
-                }
+                //TODO check getNeighboringCellInfo
+              //  for (NeighboringCellInfo cellInfo : tm.getNeighboringCellInfo()) {
+                //    addNew(list, neighboringCellInfoToString(cellInfo));
+             //   }
             }
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);

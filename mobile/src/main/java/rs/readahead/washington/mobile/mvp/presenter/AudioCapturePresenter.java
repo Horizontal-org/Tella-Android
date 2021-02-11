@@ -10,7 +10,8 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.MyApplication;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IAudioCapturePresenterContract;
@@ -20,14 +21,14 @@ import rs.readahead.washington.mobile.presentation.entity.MediaFileThumbnailData
 public class AudioCapturePresenter implements IAudioCapturePresenterContract.IPresenter {
     private IAudioCapturePresenterContract.IView view;
     private CompositeDisposable disposables = new CompositeDisposable();
-    private CacheWordDataSource cacheWordDataSource;
+    private KeyDataSource keyDataSource;
     private MediaFileHandler mediaFileHandler;
 
 
     public AudioCapturePresenter(IAudioCapturePresenterContract.IView view) {
         this.view = view;
-        this.cacheWordDataSource = new CacheWordDataSource(view.getContext());
-        this.mediaFileHandler = new MediaFileHandler(cacheWordDataSource);
+        this.keyDataSource = MyApplication.getKeyDataSource();
+        this.mediaFileHandler = new MediaFileHandler(keyDataSource);
     }
 
     @Override
@@ -58,17 +59,16 @@ public class AudioCapturePresenter implements IAudioCapturePresenterContract.IPr
 
                     return freeSpace;
                 })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(free -> view.onAvailableStorage(free),
-                        throwable -> view.onAvailableStorageFailed(throwable))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(free -> view.onAvailableStorage(free),
+                                throwable -> view.onAvailableStorageFailed(throwable))
         );
     }
 
     @Override
     public void destroy() {
         disposables.dispose();
-        cacheWordDataSource.dispose();
         view = null;
     }
 }

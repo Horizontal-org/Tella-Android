@@ -5,8 +5,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.mvp.contract.ICollectAttachmentMediaFilePresenterContract;
 import rs.readahead.washington.mobile.util.FileUtil;
@@ -14,11 +15,11 @@ import rs.readahead.washington.mobile.util.FileUtil;
 public class CollectAttachmentMediaFilePresenter implements ICollectAttachmentMediaFilePresenterContract.IPresenter {
     private ICollectAttachmentMediaFilePresenterContract.IView view;
     private CompositeDisposable disposables = new CompositeDisposable();
-    private CacheWordDataSource cacheWordDataSource;
+    private KeyDataSource keyDataSource;
 
     public CollectAttachmentMediaFilePresenter(ICollectAttachmentMediaFilePresenterContract.IView view) {
         this.view = view;
-        this.cacheWordDataSource = new CacheWordDataSource(view.getContext());
+        this.keyDataSource = MyApplication.getKeyDataSource();
     }
 
     @Override
@@ -26,7 +27,7 @@ public class CollectAttachmentMediaFilePresenter implements ICollectAttachmentMe
         String uid = FileUtil.getBaseName(fileName);
 
         disposables.add(
-                cacheWordDataSource.getDataSource()
+                keyDataSource.getDataSource()
                         .flatMapSingle((Function<DataSource, SingleSource<MediaFile>>) dataSource -> dataSource.getMediaFile(uid))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -39,7 +40,6 @@ public class CollectAttachmentMediaFilePresenter implements ICollectAttachmentMe
     @Override
     public void destroy() {
         disposables.dispose();
-        cacheWordDataSource.dispose();
         view = null;
     }
 }

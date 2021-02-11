@@ -22,18 +22,25 @@
         android:name=".MyApplication"
         android:allowBackup="false"
         android:icon="@mipmap/tella_icon"
-        android:roundIcon="@mipmap/tella_icon_round"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:supportsRtl="true"
         android:networkSecurityConfig="@xml/configure_localhost_media_file_http_server"
+        android:roundIcon="@mipmap/tella_icon_round"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
-        tools:replace="android:allowBackup">
+        tools:replace="android:allowBackup"
+        tools:targetApi="n">
 
-        <meta-data android:name="firebase_analytics_collection_deactivated" android:value="true" />
-        <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
-        <meta-data android:name="google_analytics_ssaid_collection_enabled" android:value="false" />
+        <meta-data
+            android:name="firebase_analytics_collection_deactivated"
+            android:value="true" />
+        <meta-data
+            android:name="google_analytics_adid_collection_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="google_analytics_ssaid_collection_enabled"
+            android:value="false" />
 
         <provider
             android:name=".data.provider.EncryptedFileProvider"
@@ -45,12 +52,6 @@
                 android:resource="@xml/encrypted_file_paths" />
         </provider>
 
-        <service
-            android:name="info.guardianproject.cacheword.CacheWordService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:enabled="true"
-            android:exported="false" />
-
         <!-- <receiver
             android:name=".util.OpenPassword"
             android:enabled="true"
@@ -59,11 +60,10 @@
                 <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
             </intent-filter>
         </receiver> -->
-
         <activity
             android:name=".views.activity.SplashActivity"
-            android:icon="@mipmap/tella_icon_round"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:icon="@mipmap/tella_icon_round"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -174,16 +174,17 @@
 
         <activity
             android:name=".views.activity.MainActivity"
-            android:label="@string/app_name"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.SettingsActivity"
-            android:label="@string/settings_app.bar"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/settings_app.bar"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -194,54 +195,44 @@
         </activity>
         <activity
             android:name=".views.activity.CamouflageAliasActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:label="@string/settings.camo_app.bar"
             android:parentActivityName=".views.activity.ProtectionSettingsActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="rs.readahead.washington.mobile.views.activity.ProtectionSettingsActivity" />
         </activity>
         <activity
-            android:name=".views.activity.LockScreenActivity"
-            android:label="@string/title_activity_lock_screen"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".views.activity.AudioRecordActivity2"
-            android:label="@string/recorder_app.bar"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:label="@string/recorder_app.bar"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.ProtectionSettingsActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:label="@string/settings.prot_app.bar"
             android:parentActivityName=".views.activity.SettingsActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="rs.readahead.washington.mobile.views.activity.SettingsActivity" />
         </activity>
         <activity
-            android:name=".views.activity.SecurityActivity"
+            android:name=".views.activity.PatternUpgradeActivity"
             android:label="@string/title_activity_security"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".views.activity.NewPatternActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".views.activity.AboutHelpActivity"
-            android:label="@string/settings.about_app.bar"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:label="@string/settings.about_app.bar"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.CollectMainActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:label="@string/collect_app.bar"
             android:parentActivityName=".views.activity.MainActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -249,9 +240,9 @@
         </activity>
         <activity
             android:name=".views.activity.CollectHelpActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:label="@string/collect.help_app.bar"
             android:parentActivityName=".views.activity.DocumentationSettingsActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -270,9 +261,9 @@
         </activity>
         <activity
             android:name=".views.activity.DocumentationSettingsActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:label="@string/settings.docu_app.bar"
             android:parentActivityName=".views.activity.SettingsActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -280,6 +271,7 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -295,24 +287,24 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".views.activity.QuestionAttachmentActivity"
-            android:label="@string/collect.form_select.attachment_app.bar"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:label="@string/collect.form_select.attachment_app.bar"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.GalleryActivity"
-            android:label="@string/gallery_app.bar"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:label="@string/gallery_app.bar"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.MetadataViewerActivity"
-            android:label="@string/verification.info_app.bar"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:label="@string/verification.info_app.bar"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.UploadsActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:label="@string/home_upload.button"
             android:parentActivityName=".views.activity.MainActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -320,9 +312,9 @@
         </activity>
         <activity
             android:name=".views.activity.UploadInformationActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:label="@string/upload.info_app.bar"
             android:parentActivityName=".views.activity.UploadsActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -330,8 +322,8 @@
         </activity>
         <activity
             android:name=".views.activity.MetadataHelpActivity"
-            android:label="@string/verification.help.info_app.bar"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:label="@string/verification.help.info_app.bar"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.PhotoViewerActivity"
@@ -339,19 +331,19 @@
             android:theme="@style/PhotoViewerTheme.NoActionBar" />
         <activity
             android:name=".views.activity.AudioPlayActivity"
-            android:label="@string/play.audio_app.bar"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:label="@string/play.audio_app.bar"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.LanguageSettingsActivity"
-            android:label="@string/settings.lang_app.bar"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:label="@string/settings.lang_app.bar"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.GeneralSettingsActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:label="@string/settings_select_general"
             android:parentActivityName=".views.activity.SettingsActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -359,6 +351,7 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -400,11 +393,11 @@
         <activity
             android:name=".views.activity.FormSubmitActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+        <!-- <meta-data
+             android:name="com.google.android.geo.API_KEY"
+             android:value="@string/google_maps_key" />-->
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

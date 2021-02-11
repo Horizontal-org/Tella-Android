@@ -25,7 +25,7 @@ import rs.readahead.washington.mobile.mvp.presenter.SignaturePresenter;
 import rs.readahead.washington.mobile.util.DialogsUtil;
 
 
-public class SignatureActivity extends CacheWordSubscriberBaseActivity implements
+public class SignatureActivity extends BaseLockActivity implements
         ISignaturePresenterContract.IView {
 
     public static final String MEDIA_FILE_KEY = "mfk";

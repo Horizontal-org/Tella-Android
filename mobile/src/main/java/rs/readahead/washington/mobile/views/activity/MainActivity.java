@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.views.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -8,12 +9,6 @@ import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
-
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.OrientationEventListener;
@@ -21,6 +16,13 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+
+import org.hzontal.tella.keys.key.LifecycleMainKey;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -97,7 +99,7 @@ public class MainActivity extends MetadataActivity implements
 
         handler = new Handler();
 
-        homeScreenPresenter = new HomeScreenPresenter(this, getCacheWordHandler());
+        homeScreenPresenter = new HomeScreenPresenter(this);
 
         panicActivated = false;
         timerDuration = getResources().getInteger(R.integer.panic_countdown_duration);
@@ -166,6 +168,7 @@ public class MainActivity extends MetadataActivity implements
         showMainControls();
     }
 
+    @SuppressLint("NonConstantResourceId")
     @OnClick(R.id.camera_tools_container)
     void onContainerClicked() {
         if (PermissionUtil.checkPermission(this, Manifest.permission.CAMERA)) {
@@ -348,12 +351,12 @@ public class MainActivity extends MetadataActivity implements
 
     private void closeApp() {
         finish();
-        lockCacheWord();
+        lockApp();
     }
 
     private void exitApp() {
+        lockApp();
         MyApplication.exit(this);
-        lockCacheWord();
     }
 
     private boolean checkIfShouldExit() {
@@ -375,9 +378,9 @@ public class MainActivity extends MetadataActivity implements
         return false; // todo: check panic state here
     }
 
-    private void lockCacheWord() {
-        if (!getCacheWordHandler().isLocked()) {
-            getCacheWordHandler().lock();
+    private void lockApp() {
+        if (!isLocked()) {
+            MyApplication.resetKeys();
         }
     }
 
@@ -401,6 +404,7 @@ public class MainActivity extends MetadataActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+
 
         setupPanicView();
         homeScreenPresenter.countCollectServers();

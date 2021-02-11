@@ -5,6 +5,8 @@ import androidx.annotation.NonNull;
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobRequest;
 
+import org.hzontal.tella.keys.key.LifecycleMainKey;
+
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -14,7 +16,6 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.bus.event.CollectFormSubmittedEvent;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.repository.OpenRosaRepository;
-import rs.readahead.washington.mobile.domain.entity.KeyBundle;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
@@ -30,23 +31,35 @@ public class PendingFormSendJob extends Job {
     private static boolean running = false;
     private Result exitResult = null;
 
+    public static void scheduleJob() {
+        new JobRequest.Builder(PendingFormSendJob.TAG)
+                .setExecutionWindow(1_000L, 10_000L) // start between 1-10sec from now
+                .setBackoffCriteria(10_000L, JobRequest.BackoffPolicy.LINEAR)
+                .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
+                .setRequirementsEnforced(true)
+                //.setPersisted(true) // android.Manifest.permission.RECEIVE_BOOT_COMPLETED
+                .setUpdateCurrent(true) // also, jobs will sync them self while running
+                .build()
+                .schedule();
+    }
 
     @NonNull
     @Override
     protected Result onRunJob(Params params) {
-        if (! enter()) {
+        if (!enter()) {
             return Result.SUCCESS;
         }
+        byte[] key;
 
-        KeyBundle keyBundle = MyApplication.getKeyBundle();
-        if (keyBundle == null) { // CacheWord is unavailable
+        try {
+            if ((key = MyApplication.getMainKeyHolder().get().getKey().getEncoded()) == null) {
+                return exit(Result.RESCHEDULE);
+            }
+        } catch (LifecycleMainKey.MainKeyUnavailableException e) {
+            e.printStackTrace();
             return exit(Result.RESCHEDULE);
         }
 
-        byte[] key = keyBundle.getKey();
-        if (key == null) { // key disappeared
-            return exit(Result.RESCHEDULE);
-        }
 
         final IOpenRosaRepository openRosaRepository = new OpenRosaRepository();
         final DataSource dataSource = DataSource.getInstance(getContext(), key);
@@ -57,7 +70,7 @@ public class PendingFormSendJob extends Job {
             return exit(Result.SUCCESS);
         }
 
-        for (final CollectFormInstance instance: pendingInstances) {
+        for (final CollectFormInstance instance : pendingInstances) {
             if (instance.getStatus() != CollectFormInstanceStatus.SUBMISSION_PENDING) {
                 continue;
             }
@@ -117,18 +130,6 @@ public class PendingFormSendJob extends Job {
             running = false;
             return result;
         }
-    }
-
-    public static void scheduleJob() {
-        new JobRequest.Builder(PendingFormSendJob.TAG)
-                .setExecutionWindow(1_000L, 10_000L) // start between 1-10sec from now
-                .setBackoffCriteria(10_000L, JobRequest.BackoffPolicy.LINEAR)
-                .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
-                .setRequirementsEnforced(true)
-                //.setPersisted(true) // android.Manifest.permission.RECEIVE_BOOT_COMPLETED
-                .setUpdateCurrent(true) // also, jobs will sync them self while running
-                .build()
-                .schedule();
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")

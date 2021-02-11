@@ -19,8 +19,9 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.MediaFileUrlLoader;
@@ -72,9 +73,8 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
         inflate(getContext(), R.layout.collect_attachemnt_preview_view, this);
 
         ButterKnife.bind(this);
-
-        CacheWordDataSource cacheWordDataSource = new CacheWordDataSource(getContext());
-        MediaFileHandler mediaFileHandler = new MediaFileHandler(cacheWordDataSource);
+        KeyDataSource keyDataSource = MyApplication.getKeyDataSource();
+        MediaFileHandler mediaFileHandler = new MediaFileHandler(keyDataSource);
         MediaFileUrlLoader glideLoader = new MediaFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
 
         glide = Glide.with(getContext()).using(glideLoader);

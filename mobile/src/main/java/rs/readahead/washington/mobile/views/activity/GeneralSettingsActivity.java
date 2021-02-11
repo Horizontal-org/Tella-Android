@@ -24,7 +24,7 @@ import rs.readahead.washington.mobile.util.LocaleManager;
 import rs.readahead.washington.mobile.util.StringUtils;
 
 
-public class GeneralSettingsActivity extends CacheWordSubscriberBaseActivity {
+public class GeneralSettingsActivity extends BaseLockActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.crash_report_switch)

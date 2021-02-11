@@ -1,19 +1,19 @@
 package rs.readahead.washington.mobile.javarosa;
 
+import org.hzontal.tella.keys.key.LifecycleMainKey;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryController;
 
 import java.util.LinkedHashMap;
 
-import info.guardianproject.cacheword.CacheWordHandler;
-import info.guardianproject.cacheword.ICacheWordSubscriber;
 import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.AsyncSubject;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
@@ -22,19 +22,15 @@ import rs.readahead.washington.mobile.odk.FormController.FailedConstraint;
 import rs.readahead.washington.mobile.odk.exception.JavaRosaException;
 
 
-public class FormSaver implements IFormSaverContract.IFormSaver,
-        ICacheWordSubscriber {
+public class FormSaver implements IFormSaverContract.IFormSaver{
     private IFormSaverContract.IView view;
     private AsyncSubject<DataSource> asyncDataSource = AsyncSubject.create();
-    private CacheWordHandler cacheWordHandler;
     private CompositeDisposable disposables = new CompositeDisposable();
     private boolean autoSaveDraft;
 
 
     public FormSaver(IFormSaverContract.IView view) {
         this.view = view;
-        this.cacheWordHandler = new CacheWordHandler(view.getContext().getApplicationContext(), this);
-        cacheWordHandler.connectToService();
 
         /*Single.fromCallable(new Callable<Boolean>() {
             @Override
@@ -50,6 +46,7 @@ public class FormSaver implements IFormSaverContract.IFormSaver,
                     }
                 });*/
         autoSaveDraft = false; // this is requested default..
+        initDataSource();
     }
 
     @Override
@@ -57,7 +54,7 @@ public class FormSaver implements IFormSaverContract.IFormSaver,
         FormController formController = FormController.getActive();
 
         try {
-            if (! formController.currentPromptIsQuestion()) { // bad name for method..
+            if (!formController.currentPromptIsQuestion()) { // bad name for method..
                 return true;
             }
 
@@ -96,13 +93,14 @@ public class FormSaver implements IFormSaverContract.IFormSaver,
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapSingle(dataSource -> dataSource.saveInstance(instance))
-                .subscribe(saved -> view.formSavedOnExit(), throwable -> {})
+                .subscribe(saved -> view.formSavedOnExit(), throwable -> {
+                })
         );
     }
 
     @Override
     public void autoSaveFormInstance() {
-        if (! autoSaveDraft) return;
+        if (!autoSaveDraft) return;
 
         final CollectFormInstance instance = FormController.getActive().getCollectFormInstance();
 
@@ -149,31 +147,21 @@ public class FormSaver implements IFormSaverContract.IFormSaver,
 
     @Override
     public void destroy() {
-        if (cacheWordHandler != null) {
-            cacheWordHandler.disconnectFromService();
-        }
         disposables.dispose();
         view = null;
     }
 
-    @Override
-    public void onCacheWordUninitialized() {
-    }
-
-    @Override
-    public void onCacheWordLocked() {
-    }
-
-    @Override
-    public void onCacheWordOpened() {
+    private void initDataSource() {
         if (view != null) {
-            DataSource dataSource = DataSource.getInstance(view.getContext(), cacheWordHandler.getEncryptionKey());
-            asyncDataSource.onNext(dataSource);
-            asyncDataSource.onComplete();
+            DataSource dataSource;
+            try {
+                dataSource = DataSource.getInstance(view.getContext(), MyApplication.getMainKeyHolder().get().getKey().getEncoded());
+                asyncDataSource.onNext(dataSource);
+                asyncDataSource.onComplete();
+            } catch (LifecycleMainKey.MainKeyUnavailableException e) {
+                e.printStackTrace();
+            }
         }
-
-        cacheWordHandler.disconnectFromService();
-        cacheWordHandler = null;
     }
 
     private void showFailedConstraint(FailedConstraint constraint) {

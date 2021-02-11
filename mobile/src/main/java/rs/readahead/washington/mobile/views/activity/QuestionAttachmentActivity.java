@@ -7,12 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +14,13 @@ import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
@@ -30,8 +31,9 @@ import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.RuntimePermissions;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.media.MediaFileBundle;
@@ -54,8 +56,6 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
         IGalleryMediaHandler {
     public static final String MEDIA_FILE_KEY = "mfk";
     public static final String MEDIA_FILES_FILTER = "mff";
-    private int selectedNum;
-
     @BindView(R.id.galleryRecyclerView)
     GalleryRecyclerView recyclerView;
     @BindView(R.id.progressBar)
@@ -64,7 +64,7 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
     Toolbar toolbar;
     @BindView(R.id.attachments_blank_list_info)
     TextView blankGalleryInfo;
-
+    private int selectedNum;
     private QuestionAttachmentPresenter presenter;
 
     private GalleryRecycleViewAdapter galleryAdapter;
@@ -93,10 +93,9 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
         setupToolbar();
         setupFab();
 
-        CacheWordDataSource cacheWordDataSource = new CacheWordDataSource(this);
-
+        KeyDataSource keyDataSource = MyApplication.getKeyDataSource();
         galleryAdapter = new GalleryRecycleViewAdapter(this, this,
-                new MediaFileHandler(cacheWordDataSource),
+                new MediaFileHandler(keyDataSource),
                 R.layout.card_gallery_attachment_media_file,
                 true, true);
         RecyclerView.LayoutManager galleryLayoutManager = new GridLayoutManager(this, 3);

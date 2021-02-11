@@ -9,27 +9,28 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.openrosa.OpenRosaService;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
 import rs.readahead.washington.mobile.mvp.contract.ICollectServersPresenterContract;
 
 
 public class CollectServersPresenter implements ICollectServersPresenterContract.IPresenter {
-    private CacheWordDataSource cacheWordDataSource;
+    private KeyDataSource keyDataSource;
     private ICollectServersPresenterContract.IView view;
     private CompositeDisposable disposables = new CompositeDisposable();
 
 
     //@Inject
     public CollectServersPresenter(ICollectServersPresenterContract.IView view) {
-        cacheWordDataSource = new CacheWordDataSource(view.getContext().getApplicationContext());
+        keyDataSource = MyApplication.getKeyDataSource();
         this.view = view;
     }
 
     public void getCollectServers() {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> view.showLoading())
@@ -45,7 +46,7 @@ public class CollectServersPresenter implements ICollectServersPresenterContract
     }
 
     public void create(final CollectServer server) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> view.showLoading())
@@ -61,7 +62,7 @@ public class CollectServersPresenter implements ICollectServersPresenterContract
     }
 
     public void update(final CollectServer server) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> view.showLoading())
@@ -80,7 +81,7 @@ public class CollectServersPresenter implements ICollectServersPresenterContract
     }
 
     public void remove(final CollectServer server) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> view.showLoading())
@@ -100,7 +101,6 @@ public class CollectServersPresenter implements ICollectServersPresenterContract
     @Override
     public void destroy() {
         disposables.dispose();
-        cacheWordDataSource.dispose();
         view = null;
     }
 }

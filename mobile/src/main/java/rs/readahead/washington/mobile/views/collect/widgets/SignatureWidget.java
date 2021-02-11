@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -19,9 +21,9 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.javarosa.form.api.FormEntryPrompt;
 
-import androidx.annotation.NonNull;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.MediaFileUrlLoader;
@@ -96,8 +98,8 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
         thumbView = view.findViewById(R.id.thumbView);
         fileSize = view.findViewById(R.id.fileSize);
 
-        CacheWordDataSource cacheWordDataSource = new CacheWordDataSource(getContext());
-        MediaFileHandler mediaFileHandler = new MediaFileHandler(cacheWordDataSource);
+        KeyDataSource keyDataSource = MyApplication.getKeyDataSource();
+        MediaFileHandler mediaFileHandler = new MediaFileHandler(keyDataSource);
         MediaFileUrlLoader glideLoader = new MediaFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
 
         glide = Glide.with(getContext()).using(glideLoader);
@@ -154,7 +156,7 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
         attachmentPreview.setVisibility(GONE);
     }
 
-    private void showPreview(String filename){
+    private void showPreview(String filename) {
         presenter.getMediaFile(filename);
     }
 

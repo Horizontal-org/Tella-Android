@@ -32,7 +32,7 @@ import rs.readahead.washington.mobile.mvp.contract.ILocationGettingPresenterCont
 import rs.readahead.washington.mobile.mvp.presenter.LocationGettingPresenter;
 
 
-public class LocationMapActivity extends CacheWordSubscriberBaseActivity implements
+public class LocationMapActivity extends BaseLockActivity implements
         OnMapReadyCallback, GoogleMap.OnMapLongClickListener, GoogleMap.OnCameraMoveStartedListener,
         ILocationGettingPresenterContract.IView {
     public static final String SELECTED_LOCATION = "sl";
