@@ -621,4 +621,16 @@
         <item name="android:paddingEnd">2dp</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="Tella_Main_White_Text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">28dp</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:textColor">@color/wa_white</item>
+        <item name="android:textSize">40sp</item>
+    </style>
+    <style name="Tella_Main_White_Text.Bold">
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>
