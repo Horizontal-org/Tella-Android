@@ -50,6 +50,7 @@ import rs.readahead.washington.mobile.util.jobs.TellaJobCreator;
 import rs.readahead.washington.mobile.views.activity.ExitActivity;
 import rs.readahead.washington.mobile.views.activity.MainActivity;
 import rs.readahead.washington.mobile.views.activity.TellaIntroActivity;
+import rs.readahead.washington.mobile.views.activity.onboarding.OnBoardingActivity;
 import timber.log.Timber;
 
 
@@ -64,7 +65,7 @@ public class MyApplication extends Application implements IUnlockRegistryHolder,
     public static void startMainActivity(@NonNull Context context) {
         Intent intent;
         if (Preferences.isFirstStart()) {
-            intent = new Intent(context, TellaIntroActivity.class);
+            intent = new Intent(context, OnBoardingActivity.class);
         } else {
             intent = new Intent(context, MainActivity.class);
         }

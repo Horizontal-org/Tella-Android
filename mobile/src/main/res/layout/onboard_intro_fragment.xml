@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/dark_purple">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".10"
+        android:id="@+id/guideH10"
+        >
+    </androidx.constraintlayout.widget.Guideline>
+
+    <TextView
+        android:id="@+id/welcomeTV"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideH10"
+        android:text="@string/intro_welcome"
+        style="@style/Tella_Main_White_Text.Bold">
+    </TextView>
+
+    <TextView
+        android:id="@+id/tellaTV"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/welcomeTV"
+        android:text="@string/tella"
+        android:textSize="55sp"
+        android:layout_marginStart="28dp"
+        style="@style/Tella_Main_White_Text"
+        >
+    </TextView>
+    <TextView
+        android:id="@+id/introInfoTV"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tellaTV"
+        android:text="@string/intro_document_protect"
+        android:textSize="16sp"
+        android:layout_marginStart="28dp"
+        style="@style/Tella_Main_White_Text"
+        >
+    </TextView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".306"
+        android:id="@+id/guideH30"
+        >
+    </androidx.constraintlayout.widget.Guideline>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideH30"
+        app:srcCompat="@drawable/onboard_pattern"
+        >
+    </androidx.appcompat.widget.AppCompatImageView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".85"
+        android:id="@+id/guideH96"
+        >
+    </androidx.constraintlayout.widget.Guideline>
+
+    <Button
+        android:layout_width="94dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideH96"
+        android:background="@drawable/bg_yellow_btn"
+        android:text="@string/intro_start"
+        android:textColor="@color/wa_white"
+        android:fontFamily="@font/open_sans"
+        android:layout_marginEnd="25dp"
+        android:id="@+id/startBtn"
+        >
+    </Button>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
