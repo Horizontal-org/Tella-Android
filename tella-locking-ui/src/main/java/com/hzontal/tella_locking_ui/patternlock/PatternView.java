@@ -49,6 +49,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import timber.log.Timber;
+
 /*
  * Copyright (C) 2007 The Android Open Source Project
  *
@@ -1350,7 +1352,8 @@ public class PatternView extends View {
 
         @Override
         protected void getVisibleVirtualViews(List<Integer> virtualViewIds) {
-            if (DEBUG_A11Y) Log.v(TAG, "getVisibleVirtualViews(len=" + virtualViewIds.size() + ")");
+            if (DEBUG_A11Y)
+                Timber.tag(TAG).v("getVisibleVirtualViews(len=" + virtualViewIds.size() + ")");
             if (!mPatternInProgress) {
                 return;
             }
@@ -1368,7 +1371,8 @@ public class PatternView extends View {
 
         @Override
         protected void onPopulateEventForVirtualView(int virtualViewId, AccessibilityEvent event) {
-            if (DEBUG_A11Y) Log.v(TAG, "onPopulateEventForVirtualView(" + virtualViewId + ")");
+            if (DEBUG_A11Y)
+                Timber.tag(TAG).v("onPopulateEventForVirtualView(" + virtualViewId + ")");
             // Announce this view
             if (mItems.containsKey(virtualViewId)) {
                 CharSequence contentDescription = mItems.get(virtualViewId).description;
@@ -1389,7 +1393,8 @@ public class PatternView extends View {
         @Override
         protected void onPopulateNodeForVirtualView(int virtualViewId,
                                                     AccessibilityNodeInfoCompat node) {
-            if (DEBUG_A11Y) Log.v(TAG, "onPopulateNodeForVirtualView(view=" + virtualViewId + ")");
+            if (DEBUG_A11Y)
+                Timber.tag(TAG).v("onPopulateNodeForVirtualView(view=" + virtualViewId + ")");
 
             // Node and event text and content descriptions are usually
             // identical, so we'll use the exact same string as before.
@@ -1408,7 +1413,7 @@ public class PatternView extends View {
 
             // Compute bounds for this object
             final Rect bounds = getBoundsForVirtualView(virtualViewId);
-            if (DEBUG_A11Y) Log.v(TAG, "bounds:" + bounds.toString());
+            if (DEBUG_A11Y) Timber.tag(TAG).v("bounds:" + bounds.toString());
             node.setBoundsInParent(bounds);
         }
 
@@ -1425,7 +1430,7 @@ public class PatternView extends View {
         @Override
         protected boolean onPerformActionForVirtualView(int virtualViewId, int action,
                                                         Bundle arguments) {
-            if (DEBUG_A11Y) Log.v(TAG, "onPerformActionForVirtualView(id=" + virtualViewId
+            if (DEBUG_A11Y) Timber.tag(TAG).v("onPerformActionForVirtualView(id=" + virtualViewId
                     + ", action=" + action);
             switch (action) {
                 case AccessibilityNodeInfoCompat.ACTION_CLICK:
@@ -1434,7 +1439,7 @@ public class PatternView extends View {
                     // same whether accessibility is turned on or off.
                     return onItemClicked(virtualViewId);
                 default:
-                    if (DEBUG_A11Y) Log.v(TAG, "*** action not handled in "
+                    if (DEBUG_A11Y) Timber.tag(TAG).v("*** action not handled in "
                             + "onPerformActionForVirtualView(viewId="
                             + virtualViewId + "action=" + action + ")");
             }
@@ -1442,7 +1447,7 @@ public class PatternView extends View {
         }
 
         boolean onItemClicked(int index) {
-            if (DEBUG_A11Y) Log.v(TAG, "onItemClicked(" + index + ")");
+            if (DEBUG_A11Y) Timber.tag(TAG).v("onItemClicked(" + index + ")");
 
             // Since the item's checked state is exposed to accessibility
             // services through its AccessibilityNodeInfo, we need to invalidate
@@ -1519,7 +1524,7 @@ public class PatternView extends View {
             boolean dotAvailable = mPatternDrawLookup[rowHit][columnHit];
             int dotId = (rowHit * mColumnCount + columnHit) + VIRTUAL_BASE_VIEW_ID;
             int view = dotAvailable ? dotId : ExploreByTouchHelper.INVALID_ID;
-            if (DEBUG_A11Y) Log.v(TAG, "getVirtualViewIdForHit(" + x + "," + y + ") => "
+            if (DEBUG_A11Y) Timber.tag(TAG).v("getVirtualViewIdForHit(" + x + "," + y + ") => "
                     + view + "avail =" + dotAvailable);
             return view;
         }
