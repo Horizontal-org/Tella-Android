@@ -9,7 +9,11 @@ import android.os.Bundle;
 import android.view.View;
 
 
+import androidx.core.content.ContextCompat;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.hzontal.tella_locking_ui.R;
+import com.hzontal.tella_locking_ui.ui.utils.DialogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,13 +58,13 @@ public class SetPatternActivity extends BasePatternActivity
         }
     }
 
-    private enum Stage {
+    protected enum Stage {
 
         Draw(R.string.pl_draw_pattern, LeftButtonState.Cancel, RightButtonState.ContinueDisabled,
                 true),
         DrawTooShort(R.string.pl_pattern_too_short, LeftButtonState.Redraw,
                 RightButtonState.ContinueDisabled, true),
-        DrawValid(R.string.pl_pattern_recorded, LeftButtonState.Redraw, RightButtonState.Continue,
+        DrawValid(R.string.pl_pattern_too_short, LeftButtonState.Redraw, RightButtonState.Continue,
                 false),
         Confirm(R.string.pl_confirm_pattern, LeftButtonState.Cancel,
                 RightButtonState.ConfirmDisabled, true),
@@ -87,8 +91,9 @@ public class SetPatternActivity extends BasePatternActivity
     private static final String KEY_PATTERN = "pattern";
 
     private int mMinPatternSize;
-    private List<PatternView.Cell> mPattern;
-    private Stage mStage;
+    protected List<PatternView.Cell> mPattern;
+    protected List<PatternView.Cell> mNewPattern;
+    protected Stage mStage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +131,7 @@ public class SetPatternActivity extends BasePatternActivity
 
         removeClearPatternRunnable();
 
-        mMessageText.setText(R.string.pl_recording_pattern);
+       // mMessageText.setText(R.string.pl_recording_pattern);
         mPatternView.setDisplayMode(PatternView.DisplayMode.Correct);
         mLeftButton.setEnabled(false);
         mRightButton.setEnabled(false);
@@ -139,19 +144,20 @@ public class SetPatternActivity extends BasePatternActivity
 
     @Override
     public void onPatternDetected(List<PatternView.Cell> newPattern) {
+        mNewPattern = newPattern;
         switch (mStage) {
             case Draw:
             case DrawTooShort:
-                if (newPattern.size() < mMinPatternSize) {
+                if (mNewPattern.size() < mMinPatternSize) {
                     updateStage(Stage.DrawTooShort);
                 } else {
-                    mPattern = new ArrayList<>(newPattern);
+                    mPattern = new ArrayList<>(mNewPattern);
                     updateStage(Stage.DrawValid);
                 }
                 break;
             case Confirm:
             case ConfirmWrong:
-                if (newPattern.equals(mPattern)) {
+                if (mNewPattern.equals(mPattern)) {
                     updateStage(Stage.ConfirmCorrect);
                 } else {
                     updateStage(Stage.ConfirmWrong);
@@ -170,10 +176,16 @@ public class SetPatternActivity extends BasePatternActivity
 
     private void onLeftButtonClicked() {
         if (mStage.leftButtonState == LeftButtonState.Redraw) {
-            mPattern = null;
-            updateStage(Stage.Draw);
+                mPattern = null;
+                updateStage(Stage.Draw);
         } else if (mStage.leftButtonState == LeftButtonState.Cancel) {
-            onCanceled();
+             if (mStage == Stage.ConfirmWrong){
+                mNewPattern = null;
+                updateStage(Stage.ConfirmWrong);
+            }else {
+                 onCanceled();
+             }
+
         } else {
             throw new IllegalStateException("left footer button pressed, but stage of " + mStage
                     + " doesn't make sense");
@@ -207,22 +219,24 @@ public class SetPatternActivity extends BasePatternActivity
       //  finish();
     }
 
-    private void updateStage(Stage newStage) {
+    protected void updateStage(Stage newStage) {
 
         Stage previousStage = mStage;
         mStage = newStage;
 
         if (mStage == Stage.DrawTooShort) {
             mMessageText.setText(getString(mStage.messageId, mMinPatternSize));
-        } else {
+        } else if (mStage != Stage.ConfirmWrong){
             mMessageText.setText(mStage.messageId);
         }
 
         mLeftButton.setText(mStage.leftButtonState.textId);
         mLeftButton.setEnabled(mStage.leftButtonState.enabled);
 
+        mRightButton.setVisibility(mStage == Stage.Confirm ? View.INVISIBLE : View.VISIBLE);
         mRightButton.setText(mStage.rightButtonState.textId);
         mRightButton.setEnabled(mStage.rightButtonState.enabled);
+        mRightButton.setTextColor(mStage.rightButtonState.enabled ? ContextCompat.getColor(this,R.color.wa_white) : ContextCompat.getColor(this,R.color.wa_white_40) );
 
         mPatternView.setInputEnabled(mStage.patternEnabled);
 
@@ -233,7 +247,11 @@ public class SetPatternActivity extends BasePatternActivity
                 mPatternView.clearPattern();
                 break;
             case DrawTooShort:
+                mPatternView.setDisplayMode(PatternView.DisplayMode.Wrong);
+                postClearPatternRunnable();
+                break;
             case ConfirmWrong:
+                DialogUtils.showBottomMessage(this,getString(R.string.pl_incorrect_confirm_pattern),false);
                 mPatternView.setDisplayMode(PatternView.DisplayMode.Wrong);
                 postClearPatternRunnable();
                 break;
