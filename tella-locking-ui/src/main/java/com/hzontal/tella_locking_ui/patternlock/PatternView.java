@@ -444,7 +444,7 @@ public class PatternView extends View {
      */
     public void setDisplayMode(DisplayMode displayMode) {
         mPatternDisplayMode = displayMode;
-        if (displayMode == DisplayMode.Animate) {
+        if (displayMode == DisplayMode.   Animate) {
             if (mPattern.size() == 0) {
                 throw new IllegalStateException("you must have a pattern to "
                         + "animate if you want to set the display mode to animate");
