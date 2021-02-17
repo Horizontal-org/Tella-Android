@@ -8,12 +8,25 @@
             />
         <activity android:name=".ui.pattern.PatternSetActivity"
                     android:screenOrientation="portrait"
+                    android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             />
         <activity android:name=".ui.pattern.PatternUnlockActivity"
                     android:screenOrientation="portrait"
+                    android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             />
         <activity android:name=".ui.settings.UnlockRedirectActivity"
                   android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.pin.SetPinActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:windowSoftInputMode="stateHidden"
+            />
+
+        <activity android:name=".ui.pin.ConfirmPinActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:windowSoftInputMode="stateHidden"
             />
     </application>
 

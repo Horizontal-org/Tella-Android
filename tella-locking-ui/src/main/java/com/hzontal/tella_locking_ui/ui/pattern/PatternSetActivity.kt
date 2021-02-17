@@ -3,6 +3,8 @@ package com.hzontal.tella_locking_ui.ui.pattern
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
+import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.TellaKeysUI
 import com.hzontal.tella_locking_ui.patternlock.PatternUtils
 import com.hzontal.tella_locking_ui.patternlock.PatternView
@@ -16,6 +18,8 @@ class PatternSetActivity : SetPatternActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mMessageText.text = getString(R.string.pl_pattern_too_short)
+        mTopImageView.background = ContextCompat.getDrawable(this,R.drawable.pattern_draw_bg)
     }
 
     @RequiresApi(Build.VERSION_CODES.M)

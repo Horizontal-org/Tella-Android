@@ -7,6 +7,7 @@ package com.hzontal.tella_locking_ui.patternlock;
 
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,9 +21,9 @@ public class BasePatternActivity extends BaseActivity {
 
     protected TextView mMessageText;
     protected PatternView mPatternView;
-    protected LinearLayout mButtonContainer;
-    protected Button mLeftButton;
-    protected Button mRightButton;
+    protected TextView mLeftButton;
+    protected TextView mRightButton;
+    protected ImageView mTopImageView;
 
     private final Runnable clearPatternRunnable = new Runnable() {
         public void run() {
@@ -38,9 +39,9 @@ public class BasePatternActivity extends BaseActivity {
         setContentView(R.layout.pl_base_pattern_activity);
         mMessageText = (TextView)findViewById(R.id.pl_message_text);
         mPatternView = (PatternView)findViewById(R.id.pl_pattern);
-        mButtonContainer = (LinearLayout)findViewById(R.id.pl_button_container);
-        mLeftButton = (Button)findViewById(R.id.pl_left_button);
-        mRightButton = (Button)findViewById(R.id.pl_right_button);
+         mLeftButton = (TextView)findViewById(R.id.pl_left_button);
+         mRightButton = (TextView)findViewById(R.id.pl_right_button);
+         mTopImageView = (ImageView) findViewById(R.id.pl_patternImg);
     }
 
     protected void removeClearPatternRunnable() {

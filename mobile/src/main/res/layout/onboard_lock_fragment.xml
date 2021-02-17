@@ -62,7 +62,7 @@
         app:startImg="@drawable/tella_dark__logo"
         app:topText="@string/onboard_pattern"
         app:bottomText="@string/onboard_pattern_description"
-        android:id="@+id/lockPatterndBtn"
+        android:id="@+id/lockPatternBtn"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

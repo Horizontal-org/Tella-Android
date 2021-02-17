@@ -33,9 +33,9 @@ public class ConfirmPatternActivity extends BasePatternActivity
         mMessageText.setText(R.string.pl_draw_pattern_to_unlock);
         mPatternView.setInStealthMode(isStealthModeEnabled());
         mPatternView.setOnPatternListener(this);
-        mLeftButton.setText(R.string.pl_cancel);
+        //mLeftButton.setText(R.string.pl_cancel);
         mLeftButton.setOnClickListener(v -> onCancel());
-        mRightButton.setText(R.string.pl_forgot_pattern);
+       // mRightButton.setText(R.string.pl_forgot_pattern);
         mRightButton.setOnClickListener(v -> onForgotPassword());
         ViewAccessibilityCompat.announceForAccessibility(mMessageText, mMessageText.getText());
 

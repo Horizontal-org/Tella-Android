@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 import com.hzontal.tella_locking_ui.TellaKeysUI;
 import com.hzontal.tella_locking_ui.patternlock.ConfirmPatternActivity;
@@ -48,9 +47,8 @@ public class PatternUpgradeActivity extends ConfirmPatternActivity implements IC
         super.onCreate(savedInstanceState);
 
         mCacheWord = new CacheWordHandler(this);
-
-        Button button = findViewById(R.id.pl_right_button);
-        button.setVisibility(View.INVISIBLE);
+        mRightButton.setVisibility(View.INVISIBLE);
+        mLeftButton.setVisibility(View.INVISIBLE);
     }
 
     @Override
