@@ -6,6 +6,7 @@ import com.hzontal.tella_locking_ui.patternlock.ConfirmPatternActivity
 import com.hzontal.tella_locking_ui.patternlock.PatternUtils
 import com.hzontal.tella_locking_ui.patternlock.PatternView
 import org.hzontal.tella.keys.MainKeyStore.IMainKeyLoadCallback
+import org.hzontal.tella.keys.config.UnlockRegistry
 import org.hzontal.tella.keys.key.MainKey
 import timber.log.Timber
 import javax.crypto.spec.PBEKeySpec
@@ -21,6 +22,7 @@ class PatternUnlockActivity : ConfirmPatternActivity() {
 
         TellaKeysUI.getMainKeyStore().load(config.wrapper, PBEKeySpec(mNewPassphrase.toCharArray()), object : IMainKeyLoadCallback {
             override fun onReady(mainKey: MainKey) {
+                TellaKeysUI.getUnlockRegistry().setActiveMethod(this@PatternUnlockActivity, UnlockRegistry.Method.TELLA_PATTERN)
                 Timber.d("*** MainKeyStore.IMainKeyLoadCallback.onReady")
                 getMainKeyHolder().set(mainKey);
                 TellaKeysUI.getCredentialsCallback().onSuccessfulUnlock(this@PatternUnlockActivity)

@@ -12,7 +12,7 @@ import org.hzontal.tella.keys.key.MainKey
 import timber.log.Timber
 import javax.crypto.spec.PBEKeySpec
 
-class UnlockPasswordActivity : BasePasswordActivity() {
+class PasswordUnlockActivity : BasePasswordActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +27,7 @@ class UnlockPasswordActivity : BasePasswordActivity() {
             override fun onReady(mainKey: MainKey) {
                 Timber.d("*** MainKeyStore.IMainKeyLoadCallback.onReady")
                 TellaKeysUI.getMainKeyHolder().set(mainKey);
-                TellaKeysUI.getCredentialsCallback().onSuccessfulUnlock(this@UnlockPasswordActivity)
+                TellaKeysUI.getCredentialsCallback().onSuccessfulUnlock(this@PasswordUnlockActivity)
             }
             override fun onError(throwable: Throwable) {
                 Timber.d(throwable, "*** MainKeyStore.UnlockRegistry.IUnlocker.onError")

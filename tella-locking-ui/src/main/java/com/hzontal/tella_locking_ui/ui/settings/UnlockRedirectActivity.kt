@@ -5,7 +5,6 @@ import android.os.Bundle
 import com.hzontal.tella_locking_ui.TellaKeysUI
 import com.hzontal.tella_locking_ui.common.BaseActivity
 import com.hzontal.tella_locking_ui.ui.DeviceCredentialsUnlockActivity
-import com.hzontal.tella_locking_ui.ui.PasswordUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternSetActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity
 import org.hzontal.tella.keys.config.UnlockRegistry

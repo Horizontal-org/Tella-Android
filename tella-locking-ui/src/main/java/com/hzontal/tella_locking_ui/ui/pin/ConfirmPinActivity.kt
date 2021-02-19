@@ -6,6 +6,7 @@ import com.hzontal.tella_locking_ui.TellaKeysUI
 import com.hzontal.tella_locking_ui.ui.pin.base.BasePinActivity
 import com.hzontal.tella_locking_ui.ui.utils.DialogUtils
 import org.hzontal.tella.keys.MainKeyStore
+import org.hzontal.tella.keys.config.UnlockRegistry
 import org.hzontal.tella.keys.key.MainKey
 import timber.log.Timber
 import javax.crypto.spec.PBEKeySpec
@@ -27,6 +28,7 @@ class ConfirmPinActivity  : BasePinActivity() {
 
            TellaKeysUI.getMainKeyStore().store(mainKey, config.wrapper, keySpec, object : MainKeyStore.IMainKeyStoreCallback {
                override fun onSuccess(mainKey: MainKey) {
+                   TellaKeysUI.getUnlockRegistry().setActiveMethod(this@ConfirmPinActivity, UnlockRegistry.Method.TELLA_PIN)
                    Timber.d("** MainKey stored: %s **", mainKey)
                    // here, we store MainKey in memory -> unlock the app
                    TellaKeysUI.getMainKeyHolder().set(mainKey)
