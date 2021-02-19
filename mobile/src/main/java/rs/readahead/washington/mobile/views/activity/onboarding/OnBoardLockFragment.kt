@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.hzontal.tella_locking_ui.ui.password.SetPasswordActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternSetActivity
 import com.hzontal.tella_locking_ui.ui.pin.SetPinActivity
 import rs.readahead.washington.mobile.R
@@ -37,7 +38,7 @@ class OnBoardLockFragment : BaseFragment(){
     }
 
     private fun initListeners(){
-        lockPasswordBtn.setOnClickListener{}
+        lockPasswordBtn.setOnClickListener{startActivity(Intent(activity, SetPasswordActivity::class.java))}
         lockPINdBtn.setOnClickListener{startActivity(Intent(activity, SetPinActivity::class.java))}
         lockPatternBtn.setOnClickListener{startActivity(Intent(activity, PatternSetActivity::class.java))}
     }
