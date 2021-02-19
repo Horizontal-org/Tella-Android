@@ -19,9 +19,9 @@ import com.hzontal.tella_locking_ui.TellaKeysUI;
 import com.hzontal.tella_locking_ui.common.CredentialsCallback;
 import com.hzontal.tella_locking_ui.ui.AppCompatActivityUnlocker;
 import com.hzontal.tella_locking_ui.ui.DeviceCredentialsUnlockActivity;
-import com.hzontal.tella_locking_ui.ui.PasswordUnlockActivity;
-import com.hzontal.tella_locking_ui.ui.PinUnlockActivity;
+import com.hzontal.tella_locking_ui.ui.password.PasswordUnlockActivity;
 import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity;
+import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity;
 
 import org.hzontal.tella.keys.MainKeyStore;
 import org.hzontal.tella.keys.TellaKeys;
@@ -49,7 +49,6 @@ import rs.readahead.washington.mobile.util.LocaleManager;
 import rs.readahead.washington.mobile.util.jobs.TellaJobCreator;
 import rs.readahead.washington.mobile.views.activity.ExitActivity;
 import rs.readahead.washington.mobile.views.activity.MainActivity;
-import rs.readahead.washington.mobile.views.activity.TellaIntroActivity;
 import rs.readahead.washington.mobile.views.activity.onboarding.OnBoardingActivity;
 import timber.log.Timber;
 
@@ -201,7 +200,7 @@ public class MyApplication extends Application implements IUnlockRegistryHolder,
         // we need this to set one active unlocking method
         // in Tella1 this can be here and fixed, but in Tella2 we need to read saved active method
         // when starting the app and set it (that functionality is missing from active registry, with changing method support)
-        unlockRegistry.setActiveMethod(getApplicationContext(), UnlockRegistry.Method.TELLA_PATTERN);
+       // unlockRegistry.setActiveMethod(getApplicationContext(), UnlockRegistry.Method.TELLA_PATTERN);
     }
 
     @Override
