@@ -1,6 +1,5 @@
 package com.hzontal.tella_locking_ui.ui.pattern
 
-import android.os.Bundle
 import com.hzontal.tella_locking_ui.TellaKeysUI
 import com.hzontal.tella_locking_ui.TellaKeysUI.getMainKeyHolder
 import com.hzontal.tella_locking_ui.patternlock.ConfirmPatternActivity

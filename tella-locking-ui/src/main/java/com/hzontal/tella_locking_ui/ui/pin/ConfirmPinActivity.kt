@@ -21,7 +21,6 @@ class ConfirmPinActivity  : BasePinActivity() {
 
     override fun onSuccessSetPin(pin: String?) {
        if (mConfirmPin == pin) {
-
            val mainKey = MainKey.generate()
            val keySpec = PBEKeySpec(pin?.toCharArray())
            val config = TellaKeysUI.getUnlockRegistry().getActiveConfig(this@ConfirmPinActivity)
@@ -35,17 +34,18 @@ class ConfirmPinActivity  : BasePinActivity() {
                }
 
                override fun onError(throwable: Throwable) {
+                   onFailureSetPin("General error occurred")
                    Timber.e(throwable, "** MainKey store error **")
                }
            })
         }
        else{
-           DialogUtils.showBottomMessage(this,getString(R.string.confirm_pin_error_msg),false)
+            onFailureSetPin(getString(R.string.confirm_pin_error_msg))
        }
     }
 
-    override fun onFailureSetPin(pin: String) {
-        TODO("Not yet implemented")
+    override fun onFailureSetPin(error: String) {
+        DialogUtils.showBottomMessage(this,error,false)
     }
 
 }

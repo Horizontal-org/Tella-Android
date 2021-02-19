@@ -12,7 +12,7 @@ import com.hzontal.tella_locking_ui.ui.pin.edit_text.NoImeEditText
 import com.hzontal.tella_locking_ui.ui.pin.pinview.PinLockListener
 import com.hzontal.tella_locking_ui.ui.pin.pinview.PinLockView
 
-open class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickListener,OnSetPinClickListener{
+abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickListener,OnSetPinClickListener{
 
     private lateinit var pinLockView: PinLockView
     lateinit var pinLeftButton: TextView
@@ -97,14 +97,6 @@ open class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickListen
                 onLeftButtonClickListener()
             }
         }
-    }
-
-    override fun onSuccessSetPin(pin: String?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onFailureSetPin(pin: String) {
-        TODO("Not yet implemented")
     }
 
 }

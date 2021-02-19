@@ -26,7 +26,6 @@ class PatternSetActivity : SetPatternActivity() {
     override fun onConfirmed() {
         super.onConfirmed()
         Timber.d("** We've finished first MainKey saving - now we need to proceed with application **")
-        TellaKeysUI.getCredentialsCallback().onSuccessfulUnlock(this)
         finish()
     }
 
