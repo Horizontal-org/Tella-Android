@@ -28,4 +28,12 @@
     <string name="confirm_pin_msg">Please enter your PIN one more time,\n just to be sure.</string>
     <string name="confirm_pin_error_msg">Please try again. Your PINs do not match.</string>
     <string name="incorrect_pin_error_msg">Incorrect PIN,\n please try again</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="password_message">Use at least 6 characters and avoid\n using passwords that can be guessed\n easily, such as “password.” The longer\n your password, the more secure it is.</string>
+    <string name="confirm_password_error_msg">Please try again. Your passwords do not match.</string>
+    <string name="all_done_text">You\'re all\ndone!</string>
+    <string name="done_msg_text">You can always change your lock option\n and further customize Tella in Settings.</string>
+    <string name="go_to_tella">Go to tella</string>
+    <string name="incorrect_password_error_msg">Incorrect password,\n please try again</string>
+    <string name="enter_password_tella">Enter your password to \nunlock Tella</string>
 </resources>

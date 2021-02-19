@@ -1,131 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/wa_purple"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@color/wa_purple">
 
-  <androidx.constraintlayout.widget.Guideline
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal"
-      app:layout_constraintGuide_percent=".07"
-      android:id="@+id/guideH10"
-      />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideH10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".07" />
 
-  <androidx.appcompat.widget.AppCompatImageView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      app:layout_constraintTop_toBottomOf="@id/guideH10"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      android:id="@+id/pin_TopImg"
-      android:background="@drawable/pin_top_bg"
-      />
-  <TextView
-      app:layout_constraintTop_toBottomOf="@id/pin_TopImg"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      android:text="@string/enter_your_pin"
-      style="@style/Unlock_White_Text"
-      android:textStyle="bold"
-      android:layout_marginTop="20dp"
-      android:id="@+id/pin_enterTV"
-      />
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/pin_TopImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/pin_top_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideH10" />
 
-  <TextView
-      app:layout_constraintTop_toBottomOf="@id/pin_enterTV"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      android:text="@string/pin_message"
-      style="@style/Unlock_White_Text"
-      android:layout_marginTop="4dp"
-      android:gravity="center"
-      android:textSize="14sp"
-      android:id="@+id/pin_msgTV"
-      />
+    <TextView
+        android:id="@+id/pin_enterTV"
+        style="@style/Unlock_White_Text_Bold"
+        android:text="@string/enter_your_pin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pin_TopImg" />
 
-  <View
-      android:layout_width="40dp"
-      android:layout_height="40dp"
-      app:layout_constraintBottom_toBottomOf="@id/pin_eye"
-      app:layout_constraintTop_toTopOf="@id/pin_eye"
-      app:layout_constraintEnd_toEndOf="@id/pin_eye"
-      app:layout_constraintStart_toStartOf="@id/pin_eye"
-      android:elevation="5dp"
-      android:id="@+id/pinClickView"
-      />
-  <androidx.appcompat.widget.AppCompatImageView
-      android:layout_width="22dp"
-      android:layout_height="15dp"
-      app:layout_constraintEnd_toEndOf="@id/pin_editText"
-      app:layout_constraintTop_toTopOf="@id/pin_editText"
-      app:layout_constraintBottom_toBottomOf="@id/pin_editText"
-      android:layout_marginBottom="18dp"
-      android:clickable="true"
-      android:padding="3dp"
-      android:background="@drawable/eye"
-      android:elevation="2dp"
-      android:id="@+id/pin_eye"
-      android:focusable="true" />
+    <TextView
+        android:id="@+id/pin_msgTV"
+        style="@style/Unlock_White_Text_Medium"
+        android:text="@string/pin_message"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pin_enterTV" />
 
-  <com.hzontal.tella_locking_ui.ui.pin.edit_text.NoImeEditText
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="24dp"
-      android:layout_marginEnd="24dp"
-      android:layout_marginTop="25dp"
-      android:inputType="numberPassword"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/pin_msgTV"
-      android:background="@drawable/bg_pin_edittext"
-      android:letterSpacing="0.2"
-      android:cursorVisible="true"
-      android:clickable="true"
-      android:paddingBottom="18dp"
-      android:textSize="24sp"
-      android:textColor="@color/wa_white"
-      android:gravity="center_horizontal"
-      tools:text="bjbewjfqw bjfjwq"
-      android:id="@+id/pin_editText"
-      android:focusable="true" />
+    <View
+        android:id="@+id/pinClickView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:elevation="5dp"
+        app:layout_constraintBottom_toBottomOf="@id/pin_eye"
+        app:layout_constraintEnd_toEndOf="@id/pin_eye"
+        app:layout_constraintStart_toStartOf="@id/pin_eye"
+        app:layout_constraintTop_toTopOf="@id/pin_eye" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/pin_eye"
+        android:layout_width="22dp"
+        android:layout_height="15dp"
+        android:layout_marginBottom="18dp"
+        android:background="@drawable/eye"
+        android:clickable="true"
+        android:elevation="2dp"
+        android:focusable="true"
+        android:padding="3dp"
+        app:layout_constraintBottom_toBottomOf="@id/pin_editText"
+        app:layout_constraintEnd_toEndOf="@id/pin_editText"
+        app:layout_constraintTop_toTopOf="@id/pin_editText" />
+
+    <com.hzontal.tella_locking_ui.ui.pin.edit_text.NoImeEditText
+        android:id="@+id/pin_editText"
+        style="@style/Password_EditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pin_msgTV"
+        tools:text="bjbewjfqw bjfjwq" />
 
 
+    <com.hzontal.tella_locking_ui.ui.pin.pinview.PinLockView
+        android:id="@+id/pin_lock_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:keypadButtonSize="62dp"
+        app:keypadShowDeleteButton="true"
+        app:keypadTextColor="@color/wa_white"
+        app:keypadTextSize="28sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pin_editText" />
 
-  <com.hzontal.tella_locking_ui.ui.pin.pinview.PinLockView
-      android:id="@+id/pin_lock_view"
-      app:layout_constraintTop_toBottomOf="@id/pin_editText"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="16dp"
-      app:keypadButtonSize="62dp"
-      app:keypadShowDeleteButton="true"
-      app:keypadTextSize="28sp"
-      app:keypadTextColor="@color/wa_white"
-      />
+    <TextView
+        android:id="@+id/pin_left_button"
+        style="@style/Unlock_White_Text_Back"
+        android:text="@string/pl_cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-  <TextView
-      android:id="@+id/pin_left_button"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      android:text="@string/pl_cancel"
-      android:layout_marginBottom="13dp"
-      android:layout_marginStart="34dp"
-      style="@style/Unlock_White_Text"
-      />
-
-  <TextView
-      android:id="@+id/pin_right_button"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      android:text="@string/pl_continue"
-      android:layout_marginBottom="13dp"
-      android:layout_marginEnd="34dp"
-      style="@style/Unlock_White_Text"
-      android:textColor="@color/wa_white_40"
-      />
+    <TextView
+        android:id="@+id/pin_right_button"
+        style="@style/Unlock_White_Text_Next"
+        android:text="@string/pl_continue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

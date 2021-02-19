@@ -58,4 +58,44 @@
         <item name="android:layout_marginBottom">54dp</item>
         <item name="android:background">@drawable/pop_up_background</item>
     </style>
+
+    <style name="Unlock_White_Text_Bold" parent="Unlock_White_Text">
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginTop">20dp</item>
+    </style>
+
+    <style name="Unlock_White_Text_Medium" parent="Unlock_White_Text">
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Unlock_White_Text_Next" parent="Unlock_White_Text">
+        <item name="android:layout_marginBottom">13dp</item>
+        <item name="android:layout_marginEnd">34dp</item>
+        <item name="android:textColor">@color/wa_white_40</item>
+    </style>
+
+    <style name="Unlock_White_Text_Back" parent="Unlock_White_Text">
+        <item name="android:layout_marginBottom">13dp</item>
+        <item name="android:layout_marginStart">34dp</item>
+    </style>
+
+    <style name="Password_EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">24dp</item>
+        <item name="android:layout_marginEnd">24dp</item>
+        <item name="android:layout_marginTop">50dp</item>
+        <item name="android:inputType">numberPassword</item>
+        <item name="android:background">@drawable/bg_pin_edittext</item>
+        <item name="android:letterSpacing">0.2</item>
+        <item name="android:cursorVisible">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:paddingBottom">18dp</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/wa_white</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:focusable">true</item>
+    </style>
 </resources>
