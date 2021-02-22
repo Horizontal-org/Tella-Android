@@ -22,8 +22,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
-import org.hzontal.tella.keys.key.LifecycleMainKey;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -169,14 +167,13 @@ public class MainActivity extends MetadataActivity implements
     }
 
     @SuppressLint("NonConstantResourceId")
+    @NeedsPermission(Manifest.permission.CAMERA)
     @OnClick(R.id.camera_tools_container)
     void onContainerClicked() {
-        if (PermissionUtil.checkPermission(this, Manifest.permission.CAMERA)) {
-            if (Preferences.isAnonymousMode()) {
-                MainActivityPermissionsDispatcher.switchToCameraModeAnonymousWithPermissionCheck(this);
-            } else {
-                MainActivityPermissionsDispatcher.switchToCameraModeLocationWithPermissionCheck(this);
-            }
+        if (Preferences.isAnonymousMode()) {
+            MainActivityPermissionsDispatcher.switchToCameraModeAnonymousWithPermissionCheck(this);
+        } else {
+            MainActivityPermissionsDispatcher.switchToCameraModeLocationWithPermissionCheck(this);
         }
     }
 
