@@ -218,6 +218,12 @@ public class MyApplication extends Application implements IUnlockRegistryHolder,
     }
 
     @Override
+    public void onLockConfirmed(Context context) {
+        Preferences.setFirstStart(false);
+        onSuccessfulUnlock(context);
+    }
+
+    @Override
     public UnlockRegistry getUnlockRegistry() {
         return unlockRegistry;
     }

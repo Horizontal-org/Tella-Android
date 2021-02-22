@@ -1,10 +1,12 @@
 package com.hzontal.tella_locking_ui.ui.password.base
 
+import android.app.Activity
 import android.graphics.Rect
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -26,15 +28,16 @@ abstract class BasePasswordActivity   : BaseActivity() , View.OnClickListener, O
     lateinit var topImageView: AppCompatImageView
     lateinit var passwordLeftButton: TextView
     lateinit var passwordMsgTextView: TextView
-    private lateinit var passwordRightButton: TextView
+    lateinit var passwordRightButton: TextView
     private val keyboardStatus = MutableLiveData<Pair<Boolean, Double>>()
     private val container: ViewGroup by lazy {
         findViewById<ViewGroup>(android.R.id.content)
     }
     private var isPasswordMode = true
+    var isHiLighted = false
     private lateinit var guideBottom : Guideline
     private lateinit var guideTop : Guideline
-    private var mPassword = ""
+    var mPassword = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,6 +105,17 @@ abstract class BasePasswordActivity   : BaseActivity() , View.OnClickListener, O
             }
         }
     }
+    fun hideKeyboard() {
+        val imm =
+                getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        //Find the currently focused view, so we can grab the correct window token from it.
+        var view = currentFocus
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = View(this)
+        }
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
     private fun onRightButtonClickListener(){
         onSuccessSetPassword(mPassword)
     }
@@ -110,8 +124,9 @@ abstract class BasePasswordActivity   : BaseActivity() , View.OnClickListener, O
         overridePendingTransition(0, 0)
     }
     private fun hiLightLeftButton(isHiLighted : Boolean){
+        this.isHiLighted = isHiLighted
         passwordRightButton.setTextColor(if (isHiLighted) ContextCompat.getColor(this, R.color.wa_white) else ContextCompat.getColor(this, R.color.wa_white_40))
-        passwordRightButton.setOnClickListener{if (isHiLighted) this else null }
+        passwordRightButton.setOnClickListener(if (isHiLighted) this else null )
     }
 
     private fun onShowPasswordClickListener() {

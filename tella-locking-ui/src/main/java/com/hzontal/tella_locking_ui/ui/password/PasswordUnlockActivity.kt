@@ -1,6 +1,7 @@
 package com.hzontal.tella_locking_ui.ui.password
 
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.hzontal.tella_locking_ui.R
@@ -18,8 +19,18 @@ class PasswordUnlockActivity : BasePasswordActivity() {
         super.onCreate(savedInstanceState)
         topImageView.background = ContextCompat.getDrawable(this,R.drawable.tella_logo_dark_bg)
         enterPasswordTextView.isVisible = false
+        passwordLeftButton.isVisible = false
+        passwordRightButton.isVisible = false
         passwordMsgTextView.text = getText(R.string.enter_password_tella)
         passwordEditText.onChange { passwordMsgTextView.text = getText(R.string.enter_password_tella) }
+        passwordEditText.setOnKeyListener { _, keyCode, keyEvent ->
+            if (keyEvent.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                if (isHiLighted)
+                    onSuccessSetPassword(mPassword)
+                return@setOnKeyListener true
+            }
+            return@setOnKeyListener false
+        }
     }
 
     override fun onSuccessSetPassword(password: String) {

@@ -6,4 +6,6 @@ public interface CredentialsCallback {
     void onSuccessfulUnlock(Context context);
 
     void onUnSuccessfulUnlock();
+
+    void onLockConfirmed(Context context);
 }

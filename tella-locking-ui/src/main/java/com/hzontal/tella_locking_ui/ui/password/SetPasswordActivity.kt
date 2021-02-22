@@ -9,7 +9,7 @@ internal const val CONFIRM_PASSWORD = "confirm_password"
 class SetPasswordActivity : BasePasswordActivity() {
 
     override fun onSuccessSetPassword(password: String) {
-        val intent = Intent(this, ConfirmPinActivity::class.java)
+        val intent = Intent(this, ConfirmPasswordActivity::class.java)
         intent.putExtra(CONFIRM_PASSWORD, password)
         startActivity(intent)
         overridePendingTransition(0, 0)
