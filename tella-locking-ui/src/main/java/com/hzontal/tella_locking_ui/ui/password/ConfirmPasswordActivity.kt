@@ -23,7 +23,6 @@ class ConfirmPasswordActivity : BasePasswordActivity() {
             val config = TellaKeysUI.getUnlockRegistry().getActiveConfig(this@ConfirmPasswordActivity)
             TellaKeysUI.getMainKeyStore().store(mainKey, config.wrapper, keySpec, object : MainKeyStore.IMainKeyStoreCallback {
                 override fun onSuccess(mainKey: MainKey) {
-                    TellaKeysUI.getUnlockRegistry().setActiveMethod(this@ConfirmPasswordActivity,UnlockRegistry.Method.TELLA_PASSWORD)
                     Timber.d("** MainKey stored: %s **", mainKey)
                     // here, we store MainKey in memory -> unlock the app
                     TellaKeysUI.getMainKeyHolder().set(mainKey)

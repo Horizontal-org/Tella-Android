@@ -14,7 +14,9 @@ class PinUnlockActivity  : BasePinActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        pinMsgText.isVisible = false
         pinLeftButton.isVisible = false
+        pinTopImageView.background = ContextCompat.getDrawable(this,R.drawable.tella_logo_dark_bg)
         pinTopText.text = getString(R.string.enter_pin_unlock_tella)
     }
 

@@ -1,8 +1,10 @@
 package com.hzontal.tella_locking_ui.ui.pin
 
+import android.content.Intent
 import android.os.Bundle
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.TellaKeysUI
+import com.hzontal.tella_locking_ui.ui.ConfirmCredentialsActivity
 import com.hzontal.tella_locking_ui.ui.pin.base.BasePinActivity
 import com.hzontal.tella_locking_ui.ui.utils.DialogUtils
 import org.hzontal.tella.keys.MainKeyStore
@@ -24,17 +26,16 @@ class ConfirmPinActivity  : BasePinActivity() {
        if (mConfirmPin == pin) {
            val mainKey = MainKey.generate()
            val keySpec = PBEKeySpec(pin?.toCharArray())
+           TellaKeysUI.getUnlockRegistry().setActiveMethod(this@ConfirmPinActivity,UnlockRegistry.Method.TELLA_PIN)
            val config = TellaKeysUI.getUnlockRegistry().getActiveConfig(this@ConfirmPinActivity)
-
            TellaKeysUI.getMainKeyStore().store(mainKey, config.wrapper, keySpec, object : MainKeyStore.IMainKeyStoreCallback {
                override fun onSuccess(mainKey: MainKey) {
-                   TellaKeysUI.getUnlockRegistry().setActiveMethod(this@ConfirmPinActivity, UnlockRegistry.Method.TELLA_PIN)
                    Timber.d("** MainKey stored: %s **", mainKey)
                    // here, we store MainKey in memory -> unlock the app
                    TellaKeysUI.getMainKeyHolder().set(mainKey)
-                   TellaKeysUI.getCredentialsCallback().onSuccessfulUnlock(this@ConfirmPinActivity)
+                   startActivity(Intent(this@ConfirmPinActivity, ConfirmCredentialsActivity::class.java))
+                   finishAffinity()
                }
-
                override fun onError(throwable: Throwable) {
                    onFailureSetPin("General error occurred")
                    Timber.e(throwable, "** MainKey store error **")
