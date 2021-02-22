@@ -5,12 +5,6 @@
     android:layout_height="match_parent"
     android:background="@color/wa_purple">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideH26"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent=".27" />
 
     <TextView
         android:id="@+id/allDoneTv"
@@ -21,8 +15,10 @@
         android:text="@string/all_done_text"
         android:textSize="40sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/doneMsgTv"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guideH26" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/doneMsgTv"
@@ -33,8 +29,9 @@
         android:gravity="start"
         android:text="@string/done_msg_text"
         android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/doneImgV"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/allDoneTv" />
+        app:layout_constraintTop_toBottomOf="@+id/allDoneTv" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/doneImgV"
@@ -43,8 +40,9 @@
         android:layout_marginTop="21dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/done_unlocking_setting_bg"
+        app:layout_constraintBottom_toTopOf="@+id/finishUnlockingBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/doneMsgTv" />
+        app:layout_constraintTop_toBottomOf="@+id/doneMsgTv" />
 
     <Button
         android:id="@+id/finishUnlockingBtn"
@@ -58,6 +56,7 @@
         android:padding="8dp"
         android:text="@string/go_to_tella"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/doneImgV" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

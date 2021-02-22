@@ -17,7 +17,10 @@ class ConfirmCredentialsActivity : BaseActivity() {
 
     private fun initView(){
         goToTellaButton = findViewById(R.id.finishUnlockingBtn)
-        goToTellaButton.setOnClickListener { TellaKeysUI.getCredentialsCallback().onSuccessfulUnlock(this) }
+        goToTellaButton.setOnClickListener {
+            TellaKeysUI.getCredentialsCallback().onLockConfirmed(this@ConfirmCredentialsActivity)
+            finish()
+        }
     }
 
 }
