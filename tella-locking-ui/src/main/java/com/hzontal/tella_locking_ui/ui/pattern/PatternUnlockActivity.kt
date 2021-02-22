@@ -1,5 +1,7 @@
 package com.hzontal.tella_locking_ui.ui.pattern
 
+import android.os.Bundle
+import androidx.core.view.isVisible
 import com.hzontal.tella_locking_ui.TellaKeysUI
 import com.hzontal.tella_locking_ui.TellaKeysUI.getMainKeyHolder
 import com.hzontal.tella_locking_ui.patternlock.ConfirmPatternActivity
@@ -17,6 +19,11 @@ class PatternUnlockActivity : ConfirmPatternActivity() {
     private lateinit var mNewPassphrase: String
     private var isPatternCorrect = false
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mLeftButton.isVisible = false
+        mRightButton.isVisible = false
+    }
     override fun isPatternCorrect(pattern: MutableList<PatternView.Cell>?): Boolean {
         mNewPassphrase = PatternUtils.patternToSha1String(pattern)
 

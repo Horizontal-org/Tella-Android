@@ -185,7 +185,6 @@ public class SetPatternActivity extends BasePatternActivity
             }else {
                  onCanceled();
              }
-
         } else {
             throw new IllegalStateException("left footer button pressed, but stage of " + mStage
                     + " doesn't make sense");
@@ -216,7 +215,7 @@ public class SetPatternActivity extends BasePatternActivity
 
     protected void onConfirmed() {
         setResult(RESULT_OK);
-      //  finish();
+        finish();
     }
 
     protected void updateStage(Stage newStage) {
