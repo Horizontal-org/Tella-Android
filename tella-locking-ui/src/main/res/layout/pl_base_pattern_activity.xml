@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent=".07"
+            app:layout_constraintGuide_percent=".06"
             android:id="@+id/guideH113"
             />
 
@@ -40,8 +40,8 @@
             android:id="@+id/pl_pattern"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintWidth_percent=".6"
-            app:layout_constraintHeight_percent=".5"
+            app:layout_constraintWidth_percent=".8"
+            app:layout_constraintHeight_percent=".6"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/pl_message_text"
