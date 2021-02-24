@@ -1,60 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/wa_purple"
     android:divider="?dividerHorizontal"
     android:orientation="vertical"
     android:showDividers="middle">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".06"
+            android:id="@+id/guideH113"
+            />
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/guideH113"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/pl_patternImg"
+            android:background="@drawable/tella_logo_dark_bg"
+            />
         <TextView
             android:id="@+id/pl_message_text"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textAppearance="?android:textAppearanceMedium" />
+            android:layout_marginTop="23dp"
+            android:text="@string/pl_draw_pattern_msg"
+            app:layout_constraintTop_toBottomOf="@id/pl_patternImg"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/Unlock_White_Text" />
 
         <com.hzontal.tella_locking_ui.patternlock.PatternView
             android:id="@+id/pl_pattern"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:pl_regularColor="@color/wa_dialog_gray"
-            app:pl_errorColor="@color/wa_red"
-            app:pl_successColor="@color/wa_green"/>
-
-        <View
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="1" />
-    </LinearLayout>
+            app:layout_constraintWidth_percent=".8"
+            app:layout_constraintHeight_percent=".6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pl_message_text"
+            app:pl_aspect="lock_width"
+            app:pl_regularColor="@color/wa_white"
+            app:pl_errorColor="@color/wa_red_error"
+            app:pl_successColor="@color/wa_orange"/>
 
-    <LinearLayout
-        android:id="@+id/pl_button_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
-        <Button
+
+        <TextView
             android:id="@+id/pl_left_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            style="?android:attr/borderlessButtonStyle" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/pl_cancel"
+            android:layout_marginBottom="13dp"
+            android:layout_marginStart="34dp"
+            style="@style/Unlock_White_Text"
+            />
 
-        <Button
+        <TextView
             android:id="@+id/pl_right_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            style="?android:attr/borderlessButtonStyle" />
-    </LinearLayout>
-</LinearLayout>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/pl_continue"
+            android:layout_marginBottom="13dp"
+            android:layout_marginEnd="34dp"
+            style="@style/Unlock_White_Text"
+            android:textColor="@color/wa_white_40"
+            />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

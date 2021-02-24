@@ -44,6 +44,7 @@ import rs.readahead.washington.mobile.mvp.presenter.MediaFileViewerPresenter;
 import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.util.ThreadUtil;
+import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
 import timber.log.Timber;
 

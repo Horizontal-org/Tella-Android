@@ -1,13 +1,18 @@
 package com.hzontal.tella_locking_ui.ui.pattern
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
+import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.TellaKeysUI
 import com.hzontal.tella_locking_ui.patternlock.PatternUtils
 import com.hzontal.tella_locking_ui.patternlock.PatternView
 import com.hzontal.tella_locking_ui.patternlock.SetPatternActivity
+import com.hzontal.tella_locking_ui.ui.ConfirmCredentialsActivity
 import org.hzontal.tella.keys.MainKeyStore
+import org.hzontal.tella.keys.config.UnlockRegistry
 import org.hzontal.tella.keys.key.MainKey
 import timber.log.Timber
 import javax.crypto.spec.PBEKeySpec
@@ -16,14 +21,14 @@ class PatternSetActivity : SetPatternActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mMessageText.text = getString(R.string.pl_pattern_too_short)
+        mTopImageView.background = ContextCompat.getDrawable(this,R.drawable.pattern_draw_bg)
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onConfirmed() {
         super.onConfirmed()
         Timber.d("** We've finished first MainKey saving - now we need to proceed with application **")
-        TellaKeysUI.getCredentialsCallback().onSuccessfulUnlock(this)
-        finish()
     }
 
     override fun getMinPatternSize(): Int {
@@ -41,6 +46,7 @@ class PatternSetActivity : SetPatternActivity() {
         val mNewPassphrase = PatternUtils.patternToSha1String(pattern)
         // holder.unlockRegistry.setActiveMethod(applicationContext, UnlockRegistry.Method.TELLA_PATTERN)
         // I've put this in LockApp - for holder.unlockRegistry.getActiveConfig(this) to work
+        TellaKeysUI.getUnlockRegistry().setActiveMethod(this@PatternSetActivity, UnlockRegistry.Method.TELLA_PATTERN)
 
         val mainKey = MainKey.generate()
         val keySpec = PBEKeySpec(mNewPassphrase.toCharArray())
@@ -51,6 +57,8 @@ class PatternSetActivity : SetPatternActivity() {
                 Timber.d("** MainKey stored: %s **", mainKey)
                 // here, we store MainKey in memory -> unlock the app
                 TellaKeysUI.getMainKeyHolder().set(mainKey)
+                startActivity(Intent(this@PatternSetActivity, ConfirmCredentialsActivity::class.java))
+                finishAffinity()
             }
 
             override fun onError(throwable: Throwable) {

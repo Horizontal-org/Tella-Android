@@ -38,6 +38,7 @@ import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.util.jobs.TellaUploadJob;
 import rs.readahead.washington.mobile.views.adapters.SectionItemOffset;
 import rs.readahead.washington.mobile.views.adapters.UploadSection;
+import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.custom.StopResumeUploadButton;
 
 

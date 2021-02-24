@@ -34,6 +34,7 @@ import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadPresenterCont
 import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadPresenter;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.views.adapters.UploadInformationRecycleViewAdapter;
+import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 
 public class UploadInformationActivity extends BaseLockActivity implements
         ITellaFileUploadPresenterContract.IView, UploadInformationRecycleViewAdapter.UploadInformationInterface {

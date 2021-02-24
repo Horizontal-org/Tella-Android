@@ -19,6 +19,7 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.mvp.contract.IProtectionSettingsPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.ProtectionSettingsPresenter;
 import rs.readahead.washington.mobile.util.CamouflageManager;
+import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 
 
 public class ProtectionSettingsActivity extends BaseLockActivity implements CompoundButton.OnCheckedChangeListener,

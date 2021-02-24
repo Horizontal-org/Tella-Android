@@ -3,18 +3,58 @@
     package="com.hzontal.tella_locking_ui">
 
     <application>
-        <activity android:name=".ui.settings.LockTypeActivity"
+        <activity
+            android:name=".ui.settings.LockTypeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.pattern.PatternSetActivity"
             android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.pattern.PatternSetActivity"
-                    android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.pattern.PatternUnlockActivity"
-                    android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.settings.UnlockRedirectActivity"
-                  android:screenOrientation="portrait"
-            />
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".ui.pattern.PatternUnlockActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".ui.settings.UnlockRedirectActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.pin.SetPinActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
+
+        <activity
+            android:name=".ui.pin.ConfirmPinActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
+
+        <activity
+            android:name=".ui.password.SetPasswordActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:windowSoftInputMode="stateVisible" />
+        <activity
+            android:name=".ui.password.ConfirmPasswordActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:windowSoftInputMode="stateVisible|adjustPan" />
+        <activity
+            android:name=".ui.password.PasswordUnlockActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:windowSoftInputMode="stateVisible|adjustPan" />
+        <activity
+            android:name=".ui.ConfirmCredentialsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
+
+        <activity
+            android:name=".ui.pin.PinUnlockActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
     </application>
 
 </manifest>

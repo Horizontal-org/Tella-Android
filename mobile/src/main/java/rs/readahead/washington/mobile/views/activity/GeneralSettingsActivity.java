@@ -22,6 +22,7 @@ import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.util.LocaleManager;
 import rs.readahead.washington.mobile.util.StringUtils;
+import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 
 
 public class GeneralSettingsActivity extends BaseLockActivity {

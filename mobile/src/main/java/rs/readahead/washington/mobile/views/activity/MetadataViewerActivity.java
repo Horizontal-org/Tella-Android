@@ -22,6 +22,7 @@ import rs.readahead.washington.mobile.domain.entity.Metadata;
 import rs.readahead.washington.mobile.domain.entity.MyLocation;
 import rs.readahead.washington.mobile.util.StringUtils;
 import rs.readahead.washington.mobile.util.Util;
+import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 
 
 public class MetadataViewerActivity extends BaseLockActivity {
