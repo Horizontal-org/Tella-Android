@@ -143,4 +143,11 @@ abstract class BasePasswordActivity   : BaseActivity() , View.OnClickListener, O
 
         }
     }
+    fun setTopText(text : String){
+        enterPasswordTextView.text = text
+    }
+
+    fun setMessageText(text: String){
+        passwordMsgTextView.text= text
+    }
 }

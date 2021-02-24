@@ -1,6 +1,7 @@
 package com.hzontal.tella_locking_ui.ui.password
 
 import android.content.Intent
+import android.os.Bundle
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.TellaKeysUI
 import com.hzontal.tella_locking_ui.ui.ConfirmCredentialsActivity
@@ -14,6 +15,13 @@ import javax.crypto.spec.PBEKeySpec
 
 class ConfirmPasswordActivity : BasePasswordActivity() {
     private val mConfirmPassword by lazy { intent.getStringExtra(CONFIRM_PASSWORD) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setTopText(getString(R.string.confirm_password))
+        setMessageText(getString(R.string.confirm_password_msg))
+
+    }
 
     override fun onSuccessSetPassword(password: String) {
         if (password == mConfirmPassword) {

@@ -36,4 +36,6 @@
     <string name="go_to_tella">Go to tella</string>
     <string name="incorrect_password_error_msg">Incorrect password,\n please try again</string>
     <string name="enter_password_tella">Enter your password to \nunlock Tella</string>
+    <string name="confirm_password">Confirm your password</string>
+    <string name="confirm_password_msg">Please enter your password one more\n time, just to be sure.</string>
 </resources>
