@@ -6,10 +6,10 @@
     android:clipToPadding="false"
     android:orientation="vertical">
 
-    <Button
+    <com.hzontal.tella_locking_ui.ui.pin.pinview.AutoFitTextView
         android:id="@+id/button"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
         android:fontFamily="@font/roboto_regular"
         android:textSize="18sp"
         android:background="?android:attr/selectableItemBackground"/>
