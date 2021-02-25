@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.constraintlayout.widget.Guideline
 import androidx.core.content.ContextCompat
@@ -19,12 +18,12 @@ import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.common.BaseActivity
 import com.hzontal.tella_locking_ui.common.extensions.onChange
 
-abstract class BasePasswordActivity   : BaseActivity() , View.OnClickListener, OnValidatePasswordClickListener {
+abstract class BasePasswordActivity : BaseActivity(), View.OnClickListener, OnValidatePasswordClickListener {
 
-    private lateinit var passwordClickView : View
+    private lateinit var passwordClickView: View
     lateinit var passwordEditText: EditText
     private lateinit var passwordEyeImageView: AppCompatImageView
-    lateinit var enterPasswordTextView : TextView
+    lateinit var enterPasswordTextView: TextView
     lateinit var topImageView: AppCompatImageView
     lateinit var passwordLeftButton: TextView
     lateinit var passwordMsgTextView: TextView
@@ -35,8 +34,7 @@ abstract class BasePasswordActivity   : BaseActivity() , View.OnClickListener, O
     }
     private var isPasswordMode = true
     var isHiLighted = false
-    private lateinit var guideBottom : Guideline
-    private lateinit var guideTop : Guideline
+    private lateinit var guideBottom: Guideline
     var mPassword = ""
 
 
@@ -49,9 +47,8 @@ abstract class BasePasswordActivity   : BaseActivity() , View.OnClickListener, O
         toggleKeyBoard()
     }
 
-    private fun initView(){
+    private fun initView() {
         guideBottom = findViewById(R.id.guide_bottom)
-        guideTop = findViewById(R.id.guideHTop)
         passwordClickView = findViewById(R.id.passwordClickView)
         passwordEditText = findViewById(R.id.password_editText)
         passwordEyeImageView = findViewById(R.id.password_eye)
@@ -62,29 +59,28 @@ abstract class BasePasswordActivity   : BaseActivity() , View.OnClickListener, O
         passwordMsgTextView = findViewById(R.id.password_msgTV)
     }
 
-    private fun initListeners(){
+    private fun initListeners() {
         passwordClickView.setOnClickListener(this)
         passwordLeftButton.setOnClickListener(this)
         passwordRightButton.setOnClickListener(null)
     }
 
-    private fun initObservers(){
+    private fun initObservers() {
         keyboardStatus.observe(this, Observer {
             keyBoardState(it.first, it.second)
         })
         passwordEditText.onChange { password ->
-             mPassword = password
-             hiLightLeftButton(password.length>5)
-            passwordEditText.setTextColor(ContextCompat.getColor(this,R.color.wa_white))
+            mPassword = password
+            hiLightLeftButton(password.length > 5)
+            passwordEditText.setTextColor(ContextCompat.getColor(this, R.color.wa_white))
         }
     }
 
     private fun keyBoardState(isOpened: Boolean, keyboardHeight: Double) {
-        guideBottom.setGuidelinePercent((1 - keyboardHeight).toFloat())
-        guideTop.setGuidelinePercent( if (isOpened) 0.05F else 0.25F)
+        guideBottom.setGuidelinePercent((1 - (keyboardHeight)).toFloat())
     }
 
-    private fun toggleKeyBoard(){
+    private fun toggleKeyBoard() {
         container.viewTreeObserver.addOnGlobalLayoutListener {
             val r = Rect()
             container.getWindowVisibleDisplayFrame(r)
@@ -95,7 +91,7 @@ abstract class BasePasswordActivity   : BaseActivity() , View.OnClickListener, O
                 keyboardStatus.postValue(
                         Pair(
                                 true,
-                                (keypadHeight.toDouble() / (screenHeight * 1.1))
+                                (keypadHeight.toDouble() / screenHeight)
                         )
                 )
             } else {
@@ -105,6 +101,7 @@ abstract class BasePasswordActivity   : BaseActivity() , View.OnClickListener, O
             }
         }
     }
+
     fun hideKeyboard() {
         val imm =
                 getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -116,17 +113,20 @@ abstract class BasePasswordActivity   : BaseActivity() , View.OnClickListener, O
         }
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
-    private fun onRightButtonClickListener(){
+
+    private fun onRightButtonClickListener() {
         onSuccessSetPassword(mPassword)
     }
-    private fun onLeftButtonClickListener(){
+
+    private fun onLeftButtonClickListener() {
         finish()
         overridePendingTransition(0, 0)
     }
-    private fun hiLightLeftButton(isHiLighted : Boolean){
+
+    private fun hiLightLeftButton(isHiLighted: Boolean) {
         this.isHiLighted = isHiLighted
         passwordRightButton.setTextColor(if (isHiLighted) ContextCompat.getColor(this, R.color.wa_white) else ContextCompat.getColor(this, R.color.wa_white_40))
-        passwordRightButton.setOnClickListener(if (isHiLighted) this else null )
+        passwordRightButton.setOnClickListener(if (isHiLighted) this else null)
     }
 
     private fun onShowPasswordClickListener() {
@@ -136,18 +136,25 @@ abstract class BasePasswordActivity   : BaseActivity() , View.OnClickListener, O
     }
 
     override fun onClick(view: View?) {
-        when(view?.id){
-            (R.id.password_right_button) -> {onRightButtonClickListener()}
-            (R.id.password_left_button) ->{onLeftButtonClickListener()}
-            (R.id.passwordClickView) -> {onShowPasswordClickListener()}
+        when (view?.id) {
+            (R.id.password_right_button) -> {
+                onRightButtonClickListener()
+            }
+            (R.id.password_left_button) -> {
+                onLeftButtonClickListener()
+            }
+            (R.id.passwordClickView) -> {
+                onShowPasswordClickListener()
+            }
 
         }
     }
-    fun setTopText(text : String){
+
+    fun setTopText(text: String) {
         enterPasswordTextView.text = text
     }
 
-    fun setMessageText(text: String){
-        passwordMsgTextView.text= text
+    fun setMessageText(text: String) {
+        passwordMsgTextView.text = text
     }
 }
