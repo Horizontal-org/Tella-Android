@@ -29,7 +29,7 @@
             />
         <TextView
             android:id="@+id/pl_message_text"
-            android:layout_marginTop="23dp"
+            android:layout_marginTop="10dp"
             android:text="@string/pl_draw_pattern_msg"
             app:layout_constraintTop_toBottomOf="@id/pl_patternImg"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,14 +38,13 @@
 
         <com.hzontal.tella_locking_ui.patternlock.PatternView
             android:id="@+id/pl_pattern"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
-            app:layout_constraintWidth_percent=".8"
             app:layout_constraintHeight_percent=".6"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/pl_message_text"
-            app:pl_aspect="lock_width"
+            app:pl_aspect="square"
             app:pl_regularColor="@color/wa_white"
             app:pl_errorColor="@color/wa_red_error"
             app:pl_successColor="@color/wa_orange"/>

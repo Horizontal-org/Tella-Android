@@ -6,7 +6,7 @@
     android:clipToPadding="false"
     android:orientation="vertical">
 
-    <com.hzontal.tella_locking_ui.ui.pin.pinview.AutoFitTextView
+    <Button
         android:id="@+id/button"
         android:layout_width="54dp"
         android:layout_height="54dp"

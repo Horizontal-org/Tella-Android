@@ -11,6 +11,7 @@
         android:id="@+id/pin_TopImg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:background="@drawable/pin_top_bg"
         app:layout_constraintBottom_toTopOf="@+id/pin_enterTV"
         app:layout_constraintEnd_toEndOf="parent"
