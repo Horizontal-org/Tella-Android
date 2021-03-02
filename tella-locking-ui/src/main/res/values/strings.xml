@@ -38,4 +38,5 @@
     <string name="enter_password_tella">Enter your password to \nunlock Tella</string>
     <string name="confirm_password">Confirm your password</string>
     <string name="confirm_password_msg">Please enter your password one more\n time, just to be sure.</string>
+    <string name="ok">OK</string>
 </resources>

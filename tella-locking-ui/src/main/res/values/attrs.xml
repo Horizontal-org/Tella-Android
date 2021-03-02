@@ -35,6 +35,7 @@
     <declare-styleable name="PinLockView">
         <attr name="pinLength" format="integer" />
         <attr name="keypadTextColor" format="color" />
+        <attr name="keypadOffTextColor" format="color" />
         <attr name="keypadTextSize" format="dimension" />
         <attr name="keypadButtonSize" format="dimension" />
         <attr name="keypadVerticalSpacing" format="dimension" />

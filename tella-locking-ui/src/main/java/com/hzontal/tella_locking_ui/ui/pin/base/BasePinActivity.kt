@@ -16,7 +16,7 @@ abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickLi
 
     private lateinit var pinLockView: PinLockView
     lateinit var pinLeftButton: TextView
-    private lateinit var pinRightButton: TextView
+   // private lateinit var pinRightButton: TextView
     lateinit var pinTopText: TextView
     lateinit var pinMsgText: TextView
     lateinit var pinTopImageView: AppCompatImageView
@@ -38,7 +38,6 @@ abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickLi
         pinLockView.minPinLength = 6
         pinLockView.setPinLockListener(this)
         pinLeftButton = findViewById(R.id.pin_left_button)
-        pinRightButton = findViewById(R.id.pin_right_button)
         pinEditText = findViewById(R.id.pin_editText)
         pinEyeImageView = findViewById(R.id.pin_eye)
         pinTopText = findViewById(R.id.pin_enterTV)
@@ -50,7 +49,7 @@ abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickLi
 
     private fun initListeners() {
         pinClickView.setOnClickListener(this)
-        pinRightButton.setOnClickListener(null)
+        //pinRightButton.setOnClickListener(null)
         pinLeftButton.setOnClickListener(this)
     }
 
@@ -58,12 +57,12 @@ abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickLi
         pinEditText.setText("")
     }
 
-    override fun onMinLengthReached(pin: String?) {
+    override fun onPinConfirmation(pin: String?) {
+        onSuccessSetPin(pin)
     }
 
     override fun onPinChange(pinLength: Int, intermediatePin: String?) {
         isRightButtonHighLighted = pinLength.compareTo(pinLockView.minPinLength -1) == 1
-        hiLightLeftButton(isRightButtonHighLighted)
         mPIN = intermediatePin
         pinEditText.setText(intermediatePin)
     }
@@ -82,18 +81,11 @@ abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickLi
         pinEditText.transformationMethod = if (isPasswordMode) PasswordTransformationMethod() else null
         pinEyeImageView.background = if (isPasswordMode) ContextCompat.getDrawable(this@BasePinActivity, R.drawable.eye) else ContextCompat.getDrawable(this@BasePinActivity, R.drawable.eye_off)
     }
-    private fun hiLightLeftButton(isHiLighted : Boolean){
-        pinRightButton.setTextColor(if (isHiLighted) ContextCompat.getColor(this, R.color.wa_white) else ContextCompat.getColor(this, R.color.wa_white_40))
-        pinRightButton.setOnClickListener(if (isHiLighted) this else null)
-    }
 
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.pinClickView -> {
                 onSowPasswordClickListener()
-            }
-            R.id.pin_right_button -> {
-                onRightButtonClickListener()
             }
             R.id.pin_left_button ->{
                 onLeftButtonClickListener()

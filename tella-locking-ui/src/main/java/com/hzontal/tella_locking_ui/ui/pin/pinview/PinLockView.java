@@ -12,19 +12,19 @@ import com.hzontal.tella_locking_ui.R;
 
 /**
  * Represents a numeric lock view which can used to taken numbers as input.
- * The length of the input can be customized using {@link PinLockView#setMinPinLength(int)} (int)}, the default value being 4
+ * The length of the input can be customized using {@link PinLockView#setMinPinLength(int)} (int)}, the default value being 6
  * <p/>
  * It can also be used as dial pad for taking number inputs.
  */
 public class PinLockView extends RecyclerView {
 
-    private static final int DEFAULT_PIN_LENGTH = 4;
+    public static final int DEFAULT_PIN_LENGTH = 6;
     private static final int[] DEFAULT_KEY_SET = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
 
     private String mPin = "";
     private int mPinLength;
     private int mHorizontalSpacing, mVerticalSpacing;
-    private int mTextColor, mDeleteButtonPressedColor;
+    private int mTextColor, mDeleteButtonPressedColor, mOffTextColor;
     private int mTextSize, mButtonSize, mDeleteButtonSize;
     private Drawable mButtonBackgroundDrawable;
     private Drawable mDeleteButtonDrawable;
@@ -44,6 +44,10 @@ public class PinLockView extends RecyclerView {
 
                 if (mPin.length() == 1) {
                     mAdapter.setPinLength(mPin.length());
+                    mAdapter.notifyItemChanged(mAdapter.getItemCount() - 3);
+                }
+                if (mPin.length() == 6){
+                    mAdapter.setPinLength(mPin.length());
                     mAdapter.notifyItemChanged(mAdapter.getItemCount() - 1);
                 }
 
@@ -58,10 +62,6 @@ public class PinLockView extends RecyclerView {
                     mPinLockListener.onPinChange(mPin.length(), mPin);
                 }
 
-            } else {
-                if (mPinLockListener != null) {
-                    mPinLockListener.onMinLengthReached(mPin);
-                }
             }
         }
     };
@@ -73,8 +73,11 @@ public class PinLockView extends RecyclerView {
             if (mPin.length() > 0) {
                 mPin = mPin.substring(0, mPin.length() - 1);
 
-
                 if (mPin.length() == 0) {
+                    mAdapter.setPinLength(mPin.length());
+                    mAdapter.notifyItemChanged(mAdapter.getItemCount() - 3);
+                }
+                if (mPin.length() < 6){
                     mAdapter.setPinLength(mPin.length());
                     mAdapter.notifyItemChanged(mAdapter.getItemCount() - 1);
                 }
@@ -99,6 +102,13 @@ public class PinLockView extends RecyclerView {
             resetPinLockView();
             if (mPinLockListener != null) {
                 mPinLockListener.onEmpty();
+            }
+        }
+    };
+    private final PinLockAdapter.OnConfirmClickListener mOnConfirmClickListener = () -> {
+        if (mPin.length() >= DEFAULT_PIN_LENGTH){
+            if (mPinLockListener != null) {
+                mPinLockListener.onPinConfirmation(mPin);
             }
         }
     };
@@ -127,6 +137,7 @@ public class PinLockView extends RecyclerView {
             mHorizontalSpacing = (int) typedArray.getDimension(R.styleable.PinLockView_keypadHorizontalSpacing, ResourceUtils.getDimensionInPx(getContext(), R.dimen.default_horizontal_spacing));
             mVerticalSpacing = (int) typedArray.getDimension(R.styleable.PinLockView_keypadVerticalSpacing, ResourceUtils.getDimensionInPx(getContext(), R.dimen.default_vertical_spacing));
             mTextColor = typedArray.getColor(R.styleable.PinLockView_keypadTextColor, ResourceUtils.getColor(getContext(), R.color.wa_white));
+            mOffTextColor = typedArray.getColor(R.styleable.PinLockView_keypadOffTextColor, ResourceUtils.getColor(getContext(), R.color.wa_white_40));
             mTextSize = (int) typedArray.getDimension(R.styleable.PinLockView_keypadTextSize, ResourceUtils.getDimensionInPx(getContext(), R.dimen.default_text_size));
             mButtonSize = (int) typedArray.getDimension(R.styleable.PinLockView_keypadButtonSize, ResourceUtils.getDimensionInPx(getContext(), R.dimen.default_button_size));
             mDeleteButtonSize = (int) typedArray.getDimension(R.styleable.PinLockView_keypadDeleteButtonSize, ResourceUtils.getDimensionInPx(getContext(), R.dimen.default_delete_button_size));
@@ -140,6 +151,7 @@ public class PinLockView extends RecyclerView {
 
         mCustomizationOptionsBundle = new CustomizationOptionsBundle();
         mCustomizationOptionsBundle.setTextColor(mTextColor);
+        mCustomizationOptionsBundle.seOffTextColor(mOffTextColor);
         mCustomizationOptionsBundle.setTextSize(mTextSize);
         mCustomizationOptionsBundle.setButtonSize(mButtonSize);
         mCustomizationOptionsBundle.setButtonBackgroundDrawable(mButtonBackgroundDrawable);
@@ -157,6 +169,7 @@ public class PinLockView extends RecyclerView {
         mAdapter = new PinLockAdapter(getContext());
         mAdapter.setOnItemClickListener(mOnNumberClickListener);
         mAdapter.setOnDeleteClickListener(mOnDeleteClickListener);
+        mAdapter.setOnConfirmClickListener(mOnConfirmClickListener);
         mAdapter.setCustomizationOptions(mCustomizationOptionsBundle);
         setAdapter(mAdapter);
 

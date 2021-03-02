@@ -84,7 +84,7 @@
         app:keypadButtonSize="60dp"
         app:keypadShowDeleteButton="true"
         app:keypadTextColor="@color/wa_white"
-        app:keypadTextSize="28sp"
+        app:keypadTextSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -101,6 +101,7 @@
     <TextView
         android:id="@+id/pin_right_button"
         style="@style/Unlock_White_Text_Next"
+        android:visibility="gone"
         android:text="@string/pl_continue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

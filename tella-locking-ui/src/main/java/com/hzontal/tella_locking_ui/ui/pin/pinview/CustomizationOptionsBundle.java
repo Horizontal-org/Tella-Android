@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 public class CustomizationOptionsBundle {
 
     private int textColor;
+    private int offTextColor;
     private int textSize;
     private int buttonSize;
     private Drawable buttonBackgroundDrawable;
@@ -27,6 +28,14 @@ public class CustomizationOptionsBundle {
 
     public void setTextColor(int textColor) {
         this.textColor = textColor;
+    }
+
+    public int getOffTextColor() {
+        return offTextColor;
+    }
+
+    public void seOffTextColor(int offTextColor) {
+        this.offTextColor = offTextColor;
     }
 
     public int getTextSize() {

@@ -9,7 +9,7 @@ public interface PinLockListener {
      *
      * @param pin the complete pin
      */
-    void onMinLengthReached(String pin);
+    void onPinConfirmation(String pin);
 
 
     /**
