@@ -27,6 +27,6 @@ class OnBoardIntroFragment : BaseFragment() {
 
     private fun initView(view: View){
         startBtn = view.findViewById(R.id.startBtn)
-        startBtn.setOnClickListener { activity.replaceFragmentNoAddToBackStack(OnBoardSetUpFragment(),R.id.rootOnboard) }
+        startBtn.setOnClickListener { activity.addFragment(this,OnBoardSetUpFragment(),R.id.rootOnboard) }
     }
 }

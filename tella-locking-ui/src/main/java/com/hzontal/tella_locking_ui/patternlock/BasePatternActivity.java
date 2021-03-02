@@ -11,6 +11,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+
 import com.hzontal.tella_locking_ui.common.BaseActivity;
 import com.hzontal.tella_locking_ui.R;
 
@@ -24,6 +27,7 @@ public class BasePatternActivity extends BaseActivity {
     protected TextView mLeftButton;
     protected TextView mRightButton;
     protected ImageView mTopImageView;
+    protected ConstraintLayout root;
 
     private final Runnable clearPatternRunnable = new Runnable() {
         public void run() {
@@ -42,7 +46,10 @@ public class BasePatternActivity extends BaseActivity {
          mLeftButton = (TextView)findViewById(R.id.pl_left_button);
          mRightButton = (TextView)findViewById(R.id.pl_right_button);
          mTopImageView = (ImageView) findViewById(R.id.pl_patternImg);
+         root = (ConstraintLayout) findViewById(R.id.rootPattern);
+         root.getRootView().setBackgroundColor(ContextCompat.getColor(this,R.color.wa_purple));
     }
+
 
     protected void removeClearPatternRunnable() {
         mPatternView.removeCallbacks(clearPatternRunnable);

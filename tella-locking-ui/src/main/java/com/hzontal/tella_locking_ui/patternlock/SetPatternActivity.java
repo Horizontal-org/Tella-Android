@@ -10,6 +10,7 @@ import android.view.View;
 
 
 import androidx.core.content.ContextCompat;
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.hzontal.tella_locking_ui.R;
@@ -194,6 +195,7 @@ public class SetPatternActivity extends BasePatternActivity
     protected void onCanceled() {
         setResult(RESULT_CANCELED);
         finish();
+        overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
     }
 
     private void onRightButtonClicked() {
@@ -202,6 +204,8 @@ public class SetPatternActivity extends BasePatternActivity
                 throw new IllegalStateException("expected ui stage " + Stage.DrawValid
                         + " when button is " + RightButtonState.Continue);
             }
+            root.setTranslationX(2000);
+            root.animate().translationX(0).setInterpolator(new FastOutLinearInInterpolator()).setDuration(300).start();
             updateStage(Stage.Confirm);
         } else if (mStage.rightButtonState == RightButtonState.Confirm) {
             if (mStage != Stage.ConfirmCorrect) {

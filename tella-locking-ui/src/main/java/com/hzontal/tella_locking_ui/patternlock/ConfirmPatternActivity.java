@@ -94,6 +94,7 @@ public class ConfirmPatternActivity extends BasePatternActivity
     protected void onConfirmed() {
         setResult(RESULT_OK);
         finish();
+        overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
     }
 
     protected void onWrongPattern() {
@@ -103,10 +104,12 @@ public class ConfirmPatternActivity extends BasePatternActivity
     protected void onCancel() {
         setResult(RESULT_CANCELED);
         finish();
+        overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
     }
 
     protected void onForgotPassword() {
         setResult(RESULT_FORGOT_PASSWORD);
         finish();
+        overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
     }
 }

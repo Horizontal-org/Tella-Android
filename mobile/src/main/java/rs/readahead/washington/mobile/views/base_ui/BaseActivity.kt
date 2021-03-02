@@ -48,6 +48,7 @@ import rs.readahead.washington.mobile.util.LocaleManager
         val className = fragment.javaClass.name
         supportFragmentManager
                 .beginTransaction()
+                .setCustomAnimations(R.anim.`in`,R.anim.out,R.anim.left_to_right,R.anim.right_to_left)
                 .hide(fragmentToHide)
                 .add(container, fragment, className)
                 .addToBackStack(null)
