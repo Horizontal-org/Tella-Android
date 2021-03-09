@@ -39,6 +39,7 @@ class PasswordUnlockActivity : BasePasswordActivity() {
                 Timber.d("*** MainKeyStore.IMainKeyLoadCallback.onReady")
                 TellaKeysUI.getMainKeyHolder().set(mainKey);
                 TellaKeysUI.getCredentialsCallback().onSuccessfulUnlock(this@PasswordUnlockActivity)
+                finish()
             }
             override fun onError(throwable: Throwable) {
                 Timber.d(throwable, "*** MainKeyStore.UnlockRegistry.IUnlocker.onError")

@@ -19,6 +19,10 @@ open class BaseActivity : AppCompatActivity() {
         overridePendingTransition(R.anim.`in`, R.anim.out)
     }
 
+    override fun onBackPressed() {
+        finish()
+    }
+
     override fun onResume() {
         Timber.d("** %s: %s **", javaClass, "onResume()")
         super.onResume()

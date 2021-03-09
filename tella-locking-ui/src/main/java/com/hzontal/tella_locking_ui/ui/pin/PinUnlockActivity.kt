@@ -25,6 +25,7 @@ class PinUnlockActivity  : BasePinActivity() {
             override fun onReady(mainKey: MainKey) {
                 TellaKeysUI.getMainKeyHolder().set(mainKey);
                 TellaKeysUI.getCredentialsCallback().onSuccessfulUnlock(this@PinUnlockActivity)
+                finish()
             }
 
             override fun onError(throwable: Throwable) {
