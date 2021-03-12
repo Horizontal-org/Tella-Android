@@ -98,4 +98,15 @@
         <item name="android:gravity">center_horizontal</item>
         <item name="android:focusable">true</item>
     </style>
+
+    <style name="Unlock_White_Text_Pin" parent="Unlock_White_Text_Back">
+        <item name="android:layout_width">54dp</item>
+        <item name="android:layout_height">54dp</item>
+        <item name="android:layout_marginStart">0dp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:layout_marginBottom">0dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+    </style>
 </resources>

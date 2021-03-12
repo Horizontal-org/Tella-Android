@@ -4,7 +4,6 @@ import android.graphics.drawable.Drawable;
 
 /**
  * The customization options for the buttons in {@link PinLockView}
- * passed to the {@link PinLockAdapter} to decorate the individual views
  *
  */
 public class CustomizationOptionsBundle {
