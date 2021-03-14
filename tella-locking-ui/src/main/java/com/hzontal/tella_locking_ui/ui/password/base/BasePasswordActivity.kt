@@ -1,19 +1,15 @@
 package com.hzontal.tella_locking_ui.ui.password.base
 
 import android.app.Activity
-import android.graphics.Rect
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.constraintlayout.widget.Guideline
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.common.BaseActivity
 import com.hzontal.tella_locking_ui.common.extensions.onChange
@@ -28,10 +24,6 @@ abstract class BasePasswordActivity : BaseActivity(), View.OnClickListener, OnVa
     lateinit var passwordLeftButton: TextView
     lateinit var passwordMsgTextView: TextView
     lateinit var passwordRightButton: TextView
-    private val keyboardStatus = MutableLiveData<Pair<Boolean, Double>>()
-    private val container: ViewGroup by lazy {
-        findViewById<ViewGroup>(android.R.id.content)
-    }
     private var isPasswordMode = true
     var isHiLighted = false
     private lateinit var guideBottom: Guideline
@@ -44,11 +36,9 @@ abstract class BasePasswordActivity : BaseActivity(), View.OnClickListener, OnVa
         initView()
         initObservers()
         initListeners()
-        toggleKeyBoard()
     }
 
     private fun initView() {
-        guideBottom = findViewById(R.id.guide_bottom)
         passwordClickView = findViewById(R.id.passwordClickView)
         passwordEditText = findViewById(R.id.password_editText)
         passwordEyeImageView = findViewById(R.id.password_eye)
@@ -66,39 +56,10 @@ abstract class BasePasswordActivity : BaseActivity(), View.OnClickListener, OnVa
     }
 
     private fun initObservers() {
-        keyboardStatus.observe(this, Observer {
-            keyBoardState(it.first, it.second)
-        })
         passwordEditText.onChange { password ->
             mPassword = password
             hiLightLeftButton(password.length > 5)
             passwordEditText.setTextColor(ContextCompat.getColor(this, R.color.wa_white))
-        }
-    }
-
-    private fun keyBoardState(isOpened: Boolean, keyboardHeight: Double) {
-        guideBottom.setGuidelinePercent((1 - (keyboardHeight)).toFloat())
-    }
-
-    private fun toggleKeyBoard() {
-        container.viewTreeObserver.addOnGlobalLayoutListener {
-            val r = Rect()
-            container.getWindowVisibleDisplayFrame(r)
-            val screenHeight = container.rootView.height
-            val keypadHeight = screenHeight - r.bottom
-            if (keypadHeight > screenHeight * 0.15) {
-                //keyboard Open
-                keyboardStatus.postValue(
-                        Pair(
-                                true,
-                                (keypadHeight.toDouble() / screenHeight)
-                        )
-                )
-            } else {
-                //keyboard closed
-                keyboardStatus.postValue(Pair(false, 0.0))
-
-            }
         }
     }
 
