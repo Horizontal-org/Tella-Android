@@ -11,7 +11,6 @@
         android:id="@+id/pin_TopImg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:background="@drawable/pin_top_bg"
         app:layout_constraintBottom_toTopOf="@+id/pin_enterTV"
         app:layout_constraintEnd_toEndOf="parent"
@@ -78,11 +77,10 @@
 
     <com.hzontal.tella_locking_ui.ui.pin.pinview.PinLockView
         android:id="@+id/pin_lock_view"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintHeight_percent=".35"
         android:layout_marginTop="10dp"
-        app:keypadButtonSize="60dp"
         app:keypadShowDeleteButton="true"
         app:keypadTextColor="@color/wa_white"
         app:keypadTextSize="30sp"

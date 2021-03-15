@@ -1,23 +1,14 @@
 package com.hzontal.tella_locking_ui.ui.pattern
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.hzontal.tella_locking_ui.R
-import com.hzontal.tella_locking_ui.TellaKeysUI
-import com.hzontal.tella_locking_ui.patternlock.ConfirmSetPatternActivity
-import com.hzontal.tella_locking_ui.patternlock.PatternUtils
 import com.hzontal.tella_locking_ui.patternlock.PatternView
 import com.hzontal.tella_locking_ui.patternlock.SetPatternActivity
-import com.hzontal.tella_locking_ui.ui.ConfirmCredentialsActivity
-import org.hzontal.tella.keys.MainKeyStore
-import org.hzontal.tella.keys.config.UnlockRegistry
-import org.hzontal.tella.keys.key.MainKey
 import timber.log.Timber
-import javax.crypto.spec.PBEKeySpec
 
 class PatternSetActivity : SetPatternActivity() {
     @SuppressLint("StringFormatInvalid")
@@ -40,7 +31,6 @@ class PatternSetActivity : SetPatternActivity() {
 
     override fun onPatternDetected(newPattern: MutableList<PatternView.Cell>) {
         super.onPatternDetected(newPattern)
-
         when (mStage) {
              Stage.Confirm,Stage.ConfirmWrong -> {
                 if (newPattern == mPattern) {
