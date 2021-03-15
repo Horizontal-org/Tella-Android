@@ -10,13 +10,21 @@
             android:name=".ui.pattern.PatternSetActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+
         <activity
             android:name=".ui.pattern.PatternUnlockActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+
+        <activity
+            android:name=".ui.pattern.PatternSetConfirmActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+
         <activity
             android:name=".ui.settings.UnlockRedirectActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.pin.SetPinActivity"
             android:screenOrientation="portrait"
@@ -34,16 +42,19 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:windowSoftInputMode="stateVisible|adjustResize" />
+
         <activity
             android:name=".ui.password.ConfirmPasswordActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:windowSoftInputMode="stateVisible|adjustResize" />
+
         <activity
             android:name=".ui.password.PasswordUnlockActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:windowSoftInputMode="stateVisible|adjustResize" />
+
         <activity
             android:name=".ui.ConfirmCredentialsActivity"
             android:screenOrientation="portrait"

@@ -41,11 +41,11 @@ public class BasePatternActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.pl_base_pattern_activity);
-        mMessageText = (TextView)findViewById(R.id.pl_message_text);
-        mPatternView = (PatternView)findViewById(R.id.pl_pattern);
-         mLeftButton = (TextView)findViewById(R.id.pl_left_button);
-         mRightButton = (TextView)findViewById(R.id.pl_right_button);
-         mTopImageView = (ImageView) findViewById(R.id.pl_patternImg);
+        mMessageText = findViewById(R.id.pl_message_text);
+        mPatternView = findViewById(R.id.pl_pattern);
+         mLeftButton = findViewById(R.id.pl_left_button);
+         mRightButton = findViewById(R.id.pl_right_button);
+         mTopImageView = findViewById(R.id.pl_patternImg);
          root = (ConstraintLayout) findViewById(R.id.rootPattern);
          root.getRootView().setBackgroundColor(ContextCompat.getColor(this,R.color.wa_purple));
     }
