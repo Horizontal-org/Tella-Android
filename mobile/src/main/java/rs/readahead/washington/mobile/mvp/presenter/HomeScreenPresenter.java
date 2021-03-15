@@ -6,7 +6,6 @@ import android.net.Uri;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
-import info.guardianproject.cacheword.CacheWordHandler;
 import io.reactivex.Completable;
 import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -15,8 +14,8 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.BuildConfig;
 import rs.readahead.washington.mobile.MyApplication;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.data.database.DataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.data.sharedpref.SharedPrefs;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
@@ -24,24 +23,22 @@ import rs.readahead.washington.mobile.mvp.contract.IHomeScreenPresenterContract;
 
 
 public class HomeScreenPresenter implements IHomeScreenPresenterContract.IPresenter {
-    private IHomeScreenPresenterContract.IView view;
-    private CacheWordHandler cacheWordHandler;
-    private CacheWordDataSource cacheWordDataSource;
-    private CompositeDisposable disposable;
     private final Context appContext;
+    private IHomeScreenPresenterContract.IView view;
+    private CompositeDisposable disposable;
+    private final KeyDataSource keyDataSource;
 
 
-    public HomeScreenPresenter(IHomeScreenPresenterContract.IView view, CacheWordHandler cacheWordHandler) {
+    public HomeScreenPresenter(IHomeScreenPresenterContract.IView view) {
         this.view = view;
-        this.cacheWordHandler = cacheWordHandler;
         appContext = view.getContext().getApplicationContext();
-        cacheWordDataSource = new CacheWordDataSource(appContext);
+        keyDataSource = MyApplication.getKeyDataSource();
         disposable = new CompositeDisposable();
     }
 
     @Override
     public void executePanicMode() {
-        cacheWordDataSource.getDataSource()
+        keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .flatMapCompletable(dataSource -> {
                     if (SharedPrefs.getInstance().isEraseGalleryActive()) {
@@ -62,9 +59,7 @@ public class HomeScreenPresenter implements IHomeScreenPresenterContract.IPresen
                     clearSharedPreferences();
 
                     MyApplication.exit(view.getContext());
-
-                    lockCacheWord();
-
+                    MyApplication.resetKeys();
                     if (Preferences.isUninstallOnPanic()) {
                         uninstallTella(view.getContext());
                     }
@@ -76,7 +71,7 @@ public class HomeScreenPresenter implements IHomeScreenPresenterContract.IPresen
 
     @Override
     public void countTUServers() {
-        disposable.add(cacheWordDataSource.getDataSource()
+        disposable.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapSingle((Function<DataSource, SingleSource<Long>>) DataSource::countTUServers)
@@ -92,7 +87,8 @@ public class HomeScreenPresenter implements IHomeScreenPresenterContract.IPresen
 
     @Override
     public void countCollectServers() {
-        disposable.add(cacheWordDataSource.getDataSource()
+
+        disposable.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapSingle((Function<DataSource, SingleSource<Long>>) DataSource::countCollectServers)
@@ -109,15 +105,7 @@ public class HomeScreenPresenter implements IHomeScreenPresenterContract.IPresen
     @Override
     public void destroy() {
         disposable.dispose();
-        cacheWordDataSource.dispose();
         view = null;
-        cacheWordHandler = null;
-    }
-
-    private void lockCacheWord() {
-        if (cacheWordHandler != null && !cacheWordHandler.isLocked()) {
-            cacheWordHandler.lock();
-        }
     }
 
     private void clearSharedPreferences() {

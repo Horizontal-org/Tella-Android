@@ -10,8 +10,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,7 +24,7 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
@@ -35,7 +35,7 @@ import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadPresenter;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.views.adapters.UploadInformationRecycleViewAdapter;
 
-public class UploadInformationActivity extends CacheWordSubscriberBaseActivity implements
+public class UploadInformationActivity extends BaseLockActivity implements
         ITellaFileUploadPresenterContract.IView, UploadInformationRecycleViewAdapter.UploadInformationInterface {
     public static final String SECTION_SET = "SET";
 
@@ -54,7 +54,8 @@ public class UploadInformationActivity extends CacheWordSubscriberBaseActivity i
     private long set;
     private List<FileUploadInstance> instances;
 
-    private CacheWordDataSource cacheWordDataSource;
+    // private CacheWordDataSource cacheWordDataSource;
+    private KeyDataSource keyDataSource;
     private TellaFileUploadPresenter presenter;
     private UploadInformationRecycleViewAdapter adapter;
 
@@ -65,7 +66,7 @@ public class UploadInformationActivity extends CacheWordSubscriberBaseActivity i
         setContentView(R.layout.activity_upload_information);
         ButterKnife.bind(this);
 
-        cacheWordDataSource = new CacheWordDataSource(this);
+        keyDataSource = MyApplication.getKeyDataSource();
 
         EventCompositeDisposable disposables = MyApplication.bus().createCompositeDisposable();
 
@@ -77,7 +78,7 @@ public class UploadInformationActivity extends CacheWordSubscriberBaseActivity i
         });
 
 
-        adapter = new UploadInformationRecycleViewAdapter(this, new MediaFileHandler(cacheWordDataSource), this);
+        adapter = new UploadInformationRecycleViewAdapter(this, new MediaFileHandler(keyDataSource), this);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(adapter);
@@ -129,7 +130,7 @@ public class UploadInformationActivity extends CacheWordSubscriberBaseActivity i
             alertDialog.dismiss();
         }
 
-        cacheWordDataSource.dispose();
+        // keyDataSource.dispose();
 
         stopPresenter();
         super.onDestroy();

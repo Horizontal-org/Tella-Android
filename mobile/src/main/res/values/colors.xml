@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="wa_red">#C9040D</color>
     <color name="wa_red_light">#df4a32</color>
     <color name="wa_black">#000000</color>
     <color name="wa_white">#FFFFFF</color>
     <color name="wa_gray">#98999B</color>
     <color name="wa_light_gray">#F2F2F2</color>
     <color name="wa_button_gray">#bcbcbc</color>
-    <color name="wa_dialog_gray">#636161</color>
     <color name="wa_dark_gray">#525252</color>
     <color name="wa_darker_gray">#1C1C1C</color>
-    <color name="wa_green">#23a923</color>
     <color name="wa_yellow">#feb900</color>
     <color name="wa_shortcut_background">#88000000</color>
     <color name="wa_player_background">#33000000</color>

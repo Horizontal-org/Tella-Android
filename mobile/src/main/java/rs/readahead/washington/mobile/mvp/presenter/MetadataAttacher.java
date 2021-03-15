@@ -1,16 +1,18 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
+import androidx.annotation.Nullable;
+
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
-import androidx.annotation.Nullable;
 import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.Metadata;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
@@ -19,17 +21,17 @@ import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContr
 public class MetadataAttacher implements IMetadataAttachPresenterContract.IPresenter {
     private IMetadataAttachPresenterContract.IView view;
     private CompositeDisposable disposables = new CompositeDisposable();
-    private CacheWordDataSource cacheWordDataSource;
+    private KeyDataSource keyDataSource;
 
 
     public MetadataAttacher(IMetadataAttachPresenterContract.IView view) {
         this.view = view;
-        this.cacheWordDataSource = new CacheWordDataSource(view.getContext());
+        this.keyDataSource = MyApplication.getKeyDataSource();
     }
 
     @Override
     public void attachMetadata(final long mediaFileId, @Nullable final Metadata metadata) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapSingle(new Function<DataSource, SingleSource<MediaFile>>() {
@@ -56,7 +58,6 @@ public class MetadataAttacher implements IMetadataAttachPresenterContract.IPrese
     @Override
     public void destroy() {
         disposables.dispose();
-        cacheWordDataSource.dispose();
         view = null;
     }
 }

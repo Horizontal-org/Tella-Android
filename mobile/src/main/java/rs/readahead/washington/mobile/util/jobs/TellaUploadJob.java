@@ -1,17 +1,19 @@
 package rs.readahead.washington.mobile.util.jobs;
 
+import androidx.annotation.NonNull;
+
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
+import org.hzontal.tella.keys.key.LifecycleMainKey;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import io.reactivex.Flowable;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent;
@@ -19,7 +21,6 @@ import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.data.upload.TUSClient;
 import rs.readahead.washington.mobile.domain.entity.FileUploadBundle;
-import rs.readahead.washington.mobile.domain.entity.KeyBundle;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
@@ -39,6 +40,22 @@ public class TellaUploadJob extends Job {
     private DataSource dataSource;
     private TellaUploadServer server;
 
+    public static void scheduleJob() {
+        new JobRequest.Builder(TellaUploadJob.TAG)
+                .setExecutionWindow(1_000L, 10_000L) // start between 1-10sec from now
+                .setBackoffCriteria(10_000L, JobRequest.BackoffPolicy.LINEAR)
+                .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
+                .setRequirementsEnforced(true)
+                //.setPersisted(true) // android.Manifest.permission.RECEIVE_BOOT_COMPLETED
+                .setUpdateCurrent(true) // also, jobs will sync them self while running
+                .build()
+                .schedule();
+    }
+
+    public static void cancelJob() {
+        JobManager.instance().cancelAllForTag(TellaUploadJob.TAG);
+    }
+
     @NonNull
     @Override
     protected Result onRunJob(@NotNull Job.Params params) {
@@ -49,16 +66,16 @@ public class TellaUploadJob extends Job {
         if (Preferences.isAutoUploadPaused() || Preferences.isOfflineMode()) {
             return exit(Result.RESCHEDULE);
         }
-
-        KeyBundle keyBundle = MyApplication.getKeyBundle();
-        if (keyBundle == null) { // CacheWord is unavailable
+        byte[] key;
+        try {
+            if ((key = MyApplication.getMainKeyHolder().get().getKey().getEncoded()) == null) {
+                return exit(Result.RESCHEDULE);
+            }
+        } catch (LifecycleMainKey.MainKeyUnavailableException e) {
+            e.printStackTrace();
             return exit(Result.RESCHEDULE);
         }
 
-        byte[] key = keyBundle.getKey();
-        if (key == null) { // key disappeared
-            return exit(Result.RESCHEDULE);
-        }
 
         dataSource = DataSource.getInstance(getContext(), key);
         List<FileUploadBundle> fileUploadBundles = dataSource.getFileUploadBundles(UploadStatus.SCHEDULED).blockingGet();
@@ -140,22 +157,6 @@ public class TellaUploadJob extends Job {
             running = false;
             return result;
         }
-    }
-
-    public static void scheduleJob() {
-        new JobRequest.Builder(TellaUploadJob.TAG)
-                .setExecutionWindow(1_000L, 10_000L) // start between 1-10sec from now
-                .setBackoffCriteria(10_000L, JobRequest.BackoffPolicy.LINEAR)
-                .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
-                .setRequirementsEnforced(true)
-                //.setPersisted(true) // android.Manifest.permission.RECEIVE_BOOT_COMPLETED
-                .setUpdateCurrent(true) // also, jobs will sync them self while running
-                .build()
-                .schedule();
-    }
-
-    public static void cancelJob() {
-        JobManager.instance().cancelAllForTag(TellaUploadJob.TAG);
     }
 
     private void updateProgress(UploadProgressInfo progressInfo) {

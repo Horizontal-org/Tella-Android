@@ -15,8 +15,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
@@ -27,19 +28,19 @@ import rs.readahead.washington.mobile.presentation.entity.MediaFileThumbnailData
 public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
     private IGalleryPresenterContract.IView view;
     private CompositeDisposable disposables = new CompositeDisposable();
-    private CacheWordDataSource cacheWordDataSource;
+    private KeyDataSource keyDataSource;
     private MediaFileHandler mediaFileHandler;
 
 
     public GalleryPresenter(IGalleryPresenterContract.IView view) {
         this.view = view;
-        this.cacheWordDataSource = new CacheWordDataSource(view.getContext());
-        this.mediaFileHandler = new MediaFileHandler(cacheWordDataSource);
+        this.keyDataSource = MyApplication.getKeyDataSource();
+        this.mediaFileHandler = new MediaFileHandler(keyDataSource);
     }
 
     @Override
     public void getFiles(final IMediaFileRecordRepository.Filter filter, final IMediaFileRecordRepository.Sort sort) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .flatMapSingle((Function<DataSource, SingleSource<List<MediaFile>>>) dataSource ->
                         dataSource.listMediaFiles(filter, sort))
                 .subscribeOn(Schedulers.io())
@@ -59,7 +60,6 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
     @Override
     public void destroy() {
         disposables.dispose();
-        cacheWordDataSource.dispose();
         view = null;
     }
 
@@ -72,7 +72,7 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onImportEnded())
                 .subscribe(mediaHolder ->
-                            view.onMediaImported(mediaHolder.getMediaFile(), mediaHolder.getMediaFileThumbnailData()),
+                                view.onMediaImported(mediaHolder.getMediaFile(), mediaHolder.getMediaFileThumbnailData()),
                         throwable -> {
                             FirebaseCrashlytics.getInstance().recordException(throwable);
                             view.onImportError(throwable);
@@ -109,11 +109,11 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
 
     @Override
     public void deleteMediaFiles(final List<MediaFile> mediaFiles) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .flatMapSingle((Function<DataSource, SingleSource<Integer>>) dataSource -> {
                     List<Single<MediaFile>> completables = new ArrayList<>();
-                    for (MediaFile mediafile: mediaFiles) {
+                    for (MediaFile mediafile : mediaFiles) {
                         completables.add(dataSource.deleteMediaFile(mediafile, mediaFile ->
                                 MediaFileHandler.deleteMediaFile(view.getContext(), mediaFile)));
                     }
@@ -134,7 +134,7 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
 
         disposables.add(Single
                 .fromCallable(() -> {
-                    for (MediaFile mediaFile: mediaFiles) {
+                    for (MediaFile mediaFile : mediaFiles) {
                         MediaFileHandler.exportMediaFile(context, mediaFile);
                     }
 
@@ -153,7 +153,7 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
 
     @Override
     public void countTUServers() {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapSingle((Function<DataSource, SingleSource<Long>>) DataSource::countTUServers)

@@ -2,19 +2,21 @@ package rs.readahead.washington.mobile.mvp.presenter;
 
 import android.net.Uri;
 
+import androidx.annotation.Nullable;
+
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.List;
 
-import androidx.annotation.Nullable;
 import io.reactivex.Observable;
 import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.media.MediaFileBundle;
@@ -25,8 +27,8 @@ import rs.readahead.washington.mobile.mvp.contract.IQuestionAttachmentPresenterC
 public class QuestionAttachmentPresenter implements IQuestionAttachmentPresenterContract.IPresenter {
     private IQuestionAttachmentPresenterContract.IView view;
     private CompositeDisposable disposables = new CompositeDisposable();
-    private CacheWordDataSource cacheWordDataSource;
-    private MediaFileHandler mediaFileHandler;
+    private final KeyDataSource keyDataSource;
+    private final MediaFileHandler mediaFileHandler;
 
     @Nullable
     private MediaFile attachment;
@@ -34,14 +36,14 @@ public class QuestionAttachmentPresenter implements IQuestionAttachmentPresenter
 
     public QuestionAttachmentPresenter(IQuestionAttachmentPresenterContract.IView view) {
         this.view = view;
-        this.cacheWordDataSource = new CacheWordDataSource(view.getContext());
-        this.mediaFileHandler = new MediaFileHandler(cacheWordDataSource);
+        this.keyDataSource = MyApplication.getKeyDataSource();
+        this.mediaFileHandler = new MediaFileHandler(keyDataSource);
     }
 
     @Override
     public void getFiles(final IMediaFileRecordRepository.Filter filter, final IMediaFileRecordRepository.Sort sort) {
         disposables.add(
-                cacheWordDataSource.getDataSource()
+                keyDataSource.getDataSource()
                         .flatMapSingle((Function<DataSource, SingleSource<List<MediaFile>>>) dataSource -> dataSource.listMediaFiles(filter, sort))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -51,15 +53,15 @@ public class QuestionAttachmentPresenter implements IQuestionAttachmentPresenter
         );
     }
 
-    @Override
-    public void setAttachment(@Nullable MediaFile attachment) {
-        this.attachment = attachment;
-    }
-
     @Nullable
     @Override
     public MediaFile getAttachment() {
         return attachment;
+    }
+
+    @Override
+    public void setAttachment(@Nullable MediaFile attachment) {
+        this.attachment = attachment;
     }
 
     @Override
@@ -73,7 +75,7 @@ public class QuestionAttachmentPresenter implements IQuestionAttachmentPresenter
 
     @Override
     public void addRegisteredMediaFile(final long id) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapSingle((Function<DataSource, SingleSource<MediaFile>>) dataSource -> dataSource.getMediaFile(id))
@@ -113,7 +115,6 @@ public class QuestionAttachmentPresenter implements IQuestionAttachmentPresenter
     @Override
     public void destroy() {
         disposables.dispose();
-        cacheWordDataSource.dispose();
         view = null;
     }
 }

@@ -26,7 +26,7 @@ import rs.readahead.washington.mobile.util.LocaleManager;
 import rs.readahead.washington.mobile.util.StringUtils;
 
 
-public class LanguageSettingsActivity extends CacheWordSubscriberBaseActivity implements
+public class LanguageSettingsActivity extends BaseLockActivity implements
         View.OnClickListener {
     @BindView(R.id.language_list)
     LinearLayout LanguageList;

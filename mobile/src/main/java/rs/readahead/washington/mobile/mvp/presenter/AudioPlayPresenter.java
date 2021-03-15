@@ -7,8 +7,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.exception.NotFountException;
 import rs.readahead.washington.mobile.mvp.contract.IAudioPlayPresenterContract;
@@ -17,18 +18,18 @@ import rs.readahead.washington.mobile.mvp.contract.IAudioPlayPresenterContract;
 public class AudioPlayPresenter implements
         IAudioPlayPresenterContract.IPresenter {
     private IAudioPlayPresenterContract.IView view;
-    private CacheWordDataSource cacheWordDataSource;
+    private KeyDataSource keyDataSource;
     private CompositeDisposable disposables = new CompositeDisposable();
 
 
     public AudioPlayPresenter(IAudioPlayPresenterContract.IView view) {
         this.view = view;
-        this.cacheWordDataSource = new CacheWordDataSource(view.getContext());
+        this.keyDataSource = MyApplication.getKeyDataSource();
     }
 
     @Override
     public void getMediaFile(final long id) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapSingle((Function<DataSource, SingleSource<List<MediaFile>>>) dataSource -> dataSource.getMediaFiles(new long[]{id}))
@@ -44,7 +45,6 @@ public class AudioPlayPresenter implements
 
     @Override
     public void destroy() {
-        cacheWordDataSource.dispose();
         disposables.dispose();
         view = null;
     }

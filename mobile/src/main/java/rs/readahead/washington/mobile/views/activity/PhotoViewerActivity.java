@@ -4,18 +4,17 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -34,7 +33,7 @@ import permissions.dispatcher.RuntimePermissions;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.MediaFileUrlLoader;
@@ -49,7 +48,7 @@ import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivi
 
 
 @RuntimePermissions
-public class PhotoViewerActivity extends CacheWordSubscriberBaseActivity implements
+public class PhotoViewerActivity extends BaseLockActivity implements
         IMediaFileViewerPresenterContract.IView,
         ShareDialogFragment.IShareDialogFragmentHandler {
     public static final String VIEW_PHOTO = "vp";
@@ -60,7 +59,8 @@ public class PhotoViewerActivity extends CacheWordSubscriberBaseActivity impleme
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
-    private CacheWordDataSource cacheWordDataSource;
+    //private CacheWordDataSource cacheWordDataSource;
+    private KeyDataSource keyDataSource;
     private MediaFileViewerPresenter presenter;
     private MediaFile mediaFile;
 
@@ -85,7 +85,8 @@ public class PhotoViewerActivity extends CacheWordSubscriberBaseActivity impleme
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        cacheWordDataSource = new CacheWordDataSource(this);
+        //cacheWordDataSource = new CacheWordDataSource(this);
+        keyDataSource = MyApplication.getKeyDataSource();
         presenter = new MediaFileViewerPresenter(this);
 
         if (getIntent().hasExtra(VIEW_PHOTO)) {
@@ -99,6 +100,8 @@ public class PhotoViewerActivity extends CacheWordSubscriberBaseActivity impleme
         if (getIntent().hasExtra(NO_ACTIONS)) {
             actionsDisabled = true;
         }
+
+        openMedia();
     }
 
     @Override
@@ -148,7 +151,7 @@ public class PhotoViewerActivity extends CacheWordSubscriberBaseActivity impleme
 
     @Override
     protected void onDestroy() {
-        cacheWordDataSource.dispose();
+        // keyDataSource.dispose();
 
         stopPresenter();
 
@@ -187,9 +190,7 @@ public class PhotoViewerActivity extends CacheWordSubscriberBaseActivity impleme
         alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_device_storage));
     }
 
-    @Override
-    public void onCacheWordOpened() {
-        super.onCacheWordOpened();
+    private void openMedia(){
         showGalleryImage(mediaFile);
         if (!actionsDisabled) {
             showActions = true;
@@ -294,7 +295,7 @@ public class PhotoViewerActivity extends CacheWordSubscriberBaseActivity impleme
 
     private void showGalleryImage(MediaFile mediaFile) {
         Glide.with(this)
-                .using(new MediaFileUrlLoader(this, new MediaFileHandler(cacheWordDataSource)))
+                .using(new MediaFileUrlLoader(this, new MediaFileHandler(keyDataSource)))
                 .load(new MediaFileLoaderModel(mediaFile, MediaFileLoaderModel.LoadType.ORIGINAL))
                 .listener(new RequestListener<MediaFileLoaderModel, GlideDrawable>() {
                     @Override

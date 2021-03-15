@@ -14,10 +14,6 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.List;
-
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -27,6 +23,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,7 +43,7 @@ import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.GalleryFlingTopEvent;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
@@ -81,9 +81,6 @@ public class GalleryActivity extends MetadataActivity implements
     public static final String GALLERY_ANIMATED = "ga";
     public static final String GALLERY_FILTER = "gf";
     public static final String GALLERY_ALLOWS_ADDING = "gaa";
-    private boolean animated = false;
-    private boolean adding = true;
-
     @BindView(R.id.galleryRecyclerView)
     GalleryRecyclerView recyclerView;
     @BindView(R.id.fab_button)
@@ -98,11 +95,13 @@ public class GalleryActivity extends MetadataActivity implements
     RecyclerView attachmentsRecyclerView;
     @BindView(R.id.gallery_blank_list_info)
     TextView blankGalleryInfo;
-
+    private boolean animated = false;
+    private boolean adding = true;
     private GalleryRecycleViewAdapter adapter;
     private GalleryPresenter presenter;
     private TellaFileUploadSchedulePresenter uploadPresenter;
-    private CacheWordDataSource cacheWordDataSource;
+    // private CacheWordDataSource cacheWordDataSource;
+    private KeyDataSource keyDataSource;
     private EventCompositeDisposable disposables;
 
     private AttachmentsRecycleViewAdapter attachmentsAdapter;
@@ -142,8 +141,8 @@ public class GalleryActivity extends MetadataActivity implements
         setupToolbar();
         setupFab();
 
-        cacheWordDataSource = new CacheWordDataSource(this);
-
+        //cacheWordDataSource = new CacheWordDataSource(this);
+        keyDataSource = MyApplication.getKeyDataSource();
         disposables = MyApplication.bus().createCompositeDisposable();
         disposables.wire(GalleryFlingTopEvent.class, new EventObserver<GalleryFlingTopEvent>() {
             @Override
@@ -161,13 +160,13 @@ public class GalleryActivity extends MetadataActivity implements
         });
 
         adapter = new GalleryRecycleViewAdapter(this, this,
-                new MediaFileHandler(cacheWordDataSource), R.layout.card_gallery_attachment_media_file);
+                new MediaFileHandler(keyDataSource), R.layout.card_gallery_attachment_media_file);
         final RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 3);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(adapter);
 
         attachmentsAdapter = new AttachmentsRecycleViewAdapter(this, this,
-                new MediaFileHandler(cacheWordDataSource), type);
+                new MediaFileHandler(keyDataSource), type);
         attachmentsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         attachmentsRecyclerView.setLayoutManager(attachmentsLayoutManager);
         attachmentsRecyclerView.setAdapter(attachmentsAdapter);
@@ -293,7 +292,7 @@ public class GalleryActivity extends MetadataActivity implements
             disposables.dispose();
         }
 
-        cacheWordDataSource.dispose();
+        //cacheWordDataSource.dispose();
         stopPresenters();
 
         if (alertDialog != null) {
@@ -580,7 +579,6 @@ public class GalleryActivity extends MetadataActivity implements
     public void onGetMediaFilesError(Throwable error) {
 
     }
-
 
     @Override
     public void playMedia(MediaFile mediaFile) {

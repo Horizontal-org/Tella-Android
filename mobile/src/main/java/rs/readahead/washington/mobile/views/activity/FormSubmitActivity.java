@@ -35,7 +35,7 @@ import rs.readahead.washington.mobile.views.collect.CollectFormEndView;
 import rs.readahead.washington.mobile.views.custom.FormSubmitButtonView;
 
 
-public class FormSubmitActivity extends CacheWordSubscriberBaseActivity implements
+public class FormSubmitActivity extends BaseLockActivity implements
         IFormReSubmitterContract.IView,
         IFormSubmitPresenterContract.IView {
     public static final String FORM_INSTANCE_ID_KEY = "fid";

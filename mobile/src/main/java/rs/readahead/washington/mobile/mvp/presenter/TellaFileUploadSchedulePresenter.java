@@ -7,7 +7,8 @@ import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.MyApplication;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePresenterContract;
 import rs.readahead.washington.mobile.util.jobs.TellaUploadJob;
@@ -16,24 +17,23 @@ import rs.readahead.washington.mobile.util.jobs.TellaUploadJob;
 public class TellaFileUploadSchedulePresenter implements ITellaFileUploadSchedulePresenterContract.IPresenter {
     private ITellaFileUploadSchedulePresenterContract.IView view;
     private CompositeDisposable disposables = new CompositeDisposable();
-    private CacheWordDataSource cacheWordDataSource;
+    private KeyDataSource keyDataSource;
 
 
     public TellaFileUploadSchedulePresenter(ITellaFileUploadSchedulePresenterContract.IView view) {
         this.view = view;
-        this.cacheWordDataSource = new CacheWordDataSource(view.getContext());
+        this.keyDataSource = MyApplication.getKeyDataSource();
     }
 
     @Override
     public void destroy() {
         disposables.dispose();
-        cacheWordDataSource.dispose();
         view = null;
     }
 
     @Override
     public void scheduleUploadMediaFiles(final List<MediaFile> mediaFiles) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapCompletable(dataSource -> dataSource.scheduleUploadMediaFiles(mediaFiles))
@@ -50,7 +50,7 @@ public class TellaFileUploadSchedulePresenter implements ITellaFileUploadSchedul
 
     @Override
     public void scheduleUploadMediaFilesWithPriority(final List<MediaFile> mediaFiles, long uploadServerId, boolean metadata) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapCompletable(dataSource -> dataSource.scheduleUploadMediaFilesWithPriority(mediaFiles, uploadServerId, metadata))

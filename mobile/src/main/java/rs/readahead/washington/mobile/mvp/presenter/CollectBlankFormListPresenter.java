@@ -14,8 +14,8 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.data.database.DataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.repository.OpenRosaRepository;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
@@ -31,18 +31,18 @@ public class CollectBlankFormListPresenter implements
     private IOpenRosaRepository odkRepository;
     private ICollectBlankFormListPresenterContract.IView view;
     private CompositeDisposable disposables = new CompositeDisposable();
-    private CacheWordDataSource cacheWordDataSource;
+    private KeyDataSource keyDataSource;
 
 
     public CollectBlankFormListPresenter(ICollectBlankFormListPresenterContract.IView view) {
         this.odkRepository = new OpenRosaRepository();
         this.view = view;
-        this.cacheWordDataSource = new CacheWordDataSource(view.getContext().getApplicationContext());
+        this.keyDataSource = MyApplication.getKeyDataSource();
     }
 
     @Override
     public void refreshBlankForms() {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> view.showBlankFormRefreshLoading())
@@ -81,7 +81,7 @@ public class CollectBlankFormListPresenter implements
                     }).toObservable();
                 })
                 .flatMap((Function<ListFormResult, ObservableSource<ListFormResult>>)
-                        listFormResult -> cacheWordDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<ListFormResult>>)
+                        listFormResult -> keyDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<ListFormResult>>)
                                 dataSource -> dataSource.updateBlankForms(listFormResult).toObservable()))
                 .doFinally(() -> view.hideBlankFormRefreshLoading())
                 .subscribe(listFormResult -> {
@@ -104,7 +104,7 @@ public class CollectBlankFormListPresenter implements
 
     @Override
     public void listBlankForms() {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap((Function<DataSource, ObservableSource<List<CollectForm>>>)
@@ -116,7 +116,7 @@ public class CollectBlankFormListPresenter implements
 
     @Override
     public void removeBlankFormDef(CollectForm form) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapCompletable(dataSource -> dataSource.removeBlankFormDef(form))
@@ -130,7 +130,7 @@ public class CollectBlankFormListPresenter implements
 
     @Override
     public void downloadBlankFormDef(final CollectForm form) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> view.onDownloadBlankFormDefStart())
@@ -139,7 +139,7 @@ public class CollectBlankFormListPresenter implements
                 ).flatMap((Function<CollectServer, ObservableSource<FormDef>>) server ->
                         odkRepository.getFormDef(server, form).toObservable()
                 ).flatMap((Function<FormDef, ObservableSource<FormDef>>) formDef ->
-                        cacheWordDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<FormDef>>) dataSource ->
+                        keyDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<FormDef>>) dataSource ->
                                 dataSource.updateBlankFormDef(form, formDef).toObservable()
                         )
                 )
@@ -156,7 +156,7 @@ public class CollectBlankFormListPresenter implements
 
     @Override
     public void updateBlankFormDef(final CollectForm form) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> view.onUpdateBlankFormDefStart())
@@ -165,7 +165,7 @@ public class CollectBlankFormListPresenter implements
                 ).flatMap((Function<CollectServer, ObservableSource<FormDef>>) server ->
                         odkRepository.getFormDef(server, form).toObservable()
                 ).flatMap((Function<FormDef, ObservableSource<FormDef>>) formDef ->
-                        cacheWordDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<FormDef>>) dataSource ->
+                        keyDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<FormDef>>) dataSource ->
                                 dataSource.updateBlankCollectFormDef(form, formDef).toObservable()
                         )
                 )
@@ -180,7 +180,7 @@ public class CollectBlankFormListPresenter implements
         );
     }
 
-    public void userCancel(){
+    public void userCancel() {
         disposables.clear();
         view.onUserCancel();
     }
@@ -188,7 +188,6 @@ public class CollectBlankFormListPresenter implements
     @Override
     public void destroy() {
         disposables.dispose();
-        cacheWordDataSource.dispose();
         view = null;
     }
 }

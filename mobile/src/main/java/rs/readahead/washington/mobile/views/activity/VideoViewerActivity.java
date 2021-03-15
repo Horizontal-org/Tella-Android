@@ -51,7 +51,7 @@ import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
 import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
 
 @RuntimePermissions
-public class VideoViewerActivity extends CacheWordSubscriberBaseActivity implements
+public class VideoViewerActivity extends BaseLockActivity implements
         PlaybackControlView.VisibilityListener,
         IMediaFileViewerPresenterContract.IView,
         ShareDialogFragment.IShareDialogFragmentHandler {

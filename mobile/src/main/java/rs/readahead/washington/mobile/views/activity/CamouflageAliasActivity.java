@@ -17,7 +17,7 @@ import rs.readahead.washington.mobile.util.CamouflageManager;
 import rs.readahead.washington.mobile.views.adapters.CamouflageRecycleViewAdapter;
 
 
-public class CamouflageAliasActivity extends CacheWordSubscriberBaseActivity {
+public class CamouflageAliasActivity extends BaseLockActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.iconsRecyclerView)

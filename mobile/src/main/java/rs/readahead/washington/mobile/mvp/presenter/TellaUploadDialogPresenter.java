@@ -9,25 +9,26 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.mvp.contract.ITellaUploadDialogPresenterContract;
 
 
 public class TellaUploadDialogPresenter implements ITellaUploadDialogPresenterContract.IPresenter {
-    private CacheWordDataSource cacheWordDataSource;
+    private KeyDataSource keyDataSource;
     private ITellaUploadDialogPresenterContract.IView view;
     private CompositeDisposable disposables = new CompositeDisposable();
 
 
     public TellaUploadDialogPresenter(ITellaUploadDialogPresenterContract.IView view) {
-        cacheWordDataSource = new CacheWordDataSource(view.getContext().getApplicationContext());
+        keyDataSource = MyApplication.getKeyDataSource();
         this.view = view;
     }
 
     public void loadServers() {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapSingle((Function<DataSource, SingleSource<List<TellaUploadServer>>>)
@@ -43,7 +44,6 @@ public class TellaUploadDialogPresenter implements ITellaUploadDialogPresenterCo
     @Override
     public void destroy() {
         disposables.dispose();
-        cacheWordDataSource.dispose();
         view = null;
     }
 }

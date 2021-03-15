@@ -14,7 +14,7 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.util.StringUtils;
 
 
-public class CollectHelpActivity extends CacheWordSubscriberBaseActivity {
+public class CollectHelpActivity extends BaseLockActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.servers_help)

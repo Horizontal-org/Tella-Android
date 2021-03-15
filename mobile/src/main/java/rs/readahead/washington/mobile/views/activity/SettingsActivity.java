@@ -17,7 +17,7 @@ import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
 
 
-public class SettingsActivity extends CacheWordSubscriberBaseActivity {
+public class SettingsActivity extends BaseLockActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 

@@ -1,4 +1,3 @@
-
 package rs.readahead.washington.mobile.mvp.presenter;
 
 import android.net.Uri;
@@ -14,8 +13,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.media.MediaFileBundle;
@@ -26,7 +26,7 @@ import rs.readahead.washington.mobile.mvp.contract.IAttachmentsPresenterContract
 public class AttachmentsPresenter implements IAttachmentsPresenterContract.IPresenter {
     private IAttachmentsPresenterContract.IView view;
     private CompositeDisposable disposables = new CompositeDisposable();
-    private CacheWordDataSource cacheWordDataSource;
+    private KeyDataSource keyDataSource;
     private MediaFileHandler mediaFileHandler;
 
     private List<MediaFile> attachments = new ArrayList<>();
@@ -34,14 +34,14 @@ public class AttachmentsPresenter implements IAttachmentsPresenterContract.IPres
 
     public AttachmentsPresenter(IAttachmentsPresenterContract.IView view) {
         this.view = view;
-        this.cacheWordDataSource = new CacheWordDataSource(view.getContext());
-        this.mediaFileHandler = new MediaFileHandler(cacheWordDataSource);
+        this.keyDataSource = MyApplication.getKeyDataSource();
+        this.mediaFileHandler = new MediaFileHandler(keyDataSource);
     }
 
     @Override
     public void getFiles(final IMediaFileRecordRepository.Filter filter, final IMediaFileRecordRepository.Sort sort) {
         disposables.add(
-                cacheWordDataSource.getDataSource()
+                keyDataSource.getDataSource()
                         .flatMapSingle((Function<DataSource, SingleSource<List<MediaFile>>>) dataSource -> dataSource.listMediaFiles(filter, sort))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -55,13 +55,13 @@ public class AttachmentsPresenter implements IAttachmentsPresenterContract.IPres
     }
 
     @Override
-    public void setAttachments(List<MediaFile> attachments) {
-        this.attachments = attachments;
+    public List<MediaFile> getAttachments() {
+        return attachments;
     }
 
     @Override
-    public List<MediaFile> getAttachments() {
-        return attachments;
+    public void setAttachments(List<MediaFile> attachments) {
+        this.attachments = attachments;
     }
 
     @Override
@@ -80,7 +80,7 @@ public class AttachmentsPresenter implements IAttachmentsPresenterContract.IPres
 
     @Override
     public void attachRegisteredEvidence(final long id) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapSingle((Function<DataSource, SingleSource<MediaFile>>) dataSource -> dataSource.getMediaFile(id))
@@ -125,7 +125,6 @@ public class AttachmentsPresenter implements IAttachmentsPresenterContract.IPres
     @Override
     public void destroy() {
         disposables.dispose();
-        cacheWordDataSource.dispose();
         view = null;
     }
 }

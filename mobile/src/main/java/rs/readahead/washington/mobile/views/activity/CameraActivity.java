@@ -11,6 +11,10 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -36,14 +40,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.Metadata;
@@ -74,10 +76,11 @@ public class CameraActivity extends MetadataActivity implements
         ICameraPresenterContract.IView,
         ITellaFileUploadSchedulePresenterContract.IView,
         IMetadataAttachPresenterContract.IView {
+    public static final String MEDIA_FILE_KEY = "mfk";
+    private final static int CLICK_DELAY = 1200;
+    private final static int CLICK_MODE_DELAY = 2000;
     public static String CAMERA_MODE = "cm";
     public static String INTENT_MODE = "im";
-    public static final String MEDIA_FILE_KEY = "mfk";
-
     @BindView(R.id.camera)
     CameraView cameraView;
     @BindView(R.id.gridButton)
@@ -104,7 +107,6 @@ public class CameraActivity extends MetadataActivity implements
     TextView videoModeText;
     @BindView(R.id.resolutionButton)
     CameraResolutionButton resolutionButton;
-
     private CameraPresenter presenter;
     private TellaFileUploadSchedulePresenter uploadPresenter;
     private MetadataAttacher metadataAttacher;
@@ -118,24 +120,8 @@ public class CameraActivity extends MetadataActivity implements
     private MediaFile capturedMediaFile;
     private AlertDialog videoQualityDialog;
     private VideoResolutionManager videoResolutionManager;
-
-    public enum CameraMode {
-        PHOTO,
-        VIDEO
-    }
-
-    public enum IntentMode {
-        COLLECT,
-        RETURN,
-        STAND
-    }
-
-    private final static int CLICK_DELAY = 1200;
-    private final static int CLICK_MODE_DELAY = 2000;
     private long lastClickTime = System.currentTimeMillis();
-
     private RequestManager.ImageModelRequest<MediaFileLoaderModel> glide;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -159,8 +145,9 @@ public class CameraActivity extends MetadataActivity implements
             intentMode = IntentMode.valueOf(getIntent().getStringExtra(INTENT_MODE));
         }
 
-        CacheWordDataSource cacheWordDataSource = new CacheWordDataSource(getContext());
-        MediaFileHandler mediaFileHandler = new MediaFileHandler(cacheWordDataSource);
+        // CacheWordDataSource cacheWordDataSource = new CacheWordDataSource(getContext());
+        KeyDataSource keyDataSource = MyApplication.getKeyDataSource();
+        MediaFileHandler mediaFileHandler = new MediaFileHandler(keyDataSource);
         MediaFileUrlLoader glideLoader = new MediaFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
         glide = Glide.with(getContext()).using(glideLoader);
 
@@ -693,5 +680,16 @@ public class CameraActivity extends MetadataActivity implements
         } else {
             onMediaFilesUploadScheduled();
         }
+    }
+
+    public enum CameraMode {
+        PHOTO,
+        VIDEO
+    }
+
+    public enum IntentMode {
+        COLLECT,
+        RETURN,
+        STAND
     }
 }

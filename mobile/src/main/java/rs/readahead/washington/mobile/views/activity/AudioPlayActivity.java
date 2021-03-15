@@ -50,7 +50,7 @@ import timber.log.Timber;
 import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
 
 @RuntimePermissions
-public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implements
+public class AudioPlayActivity extends BaseLockActivity implements
         IAudioPlayPresenterContract.IView,
         IMediaFileViewerPresenterContract.IView,
         ShareDialogFragment.IShareDialogFragmentHandler {

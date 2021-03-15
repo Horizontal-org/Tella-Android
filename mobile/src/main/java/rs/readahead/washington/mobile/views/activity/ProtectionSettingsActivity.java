@@ -21,7 +21,7 @@ import rs.readahead.washington.mobile.mvp.presenter.ProtectionSettingsPresenter;
 import rs.readahead.washington.mobile.util.CamouflageManager;
 
 
-public class ProtectionSettingsActivity extends CacheWordSubscriberBaseActivity implements CompoundButton.OnCheckedChangeListener,
+public class ProtectionSettingsActivity extends BaseLockActivity implements CompoundButton.OnCheckedChangeListener,
         IProtectionSettingsPresenterContract.IView {
     @BindView(R.id.camouflage_setting)
     TextView camouflageSetting;
