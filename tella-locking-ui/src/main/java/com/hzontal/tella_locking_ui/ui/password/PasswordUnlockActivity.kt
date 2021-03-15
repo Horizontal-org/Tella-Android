@@ -12,8 +12,10 @@ import org.hzontal.tella.keys.MainKeyStore
 import org.hzontal.tella.keys.key.MainKey
 import timber.log.Timber
 import javax.crypto.spec.PBEKeySpec
-
+private const val TAG = "PasswordUnlockActivity"
 class PasswordUnlockActivity : BasePasswordActivity() {
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +46,7 @@ class PasswordUnlockActivity : BasePasswordActivity() {
             override fun onError(throwable: Throwable) {
                 Timber.d(throwable, "*** MainKeyStore.UnlockRegistry.IUnlocker.onError")
                 onFailureSetPassword(getString(R.string.incorrect_password_error_msg))
-                TellaKeysUI.getCredentialsCallback().onUnSuccessfulUnlock()
+                TellaKeysUI.getCredentialsCallback().onUnSuccessfulUnlock(TAG,throwable)
             }
         })
     }

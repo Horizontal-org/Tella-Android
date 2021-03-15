@@ -9,7 +9,7 @@ import com.hzontal.tella_locking_ui.ui.pin.base.BasePinActivity
 import org.hzontal.tella.keys.MainKeyStore
 import org.hzontal.tella.keys.key.MainKey
 import javax.crypto.spec.PBEKeySpec
-
+private const val TAG = "PinUnlockActivity"
 class PinUnlockActivity  : BasePinActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,12 +30,12 @@ class PinUnlockActivity  : BasePinActivity() {
 
             override fun onError(throwable: Throwable) {
                 onFailureSetPin(getString(R.string.incorrect_pin_error_msg))
+                TellaKeysUI.getCredentialsCallback().onUnSuccessfulUnlock(TAG,throwable)
             }
         })
     }
 
     override fun onFailureSetPin(error: String) {
-        TellaKeysUI.getCredentialsCallback().onUnSuccessfulUnlock()
         pinTopText.setTextColor(ContextCompat.getColor(this,R.color.wa_red_error))
         pinTopText.text = error
     }

@@ -128,7 +128,7 @@ public class MyApplication extends Application implements IUnlockRegistryHolder,
         }
         // todo: implement dagger2
         SharedPrefs.getInstance().init(this);
-        //configureCrashlytics();
+        configureCrashlytics();
 
         RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
             @Override
@@ -213,9 +213,10 @@ public class MyApplication extends Application implements IUnlockRegistryHolder,
     }
 
     @Override
-    public void onUnSuccessfulUnlock() {
-
+    public void onUnSuccessfulUnlock(String tag, Throwable throwable) {
+        FirebaseCrashlytics.getInstance().recordException(throwable);
     }
+
 
     @Override
     public void onLockConfirmed(Context context) {
