@@ -19,7 +19,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/guideH10"
         android:text="@string/intro_welcome"
-        style="@style/Tella_Main_White_Text.Bold">
+        style="@style/Tella_Main_White_Text.Bold"
+        android:layout_marginStart="28dp"
+        >
     </TextView>
 
     <TextView
@@ -28,8 +30,8 @@
         app:layout_constraintTop_toBottomOf="@id/welcomeTV"
         android:text="@string/tella"
         android:textSize="55sp"
-        android:layout_marginStart="28dp"
         style="@style/Tella_Main_White_Text"
+        android:layout_marginStart="28dp"
         >
     </TextView>
     <TextView
