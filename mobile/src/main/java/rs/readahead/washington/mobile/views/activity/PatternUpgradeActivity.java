@@ -49,15 +49,14 @@ public class PatternUpgradeActivity extends ConfirmPatternActivity {
         dialog = DialogsUtil.showProgressDialog(this, getString(R.string.lock_dialog_expl_unlock_app));
 
         try {
-            char[] passphrase = PatternUtils.patternToSha1String(pattern).toCharArray();
-
-            PassphraseSecrets secrets = PassphraseSecrets.fetchSecrets(this, passphrase);
+            PassphraseSecrets secrets = PassphraseSecrets.fetchSecrets(this, PatternUtils.patternToSha1String(pattern).toCharArray());
             MainKey mainKey = new MainKey(new SecretKeySpec(secrets.getSecretKey().getEncoded(), "AES"));
+            PBEKeySpec keySpec = new PBEKeySpec(PatternUtils.patternToSha1String(pattern).toCharArray());
 
             IUnlockRegistryHolder holder = (IUnlockRegistryHolder) getApplicationContext();
             UnlockConfig config = holder.getUnlockRegistry().getActiveConfig(this);
 
-            TellaKeysUI.getMainKeyStore().store(mainKey, config.wrapper, new PBEKeySpec(passphrase), new MainKeyStore.IMainKeyStoreCallback() {
+            TellaKeysUI.getMainKeyStore().store(mainKey, config.wrapper, keySpec, new MainKeyStore.IMainKeyStoreCallback() {
                 @Override
                 public void onSuccess(MainKey mainKey) {
                     Timber.d("** MainKey stored: %s **", mainKey);
