@@ -16,8 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.biometric.BiometricManager;
 
 public class UnlockRegistry {
-    private Map<Method, UnlockConfig> configs = new HashMap<>();
-    private Map<String, UnlockResult> results = new HashMap<>();
+    private final Map<Method, UnlockConfig> configs = new HashMap<>();
+    private final Map<String, UnlockResult> results = new HashMap<>();
 
     public void putResult(String name, UnlockResult result) {
         results.put(name, result);
@@ -45,6 +45,7 @@ public class UnlockRegistry {
     }
 
     // capabilities
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isDeviceCredentialsAvailable() {
         // todo: check why exactly we do not go for 21 (something about changing the pass removes the keys)
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;

@@ -9,7 +9,6 @@ import info.guardianproject.cacheword.SecretsManager;
 import rs.readahead.washington.mobile.MyApplication;
 
 public abstract class BaseLockActivity extends BaseActivity {
-
     private boolean locked;
 
     private void restrictActivity() {
@@ -29,18 +28,16 @@ public abstract class BaseLockActivity extends BaseActivity {
     }
 
     protected void startKeySetup() {
-        Intent intent = new Intent(this, SecretsManager.isInitialized(this)  ? PatternUpgradeActivity.class : PatternSetActivity.class);
+        Intent intent = new Intent(this, SecretsManager.isInitialized(this) ? PatternUpgradeActivity.class : PatternSetActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         this.startActivity(intent);
     }
-
 
     protected void startUnlockingMainKey() {
         Intent intent = new Intent(this, PatternUnlockActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         this.startActivity(intent);
     }
-
 
     @Override
     protected void onResume() {

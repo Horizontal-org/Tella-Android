@@ -33,8 +33,7 @@ public class AndroidKeyStoreHelper {
 
     @RequiresApi(Build.VERSION_CODES.M)
     public static WrappedMainKey wrap(@NonNull byte[] input, IMainKeyWrapper wrapper) {
-        // SecretKey secretKey = hasKey() ? getKey() : createKey();
-        SecretKey secretKey = createKey();
+        SecretKey secretKey = hasKey() ? getKey() : createKey();
 
         try {
             Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
@@ -78,7 +77,7 @@ public class AndroidKeyStoreHelper {
                     .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
                     .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
                     .setUserAuthenticationRequired(true)
-                    .setUserAuthenticationValidityDurationSeconds(10) // todo: can this be avoided and still require auth in "real world"
+                    .setUserAuthenticationValidityDurationSeconds(10)
                     .build();
 
             keyGenerator.init(keyGenParameterSpec);
