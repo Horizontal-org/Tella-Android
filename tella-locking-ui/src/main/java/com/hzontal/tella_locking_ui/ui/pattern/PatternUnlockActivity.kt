@@ -29,7 +29,6 @@ class PatternUnlockActivity : ConfirmPatternActivity() {
 
         TellaKeysUI.getMainKeyStore().load(config.wrapper, PBEKeySpec(mNewPassphrase.toCharArray()), object : IMainKeyLoadCallback {
             override fun onReady(mainKey: MainKey) {
-                TellaKeysUI.getUnlockRegistry().setActiveMethod(this@PatternUnlockActivity, UnlockRegistry.Method.TELLA_PATTERN)
                 Timber.d("*** MainKeyStore.IMainKeyLoadCallback.onReady")
                 getMainKeyHolder().set(mainKey);
                 TellaKeysUI.getCredentialsCallback().onSuccessfulUnlock(this@PatternUnlockActivity)
