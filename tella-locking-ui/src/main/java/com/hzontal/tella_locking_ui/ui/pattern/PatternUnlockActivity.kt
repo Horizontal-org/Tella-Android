@@ -8,15 +8,12 @@ import com.hzontal.tella_locking_ui.patternlock.ConfirmPatternActivity
 import com.hzontal.tella_locking_ui.patternlock.PatternUtils
 import com.hzontal.tella_locking_ui.patternlock.PatternView
 import org.hzontal.tella.keys.MainKeyStore.IMainKeyLoadCallback
-import org.hzontal.tella.keys.config.UnlockRegistry
 import org.hzontal.tella.keys.key.MainKey
 import timber.log.Timber
 import javax.crypto.spec.PBEKeySpec
 
 private const val TAG = "PatternUnlockActivity"
 class PatternUnlockActivity : ConfirmPatternActivity() {
-
-    private lateinit var mNewPassphrase: String
     private var isPatternCorrect = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,12 +22,12 @@ class PatternUnlockActivity : ConfirmPatternActivity() {
         mRightButton.isVisible = false
     }
     override fun isPatternCorrect(pattern: MutableList<PatternView.Cell>?): Boolean {
-        mNewPassphrase = PatternUtils.patternToSha1String(pattern)
+        val passphrase = PatternUtils.patternToSha1String(pattern).toCharArray()
 
-        TellaKeysUI.getMainKeyStore().load(config.wrapper, PBEKeySpec(mNewPassphrase.toCharArray()), object : IMainKeyLoadCallback {
+        TellaKeysUI.getMainKeyStore().load(config.wrapper, PBEKeySpec(passphrase), object : IMainKeyLoadCallback {
             override fun onReady(mainKey: MainKey) {
                 Timber.d("*** MainKeyStore.IMainKeyLoadCallback.onReady")
-                getMainKeyHolder().set(mainKey);
+                getMainKeyHolder().set(mainKey)
                 TellaKeysUI.getCredentialsCallback().onSuccessfulUnlock(this@PatternUnlockActivity)
                 isPatternCorrect = true
             }
@@ -49,5 +46,4 @@ class PatternUnlockActivity : ConfirmPatternActivity() {
         super.onConfirmed()
         finish()
     }
-
 }

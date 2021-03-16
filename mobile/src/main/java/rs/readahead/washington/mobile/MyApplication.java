@@ -1,17 +1,12 @@
 package rs.readahead.washington.mobile;
 
 import android.annotation.SuppressLint;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.StrictMode;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.lifecycle.ProcessLifecycleOwner;
 
 import com.evernote.android.job.JobManager;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -35,6 +30,10 @@ import org.hzontal.tella.keys.wrapper.AndroidKeyStoreWrapper;
 import org.hzontal.tella.keys.wrapper.PBEKeyWrapper;
 import org.hzontal.tella.keys.wrapper.UnencryptedKeyWrapper;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.lifecycle.ProcessLifecycleOwner;
+import androidx.multidex.MultiDexApplication;
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
 import rs.readahead.washington.mobile.bus.TellaBus;
@@ -53,7 +52,7 @@ import rs.readahead.washington.mobile.views.activity.onboarding.OnBoardingActivi
 import timber.log.Timber;
 
 
-public class MyApplication extends Application implements IUnlockRegistryHolder, CredentialsCallback {
+public class MyApplication extends MultiDexApplication implements IUnlockRegistryHolder, CredentialsCallback {
     private static TellaBus bus;
     private static LifecycleMainKey mainKeyHolder;
     @SuppressLint("StaticFieldLeak")
