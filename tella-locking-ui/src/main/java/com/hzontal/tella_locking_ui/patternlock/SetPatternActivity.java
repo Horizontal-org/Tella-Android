@@ -60,7 +60,7 @@ public class SetPatternActivity extends BasePatternActivity
 
     protected enum Stage {
 
-        Draw(R.string.pl_draw_pattern, LeftButtonState.Cancel, RightButtonState.ContinueDisabled,
+        Draw(R.string.pl_pattern_too_short, LeftButtonState.Cancel, RightButtonState.ContinueDisabled,
                 true),
         DrawTooShort(R.string.pl_pattern_too_short, LeftButtonState.Redraw,
                 RightButtonState.ContinueDisabled, true),
