@@ -14,6 +14,7 @@ import com.hzontal.tella_locking_ui.patternlock.PatternView;
 import org.hzontal.tella.keys.MainKeyStore;
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder;
 import org.hzontal.tella.keys.config.UnlockConfig;
+import org.hzontal.tella.keys.config.UnlockRegistry;
 import org.hzontal.tella.keys.key.MainKey;
 
 import java.security.GeneralSecurityException;
@@ -54,6 +55,7 @@ public class PatternUpgradeActivity extends ConfirmPatternActivity {
             PBEKeySpec keySpec = new PBEKeySpec(PatternUtils.patternToSha1String(pattern).toCharArray());
 
             IUnlockRegistryHolder holder = (IUnlockRegistryHolder) getApplicationContext();
+            holder.getUnlockRegistry().setActiveMethod(PatternUpgradeActivity.this, UnlockRegistry.Method.TELLA_PATTERN);
             UnlockConfig config = holder.getUnlockRegistry().getActiveConfig(this);
 
             TellaKeysUI.getMainKeyStore().store(mainKey, config.wrapper, keySpec, new MainKeyStore.IMainKeyStoreCallback() {
