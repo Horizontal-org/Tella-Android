@@ -50,7 +50,6 @@ public class JavaRosa {
             "org.javarosa.core.model.data.TimeData", // CoreModelModule
             "org.javarosa.core.model.data.UncastData", // CoreModelModule
             "org.javarosa.core.model.data.helper.BasicDataPointer", // CoreModelModule
-            "org.javarosa.core.model.Action", // CoreModelModule
             "org.javarosa.core.model.actions.SetValueAction" // CoreModelModule
     };
 

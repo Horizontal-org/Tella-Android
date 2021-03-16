@@ -30,6 +30,7 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.MyLocation;
 import rs.readahead.washington.mobile.mvp.contract.ILocationGettingPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.LocationGettingPresenter;
+import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 
 
 public class LocationMapActivity extends BaseLockActivity implements

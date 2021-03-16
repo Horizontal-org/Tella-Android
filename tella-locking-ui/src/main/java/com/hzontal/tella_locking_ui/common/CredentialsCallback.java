@@ -5,5 +5,7 @@ import android.content.Context;
 public interface CredentialsCallback {
     void onSuccessfulUnlock(Context context);
 
-    void onUnSuccessfulUnlock();
+    void onUnSuccessfulUnlock(String tag,Throwable throwable);
+
+    void onLockConfirmed(Context context);
 }

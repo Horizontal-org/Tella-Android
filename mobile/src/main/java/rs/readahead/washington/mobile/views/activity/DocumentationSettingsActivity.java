@@ -39,6 +39,7 @@ import rs.readahead.washington.mobile.mvp.presenter.ServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.TellaUploadServersPresenter;
 import rs.readahead.washington.mobile.domain.entity.ServerType;
 import rs.readahead.washington.mobile.util.DialogsUtil;
+import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragment;
 import timber.log.Timber;

@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!--
-  ~ Copyright (c) 2016 Zhang Hai <Dreaming.in.Code.ZH@Gmail.com>
-  ~ All Rights Reserved.
-  -->
+
 
 <resources>
     <dimen name="pl_pattern_dot_line_width">3dp</dimen>
     <dimen name="pl_pattern_dot_size">12dp</dimen>
     <dimen name="pl_pattern_dot_size_activated">28dp</dimen>
+
+    <dimen name="default_text_size">32sp</dimen>
+    <dimen name="default_button_size">54dp</dimen>
+    <dimen name="default_delete_button_size">16dp</dimen>
+    <dimen name="default_horizontal_spacing">30dp</dimen>
+    <dimen name="default_vertical_spacing">0dp</dimen>
+
+    <dimen name="default_dot_diameter">8dp</dimen>
+    <dimen name="default_dot_spacing">8dp</dimen>
 </resources>

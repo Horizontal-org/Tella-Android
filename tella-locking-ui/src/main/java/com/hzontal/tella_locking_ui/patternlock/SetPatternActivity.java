@@ -5,11 +5,14 @@
 
 package com.hzontal.tella_locking_ui.patternlock;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
+import androidx.core.content.ContextCompat;
 
 import com.hzontal.tella_locking_ui.R;
+import com.hzontal.tella_locking_ui.ui.pattern.PatternSetConfirmActivity;
+import com.hzontal.tella_locking_ui.ui.utils.DialogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +24,7 @@ import java.util.List;
  */
 public class SetPatternActivity extends BasePatternActivity
         implements PatternView.OnPatternListener {
+    protected static final String PATTERN_CELL_BYTES = "PATTERN_CELL_BYTES";
 
     private enum LeftButtonState {
 
@@ -54,13 +58,13 @@ public class SetPatternActivity extends BasePatternActivity
         }
     }
 
-    private enum Stage {
+    protected enum Stage {
 
-        Draw(R.string.pl_draw_pattern, LeftButtonState.Cancel, RightButtonState.ContinueDisabled,
+        Draw(R.string.pl_pattern_too_short, LeftButtonState.Cancel, RightButtonState.ContinueDisabled,
                 true),
         DrawTooShort(R.string.pl_pattern_too_short, LeftButtonState.Redraw,
                 RightButtonState.ContinueDisabled, true),
-        DrawValid(R.string.pl_pattern_recorded, LeftButtonState.Redraw, RightButtonState.Continue,
+        DrawValid(R.string.pl_pattern_too_short, LeftButtonState.Redraw, RightButtonState.Continue,
                 false),
         Confirm(R.string.pl_confirm_pattern, LeftButtonState.Cancel,
                 RightButtonState.ConfirmDisabled, true),
@@ -87,15 +91,14 @@ public class SetPatternActivity extends BasePatternActivity
     private static final String KEY_PATTERN = "pattern";
 
     private int mMinPatternSize;
-    private List<PatternView.Cell> mPattern;
-    private Stage mStage;
+    protected List<PatternView.Cell> mPattern;
+    protected Stage mStage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mMinPatternSize = getMinPatternSize();
-
         mPatternView.setOnPatternListener(this);
         mLeftButton.setOnClickListener(v -> onLeftButtonClicked());
         mRightButton.setOnClickListener(v -> onRightButtonClicked());
@@ -126,7 +129,7 @@ public class SetPatternActivity extends BasePatternActivity
 
         removeClearPatternRunnable();
 
-        mMessageText.setText(R.string.pl_recording_pattern);
+        // mMessageText.setText(R.string.pl_recording_pattern);
         mPatternView.setDisplayMode(PatternView.DisplayMode.Correct);
         mLeftButton.setEnabled(false);
         mRightButton.setEnabled(false);
@@ -147,14 +150,6 @@ public class SetPatternActivity extends BasePatternActivity
                 } else {
                     mPattern = new ArrayList<>(newPattern);
                     updateStage(Stage.DrawValid);
-                }
-                break;
-            case Confirm:
-            case ConfirmWrong:
-                if (newPattern.equals(mPattern)) {
-                    updateStage(Stage.ConfirmCorrect);
-                } else {
-                    updateStage(Stage.ConfirmWrong);
                 }
                 break;
             default:
@@ -183,6 +178,7 @@ public class SetPatternActivity extends BasePatternActivity
     protected void onCanceled() {
         setResult(RESULT_CANCELED);
         finish();
+        overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
     }
 
     private void onRightButtonClicked() {
@@ -191,7 +187,9 @@ public class SetPatternActivity extends BasePatternActivity
                 throw new IllegalStateException("expected ui stage " + Stage.DrawValid
                         + " when button is " + RightButtonState.Continue);
             }
-            updateStage(Stage.Confirm);
+            Intent intent = new Intent(this, PatternSetConfirmActivity.class);
+            intent.putExtra(PATTERN_CELL_BYTES, PatternUtils.patternToSha1String(mPattern, mPattern.size()));
+            startActivity(intent);
         } else if (mStage.rightButtonState == RightButtonState.Confirm) {
             if (mStage != Stage.ConfirmCorrect) {
                 throw new IllegalStateException("expected ui stage " + Stage.ConfirmCorrect
@@ -204,17 +202,17 @@ public class SetPatternActivity extends BasePatternActivity
 
     protected void onConfirmed() {
         setResult(RESULT_OK);
-      //  finish();
+        finish();
     }
 
-    private void updateStage(Stage newStage) {
+    protected void updateStage(Stage newStage) {
 
         Stage previousStage = mStage;
         mStage = newStage;
 
         if (mStage == Stage.DrawTooShort) {
             mMessageText.setText(getString(mStage.messageId, mMinPatternSize));
-        } else {
+        } else if (mStage != Stage.ConfirmWrong) {
             mMessageText.setText(mStage.messageId);
         }
 
@@ -223,6 +221,7 @@ public class SetPatternActivity extends BasePatternActivity
 
         mRightButton.setText(mStage.rightButtonState.textId);
         mRightButton.setEnabled(mStage.rightButtonState.enabled);
+        mRightButton.setTextColor(mStage.rightButtonState.enabled ? ContextCompat.getColor(this, R.color.wa_white) : ContextCompat.getColor(this, R.color.wa_white_40));
 
         mPatternView.setInputEnabled(mStage.patternEnabled);
 
@@ -233,7 +232,11 @@ public class SetPatternActivity extends BasePatternActivity
                 mPatternView.clearPattern();
                 break;
             case DrawTooShort:
+                mPatternView.setDisplayMode(PatternView.DisplayMode.Wrong);
+                postClearPatternRunnable();
+                break;
             case ConfirmWrong:
+                DialogUtils.showBottomMessage(this, getString(R.string.pl_incorrect_confirm_pattern), false);
                 mPatternView.setDisplayMode(PatternView.DisplayMode.Wrong);
                 postClearPatternRunnable();
                 break;
@@ -253,5 +256,6 @@ public class SetPatternActivity extends BasePatternActivity
         return 4;
     }
 
-    protected void onSetPattern(List<PatternView.Cell> pattern) {}
+    protected void onSetPattern(List<PatternView.Cell> pattern) {
+    }
 }

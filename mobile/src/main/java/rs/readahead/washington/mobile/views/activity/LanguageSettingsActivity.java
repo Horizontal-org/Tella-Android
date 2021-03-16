@@ -24,6 +24,7 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
 import rs.readahead.washington.mobile.util.LocaleManager;
 import rs.readahead.washington.mobile.util.StringUtils;
+import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 
 
 public class LanguageSettingsActivity extends BaseLockActivity implements

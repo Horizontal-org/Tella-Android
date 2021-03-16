@@ -33,9 +33,9 @@ public class ConfirmPatternActivity extends BasePatternActivity
         mMessageText.setText(R.string.pl_draw_pattern_to_unlock);
         mPatternView.setInStealthMode(isStealthModeEnabled());
         mPatternView.setOnPatternListener(this);
-        mLeftButton.setText(R.string.pl_cancel);
+        //mLeftButton.setText(R.string.pl_cancel);
         mLeftButton.setOnClickListener(v -> onCancel());
-        mRightButton.setText(R.string.pl_forgot_pattern);
+       // mRightButton.setText(R.string.pl_forgot_pattern);
         mRightButton.setOnClickListener(v -> onForgotPassword());
         ViewAccessibilityCompat.announceForAccessibility(mMessageText, mMessageText.getText());
 
@@ -94,6 +94,7 @@ public class ConfirmPatternActivity extends BasePatternActivity
     protected void onConfirmed() {
         setResult(RESULT_OK);
         finish();
+        overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
     }
 
     protected void onWrongPattern() {
@@ -103,10 +104,12 @@ public class ConfirmPatternActivity extends BasePatternActivity
     protected void onCancel() {
         setResult(RESULT_CANCELED);
         finish();
+        overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
     }
 
     protected void onForgotPassword() {
         setResult(RESULT_FORGOT_PASSWORD);
         finish();
+        overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
     }
 }

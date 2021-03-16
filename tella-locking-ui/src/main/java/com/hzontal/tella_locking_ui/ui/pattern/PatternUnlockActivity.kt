@@ -12,15 +12,15 @@ import org.hzontal.tella.keys.key.MainKey
 import timber.log.Timber
 import javax.crypto.spec.PBEKeySpec
 
+private const val TAG = "PatternUnlockActivity"
 class PatternUnlockActivity : ConfirmPatternActivity() {
     private var isPatternCorrect = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        mLeftButton.isVisible = false
         mRightButton.isVisible = false
     }
-
     override fun isPatternCorrect(pattern: MutableList<PatternView.Cell>?): Boolean {
         val passphrase = PatternUtils.patternToSha1String(pattern).toCharArray()
 
@@ -34,7 +34,7 @@ class PatternUnlockActivity : ConfirmPatternActivity() {
 
             override fun onError(throwable: Throwable) {
                 Timber.d(throwable, "*** MainKeyStore.UnlockRegistry.IUnlocker.onError")
-                TellaKeysUI.getCredentialsCallback().onUnSuccessfulUnlock()
+                TellaKeysUI.getCredentialsCallback().onUnSuccessfulUnlock(TAG,throwable)
                 isPatternCorrect = false
             }
         })
