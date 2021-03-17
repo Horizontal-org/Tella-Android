@@ -12,10 +12,10 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.custom.InformationButton
 
-class OnBoardLockFragment : BaseFragment(){
-    private lateinit var lockPasswordBtn : InformationButton
-    private lateinit var lockPINdBtn : InformationButton
-    private lateinit var lockPatternBtn : InformationButton
+class OnBoardLockFragment : BaseFragment() {
+    private lateinit var lockPasswordBtn: InformationButton
+    private lateinit var lockPINdBtn: InformationButton
+    private lateinit var lockPatternBtn: InformationButton
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -29,7 +29,7 @@ class OnBoardLockFragment : BaseFragment(){
         initView(view)
     }
 
-    private fun initView(view: View){
+    private fun initView(view: View) {
         lockPasswordBtn = view.findViewById(R.id.lockPasswordBtn)
         lockPINdBtn = view.findViewById(R.id.lockPINdBtn)
         lockPatternBtn = view.findViewById(R.id.lockPatternBtn)
@@ -37,21 +37,24 @@ class OnBoardLockFragment : BaseFragment(){
         initListeners()
     }
 
-    private fun initListeners(){
-        lockPasswordBtn.setOnClickListener{
+    private fun initListeners() {
+        lockPasswordBtn.setOnClickListener {
             toggleButtons(passwordState = true, pinState = false, patternState = false)
-            startActivity(Intent(activity, SetPasswordActivity::class.java))}
-        lockPINdBtn.setOnClickListener{
+            startActivity(Intent(activity, SetPasswordActivity::class.java))
+        }
+        lockPINdBtn.setOnClickListener {
             toggleButtons(passwordState = false, pinState = true, patternState = false)
-            startActivity(Intent(activity, SetPinActivity::class.java))}
-        lockPatternBtn.setOnClickListener{
+            startActivity(Intent(activity, SetPinActivity::class.java))
+        }
+        lockPatternBtn.setOnClickListener {
             toggleButtons(passwordState = false, pinState = false, patternState = true)
-            startActivity(Intent(activity, PatternSetActivity::class.java))}
+            startActivity(Intent(activity, PatternSetActivity::class.java))
+        }
     }
 
-    private fun toggleButtons(passwordState : Boolean,pinState : Boolean, patternState: Boolean){
+    private fun toggleButtons(passwordState: Boolean, pinState: Boolean, patternState: Boolean) {
         lockPasswordBtn.isChecked = passwordState
-        lockPINdBtn.isChecked  = pinState
+        lockPINdBtn.isChecked = pinState
         lockPatternBtn.isChecked = patternState
     }
 

@@ -58,7 +58,6 @@ class PatternUnlockActivity : ConfirmPatternActivity() {
             backBtn = findViewById(R.id.backBtn)
             backBtn.isVisible = true
             backBtn.setOnClickListener { finish() }
-            mTopImageView.background = ContextCompat.getDrawable(this,R.drawable.logo)
             mMessageText.text = getString(R.string.settings_current_pattern_msg)
         }
 

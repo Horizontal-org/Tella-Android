@@ -44,7 +44,6 @@ class PasswordUnlockActivity : BasePasswordActivity() {
             backBtn = findViewById(R.id.backBtn)
             backBtn.isVisible = true
             backBtn.setOnClickListener { finish() }
-            topImageView.background = ContextCompat.getDrawable(this, R.drawable.logo)
             passwordMsgTextView.text = getString(R.string.settings_current_password_msg)
         } else {
             passwordMsgTextView.text = getText(R.string.enter_password_tella)

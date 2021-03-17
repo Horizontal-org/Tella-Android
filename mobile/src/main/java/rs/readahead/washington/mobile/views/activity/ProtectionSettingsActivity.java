@@ -110,7 +110,6 @@ public class ProtectionSettingsActivity extends BaseLockActivity implements Comp
     }
 
 
-
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
