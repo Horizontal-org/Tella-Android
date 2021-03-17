@@ -38,9 +38,22 @@ class OnBoardLockFragment : BaseFragment(){
     }
 
     private fun initListeners(){
-        lockPasswordBtn.setOnClickListener{startActivity(Intent(activity, SetPasswordActivity::class.java))}
-        lockPINdBtn.setOnClickListener{startActivity(Intent(activity, SetPinActivity::class.java))}
-        lockPatternBtn.setOnClickListener{startActivity(Intent(activity, PatternSetActivity::class.java))}
+        lockPasswordBtn.setOnClickListener{
+            toggleButtons(passwordState = true, pinState = false, patternState = false)
+            startActivity(Intent(activity, SetPasswordActivity::class.java))}
+        lockPINdBtn.setOnClickListener{
+            toggleButtons(passwordState = false, pinState = true, patternState = false)
+            startActivity(Intent(activity, SetPinActivity::class.java))}
+        lockPatternBtn.setOnClickListener{
+            toggleButtons(passwordState = false, pinState = false, patternState = true)
+            startActivity(Intent(activity, PatternSetActivity::class.java))}
     }
+
+    private fun toggleButtons(passwordState : Boolean,pinState : Boolean, patternState: Boolean){
+        lockPasswordBtn.isChecked = passwordState
+        lockPINdBtn.isChecked  = pinState
+        lockPatternBtn.isChecked = patternState
+    }
+
 
 }
