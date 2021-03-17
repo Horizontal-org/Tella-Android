@@ -25,8 +25,8 @@ class ConfirmPinActivity  : BasePinActivity() {
        if (mConfirmPin == pin) {
            var mainKey: MainKey
            try {
-               isConfirmSettingsUpdate = true
                mainKey = TellaKeysUI.getMainKeyHolder().get()
+               isConfirmSettingsUpdate = true
            } catch (e: LifecycleMainKey.MainKeyUnavailableException) {
                mainKey = MainKey.generate()
            }
