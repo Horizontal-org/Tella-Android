@@ -7,12 +7,17 @@ import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.ONBOARDING_CLASS_NAME
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.TellaKeysUI
+import com.hzontal.tella_locking_ui.ui.ConfirmCredentialsActivity
+import com.hzontal.tella_locking_ui.ui.SuccessUpdateDialog
 import org.hzontal.tella.keys.config.UnlockConfig
 import org.hzontal.tella.keys.config.UnlockRegistry
 import timber.log.Timber
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 open class BaseActivity : AppCompatActivity() {
     protected val isFromSettings by lazy { intent.getBooleanExtra(IS_FROM_SETTINGS,false)  }
+    protected var isConfirmSettingsUpdate : Boolean = false
     protected val config: UnlockConfig by lazy { TellaKeysUI.getUnlockRegistry().getActiveConfig(this) }
     protected val registry: UnlockRegistry by lazy { TellaKeysUI.getUnlockRegistry() }
 
@@ -55,5 +60,21 @@ open class BaseActivity : AppCompatActivity() {
         else{
             TellaKeysUI.getCredentialsCallback().onSuccessfulUnlock(this)
         }
+    }
+
+    protected fun onSuccessConfirmUnlock(){
+       if (isConfirmSettingsUpdate){
+           val dialog =  SuccessUpdateDialog()
+           dialog.show(supportFragmentManager,"SUCCESS_DIALOG")
+           val executor = Executors.newSingleThreadScheduledExecutor()
+           val hideDialog =  Runnable {
+               TellaKeysUI.getCredentialsCallback().onSuccessfulUnlock(this)
+               dialog.dismiss()
+           }
+           executor.schedule(hideDialog, 3, TimeUnit.SECONDS);
+       }else{
+           startActivity(Intent(this, ConfirmCredentialsActivity::class.java))
+           finishAffinity()
+       }
     }
 }

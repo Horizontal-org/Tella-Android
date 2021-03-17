@@ -1,10 +1,8 @@
 package com.hzontal.tella_locking_ui.ui.password
 
-import android.content.Intent
 import android.os.Bundle
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.TellaKeysUI
-import com.hzontal.tella_locking_ui.ui.ConfirmCredentialsActivity
 import com.hzontal.tella_locking_ui.ui.password.base.BasePasswordActivity
 import com.hzontal.tella_locking_ui.ui.utils.DialogUtils
 import org.hzontal.tella.keys.MainKeyStore
@@ -26,17 +24,22 @@ class ConfirmPasswordActivity : BasePasswordActivity() {
 
     override fun onSuccessSetPassword(password: String) {
         if (password == mConfirmPassword) {
-            val mainKey: MainKey = try {TellaKeysUI.getMainKeyHolder().get() } catch (e: LifecycleMainKey.MainKeyUnavailableException) { MainKey.generate() }
+            var mainKey: MainKey
+            try {
+                isConfirmSettingsUpdate = true
+                mainKey = TellaKeysUI.getMainKeyHolder().get()
+            } catch (e: LifecycleMainKey.MainKeyUnavailableException) {
+                mainKey = MainKey.generate()
+            }
             val keySpec = PBEKeySpec(password.toCharArray())
-            TellaKeysUI.getUnlockRegistry().setActiveMethod(this@ConfirmPasswordActivity,UnlockRegistry.Method.TELLA_PASSWORD)
+            TellaKeysUI.getUnlockRegistry().setActiveMethod(this@ConfirmPasswordActivity, UnlockRegistry.Method.TELLA_PASSWORD)
             val config = TellaKeysUI.getUnlockRegistry().getActiveConfig(this@ConfirmPasswordActivity)
             TellaKeysUI.getMainKeyStore().store(mainKey, config.wrapper, keySpec, object : MainKeyStore.IMainKeyStoreCallback {
                 override fun onSuccess(mainKey: MainKey) {
                     Timber.d("** MainKey stored: %s **", mainKey)
                     // here, we store MainKey in memory -> unlock the app
                     TellaKeysUI.getMainKeyHolder().set(mainKey)
-                    startActivity(Intent(this@ConfirmPasswordActivity, ConfirmCredentialsActivity::class.java))
-                    finishAffinity()
+                    onSuccessConfirmUnlock()
                 }
 
                 override fun onError(throwable: Throwable) {

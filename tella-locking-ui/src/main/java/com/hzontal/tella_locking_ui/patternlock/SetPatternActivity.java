@@ -189,7 +189,8 @@ public class SetPatternActivity extends BasePatternActivity
             }
             Intent intent = new Intent(this, PatternSetConfirmActivity.class);
             intent.putExtra(PATTERN_CELL_BYTES, PatternUtils.patternToSha1String(mPattern, mPattern.size()));
-            startActivity(intent);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivityForResult(intent,123);
         } else if (mStage.rightButtonState == RightButtonState.Confirm) {
             if (mStage != Stage.ConfirmCorrect) {
                 throw new IllegalStateException("expected ui stage " + Stage.ConfirmCorrect
