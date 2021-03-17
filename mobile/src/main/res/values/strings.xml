@@ -138,6 +138,7 @@
     <string name="action_exit">Exit</string>
     <string name="home_action.desc_quick.exit">Exit</string>
     <string name="settings.prot_select_camouflage">Camouflage</string>
+    <string name="settings.prot_select_lock" translatable="false">Lock</string>
     <string name="onboard.camo_heading">Camouflage</string>
     <string name="settings_dialog.action_save.server.no.internet">Save anyway</string>
     <string name="settings.docu_error_wrong.credentials">The username or password is incorrect.</string>

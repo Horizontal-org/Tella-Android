@@ -11,6 +11,12 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.hzontal.tella_locking_ui.ui.password.PasswordUnlockActivity;
+import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity;
+import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity;
+
+import org.hzontal.tella.keys.config.IUnlockRegistryHolder;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -20,6 +26,8 @@ import rs.readahead.washington.mobile.mvp.contract.IProtectionSettingsPresenterC
 import rs.readahead.washington.mobile.mvp.presenter.ProtectionSettingsPresenter;
 import rs.readahead.washington.mobile.util.CamouflageManager;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
+
+import static com.hzontal.tella_locking_ui.ConstantsKt.IS_FROM_SETTINGS;
 
 
 public class ProtectionSettingsActivity extends BaseLockActivity implements CompoundButton.OnCheckedChangeListener,
@@ -42,6 +50,8 @@ public class ProtectionSettingsActivity extends BaseLockActivity implements Comp
     CheckBox deleteServerSettings;
     @BindView(R.id.delete_tella)
     CheckBox deleteTella;
+    @BindView(R.id.lock_setting)
+    TextView lockSetting;
 
     private CamouflageManager cm = CamouflageManager.getInstance();
     private long numOfCollectServers = 0;
@@ -62,6 +72,7 @@ public class ProtectionSettingsActivity extends BaseLockActivity implements Comp
         setupQuickExitSwitch();
         setupQuickExitSettingsView();
         setupQuickExitCheckboxes();
+        setUpLockTypeText();
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -97,6 +108,7 @@ public class ProtectionSettingsActivity extends BaseLockActivity implements Comp
     public void manage(View view) {
         startActivity(new Intent(this, CamouflageAliasActivity.class));
     }
+
 
 
     @Override
@@ -237,5 +249,37 @@ public class ProtectionSettingsActivity extends BaseLockActivity implements Comp
             presenter.destroy();
             presenter = null;
         }
+    }
+
+    private void setUpLockTypeText(){
+        switch (((IUnlockRegistryHolder) getApplicationContext()).getUnlockRegistry().getActiveMethod(this)){
+            case TELLA_PIN:
+                lockSetting.setText(getString(R.string.onboard_pin));
+                break;
+            case TELLA_PASSWORD:
+                lockSetting.setText(getString(R.string.onboard_password));
+                break;
+            case TELLA_PATTERN:
+                lockSetting.setText(getString(R.string.onboard_pattern));
+                break;
+        }
+    }
+
+    @OnClick(R.id.lock_settings)
+    public void goToUnlockingActivity(){
+        Intent intent = null;
+        switch (((IUnlockRegistryHolder) getApplicationContext()).getUnlockRegistry().getActiveMethod(this)){
+            case TELLA_PIN:
+                intent =  new Intent(this,PinUnlockActivity.class);
+                break;
+            case TELLA_PASSWORD:
+                intent =  new Intent(this, PasswordUnlockActivity.class);
+                break;
+            case TELLA_PATTERN:
+                intent =  new Intent(this, PatternUnlockActivity.class);
+                break;
+        }
+        intent.putExtra(IS_FROM_SETTINGS,true);
+        startActivity(intent);
     }
 }
