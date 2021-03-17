@@ -53,6 +53,7 @@ class InformationButton @JvmOverloads constructor(
         startBottomTextView = findViewById(R.id.startBottomTv)
         rootV = findViewById(R.id.root)
         startImageView = findViewById(R.id.leftImg)
+        background = ContextCompat.getDrawable(context,R.drawable.bg_information_button)
     }
 
 
