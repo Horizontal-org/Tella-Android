@@ -9,6 +9,7 @@ import com.hzontal.tella_locking_ui.ui.password.base.BasePasswordActivity
 import com.hzontal.tella_locking_ui.ui.utils.DialogUtils
 import org.hzontal.tella.keys.MainKeyStore
 import org.hzontal.tella.keys.config.UnlockRegistry
+import org.hzontal.tella.keys.key.LifecycleMainKey
 import org.hzontal.tella.keys.key.MainKey
 import timber.log.Timber
 import javax.crypto.spec.PBEKeySpec
@@ -25,7 +26,7 @@ class ConfirmPasswordActivity : BasePasswordActivity() {
 
     override fun onSuccessSetPassword(password: String) {
         if (password == mConfirmPassword) {
-            val mainKey = MainKey.generate()
+            val mainKey: MainKey = try {TellaKeysUI.getMainKeyHolder().get() } catch (e: LifecycleMainKey.MainKeyUnavailableException) { MainKey.generate() }
             val keySpec = PBEKeySpec(password.toCharArray())
             TellaKeysUI.getUnlockRegistry().setActiveMethod(this@ConfirmPasswordActivity,UnlockRegistry.Method.TELLA_PASSWORD)
             val config = TellaKeysUI.getUnlockRegistry().getActiveConfig(this@ConfirmPasswordActivity)

@@ -23,5 +23,6 @@
         <attr name="bottomTextCenter" format="reference|string" />
         <attr name="bottomText" format="reference|string" />
         <attr name="startImg" format="reference" />
+        <attr name="state_checked" format="boolean"/>
     </declare-styleable>
 </resources>

@@ -10,6 +10,7 @@ import com.hzontal.tella_locking_ui.patternlock.SetPatternActivity
 import com.hzontal.tella_locking_ui.ui.ConfirmCredentialsActivity
 import org.hzontal.tella.keys.MainKeyStore
 import org.hzontal.tella.keys.config.UnlockRegistry
+import org.hzontal.tella.keys.key.LifecycleMainKey
 import org.hzontal.tella.keys.key.MainKey
 import timber.log.Timber
 import javax.crypto.spec.PBEKeySpec
@@ -55,7 +56,7 @@ class PatternSetConfirmActivity  : SetPatternActivity(){
          // I've put this in LockApp - for holder.unlockRegistry.getActiveConfig(this) to work
          TellaKeysUI.getUnlockRegistry().setActiveMethod(this@PatternSetConfirmActivity, UnlockRegistry.Method.TELLA_PATTERN)
 
-         val mainKey = MainKey.generate()
+         val mainKey: MainKey = try {TellaKeysUI.getMainKeyHolder().get() } catch (e: LifecycleMainKey.MainKeyUnavailableException) { MainKey.generate() }
          val keySpec = PBEKeySpec(mNewPassphrase.toCharArray())
          val config = TellaKeysUI.getUnlockRegistry().getActiveConfig(this@PatternSetConfirmActivity)
 
