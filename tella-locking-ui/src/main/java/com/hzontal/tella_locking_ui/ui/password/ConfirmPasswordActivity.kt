@@ -7,7 +7,6 @@ import com.hzontal.tella_locking_ui.ui.password.base.BasePasswordActivity
 import com.hzontal.tella_locking_ui.ui.utils.DialogUtils
 import org.hzontal.tella.keys.MainKeyStore
 import org.hzontal.tella.keys.config.UnlockRegistry
-import org.hzontal.tella.keys.key.LifecycleMainKey
 import org.hzontal.tella.keys.key.MainKey
 import timber.log.Timber
 import javax.crypto.spec.PBEKeySpec
@@ -24,17 +23,10 @@ class ConfirmPasswordActivity : BasePasswordActivity() {
 
     override fun onSuccessSetPassword(password: String) {
         if (password == mConfirmPassword) {
-            var mainKey: MainKey
-            try {
-                mainKey = TellaKeysUI.getMainKeyHolder().get()
-                isConfirmSettingsUpdate = true
-            } catch (e: LifecycleMainKey.MainKeyUnavailableException) {
-                mainKey = MainKey.generate()
-            }
             val keySpec = PBEKeySpec(password.toCharArray())
             TellaKeysUI.getUnlockRegistry().setActiveMethod(this@ConfirmPasswordActivity, UnlockRegistry.Method.TELLA_PASSWORD)
             val config = TellaKeysUI.getUnlockRegistry().getActiveConfig(this@ConfirmPasswordActivity)
-            TellaKeysUI.getMainKeyStore().store(mainKey, config.wrapper, keySpec, object : MainKeyStore.IMainKeyStoreCallback {
+            TellaKeysUI.getMainKeyStore().store(generateOrGetMainKey(), config.wrapper, keySpec, object : MainKeyStore.IMainKeyStoreCallback {
                 override fun onSuccess(mainKey: MainKey) {
                     Timber.d("** MainKey stored: %s **", mainKey)
                     // here, we store MainKey in memory -> unlock the app

@@ -52,19 +52,10 @@ class PatternSetConfirmActivity : SetPatternActivity() {
         // holder.unlockRegistry.setActiveMethod(applicationContext, UnlockRegistry.Method.TELLA_PATTERN)
         // I've put this in LockApp - for holder.unlockRegistry.getActiveConfig(this) to work
         TellaKeysUI.getUnlockRegistry().setActiveMethod(this@PatternSetConfirmActivity, UnlockRegistry.Method.TELLA_PATTERN)
-
-        var mainKey: MainKey
-        try {
-            mainKey = TellaKeysUI.getMainKeyHolder().get()
-            isConfirmSettingsUpdate = true
-        } catch (e: LifecycleMainKey.MainKeyUnavailableException) {
-            mainKey = MainKey.generate()
-        }
-
         val keySpec = PBEKeySpec(mNewPassphrase.toCharArray())
         val config = TellaKeysUI.getUnlockRegistry().getActiveConfig(this@PatternSetConfirmActivity)
 
-        TellaKeysUI.getMainKeyStore().store(mainKey, config.wrapper, keySpec, object : MainKeyStore.IMainKeyStoreCallback {
+        TellaKeysUI.getMainKeyStore().store(generateOrGetMainKey(), config.wrapper, keySpec, object : MainKeyStore.IMainKeyStoreCallback {
             override fun onSuccess(mainKey: MainKey) {
                 Timber.d("** MainKey stored: %s **", mainKey)
                 // here, we store MainKey in memory -> unlock the app
