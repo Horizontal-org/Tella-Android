@@ -19,10 +19,10 @@ class OnBoardLockFragment : BaseFragment() {
     private lateinit var lockPasswordBtn: InformationButton
     private lateinit var lockPINdBtn: InformationButton
     private lateinit var lockPatternBtn: InformationButton
-    private val isFromSettings : Boolean? by lazy { arguments?.getBoolean(IS_FROM_SETTINGS,false) }
+    private var isFromSettings = false
     private lateinit var cancelBtn : TextView
-
     companion object {
+        // Use this function to create instance of current fragment
         fun newInstance(isFromSettings : Boolean): OnBoardLockFragment {
             val args = Bundle()
             args.putBoolean(IS_FROM_SETTINGS, isFromSettings)
@@ -46,11 +46,12 @@ class OnBoardLockFragment : BaseFragment() {
     }
 
     private fun initView(view: View) {
+       arguments?.let { isFromSettings=  it.getBoolean(IS_FROM_SETTINGS,false) }
         lockPasswordBtn = view.findViewById(R.id.lockPasswordBtn)
         lockPINdBtn = view.findViewById(R.id.lockPINdBtn)
         lockPatternBtn = view.findViewById(R.id.lockPatternBtn)
         cancelBtn = view.findViewById(R.id.cancelBtn)
-        isFromSettings?.let { if (it) cancelBtn.visibility = View.VISIBLE }
+        if (isFromSettings) cancelBtn.visibility = View.VISIBLE
         initListeners()
     }
 
@@ -80,7 +81,7 @@ class OnBoardLockFragment : BaseFragment() {
 
     private fun goUnlockingActivity(destination : Activity){
         startActivity(Intent(activity, destination::class.java))
-        isFromSettings?.let { if (it) activity.finish()}
+        if (isFromSettings) activity.finish()
     }
 
 }

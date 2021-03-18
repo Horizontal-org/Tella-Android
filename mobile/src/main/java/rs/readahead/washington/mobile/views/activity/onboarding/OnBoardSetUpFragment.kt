@@ -40,7 +40,7 @@ class OnBoardSetUpFragment : BaseFragment() {
     }
 
     private fun initListeners() {
-        fullSetupBtn.setOnClickListener { activity.addFragment(this,OnBoardLockFragment(), R.id.rootOnboard) }
+        fullSetupBtn.setOnClickListener { activity.addFragment(this,OnBoardLockFragment.newInstance(false), R.id.rootOnboard) }
         quickSetupBtn.setOnClickListener { activity.addFragment(this,OnBoardLockFragment(), R.id.rootOnboard) }
     }
 }
