@@ -224,6 +224,14 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     }
 
     @Override
+    public void onUpdateUnlocking() {
+        mainKeyHolder = TellaKeysUI.getMainKeyHolder();
+        mainKeyStore = TellaKeysUI.getMainKeyStore();
+        unlockRegistry = TellaKeysUI.getUnlockRegistry();
+        keyDataSource.initKeyDataSource();
+    }
+
+    @Override
     public UnlockRegistry getUnlockRegistry() {
         return unlockRegistry;
     }

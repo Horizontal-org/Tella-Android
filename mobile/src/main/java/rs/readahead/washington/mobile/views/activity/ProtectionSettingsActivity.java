@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.hzontal.tella_locking_ui.common.CommonStates;
 import com.hzontal.tella_locking_ui.ui.password.PasswordUnlockActivity;
 import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity;
 import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity;
@@ -78,6 +81,12 @@ public class ProtectionSettingsActivity extends BaseLockActivity implements Comp
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(R.string.settings_prot_app_bar);
         }
+        CommonStates.INSTANCE.getFinishUpdateActivity().observe(this,new Observer<Boolean>(){
+            @Override
+            public void onChanged(Boolean aBoolean) {
+              setUpLockTypeText();
+            }
+        });
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.hzontal.tella_locking_ui.ui.password
 
 import android.content.Intent
 import com.hzontal.tella_locking_ui.R
+import com.hzontal.tella_locking_ui.common.CommonStates
 import com.hzontal.tella_locking_ui.ui.password.base.BasePasswordActivity
 
 internal const val CONFIRM_PASSWORD = "confirm_password"
@@ -17,5 +18,10 @@ class SetPasswordActivity : BasePasswordActivity() {
 
     override fun onFailureSetPassword(error: String) {
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        CommonStates.finishUpdateActivity.postValue(false)
     }
 }

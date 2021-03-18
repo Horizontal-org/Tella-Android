@@ -42,5 +42,9 @@ class PatternSetActivity : SetPatternActivity() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        finishActivity.postValue(false)
+    }
 
 }

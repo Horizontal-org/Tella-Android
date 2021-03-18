@@ -1,8 +1,13 @@
 package com.hzontal.tella_locking_ui.common
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.ONBOARDING_CLASS_NAME
 import com.hzontal.tella_locking_ui.R
@@ -18,14 +23,24 @@ import java.util.concurrent.TimeUnit
 
 open class BaseActivity : AppCompatActivity() {
     protected val isFromSettings by lazy { intent.getBooleanExtra(IS_FROM_SETTINGS, false) }
-    protected var isConfirmSettingsUpdate: Boolean = false
+    private var isConfirmSettingsUpdate: Boolean = false
     protected val config: UnlockConfig by lazy { TellaKeysUI.getUnlockRegistry().getActiveConfig(this) }
     protected val registry: UnlockRegistry by lazy { TellaKeysUI.getUnlockRegistry() }
+    var startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) { finish()}
+    }
+    var finishActivity = MutableLiveData<Boolean>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.d("** %s: %s **", javaClass, "onCreate()")
         super.onCreate(savedInstanceState)
         overridePendingTransition(R.anim.`in`, R.anim.out)
+        CommonStates.finishUpdateActivity.observe(this, Observer {isFinished->
+            if (isFinished) {
+                TellaKeysUI.getCredentialsCallback().onUpdateUnlocking()
+                finish()
+            }
+        })
     }
 
     override fun onBackPressed() {
@@ -68,7 +83,7 @@ open class BaseActivity : AppCompatActivity() {
             dialog.show(supportFragmentManager, "SUCCESS_DIALOG")
             val executor = Executors.newSingleThreadScheduledExecutor()
             val hideDialog = Runnable {
-                TellaKeysUI.getCredentialsCallback().onSuccessfulUnlock(this)
+                CommonStates.finishUpdateActivity.postValue(true)
                 dialog.dismiss()
             }
             executor.schedule(hideDialog, 3, TimeUnit.SECONDS);

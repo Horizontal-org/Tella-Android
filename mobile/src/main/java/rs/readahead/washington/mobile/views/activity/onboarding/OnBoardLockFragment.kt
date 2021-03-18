@@ -1,10 +1,13 @@
 package rs.readahead.washington.mobile.views.activity.onboarding
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.ui.password.SetPasswordActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternSetActivity
 import com.hzontal.tella_locking_ui.ui.pin.SetPinActivity
@@ -16,6 +19,19 @@ class OnBoardLockFragment : BaseFragment() {
     private lateinit var lockPasswordBtn: InformationButton
     private lateinit var lockPINdBtn: InformationButton
     private lateinit var lockPatternBtn: InformationButton
+    private val isFromSettings : Boolean by lazy { requireArguments().getBoolean(IS_FROM_SETTINGS,false) }
+    private lateinit var cancelBtn : TextView
+
+    companion object {
+        fun newInstance(isFromSettings : Boolean): OnBoardLockFragment {
+            val args = Bundle()
+            args.putBoolean(IS_FROM_SETTINGS, isFromSettings)
+            val fragment = OnBoardLockFragment()
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -33,23 +49,27 @@ class OnBoardLockFragment : BaseFragment() {
         lockPasswordBtn = view.findViewById(R.id.lockPasswordBtn)
         lockPINdBtn = view.findViewById(R.id.lockPINdBtn)
         lockPatternBtn = view.findViewById(R.id.lockPatternBtn)
-
+        cancelBtn = view.findViewById(R.id.cancelBtn)
+        if (isFromSettings) cancelBtn.visibility = View.VISIBLE
         initListeners()
     }
 
     private fun initListeners() {
+
         lockPasswordBtn.setOnClickListener {
             toggleButtons(passwordState = true, pinState = false, patternState = false)
-            startActivity(Intent(activity, SetPasswordActivity::class.java))
+             goUnlockingActivity(SetPasswordActivity())
         }
         lockPINdBtn.setOnClickListener {
             toggleButtons(passwordState = false, pinState = true, patternState = false)
-            startActivity(Intent(activity, SetPinActivity::class.java))
+            goUnlockingActivity(SetPinActivity())
         }
         lockPatternBtn.setOnClickListener {
             toggleButtons(passwordState = false, pinState = false, patternState = true)
-            startActivity(Intent(activity, PatternSetActivity::class.java))
+            goUnlockingActivity(PatternSetActivity())
         }
+
+        cancelBtn.setOnClickListener { activity.finish() }
     }
 
     private fun toggleButtons(passwordState: Boolean, pinState: Boolean, patternState: Boolean) {
@@ -58,5 +78,9 @@ class OnBoardLockFragment : BaseFragment() {
         lockPatternBtn.isChecked = patternState
     }
 
+    private fun goUnlockingActivity(destination : Activity){
+        startActivity(Intent(activity, destination::class.java))
+        if (isFromSettings) activity.finish()
+    }
 
 }

@@ -3,12 +3,12 @@ package com.hzontal.tella_locking_ui.ui.pattern
 import android.os.Bundle
 import androidx.core.view.isVisible
 import com.hzontal.tella_locking_ui.TellaKeysUI
+import com.hzontal.tella_locking_ui.common.CommonStates
 import com.hzontal.tella_locking_ui.patternlock.PatternUtils
 import com.hzontal.tella_locking_ui.patternlock.PatternView
 import com.hzontal.tella_locking_ui.patternlock.SetPatternActivity
 import org.hzontal.tella.keys.MainKeyStore
 import org.hzontal.tella.keys.config.UnlockRegistry
-import org.hzontal.tella.keys.key.LifecycleMainKey
 import org.hzontal.tella.keys.key.MainKey
 import timber.log.Timber
 import javax.crypto.spec.PBEKeySpec
@@ -68,7 +68,11 @@ class PatternSetConfirmActivity : SetPatternActivity() {
                 onCanceled()
             }
         })
+    }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        CommonStates.finishUpdateActivity.postValue(false)
     }
 
 }

@@ -8,9 +8,12 @@ package com.hzontal.tella_locking_ui.patternlock;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.ContextCompat;
 
 import com.hzontal.tella_locking_ui.R;
+import com.hzontal.tella_locking_ui.ui.AppCompatActivityUnlocker;
 import com.hzontal.tella_locking_ui.ui.pattern.PatternSetConfirmActivity;
 import com.hzontal.tella_locking_ui.ui.utils.DialogUtils;
 
@@ -89,6 +92,8 @@ public class SetPatternActivity extends BasePatternActivity
 
     private static final String KEY_STAGE = "stage";
     private static final String KEY_PATTERN = "pattern";
+    private ActivityResultLauncher<Intent> launcher;
+
 
     private int mMinPatternSize;
     protected List<PatternView.Cell> mPattern;
@@ -97,7 +102,6 @@ public class SetPatternActivity extends BasePatternActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mMinPatternSize = getMinPatternSize();
         mPatternView.setOnPatternListener(this);
         mLeftButton.setOnClickListener(v -> onLeftButtonClicked());
@@ -191,6 +195,7 @@ public class SetPatternActivity extends BasePatternActivity
             intent.putExtra(PATTERN_CELL_BYTES, PatternUtils.patternToSha1String(mPattern, mPattern.size()));
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivityForResult(intent,123);
+
         } else if (mStage.rightButtonState == RightButtonState.Confirm) {
             if (mStage != Stage.ConfirmCorrect) {
                 throw new IllegalStateException("expected ui stage " + Stage.ConfirmCorrect
@@ -259,4 +264,5 @@ public class SetPatternActivity extends BasePatternActivity
 
     protected void onSetPattern(List<PatternView.Cell> pattern) {
     }
+
 }

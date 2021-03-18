@@ -12,7 +12,7 @@ class OnBoardingActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboard_container)
 
-        replaceFragmentNoAddToBackStack(if (!isFromSettings) OnBoardIntroFragment() else OnBoardLockFragment(), R.id.rootOnboard)
+        replaceFragmentNoAddToBackStack(if (!isFromSettings) OnBoardIntroFragment() else OnBoardLockFragment.newInstance(true), R.id.rootOnboard)
     }
 
 }
