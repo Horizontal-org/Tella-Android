@@ -19,7 +19,7 @@ class OnBoardLockFragment : BaseFragment() {
     private lateinit var lockPasswordBtn: InformationButton
     private lateinit var lockPINdBtn: InformationButton
     private lateinit var lockPatternBtn: InformationButton
-    private val isFromSettings : Boolean by lazy { requireArguments().getBoolean(IS_FROM_SETTINGS,false) }
+    private val isFromSettings : Boolean? by lazy { arguments?.getBoolean(IS_FROM_SETTINGS,false) }
     private lateinit var cancelBtn : TextView
 
     companion object {
@@ -50,7 +50,7 @@ class OnBoardLockFragment : BaseFragment() {
         lockPINdBtn = view.findViewById(R.id.lockPINdBtn)
         lockPatternBtn = view.findViewById(R.id.lockPatternBtn)
         cancelBtn = view.findViewById(R.id.cancelBtn)
-        if (isFromSettings) cancelBtn.visibility = View.VISIBLE
+        isFromSettings?.let { if (it) cancelBtn.visibility = View.VISIBLE }
         initListeners()
     }
 
@@ -80,7 +80,7 @@ class OnBoardLockFragment : BaseFragment() {
 
     private fun goUnlockingActivity(destination : Activity){
         startActivity(Intent(activity, destination::class.java))
-        if (isFromSettings) activity.finish()
+        isFromSettings?.let { if (it) activity.finish()}
     }
 
 }
