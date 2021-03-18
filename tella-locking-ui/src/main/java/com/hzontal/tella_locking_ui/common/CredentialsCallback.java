@@ -8,4 +8,6 @@ public interface CredentialsCallback {
     void onUnSuccessfulUnlock(String tag,Throwable throwable);
 
     void onLockConfirmed(Context context);
+
+    void onUpdateUnlocking();
 }
