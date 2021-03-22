@@ -6,6 +6,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
+import rs.readahead.washington.mobile.data.openrosa.OpenRosaService;
 import rs.readahead.washington.mobile.data.repository.OpenRosaRepository;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
@@ -42,6 +43,8 @@ public class CheckOdkServerPresenter implements
                 setSaveAnyway(false);
             }
         }
+
+        OpenRosaService.clearCache();
 
         disposables.add(odkRepository.formList(server)
                 .subscribeOn(Schedulers.io())
