@@ -58,7 +58,7 @@ class PinUnlockActivity : BasePinActivity() {
     override fun onPinChange(pinLength: Int, intermediatePin: String?) {
         super.onPinChange(pinLength, intermediatePin)
         pinTopText.setTextColor(ContextCompat.getColor(this, R.color.wa_white))
-        pinTopText.text = getString(R.string.enter_pin_unlock_tella)
+        pinTopText.text =  getString(if(isFromSettings) R.string.settings_current_pin_msg else R.string.enter_pin_unlock_tella)
     }
 
 }
