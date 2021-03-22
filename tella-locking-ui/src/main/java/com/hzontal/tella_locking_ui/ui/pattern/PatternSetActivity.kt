@@ -1,11 +1,17 @@
 package com.hzontal.tella_locking_ui.ui.pattern
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import com.hzontal.tella_locking_ui.FINISH_ACTIVITY_REQUEST_CODE
 import com.hzontal.tella_locking_ui.R
+import com.hzontal.tella_locking_ui.TellaKeysUI
+import com.hzontal.tella_locking_ui.common.CommonStates
 import com.hzontal.tella_locking_ui.patternlock.PatternView
 import com.hzontal.tella_locking_ui.patternlock.SetPatternActivity
 import timber.log.Timber
@@ -17,6 +23,7 @@ class PatternSetActivity : SetPatternActivity() {
         super.onCreate(savedInstanceState)
         mMessageText.text = getString(R.string.pl_pattern_too_short, minPatternSize)
         mTopImageView.background = ContextCompat.getDrawable(this,R.drawable.pattern_draw_bg)
+
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -42,9 +49,9 @@ class PatternSetActivity : SetPatternActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        finishActivity.postValue(false)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == FINISH_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) finish()
     }
 
 }

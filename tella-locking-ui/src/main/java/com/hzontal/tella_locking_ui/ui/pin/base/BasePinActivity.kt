@@ -1,11 +1,13 @@
 package com.hzontal.tella_locking_ui.ui.pin.base
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
+import com.hzontal.tella_locking_ui.FINISH_ACTIVITY_REQUEST_CODE
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.common.BaseActivity
 import com.hzontal.tella_locking_ui.ui.pin.edit_text.NoImeEditText

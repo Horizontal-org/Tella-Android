@@ -9,16 +9,16 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.ContextCompat;
 
 import com.hzontal.tella_locking_ui.R;
-import com.hzontal.tella_locking_ui.ui.AppCompatActivityUnlocker;
 import com.hzontal.tella_locking_ui.ui.pattern.PatternSetConfirmActivity;
 import com.hzontal.tella_locking_ui.ui.utils.DialogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.hzontal.tella_locking_ui.ConstantsKt.FINISH_ACTIVITY_REQUEST_CODE;
 
 
 /*
@@ -194,7 +194,7 @@ public class SetPatternActivity extends BasePatternActivity
             Intent intent = new Intent(this, PatternSetConfirmActivity.class);
             intent.putExtra(PATTERN_CELL_BYTES, PatternUtils.patternToSha1String(mPattern, mPattern.size()));
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivityForResult(intent,123);
+            startActivityForResult(intent, FINISH_ACTIVITY_REQUEST_CODE);
 
         } else if (mStage.rightButtonState == RightButtonState.Confirm) {
             if (mStage != Stage.ConfirmCorrect) {
