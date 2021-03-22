@@ -14,7 +14,6 @@ import javax.crypto.spec.PBEKeySpec
 private const val TAG = "PinUnlockActivity"
 
 class PinUnlockActivity : BasePinActivity() {
-    private lateinit var backBtn: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,12 +22,8 @@ class PinUnlockActivity : BasePinActivity() {
 
     private fun initView() {
         pinMsgText.isVisible = false
-        pinLeftButton.isVisible = false
         pinTopImageView.background = ContextCompat.getDrawable(this, R.drawable.tella_logo_dark_bg)
         if (isFromSettings) {
-            backBtn = findViewById(R.id.backBtn)
-            backBtn.isVisible = true
-            backBtn.setOnClickListener { finish() }
             pinTopText.text = getString(R.string.settings_current_pin_msg)
         } else {
             pinTopText.text = getString(R.string.enter_pin_unlock_tella)
