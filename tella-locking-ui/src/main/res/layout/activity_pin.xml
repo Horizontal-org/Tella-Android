@@ -11,14 +11,13 @@
         android:id="@+id/backBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/icon_left"
         android:paddingStart="15dp"
-        android:paddingEnd="15dp"
         android:paddingTop="40dp"
+        android:paddingEnd="15dp"
+        android:src="@drawable/icon_left"
         android:visibility="gone"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/pin_TopImg"
@@ -90,19 +89,19 @@
 
     <com.hzontal.tella_locking_ui.ui.pin.pinview.PinLockView
         android:id="@+id/pin_lock_view"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent=".35"
         android:layout_marginTop="10dp"
         app:keypadShowDeleteButton="true"
         app:keypadTextColor="@color/wa_white"
         app:keypadTextSize="30sp"
-        app:pinLength="6"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/pin_left_button"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent=".35"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pin_editText" />
+        app:layout_constraintTop_toBottomOf="@+id/pin_editText"
+        app:pinLength="6" />
 
     <TextView
         android:id="@+id/pin_left_button"

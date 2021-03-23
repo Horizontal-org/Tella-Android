@@ -70,9 +70,4 @@ class PatternSetConfirmActivity : SetPatternActivity() {
         })
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        CommonStates.finishUpdateActivity.postValue(false)
-    }
-
 }

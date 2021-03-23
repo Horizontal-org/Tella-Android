@@ -46,8 +46,9 @@ public class BasePatternActivity extends BaseActivity {
          mLeftButton = findViewById(R.id.pl_left_button);
          mRightButton = findViewById(R.id.pl_right_button);
          mTopImageView = findViewById(R.id.pl_patternImg);
-         root = (ConstraintLayout) findViewById(R.id.rootPattern);
+         root = findViewById(R.id.rootPattern);
          root.getRootView().setBackgroundColor(ContextCompat.getColor(this,R.color.wa_purple));
+         mLeftButton.setText(isFromSettings() ? getString(R.string.pl_cancel) : getString(R.string.pl_back));
     }
 
 

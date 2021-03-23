@@ -1,8 +1,10 @@
 package com.hzontal.tella_locking_ui.ui.password
 
+import android.app.Activity
 import android.content.Intent
+import com.hzontal.tella_locking_ui.FINISH_ACTIVITY_REQUEST_CODE
+import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.R
-import com.hzontal.tella_locking_ui.common.CommonStates
 import com.hzontal.tella_locking_ui.ui.password.base.BasePasswordActivity
 
 internal const val CONFIRM_PASSWORD = "confirm_password"
@@ -12,16 +14,16 @@ class SetPasswordActivity : BasePasswordActivity() {
     override fun onSuccessSetPassword(password: String) {
         val intent = Intent(this, ConfirmPasswordActivity::class.java)
         intent.putExtra(CONFIRM_PASSWORD, password)
-        startActivity(intent)
-        overridePendingTransition(R.anim.`in`,R.anim.out)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        intent.putExtra(IS_FROM_SETTINGS, isFromSettings)
+        startActivityForResult(intent, FINISH_ACTIVITY_REQUEST_CODE)
+        overridePendingTransition(R.anim.`in`, R.anim.out)
     }
 
-    override fun onFailureSetPassword(error: String) {
+    override fun onFailureSetPassword(error: String) {}
 
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        CommonStates.finishUpdateActivity.postValue(false)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == FINISH_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) finish()
     }
 }

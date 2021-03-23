@@ -395,7 +395,7 @@
   <string name="camera_tab.title_video">فيديو</string>
   <string name="camera_tab.title_photo">صورة</string>
   <string name="action_upload">Upload</string>
-  <string name="pl_cancel">Back</string>
+  <string name="pl_cancel">Cancel</string>
   <string name="pl_confirm">Next</string>
   <string name="pl_confirm_pattern">Confirm your pattern</string>
   <string name="pl_continue">Next</string>
