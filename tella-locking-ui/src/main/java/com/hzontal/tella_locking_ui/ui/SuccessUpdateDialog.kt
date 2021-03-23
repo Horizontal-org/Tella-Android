@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit
 class SuccessUpdateDialog : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        overridePendingTransition(R.anim.`in`, R.anim.out)
         finishActivity()
         setContentView(R.layout.dialog_update_lock_success)
     }
