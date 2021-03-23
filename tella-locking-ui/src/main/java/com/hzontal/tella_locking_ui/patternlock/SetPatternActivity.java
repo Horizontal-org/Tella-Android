@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.hzontal.tella_locking_ui.ConstantsKt.FINISH_ACTIVITY_REQUEST_CODE;
+import static com.hzontal.tella_locking_ui.ConstantsKt.IS_FROM_SETTINGS;
 
 
 /*
@@ -31,8 +32,8 @@ public class SetPatternActivity extends BasePatternActivity
 
     private enum LeftButtonState {
 
-        Cancel(R.string.pl_cancel, true),
-        CancelDisabled(R.string.pl_cancel, false),
+        Cancel(R.string.pl_back, true),
+        CancelDisabled(R.string.pl_back, false),
         Redraw(R.string.pl_redraw, true),
         RedrawDisabled(R.string.pl_redraw, false);
 
@@ -62,7 +63,6 @@ public class SetPatternActivity extends BasePatternActivity
     }
 
     protected enum Stage {
-
         Draw(R.string.pl_pattern_too_short, LeftButtonState.Cancel, RightButtonState.ContinueDisabled,
                 true),
         DrawTooShort(R.string.pl_pattern_too_short, LeftButtonState.Redraw,
@@ -106,7 +106,6 @@ public class SetPatternActivity extends BasePatternActivity
         mPatternView.setOnPatternListener(this);
         mLeftButton.setOnClickListener(v -> onLeftButtonClicked());
         mRightButton.setOnClickListener(v -> onRightButtonClicked());
-
         if (savedInstanceState == null) {
             updateStage(Stage.Draw);
         } else {
@@ -193,6 +192,7 @@ public class SetPatternActivity extends BasePatternActivity
             }
             Intent intent = new Intent(this, PatternSetConfirmActivity.class);
             intent.putExtra(PATTERN_CELL_BYTES, PatternUtils.patternToSha1String(mPattern, mPattern.size()));
+            intent.putExtra(IS_FROM_SETTINGS, isFromSettings());
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivityForResult(intent, FINISH_ACTIVITY_REQUEST_CODE);
 
@@ -221,10 +221,14 @@ public class SetPatternActivity extends BasePatternActivity
         } else if (mStage != Stage.ConfirmWrong) {
             mMessageText.setText(mStage.messageId);
         }
-
-        mLeftButton.setText(mStage.leftButtonState.textId);
+        if (isFromSettings()) {
+            if (newStage.leftButtonState == LeftButtonState.Cancel)
+                mLeftButton.setText(getString(R.string.pl_cancel));
+            else mLeftButton.setText(mStage.leftButtonState.textId);
+        } else {
+            mLeftButton.setText(mStage.leftButtonState.textId);
+        }
         mLeftButton.setEnabled(mStage.leftButtonState.enabled);
-
         mRightButton.setText(mStage.rightButtonState.textId);
         mRightButton.setEnabled(mStage.rightButtonState.enabled);
         mRightButton.setTextColor(mStage.rightButtonState.enabled ? ContextCompat.getColor(this, R.color.wa_white) : ContextCompat.getColor(this, R.color.wa_white_40));

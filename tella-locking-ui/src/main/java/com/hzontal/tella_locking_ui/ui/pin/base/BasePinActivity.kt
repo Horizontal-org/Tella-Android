@@ -16,7 +16,7 @@ abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickLi
 
     private lateinit var pinLockView: PinLockView
     lateinit var pinLeftButton: TextView
-    private lateinit var pinRightButton: TextView
+    lateinit var pinRightButton: TextView
     lateinit var pinTopText: TextView
     lateinit var pinMsgText: TextView
     lateinit var pinTopImageView: AppCompatImageView
@@ -45,6 +45,7 @@ abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickLi
         pinMsgText = findViewById(R.id.pin_msgTV)
         pinClickView = findViewById(R.id.pinClickView)
         pinTopImageView = findViewById(R.id.pin_TopImg)
+        pinLeftButton.text = getText(  if (!isFromSettings) R.string.pl_back else R.string.pl_cancel)
         initListeners()
     }
 

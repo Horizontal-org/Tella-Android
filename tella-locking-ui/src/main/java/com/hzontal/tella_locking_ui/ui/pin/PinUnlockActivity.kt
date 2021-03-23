@@ -1,6 +1,7 @@
 package com.hzontal.tella_locking_ui.ui.pin
 
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -14,6 +15,7 @@ import javax.crypto.spec.PBEKeySpec
 private const val TAG = "PinUnlockActivity"
 
 class PinUnlockActivity : BasePinActivity() {
+    private lateinit var backBtn: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,9 +23,14 @@ class PinUnlockActivity : BasePinActivity() {
     }
 
     private fun initView() {
-        pinMsgText.isVisible = false
+        pinMsgText.visibility = View.GONE
+        pinLeftButton.visibility = View.GONE
+        pinRightButton.visibility = View.GONE
         pinTopImageView.background = ContextCompat.getDrawable(this, R.drawable.tella_logo_dark_bg)
         if (isFromSettings) {
+            backBtn = findViewById(R.id.backBtn)
+            backBtn.visibility = View.VISIBLE
+            backBtn.setOnClickListener { finish() }
             pinTopText.text = getString(R.string.settings_current_pin_msg)
         } else {
             pinTopText.text = getString(R.string.enter_pin_unlock_tella)

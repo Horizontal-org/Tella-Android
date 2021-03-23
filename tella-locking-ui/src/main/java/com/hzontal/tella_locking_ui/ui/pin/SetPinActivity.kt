@@ -3,6 +3,7 @@ package com.hzontal.tella_locking_ui.ui.pin
 import android.app.Activity
 import android.content.Intent
 import com.hzontal.tella_locking_ui.FINISH_ACTIVITY_REQUEST_CODE
+import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.ui.pin.base.BasePinActivity
 
@@ -13,6 +14,7 @@ class SetPinActivity : BasePinActivity() {
         val intent = Intent(this, ConfirmPinActivity::class.java)
         intent.putExtra(CONFIRM_PIN, pin)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        intent.putExtra(IS_FROM_SETTINGS, isFromSettings)
         startActivityForResult(intent, FINISH_ACTIVITY_REQUEST_CODE)
         overridePendingTransition(R.anim.`in`, R.anim.out)
     }
