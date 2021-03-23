@@ -3,4 +3,10 @@
     <color name="wa_dialog_gray">#636161</color>
     <color name="wa_red">#C9040D</color>
     <color name="wa_green">#23a923</color>
+    <color name="wa_purple">#2C275A</color>
+    <color name="wa_white">#FFFF</color>
+    <color name="wa_white_40">#66FFFFFF</color>
+    <color name="wa_orange">#D6933B</color>
+    <color name="wa_red_error">#CE1515</color>
+    <color name="wa_grey">#E8E8EC</color>
 </resources>

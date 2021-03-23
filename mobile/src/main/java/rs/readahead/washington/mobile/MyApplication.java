@@ -1,7 +1,6 @@
 package rs.readahead.washington.mobile;
 
 import android.annotation.SuppressLint;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -9,19 +8,15 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.StrictMode;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.lifecycle.ProcessLifecycleOwner;
-
 import com.evernote.android.job.JobManager;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_locking_ui.TellaKeysUI;
 import com.hzontal.tella_locking_ui.common.CredentialsCallback;
 import com.hzontal.tella_locking_ui.ui.AppCompatActivityUnlocker;
 import com.hzontal.tella_locking_ui.ui.DeviceCredentialsUnlockActivity;
-import com.hzontal.tella_locking_ui.ui.PasswordUnlockActivity;
-import com.hzontal.tella_locking_ui.ui.PinUnlockActivity;
+import com.hzontal.tella_locking_ui.ui.password.PasswordUnlockActivity;
 import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity;
+import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity;
 
 import org.hzontal.tella.keys.MainKeyStore;
 import org.hzontal.tella.keys.TellaKeys;
@@ -35,6 +30,10 @@ import org.hzontal.tella.keys.wrapper.AndroidKeyStoreWrapper;
 import org.hzontal.tella.keys.wrapper.PBEKeyWrapper;
 import org.hzontal.tella.keys.wrapper.UnencryptedKeyWrapper;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.lifecycle.ProcessLifecycleOwner;
+import androidx.multidex.MultiDexApplication;
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
 import rs.readahead.washington.mobile.bus.TellaBus;
@@ -49,11 +48,11 @@ import rs.readahead.washington.mobile.util.LocaleManager;
 import rs.readahead.washington.mobile.util.jobs.TellaJobCreator;
 import rs.readahead.washington.mobile.views.activity.ExitActivity;
 import rs.readahead.washington.mobile.views.activity.MainActivity;
-import rs.readahead.washington.mobile.views.activity.TellaIntroActivity;
+import rs.readahead.washington.mobile.views.activity.onboarding.OnBoardingActivity;
 import timber.log.Timber;
 
 
-public class MyApplication extends Application implements IUnlockRegistryHolder, CredentialsCallback {
+public class MyApplication extends MultiDexApplication implements IUnlockRegistryHolder, CredentialsCallback {
     private static TellaBus bus;
     private static LifecycleMainKey mainKeyHolder;
     @SuppressLint("StaticFieldLeak")
@@ -64,7 +63,7 @@ public class MyApplication extends Application implements IUnlockRegistryHolder,
     public static void startMainActivity(@NonNull Context context) {
         Intent intent;
         if (Preferences.isFirstStart()) {
-            intent = new Intent(context, TellaIntroActivity.class);
+            intent = new Intent(context, OnBoardingActivity.class);
         } else {
             intent = new Intent(context, MainActivity.class);
         }
@@ -128,7 +127,7 @@ public class MyApplication extends Application implements IUnlockRegistryHolder,
         }
         // todo: implement dagger2
         SharedPrefs.getInstance().init(this);
-        //configureCrashlytics();
+        configureCrashlytics();
 
         RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
             @Override
@@ -200,7 +199,7 @@ public class MyApplication extends Application implements IUnlockRegistryHolder,
         // we need this to set one active unlocking method
         // in Tella1 this can be here and fixed, but in Tella2 we need to read saved active method
         // when starting the app and set it (that functionality is missing from active registry, with changing method support)
-        unlockRegistry.setActiveMethod(getApplicationContext(), UnlockRegistry.Method.TELLA_PATTERN);
+       // unlockRegistry.setActiveMethod(getApplicationContext(), UnlockRegistry.Method.TELLA_PATTERN);
     }
 
     @Override
@@ -213,8 +212,23 @@ public class MyApplication extends Application implements IUnlockRegistryHolder,
     }
 
     @Override
-    public void onUnSuccessfulUnlock() {
+    public void onUnSuccessfulUnlock(String tag, Throwable throwable) {
+        FirebaseCrashlytics.getInstance().recordException(throwable);
+    }
 
+
+    @Override
+    public void onLockConfirmed(Context context) {
+        Preferences.setFirstStart(false);
+        onSuccessfulUnlock(context);
+    }
+
+    @Override
+    public void onUpdateUnlocking() {
+        mainKeyHolder = TellaKeysUI.getMainKeyHolder();
+        mainKeyStore = TellaKeysUI.getMainKeyStore();
+        unlockRegistry = TellaKeysUI.getUnlockRegistry();
+        keyDataSource.initKeyDataSource();
     }
 
     @Override

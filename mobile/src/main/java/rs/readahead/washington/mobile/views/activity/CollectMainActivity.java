@@ -61,6 +61,7 @@ import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.util.StringUtils;
 import rs.readahead.washington.mobile.views.adapters.ViewPagerAdapter;
+import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.fragment.BlankFormsListFragment;
 import rs.readahead.washington.mobile.views.fragment.DraftFormsListFragment;
 import rs.readahead.washington.mobile.views.fragment.FormListFragment;

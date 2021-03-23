@@ -7,8 +7,12 @@ package com.hzontal.tella_locking_ui.patternlock;
 
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import com.hzontal.tella_locking_ui.common.BaseActivity;
 import com.hzontal.tella_locking_ui.R;
@@ -20,9 +24,10 @@ public class BasePatternActivity extends BaseActivity {
 
     protected TextView mMessageText;
     protected PatternView mPatternView;
-    protected LinearLayout mButtonContainer;
-    protected Button mLeftButton;
-    protected Button mRightButton;
+    protected TextView mLeftButton;
+    protected TextView mRightButton;
+    protected ImageView mTopImageView;
+    protected ConstraintLayout root;
 
     private final Runnable clearPatternRunnable = new Runnable() {
         public void run() {
@@ -36,12 +41,15 @@ public class BasePatternActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.pl_base_pattern_activity);
-        mMessageText = (TextView)findViewById(R.id.pl_message_text);
-        mPatternView = (PatternView)findViewById(R.id.pl_pattern);
-        mButtonContainer = (LinearLayout)findViewById(R.id.pl_button_container);
-        mLeftButton = (Button)findViewById(R.id.pl_left_button);
-        mRightButton = (Button)findViewById(R.id.pl_right_button);
+        mMessageText = findViewById(R.id.pl_message_text);
+        mPatternView = findViewById(R.id.pl_pattern);
+         mLeftButton = findViewById(R.id.pl_left_button);
+         mRightButton = findViewById(R.id.pl_right_button);
+         mTopImageView = findViewById(R.id.pl_patternImg);
+         root = (ConstraintLayout) findViewById(R.id.rootPattern);
+         root.getRootView().setBackgroundColor(ContextCompat.getColor(this,R.color.wa_purple));
     }
+
 
     protected void removeClearPatternRunnable() {
         mPatternView.removeCallbacks(clearPatternRunnable);

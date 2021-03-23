@@ -21,7 +21,45 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/lock_settings"
+                style="@style/SettingsClickableHorizontalShadowLinearLayout"
+                android:layout_width="match_parent">
 
+                <androidx.appcompat.widget.AppCompatImageView
+                    style="@style/SettingsTitleImageViewStyle"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/lock_black" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="24dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/lock"
+                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:textSize="16sp"
+                        android:textColor="@color/wa_black"
+                        android:textAlignment="center"
+                        android:gravity="center_vertical"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/settings.prot_select_lock" />
+
+                    <TextView
+                        android:id="@+id/lock_setting"
+                        style="@style/SettingsTitleTextViewGray"
+                        android:textAlignment="center"
+                        android:layout_alignParentEnd="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/settings.lang_select_default"
+                        tools:ignore="RelativeOverlap" />
+                </RelativeLayout>
+            </LinearLayout>
             <LinearLayout
                 android:id="@+id/camouflage_settings"
                 style="@style/SettingsClickableHorizontalShadowLinearLayout"

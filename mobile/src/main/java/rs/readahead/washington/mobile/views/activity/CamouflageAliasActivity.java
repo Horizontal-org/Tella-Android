@@ -15,6 +15,7 @@ import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent;
 import rs.readahead.washington.mobile.presentation.entity.CamouflageOption;
 import rs.readahead.washington.mobile.util.CamouflageManager;
 import rs.readahead.washington.mobile.views.adapters.CamouflageRecycleViewAdapter;
+import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 
 
 public class CamouflageAliasActivity extends BaseLockActivity {

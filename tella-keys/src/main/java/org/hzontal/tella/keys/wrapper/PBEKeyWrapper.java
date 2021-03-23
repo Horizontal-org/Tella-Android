@@ -1,7 +1,5 @@
 package org.hzontal.tella.keys.wrapper;
 
-import android.os.Build;
-
 import org.hzontal.tella.keys.key.MainKey;
 import org.hzontal.tella.keys.key.WrappedMainKey;
 
@@ -13,11 +11,9 @@ import java.security.spec.KeySpec;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-
-import androidx.annotation.RequiresApi;
 
 public class PBEKeyWrapper implements IMainKeyWrapper {
     @Override
@@ -32,7 +28,7 @@ public class PBEKeyWrapper implements IMainKeyWrapper {
 
             byte[] salt = generateSalt();
             int iterationCount = calculateIterationCount();
-            SecretKeySpec secretKeySpec = createAESKey(pbeKeySpec.getPassword(), salt, iterationCount); // todo: just receive password here..
+            SecretKeySpec secretKeySpec = createAESKey(pbeKeySpec.getPassword(), salt, iterationCount);
 
             Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
             cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
@@ -53,17 +49,16 @@ public class PBEKeyWrapper implements IMainKeyWrapper {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT) // todo: handle this
     @Override
     public void unwrap(WrappedMainKey wrapped, KeySpec keySpec, IUnwrapCallback callback) {
         try {
             PBEKeySpec pbeKeySpec = (PBEKeySpec) keySpec;
 
             SecretKeySpec secretKeySpec = createAESKey(pbeKeySpec.getPassword(),
-                    wrapped.salt, wrapped.iterationCount); // todo: just receive password here..
+                    wrapped.salt, wrapped.iterationCount);
 
             Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
-            cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, new GCMParameterSpec(128, wrapped.iv));
+            cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, new IvParameterSpec(wrapped.iv));
             byte[] key = cipher.doFinal(wrapped.data);
 
             MainKey mainKey = new MainKey(new SecretKeySpec(key, "AES"));
@@ -77,7 +72,7 @@ public class PBEKeyWrapper implements IMainKeyWrapper {
      SecretKeySpec createAESKey(char[] password, byte[] salt, int iterationCount)
             throws NoSuchAlgorithmException, InvalidKeySpecException {
         KeySpec keySpec = new PBEKeySpec(password, salt, iterationCount, 128);
-        SecretKeyFactory factory = SecretKeyFactory.getInstance(getAlgorithm()); // todo: check this
+        SecretKeyFactory factory = SecretKeyFactory.getInstance(getAlgorithm());
         SecretKey sk = factory.generateSecret(keySpec);
 
         return new SecretKeySpec(sk.getEncoded(), "AES");
@@ -97,8 +92,7 @@ public class PBEKeyWrapper implements IMainKeyWrapper {
     }
 
     private int calculateIterationCount() {
-
-
+        // todo: implement this
         return getIterationCount();
     }
 

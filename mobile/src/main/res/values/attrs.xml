@@ -16,4 +16,13 @@
         <attr name="donut_suffix_text" format="string"/>
         <attr name="donut_background_color" format="color"/>
     </declare-styleable>
+
+    <declare-styleable name="InformationButton">
+        <attr name="topText" format="reference|string" />
+        <attr name="topTextCenter" format="reference|string" />
+        <attr name="bottomTextCenter" format="reference|string" />
+        <attr name="bottomText" format="reference|string" />
+        <attr name="startImg" format="reference" />
+        <attr name="state_checked" format="boolean"/>
+    </declare-styleable>
 </resources>

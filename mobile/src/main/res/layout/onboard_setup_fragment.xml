@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_purple">
+
+
+    <ImageView
+        android:id="@+id/setupImgV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/img_setup"
+        app:layout_constraintBottom_toTopOf="@+id/setupMainTv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/setupMainTv"
+        style="@style/Tella_Main_White_Text.Bold"
+        android:text="@string/onboard_setup_text"
+        android:textSize="18sp"
+        android:layout_marginTop="17dp"
+        app:layout_constraintBottom_toTopOf="@+id/fullSetupBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setupImgV" />
+
+    <rs.readahead.washington.mobile.views.custom.InformationButton
+        android:id="@+id/fullSetupBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="26dp"
+        app:bottomTextCenter="@string/onboard_setup_explore_custom"
+        app:layout_constraintBottom_toTopOf="@+id/quickSetupBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setupMainTv"
+        app:topTextCenter="@string/onboard_full_setup" />
+
+    <rs.readahead.washington.mobile.views.custom.InformationButton
+        android:id="@+id/quickSetupBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="26dp"
+        app:bottomTextCenter="@string/onboard_setup_start"
+        app:layout_constraintBottom_toTopOf="@+id/link"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fullSetupBtn"
+        app:topTextCenter="@string/onboard_quick_setup" />
+
+    <TextView
+        android:id="@+id/link"
+        style="@style/Tella_Main_White_Text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:text="@string/onboard_setup_customization"
+        android:textColor="@color/wa_light_gray"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/quickSetupBtn" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

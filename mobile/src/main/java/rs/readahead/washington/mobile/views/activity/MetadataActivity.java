@@ -61,6 +61,7 @@ import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.LocationUtil;
 import rs.readahead.washington.mobile.util.MetadataUtils;
 import rs.readahead.washington.mobile.util.TelephonyUtils;
+import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 
 
 public abstract class MetadataActivity extends BaseLockActivity implements

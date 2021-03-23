@@ -15,6 +15,7 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
+import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 
 
 public class SettingsActivity extends BaseLockActivity {

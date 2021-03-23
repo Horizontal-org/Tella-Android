@@ -5,12 +5,10 @@ import org.hzontal.tella.keys.key.WrappedMainKey;
 
 import java.security.spec.KeySpec;
 
-import javax.crypto.SecretKey;
-
 public interface IMainKeyWrapper {
     String getName();
 
-    void wrap(MainKey mainKey, KeySpec keySpec, IWrapCallback callback); // todo: KeySpec not Key
+    void wrap(MainKey mainKey, KeySpec keySpec, IWrapCallback callback);
     void unwrap(WrappedMainKey mainKey, KeySpec keySpec, IUnwrapCallback callback);
 
     interface IWrapCallback {
