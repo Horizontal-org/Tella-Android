@@ -6,6 +6,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
+import rs.readahead.washington.mobile.data.openrosa.OpenRosaService;
 import rs.readahead.washington.mobile.data.upload.TUSClient;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
@@ -42,6 +43,8 @@ public class CheckTUSServerPresenter implements
 
         TUSClient client = new TUSClient(view.getContext().getApplicationContext(),
                 server.getUrl(), server.getUsername(), server.getPassword());
+
+        OpenRosaService.clearCache();
 
         disposables.add(client.check()
                 .subscribeOn(Schedulers.io())
