@@ -26,7 +26,6 @@ abstract class BasePasswordActivity : BaseActivity(), View.OnClickListener, OnVa
     lateinit var passwordRightButton: TextView
     private var isPasswordMode = true
     var isHiLighted = false
-    private lateinit var guideBottom: Guideline
     var mPassword = ""
 
 
@@ -47,6 +46,7 @@ abstract class BasePasswordActivity : BaseActivity(), View.OnClickListener, OnVa
         passwordRightButton = findViewById(R.id.password_right_button)
         enterPasswordTextView = findViewById(R.id.password_enterTV)
         passwordMsgTextView = findViewById(R.id.password_msgTV)
+        passwordLeftButton.text = if(isFromSettings) getString(R.string.pl_cancel) else getString(R.string.pl_back)
     }
 
     private fun initListeners() {

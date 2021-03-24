@@ -6,13 +6,13 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 
 class OnBoardingActivity : BaseActivity() {
-    private val isFromSettings by lazy { intent.getBooleanExtra(IS_FROM_SETTINGS,false)  }
+    private val isFromSettings by lazy { intent.getBooleanExtra(IS_FROM_SETTINGS, false)  }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_onboard_container)
+        overridePendingTransition(com.hzontal.tella_locking_ui.R.anim.`in`, com.hzontal.tella_locking_ui.R.anim.out)
 
+        setContentView(R.layout.activity_onboard_container)
         replaceFragmentNoAddToBackStack(if (!isFromSettings) OnBoardIntroFragment() else OnBoardLockFragment.newInstance(true), R.id.rootOnboard)
     }
-
 }

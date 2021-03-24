@@ -3,30 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-   >
-
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideV75"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent=".75" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideV02"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent=".15" />
-
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideV047"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent=".45" />
+    android:layout_gravity="center_horizontal">
 
 
     <TextView
@@ -34,7 +11,10 @@
         style="@style/Unlock_White_Text_Pin"
         android:text="1"
         app:layout_constraintBottom_toTopOf="@+id/fourBtn"
+        app:layout_constraintEnd_toStartOf="@+id/twoBtn"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/guideV02"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="spread" />
 
@@ -44,7 +24,9 @@
         style="@style/Unlock_White_Text_Pin"
         android:text="2"
         app:layout_constraintBottom_toTopOf="@+id/fiveBtn"
-        app:layout_constraintStart_toEndOf="@+id/guideV047"
+        app:layout_constraintEnd_toStartOf="@+id/threeBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/oneBtn"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="spread" />
 
@@ -54,7 +36,9 @@
         style="@style/Unlock_White_Text_Pin"
         android:text="3"
         app:layout_constraintBottom_toTopOf="@+id/sixBtn"
-        app:layout_constraintStart_toEndOf="@+id/guideV75"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/twoBtn"
         app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -63,7 +47,10 @@
         style="@style/Unlock_White_Text_Pin"
         android:text="4"
         app:layout_constraintBottom_toTopOf="@+id/sevenBtn"
+        app:layout_constraintEnd_toStartOf="@+id/fiveBtn"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/guideV02"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/oneBtn" />
 
     <TextView
@@ -71,7 +58,9 @@
         style="@style/Unlock_White_Text_Pin"
         android:text="5"
         app:layout_constraintBottom_toTopOf="@+id/eightBtn"
-        app:layout_constraintStart_toEndOf="@+id/guideV047"
+        app:layout_constraintEnd_toStartOf="@+id/sixBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/fourBtn"
         app:layout_constraintTop_toBottomOf="@+id/twoBtn" />
 
     <TextView
@@ -79,7 +68,9 @@
         style="@style/Unlock_White_Text_Pin"
         android:text="6"
         app:layout_constraintBottom_toTopOf="@+id/nineBtn"
-        app:layout_constraintStart_toEndOf="@+id/guideV75"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/fiveBtn"
         app:layout_constraintTop_toBottomOf="@+id/threeBtn" />
 
     <TextView
@@ -87,7 +78,10 @@
         style="@style/Unlock_White_Text_Pin"
         android:text="7"
         app:layout_constraintBottom_toTopOf="@+id/deleteBtn"
+        app:layout_constraintEnd_toStartOf="@+id/eightBtn"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/guideV02"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fourBtn" />
 
 
@@ -96,7 +90,9 @@
         style="@style/Unlock_White_Text_Pin"
         android:text="8"
         app:layout_constraintBottom_toTopOf="@+id/zeroBtn"
-        app:layout_constraintStart_toEndOf="@+id/guideV047"
+        app:layout_constraintEnd_toStartOf="@+id/nineBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/sevenBtn"
         app:layout_constraintTop_toBottomOf="@+id/fiveBtn" />
 
     <TextView
@@ -104,7 +100,9 @@
         style="@style/Unlock_White_Text_Pin"
         android:text="9"
         app:layout_constraintBottom_toTopOf="@+id/okBtn"
-        app:layout_constraintStart_toEndOf="@+id/guideV75"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/eightBtn"
         app:layout_constraintTop_toBottomOf="@+id/sixBtn" />
 
     <ImageView
@@ -115,15 +113,21 @@
         android:scaleType="fitCenter"
         android:src="@drawable/delete_bg"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/guideV02"
+        app:layout_constraintEnd_toStartOf="@+id/zeroBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sevenBtn" />
 
     <TextView
         android:id="@+id/zeroBtn"
         style="@style/Unlock_White_Text_Pin"
+        android:layout_marginEnd="7dp"
         android:text="0"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/guideV047"
+        app:layout_constraintEnd_toStartOf="@+id/okBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/deleteBtn"
         app:layout_constraintTop_toBottomOf="@+id/eightBtn" />
 
     <TextView
@@ -133,7 +137,9 @@
         android:textColor="@color/wa_white_40"
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/guideV75"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/zeroBtn"
         app:layout_constraintTop_toBottomOf="@+id/nineBtn" />
 
 

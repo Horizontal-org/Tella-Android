@@ -12,19 +12,19 @@ import com.hzontal.tella_locking_ui.ui.pin.edit_text.NoImeEditText
 import com.hzontal.tella_locking_ui.ui.pin.pinview.PinLockListener
 import com.hzontal.tella_locking_ui.ui.pin.pinview.PinLockView
 
-abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickListener,OnSetPinClickListener{
+abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickListener, OnSetPinClickListener {
 
     private lateinit var pinLockView: PinLockView
     lateinit var pinLeftButton: TextView
-   private lateinit var pinRightButton: TextView
+    lateinit var pinRightButton: TextView
     lateinit var pinTopText: TextView
     lateinit var pinMsgText: TextView
     lateinit var pinTopImageView: AppCompatImageView
     private lateinit var pinEditText: NoImeEditText
     private lateinit var pinEyeImageView: AppCompatImageView
-    private lateinit var pinClickView : View
+    private lateinit var pinClickView: View
     private var isPasswordMode = true
-    private var mPIN : String? = ""
+    private var mPIN: String? = ""
     private var isRightButtonHighLighted = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +45,7 @@ abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickLi
         pinMsgText = findViewById(R.id.pin_msgTV)
         pinClickView = findViewById(R.id.pinClickView)
         pinTopImageView = findViewById(R.id.pin_TopImg)
+        pinLeftButton.text = getText(  if (!isFromSettings) R.string.pl_back else R.string.pl_cancel)
         initListeners()
     }
 
@@ -63,7 +64,7 @@ abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickLi
     }
 
     override fun onPinChange(pinLength: Int, intermediatePin: String?) {
-        isRightButtonHighLighted = pinLength.compareTo(pinLockView.minPinLength -1) == 1
+        isRightButtonHighLighted = pinLength.compareTo(pinLockView.minPinLength - 1) == 1
         hiLightLeftButton(isRightButtonHighLighted)
         mPIN = intermediatePin
         pinEditText.setText(intermediatePin)
@@ -74,7 +75,7 @@ abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickLi
         overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left)
     }
 
-    private fun onRightButtonClickListener(){
+    private fun onRightButtonClickListener() {
         onSuccessSetPin(mPIN)
     }
 
@@ -83,7 +84,8 @@ abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickLi
         pinEditText.transformationMethod = if (isPasswordMode) PasswordTransformationMethod() else null
         pinEyeImageView.background = if (isPasswordMode) ContextCompat.getDrawable(this@BasePinActivity, R.drawable.eye) else ContextCompat.getDrawable(this@BasePinActivity, R.drawable.eye_off)
     }
-    private fun hiLightLeftButton(isHiLighted : Boolean){
+
+    private fun hiLightLeftButton(isHiLighted: Boolean) {
         pinRightButton.setTextColor(if (isHiLighted) ContextCompat.getColor(this, R.color.wa_white) else ContextCompat.getColor(this, R.color.wa_white_40))
         pinRightButton.setOnClickListener(if (isHiLighted) this else null)
     }
@@ -96,7 +98,7 @@ abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickLi
             R.id.pin_right_button -> {
                 onRightButtonClickListener()
             }
-            R.id.pin_left_button ->{
+            R.id.pin_left_button -> {
                 onLeftButtonClickListener()
             }
         }

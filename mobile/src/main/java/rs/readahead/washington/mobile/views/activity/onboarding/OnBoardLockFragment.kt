@@ -80,7 +80,9 @@ class OnBoardLockFragment : BaseFragment() {
     }
 
     private fun goUnlockingActivity(destination : Activity){
-        startActivity(Intent(activity, destination::class.java))
+        val intent = Intent(activity, destination::class.java)
+        intent.putExtra(IS_FROM_SETTINGS,isFromSettings)
+        startActivity(intent)
         if (isFromSettings) activity.finish()
     }
 
