@@ -377,11 +377,6 @@
             android:theme="@android:style/Theme.NoDisplay"
             tools:targetApi="lollipop" />
         <activity
-            android:name=".views.activity.TellaIntroActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:label=""
-            android:theme="@style/PlayerTheme" />
-        <activity
             android:name=".views.activity.LocationMapActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:label="@string/title_activity_location_map"

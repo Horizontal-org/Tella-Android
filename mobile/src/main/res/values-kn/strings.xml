@@ -220,8 +220,6 @@ A toast notification informing the user that their files were successfully delet
   <string name="settings.docu_error_not.valid.URL">ಈ URL ಸರಿಯಿಲ್ಲ</string>
   <!-- The label on the sliding "Quick Delete" button on the homescreen. -->
   <string name="home_action.label_quick.delete">ಅಳಿಸು</string>
-  <!-- The heading of the Onboarding screen on the 'Quick Delete' feature -->
-  <string name="onboard.del_heading">ತ್ವರಿತವಾಗಿ ಅಳಿಸಿ</string>
   <!-- The text in the filtering menu to reorder the files by date -->
   <string name="gallery_subheading_sort.by">ವಿಂಗಡಿಸಿ</string>
   <!-- The text in the filtering menu to only show photos, videos, or audio recordings. -->
@@ -256,33 +254,6 @@ A toast notification informing the user that their files were successfully delet
   <string name="settings.docu_error_no.internet">ನೀವು ಅಂತರ್ಜಾಲಕ್ಕೆ ಸಂಪರ್ಕ ಹೊಂದಿಲ್ಲ. ಸಂಪರ್ಕಗೊಂಡಾಗ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ</string>
   <!-- The button to try again connecting to a server, if the previous attempt failed. -->
   <string name="settings.docu_dialog.action_try.again.connecting">ಮರಳಿ ಪ್ರಯತ್ನಿಸಿ</string>
-  <!-- At the end of Onboarding, the button to close the Onboarding and start Tella. -->
-  <string name="onboard.perm_action_start.app">ಪ್ರಾರಂಭ</string>
-  <!-- The subheading of the Welcome screen -->
-  <string name="onboard.intro_subheading">ದಾಖಲೆ ಮತ್ತು ಸಂರಕ್ಷಣೆ</string>
-  <string name="onboard.into_expl">ತಮ್ಮನ್ನು ಅಪಾಯಕ್ಕೆ ಸಿಲುಕಿಸದೆ ಮಾನವ ಹಕ್ಕುಗಳ ಉಲ್ಲಂಘನೆ, ಹಿಂಸೆ ಮತ್ತು ಭ್ರಷ್ಟಾಚಾರವನ್ನು ದಾಖಲಿಸಲು Tella ಯಾರಿಗಾದರೂ ಶಕ್ತಗೊಳಿಸುತ್ತದೆ.</string>
-  <!-- The subheading of the Onboarding screen on the Camouflage feature -->
-  <string name="onboard.camo_subheading">ಸಾಧನ ಹುಡುಕಾಟಗಳ ವಿರುದ್ಧ ರಕ್ಷಣೆ</string>
-  <string name="onboard.camo_expl">Tella ವನ್ನು ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿ ಮರೆಮಾಡಬಹುದು ಮತ್ತು Tellaದಲ್ಲಿ ಸೆರೆಹಿಡಿಯಲಾದ ಅಥವಾ ಆಮದು ಮಾಡಿದ ಯಾವುದೇ ಫೈಲ್ ಅನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಎನ್‌ಕ್ರಿಪ್ಟ್ ಮಾಡಿ ಗುಪ್ತ ಗ್ಯಾಲರಿಯಲ್ಲಿ ಸಂಗ್ರಹಿಸಲಾಗುತ್ತದೆ.</string>
-  <!-- The subheading of the Onboarding screen on the data collection feature -->
-  <string name="onboard.collect_subheading">ಸುಲಭವಾಗಿ ಡೇಟಾ ಅನ್ನು ಸಂಗ್ರಹಿಸಿ</string>
-  <string name="onboard.collect_expl">ಆನ್‌ಲೈನ್ ಅಥವಾ ಆಫ್‌ಲೈನ್, ನಿಮ್ಮ ಸಾಧನದಿಂದ ನೇರವಾಗಿ ಫಾರ್ಮ್‌ಗಳು ಮತ್ತು ಸಮೀಕ್ಷೆಗಳನ್ನು ಭರ್ತಿ ಮಾಡಿ. ಫಾರ್ಮ್‌ಗಳನ್ನು ರಚಿಸುವ ಮತ್ತು ಡೇಟಾವನ್ನು ನಿರ್ವಹಿಸುವ ಸಂಸ್ಥೆಗೆ ನಿಮ್ಮನ್ನು ಲಿಂಕ್ ಮಾಡಬೇಕು.</string>
-  <!-- The subheading of the Onboarding screen on the 'Quick Delete' feature -->
-  <string name="onboard.del_subheading">ತುರ್ತು ಡೇಟಾ ಅಳಿಸುವಿಕೆ</string>
-  <string name="onboard.del_expl">ತುರ್ತು ಪರಿಸ್ಥಿತಿಗಳಲ್ಲಿ, ಕೆಲವೇ ಸೆಕೆಂಡುಗಳಲ್ಲಿ Tellaದಿಂದ ಸೂಕ್ಷ್ಮ ಮಾಹಿತಿಯನ್ನು ಅಳಿಸಿ.</string>
-  <!-- The button to trigger the dialogs to give the app permissions (to use the camera, access device storage, etc). -->
-  <string name="onboard.perm_action_grant.permissions">ಅನುಮತಿ ನೀಡಿ</string>
-  <!-- The menu item in Settings > About & Help to access the tutorial. -->
-  <string name="settings.about_select_tutorial">ಟ್ಯುಟೋರಿಯಲ್</string>
-  <string name="onboard.perm_dialog.expl_grant.permissions">ಸರಿಯಾಗಿ ಕಾರ್ಯನಿರ್ವಹಿಸಲು, ನೀವು Tellaಗೆ ಬೇಕಾದ ಅನುಮತಿ ನೀಡಬೇಕು</string>
-  <!-- The heading for the Onboarding screen where the user grants permissions -->
-  <string name="onboard.perm_heading">ಕೊನೆಯದಾಗಿ ಒಂದು ವಿಷಯ</string>
-  <string name="onboard.perm_subheading">ಸರಿಯಾಗಿ ಕಾರ್ಯನಿರ್ವಹಿಸಲು, ನೀವು Tellaಗೆ ಅಧಿಕಾರ ನೀಡಬೇಕು:</string>
-  <!-- The list of permissions requested on the last screen of the Onboarding -->
-  <string name="onboard.perm_list.permissions">• ನಿಮ್ಮ ಸಾಧನದ ಸಂಗ್ರಹಣೆ (Tella ದಿಂದ ನಿಮ್ಮ ಸಾಧನಕ್ಕೆ ಫೈಲ್‌ಗಳನ್ನು ರಫ್ತುಗೊಳಿಸು)
-• ನಿಮ್ಮ ಕ್ಯಾಮೆರಾ (ಫೋಟೋಗಳು ಮತ್ತು ವೀಡಿಯೊಗಳನ್ನು ಸೆರೆಹಿಡಿಯಲು)
-• ನಿಮ್ಮ ಮೈಕ್ರೊಫೋನ್ (ಆಡಿಯೊ ರೆಕಾರ್ಡ್ ಮಾಡಲು)
-• ನಿಮ್ಮ ಜಿಪಿಎಸ್ (ನೀವು ಡೇಟಾ ಅಥವಾ ಮಲ್ಟಿಮೀಡಿಯಾವನ್ನು ಸೆರೆಹಿಡಿಯುವಾಗ ನಿಮ್ಮ ಸ್ಥಾನವನ್ನು ನಿರ್ಧರಿಸಲು, ಅವುಗಳನ್ನು ಪರಿಶೀಲಿಸುವಂತೆ ಮಾಡಲು)</string>
   <!-- The heading in the Gallery, to show all the files that are selected -->
   <string name="gallery_heading_selected_files">ಆಯಿಕೆಮಡಿದ ಫೈಲ್‌ಗಳು</string>
   <string name="settings.camo_expl">ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿ Tellaಗೆ ಮರೆಮಾಡಲು ಆ ಕಸ್ಟಮ್ ಐಕಾನ್ ಮತ್ತು ಹೆಸರನ್ನು ಆಯ್ಕೆಮಾಡಿ. ಆಂಡ್ರಾಯ್ಡ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳಿಂದ Tella ಐಕಾನ್  ಕಾಣಬರುತ್ತದೆ ಎಂಬುದನ್ನು ಗಮನಿಸಿ.</string>
