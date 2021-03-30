@@ -144,6 +144,7 @@
   <string name="settings.docu_error_unknown.connection.error">Ocorreu um erro ao tentar se conectar ao servidor.</string>
   <string name="settings.docu_error_no.internet">Você não está conectado à internet. Tente novamente quando estiver conectado.</string>
   <string name="settings.docu_dialog.action_try.again.connecting">Tente novamente</string>
+  <string name="settings.about_select_tutorial">Tutorial</string>
   <string name="gallery_heading_selected_files">Arquivos selecionados</string>
   <string name="settings.camo_expl">Selecione um ícone e um nome personalizados para melhor ocultar o Tella no seu aparelho. Note que o ícone do Tella permanecerá visível no menu de configurações do Android.</string>
   <string name="settings.camo_camera4">Câmera</string>

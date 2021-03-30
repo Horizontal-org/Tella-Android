@@ -254,6 +254,8 @@ A toast notification informing the user that their files were successfully delet
   <string name="settings.docu_error_no.internet">நீங்கள் இணையத்துடன் இணைக்கப்படவில்லை. இணைக்கப்பட்ட பிறகு மீண்டும் முயற்சிக்கவும்.</string>
   <!-- The button to try again connecting to a server, if the previous attempt failed. -->
   <string name="settings.docu_dialog.action_try.again.connecting">மீண்டும் முயற்சிக்கவும்</string>
+  <!-- The link to Tutorial-->
+  <string name="settings.about_select_tutorial">Tutorial</string>
   <!-- The heading in the Gallery, to show all the files that are selected -->
   <string name="gallery_heading_selected_files">தேர்ந்தெடுக்கப்பட்ட கோப்புகள்</string>
   <string name="settings.camo_expl">உங்கள் சாதனத்தில் டெல்லாவை சிறப்பாக மறைக்க தனிப்பயன் படவுரு மற்றும் பெயரைத் தேர்ந்தெடுக்கவும். ஆண்ட்ராய்டு அமைப்புகளிலிருந்து டெல்லாவின் உண்மையான படவுரு தெரியும் என்பதை நினைவில் கொள்க.</string>

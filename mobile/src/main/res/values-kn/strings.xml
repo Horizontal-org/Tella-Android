@@ -254,6 +254,8 @@ A toast notification informing the user that their files were successfully delet
   <string name="settings.docu_error_no.internet">ನೀವು ಅಂತರ್ಜಾಲಕ್ಕೆ ಸಂಪರ್ಕ ಹೊಂದಿಲ್ಲ. ಸಂಪರ್ಕಗೊಂಡಾಗ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ</string>
   <!-- The button to try again connecting to a server, if the previous attempt failed. -->
   <string name="settings.docu_dialog.action_try.again.connecting">ಮರಳಿ ಪ್ರಯತ್ನಿಸಿ</string>
+  <!-- The link to Tutorial-->
+  <string name="settings.about_select_tutorial">Tutorial</string>
   <!-- The heading in the Gallery, to show all the files that are selected -->
   <string name="gallery_heading_selected_files">ಆಯಿಕೆಮಡಿದ ಫೈಲ್‌ಗಳು</string>
   <string name="settings.camo_expl">ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿ Tellaಗೆ ಮರೆಮಾಡಲು ಆ ಕಸ್ಟಮ್ ಐಕಾನ್ ಮತ್ತು ಹೆಸರನ್ನು ಆಯ್ಕೆಮಾಡಿ. ಆಂಡ್ರಾಯ್ಡ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳಿಂದ Tella ಐಕಾನ್  ಕಾಣಬರುತ್ತದೆ ಎಂಬುದನ್ನು ಗಮನಿಸಿ.</string>

@@ -149,6 +149,7 @@
   <string name="settings.docu_error_unknown.connection.error">При попытке подключения к серверу произошла ошибка</string>
   <string name="settings.docu_error_no.internet">Tella не удалось подключиться к Интернету и подтвердить информацию о сервере</string>
   <string name="settings.docu_dialog.action_try.again.connecting">Попробуйте еще раз</string>
+  <string name="settings.about_select_tutorial">Tutorial</string>
   <string name="gallery_heading_selected_files">Выбранные файлы</string>
   <string name="settings.camo_expl">Выберите пользовательскую иконку и имя, чтобы лучше скрыть Tella на устройстве. Обратите внимание, что иконка Tella будет отображаться в меню настроек Android.</string>
   <string name="settings.camo_camera4">Камера</string>
