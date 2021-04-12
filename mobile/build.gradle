@@ -55,7 +55,7 @@ android {
 dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':tella-locking-ui')
+    api project(':tella-vault')
 
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 

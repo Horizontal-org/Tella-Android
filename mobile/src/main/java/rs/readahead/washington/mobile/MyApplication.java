@@ -17,6 +17,8 @@ import com.hzontal.tella_locking_ui.ui.DeviceCredentialsUnlockActivity;
 import com.hzontal.tella_locking_ui.ui.password.PasswordUnlockActivity;
 import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity;
 import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity;
+import com.hzontal.tella_vault.Vault;
+import com.hzontal.tella_vault.rx.RxVault;
 
 import org.hzontal.tella.keys.MainKeyStore;
 import org.hzontal.tella.keys.TellaKeys;
@@ -34,6 +36,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.multidex.MultiDexApplication;
+
+import java.io.File;
+
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
 import rs.readahead.washington.mobile.bus.TellaBus;
@@ -44,6 +49,7 @@ import rs.readahead.washington.mobile.data.sharedpref.SharedPrefs;
 import rs.readahead.washington.mobile.javarosa.JavaRosa;
 import rs.readahead.washington.mobile.javarosa.PropertyManager;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
+import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.LocaleManager;
 import rs.readahead.washington.mobile.util.jobs.TellaJobCreator;
 import rs.readahead.washington.mobile.views.activity.ExitActivity;
@@ -59,7 +65,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     private static MainKeyStore mainKeyStore;
     private static UnlockRegistry unlockRegistry;
     private static KeyDataSource keyDataSource;
-
+    public static Vault vault;
+    public static RxVault rxVault;
     public static void startMainActivity(@NonNull Context context) {
         Intent intent;
         if (Preferences.isFirstStart()) {
@@ -159,6 +166,16 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), LifecycleMainKey.NO_TIMEOUT);
         keyDataSource = new KeyDataSource(getApplicationContext());
         TellaKeysUI.initialize(mainKeyStore, mainKeyHolder, unlockRegistry, this);
+
+        Vault.Config vaultConfig = new Vault.Config();
+        vaultConfig.root = new File(this.getFilesDir(), C.MEDIA_DIR);
+
+        try {
+            vault = new Vault(this, mainKeyHolder, vaultConfig);
+            rxVault = new RxVault(this, vault);
+        } catch (Exception e) {
+            Timber.e(e);
+        }
     }
 
     private void configureCrashlytics() {

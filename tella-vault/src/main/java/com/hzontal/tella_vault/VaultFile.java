@@ -1,9 +1,11 @@
 package com.hzontal.tella_vault;
 
 
+import java.io.Serializable;
+
 import kotlin.Metadata;
 
-public class VaultFile {
+public class VaultFile  implements Serializable {
     public String id; // generated uuid
     public Type type;
     public String hash;

@@ -22,6 +22,9 @@ import androidx.core.content.FileProvider;
 import androidx.exifinterface.media.ExifInterface;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.VaultException;
+import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.utils.MediaFile;
 
 import org.apache.commons.io.IOUtils;
 import org.hzontal.tella.keys.key.LifecycleMainKey;
@@ -59,10 +62,7 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.provider.EncryptedFileProvider;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.MetadataMediaFile;
-import rs.readahead.washington.mobile.domain.entity.RawFile;
-import rs.readahead.washington.mobile.domain.entity.TempMediaFile;
 import rs.readahead.washington.mobile.presentation.entity.MediaFileThumbnailData;
 import rs.readahead.washington.mobile.presentation.entity.mapper.PublicMetadataMapper;
 import rs.readahead.washington.mobile.util.C;
@@ -138,9 +138,9 @@ public class MediaFileHandler {
         }
     }
 
-    public static boolean deleteMediaFile(@NonNull Context context, @NonNull MediaFile mediaFile) {
-        File file = getFile(context, mediaFile);
-        File metadata = getMetadataFile(context, mediaFile);
+    public static boolean deleteMediaFile(@NonNull Context context, @NonNull VaultFile vaultFile) {
+        File file = getFile(context, vaultFile);
+        File metadata = getMetadataFile(context, vaultFile);
         return file.delete() || metadata.delete();
     }
 
@@ -151,14 +151,14 @@ public class MediaFileHandler {
         FileUtil.emptyDir(new File(context.getFilesDir(), C.TMP_DIR));
     }
 
-    public static void exportMediaFile(Context context, MediaFile mediaFile) throws IOException {
+        public static void exportMediaFile(Context context, VaultFile vaultFile) throws IOException {
         String envDirType;
 
-        if (mediaFile.getType() == MediaFile.Type.IMAGE) {
+        if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
             envDirType = Environment.DIRECTORY_PICTURES;
-        } else if (mediaFile.getType() == MediaFile.Type.VIDEO) {
+        } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
             envDirType = Environment.DIRECTORY_MOVIES;
-        } else if (mediaFile.getType() == MediaFile.Type.AUDIO) {
+        } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
             envDirType = Environment.DIRECTORY_MUSIC;
         } else { // this should not happen anyway..
             if (Build.VERSION.SDK_INT >= 19) {
@@ -174,7 +174,7 @@ public class MediaFileHandler {
         } else {
             path = Environment.getExternalStoragePublicDirectory(envDirType);
         }
-        File file = new File(path, mediaFile.getFileName());
+        File file = new File(path, vaultFile.name);
 
         InputStream is = null;
         OutputStream os = null;
@@ -183,7 +183,7 @@ public class MediaFileHandler {
             //noinspection ResultOfMethodCallIgnored
             path.mkdirs();
 
-            is = MediaFileHandler.getStream(context, mediaFile);
+            is = MyApplication.vault.getStream(vaultFile);
             if (is == null) {
                 throw new IOException();
             }
@@ -193,56 +193,39 @@ public class MediaFileHandler {
             IOUtils.copy(is, os);
 
             MediaScannerConnection.scanFile(context, new String[]{file.toString()}, null, null);
-        } catch (IOException e) {
+        } catch (VaultException e) {
             FirebaseCrashlytics.getInstance().recordException(e);
-            throw e;
         } finally {
             FileUtil.close(is);
             FileUtil.close(os);
         }
     }
 
-    public static MediaFileBundle importPhotoUri(Context context, Uri uri) throws Exception {
-        MediaFileBundle mediaFileBundle = new MediaFileBundle();
+    public static VaultFile importPhotoUri(Context context, Uri uri) throws Exception {
+        // Vault replacement methods
+        InputStream v_input = context.getContentResolver().openInputStream(uri); // original photo
+        Bitmap v_bm = modifyOrientation(BitmapFactory.decodeStream(v_input), v_input); // bitmap of photo
+        Bitmap v_thumb = ThumbnailUtils.extractThumbnail(v_bm, v_bm.getWidth() / 10, v_bm.getHeight() / 10); // bitmap of thumb
 
-        MediaFile mediaFile = MediaFile.newJpeg();
-        mediaFileBundle.setMediaFile(mediaFile);
+        ByteArrayOutputStream v_thumb_jpeg_stream = new ByteArrayOutputStream();
+        v_thumb.compress(Bitmap.CompressFormat.JPEG, 100, v_thumb_jpeg_stream);
 
-        InputStream input = context.getContentResolver().openInputStream(uri);
-
-        Bitmap bm = BitmapFactory.decodeStream(input);
-        input = context.getContentResolver().openInputStream(uri);
-        bm = modifyOrientation(bm, input);
-        Bitmap thumb = ThumbnailUtils.extractThumbnail(bm, bm.getWidth() / 10, bm.getHeight() / 10); // todo: make this smarter and global
-
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        if (thumb.compress(Bitmap.CompressFormat.JPEG, 100, stream)) {
-            mediaFileBundle.setMediaFileThumbnailData(new MediaFileThumbnailData(stream.toByteArray()));
-        }
-
-        // todo: killing too much quality like this?
-
-        DigestOutputStream os = MediaFileHandler.getOutputStream(context, mediaFile);
-
-        if (os == null) throw new NullPointerException();
-
-        if (!bm.compress(Bitmap.CompressFormat.JPEG, 100, os)) {
+        ByteArrayOutputStream v_image_jpeg_stream = new ByteArrayOutputStream();
+        if (!v_bm.compress(Bitmap.CompressFormat.JPEG, 100, v_image_jpeg_stream)) {
             throw new Exception("JPEG compression failed");
         }
 
-        mediaFile.setHash(StringUtils.hexString(os.getMessageDigest().digest()));
-        mediaFile.setSize(getSize(context, mediaFile));
-
-        return mediaFileBundle;
+        // Rx version
+        return MyApplication.rxVault
+                .builder(new ByteArrayInputStream(v_image_jpeg_stream.toByteArray()))
+                .setMimeType("image/jpeg")
+                .setThumb(v_thumb_jpeg_stream.toByteArray())
+                .build()
+                .subscribeOn(Schedulers.io())
+                .blockingGet();
     }
 
-    public static MediaFileBundle saveJpegPhoto(@NonNull Context context, @NonNull byte[] jpegPhoto) throws Exception {
-        MediaFileBundle mediaFileBundle = new MediaFileBundle();
-
-        MediaFile mediaFile = MediaFile.newJpeg();
-        mediaFile.setAnonymous(true);
-
-        mediaFileBundle.setMediaFile(mediaFile);
+    public static VaultFile saveJpegPhoto(@NonNull Context context, @NonNull byte[] jpegPhoto) throws Exception {
 
         // create thumb
         BitmapFactory.Options opt = new BitmapFactory.Options();
@@ -255,62 +238,54 @@ public class MediaFileHandler {
 
         thumb = modifyOrientation(thumb, input);
         thumb.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        mediaFileBundle.setMediaFileThumbnailData(new MediaFileThumbnailData(stream.toByteArray()));
 
         input.reset();
 
-        copyToMediaFileStream(context, mediaFile, input);
-
-        return mediaFileBundle;
+        return  MyApplication.rxVault
+                .builder(input)
+                .setMimeType("image/jpeg")
+                .setAnonymous(true)
+                .setThumb(getThumbByteArray(thumb))
+                .build()
+                .subscribeOn(Schedulers.io())
+                .blockingGet();
     }
 
-    public static MediaFileBundle savePngImage(@NonNull Context context, @NonNull byte[] pngImage) throws Exception {
-        MediaFileBundle mediaFileBundle = new MediaFileBundle();
-
-        MediaFile mediaFile = MediaFile.newPng();
-        mediaFile.setAnonymous(true);
-
-        mediaFileBundle.setMediaFile(mediaFile);
-
+    public static VaultFile savePngImage(@NonNull Context context, @NonNull byte[] pngImage) throws Exception {
         // create thumb
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-
         BitmapFactory.Options opt = new BitmapFactory.Options();
         opt.inSampleSize = 4;
 
         final Bitmap thumb = BitmapFactory.decodeByteArray(pngImage, 0, pngImage.length, opt);
         thumb.compress(Bitmap.CompressFormat.PNG, 100, stream);
-
-        mediaFileBundle.setMediaFileThumbnailData(new MediaFileThumbnailData(stream.toByteArray()));
-
         // encode png
         InputStream input = new ByteArrayInputStream(pngImage);
 
-        copyToMediaFileStream(context, mediaFile, input);
 
-        return mediaFileBundle;
+        return MyApplication.rxVault
+                .builder(input)
+                .setMimeType("image/png")
+                .setAnonymous(true)
+                .setThumb(getThumbByteArray(thumb))
+                .build()
+                .subscribeOn(Schedulers.io())
+                .blockingGet();
     }
 
-    public static MediaFileBundle importVideoUri(Context context, Uri uri) throws Exception {
-        MediaFileBundle mediaFileBundle = new MediaFileBundle();
-
-        MediaFile mediaFile = MediaFile.newMp4();
-        mediaFileBundle.setMediaFile(mediaFile);
-
+    public static VaultFile importVideoUri(Context context, Uri uri) throws Exception {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        String mimeType = MediaFile.INSTANCE.getFileExtension(uri,context);
+        byte[] thumb = null;
+        Long duration = null;
 
         try {
             retriever.setDataSource(context, uri);
-
             // duration
             String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-            mediaFile.setDuration(Long.parseLong(time));
-
+            duration = Long.parseLong(time);
             // thumbnail
-            byte[] thumb = getThumbByteArray(retriever.getFrameAtTime());
-            if (thumb != null) {
-                mediaFileBundle.setMediaFileThumbnailData(new MediaFileThumbnailData(thumb));
-            }
+            thumb = getThumbByteArray(retriever.getFrameAtTime());
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
             Timber.e(e, MediaFileHandler.class.getName());
@@ -320,34 +295,39 @@ public class MediaFileHandler {
             } catch (Exception ignore) {
             }
         }
-
         InputStream is = context.getContentResolver().openInputStream(uri);
 
-        copyToMediaFileStream(context, mediaFile, is);
-
-        return mediaFileBundle;
+        return MyApplication.rxVault
+                .builder(is)
+                .setMimeType(mimeType)
+                .setAnonymous(true)
+                .setThumb(thumb)
+                .setDuration(duration)
+                .build()
+                .subscribeOn(Schedulers.io())
+                .blockingGet();
     }
 
-    public static MediaFileBundle saveMp4Video(Context context, File video) {
+    public static VaultFile saveMp4Video(Context context, File video) {
         FileInputStream vis = null;
         InputStream is = null;
         DigestOutputStream os = null;
 
         MediaFileBundle mediaFileBundle = new MediaFileBundle();
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        VaultFile vaultFile = new VaultFile();
 
         try {
-            MediaFile mediaFile = MediaFile.newMp4();
-            mediaFileBundle.setMediaFile(mediaFile);
+           // mediaFileBundle.setMediaFile(mediaFile);
 
-            mediaFile.setAnonymous(false); // todo: mp4 can have exif, check if it does
+            vaultFile.anonymous = false; // todo: mp4 can have exif, check if it does
 
             vis = new FileInputStream(video);
             retriever.setDataSource(vis.getFD());
 
             // duration
             String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-            mediaFile.setDuration(Long.parseLong(time));
+            vaultFile.duration = Long.parseLong(time);
 
             // thumbnail
             byte[] thumb = getThumbByteArray(retriever.getFrameAtTime());
@@ -356,14 +336,14 @@ public class MediaFileHandler {
             }
 
             is = new FileInputStream(video);
-            os = MediaFileHandler.getOutputStream(context, mediaFile);
+            os = MediaFileHandler.getOutputStream(context, vaultFile);
 
             if (os == null) throw new NullPointerException();
 
             IOUtils.copy(is, os);
 
-            mediaFile.setHash(StringUtils.hexString(os.getMessageDigest().digest()));
-            mediaFile.setSize(getSize(context, mediaFile));
+            vaultFile.hash = StringUtils.hexString(os.getMessageDigest().digest());
+            vaultFile.size = getSize(context, vaultFile);
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
             Timber.e(e, MediaFileHandler.class.getName());
@@ -378,7 +358,7 @@ public class MediaFileHandler {
             }
         }
 
-        return mediaFileBundle;
+        return vaultFile;
     }
 
     /*@NonNull
@@ -436,7 +416,7 @@ public class MediaFileHandler {
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    static boolean deleteFile(Context context, @NonNull MediaFile mediaFile) {
+    static boolean deleteFile(Context context, @NonNull VaultFile mediaFile) {
         try {
             return getFile(context, mediaFile).delete();
         } catch (Throwable ignored) {
@@ -445,9 +425,9 @@ public class MediaFileHandler {
     }
 
     @Nullable
-    public static InputStream getStream(Context context, RawFile mediaFile) {
+    public static InputStream getStream(Context context, VaultFile vaultFile) {
         try {
-            File file = getFile(context, mediaFile);
+            File file = getFile(context, vaultFile);
             FileInputStream fis = new FileInputStream(file);
             byte[] key;
 
@@ -465,42 +445,33 @@ public class MediaFileHandler {
         return null;
     }
 
-    public static Uri getEncryptedUri(Context context, MediaFile mediaFile) {
+    public static Uri getEncryptedUri(Context context, VaultFile mediaFile) {
         File newFile = getFile(context, mediaFile);
         return FileProvider.getUriForFile(context, EncryptedFileProvider.AUTHORITY, newFile);
     }
 
     @Nullable
-    private static Uri getMetadataUri(Context context, MediaFile mediaFile) {
+    private static Uri getMetadataUri(Context context, VaultFile vaultFile) {
         try {
-            MetadataMediaFile mmf = maybeCreateMetadataMediaFile(context, mediaFile);
+            MetadataMediaFile mmf = maybeCreateMetadataMediaFile(context, vaultFile);
             return FileProvider.getUriForFile(context, EncryptedFileProvider.AUTHORITY,
-                    getFile(context, mmf));
+                    getFile(context, vaultFile));
         } catch (Exception e) {
             Timber.d(e);
             return null;
         }
     }
 
-    /*public Single<MediaFileThumbnailData> updateThumbnail(final MediaFile mediaFile, final MediaFileThumbnailData mediaFileThumbnailData) {
-        return cacheWordDataSource.getDataSource().flatMap(new Function<DataSource, ObservableSource<MediaFileThumbnailData>>() {
-            @Override
-            public ObservableSource<MediaFileThumbnailData> apply(@NonNull DataSource dataSource) throws Exception {
-                return dataSource.updateMediaFileThumbnail(mediaFile.getId(), mediaFileThumbnailData).toObservable();
-            }
-        }).singleOrError();
-    }*/
-
-    public static MetadataMediaFile maybeCreateMetadataMediaFile(Context context, MediaFile mediaFile) throws Exception {
-        MetadataMediaFile mmf = MetadataMediaFile.newCSV(mediaFile);
-        File file = getFile(context, mmf);
+    public static MetadataMediaFile maybeCreateMetadataMediaFile(Context context, VaultFile vaultFile) throws Exception {
+        MetadataMediaFile mmf = MetadataMediaFile.newCSV(vaultFile);
+        File file = getFile(context, vaultFile);
 
         if (file.createNewFile()) {
             OutputStream os = getMetadataOutputStream(file);
 
             if (os == null) throw new NullPointerException();
 
-            createMetadataFile(os, mediaFile);
+            createMetadataFile(os, vaultFile);
         }
 
         mmf.setSize(getSize(file));
@@ -508,20 +479,20 @@ public class MediaFileHandler {
         return mmf;
     }
 
-    public static File getTempFile(Context context, TempMediaFile mediaFile) {
-        return getFile(context, mediaFile);
+    public static File getTempFile(Context context, VaultFile vaultFile) {
+        return getFile(context, vaultFile);
     }
 
-    public static long getSize(Context context, RawFile mediaFile) {
-        return getSize(getFile(context, mediaFile));
+    public static long getSize(Context context, VaultFile vaultFile) {
+        return getSize(getFile(context, vaultFile));
     }
 
     private static long getSize(File file) {
         return file.length() - EncryptedFileProvider.IV_SIZE;
     }
 
-    private static void createMetadataFile(@NonNull OutputStream os, @NonNull MediaFile mediaFile) {
-        LinkedHashMap<String, String> map = PublicMetadataMapper.transformToMap(mediaFile);
+    private static void createMetadataFile(@NonNull OutputStream os, @NonNull VaultFile vaultFile) {
+        LinkedHashMap<String, String> map = PublicMetadataMapper.transformToMap(vaultFile);
 
         PrintStream ps = new PrintStream(os);
         ps.println(TextUtils.join(",", map.keySet()));
@@ -531,9 +502,9 @@ public class MediaFileHandler {
     }
 
     @Nullable
-    static DigestOutputStream getOutputStream(Context context, MediaFile mediaFile) {
+    static DigestOutputStream getOutputStream(Context context, VaultFile vaultFile) {
         try {
-            File file = getFile(context, mediaFile);
+            File file = getFile(context, vaultFile);
             FileOutputStream fos = new FileOutputStream(file);
             byte[] key;
 
@@ -571,30 +542,30 @@ public class MediaFileHandler {
         return null;
     }
 
-    public static void startShareActivity(Context context, MediaFile mediaFile, boolean includeMetadata) {
+    public static void startShareActivity(Context context, VaultFile vaultFile, boolean includeMetadata) {
         if (includeMetadata) {
-            startShareActivity(context, Collections.singletonList(mediaFile), true);
+            startShareActivity(context, Collections.singletonList(vaultFile), true);
             return;
         }
 
-        Uri mediaFileUri = getEncryptedUri(context, mediaFile);
+        Uri mediaFileUri = getEncryptedUri(context, vaultFile);
 
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.putExtra(Intent.EXTRA_STREAM, mediaFileUri);
-        shareIntent.setType(FileUtil.getMimeType(mediaFile.getFileName()));
+        shareIntent.setType(FileUtil.getMimeType(vaultFile.name));
 
         context.startActivity(Intent.createChooser(shareIntent, context.getText(R.string.action_share)));
     }
 
-    public static void startShareActivity(Context context, List<MediaFile> mediaFiles, boolean includeMetadata) {
+    public static void startShareActivity(Context context, List<VaultFile> mediaFiles, boolean includeMetadata) {
         ArrayList<Uri> uris = new ArrayList<>();
 
-        for (MediaFile mediaFile : mediaFiles) {
-            uris.add(getEncryptedUri(context, mediaFile));
+        for (VaultFile vaultFile : mediaFiles) {
+            uris.add(getEncryptedUri(context, vaultFile));
 
-            if (includeMetadata && mediaFile.getMetadata() != null) {
-                Uri metadataUri = getMetadataUri(context, mediaFile);
+            if (includeMetadata && vaultFile.metadata != null) {
+                Uri metadataUri = getMetadataUri(context, vaultFile);
                 if (metadataUri != null) {
                     uris.add(metadataUri);
                 }
@@ -609,18 +580,18 @@ public class MediaFileHandler {
         context.startActivity(Intent.createChooser(shareIntent, context.getText(R.string.action_share)));
     }
 
-    private static String getMetadataFilename(MediaFile mediaFile) {
-        return mediaFile.getUid() + ".csv";
+    private static String getMetadataFilename(VaultFile vaultFile) {
+        return vaultFile.id + ".csv";
     }
 
-    private static File getFile(@NonNull Context context, RawFile mediaFile) {
-        final File mediaPath = new File(context.getFilesDir(), mediaFile.getPath());
-        return new File(mediaPath, mediaFile.getFileName());
+    private static File getFile(@NonNull Context context, VaultFile vaultFile) {
+        final File mediaPath = new File(context.getFilesDir(), vaultFile.path);
+        return new File(mediaPath, vaultFile.name);
     }
 
-    private static File getMetadataFile(@NonNull Context context, MediaFile mediaFile) {
+    private static File getMetadataFile(@NonNull Context context, VaultFile vaultFile) {
         final File metadataPath = new File(context.getFilesDir(), C.METADATA_DIR);
-        return new File(metadataPath, getMetadataFilename(mediaFile));
+        return new File(metadataPath, getMetadataFilename(vaultFile));
     }
 
     private static Bitmap modifyOrientation(Bitmap bitmap, InputStream inputStream) throws IOException {
@@ -660,8 +631,8 @@ public class MediaFileHandler {
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
 
-    private static void copyToMediaFileStream(Context context, MediaFile mediaFile, InputStream is) throws IOException {
-        DigestOutputStream os = MediaFileHandler.getOutputStream(context, mediaFile);
+    private static void copyToMediaFileStream(Context context, VaultFile vaultFile, InputStream is) throws IOException {
+        DigestOutputStream os = MediaFileHandler.getOutputStream(context, vaultFile);
 
         if (os == null) throw new NullPointerException();
 
@@ -669,21 +640,21 @@ public class MediaFileHandler {
         FileUtil.close(is);
         FileUtil.close(os);
 
-        mediaFile.setHash(StringUtils.hexString(os.getMessageDigest().digest()));
-        mediaFile.setSize(getSize(context, mediaFile));
+        vaultFile.hash = StringUtils.hexString(os.getMessageDigest().digest());
+        vaultFile.size = getSize(context, vaultFile);
     }
 
     private static MessageDigest getMessageDigest() throws NoSuchAlgorithmException {
         return MessageDigest.getInstance("SHA-256");
     }
 
-    public Observable<MediaFileBundle> registerMediaFileBundle(final MediaFileBundle mediaFileBundle) {
+    public Observable<VaultFile> registerMediaFileBundle(final MediaFileBundle mediaFileBundle) {
         return keyDataSource.getDataSource()
                 .flatMap((Function<DataSource, ObservableSource<MediaFileBundle>>) dataSource ->
                         dataSource.registerMediaFileBundle(mediaFileBundle).toObservable());
     }
 
-    public Observable<MediaFile> registerMediaFile(final MediaFileBundle mediaFileBundle) {
+    public Observable<VaultFile> registerMediaFile(final MediaFileBundle mediaFileBundle) {
         return registerMediaFile(mediaFileBundle.getMediaFile(), mediaFileBundle.getMediaFileThumbnailData());
     }
 
@@ -716,14 +687,14 @@ public class MediaFileHandler {
         return inputStream;
     }
 
-    private MediaFileThumbnailData getThumbnailData(final MediaFile mediaFile) throws NoSuchElementException {
+    private MediaFileThumbnailData getThumbnailData(final VaultFile vaultFile) throws NoSuchElementException {
         return keyDataSource
                 .getDataSource()
                 .flatMapMaybe((Function<DataSource, MaybeSource<MediaFileThumbnailData>>) dataSource ->
                         dataSource.getMediaFileThumbnail(mediaFile.getUid())).blockingFirst();
     }
 
-    private MediaFileThumbnailData updateThumb(final Context context, final MediaFile mediaFile) {
+    private MediaFileThumbnailData updateThumb(final Context context, final VaultFile vaultFile) {
         return Observable
                 .fromCallable(() -> createThumb(context, mediaFile))
                 .subscribeOn(Schedulers.from(executor)) // creating thumbs in single thread..
@@ -735,9 +706,9 @@ public class MediaFileHandler {
     }
 
     @NonNull
-    private MediaFileThumbnailData createThumb(Context context, MediaFile mediaFile) {
+    private VaultFile createThumb(Context context, VaultFile vaultFile) {
         try {
-            File file = getFile(context, mediaFile);
+            File file = getFile(context, vaultFile);
             FileInputStream fis = new FileInputStream(file);
             byte[] key;
 

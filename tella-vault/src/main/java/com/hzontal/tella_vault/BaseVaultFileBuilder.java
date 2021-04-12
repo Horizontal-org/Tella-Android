@@ -38,6 +38,11 @@ public abstract class BaseVaultFileBuilder<T extends BaseVaultFileBuilder<T, B>,
         return getThis();
     }
 
+    public T setAnonymous(boolean anonymous) {
+        this.anonymous = anonymous;
+        return getThis();
+    }
+
     // todo: with all other options.. like withThumbnail()
 
     abstract public B build() throws Exception;
