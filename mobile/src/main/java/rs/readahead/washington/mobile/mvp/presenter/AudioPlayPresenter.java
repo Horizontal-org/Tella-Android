@@ -10,7 +10,6 @@ import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.exception.NotFountException;
 import rs.readahead.washington.mobile.mvp.contract.IAudioPlayPresenterContract;
 

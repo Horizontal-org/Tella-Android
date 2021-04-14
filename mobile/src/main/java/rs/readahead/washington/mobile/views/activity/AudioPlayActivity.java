@@ -5,19 +5,20 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+
+import com.hzontal.tella_vault.VaultFile;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -34,7 +35,6 @@ import permissions.dispatcher.RuntimePermissions;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.media.AudioPlayer;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IAudioPlayPresenterContract;
@@ -76,7 +76,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
     View rewind;
 
     private AudioPlayPresenter presenter;
-    private MediaFile handlingMediaFile;
+    private VaultFile handlingVaultFile;
     private AudioPlayer audioPlayer;
     private AudioPlayer.Listener audioPlayerListener;
 
@@ -138,9 +138,9 @@ public class AudioPlayActivity extends BaseLockActivity implements
         };
 
         if (getIntent().hasExtra(PLAY_MEDIA_FILE)) {
-            MediaFile mediaFile = (MediaFile) getIntent().getSerializableExtra(PLAY_MEDIA_FILE);
-            if (mediaFile != null) {
-                ThreadUtil.runOnMain(() -> onMediaFileSuccess(mediaFile));
+            VaultFile vaultFile = (VaultFile) getIntent().getSerializableExtra(PLAY_MEDIA_FILE);
+            if (vaultFile != null) {
+                ThreadUtil.runOnMain(() -> onMediaFileSuccess(vaultFile));
             }
         } else if (getIntent().hasExtra(PLAY_MEDIA_FILE_ID_KEY)) {
             long id = getIntent().getLongExtra(PLAY_MEDIA_FILE_ID_KEY, 0);
@@ -156,7 +156,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
         if (!actionsDisabled && showActions) {
             getMenuInflater().inflate(R.menu.audio_view_menu, menu);
 
-            if (handlingMediaFile != null && handlingMediaFile.getMetadata() != null) {
+            if (handlingVaultFile != null && handlingVaultFile.metadata != null) {
                 MenuItem item = menu.findItem(R.id.menu_item_metadata);
                 item.setVisible(true);
             }
@@ -275,8 +275,8 @@ public class AudioPlayActivity extends BaseLockActivity implements
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void exportMediaFile() {
-        if (handlingMediaFile != null && viewerPresenter != null) {
-            viewerPresenter.exportNewMediaFile(handlingMediaFile);
+        if (handlingVaultFile != null && viewerPresenter != null) {
+            viewerPresenter.exportNewMediaFile(handlingVaultFile);
         }
     }
 
@@ -286,8 +286,8 @@ public class AudioPlayActivity extends BaseLockActivity implements
     }
 
     @Override
-    public void onMediaFileSuccess(MediaFile mediaFile) {
-        handlingMediaFile = mediaFile;
+    public void onMediaFileSuccess(VaultFile vaultFile) {
+        handlingVaultFile = vaultFile;
         //handlePlay();
 
         if (!actionsDisabled) {
@@ -350,11 +350,11 @@ public class AudioPlayActivity extends BaseLockActivity implements
     }
 
     private void shareMediaFile() {
-        if (handlingMediaFile == null) {
+        if (handlingVaultFile == null) {
             return;
         }
 
-        if (handlingMediaFile.getMetadata() != null) {
+        if (handlingVaultFile.metadata != null) {
             ShareDialogFragment.newInstance().show(getSupportFragmentManager(), ShareDialogFragment.TAG);
         } else {
             startShareActivity(false);
@@ -362,11 +362,11 @@ public class AudioPlayActivity extends BaseLockActivity implements
     }
 
     private void startShareActivity(boolean includeMetadata) {
-        if (handlingMediaFile == null) {
+        if (handlingVaultFile == null) {
             return;
         }
 
-        MediaFileHandler.startShareActivity(this, handlingMediaFile, includeMetadata);
+        MediaFileHandler.startShareActivity(this, handlingVaultFile, includeMetadata);
     }
 
     private void dismissShareDialog() {
@@ -386,8 +386,8 @@ public class AudioPlayActivity extends BaseLockActivity implements
                 .setTitle(R.string.gallery_delete_files_dialog_title)
                 .setMessage(R.string.gallery_delete_files_dialog_expl)
                 .setPositiveButton(R.string.action_delete, (dialog, which) -> {
-                    if (viewerPresenter != null && handlingMediaFile != null) {
-                        viewerPresenter.deleteMediaFiles(handlingMediaFile);
+                    if (viewerPresenter != null && handlingVaultFile != null) {
+                        viewerPresenter.deleteMediaFiles(handlingVaultFile);
                     }
                 })
                 .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
@@ -401,7 +401,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
     }*/
 
     private void handlePlay() {
-        if (handlingMediaFile == null) {
+        if (handlingVaultFile == null) {
             return;
         }
 
@@ -409,7 +409,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
             audioPlayer.resume();
         } else {
             audioPlayer = new AudioPlayer(this, audioPlayerListener);
-            audioPlayer.play(handlingMediaFile);
+            audioPlayer.play(handlingVaultFile);
         }
 
         paused = false;
@@ -418,7 +418,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
     }
 
     private void handlePause() {
-        if (handlingMediaFile == null) {
+        if (handlingVaultFile == null) {
             return;
         }
 
@@ -475,7 +475,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
 
     private void showMetadata() {
         Intent viewMetadata = new Intent(this, MetadataViewerActivity.class);
-        viewMetadata.putExtra(VIEW_METADATA, handlingMediaFile);
+        viewMetadata.putExtra(VIEW_METADATA, handlingVaultFile);
         startActivity(viewMetadata);
     }
 

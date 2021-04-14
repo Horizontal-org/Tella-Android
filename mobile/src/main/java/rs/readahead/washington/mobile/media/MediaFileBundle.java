@@ -1,20 +1,21 @@
 package rs.readahead.washington.mobile.media;
 
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import com.hzontal.tella_vault.VaultFile;
+
 import rs.readahead.washington.mobile.presentation.entity.MediaFileThumbnailData;
 
 
 public class MediaFileBundle {
-    private MediaFile mediaFile;
+    private VaultFile vaultFile;
     private MediaFileThumbnailData mediaFileThumbnailData = MediaFileThumbnailData.NONE;
 
 
-    public MediaFile getMediaFile() {
-        return mediaFile;
+    public VaultFile getVaultFile() {
+        return vaultFile;
     }
 
-    public void setMediaFile(MediaFile mediaFile) {
-        this.mediaFile = mediaFile;
+    public void setMediaFile(VaultFile vaultFile) {
+        this.vaultFile = vaultFile;
     }
 
     public MediaFileThumbnailData getMediaFileThumbnailData() {

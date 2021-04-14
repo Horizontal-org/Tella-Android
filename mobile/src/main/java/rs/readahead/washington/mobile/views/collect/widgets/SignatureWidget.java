@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.VaultFile;
 
 import org.javarosa.form.api.FormEntryPrompt;
 
@@ -30,7 +31,7 @@ import rs.readahead.washington.mobile.media.MediaFileUrlLoader;
 import rs.readahead.washington.mobile.mvp.contract.ICollectAttachmentMediaFilePresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CollectAttachmentMediaFilePresenter;
 import rs.readahead.washington.mobile.odk.FormController;
-import rs.readahead.washington.mobile.presentation.entity.MediaFileLoaderModel;
+import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.FileUtil;
 import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity;
@@ -49,9 +50,9 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
     ImageView thumbView;
     TextView fileSize;
 
-    private MediaFile mediaFile;
+    private VaultFile vaultFile;
     private CollectAttachmentMediaFilePresenter presenter;
-    private RequestManager.ImageModelRequest<MediaFileLoaderModel> glide;
+    private RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
 
     public SignatureWidget(Context context, FormEntryPrompt formEntryPrompt) {
 
@@ -79,8 +80,8 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
 
     @Override
     public String setBinaryData(@NonNull Object data) {
-        MediaFile mediaFile = (MediaFile) data;
-        setFilename(mediaFile.getFileName());
+        VaultFile mediaFile = (VaultFile) data;
+        setFilename(mediaFile.name);
         showPreview();
         return getFilename();
     }
@@ -127,7 +128,7 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
             Activity activity = (Activity) getContext();
             FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
 
-            MediaFile mediaFile = getFilename() != null ? MediaFile.fromFilename(getFilename()) : MediaFile.NONE;
+            VaultFile mediaFile = getFilename() != null ? MediaFile.fromFilename(getFilename()) : MediaFile.NONE;
 
             activity.startActivityForResult(new Intent(getContext(), SignatureActivity.class)
                             .putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, mediaFile),
@@ -167,8 +168,8 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
     }
 
     @Override
-    public void onGetMediaFileSuccess(MediaFile mediaFile) {
-        this.mediaFile = mediaFile;
+    public void onGetMediaFileSuccess(VaultFile vaultFile) {
+        this.vaultFile = vaultFile;
         thumbView.setId(QuestionWidget.newUniqueId());
         thumbView.setOnClickListener(v -> showPhotoViewerActivity());
 
@@ -189,21 +190,21 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
     }
 
     private void loadThumbnail() {
-        glide.load(new MediaFileLoaderModel(mediaFile, MediaFileLoaderModel.LoadType.THUMBNAIL))
+        glide.load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(thumbView);
     }
 
     private void showPhotoViewerActivity() {
-        if (mediaFile == null) {
+        if (vaultFile == null) {
             return;
         }
 
         try {
             Activity activity = (Activity) getContext();
             activity.startActivity(new Intent(getContext(), PhotoViewerActivity.class)
-                    .putExtra(PhotoViewerActivity.VIEW_PHOTO, mediaFile)
+                    .putExtra(PhotoViewerActivity.VIEW_PHOTO, vaultFile)
                     .putExtra(PhotoViewerActivity.NO_ACTIONS, true));
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
@@ -211,6 +212,6 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
     }
 
     private void showMediaFileInfo() {
-        fileSize.setText(String.format(getResources().getString(R.string.collect_form_meta_file_size), FileUtil.getFileSizeString(mediaFile.getSize())));
+        fileSize.setText(String.format(getResources().getString(R.string.collect_form_meta_file_size), FileUtil.getFileSizeString()));
     }
 }

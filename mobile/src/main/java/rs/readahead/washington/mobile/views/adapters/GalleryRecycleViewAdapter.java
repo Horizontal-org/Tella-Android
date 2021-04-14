@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.utils.MediaFile;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -27,15 +29,16 @@ import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.MediaFileUrlLoader;
 import rs.readahead.washington.mobile.presentation.entity.MediaFileLoaderModel;
+import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.views.interfaces.IGalleryMediaHandler;
 
 
 public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecycleViewAdapter.ViewHolder> {
-    private List<MediaFile> files = new ArrayList<>();
-    private MediaFileUrlLoader glideLoader;
+    private List<VaultFile> files = new ArrayList<>();
+    private VaultFileLoader glideLoader;
     private IGalleryMediaHandler galleryMediaHandler;
-    private Set<MediaFile> selected;
+    private Set<VaultFile> selected;
     private int cardLayoutId;
     private boolean selectable;
     private boolean singleSelection;
@@ -50,7 +53,7 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
                                      MediaFileHandler mediaFileHandler, @LayoutRes int cardLayoutId,
                                      boolean selectable,
                                      boolean singleSelection) {
-        this.glideLoader = new MediaFileUrlLoader(context.getApplicationContext(), mediaFileHandler);
+        this.glideLoader = new VaultFileLoaderModel(context.getApplicationContext(), mediaFileHandler);
         this.galleryMediaHandler = galleryMediaHandler;
         this.selected = new LinkedHashSet<>();
         this.cardLayoutId = cardLayoutId;
@@ -67,38 +70,38 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-        final MediaFile mediaFile = files.get(position);
+        final VaultFile vaultFile = files.get(position);
 
-        checkItemState(holder, mediaFile);
+        checkItemState(holder, vaultFile);
 
-        holder.maybeShowMetadataIcon(mediaFile);
+        holder.maybeShowMetadataIcon(vaultFile);
 
-        if (mediaFile.getType() == MediaFile.Type.IMAGE) {
+        if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
             holder.showImageInfo();
             Glide.with(holder.mediaView.getContext())
                     .using(glideLoader)
-                    .load(new MediaFileLoaderModel(mediaFile, MediaFileLoaderModel.LoadType.THUMBNAIL))
+                    .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(holder.mediaView);
-        } else if (mediaFile.getType() == MediaFile.Type.AUDIO) {
-            holder.showAudioInfo(mediaFile);
+        } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
+            holder.showAudioInfo(vaultFile);
             Drawable drawable = VectorDrawableCompat.create(holder.itemView.getContext().getResources(),
                     R.drawable.ic_mic_gray, null);
             holder.mediaView.setImageDrawable(drawable);
-        } else if (mediaFile.getType() == MediaFile.Type.VIDEO) {
-            holder.showVideoInfo(mediaFile);
+        } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
+            holder.showVideoInfo(vaultFile);
             Glide.with(holder.mediaView.getContext())
                     .using(glideLoader)
-                    .load(new MediaFileLoaderModel(mediaFile, MediaFileLoaderModel.LoadType.THUMBNAIL))
+                    .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(holder.mediaView);
         }
 
-        holder.mediaView.setOnClickListener(v -> galleryMediaHandler.playMedia(mediaFile));
+        holder.mediaView.setOnClickListener(v -> galleryMediaHandler.playMedia(vaultFile));
 
-        holder.checkBox.setOnClickListener(v -> checkboxClickHandler(holder, mediaFile));
+        holder.checkBox.setOnClickListener(v -> checkboxClickHandler(holder, vaultFile));
     }
 
     @Override
@@ -106,13 +109,13 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
         return files.size();
     }
 
-    public void setFiles(List<MediaFile> files) {
+    public void setFiles(List<VaultFile> files) {
         this.files = files;
         notifyDataSetChanged();
     }
 
-    public List<MediaFile> getSelectedMediaFiles() {
-        List<MediaFile> selectedList = new ArrayList<>(selected.size());
+    public List<VaultFile> getSelectedMediaFiles() {
+        List<VaultFile> selectedList = new ArrayList<>(selected.size());
         selectedList.addAll(selected);
 
         return selectedList;
@@ -124,55 +127,55 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
         notifyDataSetChanged();
     }
 
-    public void deselectMediaFile(@NonNull MediaFile mediaFile) {
-        if (!selected.contains(mediaFile)) {
+    public void deselectMediaFile(@NonNull VaultFile vaultFile) {
+        if (!selected.contains(vaultFile)) {
             return;
         }
 
-        selected.remove(mediaFile);
-        notifyItemChanged(files.indexOf(mediaFile));
+        selected.remove(vaultFile);
+        notifyItemChanged(files.indexOf(vaultFile));
     }
 
-    public void selectMediaFile(@NonNull MediaFile mediaFile) {
-        if (selected.contains(mediaFile)) {
+    public void selectMediaFile(@NonNull VaultFile vaultFile) {
+        if (selected.contains(vaultFile)) {
             return;
         }
 
-        selected.add(mediaFile);
-        notifyItemChanged(files.indexOf(mediaFile));
+        selected.add(vaultFile);
+        notifyItemChanged(files.indexOf(vaultFile));
     }
 
-    private void checkboxClickHandler(ViewHolder holder, MediaFile mediaFile) {
-        if (selected.contains(mediaFile)) {
-            selected.remove(mediaFile);
-            galleryMediaHandler.onMediaDeselected(mediaFile);
+    private void checkboxClickHandler(ViewHolder holder, VaultFile vaultFile) {
+        if (selected.contains(vaultFile)) {
+            selected.remove(vaultFile);
+            galleryMediaHandler.onMediaDeselected(vaultFile);
         } else {
             if (singleSelection) {
                 removeAllSelections();
             }
 
-            selected.add(mediaFile);
-            galleryMediaHandler.onMediaSelected(mediaFile);
+            selected.add(vaultFile);
+            galleryMediaHandler.onMediaSelected(vaultFile);
         }
 
-        checkItemState(holder, mediaFile);
+        checkItemState(holder, vaultFile);
         galleryMediaHandler.onSelectionNumChange(selected.size());
     }
 
     private void removeAllSelections() {
-        for (MediaFile selection: selected) {
+        for (VaultFile selection: selected) {
             deselectMediaFile(selection);
             galleryMediaHandler.onMediaDeselected(selection);
         }
     }
 
-    private void checkItemState(ViewHolder holder, MediaFile mediaFile) {
+    private void checkItemState(ViewHolder holder, VaultFile mediaFile) {
         boolean checked = selected.contains(mediaFile);
         holder.selectionDimmer.setVisibility(checked ? View.VISIBLE : View.GONE);
         holder.checkBox.setImageResource(checked ? R.drawable.ic_check_box_on : R.drawable.ic_check_box_off);
     }
 
-    public void setSelectedMediaFiles(@NonNull List<MediaFile> selectedMediaFiles) {
+    public void setSelectedMediaFiles(@NonNull List<VaultFile> selectedMediaFiles) {
         selected.addAll(selectedMediaFiles);
         notifyDataSetChanged();
     }
@@ -204,22 +207,22 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
             maybeEnableCheckBox(selectable);
         }
 
-        void showVideoInfo(MediaFile mediaFile) {
+        void showVideoInfo(VaultFile vaultFile) {
             audioInfo.setVisibility(View.GONE);
             videoInfo.setVisibility(View.VISIBLE);
-            if (mediaFile.getDuration() > 0) {
-                videoDuration.setText(getDuration(mediaFile));
+            if (vaultFile.duration > 0) {
+                videoDuration.setText(getDuration(vaultFile));
                 videoDuration.setVisibility(View.VISIBLE);
             } else {
                 videoDuration.setVisibility(View.INVISIBLE);
             }
         }
 
-        void showAudioInfo(MediaFile mediaFile) {
+        void showAudioInfo(VaultFile vaultFile) {
             videoInfo.setVisibility(View.GONE);
             audioInfo.setVisibility(View.VISIBLE);
-            if (mediaFile.getDuration() > 0) {
-                audioDuration.setText(getDuration(mediaFile));
+            if (vaultFile.duration > 0) {
+                audioDuration.setText(getDuration(vaultFile));
                 audioDuration.setVisibility(View.VISIBLE);
             } else {
                 audioDuration.setVisibility(View.INVISIBLE);
@@ -231,12 +234,12 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
             audioInfo.setVisibility(View.GONE);
         }
 
-        private String getDuration(MediaFile mediaFile) {
-            return Util.getVideoDuration((int) (mediaFile.getDuration() / 1000));
+        private String getDuration(VaultFile vaultFile) {
+            return Util.getVideoDuration((int) (vaultFile.duration / 1000));
         }
 
-        void maybeShowMetadataIcon(MediaFile mediaFile) {
-            if (mediaFile.getMetadata() != null) {
+        void maybeShowMetadataIcon(VaultFile vaultFile) {
+            if (vaultFile.metadata != null) {
                 metadataIcon.setVisibility(View.VISIBLE);
             } else {
                 metadataIcon.setVisibility(View.GONE);

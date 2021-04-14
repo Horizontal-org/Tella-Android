@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.mvp.presenter;
 import android.net.Uri;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.VaultFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,6 @@ import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.media.MediaFileBundle;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
@@ -29,7 +29,7 @@ public class AttachmentsPresenter implements IAttachmentsPresenterContract.IPres
     private KeyDataSource keyDataSource;
     private MediaFileHandler mediaFileHandler;
 
-    private List<MediaFile> attachments = new ArrayList<>();
+    private List<VaultFile> attachments = new ArrayList<VaultFile>();
 
 
     public AttachmentsPresenter(IAttachmentsPresenterContract.IView view) {
@@ -42,7 +42,7 @@ public class AttachmentsPresenter implements IAttachmentsPresenterContract.IPres
     public void getFiles(final IMediaFileRecordRepository.Filter filter, final IMediaFileRecordRepository.Sort sort) {
         disposables.add(
                 keyDataSource.getDataSource()
-                        .flatMapSingle((Function<DataSource, SingleSource<List<MediaFile>>>) dataSource -> dataSource.listMediaFiles(filter, sort))
+                        .flatMapSingle((Function<DataSource, SingleSource<List<VaultFile>>>) dataSource -> dataSource.listMediaFiles(filter, sort))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnSubscribe(disposable -> view.onGetFilesStart())
@@ -55,12 +55,12 @@ public class AttachmentsPresenter implements IAttachmentsPresenterContract.IPres
     }
 
     @Override
-    public List<MediaFile> getAttachments() {
+    public List<VaultFile> getAttachments() {
         return attachments;
     }
 
     @Override
-    public void setAttachments(List<MediaFile> attachments) {
+    public void setAttachments(List<VaultFile> attachments) {
         this.attachments = attachments;
     }
 
@@ -83,7 +83,7 @@ public class AttachmentsPresenter implements IAttachmentsPresenterContract.IPres
         disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMapSingle((Function<DataSource, SingleSource<MediaFile>>) dataSource -> dataSource.getMediaFile(id))
+                .flatMapSingle((Function<DataSource, SingleSource<VaultFile>>) dataSource -> dataSource.getMediaFile(id))
                 .subscribe(mediaFile -> {
                     if (!attachments.contains(mediaFile)) {
                         attachments.add(mediaFile);

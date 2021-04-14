@@ -1,5 +1,9 @@
 package rs.readahead.washington.mobile.data.entity.mapper;
 
+import com.hzontal.tella_vault.Metadata;
+import com.hzontal.tella_vault.MyLocation;
+import com.hzontal.tella_vault.VaultFile;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -8,9 +12,6 @@ import rs.readahead.washington.mobile.data.entity.FormMediaFileRegisterEntity;
 import rs.readahead.washington.mobile.data.entity.MediaFileEntity;
 import rs.readahead.washington.mobile.data.entity.MetadataEntity;
 import rs.readahead.washington.mobile.domain.entity.Feedback;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
-import rs.readahead.washington.mobile.domain.entity.Metadata;
-import rs.readahead.washington.mobile.domain.entity.MyLocation;
 
 
 // @Singleton
@@ -128,28 +129,28 @@ public class EntityMapper {
         return location;
     }
 
-    private MediaFileEntity transform(MediaFile mediaFile) {
-        if (mediaFile == null) {
+    private MediaFileEntity transform(VaultFile vaultFile) {
+        if (vaultFile == null) {
             return null;
         }
 
         MediaFileEntity mediaFileEntity = new MediaFileEntity();
-        mediaFileEntity.id = mediaFile.getId();
-        mediaFileEntity.path = mediaFile.getPath();
-        mediaFileEntity.uid = mediaFile.getUid();
-        mediaFileEntity.fileName = mediaFile.getFileName();
-        mediaFileEntity.metadata = transform(mediaFile.getMetadata());
-        mediaFileEntity.created = mediaFile.getCreated();
+        mediaFileEntity.id = vaultFile.id;
+        mediaFileEntity.path = vaultFile.path;
+        mediaFileEntity.uid = vaultFile.id;
+        mediaFileEntity.fileName = vaultFile.name;
+        mediaFileEntity.metadata = transform(vaultFile.metadata);
+        mediaFileEntity.created = vaultFile.created;
 
         return mediaFileEntity;
     }
 
-    public FormMediaFileRegisterEntity transformMediaFiles(Collection<MediaFile> mediaFiles) {
+    public FormMediaFileRegisterEntity transformMediaFiles(Collection<VaultFile> mediaFiles) {
         FormMediaFileRegisterEntity entity = new FormMediaFileRegisterEntity();
 
         if (mediaFiles != null) {
             entity.attachments = new ArrayList<>(mediaFiles.size());
-            for (MediaFile mediaFile: mediaFiles) {
+            for (VaultFile mediaFile: mediaFiles) {
                 entity.attachments.add(transform(mediaFile));
             }
         }

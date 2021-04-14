@@ -3,8 +3,7 @@ package rs.readahead.washington.mobile.mvp.contract;
 import android.content.Context;
 import androidx.annotation.Nullable;
 
-import rs.readahead.washington.mobile.domain.entity.Metadata;
-
+import com.hzontal.tella_vault.Metadata;
 
 public class IMetadataAttachPresenterContract {
     public interface IView {

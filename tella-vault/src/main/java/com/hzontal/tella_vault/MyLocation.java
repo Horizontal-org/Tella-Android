@@ -16,7 +16,6 @@ public final class MyLocation implements Serializable {
     private String provider;
     private Float speed;
 
-
     public MyLocation() {
         this.timestamp = UNKNOWN;
     }

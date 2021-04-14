@@ -7,6 +7,9 @@ import java.net.UnknownHostException;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
+
+import com.hzontal.tella_vault.VaultFile;
+
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Emitter;
 import io.reactivex.Flowable;
@@ -20,7 +23,6 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import rs.readahead.washington.mobile.BuildConfig;
 import rs.readahead.washington.mobile.data.http.HttpStatus;
 import rs.readahead.washington.mobile.data.repository.SkippableMediaFileRequestBody;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.util.Util;
@@ -48,12 +50,12 @@ public class TUSClient {
     }
 
     public Single<UploadProgressInfo> check() {
-        MediaFile mediaFile = MediaFile.NONE;
-        mediaFile.setFileName("test");
+        VaultFile vaultFile = VaultFile.NONE;
+        vaultFile.name = "test";
 
-        return getStatus(mediaFile)
-                .map(aLong -> new UploadProgressInfo(mediaFile, 0, 0))
-                .onErrorReturn(throwable -> mapThrowable(throwable, mediaFile));
+        return getStatus(vaultFile)
+                .map(aLong -> new UploadProgressInfo(vaultFile, 0, 0))
+                .onErrorReturn(throwable -> mapThrowable(throwable, vaultFile));
     }
 
     private Single<Long> getStatus(RawFile mediaFile) {

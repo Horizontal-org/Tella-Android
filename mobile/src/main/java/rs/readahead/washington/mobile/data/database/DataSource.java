@@ -9,6 +9,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.hzontal.tella_vault.VaultFile;
 
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteQueryBuilder;
@@ -43,8 +44,6 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.FileUploadBundle;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
-import rs.readahead.washington.mobile.domain.entity.Metadata;
 import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
@@ -322,17 +321,17 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
-    public Completable scheduleUploadMediaFiles(final List<MediaFile> mediaFiles) {
+    public Completable scheduleUploadMediaFiles(final List<VaultFile> vaultFiles) {
         return Completable.fromCallable((Callable<Void>) () -> {
-            scheduleUploadMediaFilesDb(mediaFiles);
+            scheduleUploadMediaFilesDb(vaultFiles);
             return null;
         }).compose(applyCompletableSchedulers());
     }
 
     @Override
-    public Completable scheduleUploadMediaFilesWithPriority(final List<MediaFile> mediaFiles, long uploadServerId, boolean metadata) {
+    public Completable scheduleUploadMediaFilesWithPriority(final List<VaultFile> vaultFiles, long uploadServerId, boolean metadata) {
         return Completable.fromCallable((Callable<Void>) () -> {
-            scheduleUploadMediaFilesWithPriorityDb(mediaFiles, uploadServerId, metadata);
+            scheduleUploadMediaFilesWithPriorityDb(vaultFiles, uploadServerId, metadata);
             return null;
         }).compose(applyCompletableSchedulers());
     }
@@ -354,20 +353,20 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
-    public Single<MediaFile> registerMediaFile(final MediaFile mediaFile, final MediaFileThumbnailData thumbnailData) {
-        return Single.fromCallable(() -> registerMediaFileRecord(mediaFile, thumbnailData))
+    public Single<VaultFile> registerMediaFile(final VaultFile vaultFile, final MediaFileThumbnailData thumbnailData) {
+        return Single.fromCallable(() -> registerMediaFileRecord(vaultFile, thumbnailData))
                 .compose(applySchedulers());
     }
 
     @Override
     public Single<MediaFileBundle> registerMediaFileBundle(final MediaFileBundle mediaFileBundle) {
         return Single.fromCallable(() -> {
-            registerMediaFileRecord(mediaFileBundle.getMediaFile(), mediaFileBundle.getMediaFileThumbnailData());
+            registerMediaFileRecord(mediaFileBundle.getVaultFile(), mediaFileBundle.getMediaFileThumbnailData());
             return mediaFileBundle;
         }).compose(applySchedulers());
     }
 
-    public Single<List<MediaFile>> listMediaFiles(final Filter filter, final Sort sort) {
+    public Single<List<VaultFile>> listMediaFiles(final Filter filter, final Sort sort) {
         return Single.fromCallable(() -> getMediaFiles(filter, sort))
                 .compose(applySchedulers());
     }
@@ -406,63 +405,64 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
-    public Single<List<MediaFile>> getMediaFiles(final long[] ids) {
+    public Single<List<VaultFile>> getMediaFiles(final long[] ids) {
         return Single.fromCallable(() -> getMediaFilesFromDb(ids))
                 .compose(applySchedulers());
     }
 
     @Override
-    public Single<MediaFile> getMediaFile(final long id) {
+    public Single<VaultFile> getMediaFile(final long id) {
         return Single.fromCallable(() -> getMediaFileFromDb(id))
                 .compose(applySchedulers());
     }
 
     @Override
-    public Single<MediaFile> getMediaFile(final String uid) {
+    public Single<VaultFile> getMediaFile(final String uid) {
         return Single.fromCallable(() -> getMediaFileFromDb(uid))
                 .compose(applySchedulers());
     }
 
     @Override
-    public Single<MediaFile> getLastMediaFile() {
+    public Single<VaultFile> getLastMediaFile() {
         return Single.fromCallable(this::getLastMediaFileFromDb)
                 .compose(applySchedulers());
     }
 
     @Override
-    public Single<MediaFile> deleteMediaFile(final MediaFile mediaFile, final IMediaFileDeleter deleter) {
-        return Single.fromCallable(() -> deleteMediaFileFromDb(mediaFile, deleter))
+    public Single<VaultFile> deleteMediaFile(final VaultFile vaultFile, final IMediaFileDeleter deleter) {
+        return Single.fromCallable(() -> deleteMediaFileFromDb(vaultFile, deleter))
                 .compose(applySchedulers());
     }
 
     @Override
-    public Single<MediaFile> attachMetadata(final long mediaFileId, final Metadata metadata) {
+    public Single<VaultFile> attachMetadata(final long mediaFileId, final Metadata metadata) {
         return Single.fromCallable(() -> attachMediaFileMetadataDb(mediaFileId, metadata))
                 .compose(applySchedulers());
     }
 
-    private MediaFile registerMediaFileRecord(MediaFile mediaFile, MediaFileThumbnailData thumbnailData) {
-        if (mediaFile.getCreated() == 0) {
-            mediaFile.setCreated(Util.currentTimestamp());
+    //TODO CHECK UID IN VAULTFILE
+    private VaultFile registerMediaFileRecord(VaultFile vaultFile, MediaFileThumbnailData thumbnailData) {
+        if (vaultFile.created == 0) {
+            vaultFile.created = Util.currentTimestamp();
         }
 
         try {
             database.beginTransaction();
 
             ContentValues values = new ContentValues();
-            values.put(D.C_PATH, mediaFile.getPath());
-            values.put(D.C_UID, mediaFile.getUid());
-            values.put(D.C_FILE_NAME, mediaFile.getFileName());
-            values.put(D.C_METADATA, new GsonBuilder().create().toJson(new EntityMapper().transform(mediaFile.getMetadata())));
-            values.put(D.C_CREATED, mediaFile.getCreated());
-            if (mediaFile.getDuration() > 0) {
-                values.put(D.C_DURATION, mediaFile.getDuration());
+            values.put(D.C_PATH, vaultFile.path);
+            values.put(D.C_UID, vaultFile.id);
+            values.put(D.C_FILE_NAME, vaultFile.name);
+            values.put(D.C_METADATA, new GsonBuilder().create().toJson(new EntityMapper().transform(vaultFile.metadata)));
+            values.put(D.C_CREATED, vaultFile.created);
+            if (vaultFile.duration > 0) {
+                values.put(D.C_DURATION, vaultFile.duration );
             }
-            if (mediaFile.getSize() > 0) {
-                values.put(D.C_SIZE, mediaFile.getSize());
+            if (vaultFile.size > 0) {
+                values.put(D.C_SIZE, vaultFile.size );
             }
-            values.put(D.C_ANONYMOUS, mediaFile.isAnonymous() ? 1 : 0);
-            values.put(D.C_HASH, mediaFile.getHash());
+            values.put(D.C_ANONYMOUS, vaultFile.anonymous ? 1 : 0);
+            values.put(D.C_HASH, vaultFile.hash);
 
             mediaFile.setId(database.insert(D.T_MEDIA_FILE, null, values));
 

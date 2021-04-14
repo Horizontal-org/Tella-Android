@@ -1,12 +1,14 @@
 package rs.readahead.washington.mobile.domain.entity;
 
+import com.hzontal.tella_vault.VaultFile;
+
 import java.io.Serializable;
 
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository.UploadStatus;
 
 public class FileUploadInstance implements Serializable {
     private long id;
-    private MediaFile mediaFile;
+    private VaultFile vaultFile;
     private long updated;
     private long started;
     private UploadStatus status;
@@ -24,12 +26,12 @@ public class FileUploadInstance implements Serializable {
         this.id = id;
     }
 
-    public MediaFile getMediaFile() {
-        return mediaFile;
+    public VaultFile getMediaFile() {
+        return vaultFile;
     }
 
-    public void setMediaFile(MediaFile mediaFile) {
-        this.mediaFile = mediaFile;
+    public void setMediaFile(VaultFile vaultFile) {
+        this.vaultFile = vaultFile;
     }
 
     public long getUpdated() {

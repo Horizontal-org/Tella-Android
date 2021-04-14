@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.VaultFile;
 
 import java.util.concurrent.Callable;
 
@@ -10,7 +11,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IMediaFileViewerPresenterContract;
 
@@ -27,9 +27,9 @@ public class MediaFileViewerPresenter implements IMediaFileViewerPresenterContra
     }
 
     @Override
-    public void exportNewMediaFile(final MediaFile mediaFile) {
+    public void exportNewMediaFile(final VaultFile vaultFile) {
         disposables.add(Completable.fromCallable((Callable<Void>) () -> {
-                    MediaFileHandler.exportMediaFile(view.getContext().getApplicationContext(), mediaFile);
+                    MediaFileHandler.exportMediaFile(view.getContext().getApplicationContext(), vaultFile);
                     return null;
                 })
                         .subscribeOn(Schedulers.computation())
@@ -44,11 +44,11 @@ public class MediaFileViewerPresenter implements IMediaFileViewerPresenterContra
     }
 
     @Override
-    public void deleteMediaFiles(final MediaFile mediaFile) {
+    public void deleteMediaFiles(final VaultFile vaultFile) {
         disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .flatMapCompletable(dataSource ->
-                        dataSource.deleteMediaFile(mediaFile, mediaFile1 ->
+                        dataSource.deleteMediaFile(vaultFile, mediaFile1 ->
                                 MediaFileHandler.deleteMediaFile(view.getContext(), mediaFile1)).toCompletable())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> view.onMediaFileDeleted(), throwable -> {

@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.VaultFile;
 
 import java.io.File;
 
@@ -14,7 +15,6 @@ import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.media.MediaFileBundle;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.ICameraPresenterContract;
@@ -96,7 +96,7 @@ public class CameraPresenter implements ICameraPresenterContract.IPresenter {
     @Override
     public void getLastMediaFile() {
         disposables.add(keyDataSource.getDataSource()
-                .flatMapSingle((Function<DataSource, SingleSource<MediaFile>>) DataSource::getLastMediaFile)
+                .flatMapSingle((Function<DataSource, SingleSource<VaultFile>>) DataSource::getLastMediaFile)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

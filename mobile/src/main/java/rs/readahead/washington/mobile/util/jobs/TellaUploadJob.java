@@ -6,6 +6,7 @@ import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.VaultFile;
 
 import org.hzontal.tella.keys.key.LifecycleMainKey;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +22,6 @@ import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.data.upload.TUSClient;
 import rs.readahead.washington.mobile.domain.entity.FileUploadBundle;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
@@ -36,7 +36,7 @@ public class TellaUploadJob extends Job {
     static final String TAG = "TellaUploadJob";
     private static boolean running = false;
     private Job.Result exitResult = null;
-    private HashMap<Long, MediaFile> fileMap = new HashMap<>();
+    private HashMap<Long, VaultFile> fileMap = new HashMap<>();
     private DataSource dataSource;
     private TellaUploadServer server;
 
@@ -108,7 +108,7 @@ public class TellaUploadJob extends Job {
             }
 
             if (!fileUploadBundle.isManualUpload()) {
-                fileMap.put(fileUploadBundle.getMediaFile().getId(), fileUploadBundle.getMediaFile());
+                fileMap.put(fileUploadBundle.getMediaFile().id, fileUploadBundle.getMediaFile());
             }
 
             if (fileUploadBundle.isIncludeMetdata()) {
@@ -186,10 +186,10 @@ public class TellaUploadJob extends Job {
     }
 
     private void deleteMediaFile(long id) {
-        MediaFile deleted = dataSource.deleteMediaFile(fileMap.get(id), m ->
+        VaultFile deleted = dataSource.deleteMediaFile(fileMap.get(id), m ->
                 MediaFileHandler.deleteMediaFile(getContext(), m)).blockingGet();
 
-        Timber.d("Deleted file %s", deleted.getFileName());
+        Timber.d("Deleted file %s", deleted.name);
     }
 
     private void postProgressEvent(UploadProgressInfo progress) {

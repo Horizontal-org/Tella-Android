@@ -9,20 +9,21 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import rs.readahead.washington.mobile.presentation.entity.MediaFileLoaderModel;
+import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 
 
 class MediaFileDataFetcher implements DataFetcher<InputStream> {
     private MediaFileHandler mediaFileHandler;
-    private MediaFileLoaderModel model;
+    private VaultFileLoaderModel model;
     private Context context;
     private boolean cancelled = false;
     private InputStream inputStream;
 
 
-    MediaFileDataFetcher(Context context, MediaFileHandler mediaFileHandler, MediaFileLoaderModel mediaFileLoaderModel) {
+    MediaFileDataFetcher(Context context, MediaFileHandler mediaFileHandler, VaultFileLoaderModel vaultFileLoaderModel) {
         this.context = context;
         this.mediaFileHandler = mediaFileHandler;
-        this.model = mediaFileLoaderModel;
+        this.model = vaultFileLoaderModel;
     }
 
     @Override
@@ -35,11 +36,11 @@ class MediaFileDataFetcher implements DataFetcher<InputStream> {
             return null;
         }
 
-        if (model.getLoadType() == MediaFileLoaderModel.LoadType.THUMBNAIL) {
+        if (model.getLoadType() == VaultFileLoaderModel.LoadType.THUMBNAIL) {
             return inputStream = mediaFileHandler.getThumbnailStream(context, model.getMediaFile());
         }
 
-        if (model.getLoadType() == MediaFileLoaderModel.LoadType.ORIGINAL) {
+        if (model.getLoadType() == VaultFileLoaderModel.LoadType.ORIGINAL) {
             return inputStream = MediaFileHandler.getStream(context, model.getMediaFile());
         }
 

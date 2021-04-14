@@ -5,6 +5,7 @@ import android.os.Environment;
 import android.os.StatFs;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.VaultFile;
 
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -12,7 +13,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IAudioCapturePresenterContract;
 import rs.readahead.washington.mobile.presentation.entity.MediaFileThumbnailData;
@@ -32,8 +32,8 @@ public class AudioCapturePresenter implements IAudioCapturePresenterContract.IPr
     }
 
     @Override
-    public void addMediaFile(MediaFile mediaFile) { // audio recorder creates MediaFile's file already encrypted and in place
-        disposables.add(mediaFileHandler.registerMediaFile(mediaFile, MediaFileThumbnailData.NONE)
+    public void addMediaFile(VaultFile vaultFile) { // audio recorder creates MediaFile's file already encrypted and in place
+        disposables.add(mediaFileHandler.registerMediaFile(vaultFile, MediaFileThumbnailData.NONE)
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> view.onAddingStart())
                 .observeOn(AndroidSchedulers.mainThread())

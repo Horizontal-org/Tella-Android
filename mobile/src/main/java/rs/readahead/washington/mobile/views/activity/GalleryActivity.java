@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.hzontal.tella_vault.VaultFile;
 
 import java.util.List;
 
@@ -44,7 +45,6 @@ import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.GalleryFlingTopEvent;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
@@ -455,7 +455,7 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onGetFilesSuccess(List<MediaFile> files) {
+    public void onGetFilesSuccess(List<VaultFile> files) {
         blankGalleryInfo.setVisibility((files.isEmpty() && adding) ? View.VISIBLE : View.GONE);
         adapter.setFiles(files);
     }
@@ -465,7 +465,7 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onMediaImported(MediaFile mediaFile, MediaFileThumbnailData thumbnailData) {
+    public void onMediaImported(VaultFile mediaFile, MediaFileThumbnailData thumbnailData) {
         presenter.addNewMediaFile(mediaFile, thumbnailData);
     }
 
@@ -598,7 +598,7 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onRemoveAttachment(MediaFile mediaFile) {
+    public void onRemoveAttachment(VaultFile vaultFile) {
         adapter.deselectMediaFile(mediaFile);
         onSelectionNumChange(attachmentsAdapter.getItemCount());
         updateAttachmentsVisibility();
@@ -652,13 +652,13 @@ public class GalleryActivity extends MetadataActivity implements
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
     private void removeMediaFiles() {
-        List<MediaFile> selected = adapter.getSelectedMediaFiles();
+        List<VaultFile> selected = adapter.getSelectedMediaFiles();
         presenter.deleteMediaFiles(selected);
         clearSelection();
     }
 
     private void startShareActivity(boolean includeMetadata) {
-        List<MediaFile> selected = adapter.getSelectedMediaFiles();
+        List<VaultFile> selected = adapter.getSelectedMediaFiles();
 
         if (selected.size() > 1) {
             MediaFileHandler.startShareActivity(this, selected, includeMetadata);
@@ -669,10 +669,10 @@ public class GalleryActivity extends MetadataActivity implements
 
     private void shareMediaFiles() {
         boolean metadata = false;
-        List<MediaFile> selected = adapter.getSelectedMediaFiles();
+        List<VaultFile> selected = adapter.getSelectedMediaFiles();
 
-        for (MediaFile mediaFile : selected) {
-            if (mediaFile.getMetadata() != null) {
+        for (VaultFile mediaFile : selected) {
+            if (mediaFile.metadata != null) {
                 metadata = true;
                 break;
             }
@@ -687,10 +687,10 @@ public class GalleryActivity extends MetadataActivity implements
 
     private void uploadMediaFiles() {
         boolean metadata = false;
-        List<MediaFile> selected = adapter.getSelectedMediaFiles();
+        List<VaultFile> selected = adapter.getSelectedMediaFiles();
 
-        for (MediaFile mediaFile : selected) {
-            if (mediaFile.getMetadata() != null) {
+        for (VaultFile mediaFile : selected) {
+            if (mediaFile.metadata != null) {
                 metadata = true;
                 break;
             }
@@ -700,7 +700,7 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onMediaSelected(MediaFile mediaFile) {
+    public void onMediaSelected(VaultFile mediaFile) {
         addAttachmentsAttachment(mediaFile);
         updateAttachmentsVisibility();
     }

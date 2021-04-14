@@ -3,6 +3,8 @@ package rs.readahead.washington.mobile.mvp.presenter;
 import androidx.annotation.Nullable;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.Metadata;
+import com.hzontal.tella_vault.VaultFile;
 
 import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -13,8 +15,6 @@ import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
-import rs.readahead.washington.mobile.domain.entity.Metadata;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
 
 
@@ -34,18 +34,13 @@ public class MetadataAttacher implements IMetadataAttachPresenterContract.IPrese
         disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMapSingle(new Function<DataSource, SingleSource<MediaFile>>() {
+                .flatMapSingle(new Function<DataSource, SingleSource<VaultFile>>() {
                     @Override
-                    public SingleSource<MediaFile> apply(DataSource dataSource) throws Exception {
+                    public SingleSource<VaultFile> apply(DataSource dataSource) throws Exception {
                         return dataSource.attachMetadata(mediaFileId, metadata);
                     }
                 })
-                .subscribe(new Consumer<MediaFile>() {
-                    @Override
-                    public void accept(MediaFile mediaFile) throws Exception {
-                        view.onMetadataAttached(mediaFileId, metadata);
-                    }
-                }, new Consumer<Throwable>() {
+                .subscribe(mediaFile -> view.onMetadataAttached(mediaFileId, metadata), new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         FirebaseCrashlytics.getInstance().recordException(throwable);
