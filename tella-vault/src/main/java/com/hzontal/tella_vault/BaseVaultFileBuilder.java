@@ -2,9 +2,6 @@ package com.hzontal.tella_vault;
 
 import java.io.InputStream;
 
-import kotlin.Metadata;
-
-
 public abstract class BaseVaultFileBuilder<T extends BaseVaultFileBuilder<T, B>, B> {
     protected String id;
     protected VaultFile parent;
