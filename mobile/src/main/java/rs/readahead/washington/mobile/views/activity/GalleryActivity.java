@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.utils.MediaFile;
 
 import java.util.List;
 
@@ -43,19 +44,19 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.GalleryFlingTopEvent;
-import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
+import rs.readahead.washington.mobile.bus.event.vaultFileDeletedEvent;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
-import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
-import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository.Filter;
-import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository.Sort;
-import rs.readahead.washington.mobile.media.MediaFileHandler;
+import rs.readahead.washington.mobile.domain.repository.IvaultFileRecordRepository;
+import rs.readahead.washington.mobile.domain.repository.IvaultFileRecordRepository.Filter;
+import rs.readahead.washington.mobile.domain.repository.IvaultFileRecordRepository.Sort;
+import rs.readahead.washington.mobile.media.vaultFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IGalleryPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.GalleryPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulePresenter;
-import rs.readahead.washington.mobile.presentation.entity.MediaFileThumbnailData;
+import rs.readahead.washington.mobile.presentation.entity.vaultFileThumbnailData;
 import rs.readahead.washington.mobile.presentation.entity.ViewType;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.DialogsUtil;
@@ -152,21 +153,21 @@ public class GalleryActivity extends MetadataActivity implements
                 }
             }
         });
-        disposables.wire(MediaFileDeletedEvent.class, new EventObserver<MediaFileDeletedEvent>() {
+        disposables.wire(vaultFileDeletedEvent.class, new EventObserver<vaultFileDeletedEvent>() {
             @Override
-            public void onNext(MediaFileDeletedEvent event) {
-                onMediaFilesDeleted(1);
+            public void onNext(vaultFileDeletedEvent event) {
+                onvaultFilesDeleted(1);
             }
         });
 
         adapter = new GalleryRecycleViewAdapter(this, this,
-                new MediaFileHandler(keyDataSource), R.layout.card_gallery_attachment_media_file);
+                new vaultFileHandler(keyDataSource), R.layout.card_gallery_attachment_media_file);
         final RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 3);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(adapter);
 
         attachmentsAdapter = new AttachmentsRecycleViewAdapter(this, this,
-                new MediaFileHandler(keyDataSource), type);
+                new vaultFileHandler(keyDataSource), type);
         attachmentsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         attachmentsRecyclerView.setLayoutManager(attachmentsLayoutManager);
         attachmentsRecyclerView.setAdapter(attachmentsAdapter);
@@ -229,7 +230,7 @@ public class GalleryActivity extends MetadataActivity implements
             }
 
             if (id == R.id.menu_item_share) {
-                shareMediaFiles();
+                sharevaultFiles();
                 return true;
             }
 
@@ -239,7 +240,7 @@ public class GalleryActivity extends MetadataActivity implements
             }
 
             if (id == R.id.menu_item_tu && numOfTUServers > 0) {
-                uploadMediaFiles();
+                uploadvaultFiles();
                 return true;
             }
 
@@ -322,9 +323,9 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    void exportMediaFiles() {
-        List<MediaFile> selected = adapter.getSelectedMediaFiles();
-        presenter.exportMediaFiles(selected);
+    void exportvaultFiles() {
+        List<vaultFile> selected = adapter.getSelectedvaultFiles();
+        presenter.exportvaultFiles(selected);
     }
 
     @OnPermissionDenied({Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO})
@@ -384,7 +385,7 @@ public class GalleryActivity extends MetadataActivity implements
 
     @OnClick(R.id.fab_button)
     public void importMedia() {
-        MediaFileHandler.startSelectMediaActivity(this, "image/*",
+        vaultFileHandler.startSelectMediaActivity(this, "image/*",
                 new String[]{"image/*", "video/mp4"}, C.IMPORT_MEDIA);
     }
 
@@ -441,9 +442,9 @@ public class GalleryActivity extends MetadataActivity implements
 
     @Override
     public void uploadOnServer(TellaUploadServer server, boolean metadata) {
-        List<MediaFile> selected = adapter.getSelectedMediaFiles();
+        List<VaultFile> selected = adapter.getSelectedvaultFiles();
 
-        uploadPresenter.scheduleUploadMediaFilesWithPriority(selected, server.getId(), metadata);
+        uploadPresenter.scheduleUploadvaultFilesWithPriority(selected, server.getId(), metadata);
     }
 
     @Override
@@ -465,8 +466,8 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onMediaImported(VaultFile mediaFile, MediaFileThumbnailData thumbnailData) {
-        presenter.addNewMediaFile(mediaFile, thumbnailData);
+    public void onMediaImported(VaultFile vaultFile, vaultFileThumbnailData thumbnailData) {
+        presenter.addNewvaultFile(vaultFile, thumbnailData);
     }
 
     @Override
@@ -489,24 +490,24 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onMediaFilesAdded(MediaFile mediaFile) {
+    public void onvaultFilesAdded(VaultFile vaultFile) {
         showToast(R.string.gallery_toast_file_imported_from_device);
         presenter.getFiles(filter, sort);
     }
 
     @Override
-    public void onMediaFilesAddingError(Throwable error) {
+    public void onvaultFilesAddingError(Throwable error) {
         Timber.d(error, getClass().getName());
     }
 
     @Override
-    public void onMediaFilesDeleted(int num) {
+    public void onvaultFilesDeleted(int num) {
         showToast(getResources().getQuantityString(R.plurals.gallery_toast_files_deleted, num, num));
         presenter.getFiles(filter, sort);
     }
 
     @Override
-    public void onMediaFilesDeletionError(Throwable throwable) {
+    public void onvaultFilesDeletionError(Throwable throwable) {
         showToast(R.string.gallery_toast_fail_deleting_files);
     }
 
@@ -544,8 +545,8 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     /*@Override
-    public void onTmpVideoEncrypted(MediaFileBundle mediaFileBundle) {
-        presenter.addNewMediaFile(mediaFileBundle.getMediaFile(), mediaFileBundle.getMediaFileThumbnailData());
+    public void onTmpVideoEncrypted(vaultFileBundle vaultFileBundle) {
+        presenter.addNewvaultFile(vaultFileBundle.getvaultFile(), vaultFileBundle.getvaultFileThumbnailData());
     }*/
 
     /*@Override
@@ -559,47 +560,47 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onMediaFilesUploadScheduled() {
+    public void onvaultFilesUploadScheduled() {
         clearSelection();
         Intent intent = new Intent(this, UploadsActivity.class);
         startActivity(intent);
     }
 
     @Override
-    public void onMediaFilesUploadScheduleError(Throwable throwable) {
+    public void onvaultFilesUploadScheduleError(Throwable throwable) {
 
     }
 
     @Override
-    public void onGetMediaFilesSuccess(List<RawFile> mediaFiles) {
+    public void onGetvaultFilesSuccess(List<RawFile> vaultFiles) {
 
     }
 
     @Override
-    public void onGetMediaFilesError(Throwable error) {
+    public void onGetvaultFilesError(Throwable error) {
 
     }
 
     @Override
-    public void playMedia(MediaFile mediaFile) {
-        if (mediaFile.getType() == MediaFile.Type.IMAGE) {
+    public void playMedia(VaultFile vaultFile) {
+        if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
             Intent intent = new Intent(this, PhotoViewerActivity.class);
-            intent.putExtra(PhotoViewerActivity.VIEW_PHOTO, mediaFile);
+            intent.putExtra(PhotoViewerActivity.VIEW_PHOTO, vaultFile);
             startActivity(intent);
-        } else if (mediaFile.getType() == MediaFile.Type.AUDIO) {
+        } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
             Intent intent = new Intent(this, AudioPlayActivity.class);
-            intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, mediaFile.getId());
+            intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, vaultFile.id);
             startActivity(intent);
-        } else if (mediaFile.getType() == MediaFile.Type.VIDEO) {
+        } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
             Intent intent = new Intent(this, VideoViewerActivity.class);
-            intent.putExtra(VideoViewerActivity.VIEW_VIDEO, mediaFile);
+            intent.putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile);
             startActivity(intent);
         }
     }
 
     @Override
     public void onRemoveAttachment(VaultFile vaultFile) {
-        adapter.deselectMediaFile(mediaFile);
+        adapter.deselectMediaFile(vaultFile);
         onSelectionNumChange(attachmentsAdapter.getItemCount());
         updateAttachmentsVisibility();
     }
@@ -643,7 +644,7 @@ public class GalleryActivity extends MetadataActivity implements
         alertDialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.gallery_delete_files_dialog_title)
                 .setMessage(R.string.gallery_delete_files_dialog_expl)
-                .setPositiveButton(R.string.action_delete, (dialog, which) -> removeMediaFiles())
+                .setPositiveButton(R.string.action_delete, (dialog, which) -> removevaultFiles())
                 .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
                 })
                 .setCancelable(true)
@@ -651,7 +652,7 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void removeMediaFiles() {
+    private void removevaultFiles() {
         List<VaultFile> selected = adapter.getSelectedMediaFiles();
         presenter.deleteMediaFiles(selected);
         clearSelection();
@@ -661,18 +662,18 @@ public class GalleryActivity extends MetadataActivity implements
         List<VaultFile> selected = adapter.getSelectedMediaFiles();
 
         if (selected.size() > 1) {
-            MediaFileHandler.startShareActivity(this, selected, includeMetadata);
+            vaultFileHandler.startShareActivity(this, selected, includeMetadata);
         } else {
-            MediaFileHandler.startShareActivity(this, selected.get(0), includeMetadata);
+            vaultFileHandler.startShareActivity(this, selected.get(0), includeMetadata);
         }
     }
 
-    private void shareMediaFiles() {
+    private void sharevaultFiles() {
         boolean metadata = false;
         List<VaultFile> selected = adapter.getSelectedMediaFiles();
 
-        for (VaultFile mediaFile : selected) {
-            if (mediaFile.metadata != null) {
+        for (VaultFile vaultFile : selected) {
+            if (vaultFile.metadata != null) {
                 metadata = true;
                 break;
             }
@@ -685,12 +686,12 @@ public class GalleryActivity extends MetadataActivity implements
         }
     }
 
-    private void uploadMediaFiles() {
+    private void uploadvaultFiles() {
         boolean metadata = false;
         List<VaultFile> selected = adapter.getSelectedMediaFiles();
 
-        for (VaultFile mediaFile : selected) {
-            if (mediaFile.metadata != null) {
+        for (VaultFile vaultFile : selected) {
+            if (vaultFile.metadata != null) {
                 metadata = true;
                 break;
             }
@@ -700,14 +701,14 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onMediaSelected(VaultFile mediaFile) {
-        addAttachmentsAttachment(mediaFile);
+    public void onMediaSelected(VaultFile vaultFile) {
+        addAttachmentsAttachment(vaultFile);
         updateAttachmentsVisibility();
     }
 
     @Override
-    public void onMediaDeselected(MediaFile mediaFile) {
-        attachmentsAdapter.removeAttachment(mediaFile);
+    public void onMediaDeselected(VaultFile vaultFile) {
+        attachmentsAdapter.removeAttachment(vaultFile);
         updateAttachmentsVisibility();
     }
 
@@ -748,12 +749,12 @@ public class GalleryActivity extends MetadataActivity implements
         }
     }
 
-    private void addAttachmentsAttachment(MediaFile mediaFile) {
-        if (sort == IMediaFileRecordRepository.Sort.NEWEST) {
-            attachmentsAdapter.prependAttachment(mediaFile);
+    private void addAttachmentsAttachment(VaultFile vaultFile) {
+        if (sort == IvaultFileRecordRepository.Sort.NEWEST) {
+            attachmentsAdapter.prependAttachment(vaultFile);
             attachmentsLayoutManager.scrollToPosition(0);
         } else {
-            attachmentsAdapter.appendAttachment(mediaFile);
+            attachmentsAdapter.appendAttachment(vaultFile);
             attachmentsLayoutManager.scrollToPosition(attachmentsAdapter.getItemCount());
         }
     }

@@ -12,6 +12,8 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.utils.MediaFile;
 
 import java.util.List;
 
@@ -20,11 +22,9 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.MediaFileUrlLoader;
-import rs.readahead.washington.mobile.presentation.entity.MediaFileLoaderModel;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.util.ViewUtil;
 
@@ -78,20 +78,20 @@ public class UploadSection extends Section {
 
     @Override
     public void onBindItemViewHolder(final RecyclerView.ViewHolder vholder, int position) {
-        final MediaFile mediaFile = instances.get(position).getMediaFile();
+        final VaultFile vaultFile = instances.get(position).getMediaFile();
         UploadViewHolder itemHolder = (UploadViewHolder) vholder;
 
-        if (mediaFile == null) {
+        if (vaultFile == null) {
             itemHolder.mediaView.setImageDrawable(context.getResources().getDrawable(R.drawable.uploaded_empty_file));
             itemHolder.mediaView.setAlpha((float) 0.5);
-        } else if (mediaFile.getType() == MediaFile.Type.IMAGE || mediaFile.getType() == MediaFile.Type.VIDEO) {
+        } else if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType) || (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType))) {
             Glide.with(itemHolder.mediaView.getContext())
                     .using(glideLoader)
                     .load(new MediaFileLoaderModel(mediaFile, MediaFileLoaderModel.LoadType.THUMBNAIL))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(itemHolder.mediaView);
-        } else if (mediaFile.getType() == MediaFile.Type.AUDIO) {
+        } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
             Drawable drawable = VectorDrawableCompat.create(context.getResources(),
                     R.drawable.ic_mic_gray, null);
             itemHolder.mediaView.setImageDrawable(drawable);
@@ -104,7 +104,7 @@ public class UploadSection extends Section {
         }
 
         itemHolder.itemView.setOnClickListener(v ->
-                uploadSectionListener.onItemRootViewClicked(mediaFile)
+                uploadSectionListener.onItemRootViewClicked(vaultFile)
         );
     }
 
@@ -180,6 +180,6 @@ public class UploadSection extends Section {
 
     public interface UploadSectionListener {
         void showUploadInformation(final long set);
-        void onItemRootViewClicked(MediaFile mediaFile);
+        void onItemRootViewClicked(VaultFile vaultFile);
     }
 }

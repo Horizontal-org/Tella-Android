@@ -9,6 +9,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.VaultFile;
 
 import net.sqlcipher.database.SQLiteDatabase;
@@ -464,10 +465,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             values.put(D.C_ANONYMOUS, vaultFile.anonymous ? 1 : 0);
             values.put(D.C_HASH, vaultFile.hash);
 
-            mediaFile.setId(database.insert(D.T_MEDIA_FILE, null, values));
+            vaultFile.id = database.insert(D.T_MEDIA_FILE, null, values);
 
             if (!MediaFileThumbnailData.NONE.equals(thumbnailData)) {
-                updateThumbnail(mediaFile.getId(), thumbnailData);
+                updateThumbnail(vaultFile.id, thumbnailData);
             }
 
             database.setTransactionSuccessful();
@@ -853,8 +854,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
 
-    private List<MediaFile> getMediaFilesFromDb(long[] ids) {
-        List<MediaFile> mediaFiles = new ArrayList<>();
+    private List<VaultFile> getMediaFilesFromDb(long[] ids) {
+        List<VaultFile> mediaFiles = new ArrayList<>();
         Cursor cursor = null;
 
         if (ids.length == 0) {
@@ -901,7 +902,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return mediaFiles;
     }
 
-    private MediaFile getMediaFileFromDb(long id) throws NotFountException {
+    private VaultFile getMediaFileFromDb(long id) throws NotFountException {
         Cursor cursor = null;
 
         try {
@@ -938,7 +939,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
 
-    private MediaFile getMediaFileFromDb(String uid) throws NotFountException {
+    private VaultFile getMediaFileFromDb(String uid) throws NotFountException {
         Cursor cursor = null;
 
         try {
@@ -975,7 +976,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         throw new NotFountException();
     }
 
-    private MediaFile getLastMediaFileFromDb() throws NotFountException {
+    private VaultFile getLastMediaFileFromDb() throws NotFountException {
         Cursor cursor = null;
 
         try {
@@ -1011,21 +1012,21 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         throw new NotFountException();
     }
 
-    private MediaFile deleteMediaFileFromDb(MediaFile mediaFile, IMediaFileDeleter deleter) throws NotFountException {
+    private VaultFile deleteMediaFileFromDb(VaultFile vaultFile, IMediaFileDeleter deleter) throws NotFountException {
         try {
             database.beginTransaction();
 
-            int count = database.delete(D.T_MEDIA_FILE, D.C_ID + " = ?", new String[]{Long.toString(mediaFile.getId())});
+            int count = database.delete(D.T_MEDIA_FILE, D.C_ID + " = ?", new String[]{Long.toString(vaultFile.id)});
 
             if (count != 1) {
                 throw new NotFountException();
             }
 
-            if (deleter.delete(mediaFile)) {
+            if (deleter.delete(vaultFile)) {
                 database.setTransactionSuccessful();
             }
 
-            return mediaFile;
+            return vaultFile;
         } finally {
             database.endTransaction();
         }
@@ -1054,23 +1055,23 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }
     }
 
-    private void scheduleUploadMediaFilesWithPriorityDb(List<MediaFile> mediaFiles, long uploadServerId, boolean metadata) {
+    private void scheduleUploadMediaFilesWithPriorityDb(List<VaultFile> vaultFiles, long uploadServerId, boolean metadata) {
         try {
 
             long set = calculateCurrentFileUploadSet();
             int retries = getMaxRetries(); //make sure that these files are taken first from the set
             int manualUpload = 1;
 
-            for (MediaFile mediaFile : mediaFiles) {
+            for (VaultFile vaultFile : vaultFiles) {
                 ContentValues values = new ContentValues();
-                values.put(D.C_MEDIA_FILE_ID, mediaFile.getId());
+                values.put(D.C_MEDIA_FILE_ID, vaultFile.id);
                 values.put(D.C_UPDATED, Util.currentTimestamp());
                 values.put(D.C_CREATED, Util.currentTimestamp());
                 values.put(D.C_STATUS, UploadStatus.SCHEDULED.ordinal());
                 values.put(D.C_INCLUDE_METADATA, metadata ? 1 : 0);
                 values.put(D.C_MANUAL_UPLOAD, manualUpload);
                 values.put(D.C_SERVER_ID, uploadServerId );
-                values.put(D.C_SIZE, mediaFile.getSize());
+                values.put(D.C_SIZE, vaultFile.size);
                 values.put(D.C_SET, set);
                 values.put(D.C_RETRY_COUNT, retries);
 
@@ -1085,7 +1086,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }
     }
 
-    private void scheduleUploadMediaFilesDb(List<MediaFile> mediaFiles) {
+    private void scheduleUploadMediaFilesDb(List<VaultFile> vaultFiles) {
         try {
 
             long set = calculateCurrentFileUploadSet();
@@ -1093,16 +1094,16 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             int metadata = Preferences.isMetadataAutoUpload()? 1 : 0;
             long uploadServerId = Preferences.getAutoUploadServerId();
 
-            for (MediaFile mediaFile : mediaFiles) {
+            for (VaultFile vaultFile : vaultFiles) {
                 ContentValues values = new ContentValues();
-                values.put(D.C_MEDIA_FILE_ID, mediaFile.getId());
+                values.put(D.C_MEDIA_FILE_ID, vaultFile.id);
                 values.put(D.C_UPDATED, Util.currentTimestamp());
                 values.put(D.C_CREATED, Util.currentTimestamp());
                 values.put(D.C_STATUS, UploadStatus.SCHEDULED.ordinal());
                 values.put(D.C_INCLUDE_METADATA, metadata);
                 values.put(D.C_MANUAL_UPLOAD, 0 );
                 values.put(D.C_SERVER_ID, uploadServerId );
-                values.put(D.C_SIZE, mediaFile.getSize());
+                values.put(D.C_SIZE, vaultFile.size);
                 values.put(D.C_SET, set);
 
                 database.insertWithOnConflict(
@@ -1206,7 +1207,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 new String[]{Long.toString(mediaFileId)});
     }
 
-    private MediaFile attachMediaFileMetadataDb(long mediaFileId, @Nullable Metadata metadata) throws NotFountException {
+    private VaultFile attachMediaFileMetadataDb(long mediaFileId, @Nullable Metadata metadata) throws NotFountException {
         ContentValues values = new ContentValues();
         values.put(D.C_METADATA, new GsonBuilder().create().toJson(new EntityMapper().transform(metadata)));
 
@@ -1487,7 +1488,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return null;
     }
 
-    private MediaFileThumbnailData updateThumbnail(long mediaFileId, MediaFileThumbnailData thumbnailData) {
+    private MediaFileThumbnailData updateThumbnail(String mediaFileId, MediaFileThumbnailData thumbnailData) {
         if (thumbnailData.getData() == null) {
             return thumbnailData;
         }
@@ -1498,7 +1499,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             database.update(D.T_MEDIA_FILE, values,
                     D.C_ID + "= ?",
-                    new String[]{Long.toString(mediaFileId)});
+                    new String[]{mediaFileId});
         } catch (Exception e) {
             Timber.d(e, getClass().getName());
         }
@@ -1506,9 +1507,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return thumbnailData;
     }
 
-    private List<MediaFile> getMediaFiles(final Filter filter, final Sort sort) {
+    private List<VaultFile> getMediaFiles(final Filter filter, final Sort sort) {
         Cursor cursor = null;
-        List<MediaFile> mediaFiles = new ArrayList<>();
+        List<VaultFile> mediaFiles = new ArrayList<>();
 
         String order = (sort == Sort.OLDEST ? "ASC" : "DESC");
 
@@ -1535,9 +1536,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             cursor = database.rawQuery(query, null);
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                MediaFile mediaFile = cursorToMediaFile(cursor);
-                if (mediaFileFilter(mediaFile, filter)) {
-                    mediaFiles.add(mediaFile);
+                 VaultFile vaultFile = cursorToMediaFile(cursor);
+                if (mediaFileFilter(vaultFile, filter)) {
+                    mediaFiles.add(vaultFile);
                 }
             }
         } catch (Exception e) {
@@ -1551,9 +1552,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return mediaFiles;
     }
 
-    private List<MediaFile> getUploadMediaFilesDB(final UploadStatus status) {
+    private List<VaultFile> getUploadMediaFilesDB(final UploadStatus status) {
         Cursor cursor = null;
-        List<MediaFile> mediaFiles = new ArrayList<>();
+        List<VaultFile> vaultFiles = new ArrayList<>();
 
         try {
             final String query = SQLiteQueryBuilder.buildQueryString(
@@ -1579,8 +1580,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             );
             cursor = database.rawQuery(query, null);
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                MediaFile mediaFile = cursorToMediaFile(cursor);
-                mediaFiles.add(mediaFile);
+                VaultFile vaultFile = cursorToMediaFile(cursor);
+                vaultFiles.add(vaultFile);
             }
 
         } catch (Exception e) {
@@ -1591,7 +1592,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             }
         }
 
-        return mediaFiles;
+        return vaultFiles;
     }
 
     private List<FileUploadBundle> getFileUploadBundlesDB(final UploadStatus status) {
@@ -1973,22 +1974,25 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return formMediaFile;
     }
 
-    private MediaFile cursorToMediaFile(Cursor cursor) {
+    //TODO CHECK UID INSIDE VAULT KEEP IT OR NOT ?
+    private VaultFile cursorToMediaFile(Cursor cursor) {
         String path = cursor.getString(cursor.getColumnIndexOrThrow(D.C_PATH));
         String uid = cursor.getString(cursor.getColumnIndexOrThrow(D.C_UID));
         String fileName = cursor.getString(cursor.getColumnIndexOrThrow(D.C_FILE_NAME));
         MetadataEntity metadataEntity = new Gson().fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_METADATA)), MetadataEntity.class);
 
-        MediaFile mediaFile = new MediaFile(path, uid, fileName, FileUtil.getMediaFileType(fileName));
-        mediaFile.setId(cursor.getLong(cursor.getColumnIndexOrThrow(D.A_MEDIA_FILE_ID)));
-        mediaFile.setMetadata(new EntityMapper().transform(metadataEntity));
-        mediaFile.setCreated(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_CREATED)));
-        mediaFile.setDuration(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_DURATION)));
-        mediaFile.setSize(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_SIZE)));
-        mediaFile.setAnonymous(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_ANONYMOUS)) == 1);
-        mediaFile.setHash(cursor.getString(cursor.getColumnIndexOrThrow(D.C_HASH)));
+        VaultFile vaultFile = new VaultFile();
+        vaultFile.id = cursor.getString(cursor.getColumnIndexOrThrow(D.C_UID));
+        vaultFile.path = path;
+        vaultFile.name = fileName;
+        vaultFile.metadata = new EntityMapper().transform(metadataEntity);
+        vaultFile.created = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_CREATED));
+        vaultFile.duration = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_DURATION));
+        vaultFile.size = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_SIZE));
+        vaultFile.anonymous = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_ANONYMOUS)) == 1;
+        vaultFile.hash = cursor.getString(cursor.getColumnIndexOrThrow(D.C_HASH));
 
-        return mediaFile;
+        return vaultFile;
     }
 
     private FileUploadBundle cursorToFileUplodBundle(Cursor cursor) {
@@ -1997,16 +2001,18 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         String fileName = cursor.getString(cursor.getColumnIndexOrThrow(D.C_FILE_NAME));
         MetadataEntity metadataEntity = new Gson().fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_METADATA)), MetadataEntity.class);
 
-        MediaFile mediaFile = new MediaFile(path, uid, fileName, FileUtil.getMediaFileType(fileName));
-        mediaFile.setId(cursor.getLong(cursor.getColumnIndexOrThrow(D.A_MEDIA_FILE_ID)));
-        mediaFile.setMetadata(new EntityMapper().transform(metadataEntity));
-        mediaFile.setCreated(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_CREATED)));
-        mediaFile.setDuration(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_DURATION)));
-        mediaFile.setSize(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_SIZE)));
-        mediaFile.setAnonymous(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_ANONYMOUS)) == 1);
-        mediaFile.setHash(cursor.getString(cursor.getColumnIndexOrThrow(D.C_HASH)));
+        VaultFile vaultFile = new VaultFile();
+        vaultFile.id = cursor.getString(cursor.getColumnIndexOrThrow(D.C_UID));
+        vaultFile.path = path;
+        vaultFile.name = fileName;
+        vaultFile.metadata = new EntityMapper().transform(metadataEntity);
+        vaultFile.created = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_CREATED));
+        vaultFile.duration = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_DURATION));
+        vaultFile.size = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_SIZE));
+        vaultFile.anonymous = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_ANONYMOUS)) == 1;
+        vaultFile.hash = cursor.getString(cursor.getColumnIndexOrThrow(D.C_HASH));
 
-        FileUploadBundle fileUploadBundle = new FileUploadBundle(mediaFile);
+        FileUploadBundle fileUploadBundle = new FileUploadBundle(vaultFile);
 
         fileUploadBundle.setIncludeMetadata(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_INCLUDE_METADATA)) == 1);
         fileUploadBundle.setManualUpload(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_MANUAL_UPLOAD)) == 1);

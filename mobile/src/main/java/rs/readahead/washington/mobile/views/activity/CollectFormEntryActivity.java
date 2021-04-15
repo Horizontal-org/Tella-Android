@@ -49,8 +49,6 @@ import rs.readahead.washington.mobile.bus.event.GPSProviderRequiredEvent;
 import rs.readahead.washington.mobile.bus.event.LocationPermissionRequiredEvent;
 import rs.readahead.washington.mobile.bus.event.MediaFileBinaryWidgetCleared;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
-import rs.readahead.washington.mobile.domain.entity.MyLocation;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaPartResponse;

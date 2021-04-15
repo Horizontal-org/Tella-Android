@@ -27,6 +27,7 @@ import com.google.android.exoplayer2.ui.PlaybackControlView;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.hzontal.tella_vault.VaultFile;
 
 import butterknife.ButterKnife;
 import permissions.dispatcher.NeedsPermission;
@@ -38,7 +39,6 @@ import permissions.dispatcher.RuntimePermissions;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.exo.ExoEventListener;
 import rs.readahead.washington.mobile.media.exo.MediaFileDataSourceFactory;
@@ -72,7 +72,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
     private int resumeWindow;
     private long resumePosition;
 
-    private MediaFile mediaFile;
+    private VaultFile vaultFile;
     private Toolbar toolbar;
     private boolean actionsDisabled = false;
     private MediaFileViewerPresenter presenter;
@@ -177,8 +177,8 @@ public class VideoViewerActivity extends BaseLockActivity implements
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void exportMediaFile() {
-        if (mediaFile != null && presenter != null) {
-            presenter.exportNewMediaFile(mediaFile);
+        if (vaultFile != null && presenter != null) {
+            presenter.exportNewMediaFile(vaultFile);
         }
     }
 
@@ -251,11 +251,11 @@ public class VideoViewerActivity extends BaseLockActivity implements
     }
 
     private void shareMediaFile() {
-        if (mediaFile == null) {
+        if (vaultFile == null) {
             return;
         }
 
-        if (mediaFile.getMetadata() != null) {
+        if (vaultFile.metadata != null) {
             ShareDialogFragment.newInstance().show(getSupportFragmentManager(), ShareDialogFragment.TAG);
         } else {
             startShareActivity(false);
@@ -263,11 +263,11 @@ public class VideoViewerActivity extends BaseLockActivity implements
     }
 
     private void startShareActivity(boolean includeMetadata) {
-        if (mediaFile == null) {
+        if (vaultFile == null) {
             return;
         }
 
-        MediaFileHandler.startShareActivity(this, mediaFile, includeMetadata);
+        MediaFileHandler.startShareActivity(this, vaultFile, includeMetadata);
     }
 
     private void dismissShareDialog() {
@@ -294,16 +294,16 @@ public class VideoViewerActivity extends BaseLockActivity implements
 
         if (needNewPlayer || needRetrySource) {
             if (getIntent().hasExtra(VIEW_VIDEO) && getIntent().getExtras() != null) {
-                MediaFile mediaFile = (MediaFile) getIntent().getExtras().get(VIEW_VIDEO);
-                if (mediaFile != null) {
-                    this.mediaFile = mediaFile;
-                    setupMetadataMenuItem(mediaFile.getMetadata() != null);
+                VaultFile vaultFile = (VaultFile) getIntent().getExtras().get(VIEW_VIDEO);
+                if (vaultFile != null) {
+                    this.vaultFile = vaultFile;
+                    setupMetadataMenuItem(vaultFile.metadata != null);
                 }
             }
 
-            MediaFileDataSourceFactory mediaFileDataSourceFactory = new MediaFileDataSourceFactory(this, mediaFile, null);
+            MediaFileDataSourceFactory mediaFileDataSourceFactory = new MediaFileDataSourceFactory(this, vaultFile, null);
             MediaSource mediaSource = new ExtractorMediaSource(
-                    MediaFileHandler.getEncryptedUri(this, mediaFile),
+                    MediaFileHandler.getEncryptedUri(this, vaultFile),
                     mediaFileDataSourceFactory,
                     new DefaultExtractorsFactory(),
                     null, null);
@@ -352,8 +352,8 @@ public class VideoViewerActivity extends BaseLockActivity implements
         if (!actionsDisabled) {
             toolbar.inflateMenu(R.menu.video_view_menu);
 
-            if (mediaFile != null) {
-                setupMetadataMenuItem(mediaFile.getMetadata() != null);
+            if (vaultFile != null) {
+                setupMetadataMenuItem(vaultFile.metadata != null);
             }
 
             toolbar.getMenu().findItem(R.id.menu_item_share).setOnMenuItemClickListener(item -> {
@@ -362,14 +362,14 @@ public class VideoViewerActivity extends BaseLockActivity implements
             });
 
             toolbar.getMenu().findItem(R.id.menu_item_export).setOnMenuItemClickListener(item -> {
-                if (mediaFile != null) {
+                if (vaultFile != null) {
                     showExportDialog();
                 }
                 return false;
             });
 
             toolbar.getMenu().findItem(R.id.menu_item_delete).setOnMenuItemClickListener(item -> {
-                if (mediaFile != null) {
+                if (vaultFile != null) {
                     showDeleteMediaDialog();
                 }
                 return false;
@@ -382,8 +382,8 @@ public class VideoViewerActivity extends BaseLockActivity implements
                 .setTitle(R.string.gallery_delete_files_dialog_title)
                 .setMessage(R.string.gallery_delete_files_dialog_expl)
                 .setPositiveButton(R.string.action_delete, (dialog, which) -> {
-                    if (mediaFile != null && presenter != null) {
-                        presenter.deleteMediaFiles(mediaFile);
+                    if (vaultFile != null && presenter != null) {
+                        presenter.deleteMediaFiles(vaultFile);
                     }
                 })
                 .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
@@ -394,7 +394,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
 
     private void showMetadata() {
         Intent viewMetadata = new Intent(this, MetadataViewerActivity.class);
-        viewMetadata.putExtra(VIEW_METADATA, mediaFile);
+        viewMetadata.putExtra(VIEW_METADATA, vaultFile);
         startActivity(viewMetadata);
     }
 

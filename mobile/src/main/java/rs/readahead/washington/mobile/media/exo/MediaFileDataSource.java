@@ -8,18 +8,18 @@ import androidx.annotation.Nullable;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.TransferListener;
+import com.hzontal.tella_vault.VaultFile;
 
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 
 
 class MediaFileDataSource implements DataSource {
     private final Context context;
-    private final MediaFile mediaFile;
+    private final VaultFile vaultFile;
     private final @Nullable TransferListener listener;
 
     private Uri uri;
@@ -27,10 +27,10 @@ class MediaFileDataSource implements DataSource {
     private DataSpec dataSpec = new DataSpec(uri);
 
     MediaFileDataSource(@NonNull Context context,
-                        @NonNull MediaFile mediaFile,
+                        @NonNull VaultFile vaultFile,
                         @Nullable TransferListener listener) {
         this.context = context;
-        this.mediaFile = mediaFile;
+        this.vaultFile = vaultFile;
         this.listener = listener;
     }
 
@@ -43,7 +43,7 @@ class MediaFileDataSource implements DataSource {
     public long open(DataSpec dataSpec) throws IOException {
         uri = dataSpec.uri;
 
-        inputSteam = MediaFileHandler.getStream(context, mediaFile);
+        inputSteam = MediaFileHandler.getStream(context, vaultFile);
 
         if (inputSteam == null) {
             close();
@@ -60,7 +60,7 @@ class MediaFileDataSource implements DataSource {
             throw new IOException("InputStream skip failed");
         }
 
-        long size = MediaFileHandler.getSize(context, mediaFile);
+        long size = MediaFileHandler.getSize(context, vaultFile);
 
         if (size - dataSpec.position <= 0) {
             close();

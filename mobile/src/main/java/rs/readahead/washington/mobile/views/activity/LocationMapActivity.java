@@ -23,11 +23,11 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.hzontal.tella_vault.MyLocation;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.domain.entity.MyLocation;
 import rs.readahead.washington.mobile.mvp.contract.ILocationGettingPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.LocationGettingPresenter;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;

@@ -19,6 +19,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.Metadata;
+import com.hzontal.tella_vault.VaultFile;
 import com.otaliastudios.cameraview.CameraException;
 import com.otaliastudios.cameraview.CameraListener;
 import com.otaliastudios.cameraview.CameraOptions;
@@ -47,8 +49,6 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
-import rs.readahead.washington.mobile.domain.entity.Metadata;
 import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.entity.TempMediaFile;
 import rs.readahead.washington.mobile.media.MediaFileBundle;
@@ -60,7 +60,7 @@ import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePrese
 import rs.readahead.washington.mobile.mvp.presenter.CameraPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.MetadataAttacher;
 import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulePresenter;
-import rs.readahead.washington.mobile.presentation.entity.MediaFileLoaderModel;
+import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.VideoResolutionManager;
@@ -117,11 +117,11 @@ public class CameraActivity extends MetadataActivity implements
     private ProgressDialog progressDialog;
     private OrientationEventListener mOrientationEventListener;
     private int zoomLevel = 0;
-    private MediaFile capturedMediaFile;
+    private VaultFile capturedMediaFile;
     private AlertDialog videoQualityDialog;
     private VideoResolutionManager videoResolutionManager;
     private long lastClickTime = System.currentTimeMillis();
-    private RequestManager.ImageModelRequest<MediaFileLoaderModel> glide;
+    private RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -226,7 +226,7 @@ public class CameraActivity extends MetadataActivity implements
 
     @Override
     public void onAddSuccess(MediaFileBundle bundle) {
-        capturedMediaFile = bundle.getMediaFile();
+        capturedMediaFile = bundle.getVaultFile();
         if (intentMode != IntentMode.COLLECT) {
             Glide.with(this).load(bundle.getMediaFileThumbnailData().getData()).into(previewView);
         }
@@ -242,7 +242,7 @@ public class CameraActivity extends MetadataActivity implements
     public void onMetadataAttached(long mediaFileId, @Nullable Metadata metadata) {
         Intent data = new Intent();
         if (intentMode == IntentMode.COLLECT) {
-            capturedMediaFile.setMetadata(metadata);
+            capturedMediaFile.metadata = metadata;
             data.putExtra(MEDIA_FILE_KEY, capturedMediaFile);
         } else {
             data.putExtra(C.CAPTURED_MEDIA_FILE_ID, mediaFileId);
@@ -278,9 +278,9 @@ public class CameraActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onLastMediaFileSuccess(MediaFile mediaFile) {
+    public void onLastMediaFileSuccess(VaultFile vaultFile) {
         if (intentMode != IntentMode.COLLECT) {
-            glide.load(new MediaFileLoaderModel(mediaFile, MediaFileLoaderModel.LoadType.THUMBNAIL))
+            glide.load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(previewView);
@@ -673,9 +673,9 @@ public class CameraActivity extends MetadataActivity implements
         }
     }
 
-    private void scheduleFileUpload(MediaFile mediaFile) {
+    private void scheduleFileUpload(VaultFile vaultFile) {
         if (Preferences.isAutoUploadEnabled()) {
-            List<MediaFile> upload = Collections.singletonList(mediaFile);
+            List<VaultFile> upload = Collections.singletonList(vaultFile);
             uploadPresenter.scheduleUploadMediaFiles(upload);
         } else {
             onMediaFilesUploadScheduled();

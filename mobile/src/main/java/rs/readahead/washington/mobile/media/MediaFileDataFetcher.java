@@ -8,7 +8,6 @@ import com.bumptech.glide.load.data.DataFetcher;
 import java.io.IOException;
 import java.io.InputStream;
 
-import rs.readahead.washington.mobile.presentation.entity.MediaFileLoaderModel;
 import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 
 

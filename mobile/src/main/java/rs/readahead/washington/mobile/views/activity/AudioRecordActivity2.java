@@ -24,6 +24,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
+import com.hzontal.tella_vault.Metadata;
+import com.hzontal.tella_vault.VaultFile;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -36,8 +39,6 @@ import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
-import rs.readahead.washington.mobile.domain.entity.Metadata;
 import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.media.AudioRecorder;
@@ -83,7 +84,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     private long lastUpdateTime;
 
     // handling MediaFile
-    private MediaFile handlingMediaFile;
+    private VaultFile handlingMediaFile;
 
     // recording
     private AudioRecorder audioRecorder;
@@ -260,8 +261,8 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     }
 
     @Override
-    public void onAddSuccess(MediaFile mediaFile) {
-        attachMediaFileMetadata(mediaFile, metadataAttacher);
+    public void onAddSuccess(VaultFile vaultFile) {
+        attachMediaFileMetadata(vaultFile, metadataAttacher);
         showToast(String.format(getString(R.string.recorder_toast_recording_saved), getString(R.string.app_name)));
     }
 
@@ -352,7 +353,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void onRecordingStopped(MediaFile mediaFile) {
+    private void onRecordingStopped(VaultFile vaultFile) {
         if (MediaFile.NONE.equals(mediaFile)) {
             handlingMediaFile = null;
 
@@ -499,9 +500,9 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         }
     }
 
-    private void scheduleFileUpload(MediaFile mediaFile) {
+    private void scheduleFileUpload(VaultFile vaultFile) {
         if (Preferences.isAutoUploadEnabled()) {
-            List<MediaFile> upload = Collections.singletonList(mediaFile);
+            List<VaultFile> upload = Collections.singletonList(vaultFile);
             uploadPresenter.scheduleUploadMediaFiles(upload);
         } else {
             onMediaFilesUploadScheduled();

@@ -13,6 +13,6 @@ public class IMetadataAttachPresenterContract {
     }
 
     public interface IPresenter extends IBasePresenter {
-        void attachMetadata(long mediaFileId, @Nullable Metadata metadata);
+        void attachMetadata(String mediaFileId, @Nullable Metadata metadata);
     }
 }

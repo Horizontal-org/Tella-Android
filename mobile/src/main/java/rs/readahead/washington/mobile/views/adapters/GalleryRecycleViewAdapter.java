@@ -25,10 +25,8 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.media.MediaFileUrlLoader;
-import rs.readahead.washington.mobile.presentation.entity.MediaFileLoaderModel;
+import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.views.interfaces.IGalleryMediaHandler;
@@ -36,7 +34,7 @@ import rs.readahead.washington.mobile.views.interfaces.IGalleryMediaHandler;
 
 public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecycleViewAdapter.ViewHolder> {
     private List<VaultFile> files = new ArrayList<>();
-    private VaultFileLoader glideLoader;
+    private VaultFileUrlLoader glideLoader;
     private IGalleryMediaHandler galleryMediaHandler;
     private Set<VaultFile> selected;
     private int cardLayoutId;
@@ -53,7 +51,7 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
                                      MediaFileHandler mediaFileHandler, @LayoutRes int cardLayoutId,
                                      boolean selectable,
                                      boolean singleSelection) {
-        this.glideLoader = new VaultFileLoaderModel(context.getApplicationContext(), mediaFileHandler);
+        this.glideLoader = new VaultFileUrlLoader(context.getApplicationContext(), mediaFileHandler);
         this.galleryMediaHandler = galleryMediaHandler;
         this.selected = new LinkedHashSet<>();
         this.cardLayoutId = cardLayoutId;

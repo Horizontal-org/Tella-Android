@@ -15,7 +15,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 
 import androidx.annotation.NonNull;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.util.C;

@@ -17,10 +17,11 @@ import java.util.concurrent.Executors;
 
 import androidx.annotation.Nullable;
 
+import com.hzontal.tella_vault.VaultFile;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.util.StringUtils;
 import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
@@ -62,9 +63,9 @@ public class AudioRecorder {
         cancelled = false;
     }
 
-    public Observable<MediaFile> startRecording() {
+    public Observable<VaultFile> startRecording() {
         return Observable.fromCallable(() -> {
-            MediaFile mediaFile = MediaFile.newAac();
+            VaultFile vaultFile = MediaFile.newAac();
 
             DigestOutputStream outputStream = MediaFileHandler.getOutputStream(context, mediaFile);
 
