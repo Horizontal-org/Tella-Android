@@ -13,7 +13,7 @@ public class ICameraPresenterContract {
     public interface IView {
         void onAddingStart();
         void onAddingEnd();
-        void onAddSuccess(MediaFileBundle bundle);
+        void onAddSuccess(VaultFile vaultFile);
         void onAddError(Throwable error);
         void rotateViews(int rotation);
         void onLastMediaFileSuccess(VaultFile mediaFile);

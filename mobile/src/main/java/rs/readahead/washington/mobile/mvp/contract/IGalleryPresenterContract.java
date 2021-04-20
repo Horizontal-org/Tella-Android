@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.mvp.contract;
 import android.content.Context;
 import android.net.Uri;
 
+import com.hzontal.tella_vault.IVaultDatabase;
 import com.hzontal.tella_vault.VaultFile;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class IGalleryPresenterContract {
         void onGetFilesEnd();
         void onGetFilesSuccess(List<VaultFile> files);
         void onGetFilesError(Throwable error);
-        void onMediaImported(VaultFile vaultFile, MediaFileThumbnailData thumbnailData);
+        void onMediaImported(VaultFile vaultFile);
         void onImportError(Throwable error);
         void onImportStarted();
         void onImportEnded();
@@ -37,10 +38,10 @@ public class IGalleryPresenterContract {
     }
 
     public interface IPresenter extends IBasePresenter {
-        void getFiles(IMediaFileRecordRepository.Filter filter, IMediaFileRecordRepository.Sort sort);
+        void getFiles(final IVaultDatabase.Filter filter, final IVaultDatabase.Sort sort, IVaultDatabase.Limits limits);
         void importImage(Uri uri);
         void importVideo(Uri uri);
-        void addNewMediaFile(VaultFile vaultFile, MediaFileThumbnailData thumbnailData);
+        void addNewMediaFile(VaultFile vaultFile);
         void deleteMediaFiles(List<VaultFile> mediaFiles);
         void exportMediaFiles(List<VaultFile> mediaFiles);
         void countTUServers();

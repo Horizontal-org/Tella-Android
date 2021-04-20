@@ -63,7 +63,6 @@ import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.provider.EncryptedFileProvider;
 import rs.readahead.washington.mobile.domain.entity.MetadataMediaFile;
-import rs.readahead.washington.mobile.presentation.entity.MediaFileThumbnailData;
 import rs.readahead.washington.mobile.presentation.entity.mapper.PublicMetadataMapper;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.FileUtil;
@@ -313,13 +312,10 @@ public class MediaFileHandler {
         InputStream is = null;
         DigestOutputStream os = null;
 
-        MediaFileBundle mediaFileBundle = new MediaFileBundle();
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         VaultFile vaultFile = new VaultFile();
 
         try {
-           // mediaFileBundle.setMediaFile(mediaFile);
-
             vaultFile.anonymous = false; // todo: mp4 can have exif, check if it does
 
             vis = new FileInputStream(video);
@@ -331,12 +327,11 @@ public class MediaFileHandler {
 
             // thumbnail
             byte[] thumb = getThumbByteArray(retriever.getFrameAtTime());
-            if (thumb != null) {
-                mediaFileBundle.setMediaFileThumbnailData(new MediaFileThumbnailData(thumb));
-            }
-
             is = new FileInputStream(video);
             os = MediaFileHandler.getOutputStream(context, vaultFile);
+            if (thumb != null){
+                vaultFile.thumb = thumb;
+            }
 
             if (os == null) throw new NullPointerException();
 
@@ -648,31 +643,28 @@ public class MediaFileHandler {
         return MessageDigest.getInstance("SHA-256");
     }
 
-    public Observable<VaultFile> registerMediaFileBundle(final MediaFileBundle mediaFileBundle) {
+    public Observable<VaultFile> registerMediaFileBundle(final VaultFile vaultFile){
         return keyDataSource.getDataSource()
-                .flatMap((Function<DataSource, ObservableSource<MediaFileBundle>>) dataSource ->
-                        dataSource.registerMediaFileBundle(mediaFileBundle).toObservable());
+                .flatMap((Function<DataSource, ObservableSource<VaultFile>>) dataSource ->
+                        dataSource.registerMediaFileBundle(vaultFile).toObservable());
     }
 
-    public Observable<VaultFile> registerMediaFile(final MediaFileBundle mediaFileBundle) {
-        return registerMediaFile(mediaFileBundle.getMediaFile(), mediaFileBundle.getMediaFileThumbnailData());
-    }
 
-    public Observable<MediaFile> registerMediaFile(final MediaFile mediaFile, final MediaFileThumbnailData thumbnailData) {
+    public Observable<MediaFile> registerMediaFile(final VaultFile vaultFile) {
         return keyDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<MediaFile>>) dataSource ->
-                dataSource.registerMediaFile(mediaFile, thumbnailData).toObservable());
+                dataSource.registerMediaFile(vaultFile).toObservable());
     }
 
     @Nullable
-    InputStream getThumbnailStream(Context context, final MediaFile mediaFile) {
-        MediaFileThumbnailData thumbnailData = null;
+    InputStream getThumbnailStream(Context context, final VaultFile vaultFile) {
+        VaultFile thumbnailData = null;
         InputStream inputStream = null;
 
         try {
-            thumbnailData = getThumbnailData(mediaFile);
+            thumbnailData = getThumbnailData(vaultFile);
         } catch (NoSuchElementException e) {
             try {
-                thumbnailData = updateThumb(context, mediaFile);
+                thumbnailData = updateThumb(context, vaultFile);
             } catch (Exception e1) {
                 Timber.d(e1, getClass().getName());
             }
@@ -681,27 +673,27 @@ public class MediaFileHandler {
         }
 
         if (thumbnailData != null) {
-            inputStream = new ByteArrayInputStream(thumbnailData.getData());
+            inputStream = new ByteArrayInputStream(vaultFile.thumb);
         }
 
         return inputStream;
     }
 
-    private MediaFileThumbnailData getThumbnailData(final VaultFile vaultFile) throws NoSuchElementException {
+    private VaultFile getThumbnailData(final VaultFile vaultFile) throws NoSuchElementException {
         return keyDataSource
                 .getDataSource()
-                .flatMapMaybe((Function<DataSource, MaybeSource<MediaFileThumbnailData>>) dataSource ->
-                        dataSource.getMediaFileThumbnail(mediaFile.getUid())).blockingFirst();
+                .flatMapMaybe((Function<DataSource, MaybeSource<VaultFile>>) dataSource ->
+                        dataSource.getMediaFileThumbnail(vaultFile.id)).blockingFirst();
     }
 
-    private MediaFileThumbnailData updateThumb(final Context context, final VaultFile vaultFile) {
+    private VaultFile updateThumb(final Context context, final VaultFile vaultFile) {
         return Observable
-                .fromCallable(() -> createThumb(context, mediaFile))
+                .fromCallable(() -> createThumb(context, vaultFile))
                 .subscribeOn(Schedulers.from(executor)) // creating thumbs in single thread..
-                .flatMap((Function<MediaFileThumbnailData, ObservableSource<MediaFileThumbnailData>>) mediaFileThumbnailData ->
+                .flatMap((Function<VaultFile, ObservableSource<VaultFile>>) mediaFileThumbnailData ->
                         keyDataSource.getDataSource()
-                                .flatMapSingle((Function<DataSource, SingleSource<MediaFileThumbnailData>>) dataSource ->
-                                        dataSource.updateMediaFileThumbnail(mediaFile.getId(), mediaFileThumbnailData)))
+                                .flatMapSingle((Function<DataSource, SingleSource<VaultFile>>) dataSource ->
+                                        dataSource.updateMediaFileThumbnail(vaultFile)))
                 .blockingFirst();
     }
 
@@ -713,7 +705,7 @@ public class MediaFileHandler {
             byte[] key;
 
             if ((key = MyApplication.getMainKeyHolder().get().getKey().getEncoded()) == null) {
-                return MediaFileThumbnailData.NONE;
+                return null;
             }
 
 
@@ -722,19 +714,20 @@ public class MediaFileHandler {
 
             Bitmap thumb;
 
-            if (mediaFile.getType() == MediaFile.Type.IMAGE) {
+            if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
                 thumb = ThumbnailUtils.extractThumbnail(bm, bm.getWidth() / 10, bm.getHeight() / 10);
             } else {
-                return MediaFileThumbnailData.NONE;
+                return null;
             }
-
+            VaultFile vaultFile1 = new VaultFile();
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             thumb.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            return new MediaFileThumbnailData(stream.toByteArray());
+            vaultFile1.thumb = stream.toByteArray();
+            return vaultFile1;
         } catch (IOException | LifecycleMainKey.MainKeyUnavailableException e) {
             Timber.d(e, getClass().getName());
         }
 
-        return MediaFileThumbnailData.NONE;
+        return null;
     }
 }
