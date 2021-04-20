@@ -6,14 +6,12 @@ import com.hzontal.tella_vault.VaultFile;
 
 import java.util.List;
 
-import rs.readahead.washington.mobile.domain.entity.RawFile;
-
 public class ITellaFileUploadSchedulePresenterContract {
     public interface IView {
         Context getContext();
         void onMediaFilesUploadScheduled();
         void onMediaFilesUploadScheduleError(Throwable throwable);
-        void onGetMediaFilesSuccess(List<RawFile> mediaFiles);
+        void onGetMediaFilesSuccess(List<VaultFile> mediaFiles);
         void onGetMediaFilesError(Throwable error);
     }
 

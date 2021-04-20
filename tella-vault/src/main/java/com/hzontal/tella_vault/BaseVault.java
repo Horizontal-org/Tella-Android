@@ -31,8 +31,6 @@ public abstract class BaseVault {
     protected final Config config;
     protected final static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
-    // todo: should we also inject FilterInputStream and FilterOutputStream so we can create Vaults with
-    // todo: different encryption stream or no encryption at all?
     public BaseVault(Context context, LifecycleMainKey mainKeyHolder, Config config)
             throws VaultException, LifecycleMainKey.MainKeyUnavailableException {
         this(mainKeyHolder, config, VaultDataSource.getInstance(context, mainKeyHolder.get().getKey().getEncoded()));
@@ -98,6 +96,16 @@ public abstract class BaseVault {
      */
     protected List<VaultFile> baseList(VaultFile parent) {
         return database.list(parent, null, null, null); // todo: design filter and sort that will handle use-cases
+    }
+
+
+    /**
+     * List all files in path.
+     * @param parent Parent VaultFile or null for root listing.
+     * @return List of vault files.
+     */
+    protected List<VaultFile> baseList(VaultFile parent, IVaultDatabase.Filter filter, IVaultDatabase.Sort sort, IVaultDatabase.Limits limits) {
+        return database.list(parent, filter, sort, limits); // todo: design filter and sort that will handle use-cases
     }
 
     /**

@@ -53,7 +53,7 @@ import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.entity.TempMediaFile;
 import rs.readahead.washington.mobile.media.MediaFileBundle;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.media.MediaFileUrlLoader;
+import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.mvp.contract.ICameraPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePresenterContract;
@@ -148,7 +148,7 @@ public class CameraActivity extends MetadataActivity implements
         // CacheWordDataSource cacheWordDataSource = new CacheWordDataSource(getContext());
         KeyDataSource keyDataSource = MyApplication.getKeyDataSource();
         MediaFileHandler mediaFileHandler = new MediaFileHandler(keyDataSource);
-        MediaFileUrlLoader glideLoader = new MediaFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
+        VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
         glide = Glide.with(getContext()).using(glideLoader);
 
         setupCameraView();
@@ -312,7 +312,7 @@ public class CameraActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onGetMediaFilesSuccess(List<RawFile> mediaFiles) {
+    public void onGetMediaFilesSuccess(List<VaultFile> mediaFiles) {
 
     }
 

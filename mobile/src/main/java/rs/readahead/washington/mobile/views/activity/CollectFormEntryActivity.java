@@ -21,6 +21,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
+import com.hzontal.tella_vault.MyLocation;
+import com.hzontal.tella_vault.VaultFile;
+
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -272,7 +275,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
         switch (requestCode) {
             case C.MEDIA_FILE_ID:
-                MediaFile mediaFile = (MediaFile) data.getSerializableExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY);
+                VaultFile mediaFile = (VaultFile) data.getSerializableExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY);
 
                 if (currentScreenView instanceof CollectFormView) {
                     CollectFormView cfv = (CollectFormView) currentScreenView;
@@ -282,7 +285,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
                         if (filename != null) {
                             formParser.setWidgetMediaFile(filename, mediaFile);
-                            formParser.setTellaMetadataFields(cfv, mediaFile.getMetadata());
+                            formParser.setTellaMetadataFields(cfv, mediaFile.metadata);
                         } else {
                             Timber.e("Binary data not set on waiting widget");
                         }
@@ -741,7 +744,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onGetFilesSuccess(List<MediaFile> files) {
+    public void onGetFilesSuccess(List<VaultFile> files) {
 
     }
 
@@ -751,7 +754,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onMediaFileAdded(MediaFile mediaFile) {
+    public void onMediaFileAdded(VaultFile mediaFile) {
         onActivityResult(C.MEDIA_FILE_ID, RESULT_OK, new Intent().putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, mediaFile));
     }
 
