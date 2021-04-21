@@ -6,8 +6,6 @@ import com.hzontal.tella_vault.VaultFile;
 
 import java.io.File;
 
-import rs.readahead.washington.mobile.media.MediaFileBundle;
-
 
 public class ICameraPresenterContract {
     public interface IView {

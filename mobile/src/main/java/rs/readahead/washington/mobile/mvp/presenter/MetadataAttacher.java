@@ -30,7 +30,7 @@ public class MetadataAttacher implements IMetadataAttachPresenterContract.IPrese
     }
 
     @Override
-    public void attachMetadata(final long mediaFileId, @Nullable final Metadata metadata) {
+    public void attachMetadata(final String mediaFileId, @Nullable final Metadata metadata) {
         disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

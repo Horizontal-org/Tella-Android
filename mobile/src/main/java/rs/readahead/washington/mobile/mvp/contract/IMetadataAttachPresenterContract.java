@@ -7,7 +7,7 @@ import com.hzontal.tella_vault.Metadata;
 
 public class IMetadataAttachPresenterContract {
     public interface IView {
-        void onMetadataAttached(long mediaFileId, @Nullable Metadata metadata);
+        void onMetadataAttached(String mediaFileId, @Nullable Metadata metadata);
         void onMetadataAttachError(Throwable throwable);
         Context getContext();
     }

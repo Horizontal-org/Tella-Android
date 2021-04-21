@@ -18,7 +18,6 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
-import rs.readahead.washington.mobile.media.MediaFileBundle;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IAttachmentsPresenterContract;
 
@@ -65,8 +64,8 @@ public class AttachmentsPresenter implements IAttachmentsPresenterContract.IPres
     }
 
     @Override
-    public void attachNewEvidence(MediaFileBundle mediaFileBundle) {
-        disposables.add(mediaFileHandler.registerMediaFile(mediaFileBundle)
+    public void attachNewEvidence(VaultFile vaultFile) {
+        disposables.add(mediaFileHandler.registerMediaFile(vaultFile)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mediaFile -> {

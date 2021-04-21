@@ -6,9 +6,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import androidx.annotation.Nullable;
+
+import com.hzontal.tella_vault.VaultFile;
+
 import okhttp3.internal.http.UnrepeatableRequestBody;
 import rs.readahead.washington.mobile.domain.entity.IProgressListener;
-import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import timber.log.Timber;
 
@@ -20,7 +22,7 @@ public class SkippableMediaFileRequestBody extends MediaFileRequestBody implemen
     private long skip;
 
 
-    public SkippableMediaFileRequestBody(Context context, RawFile mediaFile, long skip, @Nullable IProgressListener progressListener) {
+    public SkippableMediaFileRequestBody(Context context, VaultFile mediaFile, long skip, @Nullable IProgressListener progressListener) {
         super(context, mediaFile, progressListener);
 
         this.skip = skip;
@@ -28,7 +30,7 @@ public class SkippableMediaFileRequestBody extends MediaFileRequestBody implemen
 
     @Override
     public long contentLength() {
-        return mediaFile.getSize() - skip;
+        return mediaFile.size - skip;
     }
 
     @Override

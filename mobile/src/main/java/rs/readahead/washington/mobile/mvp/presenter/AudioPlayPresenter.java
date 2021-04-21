@@ -1,5 +1,7 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
+import com.hzontal.tella_vault.VaultFile;
+
 import java.util.List;
 
 import io.reactivex.SingleSource;
@@ -31,7 +33,7 @@ public class AudioPlayPresenter implements
         disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMapSingle((Function<DataSource, SingleSource<List<MediaFile>>>) dataSource -> dataSource.getMediaFiles(new long[]{id}))
+                .flatMapSingle((Function<DataSource, SingleSource<List<VaultFile>>>) dataSource -> dataSource.getMediaFiles(new long[]{id}))
                 .subscribe(mediaFiles -> {
                     if (mediaFiles.size() != 1) {
                         view.onMediaFileError(new NotFountException());

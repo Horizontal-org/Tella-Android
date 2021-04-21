@@ -56,12 +56,13 @@ public class CameraPresenter implements ICameraPresenterContract.IPresenter {
     @Override
     public void addMp4Video(final File file) {
         disposables.add(Observable.fromCallable(() -> MediaFileHandler.saveMp4Video(view.getContext(), file))
-                .flatMap((Function<VaultFile, ObservableSource<VaultFile>>) bundle ->)
+                .flatMap((Function<VaultFile, ObservableSource<VaultFile>>) bundle ->
+                        mediaFileHandler.registerMediaFileBundle(bundle))
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> view.onAddingStart())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onAddingEnd())
-                .subscribe(vaultFile -> view.onAddSuccess(vaultFile), throwable -> {
+                .subscribe(bundle -> view.onAddSuccess(bundle), throwable -> {
                     FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onAddError(throwable);
                 })

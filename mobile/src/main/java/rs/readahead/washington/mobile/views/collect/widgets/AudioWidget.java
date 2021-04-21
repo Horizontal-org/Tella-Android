@@ -10,6 +10,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.utils.VaultUtils;
 
 import org.javarosa.form.api.FormEntryPrompt;
 
@@ -60,8 +62,8 @@ public class AudioWidget extends MediaFileBinaryWidget {
 
     @Override
     public String setBinaryData(@NonNull Object data) {
-        MediaFile mediaFile = (MediaFile) data;
-        setFilename(mediaFile.getFileName());
+        VaultFile vaultFile = (VaultFile) data;
+        setFilename(vaultFile.name);
         showPreview();
         return getFilename();
     }
@@ -108,7 +110,7 @@ public class AudioWidget extends MediaFileBinaryWidget {
             Activity activity = (Activity) getContext();
             FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
 
-            MediaFile mediaFile = getFilename() != null ? MediaFile.fromFilename(getFilename()) : MediaFile.NONE;
+            VaultFile mediaFile = getFilename() != null ? VaultUtils.INSTANCE.fromFilename(getFilename()) : null;
 
             activity.startActivityForResult(new Intent(getContext(), QuestionAttachmentActivity.class)
                             .putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, mediaFile)

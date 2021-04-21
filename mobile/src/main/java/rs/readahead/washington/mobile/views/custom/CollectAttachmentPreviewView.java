@@ -25,7 +25,7 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.media.MediaFileUrlLoader;
+import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.mvp.contract.ICollectAttachmentMediaFilePresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CollectAttachmentMediaFilePresenter;
 import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
@@ -76,7 +76,7 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
         ButterKnife.bind(this);
         KeyDataSource keyDataSource = MyApplication.getKeyDataSource();
         MediaFileHandler mediaFileHandler = new MediaFileHandler(keyDataSource);
-        MediaFileUrlLoader glideLoader = new MediaFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
+        VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
 
         glide = Glide.with(getContext()).using(glideLoader);
         presenter = new CollectAttachmentMediaFilePresenter(this);

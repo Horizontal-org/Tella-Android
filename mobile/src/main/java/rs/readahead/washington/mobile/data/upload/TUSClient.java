@@ -2,13 +2,13 @@ package rs.readahead.washington.mobile.data.upload;
 
 import android.content.Context;
 
-import java.net.URI;
-import java.net.UnknownHostException;
-import java.util.Locale;
-
 import androidx.annotation.NonNull;
 
 import com.hzontal.tella_vault.VaultFile;
+
+import java.net.URI;
+import java.net.UnknownHostException;
+import java.util.Locale;
 
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Emitter;
@@ -23,7 +23,6 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import rs.readahead.washington.mobile.BuildConfig;
 import rs.readahead.washington.mobile.data.http.HttpStatus;
 import rs.readahead.washington.mobile.data.repository.SkippableMediaFileRequestBody;
-import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
@@ -43,14 +42,14 @@ public class TUSClient {
         baseUrl = URI.create(url);
     }
 
-    public Flowable<UploadProgressInfo> upload(RawFile mediaFile) {
+    public Flowable<UploadProgressInfo> upload(VaultFile mediaFile) {
         return getStatus(mediaFile)
                 .flatMapPublisher(skipBytes -> appendFile(mediaFile, skipBytes))
                 .onErrorReturn(throwable -> mapThrowable(throwable, mediaFile));
     }
 
     public Single<UploadProgressInfo> check() {
-        VaultFile vaultFile = VaultFile.NONE;
+        VaultFile vaultFile = new VaultFile();
         vaultFile.name = "test";
 
         return getStatus(vaultFile)
@@ -58,9 +57,9 @@ public class TUSClient {
                 .onErrorReturn(throwable -> mapThrowable(throwable, vaultFile));
     }
 
-    private Single<Long> getStatus(RawFile mediaFile) {
+    private Single<Long> getStatus(VaultFile vaultFile) {
         final Request request = new Request.Builder()
-                .url(getUploadUrl(mediaFile.getFileName()))
+                .url(getUploadUrl(vaultFile.name))
                 .head()
                 .build();
 
@@ -81,19 +80,19 @@ public class TUSClient {
         });
     }
 
-    private Flowable<UploadProgressInfo> appendFile(RawFile mediaFile, long skipBytes) {
+    private Flowable<UploadProgressInfo> appendFile(VaultFile vaultFile, long skipBytes) {
         return Flowable.create(emitter -> {
             try {
-                final long size = mediaFile.getSize();
-                final String fileName = mediaFile.getFileName();
+                final long size = vaultFile.size;
+                final String fileName = vaultFile.name;
                 final UploadEmitter uploadEmitter = new UploadEmitter();
 
-                emitter.onNext(new UploadProgressInfo(mediaFile, skipBytes, UploadProgressInfo.Status.STARTED));
+                emitter.onNext(new UploadProgressInfo(vaultFile, skipBytes, UploadProgressInfo.Status.STARTED));
 
                 final Request appendRequest = new Request.Builder()
                         .url(getUploadUrl(fileName))
-                        .put(new SkippableMediaFileRequestBody(context, mediaFile, skipBytes,
-                                (current, total) -> uploadEmitter.emit(emitter, mediaFile, skipBytes + current, size)))
+                        .put(new SkippableMediaFileRequestBody(context, vaultFile, skipBytes,
+                                (current, total) -> uploadEmitter.emit(emitter, vaultFile, skipBytes + current, size)))
                         .build();
 
                 Response response = okHttpClient.newCall(appendRequest).execute();
@@ -116,7 +115,7 @@ public class TUSClient {
                     return;
                 }
 
-                emitter.onNext(new UploadProgressInfo(mediaFile, size, UploadProgressInfo.Status.FINISHED));
+                emitter.onNext(new UploadProgressInfo(vaultFile, size, UploadProgressInfo.Status.FINISHED));
 
                 emitter.onComplete();
             } catch (Exception e) {
@@ -155,7 +154,7 @@ public class TUSClient {
         return baseUrl.resolve("/").resolve(name).toString();
     }
 
-    private UploadProgressInfo mapThrowable(Throwable throwable, RawFile mediaFile) {
+    private UploadProgressInfo mapThrowable(Throwable throwable, VaultFile vaultFile) {
         Timber.d(throwable);
 
         UploadProgressInfo.Status status = UploadProgressInfo.Status.ERROR;
@@ -165,7 +164,7 @@ public class TUSClient {
             status = UploadProgressInfo.Status.UNKNOWN_HOST;
         }
 
-        return new UploadProgressInfo(mediaFile, 0, status);
+        return new UploadProgressInfo(vaultFile, 0, status);
     }
 
     private UploadProgressInfo.Status toStatus(int code) {
@@ -193,7 +192,7 @@ public class TUSClient {
         private static final long REFRESH_TIME_MS = 500;
         private long time;
 
-        void emit(Emitter<UploadProgressInfo> emitter, RawFile file, long current, long total) {
+        void emit(Emitter<UploadProgressInfo> emitter, VaultFile file, long current, long total) {
             long now = Util.currentTimestamp();
 
             if (now - time > REFRESH_TIME_MS) {

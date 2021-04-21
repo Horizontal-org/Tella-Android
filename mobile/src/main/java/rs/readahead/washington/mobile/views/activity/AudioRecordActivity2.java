@@ -13,11 +13,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -26,6 +21,11 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.VaultFile;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,7 +39,6 @@ import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
-import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.media.AudioRecorder;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
@@ -281,7 +280,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     }
 
     @Override
-    public void onMetadataAttached(long mediaFileId, @Nullable Metadata metadata) {
+    public void onMetadataAttached(String mediaFileId, @Nullable Metadata metadata) {
         Intent intent = new Intent();
 
         if (mode == Mode.COLLECT) {
@@ -332,7 +331,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     }
 
     @Override
-    public void onGetMediaFilesSuccess(List<RawFile> mediaFiles) {
+    public void onGetMediaFilesSuccess(List<VaultFile> mediaFiles) {
 
     }
 
@@ -354,7 +353,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
     private void onRecordingStopped(VaultFile vaultFile) {
-        if (MediaFile.NONE.equals(mediaFile)) {
+        if (vaultFile == null) {
             handlingMediaFile = null;
 
             disableStop();
@@ -362,8 +361,8 @@ public class AudioRecordActivity2 extends MetadataActivity implements
             enableRecord();
 
         } else {
-            handlingMediaFile = mediaFile;
-            handlingMediaFile.setSize(MediaFileHandler.getSize(getContext(), mediaFile));
+            handlingMediaFile = vaultFile;
+            handlingMediaFile.size = MediaFileHandler.getSize(getContext(), vaultFile);
 
             disableStop();
             enablePlay();

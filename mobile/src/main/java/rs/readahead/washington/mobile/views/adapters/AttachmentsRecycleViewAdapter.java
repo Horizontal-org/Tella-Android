@@ -65,7 +65,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
             holder.showImageInfo();
             Glide.with(holder.mediaView.getContext())
                     .using(glideLoader)
-                    .load(new VaultFileUrlLoader(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+                    .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(holder.mediaView);

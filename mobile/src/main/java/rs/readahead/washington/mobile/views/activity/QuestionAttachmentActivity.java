@@ -38,7 +38,6 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
-import rs.readahead.washington.mobile.media.MediaFileBundle;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IQuestionAttachmentPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.QuestionAttachmentPresenter;
@@ -307,8 +306,8 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onMediaFileImported(MediaFileBundle mediaFileBundle) {
-        presenter.addNewMediaFile(mediaFileBundle);
+    public void onMediaFileImported(VaultFile vaultFile) {
+        presenter.addNewMediaFile(vaultFile);
     }
 
     @Override
@@ -344,9 +343,9 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
 
         VaultFile vaultFile = (VaultFile) getIntent().getSerializableExtra(MEDIA_FILE_KEY);
 
-        if (!MediaFile.NONE.equals(mediaFile)) {
-            presenter.setAttachment(mediaFile);
-            galleryAdapter.selectMediaFile(mediaFile);
+        if (vaultFile != null ) {
+            presenter.setAttachment(vaultFile);
+            galleryAdapter.selectMediaFile(vaultFile);
             onSelectionNumChange(1);
         }
     }

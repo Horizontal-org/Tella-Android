@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.text.TextUtils;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hzontal.tella_vault.Metadata;
@@ -29,8 +31,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import androidx.annotation.Nullable;
-
 import io.reactivex.Completable;
 import io.reactivex.CompletableTransformer;
 import io.reactivex.Maybe;
@@ -45,7 +45,6 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.FileUploadBundle;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
-import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
@@ -62,8 +61,6 @@ import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordReposito
 import rs.readahead.washington.mobile.domain.repository.IServersRepository;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadServersRepository;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
-import rs.readahead.washington.mobile.media.MediaFileBundle;
-import rs.readahead.washington.mobile.presentation.entity.MediaFileThumbnailData;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
@@ -337,15 +334,15 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
-    public Completable logUploadedFile(final RawFile rawFile) {
+    public Completable logUploadedFile(final VaultFile vaultFile) {
         return Completable.fromCallable((Callable<Void>) () -> {
-            logUploadedFileDb(rawFile);
+            logUploadedFileDb(vaultFile);
             return null;
         }).compose(applyCompletableSchedulers());
     }
 
     @Override
-    public Completable setUploadStatus(final long mediaFileId, UploadStatus status, long uploadedSize, boolean retry) {
+    public Completable setUploadStatus(final String mediaFileId, UploadStatus status, long uploadedSize, boolean retry) {
         return Completable.fromCallable((Callable<Void>) () -> {
             setUploadStatusDb(mediaFileId, status, uploadedSize, retry);
             return null;
@@ -435,7 +432,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
-    public Single<VaultFile> attachMetadata(final long mediaFileId, final Metadata metadata) {
+    public Single<VaultFile> attachMetadata(final String mediaFileId, final Metadata metadata) {
         return Single.fromCallable(() -> attachMediaFileMetadataDb(mediaFileId, metadata))
                 .compose(applySchedulers());
     }
@@ -464,10 +461,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             values.put(D.C_ANONYMOUS, vaultFile.anonymous ? 1 : 0);
             values.put(D.C_HASH, vaultFile.hash);
 
-            vaultFile.id = database.insert(D.T_MEDIA_FILE, null, values);
+            vaultFile.id = Long.toString(database.insert(D.T_MEDIA_FILE, null, values));
 
-            if (!MediaFileThumbnailData.NONE.equals(thumbnailData)) {
-                updateThumbnail(vaultFile.id, thumbnailData);
+            if (!vaultFile.id.equals("-1")) {
+                updateThumbnail(vaultFile);
             }
 
             database.setTransactionSuccessful();
@@ -1031,16 +1028,16 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }
     }
 
-    private void logUploadedFileDb(RawFile file) {
+    private void logUploadedFileDb(VaultFile file) {
         try {
             long set = calculateCurrentFileUploadSet();
 
             ContentValues values = new ContentValues();
-            values.put(D.C_MEDIA_FILE_ID, file.getId());
+            values.put(D.C_MEDIA_FILE_ID, file.id);
             values.put(D.C_UPDATED, Util.currentTimestamp());
             values.put(D.C_CREATED, Util.currentTimestamp());
             values.put(D.C_STATUS, UploadStatus.UPLOADED.ordinal());
-            values.put(D.C_SIZE, file.getSize());
+            values.put(D.C_SIZE, file.size);
             values.put(D.C_SET, set);
 
             database.insertWithOnConflict(
@@ -1192,7 +1189,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return maxRetries + 1;
     }
 
-    private void setUploadStatusDb(long mediaFileId, UploadStatus status, long uploadedSize, boolean retry) {
+    private void setUploadStatusDb(String mediaFileId, UploadStatus status, long uploadedSize, boolean retry) {
         ContentValues values = new ContentValues();
         values.put(D.C_STATUS, status.ordinal());
         if (status == UploadStatus.UPLOADING || status == UploadStatus.UPLOADED) {
@@ -1203,15 +1200,15 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             values.put(D.C_RETRY_COUNT, D.C_RETRY_COUNT + 1);
         }
         database.update(D.T_MEDIA_FILE_UPLOAD, values, D.C_MEDIA_FILE_ID + " = ?",
-                new String[]{Long.toString(mediaFileId)});
+                new String[]{mediaFileId});
     }
 
-    private VaultFile attachMediaFileMetadataDb(long mediaFileId, @Nullable Metadata metadata) throws NotFountException {
+    private VaultFile attachMediaFileMetadataDb(String mediaFileId, @Nullable Metadata metadata) throws NotFountException {
         ContentValues values = new ContentValues();
         values.put(D.C_METADATA, new GsonBuilder().create().toJson(new EntityMapper().transform(metadata)));
 
         database.update(D.T_MEDIA_FILE, values, D.C_ID + " = ?",
-                new String[]{Long.toString(mediaFileId)});
+                new String[]{mediaFileId});
 
         return getMediaFileFromDb(mediaFileId);
     }
@@ -1729,7 +1726,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
                 List<FormMediaFile> mediaFiles = getFormInstanceMediaFilesFromDb(instance.getId());
                 for (FormMediaFile mediaFile : mediaFiles) {
-                    instance.setWidgetMediaFile(mediaFile.getUid(), mediaFile);
+                    instance.setWidgetMediaFile(mediaFile.id, mediaFile);
                 }
 
                 instances.add(instance);
@@ -2098,11 +2095,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     /*TODO: Are we going to re*/
-    private boolean mediaFileFilter(MediaFile mediaFile, Filter filter) {
+   /* private boolean mediaFileFilter(MediaFile mediaFile, Filter filter) {
         switch (filter) {
-            case ALL:
-                return true;
-
             case AUDIO:
                 return mediaFile.getType() == MediaFile.Type.AUDIO;
 
@@ -2121,5 +2115,5 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             default:
                 return true;
         }
-    }
+    }*/
 }

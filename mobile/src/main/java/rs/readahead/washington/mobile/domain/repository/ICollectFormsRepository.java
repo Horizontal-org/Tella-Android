@@ -31,5 +31,5 @@ public interface ICollectFormsRepository {
     Single<CollectFormInstance> saveInstance(CollectFormInstance instance);
     Single<CollectFormInstance> getInstance(long id);
     Completable deleteInstance(long id);
-    Single<VaultFile> attachMetadata(long mediaFileId, Metadata metadata);
+    Single<VaultFile> attachMetadata(String mediaFileId, Metadata metadata);
 }

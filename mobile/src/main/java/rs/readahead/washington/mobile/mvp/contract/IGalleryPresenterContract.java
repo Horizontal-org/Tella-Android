@@ -9,7 +9,6 @@ import com.hzontal.tella_vault.VaultFile;
 import java.util.List;
 
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
-import rs.readahead.washington.mobile.presentation.entity.MediaFileThumbnailData;
 
 
 public class IGalleryPresenterContract {
@@ -38,7 +37,7 @@ public class IGalleryPresenterContract {
     }
 
     public interface IPresenter extends IBasePresenter {
-        void getFiles(final IVaultDatabase.Filter filter, final IVaultDatabase.Sort sort, IVaultDatabase.Limits limits);
+        void getFiles(final IMediaFileRecordRepository.Filter filter, final IMediaFileRecordRepository.Sort sort);
         void importImage(Uri uri);
         void importVideo(Uri uri);
         void addNewMediaFile(VaultFile vaultFile);

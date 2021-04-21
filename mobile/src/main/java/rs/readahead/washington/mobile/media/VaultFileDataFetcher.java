@@ -10,8 +10,7 @@ import java.io.InputStream;
 
 import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 
-
-class MediaFileDataFetcher implements DataFetcher<InputStream> {
+public class VaultFileDataFetcher implements DataFetcher<InputStream> {
     private MediaFileHandler mediaFileHandler;
     private VaultFileLoaderModel model;
     private Context context;
@@ -19,7 +18,7 @@ class MediaFileDataFetcher implements DataFetcher<InputStream> {
     private InputStream inputStream;
 
 
-    MediaFileDataFetcher(Context context, MediaFileHandler mediaFileHandler, VaultFileLoaderModel vaultFileLoaderModel) {
+    VaultFileDataFetcher(Context context, MediaFileHandler mediaFileHandler, VaultFileLoaderModel vaultFileLoaderModel) {
         this.context = context;
         this.mediaFileHandler = mediaFileHandler;
         this.model = vaultFileLoaderModel;
@@ -53,7 +52,7 @@ class MediaFileDataFetcher implements DataFetcher<InputStream> {
 
     @Override
     public String getId() {
-        return model.getMediaFile().name;
+        return model.getMediaFile().id;
     }
 
     @Override

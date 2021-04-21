@@ -478,7 +478,7 @@ public class MainActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onMetadataAttached(long mediaFileId, @Nullable Metadata metadata) {
+    public void onMetadataAttached(String mediaFileId, @Nullable Metadata metadata) {
         Intent data = new Intent();
         data.putExtra(C.CAPTURED_MEDIA_FILE_ID, mediaFileId);
 

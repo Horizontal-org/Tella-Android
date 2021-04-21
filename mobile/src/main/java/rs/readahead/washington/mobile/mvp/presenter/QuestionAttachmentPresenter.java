@@ -19,7 +19,6 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
-import rs.readahead.washington.mobile.media.MediaFileBundle;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IQuestionAttachmentPresenterContract;
 
@@ -65,8 +64,8 @@ public class QuestionAttachmentPresenter implements IQuestionAttachmentPresenter
     }
 
     @Override
-    public void addNewMediaFile(MediaFileBundle mediaFileBundle) {
-        disposables.add(mediaFileHandler.registerMediaFile(mediaFileBundle)
+    public void addNewMediaFile(VaultFile vaultFile) {
+        disposables.add(mediaFileHandler.registerMediaFile(vaultFile)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mediaFile -> view.onMediaFileAdded(attachment), throwable -> view.onMediaFileAddError(throwable))

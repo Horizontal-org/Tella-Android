@@ -15,7 +15,6 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IAudioCapturePresenterContract;
-import rs.readahead.washington.mobile.presentation.entity.MediaFileThumbnailData;
 
 
 public class AudioCapturePresenter implements IAudioCapturePresenterContract.IPresenter {
@@ -33,7 +32,7 @@ public class AudioCapturePresenter implements IAudioCapturePresenterContract.IPr
 
     @Override
     public void addMediaFile(VaultFile vaultFile) { // audio recorder creates MediaFile's file already encrypted and in place
-        disposables.add(mediaFileHandler.registerMediaFile(vaultFile, MediaFileThumbnailData.NONE)
+        disposables.add(mediaFileHandler.registerMediaFile(vaultFile)
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> view.onAddingStart())
                 .observeOn(AndroidSchedulers.mainThread())

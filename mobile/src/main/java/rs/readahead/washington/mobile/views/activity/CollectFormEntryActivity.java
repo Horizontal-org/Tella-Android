@@ -62,7 +62,6 @@ import rs.readahead.washington.mobile.javarosa.FormUtils;
 import rs.readahead.washington.mobile.javarosa.IFormParserContract;
 import rs.readahead.washington.mobile.javarosa.IFormSaverContract;
 import rs.readahead.washington.mobile.javarosa.IFormSubmitterContract;
-import rs.readahead.washington.mobile.media.MediaFileBundle;
 import rs.readahead.washington.mobile.mvp.contract.IQuestionAttachmentPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.QuestionAttachmentPresenter;
 import rs.readahead.washington.mobile.util.C;
@@ -765,9 +764,9 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onMediaFileImported(MediaFileBundle mediaFileBundle) {
-        presenter.setAttachment(mediaFileBundle.getMediaFile());
-        presenter.addNewMediaFile(mediaFileBundle);
+    public void onMediaFileImported(VaultFile vaultFile) {
+        presenter.setAttachment(vaultFile);
+        presenter.addNewMediaFile(vaultFile);
     }
 
     @Override

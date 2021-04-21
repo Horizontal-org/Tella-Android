@@ -49,9 +49,6 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
-import rs.readahead.washington.mobile.domain.entity.RawFile;
-import rs.readahead.washington.mobile.domain.entity.TempMediaFile;
-import rs.readahead.washington.mobile.media.MediaFileBundle;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.mvp.contract.ICameraPresenterContract;
@@ -225,10 +222,10 @@ public class CameraActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onAddSuccess(MediaFileBundle bundle) {
-        capturedMediaFile = bundle.getVaultFile();
+    public void onAddSuccess(VaultFile bundle) {
+        capturedMediaFile = bundle;
         if (intentMode != IntentMode.COLLECT) {
-            Glide.with(this).load(bundle.getMediaFileThumbnailData().getData()).into(previewView);
+            Glide.with(this).load(bundle.thumb).into(previewView);
         }
         attachMediaFileMetadata(capturedMediaFile, metadataAttacher);
     }
@@ -239,7 +236,7 @@ public class CameraActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onMetadataAttached(long mediaFileId, @Nullable Metadata metadata) {
+    public void onMetadataAttached(String mediaFileId, @Nullable Metadata metadata) {
         Intent data = new Intent();
         if (intentMode == IntentMode.COLLECT) {
             capturedMediaFile.metadata = metadata;
@@ -340,7 +337,7 @@ public class CameraActivity extends MetadataActivity implements
             } else {
                 setVideoQuality();
                 lastClickTime = System.currentTimeMillis();
-                TempMediaFile tmp = TempMediaFile.newMp4();
+                VaultFile tmp = new VaultFile();
                 File file = MediaFileHandler.getTempFile(this, tmp);
                 cameraView.takeVideo(file);
                 captureButton.displayStopVideo();

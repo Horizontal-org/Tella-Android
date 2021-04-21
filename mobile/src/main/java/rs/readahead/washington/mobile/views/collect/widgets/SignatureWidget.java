@@ -19,6 +19,7 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.utils.VaultUtils;
 
 import org.javarosa.form.api.FormEntryPrompt;
 
@@ -26,7 +27,7 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.media.MediaFileUrlLoader;
+import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.mvp.contract.ICollectAttachmentMediaFilePresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CollectAttachmentMediaFilePresenter;
 import rs.readahead.washington.mobile.odk.FormController;
@@ -100,7 +101,7 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
 
         KeyDataSource keyDataSource = MyApplication.getKeyDataSource();
         MediaFileHandler mediaFileHandler = new MediaFileHandler(keyDataSource);
-        MediaFileUrlLoader glideLoader = new MediaFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
+        VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
 
         glide = Glide.with(getContext()).using(glideLoader);
         presenter = new CollectAttachmentMediaFilePresenter(this);
@@ -127,7 +128,7 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
             Activity activity = (Activity) getContext();
             FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
 
-            VaultFile mediaFile = getFilename() != null ? MediaFile.fromFilename(getFilename()) : MediaFile.NONE;
+            VaultFile mediaFile = getFilename() != null ? VaultUtils.INSTANCE.fromFilename(getFilename()) : null;
 
             activity.startActivityForResult(new Intent(getContext(), SignatureActivity.class)
                             .putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, mediaFile),
@@ -211,6 +212,6 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
     }
 
     private void showMediaFileInfo() {
-        fileSize.setText(String.format(getResources().getString(R.string.collect_form_meta_file_size), FileUtil.getFileSizeString()));
+        fileSize.setText(String.format(getResources().getString(R.string.collect_form_meta_file_size), FileUtil.getFileSizeString(vaultFile.size)));
     }
 }

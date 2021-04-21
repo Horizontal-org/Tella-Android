@@ -44,15 +44,15 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.GalleryFlingTopEvent;
+import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
-import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
+import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IGalleryPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.GalleryPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulePresenter;
-import rs.readahead.washington.mobile.presentation.entity.MediaFileThumbnailData;
 import rs.readahead.washington.mobile.presentation.entity.ViewType;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.DialogsUtil;
@@ -67,7 +67,7 @@ import rs.readahead.washington.mobile.views.interfaces.IAttachmentsMediaHandler;
 import rs.readahead.washington.mobile.views.interfaces.IGalleryMediaHandler;
 import timber.log.Timber;
 
-
+//TODO CHECK FILTER AND SORTS
 @RuntimePermissions
 public class GalleryActivity extends MetadataActivity implements
         TellaUploadDialogFragment.IServerMetadataChosenHandler,
@@ -108,7 +108,7 @@ public class GalleryActivity extends MetadataActivity implements
     private AlertDialog alertDialog;
     private ProgressDialog progressDialog;
     private IMediaFileRecordRepository.Filter filter = IMediaFileRecordRepository.Filter.ALL;
-    private Sort sort = IMediaFileRecordRepository.Sort.NEWEST;
+    private IMediaFileRecordRepository.Sort sort = IMediaFileRecordRepository.Sort.NEWEST;
     private ViewType type = ViewType.EDIT;
     private long numOfTUServers;
 
@@ -132,7 +132,7 @@ public class GalleryActivity extends MetadataActivity implements
         }
 
         if (getIntent().hasExtra(GALLERY_FILTER)) {
-            filter = Filter.valueOf(getIntent().getStringExtra(GALLERY_FILTER));
+           // filter = Filter.valueOf(getIntent().getStringExtra(GALLERY_FILTER));
         }
 
         setupToolbar();
@@ -149,21 +149,21 @@ public class GalleryActivity extends MetadataActivity implements
                 }
             }
         });
-        disposables.wire(vaultFileDeletedEvent.class, new EventObserver<vaultFileDeletedEvent>() {
+        disposables.wire(MediaFileDeletedEvent.class, new EventObserver<MediaFileDeletedEvent>() {
             @Override
-            public void onNext(vaultFileDeletedEvent event) {
-                onvaultFilesDeleted(1);
+            public void onNext(MediaFileDeletedEvent event) {
+                onMediaFilesDeleted(1);
             }
         });
 
         adapter = new GalleryRecycleViewAdapter(this, this,
-                new vaultFileHandler(keyDataSource), R.layout.card_gallery_attachment_media_file);
+                new MediaFileHandler(keyDataSource), R.layout.card_gallery_attachment_media_file);
         final RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 3);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(adapter);
 
         attachmentsAdapter = new AttachmentsRecycleViewAdapter(this, this,
-                new vaultFileHandler(keyDataSource), type);
+                new MediaFileHandler(keyDataSource), type);
         attachmentsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         attachmentsRecyclerView.setLayoutManager(attachmentsLayoutManager);
         attachmentsRecyclerView.setAdapter(attachmentsAdapter);
@@ -174,7 +174,7 @@ public class GalleryActivity extends MetadataActivity implements
             animator.setRemoveDuration(120);
         }
 
-        presenter.getFiles(filter, sort);
+        presenter.getFiles(filter, null);
     }
 
     private void setupToolbar() {
@@ -381,7 +381,7 @@ public class GalleryActivity extends MetadataActivity implements
 
     @OnClick(R.id.fab_button)
     public void importMedia() {
-        vaultFileHandler.startSelectMediaActivity(this, "image/*",
+        MediaFileHandler.startSelectMediaActivity(this, "image/*",
                 new String[]{"image/*", "video/mp4"}, C.IMPORT_MEDIA);
     }
 
@@ -431,7 +431,7 @@ public class GalleryActivity extends MetadataActivity implements
 
             case C.CAMERA_CAPTURE:
             case C.RECORDED_AUDIO:
-                presenter.getFiles(filter, sort);
+                presenter.getFiles(filter, null);
                 break;
         }
     }
@@ -462,8 +462,8 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onMediaImported(VaultFile vaultFile, MediaFileThumbnailData thumbnailData) {
-        presenter.addNewMediaFile(vaultFile, thumbnailData);
+    public void onMediaImported(VaultFile vaultFile) {
+        presenter.addNewMediaFile(vaultFile);
     }
 
     @Override
@@ -488,7 +488,7 @@ public class GalleryActivity extends MetadataActivity implements
     @Override
     public void onMediaFilesAdded(VaultFile vaultFile) {
         showToast(R.string.gallery_toast_file_imported_from_device);
-        presenter.getFiles(filter, sort);
+        presenter.getFiles(filter, null);
     }
 
     @Override
@@ -499,11 +499,11 @@ public class GalleryActivity extends MetadataActivity implements
     @Override
     public void onMediaFilesDeleted(int num) {
         showToast(getResources().getQuantityString(R.plurals.gallery_toast_files_deleted, num, num));
-        presenter.getFiles(filter, sort);
+        presenter.getFiles(filter, null);
     }
 
     @Override
-    public void onvaultFilesDeletionError(Throwable throwable) {
+    public void onMediaFilesDeletionError(Throwable throwable) {
         showToast(R.string.gallery_toast_fail_deleting_files);
     }
 
@@ -633,7 +633,7 @@ public class GalleryActivity extends MetadataActivity implements
 
     private void showExportDialog() {
         alertDialog = DialogsUtil.showExportMediaDialog(this, (dialog, which) ->
-                GalleryActivityPermissionsDispatcher.exportMediaFilesWithPermissionCheck(GalleryActivity.this));
+                GalleryActivityPermissionsDispatcher.exportvaultFilesWithPermissionCheck(GalleryActivity.this));
     }
 
     private void showDeleteMediaDialog() {
@@ -658,9 +658,9 @@ public class GalleryActivity extends MetadataActivity implements
         List<VaultFile> selected = adapter.getSelectedMediaFiles();
 
         if (selected.size() > 1) {
-            vaultFileHandler.startShareActivity(this, selected, includeMetadata);
+            MediaFileHandler.startShareActivity(this, selected, includeMetadata);
         } else {
-            vaultFileHandler.startShareActivity(this, selected.get(0), includeMetadata);
+            MediaFileHandler.startShareActivity(this, selected.get(0), includeMetadata);
         }
     }
 
@@ -746,7 +746,7 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     private void addAttachmentsAttachment(VaultFile vaultFile) {
-        if (sort == IvaultFileRecordRepository.Sort.NEWEST) {
+        if (sort == IMediaFileRecordRepository.Sort.NEWEST) {
             attachmentsAdapter.prependAttachment(vaultFile);
             attachmentsLayoutManager.scrollToPosition(0);
         } else {
@@ -774,23 +774,24 @@ public class GalleryActivity extends MetadataActivity implements
         popup.inflate(R.menu.gallery_sort_menu);
         popup.show();
 
-        setCheckedSort(sort, popup);
-        setCheckedFilter(filter, popup);
+       // setCheckedSort(sort, popup);
+       // setCheckedFilter(filter, popup);
 
         popup.setOnMenuItemClickListener(item -> {
             item.setChecked(true);
 
             if (item.getGroupId() == R.id.sort) {
-                sort = getGallerySort(item.getItemId());
+              //  sort = getGallerySort(item.getItemId());
             } else {
-                filter = getGalleryFilter(item.getItemId());
+                //filter = getGalleryFilter(item.getItemId());
             }
 
-            presenter.getFiles(filter, sort);
+           // presenter.getFiles(filter, sort);
             return true;
         });
     }
 
+    /*
     private void setCheckedSort(Sort checkedSort, PopupMenu popup) {
         if (popup.getMenu().findItem(getSortId(checkedSort)) != null) {
             popup.getMenu().findItem(getSortId(checkedSort)).setChecked(true);
@@ -819,7 +820,7 @@ public class GalleryActivity extends MetadataActivity implements
 
             case R.id.files_without_metadata:
                 return Filter.WITHOUT_METADATA;
-            */
+
             default:
                 return Filter.ALL;
         }
@@ -832,8 +833,8 @@ public class GalleryActivity extends MetadataActivity implements
         }
 
         return Sort.NEWEST;
-    }
-
+    }*/
+  /*
     @IdRes
     public int getFilterId(Filter filter) {
         switch (filter) {
@@ -845,13 +846,13 @@ public class GalleryActivity extends MetadataActivity implements
 
             case VIDEO:
                 return R.id.video;
-            /*
+
             case WITH_METADATA:
                 return R.id.files_with_metadata;
 
             case WITHOUT_METADATA:
                 return R.id.files_without_metadata;
-               */
+
             default:
                 return R.id.all;
         }
@@ -864,5 +865,5 @@ public class GalleryActivity extends MetadataActivity implements
         }
 
         return R.id.newest;
-    }
+    }    */
 }

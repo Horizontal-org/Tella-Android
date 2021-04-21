@@ -74,11 +74,10 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
                 .doOnSubscribe(disposable -> view.onImportStarted())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onImportEnded())
-                .subscribe(rx -> view.onMediaImported(rx)),
-                        throwable -> {
-                            FirebaseCrashlytics.getInstance().recordException(throwable);
-                            view.onImportError(throwable);
-                        });
+                .subscribe(vaultFile -> view.onMediaImported(vaultFile),throwable ->  {FirebaseCrashlytics.getInstance().recordException(throwable);
+                    view.onImportError(throwable);
+                }));
+
     }
 
     @Override

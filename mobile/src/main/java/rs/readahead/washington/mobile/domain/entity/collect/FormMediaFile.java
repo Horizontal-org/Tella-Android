@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import com.hzontal.tella_vault.VaultFile;
 
 
-
+//TO keep it or remove it ?
 public class FormMediaFile extends VaultFile {
     public FormMediaFileStatus status; // break away from getters/setters :)
     public boolean uploading;
@@ -24,17 +24,17 @@ public class FormMediaFile extends VaultFile {
                 vaultFile.name,
                 vaultFile.type
         );
-        formMediaFile.id = mediaFile.getId();
-        formMediaFile.setCreated(mediaFile.getCreated());
-        formMediaFile.setDuration(mediaFile.getDuration());
-        formMediaFile.setMetadata(mediaFile.getMetadata());
-        formMediaFile.setSize(mediaFile.getSize());
-        formMediaFile.setAnonymous(mediaFile.isAnonymous());
+        formMediaFile.id = vaultFile.id;
+        formMediaFile.created = vaultFile.created;
+        formMediaFile.duration = vaultFile.duration;
+        formMediaFile.metadata = vaultFile.metadata;
+        formMediaFile.size = vaultFile.size;
+        formMediaFile.anonymous = vaultFile.anonymous;
 
         return formMediaFile;
     }
 
     public String getPartName() {
-        return fileName;
+        return name;
     }
 }

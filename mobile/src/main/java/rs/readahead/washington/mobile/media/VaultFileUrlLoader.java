@@ -7,7 +7,9 @@ import com.bumptech.glide.load.model.stream.StreamModelLoader;
 
 import java.io.InputStream;
 
-public class VaultFileUrlLoader implements StreamModelLoader<VaultFileUrlLoader> {
+import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
+
+public class VaultFileUrlLoader implements StreamModelLoader<VaultFileLoaderModel> {
     private Context context;
     private MediaFileHandler mediaFileHandler;
 
@@ -18,7 +20,7 @@ public class VaultFileUrlLoader implements StreamModelLoader<VaultFileUrlLoader>
     }
 
     @Override
-    public DataFetcher<InputStream> getResourceFetcher(VaultFileUrlLoader model, int width, int height) {
-        return new MediaFileDataFetcher(context, mediaFileHandler, model);
+    public DataFetcher<InputStream> getResourceFetcher(VaultFileLoaderModel model, int width, int height) {
+        return new VaultFileDataFetcher(context, mediaFileHandler, model);
     }
 }

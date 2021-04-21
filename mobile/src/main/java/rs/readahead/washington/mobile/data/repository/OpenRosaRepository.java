@@ -122,7 +122,7 @@ public class OpenRosaRepository implements IOpenRosaRepository {
                     continue;
                 }
 
-                String filename = attachment.getFileName();
+                String filename = attachment.name;
                 parts.put(String.format(Locale.ROOT, "%s\"; filename=\"%s", filename, filename), // again - wtf, OkHttp3 :)
                         new MediaFileRequestBody(context, attachment));
             }
@@ -159,7 +159,7 @@ public class OpenRosaRepository implements IOpenRosaRepository {
                     RequestBody.create(MediaType.parse("text/xml"), IOUtils.toByteArray(payload.getPayloadStream())));
 
             if (attachment != null) {
-                parts.put(getPartKey(attachment.getPartName(), attachment.getFileName()),
+                parts.put(getPartKey(attachment.getPartName(), attachment.name),
                         new MediaFileRequestBody(context, attachment, progressListener));
             }
         } catch (IOException e) {

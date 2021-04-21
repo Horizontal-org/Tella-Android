@@ -22,7 +22,6 @@ import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.data.upload.TUSClient;
 import rs.readahead.washington.mobile.domain.entity.FileUploadBundle;
-import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.domain.exception.NoConnectivityException;
@@ -36,7 +35,7 @@ public class TellaUploadJob extends Job {
     static final String TAG = "TellaUploadJob";
     private static boolean running = false;
     private Job.Result exitResult = null;
-    private HashMap<Long, VaultFile> fileMap = new HashMap<>();
+    private HashMap<String, VaultFile> fileMap = new HashMap<>();
     private DataSource dataSource;
     private TellaUploadServer server;
 
@@ -98,13 +97,13 @@ public class TellaUploadJob extends Job {
             return exit(Result.FAILURE);
         }
 
-        List<RawFile> rawFiles = new ArrayList<>();
+        List<VaultFile> vaultFiles = new ArrayList<>();
         for (FileUploadBundle fileUploadBundle : fileUploadBundles) {
 
             if (fileUploadBundle.getServerId() != server.getId()) {
                 continue;
             } else {
-                rawFiles.add(fileUploadBundle.getMediaFile());
+                vaultFiles.add(fileUploadBundle.getMediaFile());
             }
 
             if (!fileUploadBundle.isManualUpload()) {
@@ -113,7 +112,7 @@ public class TellaUploadJob extends Job {
 
             if (fileUploadBundle.isIncludeMetdata()) {
                 try {
-                    rawFiles.add(MediaFileHandler.maybeCreateMetadataMediaFile(getContext(), fileUploadBundle.getMediaFile()));
+                    vaultFiles.add(MediaFileHandler.maybeCreateMetadataMediaFile(getContext(), fileUploadBundle.getMediaFile()));
                 } catch (Exception e) {
                     Timber.d(e);
                 }
@@ -122,7 +121,7 @@ public class TellaUploadJob extends Job {
 
         final TUSClient tusClient = new TUSClient(getContext(), server.getUrl(), server.getUsername(), server.getPassword());
 
-        Flowable.fromIterable(rawFiles)
+        Flowable.fromIterable(vaultFiles)
                 .flatMap(tusClient::upload)
                 .blockingSubscribe(this::updateProgress, throwable -> {
                     if (throwable instanceof NoConnectivityException) {
@@ -185,7 +184,7 @@ public class TellaUploadJob extends Job {
         postProgressEvent(progressInfo);
     }
 
-    private void deleteMediaFile(long id) {
+    private void deleteMediaFile(String id) {
         VaultFile deleted = dataSource.deleteMediaFile(fileMap.get(id), m ->
                 MediaFileHandler.deleteMediaFile(getContext(), m)).blockingGet();
 

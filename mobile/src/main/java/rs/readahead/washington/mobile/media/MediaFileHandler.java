@@ -62,7 +62,6 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.provider.EncryptedFileProvider;
-import rs.readahead.washington.mobile.domain.entity.MetadataMediaFile;
 import rs.readahead.washington.mobile.presentation.entity.mapper.PublicMetadataMapper;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.FileUtil;
@@ -448,7 +447,7 @@ public class MediaFileHandler {
     @Nullable
     private static Uri getMetadataUri(Context context, VaultFile vaultFile) {
         try {
-            MetadataMediaFile mmf = maybeCreateMetadataMediaFile(context, vaultFile);
+            VaultFile mmf = maybeCreateMetadataMediaFile(context, vaultFile);
             return FileProvider.getUriForFile(context, EncryptedFileProvider.AUTHORITY,
                     getFile(context, vaultFile));
         } catch (Exception e) {
@@ -456,9 +455,9 @@ public class MediaFileHandler {
             return null;
         }
     }
-
-    public static MetadataMediaFile maybeCreateMetadataMediaFile(Context context, VaultFile vaultFile) throws Exception {
-        MetadataMediaFile mmf = MetadataMediaFile.newCSV(vaultFile);
+    //TODO CHECJ CSV FILE
+    public static VaultFile maybeCreateMetadataMediaFile(Context context, VaultFile vaultFile) throws Exception {
+        VaultFile mmf = new VaultFile();
         File file = getFile(context, vaultFile);
 
         if (file.createNewFile()) {
@@ -469,7 +468,7 @@ public class MediaFileHandler {
             createMetadataFile(os, vaultFile);
         }
 
-        mmf.setSize(getSize(file));
+        mmf.size = getSize(file);
 
         return mmf;
     }
@@ -650,9 +649,8 @@ public class MediaFileHandler {
     }
 
 
-    public Observable<MediaFile> registerMediaFile(final VaultFile vaultFile) {
-        return keyDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<MediaFile>>) dataSource ->
-                dataSource.registerMediaFile(vaultFile).toObservable());
+    public Observable<VaultFile> registerMediaFile(final VaultFile vaultFile) {
+        return keyDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<VaultFile>>) dataSource -> dataSource.registerMediaFile(vaultFile).toObservable());
     }
 
     @Nullable

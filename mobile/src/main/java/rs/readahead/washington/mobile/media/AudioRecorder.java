@@ -65,27 +65,27 @@ public class AudioRecorder {
 
     public Observable<VaultFile> startRecording() {
         return Observable.fromCallable(() -> {
-            VaultFile vaultFile = MediaFile.newAac();
+            VaultFile vaultFile = new VaultFile();
 
-            DigestOutputStream outputStream = MediaFileHandler.getOutputStream(context, mediaFile);
+            DigestOutputStream outputStream = MediaFileHandler.getOutputStream(context, vaultFile);
 
             if (outputStream == null) {
-                return MediaFile.NONE;
+                return null;
             }
 
             startTime = Util.currentTimestamp();
             encode(outputStream); // heigh-ho, heigh-ho..
 
             if (isCancelled()) {
-                MediaFileHandler.deleteFile(context, mediaFile);
-                return MediaFile.NONE;
+                MediaFileHandler.deleteFile(context, vaultFile);
+                return null;
             }
 
-            mediaFile.setSize(MediaFileHandler.getSize(context, mediaFile));
-            mediaFile.setHash(StringUtils.hexString(outputStream.getMessageDigest().digest()));
-            mediaFile.setDuration(duration);
+            vaultFile.size = MediaFileHandler.getSize(context, vaultFile);
+            vaultFile.hash = StringUtils.hexString(outputStream.getMessageDigest().digest());
+            vaultFile.duration = duration;
 
-            return mediaFile;
+            return vaultFile;
         }).subscribeOn(Schedulers.from(executor)).observeOn(AndroidSchedulers.mainThread());
     }
 
