@@ -82,7 +82,17 @@ public class RxVault extends BaseVault {
     public Single<List<VaultFile>> list(VaultFile parent, IVaultDatabase.Filter filter, IVaultDatabase.Sort sort, IVaultDatabase.Limits limits) {
         return Single.defer(() -> {
             try {
-                return Single.just(baseList(parent,filter,sort,limits));
+                return Single.just(baseList(parent, filter, sort, limits));
+            } catch (Exception e) {
+                return Single.error(e);
+            }
+        });
+    }
+
+    public Single<VaultFile> get(String id) {
+        return Single.defer(() -> {
+            try {
+                return Single.just(baseGet(id));
             } catch (Exception e) {
                 return Single.error(e);
             }

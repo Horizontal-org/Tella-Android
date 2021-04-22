@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-
 import com.hzontal.tella_vault.IVaultDatabase;
 import com.hzontal.tella_vault.VaultFile;
 
@@ -14,6 +13,8 @@ import net.sqlcipher.database.SQLiteQueryBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import timber.log.Timber;
 
 
 public class VaultDataSource implements IVaultDatabase {
@@ -89,7 +90,7 @@ public class VaultDataSource implements IVaultDatabase {
             final String query = SQLiteQueryBuilder.buildQueryString(
                     false,
                     D.T_VAULT_FILE,
-                    new String[] {
+                    new String[]{
                             D.C_ID,
                             D.C_PATH,
                             D.C_UID,
@@ -122,6 +123,31 @@ public class VaultDataSource implements IVaultDatabase {
 
     @Override
     public VaultFile get(String id) {
+        try (Cursor cursor = database.query(
+                D.T_VAULT_FILE,
+                new String[]{
+                        D.C_ID,
+                        D.C_PATH,
+                        D.C_UID,
+                        D.C_NAME,
+                        D.C_METADATA,
+                        D.C_CREATED,
+                        D.C_DURATION,
+                        D.C_ANONYMOUS,
+                        D.C_SIZE,
+                        D.C_HASH
+                },
+                cn(D.T_VAULT_FILE, D.C_ID) + " = ?",
+                new String[]{id},
+                null, null, null, null
+        )) {
+
+            if (cursor.moveToFirst()) {
+                return cursorToVaultFile(cursor);
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        }
         return null;
     }
 
@@ -135,10 +161,10 @@ public class VaultDataSource implements IVaultDatabase {
         try {
             database.beginTransaction();
 
-            int count = database.delete(D.T_VAULT_FILE, D.C_UID + " = ?", new String[]{ vaultFile.id });
+            int count = database.delete(D.T_VAULT_FILE, D.C_UID + " = ?", new String[]{vaultFile.id});
 
             if (count != 1) {
-               return false;
+                return false;
             }
 
             if (deleter.delete(vaultFile)) {

@@ -114,6 +114,10 @@ public abstract class BaseVault {
     protected void baseDestroy() {
     }
 
+    protected VaultFile baseGet(String id){
+        return database.get(id);
+    }
+
     protected VaultFile baseCreate(BaseVaultFileBuilder<?, ?> builder) throws VaultException {
         try {
             VaultFile vaultFile = new VaultFile(builder);

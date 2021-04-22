@@ -34,15 +34,10 @@ public class MetadataAttacher implements IMetadataAttachPresenterContract.IPrese
         disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMapSingle(new Function<DataSource, SingleSource<VaultFile>>() {
-                    @Override
-                    public SingleSource<VaultFile> apply(DataSource dataSource) throws Exception {
-                        return dataSource.attachMetadata(mediaFileId, metadata);
-                    }
-                })
+                .flatMapSingle((Function<DataSource, SingleSource<VaultFile>>) dataSource -> dataSource.attachMetadata(mediaFileId, metadata))
                 .subscribe(mediaFile -> view.onMetadataAttached(mediaFileId, metadata), new Consumer<Throwable>() {
                     @Override
-                    public void accept(Throwable throwable) throws Exception {
+                    public void accept(Throwable throwable) {
                         FirebaseCrashlytics.getInstance().recordException(throwable);
                         view.onMetadataAttachError(throwable);
                     }

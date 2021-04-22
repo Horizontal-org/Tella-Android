@@ -30,7 +30,7 @@ public class IAttachmentsPresenterContract {
         void setAttachments(List<VaultFile> attachments);
         List<VaultFile> getAttachments();
         void attachNewEvidence(VaultFile vaultFile);
-        void attachRegisteredEvidence(long id);
+        void attachRegisteredEvidence(String id);
         void importImage(Uri uri);
         void importVideo(Uri uri);
     }

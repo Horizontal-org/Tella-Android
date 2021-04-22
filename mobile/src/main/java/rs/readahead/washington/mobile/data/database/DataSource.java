@@ -448,7 +448,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             ContentValues values = new ContentValues();
             values.put(D.C_PATH, vaultFile.path);
-            values.put(D.C_UID, vaultFile.id);
+            values.put(D.C_ID, vaultFile.id);
             values.put(D.C_FILE_NAME, vaultFile.name);
             values.put(D.C_METADATA, new GsonBuilder().create().toJson(new EntityMapper().transform(vaultFile.metadata)));
             values.put(D.C_CREATED, vaultFile.created);

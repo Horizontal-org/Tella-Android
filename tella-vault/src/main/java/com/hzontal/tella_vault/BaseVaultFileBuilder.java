@@ -40,7 +40,35 @@ public abstract class BaseVaultFileBuilder<T extends BaseVaultFileBuilder<T, B>,
         return getThis();
     }
 
-    // todo: with all other options.. like withThumbnail()
+    public T  setId(String id) {
+        this.id = id;
+        return getThis();
+    }
+
+    public T setData(InputStream data) {
+        this.data = data;
+        return getThis();
+    }
+
+    public T setName(String name) {
+        this.name = name;
+        return getThis();
+    }
+
+    public T setParent(VaultFile parent) {
+        this.parent = parent;
+        return getThis();
+    }
+
+    public T setSize(long size) {
+        this.size = size;
+        return getThis();
+    }
+
+    public T setType(VaultFile.Type type) {
+        this.type = type;
+        return getThis();
+    }
 
     abstract public B build() throws Exception;
 

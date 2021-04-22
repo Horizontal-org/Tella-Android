@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
+import android.annotation.SuppressLint;
 import android.net.Uri;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -63,9 +64,21 @@ public class AttachmentsPresenter implements IAttachmentsPresenterContract.IPres
         this.attachments = attachments;
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void attachNewEvidence(VaultFile vaultFile) {
-        disposables.add(mediaFileHandler.registerMediaFile(vaultFile)
+        //TODO check vault file creation
+        MyApplication.rxVault.builder("")
+                .setDuration(vaultFile.duration)
+                .setAnonymous(vaultFile.anonymous)
+                .setThumb(vaultFile.thumb)
+                .setMimeType(vaultFile.mimeType)
+                .setMetadata(vaultFile.metadata)
+                .setParent(MyApplication.rxVault.getRoot().blockingGet())
+                .setName(vaultFile.name)
+                .setId(vaultFile.id)
+                .setType(vaultFile.type)
+                .build()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mediaFile -> {
@@ -74,22 +87,21 @@ public class AttachmentsPresenter implements IAttachmentsPresenterContract.IPres
                         view.onEvidenceAttached(mediaFile);
                     }
                 }, throwable -> view.onEvidenceAttachedError(throwable))
-        );
+                .dispose();
     }
 
     @Override
-    public void attachRegisteredEvidence(final long id) {
-        disposables.add(keyDataSource.getDataSource()
+    public void attachRegisteredEvidence(final String id) {
+        MyApplication.rxVault.get(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMapSingle((Function<DataSource, SingleSource<VaultFile>>) dataSource -> dataSource.getMediaFile(id))
                 .subscribe(mediaFile -> {
                     if (!attachments.contains(mediaFile)) {
                         attachments.add(mediaFile);
                         view.onEvidenceAttached(mediaFile);
                     }
                 }, throwable -> view.onEvidenceAttachedError(throwable))
-        );
+                .dispose();
     }
 
     @Override
