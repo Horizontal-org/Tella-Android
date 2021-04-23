@@ -14,6 +14,7 @@ public abstract class BaseVaultFileBuilder<T extends BaseVaultFileBuilder<T, B>,
     protected Metadata metadata;
     protected byte[] thumb;
     protected InputStream data;
+    protected String hash;
 
     public T setMimeType(String mimeType) {
         this.mimeType = mimeType;
@@ -67,6 +68,11 @@ public abstract class BaseVaultFileBuilder<T extends BaseVaultFileBuilder<T, B>,
 
     public T setType(VaultFile.Type type) {
         this.type = type;
+        return getThis();
+    }
+
+    public T setHash(String hash) {
+        this.hash = hash;
         return getThis();
     }
 

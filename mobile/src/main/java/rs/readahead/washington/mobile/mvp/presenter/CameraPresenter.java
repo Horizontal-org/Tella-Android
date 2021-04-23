@@ -5,6 +5,7 @@ import com.hzontal.tella_vault.MyLocation;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.rx.RxVault;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 
 import io.reactivex.Observable;
@@ -39,14 +40,11 @@ public class CameraPresenter implements ICameraPresenterContract.IPresenter {
 
     @Override
     public void addJpegPhoto(final byte[] jpeg) {
-        disposables.add(Observable.fromCallable(() -> MediaFileHandler.saveJpegPhoto(view.getContext(), jpeg))
-                .flatMap((Function<VaultFile, ObservableSource<VaultFile>>) bundle ->
-                        mediaFileHandler.registerMediaFileBundle(bundle))
-                .subscribeOn(Schedulers.io())
+        disposables.add(Observable.fromCallable(() -> MediaFileHandler.saveJpegPhoto(jpeg))
                 .doOnSubscribe(disposable -> view.onAddingStart())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onAddingEnd())
-                .subscribe(bundle -> view.onAddSuccess(bundle), throwable -> {
+                .subscribe(bundle -> view.onAddSuccess(bundle.blockingGet()), throwable -> {
                     FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onAddError(throwable);
                 })
@@ -55,9 +53,20 @@ public class CameraPresenter implements ICameraPresenterContract.IPresenter {
 
     @Override
     public void addMp4Video(final File file) {
-        disposables.add(Observable.fromCallable(() -> MediaFileHandler.saveMp4Video(view.getContext(), file))
-                .flatMap((Function<VaultFile, ObservableSource<VaultFile>>) bundle ->
-                        mediaFileHandler.registerMediaFileBundle(bundle))
+
+        VaultFile vaultFile = MediaFileHandler.saveMp4Video(view.getContext(), file);
+        MyApplication.rxVault.builder(new ByteArrayInputStream(vaultFile.thumb))
+                .setType(vaultFile.type)
+                .setMimeType(vaultFile.mimeType)
+                .setId(vaultFile.id)
+                .setMetadata(vaultFile.metadata)
+                .setAnonymous(vaultFile.anonymous)
+                .setDuration(vaultFile.duration)
+                .setThumb(vaultFile.thumb)
+                .setParent(rxVault.getRoot().blockingGet())
+                .setHash(vaultFile.hash)
+                .setSize(vaultFile.size)
+                .build()
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> view.onAddingStart())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -66,7 +75,7 @@ public class CameraPresenter implements ICameraPresenterContract.IPresenter {
                     FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onAddError(throwable);
                 })
-        );
+                .dispose();
     }
 
     @Override

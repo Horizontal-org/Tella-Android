@@ -16,6 +16,7 @@ public interface IVaultDatabase {
     }
 
     interface Filter {
+
     }
 
     interface Sort {

@@ -55,6 +55,7 @@ import io.reactivex.Completable;
 import io.reactivex.MaybeSource;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.Single;
 import io.reactivex.SingleSource;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -224,7 +225,7 @@ public class MediaFileHandler {
                 .blockingGet();
     }
 
-    public static VaultFile saveJpegPhoto(@NonNull Context context, @NonNull byte[] jpegPhoto) throws Exception {
+    public static Single<VaultFile> saveJpegPhoto(@NonNull byte[] jpegPhoto) throws Exception {
 
         // create thumb
         BitmapFactory.Options opt = new BitmapFactory.Options();
@@ -246,8 +247,8 @@ public class MediaFileHandler {
                 .setAnonymous(true)
                 .setThumb(getThumbByteArray(thumb))
                 .build()
-                .subscribeOn(Schedulers.io())
-                .blockingGet();
+                .subscribeOn(Schedulers.io());
+
     }
 
     public static VaultFile savePngImage(@NonNull Context context, @NonNull byte[] pngImage) throws Exception {
