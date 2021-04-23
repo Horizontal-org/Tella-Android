@@ -463,7 +463,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             vaultFile.id = Long.toString(database.insert(D.T_MEDIA_FILE, null, values));
 
-            if (!vaultFile.id.equals("-1")) {
+            if (vaultFile != null) {
                 updateThumbnail(vaultFile);
             }
 

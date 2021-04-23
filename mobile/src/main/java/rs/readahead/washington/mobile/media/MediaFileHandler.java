@@ -25,6 +25,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultException;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.utils.MediaFile;
+import com.hzontal.utils.VaultUtils;
 
 import org.apache.commons.io.IOUtils;
 import org.hzontal.tella.keys.key.LifecycleMainKey;
@@ -312,7 +313,7 @@ public class MediaFileHandler {
         DigestOutputStream os = null;
 
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        VaultFile vaultFile = new VaultFile();
+        VaultFile vaultFile = VaultUtils.INSTANCE.newMp4();
 
         try {
             vaultFile.anonymous = false; // todo: mp4 can have exif, check if it does

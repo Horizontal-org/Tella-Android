@@ -21,6 +21,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.utils.VaultUtils;
 import com.otaliastudios.cameraview.CameraException;
 import com.otaliastudios.cameraview.CameraListener;
 import com.otaliastudios.cameraview.CameraOptions;
@@ -337,7 +338,7 @@ public class CameraActivity extends MetadataActivity implements
             } else {
                 setVideoQuality();
                 lastClickTime = System.currentTimeMillis();
-                VaultFile tmp = new VaultFile();
+                VaultFile tmp = VaultUtils.INSTANCE.newMp4();
                 File file = MediaFileHandler.getTempFile(this, tmp);
                 cameraView.takeVideo(file);
                 captureButton.displayStopVideo();
