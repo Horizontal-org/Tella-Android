@@ -86,6 +86,6 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
     }
 
     private static String cddl(String columnName, String columnType, boolean notNull, int defaultValue) {
-        return objQuote(columnName) + " " + columnType + (notNull ? " NOT NULL" : "") + "DEFAULT " + defaultValue;
+        return objQuote(columnName) + " " + columnType + (notNull ? " NOT NULL " : "") + "DEFAULT " + defaultValue;
     }
 }
