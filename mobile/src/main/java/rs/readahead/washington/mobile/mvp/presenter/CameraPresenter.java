@@ -20,6 +20,7 @@ import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.ICameraPresenterContract;
+import timber.log.Timber;
 
 
 public class CameraPresenter implements ICameraPresenterContract.IPresenter {
@@ -53,9 +54,9 @@ public class CameraPresenter implements ICameraPresenterContract.IPresenter {
 
     @Override
     public void addMp4Video(final File file) {
-
         VaultFile vaultFile = MediaFileHandler.saveMp4Video(view.getContext(), file);
-        MyApplication.rxVault.builder(new ByteArrayInputStream(vaultFile.thumb))
+        Timber.d("****Test***%s", file.getName());
+             rxVault.builder(new ByteArrayInputStream(vaultFile.thumb))
                 .setType(vaultFile.type)
                 .setMimeType(vaultFile.mimeType)
                 .setId(vaultFile.id)
@@ -63,7 +64,7 @@ public class CameraPresenter implements ICameraPresenterContract.IPresenter {
                 .setAnonymous(vaultFile.anonymous)
                 .setDuration(vaultFile.duration)
                 .setThumb(vaultFile.thumb)
-                .setParent(rxVault.getRoot().blockingGet())
+               // .setParent(rxVault.getRoot().)
                 .setHash(vaultFile.hash)
                 .setSize(vaultFile.size)
                 .build()

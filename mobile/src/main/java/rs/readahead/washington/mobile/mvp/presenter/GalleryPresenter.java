@@ -33,17 +33,32 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
     private CompositeDisposable disposables = new CompositeDisposable();
     private KeyDataSource keyDataSource;
     private MediaFileHandler mediaFileHandler;
+    private RxVault rxVault;
 
 
     public GalleryPresenter(IGalleryPresenterContract.IView view) {
         this.view = view;
         this.keyDataSource = MyApplication.getKeyDataSource();
         this.mediaFileHandler = new MediaFileHandler(keyDataSource);
+        this.rxVault = MyApplication.rxVault;
     }
 
     @Override
     public void getFiles(final IMediaFileRecordRepository.Filter filter, final IMediaFileRecordRepository.Sort sort) {
-        disposables.add(keyDataSource.getDataSource()
+        MyApplication.rxVault.list(null)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> view.onGetFilesStart())
+                .doFinally(() -> view.onGetFilesEnd())
+                .subscribe(mediaFiles -> {
+                    view.onGetFilesSuccess(mediaFiles);
+                }, throwable -> {
+                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    view.onGetFilesError(throwable);
+                }).dispose();
+
+
+       /* disposables.add(keyDataSource.getDataSource()
                 .flatMapSingle((Function<DataSource, SingleSource<List<VaultFile>>>) dataSource ->
                         dataSource.listMediaFiles(filter, sort))
                 .subscribeOn(Schedulers.io())
@@ -57,7 +72,7 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
                     FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onGetFilesError(throwable);
                 })
-        );
+        );*/
     }
 
     @Override
