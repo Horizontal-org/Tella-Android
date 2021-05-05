@@ -67,6 +67,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     private static KeyDataSource keyDataSource;
     public static Vault vault;
     public static RxVault rxVault;
+    Vault.Config vaultConfig;
     public static void startMainActivity(@NonNull Context context) {
         Intent intent;
         if (Preferences.isFirstStart()) {
@@ -167,15 +168,9 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         keyDataSource = new KeyDataSource(getApplicationContext());
         TellaKeysUI.initialize(mainKeyStore, mainKeyHolder, unlockRegistry, this);
 
-        Vault.Config vaultConfig = new Vault.Config();
+        vaultConfig = new Vault.Config();
         vaultConfig.root = new File(this.getFilesDir(), C.MEDIA_DIR);
 
-        try {
-            vault = new Vault(this, mainKeyHolder, vaultConfig);
-            rxVault = new RxVault(this, vault);
-        } catch (Exception e) {
-            Timber.e(e);
-        }
     }
 
     private void configureCrashlytics() {
@@ -225,6 +220,13 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         mainKeyStore = TellaKeysUI.getMainKeyStore();
         unlockRegistry = TellaKeysUI.getUnlockRegistry();
         keyDataSource.initKeyDataSource();
+
+        try {
+            vault = new Vault(this, mainKeyHolder, vaultConfig);
+            rxVault = new RxVault(this, vault);
+        } catch (Exception e) {
+            Timber.e(e);
+        }
         startMainActivity(context);
     }
 
