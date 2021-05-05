@@ -40,9 +40,8 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
 
     private void createVaultFileTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + sq(D.T_VAULT_FILE) + " (" +
-            cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+            cddl(D.C_ID, D.TEXT) + " PRIMARY KEY , " +
             cddl(D.C_PARENT_ID, D.INTEGER) + ", " +
-            cddl(D.C_UID, D.TEXT, true) + ", " +
             cddl(D.C_NAME, D.TEXT, true) + ", " +
             cddl(D.C_TYPE, D.INTEGER, true) + ", " +
             cddl(D.C_HASH, D.TEXT) + ", " +
@@ -52,7 +51,6 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
             cddl(D.C_DURATION, D.INTEGER, true, 0) + ", " +
             cddl(D.C_ANONYMOUS, D.INTEGER, true, 0) + ", " +
             cddl(D.C_SIZE, D.INTEGER, true, 0) + ", " +
-            "UNIQUE(" + sq(D.C_UID) + ") " +
             "UNIQUE(" + sq(D.C_PARENT_ID) + ", " + sq(D.C_NAME) + ")" +
         ");");
     }
@@ -61,7 +59,7 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
         ContentValues values = new ContentValues();
 
         values.put(D.C_ID, VaultDataSource.ROOT_ID);
-        values.put(D.C_UID, VaultDataSource.ROOT_UID);
+      //  values.put(D.C_UID, VaultDataSource.ROOT_UID);
         values.put(D.C_NAME, "");
         values.put(D.C_TYPE, VaultFile.Type.DIRECTORY.getValue());
         values.put(D.C_CREATED, System.currentTimeMillis());

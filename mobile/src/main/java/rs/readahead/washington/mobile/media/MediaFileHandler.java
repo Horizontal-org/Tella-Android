@@ -47,6 +47,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -245,6 +246,7 @@ public class MediaFileHandler {
                 .builder(input)
                 .setMimeType("image/jpeg")
                 .setAnonymous(true)
+                .setId(UUID.randomUUID().toString())
                 .setThumb(getThumbByteArray(thumb))
                 .build()
                 .subscribeOn(Schedulers.io());
@@ -267,6 +269,7 @@ public class MediaFileHandler {
                 .builder(input)
                 .setMimeType("image/png")
                 .setAnonymous(true)
+                .setId(UUID.randomUUID().toString())
                 .setThumb(getThumbByteArray(thumb))
                 .build()
                 .subscribeOn(Schedulers.io())
@@ -328,11 +331,12 @@ public class MediaFileHandler {
 
             // thumbnail
             byte[] thumb = getThumbByteArray(retriever.getFrameAtTime());
-            is = new FileInputStream(video);
-            os = MediaFileHandler.getOutputStream(context, vaultFile);
             if (thumb != null){
                 vaultFile.thumb = thumb;
             }
+
+            is = new FileInputStream(video);
+            os = MediaFileHandler.getOutputStream(context, vaultFile);
 
             if (os == null) throw new NullPointerException();
 

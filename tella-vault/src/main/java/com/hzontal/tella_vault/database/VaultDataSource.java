@@ -57,7 +57,7 @@ public class VaultDataSource implements IVaultDatabase {
             long parentId = VaultDataSource.ROOT_ID;
 
             ContentValues values = new ContentValues();
-            values.put(D.C_UID, vaultFile.id);
+            values.put(D.C_ID, vaultFile.id);
             values.put(D.C_TYPE, vaultFile.type.getValue());
             values.put(D.C_PARENT_ID, parentId);
             values.put(D.C_NAME, vaultFile.name);
@@ -82,7 +82,7 @@ public class VaultDataSource implements IVaultDatabase {
     public List<VaultFile> list(VaultFile parent, Filter filter, Sort sort, Limits limits) {
         List<VaultFile> vaultFiles = new ArrayList<>();
         Cursor cursor = null;
-
+        //TODO: CHECK WHERE THE PARENT IS APPLIED
         try {
             // todo: add safe where clause if parent != null
             // todo: add support for limit
@@ -90,20 +90,20 @@ public class VaultDataSource implements IVaultDatabase {
             final String query = SQLiteQueryBuilder.buildQueryString(
                     false,
                     D.T_VAULT_FILE,
-                    new String[]{
+                    new String[] {
                             D.C_ID,
-                            D.C_PATH,
-                            D.C_UID,
+                            D.C_TYPE,
+                            D.C_PARENT_ID,
                             D.C_NAME,
-                            D.C_METADATA,
                             D.C_CREATED,
                             D.C_DURATION,
-                            D.C_ANONYMOUS,
                             D.C_SIZE,
-                            D.C_HASH
+                            D.C_HASH,
+                            D.C_ANONYMOUS,
+                            D.C_THUMBNAIL
                     },
                     null, null, null,
-                    D.C_CREATED + " DESC",
+                    D.C_CREATED + " ASC",
                     null
             );
 
@@ -128,7 +128,6 @@ public class VaultDataSource implements IVaultDatabase {
                 new String[]{
                         D.C_ID,
                         D.C_PATH,
-                        D.C_UID,
                         D.C_NAME,
                         D.C_METADATA,
                         D.C_CREATED,
@@ -161,7 +160,7 @@ public class VaultDataSource implements IVaultDatabase {
         try {
             database.beginTransaction();
 
-            int count = database.delete(D.T_VAULT_FILE, D.C_UID + " = ?", new String[]{vaultFile.id});
+            int count = database.delete(D.T_VAULT_FILE, D.C_ID + " = ?", new String[]{vaultFile.id});
 
             if (count != 1) {
                 return false;
@@ -185,7 +184,7 @@ public class VaultDataSource implements IVaultDatabase {
         // todo: MetadataEntity metadataEntity = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_METADATA)), MetadataEntity.class);
 
         VaultFile vaultFile = new VaultFile();
-        vaultFile.id = cursor.getString(cursor.getColumnIndexOrThrow(D.C_UID));
+        vaultFile.id = cursor.getString(cursor.getColumnIndexOrThrow(D.C_ID));
         vaultFile.type = VaultFile.Type.fromValue(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_TYPE)));
         vaultFile.name = cursor.getString(cursor.getColumnIndexOrThrow(D.C_NAME));
         vaultFile.created = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_CREATED));
