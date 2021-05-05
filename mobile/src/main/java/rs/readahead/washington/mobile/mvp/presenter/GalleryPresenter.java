@@ -45,34 +45,16 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
 
     @Override
     public void getFiles(final IMediaFileRecordRepository.Filter filter, final IMediaFileRecordRepository.Sort sort) {
-        MyApplication.rxVault.list(null)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposable -> view.onGetFilesStart())
-                .doFinally(() -> view.onGetFilesEnd())
-                .subscribe(mediaFiles -> {
-                    view.onGetFilesSuccess(mediaFiles);
-                }, throwable -> {
-                    FirebaseCrashlytics.getInstance().recordException(throwable);
-                    view.onGetFilesError(throwable);
-                }).dispose();
 
-
-       /* disposables.add(keyDataSource.getDataSource()
-                .flatMapSingle((Function<DataSource, SingleSource<List<VaultFile>>>) dataSource ->
-                        dataSource.listMediaFiles(filter, sort))
+        disposables.add(Single
+                .fromCallable(() ->  MyApplication.rxVault.list(null))
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> view.onGetFilesStart())
+                .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onGetFilesEnd())
-                .subscribe(mediaFiles -> {
-                    //checkMediaFolder(view.getContext(), mediaFiles);
-                    view.onGetFilesSuccess(mediaFiles);
-                }, throwable -> {
-                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                .subscribe(vaultFile -> view.onGetFilesSuccess(vaultFile.blockingGet()),throwable ->  {FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onGetFilesError(throwable);
-                })
-        );*/
+                }));
     }
 
     @Override

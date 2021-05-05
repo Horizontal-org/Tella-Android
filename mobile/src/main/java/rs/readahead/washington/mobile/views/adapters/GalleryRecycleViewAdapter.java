@@ -73,6 +73,7 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
         checkItemState(holder, vaultFile);
 
         holder.maybeShowMetadataIcon(vaultFile);
+        if (vaultFile.mimeType == null) return;
 
         if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
             holder.showImageInfo();

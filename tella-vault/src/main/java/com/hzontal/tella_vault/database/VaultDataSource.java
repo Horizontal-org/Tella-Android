@@ -67,6 +67,7 @@ public class VaultDataSource implements IVaultDatabase {
             values.put(D.C_ANONYMOUS, vaultFile.anonymous ? 1 : 0);
             values.put(D.C_HASH, vaultFile.hash);
             values.put(D.C_THUMBNAIL, vaultFile.thumb);
+            values.put(D.C_MIME_TYPE, vaultFile.mimeType);
 
             database.insert(D.T_VAULT_FILE, null, values);
 
@@ -100,7 +101,8 @@ public class VaultDataSource implements IVaultDatabase {
                             D.C_SIZE,
                             D.C_HASH,
                             D.C_ANONYMOUS,
-                            D.C_THUMBNAIL
+                            D.C_THUMBNAIL,
+                            D.C_MIME_TYPE
                     },
                     null, null, null,
                     D.C_CREATED + " ASC",
@@ -134,7 +136,8 @@ public class VaultDataSource implements IVaultDatabase {
                         D.C_DURATION,
                         D.C_ANONYMOUS,
                         D.C_SIZE,
-                        D.C_HASH
+                        D.C_HASH,
+                        D.C_MIME_TYPE
                 },
                 cn(D.T_VAULT_FILE, D.C_ID) + " = ?",
                 new String[]{id},
@@ -192,7 +195,8 @@ public class VaultDataSource implements IVaultDatabase {
         vaultFile.size = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_SIZE));
         vaultFile.anonymous = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_ANONYMOUS)) == 1;
         vaultFile.hash = cursor.getString(cursor.getColumnIndexOrThrow(D.C_HASH));
-
+        vaultFile.thumb = cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_THUMBNAIL));
+        vaultFile.mimeType = cursor.getString(cursor.getColumnIndexOrThrow(D.C_MIME_TYPE));
         return vaultFile;
     }
 

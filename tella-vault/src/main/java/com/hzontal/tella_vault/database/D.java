@@ -30,4 +30,5 @@ class D {
     static final String C_DURATION = "c_duration";
     static final String C_ANONYMOUS = "c_anonymous";
     static final String C_SIZE = "c_size";
+    static final String C_MIME_TYPE = "c_mime_type";
 }
