@@ -45,17 +45,13 @@ public class MediaFileViewerPresenter implements IMediaFileViewerPresenterContra
 
     @Override
     public void deleteMediaFiles(final VaultFile vaultFile) {
-        disposables.add(keyDataSource.getDataSource()
+        MyApplication.rxVault.delete(vaultFile)
                 .subscribeOn(Schedulers.io())
-                .flatMapCompletable(dataSource ->
-                        dataSource.deleteMediaFile(vaultFile, mediaFile1 ->
-                                MediaFileHandler.deleteMediaFile(view.getContext(), mediaFile1)).toCompletable())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> view.onMediaFileDeleted(), throwable -> {
+                .subscribe( v -> view.onMediaFileDeleted(), throwable -> {
                     FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onMediaFileDeletionError(throwable);
-                })
-        );
+                }).dispose();
     }
 
     @Override

@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.mvp.presenter;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.MyLocation;
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.tella_vault.database.VaultDataSource;
 import com.hzontal.tella_vault.rx.RxVault;
 
 import java.io.ByteArrayInputStream;
@@ -64,7 +65,7 @@ public class CameraPresenter implements ICameraPresenterContract.IPresenter {
                 .setAnonymous(vaultFile.anonymous)
                 .setDuration(vaultFile.duration)
                 .setThumb(vaultFile.thumb)
-               // .setParent(rxVault.getRoot().)
+                .setParent(rxVault.getRoot().blockingGet())
                 .setHash(vaultFile.hash)
                 .setSize(vaultFile.size)
                 .build()

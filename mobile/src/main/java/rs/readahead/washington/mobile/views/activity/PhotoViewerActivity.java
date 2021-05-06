@@ -152,7 +152,6 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     @Override
     protected void onDestroy() {
-        // keyDataSource.dispose();
 
         stopPresenter();
 

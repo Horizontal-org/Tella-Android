@@ -66,6 +66,7 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_TYPE, D.INTEGER, true) + ", " +
                 cddl(D.C_HASH, D.TEXT) + ", " +
                 cddl(D.C_METADATA, D.TEXT) + ", " +
+                cddl(D.C_PATH, D.TEXT) + ", " +
                 cddl(D.C_MIME_TYPE, D.TEXT) + ", " +
                 cddl(D.C_THUMBNAIL, D.BLOB) + " , " +
                 cddl(D.C_CREATED, D.INTEGER, true) + " , " +
@@ -80,7 +81,6 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
         ContentValues values = new ContentValues();
 
         values.put(D.C_ID, VaultDataSource.ROOT_ID);
-        //  values.put(D.C_UID, VaultDataSource.ROOT_UID);
         values.put(D.C_NAME, "");
         values.put(D.C_TYPE, VaultFile.Type.DIRECTORY.getValue());
         values.put(D.C_CREATED, System.currentTimeMillis());

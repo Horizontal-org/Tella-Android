@@ -220,6 +220,7 @@ public class MediaFileHandler {
         return MyApplication.rxVault
                 .builder(new ByteArrayInputStream(v_image_jpeg_stream.toByteArray()))
                 .setMimeType("image/jpeg")
+                .setType(VaultFile.Type.FILE)
                 .setThumb(v_thumb_jpeg_stream.toByteArray())
                 .build()
                 .subscribeOn(Schedulers.io())
@@ -246,6 +247,7 @@ public class MediaFileHandler {
                 .builder(input)
                 .setMimeType("image/jpeg")
                 .setAnonymous(true)
+                .setType(VaultFile.Type.FILE)
                 .setId(UUID.randomUUID().toString())
                 .setThumb(getThumbByteArray(thumb))
                 .build()
@@ -269,6 +271,7 @@ public class MediaFileHandler {
                 .builder(input)
                 .setMimeType("image/png")
                 .setAnonymous(true)
+                .setType(VaultFile.Type.FILE)
                 .setId(UUID.randomUUID().toString())
                 .setThumb(getThumbByteArray(thumb))
                 .build()
@@ -305,6 +308,7 @@ public class MediaFileHandler {
                 .setMimeType(mimeType)
                 .setAnonymous(true)
                 .setThumb(thumb)
+                .setType(VaultFile.Type.FILE)
                 .setDuration(duration)
                 .build()
                 .subscribeOn(Schedulers.io())
@@ -328,6 +332,7 @@ public class MediaFileHandler {
             // duration
             String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
             vaultFile.duration = Long.parseLong(time);
+            vaultFile.type = VaultFile.Type.FILE;
 
             // thumbnail
             byte[] thumb = getThumbByteArray(retriever.getFrameAtTime());
@@ -684,10 +689,7 @@ public class MediaFileHandler {
     }
 
     private VaultFile getThumbnailData(final VaultFile vaultFile) throws NoSuchElementException {
-        return keyDataSource
-                .getDataSource()
-                .flatMapMaybe((Function<DataSource, MaybeSource<VaultFile>>) dataSource ->
-                        dataSource.getMediaFileThumbnail(vaultFile.id)).blockingFirst();
+        return MyApplication.rxVault.get(vaultFile.id).blockingGet();
     }
 
     private VaultFile updateThumb(final Context context, final VaultFile vaultFile) {

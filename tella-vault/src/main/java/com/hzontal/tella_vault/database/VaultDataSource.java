@@ -54,12 +54,11 @@ public class VaultDataSource implements IVaultDatabase {
             database.beginTransaction();
 
             // todo: get parent id for vaultFile.parent
-            long parentId = VaultDataSource.ROOT_ID;
 
             ContentValues values = new ContentValues();
             values.put(D.C_ID, vaultFile.id);
             values.put(D.C_TYPE, vaultFile.type.getValue());
-            values.put(D.C_PARENT_ID, parentId);
+            values.put(D.C_PARENT_ID, (long) VaultDataSource.ROOT_ID);
             values.put(D.C_NAME, vaultFile.name);
             values.put(D.C_CREATED, vaultFile.created);
             values.put(D.C_DURATION, vaultFile.duration);
@@ -68,6 +67,7 @@ public class VaultDataSource implements IVaultDatabase {
             values.put(D.C_HASH, vaultFile.hash);
             values.put(D.C_THUMBNAIL, vaultFile.thumb);
             values.put(D.C_MIME_TYPE, vaultFile.mimeType);
+            values.put(D.C_PATH,vaultFile.path);
 
             database.insert(D.T_VAULT_FILE, null, values);
 
@@ -102,7 +102,8 @@ public class VaultDataSource implements IVaultDatabase {
                             D.C_HASH,
                             D.C_ANONYMOUS,
                             D.C_THUMBNAIL,
-                            D.C_MIME_TYPE
+                            D.C_MIME_TYPE,
+                            D.C_PATH
                     },
                     null, null, null,
                     D.C_CREATED + " ASC",
@@ -122,7 +123,6 @@ public class VaultDataSource implements IVaultDatabase {
 
         return vaultFiles;
     }
-
     @Override
     public VaultFile get(String id) {
         try (Cursor cursor = database.query(
@@ -137,7 +137,9 @@ public class VaultDataSource implements IVaultDatabase {
                         D.C_ANONYMOUS,
                         D.C_SIZE,
                         D.C_HASH,
-                        D.C_MIME_TYPE
+                        D.C_MIME_TYPE,
+                        D.C_TYPE,
+                        D.C_THUMBNAIL
                 },
                 cn(D.T_VAULT_FILE, D.C_ID) + " = ?",
                 new String[]{id},
@@ -197,6 +199,7 @@ public class VaultDataSource implements IVaultDatabase {
         vaultFile.hash = cursor.getString(cursor.getColumnIndexOrThrow(D.C_HASH));
         vaultFile.thumb = cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_THUMBNAIL));
         vaultFile.mimeType = cursor.getString(cursor.getColumnIndexOrThrow(D.C_MIME_TYPE));
+        vaultFile.path = cursor.getString(cursor.getColumnIndexOrThrow(D.C_PATH));
         return vaultFile;
     }
 
