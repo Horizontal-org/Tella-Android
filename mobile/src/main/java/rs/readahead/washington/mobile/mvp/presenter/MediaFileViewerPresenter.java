@@ -10,20 +10,16 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
-import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IMediaFileViewerPresenterContract;
 
 
 public class MediaFileViewerPresenter implements IMediaFileViewerPresenterContract.IPresenter {
+    private final CompositeDisposable disposables = new CompositeDisposable();
     private IMediaFileViewerPresenterContract.IView view;
-    private CompositeDisposable disposables = new CompositeDisposable();
-    private KeyDataSource keyDataSource;
-
 
     public MediaFileViewerPresenter(IMediaFileViewerPresenterContract.IView view) {
         this.view = view;
-        this.keyDataSource = MyApplication.getKeyDataSource();
     }
 
     @Override
@@ -45,13 +41,13 @@ public class MediaFileViewerPresenter implements IMediaFileViewerPresenterContra
 
     @Override
     public void deleteMediaFiles(final VaultFile vaultFile) {
-        MyApplication.rxVault.delete(vaultFile)
+        disposables.add(MyApplication.rxVault.delete(vaultFile)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe( v -> view.onMediaFileDeleted(), throwable -> {
+                .subscribe(isDeleted -> view.onMediaFileDeleted(), throwable -> {
                     FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onMediaFileDeletionError(throwable);
-                }).dispose();
+                }));
     }
 
     @Override

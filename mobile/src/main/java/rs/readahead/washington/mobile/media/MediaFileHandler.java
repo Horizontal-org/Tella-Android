@@ -651,7 +651,6 @@ public class MediaFileHandler {
         IVaultDatabase.Sort sort = new IVaultDatabase.Sort();
         sort.property = D.C_ID;
         sort.direction = IVaultDatabase.Sort.Direction.DESC;
-        List<VaultFile> vaultFiles = MyApplication.rxVault.list(null, null, sort, limits).blockingGet();
         return MyApplication.rxVault.list(null, null, sort, limits)
                 .toObservable();
     }
