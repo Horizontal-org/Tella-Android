@@ -669,6 +669,7 @@ public class MediaFileHandler {
                 .setThumb(vaultFile.thumb)
                 .setType(VaultFile.Type.FILE)
                 .setDuration(vaultFile.duration)
+                .setPath(vaultFile.path)
                 .build()
                 .toObservable();
     }

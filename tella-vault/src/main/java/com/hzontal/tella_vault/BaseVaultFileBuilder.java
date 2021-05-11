@@ -15,6 +15,12 @@ public abstract class BaseVaultFileBuilder<T extends BaseVaultFileBuilder<T, B>,
     protected byte[] thumb;
     protected InputStream data;
     protected String hash;
+    protected String path;
+
+    public T setPath(String path) {
+        this.path = path;
+        return getThis();
+    }
 
     public T setMimeType(String mimeType) {
         this.mimeType = mimeType;

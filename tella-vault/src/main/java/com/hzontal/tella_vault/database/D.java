@@ -1,7 +1,7 @@
 package com.hzontal.tella_vault.database;
 
 
-class D {
+public class D {
     /* DEFAULT TYPES FOR DATABASE */
     static final String INTEGER = " INTEGER ";
     static final String TEXT = " TEXT ";
@@ -17,7 +17,7 @@ class D {
     static final String T_VAULT_FILE = "t_vault_file";
 
     /* DATABASE COLUMNS */
-    static final String C_ID = "c_id";
+    public static final String C_ID = "c_id";
     static final String C_PARENT_ID = "c_parent_id";
     static final String C_UID = "c_uid";
     static final String C_TYPE = "c_type";

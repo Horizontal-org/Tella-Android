@@ -33,7 +33,7 @@ object VaultUtils {
         vaultFile.name = "$uid.mp4"
         vaultFile.type = VaultFile.Type.FILE
         vaultFile.mimeType = "video/mp4"
-        vaultFile.path = C.MEDIA_DIR
+        vaultFile.path = MEDIA_DIR
         return vaultFile
     }
 
@@ -51,7 +51,7 @@ object VaultUtils {
         val vaultFile = VaultFile()
         vaultFile.name = filename
         vaultFile.id = FileUtil.getBaseName(filename)
-        vaultFile.path = C.MEDIA_DIR
+        vaultFile.path = MEDIA_DIR
         return vaultFile
     }
 }

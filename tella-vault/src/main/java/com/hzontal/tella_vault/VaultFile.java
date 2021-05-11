@@ -28,6 +28,7 @@ public class VaultFile  implements Serializable {
         this.thumb = builder.thumb;
         this.metadata = builder.metadata;
         this.anonymous = builder.anonymous;
+        this.path = builder.path;
     }
 
     public enum Type {
