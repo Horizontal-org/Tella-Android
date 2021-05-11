@@ -69,7 +69,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(holder.mediaView);
-        } else if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
+        } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
             holder.showAudioInfo(vaultFile);
             Drawable drawable = VectorDrawableCompat.create(holder.itemView.getContext().getResources(),
                     R.drawable.ic_mic_gray, null);

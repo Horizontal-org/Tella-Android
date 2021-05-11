@@ -433,18 +433,8 @@ public class MediaFileHandler {
     @Nullable
     public static InputStream getStream(Context context, VaultFile vaultFile) {
         try {
-            File file = getFile(context, vaultFile);
-            FileInputStream fis = new FileInputStream(file);
-            byte[] key;
-
-            if ((key = MyApplication.getMainKeyHolder().get().getKey().getEncoded()) == null) {
-                return null;
-            }
-
-
-            return EncryptedFileProvider.getDecryptedLimitedInputStream(key, fis, file);
-
-        } catch (IOException | LifecycleMainKey.MainKeyUnavailableException e) {
+            return MyApplication.rxVault.getStream(vaultFile);
+        } catch (VaultException e) {
             Timber.d(e, MediaFileHandler.class.getName());
         }
 
@@ -698,10 +688,12 @@ public class MediaFileHandler {
 
         return inputStream;
     }
+
     //TODO CHECK WHY we need this code
     private VaultFile getThumbnailData(final VaultFile vaultFile) throws NoSuchElementException {
         return MyApplication.rxVault.get(vaultFile.id).blockingGet();
     }
+
     //TODO CHECK WHY we need this code
     private VaultFile updateThumb(final Context context, final VaultFile vaultFile) {
         return Observable

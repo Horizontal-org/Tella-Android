@@ -25,7 +25,7 @@ public class VaultFileDataFetcher implements DataFetcher<InputStream> {
     }
 
     @Override
-    public InputStream loadData(Priority priority) throws Exception {
+    public InputStream loadData(Priority priority) {
         if (model == null) {
             return null;
         }
