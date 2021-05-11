@@ -30,14 +30,12 @@ public class CameraPresenter implements ICameraPresenterContract.IPresenter {
     private MediaFileHandler mediaFileHandler;
     private KeyDataSource keyDataSource;
     private int currentRotation = 0;
-    private RxVault rxVault;
 
 
     public CameraPresenter(ICameraPresenterContract.IView view) {
         this.view = view;
         this.keyDataSource = MyApplication.getKeyDataSource();
         this.mediaFileHandler = new MediaFileHandler(keyDataSource);
-        this.rxVault = MyApplication.rxVault;
     }
 
     @Override
@@ -55,20 +53,9 @@ public class CameraPresenter implements ICameraPresenterContract.IPresenter {
 
     @Override
     public void addMp4Video(final File file) {
-        VaultFile vaultFile = MediaFileHandler.saveMp4Video(view.getContext(), file);
-        Timber.d("****Test***%s", file.getName());
-             rxVault.builder(new ByteArrayInputStream(vaultFile.thumb))
-                .setType(vaultFile.type)
-                .setMimeType(vaultFile.mimeType)
-                .setId(vaultFile.id)
-                .setMetadata(vaultFile.metadata)
-                .setAnonymous(vaultFile.anonymous)
-                .setDuration(vaultFile.duration)
-                .setThumb(vaultFile.thumb)
-                .setParent(rxVault.getRoot().blockingGet())
-                .setHash(vaultFile.hash)
-                .setSize(vaultFile.size)
-                .build()
+        disposables.add(Observable.fromCallable(() -> MediaFileHandler.saveMp4Video(view.getContext(), file))
+                .flatMap((Function<VaultFile, ObservableSource<VaultFile>>) bundle ->
+                        mediaFileHandler.saveVaultFile(bundle))
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> view.onAddingStart())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -77,7 +64,7 @@ public class CameraPresenter implements ICameraPresenterContract.IPresenter {
                     FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onAddError(throwable);
                 })
-                .dispose();
+        );
     }
 
     @Override
@@ -109,12 +96,11 @@ public class CameraPresenter implements ICameraPresenterContract.IPresenter {
 
     @Override
     public void getLastMediaFile() {
-        disposables.add(keyDataSource.getDataSource()
-                .flatMapSingle((Function<DataSource, SingleSource<VaultFile>>) DataSource::getLastMediaFile)
+        disposables.add(MediaFileHandler.getLastVaultFileFromDb()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mediaFile -> view.onLastMediaFileSuccess(mediaFile),
+                        mediaFile -> view.onLastMediaFileSuccess(mediaFile.get(1)),
                         throwable -> view.onLastMediaFileError(throwable)
                 )
         );

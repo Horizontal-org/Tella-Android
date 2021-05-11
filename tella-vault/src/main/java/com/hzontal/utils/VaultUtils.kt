@@ -32,8 +32,8 @@ object VaultUtils {
         vaultFile.id = uid
         vaultFile.name = "$uid.mp4"
         vaultFile.type = VaultFile.Type.FILE
-        vaultFile.path = MEDIA_DIR
         vaultFile.mimeType = "video/mp4"
+        vaultFile.path = C.MEDIA_DIR
         return vaultFile
     }
 
