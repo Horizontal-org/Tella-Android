@@ -22,8 +22,10 @@ import androidx.core.content.FileProvider;
 import androidx.exifinterface.media.ExifInterface;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.IVaultDatabase;
 import com.hzontal.tella_vault.VaultException;
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.tella_vault.database.D;
 import com.hzontal.utils.MediaFile;
 import com.hzontal.utils.VaultUtils;
 
@@ -53,7 +55,6 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import io.reactivex.Completable;
-import io.reactivex.MaybeSource;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Single;
@@ -152,7 +153,7 @@ public class MediaFileHandler {
         FileUtil.emptyDir(new File(context.getFilesDir(), C.TMP_DIR));
     }
 
-        public static void exportMediaFile(Context context, VaultFile vaultFile) throws IOException {
+    public static void exportMediaFile(Context context, VaultFile vaultFile) throws IOException {
         String envDirType;
 
         if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
@@ -243,7 +244,7 @@ public class MediaFileHandler {
 
         input.reset();
 
-        return  MyApplication.rxVault
+        return MyApplication.rxVault
                 .builder(input)
                 .setMimeType("image/jpeg")
                 .setAnonymous(true)
@@ -281,7 +282,7 @@ public class MediaFileHandler {
 
     public static VaultFile importVideoUri(Context context, Uri uri) throws Exception {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        String mimeType = MediaFile.INSTANCE.getFileExtension(uri,context);
+        String mimeType = MediaFile.INSTANCE.getFileExtension(uri, context);
         byte[] thumb = null;
         Long duration = null;
 
@@ -336,7 +337,7 @@ public class MediaFileHandler {
 
             // thumbnail
             byte[] thumb = getThumbByteArray(retriever.getFrameAtTime());
-            if (thumb != null){
+            if (thumb != null) {
                 vaultFile.thumb = thumb;
             }
 
@@ -466,6 +467,7 @@ public class MediaFileHandler {
             return null;
         }
     }
+
     //TODO CHECJ CSV FILE
     public static VaultFile maybeCreateMetadataMediaFile(Context context, VaultFile vaultFile) throws Exception {
         VaultFile mmf = new VaultFile();
@@ -653,12 +655,34 @@ public class MediaFileHandler {
         return MessageDigest.getInstance("SHA-256");
     }
 
-    public Observable<VaultFile> registerMediaFileBundle(final VaultFile vaultFile){
+    public static Observable<List<VaultFile>> getLastVaultFileFromDb() {
+        IVaultDatabase.Limits limits = new IVaultDatabase.Limits();
+        limits.limit = 2;
+        IVaultDatabase.Sort sort = new IVaultDatabase.Sort();
+        sort.property = D.C_ID;
+        sort.direction = IVaultDatabase.Sort.Direction.DESC;
+        List<VaultFile> vaultFiles = MyApplication.rxVault.list(null, null, sort, limits).blockingGet();
+        return MyApplication.rxVault.list(null, null, sort, limits)
+                .toObservable();
+    }
+
+    public Observable<VaultFile> registerMediaFileBundle(final VaultFile vaultFile) {
         return keyDataSource.getDataSource()
                 .flatMap((Function<DataSource, ObservableSource<VaultFile>>) dataSource ->
                         dataSource.registerMediaFileBundle(vaultFile).toObservable());
     }
 
+    public Observable<VaultFile> saveVaultFile(VaultFile vaultFile) {
+        return MyApplication.rxVault
+                .builder(new ByteArrayInputStream(vaultFile.thumb))
+                .setMimeType(vaultFile.mimeType)
+                .setAnonymous(true)
+                .setThumb(vaultFile.thumb)
+                .setType(VaultFile.Type.FILE)
+                .setDuration(vaultFile.duration)
+                .build()
+                .toObservable();
+    }
 
     public Observable<VaultFile> registerMediaFile(final VaultFile vaultFile) {
         return keyDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<VaultFile>>) dataSource -> dataSource.registerMediaFile(vaultFile).toObservable());
@@ -666,35 +690,22 @@ public class MediaFileHandler {
 
     @Nullable
     InputStream getThumbnailStream(Context context, final VaultFile vaultFile) {
-        VaultFile thumbnailData = null;
         InputStream inputStream = null;
-
-        try {
-            thumbnailData = getThumbnailData(vaultFile);
-        } catch (NoSuchElementException e) {
-            try {
-                thumbnailData = updateThumb(context, vaultFile);
-            } catch (Exception e1) {
-                Timber.d(e1, getClass().getName());
-            }
-        } catch (Exception e2) {
-            Timber.d(e2, getClass().getName());
-        }
-
+        VaultFile thumbnailData = createThumb(vaultFile);
         if (thumbnailData != null) {
             inputStream = new ByteArrayInputStream(vaultFile.thumb);
         }
 
         return inputStream;
     }
-
+    //TODO CHECK WHY we need this code
     private VaultFile getThumbnailData(final VaultFile vaultFile) throws NoSuchElementException {
         return MyApplication.rxVault.get(vaultFile.id).blockingGet();
     }
-
+    //TODO CHECK WHY we need this code
     private VaultFile updateThumb(final Context context, final VaultFile vaultFile) {
         return Observable
-                .fromCallable(() -> createThumb(context, vaultFile))
+                .fromCallable(() -> createThumb(vaultFile))
                 .subscribeOn(Schedulers.from(executor)) // creating thumbs in single thread..
                 .flatMap((Function<VaultFile, ObservableSource<VaultFile>>) mediaFileThumbnailData ->
                         keyDataSource.getDataSource()
@@ -704,18 +715,9 @@ public class MediaFileHandler {
     }
 
     @NonNull
-    private VaultFile createThumb(Context context, VaultFile vaultFile) {
+    private VaultFile createThumb(VaultFile vaultFile) {
         try {
-            File file = getFile(context, vaultFile);
-            FileInputStream fis = new FileInputStream(file);
-            byte[] key;
-
-            if ((key = MyApplication.getMainKeyHolder().get().getKey().getEncoded()) == null) {
-                return null;
-            }
-
-
-            InputStream inputStream = EncryptedFileProvider.getDecryptedInputStream(key, fis, file.getName()); // todo: move to limited variant
+            InputStream inputStream = MyApplication.rxVault.getStream(vaultFile);
             final Bitmap bm = BitmapFactory.decodeStream(inputStream);
 
             Bitmap thumb;
@@ -723,14 +725,14 @@ public class MediaFileHandler {
             if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
                 thumb = ThumbnailUtils.extractThumbnail(bm, bm.getWidth() / 10, bm.getHeight() / 10);
             } else {
-                return null;
+                return vaultFile;
             }
             VaultFile vaultFile1 = new VaultFile();
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             thumb.compress(Bitmap.CompressFormat.JPEG, 100, stream);
             vaultFile1.thumb = stream.toByteArray();
             return vaultFile1;
-        } catch (IOException | LifecycleMainKey.MainKeyUnavailableException e) {
+        } catch (VaultException e) {
             Timber.d(e, getClass().getName());
         }
 
