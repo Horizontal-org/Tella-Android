@@ -35,7 +35,7 @@ public class SkippableMediaFileRequestBody extends MediaFileRequestBody implemen
 
     @Override
     protected InputStream getInputStream() throws IOException {
-        InputStream is = MediaFileHandler.getStream(context, mediaFile);
+        InputStream is = MediaFileHandler.getStream(mediaFile);
 
         if (is != null) {
             long skipped = skipBytes(is, skip);

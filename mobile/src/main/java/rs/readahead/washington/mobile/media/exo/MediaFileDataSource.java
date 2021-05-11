@@ -43,7 +43,7 @@ class MediaFileDataSource implements DataSource {
     public long open(DataSpec dataSpec) throws IOException {
         uri = dataSpec.uri;
 
-        inputSteam = MediaFileHandler.getStream(context, vaultFile);
+        inputSteam = MediaFileHandler.getStream(vaultFile);
 
         if (inputSteam == null) {
             close();

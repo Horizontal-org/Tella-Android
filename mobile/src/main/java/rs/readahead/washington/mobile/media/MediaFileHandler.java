@@ -431,7 +431,7 @@ public class MediaFileHandler {
     }
 
     @Nullable
-    public static InputStream getStream(Context context, VaultFile vaultFile) {
+    public static InputStream getStream(VaultFile vaultFile) {
         try {
             return MyApplication.rxVault.getStream(vaultFile);
         } catch (VaultException e) {

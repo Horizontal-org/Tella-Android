@@ -94,7 +94,7 @@ public class MediaFileRequestBody extends RequestBody {
     }
 
     protected InputStream getInputStream() throws IOException {
-        return MediaFileHandler.getStream(context, mediaFile);
+        return MediaFileHandler.getStream(mediaFile);
     }
 
     /* final class CountingSink extends ForwardingSink {

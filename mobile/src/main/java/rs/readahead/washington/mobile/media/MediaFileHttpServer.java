@@ -187,7 +187,7 @@ public class MediaFileHttpServer implements Runnable {
 
         protected void execute() throws IOException {
             long fileSize = MediaFileHandler.getSize(context, vaultFile);
-            InputStream inputStream = MediaFileHandler.getStream(context, vaultFile);
+            InputStream inputStream = MediaFileHandler.getStream(vaultFile);
 
             if (inputStream == null) {
                 throw new IOException();
