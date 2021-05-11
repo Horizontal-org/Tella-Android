@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import androidx.annotation.Nullable;
+
 import com.hzontal.tella_vault.IVaultDatabase;
 import com.hzontal.tella_vault.VaultFile;
 
@@ -80,9 +82,24 @@ public class VaultDataSource implements IVaultDatabase {
     }
 
     @Override
-    public List<VaultFile> list(VaultFile parent, Filter filter, Sort sort, Limits limits) {
+    public List<VaultFile> list(VaultFile parent, @Nullable Filter filter,@Nullable Sort sort,@Nullable Limits limits) {
         List<VaultFile> vaultFiles = new ArrayList<>();
+        String filterQuery = null;
+        Sort.Direction direction = Sort.Direction.ASC;
+        String limit = null;
         Cursor cursor = null;
+        if (filter != null) {
+            filterQuery = filter.query;
+        }
+
+        if (sort != null){
+            direction = sort.direction;
+        }
+
+        if (limit != null){
+            limit = String.valueOf(limits.limit);
+        }
+
         //TODO: CHECK WHERE THE PARENT IS APPLIED
         try {
             // todo: add safe where clause if parent != null
@@ -105,9 +122,9 @@ public class VaultDataSource implements IVaultDatabase {
                             D.C_MIME_TYPE,
                             D.C_PATH
                     },
-                    null, null, null,
-                    D.C_CREATED + " ASC",
-                    null
+                    filterQuery, null, null,
+                    D.C_CREATED +" "+direction,
+                    limit
             );
 
             cursor = database.rawQuery(query, null);
