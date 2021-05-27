@@ -37,15 +37,26 @@ object VaultUtils {
         return vaultFile
     }
 
- /*   fun newAac(): MediaFile? {
+    fun newAac(): VaultFile {
         val uid = UUID.randomUUID().toString()
-        return MediaFile(rs.readahead.washington.mobile.util.C.MEDIA_DIR, uid, "$uid.aac", MediaFile.Type.AUDIO)
+        val vaultFile = VaultFile()
+        vaultFile.name = "$uid.aac"
+        vaultFile.id = uid
+        vaultFile.mimeType = "audio/aac"
+        vaultFile.type = VaultFile.Type.FILE
+        vaultFile.path = MEDIA_DIR
+        return vaultFile
     }
 
-    fun newMp4(): MediaFile? {
-        val uid = UUID.randomUUID().toString()
-        return MediaFile(rs.readahead.washington.mobile.util.C.MEDIA_DIR, uid, "$uid.mp4", MediaFile.Type.VIDEO)
-    }*/
+    /*   fun newAac(): MediaFile? {
+           val uid = UUID.randomUUID().toString()
+           return MediaFile(rs.readahead.washington.mobile.util.C.MEDIA_DIR, uid, "$uid.aac", MediaFile.Type.AUDIO)
+       }
+
+       fun newMp4(): MediaFile? {
+           val uid = UUID.randomUUID().toString()
+           return MediaFile(rs.readahead.washington.mobile.util.C.MEDIA_DIR, uid, "$uid.mp4", MediaFile.Type.VIDEO)
+       }*/
 
     fun fromFilename(filename: String): VaultFile {
         val vaultFile = VaultFile()
