@@ -65,7 +65,7 @@ public class QuestionAttachmentPresenter implements IQuestionAttachmentPresenter
 
     @Override
     public void addNewMediaFile(VaultFile vaultFile) {
-        disposables.add(mediaFileHandler.registerMediaFile(vaultFile)
+        disposables.add(mediaFileHandler.saveVaultFile(vaultFile)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mediaFile -> view.onMediaFileAdded(attachment), throwable -> view.onMediaFileAddError(throwable))

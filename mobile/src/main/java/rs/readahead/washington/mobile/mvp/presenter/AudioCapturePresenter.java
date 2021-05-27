@@ -32,7 +32,7 @@ public class AudioCapturePresenter implements IAudioCapturePresenterContract.IPr
 
     @Override
     public void addMediaFile(VaultFile vaultFile) { // audio recorder creates MediaFile's file already encrypted and in place
-        disposables.add(mediaFileHandler.registerMediaFile(vaultFile)
+        disposables.add(mediaFileHandler.saveVaultAudioFile(vaultFile)
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> view.onAddingStart())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -13,6 +13,6 @@ public class IAudioPlayPresenterContract {
     }
 
     public interface IPresenter extends IBasePresenter {
-        void getMediaFile(long ids);
+        void getMediaFile(String ids);
     }
 }

@@ -32,7 +32,7 @@ public class SignaturePresenter implements ISignaturePresenterContract.IPresente
     public void addPngImage(final byte[] png) {
         disposables.add(
                 Observable.fromCallable(() -> MediaFileHandler.savePngImage(view.getContext(), png))
-                        .flatMap((Function<VaultFile, ObservableSource<VaultFile>>) bundle -> mediaFileHandler.registerMediaFile(bundle))
+                        .flatMap((Function<VaultFile, ObservableSource<VaultFile>>) bundle -> mediaFileHandler.saveVaultFile(bundle))
                         .subscribeOn(Schedulers.io())
                         .doOnSubscribe(disposable -> view.onAddingStart())
                         .observeOn(AndroidSchedulers.mainThread())

@@ -18,6 +18,7 @@ import java.util.concurrent.Executors;
 import androidx.annotation.Nullable;
 
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.utils.VaultUtils;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -65,7 +66,7 @@ public class AudioRecorder {
 
     public Observable<VaultFile> startRecording() {
         return Observable.fromCallable(() -> {
-            VaultFile vaultFile = new VaultFile();
+            VaultFile vaultFile = VaultUtils.INSTANCE.newAac();
 
             DigestOutputStream outputStream = MediaFileHandler.getOutputStream(context, vaultFile);
 

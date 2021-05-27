@@ -143,8 +143,8 @@ public class AudioPlayActivity extends BaseLockActivity implements
                 ThreadUtil.runOnMain(() -> onMediaFileSuccess(vaultFile));
             }
         } else if (getIntent().hasExtra(PLAY_MEDIA_FILE_ID_KEY)) {
-            long id = getIntent().getLongExtra(PLAY_MEDIA_FILE_ID_KEY, 0);
-            if (id != 0) {
+            String id = getIntent().getStringExtra(PLAY_MEDIA_FILE_ID_KEY);
+            if (id != null) {
                 presenter = new AudioPlayPresenter(this);
                 presenter.getMediaFile(id);
             }
