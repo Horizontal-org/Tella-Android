@@ -13,11 +13,20 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.DigestOutputStream;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
+import javax.crypto.Cipher;
+import javax.crypto.CipherOutputStream;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 
 /**
@@ -67,6 +76,24 @@ public abstract class BaseVault {
 
             return CipherStreamUtils.getDecryptedLimitedInputStream(key, fis, file);
 
+        } catch (IOException | LifecycleMainKey.MainKeyUnavailableException e) {
+            throw new VaultException(e);
+        }
+    }
+
+    /**
+     * Returns a stream of VaultFile's data. For directories empty OutputStream will be returned.
+     * @param vaultFile Data to read.
+     * @return Stream of data.
+     */
+    protected OutputStream baseOutStream(VaultFile vaultFile) throws VaultException {
+        try {
+            File file = getFile(vaultFile);
+            FileOutputStream fis = new FileOutputStream(file);
+            byte[] key = mainKeyHolder.get().getKey().getEncoded();
+
+
+            return CipherStreamUtils.getEncryptedOutputStream(key, fis, file.getName());
         } catch (IOException | LifecycleMainKey.MainKeyUnavailableException e) {
             throw new VaultException(e);
         }

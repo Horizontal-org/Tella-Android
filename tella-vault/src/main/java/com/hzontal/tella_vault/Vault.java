@@ -7,6 +7,7 @@ import com.hzontal.tella_vault.database.VaultDataSource;
 import org.hzontal.tella.keys.key.LifecycleMainKey;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 
@@ -55,6 +56,15 @@ public class Vault extends BaseVault {
      */
     public InputStream getStream(VaultFile vaultFile) throws VaultException {
         return baseGetStream(vaultFile);
+    }
+
+    /**
+     * Returns a stream of VaultFile's data. For directories empty InputStream will be returned.
+     * @param vaultFile Data to read.
+     * @return Stream of data.
+     */
+    public OutputStream getOutStream(VaultFile vaultFile) throws VaultException {
+        return baseOutStream(vaultFile);
     }
 
     /**

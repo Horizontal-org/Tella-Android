@@ -13,6 +13,7 @@ import com.hzontal.tella_vault.database.VaultDataSource;
 import org.hzontal.tella.keys.key.LifecycleMainKey;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import io.reactivex.Completable;
@@ -47,6 +48,10 @@ public class RxVault extends BaseVault {
 
     public InputStream getStream(VaultFile vaultFile) throws VaultException {
         return baseGetStream(vaultFile);
+    }
+
+    public OutputStream getOutStream(VaultFile vaultFile) throws VaultException {
+        return baseOutStream(vaultFile);
     }
 
     public Single<VaultFile> getRoot() {
