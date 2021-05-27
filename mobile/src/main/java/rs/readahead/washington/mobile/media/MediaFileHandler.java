@@ -481,7 +481,7 @@ public class MediaFileHandler {
     }
 
     public static long getSize(Context context, VaultFile vaultFile) {
-        return getSize(getFile(context, vaultFile));
+        return vaultFile.duration - EncryptedFileProvider.IV_SIZE;
     }
 
     private static long getSize(File file) {
@@ -501,19 +501,11 @@ public class MediaFileHandler {
     @Nullable
     static DigestOutputStream getOutputStream(Context context, VaultFile vaultFile) {
         try {
-            File file = getFile(context, vaultFile);
-            FileOutputStream fos = new FileOutputStream(file);
-            byte[] key;
 
-            if ((key = MyApplication.getMainKeyHolder().get().getKey().getEncoded()) == null) {
-                return null;
-            }
-
-
-            return new DigestOutputStream(EncryptedFileProvider.getEncryptedOutputStream(key, fos, file.getName()),
+            return new DigestOutputStream(MyApplication.rxVault.getOutStream(vaultFile),
                     getMessageDigest());
 
-        } catch (IOException | NoSuchAlgorithmException | LifecycleMainKey.MainKeyUnavailableException e) {
+        } catch (VaultException | NoSuchAlgorithmException e) {
             Timber.d(e, MediaFileHandler.class.getName());
         }
 
@@ -655,12 +647,6 @@ public class MediaFileHandler {
                 .toObservable();
     }
 
-    public Observable<VaultFile> registerMediaFileBundle(final VaultFile vaultFile) {
-        return keyDataSource.getDataSource()
-                .flatMap((Function<DataSource, ObservableSource<VaultFile>>) dataSource ->
-                        dataSource.registerMediaFileBundle(vaultFile).toObservable());
-    }
-
     public Observable<VaultFile> saveVaultFile(VaultFile vaultFile) {
         return MyApplication.rxVault
                 .builder(new ByteArrayInputStream(vaultFile.thumb))
@@ -674,8 +660,17 @@ public class MediaFileHandler {
                 .toObservable();
     }
 
-    public Observable<VaultFile> registerMediaFile(final VaultFile vaultFile) {
-        return keyDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<VaultFile>>) dataSource -> dataSource.registerMediaFile(vaultFile).toObservable());
+    public Observable<VaultFile> saveVaultAudioFile(VaultFile vaultFile) {
+        return MyApplication.rxVault
+                .builder(vaultFile.name)
+                .setMimeType(vaultFile.mimeType)
+                .setAnonymous(true)
+                .setThumb(vaultFile.thumb)
+                .setType(VaultFile.Type.FILE)
+                .setDuration(vaultFile.duration)
+                .setPath(vaultFile.path)
+                .build()
+                .toObservable();
     }
 
     @Nullable

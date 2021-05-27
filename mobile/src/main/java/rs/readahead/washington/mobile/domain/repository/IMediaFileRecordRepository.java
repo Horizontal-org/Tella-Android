@@ -13,8 +13,6 @@ public interface IMediaFileRecordRepository {
         boolean delete(VaultFile vaultFile);
     }
 
-    Single<VaultFile> registerMediaFile(VaultFile vaultFile);
-    Single<VaultFile> registerMediaFileBundle(VaultFile vaultFile);
     Single<List<VaultFile>> listMediaFiles(Filter filter, Sort sort);
     Maybe<VaultFile> getMediaFileThumbnail(long id);
     Maybe<VaultFile> getMediaFileThumbnail(String uid);

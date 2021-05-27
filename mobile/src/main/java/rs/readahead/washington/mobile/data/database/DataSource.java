@@ -349,19 +349,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }).compose(applyCompletableSchedulers());
     }
 
-    @Override
-    public Single<VaultFile> registerMediaFile(final VaultFile vaultFile) {
-        return Single.fromCallable(() -> registerMediaFileRecord(vaultFile))
-                .compose(applySchedulers());
-    }
-
-    @Override
-    public Single<VaultFile> registerMediaFileBundle(final VaultFile vaultFile) {
-        return Single.fromCallable(() -> {
-            registerMediaFileRecord(vaultFile);
-            return vaultFile;
-        }).compose(applySchedulers());
-    }
 
     public Single<List<VaultFile>> listMediaFiles(final Filter filter, final Sort sort) {
         return Single.fromCallable(() -> getMediaFiles(filter, sort))
@@ -437,43 +424,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 .compose(applySchedulers());
     }
 
-    //TODO CHECK UID IN VAULTFILE
-    private VaultFile registerMediaFileRecord(VaultFile vaultFile) {
-        if (vaultFile.created == 0) {
-            vaultFile.created = Util.currentTimestamp();
-        }
-
-        try {
-            database.beginTransaction();
-
-            ContentValues values = new ContentValues();
-            values.put(D.C_PATH, vaultFile.path);
-            values.put(D.C_ID, vaultFile.id);
-            values.put(D.C_FILE_NAME, vaultFile.name);
-            values.put(D.C_METADATA, new GsonBuilder().create().toJson(new EntityMapper().transform(vaultFile.metadata)));
-            values.put(D.C_CREATED, vaultFile.created);
-            if (vaultFile.duration > 0) {
-                values.put(D.C_DURATION, vaultFile.duration );
-            }
-            if (vaultFile.size > 0) {
-                values.put(D.C_SIZE, vaultFile.size );
-            }
-            values.put(D.C_ANONYMOUS, vaultFile.anonymous ? 1 : 0);
-            values.put(D.C_HASH, vaultFile.hash);
-
-            vaultFile.id = Long.toString(database.insert(D.T_MEDIA_FILE, null, values));
-
-            if (vaultFile != null) {
-                updateThumbnail(vaultFile);
-            }
-
-            database.setTransactionSuccessful();
-        } finally {
-            database.endTransaction();
-        }
-
-        return vaultFile;
-    }
 
     private long countDBCollectServers() {
         return net.sqlcipher.DatabaseUtils.queryNumEntries(database, D.T_COLLECT_SERVER);
