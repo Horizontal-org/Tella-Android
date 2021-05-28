@@ -664,11 +664,13 @@ public class MediaFileHandler {
         return MyApplication.rxVault
                 .builder(vaultFile.name)
                 .setMimeType(vaultFile.mimeType)
+                .setId(vaultFile.id)
                 .setAnonymous(true)
                 .setThumb(vaultFile.thumb)
                 .setType(VaultFile.Type.FILE)
                 .setDuration(vaultFile.duration)
                 .setPath(vaultFile.path)
+                .setHash(vaultFile.hash)
                 .build()
                 .toObservable();
     }
