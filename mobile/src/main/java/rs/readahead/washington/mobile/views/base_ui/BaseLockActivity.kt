@@ -5,11 +5,14 @@ import com.hzontal.tella_locking_ui.ui.password.PasswordUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternSetActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity
+import com.hzontal.tella_locking_ui.ui.pin.calculator.CalculatorActivity
 import info.guardianproject.cacheword.SecretsManager
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder
 import org.hzontal.tella.keys.config.UnlockRegistry
 import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.views.activity.PatternUpgradeActivity
+import timber.log.Timber
 
 abstract class BaseLockActivity : BaseActivity() {
 
@@ -37,7 +40,12 @@ abstract class BaseLockActivity : BaseActivity() {
     private fun startUnlockingMainKey() {
         val intent = when (holder.unlockRegistry.getActiveMethod(this)) {
             UnlockRegistry.Method.TELLA_PIN -> {
-                Intent(this, PinUnlockActivity::class.java)
+                //temp switch
+                if (Preferences.getAppAlias() == "rs.readahead.washington.mobile.views.activity.AliasCalculator") {
+                    Intent(this, CalculatorActivity::class.java)
+                } else {
+                    Intent(this, PinUnlockActivity::class.java)
+                }
             }
             UnlockRegistry.Method.TELLA_PATTERN -> {
                 Intent(this, PatternUnlockActivity::class.java)

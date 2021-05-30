@@ -20,7 +20,7 @@ abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickLi
     lateinit var pinTopText: TextView
     lateinit var pinMsgText: TextView
     lateinit var pinTopImageView: AppCompatImageView
-    private lateinit var pinEditText: NoImeEditText
+    lateinit var pinEditText: NoImeEditText
     private lateinit var pinEyeImageView: AppCompatImageView
     private lateinit var pinClickView: View
     private var isPasswordMode = true

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal">
+
+    <TextView
+        android:id="@+id/deleteBtn"
+        style="@style/Calculator_Green_Keys"
+        android:text="AC"
+        app:layout_constraintBottom_toTopOf="@+id/sevenBtn"
+        app:layout_constraintEnd_toStartOf="@+id/plusMinusBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/plusMinusBtn"
+        style="@style/Calculator_Green_Keys"
+        android:text="+/-"
+        app:layout_constraintBottom_toTopOf="@+id/eightBtn"
+        app:layout_constraintEnd_toStartOf="@+id/percentBtn"
+        app:layout_constraintStart_toEndOf="@+id/deleteBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/percentBtn"
+        style="@style/Calculator_Green_Keys"
+        android:text="%"
+        app:layout_constraintBottom_toTopOf="@+id/nineBtn"
+        app:layout_constraintEnd_toStartOf="@+id/devideBtn"
+        app:layout_constraintStart_toEndOf="@+id/plusMinusBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/devideBtn"
+        style="@style/Calculator_Gray_Keys"
+        android:text="/"
+        app:layout_constraintBottom_toTopOf="@+id/multiplyBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/percentBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/sevenBtn"
+        style="@style/Calculator_Light_Keys"
+        android:text="7"
+        app:layout_constraintBottom_toTopOf="@+id/fourBtn"
+        app:layout_constraintEnd_toStartOf="@+id/eightBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deleteBtn" />
+
+    <TextView
+        android:id="@+id/eightBtn"
+        style="@style/Calculator_Light_Keys"
+        android:text="8"
+        app:layout_constraintBottom_toTopOf="@+id/fiveBtn"
+        app:layout_constraintEnd_toStartOf="@+id/nineBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/sevenBtn"
+        app:layout_constraintTop_toBottomOf="@+id/plusMinusBtn" />
+
+    <TextView
+        android:id="@+id/nineBtn"
+        style="@style/Calculator_Light_Keys"
+        android:text="9"
+        app:layout_constraintBottom_toTopOf="@+id/sixBtn"
+        app:layout_constraintEnd_toStartOf="@id/multiplyBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/eightBtn"
+        app:layout_constraintTop_toBottomOf="@+id/percentBtn" />
+
+    <TextView
+        android:id="@+id/multiplyBtn"
+        style="@style/Calculator_Gray_Keys"
+        android:text="*"
+        app:layout_constraintBottom_toTopOf="@+id/minusBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/nineBtn"
+        app:layout_constraintTop_toBottomOf="@+id/devideBtn" />
+
+    <TextView
+        android:id="@+id/fourBtn"
+        style="@style/Calculator_Light_Keys"
+        android:text="4"
+        app:layout_constraintBottom_toTopOf="@+id/oneBtn"
+        app:layout_constraintEnd_toStartOf="@+id/fiveBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sevenBtn" />
+
+    <TextView
+        android:id="@+id/fiveBtn"
+        style="@style/Calculator_Light_Keys"
+        android:text="5"
+        app:layout_constraintBottom_toTopOf="@+id/twoBtn"
+        app:layout_constraintEnd_toStartOf="@+id/sixBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/fourBtn"
+        app:layout_constraintTop_toBottomOf="@+id/eightBtn" />
+
+    <TextView
+        android:id="@+id/sixBtn"
+        style="@style/Calculator_Light_Keys"
+        android:text="6"
+        app:layout_constraintBottom_toTopOf="@+id/threeBtn"
+        app:layout_constraintEnd_toStartOf="@id/minusBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/fiveBtn"
+        app:layout_constraintTop_toBottomOf="@+id/nineBtn" />
+
+    <TextView
+        android:id="@+id/minusBtn"
+        style="@style/Calculator_Gray_Keys"
+        android:text="-"
+        app:layout_constraintBottom_toTopOf="@+id/plusBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/sixBtn"
+        app:layout_constraintTop_toBottomOf="@id/multiplyBtn"
+        app:layout_constraintVertical_chainStyle="spread" />
+
+    <TextView
+        android:id="@+id/oneBtn"
+        style="@style/Calculator_Light_Keys"
+        android:text="1"
+        app:layout_constraintTop_toBottomOf="@+id/fourBtn"
+        app:layout_constraintEnd_toStartOf="@+id/twoBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/zeroBtn"
+        app:layout_constraintVertical_chainStyle="spread" />
+
+    <TextView
+        android:id="@+id/twoBtn"
+        style="@style/Calculator_Light_Keys"
+        android:text="2"
+        app:layout_constraintTop_toBottomOf="@+id/fiveBtn"
+        app:layout_constraintEnd_toStartOf="@+id/threeBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/oneBtn"
+        app:layout_constraintBottom_toTopOf="@id/zeroBtn"
+        app:layout_constraintVertical_chainStyle="spread" />
+
+    <TextView
+        android:id="@+id/threeBtn"
+        style="@style/Calculator_Light_Keys"
+        android:text="3"
+        app:layout_constraintTop_toBottomOf="@+id/sixBtn"
+        app:layout_constraintEnd_toStartOf="@id/plusBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/twoBtn"
+        app:layout_constraintBottom_toTopOf="@id/commaBtn" />
+
+    <TextView
+        android:id="@+id/plusBtn"
+        style="@style/Calculator_Gray_Keys"
+        android:text="+"
+        app:layout_constraintTop_toBottomOf="@+id/minusBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@id/threeBtn"
+        app:layout_constraintBottom_toTopOf="@id/okBtn"
+        app:layout_constraintVertical_chainStyle="spread" />
+
+    <TextView
+        android:id="@+id/zeroBtn"
+        style="@style/Calculator_Light_Keys"
+        android:layout_width="152dp"
+        android:text="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/commaBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/oneBtn" />
+
+    <TextView
+        android:id="@+id/commaBtn"
+        style="@style/Calculator_Light_Keys"
+        android:layout_marginEnd="7dp"
+        android:text="."
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/okBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/zeroBtn"
+        app:layout_constraintTop_toBottomOf="@+id/threeBtn" />
+
+    <TextView
+        android:id="@+id/okBtn"
+        style="@style/Calculator_Dark_Green_Keys"
+        android:text="="
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/commaBtn"
+        app:layout_constraintTop_toBottomOf="@+id/plusBtn" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/btnsGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="plusBtn,minusBtn,multiplyBtn,devideBtn,percentBtn,commaBtn,oneBtn,twoBtn,threeBtn,fourBtn,fiveBtn,sixBtn,sevenBtn,eightBtn,nineBtn,zeroBtn,okBtn" />
+</androidx.constraintlayout.widget.ConstraintLayout>
