@@ -19,11 +19,11 @@
         android:id="@+id/plusMinusBtn"
         style="@style/Calculator_Green_Keys"
         android:text="+/-"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/eightBtn"
         app:layout_constraintEnd_toStartOf="@+id/percentBtn"
         app:layout_constraintStart_toEndOf="@+id/deleteBtn"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.5" />
 
     <TextView
         android:id="@+id/percentBtn"
@@ -145,8 +145,7 @@
         app:layout_constraintEnd_toStartOf="@+id/threeBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/oneBtn"
-        app:layout_constraintBottom_toTopOf="@id/zeroBtn"
-        app:layout_constraintVertical_chainStyle="spread" />
+        app:layout_constraintBottom_toTopOf="@id/zeroBtn" />
 
     <TextView
         android:id="@+id/threeBtn"
@@ -205,5 +204,5 @@
         android:id="@+id/btnsGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="plusBtn,minusBtn,multiplyBtn,devideBtn,percentBtn,commaBtn,oneBtn,twoBtn,threeBtn,fourBtn,fiveBtn,sixBtn,sevenBtn,eightBtn,nineBtn,zeroBtn,okBtn" />
+        app:constraint_referenced_ids="plusBtn,minusBtn,plusMinusBtn,multiplyBtn,devideBtn,percentBtn,commaBtn,oneBtn,twoBtn,threeBtn,fourBtn,fiveBtn,sixBtn,sevenBtn,eightBtn,nineBtn,zeroBtn,okBtn" />
 </androidx.constraintlayout.widget.ConstraintLayout>
