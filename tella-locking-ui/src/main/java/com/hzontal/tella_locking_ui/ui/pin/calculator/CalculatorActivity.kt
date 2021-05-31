@@ -2,6 +2,7 @@ package com.hzontal.tella_locking_ui.ui.pin.calculator
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.TextUtils.substring
 import android.widget.TextView
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.TellaKeysUI
@@ -56,12 +57,18 @@ class CalculatorActivity : BasePinActivity() {
         var evaluationString = ""
         try {
             val evaluation = eval(pinEditText.text.toString())
-            evaluationString =format("%.2f", evaluation)
-        }
-        catch (e: Exception){
+            evaluationString = format("%.2f", evaluation)
+            if (substring(
+                    evaluationString,
+                    evaluationString.length - 3,
+                    evaluationString.length
+                ) == ".00"
+            ) {
+                evaluationString = substring(evaluationString, 0, evaluationString.length - 3)
+            }
+        } catch (e: Exception) {
             evaluationString = "ERROR"
-        }
-        finally {
+        } finally {
             resultText.setText(evaluationString)
         }
     }

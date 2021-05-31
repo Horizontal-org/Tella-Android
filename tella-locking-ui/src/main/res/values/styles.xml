@@ -99,36 +99,27 @@
         <item name="android:focusable">true</item>
     </style>
 
-    <style name="Calculator_Edit_Text">
+    <style name="Calculator_Text">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">16dp</item>
         <item name="android:layout_marginEnd">16dp</item>
-        <item name="android:layout_marginTop">40dp</item>
-        <item name="android:inputType">text</item>
-        <item name="android:letterSpacing">0.2</item>
-        <item name="android:cursorVisible">true</item>
-        <item name="android:clickable">true</item>
-        <item name="android:paddingBottom">12dp</item>
-        <item name="android:textSize">28sp</item>
-        <item name="android:textColor">@color/wa_calc_color</item>
         <item name="android:gravity">end</item>
         <item name="android:focusable">true</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:fontFamily">@font/open_sans</item>
     </style>
 
-    <style name="Calculator_Result_Text">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">16dp</item>
-        <item name="android:layout_marginEnd">16dp</item>
-        <item name="android:cursorVisible">true</item>
-        <item name="android:letterSpacing">0.12</item>
-        <item name="android:clickable">true</item>
-        <item name="android:paddingBottom">12dp</item>
+    <style name="Calculator_Edit_Text" parent="Calculator_Text">
+        <item name="android:layout_marginTop">40dp</item>
+        <item name="android:inputType">text</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/wa_calc_color</item>
+    </style>
+
+    <style name="Calculator_Result_Text" parent="Calculator_Text">
         <item name="android:textSize">48sp</item>
         <item name="android:textColor">@color/wa_dark_green</item>
-        <item name="android:gravity">end</item>
-        <item name="android:focusable">true</item>
     </style>
 
     <style name="Unlock_White_Text_Pin" parent="Unlock_White_Text_Back">
@@ -151,8 +142,8 @@
         <item name="android:textAlignment">center</item>
         <item name="android:textSize">30sp</item>
         <item name="android:layout_marginBottom">0dp</item>
+        <item name="android:fontFamily">@font/open_sans</item>
         <item name="android:clickable">true</item>
-
     </style>
 
     <style name="Calculator_Light_Keys" parent="Calculator_Keys">
