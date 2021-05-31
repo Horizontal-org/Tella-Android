@@ -11,8 +11,8 @@ import com.hzontal.tella_locking_ui.ui.pin.calculator.Evaluator.eval
 import com.hzontal.tella_locking_ui.ui.pin.pinview.CalculatorKeyView
 import org.hzontal.tella.keys.MainKeyStore
 import org.hzontal.tella.keys.key.MainKey
-import timber.log.Timber
-import java.lang.String.*
+import java.lang.String.format
+import java.text.DecimalFormat
 import javax.crypto.spec.PBEKeySpec
 
 private const val TAG = "CalculatorActivity"
@@ -38,18 +38,21 @@ class CalculatorActivity : BasePinActivity() {
     }
 
     override fun onSuccessSetPin(pin: String?) {
-        TellaKeysUI.getMainKeyStore().load(config.wrapper, PBEKeySpec(pin?.toCharArray()), object : MainKeyStore.IMainKeyLoadCallback {
-            override fun onReady(mainKey: MainKey) {
-                TellaKeysUI.getMainKeyHolder().set(mainKey);
-                onSuccessfulUnlock()
-                finish()
-            }
+        TellaKeysUI.getMainKeyStore().load(
+            config.wrapper,
+            PBEKeySpec(pin?.toCharArray()),
+            object : MainKeyStore.IMainKeyLoadCallback {
+                override fun onReady(mainKey: MainKey) {
+                    TellaKeysUI.getMainKeyHolder().set(mainKey);
+                    onSuccessfulUnlock()
+                    finish()
+                }
 
-            override fun onError(throwable: Throwable) {
-                onFailureSetPin(getString(R.string.incorrect_pin_error_msg))
-                TellaKeysUI.getCredentialsCallback().onUnSuccessfulUnlock(TAG, throwable)
-            }
-        })
+                override fun onError(throwable: Throwable) {
+                    onFailureSetPin(getString(R.string.incorrect_pin_error_msg))
+                    TellaKeysUI.getCredentialsCallback().onUnSuccessfulUnlock(TAG, throwable)
+                }
+            })
     }
 
     @SuppressLint("DefaultLocale")
@@ -57,14 +60,18 @@ class CalculatorActivity : BasePinActivity() {
         var evaluationString = ""
         try {
             val evaluation = eval(pinEditText.text.toString())
-            evaluationString = format("%.2f", evaluation)
+            evaluationString = format("%s", evaluation)
             if (substring(
                     evaluationString,
-                    evaluationString.length - 3,
+                    evaluationString.length - 2,
                     evaluationString.length
-                ) == ".00"
+                ) == ".0"
             ) {
-                evaluationString = substring(evaluationString, 0, evaluationString.length - 3)
+                evaluationString = substring(evaluationString, 0, evaluationString.length - 2)
+            }
+            if (evaluationString.length > 10) {
+                val sf = DecimalFormat("0.######E0")
+                evaluationString = sf.format(evaluation)
             }
         } catch (e: Exception) {
             evaluationString = "ERROR"
@@ -72,5 +79,4 @@ class CalculatorActivity : BasePinActivity() {
             resultText.setText(evaluationString)
         }
     }
-
 }
