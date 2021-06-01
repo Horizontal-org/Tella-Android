@@ -5,6 +5,13 @@
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline78h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.78" />
+
     <TextView
         android:id="@+id/deleteBtn"
         style="@style/Calculator_Green_Keys"
@@ -134,8 +141,7 @@
         app:layout_constraintEnd_toStartOf="@+id/twoBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/zeroBtn"
-        app:layout_constraintVertical_chainStyle="spread" />
+        app:layout_constraintBottom_toTopOf="@id/zeroBtn" />
 
     <TextView
         android:id="@+id/twoBtn"
@@ -177,7 +183,7 @@
         app:layout_constraintEnd_toStartOf="@+id/commaBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/oneBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/guideline78h" />
 
     <TextView
         android:id="@+id/commaBtn"
@@ -188,7 +194,7 @@
         app:layout_constraintEnd_toStartOf="@+id/okBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/zeroBtn"
-        app:layout_constraintTop_toBottomOf="@+id/threeBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/guideline78h" />
 
     <TextView
         android:id="@+id/okBtn"
@@ -198,7 +204,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/commaBtn"
-        app:layout_constraintTop_toBottomOf="@+id/plusBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/guideline78h" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/btnsGroup"
