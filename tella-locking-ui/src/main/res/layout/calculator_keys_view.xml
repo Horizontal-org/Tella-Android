@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal">
@@ -20,7 +21,8 @@
         app:layout_constraintEnd_toStartOf="@+id/plusMinusBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/plusMinusBtn"
@@ -30,27 +32,30 @@
         app:layout_constraintBottom_toTopOf="@+id/eightBtn"
         app:layout_constraintEnd_toStartOf="@+id/percentBtn"
         app:layout_constraintStart_toEndOf="@+id/deleteBtn"
-        app:layout_constraintHorizontal_bias="0.5" />
+        app:layout_constraintHorizontal_bias="0.5"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/percentBtn"
         style="@style/Calculator_Green_Keys"
-        android:text="%"
+        android:text=" % "
         app:layout_constraintBottom_toTopOf="@+id/nineBtn"
         app:layout_constraintEnd_toStartOf="@+id/devideBtn"
         app:layout_constraintStart_toEndOf="@+id/plusMinusBtn"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/devideBtn"
         style="@style/Calculator_Gray_Keys"
-        android:text="/"
+        android:text=" ÷ "
         app:layout_constraintBottom_toTopOf="@+id/multiplyBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/percentBtn"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/sevenBtn"
@@ -60,7 +65,8 @@
         app:layout_constraintEnd_toStartOf="@+id/eightBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/deleteBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/deleteBtn"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/eightBtn"
@@ -70,7 +76,8 @@
         app:layout_constraintEnd_toStartOf="@+id/nineBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/sevenBtn"
-        app:layout_constraintTop_toBottomOf="@+id/plusMinusBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/plusMinusBtn"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/nineBtn"
@@ -80,17 +87,20 @@
         app:layout_constraintEnd_toStartOf="@id/multiplyBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/eightBtn"
-        app:layout_constraintTop_toBottomOf="@+id/percentBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/percentBtn"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/multiplyBtn"
         style="@style/Calculator_Gray_Keys"
-        android:text="*"
+        android:text=" x "
         app:layout_constraintBottom_toTopOf="@+id/minusBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/nineBtn"
-        app:layout_constraintTop_toBottomOf="@+id/devideBtn" />
+        android:paddingBottom="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/devideBtn"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/fourBtn"
@@ -100,7 +110,8 @@
         app:layout_constraintEnd_toStartOf="@+id/fiveBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sevenBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/sevenBtn"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/fiveBtn"
@@ -110,7 +121,8 @@
         app:layout_constraintEnd_toStartOf="@+id/sixBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/fourBtn"
-        app:layout_constraintTop_toBottomOf="@+id/eightBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/eightBtn"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/sixBtn"
@@ -120,18 +132,20 @@
         app:layout_constraintEnd_toStartOf="@id/minusBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/fiveBtn"
-        app:layout_constraintTop_toBottomOf="@+id/nineBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/nineBtn"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/minusBtn"
         style="@style/Calculator_Gray_Keys"
-        android:text="-"
+        android:text=" - "
         app:layout_constraintBottom_toTopOf="@+id/plusBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/sixBtn"
         app:layout_constraintTop_toBottomOf="@id/multiplyBtn"
-        app:layout_constraintVertical_chainStyle="spread" />
+        app:layout_constraintVertical_chainStyle="spread"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/oneBtn"
@@ -141,7 +155,8 @@
         app:layout_constraintEnd_toStartOf="@+id/twoBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/zeroBtn" />
+        app:layout_constraintBottom_toTopOf="@id/zeroBtn"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/twoBtn"
@@ -151,7 +166,8 @@
         app:layout_constraintEnd_toStartOf="@+id/threeBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/oneBtn"
-        app:layout_constraintBottom_toTopOf="@id/zeroBtn" />
+        app:layout_constraintBottom_toTopOf="@id/zeroBtn"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/threeBtn"
@@ -161,18 +177,20 @@
         app:layout_constraintEnd_toStartOf="@id/plusBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/twoBtn"
-        app:layout_constraintBottom_toTopOf="@id/commaBtn" />
+        app:layout_constraintBottom_toTopOf="@id/commaBtn"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/plusBtn"
         style="@style/Calculator_Gray_Keys"
-        android:text="+"
+        android:text=" + "
         app:layout_constraintTop_toBottomOf="@+id/minusBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@id/threeBtn"
         app:layout_constraintBottom_toTopOf="@id/okBtn"
-        app:layout_constraintVertical_chainStyle="spread" />
+        app:layout_constraintVertical_chainStyle="spread"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/zeroBtn"
@@ -183,18 +201,20 @@
         app:layout_constraintEnd_toStartOf="@+id/commaBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guideline78h" />
+        app:layout_constraintTop_toBottomOf="@+id/guideline78h"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/commaBtn"
         style="@style/Calculator_Light_Keys"
         android:layout_marginEnd="7dp"
-        android:text="."
+        android:text=","
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/okBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/zeroBtn"
-        app:layout_constraintTop_toBottomOf="@+id/guideline78h" />
+        app:layout_constraintTop_toBottomOf="@+id/guideline78h"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/okBtn"
@@ -204,7 +224,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/commaBtn"
-        app:layout_constraintTop_toBottomOf="@+id/guideline78h" />
+        app:layout_constraintTop_toBottomOf="@+id/guideline78h"
+        tools:ignore="HardcodedText" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/btnsGroup"

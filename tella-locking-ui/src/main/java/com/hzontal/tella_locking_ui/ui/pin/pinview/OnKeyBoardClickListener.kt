@@ -34,7 +34,7 @@ class OnKeyBoardClickListener (private val minLength : Int,private val mPinLockL
         mPinLockListener?.onPinChange(mPin.length, mPin)
     }
 
-    private fun onDeleteClicked() {
+    fun onDeleteClicked() {
         if (mPin.isNotEmpty()) {
             mPin = mPin.substring(0, mPin.length - 1)
 

@@ -20,6 +20,7 @@ class CalculatorKeyView @JvmOverloads constructor(
     private var mPinLockListener: PinLockListener? = null
     private lateinit var mGroupButtons : Group
     private lateinit var mOnKeyBoardClickListener : OnKeyBoardClickListener
+    private lateinit var mResultListener : ResultListener
     private lateinit var mOkButton : TextView
 
     init {
@@ -32,8 +33,11 @@ class CalculatorKeyView @JvmOverloads constructor(
         mOkButton = findViewById(R.id.okBtn)
     }
 
-    fun setPinLockListener(pinLockListener: PinLockListener?) {
+    fun setListenerers(pinLockListener: PinLockListener?, resultListener: ResultListener?) {
         mPinLockListener = pinLockListener
+        if (resultListener != null) {
+            mResultListener = resultListener
+        }
         mOnKeyBoardClickListener = OnKeyBoardClickListener(minPinLength,pinLockListener,this)
         initListeners()
     }
@@ -44,7 +48,10 @@ class CalculatorKeyView @JvmOverloads constructor(
             button.setOnClickListener(mOnKeyBoardClickListener)
         }
         val deleteButton = findViewById<TextView>(R.id.deleteBtn)
-        deleteButton.setOnClickListener(mOnKeyBoardClickListener)
+        deleteButton.setOnClickListener{
+            mResultListener.onClearResult()
+            mOnKeyBoardClickListener.onDeleteClicked()
+        }
     }
 
     override fun onHiLightView(pin: String) {

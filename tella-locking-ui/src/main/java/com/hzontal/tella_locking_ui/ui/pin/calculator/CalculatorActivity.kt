@@ -9,6 +9,7 @@ import com.hzontal.tella_locking_ui.TellaKeysUI
 import com.hzontal.tella_locking_ui.ui.pin.base.BasePinActivity
 import com.hzontal.tella_locking_ui.ui.pin.calculator.Evaluator.eval
 import com.hzontal.tella_locking_ui.ui.pin.pinview.CalculatorKeyView
+import com.hzontal.tella_locking_ui.ui.pin.pinview.ResultListener
 import org.hzontal.tella.keys.MainKeyStore
 import org.hzontal.tella.keys.key.MainKey
 import java.lang.String.format
@@ -17,7 +18,7 @@ import javax.crypto.spec.PBEKeySpec
 
 private const val TAG = "CalculatorActivity"
 
-class CalculatorActivity : BasePinActivity() {
+class CalculatorActivity : BasePinActivity(), ResultListener {
     private lateinit var calculatorKeyView: CalculatorKeyView
     private lateinit var resultText: TextView
 
@@ -31,7 +32,7 @@ class CalculatorActivity : BasePinActivity() {
     private fun initView() {
         calculatorKeyView = findViewById(R.id.pin_lock_view)
         calculatorKeyView.minPinLength = 1
-        calculatorKeyView.setPinLockListener(this)
+        calculatorKeyView.setListenerers(this, this)
 
         pinEditText = findViewById(R.id.pin_editText)
         resultText = findViewById(R.id.resultText)
@@ -59,24 +60,38 @@ class CalculatorActivity : BasePinActivity() {
     override fun onFailureSetPin(error: String) {
         var evaluationString = ""
         try {
-            val evaluation = eval(pinEditText.text.toString())
-            evaluationString = format("%s", evaluation)
-            if (substring(
-                    evaluationString,
-                    evaluationString.length - 2,
-                    evaluationString.length
-                ) == ".0"
-            ) {
-                evaluationString = substring(evaluationString, 0, evaluationString.length - 2)
-            }
-            if (evaluationString.length > 10) {
-                val sf = DecimalFormat("0.######E0")
-                evaluationString = sf.format(evaluation)
-            }
+            evaluationString = evaluateResult(pinEditText.text.toString())
         } catch (e: Exception) {
             evaluationString = "ERROR"
         } finally {
             resultText.setText(evaluationString)
         }
+    }
+
+    override fun onClearResult() {
+        resultText.setText("")
+    }
+
+    private fun evaluateResult(input: String): String {
+        var entry = input
+        entry = entry.replace('x', '*')
+        entry = entry.replace('÷', '/')
+        entry = entry.replace(',', '.')
+        entry = entry.replace(" ", "")
+        val evaluation = eval(entry)
+        var evaluationString = format("%s", evaluation)
+        if (substring(
+                evaluationString,
+                evaluationString.length - 2,
+                evaluationString.length
+            ) == ".0"
+        ) {
+            evaluationString = substring(evaluationString, 0, evaluationString.length - 2)
+        }
+        if (evaluationString.length > 10) {
+            val sf = DecimalFormat("0.#####E0")
+            evaluationString = sf.format(evaluation)
+        }
+        return evaluationString
     }
 }
