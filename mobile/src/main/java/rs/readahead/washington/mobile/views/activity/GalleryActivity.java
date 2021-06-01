@@ -454,11 +454,13 @@ public class GalleryActivity extends MetadataActivity implements
     @Override
     public void onGetFilesSuccess(List<VaultFile> files) {
         blankGalleryInfo.setVisibility((files.isEmpty() && adding) ? View.VISIBLE : View.GONE);
+        files.remove(0);
         adapter.setFiles(files);
     }
 
     @Override
     public void onGetFilesError(Throwable error) {
+        Timber.d(error, getClass().getName());
     }
 
     @Override

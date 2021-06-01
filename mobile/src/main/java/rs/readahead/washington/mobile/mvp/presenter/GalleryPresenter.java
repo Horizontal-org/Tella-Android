@@ -106,23 +106,24 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
 
     @Override
     public void deleteMediaFiles(final List<VaultFile> vaultFiles) {
-        disposables.add(keyDataSource.getDataSource()
-                .subscribeOn(Schedulers.io())
-                .flatMapSingle((Function<DataSource, SingleSource<Integer>>) dataSource -> {
-                    List<Single<VaultFile>> completables = new ArrayList<>();
-                    for (VaultFile mediafile : vaultFiles) {
-                        completables.add(dataSource.deleteMediaFile(mediafile, mediaFile ->
-                                MediaFileHandler.deleteMediaFile(view.getContext(), mediaFile)));
-                    }
+        List<Single<Boolean>> completables = new ArrayList<>();
 
-                    return Single.zip(completables, objects -> objects.length);
-                })
+        for (VaultFile vaultFile : vaultFiles) {
+            completables.add(deleteMediaFile(vaultFile));
+        }
+
+        Single.zip(completables, objects -> objects.length)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(num -> view.onMediaFilesDeleted(num), throwable -> {
                     FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onMediaFilesDeletionError(throwable);
-                })
-        );
+                }).dispose();
+    }
+
+    private Single<Boolean> deleteMediaFile(VaultFile vaultFile){
+        return MyApplication.rxVault.delete(vaultFile)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
@@ -146,6 +147,7 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
                     view.onExportError(throwable);
                 })
         );
+
     }
 
     @Override

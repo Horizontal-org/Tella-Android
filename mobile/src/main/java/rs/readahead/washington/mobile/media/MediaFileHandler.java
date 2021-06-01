@@ -422,9 +422,9 @@ public class MediaFileHandler {
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    static boolean deleteFile(Context context, @NonNull VaultFile mediaFile) {
+    static boolean deleteFile(Context context, @NonNull VaultFile vaultFile) {
         try {
-            return getFile(context, mediaFile).delete();
+            return getFile(context, vaultFile).delete();
         } catch (Throwable ignored) {
             return false;
         }
@@ -481,7 +481,7 @@ public class MediaFileHandler {
     }
 
     public static long getSize(Context context, VaultFile vaultFile) {
-        return vaultFile.duration - EncryptedFileProvider.IV_SIZE;
+        return getSize(getFile(context, vaultFile));
     }
 
     private static long getSize(File file) {
@@ -671,6 +671,7 @@ public class MediaFileHandler {
                 .setDuration(vaultFile.duration)
                 .setPath(vaultFile.path)
                 .setHash(vaultFile.hash)
+                .setSize(vaultFile.size)
                 .build()
                 .toObservable();
     }

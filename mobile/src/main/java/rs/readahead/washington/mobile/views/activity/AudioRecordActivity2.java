@@ -37,6 +37,8 @@ import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.OnShowRationale;
 import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
+import rs.readahead.washington.mobile.BuildConfig;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
@@ -51,6 +53,7 @@ import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulePrese
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.util.StringUtils;
+import timber.log.Timber;
 
 
 @RuntimePermissions
@@ -128,7 +131,6 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         if (getIntent().hasExtra(RECORDER_MODE)) {
             mode = Mode.valueOf(getIntent().getStringExtra(RECORDER_MODE));
         }
-
         animator = (ObjectAnimator) AnimatorInflater.loadAnimator(AudioRecordActivity2.this, R.animator.fade_in);
 
         mTimer.setText(timeToString(0));
@@ -236,7 +238,9 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
             audioRecorder = new AudioRecorder(this, this);
             disposable.add(audioRecorder.startRecording()
-                    .subscribe(this::onRecordingStopped, throwable -> onRecordingError())
+                    .subscribe(this::onRecordingStopped, throwable -> {
+                        Timber.d(throwable);
+                        onRecordingError();})
             );
         } else {
             canclePauseRecorder();
@@ -353,6 +357,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
     private void onRecordingStopped(VaultFile vaultFile) {
+        Timber.d("****VaultFile Output%s", vaultFile.toString());
         if (vaultFile == null) {
             handlingMediaFile = null;
 
