@@ -238,7 +238,7 @@
         app:layout_constraintBottom_toTopOf="@id/guideline98h"
         app:layout_constraintEnd_toStartOf="@+id/guideline50v"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guideline80h"
+        app:layout_constraintTop_toBottomOf="@+id/guideline82h"
         tools:ignore="HardcodedText" />
 
     <TextView
@@ -248,7 +248,7 @@
         app:layout_constraintBottom_toTopOf="@id/guideline98h"
         app:layout_constraintEnd_toStartOf="@+id/guideline74v"
         app:layout_constraintStart_toEndOf="@+id/guideline50v"
-        app:layout_constraintTop_toBottomOf="@+id/guideline80h"
+        app:layout_constraintTop_toBottomOf="@+id/guideline82h"
         tools:ignore="HardcodedText" />
 
     <TextView
@@ -258,7 +258,7 @@
         app:layout_constraintBottom_toTopOf="@id/guideline98h"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/guideline74v"
-        app:layout_constraintTop_toBottomOf="@+id/guideline80h"
+        app:layout_constraintTop_toBottomOf="@+id/guideline82h"
         tools:ignore="HardcodedText" />
 
     <androidx.constraintlayout.widget.Group
