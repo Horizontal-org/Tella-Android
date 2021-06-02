@@ -5,6 +5,7 @@ import android.net.Uri;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.IVaultDatabase;
+import com.hzontal.tella_vault.Vault;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.rx.RxVault;
 
@@ -13,6 +14,7 @@ import java.util.List;
 
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
@@ -106,18 +108,19 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
 
     @Override
     public void deleteMediaFiles(final List<VaultFile> vaultFiles) {
-        List<Single<Boolean>> completables = new ArrayList<>();
 
+        List<Single<Boolean>> completables = new ArrayList<>();
         for (VaultFile vaultFile : vaultFiles) {
             completables.add(deleteMediaFile(vaultFile));
         }
+        disposables.add(
+         Single.zip(completables, objects -> objects.length)
+                 .observeOn(AndroidSchedulers.mainThread())
+                 .subscribe(num -> view.onMediaFilesDeleted(num), throwable -> {
+                     FirebaseCrashlytics.getInstance().recordException(throwable);
+                     view.onMediaFilesDeletionError(throwable);
+                 }));
 
-        Single.zip(completables, objects -> objects.length)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(num -> view.onMediaFilesDeleted(num), throwable -> {
-                    FirebaseCrashlytics.getInstance().recordException(throwable);
-                    view.onMediaFilesDeletionError(throwable);
-                }).dispose();
     }
 
     private Single<Boolean> deleteMediaFile(VaultFile vaultFile){

@@ -407,12 +407,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
-    public Single<VaultFile> getLastMediaFile() {
-        return Single.fromCallable(this::getLastMediaFileFromDb)
-                .compose(applySchedulers());
-    }
-
-    @Override
     public Single<VaultFile> deleteMediaFile(final VaultFile vaultFile, final IMediaFileDeleter deleter) {
         return Single.fromCallable(() -> deleteMediaFileFromDb(vaultFile, deleter))
                 .compose(applySchedulers());
@@ -906,42 +900,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     cn(D.T_MEDIA_FILE, D.C_UID) + " = ?",
                     new String[]{uid},
                     null, null, null, null
-            );
-
-            if (cursor.moveToFirst()) {
-                return cursorToMediaFile(cursor);
-            }
-        } catch (Exception e) {
-            Timber.d(e, getClass().getName());
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        throw new NotFountException();
-    }
-
-    private VaultFile getLastMediaFileFromDb() throws NotFountException {
-        Cursor cursor = null;
-
-        try {
-            cursor = database.query(
-                    D.T_MEDIA_FILE,
-                    new String[]{
-                            cn(D.T_MEDIA_FILE, D.C_ID, D.A_MEDIA_FILE_ID),
-                            D.C_PATH,
-                            D.C_UID,
-                            D.C_FILE_NAME,
-                            D.C_METADATA,
-                            D.C_CREATED,
-                            D.C_DURATION,
-                            D.C_ANONYMOUS,
-                            D.C_SIZE,
-                            D.C_HASH},
-                    null,
-                    null,
-                    null, null, D.C_ID + " DESC", "1"
             );
 
             if (cursor.moveToFirst()) {

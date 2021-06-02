@@ -20,7 +20,6 @@ public interface IMediaFileRecordRepository {
     Single<List<VaultFile>> getMediaFiles(long[] ids);
     Single<VaultFile> getMediaFile(long id);
     Single<VaultFile> getMediaFile(final String uid);
-    Single<VaultFile> getLastMediaFile();
     Single<VaultFile> deleteMediaFile(VaultFile vaultFile, IMediaFileDeleter deleter);
 
     enum Filter {
