@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.VaultFile;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
@@ -10,8 +11,6 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
-import rs.readahead.washington.mobile.media.MediaFileBundle;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.ISignaturePresenterContract;
 
@@ -33,8 +32,7 @@ public class SignaturePresenter implements ISignaturePresenterContract.IPresente
     public void addPngImage(final byte[] png) {
         disposables.add(
                 Observable.fromCallable(() -> MediaFileHandler.savePngImage(view.getContext(), png))
-                        .flatMap((Function<MediaFileBundle, ObservableSource<MediaFile>>) bundle -> mediaFileHandler.registerMediaFile(bundle.getMediaFile(),
-                                bundle.getMediaFileThumbnailData()))
+                        .flatMap((Function<VaultFile, ObservableSource<VaultFile>>) bundle -> mediaFileHandler.saveVaultFile(bundle))
                         .subscribeOn(Schedulers.io())
                         .doOnSubscribe(disposable -> view.onAddingStart())
                         .observeOn(AndroidSchedulers.mainThread())

@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.domain.entity;
+package com.hzontal.tella_vault;
 
 import java.io.Serializable;
 import java.util.List;

@@ -1,24 +1,26 @@
 package rs.readahead.washington.mobile.domain.entity;
 
+import com.hzontal.tella_vault.VaultFile;
+
 import java.io.Serializable;
 
 public class FileUploadBundle implements Serializable {
 
-    private MediaFile mediaFile;
+    private VaultFile vaultFile;
     private long serverId;
     private boolean includeMetadata;
     private boolean manualUpload;
 
-    public FileUploadBundle(MediaFile mediaFile) {
-        this.mediaFile = mediaFile;
+    public FileUploadBundle(VaultFile vaultFile) {
+        this.vaultFile = vaultFile;
     }
 
-    public MediaFile getMediaFile() {
-        return mediaFile;
+    public VaultFile getMediaFile() {
+        return vaultFile;
     }
 
-    public void setMediaFile(MediaFile mediaFile) {
-        this.mediaFile = mediaFile;
+    public void setMediaFile(VaultFile vaultFile) {
+        this.vaultFile = vaultFile;
     }
 
     public boolean isIncludeMetdata() {

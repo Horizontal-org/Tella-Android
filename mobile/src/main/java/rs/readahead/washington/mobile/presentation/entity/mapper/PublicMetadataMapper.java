@@ -2,24 +2,25 @@ package rs.readahead.washington.mobile.presentation.entity.mapper;
 
 import androidx.annotation.NonNull;
 
+import com.hzontal.tella_vault.Metadata;
+import com.hzontal.tella_vault.MyLocation;
+import com.hzontal.tella_vault.VaultFile;
+
 import java.util.LinkedHashMap;
 
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
-import rs.readahead.washington.mobile.domain.entity.Metadata;
-import rs.readahead.washington.mobile.domain.entity.MyLocation;
 import rs.readahead.washington.mobile.presentation.entity.PublicMetadata;
 import rs.readahead.washington.mobile.util.StringUtils;
 
 
 public class PublicMetadataMapper {
-    private static PublicMetadata transform(@NonNull MediaFile mediaFile) {
+    private static PublicMetadata transform(@NonNull VaultFile vaultFile) {
         PublicMetadata metadata = new PublicMetadata();
 
-        metadata.fileHash = mediaFile.getHash();
-        metadata.filePath = mediaFile.getPath();
-        metadata.fileName = mediaFile.getFileName();
+        metadata.fileHash = vaultFile.hash;
+        metadata.filePath = vaultFile.path;
+        metadata.fileName = vaultFile.name;
 
-        Metadata mfmd = mediaFile.getMetadata();
+        Metadata mfmd = vaultFile.metadata;
 
         if (mfmd == null) {
             return metadata;
@@ -52,9 +53,9 @@ public class PublicMetadataMapper {
         return metadata;
     }
 
-    public static LinkedHashMap<String, String> transformToMap(@NonNull MediaFile mediaFile) {
+    public static LinkedHashMap<String, String> transformToMap(@NonNull VaultFile vaultFile) {
         LinkedHashMap<String, String> metadata = new LinkedHashMap<>();
-        PublicMetadata publicMetadata = transform(mediaFile);
+        PublicMetadata publicMetadata = transform(vaultFile);
 
         metadata.put("File hash", rc(publicMetadata.fileHash));
         metadata.put("File path", rc(publicMetadata.filePath));

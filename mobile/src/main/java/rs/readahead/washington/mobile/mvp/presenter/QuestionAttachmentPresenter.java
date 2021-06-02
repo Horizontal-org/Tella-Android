@@ -5,6 +5,7 @@ import android.net.Uri;
 import androidx.annotation.Nullable;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.VaultFile;
 
 import java.util.List;
 
@@ -17,9 +18,7 @@ import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
-import rs.readahead.washington.mobile.media.MediaFileBundle;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IQuestionAttachmentPresenterContract;
 
@@ -31,7 +30,7 @@ public class QuestionAttachmentPresenter implements IQuestionAttachmentPresenter
     private final MediaFileHandler mediaFileHandler;
 
     @Nullable
-    private MediaFile attachment;
+    private VaultFile attachment;
 
 
     public QuestionAttachmentPresenter(IQuestionAttachmentPresenterContract.IView view) {
@@ -44,7 +43,7 @@ public class QuestionAttachmentPresenter implements IQuestionAttachmentPresenter
     public void getFiles(final IMediaFileRecordRepository.Filter filter, final IMediaFileRecordRepository.Sort sort) {
         disposables.add(
                 keyDataSource.getDataSource()
-                        .flatMapSingle((Function<DataSource, SingleSource<List<MediaFile>>>) dataSource -> dataSource.listMediaFiles(filter, sort))
+                        .flatMapSingle((Function<DataSource, SingleSource<List<VaultFile>>>) dataSource -> dataSource.listMediaFiles(filter, sort))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnSubscribe(disposable -> view.onGetFilesStart())
@@ -55,18 +54,18 @@ public class QuestionAttachmentPresenter implements IQuestionAttachmentPresenter
 
     @Nullable
     @Override
-    public MediaFile getAttachment() {
+    public VaultFile getAttachment() {
         return attachment;
     }
 
     @Override
-    public void setAttachment(@Nullable MediaFile attachment) {
+    public void setAttachment(@Nullable VaultFile attachment) {
         this.attachment = attachment;
     }
 
     @Override
-    public void addNewMediaFile(MediaFileBundle mediaFileBundle) {
-        disposables.add(mediaFileHandler.registerMediaFile(mediaFileBundle)
+    public void addNewMediaFile(VaultFile vaultFile) {
+        disposables.add(mediaFileHandler.saveVaultFile(vaultFile)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mediaFile -> view.onMediaFileAdded(attachment), throwable -> view.onMediaFileAddError(throwable))
@@ -78,7 +77,7 @@ public class QuestionAttachmentPresenter implements IQuestionAttachmentPresenter
         disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMapSingle((Function<DataSource, SingleSource<MediaFile>>) dataSource -> dataSource.getMediaFile(id))
+                .flatMapSingle((Function<DataSource, SingleSource<VaultFile>>) dataSource -> dataSource.getMediaFile(id))
                 .subscribe(mediaFile -> view.onMediaFileAdded(attachment), throwable -> view.onMediaFileAddError(throwable))
         );
     }

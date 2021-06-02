@@ -12,7 +12,6 @@ import java.text.DecimalFormat;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import timber.log.Timber;
 
 
@@ -65,7 +64,7 @@ public class FileUtil {
         );
     }
 
-    public static MediaFile.Type getMediaFileType(@NonNull String filename) {
+  /*  public static MediaFile.Type getMediaFileType(@NonNull String filename) {
         String mimeType = getMimeType(filename);
         String primaryType = getPrimaryMime(mimeType);
 
@@ -82,7 +81,7 @@ public class FileUtil {
         }
 
         return MediaFile.Type.UNKNOWN;
-    }
+    }*/
 
     public static boolean mkdirs(File path) {
         return path.exists() || path.mkdirs();

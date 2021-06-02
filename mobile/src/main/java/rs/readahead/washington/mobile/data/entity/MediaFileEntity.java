@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 public final class MediaFileEntity {
     @SerializedName("id")
-    public long id;
+    public String id;
 
     @SerializedName("path")
     public String path;

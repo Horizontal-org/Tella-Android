@@ -8,6 +8,10 @@ import java.io.InputStream;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.hzontal.tella_vault.Vault;
+import com.hzontal.tella_vault.VaultFile;
+
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.internal.Util;
@@ -15,24 +19,23 @@ import okio.BufferedSink;
 import okio.Okio;
 import okio.Source;
 import rs.readahead.washington.mobile.domain.entity.IProgressListener;
-import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.util.FileUtil;
 import timber.log.Timber;
 
 
 public class MediaFileRequestBody extends RequestBody {
-    protected final RawFile mediaFile;
+    protected final VaultFile mediaFile;
     protected final Context context;
     private final MediaType contentType;
     private final IProgressListener listener;
 
-    MediaFileRequestBody(Context context, RawFile mediaFile) {
+    MediaFileRequestBody(Context context, VaultFile mediaFile) {
         this(context, mediaFile, null);
     }
 
-    MediaFileRequestBody(Context context, RawFile mediaFile, @Nullable IProgressListener progressListener) {
-        String filename = mediaFile.getFileName();
+    MediaFileRequestBody(Context context, VaultFile mediaFile, @Nullable IProgressListener progressListener) {
+        String filename = mediaFile.name;
         String mime = FileUtil.getMimeType(filename);
 
         if (TextUtils.isEmpty(mime)) {
@@ -53,7 +56,7 @@ public class MediaFileRequestBody extends RequestBody {
 
     @Override
     public long contentLength() {
-        return mediaFile.getSize();
+        return mediaFile.size;
     }
 
     @Override
@@ -65,7 +68,7 @@ public class MediaFileRequestBody extends RequestBody {
             is = getInputStream();
 
             if (is == null) {
-                Timber.d("MediaFileHandler.getStream(%s) returned null", mediaFile.getUid());
+                Timber.d("MediaFileHandler.getStream(%s) returned null", mediaFile.id);
                 return;
             }
 
@@ -91,7 +94,7 @@ public class MediaFileRequestBody extends RequestBody {
     }
 
     protected InputStream getInputStream() throws IOException {
-        return MediaFileHandler.getStream(context, mediaFile);
+        return MediaFileHandler.getStream(mediaFile);
     }
 
     /* final class CountingSink extends ForwardingSink {

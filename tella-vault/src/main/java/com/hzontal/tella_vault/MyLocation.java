@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.domain.entity;
+package com.hzontal.tella_vault;
 
 import android.location.Location;
 
@@ -15,7 +15,6 @@ public final class MyLocation implements Serializable {
     private Float accuracy;
     private String provider;
     private Float speed;
-
 
     public MyLocation() {
         this.timestamp = UNKNOWN;

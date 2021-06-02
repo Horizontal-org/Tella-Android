@@ -15,6 +15,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.utils.MediaFile;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -26,7 +29,6 @@ import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
@@ -232,24 +234,24 @@ public class UploadInformationActivity extends BaseLockActivity implements
     }
 
     @Override
-    public void onMediaViewItemClicked(MediaFile mediaFile) {
-        if (mediaFile != null) {
-            playMedia(mediaFile);
+    public void onMediaViewItemClicked(VaultFile vaultFile) {
+        if (vaultFile != null) {
+            playMedia(vaultFile);
         }
     }
 
-    private void playMedia(MediaFile mediaFile) {
-        if (mediaFile.getType() == MediaFile.Type.IMAGE) {
+    private void playMedia(VaultFile vaultFile) {
+        if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
             Intent intent = new Intent(this, PhotoViewerActivity.class);
-            intent.putExtra(PhotoViewerActivity.VIEW_PHOTO, mediaFile);
+            intent.putExtra(PhotoViewerActivity.VIEW_PHOTO, vaultFile);
             startActivity(intent);
-        } else if (mediaFile.getType() == MediaFile.Type.AUDIO) {
+        } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
             Intent intent = new Intent(this, AudioPlayActivity.class);
-            intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, mediaFile.getId());
+            intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, vaultFile.id);
             startActivity(intent);
-        } else if (mediaFile.getType() == MediaFile.Type.VIDEO) {
+        } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
             Intent intent = new Intent(this, VideoViewerActivity.class);
-            intent.putExtra(VideoViewerActivity.VIEW_VIDEO, mediaFile);
+            intent.putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile);
             startActivity(intent);
         }
     }
@@ -262,7 +264,7 @@ public class UploadInformationActivity extends BaseLockActivity implements
             if (instances.get(i).getMediaFile() == null) {
                 continue;
             }
-            if (instances.get(i).getMediaFile().getFileName().equals(progress.name)) {
+            if (instances.get(i).getMediaFile().name.equals(progress.name)) {
                 if (progress.status == UploadProgressInfo.Status.FINISHED) {
                     instances.get(i).setStatus(ITellaUploadsRepository.UploadStatus.UPLOADED);
                 } else {

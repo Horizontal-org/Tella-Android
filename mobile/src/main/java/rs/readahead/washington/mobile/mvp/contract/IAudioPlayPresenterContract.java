@@ -2,17 +2,17 @@ package rs.readahead.washington.mobile.mvp.contract;
 
 import android.content.Context;
 
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import com.hzontal.tella_vault.VaultFile;
 
 
 public class IAudioPlayPresenterContract {
     public interface IView {
-        void onMediaFileSuccess(MediaFile mediaFile);
+        void onMediaFileSuccess(VaultFile vaultFile);
         void onMediaFileError(Throwable error);
         Context getContext();
     }
 
     public interface IPresenter extends IBasePresenter {
-        void getMediaFile(long ids);
+        void getMediaFile(String ids);
     }
 }

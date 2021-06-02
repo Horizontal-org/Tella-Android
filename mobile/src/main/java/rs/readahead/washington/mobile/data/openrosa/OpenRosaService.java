@@ -39,7 +39,6 @@ import okhttp3.Response;
 import okhttp3.TlsVersion;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import rs.readahead.washington.mobile.BuildConfig;
 import rs.readahead.washington.mobile.data.http.QuotePreservingCookieJar;
@@ -149,7 +148,7 @@ public class OpenRosaService {
 
             // build them
             Retrofit retrofit = retrofitBuilder
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    //.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(SimpleXmlConverterFactory.createNonStrict(new Persister(new AnnotationStrategy())))
                     .build();
 

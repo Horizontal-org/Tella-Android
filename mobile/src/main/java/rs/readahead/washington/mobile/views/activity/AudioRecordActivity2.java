@@ -13,16 +13,19 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+
+import com.hzontal.tella_vault.Metadata;
+import com.hzontal.tella_vault.VaultFile;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,11 +37,10 @@ import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.OnShowRationale;
 import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
+import rs.readahead.washington.mobile.BuildConfig;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
-import rs.readahead.washington.mobile.domain.entity.Metadata;
-import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.media.AudioRecorder;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
@@ -51,6 +53,7 @@ import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulePrese
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.util.StringUtils;
+import timber.log.Timber;
 
 
 @RuntimePermissions
@@ -83,7 +86,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     private long lastUpdateTime;
 
     // handling MediaFile
-    private MediaFile handlingMediaFile;
+    private VaultFile handlingMediaFile;
 
     // recording
     private AudioRecorder audioRecorder;
@@ -128,7 +131,6 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         if (getIntent().hasExtra(RECORDER_MODE)) {
             mode = Mode.valueOf(getIntent().getStringExtra(RECORDER_MODE));
         }
-
         animator = (ObjectAnimator) AnimatorInflater.loadAnimator(AudioRecordActivity2.this, R.animator.fade_in);
 
         mTimer.setText(timeToString(0));
@@ -236,7 +238,9 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
             audioRecorder = new AudioRecorder(this, this);
             disposable.add(audioRecorder.startRecording()
-                    .subscribe(this::onRecordingStopped, throwable -> onRecordingError())
+                    .subscribe(this::onRecordingStopped, throwable -> {
+                        Timber.d(throwable);
+                        onRecordingError();})
             );
         } else {
             canclePauseRecorder();
@@ -260,8 +264,8 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     }
 
     @Override
-    public void onAddSuccess(MediaFile mediaFile) {
-        attachMediaFileMetadata(mediaFile, metadataAttacher);
+    public void onAddSuccess(VaultFile vaultFile) {
+        attachMediaFileMetadata(vaultFile, metadataAttacher);
         showToast(String.format(getString(R.string.recorder_toast_recording_saved), getString(R.string.app_name)));
     }
 
@@ -280,7 +284,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     }
 
     @Override
-    public void onMetadataAttached(long mediaFileId, @Nullable Metadata metadata) {
+    public void onMetadataAttached(String mediaFileId, @Nullable Metadata metadata) {
         Intent intent = new Intent();
 
         if (mode == Mode.COLLECT) {
@@ -331,7 +335,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     }
 
     @Override
-    public void onGetMediaFilesSuccess(List<RawFile> mediaFiles) {
+    public void onGetMediaFilesSuccess(List<VaultFile> mediaFiles) {
 
     }
 
@@ -352,8 +356,9 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void onRecordingStopped(MediaFile mediaFile) {
-        if (MediaFile.NONE.equals(mediaFile)) {
+    private void onRecordingStopped(VaultFile vaultFile) {
+        Timber.d("****VaultFile Output%s", vaultFile.toString());
+        if (vaultFile == null) {
             handlingMediaFile = null;
 
             disableStop();
@@ -361,8 +366,8 @@ public class AudioRecordActivity2 extends MetadataActivity implements
             enableRecord();
 
         } else {
-            handlingMediaFile = mediaFile;
-            handlingMediaFile.setSize(MediaFileHandler.getSize(getContext(), mediaFile));
+            handlingMediaFile = vaultFile;
+            handlingMediaFile.size = MediaFileHandler.getSize(getContext(), vaultFile);
 
             disableStop();
             enablePlay();
@@ -499,9 +504,9 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         }
     }
 
-    private void scheduleFileUpload(MediaFile mediaFile) {
+    private void scheduleFileUpload(VaultFile vaultFile) {
         if (Preferences.isAutoUploadEnabled()) {
-            List<MediaFile> upload = Collections.singletonList(mediaFile);
+            List<VaultFile> upload = Collections.singletonList(vaultFile);
             uploadPresenter.scheduleUploadMediaFiles(upload);
         } else {
             onMediaFilesUploadScheduled();

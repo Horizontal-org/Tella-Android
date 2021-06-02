@@ -21,6 +21,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
+import com.hzontal.tella_vault.MyLocation;
+import com.hzontal.tella_vault.VaultFile;
+
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -49,8 +52,6 @@ import rs.readahead.washington.mobile.bus.event.GPSProviderRequiredEvent;
 import rs.readahead.washington.mobile.bus.event.LocationPermissionRequiredEvent;
 import rs.readahead.washington.mobile.bus.event.MediaFileBinaryWidgetCleared;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
-import rs.readahead.washington.mobile.domain.entity.MyLocation;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaPartResponse;
@@ -61,7 +62,6 @@ import rs.readahead.washington.mobile.javarosa.FormUtils;
 import rs.readahead.washington.mobile.javarosa.IFormParserContract;
 import rs.readahead.washington.mobile.javarosa.IFormSaverContract;
 import rs.readahead.washington.mobile.javarosa.IFormSubmitterContract;
-import rs.readahead.washington.mobile.media.MediaFileBundle;
 import rs.readahead.washington.mobile.mvp.contract.IQuestionAttachmentPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.QuestionAttachmentPresenter;
 import rs.readahead.washington.mobile.util.C;
@@ -274,7 +274,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
         switch (requestCode) {
             case C.MEDIA_FILE_ID:
-                MediaFile mediaFile = (MediaFile) data.getSerializableExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY);
+                VaultFile mediaFile = (VaultFile) data.getSerializableExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY);
 
                 if (currentScreenView instanceof CollectFormView) {
                     CollectFormView cfv = (CollectFormView) currentScreenView;
@@ -284,7 +284,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
                         if (filename != null) {
                             formParser.setWidgetMediaFile(filename, mediaFile);
-                            formParser.setTellaMetadataFields(cfv, mediaFile.getMetadata());
+                            formParser.setTellaMetadataFields(cfv, mediaFile.metadata);
                         } else {
                             Timber.e("Binary data not set on waiting widget");
                         }
@@ -743,7 +743,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onGetFilesSuccess(List<MediaFile> files) {
+    public void onGetFilesSuccess(List<VaultFile> files) {
 
     }
 
@@ -753,7 +753,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onMediaFileAdded(MediaFile mediaFile) {
+    public void onMediaFileAdded(VaultFile mediaFile) {
         onActivityResult(C.MEDIA_FILE_ID, RESULT_OK, new Intent().putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, mediaFile));
     }
 
@@ -764,9 +764,9 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onMediaFileImported(MediaFileBundle mediaFileBundle) {
-        presenter.setAttachment(mediaFileBundle.getMediaFile());
-        presenter.addNewMediaFile(mediaFileBundle);
+    public void onMediaFileImported(VaultFile vaultFile) {
+        presenter.setAttachment(vaultFile);
+        presenter.addNewMediaFile(vaultFile);
     }
 
     @Override

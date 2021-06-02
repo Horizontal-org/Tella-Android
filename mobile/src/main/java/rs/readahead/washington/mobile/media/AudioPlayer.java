@@ -8,10 +8,11 @@ import android.os.Message;
 
 import androidx.annotation.NonNull;
 
+import com.hzontal.tella_vault.VaultFile;
+
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.util.ThreadUtil;
 
 
@@ -40,11 +41,11 @@ public class AudioPlayer {
         this.progressEventHandler = new ProgressEventHandler(this);
     }
 
-    public void play(MediaFile mediaFile) {
+    public void play(VaultFile vaultFile) {
         try {
             if (mediaPlayer != null) return; // there can be only one..
 
-            mediaFileHttpServer = new MediaFileHttpServer(context, mediaFile);
+            mediaFileHttpServer = new MediaFileHttpServer(context, vaultFile);
             mediaFileHttpServer.start();
 
             mediaPlayer = new MediaPlayer();

@@ -3,10 +3,11 @@ package rs.readahead.washington.mobile.javarosa;
 import android.content.Context;
 import androidx.annotation.NonNull;
 
+import com.hzontal.tella_vault.VaultFile;
+
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.mvp.contract.IBasePresenter;
 
@@ -36,7 +37,7 @@ public interface IFormParserContract {
         // List<MediaFile> getFormAttachments();
         void executeRepeat();
         void cancelRepeat();
-        void setWidgetMediaFile(@NonNull String name, @NonNull MediaFile mediaFile);
+        void setWidgetMediaFile(@NonNull String name, @NonNull VaultFile vaultFile);
         void removeWidgetMediaFile(String name);
         void stopWaitingBinaryData();
     }

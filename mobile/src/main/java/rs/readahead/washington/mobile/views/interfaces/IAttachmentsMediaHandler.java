@@ -1,9 +1,9 @@
 package rs.readahead.washington.mobile.views.interfaces;
 
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import com.hzontal.tella_vault.VaultFile;
 
 
 public interface IAttachmentsMediaHandler {
-    void playMedia(MediaFile mediaFile);
-    void onRemoveAttachment(MediaFile mediaFile);
+    void playMedia(VaultFile vaultFile);
+    void onRemoveAttachment(VaultFile vaultFile);
 }

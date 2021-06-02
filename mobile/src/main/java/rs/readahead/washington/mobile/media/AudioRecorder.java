@@ -17,10 +17,12 @@ import java.util.concurrent.Executors;
 
 import androidx.annotation.Nullable;
 
+import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.utils.VaultUtils;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.util.StringUtils;
 import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
@@ -62,29 +64,29 @@ public class AudioRecorder {
         cancelled = false;
     }
 
-    public Observable<MediaFile> startRecording() {
+    public Observable<VaultFile> startRecording() {
         return Observable.fromCallable(() -> {
-            MediaFile mediaFile = MediaFile.newAac();
+            VaultFile vaultFile = VaultUtils.INSTANCE.newAac();
 
-            DigestOutputStream outputStream = MediaFileHandler.getOutputStream(context, mediaFile);
+            DigestOutputStream outputStream = MediaFileHandler.getOutputStream(context, vaultFile);
 
             if (outputStream == null) {
-                return MediaFile.NONE;
+                return null;
             }
 
             startTime = Util.currentTimestamp();
             encode(outputStream); // heigh-ho, heigh-ho..
 
             if (isCancelled()) {
-                MediaFileHandler.deleteFile(context, mediaFile);
-                return MediaFile.NONE;
+                MediaFileHandler.deleteFile(context, vaultFile);
+                return null;
             }
+            Timber.d("Size*******%s", String.valueOf(MediaFileHandler.getSize(context, vaultFile)));
+            vaultFile.size = MediaFileHandler.getSize(context, vaultFile);
+            vaultFile.hash = StringUtils.hexString(outputStream.getMessageDigest().digest());
+            vaultFile.duration = duration;
 
-            mediaFile.setSize(MediaFileHandler.getSize(context, mediaFile));
-            mediaFile.setHash(StringUtils.hexString(outputStream.getMessageDigest().digest()));
-            mediaFile.setDuration(duration);
-
-            return mediaFile;
+            return vaultFile;
         }).subscribeOn(Schedulers.from(executor)).observeOn(AndroidSchedulers.mainThread());
     }
 

@@ -1,11 +1,13 @@
 package rs.readahead.washington.mobile.domain.entity;
 
+import com.hzontal.tella_vault.VaultFile;
+
 public class UploadProgressInfo {
     public String name;
     public long current;
     public long size;
     public Status status;
-    public long fileId;
+    public String fileId;
 
     public enum Status {
         UNKNOWN,
@@ -18,19 +20,19 @@ public class UploadProgressInfo {
         UNKNOWN_HOST,
     }
 
-    public UploadProgressInfo(RawFile file, long current, long size) {
-        this.name = file.getFileName();
-        this.fileId = file.getId();
+    public UploadProgressInfo(VaultFile file, long current, long size) {
+        this.name = file.name;
+        this.fileId = file.id;
         this.current = current;
         this.size = size;
         this.status = Status.OK;
     }
 
-    public UploadProgressInfo(RawFile file, long current, Status status) {
-        this.name = file.getFileName();
-        this.fileId = file.getId();
+    public UploadProgressInfo(VaultFile file, long current, Status status) {
+        this.name = file.name;
+        this.fileId = file.id;
         this.current = current;
-        this.size = file.getSize();
+        this.size = file.size;
         this.status = status;
     }
 }
