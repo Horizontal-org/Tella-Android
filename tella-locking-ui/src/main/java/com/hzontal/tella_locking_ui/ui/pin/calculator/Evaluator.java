@@ -2,7 +2,36 @@
 
 package com.hzontal.tella_locking_ui.ui.pin.calculator;
 
+import java.text.DecimalFormat;
+
+import static android.text.TextUtils.substring;
+import static java.lang.String.format;
+
 public class Evaluator {
+
+    public static String evaluateResult(final String input) {
+        String entry = input;
+        entry = entry.replace('x', '*');
+        entry = entry.replace('÷', '/');
+        entry = entry.replace(',', '.');
+        entry = entry.replace(" ", "");
+        Double evaluation = eval(entry);
+        String evaluationString = format("%s", evaluation);
+        if (substring(
+                evaluationString,
+                evaluationString.length() - 2,
+                evaluationString.length()
+        ).equals(".0")
+        ) {
+            evaluationString = substring(evaluationString, 0, evaluationString.length() - 2);
+        }
+        if (evaluationString.length() > 10) {
+            DecimalFormat sf = new DecimalFormat("0.#####E0");
+            evaluationString = sf.format(evaluation);
+        }
+        return evaluationString;
+    }
+
     public static double eval(final String str) {
         return new Object() {
             int pos = -1, ch;
@@ -23,14 +52,14 @@ public class Evaluator {
             double parse() {
                 nextChar();
                 double x = parseExpression();
-                if (pos < str.length()) throw new RuntimeException("Unexpected: " + (char)ch);
+                if (pos < str.length()) throw new RuntimeException("Unexpected: " + (char) ch);
                 return x;
             }
 
             double parseExpression() {
                 double x = parseTerm();
-                for (;;) {
-                    if      (eat('+')) x += parseTerm(); // addition
+                for (; ; ) {
+                    if (eat('+')) x += parseTerm(); // addition
                     else if (eat('-')) x -= parseTerm(); // subtraction
                     else return x;
                 }
@@ -38,8 +67,8 @@ public class Evaluator {
 
             double parseTerm() {
                 double x = parseFactor();
-                for (;;) {
-                    if      (eat('*')) x *= parseFactor(); // multiplication
+                for (; ; ) {
+                    if (eat('*')) x *= parseFactor(); // multiplication
                     else if (eat('/')) x /= parseFactor(); // division
                     else return x;
                 }
@@ -61,13 +90,24 @@ public class Evaluator {
                     while (ch >= 'a' && ch <= 'z') nextChar();
                     String func = str.substring(startPos, this.pos);
                     x = parseFactor();
-                    if (func.equals("sqrt")) x = Math.sqrt(x);
-                    else if (func.equals("sin")) x = Math.sin(Math.toRadians(x));
-                    else if (func.equals("cos")) x = Math.cos(Math.toRadians(x));
-                    else if (func.equals("tan")) x = Math.tan(Math.toRadians(x));
-                    else throw new RuntimeException("Unknown function: " + func);
+                    switch (func) {
+                        case "sqrt":
+                            x = Math.sqrt(x);
+                            break;
+                        case "sin":
+                            x = Math.sin(Math.toRadians(x));
+                            break;
+                        case "cos":
+                            x = Math.cos(Math.toRadians(x));
+                            break;
+                        case "tan":
+                            x = Math.tan(Math.toRadians(x));
+                            break;
+                        default:
+                            throw new RuntimeException("Unknown function: " + func);
+                    }
                 } else {
-                    throw new RuntimeException("Unexpected: " + (char)ch);
+                    throw new RuntimeException("Unexpected: " + (char) ch);
                 }
 
                 if (eat('^')) x = Math.pow(x, parseFactor()); // exponentiation

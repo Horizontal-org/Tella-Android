@@ -60,7 +60,7 @@ class CalculatorActivity : BasePinActivity(), ResultListener {
     override fun onFailureSetPin(error: String) {
         var evaluationString = ""
         try {
-            evaluationString = evaluateResult(pinEditText.text.toString())
+            evaluationString = Evaluator.evaluateResult(pinEditText.text.toString())
         } catch (e: Exception) {
             evaluationString = "ERROR"
         } finally {
@@ -70,28 +70,5 @@ class CalculatorActivity : BasePinActivity(), ResultListener {
 
     override fun onClearResult() {
         resultText.setText("")
-    }
-
-    private fun evaluateResult(input: String): String {
-        var entry = input
-        entry = entry.replace('x', '*')
-        entry = entry.replace('÷', '/')
-        entry = entry.replace(',', '.')
-        entry = entry.replace(" ", "")
-        val evaluation = eval(entry)
-        var evaluationString = format("%s", evaluation)
-        if (substring(
-                evaluationString,
-                evaluationString.length - 2,
-                evaluationString.length
-            ) == ".0"
-        ) {
-            evaluationString = substring(evaluationString, 0, evaluationString.length - 2)
-        }
-        if (evaluationString.length > 10) {
-            val sf = DecimalFormat("0.#####E0")
-            evaluationString = sf.format(evaluation)
-        }
-        return evaluationString
     }
 }
