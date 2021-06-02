@@ -144,6 +144,8 @@
         <item name="android:textSize">30sp</item>
         <item name="android:layout_marginBottom">0dp</item>
         <item name="android:fontFamily">@font/open_sans</item>
+        <item name="layout_constraintHorizontal_bias">0.5</item>
+        <item name="layout_constraintVertical_bias">0.5</item>
         <item name="android:clickable">true</item>
     </style>
 

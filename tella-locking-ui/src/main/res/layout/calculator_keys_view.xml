@@ -7,224 +7,258 @@
     android:layout_gravity="center_horizontal">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline78h"
+        android:id="@+id/guideline74v"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.74" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline50v"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.50" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline26v"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.26" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2h"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.78" />
+        app:layout_constraintGuide_percent="0.02" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline22h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.21" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline42h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.41" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline62h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.60" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline82h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.79" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline98h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.96" />
 
     <TextView
         android:id="@+id/deleteBtn"
         style="@style/Calculator_Green_Keys"
         android:text="AC"
-        app:layout_constraintBottom_toTopOf="@+id/sevenBtn"
-        app:layout_constraintEnd_toStartOf="@+id/plusMinusBtn"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintBottom_toTopOf="@+id/guideline22h"
+        app:layout_constraintEnd_toStartOf="@+id/guideline26v"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline2h"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/plusMinusBtn"
         style="@style/Calculator_Green_Keys"
         android:text="+/-"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/eightBtn"
-        app:layout_constraintEnd_toStartOf="@+id/percentBtn"
-        app:layout_constraintStart_toEndOf="@+id/deleteBtn"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toTopOf="@id/guideline2h"
+        app:layout_constraintBottom_toTopOf="@+id/guideline22h"
+        app:layout_constraintEnd_toStartOf="@+id/guideline50v"
+        app:layout_constraintStart_toEndOf="@+id/guideline26v"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/percentBtn"
         style="@style/Calculator_Green_Keys"
         android:text=" % "
-        app:layout_constraintBottom_toTopOf="@+id/nineBtn"
-        app:layout_constraintEnd_toStartOf="@+id/devideBtn"
-        app:layout_constraintStart_toEndOf="@+id/plusMinusBtn"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline22h"
+        app:layout_constraintEnd_toStartOf="@+id/guideline74v"
+        app:layout_constraintStart_toEndOf="@+id/guideline50v"
+        app:layout_constraintTop_toTopOf="@id/guideline2h"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/devideBtn"
         style="@style/Calculator_Gray_Keys"
         android:text=" ÷ "
-        app:layout_constraintBottom_toTopOf="@+id/multiplyBtn"
+        app:layout_constraintBottom_toTopOf="@+id/guideline22h"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/percentBtn"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/guideline74v"
+        app:layout_constraintTop_toTopOf="@id/guideline2h"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/sevenBtn"
         style="@style/Calculator_Light_Keys"
         android:text="7"
-        app:layout_constraintBottom_toTopOf="@+id/fourBtn"
-        app:layout_constraintEnd_toStartOf="@+id/eightBtn"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintBottom_toTopOf="@+id/guideline42h"
+        app:layout_constraintTop_toBottomOf="@+id/guideline22h"
+        app:layout_constraintEnd_toStartOf="@+id/guideline26v"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/deleteBtn"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/eightBtn"
         style="@style/Calculator_Light_Keys"
         android:text="8"
-        app:layout_constraintBottom_toTopOf="@+id/fiveBtn"
-        app:layout_constraintEnd_toStartOf="@+id/nineBtn"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/sevenBtn"
-        app:layout_constraintTop_toBottomOf="@+id/plusMinusBtn"
+        app:layout_constraintBottom_toTopOf="@+id/guideline42h"
+        app:layout_constraintTop_toBottomOf="@+id/guideline22h"
+        app:layout_constraintEnd_toStartOf="@+id/guideline50v"
+        app:layout_constraintStart_toEndOf="@+id/guideline26v"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/nineBtn"
         style="@style/Calculator_Light_Keys"
         android:text="9"
-        app:layout_constraintBottom_toTopOf="@+id/sixBtn"
-        app:layout_constraintEnd_toStartOf="@id/multiplyBtn"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/eightBtn"
-        app:layout_constraintTop_toBottomOf="@+id/percentBtn"
+        app:layout_constraintBottom_toTopOf="@+id/guideline42h"
+        app:layout_constraintTop_toBottomOf="@+id/guideline22h"
+        app:layout_constraintEnd_toStartOf="@id/guideline74v"
+        app:layout_constraintStart_toEndOf="@+id/guideline50v"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/multiplyBtn"
         style="@style/Calculator_Gray_Keys"
         android:text=" x "
-        app:layout_constraintBottom_toTopOf="@+id/minusBtn"
+        app:layout_constraintBottom_toTopOf="@+id/guideline42h"
+        app:layout_constraintTop_toBottomOf="@+id/guideline22h"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/nineBtn"
+        app:layout_constraintStart_toEndOf="@+id/guideline74v"
         android:paddingBottom="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/devideBtn"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/fourBtn"
         style="@style/Calculator_Light_Keys"
         android:text="4"
-        app:layout_constraintBottom_toTopOf="@+id/oneBtn"
-        app:layout_constraintEnd_toStartOf="@+id/fiveBtn"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintBottom_toTopOf="@+id/guideline62h"
+        app:layout_constraintTop_toBottomOf="@+id/guideline42h"
+        app:layout_constraintEnd_toStartOf="@+id/guideline26v"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sevenBtn"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/fiveBtn"
         style="@style/Calculator_Light_Keys"
         android:text="5"
-        app:layout_constraintBottom_toTopOf="@+id/twoBtn"
-        app:layout_constraintEnd_toStartOf="@+id/sixBtn"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/fourBtn"
-        app:layout_constraintTop_toBottomOf="@+id/eightBtn"
+        app:layout_constraintBottom_toTopOf="@+id/guideline62h"
+        app:layout_constraintTop_toBottomOf="@+id/guideline42h"
+        app:layout_constraintEnd_toStartOf="@+id/guideline50v"
+        app:layout_constraintStart_toEndOf="@+id/guideline26v"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/sixBtn"
         style="@style/Calculator_Light_Keys"
         android:text="6"
-        app:layout_constraintBottom_toTopOf="@+id/threeBtn"
-        app:layout_constraintEnd_toStartOf="@id/minusBtn"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/fiveBtn"
-        app:layout_constraintTop_toBottomOf="@+id/nineBtn"
+        app:layout_constraintBottom_toTopOf="@+id/guideline62h"
+        app:layout_constraintTop_toBottomOf="@+id/guideline42h"
+        app:layout_constraintEnd_toStartOf="@id/guideline74v"
+        app:layout_constraintStart_toEndOf="@+id/guideline50v"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/minusBtn"
         style="@style/Calculator_Gray_Keys"
         android:text=" - "
-        app:layout_constraintBottom_toTopOf="@+id/plusBtn"
+        app:layout_constraintBottom_toTopOf="@+id/guideline62h"
+        app:layout_constraintTop_toBottomOf="@+id/guideline42h"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/sixBtn"
-        app:layout_constraintTop_toBottomOf="@id/multiplyBtn"
-        app:layout_constraintVertical_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@+id/guideline74v"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/oneBtn"
         style="@style/Calculator_Light_Keys"
         android:text="1"
-        app:layout_constraintTop_toBottomOf="@+id/fourBtn"
-        app:layout_constraintEnd_toStartOf="@+id/twoBtn"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintBottom_toTopOf="@+id/guideline82h"
+        app:layout_constraintTop_toBottomOf="@+id/guideline62h"
+        app:layout_constraintEnd_toStartOf="@+id/guideline26v"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/zeroBtn"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/twoBtn"
         style="@style/Calculator_Light_Keys"
         android:text="2"
-        app:layout_constraintTop_toBottomOf="@+id/fiveBtn"
-        app:layout_constraintEnd_toStartOf="@+id/threeBtn"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/oneBtn"
-        app:layout_constraintBottom_toTopOf="@id/zeroBtn"
+        app:layout_constraintBottom_toTopOf="@+id/guideline82h"
+        app:layout_constraintTop_toBottomOf="@+id/guideline62h"
+        app:layout_constraintEnd_toStartOf="@+id/guideline50v"
+        app:layout_constraintStart_toEndOf="@+id/guideline26v"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/threeBtn"
         style="@style/Calculator_Light_Keys"
         android:text="3"
-        app:layout_constraintTop_toBottomOf="@+id/sixBtn"
-        app:layout_constraintEnd_toStartOf="@id/plusBtn"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/twoBtn"
-        app:layout_constraintBottom_toTopOf="@id/commaBtn"
+        app:layout_constraintBottom_toTopOf="@+id/guideline82h"
+        app:layout_constraintTop_toBottomOf="@+id/guideline62h"
+        app:layout_constraintEnd_toStartOf="@+id/guideline74v"
+        app:layout_constraintStart_toEndOf="@+id/guideline50v"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/plusBtn"
         style="@style/Calculator_Gray_Keys"
         android:text=" + "
-        app:layout_constraintTop_toBottomOf="@+id/minusBtn"
+        app:layout_constraintBottom_toTopOf="@+id/guideline82h"
+        app:layout_constraintTop_toBottomOf="@+id/guideline62h"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@id/threeBtn"
-        app:layout_constraintBottom_toTopOf="@id/okBtn"
-        app:layout_constraintVertical_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@+id/guideline74v"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/zeroBtn"
         style="@style/Calculator_Light_Keys"
-        android:layout_width="152dp"
+        android:layout_width="160dp"
         android:text="0"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/commaBtn"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintBottom_toTopOf="@id/guideline98h"
+        app:layout_constraintEnd_toStartOf="@+id/guideline50v"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guideline78h"
+        app:layout_constraintTop_toBottomOf="@+id/guideline80h"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/commaBtn"
         style="@style/Calculator_Light_Keys"
-        android:layout_marginEnd="7dp"
         android:text=","
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/okBtn"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/zeroBtn"
-        app:layout_constraintTop_toBottomOf="@+id/guideline78h"
+        app:layout_constraintBottom_toTopOf="@id/guideline98h"
+        app:layout_constraintEnd_toStartOf="@+id/guideline74v"
+        app:layout_constraintStart_toEndOf="@+id/guideline50v"
+        app:layout_constraintTop_toBottomOf="@+id/guideline80h"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/okBtn"
         style="@style/Calculator_Dark_Green_Keys"
         android:text="="
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/guideline98h"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/commaBtn"
-        app:layout_constraintTop_toBottomOf="@+id/guideline78h"
+        app:layout_constraintStart_toEndOf="@+id/guideline74v"
+        app:layout_constraintTop_toBottomOf="@+id/guideline80h"
         tools:ignore="HardcodedText" />
 
     <androidx.constraintlayout.widget.Group
