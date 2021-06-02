@@ -5,14 +5,12 @@
         <shape>
             <solid android:color="@color/wa_dialog_gray" />
             <corners android:bottomLeftRadius="15dp" android:bottomRightRadius="15dp" android:topLeftRadius="15dp" android:topRightRadius="15dp" />
-            <stroke android:width="2px" android:color="@color/wa_dialog_gray" />
         </shape>
     </item>
     <item android:state_pressed="false">
         <shape>
             <solid android:color="@color/wa_light_green" />
             <corners android:bottomLeftRadius="15dp" android:bottomRightRadius="15dp" android:topLeftRadius="15dp" android:topRightRadius="15dp" />
-            <stroke android:width="2px" android:color="@color/wa_grey" />
         </shape>
     </item>
 
