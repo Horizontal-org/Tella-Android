@@ -30,7 +30,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setupImgV" />
 
-    <rs.readahead.washington.mobile.views.custom.InformationButton
+    <com.hzontal.shared_ui.buttons.InformationButton
         android:id="@+id/lockPasswordBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
         app:state_checked="false"
         />
 
-    <rs.readahead.washington.mobile.views.custom.InformationButton
+    <com.hzontal.shared_ui.buttons.InformationButton
         android:id="@+id/lockPINdBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
 
         />
 
-    <rs.readahead.washington.mobile.views.custom.InformationButton
+    <com.hzontal.shared_ui.buttons.InformationButton
         android:id="@+id/lockPatternBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

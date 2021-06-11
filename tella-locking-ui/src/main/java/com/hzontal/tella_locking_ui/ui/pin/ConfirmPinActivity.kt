@@ -1,10 +1,10 @@
 package com.hzontal.tella_locking_ui.ui.pin
 
 import android.os.Bundle
+import com.hzontal.shared_ui.utils.DialogUtils
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.TellaKeysUI
 import com.hzontal.tella_locking_ui.ui.pin.base.BasePinActivity
-import com.hzontal.tella_locking_ui.ui.utils.DialogUtils
 import org.hzontal.tella.keys.MainKeyStore
 import org.hzontal.tella.keys.config.UnlockRegistry
 import org.hzontal.tella.keys.key.MainKey
