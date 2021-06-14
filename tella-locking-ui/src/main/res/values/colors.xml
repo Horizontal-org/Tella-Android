@@ -9,4 +9,11 @@
     <color name="wa_orange">#D6933B</color>
     <color name="wa_red_error">#CE1515</color>
     <color name="wa_grey">#E8E8EC</color>
+    <color name="wa_light_green">#E6F4F3</color>
+    <color name="wa_black">#000000</color>
+    <color name="wa_dark_gray">#494848</color>
+    <color name="wa_calc_gray">#A4A2A2</color>
+    <color name="wa_dark_green">#3C6E72</color>
+    <color name="wa_calc_color">#545957</color>
+
 </resources>
