@@ -30,7 +30,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setupImgV" />
 
-    <com.hzontal.shared_ui.buttons.InformationButton
+    <org.hzontal.shared_ui.buttons.InformationButton
         android:id="@+id/lockPasswordBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
         app:state_checked="false"
         />
 
-    <com.hzontal.shared_ui.buttons.InformationButton
+    <org.hzontal.shared_ui.buttons.InformationButton
         android:id="@+id/lockPINdBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
 
         />
 
-    <com.hzontal.shared_ui.buttons.InformationButton
+    <org.hzontal.shared_ui.buttons.InformationButton
         android:id="@+id/lockPatternBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

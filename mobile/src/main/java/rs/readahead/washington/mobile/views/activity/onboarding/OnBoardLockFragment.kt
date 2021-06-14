@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.hzontal.shared_ui.buttons.InformationButton
+import org.hzontal.shared_ui.buttons.InformationButton
 import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.ui.password.SetPasswordActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternSetActivity

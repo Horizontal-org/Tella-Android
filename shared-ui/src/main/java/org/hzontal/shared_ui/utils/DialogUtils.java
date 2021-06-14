@@ -1,4 +1,4 @@
-package com.hzontal.shared_ui.utils;
+package org.hzontal.shared_ui.utils;
 
 import android.app.Activity;
 import android.os.Build;

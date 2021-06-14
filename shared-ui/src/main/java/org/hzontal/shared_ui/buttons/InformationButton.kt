@@ -1,4 +1,4 @@
-package com.hzontal.shared_ui.buttons
+package org.hzontal.shared_ui.buttons
 
 import android.content.Context
 import android.util.AttributeSet

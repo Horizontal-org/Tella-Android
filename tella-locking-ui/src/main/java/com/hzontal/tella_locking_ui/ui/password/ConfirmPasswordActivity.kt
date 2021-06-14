@@ -1,7 +1,7 @@
 package com.hzontal.tella_locking_ui.ui.password
 
 import android.os.Bundle
-import com.hzontal.shared_ui.utils.DialogUtils
+import org.hzontal.shared_ui.utils.DialogUtils
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.TellaKeysUI
 import com.hzontal.tella_locking_ui.ui.password.base.BasePasswordActivity

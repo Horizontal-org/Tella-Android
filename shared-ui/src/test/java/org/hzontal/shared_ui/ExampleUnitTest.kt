@@ -1,4 +1,4 @@
-package com.hzontal.shared_ui
+package org.hzontal.shared_ui
 
 import org.junit.Test
 

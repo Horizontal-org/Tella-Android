@@ -31,7 +31,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setupImgV" />
 
-    <com.hzontal.shared_ui.buttons.InformationButton
+    <org.hzontal.shared_ui.buttons.InformationButton
         android:id="@+id/fullSetupBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
         app:layout_constraintTop_toBottomOf="@+id/setupMainTv"
         app:topTextCenter="@string/onboard_full_setup" />
 
-    <com.hzontal.shared_ui.buttons.InformationButton
+    <org.hzontal.shared_ui.buttons.InformationButton
         android:id="@+id/quickSetupBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
