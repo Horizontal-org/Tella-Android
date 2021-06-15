@@ -12,4 +12,12 @@
         <item name="android:textSize">15sp</item>
     </style>
 
+    <style name="AppBottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
+    </style>
+
+    <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/drag_anchor_drawable</item>
+    </style>
+
 </resources>
