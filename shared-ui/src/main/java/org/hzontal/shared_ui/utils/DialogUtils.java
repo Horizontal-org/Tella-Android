@@ -1,4 +1,4 @@
-package com.hzontal.tella_locking_ui.ui.utils;
+package org.hzontal.shared_ui.utils;
 
 import android.app.Activity;
 import android.os.Build;
@@ -9,10 +9,10 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
 
-import com.hzontal.tella_locking_ui.R;
+import com.hzontal.shared_ui.R;
+
 
 public class DialogUtils {
-
 
     public static void showBottomMessage(Activity context, String msg, Boolean isError) {
         showBottomMessage(context, msg, isError ? R.color.wa_red_error : R.color.wa_orange);
@@ -34,6 +34,5 @@ public class DialogUtils {
             }
         });
     }
-
 
 }

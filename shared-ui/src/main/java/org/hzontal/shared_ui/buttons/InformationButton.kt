@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.custom
+package org.hzontal.shared_ui.buttons
 
 import android.content.Context
 import android.util.AttributeSet
@@ -11,7 +11,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import rs.readahead.washington.mobile.R
+import com.hzontal.shared_ui.R
 
 
 class InformationButton @JvmOverloads constructor(

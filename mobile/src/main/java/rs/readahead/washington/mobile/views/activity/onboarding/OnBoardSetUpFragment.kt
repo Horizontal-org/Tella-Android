@@ -7,9 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import org.hzontal.shared_ui.buttons.InformationButton
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
-import rs.readahead.washington.mobile.views.custom.InformationButton
 
 class OnBoardSetUpFragment : BaseFragment() {
 
