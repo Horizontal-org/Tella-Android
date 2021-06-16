@@ -8,4 +8,13 @@
         <attr name="startImg" format="reference" />
         <attr name="state_checked" format="boolean"/>
     </declare-styleable>
+
+
+    <declare-styleable name="TellaSwitch">
+        <attr name="titleText" format="reference|string" />
+        <attr name="explainText" format="reference|string" />
+        <attr name="endImage" format="reference" />
+        <attr name="startImage" format="reference" />
+        <attr name="is_checked" format="boolean"/>
+    </declare-styleable>
 </resources>
