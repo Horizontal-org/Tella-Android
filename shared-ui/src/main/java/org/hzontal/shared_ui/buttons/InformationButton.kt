@@ -11,7 +11,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import com.hzontal.shared_ui.R
+import org.hzontal.shared_ui.R
 
 
 class InformationButton @JvmOverloads constructor(

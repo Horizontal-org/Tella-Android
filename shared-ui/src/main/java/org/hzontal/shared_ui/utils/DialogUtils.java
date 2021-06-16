@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
 
-import com.hzontal.shared_ui.R;
+import org.hzontal.shared_ui.R;
 
 
 public class DialogUtils {

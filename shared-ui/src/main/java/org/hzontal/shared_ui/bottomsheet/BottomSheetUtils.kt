@@ -3,7 +3,7 @@ package org.hzontal.shared_ui.bottomsheet
 import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
-import com.hzontal.shared_ui.R
+import org.hzontal.shared_ui.R
 
 object BottomSheetUtils {
 

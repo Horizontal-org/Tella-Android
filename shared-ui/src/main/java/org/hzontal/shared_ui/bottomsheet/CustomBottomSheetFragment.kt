@@ -18,7 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.hzontal.shared_ui.R
+import org.hzontal.shared_ui.R
 import java.util.*
 
 class CustomBottomSheetFragment : BottomSheetDialogFragment() {
