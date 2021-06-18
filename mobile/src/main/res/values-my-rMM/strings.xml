@@ -124,7 +124,6 @@
   <string name="collect.form_exit_dialog.action_exit.anyway">မည်သို့ပင်ဖြစ်စေထွက်ခွါမည်။</string>
   <string name="settings.docu_error_not.valid.URL">မှန်ကန်သော URL မဟုတ်ပါ။</string>
   <string name="home_action.label_quick.delete">ဖျက်ရန်</string>
-  <string name="onboard.del_heading">အမြန်ဖျက်ပါ</string>
   <string name="gallery_subheading_sort.by">အစဥ်အတိုင်း</string>
   <string name="gallery_subheading_show">ပြသသည်။</string>
   <string name="gallery_list.item_newest.to.oldest">အသစ်ဆုံးမှအဟောင်းဆုံး</string>
@@ -143,24 +142,7 @@
   <string name="settings.docu_error_unknown.connection.error">ဆာဗာနှင့်ချိတ်ဆက်ရန်ကြိုးစားနေသည့်အမှားတစ်ခုရှိသည်။</string>
   <string name="settings.docu_error_no.internet">အင်တာနက်ချိတ်ဆက်ထားခြင်းမရှိသေးပါ။ အင်တာနက်ချိတ်ဆက်ပြီးလျှင်ထပ်မံကြိုးစားပါ။</string>
   <string name="settings.docu_dialog.action_try.again.connecting">ထပ်မံကြိုးစားပါ။</string>
-  <string name="onboard.perm_action_start.app">စတင်သည်။</string>
-  <string name="onboard.intro_subheading">မှတ်တမ်းတင်ခြင်းနှင့်ကာကွယ်စောင့်ရှောက်ခြင်း</string>
-  <string name="onboard.into_expl">မည်သူမဆို အန္တရာယ်မဖြစ်စေဘဲ တဲလ်လာဖြင့်လူ့ခွင့်အရေးချိုး‌ဖောက်မှုများ၊ အကြမ်းဖက်မှုများ နှင့် လာဘ်စားခြင်းများကို မှတ်တမ်းတင်နိုင်ပါသည်။</string>
-  <string name="onboard.camo_subheading">ဖုန်းအတွင်းရှာ‌ဖွေမှုအားကားကွယ်ခြင်း</string>
-  <string name="onboard.camo_expl">တဲလ်လာကို သင့်ဖုန်းထဲမှာဖွက်ထားနိုင်ပြီး၊ တဲလ်လာဖြင့် ပြုလုပ်ထားသည့်ဖိုင်များ သို့မဟုတ် တဲလ်လာဖြင့်ပြုလုပ်ထားသည့် ဝှက်စာဖိုင်များ ကိုလည်း တဲလ်လာ၏ လျှို့ဝှက် ပြခန်းတွင် သိမ်းဖွက်နိုင်ပါသည်။</string>
-  <string name="onboard.collect_subheading">လွယ်ကူသည့်အချက်အလက်စုဆောင်းခြင်း</string>
-  <string name="onboard.collect_expl">အွန်လိုင်းချိတ်ဆက်ထားသည်ဖြစ်မစေ၊ မချိတ်ဆက်ထားသည်ဖြစ်စေ ‌ဖောင်ပုံစံနှင့် မေးခွန်းများကို သင့်ဖုန်းမှတိုက်တိုက်ဖြည့်စွက်နိုင်ပါသည်။ ဖောင်ပုံစံများကို ပြုလုပ်ခြင်း၊ စီမံခန့်ခွဲခြင်းများပြုလုပ်ပေးမည့် သင့်အားပံ့ပိုး‌ကူညီသည့် အဖွဲ့အစည်းနှင့် ချိတ်ဆက်လုပ်ဆောင်ရမည်။</string>
-  <string name="onboard.del_subheading">အရေးပေါ်ဒေတာရှင်းလင်းခြင်း </string>
-  <string name="onboard.del_expl">အရေးပေါ်အခြေအနေများတွင် တဲလ်လာတွင်ရှိသည့် အရေးပါသော အချက်အလက်များကို စက္ကန့်ပိုင်းတွင်ဖျက်ဆီးနိုင်စွမ်းရှိပါသည်။</string>
-  <string name="onboard.perm_action_grant.permissions">ခွင့်ပြုချက်ပေးခြင်း</string>
   <string name="settings.about_select_tutorial">သင်ခန်းစာ</string>
-  <string name="onboard.perm_dialog.expl_grant.permissions">လုပ်ဆောင်မှုများ အစီစဥ်တကျဖြစ်စေရန်အတွက် လိုအင်သည့်လုပ်ပိုင်ခွင့်များကို သင့်အနေဖြင့် တဲလာအားခွင့်ပြုရမည်။</string>
-  <string name="onboard.perm_heading">တစ်ခုနောက်ဆုံးသောအရာ</string>
-  <string name="onboard.perm_subheading">လုပ်ဆောင်မှုများ အစီစဥ်တကျဖြစ်စေရန်အတွက် သင့်အနေဖြင့် တဲလာအားအောက်ပါအချက်များလုပ်ခွင့်ပေးရန်</string>
-  <string name="onboard.perm_list.permissions">• သင်၏စက်သိုလှောင်မှုကိုသုံးပါ (တဲလ်လာ မှသင်၏စက်ပစ္စည်းသို့ဖိုင်များကိုတင်ပို့ရန်)
-• သင်၏ကင်မရာကိုအသုံးပြုပါ (ဓါတ်ပုံများနှင့်ဗွီဒီယိုများကိုဖမ်းယူရန်)
-• သင်၏မိုက်ခရိုဖုန်းကိုသုံးပါ။(အသံသွင်းရန်) 
-• သင်၏ GPS ကိုအသုံးပြုပါ။ (ဒေတာ (သို့) မာလ်တီမီဒီယာကိုသင်ဖမ်းယူသည့်အခါသင့်အနေအထားကိုဆုံးဖြတ်ရန်၊ ၎င်းတို့အားအတည်ပြုနိုင်စေရန်) </string>
   <string name="gallery_heading_selected_files">ဖိုင်ရွေးချယ်ပါ။</string>
   <string name="settings.camo_expl">စိတ်တိုင်း ကျ အိုင်ကွန်နှင့် အမည်အား‌ရွေးချယ်အသုံးပြုခြင်းဖြင့် တဲလ်လာကို ဖွက်သိမ်းထားနိုင်ပါသည်။ သို့ရာတွင် တဲလ်လာ အိုင်ကွန် ကို အန်ဒရိုက်စက်တင် တွင် မြင်နိုင်ကြောင်းကို သတိပြုရန်လိုအပ်သည်။  </string>
   <string name="settings.camo_camera4">ကင်မရာ</string>

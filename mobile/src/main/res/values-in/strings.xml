@@ -126,7 +126,6 @@
   <string name="collect.form_exit_dialog.action_exit.anyway">TETAP KELUAR</string>
   <string name="settings.docu_error_not.valid.URL">This is not a valid URL.</string>
   <string name="home_action.label_quick.delete">Hapus</string>
-  <string name="onboard.del_heading">Quick Delete</string>
   <string name="gallery_subheading_sort.by">Urutkan berdasarkan</string>
   <string name="gallery_subheading_show">Tampilkan</string>
   <string name="gallery_list.item_newest.to.oldest">Baru ke lama</string>
@@ -145,24 +144,7 @@
   <string name="settings.docu_error_unknown.connection.error">There was an error trying to connect to the server.</string>
   <string name="settings.docu_error_no.internet">You’re not connected to the internet. Try again when connected.</string>
   <string name="settings.docu_dialog.action_try.again.connecting">Try again</string>
-  <string name="onboard.perm_action_start.app">Mulai</string>
-  <string name="onboard.intro_subheading">Documentation and protection</string>
-  <string name="onboard.into_expl">Tella enables anyone to document human right abuses, violence and corruption without putting themselves in danger.</string>
-  <string name="onboard.camo_subheading">Protection against device searches</string>
-  <string name="onboard.camo_expl">Tella can be hidden on your device and any file captured in Tella or imported is automatically encrypted and stored in a hidden gallery.</string>
-  <string name="onboard.collect_subheading">Easy data collection</string>
-  <string name="onboard.collect_expl">Online or offline, fill forms and surveys directly from your device. You must be linked to an organization that creates forms and manages the data.</string>
-  <string name="onboard.del_subheading">Emergency data wiping</string>
-  <string name="onboard.del_expl">In emergency situations, delete sensitive information from Tella in just a few seconds.</string>
-  <string name="onboard.perm_action_grant.permissions">Grant permissions</string>
   <string name="settings.about_select_tutorial">Tutorial</string>
-  <string name="onboard.perm_dialog.expl_grant.permissions">In order to function properly, you need to grant Tella the required permissions.</string>
-  <string name="onboard.perm_heading">One last thing</string>
-  <string name="onboard.perm_subheading">In order to function properly, you need to authorize Tella to:</string>
-  <string name="onboard.perm_list.permissions">• access your device storage (to export files from Tella to your device)
-• access your camera (to capture photos and videos)
-• access your microphone (to record audio)
-• access your GPS (to determine your position when you capture data or multimedia, to make them verifiable)</string>
   <string name="gallery_heading_selected_files">Selected files</string>
   <string name="settings.camo_expl">Select a custom icon and name to better hide Tella on your device. Note that the Tella icon will remain visible from the Android settings.</string>
   <string name="settings.camo_camera4">Camera</string>

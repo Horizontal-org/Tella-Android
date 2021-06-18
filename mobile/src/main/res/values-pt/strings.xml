@@ -126,7 +126,6 @@
   <string name="collect.form_exit_dialog.action_exit.anyway">SAIR DE QUALQUER FORMA</string>
   <string name="settings.docu_error_not.valid.URL">O campo não é um URL da web válido.</string>
   <string name="home_action.label_quick.delete">Excluir</string>
-  <string name="onboard.del_heading">Excluir Rápido</string>
   <string name="gallery_subheading_sort.by">Ordenar por</string>
   <string name="gallery_subheading_show">Mostrar</string>
   <string name="gallery_list.item_newest.to.oldest">Mais novo para mais antigo</string>
@@ -145,24 +144,7 @@
   <string name="settings.docu_error_unknown.connection.error">Ocorreu um erro ao tentar se conectar ao servidor.</string>
   <string name="settings.docu_error_no.internet">Você não está conectado à internet. Tente novamente quando estiver conectado.</string>
   <string name="settings.docu_dialog.action_try.again.connecting">Tente novamente</string>
-  <string name="onboard.perm_action_start.app">Início</string>
-  <string name="onboard.intro_subheading">Documentação e proteção</string>
-  <string name="onboard.into_expl">Tella permite que qualquer pessoa documente abusos de direitos humanos, violência e corrupção sem se colocar em perigo.</string>
-  <string name="onboard.camo_subheading">Proteção contra buscas no aparelho celular</string>
-  <string name="onboard.camo_expl">O Tella pode estar ocultado no seu aparelho, e qualquer arquivo capturado no Tella ou importado é automaticamente criptografado e armazenado em uma galeria oculta.</string>
-  <string name="onboard.collect_subheading">Coleta de dados fácil</string>
-  <string name="onboard.collect_expl">Preencha formulários e pesquisas online ou offline diretamente do seu aparelho. Você deve ter um vínculo com uma organização que cria formulários e gerencia os dados.</string>
-  <string name="onboard.del_subheading">Supressão de dados com urgência</string>
-  <string name="onboard.del_expl">Em situações de emergência, exclua informações confidenciais da Tella em poucos segundos.</string>
-  <string name="onboard.perm_action_grant.permissions">Autorizar</string>
   <string name="settings.about_select_tutorial">Tutorial</string>
-  <string name="onboard.perm_dialog.expl_grant.permissions">Para funcionar corretamente, você precisa autorizar o Tella a:</string>
-  <string name="onboard.perm_heading">Uma última coisa…</string>
-  <string name="onboard.perm_subheading">Para funcionar corretamente, você precisa autorizar o Tella a:</string>
-  <string name="onboard.perm_list.permissions">• acesse o armazenamento do aparelho celular (para exportar arquivos do Tella para o seu aparelho)
- • acesse sua câmera (para fotos e vídeos) 
- • acesse seu microfone (para gravar áudio) 
- • acesse seu GPS (para determinar sua localização geográfica ao capturar dados ou multimídia, para torná-los verificáveis)</string>
   <string name="gallery_heading_selected_files">Arquivos selecionados</string>
   <string name="settings.camo_expl">Selecione um ícone e um nome personalizados para melhor ocultar o Tella no seu aparelho. Note que o ícone do Tella permanecerá visível no menu de configurações do Android.</string>
   <string name="settings.camo_camera4">Câmera</string>

@@ -58,9 +58,6 @@ public class AboutHelpActivity extends BaseLockActivity {
 
         switch (view.getId()) {
             case R.id.setup:
-                Intent intent = new Intent(this, TellaIntroActivity.class);
-                intent.putExtra(TellaIntroActivity.FROM_ABOUT, true);
-                startActivity(intent);
                 return;
 
             case R.id.faq:
