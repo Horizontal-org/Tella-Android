@@ -20,4 +20,19 @@
         <item name="android:background">@drawable/drag_anchor_drawable</item>
     </style>
 
+    <style name="SettingsTitleText">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="SwitchWithMessage">
+        <item name="colorControlActivated">@color/green</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="SettingsMessageText">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
 </resources>

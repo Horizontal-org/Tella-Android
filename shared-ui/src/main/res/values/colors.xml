@@ -10,4 +10,10 @@
     <color name="wa_red_error">#CE1515</color>
     <color name="wa_grey">#E8E8EC</color>
     <color name="black010101">#010101</color>
+    <color name="green">#59AE3C</color>
+    <color name="light_green">#B2CFA8</color>
+    <color name="light_purple">#3D3867</color>
+    <color name="gray">#A8ADAF</color>
+    <color name="light_gray">#DCDCDC</color>
+    <color name="colorAccent">@color/green</color>
 </resources>
