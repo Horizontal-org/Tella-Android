@@ -10,11 +10,9 @@
     </declare-styleable>
 
 
-    <declare-styleable name="TellaSwitch">
+    <declare-styleable name="TellaSwitchWithMessage">
         <attr name="titleText" format="reference|string" />
         <attr name="explainText" format="reference|string" />
-        <attr name="endImage" format="reference" />
-        <attr name="startImage" format="reference" />
         <attr name="is_checked" format="boolean"/>
     </declare-styleable>
 </resources>
