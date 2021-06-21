@@ -13,6 +13,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+
+import org.hzontal.shared_ui.appbar.CollapsableAppBar;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
@@ -33,7 +37,10 @@ public class LanguageSettingsActivity extends BaseLockActivity implements
     LinearLayout LanguageList;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-
+    @BindView(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout collapsingToolbarLayout;
+  /*  @BindView(R.id.collapsable_appbar)
+   CollapsableAppBar collapsableAppBar;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +49,11 @@ public class LanguageSettingsActivity extends BaseLockActivity implements
 
         ButterKnife.bind(this);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        collapsingToolbarLayout.setTitle(getString(R.string.settings_gen_select_language));
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.settings_lang_app_bar);
         }
 
         createLangViews(LocaleManager.getInstance().getLanguageSetting());
