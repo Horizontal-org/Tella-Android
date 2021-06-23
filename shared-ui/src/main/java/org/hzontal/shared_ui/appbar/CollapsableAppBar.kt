@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import androidx.appcompat.widget.Toolbar
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import org.hzontal.shared_ui.R
@@ -16,7 +18,7 @@ class CollapsableAppBar @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AppBarLayout(context, attrs, defStyleAttr){
+) : ConstraintLayout(context, attrs, defStyleAttr){
 
     @StringRes
     private var titleRes: Int = -1
@@ -68,12 +70,7 @@ class CollapsableAppBar @JvmOverloads constructor(
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun bindView() {
         if (titleRes != -1) {collapsableAppBar.title = context.getString(titleRes)}
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (contentScrimRes != -1) {collapsableAppBar.contentScrim = context.getDrawable(contentScrimRes)}
-            if (backgroundRes != -1) {collapsableAppBar.background = context.getDrawable(backgroundRes)}
-        } else {
-            if (contentScrimRes != -1) {collapsableAppBar.contentScrim = context.resources.getDrawable(contentScrimRes)}
-            if (backgroundRes != -1) {collapsableAppBar.background = context.resources.getDrawable(backgroundRes)}
-        }
+        if (contentScrimRes != -1) {collapsableAppBar.contentScrim = ContextCompat.getDrawable(context,contentScrimRes)}
+        if (backgroundRes != -1) {collapsableAppBar.background = ContextCompat.getDrawable(context,backgroundRes)}
     }
 }

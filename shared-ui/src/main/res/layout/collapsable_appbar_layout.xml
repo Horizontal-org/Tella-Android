@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.appbar.AppBarLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/appbar"
     android:layout_width="match_parent"
     android:layout_height="140dp"
@@ -16,13 +16,15 @@
         app:contentScrim="@color/space_cadet"
         app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
         android:background="@color/space_cadet"
+        tools:title="Test Title"
         app:titleTextColor="@color/wa_white">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:layout_collapseMode="pin" />
+            app:layout_collapseMode="pin"
+            />
 
     </com.google.android.material.appbar.CollapsingToolbarLayout>
 
