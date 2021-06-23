@@ -54,6 +54,13 @@ class OnKeyBoardClickListener (private val minLength : Int,private val mPinLockL
         }
     }
 
+    fun onClearClicked() {
+        clearInternalPin()
+        if (mPinLockListener != null) {
+            mPinLockListener.onEmpty()
+        }
+    }
+
     private fun onNegationClicked() {
         if (mPin.isNotEmpty()) {
             mPin = "-($mPin)"

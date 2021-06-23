@@ -50,7 +50,7 @@ class CalculatorKeyView @JvmOverloads constructor(
         val deleteButton = findViewById<TextView>(R.id.deleteBtn)
         deleteButton.setOnClickListener{
             mResultListener.onClearResult()
-            mOnKeyBoardClickListener.onDeleteClicked()
+            mOnKeyBoardClickListener.onClearClicked()
         }
     }
 
