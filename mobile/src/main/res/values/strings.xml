@@ -393,7 +393,7 @@
     <string name="pl_access_pattern_start">Pattern started</string>
     <string name="pl_access_pattern_cleared">Pattern cleared</string>
     <string name="pl_access_pattern_cell_added">Cell added</string>
-    <string name="pl_access_pattern_cell_added_verbose">Cell <xliff:g id="cell_index" example="3">%1$d</xliff:g> added</string>
+    <string name="pl_access_pattern_cell_added_verbose">Cell <xliff:g example="3" id="cell_index">%1$d</xliff:g> added</string>
     <string name="pl_access_pattern_detected">Pattern completed</string>
     <string name="pl_access_pattern_area">Pattern area.</string>
     <string name="collect.blank_action.desc_more.options">More options</string>
@@ -417,4 +417,6 @@
     <string name="onboard_pin_description" translatable="false">Camouflage Tella as Calculator app</string>
     <string name="onboard_pattern" translatable="false">Pattern</string>
     <string name="onboard_pattern_description" translatable="false">Camouflage Tella as Camera app</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

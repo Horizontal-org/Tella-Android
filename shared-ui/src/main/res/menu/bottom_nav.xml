@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/ic_home"
+        android:contentDescription="Home"
+        android:title="Home" />
+    <item
+        android:id="@+id/form"
+        android:icon="@drawable/ic_forms"
+        android:contentDescription="Forms"
+        android:title="Forms" />
+    <item
+        android:id="@+id/camera"
+        android:icon="@drawable/ic_camera"
+        android:contentDescription="Camera"
+        android:title="Camera" />
+    <item
+        android:id="@+id/mic"
+        android:icon="@drawable/ic_mic"
+        android:contentDescription="Mic"
+        android:title="Mic" />
+    <item
+        android:id="@+id/reports"
+        android:icon="@drawable/ic_reports"
+        android:contentDescription="Reports"
+        android:title="Reports" />
+</menu>
