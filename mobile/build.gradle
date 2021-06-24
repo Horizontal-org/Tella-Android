@@ -85,6 +85,7 @@ dependencies {
     implementation("org.permissionsdispatcher:permissionsdispatcher:${permissionDispatcherVersion}") {
         exclude module: "support-v13"
     }
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:${permissionDispatcherVersion}"
 
     implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'

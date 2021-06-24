@@ -21,6 +21,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -94,7 +100,7 @@ public class MainActivity extends MetadataActivity implements
         ButterKnife.bind(this);
 
         setupToolbar();
-
+        setupNavigation();
         handler = new Handler();
 
         homeScreenPresenter = new HomeScreenPresenter(this);
@@ -120,6 +126,15 @@ public class MainActivity extends MetadataActivity implements
                 recreate();
             }
         });
+    }
+
+    private void setupNavigation() {
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_nav_host);
+        assert navHostFragment != null;
+        NavController navController = navHostFragment.getNavController();
+        AppBarConfiguration appBarConfiguration =
+                new AppBarConfiguration.Builder(navController.getGraph()).build();
+        NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
     }
 
     private void setupToolbar() {
