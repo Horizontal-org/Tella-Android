@@ -37,10 +37,10 @@ public class LanguageSettingsActivity extends BaseLockActivity implements
     LinearLayout LanguageList;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.collapsing_toolbar)
-    CollapsingToolbarLayout collapsingToolbarLayout;
-  /*  @BindView(R.id.collapsable_appbar)
-   CollapsableAppBar collapsableAppBar;*/
+    /*@BindView(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout collapsingToolbarLayout;*/
+    @BindView(R.id.collapsable_appbar)
+    CollapsableAppBar collapsableAppBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +49,8 @@ public class LanguageSettingsActivity extends BaseLockActivity implements
 
         ButterKnife.bind(this);
 
-        setSupportActionBar(toolbar);
-        collapsingToolbarLayout.setTitle(getString(R.string.settings_gen_select_language));
+        setSupportActionBar(collapsableAppBar.toolbar);
+     //   collapsingToolbarLayout.setTitle(getString(R.string.settings_gen_select_language));
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
