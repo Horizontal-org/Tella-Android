@@ -8,9 +8,9 @@
  >
     <fragment
         android:id="@+id/formScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.FormListFragment"
+        android:name="rs.readahead.washington.mobile.views.fragment.DraftFormsListFragment"
         android:label="Forms"
-        tools:layout="@layout/fragment_blank_forms_list">
+        tools:layout="@layout/fragment_draft_forms_list">
     </fragment>
 
 </navigation>

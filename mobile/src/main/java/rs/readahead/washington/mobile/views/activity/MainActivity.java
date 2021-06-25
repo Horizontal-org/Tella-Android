@@ -134,7 +134,9 @@ public class MainActivity extends MetadataActivity implements
         NavController navController = navHostFragment.getNavController();
         AppBarConfiguration appBarConfiguration =
                 new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
+        BottomNavigationView btmNavMain = findViewById(R.id.btm_nav_main);
+        NavigationUI.setupWithNavController(btmNavMain, navController);
+        //NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
     }
 
     private void setupToolbar() {

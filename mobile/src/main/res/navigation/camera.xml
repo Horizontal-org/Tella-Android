@@ -7,8 +7,8 @@
     >
     <fragment
         android:id="@+id/cameraScreen"
-        android:name="rs.readahead.washington.mobile.views.activity.CameraActivity"
+        android:name="rs.readahead.washington.mobile.views.fragment.CameraFragment"
         android:label="Camera"
-        tools:layout="@layout/activity_camera">
+        tools:layout="@layout/fragment_camera">
     </fragment>
 </navigation>
