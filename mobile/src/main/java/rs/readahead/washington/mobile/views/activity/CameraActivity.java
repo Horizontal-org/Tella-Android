@@ -5,10 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.OrientationEventListener;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -73,10 +71,8 @@ import rs.readahead.washington.mobile.views.custom.CameraGridButton;
 import rs.readahead.washington.mobile.views.custom.CameraResolutionButton;
 import rs.readahead.washington.mobile.views.custom.CameraSwitchButton;
 
-import static android.app.Activity.RESULT_OK;
 
-
-public class CameraActivity extends MetaDataFragment implements
+public class CameraActivity extends MetadataActivity implements
         ICameraPresenterContract.IView,
         ITellaFileUploadSchedulePresenterContract.IView,
         IMetadataAttachPresenterContract.IView {
@@ -127,25 +123,19 @@ public class CameraActivity extends MetaDataFragment implements
     private long lastClickTime = System.currentTimeMillis();
     private RequestManager.ImageModelRequest<MediaFileLoaderModel> glide;
 
-
-    @org.jetbrains.annotations.Nullable
     @Override
-    public View onCreateView(@NotNull LayoutInflater inflater, @org.jetbrains.annotations.Nullable ViewGroup container, @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-         return inflater.inflate(R.layout.activity_camera, container, false);
-    }
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-    @Override
-    public void onViewCreated(@NotNull View view, @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        ButterKnife.bind(activity);
+        setContentView(R.layout.activity_camera);
+        ButterKnife.bind(this);
 
         presenter = new CameraPresenter(this);
         uploadPresenter = new TellaFileUploadSchedulePresenter(this);
         metadataAttacher = new MetadataAttacher(this);
 
         mode = CameraMode.PHOTO;
-        /*if (getIntent().hasExtra(CAMERA_MODE)) {
+        if (getIntent().hasExtra(CAMERA_MODE)) {
             mode = CameraMode.valueOf(getIntent().getStringExtra(CAMERA_MODE));
             modeLocked = true;
         }
@@ -153,7 +143,7 @@ public class CameraActivity extends MetaDataFragment implements
         intentMode = IntentMode.RETURN;
         if (getIntent().hasExtra(INTENT_MODE)) {
             intentMode = IntentMode.valueOf(getIntent().getStringExtra(INTENT_MODE));
-        }*/
+        }
 
         // CacheWordDataSource cacheWordDataSource = new CacheWordDataSource(getContext());
         KeyDataSource keyDataSource = MyApplication.getKeyDataSource();
@@ -166,10 +156,8 @@ public class CameraActivity extends MetaDataFragment implements
         setupImagePreview();
     }
 
-
-
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
 
         mOrientationEventListener.enable();
@@ -186,12 +174,12 @@ public class CameraActivity extends MetaDataFragment implements
     }
 
     @Override
-    public void onStart() {
+    protected void onStart() {
         super.onStart();
     }
 
     @Override
-    public void onPause() {
+    protected void onPause() {
         super.onPause();
 
         stopLocationMetadataListening();
@@ -206,12 +194,12 @@ public class CameraActivity extends MetaDataFragment implements
     }
 
     @Override
-    public void onStop() {
+    protected void onStop() {
         super.onStop();
     }
 
     @Override
-    public void onDestroy() {
+    protected void onDestroy() {
         super.onDestroy();
         stopPresenter();
         hideProgressDialog();
@@ -219,35 +207,35 @@ public class CameraActivity extends MetaDataFragment implements
         cameraView.destroy();
     }
 
-   /* @Override
+    @Override
     public void onBackPressed() {
         if (maybeStopVideoRecording()) return;
         super.onBackPressed();
-    }*/
+    }
 
     @Override
     public void onAddingStart() {
-        progressDialog = DialogsUtil.showLightProgressDialog(activity, getString(R.string.gallery_dialog_expl_encrypting));
+        progressDialog = DialogsUtil.showLightProgressDialog(this, getString(R.string.gallery_dialog_expl_encrypting));
     }
 
     @Override
     public void onAddingEnd() {
         hideProgressDialog();
-        activity.showToast(R.string.gallery_toast_file_encrypted);
+        showToast(R.string.gallery_toast_file_encrypted);
     }
 
     @Override
     public void onAddSuccess(MediaFileBundle bundle) {
         capturedMediaFile = bundle.getMediaFile();
         if (intentMode != IntentMode.COLLECT) {
-            Glide.with(activity).load(bundle.getMediaFileThumbnailData().getData()).into(previewView);
+            Glide.with(this).load(bundle.getMediaFileThumbnailData().getData()).into(previewView);
         }
         attachMediaFileMetadata(capturedMediaFile, metadataAttacher);
     }
 
     @Override
     public void onAddError(Throwable error) {
-        activity.showToast(R.string.gallery_toast_fail_saving_file);
+        showToast(R.string.gallery_toast_fail_saving_file);
     }
 
     @Override
@@ -259,7 +247,7 @@ public class CameraActivity extends MetaDataFragment implements
         } else {
             data.putExtra(C.CAPTURED_MEDIA_FILE_ID, mediaFileId);
         }
-        activity.setResult(RESULT_OK, data);
+        setResult(RESULT_OK, data);
 
         scheduleFileUpload(capturedMediaFile);
     }
@@ -271,7 +259,7 @@ public class CameraActivity extends MetaDataFragment implements
 
     @OnClick(R.id.close)
     void closeCamera() {
-       // onBackPressed();
+        onBackPressed();
     }
 
     @Override
@@ -308,13 +296,13 @@ public class CameraActivity extends MetaDataFragment implements
 
     @Override
     public Context getContext() {
-        return activity;
+        return this;
     }
 
     @Override
     public void onMediaFilesUploadScheduled() {
         if (intentMode != IntentMode.STAND) {
-            //finish();
+            finish();
         }
     }
 
@@ -353,7 +341,7 @@ public class CameraActivity extends MetaDataFragment implements
                 setVideoQuality();
                 lastClickTime = System.currentTimeMillis();
                 TempMediaFile tmp = TempMediaFile.newMp4();
-                File file = MediaFileHandler.getTempFile(activity, tmp);
+                File file = MediaFileHandler.getTempFile(this, tmp);
                 cameraView.takeVideo(file);
                 captureButton.displayStopVideo();
                 durationView.start();
@@ -440,7 +428,7 @@ public class CameraActivity extends MetaDataFragment implements
 
     @OnClick(R.id.preview_image)
     void onPreviewClicked() {
-        activity.startActivity(new Intent(activity, GalleryActivity.class));
+        startActivity(new Intent(this, GalleryActivity.class));
     }
 
     private void resetZoom() {
@@ -452,7 +440,7 @@ public class CameraActivity extends MetaDataFragment implements
     @OnClick(R.id.resolutionButton)
     public void chooseVideoResolution() {
         if (videoResolutionManager != null) {
-            videoQualityDialog = DialogsUtil.showVideoResolutionDialog(activity, this::setVideoSize, videoResolutionManager);
+            videoQualityDialog = DialogsUtil.showVideoResolutionDialog(this, this::setVideoSize, videoResolutionManager);
         }
     }
 
@@ -635,7 +623,7 @@ public class CameraActivity extends MetaDataFragment implements
 
     private void setOrientationListener() {
         mOrientationEventListener = new OrientationEventListener(
-                activity, SensorManager.SENSOR_DELAY_NORMAL) {
+                this, SensorManager.SENSOR_DELAY_NORMAL) {
 
             @Override
             public void onOrientationChanged(int orientation) {

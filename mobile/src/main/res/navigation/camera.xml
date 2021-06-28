@@ -5,10 +5,10 @@
     android:id="@+id/camera"
     app:startDestination="@+id/cameraScreen"
     >
-    <fragment
+    <activity
         android:id="@+id/cameraScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.CameraFragment"
+        android:name="rs.readahead.washington.mobile.views.activity.CameraActivity"
         android:label="Camera"
-        tools:layout="@layout/fragment_camera">
-    </fragment>
+        tools:layout="@layout/activity_camera">
+    </activity>
 </navigation>
