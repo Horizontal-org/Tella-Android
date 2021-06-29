@@ -36,6 +36,7 @@ class CalculatorActivity : BasePinActivity(), ResultListener {
 
         pinEditText = findViewById(R.id.pin_editText)
         resultText = findViewById(R.id.resultText)
+        onClearResult()
     }
 
     override fun onSuccessSetPin(pin: String?) {
@@ -69,6 +70,6 @@ class CalculatorActivity : BasePinActivity(), ResultListener {
     }
 
     override fun onClearResult() {
-        resultText.setText("")
+        resultText.setText("0")
     }
 }
