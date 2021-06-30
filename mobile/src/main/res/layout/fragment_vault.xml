@@ -7,9 +7,10 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/settings"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="@string/hello_blank_fragment" />
+        android:text="go to settings" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

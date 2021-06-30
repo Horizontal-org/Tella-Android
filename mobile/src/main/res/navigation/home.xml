@@ -10,5 +10,19 @@
         android:name="rs.readahead.washington.mobile.views.fragment.VaultFragment"
         android:label="Vault"
         tools:layout="@layout/fragment_vault">
+        <action
+            android:id="@+id/action_homeScreen_to_main_settings"
+            app:destination="@id/main_settings"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
+
+    <activity
+        android:id="@+id/main_settings"
+        android:name="rs.readahead.washington.mobile.views.activity.SettingsActivity"
+        android:label="Settings"
+        tools:layout="@layout/activity_settings">
+    </activity>
 </navigation>
