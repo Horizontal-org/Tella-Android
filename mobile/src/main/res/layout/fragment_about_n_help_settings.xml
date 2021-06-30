@@ -1,33 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/dark_purple"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/dark_purple">
 
-    <TextView
-        android:id="@+id/about_n_help_settings"
-        android:gravity="center_horizontal"
-        android:layout_width="368dp"
-        android:layout_height="97dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/settings.about_app.bar"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        android:textColor="#FFE2DF"
-        android:textSize="62sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline20h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.20" />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="66dp"
+        android:layout_height="72dp"
+        android:contentDescription="@string/settings.about_app.version"
+        android:gravity="center"
+        android:src="@drawable/tella_logo_dark_bg"
+        app:layout_constraintBottom_toTopOf="@+id/tella"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintTop_toBottomOf="@+id/guideline20h" />
 
+    <TextView
+        android:id="@+id/tella"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:gravity="center_horizontal"
+        android:text="@string/tella"
+        android:textAllCaps="false"
+        android:textColor="@color/wa_white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo" />
 
+    <TextView
+        android:id="@+id/version"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:gravity="center_horizontal"
+        android:text="@string/settings.about_app.version"
+        android:textAllCaps="false"
+        android:textColor="@color/wa_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tella" />
+
+    <LinearLayout
+        android:id="@+id/options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:background="@drawable/rounded_light_purple_background"
+        android:orientation="vertical"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/version">
+
+        <TextView
+            android:id="@+id/tutorial"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:text="@string/settings.about_select_tutorial"
+            android:textAllCaps="false"
+            android:textColor="@color/wa_white"
+            app:drawableStartCompat="@drawable/ic_baseline_error_outline_24" />
+
+        <TextView
+            android:id="@+id/faq"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:text="@string/settings.about_list.item_faq"
+            android:textAllCaps="false"
+            android:textColor="@color/wa_white"
+            app:drawableStartCompat="@drawable/ic_help_outline_white_24" />
+
+        <TextView
+            android:id="@+id/contact_us"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:text="@string/settings_menu.item_contact"
+            android:textAllCaps="false"
+            android:textColor="@color/wa_white"
+            app:drawableStartCompat="@drawable/ic_baseline_markunread_24" />
+
+        <TextView
+            android:id="@+id/privacy_policy"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:text="@string/settings.about_list.item_privacy.policy"
+            android:textAllCaps="false"
+            android:textColor="@color/wa_white"
+            app:drawableStartCompat="@drawable/ic_privacy_policy" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
