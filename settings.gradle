@@ -1,3 +1,4 @@
+include ':vault-ui'
 include ':shared-ui'
 include ':mobile'
 include ':tella-keys'
