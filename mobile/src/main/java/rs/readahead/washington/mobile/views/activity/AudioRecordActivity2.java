@@ -7,8 +7,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
@@ -23,6 +26,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+
+import org.jetbrains.annotations.NotNull;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,7 +59,7 @@ import rs.readahead.washington.mobile.util.StringUtils;
 
 
 @RuntimePermissions
-public class AudioRecordActivity2 extends MetadataActivity implements
+public class AudioRecordActivity2 extends MetaDataFragment implements
         AudioRecorder.AudioRecordInterface,
         IAudioCapturePresenterContract.IView,
         ITellaFileUploadSchedulePresenterContract.IView,
@@ -102,17 +107,23 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     private Mode mode;
 
+
+    @org.jetbrains.annotations.Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(@NotNull LayoutInflater inflater, @org.jetbrains.annotations.Nullable ViewGroup container, @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_audio_record, container, false);
+    }
 
-        setContentView(R.layout.activity_audio_record);
-        ButterKnife.bind(this);
+    @Override
+    public void onViewCreated(@NotNull View view, @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        ButterKnife.bind(activity);
 
-        ActionBar actionBar = getSupportActionBar();
+        Toolbar toolbar = requireView().findViewById(R.id.toolbar);
+        activity.setSupportActionBar(toolbar);
+
+        ActionBar actionBar = activity.getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle(R.string.recorder_app_bar);
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -125,18 +136,19 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         notRecording = true;
 
         mode = Mode.STAND;
-        if (getIntent().hasExtra(RECORDER_MODE)) {
+       /* if (getIntent().hasExtra(RECORDER_MODE)) {
             mode = Mode.valueOf(getIntent().getStringExtra(RECORDER_MODE));
-        }
+        }*/
 
-        animator = (ObjectAnimator) AnimatorInflater.loadAnimator(AudioRecordActivity2.this, R.animator.fade_in);
+        animator = (ObjectAnimator) AnimatorInflater.loadAnimator(activity, R.animator.fade_in);
 
         mTimer.setText(timeToString(0));
         disableStop();
     }
 
+
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
 
         if (presenter != null) {
@@ -149,7 +161,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            onBackPressed();
+            activity.onBackPressed();
             return true;
         }
 
@@ -175,22 +187,22 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         }
     }
 
-    @Override
+  /*  @Override
     public void onBackPressed() {
         super.onBackPressed();
 
         setResult(Activity.RESULT_CANCELED);
         finish();
-    }
+    }*/
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         startLocationMetadataListening();
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         stopLocationMetadataListening();
 
         if (rationaleDialog != null && rationaleDialog.isShowing()) {
@@ -201,7 +213,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         animator.end();
         animator = null;
         disposable.dispose();
@@ -234,7 +246,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
             handlingMediaFile = null;
             cancelRecorder();
 
-            audioRecorder = new AudioRecorder(this, this);
+            audioRecorder = new AudioRecorder(activity, this);
             disposable.add(audioRecorder.startRecording()
                     .subscribe(this::onRecordingStopped, throwable -> onRecordingError())
             );
@@ -248,7 +260,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     @OnShowRationale(Manifest.permission.RECORD_AUDIO)
     void showRecordAudioRationale(final PermissionRequest request) {
-        rationaleDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_mic));
+        rationaleDialog = PermissionUtil.showRationale(activity, request, getString(R.string.permission_dialog_expl_mic));
     }
 
     @Override
@@ -262,12 +274,12 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     @Override
     public void onAddSuccess(MediaFile mediaFile) {
         attachMediaFileMetadata(mediaFile, metadataAttacher);
-        showToast(String.format(getString(R.string.recorder_toast_recording_saved), getString(R.string.app_name)));
+        activity.showToast(String.format(getString(R.string.recorder_toast_recording_saved), getString(R.string.app_name)));
     }
 
     @Override
     public void onAddError(Throwable error) {
-        showToast(R.string.gallery_toast_fail_saving_file);
+        activity.showToast(R.string.gallery_toast_fail_saving_file);
     }
 
     @Override
@@ -289,7 +301,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
             intent.putExtra(C.CAPTURED_MEDIA_FILE_ID, mediaFileId);
         }
 
-        setResult(Activity.RESULT_OK, intent);
+        activity.setResult(Activity.RESULT_OK, intent);
         mTimer.setText(timeToString(0));
 
         scheduleFileUpload(handlingMediaFile);
@@ -297,12 +309,12 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     @Override
     public void onMetadataAttachError(Throwable throwable) {
-        showToast(R.string.gallery_toast_fail_saving_file);
+        activity.showToast(R.string.gallery_toast_fail_saving_file);
     }
 
     @Override
     public void onDurationUpdate(long duration) {
-        runOnUiThread(() -> mTimer.setText(timeToString(duration)));
+        activity.runOnUiThread(() -> mTimer.setText(timeToString(duration)));
 
         if (duration > UPDATE_SPACE_TIME_MS + lastUpdateTime) {
             lastUpdateTime += UPDATE_SPACE_TIME_MS;
@@ -315,13 +327,13 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     @Override
     public Context getContext() {
-        return this;
+        return activity;
     }
 
     @Override
     public void onMediaFilesUploadScheduled() {
         if (mode != Mode.STAND) {
-            finish();
+            //finish();
         }
     }
 
@@ -381,7 +393,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         enableRecord();
 
         mTimer.setText(timeToString(0));
-        showToast(R.string.recorder_toast_fail_recording);
+        activity.showToast(R.string.recorder_toast_fail_recording);
     }
 
     private void returnData() {
@@ -433,7 +445,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     }
 
     private void openRecordings() {
-        Intent intent = new Intent(this, GalleryActivity.class);
+        Intent intent = new Intent(activity, GalleryActivity.class);
         intent.putExtra(GalleryActivity.GALLERY_FILTER, IMediaFileRecordRepository.Filter.AUDIO.name());
         intent.putExtra(GalleryActivity.GALLERY_ALLOWS_ADDING, false);
         startActivity(intent);

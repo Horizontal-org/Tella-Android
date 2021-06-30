@@ -20,7 +20,7 @@ abstract class BaseLockActivity : BaseActivity() {
     var isLocked = false
         private set
 
-    private fun restrictActivity() {
+     fun restrictActivity() {
         if (!MyApplication.getMainKeyStore().isStored) {
             startKeySetup()
         } else {
