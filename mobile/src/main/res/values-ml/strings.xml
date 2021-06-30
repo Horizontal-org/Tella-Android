@@ -706,4 +706,12 @@ This is one of the two options available. -->
   <string name="meter">%f മീറ്റര്‍‌</string>
   <!-- The value expressed in meters per second -->
   <string name="meter_per_second">%f മീറ്റർ പ്രതി സെക്കൻറ്</string>
+  <string name="settings.sec_app.bar">Security</string>
+  <string name="settings.select_security">Security</string>
+    <string name="settings.select_customization">Customization</string>
+    <string name="settings.select_lock_timeout">Lock Timeout</string>
+    <string name="settings.sec_camera.mute_switch">Camera silent mode</string>
+    <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
+    <string name="settings.sec_quick.delete_switch">Quick delete</string>
+    <string name="settings.sec_quick.delete_expl">Shows a sliding button on the homescreen to quickly exit Tella in emergency situations.</string>
 </resources>

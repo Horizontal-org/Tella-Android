@@ -9,7 +9,6 @@ import org.hzontal.shared_ui.switches.TellaSwitchWithMessage
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.R.*
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
-import rs.readahead.washington.mobile.views.settings.OnFragmentSelected.*
 
 
 class MainSettings : Fragment() {
@@ -22,7 +21,7 @@ class MainSettings : Fragment() {
 
         val offlineSwitch = view.findViewById<TellaSwitchWithMessage>(R.id.offline_switch)
         offlineSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
-            Preferences.setSubmittingCrashReports(isChecked)
+            Preferences.setOfflineMode(isChecked)
         }
         offlineSwitch.setChecked(Preferences.isOfflineMode())
 
@@ -32,6 +31,14 @@ class MainSettings : Fragment() {
 
         view.findViewById<View>(R.id.security_settings_button).setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_main_settings_to_security_settings)
+        }
+
+        view.findViewById<View>(R.id.servers_settings_button).setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_main_settings_to_servers_settings)
+        }
+
+        view.findViewById<View>(R.id.about_n_help_settings_button).setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_main_settings_to_about_n_help_settings)
         }
         return view
     }
