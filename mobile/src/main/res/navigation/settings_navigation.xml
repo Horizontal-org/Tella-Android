@@ -16,12 +16,7 @@
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/slide_in_end"
-            app:popExitAnim="@anim/slide_out_start"
-             />
-        <!--
-        app:popEnterAnim="@anim/slide_in_end"
-            app:popExitAnim="@anim/slide_out_start"-->
-
+            app:popExitAnim="@anim/slide_out_start"/>
         <action
             android:id="@+id/action_main_settings_to_security_settings"
             app:destination="@id/security_settings"
@@ -29,56 +24,37 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/slide_in_end"
             app:popExitAnim="@anim/slide_out_start">
-            <!--
-            app:exitAnim="@anim/slide_out_end"
-            app:popEnterAnim="@anim/slide_in_end"
-            app:popExitAnim="@anim/slide_out_start"
-            -->
         </action>
-
         <action
             android:id="@+id/action_main_settings_to_servers_settings"
             app:destination="@id/servers_settings"
             app:enterAnim="@anim/slide_in_start"
-            app:exitAnim="@anim/slide_out_end"
+            app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/slide_in_end"
             app:popExitAnim="@anim/slide_out_start">
         </action>
-
         <action
             android:id="@+id/action_main_settings_to_about_n_help_settings"
             app:destination="@id/about_n_help_settings"
             app:enterAnim="@anim/slide_in_start"
-            app:exitAnim="@anim/slide_out_end"
+            app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/slide_in_end"
             app:popExitAnim="@anim/slide_out_start">
         </action>
     </fragment>
+
     <fragment
         android:id="@+id/general_settings"
         android:name="rs.readahead.washington.mobile.views.settings.GeneralSettings"
         android:label="fragment_general_settings"
         tools:layout="@layout/fragment_general_settings">
-        <!-- <action
-            android:id="@+id/action_register_to_match"
-            app:destination="@id/match"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/> -->
     </fragment>
+
     <fragment
         android:id="@+id/security_settings"
         android:name="rs.readahead.washington.mobile.views.settings.SecuritySettings"
         android:label="fragment_security_settings"
         tools:layout="@layout/fragment_security_settings">
-        <!-- <action
-             android:id="@+id/action_register_to_match"
-             app:destination="@id/match"
-             app:popEnterAnim="@anim/slide_in_left"
-             app:popExitAnim="@anim/slide_out_right"
-             app:enterAnim="@anim/slide_in_right"
-             app:exitAnim="@anim/slide_out_left"/>-->
     </fragment>
 
     <fragment
@@ -86,13 +62,6 @@
         android:name="rs.readahead.washington.mobile.views.settings.ServersSettings"
         android:label="fragment_servers_settings"
         tools:layout="@layout/fragment_servers_settings">
-        <!-- <action
-             android:id="@+id/action_register_to_match"
-             app:destination="@id/match"
-             app:popEnterAnim="@anim/slide_in_left"
-             app:popExitAnim="@anim/slide_out_right"
-             app:enterAnim="@anim/slide_in_right"
-             app:exitAnim="@anim/slide_out_left"/>-->
     </fragment>
 
     <fragment
@@ -100,13 +69,6 @@
         android:name="rs.readahead.washington.mobile.views.settings.AboutAndHelpSettings"
         android:label="fragment_about_n_help_settings"
         tools:layout="@layout/fragment_about_n_help_settings">
-        <!-- <action
-             android:id="@+id/action_register_to_match"
-             app:destination="@id/match"
-             app:popEnterAnim="@anim/slide_in_left"
-             app:popExitAnim="@anim/slide_out_right"
-             app:enterAnim="@anim/slide_in_right"
-             app:exitAnim="@anim/slide_out_left"/>-->
     </fragment>
 
 </navigation>
