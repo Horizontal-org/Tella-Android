@@ -12,7 +12,7 @@ class ServersSettings : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_servers_settings, container, false)
-        (activity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_docu_dialog_title_server_settings)
+        (activity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_servers_title_server_settings)
 
         return view
     }

@@ -6,28 +6,65 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/servers_settings"
-        android:gravity="center_horizontal"
-        android:layout_width="368dp"
-        android:layout_height="97dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/settings.docu_connect.to.servers_enable_action"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        android:textColor="#FFE2DF"
-        android:textSize="62sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <LinearLayout
+        android:id="@+id/add_servers"
+        android:background="@drawable/rounded_light_purple_background"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        android:weightSum="1">
 
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:layout_weight=".85"
+            android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/titleTV"
+                style="@style/SettingsTitleText"
+                android:text="@string/settings.servers.title_server.settings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="2dp" />
 
+            <TextView
+                android:id="@+id/explainTV"
+                android:text="@string/settings.servers.add_server.expl"
+                style="@style/SettingsMessageText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="2dp" />
 
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <ImageView
+            android:id="@+id/add"
+            android:src="@drawable/ic_add_circle_outline_24_orange"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="2dp"
+            android:layout_weight=".15"
+            android:contentDescription="@string/settings.servers.add_server.expl" />
+    </LinearLayout>
+
+    <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+        android:id="@+id/auto_upload_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:background="@drawable/rounded_light_purple_background"
+        app:explainText="@string/settings.servers_auto.upload_action.expl"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_servers"
+        app:titleText="@string/settings.servers_auto.upload_action" />
 </androidx.constraintlayout.widget.ConstraintLayout>
