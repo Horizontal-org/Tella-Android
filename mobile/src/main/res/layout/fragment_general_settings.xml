@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/dark_purple"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/options_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:gravity="top"
+        android:background="@drawable/rounded_light_purple_background"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/verification_switch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/language_settings_button"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/language"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:textColor="@color/wa_white"
+                android:gravity="center_vertical"
+                android:layout_alignParentStart="true"
+                android:text="@string/settings.lang_app.bar" />
+
+            <TextView
+                android:id="@+id/language_setting"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/wa_white"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/settings.lang_select_default"
+                tools:ignore="RelativeOverlap" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/customization_settings_button"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/customization"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:textColor="@color/wa_white"
+                android:gravity="center_vertical"
+                android:layout_alignParentStart="true"
+                android:text="@string/settings.select_customization" />
+
+            <TextView
+                android:id="@+id/customization_setting"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/wa_white"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/settings.lang_select_default"
+                tools:ignore="RelativeOverlap" />
+        </RelativeLayout>
+
+        <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+            android:id="@+id/crash_report_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_light_purple_background"
+            app:explainText="@string/settings.gen_crash.reports_action.expl"
+            app:titleText="@string/settings.gen_crash.reports_action" />
+    </LinearLayout>
+
+    <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+        android:id="@+id/verification_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:background="@drawable/rounded_light_purple_background"
+        app:explainText="@string/settings.docu_verification_action.expl"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/options_layout"
+        app:titleText="@string/settings.docu_verification_action" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/main_settings">
+
+    <fragment
+        android:id="@+id/main_settings"
+        android:name="rs.readahead.washington.mobile.views.settings.MainSettings"
+        android:label="fragment_main_settings"
+        tools:layout="@layout/fragment_main_settings">
+        <action
+            android:id="@+id/action_main_to_general_settings"
+            app:destination="@id/general_settings"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/slide_in_end"
+            app:popExitAnim="@anim/slide_out_start"/>
+        <action
+            android:id="@+id/action_main_settings_to_security_settings"
+            app:destination="@id/security_settings"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/slide_in_end"
+            app:popExitAnim="@anim/slide_out_start">
+        </action>
+        <action
+            android:id="@+id/action_main_settings_to_servers_settings"
+            app:destination="@id/servers_settings"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/slide_in_end"
+            app:popExitAnim="@anim/slide_out_start">
+        </action>
+        <action
+            android:id="@+id/action_main_settings_to_about_n_help_settings"
+            app:destination="@id/about_n_help_settings"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/slide_in_end"
+            app:popExitAnim="@anim/slide_out_start">
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/general_settings"
+        android:name="rs.readahead.washington.mobile.views.settings.GeneralSettings"
+        android:label="fragment_general_settings"
+        tools:layout="@layout/fragment_general_settings">
+    </fragment>
+
+    <fragment
+        android:id="@+id/security_settings"
+        android:name="rs.readahead.washington.mobile.views.settings.SecuritySettings"
+        android:label="fragment_security_settings"
+        tools:layout="@layout/fragment_security_settings">
+    </fragment>
+
+    <fragment
+        android:id="@+id/servers_settings"
+        android:name="rs.readahead.washington.mobile.views.settings.ServersSettings"
+        android:label="fragment_servers_settings"
+        tools:layout="@layout/fragment_servers_settings">
+    </fragment>
+
+    <fragment
+        android:id="@+id/about_n_help_settings"
+        android:name="rs.readahead.washington.mobile.views.settings.AboutAndHelpSettings"
+        android:label="fragment_about_n_help_settings"
+        tools:layout="@layout/fragment_about_n_help_settings">
+    </fragment>
+
+</navigation>

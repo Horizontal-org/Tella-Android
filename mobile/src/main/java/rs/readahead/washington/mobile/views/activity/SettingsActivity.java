@@ -1,27 +1,30 @@
 package rs.readahead.washington.mobile.views.activity;
 
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
+
+import org.jetbrains.annotations.NotNull;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
+import rs.readahead.washington.mobile.views.settings.OnFragmentSelected;
 
 
-public class SettingsActivity extends BaseLockActivity {
+public class SettingsActivity extends BaseLockActivity implements OnFragmentSelected {
+    @SuppressLint("NonConstantResourceId")
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
+    private ActionBar actionBar;
     private EventCompositeDisposable disposables;
 
 
@@ -32,7 +35,7 @@ public class SettingsActivity extends BaseLockActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        ActionBar actionBar = getSupportActionBar();
+        actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(R.string.settings_app_bar);
@@ -41,7 +44,7 @@ public class SettingsActivity extends BaseLockActivity {
         disposables = MyApplication.bus().createCompositeDisposable();
         disposables.wire(LocaleChangedEvent.class, new EventObserver<LocaleChangedEvent>() {
             @Override
-            public void onNext(LocaleChangedEvent event) {
+            public void onNext(@NotNull LocaleChangedEvent event) {
                 recreate();
             }
         });
@@ -56,7 +59,7 @@ public class SettingsActivity extends BaseLockActivity {
         super.onDestroy();
     }
 
-    @Override
+   @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
@@ -68,21 +71,9 @@ public class SettingsActivity extends BaseLockActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick({R.id.security_settings_layout, R.id.collect_settings, R.id.general_settings, R.id.about_n_help_layout})
-    public void startActivity(View view) {
-        switch (view.getId()) {
-            case R.id.general_settings:
-                startActivity(new Intent(this, GeneralSettingsActivity.class));
-                break;
-            case R.id.security_settings_layout:
-                startActivity(new Intent(this, ProtectionSettingsActivity.class));
-                break;
-            case R.id.collect_settings:
-                startActivity(new Intent(this, DocumentationSettingsActivity.class));
-                break;
-            case R.id.about_n_help_layout:
-                startActivity(new Intent(this, AboutHelpActivity.class));
-                break;
-        }
+    @Override
+    public void setToolbarLabel(int labelRes) {
+        actionBar.setTitle(getString(labelRes));
     }
+
 }

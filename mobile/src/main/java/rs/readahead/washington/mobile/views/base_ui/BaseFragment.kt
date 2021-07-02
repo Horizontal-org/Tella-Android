@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import timber.log.Timber
 
 abstract class BaseFragment : Fragment() {
@@ -37,11 +39,17 @@ abstract class BaseFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
-
-
     protected fun showToast(message: String) {
         if (isAdded) {
             activity.showToast(message)
         }
+    }
+
+    protected open fun nav(): NavController {
+        return NavHostFragment.findNavController(this)
+    }
+
+    open fun back() {
+        nav().navigateUp()
     }
 }
