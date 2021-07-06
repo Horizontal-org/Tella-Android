@@ -1,6 +1,7 @@
 package org.hzontal.shared_ui.bottomsheet
 
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import org.hzontal.shared_ui.R
@@ -66,6 +67,73 @@ object BottomSheetUtils {
             title = view.findViewById(R.id.standard_sheet_title)
             description = view.findViewById(R.id.standard_sheet_content)
         }
+    }
+
+    class DualChoiceSheetHolder : CustomBottomSheetFragment.PageHolder() {
+        lateinit var cancelButton: ImageView
+        lateinit var buttonOne: TextView
+        lateinit var buttonTwo: TextView
+        lateinit var title: TextView
+        lateinit var description: TextView
+
+        override fun bindView(view: View) {
+            cancelButton = view.findViewById(R.id.standard_sheet_cancel_btn)
+            buttonOne = view.findViewById(R.id.sheet_one_btn)
+            buttonTwo = view.findViewById(R.id.sheet_two_btn)
+            title = view.findViewById(R.id.standard_sheet_title)
+            description = view.findViewById(R.id.standard_sheet_content)
+        }
+    }
+
+    fun showDualChoiceTypeSheet(
+        fragmentManager: FragmentManager,
+        titleText: String?,
+        descriptionText: String?,
+        buttonOneLabel: String? = null,
+        buttonTwoLabel: String? = null,
+        onActionOneClick: (() -> Unit)? = null,
+        onActionTwoClick: (() -> Unit)? = null,
+        onCancelClick: (() -> Unit)? = null
+    ) {
+
+        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.choose_server_type_layout)
+            .cancellable(true)
+            .fullScreen()
+            .statusBarColor(R.color.wa_purple)
+        customSheetFragment.holder(DualChoiceSheetHolder(), object :
+            CustomBottomSheetFragment.Binder<DualChoiceSheetHolder> {
+            override fun onBind(holder: DualChoiceSheetHolder) {
+                with(holder) {
+                    title.text = titleText
+                    description.text = descriptionText
+                    buttonOneLabel?.let {
+                        buttonOne.text = it
+                    }
+                    buttonTwoLabel?.let {
+                        buttonTwo.text = it
+                    }
+
+                    buttonOne.setOnClickListener {
+                        onActionOneClick?.invoke()
+                        customSheetFragment.dismiss()
+                    }
+
+                    buttonTwo.setOnClickListener {
+                        onActionTwoClick?.invoke()
+                        customSheetFragment.dismiss()
+                    }
+
+                    cancelButton.setOnClickListener {
+                        onCancelClick?.invoke()
+                        customSheetFragment.dismiss()
+                    }
+                }
+            }
+        })
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
     }
 
 
