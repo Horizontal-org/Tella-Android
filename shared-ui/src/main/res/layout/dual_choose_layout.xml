@@ -33,7 +33,6 @@
         android:gravity="center_vertical"
         android:paddingStart="12dp"
         tools:text="Add Server"
-        android:textFontWeight="700"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
         android:textSize="18sp"
@@ -41,15 +40,15 @@
 
     <ImageView
         android:id="@+id/server_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="100dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/guidelineTop"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="10dp"
         android:src="@drawable/ic_server"
         android:textColor="@color/wa_white"
-        android:contentDescription="TODO" />
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/standard_sheet_content"
@@ -69,7 +68,7 @@
 
     <TextView
         android:id="@+id/sheet_one_btn"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="80dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -80,13 +79,14 @@
         android:gravity="center"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
+        android:textStyle="bold"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
         android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/sheet_two_btn"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="80dp"
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
@@ -97,6 +97,7 @@
         android:layout_marginTop="20dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
+        android:textStyle="bold"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
         android:textSize="18sp"/>

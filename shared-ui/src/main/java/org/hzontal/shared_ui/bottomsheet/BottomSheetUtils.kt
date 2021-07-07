@@ -97,7 +97,7 @@ object BottomSheetUtils {
     ) {
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.choose_server_type_layout)
+            .page(R.layout.dual_choose_layout)
             .cancellable(true)
             .fullScreen()
             .statusBarColor(R.color.wa_purple)
