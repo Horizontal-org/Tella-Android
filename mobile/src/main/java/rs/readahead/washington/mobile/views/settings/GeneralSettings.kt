@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.fragment.app.Fragment
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.switches.TellaSwitchWithMessage
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
@@ -28,6 +29,18 @@ class GeneralSettings : Fragment() {
             Preferences.setAnonymousMode(!isChecked)
         }
         verificationSwitch.setChecked(!Preferences.isAnonymousMode())
+
+        val languageSettings = view.findViewById<View>(R.id.language_settings_button)
+        languageSettings.setOnClickListener {
+            activity?.let {
+                BottomSheetUtils.showStandardSheet(it.supportFragmentManager,"Add Server",
+                        descriptionText = "What type of server?",
+                        actionButtonLabel = "confirm",
+                        cancelButtonLabel = "cancel",
+                        onConfirmClick = { },
+                onCancelClick = { })
+            }
+        }
 
         return view
     }
