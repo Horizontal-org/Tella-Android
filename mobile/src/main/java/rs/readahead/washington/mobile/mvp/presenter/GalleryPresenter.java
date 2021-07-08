@@ -35,21 +35,19 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
     private CompositeDisposable disposables = new CompositeDisposable();
     private KeyDataSource keyDataSource;
     private MediaFileHandler mediaFileHandler;
-    private RxVault rxVault;
 
 
     public GalleryPresenter(IGalleryPresenterContract.IView view) {
         this.view = view;
         this.keyDataSource = MyApplication.getKeyDataSource();
         this.mediaFileHandler = new MediaFileHandler(keyDataSource);
-        this.rxVault = MyApplication.rxVault;
     }
 
     @Override
-    public void getFiles(final IMediaFileRecordRepository.Filter filter, final IMediaFileRecordRepository.Sort sort) {
+    public void getFiles(final IVaultDatabase.Filter filter, final IVaultDatabase.Sort sort) {
 
         disposables.add(Single
-                .fromCallable(() ->  MyApplication.rxVault.list(null))
+                .fromCallable(() ->  MyApplication.rxVault.list(null,filter,sort,null))
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> view.onGetFilesStart())
                 .observeOn(AndroidSchedulers.mainThread())

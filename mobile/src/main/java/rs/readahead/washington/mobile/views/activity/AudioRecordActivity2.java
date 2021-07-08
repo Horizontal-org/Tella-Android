@@ -19,6 +19,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
+import com.hzontal.tella_vault.IVaultDatabase;
 import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.VaultFile;
 
@@ -367,7 +368,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
         } else {
             handlingMediaFile = vaultFile;
-            handlingMediaFile.size = MediaFileHandler.getSize(getContext(), vaultFile);
+            handlingMediaFile.size = MediaFileHandler.getSize(vaultFile);
 
             disableStop();
             enablePlay();
@@ -439,7 +440,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     private void openRecordings() {
         Intent intent = new Intent(this, GalleryActivity.class);
-        intent.putExtra(GalleryActivity.GALLERY_FILTER, IMediaFileRecordRepository.Filter.AUDIO.name());
+        intent.putExtra(GalleryActivity.GALLERY_FILTER, IVaultDatabase.Filter.FilterType.AUDIO);
         intent.putExtra(GalleryActivity.GALLERY_ALLOWS_ADDING, false);
         startActivity(intent);
     }

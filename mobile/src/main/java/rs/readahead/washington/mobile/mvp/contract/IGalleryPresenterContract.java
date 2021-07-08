@@ -37,7 +37,7 @@ public class IGalleryPresenterContract {
     }
 
     public interface IPresenter extends IBasePresenter {
-        void getFiles(final IMediaFileRecordRepository.Filter filter, final IMediaFileRecordRepository.Sort sort);
+        void getFiles(final IVaultDatabase.Filter filter, final IVaultDatabase.Sort sort);
         void importImage(Uri uri);
         void importVideo(Uri uri);
         void addNewMediaFile(VaultFile vaultFile);

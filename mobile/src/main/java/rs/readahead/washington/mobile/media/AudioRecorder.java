@@ -81,8 +81,7 @@ public class AudioRecorder {
                 MediaFileHandler.deleteFile(context, vaultFile);
                 return null;
             }
-            Timber.d("Size*******%s", String.valueOf(MediaFileHandler.getSize(context, vaultFile)));
-            vaultFile.size = MediaFileHandler.getSize(context, vaultFile);
+            vaultFile.size = MediaFileHandler.getSize(vaultFile);
             vaultFile.hash = StringUtils.hexString(outputStream.getMessageDigest().digest());
             vaultFile.duration = duration;
 

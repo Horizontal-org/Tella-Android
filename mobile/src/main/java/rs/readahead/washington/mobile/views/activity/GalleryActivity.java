@@ -60,7 +60,6 @@ import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.FileUtil;
 import rs.readahead.washington.mobile.util.PermissionUtil;
-import rs.readahead.washington.mobile.views.Extensions;
 import rs.readahead.washington.mobile.views.adapters.AttachmentsRecycleViewAdapter;
 import rs.readahead.washington.mobile.views.adapters.GalleryRecycleViewAdapter;
 import rs.readahead.washington.mobile.views.custom.GalleryRecyclerView;
@@ -110,7 +109,7 @@ public class GalleryActivity extends MetadataActivity implements
     private int selectedNum;
     private AlertDialog alertDialog;
     private ProgressDialog progressDialog;
-    private final VaultTypeFilter filter = new VaultTypeFilter() ;
+    private final VaultTypeFilter filter = new VaultTypeFilter();
     private final IVaultDatabase.Sort sort = new IVaultDatabase.Sort();
     private ViewType type = ViewType.EDIT;
     private long numOfTUServers;
@@ -137,7 +136,7 @@ public class GalleryActivity extends MetadataActivity implements
         sort.direction = IVaultDatabase.Sort.Direction.ASC;
 
         if (getIntent().hasExtra(GALLERY_FILTER)) {
-           filter.filterType = IVaultDatabase.Filter.FilterType.valueOf(getIntent().getStringExtra(GALLERY_FILTER));
+            filter.filterType = IVaultDatabase.Filter.FilterType.valueOf(getIntent().getStringExtra(GALLERY_FILTER));
         }
 
         setupToolbar();
@@ -593,8 +592,7 @@ public class GalleryActivity extends MetadataActivity implements
             startActivity(intent);
         } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
             Intent intent = new Intent(this, VideoViewerActivity.class);
-            Extensions.INSTANCE.openFile(vaultFile,this);
-           intent.putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile);
+            intent.putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile);
             startActivity(intent);
         }
     }

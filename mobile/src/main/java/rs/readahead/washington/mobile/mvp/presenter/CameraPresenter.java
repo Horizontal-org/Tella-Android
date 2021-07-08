@@ -55,7 +55,7 @@ public class CameraPresenter implements ICameraPresenterContract.IPresenter {
     public void addMp4Video(final File file) {
         disposables.add(Observable.fromCallable(() -> MediaFileHandler.saveMp4Video(view.getContext(), file))
                 .flatMap((Function<VaultFile, ObservableSource<VaultFile>>) bundle ->
-                        mediaFileHandler.saveVaultFile(bundle))
+                        mediaFileHandler.saveVaultAudioFile(bundle))
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> view.onAddingStart())
                 .observeOn(AndroidSchedulers.mainThread())

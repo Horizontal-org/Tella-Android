@@ -60,7 +60,7 @@ class MediaFileDataSource implements DataSource {
             throw new IOException("InputStream skip failed");
         }
 
-        long size = MediaFileHandler.getSize(context, vaultFile);
+        long size = MediaFileHandler.getSize(vaultFile);
 
         if (size - dataSpec.position <= 0) {
             close();

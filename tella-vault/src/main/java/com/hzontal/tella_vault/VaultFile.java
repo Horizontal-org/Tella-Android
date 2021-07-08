@@ -31,6 +31,7 @@ public class VaultFile  implements Serializable {
         this.path = builder.path;
         this.hash = builder.hash;
         this.duration = builder.duration;
+        this.size = builder.size;
     }
 
     public enum Type {

@@ -37,7 +37,9 @@ public class AudioCapturePresenter implements IAudioCapturePresenterContract.IPr
                 .doOnSubscribe(disposable -> view.onAddingStart())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onAddingEnd())
-                .subscribe(mediaFile1 -> view.onAddSuccess(mediaFile1), throwable -> {
+                .subscribe(mediaFile1 ->
+                    {view.onAddSuccess(mediaFile1);},
+                        throwable -> {
                     FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onAddError(throwable);
                 })

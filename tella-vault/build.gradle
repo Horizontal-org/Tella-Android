@@ -42,6 +42,8 @@ dependencies {
     api 'io.reactivex.rxjava2:rxjava:2.2.19'
     implementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
     implementation 'net.zetetic:android-database-sqlcipher:3.5.7@aar'
+    api "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
+
     implementation project(path: ':tella-keys')
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

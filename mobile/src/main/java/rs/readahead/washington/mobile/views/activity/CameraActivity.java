@@ -339,7 +339,7 @@ public class CameraActivity extends MetadataActivity implements
                 setVideoQuality();
                 lastClickTime = System.currentTimeMillis();
                 VaultFile tmp = VaultUtils.INSTANCE.newMp4();
-                File file = MediaFileHandler.getTempFile(this, tmp);
+                File file = MediaFileHandler.getTempFile(tmp);
                 cameraView.takeVideo(file);
                 captureButton.displayStopVideo();
                 durationView.start();
