@@ -5,7 +5,6 @@ apply plugin: 'kotlin-android'
 
 ext {
     supportLibVersion = "28.0.3"
-    retrofitVersion = '2.6.1'
     permissionDispatcherVersion = "4.8.0"
     googlePlayServicesVersion = "17.0.0"
     leakCanaryVersion = '2.4'
