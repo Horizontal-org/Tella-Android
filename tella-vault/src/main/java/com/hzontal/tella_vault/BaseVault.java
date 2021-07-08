@@ -2,6 +2,7 @@ package com.hzontal.tella_vault;
 
 import android.content.Context;
 
+import com.hzontal.provider.VaultProvider;
 import com.hzontal.tella_vault.database.VaultDataSource;
 import com.hzontal.utils.FileUtil;
 
@@ -15,18 +16,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.DigestOutputStream;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.List;
-
-import javax.crypto.Cipher;
-import javax.crypto.CipherOutputStream;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 
 
 /**
@@ -35,7 +27,7 @@ import javax.crypto.spec.SecretKeySpec;
  * directories.
  */
 public abstract class BaseVault {
-    protected final LifecycleMainKey mainKeyHolder; // todo: this should be interface with `MainKey get()` method
+    public static LifecycleMainKey mainKeyHolder = null; // todo: this should be interface with `MainKey get()` method
     protected final IVaultDatabase database;
     protected final Config config;
     protected final static char[] hexArray = "0123456789ABCDEF".toCharArray();
@@ -46,7 +38,7 @@ public abstract class BaseVault {
     }
 
     public BaseVault(LifecycleMainKey mainKeyHolder, Config config, IVaultDatabase database) throws VaultException {
-        this.mainKeyHolder = mainKeyHolder;
+        BaseVault.mainKeyHolder = mainKeyHolder;
         this.database = database;
         this.config = config;
 
@@ -74,7 +66,7 @@ public abstract class BaseVault {
             FileInputStream fis = new FileInputStream(file);
             byte[] key = mainKeyHolder.get().getKey().getEncoded();
 
-            return CipherStreamUtils.getDecryptedLimitedInputStream(key, fis, file);
+            return VaultProvider.getDecryptedLimitedInputStream(key, fis, file);
 
         } catch (IOException | LifecycleMainKey.MainKeyUnavailableException e) {
             throw new VaultException(e);
@@ -93,7 +85,7 @@ public abstract class BaseVault {
             byte[] key = mainKeyHolder.get().getKey().getEncoded();
 
 
-            return CipherStreamUtils.getEncryptedOutputStream(key, fis, file.getName());
+            return VaultProvider.getEncryptedOutputStream(key, fis, file.getName());
         } catch (IOException | LifecycleMainKey.MainKeyUnavailableException e) {
             throw new VaultException(e);
         }
@@ -155,7 +147,7 @@ public abstract class BaseVault {
                 byte[] key = mainKeyHolder.get().getKey().getEncoded();
 
                 DigestOutputStream os = new DigestOutputStream(
-                        CipherStreamUtils.getEncryptedOutputStream(key, fos, file.getName()), // todo: change this
+                        VaultProvider.getEncryptedOutputStream(key, fos, file.getName()), // todo: change this
                         MessageDigest.getInstance("SHA-256"));
 
                 IOUtils.copy(builder.data, os);
@@ -193,7 +185,7 @@ public abstract class BaseVault {
     }
 
     protected long getSize(File file) {
-        return file.length() - CipherStreamUtils.IV_SIZE;
+        return file.length() - VaultProvider.IV_SIZE;
     }
 
     /**
@@ -201,7 +193,7 @@ public abstract class BaseVault {
      * @param vaultFile VaultFile that we need File with contents.
      * @return File holding contents of VaultFile.
      */
-    protected File getFile(VaultFile vaultFile) {
+    public File getFile(VaultFile vaultFile) {
         return new File(this.config.root, vaultFile.id);
     }
 

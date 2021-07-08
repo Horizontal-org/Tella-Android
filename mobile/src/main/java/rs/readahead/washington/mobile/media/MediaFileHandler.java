@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.media;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -22,6 +23,8 @@ import androidx.core.content.FileProvider;
 import androidx.exifinterface.media.ExifInterface;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.filter.VaultTypeFilter;
+import com.hzontal.provider.VaultProvider;
 import com.hzontal.tella_vault.IVaultDatabase;
 import com.hzontal.tella_vault.VaultException;
 import com.hzontal.tella_vault.VaultFile;
@@ -41,6 +44,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.net.URI;
 import java.security.DigestOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -65,7 +69,7 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
-import rs.readahead.washington.mobile.data.provider.EncryptedFileProvider;
+import rs.readahead.washington.mobile.domain.entity.KeyBundle;
 import rs.readahead.washington.mobile.presentation.entity.mapper.PublicMetadataMapper;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.FileUtil;
@@ -141,7 +145,7 @@ public class MediaFileHandler {
     }
 
     public static boolean deleteMediaFile(@NonNull Context context, @NonNull VaultFile vaultFile) {
-        File file = getFile(context, vaultFile);
+        File file = getFile(vaultFile);
         File metadata = getMetadataFile(context, vaultFile);
         return file.delete() || metadata.delete();
     }
@@ -349,7 +353,7 @@ public class MediaFileHandler {
             IOUtils.copy(is, os);
 
             vaultFile.hash = StringUtils.hexString(os.getMessageDigest().digest());
-            vaultFile.size = getSize(context, vaultFile);
+            vaultFile.size = getSize(vaultFile);
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
             Timber.e(e, MediaFileHandler.class.getName());
@@ -424,7 +428,7 @@ public class MediaFileHandler {
     @SuppressWarnings("UnusedReturnValue")
     static boolean deleteFile(Context context, @NonNull VaultFile vaultFile) {
         try {
-            return getFile(context, vaultFile).delete();
+            return getFile(vaultFile).delete();
         } catch (Throwable ignored) {
             return false;
         }
@@ -442,16 +446,16 @@ public class MediaFileHandler {
     }
 
     public static Uri getEncryptedUri(Context context, VaultFile mediaFile) {
-        File newFile = getFile(context, mediaFile);
-        return FileProvider.getUriForFile(context, EncryptedFileProvider.AUTHORITY, newFile);
+        File newFile = getFile(mediaFile);
+        return FileProvider.getUriForFile(context, VaultProvider.AUTHORITY, newFile);
     }
 
     @Nullable
     private static Uri getMetadataUri(Context context, VaultFile vaultFile) {
         try {
             VaultFile mmf = maybeCreateMetadataMediaFile(context, vaultFile);
-            return FileProvider.getUriForFile(context, EncryptedFileProvider.AUTHORITY,
-                    getFile(context, vaultFile));
+            return FileProvider.getUriForFile(context, VaultProvider.AUTHORITY,
+                    getFile(vaultFile));
         } catch (Exception e) {
             Timber.d(e);
             return null;
@@ -461,10 +465,10 @@ public class MediaFileHandler {
     //TODO CHECJ CSV FILE
     public static VaultFile maybeCreateMetadataMediaFile(Context context, VaultFile vaultFile) throws Exception {
         VaultFile mmf = new VaultFile();
-        File file = getFile(context, vaultFile);
+        File file = getFile(vaultFile);
 
         if (file.createNewFile()) {
-            OutputStream os = getMetadataOutputStream(file);
+            OutputStream os = getMetadataOutputStream(vaultFile);
 
             if (os == null) throw new NullPointerException();
 
@@ -476,16 +480,20 @@ public class MediaFileHandler {
         return mmf;
     }
 
-    public static File getTempFile(Context context, VaultFile vaultFile) {
-        return getFile(context, vaultFile);
+    public static File getTempFile(VaultFile vaultFile) {
+        return getFile(vaultFile);
     }
 
-    public static long getSize(Context context, VaultFile vaultFile) {
-        return getSize(getFile(context, vaultFile));
+    public static long getSize(VaultFile vaultFile) {
+        return getSize(getFile(vaultFile));
+    }
+
+    public static Uri getUri(Context context, VaultFile vaultFile) {
+        return Uri.fromFile(new File(context.getFilesDir(), vaultFile.path));
     }
 
     private static long getSize(File file) {
-        return file.length() - EncryptedFileProvider.IV_SIZE;
+        return file.length() - VaultProvider.IV_SIZE;
     }
 
     private static void createMetadataFile(@NonNull OutputStream os, @NonNull VaultFile vaultFile) {
@@ -513,18 +521,10 @@ public class MediaFileHandler {
     }
 
     @Nullable
-    private static OutputStream getMetadataOutputStream(File file) {
+    private static OutputStream getMetadataOutputStream(VaultFile file) {
         try {
-            FileOutputStream fos = new FileOutputStream(file);
-            byte[] key;
-
-            if ((key = MyApplication.getMainKeyHolder().get().getKey().getEncoded()) == null) {
-                return null;
-            }
-
-            return EncryptedFileProvider.getEncryptedOutputStream(key, fos, file.getName());
-
-        } catch (IOException | LifecycleMainKey.MainKeyUnavailableException e) {
+            return MyApplication.rxVault.getOutStream(file);
+        } catch (VaultException e) {
             Timber.d(e, MediaFileHandler.class.getName());
         }
 
@@ -573,9 +573,9 @@ public class MediaFileHandler {
         return vaultFile.id + ".csv";
     }
 
-    private static File getFile(@NonNull Context context, VaultFile vaultFile) {
-        final File mediaPath = new File(context.getFilesDir(), vaultFile.path);
-        return new File(mediaPath, vaultFile.name);
+    @SuppressLint("TimberArgCount")
+    private static File getFile(VaultFile vaultFile) {
+        return MyApplication.rxVault.getFile(vaultFile);
     }
 
     private static File getMetadataFile(@NonNull Context context, VaultFile vaultFile) {
@@ -630,7 +630,7 @@ public class MediaFileHandler {
         FileUtil.close(os);
 
         vaultFile.hash = StringUtils.hexString(os.getMessageDigest().digest());
-        vaultFile.size = getSize(context, vaultFile);
+        vaultFile.size = getSize(vaultFile);
     }
 
     private static MessageDigest getMessageDigest() throws NoSuchAlgorithmException {
@@ -643,7 +643,7 @@ public class MediaFileHandler {
         IVaultDatabase.Sort sort = new IVaultDatabase.Sort();
         sort.property = D.C_ID;
         sort.direction = IVaultDatabase.Sort.Direction.DESC;
-        return MyApplication.rxVault.list(null, null, sort, limits)
+        return MyApplication.rxVault.list(null, new VaultTypeFilter(), sort, limits)
                 .toObservable();
     }
 
@@ -656,6 +656,7 @@ public class MediaFileHandler {
                 .setType(VaultFile.Type.FILE)
                 .setDuration(vaultFile.duration)
                 .setPath(vaultFile.path)
+                .setMetadata(vaultFile.metadata)
                 .build()
                 .toObservable();
     }
@@ -665,13 +666,14 @@ public class MediaFileHandler {
                 .builder(vaultFile.name)
                 .setMimeType(vaultFile.mimeType)
                 .setId(vaultFile.id)
-                .setAnonymous(true)
+                .setAnonymous(false)
                 .setThumb(vaultFile.thumb)
                 .setType(VaultFile.Type.FILE)
                 .setDuration(vaultFile.duration)
                 .setPath(vaultFile.path)
                 .setHash(vaultFile.hash)
                 .setSize(vaultFile.size)
+                .setMetadata(vaultFile.metadata)
                 .build()
                 .toObservable();
     }
