@@ -1,11 +1,15 @@
 package com.hzontal.tella_vault.database;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
 import androidx.annotation.Nullable;
 
+import com.google.gson.GsonBuilder;
+import com.hzontal.data.MetadataEntity;
+import com.hzontal.mappers.EntityMapper;
 import com.hzontal.tella_vault.IVaultDatabase;
 import com.hzontal.tella_vault.VaultFile;
 
@@ -24,7 +28,7 @@ public class VaultDataSource implements IVaultDatabase {
     public static final String ROOT_UID = UUID.randomUUID().toString();
 
     private static VaultDataSource dataSource;
-    private SQLiteDatabase database;
+    private final SQLiteDatabase database;
 
     public static synchronized VaultDataSource getInstance(Context context, byte[] key) {
         if (dataSource == null) {
@@ -46,6 +50,7 @@ public class VaultDataSource implements IVaultDatabase {
         return get(ROOT_UID);
     }
 
+    @SuppressLint("TimberArgCount")
     @Override
     public VaultFile create(VaultFile vaultFile) {
         if (vaultFile.created == 0) {
@@ -54,9 +59,7 @@ public class VaultDataSource implements IVaultDatabase {
 
         try {
             database.beginTransaction();
-
             // todo: get parent id for vaultFile.parent
-
             ContentValues values = new ContentValues();
             values.put(D.C_ID, vaultFile.id);
             values.put(D.C_TYPE, vaultFile.type.getValue());
@@ -69,7 +72,8 @@ public class VaultDataSource implements IVaultDatabase {
             values.put(D.C_HASH, vaultFile.hash);
             values.put(D.C_THUMBNAIL, vaultFile.thumb);
             values.put(D.C_MIME_TYPE, vaultFile.mimeType);
-            values.put(D.C_PATH,vaultFile.path);
+            values.put(D.C_PATH, vaultFile.path);
+            values.put(D.C_METADATA, new GsonBuilder().create().toJson(new EntityMapper().transform(vaultFile.metadata)));
 
             database.insert(D.T_VAULT_FILE, null, values);
 
@@ -77,26 +81,22 @@ public class VaultDataSource implements IVaultDatabase {
         } finally {
             database.endTransaction();
         }
-
+        Timber.d("VaultFile", vaultFile.toString());
         return vaultFile;
     }
 
     @Override
-    public List<VaultFile> list(VaultFile parent, @Nullable Filter filter,@Nullable Sort sort,@Nullable Limits limits) {
+    public List<VaultFile> list(VaultFile parent, @Nullable Filter filter, @Nullable Sort sort, @Nullable Limits limits) {
         List<VaultFile> vaultFiles = new ArrayList<>();
-        String filterQuery = null;
         Sort.Direction direction = Sort.Direction.ASC;
         String limit = null;
         Cursor cursor = null;
-        if (filter != null) {
-            filterQuery = filter.query;
-        }
 
-        if (sort != null){
+        if (sort != null) {
             direction = sort.direction;
         }
 
-        if (limit != null){
+        if (limits != null) {
             limit = String.valueOf(limits.limit);
         }
 
@@ -104,11 +104,10 @@ public class VaultDataSource implements IVaultDatabase {
         try {
             // todo: add safe where clause if parent != null
             // todo: add support for limit
-
             final String query = SQLiteQueryBuilder.buildQueryString(
                     false,
                     D.T_VAULT_FILE,
-                    new String[] {
+                    new String[]{
                             D.C_ID,
                             D.C_TYPE,
                             D.C_PARENT_ID,
@@ -120,17 +119,20 @@ public class VaultDataSource implements IVaultDatabase {
                             D.C_ANONYMOUS,
                             D.C_THUMBNAIL,
                             D.C_MIME_TYPE,
-                            D.C_PATH
+                            D.C_PATH,
+                            D.C_METADATA
                     },
-                    filterQuery, null, null,
-                    D.C_CREATED +" "+direction,
-                    limit
+                    null, null, null,
+                    D.C_CREATED + " " + direction, limit
             );
 
             cursor = database.rawQuery(query, null);
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                vaultFiles.add(cursorToVaultFile(cursor));
+                VaultFile vaultFile = cursorToVaultFile(cursor);
+                if (filter.applyFilter(vaultFile)) {
+                    vaultFiles.add(cursorToVaultFile(cursor));
+                }
             }
         } finally {
             if (cursor != null) {
@@ -140,6 +142,7 @@ public class VaultDataSource implements IVaultDatabase {
 
         return vaultFiles;
     }
+
     @Override
     public VaultFile get(String id) {
         try (Cursor cursor = database.query(
@@ -202,9 +205,9 @@ public class VaultDataSource implements IVaultDatabase {
     public void destroy() {
     }
 
+    @SuppressLint("TimberArgCount")
     private VaultFile cursorToVaultFile(Cursor cursor) {
-        // todo: MetadataEntity metadataEntity = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_METADATA)), MetadataEntity.class);
-
+        MetadataEntity metadataEntity = new GsonBuilder().create().fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_METADATA)), MetadataEntity.class);
         VaultFile vaultFile = new VaultFile();
         vaultFile.id = cursor.getString(cursor.getColumnIndexOrThrow(D.C_ID));
         vaultFile.type = VaultFile.Type.fromValue(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_TYPE)));
@@ -217,6 +220,7 @@ public class VaultDataSource implements IVaultDatabase {
         vaultFile.thumb = cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_THUMBNAIL));
         vaultFile.mimeType = cursor.getString(cursor.getColumnIndexOrThrow(D.C_MIME_TYPE));
         vaultFile.path = cursor.getString(cursor.getColumnIndexOrThrow(D.C_PATH));
+        vaultFile.metadata = new EntityMapper().transform(metadataEntity);
         return vaultFile;
     }
 
