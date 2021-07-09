@@ -24,7 +24,6 @@ import androidx.exifinterface.media.ExifInterface;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.filter.VaultTypeFilter;
-import com.hzontal.provider.VaultProvider;
 import com.hzontal.tella_vault.IVaultDatabase;
 import com.hzontal.tella_vault.VaultException;
 import com.hzontal.tella_vault.VaultFile;
@@ -33,7 +32,6 @@ import com.hzontal.utils.MediaFile;
 import com.hzontal.utils.VaultUtils;
 
 import org.apache.commons.io.IOUtils;
-import org.hzontal.tella.keys.key.LifecycleMainKey;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -44,7 +42,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.net.URI;
 import java.security.DigestOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -69,7 +66,7 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
-import rs.readahead.washington.mobile.domain.entity.KeyBundle;
+import rs.readahead.washington.mobile.data.provider.EncryptedFileProvider;
 import rs.readahead.washington.mobile.presentation.entity.mapper.PublicMetadataMapper;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.FileUtil;
@@ -445,16 +442,16 @@ public class MediaFileHandler {
         return null;
     }
 
-    public static Uri getEncryptedUri(Context context, VaultFile mediaFile) {
-        File newFile = getFile(mediaFile);
-        return FileProvider.getUriForFile(context, VaultProvider.AUTHORITY, newFile);
+    public static Uri getEncryptedUri(Context context, VaultFile vaultFile) {
+        File newFile = getFile(vaultFile);
+        return FileProvider.getUriForFile(context, EncryptedFileProvider.AUTHORITY, newFile);
     }
 
     @Nullable
     private static Uri getMetadataUri(Context context, VaultFile vaultFile) {
         try {
             VaultFile mmf = maybeCreateMetadataMediaFile(context, vaultFile);
-            return FileProvider.getUriForFile(context, VaultProvider.AUTHORITY,
+            return FileProvider.getUriForFile(context, EncryptedFileProvider.AUTHORITY,
                     getFile(vaultFile));
         } catch (Exception e) {
             Timber.d(e);
@@ -493,7 +490,7 @@ public class MediaFileHandler {
     }
 
     private static long getSize(File file) {
-        return file.length() - VaultProvider.IV_SIZE;
+        return file.length() - EncryptedFileProvider.IV_SIZE;
     }
 
     private static void createMetadataFile(@NonNull OutputStream os, @NonNull VaultFile vaultFile) {
@@ -542,7 +539,7 @@ public class MediaFileHandler {
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.putExtra(Intent.EXTRA_STREAM, mediaFileUri);
-        shareIntent.setType(FileUtil.getMimeType(vaultFile.name));
+        shareIntent.setType(vaultFile.mimeType);
 
         context.startActivity(Intent.createChooser(shareIntent, context.getText(R.string.action_share)));
     }

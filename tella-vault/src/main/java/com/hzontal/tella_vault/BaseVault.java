@@ -66,7 +66,7 @@ public abstract class BaseVault {
             FileInputStream fis = new FileInputStream(file);
             byte[] key = mainKeyHolder.get().getKey().getEncoded();
 
-            return VaultProvider.getDecryptedLimitedInputStream(key, fis, file);
+            return CipherStreamUtils.getDecryptedLimitedInputStream(key, fis, file);
 
         } catch (IOException | LifecycleMainKey.MainKeyUnavailableException e) {
             throw new VaultException(e);
@@ -85,7 +85,7 @@ public abstract class BaseVault {
             byte[] key = mainKeyHolder.get().getKey().getEncoded();
 
 
-            return VaultProvider.getEncryptedOutputStream(key, fis, file.getName());
+            return CipherStreamUtils.getEncryptedOutputStream(key, fis, file.getName());
         } catch (IOException | LifecycleMainKey.MainKeyUnavailableException e) {
             throw new VaultException(e);
         }
@@ -147,7 +147,7 @@ public abstract class BaseVault {
                 byte[] key = mainKeyHolder.get().getKey().getEncoded();
 
                 DigestOutputStream os = new DigestOutputStream(
-                        VaultProvider.getEncryptedOutputStream(key, fos, file.getName()), // todo: change this
+                        CipherStreamUtils.getEncryptedOutputStream(key, fos, file.getName()), // todo: change this
                         MessageDigest.getInstance("SHA-256"));
 
                 IOUtils.copy(builder.data, os);
@@ -185,7 +185,7 @@ public abstract class BaseVault {
     }
 
     protected long getSize(File file) {
-        return file.length() - VaultProvider.IV_SIZE;
+        return file.length() - CipherStreamUtils.IV_SIZE;
     }
 
     /**
