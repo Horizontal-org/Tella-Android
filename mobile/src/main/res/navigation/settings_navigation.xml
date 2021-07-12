@@ -51,7 +51,7 @@
         <action
             android:id="@+id/action_general_settings_to_language_settings"
             app:destination="@id/language_settings"
-            app:enterAnim="@anim/slide_in_up"
+            app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/slide_in_end"
             app:popExitAnim="@anim/slide_out_start"/>
