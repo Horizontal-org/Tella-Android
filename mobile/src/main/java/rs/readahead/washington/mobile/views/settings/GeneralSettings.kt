@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
@@ -44,18 +43,6 @@ class GeneralSettings : Fragment() {
             Preferences.setAnonymousMode(!isChecked)
         }
         verificationSwitch.setChecked(!Preferences.isAnonymousMode())
-
-       /* val languageSettings = view.findViewById<View>(R.id.language_settings_button)
-        languageSettings.setOnClickListener {
-            activity?.let {
-                BottomSheetUtils.showStandardSheet(it.supportFragmentManager,"Add Server",
-                        descriptionText = "What type of server?",
-                        actionButtonLabel = "confirm",
-                        cancelButtonLabel = "cancel",
-                        onConfirmClick = { },
-                onCancelClick = { })
-            }
-        }*/
 
         return view
     }
