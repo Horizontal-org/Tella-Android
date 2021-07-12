@@ -1,6 +1,5 @@
 package org.hzontal.shared_ui.bottomsheet
 
-import android.app.Dialog
 import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -18,8 +17,6 @@ import androidx.annotation.StyleRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.hzontal.shared_ui.R
 import java.util.*
@@ -45,7 +42,6 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
     private var pageHolder: PageHolder? = null
     private var isCancellable = false
     private var isTransparent: Boolean = false
-    private var isFullscreen: Boolean = false
 
     /**
      * Called to init LayoutRes with ID layout.
@@ -131,7 +127,6 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
      * @return Instantiated CustomBottomSheetFragment object
      */
     fun fullScreen(): CustomBottomSheetFragment {
-        isFullscreen = true
         setStyle(DialogFragment.STYLE_NO_TITLE, R.style.AppBottomSheetDialogTheme)
         return this
     }
@@ -167,18 +162,12 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
                 it.window?.let { window ->
                     if (animationStyle != null) window.attributes.windowAnimations =
                             animationStyle!!
-                    if (isTransparent) window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))else {
-                        if (isFullscreen) window.setBackgroundDrawable(ColorDrawable(getResources().getColor(R.color.wa_purple)))}
+                    if (isTransparent) window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                 }
             }
 
         }
         super.onStart()
-
-        if (isFullscreen){
-            val sheetContainer = requireView().parent as? ViewGroup ?: return
-            sheetContainer.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-        }
     }
 
     override fun getTheme(): Int {
@@ -234,15 +223,6 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
                 window.statusBarColor = ContextCompat.getColor(requireContext(), colorInt)
             }
         }
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        if (isFullscreen)
-            return BottomSheetDialog(requireContext(), theme).apply {
-                behavior.state = BottomSheetBehavior.STATE_EXPANDED
-                behavior.peekHeight = 1000
-            }
-        else return super.onCreateDialog(savedInstanceState)
     }
 
     interface Binder<T : PageHolder> {
