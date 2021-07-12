@@ -76,4 +76,8 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
         actionBar.setTitle(getString(labelRes));
     }
 
+    @Override
+    public void setToolbarHomeIcon(int iconRes) {
+        actionBar.setHomeAsUpIndicator(iconRes);
+    }
 }

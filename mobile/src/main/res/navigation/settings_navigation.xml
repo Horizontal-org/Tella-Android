@@ -48,6 +48,13 @@
         android:name="rs.readahead.washington.mobile.views.settings.GeneralSettings"
         android:label="fragment_general_settings"
         tools:layout="@layout/fragment_general_settings">
+        <action
+            android:id="@+id/action_general_settings_to_language_settings"
+            app:destination="@id/language_settings"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/slide_in_end"
+            app:popExitAnim="@anim/slide_out_start"/>
     </fragment>
 
     <fragment
@@ -71,4 +78,10 @@
         tools:layout="@layout/fragment_about_n_help_settings">
     </fragment>
 
+    <fragment
+        android:id="@+id/language_settings"
+        android:name="rs.readahead.washington.mobile.views.settings.LanguageSettings"
+        android:label="fragment_language_settings"
+        tools:layout="@layout/fragment_language_settings">
+    </fragment>
 </navigation>
