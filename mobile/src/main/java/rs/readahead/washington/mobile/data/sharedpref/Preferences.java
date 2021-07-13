@@ -200,6 +200,15 @@ public class Preferences {
         return getBoolean(SharedPrefs.AUTO_UPLOAD_PAUSED, false);
     }
 
+    @Nullable
+    public static long getLockTimeout() {
+        return getLong(SharedPrefs.LAST_COLLECT_REFRESH, 0);
+    }
+
+    public static void setLockTimeout(@Nullable long value) {
+        setLong(SharedPrefs.LAST_COLLECT_REFRESH, value);
+    }
+
     public static void setAutoUpload(boolean value) {
         setBoolean(SharedPrefs.AUTO_UPLOAD, value);
     }

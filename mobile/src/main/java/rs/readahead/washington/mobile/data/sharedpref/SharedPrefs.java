@@ -48,6 +48,7 @@ public class SharedPrefs {
     static final String AUTO_DELETE = "auto_delete";
     static final String METADATA_AUTO_UPLOAD = "metadata_auto_upload";
     static final String AUTO_UPLOAD_PAUSED = "auto_upload_paused";
+    static final String LOCK_TIMEOUT = "lock_timeout";
 
     private static SharedPrefs instance;
     private SharedPreferences pref;
