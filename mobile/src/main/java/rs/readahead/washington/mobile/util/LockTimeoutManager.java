@@ -1,17 +1,16 @@
 package rs.readahead.washington.mobile.util;
 
-
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 
 
 public class LockTimeoutManager {
-    private final HashMap<Long, Integer> options;
+    private final LinkedHashMap<Long, Integer> options;
 
     public LockTimeoutManager() {
-        options = new HashMap<> ();
+        options = new LinkedHashMap<>();
         options.put(0L,R.string.settings_sec_lock_timeout_immediately);
         options.put(60000L, R.string.settings_sec_lock_timeout_1min);
         options.put(300000L, R.string.settings_sec_lock_timeout_5min);
@@ -19,7 +18,7 @@ public class LockTimeoutManager {
         options.put(3600000L, R.string.settings_sec_lock_timeout_1hour);
     }
 
-    public HashMap<Long, Integer> getOptionsList() {
+    public LinkedHashMap<Long, Integer> getOptionsList() {
         return options;
     }
 
@@ -30,8 +29,8 @@ public class LockTimeoutManager {
     public int getSelectedStringRes() {
         int res = R.string.settings_sec_lock_timeout_immediately;
         for (long option : this.options.keySet()) {
-            if (option == getLockTimeout() && options.get(option)!= null) {
-                res = options.get(option);
+            if (option == getLockTimeout()) {
+                res = options.get(option) != null ? options.get(option) : R.string.settings_sec_lock_timeout_immediately;
             }
         }
         return res;

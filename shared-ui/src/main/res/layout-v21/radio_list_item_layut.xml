@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.AppCompatRadioButton
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/RadioListButtonStyle"
-    app:buttonTint="@color/wa_white"/>
+    android:buttonTint="@color/radio_buttons_color" />

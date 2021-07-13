@@ -81,7 +81,7 @@ object BottomSheetUtils {
             fragmentManager: FragmentManager,
             context: Context,
             currentTimeout: Long,
-            radioList: HashMap<Long, Int>,
+            radioList: LinkedHashMap<Long, Int>,
             titleText: String?,
             descriptionText: String?,
             actionButtonLabel: String? = null,
