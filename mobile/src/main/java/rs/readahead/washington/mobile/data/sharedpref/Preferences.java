@@ -202,11 +202,11 @@ public class Preferences {
 
     @Nullable
     public static long getLockTimeout() {
-        return getLong(SharedPrefs.LAST_COLLECT_REFRESH, 0);
+        return getLong(SharedPrefs.LOCK_TIMEOUT, 0);
     }
 
     public static void setLockTimeout(@Nullable long value) {
-        setLong(SharedPrefs.LAST_COLLECT_REFRESH, value);
+        setLong(SharedPrefs.LOCK_TIMEOUT, value);
     }
 
     public static void setAutoUpload(boolean value) {

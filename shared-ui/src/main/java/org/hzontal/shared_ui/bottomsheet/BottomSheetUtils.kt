@@ -1,8 +1,12 @@
 package org.hzontal.shared_ui.bottomsheet
 
+import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.fragment.app.FragmentManager
 import org.hzontal.shared_ui.R
 
@@ -69,14 +73,20 @@ object BottomSheetUtils {
         }
     }
 
+    interface LockOptionConsumer {
+        fun accept(option: Long)
+    }
+
     fun showRadioListSheet(
-        fragmentManager: FragmentManager,
-        titleText: String?,
-        descriptionText: String?,
-        actionButtonLabel: String? = null,
-        cancelButtonLabel: String? = null,
-        onConfirmClick: (() -> Unit)? = null,
-        onCancelClick: (() -> Unit)? = null
+            fragmentManager: FragmentManager,
+            context: Context,
+            currentTimeout: Long,
+            radioList: HashMap<Long, Int>,
+            titleText: String?,
+            descriptionText: String?,
+            actionButtonLabel: String? = null,
+            cancelButtonLabel: String? = null,
+            consumer: LockOptionConsumer
     ) {
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
@@ -96,13 +106,25 @@ object BottomSheetUtils {
                     }
 
                     actionButton.setOnClickListener {
-                        onConfirmClick?.invoke()
+                        val radioButton: AppCompatRadioButton = radioGroup.findViewById(radioGroup.checkedRadioButtonId)
+                        val option = radioButton.tag as Long
+                        consumer.accept(option)
                         customSheetFragment.dismiss()
                     }
 
                     cancelButton.setOnClickListener {
-                        onCancelClick?.invoke()
                         customSheetFragment.dismiss()
+                    }
+
+                    for (option in radioList) {
+                        val inflater = LayoutInflater.from(context)
+                        val button = inflater.inflate(R.layout.radio_list_item_layut, null) as RadioButton
+                        button.tag = option.key
+                        button.setText(option.value)
+                        radioGroup.addView(button)
+                        if (option.key == currentTimeout) {
+                            button.isChecked = true
+                        }
                     }
 
                     actionButton.visibility =
@@ -131,6 +153,5 @@ object BottomSheetUtils {
             radioGroup = view.findViewById(R.id.radio_list)
         }
     }
-
 
 }
