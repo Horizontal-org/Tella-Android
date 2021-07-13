@@ -27,6 +27,16 @@ public class LockTimeoutManager {
         return Preferences.getLockTimeout();
     }
 
+    public int getSelectedStringRes() {
+        int res = R.string.settings_sec_lock_timeout_immediately;
+        for (long option : this.options.keySet()) {
+            if (option == getLockTimeout() && options.get(option)!= null) {
+                res = options.get(option);
+            }
+        }
+        return res;
+    }
+
     public void setLockTimeout(long timeout) {
         Preferences.setLockTimeout(timeout);
     }

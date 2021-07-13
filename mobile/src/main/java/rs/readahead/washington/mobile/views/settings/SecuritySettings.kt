@@ -21,7 +21,7 @@ import rs.readahead.washington.mobile.util.LockTimeoutManager
 
 class SecuritySettings : Fragment() {
     var lockSetting: TextView? = null
-    var lockTimeoutSetting: View? = null
+    var lockTimeoutSetting: TextView? = null
     private val lockTimeoutManager = LockTimeoutManager()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -31,6 +31,9 @@ class SecuritySettings : Fragment() {
 
         lockSetting = view.findViewById(R.id.lock_setting)
         lockTimeoutSetting = view.findViewById(R.id.lock_timeout_setting)
+
+        setUpLockTypeText()
+        setUpLockTimeoutText()
 
         val lockSettingButton = view.findViewById<RelativeLayout>(R.id.lock_settings_button)
         lockSettingButton.setOnClickListener { goToUnlockingActivity() }
@@ -62,6 +65,7 @@ class SecuritySettings : Fragment() {
 
     private fun onLockTimeoutChoosen(option: Long) {
         lockTimeoutManager.setLockTimeout(option)
+        setUpLockTimeoutText()
     }
 
     private fun setUpLockTypeText() {
@@ -70,6 +74,10 @@ class SecuritySettings : Fragment() {
             UnlockRegistry.Method.TELLA_PASSWORD -> lockSetting?.setText(getString(R.string.onboard_password))
             UnlockRegistry.Method.TELLA_PATTERN -> lockSetting?.setText(getString(R.string.onboard_pattern))
         }
+    }
+
+    private fun setUpLockTimeoutText() {
+        lockTimeoutSetting?.setText(lockTimeoutManager.selectedStringRes)
     }
 
     fun goToUnlockingActivity() {
