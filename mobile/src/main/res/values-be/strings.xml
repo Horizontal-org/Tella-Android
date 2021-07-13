@@ -423,4 +423,10 @@
     <string name="settings.servers.add_server.expl">Connect to servers to collect and send data to your organization</string>
     <string name="settings.servers_auto.upload_action">Auto-upload to server</string>
     <string name="settings.servers_auto.upload_action.expl">Upload your files to your Reports server as soon as they are captured (photos, videos, or audio recordings) or imported into Tella.</string>
+  <string name="settings.sec_lock_timeout_immediately">Immediately</string>
+  <string name="settings.sec_lock_timeout_1min">1 minute</string>
+  <string name="settings.sec_lock_timeout_5min">5 minutes</string>
+  <string name="settings.sec_lock_timeout_30min">30 minutes</string>
+  <string name="settings.sec_lock_timeout_1hour">1 hour</string>
+  <string name="settings.sec_lock_timeout_desc">Decide how long it takes for Tella to lock</string>
 </resources>
