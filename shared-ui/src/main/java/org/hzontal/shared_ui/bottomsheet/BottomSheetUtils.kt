@@ -81,7 +81,7 @@ object BottomSheetUtils {
             fragmentManager: FragmentManager,
             context: Context,
             currentTimeout: Long,
-            radioList: HashMap<Long, Int>,
+            radioList: LinkedHashMap<Long, Int>,
             titleText: String?,
             descriptionText: String?,
             actionButtonLabel: String? = null,
@@ -90,10 +90,10 @@ object BottomSheetUtils {
     ) {
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.radio_list_sheet_layout)
-            .cancellable(true)
+                .page(R.layout.radio_list_sheet_layout)
+                .cancellable(true)
         customSheetFragment.holder(RadioListSheetHolder(), object :
-            CustomBottomSheetFragment.Binder<RadioListSheetHolder> {
+                CustomBottomSheetFragment.Binder<RadioListSheetHolder> {
             override fun onBind(holder: RadioListSheetHolder) {
                 with(holder) {
                     title.text = titleText
@@ -118,7 +118,7 @@ object BottomSheetUtils {
 
                     for (option in radioList) {
                         val inflater = LayoutInflater.from(context)
-                        val button = inflater.inflate(R.layout.radio_list_item_layut, null) as RadioButton
+                        val button = inflater.inflate(R.layout.radio_list_item_layout, null) as RadioButton
                         button.tag = option.key
                         button.setText(option.value)
                         radioGroup.addView(button)
@@ -128,7 +128,7 @@ object BottomSheetUtils {
                     }
 
                     actionButton.visibility =
-                        if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+                            if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
 
                 }
             }
