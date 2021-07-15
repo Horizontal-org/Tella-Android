@@ -1,129 +1,301 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/dark_purple"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/dark_purple">
 
-    <LinearLayout
-        android:id="@+id/options_layout"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_vertical_margin"
-        android:gravity="top"
-        android:background="@drawable/rounded_light_purple_background"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/camera_silent_switch"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:orientation="vertical">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
 
-        <RelativeLayout
-            android:id="@+id/lock_settings_button"
-            android:layout_width="wrap_content"
-            android:layout_height="56dp"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/lock"
-                android:layout_height="match_parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/options_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:background="@drawable/rounded_light_purple_background"
+            android:gravity="top"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/camera_silent_switch"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RelativeLayout
+                android:id="@+id/lock_settings_button"
                 android:layout_width="wrap_content"
-                android:textColor="@color/wa_white"
-                android:gravity="center_vertical"
-                android:layout_alignParentStart="true"
-                android:text="@string/settings_lock" />
+                android:layout_height="56dp"
+                android:orientation="horizontal"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp">
 
-            <TextView
-                android:id="@+id/lock_setting"
-                android:layout_alignParentEnd="true"
-                android:textColor="@color/wa_white"
-                android:gravity="center_vertical"
+                <TextView
+                    android:id="@+id/lock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:gravity="center_vertical"
+                    android:text="@string/settings_lock"
+                    android:textColor="@color/wa_white" />
+
+                <TextView
+                    android:id="@+id/lock_setting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="center_vertical"
+                    android:text="@string/settings.lang_select_default"
+                    android:textColor="@color/wa_white"
+                    tools:ignore="RelativeOverlap" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/lock_timeout_settings_button"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/settings.lang_select_default"
-                tools:ignore="RelativeOverlap" />
-        </RelativeLayout>
+                android:layout_height="56dp"
+                android:orientation="horizontal"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp">
 
-        <RelativeLayout
-            android:id="@+id/lock_timeout_settings_button"
-            android:layout_width="wrap_content"
-            android:layout_height="56dp"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/lock_timeout"
-                android:layout_height="match_parent"
+                <TextView
+                    android:id="@+id/lock_timeout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:gravity="center_vertical"
+                    android:text="@string/settings.select_lock_timeout"
+                    android:textColor="@color/wa_white" />
+
+                <TextView
+                    android:id="@+id/lock_timeout_setting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="center_vertical"
+                    android:text="@string/settings.lang_select_default"
+                    android:textColor="@color/wa_white"
+                    tools:ignore="RelativeOverlap" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/camouflage_settings_button"
                 android:layout_width="wrap_content"
-                android:textColor="@color/wa_white"
-                android:gravity="center_vertical"
-                android:layout_alignParentStart="true"
-                android:text="@string/settings.select_lock_timeout" />
+                android:layout_height="56dp"
+                android:orientation="horizontal"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp">
 
-            <TextView
-                android:id="@+id/lock_timeout_setting"
-                android:layout_alignParentEnd="true"
-                android:textColor="@color/wa_white"
-                android:gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/settings.lang_select_default"
-                tools:ignore="RelativeOverlap" />
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/camouflage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:gravity="center_vertical"
+                    android:text="@string/settings.prot_select_camouflage"
+                    android:textColor="@color/wa_white" />
 
-        <RelativeLayout
-            android:id="@+id/camouflage_settings_button"
-            android:layout_width="wrap_content"
-            android:layout_height="56dp"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/camouflage"
-                android:layout_height="match_parent"
-                android:layout_width="wrap_content"
-                android:textColor="@color/wa_white"
-                android:gravity="center_vertical"
-                android:layout_alignParentStart="true"
-                android:text="@string/settings.prot_select_camouflage" />
+                <TextView
+                    android:id="@+id/camouflage_setting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="center_vertical"
+                    android:text="@string/settings.lang_select_default"
+                    android:textColor="@color/wa_white"
+                    tools:ignore="RelativeOverlap" />
+            </RelativeLayout>
+        </LinearLayout>
 
-            <TextView
-                android:id="@+id/camouflage_setting"
-                android:layout_alignParentEnd="true"
-                android:textColor="@color/wa_white"
-                android:gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/settings.lang_select_default"
-                tools:ignore="RelativeOverlap" />
-        </RelativeLayout>
-    </LinearLayout>
+        <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+            android:id="@+id/camera_silent_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:background="@drawable/rounded_light_purple_background"
+            app:explainText="@string/settings.sec_camera.mute_expl"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/options_layout"
+            app:titleText="@string/settings.sec_camera.mute_switch" />
 
-    <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
-        android:id="@+id/camera_silent_switch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_vertical_margin"
-        android:background="@drawable/rounded_light_purple_background"
-        app:explainText="@string/settings.sec_camera.mute_expl"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/options_layout"
-        app:titleText="@string/settings.sec_camera.mute_switch" />
+        <LinearLayout
+            android:id="@+id/quick_exit_options_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:background="@drawable/rounded_light_purple_background"
+            android:animateLayoutChanges="true"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/camera_silent_switch">
 
-    <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
-        android:id="@+id/quick_delete_switch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_vertical_margin"
-        android:background="@drawable/rounded_light_purple_background"
-        app:explainText="@string/settings.sec_quick.delete_expl"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/camera_silent_switch"
-        app:titleText="@string/settings.sec_quick.delete_switch" />
+            <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+                android:id="@+id/quick_delete_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:explainText="@string/settings.sec_quick.delete_expl"
+                app:titleText="@string/settings.sec_quick.delete_switch" />
 
+            <LinearLayout
+                android:id="@+id/quick_exit_settings_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <View
+                    android:id="@+id/line_separator"
+                    style="@style/SettingsMainShadowLine" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/activity_vertical_margin">
+
+                    <TextView
+                        android:id="@+id/delete_vault_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/settings.prot_select_delete.vault"
+                        android:textColor="@color/wa_white" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/activity_vertical_margin"
+                        android:layout_toEndOf="@id/delete_vault_title"
+                        android:contentDescription="help"
+                        android:src="@drawable/orange_help_24"
+                        android:textColor="@color/wa_white" />
+
+                    <CheckBox
+                        android:id="@+id/delete_vault"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="8dp"
+                        app:buttonTint="@color/radio_buttons_color" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/activity_vertical_margin">
+
+                    <TextView
+                        android:id="@+id/delete_forms_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/settings.prot_select_delete.forms"
+                        android:textColor="@color/wa_white" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/activity_vertical_margin"
+                        android:layout_toEndOf="@id/delete_forms_title"
+                        android:contentDescription="help"
+                        android:src="@drawable/orange_help_24"
+                        android:textColor="@color/wa_white" />
+
+                    <CheckBox
+                        android:id="@+id/delete_forms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="8dp"
+                        app:buttonTint="@color/radio_buttons_color" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/activity_vertical_margin">
+
+                    <TextView
+                        android:id="@+id/delete_server_settings_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:textColor="@color/wa_white"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/settings.prot_select_delete.servers"
+                        app:buttonTint="@color/radio_buttons_color" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/activity_vertical_margin"
+                        android:layout_toEndOf="@id/delete_server_settings_title"
+                        android:contentDescription="help"
+                        android:src="@drawable/orange_help_24" />
+
+                    <CheckBox
+                        android:id="@+id/delete_server_settings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="8dp"
+                        app:buttonTint="@color/radio_buttons_color" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/activity_vertical_margin">
+
+                    <TextView
+                        android:id="@+id/delete_tella_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/settings.prot_select_delete.app"
+                        android:textColor="@color/wa_white" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/activity_vertical_margin"
+                        android:layout_toEndOf="@id/delete_tella_title"
+                        android:contentDescription="help"
+                        android:src="@drawable/orange_help_24"
+                        android:textColor="@color/wa_white" />
+
+                    <CheckBox
+                        android:id="@+id/delete_tella"
+                        app:buttonTint="@color/radio_buttons_color"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="8dp" />
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</RelativeLayout>

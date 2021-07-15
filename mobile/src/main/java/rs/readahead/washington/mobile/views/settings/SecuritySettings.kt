@@ -5,23 +5,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
+import android.widget.CompoundButton
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
 import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.ui.password.PasswordUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.switches.TellaSwitchWithMessage
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder
 import org.hzontal.tella.keys.config.UnlockRegistry
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 
 
 class SecuritySettings : Fragment() {
     var lockSetting: TextView? = null
     var lockTimeoutSetting: TextView? = null
+
     private val lockTimeoutManager = LockTimeoutManager()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +46,38 @@ class SecuritySettings : Fragment() {
 
         val lockTimeoutSettingButton = view.findViewById<RelativeLayout>(R.id.lock_timeout_settings_button)
         lockTimeoutSettingButton.setOnClickListener { showLockTimeoutSettingDialog() }
+
+        val deleteVault = view.findViewById<CheckBox>(R.id.delete_vault)
+        deleteVault.isChecked = Preferences.isUninstallOnPanic()
+        deleteVault.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+            deleteVault.isChecked = isChecked
+            Preferences.setEraseForms(isChecked)
+        }
+
+        val deleteForms = view.findViewById<CheckBox>(R.id.delete_forms)
+        deleteForms.isChecked = Preferences.isEraseForms()
+        deleteForms.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+            deleteForms.isChecked = isChecked
+            Preferences.setEraseForms(isChecked)
+        }
+
+        val deleteServerSettings = view.findViewById<CheckBox>(R.id.delete_server_settings)
+        deleteServerSettings.isChecked = Preferences.isDeleteServerSettingsActive()
+        deleteServerSettings.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+            deleteServerSettings.isChecked = isChecked
+            Preferences.setDeleteServerSettingsActive(isChecked)
+        }
+
+        val deleteTella = view.findViewById<CheckBox>(R.id.delete_tella)
+        deleteTella.isChecked = Preferences.isUninstallOnPanic()
+        deleteTella.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+            deleteTella.isChecked = isChecked
+            Preferences.setUninstallOnPanic(isChecked)
+        }
+
+        val quickExitTellaSwitch = view.findViewById<TellaSwitchWithMessage>(R.id.quick_delete_switch)
+        setupQuickExitSwitch(quickExitTellaSwitch.mSwitch, view)
+        setupQuickExitSettingsView(quickExitTellaSwitch.mSwitch, view)
 
         return view
     }
@@ -89,5 +127,27 @@ class SecuritySettings : Fragment() {
         }
         intent!!.putExtra(IS_FROM_SETTINGS, true)
         startActivity(intent)
+    }
+
+    private fun setupQuickExitSwitch(quickExitSwitch: SwitchCompat, view: View) {
+        quickExitSwitch.setOnCheckedChangeListener({ buttonView: CompoundButton?, isChecked: Boolean ->
+            Preferences.setQuickExit(isChecked)
+            setupQuickExitSettingsView(quickExitSwitch, view)
+        })
+    }
+
+    private fun setupQuickExitSettingsView(quickExitSwitch: SwitchCompat, view: View) {
+        val quickExitSettings = view.findViewById<View>(R.id.quick_exit_settings_layout)
+        if (Preferences.isQuickExit()) {
+            quickExitSwitch.setChecked(true)
+            quickExitSettings.setVisibility(View.VISIBLE)
+            /*if (numOfCollectServers == 0L) {
+                deleteFormsView.setVisibility(View.GONE)
+                deleteSettingsView.setVisibility(View.GONE)
+            }*/
+        } else {
+            quickExitSwitch.setChecked(false)
+            quickExitSettings.setVisibility(View.GONE)
+        }
     }
 }
