@@ -11,6 +11,7 @@ import com.google.gson.GsonBuilder;
 import com.hzontal.data.MetadataEntity;
 import com.hzontal.mappers.EntityMapper;
 import com.hzontal.tella_vault.IVaultDatabase;
+import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.VaultFile;
 
 import net.sqlcipher.database.SQLiteDatabase;
@@ -141,6 +142,22 @@ public class VaultDataSource implements IVaultDatabase {
         }
 
         return vaultFiles;
+    }
+
+    @Override
+    public VaultFile update(VaultFile vaultFile) {
+        ContentValues values = new ContentValues();
+        values.put(D.C_METADATA, new GsonBuilder().create().toJson(new EntityMapper().transform(vaultFile.metadata)));
+        values.put(D.C_TYPE, vaultFile.type.getValue());
+        values.put(D.C_PARENT_ID, (long) VaultDataSource.ROOT_ID);
+        values.put(D.C_NAME, vaultFile.name);
+        values.put(D.C_ANONYMOUS, vaultFile.anonymous ? 1 : 0);
+        values.put(D.C_HASH, vaultFile.hash);
+        values.put(D.C_PATH, vaultFile.path);
+        database.update(D.T_VAULT_FILE, values, D.C_ID + " = ?",
+                new String[]{vaultFile.id});
+
+        return get(vaultFile.id);
     }
 
     @Override

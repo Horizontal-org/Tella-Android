@@ -104,6 +104,16 @@ public class RxVault extends BaseVault {
         });
     }
 
+    public Single<VaultFile> update(VaultFile vaultFile) {
+        return Single.defer(() -> {
+            try {
+                return Single.just(baseUpdate(vaultFile));
+            } catch (Exception e) {
+                return Single.error(e);
+            }
+        });
+    }
+
     public Completable destroy() {
         return Completable.defer(() -> {
             try {

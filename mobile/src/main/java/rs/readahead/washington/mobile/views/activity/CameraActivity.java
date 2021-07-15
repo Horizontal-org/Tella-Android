@@ -237,13 +237,13 @@ public class CameraActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onMetadataAttached(String mediaFileId, @Nullable Metadata metadata) {
+    public void onMetadataAttached(VaultFile vaultFile) {
         Intent data = new Intent();
         if (intentMode == IntentMode.COLLECT) {
-            capturedMediaFile.metadata = metadata;
+            capturedMediaFile.metadata = vaultFile.metadata;
             data.putExtra(MEDIA_FILE_KEY, capturedMediaFile);
         } else {
-            data.putExtra(C.CAPTURED_MEDIA_FILE_ID, mediaFileId);
+            data.putExtra(C.CAPTURED_MEDIA_FILE_ID, vaultFile.metadata);
         }
         setResult(RESULT_OK, data);
 

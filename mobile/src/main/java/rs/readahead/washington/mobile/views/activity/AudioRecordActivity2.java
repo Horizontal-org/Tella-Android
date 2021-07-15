@@ -285,13 +285,13 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     }
 
     @Override
-    public void onMetadataAttached(String mediaFileId, @Nullable Metadata metadata) {
+    public void onMetadataAttached(VaultFile vaultFile) {
         Intent intent = new Intent();
 
         if (mode == Mode.COLLECT) {
             intent.putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, handlingMediaFile);
         } else {
-            intent.putExtra(C.CAPTURED_MEDIA_FILE_ID, mediaFileId);
+            intent.putExtra(C.CAPTURED_MEDIA_FILE_ID, vaultFile.id);
         }
 
         setResult(Activity.RESULT_OK, intent);

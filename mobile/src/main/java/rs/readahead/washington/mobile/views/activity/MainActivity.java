@@ -23,6 +23,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
 import com.hzontal.tella_vault.Metadata;
+import com.hzontal.tella_vault.VaultFile;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -478,9 +479,9 @@ public class MainActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onMetadataAttached(String mediaFileId, @Nullable Metadata metadata) {
+    public void onMetadataAttached(VaultFile vaultFile) {
         Intent data = new Intent();
-        data.putExtra(C.CAPTURED_MEDIA_FILE_ID, mediaFileId);
+        data.putExtra(C.CAPTURED_MEDIA_FILE_ID, vaultFile.id);
 
         setResult(RESULT_OK, data);
     }

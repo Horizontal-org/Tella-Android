@@ -424,7 +424,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements
     protected void attachMediaFileMetadata(final VaultFile vaultFile, final IMetadataAttachPresenterContract.IPresenter metadataAttacher) {
         // skip metadata if anonymous mode..
         if (Preferences.isAnonymousMode()) {
-            metadataAttacher.attachMetadata(vaultFile.id, null);
+            metadataAttacher.attachMetadata(vaultFile);
             return;
         }
 
@@ -461,7 +461,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements
 
         // if location gathering is not possible skip it
         if (!isLocationProviderEnabled()) {
-            metadataAttacher.attachMetadata(vaultFile.id, metadata);
+            metadataAttacher.attachMetadata(vaultFile);
             return;
         }
 
@@ -500,7 +500,8 @@ public abstract class MetadataActivity extends BaseLockActivity implements
 
                     @Override
                     public void onComplete() {
-                        metadataAttacher.attachMetadata(vaultFile.id, metadata);
+                        vaultFile.metadata = metadata;
+                        metadataAttacher.attachMetadata(vaultFile);
                     }
                 })
         );

@@ -164,6 +164,10 @@ public abstract class BaseVault {
         }
     }
 
+    protected  VaultFile baseUpdate(VaultFile vaultFile){
+        return database.update(vaultFile);
+    }
+
     public static class Config { // todo: make this VaultConfig
         /**
          * Filesystem root where Vault should create content files if chosen

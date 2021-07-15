@@ -1,12 +1,15 @@
 package com.hzontal.tella_vault;
 
 
+import androidx.annotation.Nullable;
+
 import java.util.List;
 
 public interface IVaultDatabase {
     VaultFile getRootVaultFile();
     VaultFile create(VaultFile file);
     List<VaultFile> list(VaultFile parent, Filter filter, Sort sort, Limits limits);
+    VaultFile update(VaultFile vaultFile);
     VaultFile get(String id);
     List<VaultFile> get(String[] ids);
     boolean delete(VaultFile file, IVaultFileDeleter deleter);
