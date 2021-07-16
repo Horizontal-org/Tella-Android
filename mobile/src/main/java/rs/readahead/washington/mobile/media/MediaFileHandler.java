@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.net.URI;
 import java.security.DigestOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -244,13 +245,14 @@ public class MediaFileHandler {
         thumb.compress(Bitmap.CompressFormat.JPEG, 100, stream);
 
         input.reset();
-
+        String uid = UUID.randomUUID().toString();
         return MyApplication.rxVault
                 .builder(input)
                 .setMimeType("image/jpeg")
+                .setName(uid+".jpg")
                 .setAnonymous(true)
                 .setType(VaultFile.Type.FILE)
-                .setId(UUID.randomUUID().toString())
+                .setId(uid)
                 .setThumb(getThumbByteArray(thumb))
                 .build()
                 .subscribeOn(Schedulers.io());
@@ -535,12 +537,10 @@ public class MediaFileHandler {
         }
 
         Uri mediaFileUri = getEncryptedUri(context, vaultFile);
-
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.putExtra(Intent.EXTRA_STREAM, mediaFileUri);
         shareIntent.setType(vaultFile.mimeType);
-
         context.startActivity(Intent.createChooser(shareIntent, context.getText(R.string.action_share)));
     }
 
@@ -676,7 +676,7 @@ public class MediaFileHandler {
     }
 
     @Nullable
-    InputStream getThumbnailStream(Context context, final VaultFile vaultFile) {
+    InputStream getThumbnailStream(final VaultFile vaultFile) {
         InputStream inputStream = null;
         VaultFile thumbnailData = createThumb(vaultFile);
         if (thumbnailData != null) {

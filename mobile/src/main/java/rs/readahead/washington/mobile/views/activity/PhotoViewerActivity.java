@@ -86,7 +86,6 @@ public class PhotoViewerActivity extends BaseLockActivity implements
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        //cacheWordDataSource = new CacheWordDataSource(this);
         keyDataSource = MyApplication.getKeyDataSource();
         presenter = new MediaFileViewerPresenter(this);
 

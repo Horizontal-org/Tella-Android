@@ -35,7 +35,7 @@ public class VaultFileDataFetcher implements DataFetcher<InputStream> {
         }
 
         if (model.getLoadType() == VaultFileLoaderModel.LoadType.THUMBNAIL) {
-            return inputStream = mediaFileHandler.getThumbnailStream(context, model.getMediaFile());
+            return inputStream = mediaFileHandler.getThumbnailStream(model.getMediaFile());
         }
 
         if (model.getLoadType() == VaultFileLoaderModel.LoadType.ORIGINAL) {

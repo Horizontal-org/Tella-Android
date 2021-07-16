@@ -2,7 +2,6 @@ package com.hzontal.tella_vault;
 
 import android.content.Context;
 
-import com.hzontal.provider.VaultProvider;
 import com.hzontal.tella_vault.database.VaultDataSource;
 import com.hzontal.utils.FileUtil;
 
@@ -198,7 +197,7 @@ public abstract class BaseVault {
      * @return File holding contents of VaultFile.
      */
     public File getFile(VaultFile vaultFile) {
-        return new File(this.config.root, vaultFile.id);
+        return new File(this.config.root, vaultFile.name);
     }
 
     protected boolean mkdirs(File path) {
