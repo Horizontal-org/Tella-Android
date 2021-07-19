@@ -178,7 +178,7 @@ public class MediaFileHandler {
         } else {
             path = Environment.getExternalStoragePublicDirectory(envDirType);
         }
-        File file = new File(path, vaultFile.name);
+        File file = MyApplication.rxVault.getFile(vaultFile.name);
 
         InputStream is = null;
         OutputStream os = null;
@@ -425,7 +425,7 @@ public class MediaFileHandler {
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    static boolean deleteFile(Context context, @NonNull VaultFile vaultFile) {
+    static boolean deleteFile(@NonNull VaultFile vaultFile) {
         try {
             return getFile(vaultFile).delete();
         } catch (Throwable ignored) {
@@ -572,7 +572,7 @@ public class MediaFileHandler {
 
     @SuppressLint("TimberArgCount")
     private static File getFile(VaultFile vaultFile) {
-        return MyApplication.rxVault.getFile(vaultFile);
+        return MyApplication.rxVault.getFile(vaultFile.name);
     }
 
     private static File getMetadataFile(@NonNull Context context, VaultFile vaultFile) {
@@ -638,7 +638,6 @@ public class MediaFileHandler {
         IVaultDatabase.Limits limits = new IVaultDatabase.Limits();
         limits.limit = 2;
         IVaultDatabase.Sort sort = new IVaultDatabase.Sort();
-        sort.property = D.C_ID;
         sort.direction = IVaultDatabase.Sort.Direction.DESC;
         return MyApplication.rxVault.list(null, new VaultTypeFilter(), sort, limits)
                 .toObservable();

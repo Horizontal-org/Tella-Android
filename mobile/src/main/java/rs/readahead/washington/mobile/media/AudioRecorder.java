@@ -78,7 +78,7 @@ public class AudioRecorder {
             encode(outputStream); // heigh-ho, heigh-ho..
 
             if (isCancelled()) {
-                MediaFileHandler.deleteFile(context, vaultFile);
+                MediaFileHandler.deleteFile(vaultFile);
                 return null;
             }
             vaultFile.size = MediaFileHandler.getSize(vaultFile);

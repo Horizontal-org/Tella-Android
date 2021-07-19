@@ -130,6 +130,7 @@ public abstract class BaseVault {
      * Destroys whole Vault deleting data on disk and in database.
      */
     protected void baseDestroy() {
+        database.destroy();
     }
 
     protected VaultFile baseGet(String id){
@@ -198,6 +199,10 @@ public abstract class BaseVault {
      */
     public File getFile(VaultFile vaultFile) {
         return new File(this.config.root, vaultFile.name);
+    }
+
+    public File getFile(String vaultFile) {
+        return new File(this.config.root, vaultFile);
     }
 
     protected boolean mkdirs(File path) {

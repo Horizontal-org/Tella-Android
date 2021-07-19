@@ -440,7 +440,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     private void openRecordings() {
         Intent intent = new Intent(this, GalleryActivity.class);
-        intent.putExtra(GalleryActivity.GALLERY_FILTER, IVaultDatabase.Filter.FilterType.AUDIO);
+        intent.putExtra(GalleryActivity.GALLERY_FILTER, IVaultDatabase.Filter.FilterType.AUDIO.name());
         intent.putExtra(GalleryActivity.GALLERY_ALLOWS_ADDING, false);
         startActivity(intent);
     }
