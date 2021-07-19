@@ -79,6 +79,12 @@ class SecuritySettings : Fragment() {
         setupQuickExitSwitch(quickExitTellaSwitch.mSwitch, view)
         setupQuickExitSettingsView(quickExitTellaSwitch.mSwitch, view)
 
+        val silentCameraTellaSwitch = view.findViewById<TellaSwitchWithMessage>(R.id.camera_silent_switch)
+        silentCameraTellaSwitch.mSwitch.setChecked(!Preferences.isShutterMute())
+        silentCameraTellaSwitch.mSwitch.setOnCheckedChangeListener({ buttonView: CompoundButton?, isChecked: Boolean ->
+            Preferences.setShutterMute(isChecked)
+        })
+
         return view
     }
 

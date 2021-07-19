@@ -70,6 +70,12 @@ public class Preferences {
         setBoolean(SharedPrefs.COLLECT_OPTION, value);
     }
 
+    public static boolean isShutterMute() { return getBoolean(SharedPrefs.MUTE_CAMERA_SHUTTER, false); }
+
+    public static void setShutterMute(boolean value) {
+        setBoolean(SharedPrefs.MUTE_CAMERA_SHUTTER, value);
+    }
+
     public static boolean isDeleteServerSettingsActive() {
         return getBoolean(SharedPrefs.DELETE_SERVER_SETTINGS, true);
     }
