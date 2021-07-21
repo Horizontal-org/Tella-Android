@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_marginTop="58dp"
-    tools:context=".views.activity.DocumentationSettingsActivity"
+    tools:context=".views.activity.ServersSettingsActivity"
     tools:showIn="@layout/activity_documentation_settings">
 
     <androidx.appcompat.widget.AppCompatImageView

@@ -6,8 +6,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -25,9 +28,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.bus.event.ToggleBlankFormPinnedEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.Server;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
+import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
 import rs.readahead.washington.mobile.mvp.contract.ICollectBlankFormListRefreshPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.ICollectServersPresenterContract;
@@ -45,27 +50,27 @@ import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragme
 import timber.log.Timber;
 
 
-public class DocumentationSettingsActivity extends BaseLockActivity implements
+public class ServersSettingsActivity extends BaseLockActivity implements
         IServersPresenterContract.IView,
         ICollectServersPresenterContract.IView,
         ITellaUploadServersPresenterContract.IView,
         ICollectBlankFormListRefreshPresenterContract.IView,
         CollectServerDialogFragment.CollectServerDialogHandler,
         TellaUploadServerDialogFragment.TellaUploadServerDialogHandler {
-    @BindView(R.id.anonymous_switch)
-    SwitchCompat anonymousSwitch;
-    @BindView(R.id.collect_switch)
-    SwitchCompat collectSwitch;
+    //@BindView(R.id.anonymous_switch)
+   // SwitchCompat anonymousSwitch;
+   // @BindView(R.id.collect_switch)
+   // SwitchCompat collectSwitch;
     @BindView(R.id.collect_servers_list)
     LinearLayout listView;
-    @BindView(R.id.servers_layout)
-    View serversLayout;
-    @BindView(R.id.enable_collect_info)
-    TextView collectSwitchInfo;
-    @BindView(R.id.offline_mode)
+    //@BindView(R.id.servers_layout)
+    //View serversLayout;
+/*    @BindView(R.id.enable_collect_info)
+    TextView collectSwitchInfo;*/
+    /*@BindView(R.id.offline_mode)
     SwitchCompat offlineSwitch;
     @BindView(R.id.offline_switch_layout)
-    View offlineSwitchLayout;
+    View offlineSwitchLayout;*/
     @BindView(R.id.upload_layout)
     View autoUploadSettingsView;
     @BindView(R.id.server_name)
@@ -103,13 +108,13 @@ public class DocumentationSettingsActivity extends BaseLockActivity implements
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.settings_docu_app_bar);
+            actionBar.setTitle(R.string.settings_servers_title_server_settings);
         }
 
-        setupAnonymousSwitch();
-        setupCollectSwitch();
-        setupOfflineSwitch();
-        setupCollectSettingsView();
+        //setupAnonymousSwitch();
+        //setupCollectSwitch();
+        //setupOfflineSwitch();
+        //setupCollectSettingsView();
         setupAutoDeleteAndMetadataUploadCheck();
 
         servers = new ArrayList<>();
@@ -296,11 +301,11 @@ public class DocumentationSettingsActivity extends BaseLockActivity implements
 
     @Override
     public void onServersDeleted() {
-        Preferences.setCollectServersLayout(false);
+        //Preferences.setCollectServersLayout(false);
         servers.clear();
         listView.removeAllViews();
         turnOffAutoUpload();
-        setupCollectSettingsView();
+       //setupCollectSettingsView();
         showToast(R.string.settings_docu_toast_disconnect_servers_delete);
     }
 
@@ -445,10 +450,10 @@ public class DocumentationSettingsActivity extends BaseLockActivity implements
         }
     }
 
-    private void setupAnonymousSwitch() {
+    /*private void setupAnonymousSwitch() {
         anonymousSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> Preferences.setAnonymousMode(!isChecked));
         anonymousSwitch.setChecked(!Preferences.isAnonymousMode());
-    }
+    }*/
 
     private void setupAutoDeleteAndMetadataUploadCheck() {
         autoDeleteCheck.setOnCheckedChangeListener((buttonView, isChecked) -> Preferences.setAutoDelete(isChecked));
@@ -459,27 +464,27 @@ public class DocumentationSettingsActivity extends BaseLockActivity implements
 
     private void setupCollectSettingsView() {
         if (Preferences.isCollectServersLayout()) {
-            collectSwitch.setChecked(true);
-            serversLayout.setVisibility(View.VISIBLE);
-            offlineSwitchLayout.setVisibility(View.VISIBLE);
+            //collectSwitch.setChecked(true);
+            //serversLayout.setVisibility(View.VISIBLE);
+            //offlineSwitchLayout.setVisibility(View.VISIBLE);
         } else {
-            collectSwitch.setChecked(false);
-            serversLayout.setVisibility(View.GONE);
-            offlineSwitchLayout.setVisibility(View.GONE);
+           // collectSwitch.setChecked(false);
+            //serversLayout.setVisibility(View.GONE);
+            //offlineSwitchLayout.setVisibility(View.GONE);
             autoUploadSwitchView.setVisibility(View.GONE);
         }
     }
 
-    private void setupCollectSwitch() {
+    /*private void setupCollectSwitch() {
         collectSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (!isChecked && servers.size() > 0) {
                 showCollectDisableDialog();
             } else {
-                Preferences.setCollectServersLayout(isChecked);
+                //Preferences.setCollectServersLayout(isChecked);
                 setupCollectSettingsView();
             }
         });
-    }
+    }*/
 
     private void createServerViews(List<Server> servers) {
         for (Server server : servers) {
@@ -491,11 +496,13 @@ public class DocumentationSettingsActivity extends BaseLockActivity implements
     private View getServerItem(Server server) {
         LayoutInflater inflater = LayoutInflater.from(this);
         @SuppressLint("InflateParams")
-        LinearLayout item = (LinearLayout) inflater.inflate(R.layout.collect_server_row_for_list, null);
+        LinearLayout item = (LinearLayout) inflater.inflate(R.layout.servers_list_item, null);
 
+        ViewGroup row = item.findViewById(R.id.server_row);
         TextView name = item.findViewById(R.id.server_title);
-        ImageView edit = item.findViewById(R.id.edit);
-        ImageView remove = item.findViewById(R.id.delete);
+       // ImageView edit = item.findViewById(R.id.edit);
+       // ImageView remove = item.findViewById(R.id.delete);
+        ImageView options = item.findViewById(R.id.options);
 
         if (server != null) {
             name.setText(server.getName());
@@ -508,26 +515,48 @@ public class DocumentationSettingsActivity extends BaseLockActivity implements
                     ),
                     null);
 
-            remove.setOnClickListener(v -> {
+            options.setOnClickListener(v -> {
                 if (server.getServerType() == ServerType.ODK_COLLECT) {
                     removeCollectServer((CollectServer) server);
                 } else {
                     removeTUServer((TellaUploadServer) server);
                 }
             });
-            edit.setOnClickListener(v -> {
-                if (server.getServerType() == ServerType.ODK_COLLECT) {
-                    editCollectServer((CollectServer) server);
-                } else {
-                    editTUServer((TellaUploadServer) server);
-                }
-            });
+
+            options.setOnClickListener(view -> showDownloadedPopupMenu(server, row, options));
         }
         item.setTag(servers.indexOf(server));
         return item;
     }
 
-    private void showCollectDisableDialog() {
+    private void showDownloadedPopupMenu(Server server, ViewGroup row, ImageView options) {
+        PopupMenu popup = new PopupMenu(row.getContext(), options);
+        popup.inflate(R.menu.server_item_menu);
+
+        popup.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.edit_server:
+                    if (server.getServerType() == ServerType.ODK_COLLECT) {
+                        editCollectServer((CollectServer) server);
+                    } else {
+                        editTUServer((TellaUploadServer) server);
+                    }
+                    break;
+                case R.id.remove_server:
+                    if (server.getServerType() == ServerType.ODK_COLLECT) {
+                        removeCollectServer((CollectServer) server);
+                    } else {
+                        removeTUServer((TellaUploadServer) server);
+                    }
+                    break;
+            }
+            return false;
+        });
+
+        popup.show();
+    }
+
+    /*private void showCollectDisableDialog() {
         String message = getString(R.string.settings_docu_connect_to_servers_disable_dialog_expl);
 
         dialog = DialogsUtil.showThreeOptionDialogWithTitle(this,
@@ -549,12 +578,12 @@ public class DocumentationSettingsActivity extends BaseLockActivity implements
                     serversPresenter.deleteServers();
                     dialog.dismiss();
                 });
-    }
+    }*/
 
-    private void setupOfflineSwitch() {
+    /*private void setupOfflineSwitch() {
         offlineSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> Preferences.setOfflineMode(isChecked));
         offlineSwitch.setChecked(Preferences.isOfflineMode());
-    }
+    }*/
 
     private void setupAutoUploadSwitch() {
         autoUploadSwitch.setChecked(Preferences.isAutoUploadEnabled());
