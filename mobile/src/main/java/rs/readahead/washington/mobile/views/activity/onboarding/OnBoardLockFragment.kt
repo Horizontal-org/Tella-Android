@@ -45,7 +45,7 @@ class OnBoardLockFragment : BaseFragment() {
         initView(view)
     }
 
-    private fun initView(view: View) {
+    override fun initView(view: View) {
        arguments?.let { isFromSettings=  it.getBoolean(IS_FROM_SETTINGS,false) }
         lockPasswordBtn = view.findViewById(R.id.lockPasswordBtn)
         lockPINdBtn = view.findViewById(R.id.lockPINdBtn)

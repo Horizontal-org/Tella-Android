@@ -27,13 +27,18 @@ class LanguageSettings : BaseFragment(), View.OnClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_language_settings, container, false)
+        
+        initView(view)
+
+        return view
+    }
+
+    override fun initView(view: View) {
         (activity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_lang_app_bar)
         (activity as OnFragmentSelected?)?.setToolbarHomeIcon(R.drawable.ic_close_white_24dp)
 
         LanguageList =view.findViewById(R.id.language_list)
         createLangViews()
-
-        return view
     }
 
     private fun createLangViews() {
