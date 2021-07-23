@@ -56,12 +56,12 @@ class GeneralSettings : BaseFragment() {
     }
 
     private fun setLanguageSetting() {
-        val language = LocaleManager.getInstance().languageSetting
-        if (language != null) {
+        LocaleManager.getInstance().languageSetting?.let { language ->
             val locale = Locale(language)
-            languageSetting?.setText(StringUtils.capitalize(locale.displayName, locale))
-        } else {
-            languageSetting?.setText(R.string.settings_lang_select_default)
-        }
+            languageSetting?.text = StringUtils.capitalize(
+                locale.displayName,
+                locale
+            )
+        }?.run { languageSetting?.setText(R.string.settings_lang_select_default) }
     }
 }
