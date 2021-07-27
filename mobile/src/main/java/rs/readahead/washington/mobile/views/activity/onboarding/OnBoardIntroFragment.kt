@@ -10,11 +10,11 @@ import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 
 class OnBoardIntroFragment : BaseFragment() {
 
-    private lateinit var startBtn : Button
+    private lateinit var startBtn: Button
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         return inflater.inflate(R.layout.onboard_intro_fragment, container, false)
     }
@@ -25,8 +25,14 @@ class OnBoardIntroFragment : BaseFragment() {
         initView(view)
     }
 
-    private fun initView(view: View){
+    override fun initView(view: View) {
         startBtn = view.findViewById(R.id.startBtn)
-        startBtn.setOnClickListener { activity.addFragment(this,OnBoardSetUpFragment(),R.id.rootOnboard) }
+        startBtn.setOnClickListener {
+            activity.addFragment(
+                this,
+                OnBoardSetUpFragment(),
+                R.id.rootOnboard
+            )
+        }
     }
 }
