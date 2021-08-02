@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/wa_purple"
+    android:paddingStart="17dp"
+    android:paddingEnd="17dp"
+    >
+
+    <TextView
+        android:id="@+id/filesText"
+        style="@style/Tella_Main_White_Text.MeduimbBold"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/vault_files" />
+
+    <org.hzontal.shared_ui.buttons.HomeButton
+        android:id="@+id/myFilesBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/galleryBtn"
+        app:layout_constraintTop_toBottomOf="@id/filesText"
+        app:mainTitleText="@string/vault_my_files"
+        app:rightImg="@drawable/ic_myfiles"
+        android:layout_marginEnd="17dp"
+        android:layout_marginTop="17dp"
+        />
+
+    <org.hzontal.shared_ui.buttons.HomeButton
+        android:id="@+id/galleryBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/myFilesBtn"
+        app:layout_constraintTop_toBottomOf="@id/filesText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:mainTitleText="@string/vault_my_gallery"
+        app:rightImg="@drawable/ic_gallery"
+        android:layout_marginTop="17dp"
+        />
+
+    <org.hzontal.shared_ui.buttons.HomeButton
+        android:id="@+id/audioBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/documentsBtn"
+        app:layout_constraintTop_toBottomOf="@id/myFilesBtn"
+        app:mainTitleText="@string/vault_audio"
+        app:rightImg="@drawable/ic_audio"
+        android:layout_marginEnd="17dp"
+        android:layout_marginTop="17dp"
+        />
+
+    <org.hzontal.shared_ui.buttons.HomeButton
+        android:id="@+id/documentsBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/audioBtn"
+        app:layout_constraintTop_toBottomOf="@id/myFilesBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:mainTitleText="@string/vault_documents"
+        app:rightImg="@drawable/ic_documents"
+        android:layout_marginTop="17dp"
+        />
+
+    <org.hzontal.shared_ui.buttons.HomeButton
+        android:id="@+id/othersBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/audioBtn"
+        app:layout_constraintEnd_toStartOf="@id/documentsBtn"
+        app:mainTitleText="@string/vault_others"
+        app:rightImg="@drawable/ic_others"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="17dp"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

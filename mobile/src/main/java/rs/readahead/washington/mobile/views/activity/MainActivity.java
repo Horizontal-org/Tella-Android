@@ -63,8 +63,8 @@ public class MainActivity extends MetadataActivity implements
         IMetadataAttachPresenterContract.IView,
         IHomeScreenPresenterContract.IView,
         ICollectCreateFormControllerContract.IView {
-    @BindView(R.id.main_toolbar)
-    Toolbar toolbar;
+   /* @BindView(R.id.main_toolbar)
+    Toolbar toolbar;*/
     @BindView(R.id.panic_mode_view)
     RelativeLayout panicCountdownView;
     @BindView(R.id.countdown_timer)
@@ -101,7 +101,7 @@ public class MainActivity extends MetadataActivity implements
         setContentView(R.layout.activity_main2);
         ButterKnife.bind(this);
 
-        setupToolbar();
+      //  setupToolbar();
         setupNavigation();
         handler = new Handler();
 
@@ -135,15 +135,15 @@ public class MainActivity extends MetadataActivity implements
         assert navHostFragment != null;
         NavController navController = navHostFragment.getNavController();
         BottomNavigationView btmNavMain = findViewById(R.id.btm_nav_main);
-        setSupportActionBar(toolbar);
+        //setSupportActionBar(toolbar);
         AppBarConfiguration appBarConfiguration =
                 new AppBarConfiguration.Builder(R.id.homeScreen,R.id.cameraScreen,R.id.reportsScreen,R.id.micScreen,R.id.formScreen).build();
         NavigationUI.setupWithNavController(btmNavMain, navController);
-        NavigationUI.setupActionBarWithNavController(this,navController,appBarConfiguration);
+        //NavigationUI.setupActionBarWithNavController(this,navController,appBarConfiguration);
     }
 
     private void setupToolbar() {
-        toolbar.inflateMenu(R.menu.activity_main_menu);
+        /*  toolbar.inflateMenu(R.menu.activity_main_menu);
 
         settingsMenuItem = toolbar.getMenu().findItem(R.id.nav_settings);
         settingsMenuItem.setOnMenuItemClickListener(item -> {
@@ -156,11 +156,11 @@ public class MainActivity extends MetadataActivity implements
             return true;
         });
 
-        MenuItem offlineMenuItem = toolbar.getMenu().findItem(R.id.nav_offline_mode);
-        offlineMenuItem.setOnMenuItemClickListener(item -> {
+       // MenuItem offlineMenuItem = toolbar.getMenu().findItem(R.id.nav_offline_mode);
+      offlineMenuItem.setOnMenuItemClickListener(item -> {
             DialogsUtil.showOfflineSwitchDialog(MainActivity.this, t -> setOfflineMenuIcon(item, t));
             return true;
-        });
+        });*/
     }
 
     private void setOfflineMenuIcon(MenuItem offlineMenuIcon, boolean offline) {
@@ -477,13 +477,13 @@ public class MainActivity extends MetadataActivity implements
     private void hideMainControls() {
         cameraToolsContainer.setVisibility(View.GONE);
         navBarHolder.setVisibility(View.GONE);
-        toolbar.setVisibility(View.GONE);
+       // toolbar.setVisibility(View.GONE);
     }
 
     private void showMainControls() {
         cameraToolsContainer.setVisibility(View.VISIBLE);
         navBarHolder.setVisibility(View.VISIBLE);
-        toolbar.setVisibility(View.VISIBLE);
+       // toolbar.setVisibility(View.VISIBLE);
     }
 
     void executePanicMode() {
@@ -601,8 +601,8 @@ public class MainActivity extends MetadataActivity implements
     private void hidePanicScreens() {
         resetSeekBar(panicSeekBar);
 
-        toolbar.setAlpha(1);
-        toolbar.setVisibility(View.VISIBLE);
+       // toolbar.setAlpha(1);
+       // toolbar.setVisibility(View.VISIBLE);
         cameraToolsContainer.setAlpha(1);
         cameraToolsContainer.setVisibility(View.VISIBLE);
         background.setAlpha(0f);
@@ -613,7 +613,7 @@ public class MainActivity extends MetadataActivity implements
     }
 
     private void blendPanicScreens(int i) {
-        toolbar.setAlpha((float) (100 - i) / 100);
+        //toolbar.setAlpha((float) (100 - i) / 100);
         cameraToolsContainer.setAlpha((float) (100 - i) / 100);
         background.setAlpha((float) i / 100);
         panicCountdownView.setVisibility(i == 100 ? View.VISIBLE : View.GONE);

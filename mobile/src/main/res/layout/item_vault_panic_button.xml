@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <SeekBar
+        android:id="@+id/panic_seek"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/navigation_panic_height"
+        android:layout_gravity="bottom|center"
+        android:gravity="bottom|center"
+        android:max="100"
+        android:paddingEnd="25dp"
+        android:paddingStart="25dp"
+        android:progressDrawable="@android:color/transparent"
+        android:thumb="@drawable/panic_seek_arrow" />
+</androidx.constraintlayout.widget.ConstraintLayout>
