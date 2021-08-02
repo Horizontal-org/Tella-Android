@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vault_my_files" translatable="false">My files</string>
+    <string name="vault_files" translatable="false">Files</string>
+    <string name="vault_my_gallery" translatable="false">Gallery</string>
+    <string name="vault_documents" translatable="false">Documents</string>
+    <string name="vault_audio" translatable="false">Audio</string>
+    <string name="vault_others" translatable="false">Others</string>
+</resources>

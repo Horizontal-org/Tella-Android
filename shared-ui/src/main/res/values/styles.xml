@@ -35,4 +35,30 @@
         <item name="android:textSize">11sp</item>
     </style>
 
+    <style
+        name="ShapeAppearance.Tella.FAB"
+        parent="ShapeAppearance.MaterialComponents.SmallComponent" />
+
+    <style name="Tella_Main_White_Text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:textColor">@color/wa_white</item>
+        <item name="android:textSize">40sp</item>
+    </style>
+
+    <style name="Tella_Main_White_Text.Bold">
+        <item name="android:textStyle">bold</item>
+        <item name="lineHeight">19dp</item>
+        <item name="android:textFontWeight">700</item>
+    </style>
+
+    <style name="Tella_Main_White_Text.Meduim">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Tella_Main_White_Text.MeduimbBold" parent="Tella_Main_White_Text.Bold">
+        <item name="android:textSize">14sp</item>
+    </style>
+
 </resources>

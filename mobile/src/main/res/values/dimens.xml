@@ -37,4 +37,6 @@
     <dimen name="collect_widget_icon_padding">8dp</dimen>
     <dimen name="collect_form_padding_vertical">16dp</dimen>
     <dimen name="collect_form_padding_horizontal">34dp</dimen>
+    <!-- elevation for Plant Detail toolbar - used to convert to pixels when hiding/showing -->
+    <dimen name="toolbar_elevation">5dp</dimen>
 </resources>

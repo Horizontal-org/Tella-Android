@@ -9,6 +9,12 @@
         <attr name="state_checked" format="boolean"/>
     </declare-styleable>
 
+    <declare-styleable name="HomeJavaButton">
+        <attr name="mainTitleText" format="reference" />
+        <attr name="rightImg" format="reference" />
+    </declare-styleable>
+
+
 
     <declare-styleable name="TellaSwitchWithMessage">
         <attr name="titleText" format="reference|string" />
