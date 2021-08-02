@@ -7,7 +7,7 @@
     app:startDestination="@+id/homeScreen">
     <fragment
         android:id="@+id/homeScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.VaultFragment"
+        android:name="rs.readahead.washington.mobile.views.fragment.vault.HomeVaultFragment"
         android:label="Vault"
         tools:layout="@layout/fragment_vault">
     </fragment>

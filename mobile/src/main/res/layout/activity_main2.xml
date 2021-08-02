@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -14,27 +15,9 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toTopOf="@id/btm_nav_main"
         app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/main_toolbar"
-                android:layout_width="match_parent"
-                android:background="@color/wa_purple"
-                style="@style/AppTheme.NoActionBarToolbar"
-                android:layout_height="?attr/actionBarSize"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:layout_constraintTop_toTopOf="parent"
-                app:title="@string/app_name"
-             />
-
-        </com.google.android.material.appbar.AppBarLayout>
 
 
         <androidx.fragment.app.FragmentContainerView
@@ -45,8 +28,6 @@
             app:defaultNavHost="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:navGraph="@navigation/nav_graph" />
-
-
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
