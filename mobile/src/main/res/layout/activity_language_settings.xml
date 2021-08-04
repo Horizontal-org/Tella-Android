@@ -7,46 +7,21 @@
     android:fitsSystemWindows="true"
     android:textDirection="locale"
     tools:context="rs.readahead.washington.mobile.views.activity.LanguageSettingsActivity">
-    <!--
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/appbar"
-                android:layout_width="match_parent"
-                android:layout_height="140dp"
-                android:fitsSystemWindows="true"
-                android:theme="@style/AppTheme.DarkNoActionBar">
 
-                <com.google.android.material.appbar.CollapsingToolbarLayout
-                    android:id="@+id/collapsing_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fitsSystemWindows="true"
-                    app:contentScrim="@color/dark_purple"
-                    app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
-                    android:background="@color/dark_purple"
-                    app:titleTextColor="@color/wa_white">
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-                    <androidx.appcompat.widget.Toolbar
-                        android:id="@+id/toolbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        app:layout_collapseMode="pin" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-                </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-            </com.google.android.material.appbar.AppBarLayout>
+    <include layout="@layout/content_language_settings" />
 
-     -->
-
-
-                <org.hzontal.shared_ui.appbar.CollapsableAppBar
-                    android:id="@+id/collapsable_appbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/default_app_bar_height"
-                    app:backgroundRes="@color/colorSecundary"
-                    app:contentScrimRes="@color/colorSecundary"
-                    app:titleRes="@string/settings.gen_select_language" />
-
-
-        <include layout="@layout/content_language_settings" />
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
