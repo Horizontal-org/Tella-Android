@@ -245,7 +245,7 @@
   <string name="settings.prot_app.bar">Защита</string>
   <string name="settings.gen_select_protection">Защита</string>
   <string name="action_learn.more">Узнать больше</string>
-  <string name="settings.docu_add.server_dialog.title">Добавить сервер</string>
+  <string name="settings.servers_add.server_dialog.title">Добавить сервер</string>
   <string name="settings.prot_quick.delete_action">Активировать кнопку БЫСТРОГО УДАЛЕНИЯ</string>
   <string name="settings.prot_quick.delete_action.expl">Показывает скользящую кнопку на главном экране для быстрого удаления данных Tella в экстренных ситуациях.</string>
   <string name="settings.prot_select_delete.gallery">Удалить галерею</string>
@@ -322,7 +322,7 @@
   <string name="settings.docu_auto.upload.server.selection_select">Сервер</string>
   <string name="upload_dialog.title_select.server">Выбор сервера</string>
   <string name="settings.docu_auto.upload.server.selection_dialog.expl">На какой сервер Вы хотите загрузить файлы?</string>
-  <string name="settings.docu_add.server.selection_dialog.title">Какой тип сервера?</string>
+  <string name="settings.serv_add.server.selection_dialog.title">Какой тип сервера?</string>
   <string name="settings.docu_add.server_dialog.select_odk">Набор открытых данных (НОД)</string>
   <string name="settings.docu_add.server_dialog.expl">Выберите тип сервера, к которому Вы хотите подключиться. Если Вы не уверены, обратитесь в организацию, координирующую документацию.</string>
   <string name="settings.docu_add.server_dialog.select_tus">Прямая загрузка</string>

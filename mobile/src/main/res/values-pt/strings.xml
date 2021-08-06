@@ -238,7 +238,7 @@
   <string name="settings.prot_app.bar">Proteção</string>
   <string name="settings.gen_select_protection">Proteção</string>
   <string name="action_learn.more">Saiba Mais</string>
-  <string name="settings.docu_add.server_dialog.title">Adicionar servidor</string>
+  <string name="settings.servers_add.server_dialog.title">Adicionar servidor</string>
   <string name="settings.prot_quick.delete_action">Ativar o botão EXCLUIR RÁPIDO</string>
   <string name="settings.prot_quick.delete_action.expl">Mostra um botão deslizante na tela inicial para excluir rapidamente os dados do Tella em situações de urgência.</string>
   <string name="settings.prot_select_delete.gallery">Excluir Galeria</string>
@@ -315,7 +315,7 @@
   <string name="settings.docu_auto.upload.server.selection_select">Servidor</string>
   <string name="upload_dialog.title_select.server">Seleção de servidor</string>
   <string name="settings.docu_auto.upload.server.selection_dialog.expl">Em qual servidor você gostaria de carregar os arquivos?</string>
-  <string name="settings.docu_add.server.selection_dialog.title">Que tipo de servidor?</string>
+  <string name="settings.serv_add.server.selection_dialog.title">Que tipo de servidor?</string>
   <string name="settings.docu_add.server_dialog.select_odk">Kit de Dados Abertos (ODK)</string>
   <string name="settings.docu_add.server_dialog.expl">Selecione o tipo de servidor ao qual você deseja se conectar. Se você não tiver certeza, pergunte à sua organização.</string>
   <string name="settings.docu_add.server_dialog.select_tus">Carregamento Direto</string>

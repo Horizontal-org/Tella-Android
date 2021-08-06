@@ -235,7 +235,7 @@
   <string name="settings.prot_app.bar">အကာအကွယ်</string>
   <string name="settings.gen_select_protection">အကာအကွယ်</string>
   <string name="action_learn.more">ပိုမိုသိရန်</string>
-  <string name="settings.docu_add.server_dialog.title">ဆာဗာ‌အသစ်ပေါင်းရန်</string>
+  <string name="settings.servers_add.server_dialog.title">ဆာဗာ‌အသစ်ပေါင်းရန်</string>
   <string name="settings.prot_quick.delete_action">အမြန်ဖျက်ဆီးခလုပ်အား အသက်သွင်းပါ။</string>
   <string name="settings.prot_quick.delete_action.expl">အရေး‌ပေါ်် အခြေအနေတွင် တဲလ်လာ အချက်အလက်များအား ဖျက်ဆီးရန်အတွင် Sliding Button ( ဘယ်မှာညာဆွဲရသည့်ခလုပ်) အား ဖုန်းအစမျက်နှာတွင်ပြထားပါသည်။</string>
   <string name="settings.prot_select_delete.gallery">ပြခန်းအားဖျက်မည်</string>
@@ -312,7 +312,7 @@
   <string name="settings.docu_auto.upload.server.selection_select">ဆာဗာ</string>
   <string name="upload_dialog.title_select.server">ဆာဗာရွေးချယ်မှု</string>
   <string name="settings.docu_auto.upload.server.selection_dialog.expl">ဘယ်ဆာဗာကိုဖိုင်တွေတင်ချင်ပါသလဲ။</string>
-  <string name="settings.docu_add.server.selection_dialog.title">ဘယ်ဆာဗာအမျိုးအစားလဲ။</string>
+  <string name="settings.serv_add.server.selection_dialog.title">ဘယ်ဆာဗာအမျိုးအစားလဲ။</string>
   <string name="settings.docu_add.server_dialog.select_odk">ပွင့်လင်းဒေတာကိရိယာအစုံ</string>
   <string name="settings.docu_add.server_dialog.expl">သင်ဆက်သွယ်လိုသော ဆာဗာအမျိုးအစားကိုရွေးချယ်ပါ။  သင်မသေချာပါကသင့်အဖွဲ့အစည်းကိုမေးမြန်းပါ။</string>
   <string name="settings.docu_add.server_dialog.select_tus">တိုက်ရိုက်တင်ပါ</string>

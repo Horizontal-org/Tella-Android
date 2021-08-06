@@ -85,15 +85,18 @@ object BottomSheetUtils {
         }
     }
 
+    interface ServerTypeConsumer {
+        fun accept(isCollectServer: Boolean)
+    }
+
+    @JvmStatic
     fun showDualChoiceTypeSheet(
         fragmentManager: FragmentManager,
         titleText: String?,
         descriptionText: String?,
         buttonOneLabel: String? = null,
         buttonTwoLabel: String? = null,
-        onActionOneClick: (() -> Unit)? = null,
-        onActionTwoClick: (() -> Unit)? = null,
-        onCancelClick: (() -> Unit)? = null
+        consumer: ServerTypeConsumer? = null
     ) {
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
@@ -115,17 +118,16 @@ object BottomSheetUtils {
                     }
 
                     buttonOne.setOnClickListener {
-                        onActionOneClick?.invoke()
+                        consumer?.accept(true)
                         customSheetFragment.dismiss()
                     }
 
                     buttonTwo.setOnClickListener {
-                        onActionTwoClick?.invoke()
+                        consumer?.accept(false)
                         customSheetFragment.dismiss()
                     }
 
                     cancelButton.setOnClickListener {
-                        onCancelClick?.invoke()
                         customSheetFragment.dismiss()
                     }
                 }
@@ -135,6 +137,4 @@ object BottomSheetUtils {
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
     }
-
-
 }

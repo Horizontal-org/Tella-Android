@@ -5,13 +5,14 @@ import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
@@ -28,6 +29,7 @@ import rs.readahead.washington.mobile.mvp.presenter.CollectServersPresenter
 import rs.readahead.washington.mobile.mvp.presenter.ServersPresenter
 import rs.readahead.washington.mobile.mvp.presenter.TellaUploadServersPresenter
 import rs.readahead.washington.mobile.util.DialogsUtil
+import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment.CollectServerDialogHandler
 import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragment
@@ -36,7 +38,7 @@ import timber.log.Timber
 import java.util.*
 
 
-class ServersSettings : Fragment(),
+class ServersSettings : BaseFragment(),
         IServersPresenterContract.IView,
 ICollectServersPresenterContract.IView,
 ITellaUploadServersPresenterContract.IView,
@@ -60,7 +62,8 @@ TellaUploadServerDialogHandler {
         (activity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_servers_title_server_settings)
 
         val addServerButton = view.findViewById<LinearLayout>(R.id.add_servers)
-        addServerButton.setOnClickListener {
+        listView = view.findViewById(R.id.collect_servers_list)
+        /*addServerButton.setOnClickListener {
             activity?.let {
                 BottomSheetUtils.showDualChoiceTypeSheet(it.supportFragmentManager,
                     "Add Server",
@@ -71,7 +74,7 @@ TellaUploadServerDialogHandler {
                     onActionTwoClick = {showTellaUploadServerDialog(null)},
                     onCancelClick = {})
             }
-        }
+        }*/
 
         servers = ArrayList<Server?>()
         tuServers = ArrayList<TellaUploadServer?>()
@@ -218,38 +221,53 @@ TellaUploadServerDialogHandler {
         return requireContext()
     }
 
-    private fun getServerItem(server: Server?): View {
-        val inflater = LayoutInflater.from(requireContext())
-        @SuppressLint("InflateParams") val item = inflater.inflate(R.layout.collect_server_row_for_list, null) as LinearLayout
+    private fun getServerItem(server: Server?): View? {
+        val inflater = LayoutInflater.from(context)
+        @SuppressLint("InflateParams") val item =
+            inflater.inflate(R.layout.servers_list_item, null) as LinearLayout
+        val row = item.findViewById<ViewGroup>(R.id.server_row)
         val name = item.findViewById<TextView>(R.id.server_title)
-        val edit = item.findViewById<ImageView>(R.id.edit)
-        val remove = item.findViewById<ImageView>(R.id.delete)
+        val options = item.findViewById<ImageView>(R.id.options)
         if (server != null) {
             name.text = server.name
-            name.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                    null,
-                    null,
-                    requireContext().resources.getDrawable(
-                            if (server.isChecked) R.drawable.ic_checked_green else R.drawable.watch_later_gray
-                    ),
-                    null)
-            remove.setOnClickListener { v: View? ->
-                if (server.serverType == ServerType.ODK_COLLECT) {
-                    removeCollectServer(server as CollectServer)
-                } else {
-                    removeTUServer(server as TellaUploadServer)
-                }
+            options.setOnClickListener { view: View? ->
+                showDownloadedPopupMenu(
+                    server,
+                    row,
+                    options
+                )
             }
-            edit.setOnClickListener { v: View? ->
-                if (server.serverType == ServerType.ODK_COLLECT) {
-                    editCollectServer(server as CollectServer)
-                } else {
-                    editTUServer(server as TellaUploadServer)
-                }
-            }
+            /*name.setCompoundDrawablesRelativeWithIntrinsicBounds(
+            null,
+            null,
+            getContext().getResources().getDrawable(
+                    server.isChecked() ? R.drawable.ic_checked_green : R.drawable.watch_later_gray
+            ),
+            null);*/
         }
         item.tag = servers.indexOf(server)
         return item
+    }
+
+    private fun showDownloadedPopupMenu(server: Server, row: ViewGroup, options: ImageView) {
+        val popup = PopupMenu(row.context, options)
+        popup.inflate(R.menu.server_item_menu)
+        popup.setOnMenuItemClickListener { item: MenuItem ->
+            when (item.itemId) {
+                R.id.edit_server -> if (server.serverType == ServerType.ODK_COLLECT) {
+                    editCollectServer((server as CollectServer))
+                } else {
+                    editTUServer((server as TellaUploadServer))
+                }
+                R.id.remove_server -> if (server.serverType == ServerType.ODK_COLLECT) {
+                    removeCollectServer((server as CollectServer))
+                } else {
+                    removeTUServer((server as TellaUploadServer))
+                }
+            }
+            false
+        }
+        popup.show()
     }
 
     private fun removeCollectServer(server: CollectServer) {
@@ -316,6 +334,10 @@ TellaUploadServerDialogHandler {
         collectServersPresenter!!.update(server)
     }
 
+    override fun onDialogDismiss() {
+        TODO("Not yet implemented")
+    }
+
     override fun showLoading() {}
 
     override fun hideLoading() {}
@@ -370,6 +392,7 @@ TellaUploadServerDialogHandler {
     }
 
     private fun createServerViews(servers: ArrayList<Server?>) {
+        Timber.d("+++++ createServerViews for %d server(s)", servers.size)
         for (server in servers) {
             val view = getServerItem(server)
             listView!!.addView(view, servers.indexOf(server))

@@ -425,7 +425,7 @@ A toast notification informing the user that their files were successfully delet
   <!-- A button to open a screen or webpage with more information -->
   <string name="action_learn.more">மேலும் அறிய</string>
   <!-- The button to add a connection to a server -->
-  <string name="settings.docu_add.server_dialog.title">சேவையகத்தை சேர்</string>
+  <string name="settings.servers_add.server_dialog.title">சேவையகத்தை சேர்</string>
   <!-- The name of the feature in Settings > Protection -->
   <string name="settings.prot_quick.delete_action">\"விரைவு நீக்கு\" பொத்தானை இயக்கவும்</string>
   <!-- The explanation of the Quick Delete feature in Settings > Protection -->
@@ -572,7 +572,7 @@ This is one of the two options available. -->
   <!-- If the user is connected to more than one Direct Upload server, they have to select which server to upload the files to. This is the explanation in the dialog asking them to select the server. -->
   <string name="settings.docu_auto.upload.server.selection_dialog.expl">கோப்புகளை எந்த சேவையகத்தில் பதிவேற்ற விரும்புகிறீர்கள்?</string>
   <!-- The title of the dialog where the user selects the type of server they want to connect to. -->
-  <string name="settings.docu_add.server.selection_dialog.title">எந்த வகை சேவையகம்?</string>
+  <string name="settings.serv_add.server.selection_dialog.title">எந்த வகை சேவையகம்?</string>
   <!-- When connecting to a server, users have to select which of the two kinds of servers they want to connect to. "Open Data Kit" is one of the two server types. -->
   <string name="settings.docu_add.server_dialog.select_odk">திறந்த தரவு கிட் (ஓபென் டேட்டா கிட் - ODK)</string>
   <!-- This is the explanation in the dialog where the users selects what server to connect to. -->

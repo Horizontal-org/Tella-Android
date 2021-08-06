@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/wa_purple"
+    android:id="@+id/activity_content_layout"
     android:paddingTop="@dimen/navigation_tab_bar_padding"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="rs.readahead.washington.mobile.views.activity.ServersSettingsActivity"
@@ -18,167 +19,72 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-          <!--  <LinearLayout style="@style/SettingsClickableHorizontalShadowLinearLayout">
+            <!--  <LinearLayout style="@style/SettingsClickableHorizontalShadowLinearLayout">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    style="@style/SettingsTitleImageViewStyle"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_gps_not_fixed_black_24dp" />
+                  <androidx.appcompat.widget.AppCompatImageView
+                      style="@style/SettingsTitleImageViewStyle"
+                      android:layout_gravity="center_vertical"
+                      android:src="@drawable/ic_gps_not_fixed_black_24dp" />
 
-                <LinearLayout style="@style/VerticalLinearLayout">
+                  <LinearLayout style="@style/VerticalLinearLayout">
 
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/anonymous_switch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:paddingBottom="6dp"
-                        android:text="@string/settings.docu_verification_action"
-                        android:theme="@style/SettingsTextViewSwitch" />
+                      <androidx.appcompat.widget.SwitchCompat
+                          android:id="@+id/anonymous_switch"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:gravity="center_vertical"
+                          android:paddingBottom="6dp"
+                          android:text="@string/settings.docu_verification_action"
+                          android:theme="@style/SettingsTextViewSwitch" />
 
-                    <TextView
-                        style="@style/SettingsTextViewGray"
-                        android:layout_marginEnd="30dp"
-                        android:paddingBottom="6dp"
-                        android:text="@string/settings.docu_verification_action.expl"
-                        android:textAlignment="viewStart" />
-                </LinearLayout>
-            </LinearLayout> -->
+                      <TextView
+                          style="@style/SettingsTextViewGray"
+                          android:layout_marginEnd="30dp"
+                          android:paddingBottom="6dp"
+                          android:text="@string/settings.docu_verification_action.expl"
+                          android:textAlignment="viewStart" />
+                  </LinearLayout>
+              </LinearLayout> -->
 
             <!--  <LinearLayout
                   style="@style/SettingsClickableVerticalShadowDocumentationLinerLayout"
                   android:animateLayoutChanges="true">-->
 
-                  <!--    <LinearLayout
-                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                         android:orientation="horizontal"
-                         android:paddingStart="20dp"
-                         android:paddingEnd="2dp">
+            <!--    <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:orientation="horizontal"
+                   android:paddingStart="20dp"
+                   android:paddingEnd="2dp">
 
-                         <androidx.appcompat.widget.AppCompatImageView
-                             style="@style/SettingsTitleImageViewStyle"
-                             android:layout_gravity="center_vertical"
-                             android:src="@drawable/ic_collect_menu" />
+                   <androidx.appcompat.widget.AppCompatImageView
+                       style="@style/SettingsTitleImageViewStyle"
+                       android:layout_gravity="center_vertical"
+                       android:src="@drawable/ic_collect_menu" />
 
-                         <LinearLayout style="@style/VerticalLinearLayout">
+                   <LinearLayout style="@style/VerticalLinearLayout">
 
-                             <androidx.appcompat.widget.SwitchCompat
-                                 android:id="@+id/collect_switch"
-                                 android:layout_width="match_parent"
-                                 android:layout_height="wrap_content"
-                                 android:gravity="center_vertical"
-                                 android:text="@string/settings.docu_connect.to.servers_enable_action"
-                                 android:theme="@style/SettingsTextViewSwitch" />
+                       <androidx.appcompat.widget.SwitchCompat
+                           android:id="@+id/collect_switch"
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:gravity="center_vertical"
+                           android:text="@string/settings.docu_connect.to.servers_enable_action"
+                           android:theme="@style/SettingsTextViewSwitch" />
 
-                             <TextView
-                                 android:id="@+id/enable_collect_info"
-                                 style="@style/SettingsTextViewGray"
-                                 android:text="@string/settings.docu_connect.to.servers_enable_action.expl" />
-                         </LinearLayout>
-                     </LinearLayout>-->
+                       <TextView
+                           android:id="@+id/enable_collect_info"
+                           style="@style/SettingsTextViewGray"
+                           android:text="@string/settings.docu_connect.to.servers_enable_action.expl" />
+                   </LinearLayout>
+               </LinearLayout>-->
 
-                <!--<LinearLayout
-                    android:id="@+id/servers_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">-->
-                    <!--
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingStart="20dp"
-                            android:paddingEnd="2dp">
-
-                            <androidx.appcompat.widget.AppCompatImageView
-                                style="@style/SettingsTitleImageViewStyle"
-                                android:layout_gravity="center_vertical"
-                                android:src="@drawable/assignment_black_24dp" />
-
-                            <LinearLayout style="@style/VerticalLinearLayout">
-
-                                <TextView
-                                    style="@style/SettingsTextViewTitleNormal"
-                                    android:paddingBottom="6dp"
-                                    android:text="@string/collect_servers"
-                                    android:textAlignment="viewStart" />
-
-                                <TextView
-                                    android:id="@+id/collect_servers_info"
-                                    style="@style/SettingsTextViewGray"
-                                    android:text="@string/manage_collect_servers"
-                                    android:textAlignment="viewStart" />
-                            </LinearLayout>
-                        </LinearLayout>  -->
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/activity_vertical_margin"
-                        android:background="@drawable/rounded_light_purple_background"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:id="@+id/add_servers"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="12dp"
-                            android:weightSum="1">
-
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="2dp"
-                                android:layout_weight=".85"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:id="@+id/titleTV"
-                                    style="@style/SettingsTitleText"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="start"
-                                    android:padding="2dp"
-                                    android:text="@string/settings.servers.title_server.settings" />
-
-                                <TextView
-                                    android:id="@+id/explainTV"
-                                    style="@style/SettingsMessageText"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:padding="2dp"
-                                    android:text="@string/settings.servers.add_server.expl" />
-
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
-                            <ImageView
-                                android:id="@+id/add_server"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_margin="2dp"
-                                android:layout_weight=".15"
-                                android:contentDescription="@string/settings.servers.add_server.expl"
-                                android:src="@drawable/ic_add_circle_outline_24_orange" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/collect_servers_list"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical" />
-
-                    </LinearLayout>
-                <!-- </LinearLayout>-->
-                <!-- </LinearLayout>-->
-
-            <LinearLayout
-                android:id="@+id/auto_upload_switch_view"
-                style="@style/SettingsClickableVerticalShadowDocumentationLinerLayout"
-                android:animateLayoutChanges="true">
-
+            <!--<LinearLayout
+                android:id="@+id/servers_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">-->
+            <!--
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -189,149 +95,343 @@
                     <androidx.appcompat.widget.AppCompatImageView
                         style="@style/SettingsTitleImageViewStyle"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_cloud_upload_black_24dp"
-                        android:tint="@color/wa_black"/>
+                        android:src="@drawable/assignment_black_24dp" />
 
                     <LinearLayout style="@style/VerticalLinearLayout">
 
-                        <androidx.appcompat.widget.SwitchCompat
-                            android:id="@+id/auto_upload_switch"
-                            android:layout_width="match_parent"
+                        <TextView
+                            style="@style/SettingsTextViewTitleNormal"
+                            android:paddingBottom="6dp"
+                            android:text="@string/collect_servers"
+                            android:textAlignment="viewStart" />
+
+                        <TextView
+                            android:id="@+id/collect_servers_info"
+                            style="@style/SettingsTextViewGray"
+                            android:text="@string/manage_collect_servers"
+                            android:textAlignment="viewStart" />
+                    </LinearLayout>
+                </LinearLayout>  -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:background="@drawable/rounded_light_purple_background"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/add_servers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="12dp"
+                    android:weightSum="1">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:layout_weight=".85"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/titleTV"
+                            style="@style/SettingsTitleText"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:text="@string/settings.docu_auto.upload_action"
-                            android:theme="@style/SettingsTextViewSwitch" />
+                            android:textStyle="bold"
+                            android:gravity="start"
+                            android:padding="2dp"
+                            android:text="@string/settings.servers.title_server.settings" />
+
+                        <TextView
+                            android:id="@+id/explainTV"
+                            style="@style/SettingsMessageText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="2dp"
+                            android:text="@string/settings.servers.add_server.expl" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <ImageView
+                        android:id="@+id/add_server"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="2dp"
+                        android:layout_weight=".15"
+                        android:contentDescription="@string/settings.servers.add_server.expl"
+                        android:src="@drawable/ic_add_circle_outline_24_orange" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/collect_servers_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" />
+
+            </LinearLayout>
+            <!-- </LinearLayout>-->
+            <!-- </LinearLayout>-->
+
+            <LinearLayout
+                android:id="@+id/auto_upload_switch_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:animateLayoutChanges="true"
+                android:background="@drawable/rounded_light_purple_background"
+                android:orientation="vertical">
+                <!--
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:paddingStart="20dp"
+                                    android:paddingEnd="2dp">
+
+                                    <androidx.appcompat.widget.AppCompatImageView
+                                        style="@style/SettingsTitleImageViewStyle"
+                                        android:layout_gravity="center_vertical"
+                                        android:src="@drawable/ic_cloud_upload_black_24dp"
+                                        android:tint="@color/wa_black"/>
+
+                                    <LinearLayout style="@style/VerticalLinearLayout">
+
+                                        <androidx.appcompat.widget.SwitchCompat
+                                            android:id="@+id/auto_upload_switch"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="center_vertical"
+                                            android:text="@string/settings.docu_auto.upload_action"
+                                            android:theme="@style/SettingsTextViewSwitch" />
+
+                                        <TextView
+                                            android:id="@+id/auto_upload_info"
+                                            style="@style/SettingsTextViewGray"
+                                            android:text="@string/settings.docu_auto.upload_action.expl" />
+                                    </LinearLayout>
+                                </LinearLayout>
+                -->
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="12dp"
+                    android:weightSum="1">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:layout_weight=".85"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/title_auto_upload"
+                            style="@style/SettingsTitleText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:padding="2dp"
+                            android:text="@string/settings.servers_auto.upload_action"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/auto_upload_info"
-                            style="@style/SettingsTextViewGray"
+                            style="@style/SettingsMessageText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="2dp"
                             android:text="@string/settings.docu_auto.upload_action.expl" />
-                    </LinearLayout>
-                </LinearLayout>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/auto_upload_switch"
+                        style="@style/SwitchWithMessage"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="2dp"
+                        android:layout_weight=".15" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <LinearLayout
                     android:id="@+id/upload_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:orientation="vertical">
-
-                        <View style="@style/SettingsMainShadowLine" />
-
-                        <RelativeLayout
-                            android:id="@+id/selected_upload_server_layout"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:paddingStart="62dp"
-                            android:paddingEnd="26dp"
-                            android:visibility="gone"
-                            android:orientation="horizontal">
-                            <TextView
-                                android:layout_height="match_parent"
-                                android:layout_width="wrap_content"
-                                android:gravity="center_vertical"
-                                android:layout_alignParentStart="true"
-                                android:textSize="16sp"
-                                android:textAlignment="center"
-                                android:textColor="@color/wa_black"
-                                android:text="@string/settings.docu_auto.upload.server.selection_select" />
-                            <TextView
-                                android:id="@+id/server_name"
-                                android:layout_alignParentEnd="true"
-                                android:layout_height="match_parent"
-
-                                android:layout_width="wrap_content"
-                                android:gravity="center_vertical"
-                                android:textAlignment="center"
-                                android:text="@string/settings.docu_field_server.name"
-                                tools:ignore="RelativeOverlap" />
-                        </RelativeLayout>
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
                     <View style="@style/SettingsMainShadowLine" />
 
-                    <LinearLayout
-                        android:id="@+id/metadata_layout"
+                    <RelativeLayout
+                        android:id="@+id/selected_upload_server_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:orientation="horizontal"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentStart="true"
+                            android:gravity="center_vertical"
+                            android:text="@string/settings.servers_auto.upload.server.selection"
+                            android:textColor="@color/wa_white"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/server_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentEnd="true"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/wa_white"
+                            android:text="@string/settings.docu_field_server.name"
+                            tools:ignore="RelativeOverlap" />
+                    </RelativeLayout>
+
+                    <View style="@style/SettingsMainShadowLine" />
+                    <!--
+                                        <LinearLayout
+                                            android:id="@+id/metadata_layout"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal"
+                                            android:paddingStart="48dp"
+                                            android:paddingEnd="2dp">
+
+                                            <LinearLayout style="@style/VerticalLinearLayout">
+                                                <androidx.appcompat.widget.AppCompatCheckBox
+                                                    android:id="@+id/metadata_check"
+                                                    android:layoutDirection="rtl"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:gravity="center_vertical"
+                                                    android:text="@string/settings.docu_auto.upload.metadata_action"
+                                                    android:theme="@style/SettingsTextViewCheck" />
+
+                                                <TextView
+                                                    android:id="@+id/metadata_info"
+                                                    style="@style/SettingsTextViewGray"
+                                                    android:text="@string/settings.docu_auto.upload.metadata_action.expl" />
+                                            </LinearLayout>
+                                        </LinearLayout>
+
+                                            <View style="@style/SettingsMainShadowLine" />
+                    -->
+                    <!--
+                            <LinearLayout
+                                android:id="@+id/auto_delete_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingStart="48dp"
+                                android:paddingEnd="2dp">
+
+                                <LinearLayout style="@style/VerticalLinearLayout">
+                                    <androidx.appcompat.widget.AppCompatCheckBox
+                                        android:id="@+id/auto_delete_check"
+                                        android:layoutDirection="rtl"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center_vertical"
+                                        android:text="@string/settings.docu_auto.delete_action"
+                                        android:theme="@style/SettingsTextViewCheck" />
+
+                                    <TextView
+                                        android:id="@+id/auto_delete_info"
+                                        style="@style/SettingsTextViewGray"
+                                        android:text="@string/settings.docu_auto.delete_action.expl" />
+                                </LinearLayout>
+                            </LinearLayout>
+-->
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/auto_delete_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingStart="48dp"
-                        android:paddingEnd="2dp">
+                        android:padding="12dp"
+                        android:weightSum="1">
 
-                        <LinearLayout style="@style/VerticalLinearLayout">
-                            <androidx.appcompat.widget.AppCompatCheckBox
-                                android:id="@+id/metadata_check"
-                                android:layoutDirection="rtl"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:text="@string/settings.docu_auto.upload.metadata_action"
-                                android:theme="@style/SettingsTextViewCheck" />
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="2dp"
+                            android:layout_weight=".85"
+                            android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/metadata_info"
-                                style="@style/SettingsTextViewGray"
-                                android:text="@string/settings.docu_auto.upload.metadata_action.expl" />
-                        </LinearLayout>
-                    </LinearLayout>
+                                android:id="@+id/title_auto_delete"
+                                style="@style/SettingsTitleText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:padding="2dp"
+                                android:text="@string/settings.docu_auto.delete_action"
+                                android:textStyle="bold" />
 
-                        <View style="@style/SettingsMainShadowLine" />
+                            <TextView
+                                android:id="@+id/auto_delete_info"
+                                style="@style/SettingsMessageText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="2dp"
+                                android:text="@string/settings.servers_auto.delete_action.expl" />
 
-                        <LinearLayout
-                            android:id="@+id/auto_delete_layout"
-                            android:layout_width="match_parent"
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/auto_delete_switch"
+                            style="@style/SwitchWithMessage"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingStart="48dp"
-                            android:paddingEnd="2dp">
+                            android:layout_gravity="center"
+                            android:layout_margin="2dp"
+                            android:layout_weight=".15" />
 
-                            <LinearLayout style="@style/VerticalLinearLayout">
-                                <androidx.appcompat.widget.AppCompatCheckBox
-                                    android:id="@+id/auto_delete_check"
-                                    android:layoutDirection="rtl"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/settings.docu_auto.delete_action"
-                                    android:theme="@style/SettingsTextViewCheck" />
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
-                                <TextView
-                                    android:id="@+id/auto_delete_info"
-                                    style="@style/SettingsTextViewGray"
-                                    android:text="@string/settings.docu_auto.delete_action.expl" />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </LinearLayout>
+
+                </LinearLayout>
             </LinearLayout>
 
-         <!--   <LinearLayout
-                android:id="@+id/offline_switch_layout"
-                style="@style/SettingsClickableHorizontalShadowLinearLayout">
+            <!--   <LinearLayout
+                   android:id="@+id/offline_switch_layout"
+                   style="@style/SettingsClickableHorizontalShadowLinearLayout">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    style="@style/SettingsTitleImageViewStyle"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_cloud_off_white_24dp"
-                    android:tint="@color/wa_black" />
+                   <androidx.appcompat.widget.AppCompatImageView
+                       style="@style/SettingsTitleImageViewStyle"
+                       android:layout_gravity="center_vertical"
+                       android:src="@drawable/ic_cloud_off_white_24dp"
+                       android:tint="@color/wa_black" />
 
-                <LinearLayout style="@style/VerticalLinearLayout">
+                   <LinearLayout style="@style/VerticalLinearLayout">
 
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/offline_mode"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:paddingBottom="6dp"
-                        android:text="@string/offline_dialog.title"
-                        android:theme="@style/SettingsTextViewSwitch" />
+                       <androidx.appcompat.widget.SwitchCompat
+                           android:id="@+id/offline_mode"
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:gravity="center_vertical"
+                           android:paddingBottom="6dp"
+                           android:text="@string/offline_dialog.title"
+                           android:theme="@style/SettingsTextViewSwitch" />
 
-                    <TextView
-                        style="@style/SettingsTextViewGray"
-                        android:layout_marginEnd="30dp"
-                        android:paddingBottom="6dp"
-                        android:text="@string/offline_dialog.expl"
-                        android:textAlignment="viewStart" />
-                </LinearLayout>
-            </LinearLayout> -->
+                       <TextView
+                           style="@style/SettingsTextViewGray"
+                           android:layout_marginEnd="30dp"
+                           android:paddingBottom="6dp"
+                           android:text="@string/offline_dialog.expl"
+                           android:textAlignment="viewStart" />
+                   </LinearLayout>
+               </LinearLayout> -->
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

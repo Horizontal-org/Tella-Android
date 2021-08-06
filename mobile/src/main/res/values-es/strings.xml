@@ -238,7 +238,7 @@
   <string name="settings.prot_app.bar">Protección</string>
   <string name="settings.gen_select_protection">Protección</string>
   <string name="action_learn.more">Aprende más</string>
-  <string name="settings.docu_add.server_dialog.title">Añadir servidor</string>
+  <string name="settings.servers_add.server_dialog.title">Añadir servidor</string>
   <string name="settings.prot_quick.delete_action">Activar botón de ELIMINACIÓN RÁPIDA</string>
   <string name="settings.prot_quick.delete_action.expl">Muestra un botón deslizante en la pantalla de inicio para borrar rápidamente los datos de Tella en situaciones de emergencia.</string>
   <string name="settings.prot_select_delete.gallery">Eliminar Galería</string>
@@ -315,7 +315,7 @@
   <string name="settings.docu_auto.upload.server.selection_select">Servidor</string>
   <string name="upload_dialog.title_select.server">Selección del servidor</string>
   <string name="settings.docu_auto.upload.server.selection_dialog.expl">¿A qué servidor te gustaría subir los archivos?</string>
-  <string name="settings.docu_add.server.selection_dialog.title">¿Qué tipo de servidor?</string>
+  <string name="settings.serv_add.server.selection_dialog.title">¿Qué tipo de servidor?</string>
   <string name="settings.docu_add.server_dialog.select_odk">Open Data Kit (ODK)</string>
   <string name="settings.docu_add.server_dialog.expl">Selecciona el tipo de servidor al que deseas conectarte. Si no estás seguro, consulta con tu organización.</string>
   <string name="settings.docu_add.server_dialog.select_tus">Subida directa</string>

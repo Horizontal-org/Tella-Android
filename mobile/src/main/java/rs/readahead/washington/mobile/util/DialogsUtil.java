@@ -24,6 +24,7 @@ import java.util.List;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
+import rs.readahead.washington.mobile.domain.entity.Server;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
 import rs.readahead.washington.mobile.domain.entity.ServerType;
@@ -143,7 +144,7 @@ public class DialogsUtil {
         directUpload.setChecked(false);
 
         builder.setView(view)
-                .setTitle(R.string.settings_docu_add_server_selection_dialog_title)
+                .setTitle(R.string.settings_serv_add_server_selection_dialog_title)
                 .setPositiveButton(R.string.action_next, (dialog, which) -> {
                     listener.onChoice(odk.isChecked() ? ServerType.ODK_COLLECT : ServerType.TELLA_UPLOAD);
                 })
@@ -347,7 +348,7 @@ public class DialogsUtil {
     }
 
     public interface autoUploadServerConsumer {
-        void accept(TellaUploadServer server);
+        void accept(Server server);
     }
 
     public static AlertDialog chooseAutoUploadServerDialog(Context context, autoUploadServerConsumer consumer, List<TellaUploadServer> tellaUploadServers, @NonNull DialogInterface.OnClickListener listener) {
@@ -380,6 +381,49 @@ public class DialogsUtil {
                     AppCompatRadioButton radioButton = radioGroup.findViewById(checkedRadioButtonId);
 
                     TellaUploadServer tellaUploadServer = tellaUploadServers.get((int) radioButton.getTag());
+                    consumer.accept(tellaUploadServer);
+                } else {
+                    errorMessage.setVisibility(View.VISIBLE);
+                }
+            });
+            radioGroup.setOnCheckedChangeListener((group, checkedId) -> errorMessage.setVisibility(View.GONE));
+        });
+
+        alertDialog.show();
+
+        return alertDialog;
+    }
+
+    public static AlertDialog chooseAutoUploadServerDialog1(Context context, autoUploadServerConsumer consumer, List<Server> tellaUploadServers, @NonNull DialogInterface.OnClickListener listener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.BrightBackgroundDarkLettersDialogTheme);
+        LayoutInflater inflater = LayoutInflater.from(context);
+
+        @SuppressLint("InflateParams")
+        View dialogView = inflater.inflate(R.layout.choose_auto_upload_server_dialog, null);
+        RadioGroup radioGroup = dialogView.findViewById(R.id.radio_group);
+        TextView errorMessage = dialogView.findViewById(R.id.error_message);
+
+        for (int i = 0; i < tellaUploadServers.size(); i++) {
+            AppCompatRadioButton button = (AppCompatRadioButton) inflater.inflate(R.layout.dialog_radio_button_item, null);
+            button.setTag(i);
+            button.setText(tellaUploadServers.get(i).getName());
+            radioGroup.addView(button);
+        }
+
+        final AlertDialog alertDialog = builder.setView(dialogView)
+                .setPositiveButton(R.string.action_ok, null)
+                .setNegativeButton(R.string.action_cancel, listener)
+                .setCancelable(false)
+                .create();
+
+        alertDialog.setOnShowListener(dialog -> {
+            Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+            button.setOnClickListener(view -> {
+                int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
+                if (checkedRadioButtonId > 0) {
+                    AppCompatRadioButton radioButton = radioGroup.findViewById(checkedRadioButtonId);
+
+                    Server tellaUploadServer = tellaUploadServers.get((int) radioButton.getTag());
                     consumer.accept(tellaUploadServer);
                 } else {
                     errorMessage.setVisibility(View.VISIBLE);

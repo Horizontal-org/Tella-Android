@@ -238,7 +238,7 @@
   <string name="settings.prot_app.bar">Protection</string>
   <string name="settings.gen_select_protection">Protection</string>
   <string name="action_learn.more">Pelajari Selengkapnya</string>
-  <string name="settings.docu_add.server_dialog.title">Add server</string>
+  <string name="settings.servers_add.server_dialog.title">Add server</string>
   <string name="settings.prot_quick.delete_action">Activate QUICK DELETE button</string>
   <string name="settings.prot_quick.delete_action.expl">Shows a sliding button on the homescreen to quickly delete Tella data in emergency situations.</string>
   <string name="settings.prot_select_delete.gallery">Delete Gallery</string>
@@ -315,7 +315,7 @@
   <string name="settings.docu_auto.upload.server.selection_select">Server</string>
   <string name="upload_dialog.title_select.server">Server selection</string>
   <string name="settings.docu_auto.upload.server.selection_dialog.expl">Which server would you like to upload the files to?</string>
-  <string name="settings.docu_add.server.selection_dialog.title">What type of server?</string>
+  <string name="settings.serv_add.server.selection_dialog.title">What type of server?</string>
   <string name="settings.docu_add.server_dialog.select_odk">Open Data Kit (ODK)</string>
   <string name="settings.docu_add.server_dialog.expl">Select the type of server you want to connect to. If you are unsure, ask your organization.</string>
   <string name="settings.docu_add.server_dialog.select_tus">Direct Upload</string>

@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -19,20 +18,20 @@ import java.util.List;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
+import androidx.navigation.Navigation;
+
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.bus.event.ToggleBlankFormPinnedEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.Server;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
-import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
 import rs.readahead.washington.mobile.mvp.contract.ICollectBlankFormListRefreshPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.ICollectServersPresenterContract;
@@ -79,12 +78,14 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     SwitchCompat autoUploadSwitch;
     @BindView(R.id.auto_upload_switch_view)
     View autoUploadSwitchView;
-    @BindView(R.id.auto_delete_check)
-    AppCompatCheckBox autoDeleteCheck;
-    @BindView(R.id.metadata_check)
-    AppCompatCheckBox metadataCheck;
+    @BindView(R.id.auto_delete_switch)
+    SwitchCompat autoDeleteSwitch;
+    /*@BindView(R.id.metadata_check)
+    AppCompatCheckBox metadataCheck;*/
     @BindView(R.id.selected_upload_server_layout)
     View serverSelectLayout;
+    @BindView(R.id.activity_content_layout)
+    View contentLayout;
 
 
     private ServersPresenter serversPresenter;
@@ -178,13 +179,13 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         createServerViews(servers);
 
         tuServers = tellaUploadServers;
-        if (tuServers.size() > 0) {
+        /*if (tuServers.size() > 0) {
             autoUploadSwitchView.setVisibility(View.VISIBLE);
             setupAutoUploadSwitch();
             setupAutoUploadView();
         } else {
             autoUploadSwitchView.setVisibility(View.GONE);
-        }
+        }*/
     }
 
     @Override
@@ -259,6 +260,14 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         listView.removeAllViews();
         this.servers.addAll(collectServers);
         createServerViews(servers);
+
+        if (collectServers.size() > 0) {
+            autoUploadSwitchView.setVisibility(View.VISIBLE);
+            setupAutoUploadSwitch();
+            setupAutoUploadView1();
+        } else {
+            autoUploadSwitchView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -337,7 +346,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private void showChooseServerTypeDialog() {
-        dialog = DialogsUtil.showServerChoosingDialog(this,
+       /* dialog = DialogsUtil.showServerChoosingDialog(this,
                 serverType -> {
                     if (serverType == ServerType.ODK_COLLECT) {
                         showCollectServerDialog(null);
@@ -345,6 +354,19 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                         showTellaUploadServerDialog(null);
                     }
                     dialog.dismiss();
+                });*/
+
+        BottomSheetUtils.showDualChoiceTypeSheet(this.getSupportFragmentManager(),
+                getString(R.string.settings_servers_add_server_dialog_title),
+                getString(R.string.settings_serv_add_server_selection_dialog_title),
+                getString(R.string.settings_servers_add_server_forms),
+                getString(R.string.settings_servers_add_server_reports),
+                isCollectServer -> {
+                    if (isCollectServer) {
+                        showCollectServerDialog(null);
+                    } else {
+                        showTellaUploadServerDialog(null);
+                    }
                 });
     }
 
@@ -358,7 +380,22 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 (dialog, which) -> turnOffAutoUpload());
     }
 
-    private void setAutoUploadServer(TellaUploadServer server) {
+    private void showChooseAutoUploadServerDialog1(List<Server> tellaUploadServers) {
+        dialog = DialogsUtil.chooseAutoUploadServerDialog1(this,
+                server -> {
+                    setAutoUploadServer(server);
+                    dialog.dismiss();
+                },
+                tellaUploadServers,
+                (dialog, which) -> turnOffAutoUpload());
+    }
+
+    /*private void setAutoUploadServer(TellaUploadServer server) {
+        serversPresenter.setAutoUploadServerId(server.getId());
+        autoUploadServerName.setText(server.getName());
+    }*/
+
+    private void setAutoUploadServer(Server server) {
         serversPresenter.setAutoUploadServerId(server.getId());
         autoUploadServerName.setText(server.getName());
     }
@@ -423,6 +460,11 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         collectServersPresenter.update(server);
     }
 
+    @Override
+    public void onDialogDismiss() {
+
+    }
+
     private void showCollectServerDialog(@Nullable CollectServer server) {
         CollectServerDialogFragment.newInstance(server)
                 .show(getSupportFragmentManager(), CollectServerDialogFragment.TAG);
@@ -456,10 +498,10 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }*/
 
     private void setupAutoDeleteAndMetadataUploadCheck() {
-        autoDeleteCheck.setOnCheckedChangeListener((buttonView, isChecked) -> Preferences.setAutoDelete(isChecked));
-        autoDeleteCheck.setChecked(Preferences.isAutoDeleteEnabled());
-        metadataCheck.setOnCheckedChangeListener((buttonView, isChecked) -> Preferences.setMetadataAutoUpload(isChecked));
-        metadataCheck.setChecked(Preferences.isMetadataAutoUpload());
+        autoDeleteSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> Preferences.setAutoDelete(isChecked));
+        autoDeleteSwitch.setChecked(Preferences.isAutoDeleteEnabled());
+        //metadataCheck.setOnCheckedChangeListener((buttonView, isChecked) -> Preferences.setMetadataAutoUpload(isChecked));
+        //metadataCheck.setChecked(Preferences.isMetadataAutoUpload());
     }
 
     private void setupCollectSettingsView() {
@@ -500,30 +542,18 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
         ViewGroup row = item.findViewById(R.id.server_row);
         TextView name = item.findViewById(R.id.server_title);
-       // ImageView edit = item.findViewById(R.id.edit);
-       // ImageView remove = item.findViewById(R.id.delete);
         ImageView options = item.findViewById(R.id.options);
 
         if (server != null) {
             name.setText(server.getName());
-
-            name.setCompoundDrawablesRelativeWithIntrinsicBounds(
+            options.setOnClickListener(view -> showDownloadedPopupMenu(server, row, options));
+            /*name.setCompoundDrawablesRelativeWithIntrinsicBounds(
                     null,
                     null,
                     getContext().getResources().getDrawable(
                             server.isChecked() ? R.drawable.ic_checked_green : R.drawable.watch_later_gray
                     ),
-                    null);
-
-            options.setOnClickListener(v -> {
-                if (server.getServerType() == ServerType.ODK_COLLECT) {
-                    removeCollectServer((CollectServer) server);
-                } else {
-                    removeTUServer((TellaUploadServer) server);
-                }
-            });
-
-            options.setOnClickListener(view -> showDownloadedPopupMenu(server, row, options));
+                    null);*/
         }
         item.setTag(servers.indexOf(server));
         return item;
@@ -591,7 +621,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             Preferences.setAutoUpload(isChecked);
             if (isChecked) {
                 autoUploadSettingsView.setVisibility(View.VISIBLE);
-                setupAutoUploadView();
+                setupAutoUploadView1();
             } else {
                 autoUploadSettingsView.setVisibility(View.GONE);
             }
@@ -621,6 +651,35 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         }
 
         if (tuServers.size() > 1) {
+            serverSelectLayout.setVisibility(View.VISIBLE);
+        } else {
+            serverSelectLayout.setVisibility(View.GONE);
+        }
+    }
+
+    private void setupAutoUploadView1() {
+        if (!Preferences.isAutoUploadEnabled()) {
+            return;
+        }
+
+        autoUploadSettingsView.setVisibility(View.VISIBLE);
+
+        if (serversPresenter.getAutoUploadServerId() == -1) {  // check if auto upload server is set
+            if (servers.size() == 1) {
+                setAutoUploadServer(servers.get(0));
+            } else {
+                showChooseAutoUploadServerDialog1(servers);
+            }
+        } else {
+            for (int i = 0; i < servers.size(); i++) {
+                if (servers.get(i).getId() == serversPresenter.getAutoUploadServerId()) {
+                    setAutoUploadServer(servers.get(i));
+                    break;
+                }
+            }
+        }
+
+        if (servers.size() > 1) {
             serverSelectLayout.setVisibility(View.VISIBLE);
         } else {
             serverSelectLayout.setVisibility(View.GONE);

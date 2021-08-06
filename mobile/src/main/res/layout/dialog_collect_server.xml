@@ -1,25 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ScrollView
         android:id="@+id/server_input"
+        android:fillViewport="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:orientation="vertical"
-            android:paddingLeft="?dialogPreferredPadding"
-            android:paddingRight="?dialogPreferredPadding"
-            android:paddingTop="?dialogPreferredPadding"
             android:textDirection="locale">
+
+            <LinearLayout
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/dark_purple"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                tools:ignore="MissingConstraints">
+
+                <ImageView
+                    android:id="@+id/back"
+                    android:layout_marginTop="2dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_arrow_back_white_24dp"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/wa_white"
+                    android:fontFamily="@font/open_sans"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:layout_margin="16dp"
+                    android:textSize="21sp"
+                    android:text="@string/settings.servers_add.server_dialog.title" />
+            </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/name_layout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                style="@style/DialogDataCollectionTextEntryLayout"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar"
+                android:textColorHint="@color/wa_white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -27,14 +67,22 @@
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/wa_white"
+                    app:backgroundTint="@color/wa_white"
                     android:hint="@string/settings.docu_field_server.name"
                     android:imeOptions="actionNext"
                     android:inputType="textCapSentences"
-                    android:maxLines="1" />
+                    android:maxLines="1"
+                    android:autofillHints="" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/url_layout"
+                style="@style/DialogDataCollectionTextEntryLayout"
+                android:textColorHint="@color/wa_white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/name_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -43,15 +91,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/settings.docu_field_server.url"
+                    android:textColor="@color/wa_white"
+                    app:backgroundTint="@color/wa_white"
                     android:imeOptions="actionNext"
                     android:inputType="textUri"
                     android:maxLines="1"
                     android:text="@string/ra_server_prefix"
-                    android:textDirection="ltr" />
+                    android:textDirection="ltr"
+                    android:importantForAutofill="no" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/username_layout"
+                android:textColorHint="@color/wa_white"
+                app:layout_constraintEnd_toEndOf="parent"
+                style="@style/DialogDataCollectionTextEntryLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/url_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -60,6 +116,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/settings.docu_field_username"
+                    android:textColor="@color/wa_white"
+                    app:backgroundTint="@color/wa_white"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLines="1" />
@@ -67,8 +125,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/password_layout"
+                android:textColorHint="@color/wa_white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/username_layout"
+                style="@style/DialogDataCollectionTextEntryLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:passwordToggleTint="@color/wa_orange"
                 app:passwordToggleEnabled="true">
 
                 <EditText
@@ -76,6 +140,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/settings.docu_add.server_field_password"
+                    android:textColor="@color/wa_white"
+                    app:backgroundTint="@color/wa_white"
+
                     android:imeOptions="actionDone"
                     android:inputType="textPassword"
                     android:maxLines="1" />
@@ -85,13 +152,69 @@
                 android:id="@+id/internet_error"
                 style="@style/TextValidationError"
                 android:layout_width="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/password_layout"
+                android:textColor="@color/wa_white"
                 android:layout_height="wrap_content"
                 android:text="@string/settings.docu_error_no.internet"
                 android:visibility="gone"
                 android:focusable="true"
                 android:focusableInTouchMode="true"/>
 
-        </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/buttons_layout"
+                android:layout_marginBottom="24dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:gravity="end"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                style="?android:attr/buttonBarStyle"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/cancel"
+                    android:layout_width="wrap_content"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/cancel_button_background"
+                    android:paddingBottom="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:paddingStart="32dp"
+                    android:paddingEnd="32dp"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:text="@string/action_cancel"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/wa_white"
+                    android:textSize="17sp"/>
+
+                <Button
+                    android:id="@+id/next"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:paddingStart="32dp"
+                    android:paddingEnd="32dp"
+                    android:background="@drawable/action_button_background"
+                    android:paddingBottom="4dp"
+                    android:textAllCaps="true"
+                    android:text="@string/action_save"
+                    android:textAlignment="center"
+                    android:textColor="@color/wa_white"
+                    android:textSize="17sp"/>
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
     <ProgressBar
