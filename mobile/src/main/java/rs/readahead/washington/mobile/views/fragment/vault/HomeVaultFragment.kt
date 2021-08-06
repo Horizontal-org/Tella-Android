@@ -9,8 +9,10 @@ import com.google.android.material.appbar.CollapsingToolbarLayout
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
+import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
+import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.VaultFile
 
-class HomeVaultFragment : BaseFragment() {
+class HomeVaultFragment : BaseFragment() , VaultClickListener {
     private lateinit var toolbar: Toolbar
     private lateinit var collapsingToolbar : CollapsingToolbarLayout
 
@@ -50,5 +52,37 @@ class HomeVaultFragment : BaseFragment() {
             }
             else -> return super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onPanicModeSwipeListener() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onRecentFilesItemClickListener(vaultFile: VaultFile) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onFavoriteItemClickListener(vaultFile: VaultFile) {
+        TODO("Not yet implemented")
+    }
+
+    override fun myFilesClickListener() {
+        TODO("Not yet implemented")
+    }
+
+    override fun galleryClickListener() {
+        TODO("Not yet implemented")
+    }
+
+    override fun audioClickListener() {
+        TODO("Not yet implemented")
+    }
+
+    override fun documentsClickListener() {
+        TODO("Not yet implemented")
+    }
+
+    override fun othersClickListener() {
+        TODO("Not yet implemented")
     }
 }

@@ -6,4 +6,6 @@
     <string name="vault_documents" translatable="false">Documents</string>
     <string name="vault_audio" translatable="false">Audio</string>
     <string name="vault_others" translatable="false">Others</string>
+    <string name="vault_recent_files" translatable="false">Recent files</string>
+    <string name="vault_favorite_forms" translatable="false">Favorite forms</string>
 </resources>

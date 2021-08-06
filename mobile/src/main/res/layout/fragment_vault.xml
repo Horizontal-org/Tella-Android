@@ -38,13 +38,87 @@
       </com.google.android.material.appbar.CollapsingToolbarLayout>
 
    </com.google.android.material.appbar.AppBarLayout>
-   <androidx.recyclerview.widget.RecyclerView
+   <androidx.core.widget.NestedScrollView
        android:id="@+id/vaultRecyclerView"
        android:layout_width="match_parent"
        android:layout_height="match_parent"
+       android:background="@color/wa_purple"
        app:layout_constraintTop_toBottomOf="@id/toolbar"
-       app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-     />
+     >
+      <androidx.constraintlayout.widget.ConstraintLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:id="@+id/recentFilesTitle"
+          >
+
+         <SeekBar
+             android:id="@+id/panic_seek"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toTopOf="parent"
+             app:layout_constraintEnd_toEndOf="parent"
+             android:layout_width="match_parent"
+             android:layout_height="@dimen/navigation_panic_height"
+             android:layout_gravity="bottom|center"
+             android:gravity="bottom|center"
+             android:max="100"
+             android:paddingHorizontal="16dp"
+             android:progressDrawable="@android:color/transparent"
+             android:thumb="@drawable/panic_seek_arrow" />
+
+         <TextView
+             android:id="@+id/favoriteFormsText"
+             style="@style/Tella_Main_White_Text.MeduimbBold"
+             android:layout_marginTop="18dp"
+             android:paddingHorizontal="16dp"
+             android:textColor="#FFC107"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toBottomOf="@id/panic_seek"
+             tools:ignore="TextContrastCheck"
+             tools:text="@string/vault_favorite_forms" />
+
+         <androidx.recyclerview.widget.RecyclerView
+             android:id="@+id/favoriteFormsRecyclerView"
+             app:layout_constraintTop_toBottomOf="@id/favoriteFormsText"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+             android:orientation="horizontal"
+             android:layout_marginTop="15dp"
+             android:paddingStart="6dp"
+             tools:listitem="@layout/item_favorite_form"
+             >
+         </androidx.recyclerview.widget.RecyclerView>
+         <TextView
+             android:id="@+id/recentFilesText"
+             style="@style/Tella_Main_White_Text.MeduimbBold"
+             app:layout_constraintTop_toBottomOf="@id/favoriteFormsRecyclerView"
+             app:layout_constraintStart_toStartOf="parent"
+             tools:text="@string/vault_recent_files"
+             android:layout_marginTop="18dp"
+             android:paddingHorizontal="16dp"
+             />
+
+         <androidx.recyclerview.widget.RecyclerView
+             android:id="@+id/recentFilesRecyclerView"
+             app:layout_constraintTop_toBottomOf="@id/recentFilesTitle"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+             android:orientation="horizontal"
+             android:layout_marginTop="15dp"
+             tools:listitem="@layout/item_vault_attachmenets"
+             >
+         </androidx.recyclerview.widget.RecyclerView>
+
+         <include
+             layout="@layout/item_vault_files"
+             app:layout_constraintTop_toBottomOf="@id/recentFilesRecyclerView"
+             app:layout_constraintBottom_toBottomOf="parent"
+             >
+         </include>
+      </androidx.constraintlayout.widget.ConstraintLayout>
+
+   </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
