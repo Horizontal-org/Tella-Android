@@ -94,7 +94,7 @@ public class MetadataViewerActivity extends BaseLockActivity {
         return textView;
     }
 
-    private View createMetadataLine() {
+    private LinearLayout createMetadataLine() {
         @SuppressLint("InflateParams")
         LinearLayout layout = (LinearLayout) LayoutInflater.from(this)
                 .inflate(R.layout.metadata_line, null);

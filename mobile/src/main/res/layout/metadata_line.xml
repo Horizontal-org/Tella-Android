@@ -1,2 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout style="@style/MetadataLine"/>
+<LinearLayout
+    android:orientation="horizontal"
+    android:paddingTop="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/wa_purple"
+    android:weightSum="1"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0.1dp"
+        android:background="@color/wa_purple"
+        android:padding="0.1dp"
+        android:layout_weight="0.18"/>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0.1dp"
+        android:background="@color/wa_white"
+        android:padding="0.1dp"
+        android:layout_weight="0.64"/>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0.1dp"
+        android:background="@color/wa_purple"
+        android:padding="0.1dp"
+        android:layout_weight="0.18"/>
+</LinearLayout>
