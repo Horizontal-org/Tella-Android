@@ -13,6 +13,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import androidx.annotation.Nullable;
@@ -161,7 +162,8 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     @OnClick(R.id.selected_upload_server_layout)
     public void chooseAutoUploadServer(View view) {
-        showChooseAutoUploadServerDialog(tuServers);
+        showChooseAutoUploadServerDialog1(servers);
+        //showChooseAutoUploadServerDialog(tuServers);
     }
 
     @Override
@@ -373,7 +375,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     private void showChooseAutoUploadServerDialog(List<TellaUploadServer> tellaUploadServers) {
         dialog = DialogsUtil.chooseAutoUploadServerDialog(this,
                 server -> {
-                    setAutoUploadServer(server);
+                    setAutoUploadServer(server.getId(),server.getName());
                     dialog.dismiss();
                 },
                 tellaUploadServers,
@@ -381,13 +383,29 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private void showChooseAutoUploadServerDialog1(List<Server> tellaUploadServers) {
-        dialog = DialogsUtil.chooseAutoUploadServerDialog1(this,
+
+        LinkedHashMap options = new LinkedHashMap<Long,String>();
+        for (Server server : tellaUploadServers) {
+            options.put(server.getId(), server.getName());
+        }
+        /*dialog = DialogsUtil.chooseAutoUploadServerDialog1(this,
                 server -> {
                     setAutoUploadServer(server);
                     dialog.dismiss();
                 },
                 tellaUploadServers,
-                (dialog, which) -> turnOffAutoUpload());
+                (dialog, which) -> turnOffAutoUpload());*/
+        BottomSheetUtils.showChooseAutoUploadServerSheet(this.getSupportFragmentManager(),
+                getString(R.string.settings_servers_choose_auto_upload_server_dialog_title),
+                getString(R.string.settings_docu_auto_upload_server_selection_dialog_expl),
+                getString(R.string.action_save),
+                getString(R.string.action_cancel),
+                options,
+                Preferences.getAutoUploadServerId(),
+                this,
+                serverId -> {
+                    setAutoUploadServer(serverId, (String) options.get(serverId));
+                });
     }
 
     /*private void setAutoUploadServer(TellaUploadServer server) {
@@ -395,9 +413,9 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         autoUploadServerName.setText(server.getName());
     }*/
 
-    private void setAutoUploadServer(Server server) {
-        serversPresenter.setAutoUploadServerId(server.getId());
-        autoUploadServerName.setText(server.getName());
+    private void setAutoUploadServer(Long id, String name) {
+        serversPresenter.setAutoUploadServerId(id);
+        autoUploadServerName.setText(name);
     }
 
     private void editCollectServer(CollectServer server) {
@@ -637,14 +655,14 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
         if (serversPresenter.getAutoUploadServerId() == -1) {  // check if auto upload server is set
             if (tuServers.size() == 1) {
-                setAutoUploadServer(tuServers.get(0));
+                setAutoUploadServer(tuServers.get(0).getId(), tuServers.get(0).getName());
             } else {
                 showChooseAutoUploadServerDialog(tuServers);
             }
         } else {
             for (int i = 0; i < tuServers.size(); i++) {
                 if (tuServers.get(i).getId() == serversPresenter.getAutoUploadServerId()) {
-                    setAutoUploadServer(tuServers.get(i));
+                    setAutoUploadServer(tuServers.get(i).getId(), tuServers.get(i).getName());
                     break;
                 }
             }
@@ -666,14 +684,14 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
         if (serversPresenter.getAutoUploadServerId() == -1) {  // check if auto upload server is set
             if (servers.size() == 1) {
-                setAutoUploadServer(servers.get(0));
+                setAutoUploadServer(tuServers.get(0).getId(), tuServers.get(0).getName());
             } else {
                 showChooseAutoUploadServerDialog1(servers);
             }
         } else {
             for (int i = 0; i < servers.size(); i++) {
                 if (servers.get(i).getId() == serversPresenter.getAutoUploadServerId()) {
-                    setAutoUploadServer(servers.get(i));
+                    setAutoUploadServer(tuServers.get(i).getId(), tuServers.get(i).getName());
                     break;
                 }
             }

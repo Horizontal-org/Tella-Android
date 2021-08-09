@@ -435,6 +435,7 @@
     <string name="settings.servers_auto.upload.server.selection">Server for auto-upload</string>
     <string name="settings.servers_add.server.forms">FORMS</string>
     <string name="settings.servers_add.server.reports">REPORTS</string>
+    <string name="settings.servers_choose.auto.upload.server_dialog.title">Select auto-upload server</string>
 
 
 </resources>
