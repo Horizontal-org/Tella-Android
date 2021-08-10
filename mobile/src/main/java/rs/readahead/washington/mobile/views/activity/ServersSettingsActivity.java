@@ -428,14 +428,22 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private void removeCollectServer(final CollectServer server) {
-        dialog = DialogsUtil.showDialog(this,
+        /*dialog = DialogsUtil.showDialog(this,
                 getString(R.string.settings_docu_delete_server_dialog_expl),
                 getString(R.string.action_delete),
                 getString(R.string.action_cancel),
                 (dialog, which) -> {
                     collectServersPresenter.remove(server);
                     dialog.dismiss();
-                }, null);
+                }, null);*/
+
+        BottomSheetUtils.showConfirmSheet(
+                this.getSupportFragmentManager(),
+                String.format(getResources().getString(R.string.settings_servers_delete_server_dialog_title), server.getName()),
+                getString(R.string.settings_docu_delete_server_dialog_expl),
+                getString(R.string.action_delete),
+                getString(R.string.action_cancel),
+                isConfirmed -> collectServersPresenter.remove(server));
     }
 
     private void removeTUServer(final TellaUploadServer server) {

@@ -444,6 +444,7 @@
     <string name="settings.servers_disable_auto_delete_dialog.expl">Your files will no longer be automatically deleted once the upload is complete.</string>
     <string name="action_enable">Enable</string>
     <string name="action_disable">Disable</string>
+    <string name="settings.servers_delete.server_dialog.title">Delete "%1$s" server?</string>
 
 
 </resources>

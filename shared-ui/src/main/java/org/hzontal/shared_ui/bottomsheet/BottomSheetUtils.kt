@@ -225,4 +225,54 @@ object BottomSheetUtils {
             radioGroup = view.findViewById(R.id.radio_list)
         }
     }
+
+    interface ActionConfirmed {
+        fun accept(isConfirmed: Boolean)
+    }
+
+    @JvmStatic
+    fun showConfirmSheet(
+        fragmentManager: FragmentManager,
+        titleText: String?,
+        descriptionText: String?,
+        actionButtonLabel: String? = null,
+        cancelButtonLabel: String? = null,
+        consumer: ActionConfirmed
+    ) {
+
+        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.standar_sheet_layout)
+            .cancellable(true)
+        customSheetFragment.holder(GenericSheetHolder(), object :
+            CustomBottomSheetFragment.Binder<GenericSheetHolder> {
+            override fun onBind(holder: GenericSheetHolder) {
+                with(holder) {
+                    title.text = titleText
+                    description.text = descriptionText
+                    actionButtonLabel?.let {
+                        actionButton.text = it
+                    }
+                    cancelButtonLabel?.let {
+                        cancelButton.text = it
+                    }
+
+                    actionButton.setOnClickListener {
+                        consumer.accept(isConfirmed = true)
+                        customSheetFragment.dismiss()
+                    }
+
+                    cancelButton.setOnClickListener {
+                        customSheetFragment.dismiss()
+                    }
+
+                    actionButton.visibility =
+                        if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+
+                }
+            }
+        })
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
+    }
 }
