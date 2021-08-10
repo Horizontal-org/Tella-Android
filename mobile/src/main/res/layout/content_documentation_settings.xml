@@ -279,6 +279,7 @@
                         android:visibility="gone">
 
                         <TextView
+                            android:id="@+id/server_title"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_alignParentStart="true"
@@ -289,9 +290,11 @@
 
                         <TextView
                             android:id="@+id/server_name"
+                            android:layout_marginStart="16dp"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_alignParentEnd="true"
+                            android:layout_toEndOf="@+id/server_title"
                             android:gravity="center_vertical"
                             android:textColor="@color/wa_white"
                             android:text="@string/settings.docu_field_server.name"
