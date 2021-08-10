@@ -28,6 +28,7 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import kotlin.Unit;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
@@ -516,10 +517,33 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }*/
 
     private void setupAutoDeleteAndMetadataUploadCheck() {
-        autoDeleteSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> Preferences.setAutoDelete(isChecked));
         autoDeleteSwitch.setChecked(Preferences.isAutoDeleteEnabled());
+        autoDeleteSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                Preferences.setAutoDelete(true);
+            } else {
+                BottomSheetUtils.showStandardSheet(
+                        this.getSupportFragmentManager(),
+                        getString(R.string.settings_servers_disable_auto_delete_dialog_title),
+                        getString(R.string.settings_servers_disable_auto_delete_dialog_expl),
+                        getString(R.string.action_disable),
+                        getString(R.string.action_cancel),
+                        this::disableAutoDelete, this::turnOnAutoDeleteSwitch);
+            }
+        });
         //metadataCheck.setOnCheckedChangeListener((buttonView, isChecked) -> Preferences.setMetadataAutoUpload(isChecked));
         //metadataCheck.setChecked(Preferences.isMetadataAutoUpload());
+    }
+
+    private Unit disableAutoDelete() {
+        autoDeleteSwitch.setChecked(false);
+        Preferences.setAutoDelete(false);
+        return Unit.INSTANCE;
+    }
+
+    private Unit turnOnAutoDeleteSwitch() {
+        autoDeleteSwitch.setChecked(true);
+        return Unit.INSTANCE;
     }
 
     private void setupCollectSettingsView() {
@@ -631,7 +655,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     /*private void setupOfflineSwitch() {
         offlineSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> Preferences.setOfflineMode(isChecked));
         offlineSwitch.setChecked(Preferences.isOfflineMode());
-    }*/
+    }
 
     private void setupAutoUploadSwitch() {
         autoUploadSwitch.setChecked(Preferences.isAutoUploadEnabled());
@@ -644,6 +668,55 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 autoUploadSettingsView.setVisibility(View.GONE);
             }
         });
+    }*/
+
+    private void setupAutoUploadSwitch() {
+        autoUploadSwitch.setChecked(Preferences.isAutoUploadEnabled());
+        autoUploadSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                BottomSheetUtils.showStandardSheet(
+                        this.getSupportFragmentManager(),
+                        getString(R.string.settings_servers_enable_auto_upload_dialog_title),
+                        getString(R.string.settings_servers_enable_auto_upload_dialog_expl),
+                        getString(R.string.action_enable),
+                        getString(R.string.action_cancel),
+                        this::enableAutoUpload, this::turnOffAutoUploadSwitch);
+            } else {
+                BottomSheetUtils.showStandardSheet(
+                        this.getSupportFragmentManager(),
+                        getString(R.string.settings_servers_disable_auto_upload_dialog_title),
+                        getString(R.string.settings_servers_disable_auto_upload_dialog_expl),
+                        getString(R.string.action_disable),
+                        getString(R.string.action_cancel),
+                        this::disableAutoUpload, this::turnOnAutoUploadSwitch);
+            }
+        });
+    }
+
+    private Unit enableAutoUpload() {
+        autoUploadSwitch.setChecked(true);
+        Preferences.setAutoUpload(true);
+        setupAutoUploadView1();
+        return Unit.INSTANCE;
+    }
+
+    private Unit turnOffAutoUploadSwitch() {
+        autoUploadSwitch.setChecked(false);
+        autoUploadSettingsView.setVisibility(View.GONE);
+        return Unit.INSTANCE;
+    }
+
+    private Unit turnOnAutoUploadSwitch() {
+        autoUploadSwitch.setChecked(true);
+        autoUploadSettingsView.setVisibility(View.VISIBLE);
+        return Unit.INSTANCE;
+    }
+
+    private Unit disableAutoUpload() {
+        autoUploadSwitch.setChecked(false);
+        Preferences.setAutoUpload(false);
+        autoUploadSettingsView.setVisibility(View.GONE);
+        return Unit.INSTANCE;
     }
 
     private void setupAutoUploadView() {
@@ -684,14 +757,16 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
         if (serversPresenter.getAutoUploadServerId() == -1) {  // check if auto upload server is set
             if (servers.size() == 1) {
-                setAutoUploadServer(tuServers.get(0).getId(), tuServers.get(0).getName());
+                //setAutoUploadServer(tuServers.get(0).getId(), tuServers.get(0).getName());
+                setAutoUploadServer(servers.get(0).getId(), servers.get(0).getName());
             } else {
                 showChooseAutoUploadServerDialog1(servers);
             }
         } else {
             for (int i = 0; i < servers.size(); i++) {
                 if (servers.get(i).getId() == serversPresenter.getAutoUploadServerId()) {
-                    setAutoUploadServer(tuServers.get(i).getId(), tuServers.get(i).getName());
+                    //setAutoUploadServer(tuServers.get(i).getId(), tuServers.get(i).getName());
+                    setAutoUploadServer(servers.get(i).getId(), servers.get(i).getName());
                     break;
                 }
             }

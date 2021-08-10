@@ -13,6 +13,7 @@ import org.hzontal.shared_ui.R
 
 object BottomSheetUtils {
 
+    @JvmStatic
     fun showStandardSheet(
             fragmentManager: FragmentManager,
             titleText: String?,
