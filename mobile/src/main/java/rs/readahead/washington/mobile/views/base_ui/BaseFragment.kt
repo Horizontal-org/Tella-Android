@@ -35,6 +35,7 @@ abstract class BaseFragment : Fragment() {
         Timber.d("***** ${this.javaClass.name} onViewCreated")
 
         super.onViewCreated(view, savedInstanceState)
+        initView(view)
     }
 
 
@@ -44,4 +45,6 @@ abstract class BaseFragment : Fragment() {
             activity.showToast(message)
         }
     }
+
+    abstract fun initView(view: View)
 }

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/wa_purple"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <SeekBar
         android:id="@+id/panic_seek"
@@ -13,8 +14,8 @@
         android:layout_gravity="bottom|center"
         android:gravity="bottom|center"
         android:max="100"
-        android:paddingEnd="25dp"
-        android:paddingStart="25dp"
-        android:progressDrawable="@android:color/transparent"
-        android:thumb="@drawable/panic_seek_arrow" />
+        android:thumbOffset="-5dp"
+        android:padding="2dp"
+        android:progressDrawable="@drawable/panic_seek_var_progress"
+        android:thumb="@drawable/ic_progress_bg" />
 </androidx.constraintlayout.widget.ConstraintLayout>

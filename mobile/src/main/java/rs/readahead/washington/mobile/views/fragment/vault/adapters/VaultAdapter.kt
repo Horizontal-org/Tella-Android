@@ -6,12 +6,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import rs.readahead.washington.mobile.data.entity.XFormEntity
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.FavoriteFormsViewHolder
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.FileActionsViewHolder
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.PanicModeViewHolder
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.RecentFilesViewHolder
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.BaseViewHolder
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.DataItem
+import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.VaultFile
 
 const val ITEM_RECENT_FILES = 0
 const val ITEM_FAVORITES_FORMS = 1
@@ -30,10 +32,30 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     private var actions = listOf<DataItem.FileActions>()
     private var items = listOf<DataItem>()
 
-    fun addPanicMode() {}
-    fun addRecentFiles() {}
-    fun addFileActions() {}
-    fun addFavoriteForms() {}
+    fun addPanicMode(vaultFile: VaultFile) {
+        panicMode = listOf(
+            DataItem.PanicMode(
+                vaultFile
+            )
+        )
+        renderList()
+    }
+    fun addRecentFiles(vaultFiles : List<VaultFile>) {
+        recentFiles = listOf(DataItem.RecentFiles(vaultFiles))
+        renderList()
+    }
+    fun addFileActions(vaultFile: VaultFile) {
+        actions = listOf(
+            DataItem.FileActions(
+                vaultFile
+            )
+        )
+        renderList()
+    }
+    fun addFavoriteForms(forms : List<XFormEntity>) {
+        favoriteForms = listOf(DataItem.FavoriteForms(forms))
+        renderList()
+    }
 
     fun renderList() {
         adapterScope.launch {
@@ -66,19 +88,19 @@ class VaultAdapter(private val onClick: VaultClickListener) :
         when (holder) {
             is PanicModeViewHolder -> {
                 val panicItem = getItem(position) as DataItem.PanicMode
-                holder.bind(panicItem.vaultFile)
+                holder.bind(panicItem.vaultFile,onClick)
             }
             is FavoriteFormsViewHolder -> {
                 val favoriteItem = getItem(position) as DataItem.FavoriteForms
-                holder.bind(favoriteItem.vaultFiles)
+                holder.bind(favoriteItem.forms,onClick)
             }
             is RecentFilesViewHolder -> {
                 val recentFiles = getItem(position) as DataItem.RecentFiles
-                holder.bind(recentFiles.vaultFiles)
+                holder.bind(recentFiles.vaultFiles,onClick)
             }
             is FileActionsViewHolder -> {
                 val recentFiles = getItem(position) as DataItem.FileActions
-                holder.bind(recentFiles.vaultFile)
+                holder.bind(recentFiles.vaultFile,onClick)
             }
         }
     }

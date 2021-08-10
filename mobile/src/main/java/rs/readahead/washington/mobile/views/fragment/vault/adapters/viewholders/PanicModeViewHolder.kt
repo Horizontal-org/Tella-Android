@@ -12,7 +12,7 @@ import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.
 class PanicModeViewHolder (val view : View) : BaseViewHolder<VaultFile>(view) {
     private lateinit var panicSeekBar : SeekBar
 
-    override fun bind(item: VaultFile, vararg args: Any) {
+    override fun bind(item: VaultFile, vaultClickListener: VaultClickListener) {
         panicSeekBar = view.findViewById(R.id.panic_seek)
 
         panicSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -29,7 +29,7 @@ class PanicModeViewHolder (val view : View) : BaseViewHolder<VaultFile>(view) {
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 if (seekBar.progress == 100) {
-                    (args[0] as VaultClickListener).onPanicModeSwipeListener(progress = seekBar.progress)
+                    vaultClickListener.onPanicModeSwipeListener(progress = seekBar.progress)
                     seekBar.progress = 0
                 } else {
 

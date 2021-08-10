@@ -3,10 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/wa_purple"
     android:paddingStart="17dp"
     android:paddingEnd="17dp"
+    android:layout_marginTop="17dp"
     >
 
     <TextView
@@ -15,7 +16,7 @@
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/vault_files" />
+        android:text="@string/vault_files" />
 
     <org.hzontal.shared_ui.buttons.HomeButton
         android:id="@+id/myFilesBtn"

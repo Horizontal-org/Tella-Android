@@ -8,7 +8,7 @@ data class VaultFile (var id // generated uuid
                       var hash: String? = null,
                       var path: String? = null,
                       var mimeType: String? = null,
-                      var name: String? = null,
+                      var name: String = "",
                       var size: Long = 0,
                       var created: Long = 0,
                       var duration: Long = 0,
@@ -43,7 +43,7 @@ data class VaultFile (var id // generated uuid
         result = 31 * result + (hash?.hashCode() ?: 0)
         result = 31 * result + (path?.hashCode() ?: 0)
         result = 31 * result + (mimeType?.hashCode() ?: 0)
-        result = 31 * result + (name?.hashCode() ?: 0)
+        result = 31 * result + (name.hashCode() ?: 0)
         result = 31 * result + size.hashCode()
         result = 31 * result + created.hashCode()
         result = 31 * result + duration.hashCode()

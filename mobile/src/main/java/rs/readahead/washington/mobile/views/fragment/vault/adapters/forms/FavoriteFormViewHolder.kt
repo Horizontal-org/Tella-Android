@@ -6,20 +6,19 @@ import android.widget.TextView
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.entity.XFormEntity
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
-import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.FavoriteFormsViewHolder
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.BaseViewHolder
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.inflate
 
 class FavoriteFormViewHolder(val view: View) : BaseViewHolder<XFormEntity>(view) {
        private lateinit var formsTitleTextView : TextView
-    override fun bind(item: XFormEntity, vararg args: Any) {
+    override fun bind(item: XFormEntity, vaultClickListener: VaultClickListener) {
         formsTitleTextView = view.findViewById(R.id.formTitleTv)
         item.apply {
             formsTitleTextView.text = name
         }
 
         view.setOnClickListener {
-            (args[0] as VaultClickListener).onFavoriteItemClickListener(item)
+            vaultClickListener.onFavoriteItemClickListener(item)
         }
     }
     companion object {

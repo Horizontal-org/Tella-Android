@@ -3,9 +3,10 @@ package rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders
 import android.content.Context
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
 
 abstract class BaseViewHolder<in Model>(itemView: View) : RecyclerView.ViewHolder(itemView) {
     protected val mContext: Context = itemView.context
 
-    abstract fun bind(item: Model, vararg args: Any)
+    abstract fun bind(item: Model, vaultClickListener: VaultClickListener)
 }

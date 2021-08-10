@@ -5,16 +5,23 @@ import android.view.*
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.data.entity.XFormEntity
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
+import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
+import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.MockVaultFiles
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.VaultFile
 
 class HomeVaultFragment : BaseFragment() , VaultClickListener {
     private lateinit var toolbar: Toolbar
     private lateinit var collapsingToolbar : CollapsingToolbarLayout
+    private lateinit var vaultRecyclerView : RecyclerView
+    private val vaultAdapter by lazy {VaultAdapter(this)}
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -25,7 +32,6 @@ class HomeVaultFragment : BaseFragment() , VaultClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView(view)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -33,10 +39,25 @@ class HomeVaultFragment : BaseFragment() , VaultClickListener {
         inflater.inflate(R.menu.home_menu,menu)
     }
 
-    private fun initView(view: View){
+    override fun initView(view: View){
         toolbar = view.findViewById(R.id.toolbar)
         collapsingToolbar = view.findViewById(R.id.collapsing_toolbar)
+        vaultRecyclerView = view.findViewById(R.id.vaultRecyclerView)
         setUpToolbar()
+        initData()
+    }
+
+    private fun initData(){
+        vaultAdapter.apply {
+            addPanicMode(MockVaultFiles.getRootFile())
+            addRecentFiles(MockVaultFiles.getListVaultFiles())
+            addFileActions(MockVaultFiles.getRootFile())
+            addFavoriteForms(MockVaultFiles.getListForms())
+        }
+        vaultRecyclerView.apply {
+            adapter = vaultAdapter
+            layoutManager = LinearLayoutManager(activity)
+        }
     }
 
     private fun setUpToolbar() {
@@ -46,43 +67,35 @@ class HomeVaultFragment : BaseFragment() , VaultClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        return when (item.itemId) {
             R.id.action_settings -> {
-                return true
+                true
             }
-            else -> return super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
-    override fun onPanicModeSwipeListener() {
-        TODO("Not yet implemented")
+    override fun onPanicModeSwipeListener(progress : Int) {
     }
 
     override fun onRecentFilesItemClickListener(vaultFile: VaultFile) {
-        TODO("Not yet implemented")
     }
 
-    override fun onFavoriteItemClickListener(vaultFile: VaultFile) {
-        TODO("Not yet implemented")
+    override fun onFavoriteItemClickListener(form: XFormEntity) {
     }
 
     override fun myFilesClickListener() {
-        TODO("Not yet implemented")
     }
 
     override fun galleryClickListener() {
-        TODO("Not yet implemented")
     }
 
     override fun audioClickListener() {
-        TODO("Not yet implemented")
     }
 
     override fun documentsClickListener() {
-        TODO("Not yet implemented")
     }
 
     override fun othersClickListener() {
-        TODO("Not yet implemented")
     }
 }

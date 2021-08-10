@@ -13,10 +13,10 @@ import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.
 class FavoriteFormsViewHolder  (val view : View) : BaseViewHolder<List<XFormEntity>>(view) {
     private lateinit var favoriteFormsRecyclerView : RecyclerView
 
-    override fun bind(item: List<XFormEntity>, vararg args: Any) {
+    override fun bind(item: List<XFormEntity>, vaultClickListener: VaultClickListener) {
         favoriteFormsRecyclerView = view.findViewById(R.id.favoriteFormsRecyclerView)
         favoriteFormsRecyclerView.apply {
-            adapter = FavoriteFormsAdapter(item, args[0] as VaultClickListener)
+            adapter = FavoriteFormsAdapter(item, vaultClickListener)
         }
 
     }

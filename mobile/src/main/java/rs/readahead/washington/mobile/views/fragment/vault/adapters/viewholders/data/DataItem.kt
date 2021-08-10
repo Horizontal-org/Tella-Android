@@ -13,8 +13,8 @@ sealed class DataItem {
         override val id = vaultFile.id.toString()
     }
 
-    data class FavoriteForms(val vaultFiles: List<XFormEntity>) : DataItem() {
-        override val id: String = vaultFiles[0].formID
+    data class FavoriteForms(val forms: List<XFormEntity>) : DataItem() {
+        override val id: String = forms[0].formID
     }
 
     data class FileActions(val vaultFile: VaultFile) : DataItem() {

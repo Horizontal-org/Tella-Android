@@ -62,7 +62,10 @@
     </style>
 
     <style name="Tella_Main_White_Text.SmallBold" parent="Tella_Main_White_Text.Bold">
-        <item name="android:textSize">12dp</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="Tella_Main_White_Text.Small" parent="Tella_Main_White_Text">
+        <item name="android:textSize">12sp</item>
     </style>
 
 </resources>

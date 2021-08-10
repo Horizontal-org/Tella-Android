@@ -3,8 +3,8 @@
 
     <item android:state_pressed="true">
         <shape>
-            <size android:height="45dp"
-                android:width="45dp" />
+            <size android:height="49dp"
+                android:width="49dp" />
             <solid android:color="@color/wa_white_40" />
             <solid android:color="@color/wa_white_40"/>
             <corners android:radius="25dp"/>
@@ -12,8 +12,8 @@
     </item>
     <item android:state_pressed="false">
         <shape>
-            <size android:height="45dp"
-                android:width="45dp" />
+            <size android:height="49dp"
+                android:width="49dp" />
             <solid android:color="@color/wa_white_40" />
             <solid android:color="@color/wa_white_40"/>
             <corners android:radius="25dp"/>
