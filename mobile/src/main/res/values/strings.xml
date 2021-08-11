@@ -445,6 +445,6 @@
     <string name="action_enable">Enable</string>
     <string name="action_disable">Disable</string>
     <string name="settings.servers_delete.server_dialog.title">Delete "%1$s" server?</string>
-
+    <string name="action_edit">Edit</string>
 
 </resources>

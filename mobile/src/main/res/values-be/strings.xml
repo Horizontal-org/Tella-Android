@@ -423,4 +423,18 @@
     <string name="settings.servers.add_server.expl">Connect to servers to collect and send data to your organization</string>
     <string name="settings.servers_auto.upload_action">Auto-upload to server</string>
     <string name="settings.servers_auto.upload_action.expl">Upload your files to your Reports server as soon as they are captured (photos, videos, or audio recordings) or imported into Tella.</string>
+  <string name="settings.servers_auto.delete_action.expl">If activated, Tella will automatically delete the files uploaded as soon as the upload is complete.</string>
+  <string name="settings.servers_auto.upload.server.selection">Server for auto-upload</string>
+  <string name="settings.servers_add.server.forms">FORMS</string>
+  <string name="settings.servers_add.server.reports">REPORTS</string>
+  <string name="settings.servers_choose.auto.upload.server_dialog.title">Select auto-upload server</string>
+  <string name="settings.servers_enable_auto_upload_dialog.title">Enable auto-upload?</string>
+  <string name="settings.servers_enable_auto_upload_dialog.expl">Your photos, videos, and audio files will be automatically uploaded as soon as they are recorded, and any file will be automatically uploaded when you import it into Tella.</string>
+  <string name="settings.servers_disable_auto_upload_dialog.title">Disable auto-upload?</string>
+  <string name="settings.servers_disable_auto_upload_dialog.expl">Your files will no longer be automatically uploaded to the server.</string>
+  <string name="settings.servers_disable_auto_delete_dialog.title">Disable auto-delete?</string>
+  <string name="settings.servers_disable_auto_delete_dialog.expl">Your files will no longer be automatically deleted once the upload is complete.</string>
+  <string name="action_enable">Enable</string>
+  <string name="action_disable">Disable</string>
+  <string name="settings.servers_delete.server_dialog.title">Delete "%1$s" server?</string>
 </resources>

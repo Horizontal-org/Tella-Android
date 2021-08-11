@@ -1,6 +1,7 @@
 package org.hzontal.shared_ui.bottomsheet
 
 import android.content.Context
+import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -268,6 +269,67 @@ object BottomSheetUtils {
                     actionButton.visibility =
                         if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
 
+                }
+            }
+        })
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
+    }
+
+    enum class Action {
+        EDIT, DELETE
+    }
+
+    class ServerMenuSheetHolder : CustomBottomSheetFragment.PageHolder() {
+        lateinit var actionEdit: TextView
+        lateinit var actionDelete: TextView
+        lateinit var title: TextView
+
+        override fun bindView(view: View) {
+            actionEdit = view.findViewById(R.id.action_edit)
+            actionDelete = view.findViewById(R.id.action_delete)
+            title = view.findViewById(R.id.standard_sheet_title)
+        }
+    }
+
+    interface ActionSeleceted {
+        fun accept(action: Action)
+    }
+
+    @JvmStatic
+    fun showServerMenuSheet(
+        fragmentManager: FragmentManager,
+        titleText: String?,
+        actionEditLabel: String? = null,
+        actionDeleteLabel: String? = null,
+        consumer: ActionSeleceted
+    ) {
+
+        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.server_menu_sheet_layout)
+            .cancellable(true)
+        customSheetFragment.holder(ServerMenuSheetHolder(), object :
+            CustomBottomSheetFragment.Binder<ServerMenuSheetHolder> {
+            override fun onBind(holder: ServerMenuSheetHolder) {
+                with(holder) {
+                    title.text = titleText
+                    actionEditLabel?.let {
+                        actionEdit.text = it
+                    }
+                    actionDeleteLabel?.let {
+                        actionDelete.text = it
+                    }
+
+                    actionEdit.setOnClickListener {
+                        consumer.accept(action = Action.EDIT)
+                        customSheetFragment.dismiss()
+                    }
+
+                    actionDelete.setOnClickListener {
+                        consumer.accept(action = Action.DELETE)
+                        customSheetFragment.dismiss()
+                    }
                 }
             }
         })

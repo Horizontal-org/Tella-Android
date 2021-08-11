@@ -21,7 +21,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
-import androidx.navigation.Navigation;
 
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 
@@ -447,7 +446,19 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private void removeTUServer(final TellaUploadServer server) {
-        if (server.getId() == serversPresenter.getAutoUploadServerId()) {
+        BottomSheetUtils.showConfirmSheet(
+                this.getSupportFragmentManager(),
+                String.format(getResources().getString(R.string.settings_servers_delete_server_dialog_title), server.getName()),
+                getString(R.string.settings_docu_delete_upload_server_dialog_expl),
+                getString(R.string.action_delete),
+                getString(R.string.action_cancel),
+                isConfirmed -> {
+                    tellaUploadServersPresenter.remove(server);
+                    if (server.getId() == serversPresenter.getAutoUploadServerId()) {
+                        turnOffAutoUpload();
+                    }
+                });
+        /*if (server.getId() == serversPresenter.getAutoUploadServerId()) {
             dialog = DialogsUtil.showDialog(this,
                     getString(R.string.settings_docu_delete_upload_server_dialog_expl),
                     getString(R.string.action_delete),
@@ -468,7 +479,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                         tellaUploadServersPresenter.remove(server);
                         dialog.dismiss();
                     }, null);
-        }
+        }*/
     }
 
     private void turnOffAutoUpload() {
@@ -596,7 +607,23 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
         if (server != null) {
             name.setText(server.getName());
-            options.setOnClickListener(view -> showDownloadedPopupMenu(server, row, options));
+            //options.setOnClickListener(view -> showDownloadedPopupMenu(server, row, options));
+            row.setOnClickListener(view -> {
+                BottomSheetUtils.showServerMenuSheet(
+                        this.getSupportFragmentManager(),
+                        server.getName(),
+                        getString(R.string.action_edit),
+                        getString(R.string.action_delete),
+                        action -> {
+                            if (action == BottomSheetUtils.Action.EDIT) {
+                                editServer(server);
+                            }
+                            if (action == BottomSheetUtils.Action.DELETE) {
+                                removeServer(server);
+                            }
+                        }
+                );
+            });
             /*name.setCompoundDrawablesRelativeWithIntrinsicBounds(
                     null,
                     null,
@@ -607,6 +634,22 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         }
         item.setTag(servers.indexOf(server));
         return item;
+    }
+
+    private void editServer(Server server){
+        if (server.getServerType() == ServerType.ODK_COLLECT) {
+            editCollectServer((CollectServer) server);
+        } else {
+            editTUServer((TellaUploadServer) server);
+        }
+    }
+
+    private void removeServer(Server server){
+        if (server.getServerType() == ServerType.ODK_COLLECT) {
+            removeCollectServer((CollectServer) server);
+        } else {
+            removeTUServer((TellaUploadServer) server);
+        }
     }
 
     private void showDownloadedPopupMenu(Server server, ViewGroup row, ImageView options) {
