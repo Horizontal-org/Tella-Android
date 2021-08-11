@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/wa_purple"
+    android:background="@color/space_cadet"
+    android:layout_marginTop="35dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <SeekBar
         android:id="@+id/panic_seek"

@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="17dp"
-    android:background="@color/wa_purple"
+    android:background="@color/space_cadet"
     android:paddingStart="17dp"
    >
     <TextView

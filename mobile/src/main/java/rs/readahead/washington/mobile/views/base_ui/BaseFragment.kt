@@ -33,7 +33,6 @@ abstract class BaseFragment : Fragment() {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    abstract fun initView(view: View)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.d("***** ${this.javaClass.name} onViewCreated")

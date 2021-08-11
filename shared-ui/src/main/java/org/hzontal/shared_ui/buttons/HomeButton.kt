@@ -45,14 +45,14 @@ class HomeButton @JvmOverloads constructor(
             val typedArray = context
                 .obtainStyledAttributes(
                     attrs,
-                    R.styleable.HomeJavaButton,
+                    R.styleable.HomeButton,
                     defStyleAttr,
                     defStyleAttr
                 )
 
             try {
-                titleText = typedArray.getResourceId(R.styleable.HomeJavaButton_mainTitleText, -1)
-                rightImg = typedArray.getResourceId(R.styleable.HomeJavaButton_rightImg, -1)
+                titleText = typedArray.getResourceId(R.styleable.HomeButton_mainTitleText, -1)
+                rightImg = typedArray.getResourceId(R.styleable.HomeButton_rightImg, -1)
 
             } finally {
                 typedArray.recycle()

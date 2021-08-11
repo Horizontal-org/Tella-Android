@@ -84,10 +84,11 @@ class HomeVaultFragment : BaseFragment() , VaultClickListener {
     override fun onFavoriteItemClickListener(form: XFormEntity) {
     }
 
-    override fun myFilesClickListener() {
+    override fun allFilesClickListener() {
+        nav().navigate(R.id.action_homeScreen_to_attachments_screen)
     }
 
-    override fun galleryClickListener() {
+    override fun imagesClickListener() {
     }
 
     override fun audioClickListener() {
@@ -97,5 +98,9 @@ class HomeVaultFragment : BaseFragment() , VaultClickListener {
     }
 
     override fun othersClickListener() {
+
+    }
+
+    override fun videoClickListener() {
     }
 }

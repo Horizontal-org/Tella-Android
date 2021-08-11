@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.views.fragment.vault.adapters
 
+import org.hzontal.shared_ui.buttons.HomeButton
 import rs.readahead.washington.mobile.data.entity.XFormEntity
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.VaultFile
 
@@ -10,9 +11,10 @@ interface VaultClickListener : FilesActionsListener {
 }
 
 interface FilesActionsListener{
-    fun myFilesClickListener()
-    fun galleryClickListener()
+    fun allFilesClickListener()
+    fun imagesClickListener()
     fun audioClickListener()
     fun documentsClickListener()
     fun othersClickListener()
+    fun videoClickListener()
 }

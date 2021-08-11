@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/wa_purple"
+    android:background="@color/space_cadet"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".views.fragment.VaultFragment">
 
@@ -22,9 +22,9 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:fitsSystemWindows="true"
-          app:contentScrim="@color/wa_purple"
+          app:contentScrim="@color/space_cadet"
           app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
-          android:background="@color/wa_purple"
+          android:background="@color/space_cadet"
           app:titleTextColor="@color/wa_white">
 
          <androidx.appcompat.widget.Toolbar
@@ -44,7 +44,7 @@
        android:layout_width="match_parent"
        android:layout_height="match_parent"
        android:id="@+id/vaultRecyclerView"
-       android:background="@color/wa_purple"
+       android:background="@color/space_cadet"
        app:layout_behavior="@string/appbar_scrolling_view_behavior"
        android:layout_marginBottom="55dp"
        />

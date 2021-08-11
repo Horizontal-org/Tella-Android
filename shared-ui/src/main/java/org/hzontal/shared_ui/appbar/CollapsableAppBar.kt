@@ -2,12 +2,11 @@ package org.hzontal.shared_ui.appbar
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import androidx.appcompat.widget.Toolbar
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.google.android.material.appbar.AppBarLayout
@@ -18,7 +17,7 @@ class CollapsableAppBar @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : ConstraintLayout(context, attrs, defStyleAttr){
+) : CollapsingToolbarLayout(context, attrs, defStyleAttr){
 
     @StringRes
     private var titleRes: Int = -1

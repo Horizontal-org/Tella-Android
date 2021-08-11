@@ -43,9 +43,9 @@ class VaultFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        view.findViewById<View>(R.id.settings).setOnClickListener {
+      /*  view.findViewById<View>(R.id.settings).setOnClickListener {
             nav().navigate(R.id.action_homeScreen_to_main_settings)
-        }
+        }*/
     }
 
     companion object {

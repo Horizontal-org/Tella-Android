@@ -59,7 +59,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
 
     fun renderList() {
         adapterScope.launch {
-            items = panicMode + favoriteForms + recentFiles  + actions
+            items =   favoriteForms + recentFiles  + actions + panicMode
             withContext(Dispatchers.Main) {
                 submitList(items)
             }
