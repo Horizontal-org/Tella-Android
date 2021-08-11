@@ -399,4 +399,16 @@
   <string name="action_next">Selanjutnya</string>
   <string name="meter">%f m</string>
   <string name="meter_per_second">%f m/s</string>
+  <string name="settings.sec_app.bar">Security</string>
+  <string name="settings.select_security">Security</string>
+    <string name="settings.select_customization">Customization</string>
+    <string name="settings.select_lock_timeout">Lock Timeout</string>
+    <string name="settings.sec_camera.mute_switch">Camera silent mode</string>
+    <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
+    <string name="settings.sec_quick.delete_switch">Quick delete</string>
+    <string name="settings.sec_quick.delete_expl">Shows a sliding button on the homescreen to quickly exit Tella in emergency situations.</string>
+    <string name="settings.servers.title_server.settings">Servers</string>
+    <string name="settings.servers.add_server.expl">Connect to servers to collect and send data to your organization</string>
+    <string name="settings.servers_auto.upload_action">Auto-upload to server</string>
+    <string name="settings.servers_auto.upload_action.expl">Upload your files to your Reports server as soon as they are captured (photos, videos, or audio recordings) or imported into Tella.</string>
 </resources>
