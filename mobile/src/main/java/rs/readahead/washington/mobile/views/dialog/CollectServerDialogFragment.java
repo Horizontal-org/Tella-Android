@@ -42,6 +42,7 @@ import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
 import rs.readahead.washington.mobile.mvp.contract.ICheckOdkServerContract;
 import rs.readahead.washington.mobile.mvp.presenter.CheckOdkServerPresenter;
+import rs.readahead.washington.mobile.views.custom.PanelToggleButton;
 import timber.log.Timber;
 
 
@@ -81,6 +82,10 @@ public class CollectServerDialogFragment extends AppCompatDialogFragment impleme
     TextView next;
     @BindView(R.id.back)
     ImageView back;
+    @BindView(R.id.toggle_button)
+    PanelToggleButton advancedToggle;
+    @BindView(R.id.advanced_panel)
+    ViewGroup advancedPanel;
 
     private Unbinder unbinder;
     private boolean validated = true;
@@ -130,9 +135,17 @@ public class CollectServerDialogFragment extends AppCompatDialogFragment impleme
             CollectServer server = (CollectServer) obj;
             name.setText(server.getName());
             url.setText(server.getUrl());
-            username.setText(server.getUsername());
-            password.setText(server.getPassword());
+
+            if (!server.getName().isEmpty() && !server.getPassword().isEmpty()){
+                advancedToggle.setOpen();
+                username.setText(server.getUsername());
+                password.setText(server.getPassword());
+            }
         }
+
+        advancedToggle.setOnStateChangedListener(open -> maybeShowAdvancedPanel());
+
+        maybeShowAdvancedPanel();
 
         cancel.setOnClickListener(v -> dismissDialog());
         back.setOnClickListener(v -> dismissDialog());
@@ -205,7 +218,12 @@ public class CollectServerDialogFragment extends AppCompatDialogFragment impleme
     @Override
     public void onServerCheckFailure(IErrorBundle errorBundle) {
         if (errorBundle.getCode() == HttpStatus.UNAUTHORIZED_401) {
-            usernameLayout.setError(getString(R.string.settings_docu_error_wrong_credentials));
+            if (username.getText().length() > 0 || password.getText().length() > 0) {
+                advancedToggle.setOpen();
+                usernameLayout.setError(getString(R.string.settings_docu_error_wrong_credentials));
+            } else {
+                urlLayout.setError(getString(R.string.settings_docu_error_auth_required));
+            }
         } else if (errorBundle.getException() instanceof UnknownHostException) {
             urlLayout.setError(getString(R.string.settings_docu_error_domain_doesnt_exit));
         } else {
@@ -362,5 +380,9 @@ public class CollectServerDialogFragment extends AppCompatDialogFragment impleme
         super.onCancel(dialog);
 
         onDialogDismiss();
+    }
+
+    private void maybeShowAdvancedPanel() {
+        advancedPanel.setVisibility(advancedToggle.isOpen() ? View.VISIBLE : View.GONE);
     }
 }

@@ -446,5 +446,6 @@
     <string name="action_disable">Disable</string>
     <string name="settings.servers_delete.server_dialog.title">Delete "%1$s" server?</string>
     <string name="action_edit">Edit</string>
-
+    <string name="settings.server_add.server_dialog_advanced">Advanced</string>
+    <string name="settings.docu_error_auth.required">Authentication required</string>
 </resources>

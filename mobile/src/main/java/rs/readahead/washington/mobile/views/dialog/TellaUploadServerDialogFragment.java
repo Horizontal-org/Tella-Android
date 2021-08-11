@@ -38,6 +38,7 @@ import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.mvp.contract.ICheckTUSServerContract;
 import rs.readahead.washington.mobile.mvp.presenter.CheckTUSServerPresenter;
+import rs.readahead.washington.mobile.views.custom.PanelToggleButton;
 import timber.log.Timber;
 
 
@@ -77,6 +78,10 @@ public class TellaUploadServerDialogFragment extends AppCompatDialogFragment imp
     TextView next;
     @BindView(R.id.back)
     ImageView back;
+    @BindView(R.id.toggle_button)
+    PanelToggleButton advancedToggle;
+    @BindView(R.id.advanced_panel)
+    ViewGroup advancedPanel;
 
     private Unbinder unbinder;
     private boolean validated = true;
@@ -125,9 +130,17 @@ public class TellaUploadServerDialogFragment extends AppCompatDialogFragment imp
             TellaUploadServer server = (TellaUploadServer) obj;
             name.setText(server.getName());
             url.setText(server.getUrl());
-            username.setText(server.getUsername());
-            password.setText(server.getPassword());
+
+            if (!server.getName().isEmpty() && !server.getPassword().isEmpty()){
+                advancedToggle.setOpen();
+                username.setText(server.getUsername());
+                password.setText(server.getPassword());
+            }
         }
+
+        advancedToggle.setOnStateChangedListener(open -> maybeShowAdvancedPanel());
+
+        maybeShowAdvancedPanel();
 
         cancel.setOnClickListener(v -> dismissDialog());
         back.setOnClickListener(v -> dismissDialog());
@@ -206,7 +219,12 @@ public class TellaUploadServerDialogFragment extends AppCompatDialogFragment imp
     @Override
     public void onServerCheckFailure(UploadProgressInfo.Status status) {
         if (status == UploadProgressInfo.Status.UNAUTHORIZED) {
-            usernameLayout.setError(getString(R.string.settings_docu_error_wrong_credentials));
+            if (username.getText().length() > 0 || password.getText().length() > 0) {
+                advancedToggle.setOpen();
+                usernameLayout.setError(getString(R.string.settings_docu_error_wrong_credentials));
+            } else {
+                urlLayout.setError(getString(R.string.settings_docu_error_auth_required));
+            }
         } else if (status == UploadProgressInfo.Status.UNKNOWN_HOST) {
             urlLayout.setError(getString(R.string.settings_docu_error_domain_doesnt_exit));
         } else {
@@ -351,5 +369,9 @@ public class TellaUploadServerDialogFragment extends AppCompatDialogFragment imp
         dismiss();
 
         onDialogDismiss();
+    }
+
+    private void maybeShowAdvancedPanel() {
+        advancedPanel.setVisibility(advancedToggle.isOpen() ? View.VISIBLE : View.GONE);
     }
 }

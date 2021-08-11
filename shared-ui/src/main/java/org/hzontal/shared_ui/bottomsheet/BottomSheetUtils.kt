@@ -303,8 +303,45 @@ object BottomSheetUtils {
         titleText: String?,
         actionEditLabel: String? = null,
         actionDeleteLabel: String? = null,
-        consumer: ActionSeleceted
+        consumer: ActionSeleceted,
+        titleText2: String?,
+        descriptionText: String?,
+        actionButtonLabel: String? = null,
+        cancelButtonLabel: String? = null,
+        consumer2: ActionConfirmed
     ) {
+
+        val customSheetFragment2 = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.standar_sheet_layout)
+            .cancellable(true)
+        customSheetFragment2.holder(GenericSheetHolder(), object :
+            CustomBottomSheetFragment.Binder<GenericSheetHolder> {
+            override fun onBind(holder: GenericSheetHolder) {
+                with(holder) {
+                    title.text = titleText2
+                    description.text = descriptionText
+                    actionButtonLabel?.let {
+                        actionButton.text = it
+                    }
+                    cancelButtonLabel?.let {
+                        cancelButton.text = it
+                    }
+
+                    actionButton.setOnClickListener {
+                        consumer2.accept(isConfirmed = true)
+                        customSheetFragment2.dismiss()
+                    }
+
+                    cancelButton.setOnClickListener {
+                        customSheetFragment2.dismiss()
+                    }
+
+                    actionButton.visibility =
+                        if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+
+                }
+            }
+        })
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.server_menu_sheet_layout)
@@ -327,7 +364,10 @@ object BottomSheetUtils {
                     }
 
                     actionDelete.setOnClickListener {
-                        consumer.accept(action = Action.DELETE)
+                        //consumer.accept(action = Action.DELETE)
+                        fragmentManager.beginTransaction()
+                            .add(customSheetFragment2, customSheetFragment2.tag)
+                            .commit()
                         customSheetFragment.dismiss()
                     }
                 }
