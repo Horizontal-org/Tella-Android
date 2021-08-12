@@ -177,6 +177,7 @@
                         android:layout_marginStart="@dimen/activity_vertical_margin"
                         android:layout_toEndOf="@id/delete_vault_title"
                         android:contentDescription="help"
+                        android:tooltipText="@string/settings.sec_delete.vault_tooltip"
                         android:src="@drawable/orange_help_24"
                         android:textColor="@color/wa_white" />
 
