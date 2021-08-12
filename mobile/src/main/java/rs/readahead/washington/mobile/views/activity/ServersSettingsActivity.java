@@ -57,20 +57,9 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         ICollectBlankFormListRefreshPresenterContract.IView,
         CollectServerDialogFragment.CollectServerDialogHandler,
         TellaUploadServerDialogFragment.TellaUploadServerDialogHandler {
-    //@BindView(R.id.anonymous_switch)
-   // SwitchCompat anonymousSwitch;
-   // @BindView(R.id.collect_switch)
-   // SwitchCompat collectSwitch;
+
     @BindView(R.id.collect_servers_list)
     LinearLayout listView;
-    //@BindView(R.id.servers_layout)
-    //View serversLayout;
-/*    @BindView(R.id.enable_collect_info)
-    TextView collectSwitchInfo;*/
-    /*@BindView(R.id.offline_mode)
-    SwitchCompat offlineSwitch;
-    @BindView(R.id.offline_switch_layout)
-    View offlineSwitchLayout;*/
     @BindView(R.id.upload_layout)
     View autoUploadSettingsView;
     @BindView(R.id.server_name)
@@ -81,8 +70,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     View autoUploadSwitchView;
     @BindView(R.id.auto_delete_switch)
     SwitchCompat autoDeleteSwitch;
-    /*@BindView(R.id.metadata_check)
-    AppCompatCheckBox metadataCheck;*/
     @BindView(R.id.selected_upload_server_layout)
     View serverSelectLayout;
     @BindView(R.id.activity_content_layout)
@@ -113,10 +100,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             actionBar.setTitle(R.string.settings_servers_title_server_settings);
         }
 
-        //setupAnonymousSwitch();
-        //setupCollectSwitch();
-        //setupOfflineSwitch();
-        //setupCollectSettingsView();
         setupAutoDeleteAndMetadataUploadCheck();
 
         servers = new ArrayList<>();
@@ -162,8 +145,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     @OnClick(R.id.selected_upload_server_layout)
     public void chooseAutoUploadServer(View view) {
-        showChooseAutoUploadServerDialog1(servers);
-        //showChooseAutoUploadServerDialog(tuServers);
+        showChooseAutoUploadServerDialog(tuServers);
     }
 
     @Override
@@ -181,13 +163,13 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         createServerViews(servers);
 
         tuServers = tellaUploadServers;
-        /*if (tuServers.size() > 0) {
+        if (tuServers.size() > 0) {
             autoUploadSwitchView.setVisibility(View.VISIBLE);
             setupAutoUploadSwitch();
             setupAutoUploadView();
         } else {
             autoUploadSwitchView.setVisibility(View.GONE);
-        }*/
+        }
     }
 
     @Override
@@ -262,14 +244,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         listView.removeAllViews();
         this.servers.addAll(collectServers);
         createServerViews(servers);
-
-        if (collectServers.size() > 0) {
-            autoUploadSwitchView.setVisibility(View.VISIBLE);
-            setupAutoUploadSwitch();
-            setupAutoUploadView1();
-        } else {
-            autoUploadSwitchView.setVisibility(View.GONE);
-        }
     }
 
     @Override
@@ -348,16 +322,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private void showChooseServerTypeDialog() {
-       /* dialog = DialogsUtil.showServerChoosingDialog(this,
-                serverType -> {
-                    if (serverType == ServerType.ODK_COLLECT) {
-                        showCollectServerDialog(null);
-                    } else {
-                        showTellaUploadServerDialog(null);
-                    }
-                    dialog.dismiss();
-                });*/
-
         BottomSheetUtils.showDualChoiceTypeSheet(this.getSupportFragmentManager(),
                 getString(R.string.settings_servers_add_server_dialog_title),
                 getString(R.string.settings_serv_add_server_selection_dialog_title),
@@ -372,29 +336,13 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 });
     }
 
-    private void showChooseAutoUploadServerDialog(List<TellaUploadServer> tellaUploadServers) {
-        dialog = DialogsUtil.chooseAutoUploadServerDialog(this,
-                server -> {
-                    setAutoUploadServer(server.getId(),server.getName());
-                    dialog.dismiss();
-                },
-                tellaUploadServers,
-                (dialog, which) -> turnOffAutoUpload());
-    }
-
-    private void showChooseAutoUploadServerDialog1(List<Server> tellaUploadServers) {
+    private void showChooseAutoUploadServerDialog(List<TellaUploadServer>  tellaUploadServers) {
 
         LinkedHashMap options = new LinkedHashMap<Long,String>();
         for (Server server : tellaUploadServers) {
             options.put(server.getId(), server.getName());
         }
-        /*dialog = DialogsUtil.chooseAutoUploadServerDialog1(this,
-                server -> {
-                    setAutoUploadServer(server);
-                    dialog.dismiss();
-                },
-                tellaUploadServers,
-                (dialog, which) -> turnOffAutoUpload());*/
+
         BottomSheetUtils.showChooseAutoUploadServerSheet(this.getSupportFragmentManager(),
                 getString(R.string.settings_servers_choose_auto_upload_server_dialog_title),
                 getString(R.string.settings_docu_auto_upload_server_selection_dialog_expl),
@@ -427,15 +375,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private void removeCollectServer(final CollectServer server) {
-        /*dialog = DialogsUtil.showDialog(this,
-                getString(R.string.settings_docu_delete_server_dialog_expl),
-                getString(R.string.action_delete),
-                getString(R.string.action_cancel),
-                (dialog, which) -> {
-                    collectServersPresenter.remove(server);
-                    dialog.dismiss();
-                }, null);*/
-
         BottomSheetUtils.showConfirmSheet(
                 this.getSupportFragmentManager(),
                 String.format(getResources().getString(R.string.settings_servers_delete_server_dialog_title), server.getName()),
@@ -458,28 +397,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                         turnOffAutoUpload();
                     }
                 });
-        /*if (server.getId() == serversPresenter.getAutoUploadServerId()) {
-            dialog = DialogsUtil.showDialog(this,
-                    getString(R.string.settings_docu_delete_upload_server_dialog_expl),
-                    getString(R.string.action_delete),
-                    getString(R.string.action_cancel),
-                    (dialog, which) -> {
-                        tellaUploadServersPresenter.remove(server);
-                        if (server.getId() == serversPresenter.getAutoUploadServerId()) {
-                            turnOffAutoUpload();
-                        }
-                        dialog.dismiss();
-                    }, null);
-        } else {
-            dialog = DialogsUtil.showDialog(this,
-                    getString(R.string.settings_docu_delete_auto_server_dialog_expl),
-                    getString(R.string.action_delete),
-                    getString(R.string.action_cancel),
-                    (dialog, which) -> {
-                        tellaUploadServersPresenter.remove(server);
-                        dialog.dismiss();
-                    }, null);
-        }*/
     }
 
     private void turnOffAutoUpload() {
@@ -530,11 +447,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         }
     }
 
-    /*private void setupAnonymousSwitch() {
-        anonymousSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> Preferences.setAnonymousMode(!isChecked));
-        anonymousSwitch.setChecked(!Preferences.isAnonymousMode());
-    }*/
-
     private void setupAutoDeleteAndMetadataUploadCheck() {
         autoDeleteSwitch.setChecked(Preferences.isAutoDeleteEnabled());
         autoDeleteSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -566,28 +478,10 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private void setupCollectSettingsView() {
-        if (Preferences.isCollectServersLayout()) {
-            //collectSwitch.setChecked(true);
-            //serversLayout.setVisibility(View.VISIBLE);
-            //offlineSwitchLayout.setVisibility(View.VISIBLE);
-        } else {
-           // collectSwitch.setChecked(false);
-            //serversLayout.setVisibility(View.GONE);
-            //offlineSwitchLayout.setVisibility(View.GONE);
+        if (!Preferences.isCollectServersLayout()) {
             autoUploadSwitchView.setVisibility(View.GONE);
         }
     }
-
-    /*private void setupCollectSwitch() {
-        collectSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (!isChecked && servers.size() > 0) {
-                showCollectDisableDialog();
-            } else {
-                //Preferences.setCollectServersLayout(isChecked);
-                setupCollectSettingsView();
-            }
-        });
-    }*/
 
     private void createServerViews(List<Server> servers) {
         for (Server server : servers) {
@@ -607,7 +501,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
         if (server != null) {
             name.setText(server.getName());
-            //options.setOnClickListener(view -> showDownloadedPopupMenu(server, row, options));
             row.setOnClickListener(view -> {
                 BottomSheetUtils.showServerMenuSheet(
                         this.getSupportFragmentManager(),
@@ -626,13 +519,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                         isConfirmed -> removeServer(server)
                 );
             });
-            /*name.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                    null,
-                    null,
-                    getContext().getResources().getDrawable(
-                            server.isChecked() ? R.drawable.ic_checked_green : R.drawable.watch_later_gray
-                    ),
-                    null);*/
         }
         item.setTag(servers.indexOf(server));
         return item;
@@ -681,48 +567,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         popup.show();
     }
 
-    /*private void showCollectDisableDialog() {
-        String message = getString(R.string.settings_docu_connect_to_servers_disable_dialog_expl);
-
-        dialog = DialogsUtil.showThreeOptionDialogWithTitle(this,
-                message,
-                getString(R.string.settings_docu_disable_servers_dialog_title),
-                getString(R.string.settings_docu_dialog_action_hide),
-                getString(R.string.action_cancel),
-                getString(R.string.action_delete),
-                (dialog, which) -> {  //hide
-                    Preferences.setCollectServersLayout(false);
-                    setupCollectSettingsView();
-                    dialog.dismiss();
-                },
-                (dialog, which) -> {  //cancel
-                    collectSwitch.setChecked(true);
-                    dialog.dismiss();
-                },
-                (dialog, which) -> {   //delete
-                    serversPresenter.deleteServers();
-                    dialog.dismiss();
-                });
-    }*/
-
-    /*private void setupOfflineSwitch() {
-        offlineSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> Preferences.setOfflineMode(isChecked));
-        offlineSwitch.setChecked(Preferences.isOfflineMode());
-    }
-
-    private void setupAutoUploadSwitch() {
-        autoUploadSwitch.setChecked(Preferences.isAutoUploadEnabled());
-        autoUploadSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            Preferences.setAutoUpload(isChecked);
-            if (isChecked) {
-                autoUploadSettingsView.setVisibility(View.VISIBLE);
-                setupAutoUploadView1();
-            } else {
-                autoUploadSettingsView.setVisibility(View.GONE);
-            }
-        });
-    }*/
-
     private void setupAutoUploadSwitch() {
         autoUploadSwitch.setChecked(Preferences.isAutoUploadEnabled());
         autoUploadSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -749,7 +593,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     private Unit enableAutoUpload() {
         autoUploadSwitch.setChecked(true);
         Preferences.setAutoUpload(true);
-        setupAutoUploadView1();
+        setupAutoUploadView();
         return Unit.INSTANCE;
     }
 
@@ -795,37 +639,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         }
 
         if (tuServers.size() > 1) {
-            serverSelectLayout.setVisibility(View.VISIBLE);
-        } else {
-            serverSelectLayout.setVisibility(View.GONE);
-        }
-    }
-
-    private void setupAutoUploadView1() {
-        if (!Preferences.isAutoUploadEnabled()) {
-            return;
-        }
-
-        autoUploadSettingsView.setVisibility(View.VISIBLE);
-
-        if (serversPresenter.getAutoUploadServerId() == -1) {  // check if auto upload server is set
-            if (servers.size() == 1) {
-                //setAutoUploadServer(tuServers.get(0).getId(), tuServers.get(0).getName());
-                setAutoUploadServer(servers.get(0).getId(), servers.get(0).getName());
-            } else {
-                showChooseAutoUploadServerDialog1(servers);
-            }
-        } else {
-            for (int i = 0; i < servers.size(); i++) {
-                if (servers.get(i).getId() == serversPresenter.getAutoUploadServerId()) {
-                    //setAutoUploadServer(tuServers.get(i).getId(), tuServers.get(i).getName());
-                    setAutoUploadServer(servers.get(i).getId(), servers.get(i).getName());
-                    break;
-                }
-            }
-        }
-
-        if (servers.size() > 1) {
             serverSelectLayout.setVisibility(View.VISIBLE);
         } else {
             serverSelectLayout.setVisibility(View.GONE);

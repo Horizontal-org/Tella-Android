@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -295,8 +294,8 @@ public class CollectServerDialogFragment extends AppCompatDialogFragment impleme
         validated = true;
         validateRequired(name, nameLayout);
         validateUrl(url, urlLayout);
-        validateRequired(username, usernameLayout);
-        validateRequired(password, passwordLayout);
+        //validateRequired(username, usernameLayout);
+        //validateRequired(password, passwordLayout);
 
         internetError.setVisibility(View.GONE);
     }
