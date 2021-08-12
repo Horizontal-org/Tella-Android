@@ -5,7 +5,7 @@
     android:id="@+id/rootPattern"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/wa_purple"
+    android:background="@color/space_cadet"
     android:divider="?dividerHorizontal"
     android:orientation="vertical"
     android:showDividers="middle">
@@ -59,7 +59,7 @@
         app:pl_aspect="square"
         app:pl_errorColor="@color/wa_red_error"
         app:pl_regularColor="@color/wa_white"
-        app:pl_successColor="@color/wa_orange" />
+        app:pl_successColor="@color/tigers_eye" />
 
 
     <TextView

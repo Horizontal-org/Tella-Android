@@ -29,7 +29,7 @@ class OnBoardSetUpFragment : BaseFragment() {
         initView(view)
     }
 
-    private fun initView(view: View) {
+    override fun initView(view: View) {
         fullSetupBtn = view.findViewById(R.id.fullSetupBtn)
         quickSetupBtn = view.findViewById(R.id.quickSetupBtn)
         linkTv = view.findViewById(R.id.link)

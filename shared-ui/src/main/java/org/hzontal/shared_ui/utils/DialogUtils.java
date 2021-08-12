@@ -15,7 +15,7 @@ import org.hzontal.shared_ui.R;
 public class DialogUtils {
 
     public static void showBottomMessage(Activity context, String msg, Boolean isError) {
-        showBottomMessage(context, msg, isError ? R.color.wa_red_error : R.color.wa_orange);
+        showBottomMessage(context, msg, isError ? R.color.wa_red_error : R.color.tigers_eye);
     }
 
     private static void showBottomMessage(Activity context, String msg, @ColorRes int colorRes) {
