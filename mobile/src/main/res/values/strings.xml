@@ -32,7 +32,7 @@
     <string name="action_ok">OK</string>
     <string name="collect.form_toast_validation.error">This response is invalid</string>
     <string name="collect.form_error_response.mandatory">This response is mandatory.</string>
-    <string name="homescreen_heading_quick.delete">Quick Delete mode activation</string>
+    <string name="homescreen_heading_quick.delete">Quick Delete\nmode activation</string>
     <string name="permission_dialog.expl_mic">In order to record audio, Tella needs permission to access your microphone.</string>
     <string name="settings.about_list.item_privacy.policy">Privacy policy</string>
     <string name="recorder_toast_fail.recording">There was an error recording the audio. Please try again</string>

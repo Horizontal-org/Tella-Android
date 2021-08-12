@@ -49,4 +49,6 @@
        android:layout_marginBottom="55dp"
        />
 
+   <include layout="@layout/content_panic_mode_view" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

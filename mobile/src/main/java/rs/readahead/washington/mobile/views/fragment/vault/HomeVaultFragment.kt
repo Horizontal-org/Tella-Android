@@ -1,7 +1,9 @@
 package rs.readahead.washington.mobile.views.fragment.vault
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.widget.RelativeLayout
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -12,16 +14,25 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.entity.XFormEntity
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
+import rs.readahead.washington.mobile.views.custom.CountdownImageView
+import rs.readahead.washington.mobile.views.custom.CountdownTextView
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.MockVaultFiles
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.VaultFile
 
-class HomeVaultFragment : BaseFragment() , VaultClickListener {
+class HomeVaultFragment : BaseFragment() ,IHomeVaultPresenter.IView, VaultClickListener {
     private lateinit var toolbar: Toolbar
     private lateinit var collapsingToolbar : CollapsingToolbarLayout
     private lateinit var vaultRecyclerView : RecyclerView
+    private lateinit var panicModeView : RelativeLayout
+    private lateinit var countDownTextView : CountdownTextView
+    private var timerDuration = 0
+    private var panicActivated = false
+
+
     private val vaultAdapter by lazy {VaultAdapter(this)}
+    private lateinit var homeVaultPresenter : HomeVaultPresenter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -40,9 +51,12 @@ class HomeVaultFragment : BaseFragment() , VaultClickListener {
     }
 
     override fun initView(view: View){
+        homeVaultPresenter = HomeVaultPresenter(this)
         toolbar = view.findViewById(R.id.toolbar)
         collapsingToolbar = view.findViewById(R.id.collapsing_toolbar)
         vaultRecyclerView = view.findViewById(R.id.vaultRecyclerView)
+        panicModeView = view.findViewById(R.id.panic_mode_view)
+        countDownTextView = view.findViewById(R.id.countdown_timer)
         setUpToolbar()
         initData()
     }
@@ -58,6 +72,8 @@ class HomeVaultFragment : BaseFragment() , VaultClickListener {
             adapter = vaultAdapter
             layoutManager = LinearLayoutManager(activity)
         }
+        timerDuration = resources.getInteger(R.integer.panic_countdown_duration)
+
     }
 
     private fun setUpToolbar() {
@@ -76,6 +92,7 @@ class HomeVaultFragment : BaseFragment() , VaultClickListener {
     }
 
     override fun onPanicModeSwipeListener(progress : Int) {
+        showPanicScreens()
     }
 
     override fun onRecentFilesItemClickListener(vaultFile: VaultFile) {
@@ -103,4 +120,25 @@ class HomeVaultFragment : BaseFragment() , VaultClickListener {
 
     override fun videoClickListener() {
     }
+
+    //@NeedsPermission(Manifest.permission.SEND_SMS)
+   private fun showPanicScreens() {
+        // really show panic screen
+        collapsingToolbar.visibility = View.GONE
+        (activity as MainActivity).hideBottomNavigation(false)
+
+        panicModeView.visibility = View.VISIBLE
+        panicModeView.alpha = 1f
+        countDownTextView.start(
+            timerDuration
+        ) {  }
+    }
+
+    private fun stopPanicking() {
+        countDownTextView.cancel()
+        countDownTextView.setCountdownNumber(timerDuration)
+        panicActivated = false
+       // showMainControls()
+    }
+
 }

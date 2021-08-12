@@ -67,8 +67,8 @@ public class MainActivity extends MetadataActivity implements
     Toolbar toolbar;*/
     @BindView(R.id.panic_mode_view)
     RelativeLayout panicCountdownView;
-    @BindView(R.id.countdown_timer)
-    CountdownImageView countdownImage;
+   /* @BindView(R.id.countdown_timer)
+    CountdownImageView countdownImage;*/
     @BindView(R.id.camera_tools_container)
     View cameraToolsContainer;
     @BindView(R.id.home_screen_gradient)
@@ -90,6 +90,7 @@ public class MainActivity extends MetadataActivity implements
     private HomeScreenPresenter homeScreenPresenter;
     private ProgressDialog progressDialog;
     private OrientationEventListener mOrientationEventListener;
+    private BottomNavigationView btmNavMain;
 
     private int timerDuration;
     private long numOfCollectServers;
@@ -134,7 +135,7 @@ public class MainActivity extends MetadataActivity implements
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_nav_host);
         assert navHostFragment != null;
         NavController navController = navHostFragment.getNavController();
-        BottomNavigationView btmNavMain = findViewById(R.id.btm_nav_main);
+        btmNavMain = findViewById(R.id.btm_nav_main);
         //setSupportActionBar(toolbar);
         AppBarConfiguration appBarConfiguration =
                 new AppBarConfiguration.Builder(R.id.homeScreen,R.id.cameraScreen,R.id.reportsScreen,R.id.micScreen,R.id.formScreen).build();
@@ -179,8 +180,8 @@ public class MainActivity extends MetadataActivity implements
     }
 
     private void stopPanicking() {
-        countdownImage.cancel();
-        countdownImage.setCountdownNumber(timerDuration);
+       // countdownImage.cancel();
+       // countdownImage.setCountdownNumber(timerDuration);
         panicActivated = false;
         resetSeekBar(panicSeekBar);
         showMainControls();
@@ -448,9 +449,9 @@ public class MainActivity extends MetadataActivity implements
 
         mOrientationEventListener.disable();
 
-        if (countdownImage.isCounting()) {
+      /*  if (countdownImage.isCounting()) {
             panicActivated = true;
-        }
+        }*/
     }
 
     @Override
@@ -471,7 +472,7 @@ public class MainActivity extends MetadataActivity implements
         // really show panic screen
         panicCountdownView.setVisibility(View.VISIBLE);
         panicCountdownView.setAlpha(1);
-        countdownImage.start(timerDuration, this::executePanicMode);
+      //  countdownImage.start(timerDuration, this::executePanicMode);
     }
 
     private void hideMainControls() {
@@ -693,5 +694,8 @@ public class MainActivity extends MetadataActivity implements
             buttonRecord.setBackground(getResources().getDrawable(R.drawable.central_button_background));
             buttonUploads.setBackground(getResources().getDrawable(R.drawable.round_right_button_background));
         }
+    }
+    public void hideBottomNavigation(boolean isVisible){
+        btmNavMain.setVisibility(isVisible ? View.VISIBLE : View.GONE  );
     }
 }
