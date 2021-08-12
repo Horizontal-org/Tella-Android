@@ -110,7 +110,7 @@ object BottomSheetUtils {
             .page(R.layout.dual_choose_layout)
             .cancellable(true)
             .fullScreen()
-            .statusBarColor(R.color.wa_purple)
+            .statusBarColor(R.color.space_cadet)
         customSheetFragment.holder(DualChoiceSheetHolder(), object :
             CustomBottomSheetFragment.Binder<DualChoiceSheetHolder> {
             override fun onBind(holder: DualChoiceSheetHolder) {

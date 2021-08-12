@@ -17,5 +17,9 @@ class ChooseServerTypeFragment : BaseFragment() {
         return view
     }
 
+    override fun initView(view: View) {
+        TODO("Not yet implemented")
+    }
+
 
 }
