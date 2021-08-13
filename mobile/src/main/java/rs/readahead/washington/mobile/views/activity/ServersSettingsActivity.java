@@ -511,12 +511,14 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                             if (action == BottomSheetUtils.Action.EDIT) {
                                 editServer(server);
                             }
+                            if (action == BottomSheetUtils.Action.DELETE) {
+                                removeServer(server);
+                            }
                         },
                         String.format(getResources().getString(R.string.settings_servers_delete_server_dialog_title), server.getName()),
                         getString(R.string.settings_docu_delete_server_dialog_expl),
                         getString(R.string.action_delete),
-                        getString(R.string.action_cancel),
-                        isConfirmed -> removeServer(server)
+                        getString(R.string.action_cancel)
                 );
             });
         }

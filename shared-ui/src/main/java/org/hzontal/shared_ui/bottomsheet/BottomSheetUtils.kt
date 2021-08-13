@@ -307,8 +307,7 @@ object BottomSheetUtils {
         titleText2: String?,
         descriptionText: String?,
         actionButtonLabel: String? = null,
-        cancelButtonLabel: String? = null,
-        consumer2: ActionConfirmed
+        cancelButtonLabel: String? = null
     ) {
 
         val customSheetFragment2 = CustomBottomSheetFragment.with(fragmentManager)
@@ -328,7 +327,7 @@ object BottomSheetUtils {
                     }
 
                     actionButton.setOnClickListener {
-                        consumer2.accept(isConfirmed = true)
+                        consumer.accept(action = Action.DELETE)
                         customSheetFragment2.dismiss()
                     }
 
