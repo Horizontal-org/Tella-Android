@@ -73,6 +73,7 @@ dependencies {
     // implementation "com.google.android.gms:play-services-gcm:${googlePlayServicesVersion}" // android-job, optional
 
     implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}"
     implementation "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
     implementation("com.squareup.retrofit2:converter-simplexml:${retrofitVersion}") {
         exclude group: 'xpp3', module: 'xpp3'

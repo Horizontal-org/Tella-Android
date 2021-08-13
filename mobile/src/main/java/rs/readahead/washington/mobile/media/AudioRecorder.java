@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.media;
 
-import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaCodec;
@@ -8,30 +7,27 @@ import android.media.MediaCodecInfo;
 import android.media.MediaFormat;
 import android.media.MediaRecorder;
 
+import com.hzontal.tella_vault.BaseVault;
+import com.hzontal.tella_vault.VaultFile;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.security.DigestOutputStream;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import androidx.annotation.Nullable;
-
-import com.hzontal.tella_vault.VaultFile;
-import com.hzontal.utils.VaultUtils;
-
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import rs.readahead.washington.mobile.util.StringUtils;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
 
 
 @SuppressWarnings("MethodOnlyUsedFromInnerClass")
 public class AudioRecorder {
-    private Executor executor;
-    private Context context;
+    private final Executor executor;
 
     private boolean recording;
     private boolean cancelled;
@@ -41,7 +37,7 @@ public class AudioRecorder {
     private long duration = 0L;
 
     @Nullable
-    private AudioRecordInterface caller;
+    private final AudioRecordInterface caller;
     private static final long REFRESH_TIME_MS = 500;
     private long callTime;
 
@@ -56,8 +52,7 @@ public class AudioRecorder {
     }
 
 
-    public AudioRecorder(Context context, @Nullable AudioRecordInterface caller) {
-        this.context = context.getApplicationContext();
+    public AudioRecorder(@Nullable AudioRecordInterface caller) {
         this.caller = caller;
         this.executor = Executors.newFixedThreadPool(1);
         recording = true;
@@ -66,26 +61,28 @@ public class AudioRecorder {
 
     public Observable<VaultFile> startRecording() {
         return Observable.fromCallable(() -> {
-            VaultFile vaultFile = VaultUtils.INSTANCE.newAac();
+            VaultFile vaultFile = MyApplication.rxVault.builder()
+                    .setExtension("aac")
+                    .setMimeType("audio/aac")
+                    .build()
+                    .blockingGet();
 
-            DigestOutputStream outputStream = MediaFileHandler.getOutputStream(context, vaultFile);
+            BaseVault.VaultOutputStream outputStream = MyApplication.rxVault.getOutStream(vaultFile);
 
             if (outputStream == null) {
                 return null;
             }
 
             startTime = Util.currentTimestamp();
+
             encode(outputStream); // heigh-ho, heigh-ho..
 
             if (isCancelled()) {
                 MediaFileHandler.deleteFile(vaultFile);
                 return null;
             }
-            vaultFile.size = MediaFileHandler.getSize(vaultFile);
-            vaultFile.hash = StringUtils.hexString(outputStream.getMessageDigest().digest());
-            vaultFile.duration = duration;
 
-            return vaultFile;
+            return outputStream.complete(duration);
         }).subscribeOn(Schedulers.from(executor)).observeOn(AndroidSchedulers.mainThread());
     }
 

@@ -13,14 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
-
 import com.hzontal.tella_vault.IVaultDatabase;
-import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.VaultFile;
 
 import java.util.Collections;
@@ -28,6 +21,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -38,11 +36,8 @@ import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.OnShowRationale;
 import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
-import rs.readahead.washington.mobile.BuildConfig;
-import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
-import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.media.AudioRecorder;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IAudioCapturePresenterContract;
@@ -94,7 +89,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     private TellaFileUploadSchedulePresenter uploadPresenter;
     private AudioCapturePresenter presenter;
     private MetadataAttacher metadataAttacher;
-    private CompositeDisposable disposable = new CompositeDisposable();
+    private final CompositeDisposable disposable = new CompositeDisposable();
     private AlertDialog rationaleDialog;
 
 
@@ -237,14 +232,15 @@ public class AudioRecordActivity2 extends MetadataActivity implements
             handlingMediaFile = null;
             cancelRecorder();
 
-            audioRecorder = new AudioRecorder(this, this);
+            audioRecorder = new AudioRecorder(this);
             disposable.add(audioRecorder.startRecording()
                     .subscribe(this::onRecordingStopped, throwable -> {
                         Timber.d(throwable);
-                        onRecordingError();})
+                        onRecordingError();
+                    })
             );
         } else {
-            canclePauseRecorder();
+            cancelPauseRecorder();
         }
 
         disableRecord();
@@ -357,8 +353,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void onRecordingStopped(VaultFile vaultFile) {
-        Timber.d("****VaultFile Output%s", vaultFile.toString());
+    private void onRecordingStopped(@Nullable VaultFile vaultFile) {
         if (vaultFile == null) {
             handlingMediaFile = null;
 
@@ -374,7 +369,8 @@ public class AudioRecordActivity2 extends MetadataActivity implements
             enablePlay();
             enableRecord();
 
-            returnData();
+            // returnData();
+            onAddSuccess(vaultFile);
         }
     }
 
@@ -390,11 +386,11 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         showToast(R.string.recorder_toast_fail_recording);
     }
 
-    private void returnData() {
-        if (handlingMediaFile != null) {
-            presenter.addMediaFile(handlingMediaFile);
-        }
-    }
+//    private void returnData() {
+//        if (handlingMediaFile != null) {
+//            presenter.addMediaFile(handlingMediaFile);
+//        }
+//    }
 
     private void disableRecord() {
         mRecord.setBackground(getContext().getResources().getDrawable(R.drawable.white_circle_background));
@@ -458,7 +454,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         }
     }
 
-    private void canclePauseRecorder() {
+    private void cancelPauseRecorder() {
         if (audioRecorder != null) {
             audioRecorder.cancelPause();
         }

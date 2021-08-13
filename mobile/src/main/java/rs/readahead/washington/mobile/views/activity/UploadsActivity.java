@@ -8,18 +8,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.utils.MediaFile;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
@@ -28,7 +27,6 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent;
-import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
@@ -67,7 +65,6 @@ public class UploadsActivity extends BaseLockActivity implements
     @BindView(R.id.stop_outlined)
     StopResumeUploadButton stopOutlined;
     private TellaFileUploadPresenter presenter;
-    private KeyDataSource keyDataSource;
     private EventCompositeDisposable disposables;
     private SectionedRecyclerViewAdapter sectionedAdapter;
     private AlertDialog alertDialog;
@@ -94,8 +91,6 @@ public class UploadsActivity extends BaseLockActivity implements
 
         setupToolbar();
 
-        // cacheWordDataSource = new CacheWordDataSource(this);
-        keyDataSource = MyApplication.getKeyDataSource();
         disposables = MyApplication.bus().createCompositeDisposable();
 
         disposables.wire(FileUploadProgressEvent.class, new EventObserver<FileUploadProgressEvent>() {
@@ -342,7 +337,7 @@ public class UploadsActivity extends BaseLockActivity implements
     }
 
     private void insertSection(List<FileUploadInstance> setInstances, boolean uploaded, long set) {
-        UploadSection section = new UploadSection(getContext(), new MediaFileHandler(keyDataSource), setInstances, this, set);
+        UploadSection section = new UploadSection(getContext(), new MediaFileHandler(), setInstances, this, set);
         if (!uploaded) {
             setUploadingHeader(setInstances);
             uploadnigList = setInstances;

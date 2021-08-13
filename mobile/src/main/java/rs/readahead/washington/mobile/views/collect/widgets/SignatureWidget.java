@@ -12,20 +12,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
-import com.hzontal.utils.VaultUtils;
 
 import org.javarosa.form.api.FormEntryPrompt;
 
+import androidx.annotation.NonNull;
+import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.mvp.contract.ICollectAttachmentMediaFilePresenterContract;
@@ -55,7 +53,6 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
     private RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
 
     public SignatureWidget(Context context, FormEntryPrompt formEntryPrompt) {
-
         super(context, formEntryPrompt);
 
         setFilename(formEntryPrompt.getAnswerText());
@@ -80,8 +77,8 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
 
     @Override
     public String setBinaryData(@NonNull Object data) {
-        VaultFile mediaFile = (VaultFile) data;
-        setFilename(mediaFile.name);
+        VaultFile vaultFile = (VaultFile) data;
+        setFilename(vaultFile.id);
         showPreview();
         return getFilename();
     }
@@ -99,8 +96,7 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
         thumbView = view.findViewById(R.id.thumbView);
         fileSize = view.findViewById(R.id.fileSize);
 
-        KeyDataSource keyDataSource = MyApplication.getKeyDataSource();
-        MediaFileHandler mediaFileHandler = new MediaFileHandler(keyDataSource);
+        MediaFileHandler mediaFileHandler = new MediaFileHandler();
         VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
 
         glide = Glide.with(getContext()).using(glideLoader);
@@ -128,10 +124,13 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
             Activity activity = (Activity) getContext();
             FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
 
-            VaultFile mediaFile = getFilename() != null ? VaultUtils.INSTANCE.fromFilename(getFilename()) : null;
+            VaultFile vaultFile = getFilename() != null ? MyApplication.rxVault
+                    .get(getFilename())
+                    .subscribeOn(Schedulers.io())
+                    .blockingGet() : null;
 
             activity.startActivityForResult(new Intent(getContext(), SignatureActivity.class)
-                            .putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, mediaFile),
+                            .putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, vaultFile),
                     C.MEDIA_FILE_ID
             );
         } catch (Exception e) {

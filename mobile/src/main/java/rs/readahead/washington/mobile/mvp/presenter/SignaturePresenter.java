@@ -17,22 +17,16 @@ import rs.readahead.washington.mobile.mvp.contract.ISignaturePresenterContract;
 
 public class SignaturePresenter implements ISignaturePresenterContract.IPresenter {
     private ISignaturePresenterContract.IView view;
-    private CompositeDisposable disposables = new CompositeDisposable();
-    private KeyDataSource keyDataSource;
-    private MediaFileHandler mediaFileHandler;
-
+    private final CompositeDisposable disposables = new CompositeDisposable();
 
     public SignaturePresenter(ISignaturePresenterContract.IView view) {
         this.view = view;
-        this.keyDataSource = MyApplication.getKeyDataSource();
-        this.mediaFileHandler = new MediaFileHandler(keyDataSource);
     }
 
     @Override
     public void addPngImage(final byte[] png) {
         disposables.add(
-                Observable.fromCallable(() -> MediaFileHandler.savePngImage(view.getContext(), png))
-                        .flatMap((Function<VaultFile, ObservableSource<VaultFile>>) bundle -> mediaFileHandler.saveVaultFile(bundle))
+                Observable.fromCallable(() -> MediaFileHandler.savePngImage(png))
                         .subscribeOn(Schedulers.io())
                         .doOnSubscribe(disposable -> view.onAddingStart())
                         .observeOn(AndroidSchedulers.mainThread())

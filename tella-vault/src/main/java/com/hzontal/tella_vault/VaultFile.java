@@ -1,6 +1,5 @@
 package com.hzontal.tella_vault;
 
-
 import java.io.Serializable;
 
 public class VaultFile  implements Serializable {

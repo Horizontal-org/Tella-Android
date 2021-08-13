@@ -38,6 +38,10 @@ public class RxVaultFileBuilder extends BaseVaultFileBuilder<RxVaultFileBuilder,
         return vault.create(this);
     }
 
+    public Single<VaultFile> build(String parentId) {
+        return vault.create(this, parentId);
+    }
+
     @Override
     protected RxVaultFileBuilder getThis() {
         return this;

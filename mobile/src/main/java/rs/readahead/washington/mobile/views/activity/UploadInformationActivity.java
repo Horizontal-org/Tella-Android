@@ -9,17 +9,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.utils.MediaFile;
 
 import java.util.List;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.MyApplication;
@@ -27,7 +26,6 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent;
-import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
@@ -57,8 +55,6 @@ public class UploadInformationActivity extends BaseLockActivity implements
     private long set;
     private List<FileUploadInstance> instances;
 
-    // private CacheWordDataSource cacheWordDataSource;
-    private KeyDataSource keyDataSource;
     private TellaFileUploadPresenter presenter;
     private UploadInformationRecycleViewAdapter adapter;
 
@@ -68,8 +64,6 @@ public class UploadInformationActivity extends BaseLockActivity implements
 
         setContentView(R.layout.activity_upload_information);
         ButterKnife.bind(this);
-
-        keyDataSource = MyApplication.getKeyDataSource();
 
         EventCompositeDisposable disposables = MyApplication.bus().createCompositeDisposable();
 
@@ -81,7 +75,7 @@ public class UploadInformationActivity extends BaseLockActivity implements
         });
 
 
-        adapter = new UploadInformationRecycleViewAdapter(this, new MediaFileHandler(keyDataSource), this);
+        adapter = new UploadInformationRecycleViewAdapter(this, new MediaFileHandler(), this);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(adapter);

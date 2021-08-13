@@ -11,11 +11,12 @@ import android.widget.LinearLayout;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
-import com.hzontal.utils.VaultUtils;
 
 import org.javarosa.form.api.FormEntryPrompt;
 
 import androidx.annotation.NonNull;
+import io.reactivex.schedulers.Schedulers;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
@@ -118,10 +119,13 @@ public class VideoWidget extends MediaFileBinaryWidget {
             Activity activity = (Activity) getContext();
             FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
 
-            VaultFile mediaFile = getFilename() != null ? VaultUtils.INSTANCE.fromFilename(getFilename()) : null;
+            VaultFile vaultFile = getFilename() != null ? MyApplication.rxVault
+                    .get(getFilename())
+                    .subscribeOn(Schedulers.io())
+                    .blockingGet() : null;
 
             activity.startActivityForResult(new Intent(getContext(), QuestionAttachmentActivity.class)
-                            .putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, mediaFile)
+                            .putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, vaultFile)
                             .putExtra(QuestionAttachmentActivity.MEDIA_FILES_FILTER, IMediaFileRecordRepository.Filter.VIDEO),
                     C.MEDIA_FILE_ID);
         } catch (Exception e) {

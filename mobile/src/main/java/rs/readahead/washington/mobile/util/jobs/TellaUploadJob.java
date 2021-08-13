@@ -1,7 +1,5 @@
 package rs.readahead.washington.mobile.util.jobs;
 
-import androidx.annotation.NonNull;
-
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
@@ -15,7 +13,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import io.reactivex.Flowable;
+import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent;
 import rs.readahead.washington.mobile.data.database.DataSource;
@@ -35,7 +35,7 @@ public class TellaUploadJob extends Job {
     static final String TAG = "TellaUploadJob";
     private static boolean running = false;
     private Job.Result exitResult = null;
-    private HashMap<String, VaultFile> fileMap = new HashMap<>();
+    private final HashMap<String, VaultFile> fileMap = new HashMap<>();
     private DataSource dataSource;
     private TellaUploadServer server;
 
@@ -65,13 +65,14 @@ public class TellaUploadJob extends Job {
         if (Preferences.isAutoUploadPaused() || Preferences.isOfflineMode()) {
             return exit(Result.RESCHEDULE);
         }
+
         byte[] key;
         try {
             if ((key = MyApplication.getMainKeyHolder().get().getKey().getEncoded()) == null) {
                 return exit(Result.RESCHEDULE);
             }
         } catch (LifecycleMainKey.MainKeyUnavailableException e) {
-            e.printStackTrace();
+            Timber.d(e);
             return exit(Result.RESCHEDULE);
         }
 
@@ -185,10 +186,12 @@ public class TellaUploadJob extends Job {
     }
 
     private void deleteMediaFile(String id) {
-        VaultFile deleted = dataSource.deleteMediaFile(fileMap.get(id), m ->
-                MediaFileHandler.deleteMediaFile(getContext(), m)).blockingGet();
-
-        Timber.d("Deleted file %s", deleted.name);
+        if (MyApplication.rxVault.get(id)
+                .flatMap(vaultFile -> MyApplication.rxVault.delete(vaultFile))
+                .subscribeOn(Schedulers.io())
+                .blockingGet()) {
+            Timber.d("Deleted file %s", id);
+        }
     }
 
     private void postProgressEvent(UploadProgressInfo progress) {

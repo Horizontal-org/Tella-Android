@@ -21,9 +21,7 @@ import com.hzontal.utils.MediaFile;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.mvp.contract.ICollectAttachmentMediaFilePresenterContract;
@@ -56,8 +54,8 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
     TextView audioDuration;
 
     private VaultFile vaultFile;
-    private CollectAttachmentMediaFilePresenter presenter;
-    private RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
+    private final CollectAttachmentMediaFilePresenter presenter;
+    private final RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
 
 
     public CollectAttachmentPreviewView(Context context) {
@@ -74,8 +72,7 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
         inflate(getContext(), R.layout.collect_attachemnt_preview_view, this);
 
         ButterKnife.bind(this);
-        KeyDataSource keyDataSource = MyApplication.getKeyDataSource();
-        MediaFileHandler mediaFileHandler = new MediaFileHandler(keyDataSource);
+        MediaFileHandler mediaFileHandler = new MediaFileHandler();
         VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
 
         glide = Glide.with(getContext()).using(glideLoader);
@@ -96,42 +93,39 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
     public void onGetMediaFileSuccess(VaultFile vaultFile) {
         this.vaultFile = vaultFile;
 
-            if(MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
-                thumbGradient.setVisibility(GONE);
-                thumbView.setId(QuestionWidget.newUniqueId());
-                thumbView.setOnClickListener(v -> showVideoViewerActivity());
+        if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
+            thumbGradient.setVisibility(GONE);
+            thumbView.setId(QuestionWidget.newUniqueId());
+            thumbView.setOnClickListener(v -> showVideoViewerActivity());
 
-                showMediaFileInfo();
-                loadThumbnail();
-                videoDuration.setText(Util.getShortVideoDuration((int) (vaultFile.duration / 1000)));
+            showMediaFileInfo();
+            loadThumbnail();
+            videoDuration.setText(Util.getShortVideoDuration((int) (vaultFile.duration / 1000)));
 
-                audioInfo.setVisibility(GONE);
-                videoInfo.setVisibility(VISIBLE);
-            }
-            else if(MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
-                thumbGradient.setVisibility(VISIBLE);
-                thumbView.setImageResource(R.drawable.ic_mic_gray);
-                thumbView.setOnClickListener(v -> showAudioPlayActivity());
+            audioInfo.setVisibility(GONE);
+            videoInfo.setVisibility(VISIBLE);
+        } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
+            thumbGradient.setVisibility(VISIBLE);
+            thumbView.setImageResource(R.drawable.ic_mic_gray);
+            thumbView.setOnClickListener(v -> showAudioPlayActivity());
 
-                showMediaFileInfo();
-                audioDuration.setText(Util.getShortVideoDuration((int) (vaultFile.duration / 1000)));
+            showMediaFileInfo();
+            audioDuration.setText(Util.getShortVideoDuration((int) (vaultFile.duration / 1000)));
 
-                audioInfo.setVisibility(VISIBLE);
-                videoInfo.setVisibility(GONE);
-            }
+            audioInfo.setVisibility(VISIBLE);
+            videoInfo.setVisibility(GONE);
+        } else if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
+            thumbGradient.setVisibility(GONE);
+            thumbView.setId(QuestionWidget.newUniqueId());
+            thumbView.setOnClickListener(v -> showPhotoViewerActivity());
 
-            else if(MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
-                thumbGradient.setVisibility(GONE);
-                thumbView.setId(QuestionWidget.newUniqueId());
-                thumbView.setOnClickListener(v -> showPhotoViewerActivity());
+            loadThumbnail();
+            showMediaFileInfo();
 
-                loadThumbnail();
-                showMediaFileInfo();
-
-                audioInfo.setVisibility(GONE);
-                videoInfo.setVisibility(GONE);
-            }
+            audioInfo.setVisibility(GONE);
+            videoInfo.setVisibility(GONE);
         }
+    }
 
 
     @Override

@@ -93,6 +93,16 @@ public class Vault extends BaseVault {
     }
 
     /**
+     * Updates VaultFile MetaData.
+     * @param vaultFile VaultFile to update.
+     * @param metadata New Metadata.
+     * @return Updated VaultFile.
+     */
+    public VaultFile updateMetadata(VaultFile vaultFile, Metadata metadata) {
+        return baseUpdateMetadata(vaultFile, metadata);
+    }
+
+    /**
      * Destroys whole Vault deleting data on disk and in database.
      */
     public void destroy() {
@@ -101,5 +111,9 @@ public class Vault extends BaseVault {
 
     protected VaultFile create(BaseVaultFileBuilder<?, ?> builder) throws VaultException {
         return baseCreate(builder);
+    }
+
+    protected VaultFile create(BaseVaultFileBuilder<?, ?> builder, String parentId) throws VaultException {
+        return baseCreate(builder, parentId);
     }
 }

@@ -19,6 +19,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import androidx.annotation.WorkerThread;
+
 
 /**
  * Vault stores supplied data as encrypted files with supplied metadata, thumbnails and actual
@@ -77,15 +79,15 @@ public abstract class BaseVault {
      * @param vaultFile Data to read.
      * @return Stream of data.
      */
-    protected OutputStream baseOutStream(VaultFile vaultFile) throws VaultException {
+    protected VaultOutputStream baseOutStream(VaultFile vaultFile) throws VaultException {
         try {
             File file = getFile(vaultFile);
-            FileOutputStream fis = new FileOutputStream(file);
+            FileOutputStream fos = new FileOutputStream(file);
             byte[] key = mainKeyHolder.get().getKey().getEncoded();
 
-
-            return CipherStreamUtils.getEncryptedOutputStream(key, fis, file.getName());
-        } catch (IOException | LifecycleMainKey.MainKeyUnavailableException e) {
+            return new VaultOutputStream(vaultFile, CipherStreamUtils.getEncryptedOutputStream(key, fos, file.getName()),
+                    MessageDigest.getInstance("SHA-256"));
+        } catch (IOException | LifecycleMainKey.MainKeyUnavailableException | NoSuchAlgorithmException e) {
             throw new VaultException(e);
         }
     }
@@ -138,6 +140,10 @@ public abstract class BaseVault {
     }
 
     protected VaultFile baseCreate(BaseVaultFileBuilder<?, ?> builder) throws VaultException {
+        return baseCreate(builder, VaultDataSource.ROOT_UID);
+    }
+
+    protected VaultFile baseCreate(BaseVaultFileBuilder<?, ?> builder, String parentId) throws VaultException {
         try {
             VaultFile vaultFile = new VaultFile(builder);
 
@@ -158,14 +164,14 @@ public abstract class BaseVault {
                 vaultFile.size = getSize(file);
             }
 
-            return database.create(vaultFile);
+            return database.create(parentId, vaultFile);
         } catch (IOException | NoSuchAlgorithmException | LifecycleMainKey.MainKeyUnavailableException e) {
             throw new VaultException(e);
         }
     }
 
-    protected  VaultFile baseUpdate(VaultFile vaultFile){
-        return database.update(vaultFile);
+    protected VaultFile baseUpdateMetadata(VaultFile vaultFile, Metadata metadata) {
+        return database.updateMetadata(vaultFile, metadata);
     }
 
     public static class Config { // todo: make this VaultConfig
@@ -198,14 +204,29 @@ public abstract class BaseVault {
      * @return File holding contents of VaultFile.
      */
     public File getFile(VaultFile vaultFile) {
-        return new File(this.config.root, vaultFile.name);
-    }
-
-    public File getFile(String vaultFile) {
-        return new File(this.config.root, vaultFile);
+        return new File(this.config.root, vaultFile.id);
     }
 
     protected boolean mkdirs(File path) {
         return path.exists() || path.mkdirs();
+    }
+
+    public class VaultOutputStream extends DigestOutputStream {
+        private final VaultFile vaultFile;
+
+        public VaultOutputStream(VaultFile vaultFile, OutputStream stream, MessageDigest digest) {
+            super(stream, digest);
+
+            this.vaultFile = vaultFile;
+        }
+
+        @WorkerThread
+        public VaultFile complete(long duration) {
+            vaultFile.hash = hexString(getMessageDigest().digest());
+            vaultFile.size = getSize(getFile(vaultFile));
+            vaultFile.duration = duration;
+
+            return database.completeVaultOutputStream(vaultFile);
+        }
     }
 }

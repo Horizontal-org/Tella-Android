@@ -32,6 +32,10 @@ public class VaultFileBuilder extends BaseVaultFileBuilder<VaultFileBuilder, Vau
         return vault.create(this);
     }
 
+    public VaultFile build(String parentId) throws VaultException {
+        return vault.create(this, parentId);
+    }
+
     @Override
     protected VaultFileBuilder getThis() {
         return this;

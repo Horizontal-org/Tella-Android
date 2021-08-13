@@ -1,15 +1,13 @@
 package com.hzontal.tella_vault;
 
-
-import androidx.annotation.Nullable;
-
 import java.util.List;
 
 public interface IVaultDatabase {
     VaultFile getRootVaultFile();
-    VaultFile create(VaultFile file);
+    VaultFile create(String parentId, VaultFile file);
     List<VaultFile> list(VaultFile parent, Filter filter, Sort sort, Limits limits);
-    VaultFile update(VaultFile vaultFile);
+    VaultFile updateMetadata(VaultFile vaultFile, Metadata metadata);
+    VaultFile completeVaultOutputStream(VaultFile vaultFile);
     VaultFile get(String id);
     List<VaultFile> get(String[] ids);
     boolean delete(VaultFile file, IVaultFileDeleter deleter);
@@ -20,7 +18,7 @@ public interface IVaultDatabase {
     }
 
     interface Filter {
-        enum FilterType{
+        enum FilterType {
             ALL,
             PHOTO,
             VIDEO,
@@ -28,6 +26,7 @@ public interface IVaultDatabase {
             WITH_METADATA,
             WITHOUT_METADATA
         }
+
         boolean applyFilter(VaultFile vaultFile);
     }
 
@@ -41,6 +40,7 @@ public interface IVaultDatabase {
             ASC,
             DESC;
         }
+
         public Direction direction;
         public String property;
     }

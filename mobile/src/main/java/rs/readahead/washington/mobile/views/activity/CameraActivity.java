@@ -11,17 +11,11 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
-import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.VaultFile;
-import com.hzontal.utils.VaultUtils;
 import com.otaliastudios.cameraview.CameraException;
 import com.otaliastudios.cameraview.CameraListener;
 import com.otaliastudios.cameraview.CameraOptions;
@@ -43,12 +37,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
@@ -143,9 +138,7 @@ public class CameraActivity extends MetadataActivity implements
             intentMode = IntentMode.valueOf(getIntent().getStringExtra(INTENT_MODE));
         }
 
-        // CacheWordDataSource cacheWordDataSource = new CacheWordDataSource(getContext());
-        KeyDataSource keyDataSource = MyApplication.getKeyDataSource();
-        MediaFileHandler mediaFileHandler = new MediaFileHandler(keyDataSource);
+        MediaFileHandler mediaFileHandler = new MediaFileHandler();
         VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
         glide = Glide.with(getContext()).using(glideLoader);
 
@@ -327,6 +320,7 @@ public class CameraActivity extends MetadataActivity implements
             gridButton.setVisibility(videoRecording ? View.VISIBLE : View.GONE);
             switchButton.setVisibility(videoRecording ? View.VISIBLE : View.GONE);
             resolutionButton.setVisibility(videoRecording ? View.VISIBLE : View.GONE);
+
             if (videoRecording) {
                 if (System.currentTimeMillis() - lastClickTime >= CLICK_DELAY) {
                     cameraView.stopVideo();
@@ -338,9 +332,7 @@ public class CameraActivity extends MetadataActivity implements
             } else {
                 setVideoQuality();
                 lastClickTime = System.currentTimeMillis();
-                VaultFile tmp = VaultUtils.INSTANCE.newMp4();
-                File file = MediaFileHandler.getTempFile(tmp);
-                cameraView.takeVideo(file);
+                cameraView.takeVideo(MediaFileHandler.getTempFile());
                 captureButton.displayStopVideo();
                 durationView.start();
                 videoRecording = true;

@@ -5,6 +5,7 @@ import android.content.Context;
 import com.hzontal.tella_vault.BaseVault;
 import com.hzontal.tella_vault.BaseVaultFileBuilder;
 import com.hzontal.tella_vault.IVaultDatabase;
+import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.Vault;
 import com.hzontal.tella_vault.VaultException;
 import com.hzontal.tella_vault.VaultFile;
@@ -13,7 +14,6 @@ import com.hzontal.tella_vault.database.VaultDataSource;
 import org.hzontal.tella.keys.key.LifecycleMainKey;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
 
 import io.reactivex.Completable;
@@ -46,11 +46,15 @@ public class RxVault extends BaseVault {
         return new RxVaultFileBuilder(this, data);
     }
 
+    public RxVaultFileBuilder builder() { // for use cases where we pre-create vault file fo access OutputStream
+        return new RxVaultFileBuilder(this, (InputStream) null);
+    }
+
     public InputStream getStream(VaultFile vaultFile) throws VaultException {
         return baseGetStream(vaultFile);
     }
 
-    public OutputStream getOutStream(VaultFile vaultFile) throws VaultException {
+    public VaultOutputStream getOutStream(VaultFile vaultFile) throws VaultException {
         return baseOutStream(vaultFile);
     }
 
@@ -84,6 +88,10 @@ public class RxVault extends BaseVault {
         });
     }
 
+    public Single<List<VaultFile>> list(IVaultDatabase.Filter filter, IVaultDatabase.Sort sort, IVaultDatabase.Limits limits) {
+        return list(null, filter, sort, limits);
+    }
+
     public Single<List<VaultFile>> list(VaultFile parent, IVaultDatabase.Filter filter, IVaultDatabase.Sort sort, IVaultDatabase.Limits limits) {
         return Single.defer(() -> {
             try {
@@ -104,10 +112,10 @@ public class RxVault extends BaseVault {
         });
     }
 
-    public Single<VaultFile> update(VaultFile vaultFile) {
+    public Single<VaultFile> updateMetadata(VaultFile vaultFile, Metadata metadata) {
         return Single.defer(() -> {
             try {
-                return Single.just(baseUpdate(vaultFile));
+                return Single.just(baseUpdateMetadata(vaultFile, metadata));
             } catch (Exception e) {
                 return Single.error(e);
             }
@@ -129,6 +137,16 @@ public class RxVault extends BaseVault {
         return Single.defer(() -> {
             try {
                 return Single.just(baseCreate(builder));
+            } catch (Exception e) {
+                return Single.error(e);
+            }
+        });
+    }
+
+    protected Single<VaultFile> create(BaseVaultFileBuilder<?, ?> builder, String parentId) {
+        return Single.defer(() -> {
+            try {
+                return Single.just(baseCreate(builder, parentId));
             } catch (Exception e) {
                 return Single.error(e);
             }

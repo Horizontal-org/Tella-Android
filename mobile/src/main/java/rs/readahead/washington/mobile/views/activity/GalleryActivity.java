@@ -15,6 +15,14 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.hzontal.filter.VaultTypeFilter;
+import com.hzontal.tella_vault.IVaultDatabase;
+import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.utils.MediaFile;
+
+import java.util.List;
+
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -24,15 +32,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.hzontal.filter.VaultTypeFilter;
-import com.hzontal.tella_vault.IVaultDatabase;
-import com.hzontal.tella_vault.VaultFile;
-import com.hzontal.utils.MediaFile;
-
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -48,7 +47,6 @@ import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.GalleryFlingTopEvent;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
-import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IGalleryPresenterContract;
@@ -99,8 +97,6 @@ public class GalleryActivity extends MetadataActivity implements
     private GalleryRecycleViewAdapter adapter;
     private GalleryPresenter presenter;
     private TellaFileUploadSchedulePresenter uploadPresenter;
-    // private CacheWordDataSource cacheWordDataSource;
-    private KeyDataSource keyDataSource;
     private EventCompositeDisposable disposables;
 
     private AttachmentsRecycleViewAdapter attachmentsAdapter;
@@ -111,7 +107,7 @@ public class GalleryActivity extends MetadataActivity implements
     private ProgressDialog progressDialog;
     private final VaultTypeFilter filter = new VaultTypeFilter();
     private final IVaultDatabase.Sort sort = new IVaultDatabase.Sort();
-    private ViewType type = ViewType.EDIT;
+    private final ViewType type = ViewType.EDIT;
     private long numOfTUServers;
 
 
@@ -142,7 +138,6 @@ public class GalleryActivity extends MetadataActivity implements
         setupToolbar();
         setupFab();
 
-        keyDataSource = MyApplication.getKeyDataSource();
         disposables = MyApplication.bus().createCompositeDisposable();
         disposables.wire(GalleryFlingTopEvent.class, new EventObserver<GalleryFlingTopEvent>() {
             @Override
@@ -160,13 +155,13 @@ public class GalleryActivity extends MetadataActivity implements
         });
 
         adapter = new GalleryRecycleViewAdapter(this, this,
-                new MediaFileHandler(keyDataSource), R.layout.card_gallery_attachment_media_file);
+                new MediaFileHandler(), R.layout.card_gallery_attachment_media_file);
         final RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 3);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(adapter);
 
         attachmentsAdapter = new AttachmentsRecycleViewAdapter(this, this,
-                new MediaFileHandler(keyDataSource), type);
+                new MediaFileHandler(), type);
         attachmentsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         attachmentsRecyclerView.setLayoutManager(attachmentsLayoutManager);
         attachmentsRecyclerView.setAdapter(attachmentsAdapter);

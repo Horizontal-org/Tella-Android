@@ -17,6 +17,7 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -83,8 +84,8 @@ public abstract class MetadataActivity extends BaseLockActivity implements
     private boolean wifiReceiverRegistered = false;
 
     private boolean sensorListenerRegistered = false;
-    private static SensorData lightSensorData = new SensorData();
-    private static SensorData ambientTemperatureSensorData = new SensorData();
+    private final static SensorData lightSensorData = new SensorData();
+    private final static SensorData ambientTemperatureSensorData = new SensorData();
 
     private final BehaviorSubject<List<String>> wifiSubject = BehaviorSubject.create();
     private final static BehaviorSubject<MyLocation> locationSubject = BehaviorSubject.create();
@@ -424,7 +425,6 @@ public abstract class MetadataActivity extends BaseLockActivity implements
     protected void attachMediaFileMetadata(final VaultFile vaultFile, final IMetadataAttachPresenterContract.IPresenter metadataAttacher) {
         // skip metadata if anonymous mode..
         if (Preferences.isAnonymousMode()) {
-            metadataAttacher.attachMetadata(vaultFile);
             return;
         }
 
@@ -461,7 +461,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements
 
         // if location gathering is not possible skip it
         if (!isLocationProviderEnabled()) {
-            metadataAttacher.attachMetadata(vaultFile);
+            metadataAttacher.attachMetadata(vaultFile, metadata);
             return;
         }
 
@@ -474,7 +474,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements
                 .doFinally(this::hideMetadataProgressBarDialog)
                 .subscribeWith(new DisposableObserver<MetadataHolder>() {
                     @Override
-                    public void onNext(MetadataActivity.MetadataHolder value) {
+                    public void onNext(@NonNull MetadataActivity.MetadataHolder value) {
                         if (!value.getWifis().isEmpty()) {
                             metadata.setWifis(value.getWifis());
                             networkGatheringChecked();
@@ -494,14 +494,13 @@ public abstract class MetadataActivity extends BaseLockActivity implements
                     }
 
                     @Override
-                    public void onError(Throwable e) {
+                    public void onError(@NonNull Throwable e) {
                         onComplete();
                     }
 
                     @Override
                     public void onComplete() {
-                        vaultFile.metadata = metadata;
-                        metadataAttacher.attachMetadata(vaultFile);
+                        metadataAttacher.attachMetadata(vaultFile, metadata);
                     }
                 })
         );
@@ -547,7 +546,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements
 
     // Helper Classes
     static class MetadataHolder {
-        private MyLocation location;
+        private final MyLocation location;
         private List<String> wifis;
 
 

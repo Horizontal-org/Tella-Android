@@ -10,12 +10,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -23,6 +17,11 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.hzontal.tella_vault.VaultFile;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import permissions.dispatcher.NeedsPermission;
@@ -34,7 +33,6 @@ import permissions.dispatcher.RuntimePermissions;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
-import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.mvp.contract.IMediaFileViewerPresenterContract;
@@ -60,8 +58,6 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
-    //private CacheWordDataSource cacheWordDataSource;
-    private KeyDataSource keyDataSource;
     private MediaFileViewerPresenter presenter;
     private VaultFile vaultFile;
 
@@ -86,7 +82,6 @@ public class PhotoViewerActivity extends BaseLockActivity implements
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        keyDataSource = MyApplication.getKeyDataSource();
         presenter = new MediaFileViewerPresenter(this);
 
         if (getIntent().hasExtra(VIEW_PHOTO)) {
@@ -294,7 +289,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     private void showGalleryImage(VaultFile vaultFile) {
         Glide.with(this)
-                .using(new VaultFileUrlLoader(this, new MediaFileHandler(keyDataSource)))
+                .using(new VaultFileUrlLoader(this, new MediaFileHandler()))
                 .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.ORIGINAL))
                 .listener(new RequestListener<VaultFileLoaderModel, GlideDrawable>() {
                     @Override

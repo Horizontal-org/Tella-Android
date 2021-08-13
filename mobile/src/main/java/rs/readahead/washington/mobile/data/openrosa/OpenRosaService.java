@@ -39,6 +39,7 @@ import okhttp3.Response;
 import okhttp3.TlsVersion;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import rs.readahead.washington.mobile.BuildConfig;
 import rs.readahead.washington.mobile.data.http.QuotePreservingCookieJar;
@@ -48,7 +49,7 @@ import timber.log.Timber;
 
 public class OpenRosaService {
     private static OpenRosaService instance;
-    private Retrofit retrofit;
+    private final Retrofit retrofit;
     private final static Map<String, CachingAuthenticator> authCache = new ConcurrentHashMap<>();
     private volatile static CookieJar cookieJar = new QuotePreservingCookieJar(new CookieManager());
 
@@ -148,7 +149,7 @@ public class OpenRosaService {
 
             // build them
             Retrofit retrofit = retrofitBuilder
-                    //.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(SimpleXmlConverterFactory.createNonStrict(new Persister(new AnnotationStrategy())))
                     .build();
 
@@ -158,7 +159,7 @@ public class OpenRosaService {
 
     private static class OpenRosaRequestInterceptor implements Interceptor {
         private final String TZ = "GMT";
-        private SimpleDateFormat df;
+        private final SimpleDateFormat df;
 
 
         OpenRosaRequestInterceptor() {
@@ -166,6 +167,7 @@ public class OpenRosaService {
             df.setTimeZone(TimeZone.getTimeZone(TZ));
         }
 
+        @NonNull
         @Override
         public Response intercept(@NonNull Chain chain) throws IOException {
             Request originalRequest = chain.request();

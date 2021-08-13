@@ -15,18 +15,17 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.utils.MediaFile;
+
+import java.util.List;
+
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.hzontal.tella_vault.VaultFile;
-import com.hzontal.utils.MediaFile;
-
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -34,9 +33,7 @@ import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.RuntimePermissions;
-import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IQuestionAttachmentPresenterContract;
@@ -94,9 +91,8 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
         setupToolbar();
         setupFab();
 
-        KeyDataSource keyDataSource = MyApplication.getKeyDataSource();
         galleryAdapter = new GalleryRecycleViewAdapter(this, this,
-                new MediaFileHandler(keyDataSource),
+                new MediaFileHandler(),
                 R.layout.card_gallery_attachment_media_file,
                 true, true);
         RecyclerView.LayoutManager galleryLayoutManager = new GridLayoutManager(this, 3);
@@ -191,9 +187,9 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
 
     @NeedsPermission({Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO})
     public void startCameraCaptureActivity() {
-        Intent intent = new Intent(this, CameraActivity.class);
-        intent.putExtra(CameraActivity.CAMERA_MODE, CameraActivity.CameraMode.PHOTO.name());
-        startActivityForResult(intent, C.CAMERA_CAPTURE);
+//        Intent intent = new Intent(this, CameraActivity.class);
+//        intent.putExtra(CameraActivity.CAMERA_MODE, CameraActivity.CameraMode.PHOTO.name());
+//        startActivityForResult(intent, C.CAMERA_CAPTURE);
     }
 
     @Override
@@ -245,12 +241,12 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
 
             case C.CAMERA_CAPTURE:
             case C.RECORDED_AUDIO:
-                if (data == null) break;
-
-                long mediaFileId = data.getLongExtra(C.CAPTURED_MEDIA_FILE_ID, 0);
-                if (mediaFileId == 0) break;
-
-                presenter.addRegisteredMediaFile(mediaFileId);
+//                if (data == null) break;
+//
+//                long mediaFileId = data.getLongExtra(C.CAPTURED_MEDIA_FILE_ID, 0);
+//                if (mediaFileId == 0) break;
+//
+//                presenter.addRegisteredMediaFile(mediaFileId);
 
                 break;
         }
@@ -292,6 +288,7 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
 
     @Override
     public void onGetFilesError(Throwable error) {
+        Timber.d(error);
     }
 
     @Override

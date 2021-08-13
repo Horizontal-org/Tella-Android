@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.VaultFile;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -12,7 +13,7 @@ import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContr
 
 public class MetadataAttacher implements IMetadataAttachPresenterContract.IPresenter {
     private IMetadataAttachPresenterContract.IView view;
-    private CompositeDisposable disposables = new CompositeDisposable();
+    private final CompositeDisposable disposables = new CompositeDisposable();
 
 
     public MetadataAttacher(IMetadataAttachPresenterContract.IView view) {
@@ -20,11 +21,11 @@ public class MetadataAttacher implements IMetadataAttachPresenterContract.IPrese
     }
 
     @Override
-    public void attachMetadata(VaultFile vaultFile) {
-        disposables.add(MyApplication.rxVault.update(vaultFile)
+    public void attachMetadata(VaultFile vaultFile, Metadata metadata) {
+        disposables.add(MyApplication.rxVault.updateMetadata(vaultFile, metadata)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(vaultFile1 -> view.onMetadataAttached(vaultFile1), throwable -> {
+                .subscribe(updatedVaultFile -> view.onMetadataAttached(updatedVaultFile), throwable -> {
                     FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onMetadataAttachError(throwable);
                 }));

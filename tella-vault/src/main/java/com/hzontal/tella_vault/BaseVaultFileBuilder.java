@@ -47,7 +47,7 @@ public abstract class BaseVaultFileBuilder<T extends BaseVaultFileBuilder<T, B>,
         return getThis();
     }
 
-    public T  setId(String id) {
+    public T setId(String id) {
         this.id = id;
         return getThis();
     }
@@ -79,6 +79,11 @@ public abstract class BaseVaultFileBuilder<T extends BaseVaultFileBuilder<T, B>,
 
     public T setHash(String hash) {
         this.hash = hash;
+        return getThis();
+    }
+
+    public T setExtension(String ext) {
+        this.name = this.id + "." + ext;
         return getThis();
     }
 

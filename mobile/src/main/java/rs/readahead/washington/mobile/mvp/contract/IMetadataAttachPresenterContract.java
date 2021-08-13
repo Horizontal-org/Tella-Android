@@ -1,7 +1,6 @@
 package rs.readahead.washington.mobile.mvp.contract;
 
 import android.content.Context;
-import androidx.annotation.Nullable;
 
 import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.VaultFile;
@@ -14,6 +13,6 @@ public class IMetadataAttachPresenterContract {
     }
 
     public interface IPresenter extends IBasePresenter {
-        void attachMetadata(VaultFile vaultFile);
+        void attachMetadata(VaultFile vaultFile, Metadata metadata);
     }
 }
