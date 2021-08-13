@@ -30,8 +30,10 @@ class SecuritySettings : Fragment() {
 
     private val lockTimeoutManager = LockTimeoutManager()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_security_settings, container, false)
         (activity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_sec_app_bar)
 
@@ -44,7 +46,8 @@ class SecuritySettings : Fragment() {
         val lockSettingButton = view.findViewById<RelativeLayout>(R.id.lock_settings_button)
         lockSettingButton.setOnClickListener { goToUnlockingActivity() }
 
-        val lockTimeoutSettingButton = view.findViewById<RelativeLayout>(R.id.lock_timeout_settings_button)
+        val lockTimeoutSettingButton =
+            view.findViewById<RelativeLayout>(R.id.lock_timeout_settings_button)
         lockTimeoutSettingButton.setOnClickListener { showLockTimeoutSettingDialog() }
 
         val deleteVault = view.findViewById<CheckBox>(R.id.delete_vault)
@@ -75,14 +78,23 @@ class SecuritySettings : Fragment() {
             Preferences.setUninstallOnPanic(isChecked)
         }
 
-        val quickExitTellaSwitch = view.findViewById<TellaSwitchWithMessage>(R.id.quick_delete_switch)
+        val quickExitTellaSwitch =
+            view.findViewById<TellaSwitchWithMessage>(R.id.quick_delete_switch)
         setupQuickExitSwitch(quickExitTellaSwitch.mSwitch, view)
         setupQuickExitSettingsView(quickExitTellaSwitch.mSwitch, view)
 
-        val silentCameraTellaSwitch = view.findViewById<TellaSwitchWithMessage>(R.id.camera_silent_switch)
+        val silentCameraTellaSwitch =
+            view.findViewById<TellaSwitchWithMessage>(R.id.camera_silent_switch)
         silentCameraTellaSwitch.mSwitch.setChecked(!Preferences.isShutterMute())
         silentCameraTellaSwitch.mSwitch.setOnCheckedChangeListener({ buttonView: CompoundButton?, isChecked: Boolean ->
             Preferences.setShutterMute(isChecked)
+        })
+
+        val bypassCensorshipTellaSwitch =
+            view.findViewById<TellaSwitchWithMessage>(R.id.bypass_censorship_switch)
+        bypassCensorshipTellaSwitch.mSwitch.setChecked(Preferences.isBypassCensorship())
+        bypassCensorshipTellaSwitch.mSwitch.setOnCheckedChangeListener({ buttonView: CompoundButton?, isChecked: Boolean ->
+            Preferences.setBypassCensorship(isChecked)
         })
 
         return view

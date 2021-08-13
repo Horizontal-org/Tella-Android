@@ -29,7 +29,7 @@ public class SharedPrefs {
     //private static final String AUTO_SAVE_DRAFT_FORM = "auto_save_draft_form";
     private static final String LANGUAGE = "language";
     static final String SECRET_MODE_ENABLED = "secret_password_enabled";
-    static final String DOMAIN_FRONTING = "df";
+    static final String BYPASS_CENSORSHIP = "bypass_censorship";
     static final String ANONYMOUS_MODE = "anonymous_mode";
     static final String UNINSTALL_ON_PANIC = "uninstall_on_panic";
     static final String APP_FIRST_START = "app_first_start";

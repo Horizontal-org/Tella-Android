@@ -439,5 +439,10 @@
     <string name="settings.sec_lock_timeout_desc">Decide how long it takes for Tella to lock</string>
     <string name="settings.prot_select_delete.vault">Delete Vault</string>
     <string name="settings.sec_delete.vault_tooltip">Delete all the files stored in Tella.</string>
+    <string name="settings.sec_bypass_switch_title">Bypass censorship</string>
+    <string name="settings.sec_bypass_switch_expl">Overcome attempts to block Tella in your region. Note that enabling this will make it slower to send data to the servers.</string>
+
+
+
 
 </resources>
