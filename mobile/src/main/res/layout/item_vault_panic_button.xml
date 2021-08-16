@@ -15,8 +15,24 @@
         android:layout_gravity="bottom|center"
         android:gravity="bottom|center"
         android:max="100"
-        android:thumbOffset="-5dp"
+        android:thumbOffset="-13dp"
         android:padding="2dp"
         android:progressDrawable="@drawable/panic_seek_var_progress"
         android:thumb="@drawable/ic_progress_bg" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:gravity="center"
+        android:text="@string/home_action.label_quick.delete"
+        android:textAllCaps="true"
+        app:layout_constraintStart_toStartOf="@id/panic_seek"
+        app:layout_constraintEnd_toEndOf="@id/panic_seek"
+        app:layout_constraintTop_toTopOf="@id/panic_seek"
+        app:layout_constraintBottom_toBottomOf="@id/panic_seek"
+        android:textSize="15sp"
+        style="@style/Tella_Main_White_Text.MeduimbBold"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

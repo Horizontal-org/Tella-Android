@@ -18,7 +18,7 @@ class PanicModeViewHolder (val view : View) : BaseViewHolder<VaultFile>(view) {
         panicSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 if (b) {
-                    blendPanicScreens(i)
+                   // blendPanicScreens(i)
                 }
             }
 

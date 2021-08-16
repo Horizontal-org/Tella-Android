@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.views.fragment.vault
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.RelativeLayout
@@ -12,45 +11,41 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.entity.XFormEntity
+import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
-import rs.readahead.washington.mobile.views.custom.CountdownImageView
 import rs.readahead.washington.mobile.views.custom.CountdownTextView
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.MockVaultFiles
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.VaultFile
 
-class HomeVaultFragment : BaseFragment() ,IHomeVaultPresenter.IView, VaultClickListener {
+class HomeVaultFragment : BaseFragment(), IHomeVaultPresenter.IView, VaultClickListener {
     private lateinit var toolbar: Toolbar
-    private lateinit var collapsingToolbar : CollapsingToolbarLayout
-    private lateinit var vaultRecyclerView : RecyclerView
-    private lateinit var panicModeView : RelativeLayout
-    private lateinit var countDownTextView : CountdownTextView
+    private lateinit var collapsingToolbar: CollapsingToolbarLayout
+    private lateinit var vaultRecyclerView: RecyclerView
+    private lateinit var panicModeView: RelativeLayout
+    private lateinit var countDownTextView: CountdownTextView
     private var timerDuration = 0
     private var panicActivated = false
+    private val vaultAdapter by lazy { VaultAdapter(this) }
+    private lateinit var homeVaultPresenter: HomeVaultPresenter
 
-
-    private val vaultAdapter by lazy {VaultAdapter(this)}
-    private lateinit var homeVaultPresenter : HomeVaultPresenter
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         setHasOptionsMenu(true)
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_vault, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu,inflater);
-        inflater.inflate(R.menu.home_menu,menu)
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.home_menu, menu)
     }
 
-    override fun initView(view: View){
+    override fun initView(view: View) {
         homeVaultPresenter = HomeVaultPresenter(this)
         toolbar = view.findViewById(R.id.toolbar)
         collapsingToolbar = view.findViewById(R.id.collapsing_toolbar)
@@ -59,9 +54,10 @@ class HomeVaultFragment : BaseFragment() ,IHomeVaultPresenter.IView, VaultClickL
         countDownTextView = view.findViewById(R.id.countdown_timer)
         setUpToolbar()
         initData()
+        initListeners()
     }
 
-    private fun initData(){
+    private fun initData() {
         vaultAdapter.apply {
             addPanicMode(MockVaultFiles.getRootFile())
             addRecentFiles(MockVaultFiles.getListVaultFiles())
@@ -74,6 +70,9 @@ class HomeVaultFragment : BaseFragment() ,IHomeVaultPresenter.IView, VaultClickL
         }
         timerDuration = resources.getInteger(R.integer.panic_countdown_duration)
 
+    }
+    private fun initListeners(){
+        panicModeView.setOnClickListener { onPanicClicked() }
     }
 
     private fun setUpToolbar() {
@@ -91,7 +90,7 @@ class HomeVaultFragment : BaseFragment() ,IHomeVaultPresenter.IView, VaultClickL
         }
     }
 
-    override fun onPanicModeSwipeListener(progress : Int) {
+    override fun onPanicModeSwipeListener(progress: Int) {
         showPanicScreens()
     }
 
@@ -121,8 +120,39 @@ class HomeVaultFragment : BaseFragment() ,IHomeVaultPresenter.IView, VaultClickL
     override fun videoClickListener() {
     }
 
-    //@NeedsPermission(Manifest.permission.SEND_SMS)
-   private fun showPanicScreens() {
+    private fun stopPanicking() {
+        countDownTextView.cancel()
+        countDownTextView.setCountdownNumber(timerDuration)
+        panicActivated = false
+        // showMainControls()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (panicActivated) {
+            showPanicScreens()
+            panicActivated = false
+        } else {
+            maybeClosePanic()
+        }
+    }
+
+    private fun maybeClosePanic(): Boolean {
+        if (panicModeView.visibility == View.VISIBLE) {
+            stopPanicking()
+            hidePanicScreens()
+        }
+        return false // todo: check panic state here
+    }
+
+    private fun hidePanicScreens() {
+        collapsingToolbar.visibility = View.VISIBLE
+        (activity as MainActivity).hideBottomNavigation(true)
+        setupPanicView()
+        panicModeView.visibility = View.GONE
+    }
+
+    private fun showPanicScreens() {
         // really show panic screen
         collapsingToolbar.visibility = View.GONE
         (activity as MainActivity).hideBottomNavigation(false)
@@ -131,14 +161,21 @@ class HomeVaultFragment : BaseFragment() ,IHomeVaultPresenter.IView, VaultClickL
         panicModeView.alpha = 1f
         countDownTextView.start(
             timerDuration
-        ) {  }
+        ) {
+            homeVaultPresenter.executePanicMode()
+        }
     }
 
-    private fun stopPanicking() {
-        countDownTextView.cancel()
-        countDownTextView.setCountdownNumber(timerDuration)
-        panicActivated = false
-       // showMainControls()
+    private fun setupPanicView() {
+        if (Preferences.isQuickExit()) {
+            vaultAdapter.addPanicMode(MockVaultFiles.getRootFile())
+        } else {
+            vaultAdapter.hidePanicMode()
+        }
+    }
+   private fun onPanicClicked() {
+        hidePanicScreens()
+        stopPanicking()
     }
 
 }

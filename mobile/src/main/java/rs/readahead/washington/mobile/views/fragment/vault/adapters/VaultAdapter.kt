@@ -40,6 +40,15 @@ class VaultAdapter(private val onClick: VaultClickListener) :
         )
         renderList()
     }
+
+    fun hidePanicMode(){
+        adapterScope.launch {
+            items =   items - panicMode
+            withContext(Dispatchers.Main) {
+                submitList(items)
+            }
+        }
+    }
     fun addRecentFiles(vaultFiles : List<VaultFile>) {
         recentFiles = listOf(DataItem.RecentFiles(vaultFiles))
         renderList()
