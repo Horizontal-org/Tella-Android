@@ -2,10 +2,13 @@ package rs.readahead.washington.mobile.views.activity;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +29,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -50,6 +54,7 @@ import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository.Filter;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository.Sort;
+import rs.readahead.washington.mobile.media.MediaFileBundle;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IGalleryPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePresenterContract;
@@ -401,32 +406,83 @@ public class GalleryActivity extends MetadataActivity implements
         }
 
         switch (requestCode) {
-            case C.IMPORT_IMAGE:
-                Uri image = data.getData();
-                if (image != null) {
-                    presenter.importImage(image);
+            case C.IMPORT_IMAGE: {
+                //if (data.getAction() != null && data.getAction().equals(Intent.ACTION_SEND_MULTIPLE)) {
+                    //getSelectedMediaForJellyBean(data);
+                //}
+                //check for multiple data. Should also work for JellyBean
+                ClipData clipData = data.getClipData();
+                if (clipData != null) {
+                    if (clipData.getItemCount() > 0) {
+                        List<Uri> uris = new ArrayList<>();
+                        for (int i = 0; i < clipData.getItemCount(); i++) {
+                            uris.add(clipData.getItemAt(i).getUri());
+                        }
+                        presenter.importImages(uris);
+                    }
+                } else {
+                    Uri image = data.getData();
+                    if (image != null) {
+                        presenter.importImage(image);
+                    }
                 }
                 break;
+            }
 
-            case C.IMPORT_VIDEO:
-                Uri video = data.getData();
-                if (video != null) {
-                    presenter.importVideo(video);
+            case C.IMPORT_VIDEO: {
+                //check for multiple data. Should also work for JellyBean
+                ClipData clipData = data.getClipData();
+                if (clipData != null) {
+                    if (clipData.getItemCount() > 0) {
+                        List<Uri> uris = new ArrayList<>();
+                        for (int i = 0; i < clipData.getItemCount(); i++) {
+                            uris.add(clipData.getItemAt(i).getUri());
+                        }
+                        presenter.importVideos(uris);
+                    }
+                } else {
+                    Uri video = data.getData();
+                    if (video != null) {
+                        presenter.importVideo(video);
+                    }
                 }
                 break;
+            }
 
-            case C.IMPORT_MEDIA:
-                Uri media = data.getData();
-                if (media == null) break;
+            case C.IMPORT_MEDIA: {
+                //check for multiple data. Should also work for JellyBean
+                ClipData clipData = data.getClipData();
+                if (clipData != null) {
+                    if (clipData.getItemCount() > 0) {
+                        List<Uri> imageUris = new ArrayList<>();
+                        List<Uri> videoUris = new ArrayList<>();
+                        for (int i = 0; i < clipData.getItemCount(); i++) {
+                            Uri uri = clipData.getItemAt(i).getUri();
 
-                String type = FileUtil.getPrimaryMime(getContentResolver().getType(media));
+                            String type = FileUtil.getPrimaryMime(getContentResolver().getType(uri));
+                            if ("image".equals(type)) {
+                                imageUris.add(uri);
+                            } else if ("video".equals(type)) {
+                                videoUris.add(uri);
+                            }
+                        }
+                        presenter.importImages(imageUris);
+                        presenter.importVideos(videoUris);
+                    }
+                } else {
+                    Uri media = data.getData();
+                    if (media == null) break;
 
-                if ("image".equals(type)) {
-                    presenter.importImage(media);
-                } else if ("video".equals(type)) {
-                    presenter.importVideo(media);
+                    String type = FileUtil.getPrimaryMime(getContentResolver().getType(media));
+
+                    if ("image".equals(type)) {
+                        presenter.importImage(media);
+                    } else if ("video".equals(type)) {
+                        presenter.importVideo(media);
+                    }
                 }
                 break;
+            }
 
             case C.START_CAMERA_CAPTURE:
                 startCameraCaptureActivityWithLocationChecked();
@@ -470,6 +526,11 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     @Override
+    public void onMediaImported(List<MediaFileBundle> mediaFileBundles) {
+        presenter.addNewMediaFiles(mediaFileBundles);
+    }
+
+    @Override
     public void onImportError(Throwable error) {
         showToast(R.string.gallery_toast_fail_importing_file);
         Timber.d(error, getClass().getName());
@@ -490,6 +551,12 @@ public class GalleryActivity extends MetadataActivity implements
 
     @Override
     public void onMediaFilesAdded(MediaFile mediaFile) {
+        showToast(R.string.gallery_toast_file_imported_from_device);
+        presenter.getFiles(filter, sort);
+    }
+
+    @Override
+    public void onMediaFilesAdded(List<MediaFileBundle> mediaFileBundles) {
         showToast(R.string.gallery_toast_file_imported_from_device);
         presenter.getFiles(filter, sort);
     }

@@ -20,6 +20,7 @@ import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
+import rs.readahead.washington.mobile.media.MediaFileBundle;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IGalleryPresenterContract;
 import rs.readahead.washington.mobile.presentation.entity.MediaFileThumbnailData;
@@ -81,6 +82,23 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
     }
 
     @Override
+    public void importImages(final List<Uri> uris) {
+        disposables.add(Observable
+                .fromCallable(() -> MediaFileHandler.importPhotoUris(view.getContext(), uris))
+                .subscribeOn(Schedulers.computation())
+                .doOnSubscribe(disposable -> view.onImportStarted())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> view.onImportEnded())
+                .subscribe(mediaHolder ->
+                                view.onMediaImported(mediaHolder),
+                        throwable -> {
+                            FirebaseCrashlytics.getInstance().recordException(throwable);
+                            view.onImportError(throwable);
+                        })
+        );
+    }
+
+    @Override
     public void importVideo(final Uri uri) {
         disposables.add(Observable
                 .fromCallable(() -> MediaFileHandler.importVideoUri(view.getContext(), uri))
@@ -96,11 +114,39 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
     }
 
     @Override
+    public void importVideos(final List<Uri> uris) {
+        disposables.add(Observable
+                .fromCallable(() -> MediaFileHandler.importVideoUris(view.getContext(), uris))
+                .subscribeOn(Schedulers.computation())
+                .doOnSubscribe(disposable -> view.onImportStarted())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> view.onImportEnded())
+                .subscribe(mediaHolder -> view.onMediaImported(mediaHolder),
+                        throwable -> {
+                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    view.onImportError(throwable);
+                })
+        );
+    }
+
+    @Override
     public void addNewMediaFile(MediaFile mediaFile, MediaFileThumbnailData thumbnailData) {
         disposables.add(mediaFileHandler.registerMediaFile(mediaFile, thumbnailData)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mediaFile1 -> view.onMediaFilesAdded(mediaFile1), throwable -> {
+                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    view.onMediaFilesAddingError(throwable);
+                })
+        );
+    }
+
+    @Override
+    public void addNewMediaFiles(List<MediaFileBundle> mediaFileBundles) {
+        disposables.add(mediaFileHandler.registerMediaFiles(mediaFileBundles)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mediaFileBundles1 -> view.onMediaFilesAdded(mediaFileBundles1), throwable -> {
                     FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onMediaFilesAddingError(throwable);
                 })

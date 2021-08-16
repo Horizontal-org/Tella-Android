@@ -31,6 +31,8 @@ import androidx.annotation.Nullable;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableTransformer;
+import io.reactivex.Flowable;
+import io.reactivex.FlowableTransformer;
 import io.reactivex.Maybe;
 import io.reactivex.MaybeTransformer;
 import io.reactivex.Single;
@@ -86,6 +88,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             observable -> observable.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread());
 
+    final private FlowableTransformer schedulersFlowableTransformer =
+            observable -> observable.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+
 
     public static synchronized DataSource getInstance(Context context, byte[] key) {
         if (dataSource == null) {
@@ -113,6 +119,11 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     private <T> MaybeTransformer<T, T> applyMaybeSchedulers() {
         //noinspection unchecked
         return (MaybeTransformer<T, T>) schedulersMaybeTransformer;
+    }
+
+    private <T>FlowableTransformer<T, T> applyFlowableSchedulers() {
+        //noinspection unchecked
+        return (FlowableTransformer<T, T>) schedulersFlowableTransformer;
     }
 
     @Override
@@ -367,6 +378,14 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }).compose(applySchedulers());
     }
 
+    @Override
+    public Flowable<List<MediaFileBundle>> registerMediaFileBundles(List<MediaFileBundle> mediaFileBundles) {
+        return Flowable.fromCallable(() -> {
+            registerMediaFileRecords(mediaFileBundles);
+            return mediaFileBundles;
+        }).compose(applyFlowableSchedulers());
+    }
+
     public Single<List<MediaFile>> listMediaFiles(final Filter filter, final Sort sort) {
         return Single.fromCallable(() -> getMediaFiles(filter, sort))
                 .compose(applySchedulers());
@@ -476,6 +495,53 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }
 
         return mediaFile;
+    }
+
+    private List<MediaFileBundle> registerMediaFileRecords(List<MediaFileBundle> mediaFileBundles) {
+        try {
+            database.beginTransaction();
+
+            for (MediaFileBundle mediaFileBundle: mediaFileBundles) {
+
+                MediaFile mediaFile = mediaFileBundle.getMediaFile();
+                MediaFileThumbnailData thumbnailData = mediaFileBundle.getMediaFileThumbnailData();
+
+                if (mediaFile.getCreated() == 0) {
+                    mediaFile.setCreated(Util.currentTimestamp());
+                }
+
+                ContentValues values = new ContentValues();
+                values.put(D.C_PATH, mediaFile.getPath());
+                values.put(D.C_UID, mediaFile.getUid());
+                values.put(D.C_FILE_NAME, mediaFile.getFileName());
+                values.put(D.C_METADATA, new GsonBuilder().create().toJson(new EntityMapper().transform(mediaFile.getMetadata())));
+                values.put(D.C_CREATED, mediaFile.getCreated());
+                if (mediaFile.getDuration() > 0) {
+                    values.put(D.C_DURATION, mediaFile.getDuration());
+                }
+                if (mediaFile.getSize() > 0) {
+                    values.put(D.C_SIZE, mediaFile.getSize());
+                }
+                values.put(D.C_ANONYMOUS, mediaFile.isAnonymous() ? 1 : 0);
+                values.put(D.C_HASH, mediaFile.getHash());
+
+                //TODO should use a function that concatenation insert statements and runs them as one
+                mediaFile.setId(database.insert(D.T_MEDIA_FILE, null, values));
+
+                if (!MediaFileThumbnailData.NONE.equals(thumbnailData)) {
+                    updateThumbnail(mediaFile.getId(), thumbnailData);
+                }
+
+                mediaFileBundle.setMediaFile(mediaFile);
+                mediaFileBundles.set(mediaFileBundles.indexOf(mediaFileBundle), mediaFileBundle);
+            }
+
+            database.setTransactionSuccessful();
+        } finally {
+            database.endTransaction();
+        }
+
+        return mediaFileBundles;
     }
 
     private long countDBCollectServers() {

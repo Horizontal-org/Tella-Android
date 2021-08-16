@@ -114,6 +114,7 @@ public class MediaFileHandler {
         }
 
         if (Build.VERSION.SDK_INT >= 19) {
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
             intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
             try {
                 activity.startActivityForResult(intent, requestCode);
@@ -123,12 +124,12 @@ public class MediaFileHandler {
             }
         }
 
-        //if (Build.VERSION.SDK_INT >= 18) {
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        Timber.d("+++++ get multiple");
-        // }
-
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+        //TODO make multiple selection work in API 17 & 18
+        //if (Build.VERSION.SDK_INT <= 18) {
+            intent.setAction(Intent.ACTION_SEND_MULTIPLE)
+                    .setAction(Intent.ACTION_GET_CONTENT);
+            Timber.d("+++++ get multiple");
+        //}
 
         try {
             activity.startActivityForResult(intent, requestCode);
@@ -236,6 +237,47 @@ public class MediaFileHandler {
         return mediaFileBundle;
     }
 
+    public static List<MediaFileBundle> importPhotoUris(Context context, List<Uri> uris) throws Exception {
+        List<MediaFileBundle> mediaFileBundles = new ArrayList<>();
+
+        for (Uri uri : uris) {
+
+            MediaFileBundle mediaFileBundle = new MediaFileBundle();
+
+            MediaFile mediaFile = MediaFile.newJpeg();
+            mediaFileBundle.setMediaFile(mediaFile);
+
+            InputStream input = context.getContentResolver().openInputStream(uri);
+
+            Bitmap bm = BitmapFactory.decodeStream(input);
+            input = context.getContentResolver().openInputStream(uri);
+            bm = modifyOrientation(bm, input);
+            Bitmap thumb = ThumbnailUtils.extractThumbnail(bm, bm.getWidth() / 10, bm.getHeight() / 10); // todo: make this smarter and global
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            if (thumb.compress(Bitmap.CompressFormat.JPEG, 100, stream)) {
+                mediaFileBundle.setMediaFileThumbnailData(new MediaFileThumbnailData(stream.toByteArray()));
+            }
+
+            // todo: killing too much quality like this?
+
+            DigestOutputStream os = MediaFileHandler.getOutputStream(context, mediaFile);
+
+            if (os == null) throw new NullPointerException();
+
+            if (!bm.compress(Bitmap.CompressFormat.JPEG, 100, os)) {
+                throw new Exception("JPEG compression failed");
+            }
+
+            mediaFile.setHash(StringUtils.hexString(os.getMessageDigest().digest()));
+            mediaFile.setSize(getSize(context, mediaFile));
+
+            mediaFileBundles.add(mediaFileBundle);
+        }
+
+        return mediaFileBundles;
+    }
+
     public static MediaFileBundle saveJpegPhoto(@NonNull Context context, @NonNull byte[] jpegPhoto) throws Exception {
         MediaFileBundle mediaFileBundle = new MediaFileBundle();
 
@@ -326,6 +368,49 @@ public class MediaFileHandler {
         copyToMediaFileStream(context, mediaFile, is);
 
         return mediaFileBundle;
+    }
+
+    public static List<MediaFileBundle> importVideoUris(Context context, List<Uri> uris) throws Exception {
+        List<MediaFileBundle> mediaFileBundles = new ArrayList<>();
+
+        for (Uri uri : uris) {
+            MediaFileBundle mediaFileBundle = new MediaFileBundle();
+
+            MediaFile mediaFile = MediaFile.newMp4();
+            mediaFileBundle.setMediaFile(mediaFile);
+
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+
+            try {
+                retriever.setDataSource(context, uri);
+
+                // duration
+                String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+                mediaFile.setDuration(Long.parseLong(time));
+
+                // thumbnail
+                byte[] thumb = getThumbByteArray(retriever.getFrameAtTime());
+                if (thumb != null) {
+                    mediaFileBundle.setMediaFileThumbnailData(new MediaFileThumbnailData(thumb));
+                }
+            } catch (Exception e) {
+                FirebaseCrashlytics.getInstance().recordException(e);
+                Timber.e(e, MediaFileHandler.class.getName());
+            } finally {
+                try {
+                    retriever.release();
+                } catch (Exception ignore) {
+                }
+            }
+
+            InputStream is = context.getContentResolver().openInputStream(uri);
+
+            copyToMediaFileStream(context, mediaFile, is);
+
+            mediaFileBundles.add(mediaFileBundle);
+        }
+
+        return mediaFileBundles;
     }
 
     public static MediaFileBundle saveMp4Video(Context context, File video) {
@@ -433,6 +518,12 @@ public class MediaFileHandler {
         }
 
         return null;
+    }
+
+    public Observable<List<MediaFileBundle>> registerMediaFiles(final List<MediaFileBundle> mediaFileBundles) {
+        return cacheWordDataSource.getDataSource()
+                .flatMap((Function<DataSource, ObservableSource<List<MediaFileBundle>>>) dataSource ->
+                        dataSource.registerMediaFileBundles(mediaFileBundles).toObservable());
     }
 
     @SuppressWarnings("UnusedReturnValue")
