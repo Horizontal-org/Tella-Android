@@ -22,9 +22,10 @@ import org.hzontal.tella.keys.config.UnlockRegistry
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.util.LockTimeoutManager
+import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 
 
-class SecuritySettings : Fragment() {
+class SecuritySettings : BaseFragment() {
     var lockSetting: TextView? = null
     var lockTimeoutSetting: TextView? = null
 
@@ -35,6 +36,13 @@ class SecuritySettings : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_security_settings, container, false)
+
+        initView(view)
+
+        return view
+    }
+
+    override fun initView(view: View) {
         (activity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_sec_app_bar)
 
         lockSetting = view.findViewById(R.id.lock_setting)
@@ -96,8 +104,6 @@ class SecuritySettings : Fragment() {
         bypassCensorshipTellaSwitch.mSwitch.setOnCheckedChangeListener({ buttonView: CompoundButton?, isChecked: Boolean ->
             Preferences.setBypassCensorship(isChecked)
         })
-
-        return view
     }
 
     private fun showLockTimeoutSettingDialog() {
@@ -107,15 +113,17 @@ class SecuritySettings : Fragment() {
             }
         }
         activity?.let {
-            BottomSheetUtils.showRadioListSheet(requireActivity().supportFragmentManager,
-                    requireContext(),
-                    lockTimeoutManager.lockTimeout,
-                    lockTimeoutManager.getOptionsList(),
-                    getString(R.string.settings_select_lock_timeout),
-                    getString(R.string.settings_sec_lock_timeout_desc),
-                    getString(R.string.action_ok),
-                    getString(R.string.action_cancel),
-                    optionConsumer)
+            BottomSheetUtils.showRadioListSheet(
+                requireActivity().supportFragmentManager,
+                requireContext(),
+                lockTimeoutManager.lockTimeout,
+                lockTimeoutManager.getOptionsList(),
+                getString(R.string.settings_select_lock_timeout),
+                getString(R.string.settings_sec_lock_timeout_desc),
+                getString(R.string.action_ok),
+                getString(R.string.action_cancel),
+                optionConsumer
+            )
         }
     }
 
@@ -125,7 +133,9 @@ class SecuritySettings : Fragment() {
     }
 
     private fun setUpLockTypeText() {
-        when ((activity?.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(activity)) {
+        when ((activity?.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(
+            activity
+        )) {
             UnlockRegistry.Method.TELLA_PIN -> lockSetting?.setText(getString(R.string.onboard_pin))
             UnlockRegistry.Method.TELLA_PASSWORD -> lockSetting?.setText(getString(R.string.onboard_password))
             UnlockRegistry.Method.TELLA_PATTERN -> lockSetting?.setText(getString(R.string.onboard_pattern))
@@ -138,10 +148,15 @@ class SecuritySettings : Fragment() {
 
     fun goToUnlockingActivity() {
         var intent: Intent? = null
-        when ((activity?.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(activity)) {
-            UnlockRegistry.Method.TELLA_PIN -> intent = Intent(activity, PinUnlockActivity::class.java)
-            UnlockRegistry.Method.TELLA_PASSWORD -> intent = Intent(activity, PasswordUnlockActivity::class.java)
-            UnlockRegistry.Method.TELLA_PATTERN -> intent = Intent(activity, PatternUnlockActivity::class.java)
+        when ((activity?.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(
+            activity
+        )) {
+            UnlockRegistry.Method.TELLA_PIN -> intent =
+                Intent(activity, PinUnlockActivity::class.java)
+            UnlockRegistry.Method.TELLA_PASSWORD -> intent =
+                Intent(activity, PasswordUnlockActivity::class.java)
+            UnlockRegistry.Method.TELLA_PATTERN -> intent =
+                Intent(activity, PatternUnlockActivity::class.java)
         }
         intent!!.putExtra(IS_FROM_SETTINGS, true)
         startActivity(intent)
