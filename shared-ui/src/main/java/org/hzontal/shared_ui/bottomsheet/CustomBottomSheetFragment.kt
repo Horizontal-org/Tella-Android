@@ -161,7 +161,7 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
             dialog?.let {
                 it.window?.let { window ->
                     if (animationStyle != null) window.attributes.windowAnimations =
-                        animationStyle!!
+                            animationStyle!!
                     if (isTransparent) window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                 }
             }
@@ -180,9 +180,9 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         return inflater.inflate(layoutRes, container, false)

@@ -6,9 +6,7 @@
 package com.hzontal.tella_locking_ui.patternlock;
 
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -16,7 +14,6 @@ import androidx.core.content.ContextCompat;
 
 import com.hzontal.tella_locking_ui.common.BaseActivity;
 import com.hzontal.tella_locking_ui.R;
-
 
 public class BasePatternActivity extends BaseActivity {
 
@@ -47,7 +44,7 @@ public class BasePatternActivity extends BaseActivity {
          mRightButton = findViewById(R.id.pl_right_button);
          mTopImageView = findViewById(R.id.pl_patternImg);
          root = findViewById(R.id.rootPattern);
-         root.getRootView().setBackgroundColor(ContextCompat.getColor(this,R.color.wa_purple));
+         root.getRootView().setBackgroundColor(ContextCompat.getColor(this,R.color.space_cadet));
          mLeftButton.setText(isFromSettings() ? getString(R.string.pl_cancel) : getString(R.string.pl_back));
     }
 
