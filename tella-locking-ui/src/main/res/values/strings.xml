@@ -43,6 +43,9 @@
     <string name="settings_current_password_msg">Enter your current\n password to change your\n lock</string>
     <string name="settings_current_pattern_msg">Draw your current\n pattern to change your\n lock</string>
     <string name="settings_current_pin_msg">Enter your current PIN to\n change your lock   </string>
+    <string name="settings_current_camo_password_msg">Enter your current\n password to change your\n camouflage</string>
+    <string name="settings_current_camo_pattern_msg">Draw your current\n pattern to change your\n camouflage</string>
+    <string name="settings_current_camo_pin_msg">Enter your current PIN to\n change your camouflage   </string>
     <string name="settings_lock">Lock</string>
     <string name="settings_lock_success_msg">Your lock has been changed!</string>
 </resources>

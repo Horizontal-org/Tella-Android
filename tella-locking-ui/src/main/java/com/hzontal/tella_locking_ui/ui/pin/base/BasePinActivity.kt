@@ -45,7 +45,8 @@ abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickLi
         pinMsgText = findViewById(R.id.pin_msgTV)
         pinClickView = findViewById(R.id.pinClickView)
         pinTopImageView = findViewById(R.id.pin_TopImg)
-        pinLeftButton.text = getText(  if (!isFromSettings) R.string.pl_back else R.string.pl_cancel)
+        pinLeftButton.text =
+            getText(if (!isFromSettings) R.string.pl_back else R.string.pl_cancel)
         initListeners()
     }
 

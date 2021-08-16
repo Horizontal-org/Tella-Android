@@ -40,12 +40,12 @@ public class BasePatternActivity extends BaseActivity {
         setContentView(R.layout.pl_base_pattern_activity);
         mMessageText = findViewById(R.id.pl_message_text);
         mPatternView = findViewById(R.id.pl_pattern);
-         mLeftButton = findViewById(R.id.pl_left_button);
-         mRightButton = findViewById(R.id.pl_right_button);
-         mTopImageView = findViewById(R.id.pl_patternImg);
-         root = findViewById(R.id.rootPattern);
-         root.getRootView().setBackgroundColor(ContextCompat.getColor(this,R.color.space_cadet));
-         mLeftButton.setText(isFromSettings() ? getString(R.string.pl_cancel) : getString(R.string.pl_back));
+        mLeftButton = findViewById(R.id.pl_left_button);
+        mRightButton = findViewById(R.id.pl_right_button);
+        mTopImageView = findViewById(R.id.pl_patternImg);
+        root = findViewById(R.id.rootPattern);
+        root.getRootView().setBackgroundColor(ContextCompat.getColor(this, R.color.space_cadet));
+        mLeftButton.setText(isFromSettings() ? getString(R.string.pl_cancel) : getString(R.string.pl_back));
     }
 
 

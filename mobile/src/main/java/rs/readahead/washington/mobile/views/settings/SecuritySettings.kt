@@ -10,8 +10,9 @@ import android.widget.CompoundButton
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
-import androidx.fragment.app.Fragment
 import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
+import com.hzontal.tella_locking_ui.RETURN_ACTIVITY
+import com.hzontal.tella_locking_ui.ReturnActivity
 import com.hzontal.tella_locking_ui.ui.password.PasswordUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity
@@ -51,8 +52,11 @@ class SecuritySettings : BaseFragment() {
         setUpLockTypeText()
         setUpLockTimeoutText()
 
+        val camouflageSettingButton = view.findViewById<RelativeLayout>(R.id.camouflage_settings_button)
+        camouflageSettingButton.setOnClickListener { goToUnlockingActivity(ReturnActivity.CAMOUFLAGE) }
+
         val lockSettingButton = view.findViewById<RelativeLayout>(R.id.lock_settings_button)
-        lockSettingButton.setOnClickListener { goToUnlockingActivity() }
+        lockSettingButton.setOnClickListener { goToUnlockingActivity(ReturnActivity.SETTINGS) }
 
         val lockTimeoutSettingButton =
             view.findViewById<RelativeLayout>(R.id.lock_timeout_settings_button)
@@ -112,7 +116,7 @@ class SecuritySettings : BaseFragment() {
                 onLockTimeoutChoosen(option)
             }
         }
-        activity?.let {
+        activity.let {
             BottomSheetUtils.showRadioListSheet(
                 requireActivity().supportFragmentManager,
                 requireContext(),
@@ -133,7 +137,7 @@ class SecuritySettings : BaseFragment() {
     }
 
     private fun setUpLockTypeText() {
-        when ((activity?.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(
+        when ((activity.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(
             activity
         )) {
             UnlockRegistry.Method.TELLA_PIN -> lockSetting?.setText(getString(R.string.onboard_pin))
@@ -146,9 +150,9 @@ class SecuritySettings : BaseFragment() {
         lockTimeoutSetting?.setText(lockTimeoutManager.selectedStringRes)
     }
 
-    fun goToUnlockingActivity() {
+    fun goToUnlockingActivity(returnCall: ReturnActivity) {
         var intent: Intent? = null
-        when ((activity?.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(
+        when ((activity.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(
             activity
         )) {
             UnlockRegistry.Method.TELLA_PIN -> intent =
@@ -158,7 +162,8 @@ class SecuritySettings : BaseFragment() {
             UnlockRegistry.Method.TELLA_PATTERN -> intent =
                 Intent(activity, PatternUnlockActivity::class.java)
         }
-        intent!!.putExtra(IS_FROM_SETTINGS, true)
+        intent!!.putExtra(RETURN_ACTIVITY, returnCall.getActivityOrder())
+        intent.putExtra(IS_FROM_SETTINGS, true)
         startActivity(intent)
     }
 

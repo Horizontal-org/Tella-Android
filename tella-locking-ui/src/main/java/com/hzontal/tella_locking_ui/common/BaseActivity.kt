@@ -4,11 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
-import com.hzontal.tella_locking_ui.ONBOARDING_CLASS_NAME
-import com.hzontal.tella_locking_ui.R
-import com.hzontal.tella_locking_ui.TellaKeysUI
+import com.hzontal.tella_locking_ui.*
 import com.hzontal.tella_locking_ui.ui.ConfirmCredentialsActivity
 import com.hzontal.tella_locking_ui.ui.SuccessUpdateDialog
 import org.hzontal.tella.keys.config.UnlockConfig
@@ -18,6 +14,7 @@ import timber.log.Timber
 
 open class BaseActivity : AppCompatActivity() {
     protected val isFromSettings by lazy { intent.getBooleanExtra(IS_FROM_SETTINGS, false) }
+    protected val returnActivity by lazy { intent.getIntExtra(RETURN_ACTIVITY, 0) }
     private var isConfirmSettingsUpdate: Boolean = false
     protected val config: UnlockConfig by lazy { TellaKeysUI.getUnlockRegistry().getActiveConfig(this) }
     protected val registry: UnlockRegistry by lazy { TellaKeysUI.getUnlockRegistry() }
@@ -49,12 +46,19 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     protected fun onSuccessfulUnlock() {
-        if (isFromSettings) {
-            val intent = Intent(this, Class.forName(ONBOARDING_CLASS_NAME))
-            intent.putExtra(IS_FROM_SETTINGS, true)
-            startActivity(intent)
-        } else {
-            TellaKeysUI.getCredentialsCallback().onSuccessfulUnlock(this)
+        when (returnActivity) {
+            ReturnActivity.SETTINGS.getActivityOrder() -> {
+                val intent = Intent(this, Class.forName(ReturnActivity.SETTINGS.activityName))
+                intent.putExtra(IS_FROM_SETTINGS, true)
+                startActivity(intent)
+            }
+            ReturnActivity.CAMOUFLAGE.getActivityOrder() -> {
+                val intent = Intent(this, Class.forName(ReturnActivity.CAMOUFLAGE.activityName))
+                startActivity(intent)
+            }
+            else -> {
+                TellaKeysUI.getCredentialsCallback().onSuccessfulUnlock(this)
+            }
         }
     }
 
