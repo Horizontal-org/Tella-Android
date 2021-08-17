@@ -442,6 +442,10 @@
     <string name="settings.sec_bypass_switch_title">Bypass censorship</string>
     <string name="settings.sec_bypass_switch_expl">Overcome attempts to block Tella in your region. Note that enabling this will make it slower to send data to the servers.</string>
 
+    <string name="settings.servers_add_camouflage.subtitle">Your app is currently camouflaged \n with a Calculator app</string>
+    <string name="settings.servers_change.camouflage.method">CHANGE CAMOUFLAGE METHOD</string>
+    <string name="settings.servers_remove.camouflage.method">REMOVE CAMOUFLAGE</string>
+
 
 
 

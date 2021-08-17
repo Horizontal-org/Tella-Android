@@ -7,6 +7,8 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.MyApplication;
@@ -49,6 +51,8 @@ public class CamouflageAliasActivity extends BaseLockActivity {
         recyclerView.setAdapter(adapter);
 
         adapter.setIcons(cm.getOptions(), cm.getSelectedAliasPosition());
+
+        showAddCamouflageDialog();
     }
 
     @Override
@@ -89,5 +93,20 @@ public class CamouflageAliasActivity extends BaseLockActivity {
                 }
             }
         } catch (IndexOutOfBoundsException ignored) {}
+    }
+
+    private void showAddCamouflageDialog() {
+        BottomSheetUtils.showDualChoiceTypeSheet(this.getSupportFragmentManager(),
+                getString(R.string.settings_prot_select_camouflage),
+                getString(R.string.settings_servers_add_camouflage_subtitle),
+                getString(R.string.settings_servers_change_camouflage_method),
+                getString(R.string.settings_servers_remove_camouflage_method),
+                option -> {
+                    if (option) {
+
+                    } else {
+
+                    }
+                });
     }
 }
