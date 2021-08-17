@@ -2,13 +2,11 @@ package rs.readahead.washington.mobile.views.settings
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
-import android.widget.CompoundButton
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.widget.SwitchCompat
 import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.RETURN_ACTIVITY
@@ -16,6 +14,7 @@ import com.hzontal.tella_locking_ui.ReturnActivity
 import com.hzontal.tella_locking_ui.ui.password.PasswordUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity
+import com.tooltip.Tooltip
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.switches.TellaSwitchWithMessage
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder
@@ -108,6 +107,18 @@ class SecuritySettings : BaseFragment() {
         bypassCensorshipTellaSwitch.mSwitch.setOnCheckedChangeListener({ buttonView: CompoundButton?, isChecked: Boolean ->
             Preferences.setBypassCensorship(isChecked)
         })
+
+        val vaultTooltip = view.findViewById<ImageView>(R.id.delete_vault_tooltip)
+        vaultTooltip.setOnClickListener({showTooltip(vaultTooltip, resources.getString(R.string.settings_sec_delete_vault_tooltip))})
+
+        val formsTooltip = view.findViewById<ImageView>(R.id.delete_forms_tooltip)
+        formsTooltip.setOnClickListener({showTooltip(formsTooltip, resources.getString(R.string.settings_sec_delete_forms_tooltip))})
+
+        val serversTooltip = view.findViewById<ImageView>(R.id.delete_server_tooltip)
+        serversTooltip.setOnClickListener({showTooltip(serversTooltip, resources.getString(R.string.settings_sec_delete_servers_tooltip))})
+
+        val appTooltip = view.findViewById<ImageView>(R.id.delete_app_tooltip)
+        appTooltip.setOnClickListener({showTooltip(appTooltip, resources.getString(R.string.settings_sec_delete_app_tooltip))})
     }
 
     private fun showLockTimeoutSettingDialog() {
@@ -187,5 +198,18 @@ class SecuritySettings : BaseFragment() {
             quickExitSwitch.setChecked(false)
             quickExitSettings.setVisibility(View.GONE)
         }
+    }
+
+    private fun showTooltip(v : View, text: String){
+        val tooltip = Tooltip.Builder(v)
+            .setText(text)
+            .setTextColor(resources.getColor(R.color.wa_black))
+            .setBackgroundColor(resources.getColor(R.color.wa_white))
+            .setGravity(Gravity.TOP)
+            .setCornerRadius(12f)
+            .setPadding(24)
+            .setDismissOnClick(true)
+            .setCancelable(true)
+            .show<Tooltip>()
     }
 }
