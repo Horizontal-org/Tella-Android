@@ -147,7 +147,7 @@ class HomeVaultFragment : BaseFragment(), IHomeVaultPresenter.IView, VaultClickL
 
     private fun hidePanicScreens() {
         collapsingToolbar.visibility = View.VISIBLE
-        (activity as MainActivity).hideBottomNavigation(true)
+        (activity as MainActivity).showBottomNavigation()
         setupPanicView()
         panicModeView.visibility = View.GONE
     }
@@ -155,7 +155,7 @@ class HomeVaultFragment : BaseFragment(), IHomeVaultPresenter.IView, VaultClickL
     private fun showPanicScreens() {
         // really show panic screen
         collapsingToolbar.visibility = View.GONE
-        (activity as MainActivity).hideBottomNavigation(false)
+        (activity as MainActivity).hideBottomNavigation()
 
         panicModeView.visibility = View.VISIBLE
         panicModeView.alpha = 1f

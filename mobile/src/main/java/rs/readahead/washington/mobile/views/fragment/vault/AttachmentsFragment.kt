@@ -2,17 +2,16 @@ package rs.readahead.washington.mobile.views.fragment.vault
 
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import org.hzontal.shared_ui.appbar.ToolbarComponent
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseToolbarFragment
-import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.AttachmentsAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.MockVaultFiles
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.VaultFile
@@ -21,7 +20,7 @@ class AttachmentsFragment : BaseToolbarFragment() {
     private lateinit var attachmentsRecyclerView : RecyclerView
     private val attachmentAdapter by lazy { AttachmentsAdapter( ::onMoreDetailsClicked) }
     private lateinit var detailsFab : FloatingActionButton
-    private lateinit var toolbar : Toolbar
+    private lateinit var toolbar : ToolbarComponent
     private lateinit var collapsingToolbar : CollapsingToolbarLayout
 
 
@@ -54,13 +53,13 @@ class AttachmentsFragment : BaseToolbarFragment() {
     override fun initView(view: View) {
         attachmentsRecyclerView = view.findViewById(R.id.attachmentsRecyclerView)
         toolbar = view.findViewById(R.id.toolbar)
-        collapsingToolbar = view.findViewById(R.id.collapsing_toolbar)
         attachmentsRecyclerView.apply {
             adapter = attachmentAdapter
             layoutManager = LinearLayoutManager(activity)
         }
         detailsFab = view.findViewById(R.id.detailsFab)
         detailsFab.setOnClickListener { onFabDetailsClick() }
+        toolbar.backClickListener = {nav().navigateUp()}
         initData()
     }
 
@@ -75,5 +74,7 @@ class AttachmentsFragment : BaseToolbarFragment() {
     private fun onFabDetailsClick(){
 
     }
+
+
 
 }

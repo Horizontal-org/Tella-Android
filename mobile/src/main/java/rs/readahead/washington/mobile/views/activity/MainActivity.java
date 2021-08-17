@@ -20,15 +20,13 @@ import android.widget.SeekBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,9 +50,7 @@ import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContr
 import rs.readahead.washington.mobile.mvp.presenter.HomeScreenPresenter;
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.util.C;
-import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.PermissionUtil;
-import rs.readahead.washington.mobile.views.custom.CountdownImageView;
 import rs.readahead.washington.mobile.views.custom.HomeScreenGradient;
 
 
@@ -63,12 +59,12 @@ public class MainActivity extends MetadataActivity implements
         IMetadataAttachPresenterContract.IView,
         IHomeScreenPresenterContract.IView,
         ICollectCreateFormControllerContract.IView {
-   /* @BindView(R.id.main_toolbar)
-    Toolbar toolbar;*/
+    /* @BindView(R.id.main_toolbar)
+     Toolbar toolbar;*/
     @BindView(R.id.panic_mode_view)
     RelativeLayout panicCountdownView;
-   /* @BindView(R.id.countdown_timer)
-    CountdownImageView countdownImage;*/
+    /* @BindView(R.id.countdown_timer)
+     CountdownImageView countdownImage;*/
     @BindView(R.id.camera_tools_container)
     View cameraToolsContainer;
     @BindView(R.id.home_screen_gradient)
@@ -91,7 +87,8 @@ public class MainActivity extends MetadataActivity implements
     private ProgressDialog progressDialog;
     private OrientationEventListener mOrientationEventListener;
     private BottomNavigationView btmNavMain;
-
+    private NavController navController;
+    private  AppBarConfiguration appBarConfiguration;
     private int timerDuration;
     private long numOfCollectServers;
     private MenuItem settingsMenuItem;
@@ -102,7 +99,7 @@ public class MainActivity extends MetadataActivity implements
         setContentView(R.layout.activity_main2);
         ButterKnife.bind(this);
 
-      //  setupToolbar();
+        //  setupToolbar();
         setupNavigation();
         handler = new Handler();
 
@@ -134,38 +131,23 @@ public class MainActivity extends MetadataActivity implements
     private void setupNavigation() {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_nav_host);
         assert navHostFragment != null;
-        NavController navController = navHostFragment.getNavController();
+        navController = navHostFragment.getNavController();
         btmNavMain = findViewById(R.id.btm_nav_main);
-        //setSupportActionBar(toolbar);
         AppBarConfiguration appBarConfiguration =
-                new AppBarConfiguration.Builder(R.id.homeScreen,R.id.cameraScreen,R.id.reportsScreen,R.id.micScreen,R.id.formScreen).build();
+                new AppBarConfiguration.Builder(R.id.homeScreen, R.id.cameraScreen, R.id.reportsScreen, R.id.micScreen, R.id.formScreen).build();
         NavigationUI.setupWithNavController(btmNavMain, navController);
-        //NavigationUI.setupActionBarWithNavController(this,navController,appBarConfiguration);
-    }
-
-    private void setupToolbar() {
-        /*  toolbar.inflateMenu(R.menu.activity_main_menu);
-
-        settingsMenuItem = toolbar.getMenu().findItem(R.id.nav_settings);
-        settingsMenuItem.setOnMenuItemClickListener(item -> {
-            startSettingsActivity();
-            return true;
+        navController.addOnDestinationChangedListener((navController1, navDestination, bundle) -> {
+            if (navDestination.getId() == (R.id.homeScreen ) || navDestination.getId() == R.id.formScreen || navDestination.getId() == R.id.micScreen){
+                showBottomNavigation();
+            }
+            else {
+                hideBottomNavigation();
+            }
         });
-
-        toolbar.getMenu().findItem(R.id.nav_exit).setOnMenuItemClickListener(item -> {
-            exitApp();
-            return true;
-        });
-
-       // MenuItem offlineMenuItem = toolbar.getMenu().findItem(R.id.nav_offline_mode);
-      offlineMenuItem.setOnMenuItemClickListener(item -> {
-            DialogsUtil.showOfflineSwitchDialog(MainActivity.this, t -> setOfflineMenuIcon(item, t));
-            return true;
-        });*/
     }
 
     private void setOfflineMenuIcon(MenuItem offlineMenuIcon, boolean offline) {
-       // offlineMenuIcon.setIcon(offline ? R.drawable.ic_cloud_off_white_24dp : R.drawable.ic_cloud_queue_white_24dp);
+        // offlineMenuIcon.setIcon(offline ? R.drawable.ic_cloud_off_white_24dp : R.drawable.ic_cloud_queue_white_24dp);
         // todo (djm): move this from here - this should be setup once per activity.resume()
         offlineMenuIcon.setVisible(Preferences.isCollectServersLayout());
         if (settingsMenuItem != null) {
@@ -180,8 +162,8 @@ public class MainActivity extends MetadataActivity implements
     }
 
     private void stopPanicking() {
-       // countdownImage.cancel();
-       // countdownImage.setCountdownNumber(timerDuration);
+        // countdownImage.cancel();
+        // countdownImage.setCountdownNumber(timerDuration);
         panicActivated = false;
         resetSeekBar(panicSeekBar);
         showMainControls();
@@ -438,7 +420,7 @@ public class MainActivity extends MetadataActivity implements
             maybeClosePanic();
         }
 
-       // setOfflineMenuIcon(toolbar.getMenu().findItem(R.id.nav_offline_mode), Preferences.isOfflineMode());
+        // setOfflineMenuIcon(toolbar.getMenu().findItem(R.id.nav_offline_mode), Preferences.isOfflineMode());
     }
 
     @Override
@@ -472,19 +454,19 @@ public class MainActivity extends MetadataActivity implements
         // really show panic screen
         panicCountdownView.setVisibility(View.VISIBLE);
         panicCountdownView.setAlpha(1);
-      //  countdownImage.start(timerDuration, this::executePanicMode);
+        //  countdownImage.start(timerDuration, this::executePanicMode);
     }
 
     private void hideMainControls() {
         cameraToolsContainer.setVisibility(View.GONE);
         navBarHolder.setVisibility(View.GONE);
-       // toolbar.setVisibility(View.GONE);
+        // toolbar.setVisibility(View.GONE);
     }
 
     private void showMainControls() {
         cameraToolsContainer.setVisibility(View.VISIBLE);
         navBarHolder.setVisibility(View.VISIBLE);
-       // toolbar.setVisibility(View.VISIBLE);
+        // toolbar.setVisibility(View.VISIBLE);
     }
 
     void executePanicMode() {
@@ -602,8 +584,8 @@ public class MainActivity extends MetadataActivity implements
     private void hidePanicScreens() {
         resetSeekBar(panicSeekBar);
 
-       // toolbar.setAlpha(1);
-       // toolbar.setVisibility(View.VISIBLE);
+        // toolbar.setAlpha(1);
+        // toolbar.setVisibility(View.VISIBLE);
         cameraToolsContainer.setAlpha(1);
         cameraToolsContainer.setVisibility(View.VISIBLE);
         background.setAlpha(0f);
@@ -695,7 +677,27 @@ public class MainActivity extends MetadataActivity implements
             buttonUploads.setBackground(getResources().getDrawable(R.drawable.round_right_button_background));
         }
     }
-    public void hideBottomNavigation(boolean isVisible){
-        btmNavMain.setVisibility(isVisible ? View.VISIBLE : View.GONE  );
+
+    public void hideBottomNavigation() {
+        if (btmNavMain.getVisibility() == View.VISIBLE && btmNavMain.getAlpha() == 1f) {
+            btmNavMain.animate()
+                    .alpha(0f)
+                    .withEndAction(() -> btmNavMain.setVisibility(View.GONE))
+                    .setDuration(1000);
+        }
     }
+
+    public void showBottomNavigation() {
+        btmNavMain.setVisibility(View.VISIBLE);
+        btmNavMain.animate()
+                .alpha(1f)
+                .setDuration(1000);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        return  navController.navigateUp();
+    }
+
 }
+
