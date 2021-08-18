@@ -158,6 +158,7 @@
                             android:textColor="@color/wa_white" />
 
                         <ImageView
+                            android:id="@+id/delete_vault_tooltip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -165,8 +166,7 @@
                             android:layout_toEndOf="@id/delete_vault_title"
                             android:contentDescription="help"
                             android:src="@drawable/orange_help_24"
-                            android:textColor="@color/wa_white"
-                            android:tooltipText="@string/settings.sec_delete.vault_tooltip" />
+                            android:textColor="@color/wa_white"/>
 
                         <CheckBox
                             android:id="@+id/delete_vault"
@@ -194,6 +194,7 @@
                             android:textColor="@color/wa_white" />
 
                         <ImageView
+                            android:id="@+id/delete_forms_tooltip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -230,6 +231,7 @@
                             app:buttonTint="@color/radio_buttons_color" />
 
                         <ImageView
+                            android:id="@+id/delete_server_tooltip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -264,6 +266,7 @@
                             android:textColor="@color/wa_white" />
 
                         <ImageView
+                            android:id="@+id/delete_app_tooltip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
