@@ -42,8 +42,8 @@ public class HomeScreenPresenter implements IHomeScreenPresenterContract.IPresen
                 .subscribeOn(Schedulers.io())
                 .flatMapCompletable(dataSource -> {
                     if (SharedPrefs.getInstance().isEraseGalleryActive()) {
+                        MyApplication.rxVault.destroy().blockingAwait();
                         MediaFileHandler.destroyGallery(appContext);
-                        dataSource.deleteMediaFiles();
                     }
 
                     if (Preferences.isDeleteServerSettingsActive()) {

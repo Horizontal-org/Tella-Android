@@ -1,19 +1,18 @@
 package rs.readahead.washington.mobile.mvp.contract;
 
 import android.content.Context;
-import androidx.annotation.Nullable;
 
-import rs.readahead.washington.mobile.domain.entity.Metadata;
-
+import com.hzontal.tella_vault.Metadata;
+import com.hzontal.tella_vault.VaultFile;
 
 public class IMetadataAttachPresenterContract {
     public interface IView {
-        void onMetadataAttached(long mediaFileId, @Nullable Metadata metadata);
+        void onMetadataAttached(VaultFile vaultFile);
         void onMetadataAttachError(Throwable throwable);
         Context getContext();
     }
 
     public interface IPresenter extends IBasePresenter {
-        void attachMetadata(long mediaFileId, @Nullable Metadata metadata);
+        void attachMetadata(VaultFile vaultFile, Metadata metadata);
     }
 }

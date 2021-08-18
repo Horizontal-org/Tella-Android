@@ -1,8 +1,7 @@
 package rs.readahead.washington.mobile.views.fragment.vault.adapters
 
-import org.hzontal.shared_ui.buttons.HomeButton
+import com.hzontal.tella_vault.VaultFile
 import rs.readahead.washington.mobile.data.entity.XFormEntity
-import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.VaultFile
 
 interface VaultClickListener : FilesActionsListener {
     fun onPanicModeSwipeListener(progress : Int)

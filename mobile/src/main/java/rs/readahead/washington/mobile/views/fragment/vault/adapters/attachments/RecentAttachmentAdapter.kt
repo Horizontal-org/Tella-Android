@@ -2,8 +2,8 @@ package rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.hzontal.tella_vault.VaultFile
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
-import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.VaultFile
 
 class RecentAttachmentAdapter (val list: List<VaultFile>, private val vaultClickListener: VaultClickListener)  :  RecyclerView.Adapter<RecentAttachmentViewHolder>(){
 

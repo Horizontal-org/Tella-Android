@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.views.fragment.vault.adapters
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import com.hzontal.tella_vault.VaultFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,7 +14,6 @@ import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.RecentFilesViewHolder
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.BaseViewHolder
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.DataItem
-import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.VaultFile
 
 const val ITEM_RECENT_FILES = 0
 const val ITEM_FAVORITES_FORMS = 1

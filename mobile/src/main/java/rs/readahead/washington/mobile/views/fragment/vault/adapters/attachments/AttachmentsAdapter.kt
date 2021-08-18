@@ -7,9 +7,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.hzontal.tella_vault.VaultFile
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.domain.entity.MediaFile
-import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.VaultFile
 
 class AttachmentsAdapter constructor(iGalleryMediaHandler: IGalleryMediaHandler) :
      RecyclerView.Adapter<RecyclerView.ViewHolder>() {

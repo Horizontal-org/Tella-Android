@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments
 
-import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.VaultFile
+import com.hzontal.tella_vault.VaultFile
+
 
 interface IGalleryMediaHandler {
     fun playMedia(vaultFile: VaultFile)

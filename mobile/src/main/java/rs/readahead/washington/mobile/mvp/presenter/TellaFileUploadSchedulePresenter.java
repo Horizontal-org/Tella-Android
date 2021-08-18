@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.VaultFile;
 
 import java.util.List;
 
@@ -9,7 +10,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePresenterContract;
 import rs.readahead.washington.mobile.util.jobs.TellaUploadJob;
 
@@ -32,7 +32,7 @@ public class TellaFileUploadSchedulePresenter implements ITellaFileUploadSchedul
     }
 
     @Override
-    public void scheduleUploadMediaFiles(final List<MediaFile> mediaFiles) {
+    public void scheduleUploadMediaFiles(final List<VaultFile> mediaFiles) {
         disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -49,7 +49,7 @@ public class TellaFileUploadSchedulePresenter implements ITellaFileUploadSchedul
     }
 
     @Override
-    public void scheduleUploadMediaFilesWithPriority(final List<MediaFile> mediaFiles, long uploadServerId, boolean metadata) {
+    public void scheduleUploadMediaFilesWithPriority(final List<VaultFile> mediaFiles, long uploadServerId, boolean metadata) {
         disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

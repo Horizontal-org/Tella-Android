@@ -9,6 +9,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.CollapsingToolbarLayout
+import com.hzontal.tella_vault.VaultFile
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.entity.XFormEntity
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
@@ -18,7 +19,6 @@ import rs.readahead.washington.mobile.views.custom.CountdownTextView
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.MockVaultFiles
-import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.VaultFile
 
 class HomeVaultFragment : BaseFragment(), IHomeVaultPresenter.IView, VaultClickListener {
     private lateinit var toolbar: Toolbar
@@ -58,7 +58,7 @@ class HomeVaultFragment : BaseFragment(), IHomeVaultPresenter.IView, VaultClickL
     }
 
     private fun initData() {
-        vaultAdapter.apply {
+       /* vaultAdapter.apply {
             addPanicMode(MockVaultFiles.getRootFile())
             addRecentFiles(MockVaultFiles.getListVaultFiles())
             addFileActions(MockVaultFiles.getRootFile())
@@ -67,7 +67,7 @@ class HomeVaultFragment : BaseFragment(), IHomeVaultPresenter.IView, VaultClickL
         vaultRecyclerView.apply {
             adapter = vaultAdapter
             layoutManager = LinearLayoutManager(activity)
-        }
+        }*/
         timerDuration = resources.getInteger(R.integer.panic_countdown_duration)
 
     }

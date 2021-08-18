@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data
 
+import com.hzontal.tella_vault.VaultFile
 import rs.readahead.washington.mobile.data.entity.XFormEntity
 
 sealed class DataItem {

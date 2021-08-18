@@ -16,18 +16,17 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.utils.MediaFile;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.data.database.KeyDataSource;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.media.MediaFileUrlLoader;
+import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.mvp.contract.ICollectAttachmentMediaFilePresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CollectAttachmentMediaFilePresenter;
-import rs.readahead.washington.mobile.presentation.entity.MediaFileLoaderModel;
+import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.FileUtil;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.views.activity.AudioPlayActivity;
@@ -54,9 +53,9 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
     @BindView(R.id.audioDuration)
     TextView audioDuration;
 
-    private MediaFile mediaFile;
-    private CollectAttachmentMediaFilePresenter presenter;
-    private RequestManager.ImageModelRequest<MediaFileLoaderModel> glide;
+    private VaultFile vaultFile;
+    private final CollectAttachmentMediaFilePresenter presenter;
+    private final RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
 
 
     public CollectAttachmentPreviewView(Context context) {
@@ -73,9 +72,8 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
         inflate(getContext(), R.layout.collect_attachemnt_preview_view, this);
 
         ButterKnife.bind(this);
-        KeyDataSource keyDataSource = MyApplication.getKeyDataSource();
-        MediaFileHandler mediaFileHandler = new MediaFileHandler(keyDataSource);
-        MediaFileUrlLoader glideLoader = new MediaFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
+        MediaFileHandler mediaFileHandler = new MediaFileHandler();
+        VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
 
         glide = Glide.with(getContext()).using(glideLoader);
         presenter = new CollectAttachmentMediaFilePresenter(this);
@@ -92,48 +90,43 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
     }
 
     @Override
-    public void onGetMediaFileSuccess(MediaFile mediaFile) {
-        this.mediaFile = mediaFile;
+    public void onGetMediaFileSuccess(VaultFile vaultFile) {
+        this.vaultFile = vaultFile;
 
-        switch (mediaFile.getType()) {
-            case VIDEO:
-                thumbGradient.setVisibility(GONE);
-                thumbView.setId(QuestionWidget.newUniqueId());
-                thumbView.setOnClickListener(v -> showVideoViewerActivity());
+        if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
+            thumbGradient.setVisibility(GONE);
+            thumbView.setId(QuestionWidget.newUniqueId());
+            thumbView.setOnClickListener(v -> showVideoViewerActivity());
 
-                showMediaFileInfo();
-                loadThumbnail();
-                videoDuration.setText(Util.getShortVideoDuration((int) (mediaFile.getDuration() / 1000)));
+            showMediaFileInfo();
+            loadThumbnail();
+            videoDuration.setText(Util.getShortVideoDuration((int) (vaultFile.duration / 1000)));
 
-                audioInfo.setVisibility(GONE);
-                videoInfo.setVisibility(VISIBLE);
-                break;
+            audioInfo.setVisibility(GONE);
+            videoInfo.setVisibility(VISIBLE);
+        } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
+            thumbGradient.setVisibility(VISIBLE);
+            thumbView.setImageResource(R.drawable.ic_mic_gray);
+            thumbView.setOnClickListener(v -> showAudioPlayActivity());
 
-            case AUDIO:
-                thumbGradient.setVisibility(VISIBLE);
-                thumbView.setImageResource(R.drawable.ic_mic_gray);
-                thumbView.setOnClickListener(v -> showAudioPlayActivity());
+            showMediaFileInfo();
+            audioDuration.setText(Util.getShortVideoDuration((int) (vaultFile.duration / 1000)));
 
-                showMediaFileInfo();
-                audioDuration.setText(Util.getShortVideoDuration((int) (mediaFile.getDuration() / 1000)));
+            audioInfo.setVisibility(VISIBLE);
+            videoInfo.setVisibility(GONE);
+        } else if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
+            thumbGradient.setVisibility(GONE);
+            thumbView.setId(QuestionWidget.newUniqueId());
+            thumbView.setOnClickListener(v -> showPhotoViewerActivity());
 
-                audioInfo.setVisibility(VISIBLE);
-                videoInfo.setVisibility(GONE);
-                break;
+            loadThumbnail();
+            showMediaFileInfo();
 
-            case IMAGE:
-                thumbGradient.setVisibility(GONE);
-                thumbView.setId(QuestionWidget.newUniqueId());
-                thumbView.setOnClickListener(v -> showPhotoViewerActivity());
-
-                loadThumbnail();
-                showMediaFileInfo();
-
-                audioInfo.setVisibility(GONE);
-                videoInfo.setVisibility(GONE);
-                break;
+            audioInfo.setVisibility(GONE);
+            videoInfo.setVisibility(GONE);
         }
     }
+
 
     @Override
     public void onGetMediaFileStart() {
@@ -154,26 +147,26 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
     }
 
     private void loadThumbnail() {
-        glide.load(new MediaFileLoaderModel(mediaFile, MediaFileLoaderModel.LoadType.THUMBNAIL))
+        glide.load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(thumbView);
     }
 
     private void showMediaFileInfo() {
-        fileName.setText(String.format(getResources().getString(R.string.collect_form_attachment_meta_file_name), mediaFile.getFileName()));
-        fileSize.setText(String.format(getResources().getString(R.string.collect_form_meta_file_size), FileUtil.getFileSizeString(mediaFile.getSize())));
+        fileName.setText(String.format(getResources().getString(R.string.collect_form_attachment_meta_file_name), vaultFile.name));
+        fileSize.setText(String.format(getResources().getString(R.string.collect_form_meta_file_size), FileUtil.getFileSizeString(vaultFile.size)));
     }
 
     private void showVideoViewerActivity() {
-        if (mediaFile == null) {
+        if (vaultFile == null) {
             return;
         }
 
         try {
             Activity activity = (Activity) getContext();
             activity.startActivity(new Intent(getContext(), VideoViewerActivity.class)
-                    .putExtra(VideoViewerActivity.VIEW_VIDEO, mediaFile)
+                    .putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile)
                     .putExtra(VideoViewerActivity.NO_ACTIONS, true));
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
@@ -181,14 +174,14 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
     }
 
     private void showPhotoViewerActivity() {
-        if (mediaFile == null) {
+        if (vaultFile == null) {
             return;
         }
 
         try {
             Activity activity = (Activity) getContext();
             activity.startActivity(new Intent(getContext(), PhotoViewerActivity.class)
-                    .putExtra(PhotoViewerActivity.VIEW_PHOTO, mediaFile)
+                    .putExtra(PhotoViewerActivity.VIEW_PHOTO, vaultFile)
                     .putExtra(PhotoViewerActivity.NO_ACTIONS, true));
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
@@ -196,14 +189,14 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
     }
 
     private void showAudioPlayActivity() {
-        if (mediaFile == null) {
+        if (vaultFile == null) {
             return;
         }
 
         try {
             Activity activity = (Activity) getContext();
             activity.startActivity(new Intent(getContext(), AudioPlayActivity.class)
-                    .putExtra(AudioPlayActivity.PLAY_MEDIA_FILE, mediaFile)
+                    .putExtra(AudioPlayActivity.PLAY_MEDIA_FILE, vaultFile)
                     .putExtra(AudioPlayActivity.NO_ACTIONS, true));
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);

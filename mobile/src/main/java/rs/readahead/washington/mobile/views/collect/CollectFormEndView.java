@@ -2,9 +2,6 @@ package rs.readahead.washington.mobile.views.collect;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +11,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+
+import com.hzontal.utils.MediaFile;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
@@ -69,7 +72,7 @@ public class CollectFormEndView extends FrameLayout {
         partsListView.addView(createFormSubmissionPartItemView(instance, formSize, offline));
         for (FormMediaFile mediaFile : instance.getWidgetMediaFiles()) {
             partsListView.addView(createFormMediaFileItemView(mediaFile, offline));
-            formSize += mediaFile.getSize();
+            formSize += mediaFile.size;
             formElements++;
         }
 
@@ -159,27 +162,17 @@ public class CollectFormEndView extends FrameLayout {
         ImageView iconView = layout.findViewById(R.id.partIcon);
         CheckBox uploadCheck = layout.findViewById(R.id.partCheckBox);
 
-        nameView.setText(mediaFile.getFileName());
-        sizeView.setText(FileUtil.getFileSizeString(mediaFile.getSize()));
+        nameView.setText(mediaFile.name);
+        sizeView.setText(FileUtil.getFileSizeString(mediaFile.size));
 
         int typeResId = R.drawable.ic_attach_file_black_24dp;
 
-        switch (mediaFile.getType()) {
-            case IMAGE:
-                typeResId = R.drawable.ic_menu_camera;
-                break;
-
-            case VIDEO:
-                typeResId = R.drawable.ic_videocam_black_24dp;
-                break;
-
-            case AUDIO:
-                typeResId = R.drawable.ic_mic_black_24dp;
-                break;
-
-            case UNKNOWN:
-            default:
-                break;
+        if (MediaFile.INSTANCE.isImageFileType(mediaFile.mimeType)) {
+            typeResId = R.drawable.ic_menu_camera;
+        } else if (MediaFile.INSTANCE.isVideoFileType(mediaFile.mimeType)) {
+            typeResId = R.drawable.ic_videocam_black_24dp;
+        } else if (MediaFile.INSTANCE.isAudioFileType(mediaFile.mimeType)) {
+            typeResId = R.drawable.ic_mic_black_24dp;
         }
 
         iconView.setImageResource(typeResId);

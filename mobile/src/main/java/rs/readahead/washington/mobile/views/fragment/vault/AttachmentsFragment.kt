@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.hzontal.tella_locking_ui.common.extensions.toggleVisibility
+import com.hzontal.tella_vault.VaultFile
 import org.hzontal.shared_ui.appbar.ToolbarComponent
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.activity.MainActivity
@@ -17,7 +18,6 @@ import rs.readahead.washington.mobile.views.base_ui.BaseToolbarFragment
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.AttachmentsAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.IGalleryMediaHandler
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.MockVaultFiles
-import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.VaultFile
 
 class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, IGalleryMediaHandler {
     private lateinit var attachmentsRecyclerView: RecyclerView
@@ -119,6 +119,5 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, IGaller
 
     override fun onMediaDeselected(vaultFile: VaultFile) {
     }
-
 
 }

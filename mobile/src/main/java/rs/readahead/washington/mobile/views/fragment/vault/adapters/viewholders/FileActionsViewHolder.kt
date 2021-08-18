@@ -2,12 +2,12 @@ package rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders
 
 import android.view.View
 import android.view.ViewGroup
+import com.hzontal.tella_vault.VaultFile
 import org.hzontal.shared_ui.buttons.HomeButton
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.BaseViewHolder
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.inflate
-import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.VaultFile
 
 class FileActionsViewHolder (val view : View) : BaseViewHolder<VaultFile>(view) {
 
