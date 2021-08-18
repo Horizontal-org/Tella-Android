@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.fragment.vault
+package rs.readahead.washington.mobile.views.fragment.vault.home
 
 import android.os.Bundle
 import android.view.*
@@ -20,7 +20,7 @@ import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.MockVaultFiles
 
-class HomeVaultFragment : BaseFragment(), IHomeVaultPresenter.IView, VaultClickListener {
+class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresenter.IView  {
     private lateinit var toolbar: Toolbar
     private lateinit var collapsingToolbar: CollapsingToolbarLayout
     private lateinit var vaultRecyclerView: RecyclerView
@@ -46,7 +46,6 @@ class HomeVaultFragment : BaseFragment(), IHomeVaultPresenter.IView, VaultClickL
     }
 
     override fun initView(view: View) {
-        homeVaultPresenter = HomeVaultPresenter(this)
         toolbar = view.findViewById(R.id.toolbar)
         collapsingToolbar = view.findViewById(R.id.collapsing_toolbar)
         vaultRecyclerView = view.findViewById(R.id.vaultRecyclerView)
@@ -58,16 +57,11 @@ class HomeVaultFragment : BaseFragment(), IHomeVaultPresenter.IView, VaultClickL
     }
 
     private fun initData() {
-       /* vaultAdapter.apply {
-            addPanicMode(MockVaultFiles.getRootFile())
-            addRecentFiles(MockVaultFiles.getListVaultFiles())
-            addFileActions(MockVaultFiles.getRootFile())
-            addFavoriteForms(MockVaultFiles.getListForms())
-        }
+        homeVaultPresenter = HomeVaultPresenter(this)
         vaultRecyclerView.apply {
             adapter = vaultAdapter
             layoutManager = LinearLayoutManager(activity)
-        }*/
+        }
         timerDuration = resources.getInteger(R.integer.panic_countdown_duration)
 
     }
@@ -168,7 +162,7 @@ class HomeVaultFragment : BaseFragment(), IHomeVaultPresenter.IView, VaultClickL
 
     private fun setupPanicView() {
         if (Preferences.isQuickExit()) {
-            vaultAdapter.addPanicMode(MockVaultFiles.getRootFile())
+            vaultAdapter.addPanicMode()
         } else {
             vaultAdapter.hidePanicMode()
         }
@@ -176,6 +170,18 @@ class HomeVaultFragment : BaseFragment(), IHomeVaultPresenter.IView, VaultClickL
    private fun onPanicClicked() {
         hidePanicScreens()
         stopPanicking()
+    }
+
+    override fun onCountTUServersEnded(num: Long?) {
+    }
+
+    override fun onCountTUServersFailed(throwable: Throwable?) {
+    }
+
+    override fun onCountCollectServersEnded(num: Long?) {
+    }
+
+    override fun onCountCollectServersFailed(throwable: Throwable?) {
     }
 
 }

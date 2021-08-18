@@ -1,5 +1,6 @@
-package rs.readahead.washington.mobile.views.fragment.vault
+package rs.readahead.washington.mobile.views.fragment.vault.attachements
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
@@ -18,10 +19,12 @@ import rs.readahead.washington.mobile.views.base_ui.BaseToolbarFragment
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.AttachmentsAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.IGalleryMediaHandler
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.MockVaultFiles
+import timber.log.Timber
 
-class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, IGalleryMediaHandler {
+class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, IGalleryMediaHandler, IAttachmentsPresenter.IView{
     private lateinit var attachmentsRecyclerView: RecyclerView
     private val attachmentAdapter by lazy { AttachmentsAdapter(this) }
+    private val attachmentsPresenter by lazy { AttachmentsPresenter(this) }
     private lateinit var gridLayoutManager: GridLayoutManager
     private lateinit var detailsFab: FloatingActionButton
     private lateinit var toolbar: ToolbarComponent
@@ -29,7 +32,6 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, IGaller
     private lateinit var listCheck: ImageView
     private lateinit var gridCheck: ImageView
     private var isGrid = false
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,11 +80,7 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, IGaller
     }
 
     private fun initData() {
-        attachmentAdapter.submitList(MockVaultFiles.getListVaultFiles())
-    }
-
-    private fun onMoreDetailsClicked(vaultFile: VaultFile) {
-
+        attachmentsPresenter.getFiles(null,null)
     }
 
     private fun onFabDetailsClick() {
@@ -119,5 +117,63 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, IGaller
 
     override fun onMediaDeselected(vaultFile: VaultFile) {
     }
+
+    override fun onGetFilesStart() {
+    }
+
+    override fun onGetFilesEnd() {
+    }
+
+    override fun onGetFilesSuccess(files: List<VaultFile?>) {
+        attachmentAdapter.submitList(files)
+    }
+
+    override fun onGetFilesError(error: Throwable?) {
+        Timber.d(error, javaClass.name)
+    }
+
+    override fun onMediaImported(vaultFile: VaultFile?) {
+    }
+
+    override fun onImportError(error: Throwable?) {
+    }
+
+    override fun onImportStarted() {
+    }
+
+    override fun onImportEnded() {
+    }
+
+    override fun onMediaFilesAdded(vaultFile: VaultFile?) {
+    }
+
+    override fun onMediaFilesAddingError(error: Throwable?) {
+    }
+
+    override fun onMediaFilesDeleted(num: Int) {
+    }
+
+    override fun onMediaFilesDeletionError(throwable: Throwable?) {
+    }
+
+    override fun onMediaExported(num: Int) {
+    }
+
+    override fun onExportError(error: Throwable?) {
+    }
+
+    override fun onExportStarted() {
+    }
+
+    override fun onExportEnded() {
+    }
+
+    override fun onCountTUServersEnded(num: Long?) {
+    }
+
+    override fun onCountTUServersFailed(throwable: Throwable?) {
+
+    }
+
 
 }

@@ -9,10 +9,10 @@ import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickLi
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.BaseViewHolder
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.inflate
 
-class PanicModeViewHolder (val view : View) : BaseViewHolder<VaultFile>(view) {
+class PanicModeViewHolder (val view : View) : BaseViewHolder<String>(view) {
     private lateinit var panicSeekBar : SeekBar
 
-    override fun bind(item: VaultFile, vaultClickListener: VaultClickListener) {
+    override fun bind(item: String, vaultClickListener: VaultClickListener) {
         panicSeekBar = view.findViewById(R.id.panic_seek)
 
         panicSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {

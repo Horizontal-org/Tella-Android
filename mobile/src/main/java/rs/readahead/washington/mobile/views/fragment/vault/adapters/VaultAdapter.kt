@@ -20,6 +20,9 @@ const val ITEM_FAVORITES_FORMS = 1
 const val ITEM_PANIC_BUTTON = 2
 const val ITEM_FILES_ACTIONS = 3
 
+private const val ID_FILES_ACTIONS = "1"
+private const val ID_PANIC_MODE = "2"
+
 
 class VaultAdapter(private val onClick: VaultClickListener) :
     androidx.recyclerview.widget.ListAdapter<DataItem, BaseViewHolder<*>>(
@@ -32,43 +35,49 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     private var actions = listOf<DataItem.FileActions>()
     private var items = listOf<DataItem>()
 
-    fun addPanicMode(vaultFile: VaultFile) {
+    init {
+        addFileActions()
+    }
+    fun addPanicMode() {
         panicMode = listOf(
             DataItem.PanicMode(
-                vaultFile
+                ID_PANIC_MODE
             )
         )
         renderList()
     }
 
-    fun hidePanicMode(){
+    fun hidePanicMode() {
         adapterScope.launch {
-            items =   items - panicMode
+            items = items - panicMode
             withContext(Dispatchers.Main) {
                 submitList(items)
             }
         }
     }
-    fun addRecentFiles(vaultFiles : List<VaultFile>) {
+
+    fun addRecentFiles(vaultFiles: List<VaultFile>) {
         recentFiles = listOf(DataItem.RecentFiles(vaultFiles))
         renderList()
     }
-    fun addFileActions(vaultFile: VaultFile) {
+
+    fun addFileActions() {
         actions = listOf(
             DataItem.FileActions(
-                vaultFile
+                ID_FILES_ACTIONS
             )
         )
         renderList()
     }
-    fun addFavoriteForms(forms : List<XFormEntity>) {
+
+    fun addFavoriteForms(forms: List<XFormEntity>) {
         favoriteForms = listOf(DataItem.FavoriteForms(forms))
         renderList()
     }
 
     fun renderList() {
         adapterScope.launch {
-            items =   favoriteForms + recentFiles  + actions + panicMode
+            items = favoriteForms + recentFiles + actions + panicMode
             withContext(Dispatchers.Main) {
                 submitList(items)
             }
@@ -93,23 +102,23 @@ class VaultAdapter(private val onClick: VaultClickListener) :
         }
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder<*> , position: Int) {
+    override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
         when (holder) {
             is PanicModeViewHolder -> {
                 val panicItem = getItem(position) as DataItem.PanicMode
-                holder.bind(panicItem.vaultFile,onClick)
+                holder.bind( panicItem.idPanicMode,onClick)
             }
             is FavoriteFormsViewHolder -> {
                 val favoriteItem = getItem(position) as DataItem.FavoriteForms
-                holder.bind(favoriteItem.forms,onClick)
+                holder.bind(favoriteItem.forms, onClick)
             }
             is RecentFilesViewHolder -> {
                 val recentFiles = getItem(position) as DataItem.RecentFiles
-                holder.bind(recentFiles.vaultFiles,onClick)
+                holder.bind(recentFiles.vaultFiles, onClick)
             }
             is FileActionsViewHolder -> {
                 val recentFiles = getItem(position) as DataItem.FileActions
-                holder.bind(recentFiles.vaultFile,onClick)
+                holder.bind(recentFiles.idActions, onClick)
             }
         }
     }
@@ -120,6 +129,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
             is DataItem.RecentFiles -> ITEM_RECENT_FILES
             is DataItem.PanicMode -> ITEM_PANIC_BUTTON
             is DataItem.FavoriteForms -> ITEM_FAVORITES_FORMS
+            else -> throw ClassCastException("Unknown position $position")
         }
     }
 }

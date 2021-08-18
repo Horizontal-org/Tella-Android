@@ -7,7 +7,7 @@
     app:startDestination="@+id/homeScreen">
     <fragment
         android:id="@+id/homeScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.vault.HomeVaultFragment"
+        android:name="rs.readahead.washington.mobile.views.fragment.vault.home.HomeVaultFragment"
         android:label="Vault"
         tools:layout="@layout/fragment_vault">
         <action
@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/attachments_screen"
-        android:name="rs.readahead.washington.mobile.views.fragment.vault.AttachmentsFragment"
+        android:name="rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment"
         android:label="fragment_security_settings"
         tools:layout="@layout/fragment_vault_attachments">
     </fragment>

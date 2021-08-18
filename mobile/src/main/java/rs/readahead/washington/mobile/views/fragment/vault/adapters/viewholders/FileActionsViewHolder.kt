@@ -9,7 +9,7 @@ import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickLi
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.BaseViewHolder
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.inflate
 
-class FileActionsViewHolder (val view : View) : BaseViewHolder<VaultFile>(view) {
+class FileActionsViewHolder (val view : View) : BaseViewHolder<String?>(view) {
 
     private lateinit var allFilesBtn : HomeButton
     private lateinit var imagesBtn : HomeButton
@@ -17,7 +17,7 @@ class FileActionsViewHolder (val view : View) : BaseViewHolder<VaultFile>(view) 
     private lateinit var documentsBtn : HomeButton
     private lateinit var othersBtn : HomeButton
     private lateinit var videosBtn : HomeButton
-    override fun bind(item: VaultFile, vaultClickListener: VaultClickListener) {
+    override fun bind(item: String?, vaultClickListener: VaultClickListener) {
         view.apply {
             allFilesBtn = findViewById(R.id.allFilesBtn)
             imagesBtn = findViewById(R.id.imagesBtn)
