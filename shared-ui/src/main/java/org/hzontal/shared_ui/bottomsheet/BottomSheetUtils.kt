@@ -171,8 +171,8 @@ object BottomSheetUtils {
         }
     }
 
-    interface ServerTypeConsumer {
-        fun accept(isCollectServer: Boolean)
+    interface DualChoiceConsumer {
+        fun accept(option: Boolean)
     }
 
     @JvmStatic
@@ -182,11 +182,64 @@ object BottomSheetUtils {
         descriptionText: String?,
         buttonOneLabel: String? = null,
         buttonTwoLabel: String? = null,
-        consumer: ServerTypeConsumer? = null
+        consumer: DualChoiceConsumer? = null
     ) {
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.dual_choose_layout)
+            .cancellable(true)
+            .fullScreen()
+            .statusBarColor(R.color.space_cadet)
+        customSheetFragment.holder(DualChoiceSheetHolder(), object :
+            CustomBottomSheetFragment.Binder<DualChoiceSheetHolder> {
+            override fun onBind(holder: DualChoiceSheetHolder) {
+                with(holder) {
+                    title.text = titleText
+                    description.text = descriptionText
+                    buttonOneLabel?.let {
+                        buttonOne.text = it
+                    }
+                    buttonTwoLabel?.let {
+                        buttonTwo.text = it
+                    }
+
+                    buttonOne.setOnClickListener {
+                        consumer?.accept(true)
+                        customSheetFragment.dismiss()
+                    }
+
+                    buttonTwo.setOnClickListener {
+                        consumer?.accept(false)
+                        customSheetFragment.dismiss()
+                    }
+
+                    cancelButton.setOnClickListener {
+                        customSheetFragment.dismiss()
+                    }
+                }
+            }
+        })
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
+    }
+
+    enum class CamouflageOption {
+        CUSTOM, CALCULATOR, CHANGE_LOCK
+    }
+
+    @JvmStatic
+    fun showChangeCamouflageSheet(
+        fragmentManager: FragmentManager,
+        titleText: String?,
+        descriptionText: String?,
+        buttonOneLabel: String? = null,
+        buttonTwoLabel: String? = null,
+        consumer: DualChoiceConsumer? = null
+    ) {
+
+        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.change_camouflage_layout)
             .cancellable(true)
             .fullScreen()
             .statusBarColor(R.color.space_cadet)

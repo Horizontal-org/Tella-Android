@@ -52,7 +52,8 @@ public class CamouflageAliasActivity extends BaseLockActivity {
 
         adapter.setIcons(cm.getOptions(), cm.getSelectedAliasPosition());
 
-        showAddCamouflageDialog();
+        //showAddCamouflageDialog();
+        showChooseCamouflageTypeDialog();
     }
 
     @Override
@@ -97,6 +98,21 @@ public class CamouflageAliasActivity extends BaseLockActivity {
 
     private void showAddCamouflageDialog() {
         BottomSheetUtils.showDualChoiceTypeSheet(this.getSupportFragmentManager(),
+                getString(R.string.settings_prot_select_camouflage),
+                getString(R.string.settings_servers_add_camouflage_subtitle),
+                getString(R.string.settings_servers_change_camouflage_method),
+                getString(R.string.settings_servers_remove_camouflage_method),
+                option -> {
+                    if (option) {
+
+                    } else {
+
+                    }
+                });
+    }
+
+    private void showChooseCamouflageTypeDialog() {
+        BottomSheetUtils.showChangeCamouflageSheet(this.getSupportFragmentManager(),
                 getString(R.string.settings_prot_select_camouflage),
                 getString(R.string.settings_servers_add_camouflage_subtitle),
                 getString(R.string.settings_servers_change_camouflage_method),
