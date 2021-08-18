@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="55dp"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/space_cadet"
     android:paddingHorizontal="@dimen/tella_main_vertical"
-    android:paddingTop="21dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -35,16 +34,19 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/attachmentImg"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/fileDateTextView"
         style="@style/Tella_Main_White_Text.MeduimbBold"
         tools:text="IMG1021_6a.jpg"
         android:layout_marginStart="19dp"
         android:id="@+id/fileNameTextView"
+        app:layout_constraintVertical_chainStyle="packed"
         />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/attachmentImg"
         app:layout_constraintTop_toBottomOf="@id/fileNameTextView"
+        app:layout_constraintBottom_toBottomOf="parent"
         style="@style/Tella_Main_White_Text.Small"
         android:textColor="@color/wa_white_80"
         tools:text="14:30pm"
@@ -58,6 +60,7 @@
         android:id="@+id/more"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         >
         <ImageView
             android:layout_width="4dp"
@@ -94,5 +97,16 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+    <CheckBox
+        android:id="@+id/checkbox_type_single"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/gallery_checkbox_selector"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+    </CheckBox>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
