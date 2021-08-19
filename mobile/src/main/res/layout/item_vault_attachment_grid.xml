@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="80dp"
-    android:layout_height="80dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/space_cadet"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -22,7 +22,6 @@
         app:layout_constraintBottom_toBottomOf="@id/attachmentImg"
         app:layout_constraintStart_toStartOf="@id/attachmentImg"
         app:layout_constraintEnd_toEndOf="@id/attachmentImg"
-        android:src="@drawable/ic_audio_w"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         >
@@ -87,5 +86,17 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <CheckBox
+        android:id="@+id/checkbox_type_single"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/gallery_checkbox_selector"
+        android:visibility="gone"
+        android:layout_margin="7dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+    </CheckBox>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

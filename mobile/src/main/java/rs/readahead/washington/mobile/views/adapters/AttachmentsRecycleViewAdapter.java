@@ -39,6 +39,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
     protected ViewType type;
 
 
+
     public AttachmentsRecycleViewAdapter(Context context, IAttachmentsMediaHandler attachmentsMediaHandler,
                                          MediaFileHandler mediaFileHandler, ViewType type) {
         this.glideLoader = new VaultFileUrlLoader(context.getApplicationContext(), mediaFileHandler);

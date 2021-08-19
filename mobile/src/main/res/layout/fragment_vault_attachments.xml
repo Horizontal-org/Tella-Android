@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -57,6 +58,7 @@
             />
 
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/checkBoxList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_unchecked_rectangle"
@@ -97,6 +99,8 @@
         android:background="@color/space_cadet"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_marginBottom="55dp"
+        android:layout_marginHorizontal="@dimen/tella_main_vertical"
+        android:visibility="gone"
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -109,11 +113,36 @@
         app:layout_anchorGravity="center"
         tools:ignore="VectorDrawableCompat"
         app:useCompatPadding="true"
-        android:contentDescription="TODO"
         app:fabCustomSize="50dp"
         app:maxImageSize="30dp"
         android:layout_marginHorizontal="6dp"
         android:layout_marginBottom="@dimen/tella_main_vertical"
         />
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingHorizontal="31dp"
+        android:visibility="gone"
+        android:id="@+id/emptyViewMsgContainer"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_empty_view"
+            >
+        </ImageView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vault_empty_msg"
+            android:layout_marginTop="40dp"
+            style="@style/Tella_Main_White_Text.Meduim"
+            android:gravity="center"
+            />
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

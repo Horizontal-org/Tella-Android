@@ -10,4 +10,5 @@
     <string name="vault_others" translatable="false">Others</string>
     <string name="vault_recent_files" translatable="false">Recent files</string>
     <string name="vault_favorite_forms" translatable="false">Favorite forms</string>
+    <string name="vault_empty_msg" translatable="false">You don’t have any files on your Tella yet. Click the “+” button below to import your first file, or go to the Camera or Microphone to create one. You can also create folders to keep your files organized.</string>
 </resources>

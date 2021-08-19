@@ -1,9 +1,12 @@
 package rs.readahead.washington.mobile.views.fragment.vault.attachements
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.widget.CheckBox
 import android.widget.ImageView
+import android.widget.LinearLayout
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -15,15 +18,16 @@ import com.hzontal.tella_vault.VaultFile
 import org.hzontal.shared_ui.appbar.ToolbarComponent
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.activity.MainActivity
+import rs.readahead.washington.mobile.views.adapters.AttachmentsRecycleViewAdapter
 import rs.readahead.washington.mobile.views.base_ui.BaseToolbarFragment
+import rs.readahead.washington.mobile.views.custom.SpacesItemDecoration
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.AttachmentsAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.IGalleryMediaHandler
-import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.MockVaultFiles
 import timber.log.Timber
 
 class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, IGalleryMediaHandler, IAttachmentsPresenter.IView{
     private lateinit var attachmentsRecyclerView: RecyclerView
-    private val attachmentAdapter by lazy { AttachmentsAdapter(this) }
+    private val attachmentAdapter by lazy { AttachmentsAdapter(this,activity) }
     private val attachmentsPresenter by lazy { AttachmentsPresenter(this) }
     private lateinit var gridLayoutManager: GridLayoutManager
     private lateinit var detailsFab: FloatingActionButton
@@ -31,7 +35,9 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, IGaller
     private lateinit var collapsingToolbar: CollapsingToolbarLayout
     private lateinit var listCheck: ImageView
     private lateinit var gridCheck: ImageView
-    private var isGrid = false
+    private lateinit var emptyViewMsgContainer : LinearLayout
+    private lateinit var checkBoxList : AppCompatImageView
+    private var isListCheckOn = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,8 +68,10 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, IGaller
 
     override fun initView(view: View) {
         attachmentsRecyclerView = view.findViewById(R.id.attachmentsRecyclerView)
+        attachmentsRecyclerView.addItemDecoration(SpacesItemDecoration(5))
         listCheck = view.findViewById(R.id.listCheck)
         gridCheck = view.findViewById(R.id.gridCheck)
+        emptyViewMsgContainer = view.findViewById(R.id.emptyViewMsgContainer)
         toolbar = view.findViewById(R.id.toolbar)
         gridLayoutManager = GridLayoutManager(activity, 1)
         attachmentAdapter.setLayoutManager(gridLayoutManager)
@@ -72,10 +80,13 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, IGaller
             layoutManager = gridLayoutManager
         }
         detailsFab = view.findViewById(R.id.detailsFab)
+        checkBoxList = view.findViewById(R.id.checkBoxList)
+
         detailsFab.setOnClickListener { onFabDetailsClick() }
         toolbar.backClickListener = { nav().navigateUp() }
         listCheck.setOnClickListener(this)
         gridCheck.setOnClickListener(this)
+        checkBoxList.setOnClickListener(this)
         initData()
     }
 
@@ -90,18 +101,20 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, IGaller
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.gridCheck -> {
-                isGrid = false
                 gridCheck.toggleVisibility(false)
                 listCheck.toggleVisibility(true)
-                gridLayoutManager.spanCount = 3
+                gridLayoutManager.spanCount = 4
                 attachmentAdapter.notifyItemRangeChanged(0, attachmentAdapter.itemCount)
             }
             R.id.listCheck -> {
-                isGrid = true
                 gridCheck.toggleVisibility(true)
                 listCheck.toggleVisibility(false)
                 gridLayoutManager.spanCount = 1
                 attachmentAdapter.notifyItemRangeChanged(0, attachmentAdapter.itemCount)
+            }
+            R.id.checkBoxList ->{
+                isListCheckOn = !isListCheckOn
+                attachmentAdapter.enableSelectMode(isListCheckOn)
             }
         }
     }
@@ -125,6 +138,13 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, IGaller
     }
 
     override fun onGetFilesSuccess(files: List<VaultFile?>) {
+        if(files.isEmpty()){
+            attachmentsRecyclerView.visibility = View.GONE
+            emptyViewMsgContainer.visibility = View.VISIBLE
+        }else{
+            attachmentsRecyclerView.visibility = View.VISIBLE
+            emptyViewMsgContainer.visibility = View.GONE
+        }
         attachmentAdapter.submitList(files)
     }
 

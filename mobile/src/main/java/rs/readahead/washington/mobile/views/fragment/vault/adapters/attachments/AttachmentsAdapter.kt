@@ -1,29 +1,45 @@
 package rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments
 
-import android.graphics.drawable.Drawable
+import android.annotation.SuppressLint
+import android.content.Context
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.hzontal.tella_vault.VaultFile
-import com.hzontal.utils.MediaFile
 import com.hzontal.utils.MediaFile.isAudioFileType
 import com.hzontal.utils.MediaFile.isImageFileType
 import com.hzontal.utils.MediaFile.isVideoFileType
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.media.MediaFileHandler
+import rs.readahead.washington.mobile.media.VaultFileUrlLoader
 import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.LinkedHashSet
 
-class AttachmentsAdapter constructor(val iGalleryMediaHandler: IGalleryMediaHandler) :
+class AttachmentsAdapter constructor(private val iGalleryMediaHandler: IGalleryMediaHandler,private val context: Context) :
      RecyclerView.Adapter<AttachmentsAdapter.BaseAttachmentViewHolder>() {
-    private var vaultList: List<VaultFile?> = arrayListOf()
+    private var vaultList : MutableList<VaultFile?>
     private val selected = LinkedHashSet<VaultFile>()
+    private var selectable : Boolean
     private lateinit var layoutManager: GridLayoutManager
+    private var  glideLoader:VaultFileUrlLoader
+    private val mediaFileHandler by lazy { MediaFileHandler() }
+
+    init {
+        glideLoader = VaultFileUrlLoader(context.applicationContext, mediaFileHandler)
+        vaultList = ArrayList()
+        selectable = false
+    }
+
     enum class ViewType {
         SMALL,
         DETAILED
@@ -36,42 +52,34 @@ class AttachmentsAdapter constructor(val iGalleryMediaHandler: IGalleryMediaHand
     }
 
     override fun onBindViewHolder(holder: AttachmentsAdapter.BaseAttachmentViewHolder, position: Int) {
-        val vaultFile = vaultList[position]
-
-        if (isImageFileType(vaultFile.mimeType)) {
-            holder.showImageInfo()
-            Glide.with(holder.mediaView.getContext())
-                .using(glideLoader)
-                .load(VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(holder.mediaView)
-        } else if (isAudioFileType(vaultFile.mimeType)) {
-            holder.showAudioInfo(vaultFile)
-            val drawable: Drawable? = VectorDrawableCompat.create(
-                holder.itemView.context.resources,
-                R.drawable.ic_mic_gray, null
-            )
-            holder.mediaView.setImageDrawable(drawable)
-        } else if (isVideoFileType(vaultFile.mimeType)) {
-            holder.showVideoInfo(vaultFile)
-            Glide.with(holder.mediaView.getContext())
-                .using(glideLoader)
-                .load(VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(holder.mediaView)
-        }
+        val vaultFile = vaultList[position]!!
         when(holder){
             is AttachmentsViewHolder -> {holder.bind(vaultFile = vaultList[position],iGalleryMediaHandler = iGalleryMediaHandler)}
             is GridAttachmentsViewHolder -> {holder.bind(vaultFile = vaultList[position],iGalleryMediaHandler = iGalleryMediaHandler)}
         }
+
+
+        when {
+            isImageFileType(vaultFile.mimeType) -> {
+                holder.showImageInfo(vaultFile)
+
+            }
+            isAudioFileType(vaultFile.mimeType) -> {
+                holder.showAudioInfo(vaultFile)
+
+            }
+            isVideoFileType(vaultFile.mimeType) -> {
+                holder.showVideoInfo(vaultFile)
+
+            }
+        }
+        holder.maybeEnableCheckBox(selectable)
     }
 
     override fun getItemCount() = vaultList.size
 
-    fun submitList(vaultList: List<VaultFile?>) {
-        this.vaultList = vaultList
+        fun submitList(vaultList: List<VaultFile?>) {
+        this.vaultList = vaultList.toMutableList()
         notifyItemChanged(0)
     }
 
@@ -84,27 +92,48 @@ class AttachmentsAdapter constructor(val iGalleryMediaHandler: IGalleryMediaHand
         layoutManager = gridLayoutManager
     }
 
-    fun setSelectedMediaFiles(selectedMediaFiles: List<VaultFile>) {
-        selected.addAll(selectedMediaFiles)
-        notifyItemChanged(0)
+    fun setAttachments(attachments: List<VaultFile>) {
+        vaultList = attachments.toMutableList()
+        notifyDataSetChanged()
     }
 
-    fun deselectMediaFile(vaultFile: VaultFile) {
-        if (!selected.contains(vaultFile)) {
+    fun prependAttachment(vaultFile: VaultFile) {
+        if (vaultList.contains(vaultFile)) {
             return
         }
-        selected.remove(vaultFile)
-       // notifyItemChanged(files.indexOf(vaultFile))
+        vaultList.add(0, vaultFile)
+        notifyItemInserted(0)
     }
 
-   inner class AttachmentsViewHolder(view: View)  : BaseAttachmentViewHolder(view){
+    fun appendAttachment(vaultFile: VaultFile) {
+        if (vaultList.contains(vaultFile)) {
+            return
+        }
+        vaultList.add(vaultFile)
+        notifyItemInserted(vaultList.size - 1)
+    }
+
+    fun removeAttachment(vaultFile: VaultFile) {
+        val position: Int = vaultList.indexOf(vaultFile)
+        if (position == -1) {
+            return
+        }
+        vaultList.remove(vaultFile)
+        notifyItemRemoved(position)
+    }
+    @SuppressLint("NotifyDataSetChanged")
+    fun enableSelectMode(selectable: Boolean){
+        this.selectable = selectable
+        notifyDataSetChanged()
+    }
+
+    inner class AttachmentsViewHolder(view: View)  : BaseAttachmentViewHolder(view){
 
         constructor(parent: ViewGroup)
                 : this(LayoutInflater.from(parent.context).inflate(R.layout.item_vault_attachment_hor, parent, false))
 
         private lateinit var dateTextView : TextView;
         private lateinit var nameFileTextVew : TextView
-        private lateinit var filePreviewImg : ImageView
         private lateinit var moreBtn : View
 
         fun bind(vaultFile: VaultFile?,iGalleryMediaHandler: IGalleryMediaHandler){
@@ -113,10 +142,12 @@ class AttachmentsAdapter constructor(val iGalleryMediaHandler: IGalleryMediaHand
                 nameFileTextVew = findViewById(R.id.fileNameTextView)
                 filePreviewImg = findViewById(R.id.attachmentImg)
                 moreBtn = findViewById(R.id.more)
+                icAttachmentImg = findViewById(R.id.icAttachmentImg)
+                checkBox = findViewById(R.id.checkbox_type_single)
             }
             vaultFile?.apply {
-                dateTextView.text = created.toString()
                 nameFileTextVew.text = name
+                dateTextView.text = getDate(created)
             }
 
             moreBtn.setOnClickListener {
@@ -125,31 +156,19 @@ class AttachmentsAdapter constructor(val iGalleryMediaHandler: IGalleryMediaHand
 
         }
 
-       override fun showVideoInfo(vaultFile: VaultFile) {
-           TODO("Not yet implemented")
-       }
-
-       override fun showAudioInfo(vaultFile: VaultFile) {
-           TODO("Not yet implemented")
-       }
-
-       override fun showImageInfo() {
-           TODO("Not yet implemented")
-       }
-
+        private fun getDate(time: Long): String {
+            val cal = Calendar.getInstance(Locale.ENGLISH)
+            cal.timeInMillis = time * 1000
+            return DateFormat.format("dd-MM-yyyy", cal).toString()
+        }
 
    }
-
-
-    class GridAttachmentsViewHolder (view: View)  : BaseAttachmentViewHolder(view) {
+    inner class GridAttachmentsViewHolder (view: View)  : BaseAttachmentViewHolder(view) {
 
         constructor(parent: ViewGroup)
                 : this(LayoutInflater.from(parent.context).inflate(R.layout.item_vault_attachment_grid, parent, false))
-
         private lateinit var fileNameTextView : TextView
-        private lateinit var filePreviewImg : ImageView
         private lateinit var moreBtn : View
-        private lateinit var icAttachmentImg : ImageView
 
         fun bind(vaultFile: VaultFile?, iGalleryMediaHandler: IGalleryMediaHandler){
             view.apply {
@@ -157,6 +176,7 @@ class AttachmentsAdapter constructor(val iGalleryMediaHandler: IGalleryMediaHand
                 filePreviewImg = findViewById(R.id.attachmentImg)
                 moreBtn = findViewById(R.id.more)
                 icAttachmentImg = findViewById(R.id.icAttachmentImg)
+                checkBox = findViewById(R.id.checkbox_type_single)
             }
             vaultFile?.apply {
                 fileNameTextView.text = name
@@ -165,22 +185,39 @@ class AttachmentsAdapter constructor(val iGalleryMediaHandler: IGalleryMediaHand
             moreBtn.setOnClickListener { vaultFile?.let { it1 -> iGalleryMediaHandler.playMedia(it1) } }
         }
 
-        override fun showVideoInfo(vaultFile: VaultFile) {
-        }
-
-        override fun showAudioInfo(vaultFile: VaultFile) {
-        }
-
-        override fun showImageInfo() {
-
-        }
-
     }
+    abstract inner class BaseAttachmentViewHolder (val view: View)  : RecyclerView.ViewHolder(view){
+        protected lateinit var icAttachmentImg : ImageView
+        protected lateinit var filePreviewImg : ImageView
+        protected val context: Context by lazy {view.context}
+        protected lateinit var checkBox : CheckBox
 
-    abstract class BaseAttachmentViewHolder (val view: View)  : RecyclerView.ViewHolder(view){
-        abstract fun showVideoInfo(vaultFile: VaultFile)
-        abstract fun showAudioInfo(vaultFile: VaultFile)
-        abstract fun showImageInfo()
+        fun showVideoInfo(vaultFile: VaultFile){
+            Glide.with(context)
+                .using(glideLoader)
+                .load(VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(filePreviewImg)
+            icAttachmentImg.setBackgroundResource(R.drawable.ic_play)
+
+        }
+        fun showAudioInfo(vaultFile: VaultFile){
+           icAttachmentImg.setBackgroundResource(R.drawable.ic_audio_w_small)
+        }
+        fun showImageInfo(vaultFile: VaultFile){
+            Glide.with(filePreviewImg.context)
+                .using(glideLoader)
+                .load(VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(filePreviewImg)
+        }
+
+        fun maybeEnableCheckBox(selectable: Boolean) {
+            checkBox.visibility = if (selectable) View.VISIBLE else View.GONE
+            checkBox.isChecked = selectable
+        }
     }
 
 }
