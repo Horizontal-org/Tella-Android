@@ -449,7 +449,12 @@
     <string name="settings.servers_add_camouflage.subtitle">Your app is currently camouflaged \n with a Calculator app</string>
     <string name="settings.servers_change.camouflage.method">CHANGE CAMOUFLAGE METHOD</string>
     <string name="settings.servers_remove.camouflage.method">REMOVE CAMOUFLAGE</string>
-
+    <string name="settings.servers_setup_camouflage_title">Set Up Camouflage</string>
+    <string name="settings.servers_setup_camouflage_description">There are two camouflage options available. The first one is quicker but less secure; the second one is less convenient but more secure.</string>
+    <string name="settings.servers_setup_change_camouflage_title">CHANGE NAME &amp; ICON</string>
+    <string name="settings.servers_setup_change_camouflage_subtitle">Tella will appear on the home screen with a different app name and icon</string>
+    <string name="settings.servers_setup_hide_behind_camouflage_title">hide behind a real app</string>
+    <string name="settings.servers_setup_hide_behind_camouflage_subtitle">The most secure option: Camouflage Tella behind an actual functioning app</string>
 
 
 

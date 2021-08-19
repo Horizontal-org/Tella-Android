@@ -228,13 +228,36 @@ object BottomSheetUtils {
         CUSTOM, CALCULATOR, CHANGE_LOCK
     }
 
+    class CamouflageSheetHolder : CustomBottomSheetFragment.PageHolder() {
+        lateinit var sheetTitle: TextView
+        lateinit var sheetsubTitle: TextView
+        lateinit var cancelButton: ImageView
+        lateinit var buttonOneTitle: TextView
+        lateinit var buttonOneSubtitle: TextView
+        lateinit var title: TextView
+        //lateinit var description: TextView
+
+        override fun bindView(view: View) {
+            title = view.findViewById(R.id.dialog_title)
+            cancelButton = view.findViewById(R.id.standard_sheet_cancel_btn)
+            buttonOneTitle = view.findViewById(R.id.title_btn_one)
+            buttonOneSubtitle = view.findViewById(R.id.subtitle_btn_one)
+            sheetTitle = view.findViewById(R.id.sheet_title)
+            sheetsubTitle = view.findViewById(R.id.sheet_subtitle)
+           /* title = view.findViewById(R.id.standard_sheet_title)
+            description = view.findViewById(R.id.standard_sheet_content)*/
+        }
+    }
+
+
     @JvmStatic
     fun showChangeCamouflageSheet(
         fragmentManager: FragmentManager,
         titleText: String?,
-        descriptionText: String?,
-        buttonOneLabel: String? = null,
-        buttonTwoLabel: String? = null,
+        sheetTitle: String?,
+        sheetSubtitle: String?,
+        titleOne: String?,
+        subtitleOne: String?,
         consumer: DualChoiceConsumer? = null
     ) {
 
@@ -243,12 +266,16 @@ object BottomSheetUtils {
             .cancellable(true)
             .fullScreen()
             .statusBarColor(R.color.space_cadet)
-        customSheetFragment.holder(DualChoiceSheetHolder(), object :
-            CustomBottomSheetFragment.Binder<DualChoiceSheetHolder> {
-            override fun onBind(holder: DualChoiceSheetHolder) {
+        customSheetFragment.holder(CamouflageSheetHolder(), object :
+            CustomBottomSheetFragment.Binder<CamouflageSheetHolder> {
+            override fun onBind(holder: CamouflageSheetHolder) {
                 with(holder) {
                     title.text = titleText
-                    description.text = descriptionText
+                    buttonOneTitle.text = titleOne
+                    buttonOneSubtitle.text = subtitleOne
+                    sheetTitle.text = sheetTitle
+                    sheetSubitle.text = sheetSubtitle
+                    /*description.text = descriptionText
                     buttonOneLabel?.let {
                         buttonOne.text = it
                     }
@@ -264,7 +291,7 @@ object BottomSheetUtils {
                     buttonTwo.setOnClickListener {
                         consumer?.accept(false)
                         customSheetFragment.dismiss()
-                    }
+                    }*/
 
                     cancelButton.setOnClickListener {
                         customSheetFragment.dismiss()
