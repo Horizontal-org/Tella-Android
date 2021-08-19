@@ -118,6 +118,8 @@ public class CamouflageAliasActivity extends BaseLockActivity {
                 getString(R.string.settings_servers_setup_camouflage_description),
                 getString(R.string.settings_servers_setup_change_camouflage_title),
                 getString(R.string.settings_servers_setup_change_camouflage_subtitle),
+                getString(R.string.settings_servers_setup_hide_behind_camouflage_title),
+                getString(R.string.settings_servers_setup_hide_behind_camouflage_subtitle),
                 option -> {
                     if (option) {
 

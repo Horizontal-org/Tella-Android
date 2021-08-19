@@ -142,23 +142,65 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
+    <LinearLayout
         android:id="@+id/sheet_two_btn"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/round_button_selector"
         android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:weightSum="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sheet_one_btn"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        android:background="@drawable/round_button_selector"
-        android:layout_marginTop="20dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:textStyle="bold"
-        android:textColor="@color/wa_white"
-        android:fontFamily="@font/open_sans"
-        android:textSize="18sp"/>
+        app:layout_constraintHorizontal_chainStyle="packed">
+
+        <ImageView
+            android:padding="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="0.25"
+            android:gravity="start"
+            android:src="@drawable/ic_notes_camo_real_app" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.75"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title_btn_two"
+                android:layout_marginTop="16dp"
+                android:textAlignment="viewStart"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:fontFamily="@font/open_sans"
+                android:textColor="@color/wa_white"
+                android:textAllCaps="true"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:id="@+id/subtitle_btn_two"
+                android:layout_height="wrap_content"
+                android:textAlignment="viewStart"
+                android:layout_width="match_parent"
+                android:fontFamily="@font/open_sans"
+                android:textColor="@color/wa_white"
+                android:textSize="14sp"/>
+        </LinearLayout>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/cancel_btn"

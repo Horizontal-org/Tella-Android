@@ -235,7 +235,10 @@ object BottomSheetUtils {
         lateinit var buttonOneTitle: TextView
         lateinit var buttonOneSubtitle: TextView
         lateinit var title: TextView
-        //lateinit var description: TextView
+        lateinit var buttonTwoTitle: TextView
+        lateinit var buttonTwoSubtitle: TextView
+        lateinit var buttonOne: View
+        lateinit var buttonTwo: View
 
         override fun bindView(view: View) {
             title = view.findViewById(R.id.dialog_title)
@@ -244,8 +247,10 @@ object BottomSheetUtils {
             buttonOneSubtitle = view.findViewById(R.id.subtitle_btn_one)
             sheetTitle = view.findViewById(R.id.sheet_title)
             sheetsubTitle = view.findViewById(R.id.sheet_subtitle)
-           /* title = view.findViewById(R.id.standard_sheet_title)
-            description = view.findViewById(R.id.standard_sheet_content)*/
+            buttonOne = view.findViewById(R.id.sheet_one_btn)
+            buttonTwo = view.findViewById(R.id.sheet_two_btn)
+            buttonTwoTitle = view.findViewById(R.id.title_btn_two)
+            buttonTwoSubtitle = view.findViewById(R.id.subtitle_btn_two)
         }
     }
 
@@ -254,10 +259,12 @@ object BottomSheetUtils {
     fun showChangeCamouflageSheet(
         fragmentManager: FragmentManager,
         titleText: String?,
-        sheetTitle: String?,
-        sheetSubtitle: String?,
+        dialogTitle: String?,
+        dialogSubtitle: String?,
         titleOne: String?,
         subtitleOne: String?,
+        titleTwo: String?,
+        subtitleTwo: String?,
         consumer: DualChoiceConsumer? = null
     ) {
 
@@ -273,25 +280,20 @@ object BottomSheetUtils {
                     title.text = titleText
                     buttonOneTitle.text = titleOne
                     buttonOneSubtitle.text = subtitleOne
-                    sheetTitle.text = sheetTitle
-                    sheetSubitle.text = sheetSubtitle
-                    /*description.text = descriptionText
-                    buttonOneLabel?.let {
-                        buttonOne.text = it
-                    }
-                    buttonTwoLabel?.let {
-                        buttonTwo.text = it
-                    }
+                    sheetTitle.text = dialogTitle
+                    sheetsubTitle.text = dialogSubtitle
+                    buttonTwoTitle.text = titleTwo
+                    buttonTwoSubtitle.text = subtitleTwo
 
                     buttonOne.setOnClickListener {
-                        consumer?.accept(true)
-                        customSheetFragment.dismiss()
+                    consumer?.accept(true)
+                    customSheetFragment.dismiss()
                     }
 
                     buttonTwo.setOnClickListener {
                         consumer?.accept(false)
                         customSheetFragment.dismiss()
-                    }*/
+                    }
 
                     cancelButton.setOnClickListener {
                         customSheetFragment.dismiss()
