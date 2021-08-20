@@ -220,8 +220,6 @@ A toast notification informing the user that their files were successfully delet
   <string name="settings.docu_error_not.valid.URL">இது சரியான URL அல்ல.</string>
   <!-- The label on the sliding "Quick Delete" button on the homescreen. -->
   <string name="home_action.label_quick.delete">நீக்கு</string>
-  <!-- The heading of the Onboarding screen on the 'Quick Delete' feature -->
-  <string name="onboard.del_heading">விரைவாக நீக்கு</string>
   <!-- The text in the filtering menu to reorder the files by date -->
   <string name="gallery_subheading_sort.by">இதன்படி வரிசைப்படுத்து</string>
   <!-- The text in the filtering menu to only show photos, videos, or audio recordings. -->
@@ -256,34 +254,8 @@ A toast notification informing the user that their files were successfully delet
   <string name="settings.docu_error_no.internet">நீங்கள் இணையத்துடன் இணைக்கப்படவில்லை. இணைக்கப்பட்ட பிறகு மீண்டும் முயற்சிக்கவும்.</string>
   <!-- The button to try again connecting to a server, if the previous attempt failed. -->
   <string name="settings.docu_dialog.action_try.again.connecting">மீண்டும் முயற்சிக்கவும்</string>
-  <!-- At the end of Onboarding, the button to close the Onboarding and start Tella. -->
-  <string name="onboard.perm_action_start.app">தொடங்கு</string>
-  <!-- The subheading of the Welcome screen -->
-  <string name="onboard.intro_subheading">ஆவணமாக்கம் மற்றும் பாதுகாப்பு</string>
-  <string name="onboard.into_expl">தங்களை ஆபத்தில் ஆழ்த்தாமல், மனித உரிமை மீறல்கள், வன்முறை மற்றும் ஊழல் ஆகியவற்றை ஆவணப்படுத்த டெல்லா அனைவருக்கும் உதவுகிறது.</string>
-  <!-- The subheading of the Onboarding screen on the Camouflage feature -->
-  <string name="onboard.camo_subheading">சாதனத் தேடல்களுக்கு எதிரான பாதுகாப்பு.</string>
-  <string name="onboard.camo_expl">உங்கள் சாதனத்தில் டெல்லாவை மறைக்க முடியும். டெல்லாவில் கைப்பற்றப்பட்ட அல்லது இறக்குமதி செய்யப்பட்ட எந்த கோப்பும் தானாகவே குறியாக்கம் செய்யப்பட்டு மறைக்கப்பட்ட கேலரியில் சேமிக்கப்படும்.</string>
-  <!-- The subheading of the Onboarding screen on the data collection feature -->
-  <string name="onboard.collect_subheading">எளிதான தரவு சேகரிப்பு</string>
-  <string name="onboard.collect_expl">ஆன்லைன் மற்றும் ஆஃப்லைனில், உங்கள் சாதனத்திலிருந்து நேரடியாக கணக்கெடுப்புகளையும் படிவங்களையும் நிரப்ப முடியும்.படிவங்களை உருவாக்கி தரவை நிர்வகிக்கும் ஒரு நிறுவனத்துடன் நீங்கள் இணைக்கப்பட்டிருக்க வேண்டும்.</string>
-  <!-- The subheading of the Onboarding screen on the 'Quick Delete' feature -->
-  <string name="onboard.del_subheading">அவசர தரவு அகற்றல்</string>
-  <string name="onboard.del_expl">அவசரகால சூழ்நிலைகளில், டெல்லாவிலிருந்து முக்கியமான தகவல்களை சில நொடிகளில் நீக்க முடியும்.</string>
-  <!-- The button to trigger the dialogs to give the app permissions (to use the camera, access device storage, etc). -->
-  <string name="onboard.perm_action_grant.permissions">அனுமதிகளை வழங்கவும்</string>
-  <!-- The menu item in Settings > About & Help to access the tutorial. -->
-  <string name="settings.about_select_tutorial">பயிற்சி</string>
-  <string name="onboard.perm_dialog.expl_grant.permissions">சரியாக செயல்பட, நீங்கள் டெல்லாவுக்கு தேவையான அனுமதிகளை வழங்க வேண்டும்.</string>
-  <!-- The heading for the Onboarding screen where the user grants permissions -->
-  <string name="onboard.perm_heading">கடைசியாக ஒன்று</string>
-  <string name="onboard.perm_subheading">சரியாக செயல்பட, நீங்கள் இதற்கு டெல்லாவை அங்கீகரிக்க வேண்டும்:</string>
-  <!-- The list of permissions requested on the last screen of the Onboarding -->
-  <string name="onboard.perm_list.permissions">• உங்கள் சாதன சேமிப்பிடத்தை அணுகவும் (டெல்லாவிலிருந்து உங்கள் சாதனத்திற்கு கோப்புகளை ஏற்றுமதி செய்ய)
-• உங்கள் கேமராவை அணுகவும் (புகைப்படங்கள் மற்றும் வீடியோக்களை எடுக்க)
-• உங்கள் மைக்ரோஃபோனை அணுகவும் (ஆடியோவைப் பதிவு செய்ய)
-• உங்கள் GPS ஐ அணுகவும் (நீங்கள் தரவு அல்லது மல்டிமீடியாவைப் பிடிக்கும்போது உங்கள் இருப்பிடத்தைத் தீர்மானிக்க மற்றும் கோப்புகளை சரிபார்க்கும்படி செய்ய)
-</string>
+  <!-- The link to Tutorial-->
+  <string name="settings.about_select_tutorial">Tutorial</string>
   <!-- The heading in the Gallery, to show all the files that are selected -->
   <string name="gallery_heading_selected_files">தேர்ந்தெடுக்கப்பட்ட கோப்புகள்</string>
   <string name="settings.camo_expl">உங்கள் சாதனத்தில் டெல்லாவை சிறப்பாக மறைக்க தனிப்பயன் படவுரு மற்றும் பெயரைத் தேர்ந்தெடுக்கவும். ஆண்ட்ராய்டு அமைப்புகளிலிருந்து டெல்லாவின் உண்மையான படவுரு தெரியும் என்பதை நினைவில் கொள்க.</string>
@@ -734,4 +706,16 @@ This is one of the two options available. -->
   <string name="meter">%fமீட்டர்</string>
   <!-- The value expressed in meters per second -->
   <string name="meter_per_second">%f மீட்டர் / வினாடி</string>
+  <string name="settings.sec_app.bar">Security</string>
+  <string name="settings.select_security">Security</string>
+    <string name="settings.select_customization">Customization</string>
+    <string name="settings.select_lock_timeout">Lock Timeout</string>
+    <string name="settings.sec_camera.mute_switch">Camera silent mode</string>
+    <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
+    <string name="settings.sec_quick.delete_switch">Quick delete</string>
+    <string name="settings.sec_quick.delete_expl">Shows a sliding button on the homescreen to quickly exit Tella in emergency situations.</string>
+    <string name="settings.servers.title_server.settings">Servers</string>
+    <string name="settings.servers.add_server.expl">Connect to servers to collect and send data to your organization</string>
+    <string name="settings.servers_auto.upload_action">Auto-upload to server</string>
+    <string name="settings.servers_auto.upload_action.expl">Upload your files to your Reports server as soon as they are captured (photos, videos, or audio recordings) or imported into Tella.</string>
 </resources>

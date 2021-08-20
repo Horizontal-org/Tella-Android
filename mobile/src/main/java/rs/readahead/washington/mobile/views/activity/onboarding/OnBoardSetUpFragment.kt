@@ -7,9 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import org.hzontal.shared_ui.buttons.InformationButton
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
-import rs.readahead.washington.mobile.views.custom.InformationButton
 
 class OnBoardSetUpFragment : BaseFragment() {
 
@@ -29,7 +29,7 @@ class OnBoardSetUpFragment : BaseFragment() {
         initView(view)
     }
 
-    private fun initView(view: View) {
+    override fun initView(view: View) {
         fullSetupBtn = view.findViewById(R.id.fullSetupBtn)
         quickSetupBtn = view.findViewById(R.id.quickSetupBtn)
         linkTv = view.findViewById(R.id.link)

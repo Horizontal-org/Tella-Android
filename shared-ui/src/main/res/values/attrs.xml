@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="InformationButton">
+        <attr name="topText" format="reference|string" />
+        <attr name="topTextCenter" format="reference|string" />
+        <attr name="bottomTextCenter" format="reference|string" />
+        <attr name="bottomText" format="reference|string" />
+        <attr name="startImg" format="reference" />
+        <attr name="state_checked" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="TellaSwitchWithMessage">
+        <attr name="titleText" format="reference|string" />
+        <attr name="explainText" format="reference|string" />
+        <attr name="is_checked" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="CollapsableAppBar">
+        <attr name="titleRes" format="reference|string" />
+        <attr name="barHeightRes" format="reference" />
+        <attr name="contentScrimRes" format="reference"/>
+        <attr name="backgroundRes" format="reference"/>
+    </declare-styleable>
+</resources>

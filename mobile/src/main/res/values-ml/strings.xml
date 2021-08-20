@@ -221,8 +221,6 @@ A toast notification informing the user that their files were successfully delet
   <!-- The label on the sliding "Quick Delete" button on the homescreen. -->
   <string name="home_action.label_quick.delete">നീക്കം ചെയ്യുക</string>
   <!-- The heading of the Onboarding screen on the 'Quick Delete' feature -->
-  <string name="onboard.del_heading">ദ്രുതഗതിയില്‍ നീക്കം ചെയ്യല്‍</string>
-  <!-- The text in the filtering menu to reorder the files by date -->
   <string name="gallery_subheading_sort.by">ഇങ്ങനെ അടുക്കുക</string>
   <!-- The text in the filtering menu to only show photos, videos, or audio recordings. -->
   <string name="gallery_subheading_show">കാണിക്കുക</string>
@@ -256,33 +254,8 @@ A toast notification informing the user that their files were successfully delet
   <string name="settings.docu_error_no.internet">നിങ്ങൾ ഇന്റർനെറ്റിലേക്ക് കണക്റ്റുചെയ്‌തിട്ടില്ല. കണക്റ്റുചെയ്യുമ്പോൾ വീണ്ടും ശ്രമിക്കുക</string>
   <!-- The button to try again connecting to a server, if the previous attempt failed. -->
   <string name="settings.docu_dialog.action_try.again.connecting">വീണ്ടും ശ്രമിക്കുക</string>
-  <!-- At the end of Onboarding, the button to close the Onboarding and start Tella. -->
-  <string name="onboard.perm_action_start.app">ആരംഭിക്കുക</string>
-  <!-- The subheading of the Welcome screen -->
-  <string name="onboard.intro_subheading">പ്രമാണഗ്രന്ഥവും പരിരക്ഷയും</string>
-  <string name="onboard.into_expl">തങ്ങളെത്തന്നെ അപകടത്തിലാക്കാതെ മനുഷ്യാവകാശ ലംഘനങ്ങൾ, അക്രമം, അഴിമതി എന്നിവ രേഖപ്പെടുത്താൻ Tella (റ്റെല്ല)  ആരെയും പ്രാപ്തമാക്കുന്നു.</string>
-  <!-- The subheading of the Onboarding screen on the Camouflage feature -->
-  <string name="onboard.camo_subheading">ഉപകരണ പരിശോധനകൾക്കെതിരായ പരിരക്ഷ</string>
-  <string name="onboard.camo_expl">Tella (റ്റെല്ല)യ്ക് നിങ്ങളുടെ ഉപകരണത്തിൽ മറഞ്ഞിരിക്കാം കൂടാതെ Tella (റ്റെല്ല)യിൽ പിടിച്ചതോ ഇറക്കുമതി ചെയ്തതോ ആയ ഏത് ഫയലും യാന്ത്രികമായി എൻക്രിപ്റ്റുചെയ്‌ത് ഒരു അദൃശ്യമായ ഗാലറിയിൽ സംഭരിക്കുപ്പെടും.</string>
-  <!-- The subheading of the Onboarding screen on the data collection feature -->
-  <string name="onboard.collect_subheading">ലളിതമായ ഡാറ്റ ശേഖരണം</string>
-  <string name="onboard.collect_expl">ഓൺ‌ലൈനോ ഓഫ്‌ലൈനോ, ഫോമുകളും സർവേകളും നിങ്ങളുടെ ഉപകരണത്തിൽ നിന്ന് നേരിട്ട് പൂരിപ്പിക്കാം. ഫോമുകൾ സൃഷ്ടിക്കുകയും ഡാറ്റ കൈകാര്യം ചെയ്യുകയും ചെയ്യുന്ന ഒരു സംഘടനയുമായി നിങ്ങളെ ബന്ധിപ്പിച്ചിരിക്കണം.</string>
-  <!-- The subheading of the Onboarding screen on the 'Quick Delete' feature -->
-  <string name="onboard.del_subheading">അടിയന്തിര ഡാറ്റ മായ്ക്കൽ</string>
-  <string name="onboard.del_expl">അടിയന്തിര സാഹചര്യങ്ങളിൽ, കുറച്ച് നിമിഷങ്ങൾക്കുള്ളിൽ   തന്നെ Tella (റ്റെല്ല)യിൽ നിന്ന് തന്ത്രപ്രധാനമായ വിവരങ്ങൾ ഇല്ലാതാക്കുക.</string>
-  <!-- The button to trigger the dialogs to give the app permissions (to use the camera, access device storage, etc). -->
-  <string name="onboard.perm_action_grant.permissions">അനുവാദങ്ങള്‍ നൽകുക</string>
   <!-- The menu item in Settings > About & Help to access the tutorial. -->
   <string name="settings.about_select_tutorial">പരിശീലനപദ്ധതി</string>
-  <string name="onboard.perm_dialog.expl_grant.permissions">ശരിയായി പ്രവർത്തിക്കുന്നതിന്, നിങ്ങൾ Tella (റ്റെല്ല)യ്ക്ക് ആവശ്യമായ അനുമതികൾ നൽകേണ്ടതുണ്ട്.</string>
-  <!-- The heading for the Onboarding screen where the user grants permissions -->
-  <string name="onboard.perm_heading">അവസാനമായി ഒരു കാര്യം</string>
-  <string name="onboard.perm_subheading">ശരിയായി പ്രവർത്തിക്കുന്നതിന്, ഇനിപ്പറയുന്നവയിലേക്ക് നിങ്ങൾ Tella (റ്റെല്ല)യെ അധികാരപ്പെടുത്തേണ്ടതുണ്ട്:</string>
-  <!-- The list of permissions requested on the last screen of the Onboarding -->
-  <string name="onboard.perm_list.permissions">• നിങ്ങളുടെ ഉപകരണത്തിലെ സംഭരണി ഉപയോഗിക്കക (Tella (റ്റെല്ല)യിൽ നിന്ന് നിങ്ങളുടെ ഉപകരണത്തിലേക്ക് ഫയലുകൾ എക്‌സ്‌പോർട്ടുചെയ്യാൻ)
-• നിങ്ങളുടെ ക്യാമറ ഉപയോഗിക്കുക (ചിത്രങ്ങളും വീഡിയോകളും പകർത്താൻ)
-• നിങ്ങളുടെ മൈക്രോഫോൺ ഉപയോഗിക്കുക (ശബ്ദം രേഖപ്പെടുത്താന്‍)
-• നിങ്ങളുടെ ജി‌പി‌എസ് ഉപയോഗിക്കുക (നിങ്ങൾ ഡാറ്റയോ മൾട്ടിമീഡിയയോ പിടിച്ചെടുക്കുമ്പോൾ നിങ്ങളുടെ സ്ഥാനം നിർണ്ണയിക്കാൻ, അവ പരിശോധിച്ചുറപ്പിക്കാൻ)</string>
   <!-- The heading in the Gallery, to show all the files that are selected -->
   <string name="gallery_heading_selected_files">തിരഞ്ഞെടുത്ത ഫയലുകൾ</string>
   <string name="settings.camo_expl">നിങ്ങളുടെ ഉപകരണത്തിൽ Tella (റ്റെല്ല)യെ മികച്ച രീതിയിൽ മറയ്‌ക്കാൻ ഒരു ഇഷ്‌ടാനുസൃത ഐക്കണും പേരും തിരഞ്ഞെടുക്കുക. ശ്രദ്ധിക്കുക ആന്‍ഡ്രോയിഡ് ക്രമീകരണങ്ങളിൽ Tella (റ്റെല്ല) ഐക്കൺ ദൃശ്യമാകും .</string>
@@ -733,4 +706,16 @@ This is one of the two options available. -->
   <string name="meter">%f മീറ്റര്‍‌</string>
   <!-- The value expressed in meters per second -->
   <string name="meter_per_second">%f മീറ്റർ പ്രതി സെക്കൻറ്</string>
+  <string name="settings.sec_app.bar">Security</string>
+  <string name="settings.select_security">Security</string>
+    <string name="settings.select_customization">Customization</string>
+    <string name="settings.select_lock_timeout">Lock Timeout</string>
+    <string name="settings.sec_camera.mute_switch">Camera silent mode</string>
+    <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
+    <string name="settings.sec_quick.delete_switch">Quick delete</string>
+    <string name="settings.sec_quick.delete_expl">Shows a sliding button on the homescreen to quickly exit Tella in emergency situations.</string>
+    <string name="settings.servers.title_server.settings">Servers</string>
+    <string name="settings.servers.add_server.expl">Connect to servers to collect and send data to your organization</string>
+    <string name="settings.servers_auto.upload_action">Auto-upload to server</string>
+    <string name="settings.servers_auto.upload_action.expl">Upload your files to your Reports server as soon as they are captured (photos, videos, or audio recordings) or imported into Tella.</string>
 </resources>

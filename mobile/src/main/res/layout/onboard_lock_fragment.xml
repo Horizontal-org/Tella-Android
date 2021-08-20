@@ -30,7 +30,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setupImgV" />
 
-    <rs.readahead.washington.mobile.views.custom.InformationButton
+    <org.hzontal.shared_ui.buttons.InformationButton
         android:id="@+id/lockPasswordBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
         app:state_checked="false"
         />
 
-    <rs.readahead.washington.mobile.views.custom.InformationButton
+    <org.hzontal.shared_ui.buttons.InformationButton
         android:id="@+id/lockPINdBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
 
         />
 
-    <rs.readahead.washington.mobile.views.custom.InformationButton
+    <org.hzontal.shared_ui.buttons.InformationButton
         android:id="@+id/lockPatternBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/Unlock_White_Text_Back"
-        android:text="@string/pl_cancel"
+        android:text="@string/action_cancel"
         android:id="@+id/cancelBtn"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

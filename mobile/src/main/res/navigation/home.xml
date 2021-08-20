@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home"
+    app:startDestination="@+id/homeScreen">
+    <fragment
+        android:id="@+id/homeScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.VaultFragment"
+        android:label="Vault"
+        tools:layout="@layout/fragment_vault">
+        <action
+            android:id="@+id/action_homeScreen_to_main_settings"
+            app:destination="@id/main_settings"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"/>
+    </fragment>
+
+    <activity
+        android:id="@+id/main_settings"
+        android:name="rs.readahead.washington.mobile.views.activity.SettingsActivity"
+        android:label="Settings"
+        tools:layout="@layout/activity_settings">
+    </activity>
+</navigation>

@@ -126,7 +126,6 @@
   <string name="collect.form_exit_dialog.action_exit.anyway">SORTIR QUAND MÊME</string>
   <string name="settings.docu_error_not.valid.URL">Cette URL est invalide.</string>
   <string name="home_action.label_quick.delete">Supprimer</string>
-  <string name="onboard.del_heading">Suppression rapide</string>
   <string name="gallery_subheading_sort.by">Trier par</string>
   <string name="gallery_subheading_show">Afficher</string>
   <string name="gallery_list.item_newest.to.oldest">Du plus récent au plus ancien</string>
@@ -145,24 +144,7 @@
   <string name="settings.docu_error_unknown.connection.error">Erreur de connexion au serveur.</string>
   <string name="settings.docu_error_no.internet">Vous n’êtes pas connecté à Internet. Réessayez après connexion.</string>
   <string name="settings.docu_dialog.action_try.again.connecting">Réessayer</string>
-  <string name="onboard.perm_action_start.app">Commencer</string>
-  <string name="onboard.intro_subheading">Documentation et protection</string>
-  <string name="onboard.into_expl">Tella permet à quiconque de documenter les atteintes aux droits humains, la violence et la corruption, sans se mettre en danger.</string>
-  <string name="onboard.camo_subheading">Protection contre les fouilles d’appareil</string>
-  <string name="onboard.camo_expl">Tella peut être dissimulée sur votre appareil, et tout fichier capturé dans Tella ou importé sera automatiquement chiffré et enregistré dans une galerie cachée.</string>
-  <string name="onboard.collect_subheading">Collecte de données facile</string>
-  <string name="onboard.collect_expl">Connecté ou non, remplissez des formulaires et des enquêtes directement sur votre appareil. Vous devez être lié à une organisation qui crée des formulaires et gère les données.</string>
-  <string name="onboard.del_subheading">Effacement des données en cas d’urgence</string>
-  <string name="onboard.del_expl">En cas d’urgence, effacez de Tella les renseignements délicats en quelques secondes seulement.</string>
-  <string name="onboard.perm_action_grant.permissions">Accorder les autorisations</string>
   <string name="settings.about_select_tutorial">Tutoriel</string>
-  <string name="onboard.perm_dialog.expl_grant.permissions">Pour fonctionner correctement, vous devez accorder à Tella les autorisations requises.</string>
-  <string name="onboard.perm_heading">Une dernière chose</string>
-  <string name="onboard.perm_subheading">Pour fonctionner correctement, vous devez autoriser Tella à :</string>
-  <string name="onboard.perm_list.permissions">• accéder à la mémoire de votre appareil (pour exporter des fichiers de Tella vers votre appareil)
- • accéder à votre appareil photo (pour capturer des photos et des vidéos)
- • accéder à votre microphone (pour enregistrer du son)
- • accéder à votre GPS (pour déterminer votre position géographique quand vous capturez des données ou des fichiers multimédias, pour les rendre vérifiables)</string>
   <string name="gallery_heading_selected_files">Fichiers sélectionnés</string>
   <string name="settings.camo_expl">Sélectionner une icône et un nom personnalisés pour mieux dissimuler Tella sur votre appareil. Noter que l’icône de Tella restera visible dans le menu des paramètres d’Android.</string>
   <string name="settings.camo_camera4">Appareil photo</string>
@@ -417,4 +399,16 @@
   <string name="action_next">Suivant</string>
   <string name="meter">%f m</string>
   <string name="meter_per_second">%f m/s</string>
+  <string name="settings.sec_app.bar">Security</string>
+  <string name="settings.select_security">Security</string>
+    <string name="settings.select_customization">Customization</string>
+    <string name="settings.select_lock_timeout">Lock Timeout</string>
+    <string name="settings.sec_camera.mute_switch">Camera silent mode</string>
+    <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
+    <string name="settings.sec_quick.delete_switch">Quick delete</string>
+    <string name="settings.sec_quick.delete_expl">Shows a sliding button on the homescreen to quickly exit Tella in emergency situations.</string>
+    <string name="settings.servers.title_server.settings">Servers</string>
+    <string name="settings.servers.add_server.expl">Connect to servers to collect and send data to your organization</string>
+    <string name="settings.servers_auto.upload_action">Auto-upload to server</string>
+    <string name="settings.servers_auto.upload_action.expl">Upload your files to your Reports server as soon as they are captured (photos, videos, or audio recordings) or imported into Tella.</string>
 </resources>
