@@ -536,37 +536,10 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     private void removeServer(Server server){
         if (server.getServerType() == ServerType.ODK_COLLECT) {
-            removeCollectServer((CollectServer) server);
+            collectServersPresenter.remove((CollectServer) server);
         } else {
-            removeTUServer((TellaUploadServer) server);
+            tellaUploadServersPresenter.remove((TellaUploadServer) server);
         }
-    }
-
-    private void showDownloadedPopupMenu(Server server, ViewGroup row, ImageView options) {
-        PopupMenu popup = new PopupMenu(row.getContext(), options);
-        popup.inflate(R.menu.server_item_menu);
-
-        popup.setOnMenuItemClickListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.edit_server:
-                    if (server.getServerType() == ServerType.ODK_COLLECT) {
-                        editCollectServer((CollectServer) server);
-                    } else {
-                        editTUServer((TellaUploadServer) server);
-                    }
-                    break;
-                case R.id.remove_server:
-                    if (server.getServerType() == ServerType.ODK_COLLECT) {
-                        removeCollectServer((CollectServer) server);
-                    } else {
-                        removeTUServer((TellaUploadServer) server);
-                    }
-                    break;
-            }
-            return false;
-        });
-
-        popup.show();
     }
 
     private void setupAutoUploadSwitch() {
