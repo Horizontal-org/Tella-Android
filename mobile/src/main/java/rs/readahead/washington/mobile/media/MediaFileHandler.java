@@ -152,7 +152,8 @@ public class MediaFileHandler {
         } else {
             path = Environment.getExternalStoragePublicDirectory(envDirType);
         }
-        File file = MyApplication.rxVault.getFile(vaultFile);
+
+        File file = new File(path, vaultFile.name);
 
         InputStream is = null;
         OutputStream os = null;
