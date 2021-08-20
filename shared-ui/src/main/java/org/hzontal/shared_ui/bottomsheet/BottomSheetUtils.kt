@@ -3,6 +3,7 @@ package org.hzontal.shared_ui.bottomsheet
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
@@ -152,6 +153,157 @@ object BottomSheetUtils {
             description = view.findViewById(R.id.standard_sheet_content)
             radioGroup = view.findViewById(R.id.radio_list)
         }
+    }
+
+    class DualChoiceSheetHolder : CustomBottomSheetFragment.PageHolder() {
+        lateinit var cancelButton: ImageView
+        lateinit var buttonOne: TextView
+        lateinit var buttonTwo: TextView
+        lateinit var title: TextView
+        lateinit var description: TextView
+
+        override fun bindView(view: View) {
+            cancelButton = view.findViewById(R.id.standard_sheet_cancel_btn)
+            buttonOne = view.findViewById(R.id.sheet_one_btn)
+            buttonTwo = view.findViewById(R.id.sheet_two_btn)
+            title = view.findViewById(R.id.standard_sheet_title)
+            description = view.findViewById(R.id.standard_sheet_content)
+        }
+    }
+
+    interface DualChoiceConsumer {
+        fun accept(option: Boolean)
+    }
+
+    @JvmStatic
+    fun showDualChoiceTypeSheet(
+        fragmentManager: FragmentManager,
+        titleText: String?,
+        descriptionText: String?,
+        buttonOneLabel: String? = null,
+        buttonTwoLabel: String? = null,
+        consumer: DualChoiceConsumer? = null
+    ) {
+
+        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.dual_choose_layout)
+            .cancellable(true)
+            .fullScreen()
+            .statusBarColor(R.color.space_cadet)
+        customSheetFragment.holder(DualChoiceSheetHolder(), object :
+            CustomBottomSheetFragment.Binder<DualChoiceSheetHolder> {
+            override fun onBind(holder: DualChoiceSheetHolder) {
+                with(holder) {
+                    title.text = titleText
+                    description.text = descriptionText
+                    buttonOneLabel?.let {
+                        buttonOne.text = it
+                    }
+                    buttonTwoLabel?.let {
+                        buttonTwo.text = it
+                    }
+
+                    buttonOne.setOnClickListener {
+                        consumer?.accept(true)
+                        customSheetFragment.dismiss()
+                    }
+
+                    buttonTwo.setOnClickListener {
+                        consumer?.accept(false)
+                        customSheetFragment.dismiss()
+                    }
+
+                    cancelButton.setOnClickListener {
+                        customSheetFragment.dismiss()
+                    }
+                }
+            }
+        })
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
+    }
+
+    enum class CamouflageOption {
+        CUSTOM, CALCULATOR, CHANGE_LOCK
+    }
+
+    class CamouflageSheetHolder : CustomBottomSheetFragment.PageHolder() {
+        lateinit var sheetTitle: TextView
+        lateinit var sheetsubTitle: TextView
+        lateinit var cancelButton: ImageView
+        lateinit var buttonOneTitle: TextView
+        lateinit var buttonOneSubtitle: TextView
+        lateinit var title: TextView
+        lateinit var buttonTwoTitle: TextView
+        lateinit var buttonTwoSubtitle: TextView
+        lateinit var buttonOne: View
+        lateinit var buttonTwo: View
+
+        override fun bindView(view: View) {
+            title = view.findViewById(R.id.dialog_title)
+            cancelButton = view.findViewById(R.id.standard_sheet_cancel_btn)
+            buttonOneTitle = view.findViewById(R.id.title_btn_one)
+            buttonOneSubtitle = view.findViewById(R.id.subtitle_btn_one)
+            sheetTitle = view.findViewById(R.id.sheet_title)
+            sheetsubTitle = view.findViewById(R.id.sheet_subtitle)
+            buttonOne = view.findViewById(R.id.sheet_one_btn)
+            buttonTwo = view.findViewById(R.id.sheet_two_btn)
+            buttonTwoTitle = view.findViewById(R.id.title_btn_two)
+            buttonTwoSubtitle = view.findViewById(R.id.subtitle_btn_two)
+        }
+    }
+
+
+    @JvmStatic
+    fun showChangeCamouflageSheet(
+        fragmentManager: FragmentManager,
+        titleText: String?,
+        dialogTitle: String?,
+        dialogSubtitle: String?,
+        titleOne: String?,
+        subtitleOne: String?,
+        titleTwo: String?,
+        subtitleTwo: String?,
+        consumer: DualChoiceConsumer? = null
+    ) {
+
+        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.change_camouflage_layout)
+            .cancellable(true)
+            .fullScreen()
+            .statusBarColor(R.color.space_cadet)
+        customSheetFragment.holder(CamouflageSheetHolder(), object :
+            CustomBottomSheetFragment.Binder<CamouflageSheetHolder> {
+            override fun onBind(holder: CamouflageSheetHolder) {
+                with(holder) {
+                    title.text = titleText
+                    buttonOneTitle.text = titleOne
+                    buttonOneSubtitle.text = subtitleOne
+                    sheetTitle.text = dialogTitle
+                    sheetsubTitle.text = dialogSubtitle
+                    buttonTwoTitle.text = titleTwo
+                    buttonTwoSubtitle.text = subtitleTwo
+
+                    buttonOne.setOnClickListener {
+                    consumer?.accept(true)
+                    customSheetFragment.dismiss()
+                    }
+
+                    buttonTwo.setOnClickListener {
+                        consumer?.accept(false)
+                        customSheetFragment.dismiss()
+                    }
+
+                    cancelButton.setOnClickListener {
+                        customSheetFragment.dismiss()
+                    }
+                }
+            }
+        })
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
     }
 
 }

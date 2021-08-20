@@ -37,11 +37,15 @@ class VaultFragment : BaseFragment() {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.fragment_vault, container, false)
 
+        initView(view)
+        
+        return view
+    }
+
+    override fun initView(view: View) {
         view.findViewById<View>(R.id.settings).setOnClickListener {
             nav().navigate(R.id.action_homeScreen_to_main_settings)
         }
-        
-        return view
     }
 
     companion object {

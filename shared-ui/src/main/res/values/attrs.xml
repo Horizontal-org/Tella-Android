@@ -9,10 +9,16 @@
         <attr name="state_checked" format="boolean"/>
     </declare-styleable>
 
-
     <declare-styleable name="TellaSwitchWithMessage">
         <attr name="titleText" format="reference|string" />
         <attr name="explainText" format="reference|string" />
         <attr name="is_checked" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="CollapsableAppBar">
+        <attr name="titleRes" format="reference|string" />
+        <attr name="barHeightRes" format="reference" />
+        <attr name="contentScrimRes" format="reference"/>
+        <attr name="backgroundRes" format="reference"/>
     </declare-styleable>
 </resources>

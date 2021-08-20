@@ -10,14 +10,12 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.annotation.Nullable
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent
 import rs.readahead.washington.mobile.util.LocaleManager
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
-import timber.log.Timber
 import java.util.*
 
 
@@ -27,13 +25,18 @@ class LanguageSettings : BaseFragment(), View.OnClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_language_settings, container, false)
+        
+        initView(view)
+
+        return view
+    }
+
+    override fun initView(view: View) {
         (activity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_lang_app_bar)
         (activity as OnFragmentSelected?)?.setToolbarHomeIcon(R.drawable.ic_close_white_24dp)
 
         LanguageList =view.findViewById(R.id.language_list)
         createLangViews()
-
-        return view
     }
 
     private fun createLangViews() {

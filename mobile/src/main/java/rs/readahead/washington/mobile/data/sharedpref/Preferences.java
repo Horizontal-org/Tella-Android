@@ -30,12 +30,12 @@ public class Preferences {
         setBoolean(SharedPrefs.ANONYMOUS_MODE, value);
     }
 
-    public static boolean isDomainFronting() {
-        return getBoolean(SharedPrefs.DOMAIN_FRONTING, false);
+    public static boolean isBypassCensorship() {
+        return getBoolean(SharedPrefs.BYPASS_CENSORSHIP, false);
     }
 
-    public static void setDomainFronting(boolean value) {
-        setBoolean(SharedPrefs.DOMAIN_FRONTING, value);
+    public static void setBypassCensorship(boolean value) {
+        setBoolean(SharedPrefs.BYPASS_CENSORSHIP, value);
     }
 
     public static boolean isUninstallOnPanic() {
@@ -68,6 +68,12 @@ public class Preferences {
 
     public static void setCollectServersLayout(boolean value) {
         setBoolean(SharedPrefs.COLLECT_OPTION, value);
+    }
+
+    public static boolean isShutterMute() { return getBoolean(SharedPrefs.MUTE_CAMERA_SHUTTER, false); }
+
+    public static void setShutterMute(boolean value) {
+        setBoolean(SharedPrefs.MUTE_CAMERA_SHUTTER, value);
     }
 
     public static boolean isDeleteServerSettingsActive() {

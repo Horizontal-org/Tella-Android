@@ -166,9 +166,9 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
             dialog?.let {
                 it.window?.let { window ->
                     if (animationStyle != null) window.attributes.windowAnimations =
-                            animationStyle!!
+                        animationStyle!!
                     if (isTransparent) window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))else {
-                        if (isFullscreen) window.setBackgroundDrawable(ColorDrawable(getResources().getColor(R.color.wa_purple)))}
+                        if (isFullscreen) window.setBackgroundDrawable(ColorDrawable(getResources().getColor(R.color.space_cadet)))}
                 }
             }
 
