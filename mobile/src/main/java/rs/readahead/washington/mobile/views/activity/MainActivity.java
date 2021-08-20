@@ -21,6 +21,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.Set;
+
+import com.hzontal.tella_vault.Metadata;
+import com.hzontal.tella_vault.VaultFile;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,7 +48,6 @@ import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
-import rs.readahead.washington.mobile.domain.entity.Metadata;
 import rs.readahead.washington.mobile.mvp.contract.ICollectCreateFormControllerContract;
 import rs.readahead.washington.mobile.mvp.contract.IHomeScreenPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
@@ -94,7 +104,7 @@ public class MainActivity extends MetadataActivity implements
         ButterKnife.bind(this);
 
         setupToolbar();
-
+        setupNavigation();
         handler = new Handler();
 
         homeScreenPresenter = new HomeScreenPresenter(this);
@@ -122,6 +132,18 @@ public class MainActivity extends MetadataActivity implements
         });
     }
 
+    private void setupNavigation() {
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_nav_host);
+        assert navHostFragment != null;
+        NavController navController = navHostFragment.getNavController();
+        BottomNavigationView btmNavMain = findViewById(R.id.btm_nav_main);
+        setSupportActionBar(toolbar);
+        AppBarConfiguration appBarConfiguration =
+                new AppBarConfiguration.Builder(R.id.homeScreen,R.id.cameraScreen,R.id.reportsScreen,R.id.micScreen,R.id.formScreen).build();
+        NavigationUI.setupWithNavController(btmNavMain, navController);
+        NavigationUI.setupActionBarWithNavController(this,navController,appBarConfiguration);
+    }
+
     private void setupToolbar() {
         toolbar.inflateMenu(R.menu.activity_main_menu);
 
@@ -144,7 +166,7 @@ public class MainActivity extends MetadataActivity implements
     }
 
     private void setOfflineMenuIcon(MenuItem offlineMenuIcon, boolean offline) {
-        offlineMenuIcon.setIcon(offline ? R.drawable.ic_cloud_off_white_24dp : R.drawable.ic_cloud_queue_white_24dp);
+       // offlineMenuIcon.setIcon(offline ? R.drawable.ic_cloud_off_white_24dp : R.drawable.ic_cloud_queue_white_24dp);
         // todo (djm): move this from here - this should be setup once per activity.resume()
         offlineMenuIcon.setVisible(Preferences.isCollectServersLayout());
         if (settingsMenuItem != null) {
@@ -417,7 +439,7 @@ public class MainActivity extends MetadataActivity implements
             maybeClosePanic();
         }
 
-        setOfflineMenuIcon(toolbar.getMenu().findItem(R.id.nav_offline_mode), Preferences.isOfflineMode());
+       // setOfflineMenuIcon(toolbar.getMenu().findItem(R.id.nav_offline_mode), Preferences.isOfflineMode());
     }
 
     @Override
@@ -477,9 +499,9 @@ public class MainActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onMetadataAttached(long mediaFileId, @Nullable Metadata metadata) {
+    public void onMetadataAttached(VaultFile vaultFile) {
         Intent data = new Intent();
-        data.putExtra(C.CAPTURED_MEDIA_FILE_ID, mediaFileId);
+        data.putExtra(C.CAPTURED_MEDIA_FILE_ID, vaultFile.id);
 
         setResult(RESULT_OK, data);
     }

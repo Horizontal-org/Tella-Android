@@ -2,18 +2,14 @@ package com.hzontal.tella_locking_ui.ui.pin.calculator
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.text.TextUtils.substring
 import android.widget.TextView
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.TellaKeysUI
 import com.hzontal.tella_locking_ui.ui.pin.base.BasePinActivity
-import com.hzontal.tella_locking_ui.ui.pin.calculator.Evaluator.eval
 import com.hzontal.tella_locking_ui.ui.pin.pinview.CalculatorKeyView
 import com.hzontal.tella_locking_ui.ui.pin.pinview.ResultListener
 import org.hzontal.tella.keys.MainKeyStore
 import org.hzontal.tella.keys.key.MainKey
-import java.lang.String.format
-import java.text.DecimalFormat
 import javax.crypto.spec.PBEKeySpec
 
 private const val TAG = "CalculatorActivity"

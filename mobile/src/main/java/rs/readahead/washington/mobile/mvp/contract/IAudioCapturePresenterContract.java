@@ -2,14 +2,14 @@ package rs.readahead.washington.mobile.mvp.contract;
 
 import android.content.Context;
 
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import com.hzontal.tella_vault.VaultFile;
 
 
 public class IAudioCapturePresenterContract {
     public interface IView {
         void onAddingStart();
         void onAddingEnd();
-        void onAddSuccess(MediaFile mediaFile);
+        void onAddSuccess(VaultFile mediaFile);
         void onAddError(Throwable error);
         void onAvailableStorage(long memory);
         void onAvailableStorageFailed(Throwable throwable);
@@ -17,7 +17,7 @@ public class IAudioCapturePresenterContract {
     }
 
     public interface IPresenter extends IBasePresenter {
-        void addMediaFile(MediaFile mediaFile);
+        void addMediaFile(VaultFile vaultFile);
         void checkAvailableStorage();
     }
 }

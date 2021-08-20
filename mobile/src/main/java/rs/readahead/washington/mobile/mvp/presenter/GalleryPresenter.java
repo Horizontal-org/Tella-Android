@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.IVaultDatabase;
+import com.hzontal.tella_vault.VaultFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,43 +20,32 @@ import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
-import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IGalleryPresenterContract;
-import rs.readahead.washington.mobile.presentation.entity.MediaFileThumbnailData;
 
 
 public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
     private IGalleryPresenterContract.IView view;
-    private CompositeDisposable disposables = new CompositeDisposable();
-    private KeyDataSource keyDataSource;
-    private MediaFileHandler mediaFileHandler;
+    private final CompositeDisposable disposables = new CompositeDisposable();
+    private final KeyDataSource keyDataSource;
 
 
     public GalleryPresenter(IGalleryPresenterContract.IView view) {
         this.view = view;
         this.keyDataSource = MyApplication.getKeyDataSource();
-        this.mediaFileHandler = new MediaFileHandler(keyDataSource);
     }
 
     @Override
-    public void getFiles(final IMediaFileRecordRepository.Filter filter, final IMediaFileRecordRepository.Sort sort) {
-        disposables.add(keyDataSource.getDataSource()
-                .flatMapSingle((Function<DataSource, SingleSource<List<MediaFile>>>) dataSource ->
-                        dataSource.listMediaFiles(filter, sort))
+    public void getFiles(final IVaultDatabase.Filter filter, final IVaultDatabase.Sort sort) {
+        disposables.add(MyApplication.rxVault.list(filter, sort, null)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> view.onGetFilesStart())
+                .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onGetFilesEnd())
-                .subscribe(mediaFiles -> {
-                    //checkMediaFolder(view.getContext(), mediaFiles);
-                    view.onGetFilesSuccess(mediaFiles);
-                }, throwable -> {
+                .subscribe(vaultFile -> view.onGetFilesSuccess(vaultFile),throwable ->  {
                     FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onGetFilesError(throwable);
-                })
-        );
+                }));
     }
 
     @Override
@@ -65,30 +56,26 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
 
     @Override
     public void importImage(final Uri uri) {
-        disposables.add(Observable
-                .fromCallable(() -> MediaFileHandler.importPhotoUri(view.getContext(), uri))
+        disposables.add(Observable.fromCallable(() -> MediaFileHandler.importPhotoUri(view.getContext(), uri))
                 .subscribeOn(Schedulers.computation())
                 .doOnSubscribe(disposable -> view.onImportStarted())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onImportEnded())
-                .subscribe(mediaHolder ->
-                                view.onMediaImported(mediaHolder.getMediaFile(), mediaHolder.getMediaFileThumbnailData()),
-                        throwable -> {
-                            FirebaseCrashlytics.getInstance().recordException(throwable);
-                            view.onImportError(throwable);
-                        })
-        );
+                .subscribe(vaultFile -> view.onMediaImported(vaultFile), throwable -> {
+                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    view.onImportError(throwable);
+                }));
+
     }
 
     @Override
     public void importVideo(final Uri uri) {
-        disposables.add(Observable
-                .fromCallable(() -> MediaFileHandler.importVideoUri(view.getContext(), uri))
+        disposables.add(Observable.fromCallable(() -> MediaFileHandler.importVideoUri(view.getContext(), uri))
                 .subscribeOn(Schedulers.computation())
                 .doOnSubscribe(disposable -> view.onImportStarted())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onImportEnded())
-                .subscribe(mediaHolder -> view.onMediaImported(mediaHolder.getMediaFile(), mediaHolder.getMediaFileThumbnailData()), throwable -> {
+                .subscribe(vaultFile -> view.onMediaImported(vaultFile), throwable -> {
                     FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onImportError(throwable);
                 })
@@ -96,49 +83,43 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
     }
 
     @Override
-    public void addNewMediaFile(MediaFile mediaFile, MediaFileThumbnailData thumbnailData) {
-        disposables.add(mediaFileHandler.registerMediaFile(mediaFile, thumbnailData)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mediaFile1 -> view.onMediaFilesAdded(mediaFile1), throwable -> {
-                    FirebaseCrashlytics.getInstance().recordException(throwable);
-                    view.onMediaFilesAddingError(throwable);
-                })
-        );
+    public void addNewMediaFile(VaultFile vaultFile) {
+        view.onMediaFilesAdded(vaultFile);
     }
 
     @Override
-    public void deleteMediaFiles(final List<MediaFile> mediaFiles) {
-        disposables.add(keyDataSource.getDataSource()
-                .subscribeOn(Schedulers.io())
-                .flatMapSingle((Function<DataSource, SingleSource<Integer>>) dataSource -> {
-                    List<Single<MediaFile>> completables = new ArrayList<>();
-                    for (MediaFile mediafile : mediaFiles) {
-                        completables.add(dataSource.deleteMediaFile(mediafile, mediaFile ->
-                                MediaFileHandler.deleteMediaFile(view.getContext(), mediaFile)));
-                    }
+    public void deleteMediaFiles(final List<VaultFile> vaultFiles) {
+        List<Single<Boolean>> completables = new ArrayList<>();
+        for (VaultFile vaultFile : vaultFiles) {
+            completables.add(deleteMediaFile(vaultFile));
+        }
 
-                    return Single.zip(completables, objects -> objects.length);
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(num -> view.onMediaFilesDeleted(num), throwable -> {
-                    FirebaseCrashlytics.getInstance().recordException(throwable);
-                    view.onMediaFilesDeletionError(throwable);
-                })
+        disposables.add(Single.zip(completables, objects -> objects.length)
+                 .observeOn(AndroidSchedulers.mainThread())
+                 .subscribe(num -> view.onMediaFilesDeleted(num), throwable -> {
+                     FirebaseCrashlytics.getInstance().recordException(throwable);
+                     view.onMediaFilesDeletionError(throwable);
+                 })
         );
     }
 
+    private Single<Boolean> deleteMediaFile(VaultFile vaultFile){
+        return MyApplication.rxVault.delete(vaultFile)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
     @Override
-    public void exportMediaFiles(final List<MediaFile> mediaFiles) {
+    public void exportMediaFiles(final List<VaultFile> vaultFiles) {
         final Context context = view.getContext().getApplicationContext();
 
         disposables.add(Single
                 .fromCallable(() -> {
-                    for (MediaFile mediaFile : mediaFiles) {
+                    for (VaultFile mediaFile : vaultFiles) {
                         MediaFileHandler.exportMediaFile(context, mediaFile);
                     }
 
-                    return mediaFiles.size();
+                    return vaultFiles.size();
                 })
                 .subscribeOn(Schedulers.computation())
                 .doOnSubscribe(disposable -> view.onExportStarted())
@@ -149,6 +130,7 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
                     view.onExportError(throwable);
                 })
         );
+
     }
 
     @Override

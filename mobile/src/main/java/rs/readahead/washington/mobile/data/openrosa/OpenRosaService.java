@@ -49,7 +49,7 @@ import timber.log.Timber;
 
 public class OpenRosaService {
     private static OpenRosaService instance;
-    private Retrofit retrofit;
+    private final Retrofit retrofit;
     private final static Map<String, CachingAuthenticator> authCache = new ConcurrentHashMap<>();
     private volatile static CookieJar cookieJar = new QuotePreservingCookieJar(new CookieManager());
 
@@ -159,7 +159,7 @@ public class OpenRosaService {
 
     private static class OpenRosaRequestInterceptor implements Interceptor {
         private final String TZ = "GMT";
-        private SimpleDateFormat df;
+        private final SimpleDateFormat df;
 
 
         OpenRosaRequestInterceptor() {
@@ -167,6 +167,7 @@ public class OpenRosaService {
             df.setTimeZone(TimeZone.getTimeZone(TZ));
         }
 
+        @NonNull
         @Override
         public Response intercept(@NonNull Chain chain) throws IOException {
             Request originalRequest = chain.request();

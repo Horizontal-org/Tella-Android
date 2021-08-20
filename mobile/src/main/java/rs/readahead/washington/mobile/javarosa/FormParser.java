@@ -3,6 +3,8 @@ package rs.readahead.washington.mobile.javarosa;
 import android.text.TextUtils;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.Metadata;
+import com.hzontal.tella_vault.VaultFile;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormIndex;
@@ -12,8 +14,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 
 import androidx.annotation.NonNull;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
-import rs.readahead.washington.mobile.domain.entity.Metadata;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
@@ -122,8 +122,8 @@ public class FormParser implements IFormParserContract.IFormParser {
     }
 
     @Override
-    public void setWidgetMediaFile(@NonNull String name, @NonNull MediaFile mediaFile) {
-        formController.getCollectFormInstance().setWidgetMediaFile(name, FormMediaFile.fromMediaFile(mediaFile));
+    public void setWidgetMediaFile(@NonNull String name, @NonNull VaultFile vaultFile) {
+        formController.getCollectFormInstance().setWidgetMediaFile(name, FormMediaFile.fromMediaFile(vaultFile));
     }
 
     @Override

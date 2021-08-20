@@ -11,14 +11,11 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.VaultFile;
 import com.otaliastudios.cameraview.CameraException;
 import com.otaliastudios.cameraview.CameraListener;
 import com.otaliastudios.cameraview.CameraOptions;
@@ -40,27 +37,23 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
-import rs.readahead.washington.mobile.domain.entity.Metadata;
-import rs.readahead.washington.mobile.domain.entity.RawFile;
-import rs.readahead.washington.mobile.domain.entity.TempMediaFile;
-import rs.readahead.washington.mobile.media.MediaFileBundle;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.media.MediaFileUrlLoader;
+import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.mvp.contract.ICameraPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CameraPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.MetadataAttacher;
 import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulePresenter;
-import rs.readahead.washington.mobile.presentation.entity.MediaFileLoaderModel;
+import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.VideoResolutionManager;
@@ -117,11 +110,11 @@ public class CameraActivity extends MetadataActivity implements
     private ProgressDialog progressDialog;
     private OrientationEventListener mOrientationEventListener;
     private int zoomLevel = 0;
-    private MediaFile capturedMediaFile;
+    private VaultFile capturedMediaFile;
     private AlertDialog videoQualityDialog;
     private VideoResolutionManager videoResolutionManager;
     private long lastClickTime = System.currentTimeMillis();
-    private RequestManager.ImageModelRequest<MediaFileLoaderModel> glide;
+    private RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -145,10 +138,8 @@ public class CameraActivity extends MetadataActivity implements
             intentMode = IntentMode.valueOf(getIntent().getStringExtra(INTENT_MODE));
         }
 
-        // CacheWordDataSource cacheWordDataSource = new CacheWordDataSource(getContext());
-        KeyDataSource keyDataSource = MyApplication.getKeyDataSource();
-        MediaFileHandler mediaFileHandler = new MediaFileHandler(keyDataSource);
-        MediaFileUrlLoader glideLoader = new MediaFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
+        MediaFileHandler mediaFileHandler = new MediaFileHandler();
+        VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
         glide = Glide.with(getContext()).using(glideLoader);
 
         setupCameraView();
@@ -225,10 +216,10 @@ public class CameraActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onAddSuccess(MediaFileBundle bundle) {
-        capturedMediaFile = bundle.getMediaFile();
+    public void onAddSuccess(VaultFile bundle) {
+        capturedMediaFile = bundle;
         if (intentMode != IntentMode.COLLECT) {
-            Glide.with(this).load(bundle.getMediaFileThumbnailData().getData()).into(previewView);
+            Glide.with(this).load(bundle.thumb).into(previewView);
         }
         attachMediaFileMetadata(capturedMediaFile, metadataAttacher);
     }
@@ -239,13 +230,13 @@ public class CameraActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onMetadataAttached(long mediaFileId, @Nullable Metadata metadata) {
+    public void onMetadataAttached(VaultFile vaultFile) {
         Intent data = new Intent();
         if (intentMode == IntentMode.COLLECT) {
-            capturedMediaFile.setMetadata(metadata);
+            capturedMediaFile.metadata = vaultFile.metadata;
             data.putExtra(MEDIA_FILE_KEY, capturedMediaFile);
         } else {
-            data.putExtra(C.CAPTURED_MEDIA_FILE_ID, mediaFileId);
+            data.putExtra(C.CAPTURED_MEDIA_FILE_ID, vaultFile.metadata);
         }
         setResult(RESULT_OK, data);
 
@@ -278,9 +269,9 @@ public class CameraActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onLastMediaFileSuccess(MediaFile mediaFile) {
+    public void onLastMediaFileSuccess(VaultFile vaultFile) {
         if (intentMode != IntentMode.COLLECT) {
-            glide.load(new MediaFileLoaderModel(mediaFile, MediaFileLoaderModel.LoadType.THUMBNAIL))
+            glide.load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(previewView);
@@ -312,7 +303,7 @@ public class CameraActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onGetMediaFilesSuccess(List<RawFile> mediaFiles) {
+    public void onGetMediaFilesSuccess(List<VaultFile> mediaFiles) {
 
     }
 
@@ -329,6 +320,7 @@ public class CameraActivity extends MetadataActivity implements
             gridButton.setVisibility(videoRecording ? View.VISIBLE : View.GONE);
             switchButton.setVisibility(videoRecording ? View.VISIBLE : View.GONE);
             resolutionButton.setVisibility(videoRecording ? View.VISIBLE : View.GONE);
+
             if (videoRecording) {
                 if (System.currentTimeMillis() - lastClickTime >= CLICK_DELAY) {
                     cameraView.stopVideo();
@@ -340,9 +332,7 @@ public class CameraActivity extends MetadataActivity implements
             } else {
                 setVideoQuality();
                 lastClickTime = System.currentTimeMillis();
-                TempMediaFile tmp = TempMediaFile.newMp4();
-                File file = MediaFileHandler.getTempFile(this, tmp);
-                cameraView.takeVideo(file);
+                cameraView.takeVideo(MediaFileHandler.getTempFile());
                 captureButton.displayStopVideo();
                 durationView.start();
                 videoRecording = true;
@@ -673,9 +663,9 @@ public class CameraActivity extends MetadataActivity implements
         }
     }
 
-    private void scheduleFileUpload(MediaFile mediaFile) {
+    private void scheduleFileUpload(VaultFile vaultFile) {
         if (Preferences.isAutoUploadEnabled()) {
-            List<MediaFile> upload = Collections.singletonList(mediaFile);
+            List<VaultFile> upload = Collections.singletonList(vaultFile);
             uploadPresenter.scheduleUploadMediaFiles(upload);
         } else {
             onMediaFilesUploadScheduled();

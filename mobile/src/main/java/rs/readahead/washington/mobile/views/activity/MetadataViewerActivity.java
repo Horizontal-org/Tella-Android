@@ -3,9 +3,6 @@ package rs.readahead.washington.mobile.views.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,12 +11,16 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+
+import com.hzontal.tella_vault.Metadata;
+import com.hzontal.tella_vault.MyLocation;
+import com.hzontal.tella_vault.VaultFile;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
-import rs.readahead.washington.mobile.domain.entity.Metadata;
-import rs.readahead.washington.mobile.domain.entity.MyLocation;
 import rs.readahead.washington.mobile.util.StringUtils;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
@@ -31,7 +32,7 @@ public class MetadataViewerActivity extends BaseLockActivity {
     @BindView(R.id.metadata_list)
     LinearLayout metadataList;
 
-    private MediaFile mediaFile;
+    private VaultFile vaultFile;
     private Metadata metadata;
 
 
@@ -51,13 +52,13 @@ public class MetadataViewerActivity extends BaseLockActivity {
         }
 
         if (getIntent().hasExtra(VIEW_METADATA)) {
-            MediaFile mediaFile = (MediaFile) getIntent().getExtras().get(VIEW_METADATA);
-            if (mediaFile != null) {
-                this.mediaFile = mediaFile;
+            VaultFile vaultFile = (VaultFile) getIntent().getExtras().get(VIEW_METADATA);
+            if (vaultFile != null) {
+                this.vaultFile = vaultFile;
             }
         }
 
-        metadata = mediaFile.getMetadata();
+        metadata = vaultFile.metadata;
 
         showMetadata();
     }
@@ -113,19 +114,19 @@ public class MetadataViewerActivity extends BaseLockActivity {
     }
 
     private void showMetadata() {
-        if (mediaFile == null || metadata == null) {
+        if (vaultFile == null || metadata == null) {
             return;
         }
 
         metadataList.addView(createMetadataTitle(R.string.verification_info_subheading_file_metadata));
         metadataList.addView(createMetadataItem(metadata.getFileName() != null ?
-                metadata.getFileName() : mediaFile.getFileName(), getResources().getString(R.string.verification_info_field_filename)));
-        metadataList.addView(createMetadataItem(mediaFile.getPath(), getResources().getString(R.string.verification_info_field_file_path)));
+                metadata.getFileName() : vaultFile.name, getResources().getString(R.string.verification_info_field_filename)));
+        metadataList.addView(createMetadataItem(vaultFile.path, getResources().getString(R.string.verification_info_field_file_path)));
 
-        metadataList.addView(createMetadataItem(mediaFile.getHash() != null ?
-                mediaFile.getHash() : metadata.getFileHashSHA256(), getResources().getString(R.string.verification_info_field_hash)));
+        metadataList.addView(createMetadataItem(vaultFile.hash != null ?
+                vaultFile.hash : metadata.getFileHashSHA256(), getResources().getString(R.string.verification_info_field_hash)));
         metadataList.addView(createMetadataItem(
-                Util.getDateTimeString(mediaFile.getCreated(), "dd-MM-yyyy HH:mm:ss Z"), getResources().getString(R.string.verification_info_field_file_modified)));
+                Util.getDateTimeString(vaultFile.created, "dd-MM-yyyy HH:mm:ss Z"), getResources().getString(R.string.verification_info_field_file_modified)));
 
         metadataList.addView(createMetadataTitle(R.string.verification_info_subheading_device_metadata));
         metadataList.addView(createMetadataItem(metadata.getManufacturer(), getResources().getString(R.string.verification_info_field_manufacturer)));

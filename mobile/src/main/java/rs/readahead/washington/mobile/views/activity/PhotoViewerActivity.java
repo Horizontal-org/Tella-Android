@@ -10,18 +10,18 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.hzontal.tella_vault.VaultFile;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import permissions.dispatcher.NeedsPermission;
@@ -33,13 +33,11 @@ import permissions.dispatcher.RuntimePermissions;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
-import rs.readahead.washington.mobile.data.database.KeyDataSource;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.media.MediaFileUrlLoader;
+import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.mvp.contract.IMediaFileViewerPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.MediaFileViewerPresenter;
-import rs.readahead.washington.mobile.presentation.entity.MediaFileLoaderModel;
+import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
@@ -60,10 +58,8 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
-    //private CacheWordDataSource cacheWordDataSource;
-    private KeyDataSource keyDataSource;
     private MediaFileViewerPresenter presenter;
-    private MediaFile mediaFile;
+    private VaultFile vaultFile;
 
     private boolean showActions = false;
     private boolean actionsDisabled = false;
@@ -86,15 +82,13 @@ public class PhotoViewerActivity extends BaseLockActivity implements
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        //cacheWordDataSource = new CacheWordDataSource(this);
-        keyDataSource = MyApplication.getKeyDataSource();
         presenter = new MediaFileViewerPresenter(this);
 
         if (getIntent().hasExtra(VIEW_PHOTO)) {
             //noinspection ConstantConditions
-            MediaFile mediaFile = (MediaFile) getIntent().getExtras().get(VIEW_PHOTO);
-            if (mediaFile != null) {
-                this.mediaFile = mediaFile;
+            VaultFile vaultFile = (VaultFile) getIntent().getExtras().get(VIEW_PHOTO);
+            if (vaultFile != null) {
+                this.vaultFile = vaultFile;
             }
         }
 
@@ -109,7 +103,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!actionsDisabled && showActions) {
             getMenuInflater().inflate(R.menu.photo_view_menu, menu);
-            if (mediaFile.getMetadata() != null) {
+            if (vaultFile.metadata != null) {
                 MenuItem item = menu.findItem(R.id.menu_item_metadata);
                 item.setVisible(true);
             }
@@ -152,7 +146,6 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     @Override
     protected void onDestroy() {
-        // keyDataSource.dispose();
 
         stopPresenter();
 
@@ -181,8 +174,8 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void exportMediaFile() {
-        if (mediaFile != null && presenter != null) {
-            presenter.exportNewMediaFile(mediaFile);
+        if (vaultFile != null && presenter != null) {
+            presenter.exportNewMediaFile(vaultFile);
         }
     }
 
@@ -192,7 +185,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     }
 
     private void openMedia(){
-        showGalleryImage(mediaFile);
+        showGalleryImage(vaultFile);
         if (!actionsDisabled) {
             showActions = true;
             invalidateOptionsMenu();
@@ -248,11 +241,11 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     }
 
     private void shareMediaFile() {
-        if (mediaFile == null) {
+        if (vaultFile == null) {
             return;
         }
 
-        if (mediaFile.getMetadata() != null) {
+        if (vaultFile.metadata != null) {
             ShareDialogFragment.newInstance().show(getSupportFragmentManager(), ShareDialogFragment.TAG);
         } else {
             startShareActivity(false);
@@ -260,11 +253,11 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     }
 
     private void startShareActivity(boolean includeMetadata) {
-        if (mediaFile == null) {
+        if (vaultFile == null) {
             return;
         }
 
-        MediaFileHandler.startShareActivity(this, mediaFile, includeMetadata);
+        MediaFileHandler.startShareActivity(this, vaultFile, includeMetadata);
     }
 
     private void dismissShareDialog() {
@@ -284,8 +277,8 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                 .setTitle(R.string.gallery_delete_files_dialog_title)
                 .setMessage(R.string.gallery_delete_files_dialog_expl)
                 .setPositiveButton(R.string.action_delete, (dialog, which) -> {
-                    if (mediaFile != null && presenter != null) {
-                        presenter.deleteMediaFiles(mediaFile);
+                    if (vaultFile != null && presenter != null) {
+                        presenter.deleteMediaFiles(vaultFile);
                     }
                 })
                 .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
@@ -294,20 +287,20 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                 .show();
     }
 
-    private void showGalleryImage(MediaFile mediaFile) {
+    private void showGalleryImage(VaultFile vaultFile) {
         Glide.with(this)
-                .using(new MediaFileUrlLoader(this, new MediaFileHandler(keyDataSource)))
-                .load(new MediaFileLoaderModel(mediaFile, MediaFileLoaderModel.LoadType.ORIGINAL))
-                .listener(new RequestListener<MediaFileLoaderModel, GlideDrawable>() {
+                .using(new VaultFileUrlLoader(this, new MediaFileHandler()))
+                .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.ORIGINAL))
+                .listener(new RequestListener<VaultFileLoaderModel, GlideDrawable>() {
                     @Override
-                    public boolean onException(Exception e, MediaFileLoaderModel model,
+                    public boolean onException(Exception e, VaultFileLoaderModel model,
                                                Target<GlideDrawable> target, boolean isFirstResource) {
                         progressBar.setVisibility(View.GONE);
                         return false;
                     }
 
                     @Override
-                    public boolean onResourceReady(GlideDrawable resource, MediaFileLoaderModel model,
+                    public boolean onResourceReady(GlideDrawable resource, VaultFileLoaderModel model,
                                                    Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
                         progressBar.setVisibility(View.GONE);
                         return false;
@@ -320,7 +313,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     private void showMetadata() {
         Intent viewMetadata = new Intent(this, MetadataViewerActivity.class);
-        viewMetadata.putExtra(VIEW_METADATA, mediaFile);
+        viewMetadata.putExtra(VIEW_METADATA, vaultFile);
         startActivity(viewMetadata);
     }
 
