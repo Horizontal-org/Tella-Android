@@ -3,20 +3,27 @@ package rs.readahead.washington.mobile.views.settings
 import android.os.Bundle
 import android.view.*
 import android.widget.CompoundButton
-import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import org.hzontal.shared_ui.switches.TellaSwitchWithMessage
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.R.*
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
+import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 
 
-class MainSettings : Fragment() {
+class MainSettings : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
         val view = inflater.inflate(layout.fragment_main_settings, container, false)
+
+        initView(view)
+
+        return view
+    }
+
+    override fun initView(view: View) {
         (activity as OnFragmentSelected?)?.setToolbarLabel(string.settings_app_bar)
 
         val offlineSwitch = view.findViewById<TellaSwitchWithMessage>(R.id.offline_switch)
@@ -40,6 +47,12 @@ class MainSettings : Fragment() {
         view.findViewById<View>(R.id.about_n_help_settings_button).setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_main_settings_to_about_n_help_settings)
         }
-        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if ((activity as OnFragmentSelected?)?.isCamouflage() == true){
+            Navigation.findNavController(view).navigate(R.id.action_main_settings_to_hide_tella)
+        }
     }
 }

@@ -54,6 +54,7 @@ open class BaseActivity : AppCompatActivity() {
             }
             ReturnActivity.CAMOUFLAGE.getActivityOrder() -> {
                 val intent = Intent(this, Class.forName(ReturnActivity.CAMOUFLAGE.activityName))
+                intent.putExtra(IS_CAMOUFLAGE, true)
                 startActivity(intent)
             }
             else -> {

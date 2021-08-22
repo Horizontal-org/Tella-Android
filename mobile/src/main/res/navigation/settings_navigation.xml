@@ -41,6 +41,14 @@
             app:popEnterAnim="@anim/slide_in_end"
             app:popExitAnim="@anim/slide_out_start">
         </action>
+        <action
+            android:id="@+id/action_main_settings_to_hide_tella"
+            app:destination="@id/hide_tella"
+            app:enterAnim="@anim/slide_in_end"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/slide_in_end"
+            app:popExitAnim="@anim/slide_out_end">
+        </action>
     </fragment>
 
     <fragment
@@ -83,5 +91,19 @@
         android:name="rs.readahead.washington.mobile.views.settings.LanguageSettings"
         android:label="fragment_language_settings"
         tools:layout="@layout/fragment_language_settings">
+    </fragment>
+
+    <fragment
+        android:id="@+id/hide_tella"
+        android:name="rs.readahead.washington.mobile.views.settings.HideTella"
+        android:label="fragment_language_settings"
+        tools:layout="@layout/fragment_hide_tella">
+        <action
+            android:id="@+id/action_hide_tella_to_security_settings"
+            app:destination="@id/security_settings"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/slide_in_end"
+            app:popExitAnim="@anim/slide_out_start"/>
     </fragment>
 </navigation>
