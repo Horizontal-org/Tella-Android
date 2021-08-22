@@ -38,7 +38,7 @@ public class CamouflageManager {
         options.add(new CamouflageOption(getOptionAlias("Weather"), R.drawable.weather, R.string.settings_camo_weather1));
         options.add(new CamouflageOption(getOptionAlias("WeatherNow"), R.drawable.weather_now, R.string.settings_camo_weather3));
         options.add(new CamouflageOption(getOptionAlias("LocalWeather"), R.drawable.local_weather, R.string.settings_camo_weather2));
-        options.add(new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calculator, R.string.settings_camo_calculator2));
+        //options.add(new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calculator, R.string.settings_camo_calculator2));
         options.add(new CamouflageOption(getOptionAlias("EasyMath"), R.drawable.easy_math, R.string.settings_camo_calculator1));
 
     }

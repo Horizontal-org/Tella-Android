@@ -94,13 +94,27 @@
     </fragment>
 
     <fragment
+        android:id="@+id/camouflage_name_logo"
+        android:name="rs.readahead.washington.mobile.views.settings.CamouflageNameAndLogo"
+        android:label="fragment_name_logo"
+        tools:layout="@layout/fragment_name_and_logo">
+    </fragment>
+
+    <fragment
         android:id="@+id/hide_tella"
         android:name="rs.readahead.washington.mobile.views.settings.HideTella"
-        android:label="fragment_language_settings"
+        android:label="fragment_hide_tella"
         tools:layout="@layout/fragment_hide_tella">
         <action
             android:id="@+id/action_hide_tella_to_security_settings"
             app:destination="@id/security_settings"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/slide_in_end"
+            app:popExitAnim="@anim/slide_out_start"/>
+        <action
+            android:id="@+id/action_hide_tella_to_camouflage_name_logo"
+            app:destination="@id/camouflage_name_logo"
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/slide_in_end"

@@ -632,4 +632,13 @@
     <style name="Tella_Main_White_Text.Bold">
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="CamouflageOptionStyle">
+        <item name="android:textSize">19sp</item>
+        <item name="android:textColor">@color/wa_white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+    </style>
 </resources>
