@@ -29,7 +29,7 @@ class SplashActivity : BaseActivity() {
             goToMainActivity()
         }
     }
-    
+
     private fun goToMainActivity(){
         MyApplication.startMainActivity(this@SplashActivity)
         finish()

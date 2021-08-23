@@ -224,10 +224,6 @@ object BottomSheetUtils {
         customSheetFragment.launch()
     }
 
-    enum class CamouflageOption {
-        CUSTOM, CALCULATOR, CHANGE_LOCK
-    }
-
     class CamouflageSheetHolder : CustomBottomSheetFragment.PageHolder() {
         lateinit var sheetTitle: TextView
         lateinit var sheetsubTitle: TextView
@@ -298,6 +294,56 @@ object BottomSheetUtils {
                     cancelButton.setOnClickListener {
                         customSheetFragment.dismiss()
                     }
+                }
+            }
+        })
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
+    }
+
+    interface ActionConfirmed {
+        fun accept(isConfirmed: Boolean)
+    }
+
+    @JvmStatic
+    fun showConfirmSheet(
+        fragmentManager: FragmentManager,
+        titleText: String?,
+        descriptionText: String?,
+        actionButtonLabel: String? = null,
+        cancelButtonLabel: String? = null,
+        consumer: ActionConfirmed
+    ) {
+
+        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.standar_sheet_layout)
+            .cancellable(true)
+        customSheetFragment.holder(GenericSheetHolder(), object :
+            CustomBottomSheetFragment.Binder<GenericSheetHolder> {
+            override fun onBind(holder: GenericSheetHolder) {
+                with(holder) {
+                    title.text = titleText
+                    description.text = descriptionText
+                    actionButtonLabel?.let {
+                        actionButton.text = it
+                    }
+                    cancelButtonLabel?.let {
+                        cancelButton.text = it
+                    }
+
+                    actionButton.setOnClickListener {
+                        consumer.accept(isConfirmed = true)
+                        customSheetFragment.dismiss()
+                    }
+
+                    cancelButton.setOnClickListener {
+                        customSheetFragment.dismiss()
+                    }
+
+                    actionButton.visibility =
+                        if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+
                 }
             }
         })

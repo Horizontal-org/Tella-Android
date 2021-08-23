@@ -207,7 +207,7 @@
         android:text="@string/pl_back"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
-        android:textSize="14sp"
+        android:textSize="17sp"
         android:layout_marginEnd="30dp"/>
 
 

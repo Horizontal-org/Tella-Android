@@ -20,7 +20,7 @@ public class CamouflageManager {
     private static final String defaultAlias = SplashActivity.class.getCanonicalName();
     private final List<CamouflageOption> options;
 
-    private final CamouflageOption calculatorOption = new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calculator, R.string.settings_camo_calculator2);
+    public final CamouflageOption calculatorOption = new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calculator, R.string.settings_camo_calculator2);
 
     public synchronized static CamouflageManager getInstance() {
         if (instance == null) {

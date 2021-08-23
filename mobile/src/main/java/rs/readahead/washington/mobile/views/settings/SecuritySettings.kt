@@ -16,6 +16,8 @@ import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity
 import com.tooltip.Tooltip
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
 import org.hzontal.shared_ui.switches.TellaSwitchWithMessage
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder
 import org.hzontal.tella.keys.config.UnlockRegistry
@@ -63,7 +65,7 @@ class SecuritySettings : BaseFragment() {
         }
 
         val lockSettingButton = view.findViewById<RelativeLayout>(R.id.lock_settings_button)
-        lockSettingButton.setOnClickListener { goToUnlockingActivity(ReturnActivity.SETTINGS) }
+        lockSettingButton.setOnClickListener { checkCamouflageAndLockSetting() }
 
         val lockTimeoutSettingButton =
             view.findViewById<RelativeLayout>(R.id.lock_timeout_settings_button)
@@ -187,6 +189,28 @@ class SecuritySettings : BaseFragment() {
 
     private fun setUpLockTimeoutText() {
         lockTimeoutSetting?.setText(lockTimeoutManager.selectedStringRes)
+    }
+
+    private fun checkCamouflageAndLockSetting() {
+        if ((activity.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(activity) == UnlockRegistry.Method.TELLA_PIN
+            && Preferences.getAppAlias().equals(cm.calculatorOption.alias)
+        ) {
+            showConfirmSheet(
+                requireActivity().supportFragmentManager,
+                null,
+                getString(R.string.settings_sec_change_lock_type_warning),
+                getString(R.string.action_continue),
+                getString(R.string.action_cancel),
+                object : ActionConfirmed {
+                    override fun accept(isConfirmed: Boolean) {
+                        if (isConfirmed) {
+                            goToUnlockingActivity(ReturnActivity.SETTINGS)
+                        }
+                    }
+                })
+        } else {
+            goToUnlockingActivity(ReturnActivity.SETTINGS)
+        }
     }
 
     fun goToUnlockingActivity(returnCall: ReturnActivity) {
