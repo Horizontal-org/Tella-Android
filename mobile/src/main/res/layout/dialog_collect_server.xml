@@ -81,6 +81,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/url_layout"
                 style="@style/DialogDataCollectionTextEntryLayout"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/wa_white"
@@ -106,6 +107,7 @@
             <rs.readahead.washington.mobile.views.custom.PanelToggleButton
                 android:id="@+id/toggle_button"
                 style="?android:attr/borderlessButtonStyle"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/wa_transparent"
@@ -147,6 +149,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/password_layout"
                     style="@style/DialogDataCollectionTextEntryLayout"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColorHint="@color/wa_white"
