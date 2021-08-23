@@ -11,6 +11,7 @@ abstract class BaseToolbarFragment : BaseFragment() , OnFragmentSelected{
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpToolbar()
         onBackPressed()
     }
 

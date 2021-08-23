@@ -71,7 +71,6 @@ class ToolbarComponent @JvmOverloads constructor(
     }
 
     private fun extractAttributes(attrs: AttributeSet?, defStyleAttr: Int) {
-
         attrs?.let {
 
             val typedArray =
@@ -112,6 +111,10 @@ class ToolbarComponent @JvmOverloads constructor(
         if (toolbarTitle.isNotEmpty()) {
             toolbarTextView.text = toolbarTitle
         }
+    }
+
+    fun setToolbarNavigationIcon(icon : Int) {
+       btnBack.setBackgroundResource(icon)
     }
 
     private fun bindView() {

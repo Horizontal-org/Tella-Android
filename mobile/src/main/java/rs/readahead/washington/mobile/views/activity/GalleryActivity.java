@@ -64,7 +64,7 @@ import rs.readahead.washington.mobile.views.custom.GalleryRecyclerView;
 import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
 import rs.readahead.washington.mobile.views.fragment.TellaUploadDialogFragment;
 import rs.readahead.washington.mobile.views.interfaces.IAttachmentsMediaHandler;
-import rs.readahead.washington.mobile.views.interfaces.IGalleryMediaHandler;
+import rs.readahead.washington.mobile.views.interfaces.IGalleryVaultHandler;
 import timber.log.Timber;
 
 //TODO CHECK FILTER AND SORTS
@@ -73,7 +73,7 @@ public class GalleryActivity extends MetadataActivity implements
         TellaUploadDialogFragment.IServerMetadataChosenHandler,
         IGalleryPresenterContract.IView,
         ITellaFileUploadSchedulePresenterContract.IView,
-        IGalleryMediaHandler, IAttachmentsMediaHandler,
+        IGalleryVaultHandler, IAttachmentsMediaHandler,
         ShareDialogFragment.IShareDialogFragmentHandler {
     public static final String GALLERY_ANIMATED = "ga";
     public static final String GALLERY_FILTER = "gf";
@@ -813,12 +813,6 @@ public class GalleryActivity extends MetadataActivity implements
             case R.id.video:
                 return IVaultDatabase.Filter.FilterType.VIDEO;
 
-           /* case R.id.files_with_metadata:
-                return IVaultDatabase.Filter.FilterType.WITH_METADATA;
-
-            case R.id.files_without_metadata:
-                return IVaultDatabase.Filter.FilterType.WITHOUT_METADATA;
-*/
             default:
                 return IVaultDatabase.Filter.FilterType.ALL;
         }

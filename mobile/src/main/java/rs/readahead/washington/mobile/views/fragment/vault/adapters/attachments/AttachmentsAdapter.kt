@@ -21,11 +21,12 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader
 import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel
+import rs.readahead.washington.mobile.views.interfaces.IGalleryVaultHandler
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.LinkedHashSet
 
-class AttachmentsAdapter constructor(private val iGalleryMediaHandler: IGalleryMediaHandler,private val context: Context) :
+class AttachmentsAdapter constructor(private val iGalleryMediaHandler: IGalleryVaultHandler,private val context: Context) :
      RecyclerView.Adapter<AttachmentsAdapter.BaseAttachmentViewHolder>() {
     private var vaultList : MutableList<VaultFile?>
     private val selected = LinkedHashSet<VaultFile>()
@@ -136,7 +137,7 @@ class AttachmentsAdapter constructor(private val iGalleryMediaHandler: IGalleryM
         private lateinit var nameFileTextVew : TextView
         private lateinit var moreBtn : View
 
-        fun bind(vaultFile: VaultFile?,iGalleryMediaHandler: IGalleryMediaHandler){
+        fun bind(vaultFile: VaultFile?,iGalleryMediaHandler: IGalleryVaultHandler){
             view.apply {
                 dateTextView = findViewById(R.id.fileDateTextView)
                 nameFileTextVew = findViewById(R.id.fileNameTextView)
@@ -170,7 +171,7 @@ class AttachmentsAdapter constructor(private val iGalleryMediaHandler: IGalleryM
         private lateinit var fileNameTextView : TextView
         private lateinit var moreBtn : View
 
-        fun bind(vaultFile: VaultFile?, iGalleryMediaHandler: IGalleryMediaHandler){
+        fun bind(vaultFile: VaultFile?, iGalleryMediaHandler: IGalleryVaultHandler){
             view.apply {
                 fileNameTextView = findViewById(R.id.fileNameTextView)
                 filePreviewImg = findViewById(R.id.attachmentImg)

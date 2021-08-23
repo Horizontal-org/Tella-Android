@@ -43,7 +43,7 @@ import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.views.adapters.GalleryRecycleViewAdapter;
 import rs.readahead.washington.mobile.views.custom.GalleryRecyclerView;
 import rs.readahead.washington.mobile.views.interfaces.IAttachmentsMediaHandler;
-import rs.readahead.washington.mobile.views.interfaces.IGalleryMediaHandler;
+import rs.readahead.washington.mobile.views.interfaces.IGalleryVaultHandler;
 import timber.log.Timber;
 
 
@@ -51,7 +51,7 @@ import timber.log.Timber;
 public class QuestionAttachmentActivity extends MetadataActivity implements
         IQuestionAttachmentPresenterContract.IView,
         IAttachmentsMediaHandler,
-        IGalleryMediaHandler {
+        IGalleryVaultHandler {
     public static final String MEDIA_FILE_KEY = "mfk";
     public static final String MEDIA_FILES_FILTER = "mff";
     @BindView(R.id.galleryRecyclerView)
