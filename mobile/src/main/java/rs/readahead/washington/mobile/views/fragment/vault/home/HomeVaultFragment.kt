@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.hzontal.tella_vault.VaultFile
+import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.entity.XFormEntity
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
@@ -78,7 +79,12 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> {
-                true
+               nav().navigate(R.id.main_settings)
+                return true
+            }
+            R.id.action_close -> {
+                MyApplication.exit(activity)
+                return true
             }
             else -> super.onOptionsItemSelected(item)
         }
@@ -123,6 +129,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     override fun onResume() {
         super.onResume()
+        setupPanicView()
         if (panicActivated) {
             showPanicScreens()
             panicActivated = false
