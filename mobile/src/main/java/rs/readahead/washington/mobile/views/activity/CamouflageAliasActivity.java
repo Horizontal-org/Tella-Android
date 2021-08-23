@@ -92,37 +92,4 @@ public class CamouflageAliasActivity extends BaseLockActivity {
             }
         } catch (IndexOutOfBoundsException ignored) {}
     }
-
-    private void showAddCamouflageDialog() {
-        BottomSheetUtils.showDualChoiceTypeSheet(this.getSupportFragmentManager(),
-                getString(R.string.settings_prot_select_camouflage),
-                getString(R.string.settings_servers_add_camouflage_subtitle),
-                getString(R.string.settings_servers_change_camouflage_method),
-                getString(R.string.settings_servers_remove_camouflage_method),
-                option -> {
-                    if (option) {
-
-                    } else {
-
-                    }
-                });
-    }
-
-    private void showChooseCamouflageTypeDialog() {
-        BottomSheetUtils.showChangeCamouflageSheet(this.getSupportFragmentManager(),
-                getString(R.string.settings_prot_select_camouflage),
-                getString(R.string.settings_servers_setup_camouflage_title),
-                getString(R.string.settings_servers_setup_camouflage_description),
-                getString(R.string.settings_servers_setup_change_camouflage_title),
-                getString(R.string.settings_servers_setup_change_camouflage_subtitle),
-                getString(R.string.settings_servers_setup_hide_behind_camouflage_title),
-                getString(R.string.settings_servers_setup_hide_behind_camouflage_subtitle),
-                option -> {
-                    if (option) {
-
-                    } else {
-
-                    }
-                });
-    }
 }

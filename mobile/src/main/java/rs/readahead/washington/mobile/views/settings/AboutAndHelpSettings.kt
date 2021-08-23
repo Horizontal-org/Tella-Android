@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.views.settings
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.widget.TextView
 import rs.readahead.washington.mobile.BuildConfig
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.util.Util
+import rs.readahead.washington.mobile.views.activity.onboarding.OnBoardingActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 
 
@@ -32,6 +34,14 @@ class AboutAndHelpSettings : BaseFragment() {
                 BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")"
             )
         )
+
+        view.findViewById<View>(R.id.tutorial).setOnClickListener {
+            val intent = Intent(
+                requireContext(),
+                OnBoardingActivity::class.java
+            )
+            startActivity(intent)
+        }
 
         view.findViewById<View>(R.id.faq).setOnClickListener {
             Util.startBrowserIntent(context, getString(R.string.config_faq_url))

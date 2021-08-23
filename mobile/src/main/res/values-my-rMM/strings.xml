@@ -452,4 +452,6 @@
     <string name="settings.servers_setup_hide_behind_calculator_title">hide behind a calculator app</string>
     <string name="settings.servers_setup_hide_behind_calculator_subtitle"><![CDATA[<b>More secure:</b> Camouflage Tella behind an actual functioning calculator app. Input your PIN on the calculator to unlock Tella.]]></string>
     <string name="settings.servers_setup_hide_behind_calculator_not_possible"><![CDATA[The Calculator camouflage is only possible if you use a PIN lock.<b><font color="#D6933B"> Change lock here</font></b>]]></string>
+    <string name="settings.sec_change_lock_type_warning">If you change your lock method, Camouflage will be disabled</string>
+    <string name="action_continue">Continue</string>
 </resources>
