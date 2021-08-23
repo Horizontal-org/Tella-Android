@@ -1,6 +1,7 @@
 package com.hzontal.tella_vault;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.hzontal.tella_vault.database.VaultDataSource;
 import com.hzontal.utils.FileUtil;
@@ -81,7 +82,7 @@ public abstract class BaseVault {
      */
     protected VaultOutputStream baseOutStream(VaultFile vaultFile) throws VaultException {
         try {
-            File file = getFile(vaultFile);
+            File file = getWritableFile(vaultFile);
             FileOutputStream fos = new FileOutputStream(file);
             byte[] key = mainKeyHolder.get().getKey().getEncoded();
 
@@ -148,7 +149,7 @@ public abstract class BaseVault {
             VaultFile vaultFile = new VaultFile(builder);
 
             if (builder.data != null) { // not a dir
-                File file = getFile(vaultFile);
+                File file = getWritableFile(vaultFile);
                 FileOutputStream fos = new FileOutputStream(file);
                 byte[] key = mainKeyHolder.get().getKey().getEncoded();
 
@@ -204,11 +205,23 @@ public abstract class BaseVault {
      * @return File holding contents of VaultFile.
      */
     public File getFile(VaultFile vaultFile) {
-        return new File(this.config.root, vaultFile.id);
+        File file = new File(this.config.root, getFileName(vaultFile));
+        //noinspection ResultOfMethodCallIgnored
+        file.setReadOnly();
+        return file;
+    }
+
+    protected File getWritableFile(VaultFile vaultFile) {
+        return new File(this.config.root, getFileName(vaultFile));
     }
 
     protected boolean mkdirs(File path) {
         return path.exists() || path.mkdirs();
+    }
+
+    protected String getFileName(VaultFile vaultFile) {
+        String ext = VaultFileBuilder.getExtensionFromMimeType(vaultFile.mimeType);
+        return vaultFile.id + (!TextUtils.isEmpty(ext) ? "." + ext : "");
     }
 
     public class VaultOutputStream extends DigestOutputStream {

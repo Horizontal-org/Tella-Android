@@ -29,10 +29,18 @@ public class VaultFileBuilder extends BaseVaultFileBuilder<VaultFileBuilder, Vau
     }
 
     public VaultFile build() throws VaultException {
+        if (!validateVaultFile()) {
+            throw new VaultException("VaultFile properties not set");
+        }
+
         return vault.create(this);
     }
 
     public VaultFile build(String parentId) throws VaultException {
+        if (!validateVaultFile()) {
+            throw new VaultException("VaultFile properties not set");
+        }
+
         return vault.create(this, parentId);
     }
 

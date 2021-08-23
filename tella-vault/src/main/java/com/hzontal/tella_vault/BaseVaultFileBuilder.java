@@ -1,5 +1,8 @@
 package com.hzontal.tella_vault;
 
+import android.text.TextUtils;
+import android.webkit.MimeTypeMap;
+
 import java.io.InputStream;
 
 public abstract class BaseVaultFileBuilder<T extends BaseVaultFileBuilder<T, B>, B> {
@@ -23,26 +26,31 @@ public abstract class BaseVaultFileBuilder<T extends BaseVaultFileBuilder<T, B>,
     }
 
     public T setMimeType(String mimeType) {
+        checkForFile();
         this.mimeType = mimeType;
         return getThis();
     }
 
     public T setMetadata(Metadata metadata) {
+        checkForFile();
         this.metadata = metadata;
         return getThis();
     }
 
     public T setThumb(byte[] thumb) {
+        checkForFile();
         this.thumb = thumb;
         return getThis();
     }
 
     public T setDuration(long duration) {
+        checkForFile();
         this.duration = duration;
         return getThis();
     }
 
     public T setAnonymous(boolean anonymous) {
+        checkForFile();
         this.anonymous = anonymous;
         return getThis();
     }
@@ -53,6 +61,7 @@ public abstract class BaseVaultFileBuilder<T extends BaseVaultFileBuilder<T, B>,
     }
 
     public T setData(InputStream data) {
+        checkForFile();
         this.data = data;
         return getThis();
     }
@@ -78,16 +87,51 @@ public abstract class BaseVaultFileBuilder<T extends BaseVaultFileBuilder<T, B>,
     }
 
     public T setHash(String hash) {
+        checkForFile();
         this.hash = hash;
         return getThis();
     }
 
-    public T setExtension(String ext) {
-        this.name = this.id + "." + ext;
-        return getThis();
+    abstract public B build() throws Exception;
+
+    /* package */
+    static String getExtensionFromMimeType(String mimeType) {
+        return MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType);
     }
 
-    abstract public B build() throws Exception;
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    protected boolean validateVaultFile() {
+        if (this.type == null) {
+            return false;
+        }
+
+        setDefaultMimeType();
+        setDefaultName();
+
+        return true;
+    }
+
+    protected void setDefaultMimeType() {
+        if (this.type == VaultFile.Type.FILE && TextUtils.isEmpty(this.mimeType)) {
+            setMimeType("application/octet-stream");
+        }
+    }
+
+    protected void setDefaultName() {
+        if (TextUtils.isEmpty(this.name)) {
+            this.name = this.id;
+
+            if (this.type == VaultFile.Type.FILE) {
+                this.name = this.name + "." + getExtensionFromMimeType(this.mimeType);
+            }
+        }
+    }
+
+    protected void checkForFile() {
+        if (this.type != VaultFile.Type.FILE) {
+            throw new IllegalStateException("Required FILE type for this operation");
+        }
+    }
 
     abstract protected T getThis();
 }
