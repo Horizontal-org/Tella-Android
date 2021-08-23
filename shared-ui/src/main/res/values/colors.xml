@@ -18,6 +18,7 @@
     <color name="light_gray">#DCDCDC</color>
     <color name="rich_black">#071013</color>
     <color name="prussian_blue">#2c6c97</color>
+    <color name="dark_purple">#2C275A</color>
 
 
     <color name="colorPrimary">@color/space_cadet</color>

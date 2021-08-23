@@ -80,12 +80,12 @@
         tools:layout="@layout/fragment_security_settings">
     </fragment>
 
-    <fragment
+    <activity
         android:id="@+id/servers_settings"
-        android:name="rs.readahead.washington.mobile.views.settings.ServersSettings"
-        android:label="fragment_servers_settings"
-        tools:layout="@layout/fragment_servers_settings">
-    </fragment>
+        android:name="rs.readahead.washington.mobile.views.activity.ServersSettingsActivity"
+        android:label="activity_servers_settings"
+        tools:layout="@layout/activity_documentation_settings">
+    </activity>
 
     <fragment
         android:id="@+id/about_n_help_settings"

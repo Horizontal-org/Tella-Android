@@ -52,6 +52,5 @@
         <item name="android:textColorPrimaryInverse">@color/colorPrimaryInverse</item>
         <item name="android:textColorSecondary">@color/colorPrimaryInverse</item>
         <item name="android:fontFamily">@font/open_sans</item>
-    </style>
 
 </resources>

@@ -243,12 +243,13 @@
         <activity
             android:name=".views.activity.CollectHelpActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:windowSoftInputMode="adjustPan"
             android:label="@string/collect.help_app.bar"
-            android:parentActivityName=".views.activity.DocumentationSettingsActivity"
+            android:parentActivityName=".views.activity.ServersSettingsActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="rs.readahead.washington.mobile.views.activity.DocumentationSettingsActivity" />
+                android:value="rs.readahead.washington.mobile.views.activity.ServersSettingsActivity" />
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -262,7 +263,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".views.activity.DocumentationSettingsActivity"
+            android:name=".views.activity.ServersSettingsActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:label="@string/settings.docu_app.bar"
             android:parentActivityName=".views.activity.SettingsActivity"
