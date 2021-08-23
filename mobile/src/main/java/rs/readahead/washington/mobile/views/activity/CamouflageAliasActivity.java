@@ -51,9 +51,6 @@ public class CamouflageAliasActivity extends BaseLockActivity {
         recyclerView.setAdapter(adapter);
 
         adapter.setIcons(cm.getOptions(), cm.getSelectedAliasPosition());
-
-        //showAddCamouflageDialog();
-        //showChooseCamouflageTypeDialog();
     }
 
     @Override

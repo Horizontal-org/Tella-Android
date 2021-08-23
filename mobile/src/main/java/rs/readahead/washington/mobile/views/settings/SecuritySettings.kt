@@ -23,6 +23,7 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
+import rs.readahead.washington.mobile.util.CamouflageManager
 
 
 class SecuritySettings : BaseFragment() {
@@ -30,6 +31,7 @@ class SecuritySettings : BaseFragment() {
     var lockTimeoutSetting: TextView? = null
 
     private val lockTimeoutManager = LockTimeoutManager()
+    private val cm = CamouflageManager.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,8 +53,14 @@ class SecuritySettings : BaseFragment() {
         setUpLockTypeText()
         setUpLockTimeoutText()
 
-        val camouflageSettingButton = view.findViewById<RelativeLayout>(R.id.camouflage_settings_button)
+        val camouflageSettingButton =
+            view.findViewById<RelativeLayout>(R.id.camouflage_settings_button)
         camouflageSettingButton.setOnClickListener { goToUnlockingActivity(ReturnActivity.CAMOUFLAGE) }
+
+        val currentCamouflageSetting = view.findViewById<TextView>(R.id.camouflage_setting)
+        if (cm.getLauncherName(requireContext()) != null) {
+            currentCamouflageSetting.setText(cm.getLauncherName(requireContext()));
+        }
 
         val lockSettingButton = view.findViewById<RelativeLayout>(R.id.lock_settings_button)
         lockSettingButton.setOnClickListener { goToUnlockingActivity(ReturnActivity.SETTINGS) }
@@ -109,16 +117,36 @@ class SecuritySettings : BaseFragment() {
         })
 
         val vaultTooltip = view.findViewById<ImageView>(R.id.delete_vault_tooltip)
-        vaultTooltip.setOnClickListener({showTooltip(vaultTooltip, resources.getString(R.string.settings_sec_delete_vault_tooltip))})
+        vaultTooltip.setOnClickListener({
+            showTooltip(
+                vaultTooltip,
+                resources.getString(R.string.settings_sec_delete_vault_tooltip)
+            )
+        })
 
         val formsTooltip = view.findViewById<ImageView>(R.id.delete_forms_tooltip)
-        formsTooltip.setOnClickListener({showTooltip(formsTooltip, resources.getString(R.string.settings_sec_delete_forms_tooltip))})
+        formsTooltip.setOnClickListener({
+            showTooltip(
+                formsTooltip,
+                resources.getString(R.string.settings_sec_delete_forms_tooltip)
+            )
+        })
 
         val serversTooltip = view.findViewById<ImageView>(R.id.delete_server_tooltip)
-        serversTooltip.setOnClickListener({showTooltip(serversTooltip, resources.getString(R.string.settings_sec_delete_servers_tooltip))})
+        serversTooltip.setOnClickListener({
+            showTooltip(
+                serversTooltip,
+                resources.getString(R.string.settings_sec_delete_servers_tooltip)
+            )
+        })
 
         val appTooltip = view.findViewById<ImageView>(R.id.delete_app_tooltip)
-        appTooltip.setOnClickListener({showTooltip(appTooltip, resources.getString(R.string.settings_sec_delete_app_tooltip))})
+        appTooltip.setOnClickListener({
+            showTooltip(
+                appTooltip,
+                resources.getString(R.string.settings_sec_delete_app_tooltip)
+            )
+        })
     }
 
     private fun showLockTimeoutSettingDialog() {
@@ -200,7 +228,7 @@ class SecuritySettings : BaseFragment() {
         }
     }
 
-    private fun showTooltip(v : View, text: String){
+    private fun showTooltip(v: View, text: String) {
         val tooltip = Tooltip.Builder(v)
             .setText(text)
             .setTextColor(resources.getColor(R.color.wa_black))
