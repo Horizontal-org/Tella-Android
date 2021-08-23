@@ -238,7 +238,7 @@
   <string name="settings.prot_app.bar">Proteção</string>
   <string name="settings.gen_select_protection">Proteção</string>
   <string name="action_learn.more">Saiba Mais</string>
-  <string name="settings.docu_add.server_dialog.title">Adicionar servidor</string>
+  <string name="settings.servers_add.server_dialog.title">Adicionar servidor</string>
   <string name="settings.prot_quick.delete_action">Ativar o botão EXCLUIR RÁPIDO</string>
   <string name="settings.prot_quick.delete_action.expl">Mostra um botão deslizante na tela inicial para excluir rapidamente os dados do Tella em situações de urgência.</string>
   <string name="settings.prot_select_delete.gallery">Excluir Galeria</string>
@@ -315,7 +315,7 @@
   <string name="settings.docu_auto.upload.server.selection_select">Servidor</string>
   <string name="upload_dialog.title_select.server">Seleção de servidor</string>
   <string name="settings.docu_auto.upload.server.selection_dialog.expl">Em qual servidor você gostaria de carregar os arquivos?</string>
-  <string name="settings.docu_add.server.selection_dialog.title">Que tipo de servidor?</string>
+  <string name="settings.serv_add.server.selection_dialog.title">Que tipo de servidor?</string>
   <string name="settings.docu_add.server_dialog.select_odk">Kit de Dados Abertos (ODK)</string>
   <string name="settings.docu_add.server_dialog.expl">Selecione o tipo de servidor ao qual você deseja se conectar. Se você não tiver certeza, pergunte à sua organização.</string>
   <string name="settings.docu_add.server_dialog.select_tus">Carregamento Direto</string>
@@ -411,4 +411,21 @@
     <string name="settings.servers.add_server.expl">Connect to servers to collect and send data to your organization</string>
     <string name="settings.servers_auto.upload_action">Auto-upload to server</string>
     <string name="settings.servers_auto.upload_action.expl">Upload your files to your Reports server as soon as they are captured (photos, videos, or audio recordings) or imported into Tella.</string>
+    <string name="settings.servers_auto.delete_action.expl">If activated, Tella will automatically delete the files uploaded as soon as the upload is complete.</string>
+    <string name="settings.servers_auto.upload.server.selection">Server for auto-upload</string>
+    <string name="settings.servers_add.server.forms">FORMS</string>
+    <string name="settings.servers_add.server.reports">REPORTS</string>
+    <string name="settings.servers_choose.auto.upload.server_dialog.title">Select auto-upload server</string>
+    <string name="settings.servers_enable_auto_upload_dialog.title">Enable auto-upload?</string>
+    <string name="settings.servers_enable_auto_upload_dialog.expl">Your photos, videos, and audio files will be automatically uploaded as soon as they are recorded, and any file will be automatically uploaded when you import it into Tella.</string>
+    <string name="settings.servers_disable_auto_upload_dialog.title">Disable auto-upload?</string>
+    <string name="settings.servers_disable_auto_upload_dialog.expl">Your files will no longer be automatically uploaded to the server.</string>
+    <string name="settings.servers_disable_auto_delete_dialog.title">Disable auto-delete?</string>
+    <string name="settings.servers_disable_auto_delete_dialog.expl">Your files will no longer be automatically deleted once the upload is complete.</string>
+    <string name="action_enable">Enable</string>
+    <string name="action_disable">Disable</string>
+    <string name="settings.servers_delete.server_dialog.title">Delete "%1$s" server?</string>
+    <string name="action_edit">Edit</string>
+    <string name="settings.server_add.server_dialog_advanced">Advanced</string>
+    <string name="settings.docu_error_auth.required">Authentication required</string>
 </resources>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/button_pressed_transparent"
+    android:clickable="true"
+    android:focusable="true"
+    android:layoutDirection="locale"
+    android:orientation="vertical"
+    android:textDirection="locale">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_gravity="bottom"
+        android:background="#47426F" />
+
+    <RelativeLayout
+        android:id="@+id/server_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/options"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_baseline_more_vert_24" />
+
+        <TextView
+            android:id="@+id/server_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textColor="@color/wa_white"
+            android:textSize="14sp" />
+    </RelativeLayout>
+</LinearLayout>

@@ -13,7 +13,7 @@ ext {
 }
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     defaultConfig {
         applicationId "org.hzontal.tella"
@@ -88,6 +88,7 @@ dependencies {
         exclude module: "support-v13"
     }
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.navigation:navigation-runtime:2.3.0'
     annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:${permissionDispatcherVersion}"
 
     implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'

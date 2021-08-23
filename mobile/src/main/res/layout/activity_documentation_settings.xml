@@ -5,10 +5,10 @@
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_shadow"
+    android:background="@color/dark_purple"
     android:fitsSystemWindows="true"
     android:textDirection="locale"
-    tools:context="rs.readahead.washington.mobile.views.activity.DocumentationSettingsActivity">
+    tools:context="rs.readahead.washington.mobile.views.activity.ServersSettingsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -20,7 +20,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@color/dark_purple"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
         </androidx.appcompat.widget.Toolbar>
