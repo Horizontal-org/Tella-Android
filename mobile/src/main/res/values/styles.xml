@@ -69,8 +69,8 @@
 
     <style name="SettingsMainShadowLine">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1dp</item>
-        <item name="android:background">#80CCCCCC</item>
+        <item name="android:layout_height">2dp</item>
+        <item name="android:background">#47426F</item>
     </style>
 
     <style name="CameraModeText">
@@ -622,4 +622,34 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="Tella_Main_White_Text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:textColor">@color/wa_white</item>
+        <item name="android:textSize">40sp</item>
+    </style>
+    <style name="Tella_Main_White_Text.Bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="DialogDataCollectionTextEntryLayout" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColorHint">@color/wa_white</item>
+    </style>
+
+    <style name="CollectDialogTextValidationError">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/wa_white</item>
+        <item name="android:layout_margin">6dp</item>
+        <item name="android:padding">6dp</item>
+        <item name="android:background">@drawable/red_border_background</item>
+    </style>
+
+    <style name="CollectDialogAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/slide_in_start</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_end</item>
+    </style>
 </resources>
