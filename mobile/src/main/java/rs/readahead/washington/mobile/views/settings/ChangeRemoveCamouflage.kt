@@ -1,0 +1,45 @@
+package rs.readahead.washington.mobile.views.settings
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.navigation.Navigation
+import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.util.CamouflageManager
+import rs.readahead.washington.mobile.views.base_ui.BaseFragment
+
+
+class ChangeRemoveCamouflage : BaseFragment() {
+
+    private val cm = CamouflageManager.getInstance()
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_change_remove_camouflage, container, false)
+        (activity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_prot_select_camouflage)
+
+        initView(view)
+
+        return view
+    }
+
+    override fun initView(view: View) {
+
+        val fragmentTitle = view.findViewById<TextView>(R.id.title)
+        fragmentTitle.text = getString(R.string.settings_servers_add_camouflage_subtitle, cm.getLauncherName(requireContext()))
+
+        view.findViewById<View>(R.id.change_method).setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_camouflage_change_or_remove_to_hide_tella)
+        }
+
+        view.findViewById<View>(R.id.remove_camouflage).setOnClickListener {
+            removeCamouflage()
+        }
+    }
+
+    private fun  removeCamouflage() {
+        cm.setDefaultLauncherActivityAlias(requireContext())
+    }
+}

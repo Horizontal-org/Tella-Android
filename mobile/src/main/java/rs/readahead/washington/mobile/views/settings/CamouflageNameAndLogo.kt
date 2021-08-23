@@ -61,6 +61,4 @@ class CamouflageNameAndLogo : BaseFragment() {
         } catch (ignored: IndexOutOfBoundsException) {
         }
     }
-
-
 }

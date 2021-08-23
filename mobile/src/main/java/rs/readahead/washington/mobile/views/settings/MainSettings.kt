@@ -8,10 +8,13 @@ import org.hzontal.shared_ui.switches.TellaSwitchWithMessage
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.R.*
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
+import rs.readahead.washington.mobile.util.CamouflageManager
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 
 
 class MainSettings : BaseFragment() {
+
+    private val cm = CamouflageManager.getInstance()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -51,8 +54,12 @@ class MainSettings : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if ((activity as OnFragmentSelected?)?.isCamouflage() == true){
-            Navigation.findNavController(view).navigate(R.id.action_main_settings_to_hide_tella)
+        if ((activity as OnFragmentSelected?)?.isCamouflage() == true) {
+            if (cm.isDefaultLauncherActivityAlias) {
+                Navigation.findNavController(view).navigate(R.id.action_main_settings_to_hide_tella)
+            } else {
+                Navigation.findNavController(view).navigate(R.id.action_main_settings_to_camouflage_change_or_remove)
+            }
         }
     }
 }
