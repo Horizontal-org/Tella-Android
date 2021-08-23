@@ -243,6 +243,7 @@
         <activity
             android:name=".views.activity.CollectHelpActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:windowSoftInputMode="adjustPan"
             android:label="@string/collect.help_app.bar"
             android:parentActivityName=".views.activity.ServersSettingsActivity"
             android:theme="@style/AppTheme.NoActionBar">
