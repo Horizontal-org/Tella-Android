@@ -10,6 +10,7 @@
         android:id="@+id/server_input"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:isScrollContainer="true"
         android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
