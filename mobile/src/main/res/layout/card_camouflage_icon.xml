@@ -26,6 +26,7 @@
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/wa_white"
         android:layout_marginTop="@dimen/small_text_margin"
         android:maxLines="1"
         android:ellipsize="end"

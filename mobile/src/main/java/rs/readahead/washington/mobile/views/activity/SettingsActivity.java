@@ -1,5 +1,7 @@
 package rs.readahead.washington.mobile.views.activity;
 
+import static com.hzontal.tella_locking_ui.ConstantsKt.IS_CAMOUFLAGE;
+
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import androidx.appcompat.app.ActionBar;
@@ -26,6 +28,7 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
 
     private ActionBar actionBar;
     private EventCompositeDisposable disposables;
+    protected boolean isCamouflage = false;
 
 
     @Override
@@ -39,6 +42,10 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(R.string.settings_app_bar);
+        }
+
+        if (getIntent().hasExtra(IS_CAMOUFLAGE)) {
+            isCamouflage = true;
         }
 
         disposables = MyApplication.bus().createCompositeDisposable();
@@ -79,5 +86,10 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
     @Override
     public void setToolbarHomeIcon(int iconRes) {
         actionBar.setHomeAsUpIndicator(iconRes);
+    }
+
+    @Override
+    public boolean isCamouflage() {
+        return isCamouflage;
     }
 }

@@ -53,7 +53,7 @@ public class CamouflageAliasActivity extends BaseLockActivity {
         adapter.setIcons(cm.getOptions(), cm.getSelectedAliasPosition());
 
         //showAddCamouflageDialog();
-        showChooseCamouflageTypeDialog();
+        //showChooseCamouflageTypeDialog();
     }
 
     @Override

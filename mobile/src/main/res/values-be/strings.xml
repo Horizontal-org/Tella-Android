@@ -430,5 +430,26 @@
   <string name="settings.sec_lock_timeout_1hour">1 hour</string>
   <string name="settings.sec_lock_timeout_desc">Decide how long it takes for Tella to lock</string>
     <string name="settings.prot_select_delete.vault">Delete Vault</string>
-  <string name="settings.sec_delete.vault_tooltip">Delete all the files stored in Tella.</string>
+    <string name="settings.sec_delete.vault_tooltip">Delete all the files stored in Tella.</string>
+    <string name="settings.sec_delete.forms_tooltip">Delete all draft and submitted forms.</string>
+    <string name="settings.sec_delete.servers_tooltip">Delete your connections to servers and all forms associated with them.</string>
+    <string name="settings.sec_delete.app_tooltip">Delete the app and all the data it contains. You will be asked “Do you want to uninstall this app?” Unless you confirm, Tella will not be deleted.</string>
+    <string name="settings.sec_bypass_switch_title">Bypass censorship</string>
+    <string name="settings.sec_bypass_switch_expl">Overcome attempts to block Tella in your region. Note that enabling this will make it slower to send data to the servers.</string>
+    <string name="settings.servers_add_camouflage.subtitle">Your app is currently camouflaged \n with a Calculator app</string>
+    <string name="settings.servers_change.camouflage.method">CHANGE CAMOUFLAGE METHOD</string>
+    <string name="settings.servers_remove.camouflage.method">REMOVE CAMOUFLAGE</string>
+    <string name="settings.servers_hide_tella_title">Hide Tella</string>
+    <string name="settings.servers_hide_tella_desc">Select your preferred method of hiding Tella</string>
+    <string name="settings.servers_setup_camouflage_title">Set Up Camouflage</string>
+    <string name="settings.servers_setup_camouflage_description">There are two camouflage options available. The first one is quicker but less secure; the second one is less convenient but more secure.</string>
+    <string name="settings.servers_setup_change_camouflage_title">CHANGE NAME &amp; ICON</string>
+    <string name="settings.servers_setup_change_camouflage_subtitle">Tella will appear on the home screen with a different app name and icon</string>
+    <string name="settings.servers_setup_hide_behind_camouflage_title">hide behind a real app</string>
+    <string name="settings.servers_setup_hide_behind_camouflage_subtitle">The most secure option: Camouflage Tella behind an actual functioning app</string>
+    <string name="settings.servers_setup_change_name_icon_title">CHANGE NAME AND ICON</string>
+    <string name="settings.servers_setup_change_name_icon_subtitle"><![CDATA[<b>Less secure:</b> Tella will appear on the home screen with a different app name and icon. Tapping on the new icon opens the actual Tella.]]></string>
+    <string name="settings.servers_setup_hide_behind_calculator_title">hide behind a calculator app</string>
+    <string name="settings.servers_setup_hide_behind_calculator_subtitle"><![CDATA[<b>More secure:</b> Camouflage Tella behind an actual functioning calculator app. Input your PIN on the calculator to unlock Tella.]]></string>
+    <string name="settings.servers_setup_hide_behind_calculator_not_possible"><![CDATA[The Calculator camouflage is only possible if you use a PIN lock.<b><font color="#D6933B"> Change lock here</font></b>]]></string>
 </resources>
