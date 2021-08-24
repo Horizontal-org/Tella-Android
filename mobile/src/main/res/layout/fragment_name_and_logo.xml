@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/wa_purple"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -48,38 +48,31 @@
 
     <RelativeLayout
         android:id="@+id/buttons_layout"
-        style="?android:attr/buttonBarStyle"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_marginBottom="24dp"
-        android:gravity="end|bottom"
+        android:gravity="bottom"
         android:orientation="horizontal">
 
-        <Button
+        <TextView
             android:id="@+id/back"
-            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_gravity="center"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:layout_marginBottom="4dp"
             android:paddingStart="32dp"
             android:paddingEnd="32dp"
             android:paddingBottom="4dp"
             android:text="@string/pl_back"
             android:textAlignment="center"
-            android:textAllCaps="true"
             android:textColor="@color/wa_white"
+            android:background="@color/dark_purple"
             android:textSize="17sp" />
 
-        <Button
+        <TextView
             android:id="@+id/next"
-            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -88,11 +81,10 @@
             android:paddingEnd="32dp"
             android:paddingBottom="4dp"
             android:text="@string/action_next"
+            android:background="@color/dark_purple"
             android:textAlignment="center"
-            android:textAllCaps="true"
             android:textColor="@color/wa_white"
-            android:textSize="17sp"
-            android:textStyle="bold" />
+            android:textSize="17sp"/>
     </RelativeLayout>
 
 </RelativeLayout>

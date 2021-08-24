@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -81,6 +82,16 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
     @Override
     public void setToolbarLabel(int labelRes) {
         actionBar.setTitle(getString(labelRes));
+    }
+
+    @Override
+    public void hideAppbar() {
+        actionBar.hide();
+    }
+
+    @Override
+    public void showAppbar() {
+        actionBar.show();
     }
 
     @Override

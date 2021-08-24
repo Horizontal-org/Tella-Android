@@ -34,7 +34,7 @@ class HideTella : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        (activity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_prot_select_camouflage)
+        (activity as OnFragmentSelected?)?.hideAppbar()
 
         val btnOneDesc = view.findViewById<TextView>(R.id.subtitle_btn_one)
         btnOneDesc.setText(Html.fromHtml(getString(R.string.settings_servers_setup_change_name_icon_subtitle)))

@@ -31,6 +31,8 @@ class CamouflageNameAndLogo : BaseFragment() {
     }
 
     override fun initView(view: View) {
+        (activity as OnFragmentSelected?)?.hideAppbar()
+
         recyclerView = view.findViewById(R.id.iconsRecyclerView)
 
         adapter = CamouflageRecycleViewAdapter()

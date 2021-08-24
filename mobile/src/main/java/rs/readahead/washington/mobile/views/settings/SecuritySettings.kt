@@ -47,6 +47,7 @@ class SecuritySettings : BaseFragment() {
     }
 
     override fun initView(view: View) {
+        (activity as OnFragmentSelected?)?.showAppbar()
         (activity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_sec_app_bar)
 
         lockSetting = view.findViewById(R.id.lock_setting)
