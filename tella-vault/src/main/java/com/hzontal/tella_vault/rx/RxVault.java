@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.hzontal.tella_vault.BaseVault;
 import com.hzontal.tella_vault.BaseVaultFileBuilder;
+import com.hzontal.tella_vault.Filter;
 import com.hzontal.tella_vault.IVaultDatabase;
 import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.Vault;
@@ -88,11 +89,11 @@ public class RxVault extends BaseVault {
         });
     }
 
-    public Single<List<VaultFile>> list(IVaultDatabase.Filter filter, IVaultDatabase.Sort sort, IVaultDatabase.Limits limits) {
+    public Single<List<VaultFile>> list(Filter filter, IVaultDatabase.Sort sort, IVaultDatabase.Limits limits) {
         return list(null, filter, sort, limits);
     }
 
-    public Single<List<VaultFile>> list(VaultFile parent, IVaultDatabase.Filter filter, IVaultDatabase.Sort sort, IVaultDatabase.Limits limits) {
+    public Single<List<VaultFile>> list(VaultFile parent, Filter filter, IVaultDatabase.Sort sort, IVaultDatabase.Limits limits) {
         return Single.defer(() -> {
             try {
                 return Single.just(baseList(parent, filter, sort, limits));

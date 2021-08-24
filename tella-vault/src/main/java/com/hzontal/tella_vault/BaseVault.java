@@ -125,7 +125,7 @@ public abstract class BaseVault {
      * @param parent Parent VaultFile or null for root listing.
      * @return List of vault files.
      */
-    protected List<VaultFile> baseList(VaultFile parent, IVaultDatabase.Filter filter, IVaultDatabase.Sort sort, IVaultDatabase.Limits limits) {
+    protected List<VaultFile> baseList(VaultFile parent,Filter filter, IVaultDatabase.Sort sort, IVaultDatabase.Limits limits) {
         return database.list(parent, filter, sort, limits); // todo: design filter and sort that will handle use-cases
     }
 

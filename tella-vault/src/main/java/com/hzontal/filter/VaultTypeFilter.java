@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 
 import androidx.annotation.NonNull;
 
+import com.hzontal.tella_vault.Filter;
 import com.hzontal.tella_vault.IVaultDatabase;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.utils.MediaFile;
@@ -12,7 +13,7 @@ import com.hzontal.utils.MediaFile;
 
 import timber.log.Timber;
 
-public class VaultTypeFilter implements IVaultDatabase.Filter {
+public class VaultTypeFilter implements Filter {
 
     @NonNull
     public FilterType filterType = FilterType.ALL;
