@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hzontal.filter.VaultTypeFilter;
+import com.hzontal.tella_vault.Filter;
 import com.hzontal.tella_vault.IVaultDatabase;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.utils.MediaFile;
@@ -132,7 +133,7 @@ public class GalleryActivity extends MetadataActivity implements
         sort.direction = IVaultDatabase.Sort.Direction.ASC;
 
         if (getIntent().hasExtra(GALLERY_FILTER)) {
-            filter.filterType = IVaultDatabase.Filter.FilterType.valueOf(getIntent().getStringExtra(GALLERY_FILTER));
+            filter.filterType = Filter.FilterType.valueOf(getIntent().getStringExtra(GALLERY_FILTER));
         }
 
         setupToolbar();
@@ -802,19 +803,19 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     @SuppressLint("NonConstantResourceId")
-    public IVaultDatabase.Filter.FilterType getGalleryFilter(final int id) {
+    public Filter.FilterType getGalleryFilter(final int id) {
         switch (id) {
             case R.id.photo:
-                return IVaultDatabase.Filter.FilterType.PHOTO;
+                return Filter.FilterType.PHOTO;
 
             case R.id.audio:
-                return IVaultDatabase.Filter.FilterType.AUDIO;
+                return Filter.FilterType.AUDIO;
 
             case R.id.video:
-                return IVaultDatabase.Filter.FilterType.VIDEO;
+                return Filter.FilterType.VIDEO;
 
             default:
-                return IVaultDatabase.Filter.FilterType.ALL;
+                return Filter.FilterType.ALL;
         }
 
     }
@@ -828,7 +829,7 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     @IdRes
-    public int getFilterId(IVaultDatabase.Filter.FilterType filter) {
+    public int getFilterId(Filter.FilterType filter) {
         switch (filter) {
             case PHOTO:
                 return R.id.photo;

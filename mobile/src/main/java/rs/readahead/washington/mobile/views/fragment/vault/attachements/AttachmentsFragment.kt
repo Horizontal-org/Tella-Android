@@ -1,5 +1,7 @@
 package rs.readahead.washington.mobile.views.fragment.vault.attachements
 
+import android.Manifest
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
@@ -11,26 +13,29 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.hzontal.tella_locking_ui.common.extensions.toggleVisibility
 import com.hzontal.tella_vault.VaultFile
-import com.hzontal.utils.MediaFile
 import com.hzontal.utils.MediaFile.isAudioFileType
 import com.hzontal.utils.MediaFile.isImageFileType
 import com.hzontal.utils.MediaFile.isVideoFileType
 import org.hzontal.shared_ui.appbar.ToolbarComponent
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.IVaultActions
+import org.hzontal.shared_ui.utils.DialogUtils
+import permissions.dispatcher.NeedsPermission
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.media.MediaFileHandler
+import rs.readahead.washington.mobile.util.DialogsUtil
 import rs.readahead.washington.mobile.views.activity.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity
 import rs.readahead.washington.mobile.views.activity.VideoViewerActivity
-import rs.readahead.washington.mobile.views.adapters.GalleryRecycleViewAdapter
 import rs.readahead.washington.mobile.views.base_ui.BaseToolbarFragment
 import rs.readahead.washington.mobile.views.custom.SpacesItemDecoration
-import rs.readahead.washington.mobile.views.interfaces.IGalleryVaultHandler
+import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.AttachmentsRecycleViewAdapter
 import timber.log.Timber
 
-class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, IGalleryVaultHandler, IAttachmentsPresenter.IView{
+class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.IGalleryVaultHandler, IAttachmentsPresenter.IView{
     private lateinit var attachmentsRecyclerView: RecyclerView
-    private val attachmentsAdapter by lazy { GalleryRecycleViewAdapter(activity, this,
+    private val attachmentsAdapter by lazy { AttachmentsRecycleViewAdapter(activity, this,
          MediaFileHandler(), R.layout.item_vault_attachment_hor)}
     private val attachmentsPresenter by lazy { AttachmentsPresenter(this) }
     private lateinit var gridLayoutManager: GridLayoutManager
@@ -41,6 +46,7 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, IGaller
     private lateinit var emptyViewMsgContainer : LinearLayout
     private lateinit var checkBoxList : AppCompatImageView
     private var isListCheckOn = false
+    private var progressDialog : ProgressDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -193,6 +199,44 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, IGaller
         updateAttachmentsToolbar()
     }
 
+    override fun onMoreClicked(vaultFile: VaultFile?) {
+       BottomSheetUtils.showVaultActionsSheet(activity.supportFragmentManager,
+           vaultFile?.name,
+           getString(R.string.action_upload),
+           getString(R.string.action_share),
+           getString(R.string.vault_move_to_another_folder),
+           getString(R.string.vault_rename),
+           getString(R.string.action_save),
+           getString(R.string.vault_file_info),
+           getString(R.string.action_delete),
+           action = object : IVaultActions{
+               override fun upload() {
+
+               }
+               override fun share() {
+               }
+
+               override fun move() {
+               }
+
+               override fun rename() {
+               }
+
+               override fun save() {
+               }
+
+               override fun info() {
+               }
+
+               override fun delete() {
+                   attachmentsPresenter.deleteVaultFile(vaultFile)
+               }
+
+           }
+
+       )
+    }
+
     override fun onGetFilesStart() {
     }
 
@@ -238,6 +282,14 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, IGaller
     override fun onMediaFilesDeletionError(throwable: Throwable?) {
     }
 
+    override fun onMediaFileDeleted() {
+        attachmentsPresenter.getFiles(null,null)
+    }
+
+    override fun onMediaFileDeletionError(throwable: Throwable?) {
+        DialogUtils.showBottomMessage(activity,getString(R.string.gallery_toast_fail_deleting_files),true)
+    }
+
     override fun onMediaExported(num: Int) {
     }
 
@@ -245,9 +297,16 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, IGaller
     }
 
     override fun onExportStarted() {
+        progressDialog = DialogsUtil.showProgressDialog(
+            activity,
+            getString(R.string.gallery_save_to_device_dialog_progress_expl)
+        )
+        detailsFab.hide()
     }
 
     override fun onExportEnded() {
+        hideProgressDialog()
+        detailsFab.show()
     }
 
     override fun onCountTUServersEnded(num: Long?) {
@@ -256,5 +315,19 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, IGaller
     override fun onCountTUServersFailed(throwable: Throwable?) {
 
     }
+
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun exportvaultFiles() {
+        val selected: List<VaultFile> = attachmentsAdapter.selectedMediaFiles
+        attachmentsPresenter.exportMediaFiles(selected)
+    }
+
+    private fun hideProgressDialog() {
+        if (progressDialog != null) {
+            progressDialog?.dismiss()
+            progressDialog = null
+        }
+    }
+
 
 }
