@@ -34,7 +34,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/server_icon"
         android:gravity="center"
-        android:paddingStart="12dp"
+        android:padding="12dp"
         android:text="@string/settings.servers_hide_tella_title"
         android:layout_marginTop="16dp"
         android:textColor="@color/wa_white"
@@ -50,7 +50,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sheet_title"
         android:gravity="center"
-        android:paddingStart="12dp"
+        android:padding="12dp"
         android:text="@string/settings.servers_hide_tella_desc"
         android:layout_marginTop="16dp"
         android:textColor="@color/wa_white"
@@ -84,7 +84,8 @@
             android:layout_gravity="center"
             android:layout_weight="0.25"
             android:gravity="start"
-            android:src="@drawable/ic_camo_name_and_icon" />
+            android:src="@drawable/ic_camo_name_and_icon"
+            android:contentDescription="@string/settings.servers_setup_change_name_icon_title" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -143,15 +144,16 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_weight="0.25"
+            android:layout_weight="0.3"
             android:gravity="start"
-            android:src="@drawable/ic_notes_camo_real_app" />
+            android:src="@drawable/ic_notes_camo_real_app"
+            android:contentDescription="@string/settings.servers_setup_hide_behind_calculator_title" />
 
         <LinearLayout
             android:id="@+id/sheet_two_btn_label"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.75"
+            android:layout_weight="0.70"
             android:gravity="center"
             android:orientation="vertical">
 

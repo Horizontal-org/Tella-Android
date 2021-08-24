@@ -76,7 +76,7 @@ class HideTella : BaseFragment() {
     private fun hideTellaBehindCalculator(){
         if (cm.setLauncherActivityAlias(requireContext(), CALCULATOR_ALIAS)) {
             MyApplication.bus()
-                .post(CamouflageAliasChangedEvent()) // todo: replace with startActivityForResult
+                .post(CamouflageAliasChangedEvent())
         }
     }
 }

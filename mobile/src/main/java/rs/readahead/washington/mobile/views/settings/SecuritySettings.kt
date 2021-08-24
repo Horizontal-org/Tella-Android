@@ -26,6 +26,7 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.util.CamouflageManager
+import timber.log.Timber
 
 
 class SecuritySettings : BaseFragment() {
@@ -179,12 +180,13 @@ class SecuritySettings : BaseFragment() {
     }
 
     private fun setUpLockTypeText() {
-        when ((activity.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(
-            activity
-        )) {
+        when ((activity.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(activity)) {
             UnlockRegistry.Method.TELLA_PIN -> lockSetting?.setText(getString(R.string.onboard_pin))
             UnlockRegistry.Method.TELLA_PASSWORD -> lockSetting?.setText(getString(R.string.onboard_password))
             UnlockRegistry.Method.TELLA_PATTERN -> lockSetting?.setText(getString(R.string.onboard_pattern))
+            else -> {
+                Timber.e("Unlock method not recognized")
+            }
         }
     }
 
@@ -216,16 +218,18 @@ class SecuritySettings : BaseFragment() {
 
     fun goToUnlockingActivity(returnCall: ReturnActivity) {
         var intent: Intent? = null
-        when ((activity.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(
-            activity
-        )) {
+        when ((activity.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(activity)) {
             UnlockRegistry.Method.TELLA_PIN -> intent =
                 Intent(activity, PinUnlockActivity::class.java)
             UnlockRegistry.Method.TELLA_PASSWORD -> intent =
                 Intent(activity, PasswordUnlockActivity::class.java)
             UnlockRegistry.Method.TELLA_PATTERN -> intent =
                 Intent(activity, PatternUnlockActivity::class.java)
+            else -> {
+                Timber.e("Unlock method not recognized")
+            }
         }
+
         intent!!.putExtra(RETURN_ACTIVITY, returnCall.getActivityOrder())
         intent.putExtra(IS_FROM_SETTINGS, true)
         startActivity(intent)

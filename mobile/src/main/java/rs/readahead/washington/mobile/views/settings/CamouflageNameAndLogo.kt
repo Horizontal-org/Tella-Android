@@ -57,7 +57,7 @@ class CamouflageNameAndLogo : BaseFragment() {
             if (option != null) {
                 if (cm.setLauncherActivityAlias(requireContext(), option.alias)) {
                     MyApplication.bus()
-                        .post(CamouflageAliasChangedEvent()) // todo: replace with startActivityForResult
+                        .post(CamouflageAliasChangedEvent())
                 }
             }
         } catch (ignored: IndexOutOfBoundsException) {
