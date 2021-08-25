@@ -54,7 +54,6 @@ class SecuritySettings : BaseFragment() {
         lockSetting = view.findViewById(R.id.lock_setting)
         lockTimeoutSetting = view.findViewById(R.id.lock_timeout_setting)
 
-        setUpLockTypeText()
         setUpLockTimeoutText()
 
         val camouflageSettingButton =
@@ -151,6 +150,11 @@ class SecuritySettings : BaseFragment() {
                 resources.getString(R.string.settings_sec_delete_app_tooltip)
             )
         })
+    }
+
+    override fun onStart() {
+        super.onStart()
+        setUpLockTypeText()
     }
 
     private fun showLockTimeoutSettingDialog() {
