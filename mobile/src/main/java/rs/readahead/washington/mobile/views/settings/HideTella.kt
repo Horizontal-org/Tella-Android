@@ -46,7 +46,7 @@ class HideTella : BaseFragment() {
         hideNotPossible.setText(Html.fromHtml(getString(R.string.settings_servers_setup_hide_behind_calculator_not_possible)))
 
         view.findViewById<LinearLayout>(R.id.sheet_one_btn).setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_hide_tella_to_camouflage_name_logo)
+            nav().navigate(R.id.action_hide_tella_to_camouflage_name_logo)
         }
 
         val btnTwoLabel = view.findViewById<LinearLayout>(R.id.sheet_two_btn_label)
@@ -55,7 +55,7 @@ class HideTella : BaseFragment() {
         if ((activity.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(activity) != UnlockRegistry.Method.TELLA_PIN) {
             hideNotPossible.visibility = View.VISIBLE
             hideNotPossible.setOnClickListener {
-                Navigation.findNavController(view).navigate(R.id.action_hide_tella_to_security_settings)
+                nav().navigate(R.id.action_hide_tella_to_security_settings)
             }
             btnTwoLabel.setAlpha(0.38f)
             btnTwo.setClickable(false)
@@ -69,7 +69,7 @@ class HideTella : BaseFragment() {
         }
 
         view.findViewById<View>(R.id.back_btn).setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_hide_tella_to_security_settings)
+            nav().navigate(R.id.action_hide_tella_to_security_settings)
         }
     }
 

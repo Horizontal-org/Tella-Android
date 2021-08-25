@@ -36,19 +36,19 @@ class MainSettings : BaseFragment() {
         offlineSwitch.setChecked(Preferences.isOfflineMode())
 
         view.findViewById<View>(R.id.general_settings_button).setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_main_to_general_settings)
+            nav().navigate(R.id.action_main_to_general_settings)
         }
 
         view.findViewById<View>(R.id.security_settings_button).setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_main_settings_to_security_settings)
+            nav().navigate(R.id.action_main_settings_to_security_settings)
         }
 
         view.findViewById<View>(R.id.servers_settings_button).setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_main_settings_to_servers_settings)
+            nav().navigate(R.id.action_main_settings_to_servers_settings)
         }
 
         view.findViewById<View>(R.id.about_n_help_settings_button).setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_main_settings_to_about_n_help_settings)
+            nav().navigate(R.id.action_main_settings_to_about_n_help_settings)
         }
     }
 
@@ -56,9 +56,9 @@ class MainSettings : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         if ((activity as OnFragmentSelected?)?.isCamouflage() == true) {
             if (cm.isDefaultLauncherActivityAlias) {
-                Navigation.findNavController(view).navigate(R.id.action_main_settings_to_hide_tella)
+                nav().navigate(R.id.action_main_settings_to_hide_tella)
             } else {
-                Navigation.findNavController(view).navigate(R.id.action_main_settings_to_camouflage_change_or_remove)
+                nav().navigate(R.id.action_main_settings_to_camouflage_change_or_remove)
             }
         }
     }
