@@ -1,5 +1,7 @@
 package rs.readahead.washington.mobile.util;
 
+import static rs.readahead.washington.mobile.MyApplication.getMainKeyHolder;
+
 import java.util.LinkedHashMap;
 
 import rs.readahead.washington.mobile.R;
@@ -38,5 +40,6 @@ public class LockTimeoutManager {
 
     public void setLockTimeout(long timeout) {
         Preferences.setLockTimeout(timeout);
+        getMainKeyHolder().setTimeout(timeout);
     }
 }
