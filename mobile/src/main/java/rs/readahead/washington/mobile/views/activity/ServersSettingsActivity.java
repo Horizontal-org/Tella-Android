@@ -198,7 +198,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     @Override
     public void onCreateTUServerError(Throwable throwable) {
-        showToast(R.string.settings_docu_toast_fail_create_server);
+        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_fail_create_server), true);
     }
 
     @Override
@@ -217,12 +217,12 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         }
 
         createServerViews(servers);
-        showToast(R.string.settings_docu_toast_server_deleted);
+        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_server_deleted), false);
     }
 
     @Override
     public void onRemoveTUServerError(Throwable throwable) {
-        showToast(R.string.settings_docu_toast_fail_delete_server);
+        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_fail_delete_server), true);
     }
 
     @Override
@@ -238,7 +238,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     @Override
     public void onUpdateTUServerError(Throwable throwable) {
-        showToast(R.string.settings_docu_toast_fail_update_server);
+        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_fail_update_server), true);
     }
 
     @Override
@@ -250,7 +250,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     @Override
     public void onLoadServersError(Throwable throwable) {
-        showToast(R.string.settings_docu_toast_fail_load_list_connected_servers);
+        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_fail_load_list_connected_servers), true);
     }
 
     @Override
@@ -267,7 +267,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     @Override
     public void onCreateCollectServerError(Throwable throwable) {
-        showToast(R.string.settings_docu_toast_fail_create_server);
+        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_fail_create_server), true);
     }
 
     @Override
@@ -278,13 +278,13 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             servers.set(i, server);
             listView.removeViewAt(i);
             listView.addView(getServerItem(server), i);
-            showToast(R.string.settings_docu_toast_server_updated);
+            DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_server_updated), false);
         }
     }
 
     @Override
     public void onUpdateServerError(Throwable throwable) {
-        showToast(R.string.settings_docu_toast_fail_update_server);
+        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_fail_update_server), true);
     }
 
     @Override
@@ -294,7 +294,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         listView.removeAllViews();
         turnOffAutoUpload();
        //setupCollectSettingsView();
-        showToast(R.string.settings_docu_toast_disconnect_servers_delete);
+        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_disconnect_servers_delete), false);
     }
 
     @Override
@@ -306,12 +306,12 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         servers.remove(server);
         listView.removeAllViews();
         createServerViews(servers);
-        showToast(R.string.settings_docu_toast_server_deleted);
+        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_server_deleted), false);
     }
 
     @Override
     public void onRemoveServerError(Throwable throwable) {
-        showToast(R.string.settings_docu_toast_fail_delete_server);
+        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_fail_delete_server), true);
     }
 
     @Override
