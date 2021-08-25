@@ -33,7 +33,7 @@ class MainSettings : BaseFragment() {
         offlineSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
             Preferences.setOfflineMode(isChecked)
         }
-        offlineSwitch.setChecked(Preferences.isOfflineMode())
+        offlineSwitch.mSwitch.setChecked(Preferences.isOfflineMode())
 
         view.findViewById<View>(R.id.general_settings_button).setOnClickListener {
             nav().navigate(R.id.action_main_to_general_settings)
