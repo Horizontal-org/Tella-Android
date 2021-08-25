@@ -19,7 +19,6 @@ import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.custom.CountdownTextView
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
-import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.MockVaultFiles
 
 class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresenter.IView  {
     private lateinit var toolbar: Toolbar
