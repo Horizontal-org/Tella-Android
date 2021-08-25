@@ -6,6 +6,8 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+
 import android.view.MenuItem;
 import android.view.View;
 
@@ -18,7 +20,10 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
+import rs.readahead.washington.mobile.util.CamouflageManager;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
+import rs.readahead.washington.mobile.views.settings.ChangeRemoveCamouflage;
+import rs.readahead.washington.mobile.views.settings.HideTella;
 import rs.readahead.washington.mobile.views.settings.OnFragmentSelected;
 
 
@@ -29,6 +34,7 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
 
     private ActionBar actionBar;
     private EventCompositeDisposable disposables;
+    private CamouflageManager cm = CamouflageManager.getInstance();
     protected boolean isCamouflage = false;
 
 
@@ -46,7 +52,11 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
         }
 
         if (getIntent().hasExtra(IS_CAMOUFLAGE)) {
-            isCamouflage = true;
+            if (cm.isDefaultLauncherActivityAlias()) {
+                addFragment(new HideTella(),R.id.my_nav_host_fragment);
+            } else {
+                addFragment(new ChangeRemoveCamouflage(),R.id.my_nav_host_fragment);
+            }
         }
 
         disposables = MyApplication.bus().createCompositeDisposable();

@@ -51,15 +51,4 @@ class MainSettings : BaseFragment() {
             nav().navigate(R.id.action_main_settings_to_about_n_help_settings)
         }
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        if ((activity as OnFragmentSelected?)?.isCamouflage() == true) {
-            if (cm.isDefaultLauncherActivityAlias) {
-                nav().navigate(R.id.action_main_settings_to_hide_tella)
-            } else {
-                nav().navigate(R.id.action_main_settings_to_camouflage_change_or_remove)
-            }
-        }
-    }
 }

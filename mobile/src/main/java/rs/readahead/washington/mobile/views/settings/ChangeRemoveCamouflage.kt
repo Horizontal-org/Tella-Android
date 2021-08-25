@@ -31,7 +31,7 @@ class ChangeRemoveCamouflage : BaseFragment() {
         fragmentTitle.text = getString(R.string.settings_servers_add_camouflage_subtitle, cm.getLauncherName(requireContext()))
 
         view.findViewById<View>(R.id.change_method).setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_camouflage_change_or_remove_to_hide_tella)
+            activity.addFragment(HideTella(), R.id.my_nav_host_fragment)
         }
 
         view.findViewById<View>(R.id.remove_camouflage).setOnClickListener {
