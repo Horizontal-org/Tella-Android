@@ -207,19 +207,21 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, rs.read
            getString(R.string.vault_move_to_another_folder),
            getString(R.string.vault_rename),
            getString(R.string.action_save),
-           getString(R.string.vault_file_info),
+           getString(R.string.vault_file_information),
            getString(R.string.action_delete),
            action = object : IVaultActions{
                override fun upload() {
 
                }
                override fun share() {
+                   startShareActivity(includeMetadata = false)
                }
 
                override fun move() {
                }
 
                override fun rename() {
+
                }
 
                override fun save() {
@@ -327,6 +329,19 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, rs.read
             progressDialog?.dismiss()
             progressDialog = null
         }
+    }
+
+    private fun startShareActivity(includeMetadata: Boolean) {
+        val selected: List<VaultFile> = attachmentsAdapter.selectedMediaFiles
+        if (selected.size > 1) {
+            MediaFileHandler.startShareActivity(activity, selected, includeMetadata)
+        } else {
+            MediaFileHandler.startShareActivity(activity, selected[0], includeMetadata)
+        }
+    }
+
+    private fun showVaultInfo(){
+
     }
 
 

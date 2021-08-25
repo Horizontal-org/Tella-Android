@@ -13,5 +13,13 @@
     <string name="vault_empty_msg" translatable="false">You don’t have any files on your Tella yet. Click the “+” button below to import your first file, or go to the Camera or Microphone to create one. You can also create folders to keep your files organized.</string>
     <string name="vault_move_to_another_folder" translatable="false">Move to another folder</string>
     <string name="vault_rename" translatable="false">Rename</string>
-    <string name="vault_file_info" translatable="false">File information</string>
+    <string name="vault_file_information" translatable="false">File information</string>
+    <string name="vault_file_info" translatable="false">File info</string>
+    <string name="vault_file_name" translatable="false">File name</string>
+    <string name="vault_file_size" translatable="false">Size</string>
+    <string name="vault_file_format" translatable="false">Format</string>
+    <string name="vault_file_created" translatable="false">Created</string>
+    <string name="vault_file_resolution" translatable="false">Resolution</string>
+    <string name="vault_file_length" translatable="false">Length</string>
+    <string name="vault_file_path" translatable="false">path</string>
 </resources>
