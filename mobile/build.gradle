@@ -132,4 +132,5 @@ dependencies {
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}"
 
     testImplementation 'junit:junit:4.13'
+    implementation 'com.github.vihtarb:tooltip:1.0.0-alpha06-SNAPSHOT'
 }
