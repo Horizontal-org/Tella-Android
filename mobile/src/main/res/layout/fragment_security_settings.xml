@@ -153,6 +153,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
+                            android:layout_marginTop="6dp"
                             android:layout_gravity="center_vertical"
                             android:text="@string/settings.prot_select_delete.vault"
                             android:textColor="@color/wa_white" />
@@ -163,10 +164,11 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/activity_vertical_margin"
+                            android:layout_marginTop="4dp"
                             android:layout_toEndOf="@id/delete_vault_title"
                             android:contentDescription="help"
                             android:src="@drawable/orange_help_24"
-                            android:textColor="@color/wa_white"/>
+                            android:textColor="@color/wa_white" />
 
                         <CheckBox
                             android:id="@+id/delete_vault"
@@ -182,6 +184,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
                         android:padding="@dimen/activity_vertical_margin">
 
                         <TextView
@@ -189,7 +193,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
-                            android:layout_gravity="center_vertical"
+                            android:layout_marginTop="6dp"
                             android:text="@string/settings.prot_select_delete.forms"
                             android:textColor="@color/wa_white" />
 
@@ -197,8 +201,8 @@
                             android:id="@+id/delete_forms_tooltip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/activity_vertical_margin"
+                            android:layout_marginTop="4dp"
                             android:layout_toEndOf="@id/delete_forms_title"
                             android:contentDescription="help"
                             android:src="@drawable/orange_help_24"
@@ -225,6 +229,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
+                            android:layout_marginTop="6dp"
                             android:layout_gravity="center_vertical"
                             android:text="@string/settings.prot_select_delete.servers"
                             android:textColor="@color/wa_white"
@@ -236,6 +241,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/activity_vertical_margin"
+                            android:layout_marginTop="4dp"
                             android:layout_toEndOf="@id/delete_server_settings_title"
                             android:contentDescription="help"
                             android:src="@drawable/orange_help_24" />
@@ -262,6 +268,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_gravity="center_vertical"
+                            android:layout_marginTop="6dp"
                             android:text="@string/settings.prot_select_delete.app"
                             android:textColor="@color/wa_white" />
 
@@ -271,6 +278,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/activity_vertical_margin"
+                            android:layout_marginTop="4dp"
                             android:layout_toEndOf="@id/delete_tella_title"
                             android:contentDescription="help"
                             android:src="@drawable/orange_help_24"
