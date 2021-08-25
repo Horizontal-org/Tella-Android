@@ -23,6 +23,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
+import org.hzontal.shared_ui.utils.DialogUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -191,7 +192,8 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         if (tuServers.size() > 1) {
             serverSelectLayout.setVisibility(View.VISIBLE);
         }
-        showToast(R.string.settings_docu_toast_server_created);
+
+        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_server_created), false);
     }
 
     @Override
@@ -256,7 +258,8 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         servers.add(server);
         listView.addView(getServerItem(server), servers.indexOf(server));
 
-        showToast(R.string.settings_docu_toast_server_created);
+        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_server_created), false);
+
         if (MyApplication.isConnectedToInternet(this)) {
             refreshPresenter.refreshBlankForms();
         }
