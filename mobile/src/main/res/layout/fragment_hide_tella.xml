@@ -6,21 +6,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/wa_purple"
-    android:padding="21dp">
+    android:paddingEnd="21dp"
+    android:paddingStart="21dp">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineTop"
+        android:id="@+id/guidelineCenter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.015" />
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95" />
 
     <ImageView
         android:id="@+id/server_icon"
         android:layout_width="64dp"
         android:layout_height="64dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guidelineTop"
+        app:layout_constraintBottom_toTopOf="@+id/sheet_title"
         app:layout_constraintEnd_toEndOf="parent"
         android:src="@drawable/ic_camouflage"
         android:textColor="@color/wa_white"
@@ -32,9 +40,9 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/server_icon"
+        app:layout_constraintBottom_toTopOf="@+id/sheet_subtitle"
         android:gravity="center"
-        android:padding="12dp"
+        android:padding="6dp"
         android:text="@string/settings.servers_hide_tella_title"
         android:layout_marginTop="16dp"
         android:textColor="@color/wa_white"
@@ -48,11 +56,10 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sheet_title"
+        app:layout_constraintBottom_toTopOf="@+id/sheet_one_btn"
         android:gravity="center"
-        android:padding="12dp"
+        android:padding="8dp"
         android:text="@string/settings.servers_hide_tella_desc"
-        android:layout_marginTop="16dp"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
         android:textSize="14sp"
@@ -61,8 +68,9 @@
     <LinearLayout
         android:id="@+id/sheet_one_btn"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="138dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/round_button_selector"
         android:gravity="center"
         android:orientation="horizontal"
@@ -72,7 +80,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sheet_subtitle">
+        app:layout_constraintBottom_toTopOf="@+id/guidelineCenter">
 
         <ImageView
             android:padding="16dp"
@@ -124,8 +132,9 @@
     <LinearLayout
         android:id="@+id/sheet_two_btn"
         android:layout_width="match_parent"
-        android:layout_height="164dp"
-        android:layout_marginTop="24dp"
+        android:layout_height="158dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="6dp"
         android:background="@drawable/round_button_selector"
         android:gravity="center"
         android:orientation="horizontal"
@@ -134,7 +143,7 @@
         android:weightSum="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sheet_one_btn"
+        app:layout_constraintTop_toBottomOf="@+id/guidelineCenter"
         app:layout_constraintHorizontal_chainStyle="packed">
 
         <ImageView
@@ -191,8 +200,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sheet_two_btn"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
         android:text="@string/settings.servers_setup_hide_behind_calculator_not_possible"
-        android:layout_margin="16dp"
+        android:layout_marginTop="8dp"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
         android:textSize="12sp"
@@ -203,14 +213,15 @@
         android:id="@+id/back_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_chainStyle="packed"
+        android:fontFamily="@font/open_sans"
+        android:layout_gravity="bottom"
         android:text="@string/pl_back"
         android:textColor="@color/wa_white"
-        android:fontFamily="@font/open_sans"
         android:textSize="17sp"
-        android:layout_marginEnd="30dp"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guidelineBottom" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
