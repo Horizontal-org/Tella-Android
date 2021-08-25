@@ -35,14 +35,6 @@ class AboutAndHelpSettings : BaseFragment() {
             )
         )
 
-        view.findViewById<View>(R.id.tutorial).setOnClickListener {
-            val intent = Intent(
-                requireContext(),
-                OnBoardingActivity::class.java
-            )
-            startActivity(intent)
-        }
-
         view.findViewById<View>(R.id.faq).setOnClickListener {
             Util.startBrowserIntent(context, getString(R.string.config_faq_url))
         }
