@@ -111,6 +111,16 @@ public abstract class BaseVault {
     }
 
     /**
+     * Deletes a VaultFile.
+     * @param id VaultFile id to rename.
+     * @param name New VaultFile name
+     */
+    protected VaultFile baseRename(String id, String name) {
+        return database.rename(id,id);
+    }
+
+
+    /**
      * List all files in path.
      * @param parent Parent VaultFile or null for root listing.
      * @return List of vault files.

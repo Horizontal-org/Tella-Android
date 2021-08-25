@@ -123,6 +123,16 @@ public class RxVault extends BaseVault {
         });
     }
 
+    public Single<VaultFile> rename(String id, String name) {
+        return Single.defer(() -> {
+            try {
+                return Single.just(baseRename(id, name));
+            } catch (Exception e) {
+                return Single.error(e);
+            }
+        });
+    }
+
     public Completable destroy() {
         return Completable.defer(() -> {
             try {

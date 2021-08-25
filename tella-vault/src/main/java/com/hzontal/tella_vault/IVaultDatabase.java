@@ -9,6 +9,7 @@ public interface IVaultDatabase {
     VaultFile updateMetadata(VaultFile vaultFile, Metadata metadata);
     VaultFile completeVaultOutputStream(VaultFile vaultFile);
     VaultFile get(String id);
+    VaultFile rename(String id,String name);
     List<VaultFile> get(String[] ids);
     boolean delete(VaultFile file, IVaultFileDeleter deleter);
     void destroy();

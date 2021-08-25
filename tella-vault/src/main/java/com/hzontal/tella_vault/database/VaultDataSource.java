@@ -201,6 +201,18 @@ public class VaultDataSource implements IVaultDatabase {
     }
 
     @Override
+    public VaultFile rename(String id,String name) {
+        ContentValues values = new ContentValues();
+
+        values.put(D.C_NAME, name);
+
+        database.update(D.T_VAULT_FILE, values, D.C_ID + " = ?",
+                new String[]{id});
+
+        return get(id);
+    }
+
+    @Override
     public List<VaultFile> get(String[] ids) {
         return null;
     }
