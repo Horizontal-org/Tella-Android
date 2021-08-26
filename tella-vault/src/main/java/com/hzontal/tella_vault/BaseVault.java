@@ -116,7 +116,7 @@ public abstract class BaseVault {
      * @param name New VaultFile name
      */
     protected VaultFile baseRename(String id, String name) {
-        return database.rename(id,id);
+        return database.rename(id,name);
     }
 
 
