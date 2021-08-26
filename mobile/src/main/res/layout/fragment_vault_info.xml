@@ -32,7 +32,7 @@
         android:paddingHorizontal="@dimen/tella_main_vertical"
         android:text="@string/vault_file_info"
         android:id="@+id/fileInfoLabelTv"
-
+        android:layout_marginTop="20dp"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -44,6 +44,7 @@
         tools:text="Traffic Light"
         android:id="@+id/fileInfoTv"
         android:textSize="11sp"
+        android:layout_marginTop="20dp"
         />
 
 

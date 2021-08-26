@@ -22,4 +22,5 @@
     <string name="vault_file_resolution" translatable="false">Resolution</string>
     <string name="vault_file_length" translatable="false">Length</string>
     <string name="vault_file_path" translatable="false">path</string>
+    <string name="vault_rename_file" translatable="false">Rename file</string>
 </resources>

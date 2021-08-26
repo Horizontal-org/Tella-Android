@@ -5,8 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.hzontal.tella_vault.VaultFile
+import org.hzontal.shared_ui.appbar.ToolbarComponent
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.util.DateUtil
+import rs.readahead.washington.mobile.util.FileUtil
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
+import rs.readahead.washington.mobile.views.fragment.vault.attachements.VAULT_FILE_ARG
 
 class VaultInfoFragment : BaseFragment() {
     private lateinit var fileInfoTv: TextView
@@ -35,7 +40,16 @@ class VaultInfoFragment : BaseFragment() {
             fileResolutionTv = findViewById(R.id.fileResolutionTv)
             fileLengthTv = findViewById(R.id.fileLengthTv)
             filePathTv = findViewById(R.id.filePathTv)
+            findViewById<ToolbarComponent>(R.id.toolbar).backClickListener = {back()}
         }
-
+         arguments?.getSerializable(VAULT_FILE_ARG)?.let {
+             (it as VaultFile).apply {
+                 fileInfoTv.text = name
+                 fileFormatTv.text = mimeType
+                 fileCreatedTv.text = DateUtil.getDate(created)
+                 fileSizeTv.text = FileUtil.getFileSizeString(size)
+                 filePathTv.text = path
+             }
+         }
     }
 }
