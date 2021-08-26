@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments
 import android.annotation.SuppressLint
 import android.content.Context
 import android.text.format.DateFormat
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,7 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader
 import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel
+import rs.readahead.washington.mobile.util.DateUtil
 import rs.readahead.washington.mobile.views.interfaces.IGalleryVaultHandler
 import java.util.*
 import kotlin.collections.ArrayList
@@ -148,19 +150,13 @@ class AttachmentsAdapter constructor(private val iGalleryMediaHandler: IGalleryV
             }
             vaultFile?.apply {
                 nameFileTextVew.text = name
-                dateTextView.text = getDate(created)
+                dateTextView.text = DateUtil.getDate(created)
             }
 
             moreBtn.setOnClickListener {
                 vaultFile?.let { it1 -> iGalleryMediaHandler.playMedia(it1) }
             }
 
-        }
-
-        private fun getDate(time: Long): String {
-            val cal = Calendar.getInstance(Locale.ENGLISH)
-            cal.timeInMillis = time * 1000
-            return DateFormat.format("dd-MM-yyyy", cal).toString()
         }
 
    }

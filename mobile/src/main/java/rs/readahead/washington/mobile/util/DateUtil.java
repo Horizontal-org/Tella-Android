@@ -38,4 +38,7 @@ public class DateUtil {
                 && mCurrentCalendar.get(Calendar.DATE) == reportTime.get(Calendar.DATE);
     }
 
+    public static String getDate(Long time){
+        return dateFormatter.format(time);
+    }
 }
