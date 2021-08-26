@@ -18,6 +18,8 @@
 
     <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/drag_anchor_drawable</item>
+        <item name="android:windowSoftInputMode">adjustResize|stateVisible</item>
+        <item name="android:windowIsFloating">false</item>
     </style>
 
     <style name="SettingsTitleText">
@@ -85,5 +87,25 @@
         <item name="android:textColorSecondary">@color/colorPrimaryInverse</item>
         <item name="android:fontFamily">@font/open_sans</item>
     </style>
+
+
+    <style name="Style_EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">24dp</item>
+        <item name="android:layout_marginEnd">24dp</item>
+        <item name="android:layout_marginTop">40dp</item>
+        <item name="android:background">@drawable/bg_edittext</item>
+        <item name="android:letterSpacing">0.2</item>
+        <item name="android:cursorVisible">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/wa_white</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+
 
 </resources>
