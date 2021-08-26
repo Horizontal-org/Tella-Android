@@ -56,6 +56,8 @@
                         tools:ignore="RelativeOverlap" />
                 </RelativeLayout>
 
+                <View style="@style/SettingsMainShadowLine" />
+
                 <RelativeLayout
                     android:id="@+id/lock_timeout_settings_button"
                     android:layout_width="wrap_content"
@@ -83,6 +85,8 @@
                         android:textColor="@color/wa_white"
                         tools:ignore="RelativeOverlap" />
                 </RelativeLayout>
+
+                <View style="@style/SettingsMainShadowLine" />
 
                 <RelativeLayout
                     android:id="@+id/camouflage_settings_button"
@@ -157,6 +161,7 @@
                             android:layout_gravity="center_vertical"
                             android:text="@string/settings.prot_select_delete.vault"
                             android:textColor="@color/wa_white" />
+
 
                         <ImageView
                             android:id="@+id/delete_vault_tooltip"

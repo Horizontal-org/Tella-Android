@@ -23,7 +23,6 @@
         android:layout_margin="@dimen/activity_vertical_margin"
         android:background="@drawable/rounded_light_purple_background"
         android:orientation="vertical"
-        android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/offline_switch">
@@ -32,6 +31,8 @@
             android:id="@+id/general_settings_button"
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
             android:text="@string/settings_select_general"
@@ -39,10 +40,14 @@
             android:textColor="@color/wa_white"
             app:drawableStartCompat="@drawable/ic_settings_white" />
 
+        <View style="@style/SettingsMainShadowLine" />
+
         <TextView
             android:id="@+id/security_settings_button"
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
             android:text="@string/settings.select_security"
@@ -50,10 +55,14 @@
             android:textColor="@color/wa_white"
             app:drawableStartCompat="@drawable/ic_white_lock_24" />
 
+        <View style="@style/SettingsMainShadowLine" />
+
         <TextView
             android:id="@+id/servers_settings_button"
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
             android:text="@string/settings.docu_dialog.title_server.settings"
@@ -61,10 +70,14 @@
             android:textColor="@color/wa_white"
             app:drawableStartCompat="@drawable/ic_assignment_white_24" />
 
+        <View style="@style/SettingsMainShadowLine" />
+
         <TextView
             android:id="@+id/about_n_help_settings_button"
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
             android:text="@string/settings.about_app.bar"

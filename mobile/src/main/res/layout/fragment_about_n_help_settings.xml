@@ -56,10 +56,10 @@
         android:id="@+id/options"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_vertical_margin"
         android:background="@drawable/rounded_light_purple_background"
         android:orientation="vertical"
-        android:padding="12dp"
+
+        android:layout_margin="@dimen/activity_vertical_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/version">
@@ -69,26 +69,36 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:drawablePadding="10dp"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
             android:gravity="center_vertical"
             android:text="@string/settings.about_select_tutorial"
             android:textAllCaps="false"
             android:textColor="@color/wa_white"
             app:drawableStartCompat="@drawable/ic_baseline_error_outline_24" />
 
+        <View style="@style/SettingsMainShadowLine" />
+
         <TextView
             android:id="@+id/faq"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:drawablePadding="10dp"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
             android:gravity="center_vertical"
             android:text="@string/settings.about_list.item_faq"
             android:textAllCaps="false"
             android:textColor="@color/wa_white"
             app:drawableStartCompat="@drawable/ic_help_outline_white_24" />
 
+        <View style="@style/SettingsMainShadowLine" />
+
         <TextView
             android:id="@+id/contact_us"
             android:layout_width="match_parent"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
             android:layout_height="56dp"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
@@ -97,9 +107,13 @@
             android:textColor="@color/wa_white"
             app:drawableStartCompat="@drawable/ic_baseline_markunread_24" />
 
+        <View style="@style/SettingsMainShadowLine" />
+
         <TextView
             android:id="@+id/privacy_policy"
             android:layout_width="match_parent"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
             android:layout_height="56dp"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
