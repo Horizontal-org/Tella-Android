@@ -117,7 +117,7 @@ public class MainActivity extends MetadataActivity implements
 
     private void initSetup() {
         //handleOrbot();
-        setupPanicSeek();
+        //setupPanicSeek();
 
         setOrientationListener();
 
@@ -407,20 +407,11 @@ public class MainActivity extends MetadataActivity implements
     protected void onResume() {
         super.onResume();
 
-
-        setupPanicView();
         homeScreenPresenter.countCollectServers();
 
         startLocationMetadataListening();
 
         mOrientationEventListener.enable();
-
-        if (panicActivated) {
-            showPanicScreens();
-            panicActivated = false;
-        } else {
-            maybeClosePanic();
-        }
 
         // setOfflineMenuIcon(toolbar.getMenu().findItem(R.id.nav_offline_mode), Preferences.isOfflineMode());
     }

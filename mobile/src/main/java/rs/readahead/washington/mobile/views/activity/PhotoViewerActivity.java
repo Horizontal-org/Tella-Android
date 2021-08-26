@@ -91,6 +91,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                 this.vaultFile = vaultFile;
             }
         }
+        toolbar.setTitle(vaultFile.name);
 
         if (getIntent().hasExtra(NO_ACTIONS)) {
             actionsDisabled = true;

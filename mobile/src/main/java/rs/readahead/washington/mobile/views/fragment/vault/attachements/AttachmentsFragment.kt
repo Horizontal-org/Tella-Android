@@ -1,13 +1,17 @@
 package rs.readahead.washington.mobile.views.fragment.vault.attachements
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.annotation.RequiresPermission
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -17,9 +21,13 @@ import com.hzontal.utils.MediaFile.isAudioFileType
 import com.hzontal.utils.MediaFile.isImageFileType
 import com.hzontal.utils.MediaFile.isVideoFileType
 import org.hzontal.shared_ui.appbar.ToolbarComponent
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import permissions.dispatcher.NeedsPermission
+import permissions.dispatcher.OnNeverAskAgain
+import permissions.dispatcher.OnPermissionDenied
+import permissions.dispatcher.RuntimePermissions
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.util.DialogsUtil
@@ -68,7 +76,8 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, rs.read
                 true
             }
             R.id.action_share -> {
-                true
+                startShareActivity(false)
+                return true
             }
 
             R.id.action_check -> {
@@ -211,11 +220,9 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, rs.read
            getString(R.string.action_delete),
            action = object : VaultSheetUtils.IVaultActions {
                override fun upload() {
-
                }
                override fun share() {
-                   startShareActivity(includeMetadata = false)
-               }
+                   MediaFileHandler.startShareActivity(activity, vaultFile, false)               }
 
                override fun move() {
                }
@@ -347,10 +354,23 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, rs.read
        DialogUtils.showBottomMessage(activity,error?.localizedMessage,true)
     }
 
-    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    fun exportvaultFiles() {
+    @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun onWriteExternalStoragePermissionDenied() {
+    }
+
+    @OnNeverAskAgain(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun onWriteExternalStorageNeverAskAgain() {
+    }
+
+    @RequiresPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun exportVaultFiles() {
         val selected: List<VaultFile> = attachmentsAdapter.selectedMediaFiles
         attachmentsPresenter.exportMediaFiles(selected)
+    }
+
+    @RequiresPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun exportVaultFile(vaultFile: VaultFile) {
+        attachmentsPresenter.exportMediaFiles(arrayListOf(vaultFile))
     }
 
     private fun hideProgressDialog() {
@@ -369,8 +389,13 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, rs.read
         }
     }
 
-    private fun showVaultInfo(){
-
+    @SuppressLint("NeedOnRequestPermissionsResult")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
 
