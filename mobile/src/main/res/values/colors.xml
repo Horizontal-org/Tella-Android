@@ -26,6 +26,7 @@
     <color name="light_yellow">#ffe600</color>
     <color name="dark_purple">#2C275A</color>
     <color name="dark_orange">#D6933B</color>
+    <color name="wa_purple">#2C275A</color>
 
     <color name="colorPrimary">@color/wa_black</color>
     <color name="colorPrimaryDark">@color/wa_dark_gray</color>

@@ -7,10 +7,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,7 +19,6 @@ import com.hzontal.tella_vault.VaultFile;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
@@ -56,7 +53,7 @@ import timber.log.Timber;
 
 
 @RuntimePermissions
-public class AudioRecordActivity2 extends MetaDataFragment implements
+public class AudioRecordActivity2 extends MetadataActivity implements
         AudioRecorder.AudioRecordInterface,
         IAudioCapturePresenterContract.IView,
         ITellaFileUploadSchedulePresenterContract.IView,
@@ -105,22 +102,16 @@ public class AudioRecordActivity2 extends MetaDataFragment implements
     private Mode mode;
 
 
-    @org.jetbrains.annotations.Nullable
     @Override
-    public View onCreateView(@NotNull LayoutInflater inflater, @org.jetbrains.annotations.Nullable ViewGroup container, @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_audio_record, container, false);
-    }
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-    @Override
-    public void onViewCreated(@NotNull View view, @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(this);
 
-        ButterKnife.bind(activity);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        Toolbar toolbar = requireView().findViewById(R.id.toolbar);
-        activity.setSupportActionBar(toolbar);
-
-        ActionBar actionBar = activity.getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle(R.string.recorder_app_bar);
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -157,7 +148,7 @@ public class AudioRecordActivity2 extends MetaDataFragment implements
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            activity.onBackPressed();
+            onBackPressed();
             return true;
         }
 
@@ -259,7 +250,7 @@ public class AudioRecordActivity2 extends MetaDataFragment implements
 
     @OnShowRationale(Manifest.permission.RECORD_AUDIO)
     void showRecordAudioRationale(final PermissionRequest request) {
-        rationaleDialog = PermissionUtil.showRationale(activity, request, getString(R.string.permission_dialog_expl_mic));
+        rationaleDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_mic));
     }
 
     @Override
@@ -278,7 +269,7 @@ public class AudioRecordActivity2 extends MetaDataFragment implements
 
     @Override
     public void onAddError(Throwable error) {
-        activity.showToast(R.string.gallery_toast_fail_saving_file);
+        showToast(R.string.gallery_toast_fail_saving_file);
     }
 
     @Override
@@ -300,7 +291,7 @@ public class AudioRecordActivity2 extends MetaDataFragment implements
             intent.putExtra(C.CAPTURED_MEDIA_FILE_ID, vaultFile.id);
         }
 
-        activity.setResult(Activity.RESULT_OK, intent);
+        setResult(Activity.RESULT_OK, intent);
         mTimer.setText(timeToString(0));
 
         scheduleFileUpload(handlingMediaFile);
@@ -308,12 +299,12 @@ public class AudioRecordActivity2 extends MetaDataFragment implements
 
     @Override
     public void onMetadataAttachError(Throwable throwable) {
-        activity.showToast(R.string.gallery_toast_fail_saving_file);
+        showToast(R.string.gallery_toast_fail_saving_file);
     }
 
     @Override
     public void onDurationUpdate(long duration) {
-        activity.runOnUiThread(() -> mTimer.setText(timeToString(duration)));
+        runOnUiThread(() -> mTimer.setText(timeToString(duration)));
 
         if (duration > UPDATE_SPACE_TIME_MS + lastUpdateTime) {
             lastUpdateTime += UPDATE_SPACE_TIME_MS;
@@ -326,7 +317,7 @@ public class AudioRecordActivity2 extends MetaDataFragment implements
 
     @Override
     public Context getContext() {
-        return activity;
+        return this;
     }
 
     @Override
@@ -393,7 +384,7 @@ public class AudioRecordActivity2 extends MetaDataFragment implements
         enableRecord();
 
         mTimer.setText(timeToString(0));
-        activity.showToast(R.string.recorder_toast_fail_recording);
+        showToast(R.string.recorder_toast_fail_recording);
     }
 
 //    private void returnData() {
