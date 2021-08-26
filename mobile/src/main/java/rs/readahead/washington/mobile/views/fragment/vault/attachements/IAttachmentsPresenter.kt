@@ -29,6 +29,10 @@ class IAttachmentsPresenter {
         fun onExportEnded()
         fun onCountTUServersEnded(num: Long?)
         fun onCountTUServersFailed(throwable: Throwable?)
+        fun onRenameFileStart()
+        fun onRenameFileEnd()
+        fun onRenameFileSuccess()
+        fun onRenameFileError(error: Throwable?)
         fun getContext(): Context?
     }
 
@@ -37,6 +41,7 @@ class IAttachmentsPresenter {
         fun importImage(uri: Uri?)
         fun importVideo(uri: Uri?)
         fun addNewVaultFile(vaultFile: VaultFile?)
+        fun renameVaultFile(id : String, name : String)
         fun deleteVaultFiles(vaultFiles: List<VaultFile?>?)
         fun deleteVaultFile(vaultFile: VaultFile?)
         fun exportMediaFiles(vaultFiles: List<VaultFile?>)

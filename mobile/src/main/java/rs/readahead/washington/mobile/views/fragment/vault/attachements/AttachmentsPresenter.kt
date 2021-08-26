@@ -43,6 +43,20 @@ class AttachmentsPresenter (val view: IAttachmentsPresenter.IView) : IAttachment
     override fun addNewVaultFile(vaultFile: VaultFile?) {
     }
 
+    override fun renameVaultFile(id: String, name: String) {
+        disposables.add(MyApplication.rxVault.rename(id,name)
+            .subscribeOn(Schedulers.io())
+            .doOnSubscribe{ view.onRenameFileStart()}
+            .observeOn(AndroidSchedulers.mainThread())
+            .doFinally { view.onRenameFileEnd() }
+            .subscribe(
+                { view.onRenameFileSuccess() }
+            ) { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                view.onRenameFileError(throwable)
+            })
+    }
+
     override fun deleteVaultFiles(vaultFiles: List<VaultFile?>?) {
     }
 

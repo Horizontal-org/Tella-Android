@@ -17,8 +17,7 @@ import com.hzontal.utils.MediaFile.isAudioFileType
 import com.hzontal.utils.MediaFile.isImageFileType
 import com.hzontal.utils.MediaFile.isVideoFileType
 import org.hzontal.shared_ui.appbar.ToolbarComponent
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.IVaultActions
+import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import permissions.dispatcher.NeedsPermission
 import rs.readahead.washington.mobile.R
@@ -33,6 +32,7 @@ import rs.readahead.washington.mobile.views.custom.SpacesItemDecoration
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.AttachmentsRecycleViewAdapter
 import timber.log.Timber
 
+const val VAULT_FILE_ARG = "VaultFileArg"
 class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.IGalleryVaultHandler, IAttachmentsPresenter.IView{
     private lateinit var attachmentsRecyclerView: RecyclerView
     private val attachmentsAdapter by lazy { AttachmentsRecycleViewAdapter(activity, this,
@@ -199,9 +199,9 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, rs.read
         updateAttachmentsToolbar()
     }
 
-    override fun onMoreClicked(vaultFile: VaultFile?) {
-       BottomSheetUtils.showVaultActionsSheet(activity.supportFragmentManager,
-           vaultFile?.name,
+    override fun onMoreClicked(vaultFile: VaultFile) {
+       VaultSheetUtils.showVaultActionsSheet(activity.supportFragmentManager,
+           vaultFile.name,
            getString(R.string.action_upload),
            getString(R.string.action_share),
            getString(R.string.vault_move_to_another_folder),
@@ -209,7 +209,7 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, rs.read
            getString(R.string.action_save),
            getString(R.string.vault_file_information),
            getString(R.string.action_delete),
-           action = object : IVaultActions{
+           action = object : VaultSheetUtils.IVaultActions {
                override fun upload() {
 
                }
@@ -221,13 +221,26 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, rs.read
                }
 
                override fun rename() {
-
+                   VaultSheetUtils.showVaultRenameSheet(
+                       activity.supportFragmentManager,
+                       getString(R.string.vault_rename_file),
+                       getString(R.string.action_cancel),
+                       getString(R.string.action_ok),
+                       activity,
+                       vaultFile.name
+                   ) {
+                       attachmentsPresenter.renameVaultFile(vaultFile.id, it) }
                }
 
                override fun save() {
                }
 
                override fun info() {
+                   vaultFile.let {
+                   val bundle = Bundle()
+                   bundle.putSerializable(VAULT_FILE_ARG,it)
+                    nav().navigate(R.id.action_attachments_screen_to_info_screen,bundle)
+                   }
                }
 
                override fun delete() {
@@ -318,6 +331,22 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, rs.read
 
     }
 
+    override fun onRenameFileStart() {
+        activity.toggleLoading(true)
+    }
+
+    override fun onRenameFileEnd() {
+        activity.toggleLoading(false)
+    }
+
+    override fun onRenameFileSuccess() {
+        attachmentsPresenter.getFiles(null,null)
+    }
+
+    override fun onRenameFileError(error: Throwable?) {
+       DialogUtils.showBottomMessage(activity,error?.localizedMessage,true)
+    }
+
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     fun exportvaultFiles() {
         val selected: List<VaultFile> = attachmentsAdapter.selectedMediaFiles
@@ -343,6 +372,7 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, rs.read
     private fun showVaultInfo(){
 
     }
+
 
 
 }
