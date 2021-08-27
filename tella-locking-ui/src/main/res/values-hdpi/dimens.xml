@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="calc_key_size">60dp</dimen>
+    <dimen name="calc_key_wide">140dp</dimen>
+    <dimen name="calc_text_size">26sp</dimen>
+</resources>
