@@ -157,8 +157,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
-                            android:layout_marginTop="6dp"
                             android:layout_gravity="center_vertical"
+                            android:layout_marginTop="6dp"
                             android:text="@string/settings.prot_select_delete.vault"
                             android:textColor="@color/wa_white" />
 

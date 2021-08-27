@@ -5,17 +5,48 @@
     android:layout_height="match_parent"
     android:background="@color/dark_purple">
 
-    <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
-        android:id="@+id/offline_switch"
+    <RelativeLayout
+        android:id="@+id/offline_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_vertical_margin"
         android:background="@drawable/rounded_light_purple_background"
-        app:explainText="@string/offline_dialog.expl"
+        android:orientation="horizontal"
+        android:padding="@dimen/activity_vertical_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:titleText="@string/offline_dialog.title" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/offline_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="6dp"
+            android:text="@string/offline_dialog.title"
+            android:textColor="@color/wa_white" />
+
+        <ImageView
+            android:id="@+id/offline_tooltip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginTop="4dp"
+            android:layout_toEndOf="@id/offline_title"
+            android:contentDescription="@string/offline_dialog.expl"
+            android:src="@drawable/orange_help_24"
+            android:textColor="@color/wa_white" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/offline_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:paddingStart="0dp"
+            app:buttonTint="@color/radio_buttons_color" />
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,7 +56,7 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/offline_switch">
+        app:layout_constraintTop_toBottomOf="@+id/offline_layout">
 
         <TextView
             android:id="@+id/general_settings_button"
