@@ -85,7 +85,6 @@
                     android:layout_height="56dp"
                     android:layout_marginStart="@dimen/activity_vertical_margin"
                     android:layout_marginEnd="@dimen/activity_vertical_margin"
-
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
                     android:text="@string/settings.about_select_tutorial"
