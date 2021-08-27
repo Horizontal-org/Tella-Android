@@ -15,6 +15,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_gravity="top">
 
             <LinearLayout
@@ -24,6 +25,8 @@
                 android:layout_margin="@dimen/activity_vertical_margin"
                 android:background="@drawable/rounded_light_purple_background"
                 android:orientation="vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -32,9 +35,7 @@
                     android:id="@+id/lock_settings_button"
                     android:layout_width="wrap_content"
                     android:layout_height="56dp"
-                    android:orientation="horizontal"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/lock"
@@ -62,9 +63,7 @@
                     android:id="@+id/lock_timeout_settings_button"
                     android:layout_width="wrap_content"
                     android:layout_height="56dp"
-                    android:orientation="horizontal"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/lock_timeout"
@@ -92,9 +91,7 @@
                     android:id="@+id/camouflage_settings_button"
                     android:layout_width="wrap_content"
                     android:layout_height="56dp"
-                    android:orientation="horizontal"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/camouflage"
@@ -186,9 +183,9 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:layout_gravity="center_vertical"
                         android:gravity="center_vertical"
+                        android:orientation="horizontal"
                         android:padding="@dimen/activity_vertical_margin">
 
                         <TextView
@@ -230,8 +227,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
-                            android:layout_marginTop="6dp"
                             android:layout_gravity="center_vertical"
+                            android:layout_marginTop="6dp"
                             android:text="@string/settings.prot_select_delete.servers"
                             android:textColor="@color/wa_white"
                             app:buttonTint="@color/radio_buttons_color" />
