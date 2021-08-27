@@ -16,9 +16,10 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Test "
         android:textFontWeight="700"
+        android:textStyle="bold"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
-        android:textSize="21sp"
+        android:textSize="16sp"
         />
 
     <TextView
