@@ -84,7 +84,7 @@
             android:text="@string/settings.select_security"
             android:textAllCaps="false"
             android:textColor="@color/wa_white"
-            app:drawableStartCompat="@drawable/ic_white_lock_24" />
+            app:drawableStartCompat="@drawable/ic_secret_icon" />
 
         <View style="@style/SettingsMainShadowLine" />
 
@@ -99,7 +99,7 @@
             android:text="@string/settings.docu_dialog.title_server.settings"
             android:textAllCaps="false"
             android:textColor="@color/wa_white"
-            app:drawableStartCompat="@drawable/ic_assignment_white_24" />
+            app:drawableStartCompat="@drawable/ic_servers_icon" />
 
         <View style="@style/SettingsMainShadowLine" />
 
