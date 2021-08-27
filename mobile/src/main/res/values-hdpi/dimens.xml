@@ -5,4 +5,7 @@
     <dimen name="intro_title_text_size">20sp</dimen>
     <dimen name="intro_text_size">14sp</dimen>
     <dimen name="intro_link_text_size">16sp</dimen>
+
+    <dimen name="about_tella_icon_height">65sp</dimen>
+    <dimen name="about_tella_icon_width">60sp</dimen>
 </resources>
