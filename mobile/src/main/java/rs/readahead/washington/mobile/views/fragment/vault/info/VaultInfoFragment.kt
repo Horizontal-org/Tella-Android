@@ -13,6 +13,7 @@ import rs.readahead.washington.mobile.util.FileUtil
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.VAULT_FILE_ARG
 
+const val VAULT_FILE_INFO_TOOLBAR = "VAULT_FILE_INFO_TOOLBAR"
 class VaultInfoFragment : BaseFragment() {
     private lateinit var fileInfoTv: TextView
     private lateinit var fileSizeTv: TextView
@@ -21,6 +22,15 @@ class VaultInfoFragment : BaseFragment() {
     private lateinit var fileResolutionTv: TextView
     private lateinit var fileLengthTv: TextView
     private lateinit var filePathTv: TextView
+
+    fun newInstance(vaultFile: VaultFile,showToolbar : Boolean): VaultInfoFragment {
+        val args = Bundle()
+        args.putSerializable(VAULT_FILE_ARG,vaultFile)
+        args.putBoolean(VAULT_FILE_INFO_TOOLBAR,showToolbar)
+        val fragment = VaultInfoFragment()
+        fragment.arguments = args
+        return fragment
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,5 +61,8 @@ class VaultInfoFragment : BaseFragment() {
                  filePathTv.text = path
              }
          }
+        arguments?.getBoolean(VAULT_FILE_INFO_TOOLBAR)?.let { isToolbarShonw ->
+            view.findViewById<ToolbarComponent>(R.id.toolbar).visibility = if(isToolbarShonw) View.VISIBLE else View.GONE
+        }
     }
 }

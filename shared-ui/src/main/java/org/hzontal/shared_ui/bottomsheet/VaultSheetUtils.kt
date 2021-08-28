@@ -18,7 +18,7 @@ object VaultSheetUtils {
         fun info()
         fun delete()
     }
-
+    @JvmStatic
     fun showVaultActionsSheet(
         fragmentManager: FragmentManager,
         titleText: String?,
@@ -110,6 +110,7 @@ object VaultSheetUtils {
         }
     }
 
+    @JvmStatic
     fun showVaultRenameSheet(
         fragmentManager: FragmentManager,
         titleText: String?,

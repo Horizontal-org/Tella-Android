@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/wa_light_gray"
+    android:background="@color/space_cadet"
     android:padding="@dimen/activity_vertical_margin"
     android:textDirection="locale"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -19,8 +19,12 @@
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="@string/start_time"
-        android:textColor="@color/wa_gray"
-        android:textSize="48sp" />
+        android:textColor="@color/wa_white"
+        android:textSize="48sp"
+        android:fontFamily="@font/open_sans"
+        android:textFontWeight="300"
+        android:lineHeight="68dp"
+        />
 
     <TextView
         android:id="@+id/duration"

@@ -243,6 +243,7 @@ object BottomSheetUtils {
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.standar_sheet_layout)
+            .screenTag("ConfirmSheet")
             .cancellable(true)
         customSheetFragment.holder(GenericSheetHolder(), object :
             CustomBottomSheetFragment.Binder<GenericSheetHolder> {

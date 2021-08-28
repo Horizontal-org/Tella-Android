@@ -13,24 +13,24 @@ import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.media.MediaFileHandler
 
-class AttachmentsPresenter (val view: IAttachmentsPresenter.IView) : IAttachmentsPresenter.IPresenter  {
+class AttachmentsPresenter (val view: IAttachmentsPresenter.IView?) : IAttachmentsPresenter.IPresenter  {
     private val disposables = CompositeDisposable()
 
     override fun getFiles(filter: Filter?, sort: IVaultDatabase.Sort?) {
         disposables.add(MyApplication.rxVault.list(filter, sort, null)
             .subscribeOn(Schedulers.io())
-            .doOnSubscribe { view.onGetFilesStart() }
+            .doOnSubscribe { view?.onGetFilesStart() }
             .observeOn(AndroidSchedulers.mainThread())
-            .doFinally { view.onGetFilesEnd() }
+            .doFinally { view?.onGetFilesEnd() }
             .subscribe(
                 { vaultFile: List<VaultFile?> ->
-                    view.onGetFilesSuccess(
+                    view?.onGetFilesSuccess(
                         vaultFile
                     )
                 }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                view.onGetFilesError(throwable)
+                view?.onGetFilesError(throwable)
             })
     }
 
@@ -46,14 +46,14 @@ class AttachmentsPresenter (val view: IAttachmentsPresenter.IView) : IAttachment
     override fun renameVaultFile(id: String, name: String) {
         disposables.add(MyApplication.rxVault.rename(id,name)
             .subscribeOn(Schedulers.io())
-            .doOnSubscribe{ view.onRenameFileStart()}
+            .doOnSubscribe{ view?.onRenameFileStart()}
             .observeOn(AndroidSchedulers.mainThread())
-            .doFinally { view.onRenameFileEnd() }
+            .doFinally { view?.onRenameFileEnd() }
             .subscribe(
-                { view.onRenameFileSuccess() }
+                { view?.onRenameFileSuccess() }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                view.onRenameFileError(throwable)
+                view?.onRenameFileError(throwable)
             })
     }
 
@@ -65,10 +65,10 @@ class AttachmentsPresenter (val view: IAttachmentsPresenter.IView) : IAttachment
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { view.onMediaFileDeleted() }
+                { view?.onMediaFileDeleted() }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                view.onMediaFileDeletionError(throwable)
+                view?.onMediaFileDeletionError(throwable)
             })
     }
 
@@ -77,19 +77,19 @@ class AttachmentsPresenter (val view: IAttachmentsPresenter.IView) : IAttachment
             Single
                 .fromCallable {
                     for (mediaFile in vaultFiles) {
-                        MediaFileHandler.exportMediaFile(view.getContext(), mediaFile)
+                        MediaFileHandler.exportMediaFile(view?.getContext(), mediaFile)
                     }
                     vaultFiles.size
                 }
                 .subscribeOn(Schedulers.computation())
-                .doOnSubscribe { view.onExportStarted() }
+                .doOnSubscribe { view?.onExportStarted() }
                 .observeOn(AndroidSchedulers.mainThread())
-                .doFinally { view.onExportEnded() }
+                .doFinally { view?.onExportEnded() }
                 .subscribe(
-                    { num: Int? -> view.onMediaExported(num!!) }
+                    { num: Int? -> view?.onMediaExported(num!!) }
                 ) { throwable: Throwable? ->
                     FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                    view.onExportError(throwable)
+                    view?.onExportError(throwable)
                 }
         )
     }

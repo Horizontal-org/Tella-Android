@@ -4,14 +4,12 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.RequiresPermission
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -21,14 +19,17 @@ import com.hzontal.utils.MediaFile.isAudioFileType
 import com.hzontal.utils.MediaFile.isImageFileType
 import com.hzontal.utils.MediaFile.isVideoFileType
 import org.hzontal.shared_ui.appbar.ToolbarComponent
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
-import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnNeverAskAgain
 import permissions.dispatcher.OnPermissionDenied
-import permissions.dispatcher.RuntimePermissions
+import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.bus.EventObserver
+import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent
+import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.util.DialogsUtil
 import rs.readahead.washington.mobile.views.activity.AudioPlayActivity
@@ -41,20 +42,28 @@ import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.
 import timber.log.Timber
 
 const val VAULT_FILE_ARG = "VaultFileArg"
-class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.IGalleryVaultHandler, IAttachmentsPresenter.IView{
+
+class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener,
+    rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.IGalleryVaultHandler,
+    IAttachmentsPresenter.IView {
     private lateinit var attachmentsRecyclerView: RecyclerView
-    private val attachmentsAdapter by lazy { AttachmentsRecycleViewAdapter(activity, this,
-         MediaFileHandler(), R.layout.item_vault_attachment_hor)}
+    private val attachmentsAdapter by lazy {
+        AttachmentsRecycleViewAdapter(
+            activity, this,
+            MediaFileHandler(), R.layout.item_vault_attachment_hor
+        )
+    }
     private val attachmentsPresenter by lazy { AttachmentsPresenter(this) }
     private lateinit var gridLayoutManager: GridLayoutManager
     private lateinit var detailsFab: FloatingActionButton
     private lateinit var toolbar: ToolbarComponent
     private lateinit var listCheck: ImageView
     private lateinit var gridCheck: ImageView
-    private lateinit var emptyViewMsgContainer : LinearLayout
-    private lateinit var checkBoxList : AppCompatImageView
+    private lateinit var emptyViewMsgContainer: LinearLayout
+    private lateinit var checkBoxList: AppCompatImageView
     private var isListCheckOn = false
-    private var progressDialog : ProgressDialog? = null
+    private var progressDialog: ProgressDialog? = null
+    private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -120,10 +129,12 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, rs.read
 
         detailsFab.setOnClickListener { onFabDetailsClick() }
         toolbar.backClickListener = {
-            if (isListCheckOn){
+            if (isListCheckOn) {
                 isListCheckOn != isListCheckOn
-                updateAttachmentsToolbar() }
-            else{ nav().navigateUp() }
+                updateAttachmentsToolbar()
+            } else {
+                nav().navigateUp()
+            }
         }
         listCheck.setOnClickListener(this)
         gridCheck.setOnClickListener(this)
@@ -132,7 +143,9 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, rs.read
     }
 
     private fun initData() {
-        attachmentsPresenter.getFiles(null,null)
+        attachmentsPresenter.getFiles(null, null)
+        onFileDeletedEventListener()
+        onFileRenameEventListener()
     }
 
     private fun onFabDetailsClick() {
@@ -153,20 +166,21 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, rs.read
                 gridLayoutManager.spanCount = 1
                 attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
             }
-            R.id.checkBoxList ->{
+            R.id.checkBoxList -> {
                 isListCheckOn = !isListCheckOn
                 attachmentsAdapter.enableSelectMode(isListCheckOn)
                 updateAttachmentsToolbar()
             }
         }
     }
+
     private fun updateAttachmentsToolbar() {
         activity.invalidateOptionsMenu()
 
-        if (isListCheckOn){
+        if (isListCheckOn) {
             toolbar.setToolbarNavigationIcon(R.drawable.ic_close_white_24dp)
-            toolbar.setStartTextTitle(attachmentsAdapter.selectedMediaFiles.size.toString()+" items")
-        }else{
+            toolbar.setStartTextTitle(attachmentsAdapter.selectedMediaFiles.size.toString() + " items")
+        } else {
             toolbar.setToolbarNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
             toolbar.setStartTextTitle("")
         }
@@ -190,7 +204,7 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, rs.read
                 startActivity(intent)
             }
             else -> {
-                if (vaultFile.type == VaultFile.Type.DIRECTORY){
+                if (vaultFile.type == VaultFile.Type.DIRECTORY) {
 
                 }
             }
@@ -209,54 +223,69 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, rs.read
     }
 
     override fun onMoreClicked(vaultFile: VaultFile) {
-       VaultSheetUtils.showVaultActionsSheet(activity.supportFragmentManager,
-           vaultFile.name,
-           getString(R.string.action_upload),
-           getString(R.string.action_share),
-           getString(R.string.vault_move_to_another_folder),
-           getString(R.string.vault_rename),
-           getString(R.string.action_save),
-           getString(R.string.vault_file_information),
-           getString(R.string.action_delete),
-           action = object : VaultSheetUtils.IVaultActions {
-               override fun upload() {
-               }
-               override fun share() {
-                   MediaFileHandler.startShareActivity(activity, vaultFile, false)               }
+        VaultSheetUtils.showVaultActionsSheet(activity.supportFragmentManager,
+            vaultFile.name,
+            getString(R.string.action_upload),
+            getString(R.string.action_share),
+            getString(R.string.vault_move_to_another_folder),
+            getString(R.string.vault_rename),
+            getString(R.string.action_save),
+            getString(R.string.vault_file_information),
+            getString(R.string.action_delete),
+            action = object : VaultSheetUtils.IVaultActions {
+                override fun upload() {
+                }
 
-               override fun move() {
-               }
+                override fun share() {
+                    MediaFileHandler.startShareActivity(activity, vaultFile, false)
+                }
 
-               override fun rename() {
-                   VaultSheetUtils.showVaultRenameSheet(
-                       activity.supportFragmentManager,
-                       getString(R.string.vault_rename_file),
-                       getString(R.string.action_cancel),
-                       getString(R.string.action_ok),
-                       activity,
-                       vaultFile.name
-                   ) {
-                       attachmentsPresenter.renameVaultFile(vaultFile.id, it) }
-               }
+                override fun move() {
+                }
 
-               override fun save() {
-               }
+                override fun rename() {
+                    VaultSheetUtils.showVaultRenameSheet(
+                        activity.supportFragmentManager,
+                        getString(R.string.vault_rename_file),
+                        getString(R.string.action_cancel),
+                        getString(R.string.action_ok),
+                        activity,
+                        vaultFile.name
+                    ) {
+                        attachmentsPresenter.renameVaultFile(vaultFile.id, it)
+                    }
+                }
 
-               override fun info() {
-                   vaultFile.let {
-                   val bundle = Bundle()
-                   bundle.putSerializable(VAULT_FILE_ARG,it)
-                    nav().navigate(R.id.action_attachments_screen_to_info_screen,bundle)
-                   }
-               }
+                override fun save() {
+                }
 
-               override fun delete() {
-                   attachmentsPresenter.deleteVaultFile(vaultFile)
-               }
+                override fun info() {
+                    vaultFile.let {
+                        val bundle = Bundle()
+                        bundle.putSerializable(VAULT_FILE_ARG, it)
+                        nav().navigate(R.id.action_attachments_screen_to_info_screen, bundle)
+                    }
+                }
 
-           }
+                override fun delete() {
+                    showConfirmSheet(
+                        activity.supportFragmentManager,
+                        getString(R.string.vault_delete_file),
+                        getString(R.string.vault_delete_file_msg),
+                        getString(R.string.action_delete),
+                        getString(R.string.action_cancel),
+                        consumer = object : ActionConfirmed {
+                            override fun accept(isConfirmed: Boolean) {
+                                attachmentsPresenter.deleteVaultFile(vaultFile)
+                            }
+                        }
+                    )
 
-       )
+                }
+
+            }
+
+        )
     }
 
     override fun onGetFilesStart() {
@@ -266,14 +295,14 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, rs.read
     }
 
     override fun onGetFilesSuccess(files: List<VaultFile?>) {
-        if(files.isEmpty()){
+        if (files.isEmpty()) {
             attachmentsRecyclerView.visibility = View.GONE
             emptyViewMsgContainer.visibility = View.VISIBLE
-        }else{
+        } else {
             attachmentsRecyclerView.visibility = View.VISIBLE
             emptyViewMsgContainer.visibility = View.GONE
         }
-            attachmentsAdapter.setFiles(files)
+        attachmentsAdapter.setFiles(files)
     }
 
     override fun onGetFilesError(error: Throwable?) {
@@ -299,17 +328,22 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, rs.read
     }
 
     override fun onMediaFilesDeleted(num: Int) {
+        attachmentsPresenter.getFiles(null, null)
     }
 
     override fun onMediaFilesDeletionError(throwable: Throwable?) {
     }
 
     override fun onMediaFileDeleted() {
-        attachmentsPresenter.getFiles(null,null)
+        attachmentsPresenter.getFiles(null, null)
     }
 
     override fun onMediaFileDeletionError(throwable: Throwable?) {
-        DialogUtils.showBottomMessage(activity,getString(R.string.gallery_toast_fail_deleting_files),true)
+        DialogUtils.showBottomMessage(
+            activity,
+            getString(R.string.gallery_toast_fail_deleting_files),
+            true
+        )
     }
 
     override fun onMediaExported(num: Int) {
@@ -347,11 +381,11 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, rs.read
     }
 
     override fun onRenameFileSuccess() {
-        attachmentsPresenter.getFiles(null,null)
+        attachmentsPresenter.getFiles(null, null)
     }
 
     override fun onRenameFileError(error: Throwable?) {
-       DialogUtils.showBottomMessage(activity,error?.localizedMessage,true)
+        DialogUtils.showBottomMessage(activity, error?.localizedMessage, true)
     }
 
     @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -398,6 +432,24 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener, rs.read
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
+    private fun onFileDeletedEventListener() {
+        disposables.wire(
+            MediaFileDeletedEvent::class.java,
+            object : EventObserver<MediaFileDeletedEvent?>() {
+                override fun onNext(event: MediaFileDeletedEvent) {
+                    onMediaFilesDeleted(1)
+                }
+            })
+    }
+    private fun onFileRenameEventListener() {
+        disposables.wire(
+            VaultFileRenameEvent::class.java,
+            object : EventObserver<VaultFileRenameEvent?>() {
+                override fun onNext(event: VaultFileRenameEvent) {
+                    onRenameFileSuccess()
+                }
+            })
+    }
 
 
 }

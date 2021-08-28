@@ -13,12 +13,14 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <androidx.appcompat.widget.Toolbar
+        <org.hzontal.shared_ui.appbar.ToolbarComponent
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:arrowBackIcon="@drawable/ic_back_white"
+            />
 
     </com.google.android.material.appbar.AppBarLayout>
 

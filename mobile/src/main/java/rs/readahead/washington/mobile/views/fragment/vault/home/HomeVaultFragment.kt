@@ -1,5 +1,7 @@
 package rs.readahead.washington.mobile.views.fragment.vault.home
 
+import android.content.Intent
+import android.media.AudioRecord
 import android.os.Bundle
 import android.view.*
 import android.widget.RelativeLayout
@@ -14,6 +16,7 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.entity.XFormEntity
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
+import rs.readahead.washington.mobile.views.activity.AudioRecordActivity2
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.custom.CountdownTextView
@@ -78,7 +81,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> {
-               nav().navigate(R.id.main_settings)
+               //nav().navigate(R.id.main_settings)
+                startActivity(Intent(activity, AudioRecordActivity2::class.java))
                 return true
             }
             R.id.action_close -> {

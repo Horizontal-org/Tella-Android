@@ -8,7 +8,7 @@
         android:visible="false"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/menu_item_export"
+        android:id="@+id/menu_item_more"
         android:icon="@drawable/ic_more"
         android:title="@string/gallery_action.desc_save.to.device"
         app:showAsAction="ifRoom" />
