@@ -11,6 +11,8 @@ import com.hzontal.tella_vault.Vault;
 import com.hzontal.tella_vault.VaultException;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.database.VaultDataSource;
+import com.hzontal.tella_vault.filter.Limits;
+import com.hzontal.tella_vault.filter.Sort;
 
 import org.hzontal.tella.keys.key.LifecycleMainKey;
 
@@ -89,11 +91,11 @@ public class RxVault extends BaseVault {
         });
     }
 
-    public Single<List<VaultFile>> list(Filter filter, IVaultDatabase.Sort sort, IVaultDatabase.Limits limits) {
+    public Single<List<VaultFile>> list(Filter filter, Sort sort, Limits limits) {
         return list(null, filter, sort, limits);
     }
 
-    public Single<List<VaultFile>> list(VaultFile parent, Filter filter, IVaultDatabase.Sort sort, IVaultDatabase.Limits limits) {
+    public Single<List<VaultFile>> list(VaultFile parent, Filter filter, Sort sort, Limits limits) {
         return Single.defer(() -> {
             try {
                 return Single.just(baseList(parent, filter, sort, limits));

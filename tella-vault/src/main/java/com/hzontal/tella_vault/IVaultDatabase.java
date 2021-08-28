@@ -1,5 +1,9 @@
 package com.hzontal.tella_vault;
 
+
+import com.hzontal.tella_vault.filter.Limits;
+import com.hzontal.tella_vault.filter.Sort;
+
 import java.util.List;
 
 public interface IVaultDatabase {
@@ -16,21 +20,5 @@ public interface IVaultDatabase {
 
     interface IVaultFileDeleter {
         boolean delete(VaultFile vaultFile);
-    }
-
-
-    class Limits {
-        public int offset;
-        public int limit;
-    }
-
-    class Sort {
-        public enum Direction {
-            ASC,
-            DESC;
-        }
-
-        public Direction direction;
-        public String property;
     }
 }

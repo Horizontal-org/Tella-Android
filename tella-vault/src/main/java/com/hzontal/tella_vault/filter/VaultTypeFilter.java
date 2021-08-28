@@ -1,4 +1,4 @@
-package com.hzontal.filter;
+package com.hzontal.tella_vault.filter;
 
 
 import android.annotation.SuppressLint;
@@ -6,7 +6,6 @@ import android.annotation.SuppressLint;
 import androidx.annotation.NonNull;
 
 import com.hzontal.tella_vault.Filter;
-import com.hzontal.tella_vault.IVaultDatabase;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.utils.MediaFile;
 

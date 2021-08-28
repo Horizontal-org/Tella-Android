@@ -16,7 +16,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.hzontal.filter.VaultTypeFilter;
+import com.hzontal.tella_vault.filter.Sort;
+import com.hzontal.tella_vault.filter.VaultTypeFilter;
 import com.hzontal.tella_vault.Filter;
 import com.hzontal.tella_vault.IVaultDatabase;
 import com.hzontal.tella_vault.VaultFile;
@@ -107,7 +108,7 @@ public class GalleryActivity extends MetadataActivity implements
     private AlertDialog alertDialog;
     private ProgressDialog progressDialog;
     private final VaultTypeFilter filter = new VaultTypeFilter();
-    private final IVaultDatabase.Sort sort = new IVaultDatabase.Sort();
+    private final Sort sort = new Sort();
     private final ViewType type = ViewType.EDIT;
     private long numOfTUServers;
 
@@ -130,7 +131,7 @@ public class GalleryActivity extends MetadataActivity implements
             adding = getIntent().getBooleanExtra(GALLERY_ALLOWS_ADDING, false);
         }
 
-        sort.direction = IVaultDatabase.Sort.Direction.ASC;
+        sort.direction = Sort.Direction.ASC;
 
         if (getIntent().hasExtra(GALLERY_FILTER)) {
             filter.filterType = Filter.FilterType.valueOf(getIntent().getStringExtra(GALLERY_FILTER));
@@ -745,7 +746,7 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     private void addAttachmentsAttachment(VaultFile vaultFile) {
-        if (sort.direction == IVaultDatabase.Sort.Direction.ASC) {
+        if (sort.direction == Sort.Direction.ASC) {
             attachmentsAdapter.prependAttachment(vaultFile);
             attachmentsLayoutManager.scrollToPosition(0);
         } else {
@@ -790,7 +791,7 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
 
-    private void setCheckedSort(IVaultDatabase.Sort checkedSort, PopupMenu popup) {
+    private void setCheckedSort(Sort checkedSort, PopupMenu popup) {
         if (popup.getMenu().findItem(getSortId(checkedSort)) != null) {
             popup.getMenu().findItem(getSortId(checkedSort)).setChecked(true);
         }
@@ -820,12 +821,12 @@ public class GalleryActivity extends MetadataActivity implements
 
     }
 
-    public IVaultDatabase.Sort.Direction getGallerySort(final int id) {
+    public Sort.Direction getGallerySort(final int id) {
         if (id == R.id.oldest) {
-            return IVaultDatabase.Sort.Direction.ASC;
+            return Sort.Direction.ASC;
         }
 
-        return IVaultDatabase.Sort.Direction.DESC;
+        return Sort.Direction.DESC;
     }
 
     @IdRes
@@ -843,8 +844,8 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     @IdRes
-    public int getSortId(IVaultDatabase.Sort sort) {
-        if (sort.direction == IVaultDatabase.Sort.Direction.ASC) {
+    public int getSortId(Sort sort) {
+        if (sort.direction == Sort.Direction.ASC) {
             return R.id.oldest;
         }
 

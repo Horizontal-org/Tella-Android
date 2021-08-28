@@ -5,6 +5,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.Filter
 import com.hzontal.tella_vault.IVaultDatabase
 import com.hzontal.tella_vault.VaultFile
+import com.hzontal.tella_vault.filter.Sort
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -16,7 +17,7 @@ import rs.readahead.washington.mobile.media.MediaFileHandler
 class AttachmentsPresenter (val view: IAttachmentsPresenter.IView?) : IAttachmentsPresenter.IPresenter  {
     private val disposables = CompositeDisposable()
 
-    override fun getFiles(filter: Filter?, sort: IVaultDatabase.Sort?) {
+    override fun getFiles(filter: Filter?, sort: Sort?) {
         disposables.add(MyApplication.rxVault.list(filter, sort, null)
             .subscribeOn(Schedulers.io())
             .doOnSubscribe { view?.onGetFilesStart() }

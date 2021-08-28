@@ -17,7 +17,9 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
-import com.hzontal.filter.VaultTypeFilter;
+import com.hzontal.tella_vault.filter.Limits;
+import com.hzontal.tella_vault.filter.Sort;
+import com.hzontal.tella_vault.filter.VaultTypeFilter;
 import com.hzontal.tella_vault.IVaultDatabase;
 import com.hzontal.tella_vault.VaultException;
 import com.hzontal.tella_vault.VaultFile;
@@ -536,10 +538,10 @@ public class MediaFileHandler {
     }
 
     public static Observable<List<VaultFile>> getLastVaultFileFromDb() {
-        IVaultDatabase.Limits limits = new IVaultDatabase.Limits();
+        Limits limits = new Limits();
         limits.limit = 2;
-        IVaultDatabase.Sort sort = new IVaultDatabase.Sort();
-        sort.direction = IVaultDatabase.Sort.Direction.DESC;
+        Sort sort = new Sort();
+        sort.direction = Sort.Direction.DESC;
         return MyApplication.rxVault.list(null, new VaultTypeFilter(), sort, limits)
                 .toObservable();
     }
