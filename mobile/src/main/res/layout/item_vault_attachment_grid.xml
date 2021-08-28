@@ -42,51 +42,16 @@
         android:layout_marginBottom="3dp"
         />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/more"
-        android:layout_marginStart="4dp"
         app:layout_constraintStart_toEndOf="@id/fileNameTextView"
         app:layout_constraintBottom_toBottomOf="@id/fileNameTextView"
         app:layout_constraintTop_toTopOf="@id/fileNameTextView"
-
+        android:background="@drawable/ic_more"
         >
-        <ImageView
-            android:layout_width="2dp"
-            android:layout_height="2dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/dotTwo"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/ic_dot"
-            android:id="@+id/dotOne"
-            >
-        </ImageView>
-
-        <ImageView
-            android:layout_width="2dp"
-            android:layout_height="2dp"
-            app:layout_constraintTop_toBottomOf="@id/dotOne"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/ic_dot"
-            android:layout_marginTop="1dp"
-            android:id="@+id/dotTwo"
-            />
-
-        <ImageView
-            android:layout_width="2dp"
-            android:layout_height="2dp"
-            app:layout_constraintTop_toBottomOf="@id/dotTwo"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/ic_dot"
-            android:layout_marginTop="1dp"
-            android:id="@+id/dotThree"
-            />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+    </ImageView>
     <ImageView
         android:id="@+id/checkbox_type_single"
         android:layout_width="wrap_content"

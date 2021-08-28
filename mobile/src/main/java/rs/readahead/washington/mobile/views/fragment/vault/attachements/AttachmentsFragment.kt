@@ -50,7 +50,7 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener,
     private val attachmentsAdapter by lazy {
         AttachmentsRecycleViewAdapter(
             activity, this,
-            MediaFileHandler(), R.layout.item_vault_attachment_hor
+            MediaFileHandler(),gridLayoutManager
         )
     }
     private val attachmentsPresenter by lazy { AttachmentsPresenter(this) }
@@ -158,12 +158,14 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener,
                 gridCheck.toggleVisibility(false)
                 listCheck.toggleVisibility(true)
                 gridLayoutManager.spanCount = 4
+                attachmentsAdapter.setLayoutManager(gridLayoutManager);
                 attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
             }
             R.id.listCheck -> {
                 gridCheck.toggleVisibility(true)
                 listCheck.toggleVisibility(false)
                 gridLayoutManager.spanCount = 1
+                attachmentsAdapter.setLayoutManager(gridLayoutManager);
                 attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
             }
             R.id.checkBoxList -> {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,41 +29,60 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
+import rs.readahead.washington.mobile.util.DateUtil;
 import rs.readahead.washington.mobile.util.Util;
 
-
+enum ViewType {
+    SMALL,
+    DETAILED
+}
 public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<AttachmentsRecycleViewAdapter.ViewHolder> {
     private List<VaultFile> files = new ArrayList<>();
     private VaultFileUrlLoader glideLoader;
     private IGalleryVaultHandler galleryMediaHandler;
     private Set<VaultFile> selected;
-    private int cardLayoutId;
     private boolean selectable;
     private boolean singleSelection;
+    private GridLayoutManager layoutManager;
 
 
     public AttachmentsRecycleViewAdapter(Context context, IGalleryVaultHandler galleryMediaHandler,
-                                         MediaFileHandler mediaFileHandler, @LayoutRes int cardLayoutId) {
-        this(context, galleryMediaHandler, mediaFileHandler, cardLayoutId, false, false);
+                                         MediaFileHandler mediaFileHandler, GridLayoutManager layoutManager) {
+        this(context, galleryMediaHandler, mediaFileHandler, layoutManager, false, false);
     }
 
     public AttachmentsRecycleViewAdapter(Context context, IGalleryVaultHandler galleryMediaHandler,
-                                         MediaFileHandler mediaFileHandler, @LayoutRes int cardLayoutId,
+                                         MediaFileHandler mediaFileHandler,  GridLayoutManager layoutManager,
                                          boolean selectable,
                                          boolean singleSelection) {
         this.glideLoader = new VaultFileUrlLoader(context.getApplicationContext(), mediaFileHandler);
         this.galleryMediaHandler = galleryMediaHandler;
         this.selected = new LinkedHashSet<>();
-        this.cardLayoutId = cardLayoutId;
         this.selectable = selectable;
         this.singleSelection = singleSelection;
+        this.layoutManager = layoutManager;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(cardLayoutId, parent,false);
-        return new ViewHolder(v, this.selectable);
+        if (viewType == ViewType.SMALL.ordinal()){
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_vault_attachment_grid, parent,false);
+            return new ViewHolder(v, this.selectable);
+        }else {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_vault_attachment_hor, parent,false);
+            return new ViewHolder(v, this.selectable);
+        }
+
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+         return layoutManager.getSpanCount() == 1 ? ViewType.DETAILED.ordinal() : ViewType.SMALL.ordinal();
+    }
+
+    public void setLayoutManager(GridLayoutManager layoutManager) {
+        this.layoutManager = layoutManager;
     }
 
     @Override
@@ -102,6 +122,9 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
         holder.mediaView.setOnClickListener(v -> galleryMediaHandler.playMedia(vaultFile));
 
         holder.checkBox.setOnClickListener(v -> checkboxClickHandler(holder, vaultFile));
+        if (holder instanceof ListViewHolder) {
+            ( (ListViewHolder) holder).setFileDateTextView(vaultFile);
+        }
     }
 
     @Override
@@ -197,6 +220,8 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
         TextView fileName;
         @BindView(R.id.more)
         ImageView more;
+        @BindView(R.id.icAttachmentImg)
+        ImageView icAttachmentImg;
 
         public ViewHolder(View itemView, boolean selectable) {
             super(itemView);
@@ -204,11 +229,11 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
         }
 
         void showVideoInfo(VaultFile vaultFile) {
-            mediaView.setBackgroundResource(R.drawable.ic_play);
+            icAttachmentImg.setBackgroundResource(R.drawable.ic_play);
         }
 
         void showAudioInfo(VaultFile vaultFile) {
-            mediaView.setBackgroundResource(R.drawable.ic_audio_w_small);
+            icAttachmentImg.setBackgroundResource(R.drawable.ic_audio_w_small);
         }
 
         void showImageInfo() {
@@ -232,4 +257,25 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
             checkBox.setEnabled(selectable);
         }
     }
+
+    static class GridViewHolder extends ViewHolder{
+
+        public GridViewHolder(View itemView, boolean selectable) {
+            super(itemView, selectable);
+        }
+    }
+
+    static class ListViewHolder extends ViewHolder{
+        @BindView(R.id.fileDateTextView)
+        TextView fileDateTextView;
+
+        public ListViewHolder(View itemView, boolean selectable) {
+            super(itemView, selectable);
+        }
+
+        public void setFileDateTextView(VaultFile vaultFile){
+            fileDateTextView.setText(DateUtil.getDate(vaultFile.created));
+        }
+    }
+
 }
