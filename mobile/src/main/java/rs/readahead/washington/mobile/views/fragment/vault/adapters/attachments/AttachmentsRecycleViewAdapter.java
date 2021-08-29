@@ -112,7 +112,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
         } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
             holder.showAudioInfo(vaultFile);
             Drawable drawable = VectorDrawableCompat.create(holder.itemView.getContext().getResources(),
-                    R.drawable.ic_mic_gray, null);
+                    R.drawable.ic_audio_w_small, null);
             holder.mediaView.setImageDrawable(drawable);
         } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
             holder.showVideoInfo(vaultFile);

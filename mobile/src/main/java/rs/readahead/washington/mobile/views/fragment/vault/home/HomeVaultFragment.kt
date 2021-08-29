@@ -13,13 +13,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
+import com.hzontal.tella_vault.filter.Limits
+import com.hzontal.tella_vault.filter.Sort
+import com.hzontal.utils.MediaFile
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.entity.XFormEntity
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
-import rs.readahead.washington.mobile.views.activity.AudioRecordActivity2
-import rs.readahead.washington.mobile.views.activity.GalleryActivity
-import rs.readahead.washington.mobile.views.activity.MainActivity
+import rs.readahead.washington.mobile.views.activity.*
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.custom.CountdownTextView
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultAdapter
@@ -72,6 +73,15 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         timerDuration = resources.getInteger(R.integer.panic_countdown_duration)
 
     }
+
+    private fun getFiles(){
+        val sort = Sort()
+        sort.direction = Sort.Direction.ASC
+        sort.type = Sort.Type.DATE
+        val limits = Limits()
+        limits.limit = 5
+        homeVaultPresenter.getRecentFiles(FilterType.ALL, sort,limits)
+    }
     private fun initListeners(){
         panicModeView.setOnClickListener { onPanicClicked() }
     }
@@ -102,6 +112,23 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     override fun onRecentFilesItemClickListener(vaultFile: VaultFile) {
+        when {
+            MediaFile.isImageFileType(vaultFile.mimeType) -> {
+                val intent = Intent(activity, PhotoViewerActivity::class.java)
+                intent.putExtra(PhotoViewerActivity.VIEW_PHOTO, vaultFile)
+                startActivity(intent)
+            }
+            MediaFile.isAudioFileType(vaultFile.mimeType) -> {
+                val intent = Intent(activity, AudioPlayActivity::class.java)
+                intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, vaultFile.id)
+                startActivity(intent)
+            }
+            MediaFile.isVideoFileType(vaultFile.mimeType) -> {
+                val intent = Intent(activity, VideoViewerActivity::class.java)
+                intent.putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile)
+                startActivity(intent)
+            }
+            }
     }
 
     override fun onFavoriteItemClickListener(form: XFormEntity) {
@@ -147,6 +174,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     override fun onResume() {
         super.onResume()
+        getFiles()
         setupPanicView()
         if (panicActivated) {
             showPanicScreens()
@@ -207,6 +235,16 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     override fun onCountCollectServersFailed(throwable: Throwable?) {
+    }
+
+    override fun onGetFilesSuccess(files: List<VaultFile?>) {
+        if (!files.isNullOrEmpty()){
+            vaultAdapter.addRecentFiles(files)
+        }
+    }
+
+    override fun onGetFilesError(error: Throwable?) {
+
     }
 
     private fun navigateToAttachmentsList(bundle: Bundle?){

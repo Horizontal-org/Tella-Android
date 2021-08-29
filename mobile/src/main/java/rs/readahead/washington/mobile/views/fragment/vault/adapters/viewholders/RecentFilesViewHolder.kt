@@ -10,10 +10,10 @@ import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.BaseViewHolder
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.inflate
 
-class RecentFilesViewHolder  constructor(val view : View) : BaseViewHolder<List<VaultFile>>(view) {
+class RecentFilesViewHolder  constructor(val view : View) : BaseViewHolder<List<VaultFile?>>(view) {
     private lateinit var recentFilesRecyclerView : RecyclerView
 
-    override fun bind(item: List<VaultFile>, vaultClickListener: VaultClickListener) {
+    override fun bind(item: List<VaultFile?>, vaultClickListener: VaultClickListener) {
         recentFilesRecyclerView = view.findViewById(R.id.recentFilesRecyclerView)
         recentFilesRecyclerView.apply {
             adapter = RecentAttachmentAdapter(item,vaultClickListener)

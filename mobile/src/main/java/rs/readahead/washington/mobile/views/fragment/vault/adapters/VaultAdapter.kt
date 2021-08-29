@@ -56,7 +56,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
         }
     }
 
-    fun addRecentFiles(vaultFiles: List<VaultFile>) {
+    fun addRecentFiles(vaultFiles: List<VaultFile?>) {
         recentFiles = listOf(DataItem.RecentFiles(vaultFiles))
         renderList()
     }
