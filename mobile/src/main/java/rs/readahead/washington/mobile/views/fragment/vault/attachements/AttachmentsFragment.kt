@@ -17,6 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.hzontal.tella_locking_ui.common.extensions.toggleVisibility
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
+import com.hzontal.tella_vault.filter.Sort
 import com.hzontal.utils.MediaFile.isAudioFileType
 import com.hzontal.utils.MediaFile.isImageFileType
 import com.hzontal.utils.MediaFile.isVideoFileType
@@ -70,7 +71,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private var isListCheckOn = false
     private var progressDialog: ProgressDialog? = null
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
-    private var filterType = FilterType.ALL;
+    private var filterType = FilterType.ALL
+    private lateinit var sort: Sort
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -159,10 +161,16 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
          arguments?.getString(VAULT_FILTER)?.let {
              filterType  =  FilterType.valueOf(it)
         }
+        initSorting()
         setToolbarLabel()
-        attachmentsPresenter.getFiles(filterType, null)
+        attachmentsPresenter.getFiles(filterType, sort)
         onFileDeletedEventListener()
         onFileRenameEventListener()
+    }
+    private fun initSorting(){
+        sort = Sort()
+        sort.type = Sort.Type.NAME
+        sort.direction = Sort.Direction.ASC
     }
 
     private fun onFabDetailsClick() {
@@ -191,7 +199,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 updateAttachmentsToolbar()
             }
             R.id.filterNameTv ->{
-                attachmentsAdapter.sortListByDate()
+                handleSortSheet()
             }
         }
     }
@@ -471,6 +479,47 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                     onRenameFileSuccess()
                 }
             })
+    }
+    private fun handleSortSheet(){
+        VaultSheetUtils.showVaultSortSheet(
+            activity.supportFragmentManager,
+            getString(R.string.gallery_subheading_sort_by),
+            getString(R.string.vault_sort_name_asc),
+            getString(R.string.vault_sort_name_desc),
+            getString(R.string.vault_sort_date_asc),
+            getString(R.string.vault_sort_date_desc),
+            sort = object : VaultSheetUtils.IVaultSortActions {
+                override fun onSortDateASC() {
+                    filterNameTv.text = getString(R.string.vault_sort_date_asc)
+                    sort.type = Sort.Type.DATE
+                    sort.direction = Sort.Direction.ASC
+                    attachmentsPresenter.getFiles(filterType, sort)
+                }
+
+                override fun onSortDateDESC() {
+                    filterNameTv.text = getString(R.string.vault_sort_date_desc)
+                    sort.type = Sort.Type.DATE
+                    sort.direction = Sort.Direction.DESC
+                    attachmentsPresenter.getFiles(filterType, sort)
+                }
+
+                override fun onSortNameDESC() {
+                    filterNameTv.text = getString(R.string.vault_sort_name_desc)
+                    sort.type = Sort.Type.NAME
+                    sort.direction = Sort.Direction.DESC
+                    attachmentsPresenter.getFiles(filterType, sort)
+                }
+
+                override fun onSortNameASC() {
+                    filterNameTv.text = getString(R.string.vault_sort_name_asc)
+                    sort.type = Sort.Type.NAME
+                    sort.direction = Sort.Direction.ASC
+                    attachmentsPresenter.getFiles(filterType, sort)
+                }
+
+            }
+
+        )
     }
 
 

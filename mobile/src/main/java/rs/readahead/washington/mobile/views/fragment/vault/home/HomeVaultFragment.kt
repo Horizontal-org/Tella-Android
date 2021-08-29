@@ -174,7 +174,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     override fun onResume() {
         super.onResume()
-        getFiles()
         setupPanicView()
         if (panicActivated) {
             showPanicScreens()
@@ -182,6 +181,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         } else {
             maybeClosePanic()
         }
+        getFiles()
     }
 
     private fun maybeClosePanic(): Boolean {

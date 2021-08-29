@@ -27,4 +27,9 @@
     <string name="vault_delete_files_msg" translatable="false">The selected files will be permanently delated from Tella.</string>
     <string name="vault_delete_file" translatable="false">Delete file?</string>
     <string name="vault_delete_file_msg" translatable="false">The selected file will be permanently delated from Tella.</string>
+    <string name="vault_sort_by" translatable="false">Sort by</string>
+    <string name="vault_sort_name_asc" translatable="false">Name A > Z</string>
+    <string name="vault_sort_name_desc" translatable="false">Name Z > A</string>
+    <string name="vault_sort_date_asc" translatable="false">Newest to oldest</string>
+    <string name="vault_sort_date_desc" translatable="false">Oldest to newest</string>
 </resources>

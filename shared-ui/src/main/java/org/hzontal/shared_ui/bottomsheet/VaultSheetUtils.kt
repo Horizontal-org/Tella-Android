@@ -3,6 +3,8 @@ package org.hzontal.shared_ui.bottomsheet
 import android.app.Activity
 import android.view.View
 import android.widget.EditText
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import org.hzontal.shared_ui.R
@@ -167,6 +169,86 @@ object VaultSheetUtils {
             actionCancel = view.findViewById(R.id.standard_sheet_cancel_btn)
             title = view.findViewById(R.id.standard_sheet_title)
             renameEditText = view.findViewById(R.id.renameEditText)
+        }
+    }
+
+
+
+    interface IVaultSortActions {
+        fun onSortDateASC()
+        fun onSortDateDESC()
+        fun onSortNameDESC()
+        fun onSortNameASC()
+    }
+    @JvmStatic
+    fun showVaultSortSheet(
+        fragmentManager: FragmentManager,
+        titleText: String?,
+        filterNameAZ: String?,
+        filterNameZA: String,
+        filterASC: String,
+        filterDESC: String,
+        sort: IVaultSortActions
+    ) {
+        val vaultSortSheet = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.layout_sort_vault)
+            .screenTag("vaultSortSheet")
+            .cancellable(true)
+        vaultSortSheet.holder(VaultSortSheetHolder(), object :
+            CustomBottomSheetFragment.Binder<VaultSortSheetHolder> {
+            override fun onBind(holder: VaultSortSheetHolder) {
+                with(holder) {
+                    title.text = titleText
+                    //Sort NAME A-Z action
+                    radioBtnNameAZ.text = filterNameAZ
+                    //Sort NAME Z-A action
+                    radioBtnNameZA.text = filterNameZA
+                    //Sort DATE ASC
+                    radioBtnASC.text = filterASC
+                    //Sort DATE DESC
+                    radioBtnDESC.text = filterDESC
+
+                    radioGroup.setOnCheckedChangeListener { radioGroup, checkedId ->
+                        when (radioGroup.checkedRadioButtonId) {
+                            R.id.radioBtnNameAZ -> {
+                                vaultSortSheet.dismiss()
+                                sort.onSortNameASC()
+                            }
+                            R.id.radioBtnNameZA -> {
+                                vaultSortSheet.dismiss()
+                                sort.onSortNameDESC()
+                            }
+                            R.id.radioBtnDESC -> {
+                                vaultSortSheet.dismiss()
+                                sort.onSortDateDESC()
+                            }
+                            R.id.radioBtnASC -> {
+                                vaultSortSheet.dismiss()
+                                sort.onSortDateASC()
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        vaultSortSheet.transparentBackground()
+        vaultSortSheet.launch()
+    }
+    class VaultSortSheetHolder : CustomBottomSheetFragment.PageHolder() {
+        lateinit var title: TextView
+        lateinit var radioBtnNameAZ : RadioButton
+        lateinit var radioBtnNameZA : RadioButton
+        lateinit var radioBtnASC : RadioButton
+        lateinit var radioBtnDESC : RadioButton
+        lateinit var radioGroup: RadioGroup
+
+        override fun bindView(view: View) {
+            radioBtnNameAZ = view.findViewById(R.id.radioBtnNameAZ)
+            radioBtnNameZA = view.findViewById(R.id.radioBtnNameZA)
+            radioBtnASC = view.findViewById(R.id.radioBtnASC)
+            radioBtnDESC = view.findViewById(R.id.radioBtnDESC)
+            radioGroup = view.findViewById(R.id.radio_list)
+            title = view.findViewById(R.id.standard_sheet_title)
         }
     }
 
