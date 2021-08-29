@@ -2,14 +2,13 @@ package rs.readahead.washington.mobile.views.fragment.vault.attachements
 
 import android.net.Uri
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.hzontal.tella_vault.Filter
-import com.hzontal.tella_vault.IVaultDatabase
+import com.hzontal.tella_vault.filter.Filter
 import com.hzontal.tella_vault.VaultFile
+import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Sort
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.media.MediaFileHandler
@@ -17,8 +16,8 @@ import rs.readahead.washington.mobile.media.MediaFileHandler
 class AttachmentsPresenter (val view: IAttachmentsPresenter.IView?) : IAttachmentsPresenter.IPresenter  {
     private val disposables = CompositeDisposable()
 
-    override fun getFiles(filter: Filter?, sort: Sort?) {
-        disposables.add(MyApplication.rxVault.list(filter, sort, null)
+    override fun getFiles(filterType: FilterType?, sort: Sort?) {
+        disposables.add(MyApplication.rxVault.list(filterType, sort, null)
             .subscribeOn(Schedulers.io())
             .doOnSubscribe { view?.onGetFilesStart() }
             .observeOn(AndroidSchedulers.mainThread())

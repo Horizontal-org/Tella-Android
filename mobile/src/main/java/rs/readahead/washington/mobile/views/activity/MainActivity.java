@@ -672,19 +672,12 @@ public class MainActivity extends MetadataActivity implements
     }
 
     public void hideBottomNavigation() {
-        if (btmNavMain.getVisibility() == View.VISIBLE && btmNavMain.getAlpha() == 1f) {
-            btmNavMain.animate()
-                    .alpha(0f)
-                    .withEndAction(() -> btmNavMain.setVisibility(View.GONE))
-                    .setDuration(1000);
-        }
+        btmNavMain.setVisibility(View.GONE);
     }
 
     public void showBottomNavigation() {
         btmNavMain.setVisibility(View.VISIBLE);
-        btmNavMain.animate()
-                .alpha(1f)
-                .setDuration(1000);
+
     }
 
     @Override

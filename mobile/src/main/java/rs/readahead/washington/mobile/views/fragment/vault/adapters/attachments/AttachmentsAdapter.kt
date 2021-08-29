@@ -130,6 +130,7 @@ class AttachmentsAdapter constructor(private val iGalleryMediaHandler: IGalleryV
         notifyDataSetChanged()
     }
 
+
     inner class AttachmentsViewHolder(view: View)  : BaseAttachmentViewHolder(view){
 
         constructor(parent: ViewGroup)

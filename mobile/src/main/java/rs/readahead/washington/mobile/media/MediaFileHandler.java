@@ -16,13 +16,17 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
+import androidx.core.content.FileProvider;
+import androidx.exifinterface.media.ExifInterface;
+
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
-import com.hzontal.tella_vault.filter.Limits;
-import com.hzontal.tella_vault.filter.Sort;
-import com.hzontal.tella_vault.filter.VaultTypeFilter;
-import com.hzontal.tella_vault.IVaultDatabase;
 import com.hzontal.tella_vault.VaultException;
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.tella_vault.filter.Limits;
+import com.hzontal.tella_vault.filter.Sort;
 import com.hzontal.utils.MediaFile;
 
 import org.apache.commons.io.IOUtils;
@@ -44,11 +48,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.WorkerThread;
-import androidx.core.content.FileProvider;
-import androidx.exifinterface.media.ExifInterface;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -542,7 +541,7 @@ public class MediaFileHandler {
         limits.limit = 2;
         Sort sort = new Sort();
         sort.direction = Sort.Direction.DESC;
-        return MyApplication.rxVault.list(null, new VaultTypeFilter(), sort, limits)
+        return MyApplication.rxVault.list(null, null, sort, limits)
                 .toObservable();
     }
 

@@ -12,7 +12,8 @@ import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.fragment.app.FragmentManager
 import org.hzontal.shared_ui.R
 
-object BottomSheetUtils {
+object
+BottomSheetUtils {
 
     @JvmStatic
     fun showStandardSheet(

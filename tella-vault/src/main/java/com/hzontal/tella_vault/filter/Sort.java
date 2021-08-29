@@ -5,7 +5,12 @@ public class Sort {
             ASC,
             DESC;
         }
+        public enum Type{
+            DATE,
+            NAME
+        }
 
         public Direction direction;
+        public Type type;
         public String property;
     }

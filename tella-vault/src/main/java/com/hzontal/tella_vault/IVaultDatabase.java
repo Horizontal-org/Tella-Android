@@ -1,6 +1,8 @@
 package com.hzontal.tella_vault;
 
 
+import com.hzontal.tella_vault.filter.Filter;
+import com.hzontal.tella_vault.filter.FilterType;
 import com.hzontal.tella_vault.filter.Limits;
 import com.hzontal.tella_vault.filter.Sort;
 
@@ -9,7 +11,7 @@ import java.util.List;
 public interface IVaultDatabase {
     VaultFile getRootVaultFile();
     VaultFile create(String parentId, VaultFile file);
-    List<VaultFile> list(VaultFile parent, Filter filter, Sort sort, Limits limits);
+    List<VaultFile> list(VaultFile parent, FilterType filter, Sort sort, Limits limits);
     VaultFile updateMetadata(VaultFile vaultFile, Metadata metadata);
     VaultFile completeVaultOutputStream(VaultFile vaultFile);
     VaultFile get(String id);

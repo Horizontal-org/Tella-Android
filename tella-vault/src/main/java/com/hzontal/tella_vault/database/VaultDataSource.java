@@ -5,12 +5,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.hzontal.tella_vault.Filter;
 import com.hzontal.tella_vault.IVaultDatabase;
 import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.tella_vault.filter.Filter;
+import com.hzontal.tella_vault.filter.FilterType;
 import com.hzontal.tella_vault.filter.Limits;
 import com.hzontal.tella_vault.filter.Sort;
 
@@ -20,7 +23,6 @@ import net.sqlcipher.database.SQLiteQueryBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.Nullable;
 import timber.log.Timber;
 
 
@@ -88,23 +90,17 @@ public class VaultDataSource implements IVaultDatabase {
     }
 
     @Override
-    public List<VaultFile> list(@Nullable VaultFile parent, @Nullable Filter filter, @Nullable Sort sort, @Nullable Limits limits) {
+    public List<VaultFile> list(@Nullable VaultFile parent, @Nullable FilterType filterType, @Nullable Sort sort, @Nullable Limits limits) {
         List<VaultFile> vaultFiles = new ArrayList<>();
 
-        String direction = Sort.Direction.ASC.name();
         String limit = null;
         String where;
         Cursor cursor = null;
 
-        if (sort != null) {
-            direction = sort.direction.name();
-        }
-
         if (limits != null) {
             limit = String.valueOf(limits.limit);
         }
-
-        where = cn(D.T_VAULT_FILE, D.C_PARENT_ID) + " = '" + (parent != null ? parent.id : ROOT_UID) + "'";
+        where = getFilterQuery(filterType,(parent != null ? parent.id : ROOT_UID)) ;
 
         try {
             // todo: add support for filter directly in query
@@ -129,7 +125,7 @@ public class VaultDataSource implements IVaultDatabase {
                     where,
                     null,
                     null,
-                    D.C_CREATED + " " + direction,
+                    getSortQuery(sort),
                     limit
             );
 
@@ -145,6 +141,15 @@ public class VaultDataSource implements IVaultDatabase {
         }
 
         return vaultFiles;
+    }
+
+    private String getSortQuery(Sort sort) {
+        if (sort == null)
+            return D.C_NAME + " " + Sort.Direction.ASC.name();
+
+        if (sort.type.name().equals(Sort.Type.DATE.name()))
+            return D.C_CREATED + " " + sort.direction.name();
+        else return D.C_NAME + " " + sort.direction.name();
     }
 
     public VaultFile updateMetadata(VaultFile vaultFile, Metadata metadata) {
@@ -203,7 +208,7 @@ public class VaultDataSource implements IVaultDatabase {
     }
 
     @Override
-    public VaultFile rename(String id,String name) {
+    public VaultFile rename(String id, String name) {
         ContentValues values = new ContentValues();
 
         values.put(D.C_NAME, name);
@@ -269,9 +274,32 @@ public class VaultDataSource implements IVaultDatabase {
         return table + "." + column;
     }
 
+    private String getFilterQuery(FilterType filter,String parentId) {
+        if (filter == null)
+            return  cn(D.T_VAULT_FILE, D.C_PARENT_ID) + " = '" + parentId+ "'" ;
+
+        switch (filter) {
+            case AUDIO:
+                return cn(D.T_VAULT_FILE, D.C_MIME_TYPE) + " = '" + "audio/aac'";
+            case VIDEO:
+                return cn(D.T_VAULT_FILE, D.C_MIME_TYPE) + " = '" + "video/mp4'";
+            case PHOTO:
+                return cn(D.T_VAULT_FILE, D.C_MIME_TYPE) + " = '" + "image/jpeg'";
+            case OTHERS:
+                return cn(D.T_VAULT_FILE, D.C_TYPE) + " = '" + VaultFile.Type.DIRECTORY +"'";
+            case DOCUMENTS:
+                return cn(D.T_VAULT_FILE, D.C_MIME_TYPE) + " != '" + "image/jpeg'" + " && " + cn(D.T_VAULT_FILE, D.C_MIME_TYPE) + " != '" + "audio/aac'"
+                        + " && " + cn(D.T_VAULT_FILE, D.C_MIME_TYPE) + " != '" + "video/mp4" + " && " + cn(D.T_VAULT_FILE, D.C_TYPE) + " != '" + VaultFile.Type.DIRECTORY +"'";
+            default:
+                return  cn(D.T_VAULT_FILE, D.C_PARENT_ID) + " = '" + parentId+ "'" ;
+
+        }
+    }
+
     private String cn(String table, String column, String as) {
         return table + "." + column + " AS " + as;
     }
+
     private void deleteTable(String table) {
         database.execSQL("DELETE FROM " + table);
     }

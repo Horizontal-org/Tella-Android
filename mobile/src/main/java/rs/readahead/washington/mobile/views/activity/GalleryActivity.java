@@ -15,16 +15,6 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.hzontal.tella_vault.filter.Sort;
-import com.hzontal.tella_vault.filter.VaultTypeFilter;
-import com.hzontal.tella_vault.Filter;
-import com.hzontal.tella_vault.IVaultDatabase;
-import com.hzontal.tella_vault.VaultFile;
-import com.hzontal.utils.MediaFile;
-
-import java.util.List;
-
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -34,6 +24,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.tella_vault.filter.Filter;
+import com.hzontal.tella_vault.filter.Sort;
+import com.hzontal.utils.MediaFile;
+
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -107,7 +106,7 @@ public class GalleryActivity extends MetadataActivity implements
     private int selectedNum;
     private AlertDialog alertDialog;
     private ProgressDialog progressDialog;
-    private final VaultTypeFilter filter = new VaultTypeFilter();
+    //private final VaultTypeFilter filter = new VaultTypeFilter();
     private final Sort sort = new Sort();
     private final ViewType type = ViewType.EDIT;
     private long numOfTUServers;
@@ -134,7 +133,7 @@ public class GalleryActivity extends MetadataActivity implements
         sort.direction = Sort.Direction.ASC;
 
         if (getIntent().hasExtra(GALLERY_FILTER)) {
-            filter.filterType = Filter.FilterType.valueOf(getIntent().getStringExtra(GALLERY_FILTER));
+            //filter.filterType = Filter.FilterType.valueOf(getIntent().getStringExtra(GALLERY_FILTER));
         }
 
         setupToolbar();
@@ -174,7 +173,7 @@ public class GalleryActivity extends MetadataActivity implements
             animator.setRemoveDuration(120);
         }
 
-        presenter.getFiles(filter, sort);
+        //presenter.getFiles(filter, sort);
     }
 
     private void setupToolbar() {
@@ -430,7 +429,7 @@ public class GalleryActivity extends MetadataActivity implements
 
             case C.CAMERA_CAPTURE:
             case C.RECORDED_AUDIO:
-                presenter.getFiles(filter, sort);
+                //presenter.getFiles(filter, sort);
                 break;
         }
     }
@@ -488,7 +487,7 @@ public class GalleryActivity extends MetadataActivity implements
     @Override
     public void onMediaFilesAdded(VaultFile vaultFile) {
         showToast(R.string.gallery_toast_file_imported_from_device);
-        presenter.getFiles(filter, sort);
+       // presenter.getFiles(filter, sort);
     }
 
     @Override
@@ -499,7 +498,7 @@ public class GalleryActivity extends MetadataActivity implements
     @Override
     public void onMediaFilesDeleted(int num) {
         showToast(getResources().getQuantityString(R.plurals.gallery_toast_files_deleted, num, num));
-        presenter.getFiles(filter, sort);
+       // presenter.getFiles(filter, sort);
     }
 
     @Override
@@ -775,7 +774,7 @@ public class GalleryActivity extends MetadataActivity implements
         popup.show();
 
         setCheckedSort(sort, popup);
-        setCheckedFilter(filter, popup);
+      //  setCheckedFilter(filter, popup);
 
         popup.setOnMenuItemClickListener(item -> {
             item.setChecked(true);
@@ -783,9 +782,9 @@ public class GalleryActivity extends MetadataActivity implements
             if (item.getGroupId() == R.id.sort) {
                 sort.direction = getGallerySort(item.getItemId());
             } else {
-                filter.filterType = getGalleryFilter(item.getItemId());
+              //  filter.filterType = getGalleryFilter(item.getItemId());
             }
-            presenter.getFiles(filter, sort);
+           // presenter.getFiles(filter, sort);
             return true;
         });
     }
@@ -797,13 +796,13 @@ public class GalleryActivity extends MetadataActivity implements
         }
     }
 
-    private void setCheckedFilter(VaultTypeFilter checkedFilter, PopupMenu popup) {
+   /* private void setCheckedFilter(VaultTypeFilter checkedFilter, PopupMenu popup) {
         if (popup.getMenu().findItem(getFilterId(checkedFilter.filterType)) != null) {
             popup.getMenu().findItem(getFilterId(checkedFilter.filterType)).setChecked(true);
         }
-    }
+    }*/
 
-    @SuppressLint("NonConstantResourceId")
+  /*  @SuppressLint("NonConstantResourceId")
     public Filter.FilterType getGalleryFilter(final int id) {
         switch (id) {
             case R.id.photo:
@@ -819,7 +818,7 @@ public class GalleryActivity extends MetadataActivity implements
                 return Filter.FilterType.ALL;
         }
 
-    }
+    }*/
 
     public Sort.Direction getGallerySort(final int id) {
         if (id == R.id.oldest) {
@@ -829,7 +828,7 @@ public class GalleryActivity extends MetadataActivity implements
         return Sort.Direction.DESC;
     }
 
-    @IdRes
+   /* @IdRes
     public int getFilterId(Filter.FilterType filter) {
         switch (filter) {
             case PHOTO:
@@ -841,7 +840,7 @@ public class GalleryActivity extends MetadataActivity implements
             default:
                 return R.id.all;
         }
-    }
+    }*/
 
     @IdRes
     public int getSortId(Sort sort) {

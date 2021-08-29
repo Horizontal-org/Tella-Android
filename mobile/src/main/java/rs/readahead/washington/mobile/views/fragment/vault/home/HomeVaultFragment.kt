@@ -12,17 +12,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.hzontal.tella_vault.VaultFile
+import com.hzontal.tella_vault.filter.FilterType
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.entity.XFormEntity
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.views.activity.AudioRecordActivity2
+import rs.readahead.washington.mobile.views.activity.GalleryActivity
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.custom.CountdownTextView
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
 
+const val VAULT_FILTER = "vf"
 class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresenter.IView  {
     private lateinit var toolbar: Toolbar
     private lateinit var collapsingToolbar: CollapsingToolbarLayout
@@ -33,6 +36,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private var panicActivated = false
     private val vaultAdapter by lazy { VaultAdapter(this) }
     private lateinit var homeVaultPresenter: HomeVaultPresenter
+    private  val bundle by lazy {Bundle()}
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -104,24 +108,35 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     override fun allFilesClickListener() {
-        nav().navigate(R.id.action_homeScreen_to_attachments_screen)
+        bundle.putString(VAULT_FILTER,FilterType.ALL.name)
+        navigateToAttachmentsList(bundle)
     }
 
     override fun imagesClickListener() {
+        bundle.putString(VAULT_FILTER,FilterType.PHOTO.name)
+        navigateToAttachmentsList(bundle)
     }
 
     override fun audioClickListener() {
+        bundle.putString(VAULT_FILTER,FilterType.AUDIO.name)
+        navigateToAttachmentsList(bundle)
     }
 
     override fun documentsClickListener() {
+        bundle.putString(VAULT_FILTER,FilterType.DOCUMENTS.name)
+        navigateToAttachmentsList(bundle)
     }
 
     override fun othersClickListener() {
-
+        bundle.putString(VAULT_FILTER,FilterType.OTHERS.name)
+        navigateToAttachmentsList(bundle)
     }
 
     override fun videoClickListener() {
+        bundle.putString(VAULT_FILTER,FilterType.VIDEO.name)
+        navigateToAttachmentsList(bundle)
     }
+
 
     private fun stopPanicking() {
         countDownTextView.cancel()
@@ -192,6 +207,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     override fun onCountCollectServersFailed(throwable: Throwable?) {
+    }
+
+    private fun navigateToAttachmentsList(bundle: Bundle?){
+        nav().navigate(R.id.action_homeScreen_to_attachments_screen,bundle)
     }
 
 }

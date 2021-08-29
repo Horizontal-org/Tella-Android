@@ -13,9 +13,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.hzontal.tella_vault.Filter;
-import com.hzontal.tella_vault.IVaultDatabase;
+import com.hzontal.tella_vault.filter.Filter;
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.tella_vault.filter.FilterType;
 
 import java.util.Collections;
 import java.util.List;
@@ -437,7 +437,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     private void openRecordings() {
         Intent intent = new Intent(this, GalleryActivity.class);
-        intent.putExtra(GalleryActivity.GALLERY_FILTER, Filter.FilterType.AUDIO.name());
+        intent.putExtra(GalleryActivity.GALLERY_FILTER, FilterType.AUDIO.name());
         intent.putExtra(GalleryActivity.GALLERY_ALLOWS_ADDING, false);
         startActivity(intent);
     }

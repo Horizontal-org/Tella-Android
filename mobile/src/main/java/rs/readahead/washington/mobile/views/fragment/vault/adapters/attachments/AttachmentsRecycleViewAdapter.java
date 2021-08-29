@@ -18,7 +18,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.utils.MediaFile;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,11 +34,13 @@ import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.DateUtil;
 import rs.readahead.washington.mobile.util.Util;
+import rs.readahead.washington.mobile.util.helper.OrderType;
 
 enum ViewType {
     SMALL,
     DETAILED
 }
+
 public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<AttachmentsRecycleViewAdapter.ViewHolder> {
     private List<VaultFile> files = new ArrayList<>();
     private VaultFileUrlLoader glideLoader;
@@ -168,6 +173,15 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
         notifyItemChanged(files.indexOf(vaultFile));
     }
 
+    public void sortListByDate(){
+        Collections.sort(files, OrderType.NAME.getComparator());
+        notifyDataSetChanged();
+    }
+
+    public void sortListByName(){
+
+    }
+
     private void checkboxClickHandler(ViewHolder holder, VaultFile vaultFile) {
         if (selected.contains(vaultFile)) {
             selected.remove(vaultFile);
@@ -196,6 +210,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
             galleryMediaHandler.onMediaDeselected(selection);
         }
     }
+
     private void onMoreSelected(ViewHolder holder, VaultFile vaultFile){
         holder.more.setOnClickListener(v -> { galleryMediaHandler.onMoreClicked(vaultFile);});
     }

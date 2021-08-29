@@ -4,9 +4,9 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
-import com.hzontal.tella_vault.Filter;
-import com.hzontal.tella_vault.IVaultDatabase;
+import com.hzontal.tella_vault.filter.Filter;
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.tella_vault.filter.FilterType;
 import com.hzontal.tella_vault.filter.Sort;
 
 import java.util.ArrayList;
@@ -38,8 +38,8 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
     }
 
     @Override
-    public void getFiles(final Filter filter, final Sort sort) {
-        disposables.add(MyApplication.rxVault.list(filter, sort, null)
+    public void getFiles(final FilterType filterType, final Sort sort) {
+        disposables.add(MyApplication.rxVault.list(filterType, sort, null)
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> view.onGetFilesStart())
                 .observeOn(AndroidSchedulers.mainThread())

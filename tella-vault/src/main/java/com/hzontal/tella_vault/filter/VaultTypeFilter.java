@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 
 import androidx.annotation.NonNull;
 
-import com.hzontal.tella_vault.Filter;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.utils.MediaFile;
 
@@ -33,11 +32,6 @@ public class VaultTypeFilter implements Filter {
 
             case VIDEO:
                 return vaultFile.mimeType != null && MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType);
-            case WITH_METADATA:
-                return vaultFile.metadata != null;
-
-            case WITHOUT_METADATA:
-                return vaultFile.metadata == null;
             default:
                 return !vaultFile.id.equals("1");
         }

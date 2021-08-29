@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.annotation.RequiresPermission
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.GridLayoutManager
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.hzontal.tella_locking_ui.common.extensions.toggleVisibility
 import com.hzontal.tella_vault.VaultFile
+import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.utils.MediaFile.isAudioFileType
 import com.hzontal.utils.MediaFile.isImageFileType
 import com.hzontal.utils.MediaFile.isVideoFileType
@@ -36,14 +38,17 @@ import rs.readahead.washington.mobile.views.activity.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity
 import rs.readahead.washington.mobile.views.activity.VideoViewerActivity
+import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.base_ui.BaseToolbarFragment
 import rs.readahead.washington.mobile.views.custom.SpacesItemDecoration
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.AttachmentsRecycleViewAdapter
+import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
+import rs.readahead.washington.mobile.views.settings.OnFragmentSelected
 import timber.log.Timber
 
 const val VAULT_FILE_ARG = "VaultFileArg"
 
-class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener,
+class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.IGalleryVaultHandler,
     IAttachmentsPresenter.IView {
     private lateinit var attachmentsRecyclerView: RecyclerView
@@ -59,11 +64,13 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener,
     private lateinit var toolbar: ToolbarComponent
     private lateinit var listCheck: ImageView
     private lateinit var gridCheck: ImageView
+    private lateinit var filterNameTv: TextView
     private lateinit var emptyViewMsgContainer: LinearLayout
     private lateinit var checkBoxList: AppCompatImageView
     private var isListCheckOn = false
     private var progressDialog: ProgressDialog? = null
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
+    private var filterType = FilterType.ALL;
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -100,14 +107,17 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener,
         }
     }
 
-    override fun setToolbarLabel(labelRes: Int) {
-
+    private fun setToolbarLabel() {
+        when(filterType){
+            FilterType.PHOTO -> toolbar.setStartTextTitle("Images")
+            FilterType.VIDEO -> toolbar.setStartTextTitle("Videos")
+            FilterType.AUDIO -> toolbar.setStartTextTitle("Audios")
+            FilterType.DOCUMENTS -> toolbar.setStartTextTitle("Documents")
+            FilterType.OTHERS -> toolbar.setStartTextTitle("Others")
+            FilterType.ALL -> toolbar.setStartTextTitle("All files")
+        }
     }
-
-    override fun setToolbarHomeIcon(iconRes: Int) {
-    }
-
-    override fun setUpToolbar() {
+     private fun setUpToolbar() {
         val activity = context as MainActivity
         activity.setSupportActionBar(toolbar)
     }
@@ -118,6 +128,7 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener,
         listCheck = view.findViewById(R.id.listCheck)
         gridCheck = view.findViewById(R.id.gridCheck)
         emptyViewMsgContainer = view.findViewById(R.id.emptyViewMsgContainer)
+        filterNameTv = view.findViewById(R.id.filterNameTv)
         toolbar = view.findViewById(R.id.toolbar)
         gridLayoutManager = GridLayoutManager(activity, 1)
         attachmentsRecyclerView.apply {
@@ -139,11 +150,17 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener,
         listCheck.setOnClickListener(this)
         gridCheck.setOnClickListener(this)
         checkBoxList.setOnClickListener(this)
+        filterNameTv.setOnClickListener(this)
+        setUpToolbar()
         initData()
     }
 
     private fun initData() {
-        attachmentsPresenter.getFiles(null, null)
+         arguments?.getString(VAULT_FILTER)?.let {
+             filterType  =  FilterType.valueOf(it)
+        }
+        setToolbarLabel()
+        attachmentsPresenter.getFiles(filterType, null)
         onFileDeletedEventListener()
         onFileRenameEventListener()
     }
@@ -172,6 +189,9 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener,
                 isListCheckOn = !isListCheckOn
                 attachmentsAdapter.enableSelectMode(isListCheckOn)
                 updateAttachmentsToolbar()
+            }
+            R.id.filterNameTv ->{
+                attachmentsAdapter.sortListByDate()
             }
         }
     }
@@ -330,14 +350,14 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener,
     }
 
     override fun onMediaFilesDeleted(num: Int) {
-        attachmentsPresenter.getFiles(null, null)
+        attachmentsPresenter.getFiles(filterType, null)
     }
 
     override fun onMediaFilesDeletionError(throwable: Throwable?) {
     }
 
     override fun onMediaFileDeleted() {
-        attachmentsPresenter.getFiles(null, null)
+        attachmentsPresenter.getFiles(filterType, null)
     }
 
     override fun onMediaFileDeletionError(throwable: Throwable?) {
@@ -383,7 +403,7 @@ class AttachmentsFragment : BaseToolbarFragment(), View.OnClickListener,
     }
 
     override fun onRenameFileSuccess() {
-        attachmentsPresenter.getFiles(null, null)
+        attachmentsPresenter.getFiles(filterType, null)
     }
 
     override fun onRenameFileError(error: Throwable?) {
