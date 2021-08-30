@@ -135,7 +135,7 @@ public class MainActivity extends MetadataActivity implements
         assert navHostFragment != null;
         navController = navHostFragment.getNavController();
         btmNavMain = findViewById(R.id.btm_nav_main);
-        AppBarConfiguration appBarConfiguration =
+        appBarConfiguration =
                 new AppBarConfiguration.Builder(R.id.homeScreen, R.id.cameraScreen, R.id.reportsScreen, R.id.micScreen, R.id.formScreen).build();
         NavigationUI.setupWithNavController(btmNavMain, navController);
         navController.addOnDestinationChangedListener((navController1, navDestination, bundle) -> {

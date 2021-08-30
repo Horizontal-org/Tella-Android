@@ -95,8 +95,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> {
-               //nav().navigate(R.id.main_settings)
-                startActivity(Intent(activity, AudioRecordActivity2::class.java))
+               nav().navigate(R.id.main_settings)
                 return true
             }
             R.id.action_close -> {
