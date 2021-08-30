@@ -208,7 +208,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         countDownTextView.start(
             timerDuration
         ) {
-            homeVaultPresenter.executePanicMode()
+            executePanicMode()
         }
     }
 
@@ -217,6 +217,13 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             vaultAdapter.addPanicMode()
         } else {
             vaultAdapter.hidePanicMode()
+        }
+    }
+    private fun executePanicMode() {
+        try {
+            homeVaultPresenter.executePanicMode()
+        } catch (ignored: Throwable) {
+            panicActivated = true
         }
     }
    private fun onPanicClicked() {

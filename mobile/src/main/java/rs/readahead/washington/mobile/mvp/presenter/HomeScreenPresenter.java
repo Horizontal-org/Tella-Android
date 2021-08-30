@@ -87,7 +87,6 @@ public class HomeScreenPresenter implements IHomeScreenPresenterContract.IPresen
 
     @Override
     public void countCollectServers() {
-
         disposable.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
