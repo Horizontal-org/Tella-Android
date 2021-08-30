@@ -4,14 +4,16 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.annotation.RequiresPermission
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -27,8 +29,6 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
-import permissions.dispatcher.OnNeverAskAgain
-import permissions.dispatcher.OnPermissionDenied
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.EventObserver
@@ -43,14 +43,13 @@ import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity
 import rs.readahead.washington.mobile.views.activity.VideoViewerActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
-import rs.readahead.washington.mobile.views.base_ui.BaseToolbarFragment
 import rs.readahead.washington.mobile.views.custom.SpacesItemDecoration
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.AttachmentsRecycleViewAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
-import rs.readahead.washington.mobile.views.settings.OnFragmentSelected
 import timber.log.Timber
 
 const val VAULT_FILE_ARG = "VaultFileArg"
+const val WRITE_REQUEST_CODE = 1002
 
 class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.IGalleryVaultHandler,
@@ -59,7 +58,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private val attachmentsAdapter by lazy {
         AttachmentsRecycleViewAdapter(
             activity, this,
-            MediaFileHandler(),gridLayoutManager
+            MediaFileHandler(), gridLayoutManager
         )
     }
     private val attachmentsPresenter by lazy { AttachmentsPresenter(this) }
@@ -76,6 +75,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
     private var filterType = FilterType.ALL
     private lateinit var sort: Sort
+    private var vaultFile: VaultFile? = null
+    private var isSelectModeOn = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -106,6 +107,11 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             }
 
             R.id.action_upload -> {
+                if (hasStoragePermissions(activity)) {
+                    exportVaultFiles()
+                } else {
+                    requestStoragePermissions(WRITE_REQUEST_CODE)
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -113,7 +119,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     private fun setToolbarLabel() {
-        when(filterType){
+        when (filterType) {
             FilterType.PHOTO -> toolbar.setStartTextTitle("Images")
             FilterType.VIDEO -> toolbar.setStartTextTitle("Videos")
             FilterType.AUDIO -> toolbar.setStartTextTitle("Audios")
@@ -122,7 +128,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             FilterType.ALL -> toolbar.setStartTextTitle("All files")
         }
     }
-     private fun setUpToolbar() {
+
+    private fun setUpToolbar() {
         val activity = context as MainActivity
         activity.setSupportActionBar(toolbar)
     }
@@ -142,27 +149,26 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         }
         detailsFab = view.findViewById(R.id.fab_button)
         checkBoxList = view.findViewById(R.id.checkBoxList)
-
         detailsFab.setOnClickListener(this)
-        toolbar.backClickListener = {
-            if (isListCheckOn) {
-                isListCheckOn != isListCheckOn
-                updateAttachmentsToolbar()
-            } else {
-                nav().navigateUp()
-            }
-        }
         listCheck.setOnClickListener(this)
         gridCheck.setOnClickListener(this)
         checkBoxList.setOnClickListener(this)
         filterNameTv.setOnClickListener(this)
+        toolbar.backClickListener = {
+            if (attachmentsAdapter.selectedMediaFiles.size>0){
+                attachmentsAdapter.clearSelected()
+                updateAttachmentsToolbar(false)
+            }else{
+                nav().navigateUp()
+            }
+        }
         setUpToolbar()
         initData()
     }
 
     private fun initData() {
-         arguments?.getString(VAULT_FILTER)?.let {
-             filterType  =  FilterType.valueOf(it)
+        arguments?.getString(VAULT_FILTER)?.let {
+            filterType = FilterType.valueOf(it)
         }
         initSorting()
         setToolbarLabel()
@@ -170,14 +176,11 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         onFileDeletedEventListener()
         onFileRenameEventListener()
     }
-    private fun initSorting(){
+
+    private fun initSorting() {
         sort = Sort()
         sort.type = Sort.Type.NAME
         sort.direction = Sort.Direction.ASC
-    }
-
-    private fun onFabDetailsClick() {
-
     }
 
     override fun onClick(v: View?) {
@@ -199,9 +202,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             R.id.checkBoxList -> {
                 isListCheckOn = !isListCheckOn
                 attachmentsAdapter.enableSelectMode(isListCheckOn)
-                updateAttachmentsToolbar()
             }
-            R.id.filterNameTv ->{
+            R.id.filterNameTv -> {
                 handleSortSheet()
             }
             R.id.fab_button -> {
@@ -215,15 +217,15 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         }
     }
 
-    private fun updateAttachmentsToolbar() {
+    private fun updateAttachmentsToolbar(isItemsChecked : Boolean) {
         activity.invalidateOptionsMenu()
 
-        if (isListCheckOn) {
+        if (isItemsChecked) {
             toolbar.setToolbarNavigationIcon(R.drawable.ic_close_white_24dp)
             toolbar.setStartTextTitle(attachmentsAdapter.selectedMediaFiles.size.toString() + " items")
         } else {
             toolbar.setToolbarNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
-            toolbar.setStartTextTitle("")
+            setToolbarLabel()
         }
     }
 
@@ -256,11 +258,11 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     override fun onMediaSelected(vaultFile: VaultFile) {
-        updateAttachmentsToolbar()
+        updateAttachmentsToolbar(!attachmentsAdapter.selectedMediaFiles.isNullOrEmpty())
     }
 
     override fun onMediaDeselected(vaultFile: VaultFile) {
-        updateAttachmentsToolbar()
+        updateAttachmentsToolbar(!attachmentsAdapter.selectedMediaFiles.isNullOrEmpty())
     }
 
     override fun onMoreClicked(vaultFile: VaultFile) {
@@ -298,6 +300,12 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 }
 
                 override fun save() {
+                    this@AttachmentsFragment.vaultFile = vaultFile
+                    if (hasStoragePermissions(activity)) {
+                        exportVaultFile(vaultFile)
+                    } else {
+                        requestStoragePermissions(WRITE_REQUEST_CODE)
+                    }
                 }
 
                 override fun info() {
@@ -358,13 +366,14 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     override fun onImportStarted() {
+
     }
 
     override fun onImportEnded() {
     }
 
     override fun onMediaFilesAdded(vaultFile: VaultFile?) {
-        attachmentsPresenter.getFiles(filterType,sort)
+        attachmentsPresenter.getFiles(filterType, sort)
     }
 
     override fun onMediaFilesAddingError(error: Throwable?) {
@@ -431,22 +440,12 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         DialogUtils.showBottomMessage(activity, error?.localizedMessage, true)
     }
 
-    @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    fun onWriteExternalStoragePermissionDenied() {
-    }
-
-    @OnNeverAskAgain(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    fun onWriteExternalStorageNeverAskAgain() {
-    }
-
-    @RequiresPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     fun exportVaultFiles() {
         val selected: List<VaultFile> = attachmentsAdapter.selectedMediaFiles
         attachmentsPresenter.exportMediaFiles(selected)
     }
 
-    @RequiresPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    fun exportVaultFile(vaultFile: VaultFile) {
+    private fun exportVaultFile(vaultFile: VaultFile) {
         attachmentsPresenter.exportMediaFiles(arrayListOf(vaultFile))
     }
 
@@ -459,6 +458,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     private fun startShareActivity(includeMetadata: Boolean) {
         val selected: List<VaultFile> = attachmentsAdapter.selectedMediaFiles
+        if (selected.isNullOrEmpty()) return
         if (selected.size > 1) {
             MediaFileHandler.startShareActivity(activity, selected, includeMetadata)
         } else {
@@ -473,6 +473,17 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == WRITE_REQUEST_CODE) {
+            context?.let {
+                if (hasStoragePermissions(it)) {
+                    if (attachmentsAdapter.selectedMediaFiles.size == 0)
+                        vaultFile?.let { it1 -> exportVaultFile(it1) }
+                    else
+                        exportVaultFiles()
+                }
+
+            }
+        }
     }
 
     private fun onFileDeletedEventListener() {
@@ -484,6 +495,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 }
             })
     }
+
     private fun onFileRenameEventListener() {
         disposables.wire(
             VaultFileRenameEvent::class.java,
@@ -493,7 +505,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 }
             })
     }
-    private fun handleSortSheet(){
+
+    private fun handleSortSheet() {
         VaultSheetUtils.showVaultSortSheet(
             activity.supportFragmentManager,
             getString(R.string.gallery_subheading_sort_by),
@@ -539,6 +552,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         return requestCode == C.START_CAMERA_CAPTURE ||
                 requestCode == C.START_AUDIO_RECORD
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (!isLocationSettingsRequestCode(requestCode) && resultCode != Activity.RESULT_OK) {
@@ -568,7 +582,28 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             }
             C.CAMERA_CAPTURE, C.RECORDED_AUDIO -> {
             }
+            WRITE_REQUEST_CODE -> {
+                vaultFile?.let { exportVaultFile(vaultFile = it) }
+            }
         }
+    }
+
+    fun hasStoragePermissions(context: Context): Boolean {
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+        )
+            return true
+        return false
+    }
+
+    fun requestStoragePermissions(requestCode: Int) {
+        requestPermissions(
+            arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ), requestCode
+        )
     }
 
 

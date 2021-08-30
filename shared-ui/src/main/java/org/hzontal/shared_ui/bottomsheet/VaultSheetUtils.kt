@@ -36,6 +36,7 @@ object VaultSheetUtils {
         val vaultActionSheet = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.vault_actions_sheet_layout)
             .cancellable(true)
+            .screenTag("vaultActionSheet")
         vaultActionSheet.holder(VaultActionsSheetHolder(), object :
             CustomBottomSheetFragment.Binder<VaultActionsSheetHolder> {
             override fun onBind(holder: VaultActionsSheetHolder) {

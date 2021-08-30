@@ -73,10 +73,10 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == ViewType.SMALL.ordinal()){
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_vault_attachment_grid, parent,false);
-            return new ViewHolder(v, this.selectable);
+            return new GridViewHolder(v, this.selectable);
         }else {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_vault_attachment_hor, parent,false);
-            return new ViewHolder(v, this.selectable);
+            return new ListViewHolder(v, this.selectable);
         }
 
     }
