@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.util;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
+
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -17,8 +18,9 @@ import rs.readahead.washington.mobile.views.activity.SplashActivity;
 public class CamouflageManager {
     private static CamouflageManager instance;
     private static final String defaultAlias = SplashActivity.class.getCanonicalName();
-    private List<CamouflageOption> options;
+    private final List<CamouflageOption> options;
 
+    public final CamouflageOption calculatorOption = new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calculator, R.string.settings_camo_calculator2);
 
     public synchronized static CamouflageManager getInstance() {
         if (instance == null) {
@@ -38,9 +40,8 @@ public class CamouflageManager {
         options.add(new CamouflageOption(getOptionAlias("Weather"), R.drawable.weather, R.string.settings_camo_weather1));
         options.add(new CamouflageOption(getOptionAlias("WeatherNow"), R.drawable.weather_now, R.string.settings_camo_weather3));
         options.add(new CamouflageOption(getOptionAlias("LocalWeather"), R.drawable.local_weather, R.string.settings_camo_weather2));
-        options.add(new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calculator, R.string.settings_camo_calculator2));
+        //options.add(new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calculator, R.string.settings_camo_calculator2));
         options.add(new CamouflageOption(getOptionAlias("EasyMath"), R.drawable.easy_math, R.string.settings_camo_calculator1));
-
     }
 
     public boolean setLauncherActivityAlias(@NonNull Context context, @NonNull String activityAlias) {
@@ -52,7 +53,10 @@ public class CamouflageManager {
         PackageManager packageManager = context.getPackageManager();
         String packageName = context.getApplicationContext().getPackageName();
 
-        for (CamouflageOption option: options) {
+        List<CamouflageOption> fullOptions = new ArrayList<>(options);
+        fullOptions.add(calculatorOption);
+
+        for (CamouflageOption option : fullOptions) {
             packageManager.setComponentEnabledSetting(
                     new ComponentName(packageName, option.alias),
                     option.alias.equals(activityAlias) ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED :
@@ -128,6 +132,9 @@ public class CamouflageManager {
 
     public CharSequence getLauncherName(@NonNull Context context) {
         try {
+            if (isDefaultLauncherActivityAlias()) {
+                return context.getString(R.string.settings_lang_select_default);
+            }
             return context.getResources().getString(context.getPackageManager().getActivityInfo(getLauncherComponentName(context), 0).labelRes);
         } catch (PackageManager.NameNotFoundException e) {
             return context.getResources().getString(R.string.settings_camo_error_fail_retrieve_app_name);

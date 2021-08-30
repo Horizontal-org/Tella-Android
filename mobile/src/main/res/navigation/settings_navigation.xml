@@ -41,6 +41,22 @@
             app:popEnterAnim="@anim/slide_in_end"
             app:popExitAnim="@anim/slide_out_start">
         </action>
+        <action
+            android:id="@+id/action_main_settings_to_hide_tella"
+            app:destination="@id/hide_tella"
+            app:enterAnim="@anim/slide_in_end"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/slide_in_end"
+            app:popExitAnim="@anim/slide_out_end">
+        </action>
+        <action
+            android:id="@+id/action_main_settings_to_camouflage_change_or_remove"
+            app:destination="@id/camouflage_change_or_remove"
+            app:enterAnim="@anim/slide_in_end"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/slide_in_end"
+            app:popExitAnim="@anim/slide_out_end">
+        </action>
     </fragment>
 
     <fragment
@@ -83,5 +99,47 @@
         android:name="rs.readahead.washington.mobile.views.settings.LanguageSettings"
         android:label="fragment_language_settings"
         tools:layout="@layout/fragment_language_settings">
+    </fragment>
+
+    <fragment
+        android:id="@+id/camouflage_name_logo"
+        android:name="rs.readahead.washington.mobile.views.settings.CamouflageNameAndLogo"
+        android:label="fragment_name_logo"
+        tools:layout="@layout/fragment_name_and_logo">
+    </fragment>
+
+    <fragment
+        android:id="@+id/camouflage_change_or_remove"
+        android:name="rs.readahead.washington.mobile.views.settings.ChangeRemoveCamouflage"
+        android:label="fragment_camouflage_change_or_remove"
+        tools:layout="@layout/fragment_change_remove_camouflage">
+        <action
+            android:id="@+id/action_camouflage_change_or_remove_to_hide_tella"
+            app:destination="@id/hide_tella"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/slide_in_end"
+            app:popExitAnim="@anim/slide_out_start"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/hide_tella"
+        android:name="rs.readahead.washington.mobile.views.settings.HideTella"
+        android:label="fragment_hide_tella"
+        tools:layout="@layout/fragment_hide_tella">
+        <action
+            android:id="@+id/action_hide_tella_to_security_settings"
+            app:destination="@id/security_settings"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/slide_in_end"
+            app:popExitAnim="@anim/slide_out_start"/>
+        <action
+            android:id="@+id/action_hide_tella_to_camouflage_name_logo"
+            app:destination="@id/camouflage_name_logo"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/slide_in_end"
+            app:popExitAnim="@anim/slide_out_start"/>
     </fragment>
 </navigation>

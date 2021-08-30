@@ -7,6 +7,8 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.MyApplication;
