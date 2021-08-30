@@ -29,25 +29,25 @@ import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.Util;
-import rs.readahead.washington.mobile.views.interfaces.IGalleryVaultHandler;
+import rs.readahead.washington.mobile.views.interfaces.IGalleryMediaHandler;
 
 
 public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecycleViewAdapter.ViewHolder> {
     private List<VaultFile> files = new ArrayList<>();
     private VaultFileUrlLoader glideLoader;
-    private IGalleryVaultHandler galleryMediaHandler;
+    private IGalleryMediaHandler galleryMediaHandler;
     private Set<VaultFile> selected;
     private int cardLayoutId;
     private boolean selectable;
     private boolean singleSelection;
 
 
-    public GalleryRecycleViewAdapter(Context context, IGalleryVaultHandler galleryMediaHandler,
+    public GalleryRecycleViewAdapter(Context context, IGalleryMediaHandler galleryMediaHandler,
                                      MediaFileHandler mediaFileHandler, @LayoutRes int cardLayoutId) {
-        this(context, galleryMediaHandler, mediaFileHandler, cardLayoutId, false, false);
+        this(context, galleryMediaHandler, mediaFileHandler, cardLayoutId, true, false);
     }
 
-    public GalleryRecycleViewAdapter(Context context, IGalleryVaultHandler galleryMediaHandler,
+    public GalleryRecycleViewAdapter(Context context, IGalleryMediaHandler galleryMediaHandler,
                                      MediaFileHandler mediaFileHandler, @LayoutRes int cardLayoutId,
                                      boolean selectable,
                                      boolean singleSelection) {
@@ -71,9 +71,8 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
         final VaultFile vaultFile = files.get(position);
 
         checkItemState(holder, vaultFile);
+
         holder.maybeShowMetadataIcon(vaultFile);
-        holder.showFileInfo(vaultFile);
-        holder.maybeEnableCheckBox(selectable);
         if (vaultFile.mimeType == null) return;
 
         if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
@@ -162,11 +161,6 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
         galleryMediaHandler.onSelectionNumChange(selected.size());
     }
 
-    public void enableSelectMode(Boolean selectable){
-        this.selectable = selectable;
-        notifyDataSetChanged();
-    }
-
     private void removeAllSelections() {
         for (VaultFile selection: selected) {
             deselectMediaFile(selection);
@@ -176,7 +170,7 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
 
     private void checkItemState(ViewHolder holder, VaultFile mediaFile) {
         boolean checked = selected.contains(mediaFile);
-       // holder.selectionDimmer.setVisibility(checked ? View.VISIBLE : View.GONE);
+        holder.selectionDimmer.setVisibility(checked ? View.VISIBLE : View.GONE);
         holder.checkBox.setImageResource(checked ? R.drawable.ic_check_box_on : R.drawable.ic_check_box_off);
     }
 
@@ -186,13 +180,11 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.attachmentImg)
+        @BindView(R.id.mediaView)
         ImageView mediaView;
-        @BindView(R.id.checkbox_type_single)
+        @BindView(R.id.checkBox)
         ImageView checkBox;
-        @BindView(R.id.fileNameTextView)
-        TextView fileName;
-      /*  @BindView(R.id.videoInfo)
+        @BindView(R.id.videoInfo)
         ViewGroup videoInfo;
         @BindView(R.id.videoDuration)
         TextView videoDuration;
@@ -205,25 +197,40 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
         @BindView(R.id.checkboxOuter)
         View checkboxOuter;
         @BindView(R.id.metadata_icon)
-        ImageView metadataIcon;*/
+        ImageView metadataIcon;
 
 
         public ViewHolder(View itemView, boolean selectable) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            maybeEnableCheckBox(selectable);
         }
 
         void showVideoInfo(VaultFile vaultFile) {
-            mediaView.setBackgroundResource(R.drawable.ic_play);
+            audioInfo.setVisibility(View.GONE);
+            videoInfo.setVisibility(View.VISIBLE);
+            if (vaultFile.duration > 0) {
+                videoDuration.setText(getDuration(vaultFile));
+                videoDuration.setVisibility(View.VISIBLE);
+            } else {
+                videoDuration.setVisibility(View.INVISIBLE);
+            }
         }
 
         void showAudioInfo(VaultFile vaultFile) {
-            mediaView.setBackgroundResource(R.drawable.ic_audio_w_small);
+            videoInfo.setVisibility(View.GONE);
+            audioInfo.setVisibility(View.VISIBLE);
+            if (vaultFile.duration > 0) {
+                audioDuration.setText(getDuration(vaultFile));
+                audioDuration.setVisibility(View.VISIBLE);
+            } else {
+                audioDuration.setVisibility(View.INVISIBLE);
+            }
         }
 
         void showImageInfo() {
-           /* videoInfo.setVisibility(View.GONE);
-            audioInfo.setVisibility(View.GONE);*/
+            videoInfo.setVisibility(View.GONE);
+            audioInfo.setVisibility(View.GONE);
         }
 
         private String getDuration(VaultFile vaultFile) {
@@ -231,19 +238,14 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
         }
 
         void maybeShowMetadataIcon(VaultFile vaultFile) {
-          /*  if (vaultFile.metadata != null) {
+            if (vaultFile.metadata != null) {
                 metadataIcon.setVisibility(View.VISIBLE);
             } else {
                 metadataIcon.setVisibility(View.GONE);
-            }*/
-        }
-
-        void showFileInfo(VaultFile vaultFile){
-            fileName.setText(vaultFile.name);
+            }
         }
 
         void maybeEnableCheckBox(boolean selectable) {
-            checkBox.setVisibility(selectable ? View.VISIBLE : View.GONE);
             checkBox.setEnabled(selectable);
         }
     }

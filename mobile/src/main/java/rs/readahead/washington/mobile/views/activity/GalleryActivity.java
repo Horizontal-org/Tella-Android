@@ -65,6 +65,7 @@ import rs.readahead.washington.mobile.views.custom.GalleryRecyclerView;
 import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
 import rs.readahead.washington.mobile.views.fragment.TellaUploadDialogFragment;
 import rs.readahead.washington.mobile.views.interfaces.IAttachmentsMediaHandler;
+import rs.readahead.washington.mobile.views.interfaces.IGalleryMediaHandler;
 import rs.readahead.washington.mobile.views.interfaces.IGalleryVaultHandler;
 import timber.log.Timber;
 
@@ -74,7 +75,7 @@ public class GalleryActivity extends MetadataActivity implements
         TellaUploadDialogFragment.IServerMetadataChosenHandler,
         IGalleryPresenterContract.IView,
         ITellaFileUploadSchedulePresenterContract.IView,
-        IGalleryVaultHandler, IAttachmentsMediaHandler,
+        IGalleryMediaHandler, IAttachmentsMediaHandler,
         ShareDialogFragment.IShareDialogFragmentHandler {
     public static final String GALLERY_ANIMATED = "ga";
     public static final String GALLERY_FILTER = "gf";
