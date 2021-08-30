@@ -6,25 +6,19 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.util.Pair
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.FrameLayout
 import androidx.annotation.ColorRes
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.StyleRes
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.Insets
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.hzontal.shared_ui.R
@@ -202,7 +196,6 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
             savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_MASK_ADJUST)
         return inflater.inflate(layoutRes, container, false)
     }
 
@@ -243,20 +236,14 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        view.fitSystemWindowsAndAdjustResize()
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return if (isFullscreen)
-            BottomSheetDialog(requireContext(), theme).apply {
-                behavior.state = STATE_EXPANDED
+        if (isFullscreen)
+            return BottomSheetDialog(requireContext(), theme).apply {
+                behavior.state = BottomSheetBehavior.STATE_EXPANDED
                 behavior.peekHeight = 1000
             }
-        else super.onCreateDialog(savedInstanceState)
+        else return super.onCreateDialog(savedInstanceState)
     }
-
 
     interface Binder<T : PageHolder> {
         fun onBind(holder: T)
@@ -285,23 +272,5 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
 fun DialogFragment.showOnce(manager: FragmentManager, tag: String) {
     if (manager.findFragmentByTag(tag) == null) {
         show(manager, tag)
-    }
-}
-
-fun View?.fitSystemWindowsAndAdjustResize() = this?.let { view ->
-    ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
-        view.fitsSystemWindows = true
-        val bottom = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
-
-        WindowInsetsCompat
-            .Builder()
-            .setInsets(
-                WindowInsetsCompat.Type.systemBars(),
-                Insets.of(0, 0, 0, bottom)
-            )
-            .build()
-            .apply {
-                ViewCompat.onApplyWindowInsets(v, this)
-            }
     }
 }
