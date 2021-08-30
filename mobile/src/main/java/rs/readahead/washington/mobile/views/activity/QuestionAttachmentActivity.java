@@ -15,17 +15,18 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.hzontal.tella_vault.VaultFile;
-import com.hzontal.utils.MediaFile;
-
-import java.util.List;
-
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.utils.MediaFile;
+
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -43,7 +44,7 @@ import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.views.adapters.GalleryRecycleViewAdapter;
 import rs.readahead.washington.mobile.views.custom.GalleryRecyclerView;
 import rs.readahead.washington.mobile.views.interfaces.IAttachmentsMediaHandler;
-import rs.readahead.washington.mobile.views.interfaces.IGalleryVaultHandler;
+import rs.readahead.washington.mobile.views.interfaces.IGalleryMediaHandler;
 import timber.log.Timber;
 
 
@@ -51,7 +52,7 @@ import timber.log.Timber;
 public class QuestionAttachmentActivity extends MetadataActivity implements
         IQuestionAttachmentPresenterContract.IView,
         IAttachmentsMediaHandler,
-        IGalleryVaultHandler {
+        IGalleryMediaHandler {
     public static final String MEDIA_FILE_KEY = "mfk";
     public static final String MEDIA_FILES_FILTER = "mff";
     @BindView(R.id.galleryRecyclerView)
