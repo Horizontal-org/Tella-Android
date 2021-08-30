@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.views.fragment.vault.attachements
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
@@ -34,7 +35,9 @@ import rs.readahead.washington.mobile.bus.EventObserver
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent
 import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent
 import rs.readahead.washington.mobile.media.MediaFileHandler
+import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.DialogsUtil
+import rs.readahead.washington.mobile.util.FileUtil
 import rs.readahead.washington.mobile.views.activity.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity
@@ -137,10 +140,10 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             adapter = attachmentsAdapter
             layoutManager = gridLayoutManager
         }
-        detailsFab = view.findViewById(R.id.detailsFab)
+        detailsFab = view.findViewById(R.id.fab_button)
         checkBoxList = view.findViewById(R.id.checkBoxList)
 
-        detailsFab.setOnClickListener { onFabDetailsClick() }
+        detailsFab.setOnClickListener(this)
         toolbar.backClickListener = {
             if (isListCheckOn) {
                 isListCheckOn != isListCheckOn
@@ -200,6 +203,14 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             }
             R.id.filterNameTv ->{
                 handleSortSheet()
+            }
+            R.id.fab_button -> {
+                MediaFileHandler.startSelectMediaActivity(
+                    activity,
+                    "image/*",
+                    arrayOf("image/*", "video/mp4"),
+                    C.IMPORT_MEDIA
+                )
             }
         }
     }
@@ -340,6 +351,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     override fun onMediaImported(vaultFile: VaultFile?) {
+        attachmentsPresenter.addNewVaultFile(vaultFile)
     }
 
     override fun onImportError(error: Throwable?) {
@@ -352,6 +364,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     override fun onMediaFilesAdded(vaultFile: VaultFile?) {
+        attachmentsPresenter.getFiles(filterType,sort)
     }
 
     override fun onMediaFilesAddingError(error: Throwable?) {
@@ -520,6 +533,42 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             }
 
         )
+    }
+
+    private fun isLocationSettingsRequestCode(requestCode: Int): Boolean {
+        return requestCode == C.START_CAMERA_CAPTURE ||
+                requestCode == C.START_AUDIO_RECORD
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (!isLocationSettingsRequestCode(requestCode) && resultCode != Activity.RESULT_OK) {
+            return  // user canceled evidence acquiring
+        }
+        when (requestCode) {
+            C.IMPORT_IMAGE -> {
+                val image = data?.data
+                if (image != null) {
+                    attachmentsPresenter.importImage(image)
+                }
+            }
+            C.IMPORT_VIDEO -> {
+                val video = data?.data
+                if (video != null) {
+                    attachmentsPresenter.importVideo(video)
+                }
+            }
+            C.IMPORT_MEDIA -> {
+                val media = data?.data ?: return
+                val type = FileUtil.getPrimaryMime(activity.contentResolver.getType(media))
+                if ("image" == type) {
+                    attachmentsPresenter.importImage(media)
+                } else if ("video" == type) {
+                    attachmentsPresenter.importVideo(media)
+                }
+            }
+            C.CAMERA_CAPTURE, C.RECORDED_AUDIO -> {
+            }
+        }
     }
 
 

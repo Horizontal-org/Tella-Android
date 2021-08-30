@@ -31,6 +31,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.VaultFile;
 
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -319,6 +321,8 @@ public class MainActivity extends MetadataActivity implements
         if (!isLocationSettingsRequestCode(requestCode) && resultCode != RESULT_OK) {
             return; // user canceled evidence acquiring
         }
+        Objects.requireNonNull(getSupportFragmentManager().getPrimaryNavigationFragment()).getChildFragmentManager().getFragments().forEach(fragment ->
+                fragment.onActivityResult(requestCode, resultCode, data));
 
         switch (requestCode) {
             case C.START_CAMERA_CAPTURE:

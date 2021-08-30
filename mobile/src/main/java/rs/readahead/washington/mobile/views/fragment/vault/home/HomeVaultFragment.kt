@@ -1,7 +1,7 @@
 package rs.readahead.washington.mobile.views.fragment.vault.home
 
+import android.app.Activity
 import android.content.Intent
-import android.media.AudioRecord
 import android.os.Bundle
 import android.view.*
 import android.widget.RelativeLayout
@@ -20,14 +20,20 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.entity.XFormEntity
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
-import rs.readahead.washington.mobile.views.activity.*
+import rs.readahead.washington.mobile.util.C
+import rs.readahead.washington.mobile.util.FileUtil
+import rs.readahead.washington.mobile.views.activity.AudioPlayActivity
+import rs.readahead.washington.mobile.views.activity.MainActivity
+import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity
+import rs.readahead.washington.mobile.views.activity.VideoViewerActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.custom.CountdownTextView
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
 
 const val VAULT_FILTER = "vf"
-class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresenter.IView  {
+
+class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresenter.IView {
     private lateinit var toolbar: Toolbar
     private lateinit var collapsingToolbar: CollapsingToolbarLayout
     private lateinit var vaultRecyclerView: RecyclerView
@@ -37,7 +43,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private var panicActivated = false
     private val vaultAdapter by lazy { VaultAdapter(this) }
     private lateinit var homeVaultPresenter: HomeVaultPresenter
-    private  val bundle by lazy {Bundle()}
+    private val bundle by lazy { Bundle() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,15 +80,16 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     }
 
-    private fun getFiles(){
+    private fun getFiles() {
         val sort = Sort()
         sort.direction = Sort.Direction.ASC
         sort.type = Sort.Type.DATE
         val limits = Limits()
         limits.limit = 5
-        homeVaultPresenter.getRecentFiles(FilterType.ALL, sort,limits)
+        homeVaultPresenter.getRecentFiles(FilterType.ALL, sort, limits)
     }
-    private fun initListeners(){
+
+    private fun initListeners() {
         panicModeView.setOnClickListener { onPanicClicked() }
     }
 
@@ -95,7 +102,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> {
-               nav().navigate(R.id.main_settings)
+                nav().navigate(R.id.main_settings)
                 return true
             }
             R.id.action_close -> {
@@ -127,42 +134,41 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
                 intent.putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile)
                 startActivity(intent)
             }
-            }
+        }
     }
 
     override fun onFavoriteItemClickListener(form: XFormEntity) {
     }
 
     override fun allFilesClickListener() {
-        bundle.putString(VAULT_FILTER,FilterType.ALL.name)
+        bundle.putString(VAULT_FILTER, FilterType.ALL.name)
         navigateToAttachmentsList(bundle)
     }
 
     override fun imagesClickListener() {
-        bundle.putString(VAULT_FILTER,FilterType.PHOTO.name)
+        bundle.putString(VAULT_FILTER, FilterType.PHOTO.name)
         navigateToAttachmentsList(bundle)
     }
 
     override fun audioClickListener() {
-        bundle.putString(VAULT_FILTER,FilterType.AUDIO.name)
+        bundle.putString(VAULT_FILTER, FilterType.AUDIO.name)
         navigateToAttachmentsList(bundle)
     }
 
     override fun documentsClickListener() {
-        bundle.putString(VAULT_FILTER,FilterType.DOCUMENTS.name)
+        bundle.putString(VAULT_FILTER, FilterType.DOCUMENTS.name)
         navigateToAttachmentsList(bundle)
     }
 
     override fun othersClickListener() {
-        bundle.putString(VAULT_FILTER,FilterType.OTHERS.name)
+        bundle.putString(VAULT_FILTER, FilterType.OTHERS.name)
         navigateToAttachmentsList(bundle)
     }
 
     override fun videoClickListener() {
-        bundle.putString(VAULT_FILTER,FilterType.VIDEO.name)
+        bundle.putString(VAULT_FILTER, FilterType.VIDEO.name)
         navigateToAttachmentsList(bundle)
     }
-
 
     private fun stopPanicking() {
         countDownTextView.cancel()
@@ -219,6 +225,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             vaultAdapter.hidePanicMode()
         }
     }
+
     private fun executePanicMode() {
         try {
             homeVaultPresenter.executePanicMode()
@@ -226,7 +233,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             panicActivated = true
         }
     }
-   private fun onPanicClicked() {
+
+    private fun onPanicClicked() {
         hidePanicScreens()
         stopPanicking()
     }
@@ -244,7 +252,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     override fun onGetFilesSuccess(files: List<VaultFile?>) {
-        if (!files.isNullOrEmpty()){
+        if (!files.isNullOrEmpty()) {
             vaultAdapter.addRecentFiles(files)
         }
     }
@@ -253,8 +261,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     }
 
-    private fun navigateToAttachmentsList(bundle: Bundle?){
-        nav().navigate(R.id.action_homeScreen_to_attachments_screen,bundle)
+    private fun navigateToAttachmentsList(bundle: Bundle?) {
+        nav().navigate(R.id.action_homeScreen_to_attachments_screen, bundle)
     }
 
 }

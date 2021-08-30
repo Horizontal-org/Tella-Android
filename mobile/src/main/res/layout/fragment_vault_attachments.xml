@@ -102,7 +102,7 @@
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/detailsFab"
+        android:id="@+id/fab_button"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:backgroundTint="@color/dark_orange"

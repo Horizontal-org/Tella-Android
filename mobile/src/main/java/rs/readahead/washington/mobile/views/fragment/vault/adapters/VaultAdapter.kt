@@ -61,7 +61,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
         renderList()
     }
 
-    fun addFileActions() {
+   private fun addFileActions() {
         actions = listOf(
             DataItem.FileActions(
                 ID_FILES_ACTIONS
