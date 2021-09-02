@@ -14,9 +14,11 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.ActivityCompat
+import androidx.core.text.toSpannable
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.hzontal.tella_locking_ui.common.extensions.toggleVisibility
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
@@ -28,6 +30,10 @@ import org.hzontal.shared_ui.appbar.ToolbarComponent
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils
+import org.hzontal.shared_ui.breadcrumb.BreadcrumbsView
+import org.hzontal.shared_ui.breadcrumb.DefaultBreadcrumbsCallback
+import org.hzontal.shared_ui.breadcrumb.model.BreadcrumbItem
+import org.hzontal.shared_ui.breadcrumb.model.Item
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
@@ -44,6 +50,7 @@ import rs.readahead.washington.mobile.views.custom.SpacesItemDecoration
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.AttachmentsRecycleViewAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import timber.log.Timber
+import java.util.*
 
 const val VAULT_FILE_ARG = "VaultFileArg"
 const val WRITE_REQUEST_CODE = 1002
@@ -73,7 +80,10 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private var filterType = FilterType.ALL
     private lateinit var sort: Sort
     private var vaultFile: VaultFile? = null
-    private var rootIDS = arrayListOf<String>()
+    private var rootFile : VaultFile? = null
+    private var currentRoot : VaultFile? = null
+    private lateinit var breadcrumbView : BreadcrumbsView
+    private var currentRootID : String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -132,6 +142,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     override fun initView(view: View) {
+        breadcrumbView = view.findViewById(R.id.breadcrumbs_view)
         attachmentsRecyclerView = view.findViewById(R.id.attachmentsRecyclerView)
         attachmentsRecyclerView.addItemDecoration(SpacesItemDecoration(5))
         listCheck = view.findViewById(R.id.listCheck)
@@ -161,6 +172,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         }
         setUpToolbar()
         initData()
+        setUpBreadCrumb()
     }
 
     private fun initData() {
@@ -179,6 +191,23 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         sort = Sort()
         sort.type = Sort.Type.NAME
         sort.direction = Sort.Direction.ASC
+    }
+
+    private fun setUpBreadCrumb(){
+        breadcrumbView.setCallback(object : DefaultBreadcrumbsCallback<BreadcrumbItem?>() {
+            override fun onNavigateBack(item: BreadcrumbItem?, position: Int) {
+                if (position == 0){
+                    breadcrumbView.visibility = View.GONE
+                }
+                currentRootID = item?.items?.get(item.selectedIndex)?.id
+            }
+
+            override fun onNavigateNewLocation(newItem: BreadcrumbItem?, changedPosition: Int) {
+                showToast(changedPosition.toString())
+                // currentRootID = newItem?.items?.get(changedPosition)?.id
+            }
+
+        })
     }
 
     override fun onClick(v: View?) {
@@ -240,7 +269,11 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                                 requireActivity(),
                                    null
                             ) {
-                                attachmentsPresenter.createFolder(it,rootIDS[0])
+                                rootFile?.id?.let { it1 ->
+                                    attachmentsPresenter.createFolder(it,
+                                        it1
+                                    )
+                                }
                             }
 
                         }
@@ -283,9 +316,10 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 }
             }
         }else {
-            when {
-                vaultFile.type == VaultFile.Type.DIRECTORY -> {
-
+            when (vaultFile.type) {
+                VaultFile.Type.DIRECTORY -> {
+                    breadcrumbView.visibility = View.VISIBLE
+                    breadcrumbView.addItem(createItem(vaultFile));
                 }
             }
         }
@@ -487,8 +521,9 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     }
 
-    override fun onGetRootIdSuccess(rootID: String) {
-        if (!rootIDS.contains(rootID)) rootIDS.add(0,rootID)
+    override fun onGetRootIdSuccess(vaultFile: VaultFile?) {
+       this.rootFile = vaultFile
+        currentRootID = vaultFile?.id
 
     }
 
@@ -496,7 +531,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     }
 
-    fun exportVaultFiles() {
+    private fun exportVaultFiles() {
         val selected: List<VaultFile> = attachmentsAdapter.selectedMediaFiles
         attachmentsPresenter.exportMediaFiles(selected)
     }
@@ -661,6 +696,10 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             ), requestCode
         )
     }
-
+    private fun createItem(file: VaultFile): BreadcrumbItem {
+        val list: MutableList<Item> = ArrayList()
+        list.add(Item(file.name,file.id))
+        return BreadcrumbItem(list)
+    }
 
 }

@@ -179,7 +179,7 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
     override fun getRootId() {
         MyApplication.rxVault.root
             .subscribe(
-                { vaultFile: VaultFile? -> vaultFile?.let { view?.onGetRootIdSuccess(it.id) } }
+                { vaultFile: VaultFile? -> view?.onGetRootIdSuccess(vaultFile)  }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 view?.onGetRootIdError(throwable)
