@@ -34,6 +34,7 @@ import org.hzontal.tella.keys.wrapper.UnencryptedKeyWrapper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.multidex.MultiDexApplication;
 
@@ -123,6 +124,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     @Override
     public void onCreate() {
         super.onCreate();
+
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         //ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
         BaseApi.Builder apiBuilder = new BaseApi.Builder();

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="DialogBottomPopUpText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -46,9 +47,8 @@
         <item name="android:paddingStart">16dp</item>
         <item name="android:paddingEnd">2dp</item>
     </style>
-    <style
-        name="ShapeAppearance.Tella.FAB"
-        parent="ShapeAppearance.MaterialComponents.SmallComponent" />
+
+    <style name="ShapeAppearance.Tella.FAB" parent="ShapeAppearance.MaterialComponents.SmallComponent" />
 
     <style name="Tella_Main_White_Text">
         <item name="android:layout_width">wrap_content</item>
@@ -75,6 +75,7 @@
     <style name="Tella_Main_White_Text.SmallBold" parent="Tella_Main_White_Text.Bold">
         <item name="android:textSize">12sp</item>
     </style>
+
     <style name="Tella_Main_White_Text.Small" parent="Tella_Main_White_Text">
         <item name="android:textSize">12sp</item>
     </style>
@@ -106,6 +107,11 @@
         <item name="android:focusable">true</item>
     </style>
 
-
+    <style name="BreadcrumbsView">
+        <item name="crumbsTextColor">?android:attr/textColorSecondary</item>
+        <item name="crumbsSelectedTextColor">?android:attr/textColorPrimary</item>
+        <item name="crumbsTextSize">18sp</item>
+        <item name="crumbsPadding">16dp</item>
+    </style>
 
 </resources>

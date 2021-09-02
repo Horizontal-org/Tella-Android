@@ -10,7 +10,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.DarkNoActionBar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,20 +22,19 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:arrowBackIcon="@drawable/ic_back_white"/>
+
+        <org.hzontal.shared_ui.breadcrumb.BreadcrumbsView
+            android:id="@+id/breadcrumbs_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingHorizontal="@dimen/tella_main_vertical">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:id="@+id/breadcrumb"
-                />
             <TextView
                 android:id="@+id/filterNameTv"
                 style="@style/Tella_Main_White_Text.Small"
