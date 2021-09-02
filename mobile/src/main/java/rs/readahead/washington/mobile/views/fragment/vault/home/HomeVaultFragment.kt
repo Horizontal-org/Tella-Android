@@ -86,7 +86,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         sort.type = Sort.Type.DATE
         val limits = Limits()
         limits.limit = 5
-        homeVaultPresenter.getRecentFiles(FilterType.ALL, sort, limits)
+        homeVaultPresenter.getRecentFiles(FilterType.DOCUMENTS, sort, limits)
     }
 
     private fun initListeners() {

@@ -12,9 +12,10 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.media.MediaFileHandler
-import java.util.ArrayList
+import java.util.*
 
-class AttachmentsPresenter (var view: IAttachmentsPresenter.IView?) : IAttachmentsPresenter.IPresenter  {
+class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
+    IAttachmentsPresenter.IPresenter {
     private val disposables = CompositeDisposable()
 
     override fun getFiles(filterType: FilterType?, sort: Sort?) {
@@ -85,9 +86,9 @@ class AttachmentsPresenter (var view: IAttachmentsPresenter.IView?) : IAttachmen
     }
 
     override fun renameVaultFile(id: String, name: String) {
-        disposables.add(MyApplication.rxVault.rename(id,name)
+        disposables.add(MyApplication.rxVault.rename(id, name)
             .subscribeOn(Schedulers.io())
-            .doOnSubscribe{ view?.onRenameFileStart()}
+            .doOnSubscribe { view?.onRenameFileStart() }
             .observeOn(AndroidSchedulers.mainThread())
             .doFinally { view?.onRenameFileEnd() }
             .subscribe(
@@ -119,6 +120,7 @@ class AttachmentsPresenter (var view: IAttachmentsPresenter.IView?) : IAttachmen
                 }
         )
     }
+
     private fun deleteFile(vaultFile: VaultFile): Single<Boolean> {
         return MyApplication.rxVault.delete(vaultFile)
             .subscribeOn(Schedulers.io())
@@ -159,9 +161,35 @@ class AttachmentsPresenter (var view: IAttachmentsPresenter.IView?) : IAttachmen
         )
     }
 
+    override fun createFolder(folderName: String, parent: String) {
+        MyApplication.rxVault
+            .builder()
+            .setName(folderName)
+            .setType(VaultFile.Type.DIRECTORY)
+            .build(parent)
+            .subscribe(
+                { vaultFile: VaultFile? -> view?.onCreateFolderSuccess() }
+            ) { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                view?.onCountTUServersFailed(throwable)
+            }.dispose()
+
+    }
+
+    override fun getRootId() {
+        MyApplication.rxVault.root
+            .subscribe(
+                { vaultFile: VaultFile? -> vaultFile?.let { view?.onGetRootIdSuccess(it.id) } }
+            ) { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                view?.onGetRootIdError(throwable)
+            }.dispose()
+    }
+
 
     override fun countTUServers() {
     }
+
 
     override fun destroy() {
         disposables.dispose()

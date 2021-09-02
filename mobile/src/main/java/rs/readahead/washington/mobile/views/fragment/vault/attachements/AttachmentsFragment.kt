@@ -38,10 +38,7 @@ import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.DialogsUtil
 import rs.readahead.washington.mobile.util.FileUtil
-import rs.readahead.washington.mobile.views.activity.AudioPlayActivity
-import rs.readahead.washington.mobile.views.activity.MainActivity
-import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity
-import rs.readahead.washington.mobile.views.activity.VideoViewerActivity
+import rs.readahead.washington.mobile.views.activity.*
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.custom.SpacesItemDecoration
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.AttachmentsRecycleViewAdapter
@@ -76,7 +73,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private var filterType = FilterType.ALL
     private lateinit var sort: Sort
     private var vaultFile: VaultFile? = null
-    private var isSelectModeOn = false
+    private var rootIDS = arrayListOf<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -173,6 +170,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         initSorting()
         setToolbarLabel()
         attachmentsPresenter.getFiles(filterType, sort)
+        attachmentsPresenter.getRootId()
         onFileDeletedEventListener()
         onFileRenameEventListener()
     }
@@ -207,11 +205,47 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 handleSortSheet()
             }
             R.id.fab_button -> {
-                MediaFileHandler.startSelectMediaActivity(
-                    activity,
-                    "image/*",
-                    arrayOf("image/*", "video/mp4"),
-                    C.IMPORT_MEDIA
+                VaultSheetUtils.showVaultManageFilesSheet(
+                    activity.supportFragmentManager,
+                    getString(R.string.vault_take_photo_video),
+                    getString(R.string.vault_record_audio),
+                    getString(R.string.vault_import_from_device),
+                    getString(R.string.vault_import_delete_file),
+                    getString(R.string.vault_create_new_folder),
+                    getString(R.string.vault_manage_files),
+                    action = object : VaultSheetUtils.IVaultManageFiles {
+                        override fun goToCamera() {
+                            activity.startActivity(Intent(activity,CameraActivity::class.java))
+                        }
+
+                        override fun goToRecorder() {
+                            activity.startActivity(Intent(activity,AudioRecordActivity2::class.java))
+
+                        }
+
+                        override fun import() {
+
+                        }
+
+                        override fun importAndDelete() {
+
+                        }
+
+                        override fun createFolder() {
+                            VaultSheetUtils.showVaultRenameSheet(
+                                activity.supportFragmentManager,
+                                getString(R.string.vault_rename_file),
+                                getString(R.string.action_cancel),
+                                getString(R.string.action_ok),
+                                requireActivity(),
+                                   null
+                            ) {
+                                attachmentsPresenter.createFolder(it,rootIDS[0])
+                            }
+
+                        }
+
+                    }
                 )
             }
         }
@@ -230,28 +264,32 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     override fun playMedia(vaultFile: VaultFile) {
-        when {
-            isImageFileType(vaultFile.mimeType) -> {
-                val intent = Intent(activity, PhotoViewerActivity::class.java)
-                intent.putExtra(PhotoViewerActivity.VIEW_PHOTO, vaultFile)
-                startActivity(intent)
+        if (vaultFile.mimeType != null){
+            when {
+                isImageFileType(vaultFile.mimeType) -> {
+                    val intent = Intent(activity, PhotoViewerActivity::class.java)
+                    intent.putExtra(PhotoViewerActivity.VIEW_PHOTO, vaultFile)
+                    startActivity(intent)
+                }
+                isAudioFileType(vaultFile.mimeType) -> {
+                    val intent = Intent(activity, AudioPlayActivity::class.java)
+                    intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, vaultFile.id)
+                    startActivity(intent)
+                }
+                isVideoFileType(vaultFile.mimeType) -> {
+                    val intent = Intent(activity, VideoViewerActivity::class.java)
+                    intent.putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile)
+                    startActivity(intent)
+                }
             }
-            isAudioFileType(vaultFile.mimeType) -> {
-                val intent = Intent(activity, AudioPlayActivity::class.java)
-                intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, vaultFile.id)
-                startActivity(intent)
-            }
-            isVideoFileType(vaultFile.mimeType) -> {
-                val intent = Intent(activity, VideoViewerActivity::class.java)
-                intent.putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile)
-                startActivity(intent)
-            }
-            else -> {
-                if (vaultFile.type == VaultFile.Type.DIRECTORY) {
+        }else {
+            when {
+                vaultFile.type == VaultFile.Type.DIRECTORY -> {
 
                 }
             }
         }
+
     }
 
     override fun onSelectionNumChange(num: Int) {
@@ -292,7 +330,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                         getString(R.string.vault_rename_file),
                         getString(R.string.action_cancel),
                         getString(R.string.action_ok),
-                        activity,
+                        requireActivity(),
                         vaultFile.name
                     ) {
                         attachmentsPresenter.renameVaultFile(vaultFile.id, it)
@@ -438,6 +476,24 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     override fun onRenameFileError(error: Throwable?) {
         DialogUtils.showBottomMessage(activity, error?.localizedMessage, true)
+    }
+
+    override fun onCreateFolderSuccess() {
+        attachmentsPresenter.getFiles(filterType,sort)
+
+    }
+
+    override fun onCreateFolderError(error: Throwable?) {
+
+    }
+
+    override fun onGetRootIdSuccess(rootID: String) {
+        if (!rootIDS.contains(rootID)) rootIDS.add(0,rootID)
+
+    }
+
+    override fun onGetRootIdError(error: Throwable?) {
+
     }
 
     fun exportVaultFiles() {

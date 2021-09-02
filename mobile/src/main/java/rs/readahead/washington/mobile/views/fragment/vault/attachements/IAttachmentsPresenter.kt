@@ -34,6 +34,10 @@ class IAttachmentsPresenter {
         fun onRenameFileEnd()
         fun onRenameFileSuccess()
         fun onRenameFileError(error: Throwable?)
+        fun onCreateFolderSuccess()
+        fun onCreateFolderError(error: Throwable?)
+        fun onGetRootIdSuccess(rootID: String)
+        fun onGetRootIdError(error: Throwable?)
         fun getContext(): Context?
     }
 
@@ -46,6 +50,8 @@ class IAttachmentsPresenter {
         fun deleteVaultFiles(vaultFiles: List<VaultFile?>?)
         fun deleteVaultFile(vaultFile: VaultFile?)
         fun exportMediaFiles(vaultFiles: List<VaultFile?>)
+        fun createFolder(folderName : String, parent: String)
+        fun getRootId()
         fun countTUServers()
 
     }

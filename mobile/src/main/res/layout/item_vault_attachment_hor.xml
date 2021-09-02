@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="55dp"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/space_cadet"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
@@ -17,13 +16,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/attachmentImgContainer"
-        android:background="@color/wa_white_32"
+        android:background="@color/wa_white_20"
         >
         <ImageView
             android:id="@+id/attachmentImg"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:scaleType="fitXY"
+            android:background="@color/wa_white_20"
             />
     </androidx.cardview.widget.CardView>
 

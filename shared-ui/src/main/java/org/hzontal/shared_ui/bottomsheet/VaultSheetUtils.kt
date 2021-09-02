@@ -20,6 +20,7 @@ object VaultSheetUtils {
         fun info()
         fun delete()
     }
+
     @JvmStatic
     fun showVaultActionsSheet(
         fragmentManager: FragmentManager,
@@ -120,12 +121,12 @@ object VaultSheetUtils {
         cancelLabel: String,
         confirmLabel: String,
         context: Activity,
-        fileName : String,
+        fileName: String?,
         onConfirmClick: ((String) -> Unit)? = null
     ) {
         val vaultActionSheet = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.sheet_rename)
-            .screenTag("vaultActionSheet")
+            .screenTag("VaultRenameSheet")
             .cancellable(true)
         vaultActionSheet.holder(VaultRenameSheetHolder(), object :
             CustomBottomSheetFragment.Binder<VaultRenameSheetHolder> {
@@ -174,13 +175,13 @@ object VaultSheetUtils {
     }
 
 
-
     interface IVaultSortActions {
         fun onSortDateASC()
         fun onSortDateDESC()
         fun onSortNameDESC()
         fun onSortNameASC()
     }
+
     @JvmStatic
     fun showVaultSortSheet(
         fragmentManager: FragmentManager,
@@ -235,12 +236,13 @@ object VaultSheetUtils {
         vaultSortSheet.transparentBackground()
         vaultSortSheet.launch()
     }
+
     class VaultSortSheetHolder : CustomBottomSheetFragment.PageHolder() {
         lateinit var title: TextView
-        lateinit var radioBtnNameAZ : RadioButton
-        lateinit var radioBtnNameZA : RadioButton
-        lateinit var radioBtnASC : RadioButton
-        lateinit var radioBtnDESC : RadioButton
+        lateinit var radioBtnNameAZ: RadioButton
+        lateinit var radioBtnNameZA: RadioButton
+        lateinit var radioBtnASC: RadioButton
+        lateinit var radioBtnDESC: RadioButton
         lateinit var radioGroup: RadioGroup
 
         override fun bindView(view: View) {
@@ -250,6 +252,91 @@ object VaultSheetUtils {
             radioBtnDESC = view.findViewById(R.id.radioBtnDESC)
             radioGroup = view.findViewById(R.id.radio_list)
             title = view.findViewById(R.id.standard_sheet_title)
+        }
+    }
+
+    interface IVaultManageFiles {
+        fun goToCamera()
+        fun goToRecorder()
+        fun import()
+        fun importAndDelete()
+        fun createFolder()
+    }
+
+    @JvmStatic
+    fun showVaultManageFilesSheet(
+        fragmentManager: FragmentManager,
+        cameraLabel: String?,
+        recordLabel: String?,
+        importLabel: String,
+        importDeleteLabel: String,
+        createFolderLabel: String,
+        titleText: String,
+        action: IVaultManageFiles
+    ) {
+        val vaultManageFilesSheet = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.manage_files_layout)
+            .screenTag("vaultManageFilesSheet")
+            .cancellable(true)
+        vaultManageFilesSheet.holder(VaultManageFilesSheetHolder(), object :
+            CustomBottomSheetFragment.Binder<VaultManageFilesSheetHolder> {
+            override fun onBind(holder: VaultManageFilesSheetHolder) {
+                with(holder) {
+                    title.text = titleText
+                    title.text = titleText
+                    //Go to camera action
+                    cameraActionTV.text = cameraLabel
+                    cameraActionTV.setOnClickListener {
+                        vaultManageFilesSheet.dismiss()
+                        action.goToCamera()
+                    }
+                    //Go to recorder action
+                    recordAudioActionTV.text = recordLabel
+                    recordAudioActionTV.setOnClickListener {
+                        vaultManageFilesSheet.dismiss()
+                        action.goToRecorder()
+                    }
+                    //Upload action
+                    importActionTV.text = importLabel
+                    importActionTV.setOnClickListener {
+                        vaultManageFilesSheet.dismiss()
+                        action.import()
+                    }
+                    //Share action
+                    createDeleteActionTV.text = importDeleteLabel
+                    createDeleteActionTV.setOnClickListener {
+                        vaultManageFilesSheet.dismiss()
+                        action.importAndDelete()
+                    }
+                    //Move action
+                    createFolderActionTV.text = createFolderLabel
+                    createFolderActionTV.setOnClickListener {
+                        vaultManageFilesSheet.dismiss()
+                        action.createFolder()
+                    }
+
+                }
+            }
+        })
+        vaultManageFilesSheet.transparentBackground()
+        vaultManageFilesSheet.launch()
+    }
+
+    class VaultManageFilesSheetHolder : CustomBottomSheetFragment.PageHolder() {
+        lateinit var cameraActionTV: TextView
+        lateinit var recordAudioActionTV: TextView
+        lateinit var importActionTV: TextView
+        lateinit var createDeleteActionTV: TextView
+        lateinit var createFolderActionTV: TextView
+        lateinit var title: TextView
+
+        override fun bindView(view: View) {
+            cameraActionTV = view.findViewById(R.id.cameraActionTV)
+            recordAudioActionTV = view.findViewById(R.id.recordAudioActionTV)
+            importActionTV = view.findViewById(R.id.importActionTV)
+            createDeleteActionTV = view.findViewById(R.id.createDeleteActionTV)
+            createFolderActionTV = view.findViewById(R.id.createFolderActionTV)
+            title = view.findViewById(R.id.sheetTitleTv)
         }
     }
 

@@ -41,6 +41,7 @@ class RecentAttachmentViewHolder (val view: View) : BaseViewHolder<VaultFile?>(v
     }
 
     private fun icPreview(vaultFile : VaultFile){
+        if (vaultFile.mimeType == null ) return
         when {
             isImageFileType(vaultFile.mimeType) -> {
                 Glide.with(previewImageView.context)

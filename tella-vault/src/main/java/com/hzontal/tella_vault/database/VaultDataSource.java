@@ -286,10 +286,9 @@ public class VaultDataSource implements IVaultDatabase {
             case PHOTO:
                 return cn(D.T_VAULT_FILE, D.C_MIME_TYPE) + " = '" + "image/jpeg'";
             case OTHERS:
-                return cn(D.T_VAULT_FILE, D.C_TYPE) + " = '" + VaultFile.Type.DIRECTORY +"'";
+                return cn(D.T_VAULT_FILE, D.C_TYPE) + " = '" + VaultFile.Type.DIRECTORY.getValue() +"'";
             case DOCUMENTS:
-                return cn(D.T_VAULT_FILE, D.C_MIME_TYPE) + " != '" + "image/jpeg'" + " && " + cn(D.T_VAULT_FILE, D.C_MIME_TYPE) + " != '" + "audio/aac'"
-                        + " && " + cn(D.T_VAULT_FILE, D.C_MIME_TYPE) + " != '" + "video/mp4" + " && " + cn(D.T_VAULT_FILE, D.C_TYPE) + " != '" + VaultFile.Type.DIRECTORY +"'";
+                return cn(D.T_VAULT_FILE, D.C_TYPE) + " != '" + VaultFile.Type.DIRECTORY.getValue() +"'";
             default:
                 return  cn(D.T_VAULT_FILE, D.C_PARENT_ID) + " = '" + parentId+ "'" ;
 

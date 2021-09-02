@@ -8,6 +8,7 @@ import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Limits
 import com.hzontal.tella_vault.filter.Sort
+import com.hzontal.tella_vault.rx.RxVault
 import io.reactivex.Completable
 import io.reactivex.CompletableSource
 import io.reactivex.SingleSource
@@ -28,10 +29,12 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
     private var keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private var disposable: CompositeDisposable? = null
     private var appContext: Context? = null
+    private var rxVault : RxVault? = null
 
     init {
         disposable = CompositeDisposable()
         appContext = view?.getContext()?.applicationContext
+        rxVault = MyApplication.rxVault
     }
 
     private val disposables = CompositeDisposable()
@@ -46,7 +49,7 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
             .subscribeOn(Schedulers.io())
             .flatMapCompletable { dataSource: DataSource ->
                 if (SharedPrefs.getInstance().isEraseGalleryActive) {
-                    MyApplication.rxVault.destroy().blockingAwait()
+                    rxVault?.destroy()?.blockingAwait()
                     MediaFileHandler.destroyGallery(appContext!!)
                 }
                 if (Preferences.isDeleteServerSettingsActive()) {
@@ -89,10 +92,10 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
     }
 
     override fun getRecentFiles(filterType: FilterType?, sort: Sort?, limits: Limits) {
-        disposables.add(MyApplication.rxVault.list(filterType, sort, limits)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
+        rxVault?.list(filterType, sort, limits)
+            ?.subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe(
                 { vaultFile: List<VaultFile?> ->
                     view?.onGetFilesSuccess(
                         vaultFile
@@ -101,7 +104,7 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 view?.onGetFilesError(throwable)
-            })
+            }?.let { disposables.add(it) }
     }
     private fun clearSharedPreferences() {
         Preferences.setPanicMessage(null)

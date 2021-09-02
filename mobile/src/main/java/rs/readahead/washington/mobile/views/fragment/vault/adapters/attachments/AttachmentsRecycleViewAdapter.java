@@ -99,34 +99,41 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
         holder.maybeShowMetadataIcon(vaultFile);
         holder.showFileInfo(vaultFile);
         holder.maybeEnableCheckBox(selectable);
-        if (vaultFile.mimeType == null) return;
 
-        if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
-            holder.showImageInfo();
-            Glide.with(holder.mediaView.getContext())
-                    .using(glideLoader)
-                    .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(holder.mediaView);
-        } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
-            holder.showAudioInfo(vaultFile);
-            Drawable drawable = VectorDrawableCompat.create(holder.itemView.getContext().getResources(),
-                    R.drawable.ic_audio_w_small, null);
-            holder.mediaView.setImageDrawable(drawable);
-        } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
-            holder.showVideoInfo(vaultFile);
-            Glide.with(holder.mediaView.getContext())
-                    .using(glideLoader)
-                    .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(holder.mediaView);
+        if (vaultFile.mimeType != null){
+            if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
+                holder.showImageInfo();
+                Glide.with(holder.mediaView.getContext())
+                        .using(glideLoader)
+                        .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .into(holder.mediaView);
+            } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
+                holder.showAudioInfo(vaultFile);
+                Drawable drawable = VectorDrawableCompat.create(holder.itemView.getContext().getResources(),
+                        R.drawable.ic_audio_w_small, null);
+                holder.mediaView.setImageDrawable(drawable);
+            } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
+                holder.showVideoInfo(vaultFile);
+                Glide.with(holder.mediaView.getContext())
+                        .using(glideLoader)
+                        .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .into(holder.mediaView);
+            }
+        }else {
+            if (VaultFile.Type.fromValue(vaultFile.type.getValue()) == VaultFile.Type.DIRECTORY){
+                holder.showFolderInfo();
+            }
         }
+
 
         holder.mediaView.setOnClickListener(v -> galleryMediaHandler.playMedia(vaultFile));
 
         holder.checkBox.setOnClickListener(v -> checkboxClickHandler(holder, vaultFile));
+
         if (holder instanceof ListViewHolder) {
             ( (ListViewHolder) holder).setFileDateTextView(vaultFile);
         }
@@ -171,15 +178,6 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
 
         selected.add(vaultFile);
         notifyItemChanged(files.indexOf(vaultFile));
-    }
-
-    public void sortListByDate(){
-        Collections.sort(files, OrderType.NAME.getComparator());
-        notifyDataSetChanged();
-    }
-
-    public void sortListByName(){
-
     }
 
     private void checkboxClickHandler(ViewHolder holder, VaultFile vaultFile) {
@@ -255,12 +253,11 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
 
         }
 
-        private String getDuration(VaultFile vaultFile) {
-            return Util.getVideoDuration((int) (vaultFile.duration / 1000));
-        }
-
         void maybeShowMetadataIcon(VaultFile vaultFile) {
 
+        }
+        void showFolderInfo(){
+            icAttachmentImg.setBackgroundResource(R.drawable.ic_folder_24px);
         }
 
         void showFileInfo(VaultFile vaultFile){
