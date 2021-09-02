@@ -16,6 +16,7 @@ public interface IVaultDatabase {
     VaultFile completeVaultOutputStream(VaultFile vaultFile);
     VaultFile get(String id);
     VaultFile rename(String id,String name);
+    boolean move(VaultFile vaultFile, VaultFile newParent);
     List<VaultFile> get(String[] ids);
     boolean delete(VaultFile file, IVaultFileDeleter deleter);
     void destroy();

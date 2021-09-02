@@ -220,6 +220,17 @@ public class VaultDataSource implements IVaultDatabase {
     }
 
     @Override
+    public boolean move(VaultFile vaultFile, VaultFile newParent) {
+        ContentValues values = new ContentValues();
+        values.put(D.C_PARENT_ID, newParent.id);
+
+        int count = database.update(D.T_VAULT_FILE, values, D.C_ID + " = ?",
+                new String[]{vaultFile.id});
+
+        return count == 1;
+    }
+
+    @Override
     public List<VaultFile> get(String[] ids) {
         return null;
     }
