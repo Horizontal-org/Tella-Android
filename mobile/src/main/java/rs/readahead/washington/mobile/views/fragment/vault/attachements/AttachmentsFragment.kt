@@ -524,7 +524,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     override fun onGetRootIdSuccess(vaultFile: VaultFile?) {
        this.rootFile = vaultFile
         currentRootID = vaultFile?.id
-
+        breadcrumbView.addItem(BreadcrumbItem.createSimpleItem(Item("Origin",vaultFile?.id)))
     }
 
     override fun onGetRootIdError(error: Throwable?) {

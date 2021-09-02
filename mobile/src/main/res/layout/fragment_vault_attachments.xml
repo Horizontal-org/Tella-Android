@@ -27,6 +27,8 @@
             android:id="@+id/breadcrumbs_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginBottom="30dp"
             app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,6 +36,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
+            android:paddingBottom="10dp"
             android:paddingHorizontal="@dimen/tella_main_vertical">
             <TextView
                 android:id="@+id/filterNameTv"
