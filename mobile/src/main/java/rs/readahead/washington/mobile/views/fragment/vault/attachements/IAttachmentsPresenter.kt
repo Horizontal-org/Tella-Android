@@ -2,7 +2,6 @@ package rs.readahead.washington.mobile.views.fragment.vault.attachements
 
 import android.content.Context
 import android.net.Uri
-import com.hzontal.tella_vault.filter.Filter
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Sort
@@ -42,7 +41,7 @@ class IAttachmentsPresenter {
     }
 
     interface IPresenter : IBasePresenter {
-        fun getFiles(filterType: FilterType?, sort: Sort?)
+        fun getFiles(parent: String?,filterType: FilterType?, sort: Sort?)
         fun importImage(uri: Uri?)
         fun importVideo(uri: Uri?)
         fun addNewVaultFile(vaultFile: VaultFile?)

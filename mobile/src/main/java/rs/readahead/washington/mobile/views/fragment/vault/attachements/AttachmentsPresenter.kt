@@ -18,22 +18,31 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
     IAttachmentsPresenter.IPresenter {
     private val disposables = CompositeDisposable()
 
-    override fun getFiles(filterType: FilterType?, sort: Sort?) {
-        disposables.add(MyApplication.rxVault.list(filterType, sort, null)
-            .subscribeOn(Schedulers.io())
-            .doOnSubscribe { view?.onGetFilesStart() }
-            .observeOn(AndroidSchedulers.mainThread())
-            .doFinally { view?.onGetFilesEnd() }
+    override fun getFiles(parent: String?,filterType: FilterType?, sort: Sort?) {
+
+        MyApplication.rxVault.get(parent)
             .subscribe(
-                { vaultFile: List<VaultFile?> ->
-                    view?.onGetFilesSuccess(
-                        vaultFile
-                    )
+                { vaultFile: VaultFile? ->
+                    disposables.add(MyApplication.rxVault.list(vaultFile,filterType, sort, null)
+                        .subscribeOn(Schedulers.io())
+                        .doOnSubscribe { view?.onGetFilesStart() }
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doFinally { view?.onGetFilesEnd() }
+                        .subscribe(
+                            { vaultFiles: List<VaultFile?> ->
+                                view?.onGetFilesSuccess(
+                                    vaultFiles
+                                )
+                            }
+                        ) { throwable: Throwable? ->
+                            FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                            view?.onGetFilesError(throwable)
+                        })
                 }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                view?.onGetFilesError(throwable)
-            })
+                view?.onGetRootIdError(throwable)
+            }.dispose()
     }
 
     override fun importImage(uri: Uri?) {

@@ -14,11 +14,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.ActivityCompat
-import androidx.core.text.toSpannable
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import com.hzontal.tella_locking_ui.common.extensions.toggleVisibility
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
@@ -181,7 +179,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         }
         initSorting()
         setToolbarLabel()
-        attachmentsPresenter.getFiles(filterType, sort)
         attachmentsPresenter.getRootId()
         onFileDeletedEventListener()
         onFileRenameEventListener()
@@ -200,13 +197,14 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                     breadcrumbView.visibility = View.GONE
                 }
                 currentRootID = item?.items?.get(item.selectedIndex)?.id
+                attachmentsPresenter.getFiles(currentRootID,filterType,sort)
             }
 
             override fun onNavigateNewLocation(newItem: BreadcrumbItem?, changedPosition: Int) {
                 showToast(changedPosition.toString())
-                // currentRootID = newItem?.items?.get(changedPosition)?.id
+                currentRootID = newItem?.items?.get(newItem.selectedIndex)?.id
+                attachmentsPresenter.getFiles(currentRootID,filterType,sort)
             }
-
         })
     }
 
@@ -229,6 +227,9 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             R.id.checkBoxList -> {
                 isListCheckOn = !isListCheckOn
                 attachmentsAdapter.enableSelectMode(isListCheckOn)
+                if (!isListCheckOn){
+                    attachmentsAdapter.clearSelected()
+                    updateAttachmentsToolbar(false)                }
             }
             R.id.filterNameTv -> {
                 handleSortSheet()
@@ -318,6 +319,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         }else {
             when (vaultFile.type) {
                 VaultFile.Type.DIRECTORY -> {
+                    currentRootID = vaultFile.id
+                    attachmentsPresenter.getFiles(currentRootID,filterType,sort)
                     breadcrumbView.visibility = View.VISIBLE
                     breadcrumbView.addItem(createItem(vaultFile));
                 }
@@ -445,21 +448,21 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     override fun onMediaFilesAdded(vaultFile: VaultFile?) {
-        attachmentsPresenter.getFiles(filterType, sort)
+        attachmentsPresenter.getFiles(currentRootID,filterType, sort)
     }
 
     override fun onMediaFilesAddingError(error: Throwable?) {
     }
 
     override fun onMediaFilesDeleted(num: Int) {
-        attachmentsPresenter.getFiles(filterType, null)
+        attachmentsPresenter.getFiles(currentRootID,filterType, sort)
     }
 
     override fun onMediaFilesDeletionError(throwable: Throwable?) {
     }
 
     override fun onMediaFileDeleted() {
-        attachmentsPresenter.getFiles(filterType, null)
+        attachmentsPresenter.getFiles(currentRootID,filterType, sort)
     }
 
     override fun onMediaFileDeletionError(throwable: Throwable?) {
@@ -505,7 +508,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     override fun onRenameFileSuccess() {
-        attachmentsPresenter.getFiles(filterType, null)
+        attachmentsPresenter.getFiles(currentRootID,filterType, sort)
     }
 
     override fun onRenameFileError(error: Throwable?) {
@@ -513,7 +516,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     override fun onCreateFolderSuccess() {
-        attachmentsPresenter.getFiles(filterType,sort)
+        attachmentsPresenter.getFiles(currentRootID,filterType, sort)
 
     }
 
@@ -525,6 +528,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
        this.rootFile = vaultFile
         currentRootID = vaultFile?.id
         breadcrumbView.addItem(BreadcrumbItem.createSimpleItem(Item("Origin",vaultFile?.id)))
+        attachmentsPresenter.getFiles(currentRootID,filterType, sort)
     }
 
     override fun onGetRootIdError(error: Throwable?) {
@@ -610,28 +614,28 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                     filterNameTv.text = getString(R.string.vault_sort_date_asc)
                     sort.type = Sort.Type.DATE
                     sort.direction = Sort.Direction.ASC
-                    attachmentsPresenter.getFiles(filterType, sort)
+                    attachmentsPresenter.getFiles(currentRootID,filterType, sort)
                 }
 
                 override fun onSortDateDESC() {
                     filterNameTv.text = getString(R.string.vault_sort_date_desc)
                     sort.type = Sort.Type.DATE
                     sort.direction = Sort.Direction.DESC
-                    attachmentsPresenter.getFiles(filterType, sort)
+                    attachmentsPresenter.getFiles(currentRootID,filterType, sort)
                 }
 
                 override fun onSortNameDESC() {
                     filterNameTv.text = getString(R.string.vault_sort_name_desc)
                     sort.type = Sort.Type.NAME
                     sort.direction = Sort.Direction.DESC
-                    attachmentsPresenter.getFiles(filterType, sort)
+                    attachmentsPresenter.getFiles(currentRootID,filterType, sort)
                 }
 
                 override fun onSortNameASC() {
                     filterNameTv.text = getString(R.string.vault_sort_name_asc)
                     sort.type = Sort.Type.NAME
                     sort.direction = Sort.Direction.ASC
-                    attachmentsPresenter.getFiles(filterType, sort)
+                    attachmentsPresenter.getFiles(currentRootID,filterType, sort)
                 }
 
             }
