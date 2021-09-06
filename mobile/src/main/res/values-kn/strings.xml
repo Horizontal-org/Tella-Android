@@ -706,6 +706,23 @@ This is one of the two options available. -->
   <string name="meter">%f ಮಿ</string>
   <!-- The value expressed in meters per second -->
   <string name="meter_per_second">%f ಮಿ/ಸೆ</string>
+  <string name="intro_welcome">Welcome to</string>
+  <string name="tella">Tella</string>
+  <string name="intro_start">START</string>
+  <string name="intro_document_protect"><![CDATA[Document & Protect]]></string>
+  <string name="onboard_setup_text">How would you like to set up Tella?</string>
+  <string name="onboard_full_setup">FULL SETUP</string>
+  <string name="onboard_quick_setup">QUICK SETUP</string>
+  <string name="onboard_setup_explore_custom">Explore and fully customize the app</string>
+  <string name="onboard_setup_start">Set the lock and get started immediately</string>
+  <string name="onboard_setup_customization">Have a customization code/file?</string>
+  <string name="onboard_setup_lock">How would you like to lock Tella?</string>
+  <string name="onboard_password">Password</string>
+  <string name="onboard_password_description">The most secure option</string>
+  <string name="onboard_pin">PIN</string>
+  <string name="onboard_pin_description">Moderately secure</string>
+  <string name="onboard_pattern">Pattern</string>
+  <string name="onboard_pattern_description">The least secure option</string>
   <string name="settings.sec_app.bar">Security</string>
   <string name="settings.select_security">Security</string>
     <string name="settings.select_customization">Customization</string>

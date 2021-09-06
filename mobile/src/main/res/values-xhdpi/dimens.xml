@@ -4,4 +4,6 @@
     <dimen name="intro_header_text_size">26sp</dimen>
     <dimen name="about_tella_icon_height">72sp</dimen>
     <dimen name="about_tella_icon_width">66sp</dimen>
+    <dimen name="lock_password_button_margin_top">35dp</dimen>
+    <dimen name="lock_subtitle_desc_margin_top">17dp</dimen>
 </resources>
