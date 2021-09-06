@@ -44,7 +44,7 @@
         android:gravity="center"
         android:padding="6dp"
         android:text="@string/settings.servers_hide_tella_title"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/hide_tella_big_margin"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
         android:textSize="18sp"
@@ -58,7 +58,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/sheet_one_btn"
         android:gravity="center"
-        android:padding="8dp"
+        android:padding="@dimen/hide_tella_small_margin"
         android:text="@string/settings.servers_hide_tella_desc"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
@@ -68,14 +68,14 @@
     <LinearLayout
         android:id="@+id/sheet_one_btn"
         android:layout_width="match_parent"
-        android:layout_height="142dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="@dimen/hide_tella_small_button_height"
+        android:layout_marginTop="@dimen/hide_tella_small_margin"
+        android:layout_marginBottom="@dimen/hide_tella_small_margin"
         android:background="@drawable/round_button_selector"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
+        android:paddingStart="@dimen/hide_tella_big_margin"
+        android:paddingEnd="@dimen/hide_tella_big_margin"
         android:weightSum="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -83,10 +83,10 @@
         app:layout_constraintBottom_toTopOf="@+id/guidelineCenter">
 
         <ImageView
-            android:padding="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="16dp"
+            android:padding="@dimen/hide_tella_big_margin"
+            android:layout_marginTop="@dimen/hide_tella_small_margin"
+            android:layout_marginBottom="@dimen/hide_tella_small_margin"
+            android:layout_marginEnd="@dimen/hide_tella_big_margin"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -104,7 +104,7 @@
 
             <TextView
                 android:id="@+id/title_btn_one"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/hide_tella_big_margin"
                 android:textAlignment="viewStart"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
@@ -116,8 +116,8 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="@dimen/hide_tella_big_margin"
+                android:layout_marginBottom="@dimen/hide_tella_big_margin"
                 android:id="@+id/subtitle_btn_one"
                 android:layout_height="wrap_content"
                 android:textAlignment="viewStart"
@@ -132,14 +132,14 @@
     <LinearLayout
         android:id="@+id/sheet_two_btn"
         android:layout_width="match_parent"
-        android:layout_height="164dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="@dimen/hide_tella_big_button_height"
+        android:layout_marginTop="@dimen/hide_tella_small_margin"
         android:layout_marginBottom="6dp"
         android:background="@drawable/round_button_selector"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
+        android:paddingStart="@dimen/hide_tella_big_margin"
+        android:paddingEnd="@dimen/hide_tella_big_margin"
         android:weightSum="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -147,9 +147,9 @@
         app:layout_constraintHorizontal_chainStyle="packed">
 
         <ImageView
-            android:padding="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:padding="@dimen/hide_tella_big_margin"
+            android:layout_marginTop="@dimen/hide_tella_small_margin"
+            android:layout_marginBottom="@dimen/hide_tella_small_margin"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -168,7 +168,7 @@
 
             <TextView
                 android:id="@+id/title_btn_two"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/hide_tella_big_margin"
                 android:textAlignment="viewStart"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
@@ -181,8 +181,8 @@
 
             <TextView
                 android:id="@+id/subtitle_btn_two"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="@dimen/hide_tella_big_margin"
+                android:layout_marginBottom="@dimen/hide_tella_big_margin"
                 android:layout_height="wrap_content"
                 android:textAlignment="viewStart"
                 android:layout_width="match_parent"
