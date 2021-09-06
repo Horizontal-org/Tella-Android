@@ -13,7 +13,6 @@
         app:layout_constraintBottom_toTopOf="@+id/fourBtn"
         app:layout_constraintEnd_toStartOf="@+id/twoBtn"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/guideV02"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="spread" />
@@ -49,7 +48,6 @@
         app:layout_constraintBottom_toTopOf="@+id/sevenBtn"
         app:layout_constraintEnd_toStartOf="@+id/fiveBtn"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/guideV02"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/oneBtn" />
 
@@ -80,7 +78,6 @@
         app:layout_constraintBottom_toTopOf="@+id/deleteBtn"
         app:layout_constraintEnd_toStartOf="@+id/eightBtn"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/guideV02"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fourBtn" />
 
