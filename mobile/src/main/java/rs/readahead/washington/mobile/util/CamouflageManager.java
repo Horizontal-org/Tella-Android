@@ -39,10 +39,16 @@ public class CamouflageManager {
         options.add(new CamouflageOption(getOptionAlias("Calculate"), R.drawable.calculate_foreground, R.string.settings_camo_calculate));
         options.add(new CamouflageOption(getOptionAlias("CalculatorPlus"), R.drawable.calculatorplus_foreground, R.string.settings_camo_calculator_plus));
         options.add(new CamouflageOption(getOptionAlias("iCalculator"), R.drawable.icalculator_foreground, R.string.settings_camo_icalculator));
-
-        options.add(new CamouflageOption(getOptionAlias("LocalWeather"), R.drawable.local_weather, R.string.settings_camo_weather2));
+        options.add(new CamouflageOption(getOptionAlias("Weather"), R.drawable.weather_foreground, R.string.settings_camo_weather));
+        options.add(new CamouflageOption(getOptionAlias("EasyWeather"), R.drawable.easyweather_foreground, R.string.settings_camo_easyweather));
+        options.add(new CamouflageOption(getOptionAlias("SunnyDay"), R.drawable.sunnyday_foreground, R.string.settings_camo_sunnyday));
+        options.add(new CamouflageOption(getOptionAlias("GameStation"), R.drawable.gamestation_foreground, R.string.settings_camo_gamestation));
+        options.add(new CamouflageOption(getOptionAlias("PlayNow"), R.drawable.playnow_foreground, R.string.settings_camo_playnow));
+        options.add(new CamouflageOption(getOptionAlias("JewelDash"), R.drawable.jeweldash_foreground, R.string.settings_camo_jeweldash));
+        options.add(new CamouflageOption(getOptionAlias("Clock"), R.drawable.clock_foreground, R.string.settings_camo_clock));
+        options.add(new CamouflageOption(getOptionAlias("Time"), R.drawable.time_foreground, R.string.settings_camo_time));
+        options.add(new CamouflageOption(getOptionAlias("StopWatch"), R.drawable.stopwatch_foreground, R.string.settings_camo_stopwatch));
         //options.add(new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calculator, R.string.settings_camo_calculator2));
-        options.add(new CamouflageOption(getOptionAlias("EasyMath"), R.drawable.easy_math, R.string.settings_camo_calculator1));
     }
 
     public boolean setLauncherActivityAlias(@NonNull Context context, @NonNull String activityAlias) {

@@ -137,12 +137,99 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
-        
         <activity-alias
-            android:name=".views.activity.AliasLocalWeather"
+            android:name=".views.activity.AliasWeather"
             android:enabled="false"
-            android:icon="@mipmap/local_weather_round"
-            android:label="@string/settings.camo_weather2"
+            android:icon="@mipmap/weather_round"
+            android:label="@string/settings.camo_weather"
+            android:targetActivity=".views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".views.activity.AliasEasyWeather"
+            android:enabled="false"
+            android:icon="@mipmap/easyweather_round"
+            android:label="@string/settings.camo_easyweather"
+            android:targetActivity=".views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".views.activity.AliasSunnyDay"
+            android:enabled="false"
+            android:icon="@mipmap/sunnyday_round"
+            android:label="@string/settings.camo_sunnyday"
+            android:targetActivity=".views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".views.activity.AliasGameStation"
+            android:enabled="false"
+            android:icon="@mipmap/gamestation_round"
+            android:label="@string/settings.camo_gamestation"
+            android:targetActivity=".views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".views.activity.AliasPlayNow"
+            android:enabled="false"
+            android:icon="@mipmap/playnow_round"
+            android:label="@string/settings.camo_playnow"
+            android:targetActivity=".views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".views.activity.AliasJewelDash"
+            android:enabled="false"
+            android:icon="@mipmap/jeweldash_round"
+            android:label="@string/settings.camo_jeweldash"
+            android:targetActivity=".views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".views.activity.AliasClock"
+            android:enabled="false"
+            android:icon="@mipmap/clock_round"
+            android:label="@string/settings.camo_clock"
+            android:targetActivity=".views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".views.activity.AliasTime"
+            android:enabled="false"
+            android:icon="@mipmap/time_round"
+            android:label="@string/settings.camo_time"
+            android:targetActivity=".views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".views.activity.AliasStopWatch"
+            android:enabled="false"
+            android:icon="@mipmap/stopwatch_round"
+            android:label="@string/settings.camo_stopwatch"
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -154,17 +241,6 @@
             android:enabled="false"
             android:icon="@mipmap/calculator_round"
             android:label="@string/settings.camo_calculator2"
-            android:targetActivity=".views.activity.SplashActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-        <activity-alias
-            android:name=".views.activity.AliasEasyMath"
-            android:enabled="false"
-            android:icon="@mipmap/easy_math_round"
-            android:label="@string/settings.camo_calculator1"
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
