@@ -45,10 +45,10 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
             }.dispose()
     }
 
-    override fun importVaultFiles(uris: List<Uri?>) {
+    override fun importVaultFiles(uris: List<Uri?>,parentId : String?) {
         disposables.add(Observable.fromCallable {
             MediaFileHandler.importVaultFilesUris(
-                view?.getContext(), uris
+                view?.getContext(), uris,parentId
             )
         }
             .subscribeOn(Schedulers.computation())

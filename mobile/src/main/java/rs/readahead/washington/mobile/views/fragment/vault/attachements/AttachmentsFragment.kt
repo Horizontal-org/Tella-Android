@@ -698,7 +698,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                             listVaultFilesUris.add(returnedUri)
                         }
                     }
-                    attachmentsPresenter.importVaultFiles(listVaultFilesUris)
+                    attachmentsPresenter.importVaultFiles(listVaultFilesUris,currentRootID)
             }}
             WRITE_REQUEST_CODE -> {
                 vaultFile?.let { exportVaultFile(vaultFile = it) }

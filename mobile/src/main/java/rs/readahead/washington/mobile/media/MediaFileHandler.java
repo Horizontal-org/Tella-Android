@@ -187,7 +187,7 @@ public class MediaFileHandler {
         }
     }
 
-    public static VaultFile importPhotoUri(Context context, Uri uri) throws Exception {
+    public static VaultFile importPhotoUri(Context context, Uri uri,@Nullable String parentId) throws Exception {
         // Vault replacement methods
         InputStream v_input = context.getContentResolver().openInputStream(uri); // original photo
         Bitmap v_bm = modifyOrientation(BitmapFactory.decodeStream(v_input), v_input); // bitmap of photo
@@ -206,7 +206,7 @@ public class MediaFileHandler {
                 .setMimeType("image/jpeg")
                 .setType(VaultFile.Type.FILE)
                 .setThumb(v_thumb_jpeg_stream.toByteArray())
-                .build()
+                .build(parentId)
                 .subscribeOn(Schedulers.io())
                 .blockingGet();
     }
@@ -262,7 +262,7 @@ public class MediaFileHandler {
                 .blockingGet();
     }
 
-    public static VaultFile importVideoUri(Context context, Uri uri) throws Exception {
+    public static VaultFile importVideoUri(Context context, Uri uri,String parentID) throws Exception {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         String mimeType = context.getContentResolver().getType(uri);
 
@@ -285,7 +285,7 @@ public class MediaFileHandler {
                     .setThumb(thumb)
                     .setType(VaultFile.Type.FILE)
                     .setDuration(duration)
-                    .build()
+                    .build(parentID)
                     .subscribeOn(Schedulers.io())
                     .blockingGet();
         } catch (Exception e) {
@@ -301,7 +301,7 @@ public class MediaFileHandler {
         }
     }
 
-    public static VaultFile importOthersUri(Context context, Uri uri) throws Exception {
+    public static VaultFile importOthersUri(Context context, Uri uri,String parentId) throws Exception {
         String mimeType = context.getContentResolver().getType(uri);
 
         try {
@@ -314,7 +314,7 @@ public class MediaFileHandler {
                     .setAnonymous(true)
                     .setName(DocumentFile.fromSingleUri(context, uri).getName())
                     .setType(VaultFile.Type.FILE)
-                    .build()
+                    .build(parentId)
                     .subscribeOn(Schedulers.io())
                     .blockingGet();
         } catch (Exception e) {
@@ -369,18 +369,18 @@ public class MediaFileHandler {
         }
     }
 
-    public static List<VaultFile>  importVaultFilesUris(Context context,@Nullable List<Uri> uris) throws Exception {
+    public static List<VaultFile>  importVaultFilesUris(Context context,@Nullable List<Uri> uris,String parentId) throws Exception {
         List<VaultFile> vaultFiles = new ArrayList<>();
         assert uris != null;
         for (Uri uri:uris) {
             String mimeType = getMimeType(uri,context.getContentResolver());
             if (mimeType != null){
                if (MediaFile.INSTANCE.isImageFileType(mimeType)){
-                    vaultFiles.add(importPhotoUri(context,uri));
+                    vaultFiles.add(importPhotoUri(context,uri,parentId));
                 }else if (MediaFile.INSTANCE.isVideoFileType(mimeType)){
-                    vaultFiles.add(importVideoUri(context,uri));
+                    vaultFiles.add(importVideoUri(context,uri,parentId));
                 }else {
-                   vaultFiles.add(importOthersUri(context,uri));
+                   vaultFiles.add(importOthersUri(context,uri,parentId));
                 }
             }
         }
