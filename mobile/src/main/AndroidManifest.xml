@@ -71,12 +71,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity-alias
-            android:name=".views.activity.AliasEasyCam"
+            android:name=".views.activity.AliasiCamera"
             android:enabled="false"
-            android:icon="@mipmap/easy_cam_round"
-            android:label="@string/settings.camo_camera1"
+            android:icon="@mipmap/icamera_round"
+            android:label="@string/settings.camo_icamera"
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -84,10 +83,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".views.activity.AliasSuperCam"
+            android:name=".views.activity.AliasSelfieCam"
             android:enabled="false"
-            android:icon="@mipmap/super_camera_round"
-            android:label="@string/settings.camo_camera2"
+            android:icon="@mipmap/selfiecamera_round"
+            android:label="@string/settings.camo_selfie_cam"
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -95,10 +94,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".views.activity.AliasCameraPro"
+            android:name=".views.activity.AliasSnapCamera"
             android:enabled="false"
-            android:icon="@mipmap/camera_pro_round"
-            android:label="@string/settings.camo_camera3"
+            android:icon="@mipmap/snapcamera_round"
+            android:label="@string/settings.camo_snap_camera"
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -106,10 +105,10 @@
             </intent-filter>
         </activity-alias> <!-- activity aliases -->
         <activity-alias
-            android:name=".views.activity.AliasCamera"
+            android:name=".views.activity.AliasCalculate"
             android:enabled="false"
-            android:icon="@mipmap/camera_round"
-            android:label="@string/settings.camo_camera4"
+            android:icon="@mipmap/calculate_round"
+            android:label="@string/settings.camo_calculate"
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -117,10 +116,10 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".views.activity.AliasWeather"
+            android:name=".views.activity.AliasCalculatorPlus"
             android:enabled="false"
-            android:icon="@mipmap/weather_round"
-            android:label="@string/settings.camo_weather1"
+            android:icon="@mipmap/calculatorplus_round"
+            android:label="@string/settings.camo_calculator_plus"
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -128,16 +127,17 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".views.activity.AliasWeatherNow"
+            android:name=".views.activity.AliasiCalculator"
             android:enabled="false"
-            android:icon="@mipmap/weather_now_round"
-            android:label="@string/settings.camo_weather3"
+            android:icon="@mipmap/icalculator_round"
+            android:label="@string/settings.camo_icalculator"
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
+        
         <activity-alias
             android:name=".views.activity.AliasLocalWeather"
             android:enabled="false"

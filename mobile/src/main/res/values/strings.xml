@@ -478,4 +478,11 @@
     <string name="settings.servers_setup_hide_behind_calculator_not_possible"><![CDATA[<center>The Calculator camouflage is only possible if you<br> use a PIN lock.<font color="#D6933B"><b> Change lock here</b></font></center>]]></string>
     <string name="settings.sec_change_lock_type_warning">If you change your lock method, Camouflage will be disabled</string>
     <string name="action_continue">Continue</string>
+    <string name="settings.camo_icamera">iCamera</string>
+    <string name="settings.camo_selfie_cam">Selfie Cam</string>
+    <string name="settings.camo_snap_camera">Snap Camera</string>
+    <string name="settings.camo_calculate">Calculate</string>
+    <string name="settings.camo_calculator_plus">Calculator Plus</string>
+    <string name="settings.camo_icalculator">iCalculator</string>
+    <string name="settings.camo_weather">Weather</string>
 </resources>
