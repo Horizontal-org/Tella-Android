@@ -45,10 +45,10 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
             }.dispose()
     }
 
-    override fun importImage(uri: Uri?) {
+    override fun importVaultFiles(uris: List<Uri?>) {
         disposables.add(Observable.fromCallable {
-            MediaFileHandler.importPhotoUri(
-                view?.getContext(), uri
+            MediaFileHandler.importVaultFilesUris(
+                view?.getContext(), uris
             )
         }
             .subscribeOn(Schedulers.computation())
@@ -56,42 +56,19 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
             .observeOn(AndroidSchedulers.mainThread())
             .doFinally { view?.onImportEnded() }
             .subscribe(
-                { vaultFile: VaultFile? ->
-                    view?.onMediaImported(
-                        vaultFile
-                    )
+                { vaultFiles ->
+                    view?.onMediaImported(vaultFiles)
                 }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 view?.onImportError(throwable)
             })
+
     }
 
-    override fun importVideo(uri: Uri?) {
-        disposables.add(Observable.fromCallable {
-            MediaFileHandler.importVideoUri(
-                view?.getContext(), uri
-            )
-        }
-            .subscribeOn(Schedulers.computation())
-            .doOnSubscribe { view?.onImportStarted() }
-            .observeOn(AndroidSchedulers.mainThread())
-            .doFinally { view!!.onImportEnded() }
-            .subscribe(
-                { vaultFile: VaultFile? ->
-                    view?.onMediaImported(
-                        vaultFile
-                    )
-                }
-            ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                view?.onImportError(throwable)
-            }
-        )
-    }
 
-    override fun addNewVaultFile(vaultFile: VaultFile?) {
-        view?.onMediaFilesAdded(vaultFile)
+    override fun addNewVaultFiles() {
+        view?.onMediaFilesAdded()
     }
 
     override fun renameVaultFile(id: String, name: String) {

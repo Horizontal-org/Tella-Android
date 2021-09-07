@@ -1,7 +1,10 @@
 package rs.readahead.washington.mobile.media;
 
+import static rs.readahead.washington.mobile.util.C.IMPORT_MULTIPLE_FILES;
+
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,12 +17,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import androidx.core.content.FileProvider;
+import androidx.documentfile.provider.DocumentFile;
 import androidx.exifinterface.media.ExifInterface;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -35,6 +40,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,6 +51,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
@@ -294,6 +301,30 @@ public class MediaFileHandler {
         }
     }
 
+    public static VaultFile importOthersUri(Context context, Uri uri) throws Exception {
+        String mimeType = context.getContentResolver().getType(uri);
+
+        try {
+
+            InputStream is = context.getContentResolver().openInputStream(uri);
+
+            return MyApplication.rxVault
+                    .builder(is)
+                    .setMimeType(mimeType)
+                    .setAnonymous(true)
+                    .setName(DocumentFile.fromSingleUri(context, uri).getName())
+                    .setType(VaultFile.Type.FILE)
+                    .build()
+                    .subscribeOn(Schedulers.io())
+                    .blockingGet();
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Timber.e(e, MediaFileHandler.class.getName());
+
+            throw e;
+        }
+    }
+
     @WorkerThread
     public static VaultFile saveMp4Video(File video) throws IOException {
         FileInputStream vis = null;
@@ -336,6 +367,37 @@ public class MediaFileHandler {
             } catch (Exception ignore) {
             }
         }
+    }
+
+    public static List<VaultFile>  importVaultFilesUris(Context context,@Nullable List<Uri> uris) throws Exception {
+        List<VaultFile> vaultFiles = new ArrayList<>();
+        assert uris != null;
+        for (Uri uri:uris) {
+            String mimeType = getMimeType(uri,context.getContentResolver());
+            if (mimeType != null){
+               if (MediaFile.INSTANCE.isImageFileType(mimeType)){
+                    vaultFiles.add(importPhotoUri(context,uri));
+                }else if (MediaFile.INSTANCE.isVideoFileType(mimeType)){
+                    vaultFiles.add(importVideoUri(context,uri));
+                }else {
+                   vaultFiles.add(importOthersUri(context,uri));
+                }
+            }
+        }
+        return vaultFiles;
+    }
+
+    @Nullable
+    private static String getMimeType(Uri uri, ContentResolver contentResolver ) {
+        String mimeType;
+         if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+             mimeType = contentResolver.getType(uri);
+        } else {
+            String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri.toString());
+             mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                    fileExtension.toLowerCase(Locale.getDefault()));
+        }
+        return mimeType;
     }
 
     @Nullable
@@ -421,10 +483,6 @@ public class MediaFileHandler {
         return getSize(getFile(vaultFile));
     }
 
-    public static Uri getUri(Context context, VaultFile vaultFile) {
-        return Uri.fromFile(new File(context.getFilesDir(), vaultFile.path));
-    }
-
     private static long getSize(File file) {
         return file.length() - EncryptedFileProvider.IV_SIZE;
     }
@@ -494,11 +552,6 @@ public class MediaFileHandler {
         return MyApplication.rxVault.getFile(vaultFile);
     }
 
-    private static File getMetadataFile(@NonNull Context context, VaultFile vaultFile) {
-        final File metadataPath = new File(context.getFilesDir(), C.METADATA_DIR);
-        return new File(metadataPath, getMetadataFilename(vaultFile));
-    }
-
     private static Bitmap modifyOrientation(Bitmap bitmap, InputStream inputStream) throws IOException {
         ExifInterface ei = new ExifInterface(inputStream);
         int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
@@ -543,6 +596,18 @@ public class MediaFileHandler {
         sort.direction = Sort.Direction.DESC;
         return MyApplication.rxVault.list(null, null, sort, limits)
                 .toObservable();
+    }
+
+    public static void startImportFiles(Activity context, Boolean multipleFile) {
+        Intent intent = new Intent()
+                .setType("*/*")
+                .setAction(Intent.ACTION_GET_CONTENT)
+                .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, multipleFile);
+
+        context.startActivityForResult(
+                Intent.createChooser(intent, "Import files"),
+                IMPORT_MULTIPLE_FILES
+        );
     }
 
     @Nullable
