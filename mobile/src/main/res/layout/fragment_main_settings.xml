@@ -41,11 +41,11 @@
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/offline_switch"
+            style="@style/SwitchWithMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:paddingStart="0dp"
-            app:buttonTint="@color/radio_buttons_color" />
+            android:paddingStart="0dp" />
     </RelativeLayout>
 
     <LinearLayout

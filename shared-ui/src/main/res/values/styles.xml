@@ -26,7 +26,8 @@
     </style>
 
     <style name="SwitchWithMessage">
-        <item name="colorControlActivated">@color/green</item>
+        <item name="trackTint">@color/switch_track_color</item>
+        <item name="thumbTint">@color/switch_thumb_color</item>
         <item name="android:textSize">14sp</item>
     </style>
 
