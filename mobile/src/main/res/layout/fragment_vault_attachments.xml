@@ -28,7 +28,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="25dp"
+            app:crumbsPadding="5dp"
+            app:crumbsTextColor="@color/wa_white_92"
+            app:crumbsTextSize="13sp"
+            android:paddingHorizontal="@dimen/tella_main_vertical"
             app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout

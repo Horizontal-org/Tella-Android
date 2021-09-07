@@ -186,13 +186,10 @@ public class BreadcrumbsView extends FrameLayout {
 			}
 			mAdapter.notifyItemRangeRemoved(afterPos * 2 - 1, oldSize - afterPos);
 			/* Add delay time to fix animation */
-			postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					int currentPos = afterPos * 2 - 1 - 1;
-					mAdapter.notifyItemChanged(currentPos);
-					performSafeSmoothScrollToPosition(currentPos);
-				}
+			postDelayed(() -> {
+				int currentPos = afterPos * 2 - 1 - 1;
+				mAdapter.notifyItemChanged(currentPos);
+				performSafeSmoothScrollToPosition(currentPos);
 			}, 100);
 		}
 	}
