@@ -1,6 +1,7 @@
 package org.hzontal.shared_ui.bottomsheet
 
 import android.app.Activity
+import android.opengl.Visibility
 import android.view.View
 import android.widget.EditText
 import android.widget.RadioButton
@@ -32,7 +33,10 @@ object VaultSheetUtils {
         saveLabel: String,
         infoLabel: String,
         deleteLabel: String,
+        isDirectory : Boolean = false,
+        isMultipleFiles: Boolean = false,
         action: IVaultActions
+
     ) {
         val vaultActionSheet = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.vault_actions_sheet_layout)
@@ -43,6 +47,16 @@ object VaultSheetUtils {
             override fun onBind(holder: VaultActionsSheetHolder) {
                 with(holder) {
                     title.text = titleText
+                    //Actions visibility
+                    if (isDirectory){
+                        seperator.visibility = View.GONE
+                        actionShare.visibility = View.GONE
+                        actionUpload.visibility = View.GONE
+                    }
+                    if (isMultipleFiles){
+                        actionRename.visibility = View.GONE
+                        actionInfo.visibility = View.GONE
+                    }
                     //Rename action
                     actionRename.text = renameLabel
                     actionRename.setOnClickListener {
@@ -101,6 +115,7 @@ object VaultSheetUtils {
         lateinit var actionInfo: TextView
         lateinit var actionSave: TextView
         lateinit var title: TextView
+        lateinit var seperator : View
 
         override fun bindView(view: View) {
             actionRename = view.findViewById(R.id.renameActionTV)
@@ -111,6 +126,7 @@ object VaultSheetUtils {
             actionInfo = view.findViewById(R.id.infoActionTV)
             actionSave = view.findViewById(R.id.saveActionTV)
             title = view.findViewById(R.id.sheetTitleTv)
+            seperator = view.findViewById(R.id.separator)
         }
     }
 

@@ -430,6 +430,8 @@ public class VideoViewerActivity extends BaseLockActivity implements
                 getString(R.string.action_save),
                 getString(R.string.vault_file_information),
                 getString(R.string.action_delete),
+                false,
+                false,
                 new VaultSheetUtils.IVaultActions() {
                     @Override
                     public void upload() {
