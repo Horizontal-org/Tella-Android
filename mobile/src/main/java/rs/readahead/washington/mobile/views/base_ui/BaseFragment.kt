@@ -56,4 +56,6 @@ abstract class BaseFragment : Fragment() {
     }
 
     abstract fun initView(view: View)
+
+    open fun onBackPressed() = true
 }
