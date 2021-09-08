@@ -21,6 +21,13 @@
             android:paddingEnd="16dp"
             android:textDirection="locale">
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineBottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.88" />
+
             <LinearLayout
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
@@ -125,6 +132,7 @@
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/internet_error"
                 app:layout_constraintTop_toBottomOf="@+id/toggle_button">
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -188,13 +196,14 @@
 
             <LinearLayout
                 android:id="@+id/buttons_layout"
-                style="?android:attr/buttonBarStyle"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_marginBottom="24dp"
                 android:gravity="end|bottom"
                 android:orientation="horizontal"
+                app:layout_constraintTop_toTopOf="@+id/guidelineBottom"
                 app:layout_constraintTop_toBottomOf="@+id/internet_error"
                 app:layout_constraintEnd_toEndOf="parent">
 
