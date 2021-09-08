@@ -42,6 +42,7 @@
         android:layout_above="@+id/buttons_layout"
         android:layout_below="@id/camouflage_header"
         android:clipToPadding="false"
+        android:paddingBottom="24dp"
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
