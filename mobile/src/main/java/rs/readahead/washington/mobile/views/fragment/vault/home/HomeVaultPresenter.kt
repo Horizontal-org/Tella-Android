@@ -106,9 +106,11 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
                 view?.onGetFilesError(throwable)
             }?.let { disposables.add(it) }
     }
+
     private fun clearSharedPreferences() {
         Preferences.setPanicMessage(null)
     }
+
     private fun uninstallTella(context: Context) {
         val packageUri = Uri.parse("package:" + BuildConfig.APPLICATION_ID)
         val intent = Intent(Intent.ACTION_UNINSTALL_PACKAGE, packageUri)

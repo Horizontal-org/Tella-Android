@@ -297,7 +297,7 @@ public class VaultDataSource implements IVaultDatabase {
             case PHOTO:
                 return cn(D.T_VAULT_FILE, D.C_MIME_TYPE) + " = '" + "image/jpeg'";
             case OTHERS:
-                return cn(D.T_VAULT_FILE, D.C_TYPE) + " = '" + VaultFile.Type.DIRECTORY.getValue() +"'";
+                return cn(D.T_VAULT_FILE, D.C_TYPE) + " = '" + VaultFile.Type.DIRECTORY.getValue() +"' &&"+ cn(D.T_VAULT_FILE, D.C_PARENT_ID) + " = '" + parentId+ "'"  ;
             case DOCUMENTS:
                 return cn(D.T_VAULT_FILE, D.C_TYPE) + " != '" + VaultFile.Type.DIRECTORY.getValue() +"'";
             default:

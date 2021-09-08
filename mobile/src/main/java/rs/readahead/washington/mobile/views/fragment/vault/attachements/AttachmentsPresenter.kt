@@ -11,19 +11,18 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.media.FileWalker
 import rs.readahead.washington.mobile.media.MediaFileHandler
-import java.util.*
 
 class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
     IAttachmentsPresenter.IPresenter {
     private val disposables = CompositeDisposable()
 
-    override fun getFiles(parent: String?,filterType: FilterType?, sort: Sort?) {
-
+    override fun getFiles(parent: String?, filterType: FilterType?, sort: Sort?) {
         MyApplication.rxVault.get(parent)
             .subscribe(
                 { vaultFile: VaultFile? ->
-                    disposables.add(MyApplication.rxVault.list(vaultFile,filterType, sort, null)
+                    disposables.add(MyApplication.rxVault.list(vaultFile, filterType, sort, null)
                         .subscribeOn(Schedulers.io())
                         .doOnSubscribe { view?.onGetFilesStart() }
                         .observeOn(AndroidSchedulers.mainThread())
@@ -45,10 +44,10 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
             }.dispose()
     }
 
-    override fun importVaultFiles(uris: List<Uri?>,parentId : String?) {
+    override fun importVaultFiles(uris: List<Uri?>, parentId: String?) {
         disposables.add(Observable.fromCallable {
             MediaFileHandler.importVaultFilesUris(
-                view?.getContext(), uris,parentId
+                view?.getContext(), uris, parentId
             )
         }
             .subscribeOn(Schedulers.computation())
@@ -86,11 +85,14 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
     }
 
     override fun deleteVaultFiles(vaultFiles: List<VaultFile?>?) {
+        if (vaultFiles == null) return
+
         val completable: MutableList<Single<Boolean>> = ArrayList()
-        if (vaultFiles != null) {
-            for (vaultFile in vaultFiles) {
-                vaultFile?.let { deleteFile(it) }?.let { completable.add(it) }
-            }
+
+        val resultList = walkAllFilesWithDirectories(vaultFiles)
+
+        for (vaultFile in resultList) {
+            vaultFile?.let { deleteFile(it) }?.let { completable.add(it) }
         }
 
         disposables.add(
@@ -129,8 +131,9 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
         disposables.add(
             Single
                 .fromCallable {
-                    for (mediaFile in vaultFiles) {
-                        MediaFileHandler.exportMediaFile(view?.getContext(), mediaFile)
+                    val resultList = walkAllFiles(vaultFiles)
+                    for (vaultFile in resultList) {
+                        vaultFile?.let { MediaFileHandler.exportMediaFile(view?.getContext(), it)  }
                     }
                     vaultFiles.size
                 }
@@ -147,6 +150,37 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
         )
     }
 
+    private fun walkAllFiles(vaultFiles: List<VaultFile?>): List<VaultFile?> {
+        val resultList = arrayListOf<VaultFile?>()
+        for (vaultFile in vaultFiles) {
+            if (vaultFile?.type == VaultFile.Type.DIRECTORY) {
+                resultList.addAll(getAllFiles(vaultFile))
+            } else {
+                resultList.add(vaultFile)
+            }
+        }
+        return resultList.toList()
+    }
+
+    private fun walkAllFilesWithDirectories(vaultFiles: List<VaultFile?>): List<VaultFile?> {
+        val resultList = arrayListOf<VaultFile?>()
+        val fileWalker = FileWalker()
+        for (vaultFile in vaultFiles) {
+            if (vaultFile?.type == VaultFile.Type.DIRECTORY) {
+                resultList.addAll(fileWalker.walkWithDirectories(vaultFile))
+                resultList.add(vaultFile)
+            } else {
+                resultList.add(vaultFile)
+            }
+        }
+        return resultList.toList()
+    }
+
+    private fun getAllFiles(vaultFile: VaultFile): List<VaultFile> {
+        val fileWalker = FileWalker()
+        return fileWalker.walk(vaultFile)
+    }
+
     override fun createFolder(folderName: String, parent: String) {
         MyApplication.rxVault
             .builder()
@@ -154,7 +188,7 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
             .setType(VaultFile.Type.DIRECTORY)
             .build(parent)
             .subscribe(
-                { vaultFile: VaultFile? -> view?.onCreateFolderSuccess() }
+                { view?.onCreateFolderSuccess() }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 view?.onCountTUServersFailed(throwable)
@@ -165,7 +199,7 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
     override fun getRootId() {
         MyApplication.rxVault.root
             .subscribe(
-                { vaultFile: VaultFile? -> view?.onGetRootIdSuccess(vaultFile)  }
+                { vaultFile: VaultFile? -> view?.onGetRootIdSuccess(vaultFile) }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 view?.onGetRootIdError(throwable)

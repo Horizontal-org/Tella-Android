@@ -13,6 +13,7 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -99,7 +100,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_more -> {
-                if (attachmentsAdapter.selectedMediaFiles.size>0){
+                if (attachmentsAdapter.selectedMediaFiles.size > 0) {
                     showFileActionsSheet(null, true)
                 }
                 true
@@ -162,14 +163,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         gridCheck.setOnClickListener(this)
         checkBoxList.setOnClickListener(this)
         filterNameTv.setOnClickListener(this)
-        toolbar.backClickListener = {
-            if (attachmentsAdapter.selectedMediaFiles.size > 0) {
-                attachmentsAdapter.clearSelected()
-                updateAttachmentsToolbar(false)
-            } else {
-                nav().navigateUp()
-            }
-        }
+        handleOnBackPressed()
         setUpToolbar()
         initData()
         setUpBreadCrumb()
@@ -262,7 +256,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                         }
 
                         override fun import() {
-                            MediaFileHandler.startImportFiles(activity,true)
+                            MediaFileHandler.startImportFiles(activity, true)
                         }
 
                         override fun importAndDelete() {
@@ -310,7 +304,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     override fun playMedia(vaultFile: VaultFile) {
         when (vaultFile.type) {
             VaultFile.Type.DIRECTORY -> {
-                if (currentRootID != vaultFile.id){
+                if (currentRootID != vaultFile.id) {
                     currentRootID = vaultFile.id
                     attachmentsPresenter.getFiles(currentRootID, filterType, sort)
                     breadcrumbView.visibility = View.VISIBLE
@@ -360,10 +354,10 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     override fun onMoreClicked(vaultFile: VaultFile) {
         showFileActionsSheet(vaultFile, false)
     }
-    private fun showFileActionsSheet(vaultFile: VaultFile?, isMultipleFiles: Boolean)
-    {
+
+    private fun showFileActionsSheet(vaultFile: VaultFile?, isMultipleFiles: Boolean) {
         VaultSheetUtils.showVaultActionsSheet(activity.supportFragmentManager,
-            getSheetName(vaultFile,isMultipleFiles),
+            getSheetName(vaultFile, isMultipleFiles),
             getString(R.string.action_upload),
             getString(R.string.action_share),
             getString(R.string.vault_move_to_another_folder),
@@ -400,9 +394,9 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 override fun save() {
                     this@AttachmentsFragment.vaultFile = vaultFile
                     if (hasStoragePermissions(activity)) {
-                        if (isMultipleFiles){
-                           exportVaultFiles()
-                        }else{
+                        if (isMultipleFiles) {
+                            exportVaultFiles()
+                        } else {
                             vaultFile?.let { exportVaultFile(it) }
                         }
                     } else {
@@ -414,7 +408,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                     vaultFile.let {
                         val bundle = Bundle()
                         bundle.putSerializable(VAULT_FILE_ARG, it)
-                        bundle.putBoolean(VAULT_FILE_INFO_TOOLBAR,true)
+                        bundle.putBoolean(VAULT_FILE_INFO_TOOLBAR, true)
                         nav().navigate(R.id.action_attachments_screen_to_info_screen, bundle)
                     }
                 }
@@ -428,9 +422,9 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                         getString(R.string.action_cancel),
                         consumer = object : ActionConfirmed {
                             override fun accept(isConfirmed: Boolean) {
-                                if (isMultipleFiles){
+                                if (isMultipleFiles) {
                                     attachmentsPresenter.deleteVaultFiles(attachmentsAdapter.selectedMediaFiles)
-                                }else{
+                                } else {
                                     attachmentsPresenter.deleteVaultFile(vaultFile)
                                 }
 
@@ -444,6 +438,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
         )
     }
+
     override fun onGetFilesStart() {
     }
 
@@ -469,8 +464,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         attachmentsPresenter.addNewVaultFiles()
     }
 
-    override fun onImportError(error: Throwable?) {
-    }
+    override fun onImportError(error: Throwable?) {}
 
     override fun onImportStarted() {
 
@@ -488,6 +482,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     override fun onMediaFilesDeleted(num: Int) {
         attachmentsPresenter.getFiles(currentRootID, filterType, sort)
+        isListCheckOn = !isListCheckOn
+        updateAttachmentsToolbar(false)
     }
 
     override fun onMediaFilesDeletionError(throwable: Throwable?) {
@@ -698,8 +694,9 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                             listVaultFilesUris.add(returnedUri)
                         }
                     }
-                    attachmentsPresenter.importVaultFiles(listVaultFilesUris,currentRootID)
-            }}
+                    attachmentsPresenter.importVaultFiles(listVaultFilesUris, currentRootID)
+                }
+            }
             WRITE_REQUEST_CODE -> {
                 vaultFile?.let { exportVaultFile(vaultFile = it) }
             }
@@ -729,12 +726,44 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         list.add(Item(file.name, file.id))
         return BreadcrumbItem(list)
     }
-    private fun  getSheetName(vaultFile: VaultFile?,isMultipleFiles : Boolean) : String? {
-        return if (isMultipleFiles){
+
+    private fun getSheetName(vaultFile: VaultFile?, isMultipleFiles: Boolean): String? {
+        return if (isMultipleFiles) {
             attachmentsAdapter.selectedMediaFiles.size.toString() + " " + "items"
         } else {
             vaultFile?.name
         }
     }
 
+    private fun handleOnBackPressed() {
+        toolbar.backClickListener = {
+            handleBackStack()
+        }
+        (activity as MainActivity).onBackPressedDispatcher
+            .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    handleBackStack()
+                }
+            })
+    }
+
+    private fun handleBackStack() {
+        when {
+            attachmentsAdapter.selectedMediaFiles.size > 0 -> {
+                attachmentsAdapter.clearSelected()
+                updateAttachmentsToolbar(false)
+            }
+            breadcrumbView.items.size > 1 -> {
+                if (breadcrumbView.items.size == 2) {
+                    breadcrumbView.visibility = View.GONE
+                }
+                breadcrumbView.removeLastItem()
+                currentRootID = breadcrumbView.getCurrentItem<BreadcrumbItem>().selectedItem.id
+                attachmentsPresenter.getFiles(currentRootID, filterType, sort)
+            }
+            else -> {
+                nav().navigateUp()
+            }
+        }
+    }
 }
