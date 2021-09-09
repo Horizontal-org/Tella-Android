@@ -8,4 +8,6 @@
     <dimen name="hide_tella_small_margin">8dp</dimen>
     <dimen name="hide_tella_big_button_height">164dp</dimen>
     <dimen name="hide_tella_small_button_height">142dp</dimen>
+
+    <item name="pattern_height_percent" type="dimen" format="float">.46</item>
 </resources>
