@@ -471,4 +471,5 @@
     <string name="settings.servers_setup_hide_behind_calculator_not_possible"><![CDATA[The Calculator camouflage is only possible if you \n use a PIN lock.<font color="#D6933B"><b> Change lock here</b></font>]]></string>
     <string name="settings.sec_change_lock_type_warning">If you change your lock method, Camouflage will be disabled</string>
     <string name="action_continue">Continue</string>
+  <string name="fragment_mic">Microphone</string>
 </resources>
