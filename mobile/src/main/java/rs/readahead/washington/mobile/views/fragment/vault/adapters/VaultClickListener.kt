@@ -4,7 +4,6 @@ import com.hzontal.tella_vault.VaultFile
 import rs.readahead.washington.mobile.data.entity.XFormEntity
 
 interface VaultClickListener : FilesActionsListener {
-    fun onPanicModeSwipeListener(progress : Int)
     fun onRecentFilesItemClickListener(vaultFile: VaultFile)
     fun onFavoriteItemClickListener(form: XFormEntity)
 }

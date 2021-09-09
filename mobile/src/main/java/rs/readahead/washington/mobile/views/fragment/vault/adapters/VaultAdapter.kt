@@ -29,7 +29,6 @@ class VaultAdapter(private val onClick: VaultClickListener) :
         ListDiffCallback()
     ) {
     private val adapterScope = CoroutineScope(Dispatchers.Default)
-    private var panicMode = listOf<DataItem.PanicMode>()
     private var recentFiles = listOf<DataItem.RecentFiles>()
     private var favoriteForms = listOf<DataItem.FavoriteForms>()
     private var actions = listOf<DataItem.FileActions>()
@@ -38,23 +37,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     init {
         addFileActions()
     }
-    fun addPanicMode() {
-        panicMode = listOf(
-            DataItem.PanicMode(
-                ID_PANIC_MODE
-            )
-        )
-        renderList()
-    }
 
-    fun hidePanicMode() {
-        adapterScope.launch {
-            items = items - panicMode
-            withContext(Dispatchers.Main) {
-                submitList(items)
-            }
-        }
-    }
 
     fun addRecentFiles(vaultFiles: List<VaultFile?>) {
         recentFiles = listOf(DataItem.RecentFiles(vaultFiles))
@@ -77,7 +60,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
 
     fun renderList() {
         adapterScope.launch {
-            items = favoriteForms + recentFiles + actions + panicMode
+            items = favoriteForms + recentFiles + actions
             withContext(Dispatchers.Main) {
                 submitList(items)
             }
@@ -104,10 +87,6 @@ class VaultAdapter(private val onClick: VaultClickListener) :
 
     override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
         when (holder) {
-            is PanicModeViewHolder -> {
-                val panicItem = getItem(position) as DataItem.PanicMode
-                holder.bind( panicItem.idPanicMode,onClick)
-            }
             is FavoriteFormsViewHolder -> {
                 val favoriteItem = getItem(position) as DataItem.FavoriteForms
                 holder.bind(favoriteItem.forms, onClick)
@@ -127,7 +106,6 @@ class VaultAdapter(private val onClick: VaultClickListener) :
         return when (getItem(position)) {
             is DataItem.FileActions -> ITEM_FILES_ACTIONS
             is DataItem.RecentFiles -> ITEM_RECENT_FILES
-            is DataItem.PanicMode -> ITEM_PANIC_BUTTON
             is DataItem.FavoriteForms -> ITEM_FAVORITES_FORMS
             else -> throw ClassCastException("Unknown position $position")
         }

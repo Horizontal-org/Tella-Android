@@ -15,6 +15,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        />
+
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/left_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
         />
 
     <TextView
@@ -22,6 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/Tella_Main_White_Text.Meduim"
+        android:visibility="gone"
         android:layout_marginStart="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/btn_back"
@@ -61,13 +75,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/open_sans"
-        android:textColor="@android:color/black"
-        android:textSize="20sp"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/titleImg"
         app:layout_constraintTop_toTopOf="parent"
+        android:textFontWeight="700"
+       />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/right_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:visibility="gone"
-        tools:text="ورود از طریق" />
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

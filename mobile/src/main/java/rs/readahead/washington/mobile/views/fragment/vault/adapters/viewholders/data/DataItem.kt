@@ -10,10 +10,6 @@ sealed class DataItem {
         override val id = vaultFiles[0]?.id.toString()
     }
 
-    data class PanicMode(val idPanicMode: String) : DataItem() {
-        override val id = idPanicMode
-    }
-
     data class FavoriteForms(val forms: List<XFormEntity>) : DataItem() {
         override val id: String = forms[0].formID
     }

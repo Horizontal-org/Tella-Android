@@ -29,7 +29,7 @@ class PanicModeViewHolder (val view : View) : BaseViewHolder<String>(view) {
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 if (seekBar.progress == 100) {
-                    vaultClickListener.onPanicModeSwipeListener(progress = seekBar.progress)
+                   // vaultClickListener.onPanicModeSwipeListener(progress = seekBar.progress)
                     seekBar.progress = 0
                 } else {
 
