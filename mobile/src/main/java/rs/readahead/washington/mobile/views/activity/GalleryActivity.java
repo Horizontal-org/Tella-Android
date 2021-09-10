@@ -32,6 +32,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.tella_vault.filter.Filter;
+import com.hzontal.tella_vault.filter.Sort;
+import com.hzontal.utils.MediaFile;
+
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -65,6 +74,7 @@ import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
 import rs.readahead.washington.mobile.views.fragment.TellaUploadDialogFragment;
 import rs.readahead.washington.mobile.views.interfaces.IAttachmentsMediaHandler;
 import rs.readahead.washington.mobile.views.interfaces.IGalleryMediaHandler;
+import rs.readahead.washington.mobile.views.interfaces.IGalleryVaultHandler;
 import timber.log.Timber;
 
 //TODO CHECK FILTER AND SORTS
@@ -105,8 +115,8 @@ public class GalleryActivity extends MetadataActivity implements
     private int selectedNum;
     private AlertDialog alertDialog;
     private ProgressDialog progressDialog;
-    private final VaultTypeFilter filter = new VaultTypeFilter();
-    private final IVaultDatabase.Sort sort = new IVaultDatabase.Sort();
+    //private final VaultTypeFilter filter = new VaultTypeFilter();
+    private final Sort sort = new Sort();
     private final ViewType type = ViewType.EDIT;
     private long numOfTUServers;
 
@@ -129,10 +139,10 @@ public class GalleryActivity extends MetadataActivity implements
             adding = getIntent().getBooleanExtra(GALLERY_ALLOWS_ADDING, false);
         }
 
-        sort.direction = IVaultDatabase.Sort.Direction.ASC;
+        sort.direction = Sort.Direction.ASC;
 
         if (getIntent().hasExtra(GALLERY_FILTER)) {
-            filter.filterType = IVaultDatabase.Filter.FilterType.valueOf(getIntent().getStringExtra(GALLERY_FILTER));
+            //filter.filterType = Filter.FilterType.valueOf(getIntent().getStringExtra(GALLERY_FILTER));
         }
 
         setupToolbar();
@@ -172,7 +182,7 @@ public class GalleryActivity extends MetadataActivity implements
             animator.setRemoveDuration(120);
         }
 
-        presenter.getFiles(filter, sort);
+        //presenter.getFiles(filter, sort);
     }
 
     private void setupToolbar() {
@@ -224,7 +234,7 @@ public class GalleryActivity extends MetadataActivity implements
             }
 
             if (id == R.id.menu_item_share) {
-                sharevaultFiles();
+                shareVaultFiles();
                 return true;
             }
 
@@ -234,7 +244,7 @@ public class GalleryActivity extends MetadataActivity implements
             }
 
             if (id == R.id.menu_item_tu && numOfTUServers > 0) {
-                uploadvaultFiles();
+                uploadVaultFiles();
                 return true;
             }
 
@@ -428,7 +438,7 @@ public class GalleryActivity extends MetadataActivity implements
 
             case C.CAMERA_CAPTURE:
             case C.RECORDED_AUDIO:
-                presenter.getFiles(filter, sort);
+                //presenter.getFiles(filter, sort);
                 break;
         }
     }
@@ -486,7 +496,7 @@ public class GalleryActivity extends MetadataActivity implements
     @Override
     public void onMediaFilesAdded(VaultFile vaultFile) {
         showToast(R.string.gallery_toast_file_imported_from_device);
-        presenter.getFiles(filter, sort);
+       // presenter.getFiles(filter, sort);
     }
 
     @Override
@@ -497,7 +507,7 @@ public class GalleryActivity extends MetadataActivity implements
     @Override
     public void onMediaFilesDeleted(int num) {
         showToast(getResources().getQuantityString(R.plurals.gallery_toast_files_deleted, num, num));
-        presenter.getFiles(filter, sort);
+       // presenter.getFiles(filter, sort);
     }
 
     @Override
@@ -638,7 +648,7 @@ public class GalleryActivity extends MetadataActivity implements
         alertDialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.gallery_delete_files_dialog_title)
                 .setMessage(R.string.gallery_delete_files_dialog_expl)
-                .setPositiveButton(R.string.action_delete, (dialog, which) -> removevaultFiles())
+                .setPositiveButton(R.string.action_delete, (dialog, which) -> removeVaultFiles())
                 .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
                 })
                 .setCancelable(true)
@@ -646,7 +656,7 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void removevaultFiles() {
+    private void removeVaultFiles() {
         List<VaultFile> selected = adapter.getSelectedMediaFiles();
         presenter.deleteMediaFiles(selected);
         clearSelection();
@@ -662,7 +672,7 @@ public class GalleryActivity extends MetadataActivity implements
         }
     }
 
-    private void sharevaultFiles() {
+    private void shareVaultFiles() {
         boolean metadata = false;
         List<VaultFile> selected = adapter.getSelectedMediaFiles();
 
@@ -680,7 +690,7 @@ public class GalleryActivity extends MetadataActivity implements
         }
     }
 
-    private void uploadvaultFiles() {
+    private void uploadVaultFiles() {
         boolean metadata = false;
         List<VaultFile> selected = adapter.getSelectedMediaFiles();
 
@@ -744,7 +754,7 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     private void addAttachmentsAttachment(VaultFile vaultFile) {
-        if (sort.direction == IVaultDatabase.Sort.Direction.ASC) {
+        if (sort.direction == Sort.Direction.ASC) {
             attachmentsAdapter.prependAttachment(vaultFile);
             attachmentsLayoutManager.scrollToPosition(0);
         } else {
@@ -773,7 +783,7 @@ public class GalleryActivity extends MetadataActivity implements
         popup.show();
 
         setCheckedSort(sort, popup);
-        setCheckedFilter(filter, popup);
+      //  setCheckedFilter(filter, popup);
 
         popup.setOnMenuItemClickListener(item -> {
             item.setChecked(true);
@@ -781,60 +791,54 @@ public class GalleryActivity extends MetadataActivity implements
             if (item.getGroupId() == R.id.sort) {
                 sort.direction = getGallerySort(item.getItemId());
             } else {
-                filter.filterType = getGalleryFilter(item.getItemId());
+              //  filter.filterType = getGalleryFilter(item.getItemId());
             }
-            presenter.getFiles(filter, sort);
+           // presenter.getFiles(filter, sort);
             return true;
         });
     }
 
 
-    private void setCheckedSort(IVaultDatabase.Sort checkedSort, PopupMenu popup) {
+    private void setCheckedSort(Sort checkedSort, PopupMenu popup) {
         if (popup.getMenu().findItem(getSortId(checkedSort)) != null) {
             popup.getMenu().findItem(getSortId(checkedSort)).setChecked(true);
         }
     }
 
-    private void setCheckedFilter(VaultTypeFilter checkedFilter, PopupMenu popup) {
+   /* private void setCheckedFilter(VaultTypeFilter checkedFilter, PopupMenu popup) {
         if (popup.getMenu().findItem(getFilterId(checkedFilter.filterType)) != null) {
             popup.getMenu().findItem(getFilterId(checkedFilter.filterType)).setChecked(true);
         }
-    }
+    }*/
 
-    @SuppressLint("NonConstantResourceId")
-    public IVaultDatabase.Filter.FilterType getGalleryFilter(final int id) {
+  /*  @SuppressLint("NonConstantResourceId")
+    public Filter.FilterType getGalleryFilter(final int id) {
         switch (id) {
             case R.id.photo:
-                return IVaultDatabase.Filter.FilterType.PHOTO;
+                return Filter.FilterType.PHOTO;
 
             case R.id.audio:
-                return IVaultDatabase.Filter.FilterType.AUDIO;
+                return Filter.FilterType.AUDIO;
 
             case R.id.video:
-                return IVaultDatabase.Filter.FilterType.VIDEO;
+                return Filter.FilterType.VIDEO;
 
-           /* case R.id.files_with_metadata:
-                return IVaultDatabase.Filter.FilterType.WITH_METADATA;
-
-            case R.id.files_without_metadata:
-                return IVaultDatabase.Filter.FilterType.WITHOUT_METADATA;
-*/
             default:
-                return IVaultDatabase.Filter.FilterType.ALL;
+                return Filter.FilterType.ALL;
         }
 
-    }
+    }*/
 
-    public IVaultDatabase.Sort.Direction getGallerySort(final int id) {
+    public Sort.Direction getGallerySort(final int id) {
         if (id == R.id.oldest) {
-            return IVaultDatabase.Sort.Direction.ASC;
+            return Sort.Direction.ASC;
         }
 
-        return IVaultDatabase.Sort.Direction.DESC;
+        return Sort.Direction.DESC;
     }
 
-    @IdRes
-    public int getFilterId(IVaultDatabase.Filter.FilterType filter) {
+   /* @IdRes
+    public int getFilterId(Filter.FilterType filter) {
         switch (filter) {
             case PHOTO:
                 return R.id.photo;
@@ -845,11 +849,11 @@ public class GalleryActivity extends MetadataActivity implements
             default:
                 return R.id.all;
         }
-    }
+    }*/
 
     @IdRes
-    public int getSortId(IVaultDatabase.Sort sort) {
-        if (sort.direction == IVaultDatabase.Sort.Direction.ASC) {
+    public int getSortId(Sort sort) {
+        if (sort.direction == Sort.Direction.ASC) {
             return R.id.oldest;
         }
 

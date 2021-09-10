@@ -46,22 +46,23 @@ class GeneralSettings : BaseFragment() {
         crashReportsSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
             Preferences.setSubmittingCrashReports(isChecked)
         }
-        crashReportsSwitch.setChecked(Preferences.isSubmittingCrashReports())
+        crashReportsSwitch.mSwitch.setChecked(Preferences.isSubmittingCrashReports())
 
         val verificationSwitch = view.findViewById<TellaSwitchWithMessage>(R.id.verification_switch)
         verificationSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
             Preferences.setAnonymousMode(!isChecked)
         }
-        verificationSwitch.setChecked(!Preferences.isAnonymousMode())
+        verificationSwitch.mSwitch.setChecked(!Preferences.isAnonymousMode())
     }
 
+
     private fun setLanguageSetting() {
-        LocaleManager.getInstance().languageSetting?.let { language ->
+        val language = LocaleManager.getInstance().languageSetting
+        if (language != null) {
             val locale = Locale(language)
-            languageSetting?.text = StringUtils.capitalize(
-                locale.displayName,
-                locale
-            )
-        }?.run { languageSetting?.setText(R.string.settings_lang_select_default) }
+            languageSetting?.setText(StringUtils.capitalize(locale.displayName, locale))
+        } else {
+            languageSetting?.setText(R.string.settings_lang_select_default)
+        }
     }
 }

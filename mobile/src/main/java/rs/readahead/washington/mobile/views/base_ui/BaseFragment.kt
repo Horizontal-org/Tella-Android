@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import timber.log.Timber
+import com.tooltip.Tooltip
+import rs.readahead.washington.mobile.R
 
 abstract class BaseFragment : Fragment() {
 
@@ -33,12 +35,12 @@ abstract class BaseFragment : Fragment() {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    abstract fun initView(view: View)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.d("***** ${this.javaClass.name} onViewCreated")
 
         super.onViewCreated(view, savedInstanceState)
+        initView(view)
     }
 
     protected fun showToast(message: String) {
@@ -50,8 +52,25 @@ abstract class BaseFragment : Fragment() {
     protected open fun nav(): NavController {
         return NavHostFragment.findNavController(this)
     }
+    
+    protected fun showTooltip(v: View, text: String, gravity: Int) {
+        val tooltip = Tooltip.Builder(v)
+                .setText(text)
+                .setTextColor(resources.getColor(R.color.wa_black))
+                .setBackgroundColor(resources.getColor(R.color.wa_white))
+                .setGravity(gravity)
+                .setCornerRadius(12f)
+                .setPadding(24)
+                .setDismissOnClick(true)
+                .setCancelable(true)
+                .show<Tooltip>()
+    }
 
     open fun back() {
         nav().navigateUp()
     }
+
+    abstract fun initView(view: View)
+
+    open fun onBackPressed() = true
 }

@@ -4,6 +4,10 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.hzontal.tella_vault.database.VaultDataSource;
+import com.hzontal.tella_vault.filter.Filter;
+import com.hzontal.tella_vault.filter.FilterType;
+import com.hzontal.tella_vault.filter.Limits;
+import com.hzontal.tella_vault.filter.Sort;
 import com.hzontal.utils.FileUtil;
 
 import org.apache.commons.io.IOUtils;
@@ -111,6 +115,16 @@ public abstract class BaseVault {
     }
 
     /**
+     * Deletes a VaultFile.
+     * @param id VaultFile id to rename.
+     * @param name New VaultFile name
+     */
+    protected VaultFile baseRename(String id, String name) {
+        return database.rename(id,name);
+    }
+
+
+    /**
      * List all files in path.
      * @param parent Parent VaultFile or null for root listing.
      * @return List of vault files.
@@ -125,8 +139,8 @@ public abstract class BaseVault {
      * @param parent Parent VaultFile or null for root listing.
      * @return List of vault files.
      */
-    protected List<VaultFile> baseList(VaultFile parent, IVaultDatabase.Filter filter, IVaultDatabase.Sort sort, IVaultDatabase.Limits limits) {
-        return database.list(parent, filter, sort, limits); // todo: design filter and sort that will handle use-cases
+    protected List<VaultFile> baseList(VaultFile parent, FilterType filterType, Sort sort, Limits limits) {
+        return database.list(parent, filterType, sort, limits); // todo: design filter and sort that will handle use-cases
     }
 
     /**

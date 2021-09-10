@@ -4,12 +4,16 @@ import android.content.Context;
 
 import com.hzontal.tella_vault.BaseVault;
 import com.hzontal.tella_vault.BaseVaultFileBuilder;
+import com.hzontal.tella_vault.filter.Filter;
 import com.hzontal.tella_vault.IVaultDatabase;
 import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.Vault;
 import com.hzontal.tella_vault.VaultException;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.database.VaultDataSource;
+import com.hzontal.tella_vault.filter.FilterType;
+import com.hzontal.tella_vault.filter.Limits;
+import com.hzontal.tella_vault.filter.Sort;
 
 import org.hzontal.tella.keys.key.LifecycleMainKey;
 
@@ -88,14 +92,14 @@ public class RxVault extends BaseVault {
         });
     }
 
-    public Single<List<VaultFile>> list(IVaultDatabase.Filter filter, IVaultDatabase.Sort sort, IVaultDatabase.Limits limits) {
-        return list(null, filter, sort, limits);
+    public Single<List<VaultFile>> list(FilterType filterType, Sort sort, Limits limits) {
+        return list(null, filterType, sort, limits);
     }
 
-    public Single<List<VaultFile>> list(VaultFile parent, IVaultDatabase.Filter filter, IVaultDatabase.Sort sort, IVaultDatabase.Limits limits) {
+    public Single<List<VaultFile>> list(VaultFile parent, FilterType filterType, Sort sort, Limits limits) {
         return Single.defer(() -> {
             try {
-                return Single.just(baseList(parent, filter, sort, limits));
+                return Single.just(baseList(parent, filterType, sort, limits));
             } catch (Exception e) {
                 return Single.error(e);
             }
@@ -116,6 +120,16 @@ public class RxVault extends BaseVault {
         return Single.defer(() -> {
             try {
                 return Single.just(baseUpdateMetadata(vaultFile, metadata));
+            } catch (Exception e) {
+                return Single.error(e);
+            }
+        });
+    }
+
+    public Single<VaultFile> rename(String id, String name) {
+        return Single.defer(() -> {
+            try {
+                return Single.just(baseRename(id, name));
             } catch (Exception e) {
                 return Single.error(e);
             }

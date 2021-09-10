@@ -4,8 +4,10 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
-import com.hzontal.tella_vault.IVaultDatabase;
+import com.hzontal.tella_vault.filter.Filter;
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.tella_vault.filter.FilterType;
+import com.hzontal.tella_vault.filter.Sort;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +38,8 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
     }
 
     @Override
-    public void getFiles(final IVaultDatabase.Filter filter, final IVaultDatabase.Sort sort) {
-        disposables.add(MyApplication.rxVault.list(filter, sort, null)
+    public void getFiles(final FilterType filterType, final Sort sort) {
+        disposables.add(MyApplication.rxVault.list(filterType, sort, null)
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> view.onGetFilesStart())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -56,7 +58,7 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
 
     @Override
     public void importImage(final Uri uri) {
-        disposables.add(Observable.fromCallable(() -> MediaFileHandler.importPhotoUri(view.getContext(), uri))
+        disposables.add(Observable.fromCallable(() -> MediaFileHandler.importPhotoUri(view.getContext(), uri,null))
                 .subscribeOn(Schedulers.computation())
                 .doOnSubscribe(disposable -> view.onImportStarted())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -70,7 +72,7 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
 
     @Override
     public void importVideo(final Uri uri) {
-        disposables.add(Observable.fromCallable(() -> MediaFileHandler.importVideoUri(view.getContext(), uri))
+        disposables.add(Observable.fromCallable(() -> MediaFileHandler.importVideoUri(view.getContext(), uri,null))
                 .subscribeOn(Schedulers.computation())
                 .doOnSubscribe(disposable -> view.onImportStarted())
                 .observeOn(AndroidSchedulers.mainThread())

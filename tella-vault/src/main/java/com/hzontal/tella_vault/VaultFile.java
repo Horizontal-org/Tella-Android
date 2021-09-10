@@ -7,7 +7,7 @@ public class VaultFile  implements Serializable {
     public Type type;
     public String hash;
     public String path;
-    public String mimeType;
+    public String mimeType = null;
     public String name;
     public long size;
     public long created;

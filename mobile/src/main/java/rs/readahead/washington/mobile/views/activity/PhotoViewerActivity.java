@@ -1,9 +1,11 @@
 package rs.readahead.washington.mobile.views.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.InflateException;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +26,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import kotlin.Unit;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -33,6 +36,7 @@ import permissions.dispatcher.RuntimePermissions;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
+import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.mvp.contract.IMediaFileViewerPresenterContract;
@@ -42,8 +46,14 @@ import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
+import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment;
 
 import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
+
+import org.hzontal.shared_ui.appbar.ToolbarComponent;
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
+import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
+import org.hzontal.shared_ui.utils.DialogUtils;
 
 
 @RuntimePermissions
@@ -64,6 +74,8 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     private boolean showActions = false;
     private boolean actionsDisabled = false;
     private AlertDialog alertDialog;
+    private ToolbarComponent toolbar;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,14 +85,8 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         ButterKnife.bind(this);
 
         setTitle(null);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
 
         presenter = new MediaFileViewerPresenter(this);
 
@@ -91,6 +97,11 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                 this.vaultFile = vaultFile;
             }
         }
+        toolbar.setStartTextTitle(vaultFile.name);
+        toolbar.setBackClickListener(() -> {
+            onBackPressed();
+            return Unit.INSTANCE;
+        });
 
         if (getIntent().hasExtra(NO_ACTIONS)) {
             actionsDisabled = true;
@@ -108,7 +119,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                 item.setVisible(true);
             }
         }
-
+        this.menu = menu;
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -116,23 +127,8 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-
-        if (id == R.id.menu_item_share) {
-            shareMediaFile();
-            return true;
-        }
-
-        if (id == R.id.menu_item_export) {
-            showExportDialog();
-            return true;
-        }
-
-        if (id == R.id.menu_item_delete) {
-            showDeleteMediaDialog();
+        if (id == R.id.menu_item_more) {
+            showVaultActionsDialog(vaultFile);
             return true;
         }
 
@@ -220,7 +216,27 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     @Override
     public void onMediaFileDeletionError(Throwable throwable) {
-        showToast(R.string.gallery_toast_fail_deleting_files);
+        DialogUtils.showBottomMessage(this,getString(R.string.gallery_toast_fail_deleting_files),true);
+    }
+
+    @Override
+    public void onMediaFileRename(VaultFile vaultFile) {
+        toolbar.setStartTextTitle(vaultFile.name);
+        MyApplication.bus().post(new VaultFileRenameEvent());
+    }
+
+    @Override
+    public void onMediaFileRenameError(Throwable throwable) {
+        //TODO CHECK ERROR MSG WHEN RENAME
+        DialogUtils.showBottomMessage(this,getString(R.string.gallery_toast_fail_deleting_files),true);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        menu.findItem(R.id.menu_item_more).setVisible(true);
+        menu.findItem(R.id.menu_item_metadata).setVisible(true);
+        toolbar.setStartTextTitle(vaultFile.name);
     }
 
     @Override
@@ -272,21 +288,6 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                 PhotoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(PhotoViewerActivity.this));
     }
 
-    private void showDeleteMediaDialog() {
-        alertDialog = new AlertDialog.Builder(this)
-                .setTitle(R.string.gallery_delete_files_dialog_title)
-                .setMessage(R.string.gallery_delete_files_dialog_expl)
-                .setPositiveButton(R.string.action_delete, (dialog, which) -> {
-                    if (vaultFile != null && presenter != null) {
-                        presenter.deleteMediaFiles(vaultFile);
-                    }
-                })
-                .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
-                })
-                .setCancelable(true)
-                .show();
-    }
-
     private void showGalleryImage(VaultFile vaultFile) {
         Glide.with(this)
                 .using(new VaultFileUrlLoader(this, new MediaFileHandler()))
@@ -322,5 +323,89 @@ public class PhotoViewerActivity extends BaseLockActivity implements
             presenter.destroy();
             presenter = null;
         }
+    }
+
+    private void showVaultActionsDialog(VaultFile vaultFile){
+        VaultSheetUtils.showVaultActionsSheet(getSupportFragmentManager(),
+                vaultFile.name,
+                getString(R.string.action_upload),
+                getString(R.string.action_share),
+                getString(R.string.vault_move_to_another_folder),
+                getString(R.string.vault_rename),
+                getString(R.string.action_save),
+                getString(R.string.vault_file_information),
+                getString(R.string.action_delete),
+                false,
+                false,
+                new VaultSheetUtils.IVaultActions() {
+                    @Override
+                    public void upload() {
+
+                    }
+
+                    @Override
+                    public void share() {
+                        startShareActivity(false);
+                    }
+
+                    @Override
+                    public void move() {
+
+                    }
+
+                    @Override
+                    public void rename() {
+                        VaultSheetUtils.showVaultRenameSheet(
+                                getSupportFragmentManager(),
+                                getString(R.string.vault_rename_file),
+                                getString(R.string.action_cancel),
+                                getString(R.string.action_ok),
+                                PhotoViewerActivity.this,
+                                vaultFile.name,
+                                (name) -> {
+                                    presenter.renameVaultFile(vaultFile.id,name);
+                                    return Unit.INSTANCE;
+                                }
+                                );
+                    }
+
+                    @Override
+                    public void save() {
+                        BottomSheetUtils.showConfirmSheet(
+                                getSupportFragmentManager(),
+                                getString(R.string.gallery_save_to_device_dialog_title),
+                                getString(R.string.gallery_save_to_device_dialog_expl),
+                                getString(R.string.action_save),
+                                getString(R.string.action_cancel),
+                                isConfirmed -> {
+                                    PhotoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(PhotoViewerActivity.this);                          }
+                        );
+                    }
+
+                    @Override
+                    public void info() {
+                        toolbar.setStartTextTitle(getString(R.string.vault_file_info));
+                        menu.findItem(R.id.menu_item_more).setVisible(false);
+                        menu.findItem(R.id.menu_item_metadata).setVisible(false);
+                        invalidateOptionsMenu();
+                        addFragment(new VaultInfoFragment().newInstance(vaultFile,false),R.id.photo_viewer_container);
+                    }
+
+                    @Override
+                    public void delete() {
+                        BottomSheetUtils.showConfirmSheet(
+                                getSupportFragmentManager(),
+                                getString(R.string.vault_delete_file),
+                                getString(R.string.vault_delete_file_msg),
+                                getString(R.string.action_delete),
+                                getString(R.string.action_cancel),
+                                isConfirmed -> {
+                                    presenter.deleteMediaFiles(vaultFile);
+                                }
+                        );
+
+                    }
+                }
+        );
     }
 }

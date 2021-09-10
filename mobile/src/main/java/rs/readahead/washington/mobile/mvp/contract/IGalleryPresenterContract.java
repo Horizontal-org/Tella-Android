@@ -3,12 +3,11 @@ package rs.readahead.washington.mobile.mvp.contract;
 import android.content.Context;
 import android.net.Uri;
 
-import com.hzontal.tella_vault.IVaultDatabase;
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.tella_vault.filter.FilterType;
+import com.hzontal.tella_vault.filter.Sort;
 
 import java.util.List;
-
-import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 
 
 public class IGalleryPresenterContract {
@@ -37,7 +36,7 @@ public class IGalleryPresenterContract {
     }
 
     public interface IPresenter extends IBasePresenter {
-        void getFiles(final IVaultDatabase.Filter filter, final IVaultDatabase.Sort sort);
+        void getFiles(final FilterType filterType, final Sort sort);
         void importImage(Uri uri);
         void importVideo(Uri uri);
         void addNewMediaFile(VaultFile vaultFile);

@@ -2,10 +2,12 @@ package com.hzontal.tella_locking_ui.ui.password
 
 import android.os.Bundle
 import android.view.KeyEvent
+import android.view.View
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.hzontal.tella_locking_ui.R
+import com.hzontal.tella_locking_ui.ReturnActivity
 import com.hzontal.tella_locking_ui.TellaKeysUI
 import com.hzontal.tella_locking_ui.common.extensions.onChange
 import com.hzontal.tella_locking_ui.ui.password.base.BasePasswordActivity
@@ -40,14 +42,25 @@ class PasswordUnlockActivity : BasePasswordActivity() {
             }
             return@setOnKeyListener false
         }
-        if (isFromSettings) {
-            backBtn = findViewById(R.id.backBtn)
-            backBtn.isVisible = true
-            backBtn.setOnClickListener { finish() }
-            passwordMsgTextView.text = getString(R.string.settings_current_password_msg)
-        } else {
-            passwordMsgTextView.text = getText(R.string.enter_password_tella)
-            passwordEditText.onChange { passwordMsgTextView.text = getText(R.string.enter_password_tella) }
+        when (returnActivity) {
+            ReturnActivity.SETTINGS.getActivityOrder() -> {
+                backBtn = findViewById(R.id.backBtn)
+                backBtn.isVisible = true
+                backBtn.setOnClickListener { finish() }
+                passwordMsgTextView.text = getString(R.string.settings_current_password_msg)
+            }
+            ReturnActivity.CAMOUFLAGE.getActivityOrder() -> {
+                backBtn = findViewById(R.id.backBtn)
+                backBtn.isVisible = true
+                backBtn.setOnClickListener { finish() }
+                passwordMsgTextView.text = getString(R.string.settings_current_camo_password_msg)
+            }
+            else -> {
+                passwordMsgTextView.text = getText(R.string.enter_password_tella)
+                passwordEditText.onChange {
+                    passwordMsgTextView.text = getText(R.string.enter_password_tella)
+                }
+            }
         }
     }
 

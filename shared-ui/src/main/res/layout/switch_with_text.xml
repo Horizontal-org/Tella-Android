@@ -5,14 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="12dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp"
+    android:paddingStart="12dp"
+    android:paddingEnd="8dp"
     android:weightSum="1">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
-        android:layout_weight=".85"
+        android:layout_weight=".82"
         android:orientation="vertical">
 
         <TextView
@@ -38,7 +41,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="2dp"
-        android:layout_weight=".15" />
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_weight=".18" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

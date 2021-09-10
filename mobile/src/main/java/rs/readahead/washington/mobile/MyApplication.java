@@ -34,6 +34,7 @@ import org.hzontal.tella.keys.wrapper.UnencryptedKeyWrapper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.multidex.MultiDexApplication;
 
@@ -124,6 +125,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     public void onCreate() {
         super.onCreate();
 
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+
         //ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
         BaseApi.Builder apiBuilder = new BaseApi.Builder();
 
@@ -164,7 +167,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         TellaKeys.initialize();
         initializeLockConfigRegistry();
         mainKeyStore = new MainKeyStore(getApplicationContext());
-        mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), LifecycleMainKey.NO_TIMEOUT);
+        //mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), LifecycleMainKey.NO_TIMEOUT);
+        mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), Preferences.getLockTimeout());
         keyDataSource = new KeyDataSource(getApplicationContext());
         TellaKeysUI.initialize(mainKeyStore, mainKeyHolder, unlockRegistry, this);
 

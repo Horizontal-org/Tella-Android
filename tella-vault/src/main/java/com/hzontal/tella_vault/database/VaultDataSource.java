@@ -5,11 +5,16 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hzontal.tella_vault.IVaultDatabase;
 import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.tella_vault.filter.FilterType;
+import com.hzontal.tella_vault.filter.Limits;
+import com.hzontal.tella_vault.filter.Sort;
 
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteQueryBuilder;
@@ -17,7 +22,6 @@ import net.sqlcipher.database.SQLiteQueryBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.Nullable;
 import timber.log.Timber;
 
 
@@ -28,6 +32,13 @@ public class VaultDataSource implements IVaultDatabase {
     private static Gson gson;
     private final SQLiteDatabase database;
 
+    public VaultDataSource(Context context, byte[] key) {
+        VaultSQLiteOpenHelper sqLiteOpenHelper = new VaultSQLiteOpenHelper(context);
+        SQLiteDatabase.loadLibs(context);
+
+        database = sqLiteOpenHelper.getWritableDatabase(key);
+    }
+
     public static synchronized VaultDataSource getInstance(Context context, byte[] key) {
         if (dataSource == null) {
             dataSource = new VaultDataSource(context.getApplicationContext(), key);
@@ -35,13 +46,6 @@ public class VaultDataSource implements IVaultDatabase {
         }
 
         return dataSource;
-    }
-
-    public VaultDataSource(Context context, byte[] key) {
-        VaultSQLiteOpenHelper sqLiteOpenHelper = new VaultSQLiteOpenHelper(context);
-        SQLiteDatabase.loadLibs(context);
-
-        database = sqLiteOpenHelper.getWritableDatabase(key);
     }
 
     @Override
@@ -85,24 +89,18 @@ public class VaultDataSource implements IVaultDatabase {
     }
 
     @Override
-    public List<VaultFile> list(@Nullable VaultFile parent, @Nullable Filter filter, @Nullable Sort sort, @Nullable Limits limits) {
+    public List<VaultFile> list(@Nullable VaultFile parent, @Nullable FilterType filterType, @Nullable Sort sort, @Nullable Limits limits) {
         List<VaultFile> vaultFiles = new ArrayList<>();
 
-        String direction = Sort.Direction.ASC.name();
         String limit = null;
         String where;
         Cursor cursor = null;
 
-        if (sort != null) {
-            direction = sort.direction.name();
-        }
-
         if (limits != null) {
             limit = String.valueOf(limits.limit);
         }
-
-        where = cn(D.T_VAULT_FILE, D.C_PARENT_ID) + " = '" + (parent != null ? parent.id : ROOT_UID) + "'";
-
+        where = getFilterQuery(filterType, (parent != null ? parent.id : ROOT_UID));
+        Timber.d("where%s", where);
         try {
             // todo: add support for filter directly in query
             final String query = SQLiteQueryBuilder.buildQueryString(
@@ -126,7 +124,7 @@ public class VaultDataSource implements IVaultDatabase {
                     where,
                     null,
                     null,
-                    D.C_CREATED + " " + direction,
+                    getSortQuery(sort),
                     limit
             );
 
@@ -142,6 +140,15 @@ public class VaultDataSource implements IVaultDatabase {
         }
 
         return vaultFiles;
+    }
+
+    private String getSortQuery(Sort sort) {
+        if (sort == null)
+            return D.C_NAME + " " + Sort.Direction.ASC.name();
+
+        if (sort.type.name().equals(Sort.Type.DATE.name()))
+            return D.C_CREATED + " " + sort.direction.name();
+        else return D.C_NAME + " " + sort.direction.name();
     }
 
     public VaultFile updateMetadata(VaultFile vaultFile, Metadata metadata) {
@@ -186,7 +193,7 @@ public class VaultDataSource implements IVaultDatabase {
                         D.C_TYPE,
                         D.C_THUMBNAIL
                 },
-                cn(D.T_VAULT_FILE, D.C_ID) + " = ?", new String[]{id},
+                cn(D.C_ID) + " = ?", new String[]{id},
                 null, null, null, null
         )) {
             if (cursor.moveToFirst()) {
@@ -197,6 +204,29 @@ public class VaultDataSource implements IVaultDatabase {
         }
 
         return null;
+    }
+
+    @Override
+    public VaultFile rename(String id, String name) {
+        ContentValues values = new ContentValues();
+
+        values.put(D.C_NAME, name);
+
+        database.update(D.T_VAULT_FILE, values, D.C_ID + " = ?",
+                new String[]{id});
+
+        return get(id);
+    }
+
+    @Override
+    public boolean move(VaultFile vaultFile, VaultFile newParent) {
+        ContentValues values = new ContentValues();
+        values.put(D.C_PARENT_ID, newParent.id);
+
+        int count = database.update(D.T_VAULT_FILE, values, D.C_ID + " = ?",
+                new String[]{vaultFile.id});
+
+        return count == 1;
     }
 
     @Override
@@ -250,13 +280,49 @@ public class VaultDataSource implements IVaultDatabase {
         return vaultFile;
     }
 
-    private String cn(String table, String column) {
-        return table + "." + column;
+    private String cn(String column) {
+        return D.T_VAULT_FILE + "." + column;
+    }
+
+    private String getFilterQuery(FilterType filter, String parentId) {
+        if (filter == null)
+            return cn(D.C_PARENT_ID) + " = '" + parentId + "'";
+
+        switch (filter) {
+            case AUDIO:
+                return cn(D.C_MIME_TYPE) + " LIKE '" + "audio/%" + "'";
+            case VIDEO:
+                return cn(D.C_MIME_TYPE) + " LIKE '" + "video/%" + "'";
+            case PHOTO:
+                return cn(D.C_MIME_TYPE) + " LIKE '" + "image/%" + "'";
+            case OTHERS:
+                return cn(D.C_MIME_TYPE) + " NOT LIKE '" + "audio/%" + "'"
+                        + cn(D.C_MIME_TYPE) + " NOT LIKE '" + "video/%" + "'"
+                        + cn(D.C_MIME_TYPE) + " NOT LIKE '" + "image/%" + "'"
+                        + cn(D.C_MIME_TYPE) + " NOT LIKE '" + "text/%" + "'"
+                        ;
+            case DOCUMENTS:
+                return cn(D.C_MIME_TYPE) + " LIKE '" + "text/%" + "' OR " + cn(D.C_MIME_TYPE) + " IN " +
+                        "(" + "'application/pdf'" + ","
+                        + "'application/msword'" + ","
+                        + "'application/vnd.ms-excel'" + ""
+                        + "'application/mspowerpoint'" + ""
+                        + "'audio/flac'" + ""
+                        + "'application/zip'" + ""
+                        + ")";
+            case ALL_WITHOUT_DIRECTORY:
+                return cn(D.C_TYPE) + " != '" + VaultFile.Type.DIRECTORY.getValue() + "'";
+            default:
+                return cn(D.C_PARENT_ID) + " = '" + parentId + "'";
+
+        }
     }
 
     private String cn(String table, String column, String as) {
         return table + "." + column + " AS " + as;
     }
+
+
     private void deleteTable(String table) {
         database.execSQL("DELETE FROM " + table);
     }

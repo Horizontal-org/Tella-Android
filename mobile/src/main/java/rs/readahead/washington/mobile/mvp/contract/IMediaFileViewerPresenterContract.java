@@ -13,11 +13,15 @@ public class IMediaFileViewerPresenterContract {
         void onExportEnded();
         void onMediaFileDeleted();
         void onMediaFileDeletionError(Throwable throwable);
+        void onMediaFileRename(VaultFile vaultFile);
+        void onMediaFileRenameError(Throwable throwable);
         Context getContext();
     }
 
     public interface IPresenter extends IBasePresenter {
         void exportNewMediaFile(VaultFile vaultFile);
         void deleteMediaFiles(VaultFile vaultFile);
+        void renameVaultFile(String id, String name);
+
     }
 }

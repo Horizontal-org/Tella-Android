@@ -61,7 +61,7 @@ public class QuestionAttachmentPresenter implements IQuestionAttachmentPresenter
 
     @Override
     public void importImage(final Uri uri) {
-        disposables.add(Observable.fromCallable(() -> MediaFileHandler.importPhotoUri(view.getContext(), uri))
+        disposables.add(Observable.fromCallable(() -> MediaFileHandler.importPhotoUri(view.getContext(), uri,null))
                 .subscribeOn(Schedulers.computation())
                 .doOnSubscribe(disposable -> view.onImportStarted())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -75,7 +75,7 @@ public class QuestionAttachmentPresenter implements IQuestionAttachmentPresenter
 
     @Override
     public void importVideo(final Uri uri) {
-        disposables.add(Observable.fromCallable(() -> MediaFileHandler.importVideoUri(view.getContext(), uri))
+        disposables.add(Observable.fromCallable(() -> MediaFileHandler.importVideoUri(view.getContext(), uri,null))
                 .subscribeOn(Schedulers.computation())
                 .doOnSubscribe(disposable -> view.onImportStarted())
                 .observeOn(AndroidSchedulers.mainThread())

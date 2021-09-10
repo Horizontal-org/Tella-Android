@@ -12,15 +12,14 @@ ext {
 }
 
 android {
-    compileSdkVersion 29
-
+    compileSdkVersion 30
     defaultConfig {
         applicationId "org.hzontal.tella"
         minSdkVersion 17
         compileSdkVersion 29
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 63
-        versionName "1.7.2"
+        versionName "2.0.0-alpha1"
         multiDexEnabled true
         // vectorDrawables.useSupportLibrary = true // don't care about apk size, care about crashes
     }
@@ -54,7 +53,8 @@ android {
 dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api project(':tella-vault')
+    implementation project(':tella-vault')
+    api project(':tella-locking-ui')
 
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
@@ -87,6 +87,8 @@ dependencies {
         exclude module: "support-v13"
     }
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.navigation:navigation-runtime:2.3.0'
+    implementation 'androidx.navigation:navigation-fragment:2.3.5'
     annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:${permissionDispatcherVersion}"
 
     implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
@@ -129,4 +131,5 @@ dependencies {
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}"
 
     testImplementation 'junit:junit:4.13'
+    implementation 'com.github.vihtarb:tooltip:1.0.0-alpha06-SNAPSHOT'
 }

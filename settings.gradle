@@ -1,4 +1,5 @@
 include ':tella-vault'
+include ':shared-ui'
 include ':mobile'
 include ':tella-keys'
 include ':tella-locking-ui'

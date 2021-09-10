@@ -51,6 +51,17 @@ public class MediaFileViewerPresenter implements IMediaFileViewerPresenterContra
     }
 
     @Override
+    public void renameVaultFile(String id, String name) {
+        disposables.add(MyApplication.rxVault.rename(id,name)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(vaultFile -> view.onMediaFileRename(vaultFile), throwable -> {
+                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    view.onMediaFileRenameError(throwable);
+                }));
+    }
+
+    @Override
     public void destroy() {
         disposables.dispose();
         view = null;

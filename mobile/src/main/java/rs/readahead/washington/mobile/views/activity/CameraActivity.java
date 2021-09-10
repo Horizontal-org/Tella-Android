@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.OrientationEventListener;
 import android.view.View;
@@ -145,6 +146,7 @@ public class CameraActivity extends MetadataActivity implements
         setupCameraView();
         setupCameraModeButton();
         setupImagePreview();
+        setupShutterSound();
     }
 
     @Override
@@ -207,6 +209,10 @@ public class CameraActivity extends MetadataActivity implements
     @Override
     public void onAddingStart() {
         progressDialog = DialogsUtil.showLightProgressDialog(this, getString(R.string.gallery_dialog_expl_encrypting));
+        if (Preferences.isShutterMute()) {
+            AudioManager mgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false);
+        }
     }
 
     @Override
@@ -314,6 +320,10 @@ public class CameraActivity extends MetadataActivity implements
 
     @OnClick(R.id.captureButton)
     void onCaptureClicked() {
+        if (Preferences.isShutterMute()) {
+            AudioManager mgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true);
+        }
         if (cameraView.getMode() == Mode.PICTURE) {
             cameraView.takePicture();
         } else {
@@ -670,6 +680,10 @@ public class CameraActivity extends MetadataActivity implements
         } else {
             onMediaFilesUploadScheduled();
         }
+    }
+
+    private void setupShutterSound() {
+        cameraView.setPlaySounds(!Preferences.isShutterMute());
     }
 
     public enum CameraMode {

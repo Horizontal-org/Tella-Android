@@ -1,18 +1,21 @@
 package rs.readahead.washington.mobile.views.activity;
 
+import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
+
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -29,7 +32,13 @@ import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.hzontal.tella_vault.VaultFile;
 
+import org.hzontal.shared_ui.appbar.ToolbarComponent;
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
+import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
+import org.hzontal.shared_ui.utils.DialogUtils;
+
 import butterknife.ButterKnife;
+import kotlin.Unit;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -39,6 +48,7 @@ import permissions.dispatcher.RuntimePermissions;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
+import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.exo.ExoEventListener;
 import rs.readahead.washington.mobile.media.exo.MediaFileDataSourceFactory;
@@ -48,8 +58,7 @@ import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
-
-import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
+import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment;
 
 @RuntimePermissions
 public class VideoViewerActivity extends BaseLockActivity implements
@@ -73,12 +82,12 @@ public class VideoViewerActivity extends BaseLockActivity implements
     private long resumePosition;
 
     private VaultFile vaultFile;
-    private Toolbar toolbar;
+    private ToolbarComponent toolbar;
     private boolean actionsDisabled = false;
     private MediaFileViewerPresenter presenter;
     private AlertDialog alertDialog;
     private ProgressDialog progressDialog;
-
+    private boolean isInfoShown = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -220,6 +229,21 @@ public class VideoViewerActivity extends BaseLockActivity implements
     }
 
     @Override
+    public void onMediaFileRename(VaultFile vaultFile) {
+        if (vaultFile != null) {
+            toolbar.setStartTextTitle(vaultFile.name);
+            this.vaultFile = vaultFile;
+        }
+        MyApplication.bus().post(new VaultFileRenameEvent());
+    }
+
+    @Override
+    public void onMediaFileRenameError(Throwable throwable) {
+        //TODO CHECK ERROR MSG WHEN RENAME
+        DialogUtils.showBottomMessage(this, getString(R.string.gallery_toast_fail_deleting_files), true);
+    }
+
+    @Override
     public Context getContext() {
         return this;
     }
@@ -297,6 +321,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
                 VaultFile vaultFile = (VaultFile) getIntent().getExtras().get(VIEW_VIDEO);
                 if (vaultFile != null) {
                     this.vaultFile = vaultFile;
+                    toolbar.setStartTextTitle(vaultFile.name);
                     setupMetadataMenuItem(vaultFile.metadata != null);
                 }
             }
@@ -328,11 +353,6 @@ public class VideoViewerActivity extends BaseLockActivity implements
         }
     }
 
-    /*private void updateResumePosition() {
-        resumeWindow = player.getCurrentWindowIndex();
-        resumePosition = player.isCurrentWindowSeekable() ? Math.max(0, player.getCurrentPosition())
-                : C.TIME_UNSET;
-    }*/
 
     private void clearResumePosition() {
         resumeWindow = C.INDEX_UNSET;
@@ -341,13 +361,19 @@ public class VideoViewerActivity extends BaseLockActivity implements
 
     @Override
     public void onVisibilityChange(int visibility) {
-        toolbar.setVisibility(visibility);
+        if (!isInfoShown) {
+            toolbar.setVisibility(visibility);
+        } else {
+            toolbar.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setupToolbar() {
         toolbar = findViewById(R.id.player_toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        toolbar.setBackClickListener(() -> {
+            onBackPressed();
+            return Unit.INSTANCE;
+        });
 
         if (!actionsDisabled) {
             toolbar.inflateMenu(R.menu.video_view_menu);
@@ -356,41 +382,13 @@ public class VideoViewerActivity extends BaseLockActivity implements
                 setupMetadataMenuItem(vaultFile.metadata != null);
             }
 
-            toolbar.getMenu().findItem(R.id.menu_item_share).setOnMenuItemClickListener(item -> {
-                shareMediaFile();
-                return false;
-            });
-
-            toolbar.getMenu().findItem(R.id.menu_item_export).setOnMenuItemClickListener(item -> {
-                if (vaultFile != null) {
-                    showExportDialog();
-                }
-                return false;
-            });
-
-            toolbar.getMenu().findItem(R.id.menu_item_delete).setOnMenuItemClickListener(item -> {
-                if (vaultFile != null) {
-                    showDeleteMediaDialog();
-                }
+            toolbar.getMenu().findItem(R.id.menu_item_more).setOnMenuItemClickListener(item -> {
+                showVaultActionsDialog(vaultFile);
                 return false;
             });
         }
     }
 
-    private void showDeleteMediaDialog() {
-        alertDialog = new AlertDialog.Builder(this)
-                .setTitle(R.string.gallery_delete_files_dialog_title)
-                .setMessage(R.string.gallery_delete_files_dialog_expl)
-                .setPositiveButton(R.string.action_delete, (dialog, which) -> {
-                    if (vaultFile != null && presenter != null) {
-                        presenter.deleteMediaFiles(vaultFile);
-                    }
-                })
-                .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
-                })
-                .setCancelable(true)
-                .show();
-    }
 
     private void showMetadata() {
         Intent viewMetadata = new Intent(this, MetadataViewerActivity.class);
@@ -420,5 +418,103 @@ public class VideoViewerActivity extends BaseLockActivity implements
         } else {
             mdMenuItem.setVisible(false);
         }
+    }
+
+    private void showVaultActionsDialog(VaultFile vaultFile) {
+        VaultSheetUtils.showVaultActionsSheet(getSupportFragmentManager(),
+                vaultFile.name,
+                getString(R.string.action_upload),
+                getString(R.string.action_share),
+                getString(R.string.vault_move_to_another_folder),
+                getString(R.string.vault_rename),
+                getString(R.string.action_save),
+                getString(R.string.vault_file_information),
+                getString(R.string.action_delete),
+                false,
+                false,
+                new VaultSheetUtils.IVaultActions() {
+                    @Override
+                    public void upload() {
+
+                    }
+
+                    @Override
+                    public void share() {
+                        startShareActivity(false);
+                    }
+
+                    @Override
+                    public void move() {
+
+                    }
+
+                    @Override
+                    public void rename() {
+                        VaultSheetUtils.showVaultRenameSheet(
+                                getSupportFragmentManager(),
+                                getString(R.string.vault_rename_file),
+                                getString(R.string.action_cancel),
+                                getString(R.string.action_ok),
+                                VideoViewerActivity.this,
+                                vaultFile.name,
+                                (name) -> {
+                                    presenter.renameVaultFile(vaultFile.id, name);
+                                    return Unit.INSTANCE;
+                                }
+                        );
+                    }
+
+                    @Override
+                    public void save() {
+                        BottomSheetUtils.showConfirmSheet(
+                                getSupportFragmentManager(),
+                                getString(R.string.gallery_save_to_device_dialog_title),
+                                getString(R.string.gallery_save_to_device_dialog_expl),
+                                getString(R.string.action_save),
+                                getString(R.string.action_cancel),
+                                isConfirmed -> {
+                                    VideoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(VideoViewerActivity.this);
+                                }
+                        );
+                    }
+
+                    @Override
+                    public void info() {
+                        isInfoShown = true;
+                        onVisibilityChange(View.VISIBLE);
+                        toolbar.setStartTextTitle(getString(R.string.vault_file_info));
+                        toolbar.getMenu().findItem(R.id.menu_item_more).setVisible(false);
+                        toolbar.getMenu().findItem(R.id.menu_item_metadata).setVisible(false);
+                        invalidateOptionsMenu();
+                        addFragment(new VaultInfoFragment().newInstance(vaultFile, false), R.id.container);
+
+                    }
+
+                    @Override
+                    public void delete() {
+                        BottomSheetUtils.showConfirmSheet(
+                                getSupportFragmentManager(),
+                                getString(R.string.vault_delete_file),
+                                getString(R.string.vault_delete_file_msg),
+                                getString(R.string.action_delete),
+                                getString(R.string.action_cancel),
+                                isConfirmed -> {
+                                    presenter.deleteMediaFiles(vaultFile);
+                                }
+                        );
+
+                    }
+                }
+        );
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        toolbar.setStartTextTitle(vaultFile.name);
+        toolbar.getMenu().findItem(R.id.menu_item_more).setVisible(true);
+        setupMetadataMenuItem(vaultFile.metadata != null);
+        invalidateOptionsMenu();
+        isInfoShown = false;
     }
 }

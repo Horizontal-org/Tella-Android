@@ -51,7 +51,7 @@ public class BaseApi {
             synchronized (BaseApi.class) {
                 baseRetrofit = retrofitBuilder
                         .baseUrl(restBase)
-                        //.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
             }

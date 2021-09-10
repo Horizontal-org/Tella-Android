@@ -1,16 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".views.fragment.VaultFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/settings"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="go to settings" />
+   <com.google.android.material.appbar.AppBarLayout
+       android:id="@+id/appbar"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       android:fitsSystemWindows="true"
+       android:theme="@style/AppTheme.DarkNoActionBar">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+      <org.hzontal.shared_ui.appbar.ToolbarComponent
+          android:id="@+id/toolbar"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          app:toolbarTitle="@string/app_name"
+          app:leftIcon="@drawable/ic_settings"
+          app:rightIcon="@drawable/ic_close"
+          />
+
+   </com.google.android.material.appbar.AppBarLayout>
+
+   <androidx.recyclerview.widget.RecyclerView
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:id="@+id/vaultRecyclerView"
+       android:background="@color/space_cadet"
+       app:layout_behavior="@string/appbar_scrolling_view_behavior"
+       tools:listitem="@layout/item_vault_attachment_hor"
+       tools:itemCount="30"
+       />
+
+   <androidx.constraintlayout.widget.ConstraintLayout
+       android:layout_width="match_parent"
+       android:layout_height="50dp"
+       android:layout_gravity="bottom"
+       android:layout_marginBottom="55dp"
+       android:id="@+id/panicSeekContainer"
+      >
+      <SeekBar
+          android:id="@+id/panic_seek"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintBottom_toBottomOf="parent"
+          android:layout_marginEnd="70dp"
+          android:layout_marginStart="17dp"
+          android:layout_width="0dp"
+          android:background="@color/space_cadet"
+          android:layout_height="@dimen/navigation_panic_height"
+          android:max="100"
+          android:thumbOffset="-4dp"
+          android:padding="3dp"
+          android:progressDrawable="@drawable/panic_seek_var_progress"
+          android:thumb="@drawable/ic_progress_bg"
+          android:splitTrack="false"
+          />
+
+      <TextView
+          android:id="@+id/deleteTv"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="bottom|center"
+          android:gravity="center"
+          android:text="@string/home_action.label_quick.delete"
+          android:textAllCaps="true"
+          app:layout_constraintStart_toStartOf="@id/panic_seek"
+          app:layout_constraintEnd_toEndOf="@id/panic_seek"
+          app:layout_constraintTop_toTopOf="@id/panic_seek"
+          app:layout_constraintBottom_toBottomOf="@id/panic_seek"
+          android:textSize="15sp"
+          style="@style/Tella_Main_White_Text.MeduimbBold"
+          />
+
+      <androidx.constraintlayout.widget.Group
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:id="@+id/seekBarGrp"
+          android:visibility="visible"
+          app:constraint_referenced_ids="panic_seek,deleteTv"
+          />
+
+      <com.google.android.material.floatingactionbutton.FloatingActionButton
+          android:id="@+id/fab_button"
+          android:layout_width="50dp"
+          android:layout_height="50dp"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintBottom_toBottomOf="parent"
+          android:background="@color/dark_orange"
+          app:backgroundTint="@color/dark_orange"
+          app:fabCustomSize="50dp"
+          app:layout_anchorGravity="center"
+          app:maxImageSize="30dp"
+          app:srcCompat="@drawable/ic_plus"
+          app:useCompatPadding="true"
+          tools:ignore="VectorDrawableCompat"
+          android:layout_marginEnd="16dp"
+          android:contentDescription="TODO" />
+
+   </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+   <include layout="@layout/content_panic_mode_view" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
