@@ -44,7 +44,10 @@ import androidx.appcompat.app.AlertDialog;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.bus.event.CaptureEvent;
+import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
@@ -228,6 +231,7 @@ public class CameraActivity extends MetadataActivity implements
             Glide.with(this).load(bundle.thumb).into(previewView);
         }
         attachMediaFileMetadata(capturedMediaFile, metadataAttacher);
+        MyApplication.bus().post(new CaptureEvent());
     }
 
     @Override

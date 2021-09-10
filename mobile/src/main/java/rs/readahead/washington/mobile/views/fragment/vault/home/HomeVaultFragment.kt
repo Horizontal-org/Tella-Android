@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.views.fragment.vault.home
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.RelativeLayout
@@ -95,6 +96,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
                     seekBar.progress = 0
                     showPanicScreens()
                 } else {
+                    seekBar.progress = 0
                     hidePanicScreens()
                 }
             }
@@ -107,6 +109,11 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private fun setUpToolbar() {
         val activity = context as MainActivity
         activity.setSupportActionBar(toolbar)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            view?.findViewById<View>(R.id.appbar)?.outlineProvider = null
+        } else {
+            view?.findViewById<View>(R.id.appbar)?.bringToFront()
+        }
     }
 
     override fun onRecentFilesItemClickListener(vaultFile: VaultFile) {

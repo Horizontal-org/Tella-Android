@@ -39,6 +39,7 @@ import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.EventObserver
+import rs.readahead.washington.mobile.bus.event.CaptureEvent
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent
 import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent
 import rs.readahead.washington.mobile.media.MediaFileHandler
@@ -187,6 +188,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         attachmentsPresenter.getRootId()
         onFileDeletedEventListener()
         onFileRenameEventListener()
+        onCaptureEventListener()
     }
 
     private fun initSorting() {
@@ -218,14 +220,14 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             R.id.gridCheck -> {
                 gridCheck.toggleVisibility(false)
                 listCheck.toggleVisibility(true)
-                gridLayoutManager.spanCount = 4
+                gridLayoutManager.spanCount = 1
                 attachmentsAdapter.setLayoutManager(gridLayoutManager)
                 attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
             }
             R.id.listCheck -> {
                 gridCheck.toggleVisibility(true)
                 listCheck.toggleVisibility(false)
-                gridLayoutManager.spanCount = 1
+                gridLayoutManager.spanCount = 4
                 attachmentsAdapter.setLayoutManager(gridLayoutManager)
                 attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
             }
@@ -639,6 +641,16 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             })
     }
 
+    private fun onCaptureEventListener() {
+        disposables.wire(
+            CaptureEvent::class.java,
+            object : EventObserver<CaptureEvent?>() {
+                override fun onNext(event: CaptureEvent) {
+                   attachmentsPresenter.getFiles(currentRootID,filterType,sort)
+                }
+            })
+    }
+
     private fun handleSortSheet() {
         VaultSheetUtils.showVaultSortSheet(
             activity.supportFragmentManager,
@@ -708,9 +720,13 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                     attachmentsPresenter.importVaultFiles(listVaultFilesUris, currentRootID)
                 }
             }
+             C.CAMERA_CAPTURE or C.RECORDED_AUDIO -> {
+                 attachmentsPresenter.getFiles(currentRootID, filterType, sort)
+             }
             WRITE_REQUEST_CODE -> {
                 vaultFile?.let { exportVaultFile(vaultFile = it) }
             }
+
         }
     }
 
@@ -777,6 +793,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             }
         }
     }
+
     private fun enableMoveTheme(){
         if (!isMoveModeEnabled){
             toolbar.setBackgroundColor(R.color.prussian_blue)

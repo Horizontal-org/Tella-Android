@@ -37,7 +37,9 @@ import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.OnShowRationale;
 import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.bus.event.CaptureEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.media.AudioRecorder;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
@@ -102,11 +104,11 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     private Mode mode;
 
-
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_audio_record);
         ButterKnife.bind(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -264,6 +266,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     @Override
     public void onAddSuccess(VaultFile vaultFile) {
         attachMediaFileMetadata(vaultFile, metadataAttacher);
+        MyApplication.bus().post(new CaptureEvent());
         showToast(String.format(getString(R.string.recorder_toast_recording_saved), getString(R.string.app_name)));
     }
 
