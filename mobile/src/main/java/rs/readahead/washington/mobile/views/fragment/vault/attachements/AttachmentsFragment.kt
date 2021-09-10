@@ -386,7 +386,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
                 override fun move() {
                     isMoveModeEnabled = true
-                    enableMoveTheme()
+                   // enableMoveTheme()
                 }
 
                 override fun rename() {
