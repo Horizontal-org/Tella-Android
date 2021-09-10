@@ -55,11 +55,6 @@ import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.WorkerThread;
-import androidx.core.content.FileProvider;
-import androidx.exifinterface.media.ExifInterface;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -166,8 +161,6 @@ public class MediaFileHandler {
             path = Environment.getExternalStoragePublicDirectory(envDirType);
         }
         File file = MyApplication.rxVault.getFile(vaultFile);
-
-        File file = new File(path, vaultFile.name);
 
         InputStream is = null;
         OutputStream os = null;
@@ -488,10 +481,6 @@ public class MediaFileHandler {
 
     public static long getSize(VaultFile vaultFile) {
         return getSize(getFile(vaultFile));
-    }
-
-    public static Uri getUri(Context context, VaultFile vaultFile) {
-        return Uri.fromFile(new File(context.getFilesDir(), vaultFile.path));
     }
 
     private static long getSize(File file) {

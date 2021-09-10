@@ -1,7 +1,6 @@
 package rs.readahead.washington.mobile.views.activity;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -15,14 +14,6 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.hzontal.filter.VaultTypeFilter;
-import com.hzontal.tella_vault.IVaultDatabase;
-import com.hzontal.tella_vault.VaultFile;
-import com.hzontal.utils.MediaFile;
-
-import java.util.List;
-
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -32,15 +23,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hzontal.tella_vault.VaultFile;
-import com.hzontal.tella_vault.filter.Filter;
 import com.hzontal.tella_vault.filter.Sort;
 import com.hzontal.utils.MediaFile;
-
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -74,7 +61,6 @@ import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
 import rs.readahead.washington.mobile.views.fragment.TellaUploadDialogFragment;
 import rs.readahead.washington.mobile.views.interfaces.IAttachmentsMediaHandler;
 import rs.readahead.washington.mobile.views.interfaces.IGalleryMediaHandler;
-import rs.readahead.washington.mobile.views.interfaces.IGalleryVaultHandler;
 import timber.log.Timber;
 
 //TODO CHECK FILTER AND SORTS
