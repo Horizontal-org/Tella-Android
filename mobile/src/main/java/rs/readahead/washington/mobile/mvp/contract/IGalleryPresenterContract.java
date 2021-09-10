@@ -3,7 +3,6 @@ package rs.readahead.washington.mobile.mvp.contract;
 import android.content.Context;
 import android.net.Uri;
 
-import com.hzontal.tella_vault.filter.Filter;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
 import com.hzontal.tella_vault.filter.Sort;

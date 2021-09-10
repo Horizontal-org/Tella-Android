@@ -226,7 +226,7 @@ public class GalleryActivity extends MetadataActivity implements
             }
 
             if (id == R.id.menu_item_share) {
-                sharevaultFiles();
+                shareVaultFiles();
                 return true;
             }
 
@@ -236,7 +236,7 @@ public class GalleryActivity extends MetadataActivity implements
             }
 
             if (id == R.id.menu_item_tu && numOfTUServers > 0) {
-                uploadvaultFiles();
+                uploadVaultFiles();
                 return true;
             }
 
@@ -640,7 +640,7 @@ public class GalleryActivity extends MetadataActivity implements
         alertDialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.gallery_delete_files_dialog_title)
                 .setMessage(R.string.gallery_delete_files_dialog_expl)
-                .setPositiveButton(R.string.action_delete, (dialog, which) -> removevaultFiles())
+                .setPositiveButton(R.string.action_delete, (dialog, which) -> removeVaultFiles())
                 .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
                 })
                 .setCancelable(true)
@@ -648,7 +648,7 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void removevaultFiles() {
+    private void removeVaultFiles() {
         List<VaultFile> selected = adapter.getSelectedMediaFiles();
         presenter.deleteMediaFiles(selected);
         clearSelection();
@@ -664,7 +664,7 @@ public class GalleryActivity extends MetadataActivity implements
         }
     }
 
-    private void sharevaultFiles() {
+    private void shareVaultFiles() {
         boolean metadata = false;
         List<VaultFile> selected = adapter.getSelectedMediaFiles();
 
@@ -682,7 +682,7 @@ public class GalleryActivity extends MetadataActivity implements
         }
     }
 
-    private void uploadvaultFiles() {
+    private void uploadVaultFiles() {
         boolean metadata = false;
         List<VaultFile> selected = adapter.getSelectedMediaFiles();
 

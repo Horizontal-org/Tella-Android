@@ -364,7 +364,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
         } else {
             handlingMediaFile = vaultFile;
-            handlingMediaFile.size = MediaFileHandler.getSize(vaultFile);
+            handlingMediaFile.size = vaultFile.size;
 
             disableStop();
             enablePlay();

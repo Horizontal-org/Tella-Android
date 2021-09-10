@@ -32,6 +32,7 @@ public class CameraPresenter implements ICameraPresenterContract.IPresenter {
                     FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onAddError(throwable);
                 })
+
         );
     }
 
@@ -82,7 +83,7 @@ public class CameraPresenter implements ICameraPresenterContract.IPresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mediaFile -> view.onLastMediaFileSuccess(mediaFile.get(1)),
+                        mediaFile -> view.onLastMediaFileSuccess(mediaFile.get(0)),
                         throwable -> view.onLastMediaFileError(throwable)
                 )
         );
