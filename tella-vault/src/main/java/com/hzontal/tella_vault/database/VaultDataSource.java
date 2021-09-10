@@ -302,7 +302,7 @@ public class VaultDataSource implements IVaultDatabase {
                         + cn(D.C_MIME_TYPE) + " NOT LIKE '" + "text/%" + "'"
                         ;
             case DOCUMENTS:
-                return cn(D.C_MIME_TYPE) + " LIKE '" + "text/%" + "' OR" + cn(D.C_MIME_TYPE) + " IN " +
+                return cn(D.C_MIME_TYPE) + " LIKE '" + "text/%" + "' OR " + cn(D.C_MIME_TYPE) + " IN " +
                         "(" + "'application/pdf'" + ","
                         + "'application/msword'" + ","
                         + "'application/vnd.ms-excel'" + ""
@@ -311,7 +311,7 @@ public class VaultDataSource implements IVaultDatabase {
                         + "'application/zip'" + ""
                         + ")";
             case ALL_WITHOUT_DIRECTORY:
-                return cn(D.C_TYPE) + " != '" + VaultFile.Type.DIRECTORY + "'";
+                return cn(D.C_TYPE) + " != '" + VaultFile.Type.DIRECTORY.getValue() + "'";
             default:
                 return cn(D.C_PARENT_ID) + " = '" + parentId + "'";
 
