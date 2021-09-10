@@ -9,7 +9,9 @@
         android:id="@+id/form"
         android:icon="@drawable/ic_forms"
         android:contentDescription="Forms"
-        android:title="Forms" />
+        android:title="Forms"
+        android:visible="false"
+        />
     <item
         android:id="@+id/camera"
         android:icon="@drawable/ic_camera"
@@ -24,5 +26,7 @@
         android:id="@+id/reports"
         android:icon="@drawable/ic_reports"
         android:contentDescription="Reports"
-        android:title="Reports" />
+        android:title="Reports"
+        android:visible="false"
+        />
 </menu>

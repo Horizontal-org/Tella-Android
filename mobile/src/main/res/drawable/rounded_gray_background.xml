@@ -2,17 +2,21 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:state_pressed="true">
-        <shape xmlns:android="http://schemas.android.com/apk/res/android">
-            <solid android:color="@color/wa_dark_gray" />
-            <corners android:bottomLeftRadius="7dp" android:bottomRightRadius="7dp" android:topLeftRadius="7dp" android:topRightRadius="7dp" />
-            <stroke android:width="2px" android:color="@color/wa_dark_gray" />
+        <shape>
+            <size android:height="49dp"
+                android:width="49dp" />
+            <solid android:color="@color/wa_white_40" />
+            <solid android:color="@color/wa_white_40"/>
+            <corners android:radius="25dp"/>
         </shape>
     </item>
     <item android:state_pressed="false">
-        <shape xmlns:android="http://schemas.android.com/apk/res/android">
-            <solid android:color="@color/wa_transparent" />
-            <corners android:bottomLeftRadius="7dp" android:bottomRightRadius="7dp" android:topLeftRadius="7dp" android:topRightRadius="7dp" />
-            <stroke android:width="2px" android:color="@color/wa_dark_gray" />
+        <shape>
+            <size android:height="49dp"
+                android:width="49dp" />
+            <solid android:color="@color/wa_white_40" />
+            <solid android:color="@color/wa_white_40"/>
+            <corners android:radius="25dp"/>
         </shape>
     </item>
 

@@ -33,12 +33,12 @@ abstract class BaseFragment : Fragment() {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    abstract fun initView(view: View)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.d("***** ${this.javaClass.name} onViewCreated")
 
         super.onViewCreated(view, savedInstanceState)
+        initView(view)
     }
 
     protected fun showToast(message: String) {
@@ -54,4 +54,8 @@ abstract class BaseFragment : Fragment() {
     open fun back() {
         nav().navigateUp()
     }
+
+    abstract fun initView(view: View)
+
+    open fun onBackPressed() = true
 }

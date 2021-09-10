@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <item
+        android:id="@+id/action_more"
+        android:orderInCategory="4"
+        android:icon="@drawable/ic_more"
+        android:title="@string/action_learn.more"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_share"
+        android:title="@string/action_share"
+        android:orderInCategory="3"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/action_upload"
+        android:icon="@drawable/ic_upload_cloud"
+        android:title="@string/action_upload"
+        android:orderInCategory="2"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/action_check"
+        android:icon="@drawable/ic_check"
+        android:title="@string/settings_select_general"
+        android:orderInCategory="1"
+        app:showAsAction="always"
+        />
+</menu>

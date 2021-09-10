@@ -21,6 +21,6 @@
         android:layout_height="wrap_content"
         app:itemRippleColor="@color/wa_white"
         app:menu="@menu/bottom_nav"
-        android:background="@color/wa_purple"
+        android:background="@color/space_cadet"
         />
 </LinearLayout>

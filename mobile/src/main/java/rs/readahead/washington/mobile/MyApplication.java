@@ -17,6 +17,8 @@ import com.hzontal.tella_locking_ui.ui.DeviceCredentialsUnlockActivity;
 import com.hzontal.tella_locking_ui.ui.password.PasswordUnlockActivity;
 import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity;
 import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity;
+import com.hzontal.tella_vault.Vault;
+import com.hzontal.tella_vault.rx.RxVault;
 
 import org.hzontal.tella.keys.MainKeyStore;
 import org.hzontal.tella.keys.TellaKeys;
@@ -32,8 +34,12 @@ import org.hzontal.tella.keys.wrapper.UnencryptedKeyWrapper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.multidex.MultiDexApplication;
+
+import java.io.File;
+
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
 import rs.readahead.washington.mobile.bus.TellaBus;
@@ -44,6 +50,7 @@ import rs.readahead.washington.mobile.data.sharedpref.SharedPrefs;
 import rs.readahead.washington.mobile.javarosa.JavaRosa;
 import rs.readahead.washington.mobile.javarosa.PropertyManager;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
+import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.LocaleManager;
 import rs.readahead.washington.mobile.util.jobs.TellaJobCreator;
 import rs.readahead.washington.mobile.views.activity.ExitActivity;
@@ -59,7 +66,9 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     private static MainKeyStore mainKeyStore;
     private static UnlockRegistry unlockRegistry;
     private static KeyDataSource keyDataSource;
-
+    public static Vault vault;
+    public static RxVault rxVault;
+    Vault.Config vaultConfig;
     public static void startMainActivity(@NonNull Context context) {
         Intent intent;
         if (Preferences.isFirstStart()) {
@@ -116,6 +125,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     public void onCreate() {
         super.onCreate();
 
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+
         //ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
         BaseApi.Builder apiBuilder = new BaseApi.Builder();
 
@@ -160,6 +171,10 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), Preferences.getLockTimeout());
         keyDataSource = new KeyDataSource(getApplicationContext());
         TellaKeysUI.initialize(mainKeyStore, mainKeyHolder, unlockRegistry, this);
+
+        vaultConfig = new Vault.Config();
+        vaultConfig.root = new File(this.getFilesDir(), C.MEDIA_DIR);
+
     }
 
     private void configureCrashlytics() {
@@ -209,6 +224,13 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         mainKeyStore = TellaKeysUI.getMainKeyStore();
         unlockRegistry = TellaKeysUI.getUnlockRegistry();
         keyDataSource.initKeyDataSource();
+
+        try {
+            vault = new Vault(this, mainKeyHolder, vaultConfig);
+            rxVault = new RxVault(this, vault);
+        } catch (Exception e) {
+            Timber.e(e);
+        }
         startMainActivity(context);
     }
 

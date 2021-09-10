@@ -10,12 +10,14 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.VaultFile;
 
 import org.javarosa.form.api.FormEntryPrompt;
 
 import androidx.annotation.NonNull;
+import io.reactivex.schedulers.Schedulers;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.odk.FormController;
@@ -63,8 +65,8 @@ public class VideoWidget extends MediaFileBinaryWidget {
 
     @Override
     public String setBinaryData(@NonNull Object data) {
-        MediaFile mediaFile = (MediaFile) data;
-        setFilename(mediaFile.getFileName());
+        VaultFile vaultFile = (VaultFile) data;
+        setFilename(vaultFile.name);
         showPreview();
         return getFilename();
     }
@@ -117,10 +119,13 @@ public class VideoWidget extends MediaFileBinaryWidget {
             Activity activity = (Activity) getContext();
             FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
 
-            MediaFile mediaFile = getFilename() != null ? MediaFile.fromFilename(getFilename()) : MediaFile.NONE;
+            VaultFile vaultFile = getFilename() != null ? MyApplication.rxVault
+                    .get(getFilename())
+                    .subscribeOn(Schedulers.io())
+                    .blockingGet() : null;
 
             activity.startActivityForResult(new Intent(getContext(), QuestionAttachmentActivity.class)
-                            .putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, mediaFile)
+                            .putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, vaultFile)
                             .putExtra(QuestionAttachmentActivity.MEDIA_FILES_FILTER, IMediaFileRecordRepository.Filter.VIDEO),
                     C.MEDIA_FILE_ID);
         } catch (Exception e) {

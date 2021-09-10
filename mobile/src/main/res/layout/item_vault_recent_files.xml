@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingStart="17dp"
+    android:paddingEnd="17dp"
+    android:layout_marginTop="17dp"
+    >
+    <TextView
+        android:id="@+id/recentFilesText"
+        style="@style/Tella_Main_White_Text.MeduimbBold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/vault_recent_files"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recentFilesRecyclerView"
+        app:layout_constraintTop_toBottomOf="@id/recentFilesText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:orientation="horizontal"
+        android:layout_marginTop="17dp"
+        tools:listitem="@layout/item_vault_attachmenets"
+        >
+    </androidx.recyclerview.widget.RecyclerView>
+</androidx.constraintlayout.widget.ConstraintLayout>

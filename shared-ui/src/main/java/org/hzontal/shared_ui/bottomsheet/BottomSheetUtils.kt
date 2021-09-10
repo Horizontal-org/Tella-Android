@@ -12,7 +12,8 @@ import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.fragment.app.FragmentManager
 import org.hzontal.shared_ui.R
 
-object BottomSheetUtils {
+object
+BottomSheetUtils {
 
     @JvmStatic
     fun showStandardSheet(
@@ -321,6 +322,7 @@ object BottomSheetUtils {
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.standar_sheet_layout)
             .cancellable(true)
+            .screenTag("ConfirmSheet")
         customSheetFragment.holder(GenericSheetHolder(), object :
             CustomBottomSheetFragment.Binder<GenericSheetHolder> {
             override fun onBind(holder: GenericSheetHolder) {

@@ -42,8 +42,8 @@ public class HomeScreenPresenter implements IHomeScreenPresenterContract.IPresen
                 .subscribeOn(Schedulers.io())
                 .flatMapCompletable(dataSource -> {
                     if (SharedPrefs.getInstance().isEraseGalleryActive()) {
+                        MyApplication.rxVault.destroy().blockingAwait();
                         MediaFileHandler.destroyGallery(appContext);
-                        dataSource.deleteMediaFiles();
                     }
 
                     if (Preferences.isDeleteServerSettingsActive()) {
@@ -87,7 +87,6 @@ public class HomeScreenPresenter implements IHomeScreenPresenterContract.IPresen
 
     @Override
     public void countCollectServers() {
-
         disposable.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

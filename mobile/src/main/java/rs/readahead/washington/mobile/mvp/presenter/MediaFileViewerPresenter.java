@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.VaultFile;
 
 import java.util.concurrent.Callable;
 
@@ -9,27 +10,22 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
-import rs.readahead.washington.mobile.data.database.KeyDataSource;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IMediaFileViewerPresenterContract;
 
 
 public class MediaFileViewerPresenter implements IMediaFileViewerPresenterContract.IPresenter {
+    private final CompositeDisposable disposables = new CompositeDisposable();
     private IMediaFileViewerPresenterContract.IView view;
-    private CompositeDisposable disposables = new CompositeDisposable();
-    private KeyDataSource keyDataSource;
-
 
     public MediaFileViewerPresenter(IMediaFileViewerPresenterContract.IView view) {
         this.view = view;
-        this.keyDataSource = MyApplication.getKeyDataSource();
     }
 
     @Override
-    public void exportNewMediaFile(final MediaFile mediaFile) {
+    public void exportNewMediaFile(final VaultFile vaultFile) {
         disposables.add(Completable.fromCallable((Callable<Void>) () -> {
-                    MediaFileHandler.exportMediaFile(view.getContext().getApplicationContext(), mediaFile);
+                    MediaFileHandler.exportMediaFile(view.getContext().getApplicationContext(), vaultFile);
                     return null;
                 })
                         .subscribeOn(Schedulers.computation())
@@ -44,18 +40,25 @@ public class MediaFileViewerPresenter implements IMediaFileViewerPresenterContra
     }
 
     @Override
-    public void deleteMediaFiles(final MediaFile mediaFile) {
-        disposables.add(keyDataSource.getDataSource()
+    public void deleteMediaFiles(final VaultFile vaultFile) {
+        disposables.add(MyApplication.rxVault.delete(vaultFile)
                 .subscribeOn(Schedulers.io())
-                .flatMapCompletable(dataSource ->
-                        dataSource.deleteMediaFile(mediaFile, mediaFile1 ->
-                                MediaFileHandler.deleteMediaFile(view.getContext(), mediaFile1)).toCompletable())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> view.onMediaFileDeleted(), throwable -> {
+                .subscribe(isDeleted -> view.onMediaFileDeleted(), throwable -> {
                     FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onMediaFileDeletionError(throwable);
-                })
-        );
+                }));
+    }
+
+    @Override
+    public void renameVaultFile(String id, String name) {
+        disposables.add(MyApplication.rxVault.rename(id,name)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(vaultFile -> view.onMediaFileRename(vaultFile), throwable -> {
+                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    view.onMediaFileRenameError(throwable);
+                }));
     }
 
     @Override
