@@ -336,7 +336,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
     }
 
     private fun disableRecord() {
-        mRecord.background = activity.resources.getDrawable(R.drawable.white_circle_background)
+        mRecord.background = activity.resources.getDrawable(R.drawable.red_circle_background)
         mRecord.setImageResource(R.drawable.ic_pause_black_24dp)
         redDot.visibility = View.VISIBLE
         animator!!.target = redDot

@@ -18,13 +18,13 @@
     <color name="black010101">#010101</color>
     <color name="green">#59AE3C</color>
     <color name="light_green">#B2CFA8</color>
-    <color name="light_purple">#3D3867</color>
+    <color name="light_purple">#B52C275A</color>
     <color name="gray">#A8ADAF</color>
     <color name="light_gray">#DCDCDC</color>
     <color name="rich_black">#071013</color>
     <color name="prussian_blue">#2c6c97</color>
     <color name="dark_purple">#2C275A</color>
-
+    <color name="light_red">#FC4444</color>
 
     <color name="colorPrimary">@color/space_cadet</color>
     <color name="colorSecundary">@color/tigers_eye</color>

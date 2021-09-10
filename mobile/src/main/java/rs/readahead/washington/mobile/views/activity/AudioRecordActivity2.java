@@ -394,7 +394,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 //    }
 
     private void disableRecord() {
-        mRecord.setBackground(getContext().getResources().getDrawable(R.drawable.white_circle_background));
+        mRecord.setBackground(getContext().getResources().getDrawable(R.drawable.red_circle_background));
         mRecord.setImageResource(R.drawable.ic_pause_black_24dp);
         redDot.setVisibility(View.VISIBLE);
 
