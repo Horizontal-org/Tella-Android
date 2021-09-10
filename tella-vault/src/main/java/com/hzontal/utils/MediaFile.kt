@@ -157,6 +157,10 @@ object MediaFile {
         return isImageFileType(getFileTypeForMimeType(mimeType))
     }
 
+    fun isTextFileType(mimeType: String): Boolean {
+        return isTextFileType(getFileTypeForMimeType(mimeType))
+    }
+
     fun isImageFileType(fileType: Int): Boolean {
         return fileType in FIRST_IMAGE_FILE_TYPE..LAST_IMAGE_FILE_TYPE
     }
