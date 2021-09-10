@@ -18,8 +18,8 @@ android {
         minSdkVersion 17
         compileSdkVersion 29
         targetSdkVersion 30
-        versionCode 63
-        versionName "2.0.0-alpha1"
+        versionCode 64
+        versionName "2.0.0-alpha2"
         multiDexEnabled true
         // vectorDrawables.useSupportLibrary = true // don't care about apk size, care about crashes
     }
