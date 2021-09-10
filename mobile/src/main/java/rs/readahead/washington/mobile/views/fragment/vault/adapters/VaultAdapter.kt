@@ -43,6 +43,14 @@ class VaultAdapter(private val onClick: VaultClickListener) :
         recentFiles = listOf(DataItem.RecentFiles(vaultFiles))
         renderList()
     }
+    fun removeRecentFiles(){
+        adapterScope.launch {
+            items = favoriteForms - recentFiles + actions
+            withContext(Dispatchers.Main) {
+                submitList(items)
+            }
+        }
+    }
 
    private fun addFileActions() {
         actions = listOf(

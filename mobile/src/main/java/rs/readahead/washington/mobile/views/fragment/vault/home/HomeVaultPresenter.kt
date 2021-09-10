@@ -27,12 +27,11 @@ import rs.readahead.washington.mobile.media.MediaFileHandler
 class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
     IHomeVaultPresenter.IPresenter {
     private var keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
-    private var disposable: CompositeDisposable? = null
+    private var disposable = CompositeDisposable()
     private var appContext: Context? = null
     private var rxVault : RxVault? = null
 
     init {
-        disposable = CompositeDisposable()
         appContext = view?.getContext()?.applicationContext
         rxVault = MyApplication.rxVault
     }
@@ -40,7 +39,7 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
     private val disposables = CompositeDisposable()
 
     override fun destroy() {
-        disposable?.dispose()
+        disposable.dispose()
         view = null
     }
 

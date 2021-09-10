@@ -18,6 +18,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.hzontal.tella_locking_ui.common.extensions.toggleVisibility
 import com.hzontal.tella_vault.VaultFile
@@ -74,14 +75,19 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private lateinit var filterNameTv: TextView
     private lateinit var emptyViewMsgContainer: LinearLayout
     private lateinit var checkBoxList: AppCompatImageView
-    private var isListCheckOn = false
+    private lateinit var root : View
+    private lateinit var breadcrumbView: BreadcrumbsView
+    private lateinit var appBar : AppBarLayout
     private var progressDialog: ProgressDialog? = null
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
     private var filterType = FilterType.ALL
     private lateinit var sort: Sort
     private var vaultFile: VaultFile? = null
-    private lateinit var breadcrumbView: BreadcrumbsView
     private var currentRootID: String? = null
+    private var currentMove : String? = null
+    private var isListCheckOn = false
+    private var isMoveModeEnabled = false
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -151,6 +157,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         emptyViewMsgContainer = view.findViewById(R.id.emptyViewMsgContainer)
         filterNameTv = view.findViewById(R.id.filterNameTv)
         toolbar = view.findViewById(R.id.toolbar)
+        root = view.findViewById(R.id.root)
+        appBar = view.findViewById(R.id.appbar)
         gridLayoutManager = GridLayoutManager(activity, 1)
         attachmentsRecyclerView.apply {
             adapter = attachmentsAdapter
@@ -163,6 +171,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         gridCheck.setOnClickListener(this)
         checkBoxList.setOnClickListener(this)
         filterNameTv.setOnClickListener(this)
+       // enableMoveTheme()
         handleOnBackPressed()
         setUpToolbar()
         initData()
@@ -376,6 +385,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 }
 
                 override fun move() {
+                    isMoveModeEnabled = true
+                    enableMoveTheme()
                 }
 
                 override fun rename() {
@@ -765,5 +776,23 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 nav().navigateUp()
             }
         }
+    }
+    private fun enableMoveTheme(){
+        if (!isMoveModeEnabled){
+            toolbar.setBackgroundColor(R.color.prussian_blue)
+            attachmentsRecyclerView.setBackgroundColor(R.color.wa_white_12)
+            root.setBackgroundColor(R.color.prussian_blue)
+            appBar.setBackgroundColor(R.color.prussian_blue)
+            (activity as MainActivity).enableMoveMode(true)
+        }else{
+            toolbar.setBackgroundColor(R.color.space_cadet)
+            attachmentsRecyclerView.setBackgroundColor(R.color.space_cadet)
+            root.setBackgroundColor(R.color.space_cadet)
+            appBar.setBackgroundColor(R.color.space_cadet)
+            (activity as MainActivity).enableMoveMode(false)
+
+        }
+
+
     }
 }

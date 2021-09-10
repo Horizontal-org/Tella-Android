@@ -63,6 +63,8 @@ public class MainActivity extends MetadataActivity implements
     LinearLayout navBarHolder;
     @BindView(R.id.background)
     View background;
+    @BindView(R.id.main_container)
+    View root;
 
     private boolean mExit = false;
     private Handler handler;
@@ -516,7 +518,13 @@ public class MainActivity extends MetadataActivity implements
 
     public void showBottomNavigation() {
         btmNavMain.setVisibility(View.VISIBLE);
-
+    }
+    public void enableMoveMode(Boolean isEnabled){
+        if (isEnabled){
+            root.setBackgroundColor(R.color.prussian_blue);
+        }else{
+            root.setBackgroundColor(R.color.space_cadet);
+        }
     }
 }
 

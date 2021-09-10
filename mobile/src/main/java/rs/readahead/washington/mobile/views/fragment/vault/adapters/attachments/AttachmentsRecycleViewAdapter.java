@@ -111,9 +111,6 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
                         .into(holder.mediaView);
             } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
                 holder.showAudioInfo(vaultFile);
-                Drawable drawable = VectorDrawableCompat.create(holder.itemView.getContext().getResources(),
-                        R.drawable.ic_audio_w_small, null);
-                holder.mediaView.setImageDrawable(drawable);
             } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
                 holder.showVideoInfo(vaultFile);
                 Glide.with(holder.mediaView.getContext())
@@ -122,6 +119,8 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
                         .into(holder.mediaView);
+            }else if (MediaFile.INSTANCE.isTextFileType(vaultFile.mimeType)){
+                 holder.showDocumentInfo(vaultFile);
             }
         }else {
             if (VaultFile.Type.fromValue(vaultFile.type.getValue()) == VaultFile.Type.DIRECTORY){
@@ -247,6 +246,10 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
 
         void showAudioInfo(VaultFile vaultFile) {
             icAttachmentImg.setBackgroundResource(R.drawable.ic_audio_w_small);
+        }
+
+        void showDocumentInfo(VaultFile vaultFile) {
+            icAttachmentImg.setBackgroundResource(R.drawable.ic_document_24px_filled);
         }
 
         void showImageInfo() {

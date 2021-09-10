@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/space_cadet"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".views.fragment.VaultFragment">
 
@@ -36,7 +35,6 @@
        app:layout_behavior="@string/appbar_scrolling_view_behavior"
        tools:listitem="@layout/item_vault_attachment_hor"
        tools:itemCount="30"
-       android:layout_marginBottom="115dp"
        />
 
    <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,7 +42,7 @@
        android:layout_height="50dp"
        android:layout_gravity="bottom"
        android:layout_marginBottom="55dp"
-       android:background="@color/space_cadet"
+       android:id="@+id/panicSeekContainer"
       >
       <SeekBar
           android:id="@+id/panic_seek"
@@ -53,13 +51,17 @@
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintBottom_toBottomOf="parent"
           android:layout_marginEnd="70dp"
-          android:layout_width="match_parent"
+          android:layout_marginStart="17dp"
+          android:layout_width="0dp"
+          android:background="@color/space_cadet"
           android:layout_height="@dimen/navigation_panic_height"
           android:max="100"
-          android:thumbOffset="-8dp"
+          android:thumbOffset="-4dp"
           android:padding="3dp"
           android:progressDrawable="@drawable/panic_seek_var_progress"
-          android:thumb="@drawable/ic_progress_bg" />
+          android:thumb="@drawable/ic_progress_bg"
+          android:splitTrack="false"
+          />
 
       <TextView
           android:id="@+id/deleteTv"
@@ -81,7 +83,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:id="@+id/seekBarGrp"
-          android:visibility="gone"
+          android:visibility="visible"
           app:constraint_referenced_ids="panic_seek,deleteTv"
           />
 

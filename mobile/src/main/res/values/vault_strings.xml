@@ -39,5 +39,7 @@
     <string name="vault_import_delete_file" translatable="false">Import and delete original file</string>
     <string name="vault_create_new_folder" translatable="false">Create a new folder</string>
     <string name="vault_new_folder_title" translatable="false">New folder title</string>
+    <string name="vault_move_here" translatable="false">move here</string>
+
 
 </resources>
