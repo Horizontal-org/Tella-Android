@@ -21,6 +21,13 @@
             android:paddingEnd="16dp"
             android:textDirection="locale">
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineBottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.85" />
+
             <LinearLayout
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
@@ -39,7 +46,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:layout_marginTop="2dp"
-                    android:src="@drawable/ic_arrow_back_white_24dp"
+                    android:src="@drawable/ic_close_white_24dp"
                     tools:ignore="ContentDescription" />
 
                 <TextView
@@ -107,7 +114,7 @@
             <rs.readahead.washington.mobile.views.custom.PanelToggleButton
                 android:id="@+id/toggle_button"
                 style="?android:attr/borderlessButtonStyle"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/wa_transparent"
@@ -143,7 +150,8 @@
                         android:inputType="text"
                         android:maxLines="1"
                         android:textColor="@color/wa_white"
-                        app:backgroundTint="@color/wa_white" />
+                        app:backgroundTint="@color/wa_white"
+                        android:autofillHints="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -163,7 +171,6 @@
                         android:hint="@string/settings.docu_add.server_field_password"
                         android:imeOptions="actionDone"
                         android:inputType="textPassword"
-
                         android:maxLines="1"
                         android:textColor="@color/wa_white"
                         app:backgroundTint="@color/wa_white" />
@@ -171,47 +178,33 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/internet_error"
-                style="@style/TextValidationError"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:text="@string/settings.docu_error_no.internet"
-                android:textColor="@color/wa_white"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/advanced_panel" />
 
 
             <LinearLayout
                 android:id="@+id/buttons_layout"
-                style="?android:attr/buttonBarStyle"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
+                android:layout_height="70dp"
+                android:layout_gravity="end|bottom"
                 android:layout_marginBottom="24dp"
                 android:gravity="end|bottom"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@+id/internet_error"
+                app:layout_constraintTop_toBottomOf="@+id/guidelineBottom"
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <Button
                     android:id="@+id/cancel"
                     style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
                     android:layout_marginTop="4dp"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
                     android:layout_marginBottom="4dp"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
                     android:background="@drawable/cancel_button_background"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp"
-                    android:paddingBottom="4dp"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
                     android:text="@string/action_cancel"
                     android:textAlignment="center"
                     android:textAllCaps="true"
@@ -222,18 +215,19 @@
                     android:id="@+id/next"
                     style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:background="@drawable/action_button_background"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp"
-                    android:paddingBottom="4dp"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:maxLines="1"
                     android:text="@string/action_save"
                     android:textAlignment="center"
                     android:textAllCaps="true"
                     android:textColor="@color/wa_white"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
+                    android:textSize="17sp" />
 
             </LinearLayout>
 

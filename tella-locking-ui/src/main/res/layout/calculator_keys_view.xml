@@ -233,7 +233,7 @@
     <TextView
         android:id="@+id/zeroBtn"
         style="@style/Calculator_Light_Keys"
-        android:layout_width="160dp"
+        android:layout_width="@dimen/calc_key_wide"
         android:text="0"
         app:layout_constraintBottom_toTopOf="@id/guideline98h"
         app:layout_constraintEnd_toStartOf="@+id/guideline50v"

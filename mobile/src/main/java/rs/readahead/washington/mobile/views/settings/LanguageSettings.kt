@@ -10,6 +10,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent
@@ -70,6 +71,7 @@ class LanguageSettings : BaseFragment(), View.OnClickListener {
             langInfo.setText(StringUtils.capitalize(locale.getDisplayName(locale), locale))
         }
         imageView.setVisibility(if (selected) View.VISIBLE else View.GONE)
+        item.setBackgroundColor(if (selected) ContextCompat.getColor(requireContext(),R.color.light_purple) else ContextCompat.getColor(requireContext(),R.color.dark_purple))
         return item
     }
 

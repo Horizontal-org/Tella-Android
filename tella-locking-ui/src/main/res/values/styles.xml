@@ -105,12 +105,12 @@
 
     <style name="Calculator_Keys">
         <item name="android:layout_margin">6dp</item>
-        <item name="android:layout_width">70dp</item>
-        <item name="android:layout_height">70dp</item>
+        <item name="android:layout_width">@dimen/calc_key_size</item>
+        <item name="android:layout_height">@dimen/calc_key_size</item>
         <item name="android:layout_marginStart">0dp</item>
         <item name="android:textAlignment">center</item>
         <item name="android:gravity">center</item>
-        <item name="android:textSize">30sp</item>
+        <item name="android:textSize">@dimen/calc_text_size</item>
         <item name="android:layout_marginBottom">0dp</item>
         <item name="android:fontFamily">@font/open_sans</item>
         <item name="layout_constraintHorizontal_bias">0.5</item>
