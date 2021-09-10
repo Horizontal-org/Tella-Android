@@ -102,11 +102,11 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     private Mode mode;
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_audio_record);
         ButterKnife.bind(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);

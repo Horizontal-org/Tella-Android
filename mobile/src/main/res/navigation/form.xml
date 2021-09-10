@@ -4,13 +4,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/form"
-    app:startDestination="@+id/formScreen"
- >
-    <fragment
-        android:id="@+id/formScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.ReportsFragment"
-        android:label="Forms"
-        tools:layout="@layout/fragment_draft_forms_list">
-    </fragment>
+    app:startDestination="@+id/formScreen">
 
+    <activity
+        android:id="@+id/formScreen"
+        android:name="rs.readahead.washington.mobile.views.activity.CollectMainActivity"
+        android:label="Forms"
+        tools:layout="@layout/activity_collect_main"/>
 </navigation>
