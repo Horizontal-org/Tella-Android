@@ -1,17 +1,11 @@
 package rs.readahead.washington.mobile.views.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,12 +13,21 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+
+import com.hzontal.tella_vault.VaultFile;
+
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import kotlin.Unit;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -34,7 +37,7 @@ import permissions.dispatcher.RuntimePermissions;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent;
 import rs.readahead.washington.mobile.media.AudioPlayer;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IAudioPlayPresenterContract;
@@ -46,9 +49,14 @@ import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.util.ThreadUtil;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
+import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment;
 import timber.log.Timber;
 
 import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
+
+import org.hzontal.shared_ui.appbar.ToolbarComponent;
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
+import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
 
 @RuntimePermissions
 public class AudioPlayActivity extends BaseLockActivity implements
@@ -76,7 +84,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
     View rewind;
 
     private AudioPlayPresenter presenter;
-    private MediaFile handlingMediaFile;
+    private VaultFile handlingVaultFile;
     private AudioPlayer audioPlayer;
     private AudioPlayer.Listener audioPlayerListener;
 
@@ -88,6 +96,8 @@ public class AudioPlayActivity extends BaseLockActivity implements
     private ProgressDialog progressDialog;
 
     private boolean paused = true;
+    private ToolbarComponent toolbar;
+    private boolean isInfoShown = false;
 
 
     @Override
@@ -97,14 +107,12 @@ public class AudioPlayActivity extends BaseLockActivity implements
         setContentView(R.layout.activity_audio_play);
         ButterKnife.bind(this);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-
+        toolbar.setBackClickListener(() -> {
+            onBackPressed();
+            return Unit.INSTANCE;
+        });
         viewerPresenter = new MediaFileViewerPresenter(this);
         enablePlay();
 
@@ -138,13 +146,13 @@ public class AudioPlayActivity extends BaseLockActivity implements
         };
 
         if (getIntent().hasExtra(PLAY_MEDIA_FILE)) {
-            MediaFile mediaFile = (MediaFile) getIntent().getSerializableExtra(PLAY_MEDIA_FILE);
-            if (mediaFile != null) {
-                ThreadUtil.runOnMain(() -> onMediaFileSuccess(mediaFile));
+            VaultFile vaultFile = (VaultFile) getIntent().getSerializableExtra(PLAY_MEDIA_FILE);
+            if (vaultFile != null) {
+                ThreadUtil.runOnMain(() -> onMediaFileSuccess(vaultFile));
             }
         } else if (getIntent().hasExtra(PLAY_MEDIA_FILE_ID_KEY)) {
-            long id = getIntent().getLongExtra(PLAY_MEDIA_FILE_ID_KEY, 0);
-            if (id != 0) {
+            String id = getIntent().getStringExtra(PLAY_MEDIA_FILE_ID_KEY);
+            if (id != null) {
                 presenter = new AudioPlayPresenter(this);
                 presenter.getMediaFile(id);
             }
@@ -154,10 +162,10 @@ public class AudioPlayActivity extends BaseLockActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!actionsDisabled && showActions) {
-            getMenuInflater().inflate(R.menu.audio_view_menu, menu);
+            toolbar.inflateMenu(R.menu.video_view_menu);
 
-            if (handlingMediaFile != null && handlingMediaFile.getMetadata() != null) {
-                MenuItem item = menu.findItem(R.id.menu_item_metadata);
+            if (handlingVaultFile != null && handlingVaultFile.metadata != null) {
+                MenuItem item =  toolbar.getMenu().findItem(R.id.menu_item_metadata);
                 item.setVisible(true);
             }
         }
@@ -169,23 +177,8 @@ public class AudioPlayActivity extends BaseLockActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-
-        if (id == R.id.menu_item_share) {
-            shareMediaFile();
-            return true;
-        }
-
-        if (id == R.id.menu_item_export) {
-            showExportDialog();
-            return true;
-        }
-
-        if (id == R.id.menu_item_delete) {
-            showDeleteMediaDialog();
+        if (id == R.id.menu_item_more) {
+            showVaultActionsDialog(handlingVaultFile);
             return true;
         }
 
@@ -220,8 +213,15 @@ public class AudioPlayActivity extends BaseLockActivity implements
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        stopPlayer();
-        finish();
+        if (isInfoShown){
+            toolbar.getMenu().findItem(R.id.menu_item_more).setVisible(true);
+            toolbar.getMenu().findItem(R.id.menu_item_metadata).setVisible(true);
+            toolbar.setStartTextTitle(handlingVaultFile.name);
+        }else {
+            stopPlayer();
+            finish();
+        }
+
     }
 
     @Override
@@ -259,6 +259,9 @@ public class AudioPlayActivity extends BaseLockActivity implements
         super.onDestroy();
     }
 
+
+
+    @SuppressLint("NeedOnRequestPermissionsResult")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -275,8 +278,8 @@ public class AudioPlayActivity extends BaseLockActivity implements
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void exportMediaFile() {
-        if (handlingMediaFile != null && viewerPresenter != null) {
-            viewerPresenter.exportNewMediaFile(handlingMediaFile);
+        if (handlingVaultFile != null && viewerPresenter != null) {
+            viewerPresenter.exportNewMediaFile(handlingVaultFile);
         }
     }
 
@@ -286,8 +289,9 @@ public class AudioPlayActivity extends BaseLockActivity implements
     }
 
     @Override
-    public void onMediaFileSuccess(MediaFile mediaFile) {
-        handlingMediaFile = mediaFile;
+    public void onMediaFileSuccess(VaultFile vaultFile) {
+        handlingVaultFile = vaultFile;
+        toolbar.setStartTextTitle(vaultFile.name);
         //handlePlay();
 
         if (!actionsDisabled) {
@@ -333,6 +337,17 @@ public class AudioPlayActivity extends BaseLockActivity implements
     }
 
     @Override
+    public void onMediaFileRename(VaultFile vaultFile) {
+        toolbar.setStartTextTitle(vaultFile.name);
+        MyApplication.bus().post(new VaultFileRenameEvent());
+    }
+
+    @Override
+    public void onMediaFileRenameError(Throwable throwable) {
+
+    }
+
+    @Override
     public Context getContext() {
         return this;
     }
@@ -350,11 +365,11 @@ public class AudioPlayActivity extends BaseLockActivity implements
     }
 
     private void shareMediaFile() {
-        if (handlingMediaFile == null) {
+        if (handlingVaultFile == null) {
             return;
         }
 
-        if (handlingMediaFile.getMetadata() != null) {
+        if (handlingVaultFile.metadata != null) {
             ShareDialogFragment.newInstance().show(getSupportFragmentManager(), ShareDialogFragment.TAG);
         } else {
             startShareActivity(false);
@@ -362,11 +377,11 @@ public class AudioPlayActivity extends BaseLockActivity implements
     }
 
     private void startShareActivity(boolean includeMetadata) {
-        if (handlingMediaFile == null) {
+        if (handlingVaultFile == null) {
             return;
         }
 
-        MediaFileHandler.startShareActivity(this, handlingMediaFile, includeMetadata);
+        MediaFileHandler.startShareActivity(this, handlingVaultFile, includeMetadata);
     }
 
     private void dismissShareDialog() {
@@ -386,8 +401,8 @@ public class AudioPlayActivity extends BaseLockActivity implements
                 .setTitle(R.string.gallery_delete_files_dialog_title)
                 .setMessage(R.string.gallery_delete_files_dialog_expl)
                 .setPositiveButton(R.string.action_delete, (dialog, which) -> {
-                    if (viewerPresenter != null && handlingMediaFile != null) {
-                        viewerPresenter.deleteMediaFiles(handlingMediaFile);
+                    if (viewerPresenter != null && handlingVaultFile != null) {
+                        viewerPresenter.deleteMediaFiles(handlingVaultFile);
                     }
                 })
                 .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
@@ -397,11 +412,11 @@ public class AudioPlayActivity extends BaseLockActivity implements
     }
 
     /*private void handleStop() {
-        stopPlayer();
+        stopPlayer();xr
     }*/
 
     private void handlePlay() {
-        if (handlingMediaFile == null) {
+        if (handlingVaultFile == null) {
             return;
         }
 
@@ -409,7 +424,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
             audioPlayer.resume();
         } else {
             audioPlayer = new AudioPlayer(this, audioPlayerListener);
-            audioPlayer.play(handlingMediaFile);
+            audioPlayer.play(handlingVaultFile);
         }
 
         paused = false;
@@ -418,7 +433,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
     }
 
     private void handlePause() {
-        if (handlingMediaFile == null) {
+        if (handlingVaultFile == null) {
             return;
         }
 
@@ -475,7 +490,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
 
     private void showMetadata() {
         Intent viewMetadata = new Intent(this, MetadataViewerActivity.class);
-        viewMetadata.putExtra(VIEW_METADATA, handlingMediaFile);
+        viewMetadata.putExtra(VIEW_METADATA, handlingVaultFile);
         startActivity(viewMetadata);
     }
 
@@ -495,4 +510,89 @@ public class AudioPlayActivity extends BaseLockActivity implements
     private void enableScreenTimeout() {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
+    private void showVaultActionsDialog(VaultFile vaultFile){
+        VaultSheetUtils.showVaultActionsSheet(getSupportFragmentManager(),
+                vaultFile.name,
+                getString(R.string.action_upload),
+                getString(R.string.action_share),
+                getString(R.string.vault_move_to_another_folder),
+                getString(R.string.vault_rename),
+                getString(R.string.action_save),
+                getString(R.string.vault_file_information),
+                getString(R.string.action_delete),
+                false,
+                false,
+                new VaultSheetUtils.IVaultActions() {
+                    @Override
+                    public void upload() {
+
+                    }
+
+                    @Override
+                    public void share() {
+                        startShareActivity(false);
+                    }
+
+                    @Override
+                    public void move() {
+
+                    }
+
+                    @Override
+                    public void rename() {
+                        VaultSheetUtils.showVaultRenameSheet(
+                                getSupportFragmentManager(),
+                                getString(R.string.vault_rename_file),
+                                getString(R.string.action_cancel),
+                                getString(R.string.action_ok),
+                                AudioPlayActivity.this,
+                                vaultFile.name,
+                                (name) -> {
+                                    viewerPresenter.renameVaultFile(vaultFile.id,name);
+                                    return Unit.INSTANCE;
+                                }
+                        );
+                    }
+
+                    @Override
+                    public void save() {
+                        BottomSheetUtils.showConfirmSheet(
+                                getSupportFragmentManager(),
+                                getString(R.string.gallery_save_to_device_dialog_title),
+                                getString(R.string.gallery_save_to_device_dialog_expl),
+                                getString(R.string.action_save),
+                                getString(R.string.action_cancel),
+                                isConfirmed -> {
+                                    AudioPlayActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(AudioPlayActivity.this);                          }
+                        );
+                    }
+
+                    @Override
+                    public void info() {
+                        toolbar.setStartTextTitle(getString(R.string.vault_file_info));
+                        toolbar.getMenu().findItem(R.id.menu_item_more).setVisible(false);
+                        toolbar.getMenu().findItem(R.id.menu_item_metadata).setVisible(false);
+                        invalidateOptionsMenu();
+                        addFragment(new VaultInfoFragment().newInstance(vaultFile,false),R.id.root);
+                        isInfoShown = true;
+                    }
+
+                    @Override
+                    public void delete() {
+                        BottomSheetUtils.showConfirmSheet(
+                                getSupportFragmentManager(),
+                                getString(R.string.vault_delete_file),
+                                getString(R.string.vault_delete_file_msg),
+                                getString(R.string.action_delete),
+                                getString(R.string.action_cancel),
+                                isConfirmed -> {
+                                    viewerPresenter.deleteMediaFiles(vaultFile);
+                                }
+                        );
+
+                    }
+                }
+        );
+    }
+
 }

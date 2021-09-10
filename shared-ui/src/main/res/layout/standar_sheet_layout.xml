@@ -46,10 +46,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         tools:text="Cancel"
         android:layout_marginTop="40dp"
-        android:textFontWeight="600"
-        android:textColor="@color/wa_white"
-        android:fontFamily="@font/open_sans"
-        android:textSize="14sp"
+        style="@style/Tella_Main_White_Text.MeduimbBold"
         android:layout_marginEnd="30dp"
         />
 
@@ -62,9 +59,7 @@
         app:layout_constraintTop_toBottomOf="@id/standard_sheet_content"
         tools:text="Confirm "
         android:layout_marginTop="40dp"
-        android:textFontWeight="600"
-        android:textColor="@color/wa_white"
-        android:fontFamily="@font/open_sans"
+        style="@style/Tella_Main_White_Text.MeduimbBold"
         android:textSize="14sp"
         />
 

@@ -2,8 +2,6 @@ package rs.readahead.washington.mobile.views.collect;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -18,6 +16,8 @@ import org.javarosa.form.api.FormEntryPrompt;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
@@ -31,7 +31,7 @@ public class CollectFormView extends LinearLayout {
     // starter random number for view IDs
     private static final int VIEW_ID = 12061974;
 
-    private ArrayList<QuestionWidget> widgets;
+    private final ArrayList<QuestionWidget> widgets;
 
 
     public CollectFormView(Context context, final FormEntryPrompt[] questionPrompts, FormEntryCaption[] groups) {

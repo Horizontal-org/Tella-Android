@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="24dp"
+    android:background="@drawable/drag_anchor_drawable"
+    >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sheetTitleTv"
+        style="@style/Tella_Main_White_Text.MeduimbBold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="5 items"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cameraActionTV"
+        style="@style/Tella_Main_White_Text.Meduim"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sheetTitleTv"
+        android:layout_marginTop="25dp"
+        android:drawablePadding="17dp"
+        android:drawableStart="@drawable/ic_camera_alt_24px"
+        tools:text="Take photo/video"
+        android:gravity="center"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/recordAudioActionTV"
+        style="@style/Tella_Main_White_Text.Meduim"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cameraActionTV"
+        android:layout_marginTop="20dp"
+        android:drawablePadding="17dp"
+        android:drawableStart="@drawable/keyboard_voice_24px_filled"
+        android:gravity="center"
+        tools:text="Record audio"
+        />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/importActionTV"
+        style="@style/Tella_Main_White_Text.Meduim"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recordAudioActionTV"
+        android:layout_marginTop="17dp"
+        android:drawablePadding="17dp"
+        android:drawableStart="@drawable/ic_upload_cloud"
+        android:gravity="center"
+        tools:text="Import from device" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/createDeleteActionTV"
+        style="@style/Tella_Main_White_Text.Meduim"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/importActionTV"
+        android:layout_marginTop="20dp"
+        android:drawablePadding="17dp"
+        app:drawableStartCompat="@drawable/ic_pen"
+        android:drawableStart="@drawable/ic_upload_cloud"
+        android:gravity="center"
+        tools:text="Import and delete original device"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/createFolderActionTV"
+        style="@style/Tella_Main_White_Text.Meduim"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/createDeleteActionTV"
+        android:layout_marginTop="20dp"
+        android:drawablePadding="17dp"
+        app:drawableStartCompat="@drawable/ic_save_alt_24px"
+        android:drawableStart="@drawable/ic_upload_cloud"
+        android:gravity="center"
+        tools:text="Create a new folder"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

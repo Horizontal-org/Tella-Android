@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/wa_light_gray"
+    android:background="@color/space_cadet"
     android:padding="@dimen/activity_vertical_margin"
     android:textDirection="locale"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -19,8 +19,12 @@
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="@string/start_time"
-        android:textColor="@color/wa_gray"
-        android:textSize="48sp" />
+        android:textColor="@color/wa_white"
+        android:textSize="48sp"
+        android:fontFamily="@font/open_sans"
+        android:textFontWeight="300"
+        android:lineHeight="68dp"
+        />
 
     <TextView
         android:id="@+id/duration"
@@ -48,10 +52,10 @@
 
         <ImageButton
             android:id="@+id/rwd_button"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_margin="2dp"
-            android:background="@color/wa_light_gray"
+            android:background="@drawable/bg_play_circle"
             android:padding="5dp"
             android:src="@drawable/ic_fast_rewind_black_24dp"
             android:contentDescription="@string/action_record"/>
@@ -61,8 +65,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/play.audio_action.expl_minus15s"
-            android:textColor="@color/wa_black"
-            android:textSize="14sp" />
+            android:textColor="@color/wa_white_16"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -100,10 +104,10 @@
 
         <ImageButton
             android:id="@+id/fwd_button"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_margin="2dp"
-            android:background="@color/wa_light_gray"
+            android:background="@drawable/bg_play_circle"
             android:padding="5dp"
             android:src="@drawable/ic_fast_forward_black_24dp"
             android:contentDescription="@string/action_play"/>
@@ -113,8 +117,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/play.audio_action.expl_plus15s"
-            android:textColor="@color/wa_black"
-            android:textSize="14sp" />
+            android:textColor="@color/wa_white_16"
+            android:textSize="12sp" />
     </LinearLayout>
 
 </RelativeLayout>

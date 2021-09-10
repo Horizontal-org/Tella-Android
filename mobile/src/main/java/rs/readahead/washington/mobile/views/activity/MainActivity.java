@@ -6,29 +6,26 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.SensorManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.hzontal.tella_vault.VaultFile;
 
-import java.util.Set;
+import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,16 +42,13 @@ import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
-import rs.readahead.washington.mobile.domain.entity.Metadata;
 import rs.readahead.washington.mobile.mvp.contract.ICollectCreateFormControllerContract;
 import rs.readahead.washington.mobile.mvp.contract.IHomeScreenPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.HomeScreenPresenter;
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.util.C;
-import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.PermissionUtil;
-import rs.readahead.washington.mobile.views.custom.CountdownImageView;
 import rs.readahead.washington.mobile.views.custom.HomeScreenGradient;
 
 
@@ -63,37 +57,26 @@ public class MainActivity extends MetadataActivity implements
         IMetadataAttachPresenterContract.IView,
         IHomeScreenPresenterContract.IView,
         ICollectCreateFormControllerContract.IView {
-    @BindView(R.id.main_toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.panic_mode_view)
-    RelativeLayout panicCountdownView;
-    @BindView(R.id.countdown_timer)
-    CountdownImageView countdownImage;
-    @BindView(R.id.camera_tools_container)
-    View cameraToolsContainer;
     @BindView(R.id.home_screen_gradient)
     HomeScreenGradient homeScreenGradient;
     @BindView(R.id.nav_bar_holder)
     LinearLayout navBarHolder;
-    @BindView(R.id.panic_seek)
-    SeekBar panicSeekBar;
-    @BindView(R.id.panic_bar)
-    LinearLayout panicSeekBarView;
     @BindView(R.id.background)
     View background;
+    @BindView(R.id.main_container)
+    View root;
 
     private boolean mExit = false;
     private Handler handler;
-    private boolean panicActivated;
     private EventCompositeDisposable disposables;
     private AlertDialog alertDialog;
     private HomeScreenPresenter homeScreenPresenter;
     private ProgressDialog progressDialog;
     private OrientationEventListener mOrientationEventListener;
-
-    private int timerDuration;
+    private BottomNavigationView btmNavMain;
+    private NavController navController;
+    private AppBarConfiguration appBarConfiguration;
     private long numOfCollectServers;
-    private MenuItem settingsMenuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,14 +84,12 @@ public class MainActivity extends MetadataActivity implements
         setContentView(R.layout.activity_main2);
         ButterKnife.bind(this);
 
-        setupToolbar();
+        //  setupToolbar();
         setupNavigation();
         handler = new Handler();
 
         homeScreenPresenter = new HomeScreenPresenter(this);
 
-        panicActivated = false;
-        timerDuration = getResources().getInteger(R.integer.panic_countdown_duration);
         initSetup();
 
         // todo: check this..
@@ -117,7 +98,7 @@ public class MainActivity extends MetadataActivity implements
 
     private void initSetup() {
         //handleOrbot();
-        setupPanicSeek();
+        //setupPanicSeek();
 
         setOrientationListener();
 
@@ -133,57 +114,18 @@ public class MainActivity extends MetadataActivity implements
     private void setupNavigation() {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_nav_host);
         assert navHostFragment != null;
-        NavController navController = navHostFragment.getNavController();
-        BottomNavigationView btmNavMain = findViewById(R.id.btm_nav_main);
-        setSupportActionBar(toolbar);
-        AppBarConfiguration appBarConfiguration =
-                new AppBarConfiguration.Builder(R.id.homeScreen,R.id.cameraScreen,R.id.reportsScreen,R.id.micScreen,R.id.formScreen).build();
+        navController = navHostFragment.getNavController();
+        btmNavMain = findViewById(R.id.btm_nav_main);
+        appBarConfiguration =
+                new AppBarConfiguration.Builder(R.id.homeScreen, R.id.cameraScreen, R.id.reportsScreen, R.id.micScreen, R.id.formScreen).build();
         NavigationUI.setupWithNavController(btmNavMain, navController);
-        NavigationUI.setupActionBarWithNavController(this,navController,appBarConfiguration);
-    }
-
-    private void setupToolbar() {
-        toolbar.inflateMenu(R.menu.activity_main_menu);
-
-        settingsMenuItem = toolbar.getMenu().findItem(R.id.nav_settings);
-        settingsMenuItem.setOnMenuItemClickListener(item -> {
-            startSettingsActivity();
-            return true;
+        navController.addOnDestinationChangedListener((navController1, navDestination, bundle) -> {
+            if (navDestination.getId() == (R.id.homeScreen) || navDestination.getId() == R.id.formScreen || navDestination.getId() == R.id.micScreen) {
+                showBottomNavigation();
+            } else {
+                hideBottomNavigation();
+            }
         });
-
-        toolbar.getMenu().findItem(R.id.nav_exit).setOnMenuItemClickListener(item -> {
-            exitApp();
-            return true;
-        });
-
-        MenuItem offlineMenuItem = toolbar.getMenu().findItem(R.id.nav_offline_mode);
-        offlineMenuItem.setOnMenuItemClickListener(item -> {
-            DialogsUtil.showOfflineSwitchDialog(MainActivity.this, t -> setOfflineMenuIcon(item, t));
-            return true;
-        });
-    }
-
-    private void setOfflineMenuIcon(MenuItem offlineMenuIcon, boolean offline) {
-       // offlineMenuIcon.setIcon(offline ? R.drawable.ic_cloud_off_white_24dp : R.drawable.ic_cloud_queue_white_24dp);
-        // todo (djm): move this from here - this should be setup once per activity.resume()
-        offlineMenuIcon.setVisible(Preferences.isCollectServersLayout());
-        if (settingsMenuItem != null) {
-            settingsMenuItem.setShowAsAction(Preferences.isCollectServersLayout() ? MenuItem.SHOW_AS_ACTION_NEVER : MenuItem.SHOW_AS_ACTION_IF_ROOM);
-        }
-    }
-
-    @OnClick(R.id.panic_mode_view)
-    void onPanicClicked() {
-        hidePanicScreens();
-        stopPanicking();
-    }
-
-    private void stopPanicking() {
-        countdownImage.cancel();
-        countdownImage.setCountdownNumber(timerDuration);
-        panicActivated = false;
-        resetSeekBar(panicSeekBar);
-        showMainControls();
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -334,6 +276,10 @@ public class MainActivity extends MetadataActivity implements
         if (!isLocationSettingsRequestCode(requestCode) && resultCode != RESULT_OK) {
             return; // user canceled evidence acquiring
         }
+        List<Fragment> fragments = Objects.requireNonNull(getSupportFragmentManager().getPrimaryNavigationFragment()).getChildFragmentManager().getFragments();
+        for (Fragment fragment : fragments) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
 
         switch (requestCode) {
             case C.START_CAMERA_CAPTURE:
@@ -360,7 +306,6 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     public void onBackPressed() {
-        if (maybeClosePanic()) return;
         // if (maybeCloseCamera()) return;
         if (!checkIfShouldExit()) return;
         closeApp();
@@ -371,11 +316,6 @@ public class MainActivity extends MetadataActivity implements
         lockApp();
     }
 
-    private void exitApp() {
-        lockApp();
-        MyApplication.exit(this);
-    }
-
     private boolean checkIfShouldExit() {
         if (!mExit) {
             mExit = true;
@@ -384,15 +324,6 @@ public class MainActivity extends MetadataActivity implements
             return false;
         }
         return true;
-    }
-
-    private boolean maybeClosePanic() {
-        if (panicCountdownView.getVisibility() == View.VISIBLE) {
-            stopPanicking();
-            hidePanicScreens();
-        }
-
-        return false; // todo: check panic state here
     }
 
     private void lockApp() {
@@ -422,22 +353,13 @@ public class MainActivity extends MetadataActivity implements
     protected void onResume() {
         super.onResume();
 
-
-        setupPanicView();
         homeScreenPresenter.countCollectServers();
 
         startLocationMetadataListening();
 
         mOrientationEventListener.enable();
 
-        if (panicActivated) {
-            showPanicScreens();
-            panicActivated = false;
-        } else {
-            maybeClosePanic();
-        }
-
-       // setOfflineMenuIcon(toolbar.getMenu().findItem(R.id.nav_offline_mode), Preferences.isOfflineMode());
+        // setOfflineMenuIcon(toolbar.getMenu().findItem(R.id.nav_offline_mode), Preferences.isOfflineMode());
     }
 
     @Override
@@ -447,10 +369,6 @@ public class MainActivity extends MetadataActivity implements
         stopLocationMetadataListening();
 
         mOrientationEventListener.disable();
-
-        if (countdownImage.isCounting()) {
-            panicActivated = true;
-        }
     }
 
     @Override
@@ -462,44 +380,10 @@ public class MainActivity extends MetadataActivity implements
         super.onStop();
     }
 
-    //@NeedsPermission(Manifest.permission.SEND_SMS)
-    public void showPanicScreens() {
-        // hide controls
-        //cameraToolsContainer.setVisibility(View.GONE);
-        hideMainControls();
-
-        // really show panic screen
-        panicCountdownView.setVisibility(View.VISIBLE);
-        panicCountdownView.setAlpha(1);
-        countdownImage.start(timerDuration, this::executePanicMode);
-    }
-
-    private void hideMainControls() {
-        cameraToolsContainer.setVisibility(View.GONE);
-        navBarHolder.setVisibility(View.GONE);
-        toolbar.setVisibility(View.GONE);
-    }
-
-    private void showMainControls() {
-        cameraToolsContainer.setVisibility(View.VISIBLE);
-        navBarHolder.setVisibility(View.VISIBLE);
-        toolbar.setVisibility(View.VISIBLE);
-    }
-
-    void executePanicMode() {
-        try {
-            if (homeScreenPresenter != null) {
-                homeScreenPresenter.executePanicMode();
-            }
-        } catch (Throwable ignored) {
-            panicActivated = true;
-        }
-    }
-
     @Override
-    public void onMetadataAttached(long mediaFileId, @Nullable Metadata metadata) {
+    public void onMetadataAttached(VaultFile vaultFile) {
         Intent data = new Intent();
-        data.putExtra(C.CAPTURED_MEDIA_FILE_ID, mediaFileId);
+        data.putExtra(C.CAPTURED_MEDIA_FILE_ID, vaultFile.id);
 
         setResult(RESULT_OK, data);
     }
@@ -560,66 +444,6 @@ public class MainActivity extends MetadataActivity implements
         }
     }
 
-    private void setupPanicView() {
-        if (Preferences.isQuickExit()) {
-            panicSeekBarView.setVisibility(View.VISIBLE);
-        } else {
-            panicSeekBarView.setVisibility(View.GONE);
-        }
-    }
-
-    private void setupPanicSeek() {
-        panicSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                if (b) {
-                    blendPanicScreens(i);
-                }
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                if (seekBar.getProgress() > 0) {
-                    hidePanicScreens();
-                }
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                if (seekBar.getProgress() == 100) {
-                    panicSeekBarView.setVisibility(View.GONE);
-                    seekBar.setProgress(0);
-                    //MainActivityPermissionsDispatcher.showPanicScreensWithCheck(MainActivity.this);
-                    showPanicScreens();
-                } else {
-                    hidePanicScreens();
-                }
-            }
-        });
-    }
-
-    private void hidePanicScreens() {
-        resetSeekBar(panicSeekBar);
-
-        toolbar.setAlpha(1);
-        toolbar.setVisibility(View.VISIBLE);
-        cameraToolsContainer.setAlpha(1);
-        cameraToolsContainer.setVisibility(View.VISIBLE);
-        background.setAlpha(0f);
-
-        setupPanicView();
-
-        panicCountdownView.setVisibility(View.GONE);
-    }
-
-    private void blendPanicScreens(int i) {
-        toolbar.setAlpha((float) (100 - i) / 100);
-        cameraToolsContainer.setAlpha((float) (100 - i) / 100);
-        background.setAlpha((float) i / 100);
-        panicCountdownView.setVisibility(i == 100 ? View.VISIBLE : View.GONE);
-        panicSeekBarView.setVisibility(i == 100 ? View.INVISIBLE : View.VISIBLE);
-    }
-
     private void hideProgressDialog() {
         if (progressDialog != null) {
             progressDialog.dismiss();
@@ -644,13 +468,6 @@ public class MainActivity extends MetadataActivity implements
         };
     }
 
-    private void resetSeekBar(SeekBar seekbar) {
-        if (Build.VERSION.SDK_INT >= 24) {
-            seekbar.setProgress(0, true);
-        } else {
-            seekbar.setProgress(0);
-        }
-    }
 
     private void setupButtonsTab(long numOfTUS) {
         LinearLayout navbar;
@@ -694,4 +511,20 @@ public class MainActivity extends MetadataActivity implements
             buttonUploads.setBackground(getResources().getDrawable(R.drawable.round_right_button_background));
         }
     }
+
+    public void hideBottomNavigation() {
+        btmNavMain.setVisibility(View.GONE);
+    }
+
+    public void showBottomNavigation() {
+        btmNavMain.setVisibility(View.VISIBLE);
+    }
+    public void enableMoveMode(Boolean isEnabled){
+        if (isEnabled){
+            root.setBackgroundColor(R.color.prussian_blue);
+        }else{
+            root.setBackgroundColor(R.color.space_cadet);
+        }
+    }
 }
+

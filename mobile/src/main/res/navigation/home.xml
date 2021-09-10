@@ -7,7 +7,7 @@
     app:startDestination="@+id/homeScreen">
     <fragment
         android:id="@+id/homeScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.VaultFragment"
+        android:name="rs.readahead.washington.mobile.views.fragment.vault.home.HomeVaultFragment"
         android:label="Vault"
         tools:layout="@layout/fragment_vault">
         <action
@@ -15,6 +15,33 @@
             app:destination="@id/main_settings"
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out"/>
+
+        <action
+            android:id="@+id/action_homeScreen_to_attachments_screen"
+            app:destination="@id/attachments_screen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"/>
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/attachments_screen"
+        android:name="rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment"
+        tools:layout="@layout/fragment_vault_attachments">
+        <action
+            android:id="@+id/action_attachments_screen_to_info_screen"
+            app:destination="@id/info_screen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out">
+        </action>
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/info_screen"
+        android:name="rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment"
+        android:label="@string/vault_file_info"
+        tools:layout="@layout/fragment_vault_attachments">
     </fragment>
 
     <activity

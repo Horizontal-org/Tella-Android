@@ -14,6 +14,8 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.utils.MediaFile;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,22 +24,21 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.media.MediaFileUrlLoader;
-import rs.readahead.washington.mobile.presentation.entity.MediaFileLoaderModel;
+import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
+import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.FileUtil;
 import rs.readahead.washington.mobile.util.ViewUtil;
 import rs.readahead.washington.mobile.views.custom.StopResumeUploadButton;
 
 public class UploadInformationRecycleViewAdapter extends RecyclerView.Adapter<UploadInformationRecycleViewAdapter.ViewHolder> {
     private List<FileUploadInstance> instances = Collections.emptyList();
-    private MediaFileUrlLoader glideLoader;
+    private VaultFileUrlLoader glideLoader;
     private UploadInformationInterface uploadInformationInterface;
 
     public UploadInformationRecycleViewAdapter(Context context, MediaFileHandler mediaFileHandler, @NonNull UploadInformationInterface uploadInformationInterface) {
-        this.glideLoader = new MediaFileUrlLoader(context.getApplicationContext(), mediaFileHandler);
+        this.glideLoader = new VaultFileUrlLoader(context.getApplicationContext(), mediaFileHandler);
         this.uploadInformationInterface = uploadInformationInterface;
     }
 
@@ -57,17 +58,17 @@ public class UploadInformationRecycleViewAdapter extends RecyclerView.Adapter<Up
         holder.size.setText(String.format(context.getString(R.string.collect_form_meta_file_size), FileUtil.getFileSizeString(instance.getSize())));
 
         if (instance.getMediaFile() != null) {
-            holder.name.setText(instance.getMediaFile().getFileName());
-            holder.hash.setText(String.format("%s: %s", context.getString(R.string.verification_info_field_hash), instance.getMediaFile().getHash()));
-            holder.type.setText(String.format("%s %s", context.getString(R.string.upload_info_meta_file_type), instance.getMediaFile().getType().name()));
-            if (instance.getMediaFile().getType() == MediaFile.Type.IMAGE || instance.getMediaFile().getType() == MediaFile.Type.VIDEO) {
+            holder.name.setText(instance.getMediaFile().name);
+            holder.hash.setText(String.format("%s: %s", context.getString(R.string.verification_info_field_hash), instance.getMediaFile().hash));
+            holder.type.setText(String.format("%s %s", context.getString(R.string.upload_info_meta_file_type), instance.getMediaFile().type));
+            if (MediaFile.INSTANCE.isImageFileType(instance.getMediaFile().mimeType) || MediaFile.INSTANCE.isVideoFileType(instance.getMediaFile().mimeType)) {
                 Glide.with(holder.mediaView.getContext())
                         .using(glideLoader)
-                        .load(new MediaFileLoaderModel(instance.getMediaFile(), MediaFileLoaderModel.LoadType.THUMBNAIL))
+                        .load(new VaultFileLoaderModel(instance.getMediaFile(), VaultFileLoaderModel.LoadType.THUMBNAIL))
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
                         .into(holder.mediaView);
-            } else if (instance.getMediaFile().getType() == MediaFile.Type.AUDIO) {
+            } else if (MediaFile.INSTANCE.isVideoFileType(instance.getMediaFile().mimeType)) {
                 Drawable drawable = VectorDrawableCompat.create(context.getResources(),
                         R.drawable.ic_mic_gray, null);
                 holder.mediaView.setImageDrawable(drawable);
@@ -103,7 +104,7 @@ public class UploadInformationRecycleViewAdapter extends RecyclerView.Adapter<Up
 
     public interface UploadInformationInterface {
         void clearUpload(final long id);
-        void onMediaViewItemClicked(MediaFile mediaFile);
+        void onMediaViewItemClicked(VaultFile vaultFile);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

@@ -26,6 +26,7 @@ public class C {
     public static final int MEDIA_FILE_ID               = 10018;
     public static final int SELECTED_LOCATION           = 10019;
     public static final int GPS_PROVIDER                = 10020;
+    public static final int IMPORT_MULTIPLE_FILES       = 10021;
 
     // "global" intent keys
     public static final String CAPTURED_MEDIA_FILE_ID = "cmfi";

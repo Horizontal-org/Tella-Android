@@ -13,8 +13,9 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <androidx.appcompat.widget.Toolbar
+        <org.hzontal.shared_ui.appbar.ToolbarComponent
             android:id="@+id/toolbar"
+            app:arrowBackIcon="@drawable/ic_back_white"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
@@ -24,5 +25,11 @@
 
     <include layout="@layout/content_audio_play" />
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:id="@+id/root"
+        />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

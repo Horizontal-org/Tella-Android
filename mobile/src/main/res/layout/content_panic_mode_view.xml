@@ -1,33 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/panic_mode_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/wa_red"
+    android:background="@color/space_cadet"
     android:gravity="center_horizontal"
     android:visibility="gone">
 
-    <rs.readahead.washington.mobile.views.custom.CountdownImageView
+    <rs.readahead.washington.mobile.views.custom.CountdownTextView
         android:id="@+id/countdown_timer"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        android:src="@drawable/countdown_5" />
+        style="@style/Tella_Main_White_Text"
+        tools:text="5"
+        android:textSize="120sp"
+        android:gravity="center"
+        android:background="@drawable/ic_panic_circle" />
 
     <TextView
-        style="@style/PanicActiveText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/countdown_timer"
         android:layout_centerHorizontal="true"
         android:textAlignment="center"
-        android:text="@string/homescreen_heading_quick.delete" />
+        android:text="@string/homescreen_heading_quick.delete"
+        style="@style/Tella_Main_White_Text"
+        android:textSize="35sp"
+        android:lineSpacingExtra="0.4dp"
+        />
 
     <TextView
-        style="@style/PanicActiveText"
+        style="@style/Tella_Main_White_Text"
+        android:lineHeight="47dp"
+        android:textSize="35sp"
+        android:lineSpacingExtra="0.4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/countdown_timer"

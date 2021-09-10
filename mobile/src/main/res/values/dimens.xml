@@ -27,7 +27,7 @@
     <dimen name="navigation_row_height">80dp</dimen>
     <dimen name="navigation_table">240dp</dimen>
     <dimen name="navigation_table_cell_height">120dp</dimen>
-    <dimen name="navigation_panic_height">50dp</dimen>
+    <dimen name="navigation_panic_height">52dp</dimen>
     <dimen name="settings_title_height">70dp</dimen>
     <dimen name="settings_title_height_short">65dp</dimen>
     <dimen name="activity_about_margin">@dimen/activity_vertical_margin</dimen>
@@ -37,8 +37,13 @@
     <dimen name="collect_widget_icon_padding">8dp</dimen>
     <dimen name="collect_form_padding_vertical">16dp</dimen>
     <dimen name="collect_form_padding_horizontal">34dp</dimen>
+
     <dimen name="about_tella_icon_height">72sp</dimen>
     <dimen name="about_tella_icon_width">66sp</dimen>
     <dimen name="lock_password_button_margin_top">35dp</dimen>
     <dimen name="lock_subtitle_desc_margin_top">17dp</dimen>
+
+    <!-- elevation for Plant Detail toolbar - used to convert to pixels when hiding/showing -->
+    <dimen name="toolbar_elevation">5dp</dimen>
+    <dimen name="tella_main_vertical">17dp</dimen>
 </resources>
