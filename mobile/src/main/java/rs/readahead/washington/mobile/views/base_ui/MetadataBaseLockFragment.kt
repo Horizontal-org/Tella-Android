@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import rs.readahead.washington.mobile.views.activity.MetadataActivity
 import timber.log.Timber
 
@@ -41,4 +43,14 @@ open class MetadataBaseLockFragment  : Fragment(){
         activity.restrictActivity()
         super.onResume()
     }
+
+    protected open fun nav(): NavController {
+        return NavHostFragment.findNavController(this)
+    }
+
+    open fun back() {
+        nav().navigateUp()
+    }
+
+    open fun onBackPressed() = true
 }

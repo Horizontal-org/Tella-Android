@@ -2,7 +2,6 @@ package rs.readahead.washington.mobile.views.fragment.vault.attachements
 
 import android.content.Context
 import android.net.Uri
-import com.hzontal.tella_vault.filter.Filter
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Sort
@@ -14,11 +13,11 @@ class IAttachmentsPresenter {
         fun onGetFilesEnd()
         fun onGetFilesSuccess(files: List<VaultFile?>)
         fun onGetFilesError(error: Throwable?)
-        fun onMediaImported(vaultFile: VaultFile?)
+        fun onMediaImported(vaultFile: List<VaultFile?>)
         fun onImportError(error: Throwable?)
         fun onImportStarted()
         fun onImportEnded()
-        fun onMediaFilesAdded(vaultFile: VaultFile?)
+        fun onMediaFilesAdded()
         fun onMediaFilesAddingError(error: Throwable?)
         fun onMediaFilesDeleted(num: Int)
         fun onMediaFilesDeletionError(throwable: Throwable?)
@@ -34,18 +33,23 @@ class IAttachmentsPresenter {
         fun onRenameFileEnd()
         fun onRenameFileSuccess()
         fun onRenameFileError(error: Throwable?)
+        fun onCreateFolderSuccess()
+        fun onCreateFolderError(error: Throwable?)
+        fun onGetRootIdSuccess(vaultFile: VaultFile?)
+        fun onGetRootIdError(error: Throwable?)
         fun getContext(): Context?
     }
 
     interface IPresenter : IBasePresenter {
-        fun getFiles(filterType: FilterType?, sort: Sort?)
-        fun importImage(uri: Uri?)
-        fun importVideo(uri: Uri?)
-        fun addNewVaultFile(vaultFile: VaultFile?)
+        fun getFiles(parent: String?,filterType: FilterType?, sort: Sort?)
+        fun importVaultFiles(uris: List<Uri?>,parentId : String?)
+        fun addNewVaultFiles()
         fun renameVaultFile(id : String, name : String)
         fun deleteVaultFiles(vaultFiles: List<VaultFile?>?)
         fun deleteVaultFile(vaultFile: VaultFile?)
         fun exportMediaFiles(vaultFiles: List<VaultFile?>)
+        fun createFolder(folderName : String, parent: String)
+        fun getRootId()
         fun countTUServers()
 
     }

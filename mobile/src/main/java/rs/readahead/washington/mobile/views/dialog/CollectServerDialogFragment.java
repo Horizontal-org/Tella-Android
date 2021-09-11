@@ -71,8 +71,6 @@ public class CollectServerDialogFragment extends AppCompatDialogFragment impleme
     EditText password;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
-    @BindView(R.id.internet_error)
-    TextView internetError;
     @BindView(R.id.server_input)
     View serverInput;
     @BindView(R.id.cancel)
@@ -154,7 +152,7 @@ public class CollectServerDialogFragment extends AppCompatDialogFragment impleme
                 checkServer(copyFields(new CollectServer(serverId)), false);
             }
         });
-        internetError.setVisibility(View.INVISIBLE);
+
         return dialogView;
     }
 
@@ -252,8 +250,9 @@ public class CollectServerDialogFragment extends AppCompatDialogFragment impleme
 
     @Override
     public void onNoConnectionAvailable() {
-        internetError.setVisibility(View.VISIBLE);
-        internetError.requestFocus();
+        Toast.makeText(getActivity(), getString(R.string.settings_docu_error_no_internet), Toast.LENGTH_LONG).show();
+        next.setText(R.string.settings_docu_dialog_action_try_again_connecting);
+
         validated = false;
     }
 
@@ -296,8 +295,6 @@ public class CollectServerDialogFragment extends AppCompatDialogFragment impleme
         validateUrl(url, urlLayout);
         //validateRequired(username, usernameLayout);
         //validateRequired(password, passwordLayout);
-
-        internetError.setVisibility(View.GONE);
     }
 
     private void validateRequired(EditText field, TextInputLayout layout) {

@@ -14,7 +14,6 @@ import com.hzontal.tella_locking_ui.ReturnActivity
 import com.hzontal.tella_locking_ui.ui.password.PasswordUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity
-import com.tooltip.Tooltip
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
@@ -109,7 +108,7 @@ class SecuritySettings : BaseFragment() {
             view.findViewById<TellaSwitchWithMessage>(R.id.camera_silent_switch)
         silentCameraTellaSwitch.mSwitch.setChecked(!Preferences.isShutterMute())
         silentCameraTellaSwitch.mSwitch.setOnCheckedChangeListener({ buttonView: CompoundButton?, isChecked: Boolean ->
-            Preferences.setShutterMute(isChecked)
+            Preferences.setShutterMute(!isChecked)
         })
 
         val bypassCensorshipTellaSwitch =
@@ -123,7 +122,8 @@ class SecuritySettings : BaseFragment() {
         vaultTooltip.setOnClickListener({
             showTooltip(
                 vaultTooltip,
-                resources.getString(R.string.settings_sec_delete_vault_tooltip)
+                resources.getString(R.string.settings_sec_delete_vault_tooltip),
+                Gravity.TOP
             )
         })
 
@@ -131,7 +131,8 @@ class SecuritySettings : BaseFragment() {
         formsTooltip.setOnClickListener({
             showTooltip(
                 formsTooltip,
-                resources.getString(R.string.settings_sec_delete_forms_tooltip)
+                resources.getString(R.string.settings_sec_delete_forms_tooltip),
+                Gravity.TOP
             )
         })
 
@@ -139,7 +140,8 @@ class SecuritySettings : BaseFragment() {
         serversTooltip.setOnClickListener({
             showTooltip(
                 serversTooltip,
-                resources.getString(R.string.settings_sec_delete_servers_tooltip)
+                resources.getString(R.string.settings_sec_delete_servers_tooltip),
+                Gravity.TOP
             )
         })
 
@@ -147,7 +149,8 @@ class SecuritySettings : BaseFragment() {
         appTooltip.setOnClickListener({
             showTooltip(
                 appTooltip,
-                resources.getString(R.string.settings_sec_delete_app_tooltip)
+                resources.getString(R.string.settings_sec_delete_app_tooltip),
+                Gravity.TOP
             )
         })
     }
@@ -259,18 +262,5 @@ class SecuritySettings : BaseFragment() {
             quickExitSwitch.setChecked(false)
             quickExitSettings.setVisibility(View.GONE)
         }
-    }
-
-    private fun showTooltip(v: View, text: String) {
-        val tooltip = Tooltip.Builder(v)
-            .setText(text)
-            .setTextColor(resources.getColor(R.color.wa_black))
-            .setBackgroundColor(resources.getColor(R.color.wa_white))
-            .setGravity(Gravity.TOP)
-            .setCornerRadius(12f)
-            .setPadding(24)
-            .setDismissOnClick(true)
-            .setCancelable(true)
-            .show<Tooltip>()
     }
 }

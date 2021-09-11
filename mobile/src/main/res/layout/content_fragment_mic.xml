@@ -113,6 +113,7 @@
             android:background="@drawable/light_purple_circle_background"
             android:contentDescription="@string/action_play"
             android:padding="5dp"
+            app:backgroundTint="@color/wa_white_20"
             android:src="@drawable/ic_headset_white_24dp" />
     </LinearLayout>
 

@@ -11,34 +11,43 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.media.FileWalker
 import rs.readahead.washington.mobile.media.MediaFileHandler
-import java.util.ArrayList
 
-class AttachmentsPresenter (var view: IAttachmentsPresenter.IView?) : IAttachmentsPresenter.IPresenter  {
+class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
+    IAttachmentsPresenter.IPresenter {
     private val disposables = CompositeDisposable()
 
-    override fun getFiles(filterType: FilterType?, sort: Sort?) {
-        disposables.add(MyApplication.rxVault.list(filterType, sort, null)
-            .subscribeOn(Schedulers.io())
-            .doOnSubscribe { view?.onGetFilesStart() }
-            .observeOn(AndroidSchedulers.mainThread())
-            .doFinally { view?.onGetFilesEnd() }
+    override fun getFiles(parent: String?, filterType: FilterType?, sort: Sort?) {
+        MyApplication.rxVault.get(parent)
             .subscribe(
-                { vaultFile: List<VaultFile?> ->
-                    view?.onGetFilesSuccess(
-                        vaultFile
-                    )
+                { vaultFile: VaultFile? ->
+                    disposables.add(MyApplication.rxVault.list(vaultFile, filterType, sort, null)
+                        .subscribeOn(Schedulers.io())
+                        .doOnSubscribe { view?.onGetFilesStart() }
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doFinally { view?.onGetFilesEnd() }
+                        .subscribe(
+                            { vaultFiles: List<VaultFile?> ->
+                                view?.onGetFilesSuccess(
+                                    vaultFiles
+                                )
+                            }
+                        ) { throwable: Throwable? ->
+                            FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                            view?.onGetFilesError(throwable)
+                        })
                 }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                view?.onGetFilesError(throwable)
-            })
+                view?.onGetRootIdError(throwable)
+            }.dispose()
     }
 
-    override fun importImage(uri: Uri?) {
+    override fun importVaultFiles(uris: List<Uri?>, parentId: String?) {
         disposables.add(Observable.fromCallable {
-            MediaFileHandler.importPhotoUri(
-                view?.getContext(), uri
+            MediaFileHandler.importVaultFilesUris(
+                view?.getContext(), uris, parentId
             )
         }
             .subscribeOn(Schedulers.computation())
@@ -46,48 +55,25 @@ class AttachmentsPresenter (var view: IAttachmentsPresenter.IView?) : IAttachmen
             .observeOn(AndroidSchedulers.mainThread())
             .doFinally { view?.onImportEnded() }
             .subscribe(
-                { vaultFile: VaultFile? ->
-                    view?.onMediaImported(
-                        vaultFile
-                    )
+                { vaultFiles ->
+                    view?.onMediaImported(vaultFiles)
                 }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 view?.onImportError(throwable)
             })
+
     }
 
-    override fun importVideo(uri: Uri?) {
-        disposables.add(Observable.fromCallable {
-            MediaFileHandler.importVideoUri(
-                view?.getContext(), uri
-            )
-        }
-            .subscribeOn(Schedulers.computation())
-            .doOnSubscribe { view?.onImportStarted() }
-            .observeOn(AndroidSchedulers.mainThread())
-            .doFinally { view!!.onImportEnded() }
-            .subscribe(
-                { vaultFile: VaultFile? ->
-                    view?.onMediaImported(
-                        vaultFile
-                    )
-                }
-            ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                view?.onImportError(throwable)
-            }
-        )
-    }
 
-    override fun addNewVaultFile(vaultFile: VaultFile?) {
-        view?.onMediaFilesAdded(vaultFile)
+    override fun addNewVaultFiles() {
+        view?.onMediaFilesAdded()
     }
 
     override fun renameVaultFile(id: String, name: String) {
-        disposables.add(MyApplication.rxVault.rename(id,name)
+        disposables.add(MyApplication.rxVault.rename(id, name)
             .subscribeOn(Schedulers.io())
-            .doOnSubscribe{ view?.onRenameFileStart()}
+            .doOnSubscribe { view?.onRenameFileStart() }
             .observeOn(AndroidSchedulers.mainThread())
             .doFinally { view?.onRenameFileEnd() }
             .subscribe(
@@ -99,11 +85,14 @@ class AttachmentsPresenter (var view: IAttachmentsPresenter.IView?) : IAttachmen
     }
 
     override fun deleteVaultFiles(vaultFiles: List<VaultFile?>?) {
+        if (vaultFiles == null) return
+
         val completable: MutableList<Single<Boolean>> = ArrayList()
-        if (vaultFiles != null) {
-            for (vaultFile in vaultFiles) {
-                vaultFile?.let { deleteFile(it) }?.let { completable.add(it) }
-            }
+
+        val resultList = walkAllFilesWithDirectories(vaultFiles)
+
+        for (vaultFile in resultList) {
+            vaultFile?.let { deleteFile(it) }?.let { completable.add(it) }
         }
 
         disposables.add(
@@ -119,6 +108,7 @@ class AttachmentsPresenter (var view: IAttachmentsPresenter.IView?) : IAttachmen
                 }
         )
     }
+
     private fun deleteFile(vaultFile: VaultFile): Single<Boolean> {
         return MyApplication.rxVault.delete(vaultFile)
             .subscribeOn(Schedulers.io())
@@ -141,8 +131,9 @@ class AttachmentsPresenter (var view: IAttachmentsPresenter.IView?) : IAttachmen
         disposables.add(
             Single
                 .fromCallable {
-                    for (mediaFile in vaultFiles) {
-                        MediaFileHandler.exportMediaFile(view?.getContext(), mediaFile)
+                    val resultList = walkAllFiles(vaultFiles)
+                    for (vaultFile in resultList) {
+                        vaultFile?.let { MediaFileHandler.exportMediaFile(view?.getContext(), it)  }
                     }
                     vaultFiles.size
                 }
@@ -159,9 +150,66 @@ class AttachmentsPresenter (var view: IAttachmentsPresenter.IView?) : IAttachmen
         )
     }
 
+    private fun walkAllFiles(vaultFiles: List<VaultFile?>): List<VaultFile?> {
+        val resultList = arrayListOf<VaultFile?>()
+        for (vaultFile in vaultFiles) {
+            if (vaultFile?.type == VaultFile.Type.DIRECTORY) {
+                resultList.addAll(getAllFiles(vaultFile))
+            } else {
+                resultList.add(vaultFile)
+            }
+        }
+        return resultList.toList()
+    }
+
+    private fun walkAllFilesWithDirectories(vaultFiles: List<VaultFile?>): List<VaultFile?> {
+        val resultList = arrayListOf<VaultFile?>()
+        val fileWalker = FileWalker()
+        for (vaultFile in vaultFiles) {
+            if (vaultFile?.type == VaultFile.Type.DIRECTORY) {
+                resultList.addAll(fileWalker.walkWithDirectories(vaultFile))
+                resultList.add(vaultFile)
+            } else {
+                resultList.add(vaultFile)
+            }
+        }
+        return resultList.toList()
+    }
+
+    private fun getAllFiles(vaultFile: VaultFile): List<VaultFile> {
+        val fileWalker = FileWalker()
+        return fileWalker.walk(vaultFile)
+    }
+
+    override fun createFolder(folderName: String, parent: String) {
+        MyApplication.rxVault
+            .builder()
+            .setName(folderName)
+            .setType(VaultFile.Type.DIRECTORY)
+            .build(parent)
+            .subscribe(
+                { view?.onCreateFolderSuccess() }
+            ) { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                view?.onCountTUServersFailed(throwable)
+            }.dispose()
+
+    }
+
+    override fun getRootId() {
+        MyApplication.rxVault.root
+            .subscribe(
+                { vaultFile: VaultFile? -> view?.onGetRootIdSuccess(vaultFile) }
+            ) { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                view?.onGetRootIdError(throwable)
+            }.dispose()
+    }
+
 
     override fun countTUServers() {
     }
+
 
     override fun destroy() {
         disposables.dispose()

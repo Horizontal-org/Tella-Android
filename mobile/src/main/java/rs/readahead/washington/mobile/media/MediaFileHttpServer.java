@@ -197,7 +197,7 @@ public class MediaFileHttpServer implements Runnable {
             if (cbSkip > 0) {// It is a seek or skip request if there's a Range
                 // header
                 headers += "HTTP/1.1 206 Partial Content\r\n";
-                headers += "Content-Type: " + FileUtil.getMimeType(vaultFile.name) + "\r\n";
+                headers += "Content-Type: " + vaultFile.mimeType + "\r\n";
                 headers += "Accept-Ranges: bytes\r\n";
                 headers += "Content-Length: " + (fileSize - cbSkip) + "\r\n";
                 headers += "Content-Range: bytes " + cbSkip + "-" + (fileSize - 1) + "/" + fileSize + "\r\n";
@@ -205,7 +205,7 @@ public class MediaFileHttpServer implements Runnable {
                 headers += "\r\n";
             } else {
                 headers += "HTTP/1.1 200 OK\r\n";
-                headers += "Content-Type: " + FileUtil.getMimeType(vaultFile.name) + "\r\n";
+                headers += "Content-Type: " + vaultFile.mimeType + "\r\n";
                 headers += "Accept-Ranges: bytes\r\n";
                 headers += "Content-Length: " + fileSize + "\r\n";
                 headers += "Connection: Keep-Alive\r\n";

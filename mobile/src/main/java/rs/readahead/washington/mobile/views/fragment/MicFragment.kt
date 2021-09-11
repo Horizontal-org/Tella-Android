@@ -45,7 +45,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
     IMetadataAttachPresenterContract.IView {
 
     // TODO: Rename and change types of parameters
-    private val TIME_FORMAT: String = "%02d:%02d:%02d"
+    private val TIME_FORMAT: String = "%02d:%02d"
     var RECORDER_MODE = "rm"
 
     private var animator: ObjectAnimator? = null
@@ -174,7 +174,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        AudioRecordActivity2PermissionsDispatcher.onRequestPermissionsResult(
+        MicFragmentPermissionsDispatcher.onRequestPermissionsResult(
             this,
             requestCode,
             grantResults
@@ -420,9 +420,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
     private fun timeToString(duration: Long): String {
         return String.format(
             Locale.ROOT, TIME_FORMAT,
-            TimeUnit.MILLISECONDS.toHours(duration),
-            TimeUnit.MILLISECONDS.toMinutes(duration) -
-                    TimeUnit.MINUTES.toMinutes(TimeUnit.MILLISECONDS.toHours(duration)),
+            TimeUnit.MILLISECONDS.toMinutes(duration),
             TimeUnit.MILLISECONDS.toSeconds(duration) -
                     TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration))
         )

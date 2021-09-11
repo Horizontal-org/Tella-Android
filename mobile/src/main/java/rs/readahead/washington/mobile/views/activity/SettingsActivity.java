@@ -3,13 +3,13 @@ package rs.readahead.washington.mobile.views.activity;
 import static com.hzontal.tella_locking_ui.ConstantsKt.IS_CAMOUFLAGE;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
 
 import android.view.MenuItem;
-import android.view.View;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -34,9 +34,8 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
 
     private ActionBar actionBar;
     private EventCompositeDisposable disposables;
-    private CamouflageManager cm = CamouflageManager.getInstance();
+    private final CamouflageManager cm = CamouflageManager.getInstance();
     protected boolean isCamouflage = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +45,16 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
         setSupportActionBar(toolbar);
 
         actionBar = getSupportActionBar();
+
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(R.string.settings_app_bar);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            findViewById(R.id.appbar).setOutlineProvider(null);
+        } else {
+            findViewById(R.id.appbar).bringToFront();
         }
 
         if (getIntent().hasExtra(IS_CAMOUFLAGE)) {

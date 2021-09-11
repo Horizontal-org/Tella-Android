@@ -55,13 +55,14 @@ class GeneralSettings : BaseFragment() {
         verificationSwitch.mSwitch.setChecked(!Preferences.isAnonymousMode())
     }
 
+
     private fun setLanguageSetting() {
-        LocaleManager.getInstance().languageSetting?.let { language ->
+        val language = LocaleManager.getInstance().languageSetting
+        if (language != null) {
             val locale = Locale(language)
-            languageSetting?.text = StringUtils.capitalize(
-                locale.displayName,
-                locale
-            )
-        }?.run { languageSetting?.setText(R.string.settings_lang_select_default) }
+            languageSetting?.setText(StringUtils.capitalize(locale.displayName, locale))
+        } else {
+            languageSetting?.setText(R.string.settings_lang_select_default)
+        }
     }
 }

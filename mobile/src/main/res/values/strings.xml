@@ -400,23 +400,23 @@
     <string name="action_next">Next</string>
     <string name="meter">%f m</string>
     <string name="meter_per_second">%f m/s</string>
-    <string name="intro_welcome" translatable="false">Welcome to</string>
-    <string name="tella" translatable="false">Tella</string>
-    <string name="intro_start" translatable="false">START</string>
-    <string name="intro_document_protect" translatable="false"><![CDATA[Document & Protect]]></string>
-    <string name="onboard_setup_text" translatable="false">How would you like to set up Tella?</string>
-    <string name="onboard_full_setup" translatable="false">FULL SETUP</string>
-    <string name="onboard_quick_setup" translatable="false">QUICK SETUP</string>
-    <string name="onboard_setup_explore_custom" translatable="false">Explore and fully customize the app</string>
-    <string name="onboard_setup_start" translatable="false">Set the lock and get started immediately</string>
-    <string name="onboard_setup_customization" translatable="false">Have a customization code/file?</string>
-    <string name="onboard_setup_lock" translatable="false">How would you like to lock Tella?</string>
-    <string name="onboard_password" translatable="false">Password</string>
-    <string name="onboard_password_description" translatable="false">Camouflage Tella as Notes app</string>
-    <string name="onboard_pin" translatable="false">PIN</string>
-    <string name="onboard_pin_description" translatable="false">Camouflage Tella as Calculator app</string>
-    <string name="onboard_pattern" translatable="false">Pattern</string>
-    <string name="onboard_pattern_description" translatable="false">Camouflage Tella as Camera app</string>
+    <string name="intro_welcome">Welcome to</string>
+    <string name="tella">Tella</string>
+    <string name="intro_start">START</string>
+    <string name="intro_document_protect"><![CDATA[Document & Protect]]></string>
+    <string name="onboard_setup_text">How would you like to set up Tella?</string>
+    <string name="onboard_full_setup">FULL SETUP</string>
+    <string name="onboard_quick_setup">QUICK SETUP</string>
+    <string name="onboard_setup_explore_custom">Explore and fully customize the app</string>
+    <string name="onboard_setup_start">Set the lock and get started immediately</string>
+    <string name="onboard_setup_customization">Have a customization code/file?</string>
+    <string name="onboard_setup_lock">How would you like to lock Tella?</string>
+    <string name="onboard_password">Password</string>
+    <string name="onboard_password_description">The most secure option</string>
+    <string name="onboard_pin">PIN</string>
+    <string name="onboard_pin_description">Moderately secure</string>
+    <string name="onboard_pattern">Pattern</string>
+    <string name="onboard_pattern_description">The least secure option</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="settings.sec_app.bar">Security</string>
     <string name="settings.select_security">Security</string>
@@ -478,5 +478,20 @@
     <string name="settings.servers_setup_hide_behind_calculator_not_possible"><![CDATA[<center>The Calculator camouflage is only possible if you<br> use a PIN lock.<font color="#D6933B"><b> Change lock here</b></font></center>]]></string>
     <string name="settings.sec_change_lock_type_warning">If you change your lock method, Camouflage will be disabled</string>
     <string name="action_continue">Continue</string>
+    <string name="settings.camo_icamera">iCamera</string>
+    <string name="settings.camo_selfie_cam">Selfie Cam</string>
+    <string name="settings.camo_snap_camera">Snap Camera</string>
+    <string name="settings.camo_calculate">Calculate</string>
+    <string name="settings.camo_calculator_plus">Calculator Plus</string>
+    <string name="settings.camo_icalculator">iCalculator</string>
+    <string name="settings.camo_weather">Weather</string>
+    <string name="settings.camo_easyweather">EasyWeather</string>
+    <string name="settings.camo_sunnyday">SunnyDay</string>
+    <string name="settings.camo_gamestation">GameStation</string>
+    <string name="settings.camo_playnow">PlayNow</string>
+    <string name="settings.camo_jeweldash">Jewel Dash</string>
+    <string name="settings.camo_clock">Clock</string>
+    <string name="settings.camo_time">Time</string>
+    <string name="settings.camo_stopwatch">StopWatch</string>
     <string name="fragment_mic">Microphone</string>
 </resources>

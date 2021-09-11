@@ -649,8 +649,8 @@
     </style>
 
     <style name="CollectDialogAnimation" parent="@android:style/Animation.Activity">
-        <item name="android:windowEnterAnimation">@anim/slide_in_start</item>
-        <item name="android:windowExitAnimation">@anim/slide_out_end</item>
+        <item name="android:windowEnterAnimation">@anim/slide_in_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_down</item>
     </style>
 
     <style name="CamouflageOptionStyle">

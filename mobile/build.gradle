@@ -13,14 +13,13 @@ ext {
 
 android {
     compileSdkVersion 30
-
     defaultConfig {
         applicationId "org.hzontal.tella"
         minSdkVersion 17
         compileSdkVersion 29
-        targetSdkVersion 29
-        versionCode 63
-        versionName "1.7.2"
+        targetSdkVersion 30
+        versionCode 64
+        versionName "2.0.0-alpha2"
         multiDexEnabled true
         // vectorDrawables.useSupportLibrary = true // don't care about apk size, care about crashes
     }
@@ -54,7 +53,8 @@ android {
 dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api project(':tella-vault')
+    implementation project(':tella-vault')
+    api project(':tella-locking-ui')
 
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 

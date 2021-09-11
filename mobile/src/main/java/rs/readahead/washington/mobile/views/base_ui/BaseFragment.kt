@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import timber.log.Timber
+import com.tooltip.Tooltip
+import rs.readahead.washington.mobile.R
 
 abstract class BaseFragment : Fragment() {
 
@@ -51,9 +53,24 @@ abstract class BaseFragment : Fragment() {
         return NavHostFragment.findNavController(this)
     }
 
+    protected fun showTooltip(v: View, text: String, gravity: Int) {
+        val tooltip = Tooltip.Builder(v)
+                .setText(text)
+                .setTextColor(resources.getColor(R.color.wa_black))
+                .setBackgroundColor(resources.getColor(R.color.wa_white))
+                .setGravity(gravity)
+                .setCornerRadius(12f)
+                .setPadding(24)
+                .setDismissOnClick(true)
+                .setCancelable(true)
+                .show<Tooltip>()
+    }
+
     open fun back() {
         nav().navigateUp()
     }
 
     abstract fun initView(view: View)
+
+    open fun onBackPressed() = true
 }

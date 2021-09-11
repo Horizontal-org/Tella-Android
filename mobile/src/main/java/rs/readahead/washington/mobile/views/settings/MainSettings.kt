@@ -3,8 +3,7 @@ package rs.readahead.washington.mobile.views.settings
 import android.os.Bundle
 import android.view.*
 import android.widget.CompoundButton
-import androidx.navigation.Navigation
-import org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+import android.widget.ImageView
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.R.*
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
@@ -29,11 +28,11 @@ class MainSettings : BaseFragment() {
     override fun initView(view: View) {
         (activity as OnFragmentSelected?)?.setToolbarLabel(string.settings_app_bar)
 
-        val offlineSwitch = view.findViewById<TellaSwitchWithMessage>(R.id.offline_switch)
-        offlineSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+        val offlineSwitch = view.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.offline_switch)
+        offlineSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
             Preferences.setOfflineMode(isChecked)
         }
-        offlineSwitch.mSwitch.setChecked(Preferences.isOfflineMode())
+        offlineSwitch.setChecked(Preferences.isOfflineMode())
 
         view.findViewById<View>(R.id.general_settings_button).setOnClickListener {
             nav().navigate(R.id.action_main_to_general_settings)
@@ -50,5 +49,15 @@ class MainSettings : BaseFragment() {
         view.findViewById<View>(R.id.about_n_help_settings_button).setOnClickListener {
             nav().navigate(R.id.action_main_settings_to_about_n_help_settings)
         }
+
+        val offlineTooltip = view.findViewById<ImageView>(R.id.offline_tooltip)
+        offlineTooltip.setOnClickListener({
+            showTooltip(
+                    offlineTooltip,
+                    resources.getString(R.string.offline_dialog_expl),
+                    Gravity.BOTTOM
+            )
+        })
     }
+
 }

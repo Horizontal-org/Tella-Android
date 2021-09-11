@@ -12,6 +12,7 @@ import com.hzontal.tella_vault.VaultFile
 import com.hzontal.utils.MediaFile
 import com.hzontal.utils.MediaFile.isAudioFileType
 import com.hzontal.utils.MediaFile.isImageFileType
+import com.hzontal.utils.MediaFile.isTextFileType
 import com.hzontal.utils.MediaFile.isVideoFileType
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.media.MediaFileHandler
@@ -41,6 +42,7 @@ class RecentAttachmentViewHolder (val view: View) : BaseViewHolder<VaultFile?>(v
     }
 
     private fun icPreview(vaultFile : VaultFile){
+        if (vaultFile.mimeType == null ) return
         when {
             isImageFileType(vaultFile.mimeType) -> {
                 Glide.with(previewImageView.context)
@@ -62,6 +64,9 @@ class RecentAttachmentViewHolder (val view: View) : BaseViewHolder<VaultFile?>(v
                     .skipMemoryCache(true)
                     .into(previewImageView)
             }
+            isTextFileType(vaultFile.mimeType) -> {
+                showDocumentInfo(vaultFile)
+            }
         }
     }
 
@@ -73,6 +78,12 @@ class RecentAttachmentViewHolder (val view: View) : BaseViewHolder<VaultFile?>(v
         icAttachmentImg.setBackgroundResource(R.drawable.ic_audio_w_small)
         fileNameTextView.visibility = View.VISIBLE
         fileNameTextView.text = vaultFile.name
+    }
+
+    private fun showDocumentInfo(vaultFile: VaultFile?) {
+        icAttachmentImg.setBackgroundResource(R.drawable.ic_document_24px_filled)
+        fileNameTextView.visibility = View.VISIBLE
+        fileNameTextView.text = vaultFile?.name
         more.visibility = View.VISIBLE
     }
 

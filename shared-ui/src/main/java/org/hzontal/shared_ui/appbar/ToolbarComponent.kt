@@ -26,23 +26,21 @@ class ToolbarComponent @JvmOverloads constructor(
     private lateinit var titleImg: ImageView
     private lateinit var startTitleTv: TextView
     private lateinit var endTitleTv: TextView
-
+    private lateinit var rightImg : AppCompatImageButton
+    private lateinit var leftImg : AppCompatImageButton
     @DrawableRes
     private var arrowBackIcon: Int = -1
-
     @DrawableRes
     private var titleIcon: Int = -1
-
+    private var rightIcon : Int = -1
+    private var leftIcon : Int = -1
     @StringRes
     var toolbarTitle: Int = -1
-
     var startTitle: Int = -1
-
     var endTitle: Int = -1
-
     var backClickListener: (() -> Unit)? = null
-
-    var onEndClickListener: (() -> Unit)? = null
+    var onRightClickListener: (() -> Unit)? = null
+    var onLeftClickListener: (() -> Unit)? = null
 
     init {
         LayoutInflater.from(context)
@@ -58,15 +56,20 @@ class ToolbarComponent @JvmOverloads constructor(
         titleImg = findViewById(R.id.titleImg)
         startTitleTv = findViewById(R.id.startTitleTv)
         endTitleTv = findViewById(R.id.endTitleTv)
-
+        endTitleTv = findViewById(R.id.endTitleTv)
+        rightImg = findViewById(R.id.right_img)
+        leftImg = findViewById(R.id.left_img)
     }
 
     private fun initListener() {
         btnBack.setOnClickListener {
             backClickListener?.invoke()
         }
-        endTitleTv.setOnClickListener {
-            onEndClickListener?.invoke()
+        rightImg.setOnClickListener {
+            onRightClickListener?.invoke()
+        }
+        leftImg.setOnClickListener {
+            onLeftClickListener?.invoke()
         }
     }
 
@@ -84,6 +87,8 @@ class ToolbarComponent @JvmOverloads constructor(
                 titleIcon = typedArray.getResourceId(R.styleable.ToolbarComponent_titleIcon, -1)
                 startTitle = typedArray.getResourceId(R.styleable.ToolbarComponent_startTitle, -1)
                 endTitle = typedArray.getResourceId(R.styleable.ToolbarComponent_endTitle, -1)
+                rightIcon = typedArray.getResourceId(R.styleable.ToolbarComponent_rightIcon, -1)
+                leftIcon = typedArray.getResourceId(R.styleable.ToolbarComponent_leftIcon, -1)
 
             } finally {
                 typedArray.recycle()
@@ -122,7 +127,10 @@ class ToolbarComponent @JvmOverloads constructor(
             btnBack.setBackgroundResource(arrowBackIcon)
             btnBack.isVisible = true
         }
-        if (toolbarTitle != -1) toolbarTextView.text = context.getString(toolbarTitle)
+        if (toolbarTitle != -1){
+            toolbarTextView.text = context.getString(toolbarTitle)
+            toolbarTextView.isVisible = true
+        }
         if (titleIcon != -1) titleImg.setBackgroundResource(titleIcon)
         if (startTitle != -1) {
             startTitleTv.text = context.getString(startTitle)
@@ -131,6 +139,14 @@ class ToolbarComponent @JvmOverloads constructor(
         if (endTitle != -1) {
             endTitleTv.text = context.getString(endTitle)
             endTitleTv.isVisible = true
+        }
+        if (rightIcon != -1){
+            rightImg.setBackgroundResource(rightIcon)
+            rightImg.isVisible = true
+        }
+        if (leftIcon != -1){
+            leftImg.setBackgroundResource(leftIcon)
+            leftImg.isVisible = true
         }
 
 

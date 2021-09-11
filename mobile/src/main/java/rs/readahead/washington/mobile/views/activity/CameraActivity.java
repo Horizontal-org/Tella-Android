@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.OrientationEventListener;
 import android.view.View;
@@ -43,7 +44,10 @@ import androidx.appcompat.app.AlertDialog;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.bus.event.CaptureEvent;
+import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
@@ -145,6 +149,7 @@ public class CameraActivity extends MetadataActivity implements
         setupCameraView();
         setupCameraModeButton();
         setupImagePreview();
+        setupShutterSound();
     }
 
     @Override
@@ -207,6 +212,10 @@ public class CameraActivity extends MetadataActivity implements
     @Override
     public void onAddingStart() {
         progressDialog = DialogsUtil.showLightProgressDialog(this, getString(R.string.gallery_dialog_expl_encrypting));
+        if (Preferences.isShutterMute()) {
+            AudioManager mgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false);
+        }
     }
 
     @Override
@@ -222,6 +231,7 @@ public class CameraActivity extends MetadataActivity implements
             Glide.with(this).load(bundle.thumb).into(previewView);
         }
         attachMediaFileMetadata(capturedMediaFile, metadataAttacher);
+        MyApplication.bus().post(new CaptureEvent());
     }
 
     @Override
@@ -314,6 +324,10 @@ public class CameraActivity extends MetadataActivity implements
 
     @OnClick(R.id.captureButton)
     void onCaptureClicked() {
+        if (Preferences.isShutterMute()) {
+            AudioManager mgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true);
+        }
         if (cameraView.getMode() == Mode.PICTURE) {
             cameraView.takePicture();
         } else {
@@ -670,6 +684,10 @@ public class CameraActivity extends MetadataActivity implements
         } else {
             onMediaFilesUploadScheduled();
         }
+    }
+
+    private void setupShutterSound() {
+        cameraView.setPlaySounds(!Preferences.isShutterMute());
     }
 
     public enum CameraMode {

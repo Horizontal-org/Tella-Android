@@ -1,7 +1,6 @@
 package rs.readahead.washington.mobile.views.activity;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -24,15 +23,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hzontal.tella_vault.VaultFile;
-import com.hzontal.tella_vault.filter.Filter;
 import com.hzontal.tella_vault.filter.Sort;
 import com.hzontal.utils.MediaFile;
-
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -66,7 +61,6 @@ import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
 import rs.readahead.washington.mobile.views.fragment.TellaUploadDialogFragment;
 import rs.readahead.washington.mobile.views.interfaces.IAttachmentsMediaHandler;
 import rs.readahead.washington.mobile.views.interfaces.IGalleryMediaHandler;
-import rs.readahead.washington.mobile.views.interfaces.IGalleryVaultHandler;
 import timber.log.Timber;
 
 //TODO CHECK FILTER AND SORTS
@@ -226,7 +220,7 @@ public class GalleryActivity extends MetadataActivity implements
             }
 
             if (id == R.id.menu_item_share) {
-                sharevaultFiles();
+                shareVaultFiles();
                 return true;
             }
 
@@ -236,7 +230,7 @@ public class GalleryActivity extends MetadataActivity implements
             }
 
             if (id == R.id.menu_item_tu && numOfTUServers > 0) {
-                uploadvaultFiles();
+                uploadVaultFiles();
                 return true;
             }
 
@@ -640,7 +634,7 @@ public class GalleryActivity extends MetadataActivity implements
         alertDialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.gallery_delete_files_dialog_title)
                 .setMessage(R.string.gallery_delete_files_dialog_expl)
-                .setPositiveButton(R.string.action_delete, (dialog, which) -> removevaultFiles())
+                .setPositiveButton(R.string.action_delete, (dialog, which) -> removeVaultFiles())
                 .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
                 })
                 .setCancelable(true)
@@ -648,7 +642,7 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void removevaultFiles() {
+    private void removeVaultFiles() {
         List<VaultFile> selected = adapter.getSelectedMediaFiles();
         presenter.deleteMediaFiles(selected);
         clearSelection();
@@ -664,7 +658,7 @@ public class GalleryActivity extends MetadataActivity implements
         }
     }
 
-    private void sharevaultFiles() {
+    private void shareVaultFiles() {
         boolean metadata = false;
         List<VaultFile> selected = adapter.getSelectedMediaFiles();
 
@@ -682,7 +676,7 @@ public class GalleryActivity extends MetadataActivity implements
         }
     }
 
-    private void uploadvaultFiles() {
+    private void uploadVaultFiles() {
         boolean metadata = false;
         List<VaultFile> selected = adapter.getSelectedMediaFiles();
 

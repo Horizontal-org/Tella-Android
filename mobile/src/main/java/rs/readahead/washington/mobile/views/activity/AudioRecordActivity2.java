@@ -37,7 +37,9 @@ import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.OnShowRationale;
 import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.bus.event.CaptureEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.media.AudioRecorder;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
@@ -264,6 +266,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     @Override
     public void onAddSuccess(VaultFile vaultFile) {
         attachMediaFileMetadata(vaultFile, metadataAttacher);
+        MyApplication.bus().post(new CaptureEvent());
         showToast(String.format(getString(R.string.recorder_toast_recording_saved), getString(R.string.app_name)));
     }
 
@@ -364,7 +367,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
         } else {
             handlingMediaFile = vaultFile;
-            handlingMediaFile.size = MediaFileHandler.getSize(vaultFile);
+            handlingMediaFile.size = vaultFile.size;
 
             disableStop();
             enablePlay();

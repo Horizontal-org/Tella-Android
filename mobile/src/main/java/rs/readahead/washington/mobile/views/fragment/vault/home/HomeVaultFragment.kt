@@ -1,27 +1,24 @@
 package rs.readahead.washington.mobile.views.fragment.vault.home
 
-import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.RelativeLayout
-import androidx.appcompat.widget.Toolbar
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
+import android.widget.SeekBar
+import androidx.constraintlayout.widget.Group
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Limits
 import com.hzontal.tella_vault.filter.Sort
 import com.hzontal.utils.MediaFile
+import org.hzontal.shared_ui.appbar.ToolbarComponent
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.entity.XFormEntity
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
-import rs.readahead.washington.mobile.util.C
-import rs.readahead.washington.mobile.util.FileUtil
 import rs.readahead.washington.mobile.views.activity.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity
@@ -34,11 +31,12 @@ import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickLi
 const val VAULT_FILTER = "vf"
 
 class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresenter.IView {
-    private lateinit var toolbar: Toolbar
-    private lateinit var collapsingToolbar: CollapsingToolbarLayout
+    private lateinit var toolbar: ToolbarComponent
     private lateinit var vaultRecyclerView: RecyclerView
     private lateinit var panicModeView: RelativeLayout
     private lateinit var countDownTextView: CountdownTextView
+    private lateinit var seekBar : SeekBar
+    private lateinit var seekBarGrp : Group
     private var timerDuration = 0
     private var panicActivated = false
     private val vaultAdapter by lazy { VaultAdapter(this) }
@@ -49,22 +47,16 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        setHasOptionsMenu(true)
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_vault, container, false)
     }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.home_menu, menu)
-    }
-
     override fun initView(view: View) {
         toolbar = view.findViewById(R.id.toolbar)
-        collapsingToolbar = view.findViewById(R.id.collapsing_toolbar)
         vaultRecyclerView = view.findViewById(R.id.vaultRecyclerView)
         panicModeView = view.findViewById(R.id.panic_mode_view)
         countDownTextView = view.findViewById(R.id.countdown_timer)
+        seekBar = view.findViewById(R.id.panic_seek)
+        seekBarGrp = view.findViewById(R.id.seekBarGrp)
         setUpToolbar()
         initData()
         initListeners()
@@ -86,35 +78,42 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         sort.type = Sort.Type.DATE
         val limits = Limits()
         limits.limit = 5
-        homeVaultPresenter.getRecentFiles(FilterType.ALL, sort, limits)
+        homeVaultPresenter.getRecentFiles(FilterType.ALL_WITHOUT_DIRECTORY, sort, limits)
     }
 
     private fun initListeners() {
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
+                if (b) {
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                if (seekBar.progress == 100) {
+                    seekBar.progress = 0
+                    showPanicScreens()
+                } else {
+                    seekBar.progress = 0
+                    hidePanicScreens()
+                }
+            }
+        })
         panicModeView.setOnClickListener { onPanicClicked() }
+        toolbar.onLeftClickListener = {nav().navigate(R.id.main_settings)}
+        toolbar.onRightClickListener = {MyApplication.exit(activity)}
     }
 
     private fun setUpToolbar() {
         val activity = context as MainActivity
         activity.setSupportActionBar(toolbar)
-        collapsingToolbar.setupWithNavController(toolbar, findNavController())
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_settings -> {
-                nav().navigate(R.id.main_settings)
-                return true
-            }
-            R.id.action_close -> {
-                MyApplication.exit(activity)
-                return true
-            }
-            else -> super.onOptionsItemSelected(item)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            view?.findViewById<View>(R.id.appbar)?.outlineProvider = null
+        } else {
+            view?.findViewById<View>(R.id.appbar)?.bringToFront()
         }
-    }
-
-    override fun onPanicModeSwipeListener(progress: Int) {
-        showPanicScreens()
     }
 
     override fun onRecentFilesItemClickListener(vaultFile: VaultFile) {
@@ -198,7 +197,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     private fun hidePanicScreens() {
-        collapsingToolbar.visibility = View.VISIBLE
         (activity as MainActivity).showBottomNavigation()
         setupPanicView()
         panicModeView.visibility = View.GONE
@@ -206,7 +204,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     private fun showPanicScreens() {
         // really show panic screen
-        collapsingToolbar.visibility = View.GONE
         (activity as MainActivity).hideBottomNavigation()
 
         panicModeView.visibility = View.VISIBLE
@@ -220,9 +217,9 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     private fun setupPanicView() {
         if (Preferences.isQuickExit()) {
-            vaultAdapter.addPanicMode()
+            seekBarGrp.visibility = View.VISIBLE
         } else {
-            vaultAdapter.hidePanicMode()
+            seekBarGrp.visibility = View.GONE
         }
     }
 
@@ -254,6 +251,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     override fun onGetFilesSuccess(files: List<VaultFile?>) {
         if (!files.isNullOrEmpty()) {
             vaultAdapter.addRecentFiles(files)
+        }else{
+            vaultAdapter.removeRecentFiles()
         }
     }
 

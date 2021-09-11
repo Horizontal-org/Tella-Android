@@ -1,10 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_content_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/wa_purple"
-    android:id="@+id/activity_content_layout"
     android:paddingTop="@dimen/navigation_tab_bar_padding"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="rs.readahead.washington.mobile.views.activity.ServersSettingsActivity"
@@ -19,100 +19,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!--  <LinearLayout style="@style/SettingsClickableHorizontalShadowLinearLayout">
-
-                  <androidx.appcompat.widget.AppCompatImageView
-                      style="@style/SettingsTitleImageViewStyle"
-                      android:layout_gravity="center_vertical"
-                      android:src="@drawable/ic_gps_not_fixed_black_24dp" />
-
-                  <LinearLayout style="@style/VerticalLinearLayout">
-
-                      <androidx.appcompat.widget.SwitchCompat
-                          android:id="@+id/anonymous_switch"
-                          android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:gravity="center_vertical"
-                          android:paddingBottom="6dp"
-                          android:text="@string/settings.docu_verification_action"
-                          android:theme="@style/SettingsTextViewSwitch" />
-
-                      <TextView
-                          style="@style/SettingsTextViewGray"
-                          android:layout_marginEnd="30dp"
-                          android:paddingBottom="6dp"
-                          android:text="@string/settings.docu_verification_action.expl"
-                          android:textAlignment="viewStart" />
-                  </LinearLayout>
-              </LinearLayout> -->
-
-            <!--  <LinearLayout
-                  style="@style/SettingsClickableVerticalShadowDocumentationLinerLayout"
-                  android:animateLayoutChanges="true">-->
-
-            <!--    <LinearLayout
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:orientation="horizontal"
-                   android:paddingStart="20dp"
-                   android:paddingEnd="2dp">
-
-                   <androidx.appcompat.widget.AppCompatImageView
-                       style="@style/SettingsTitleImageViewStyle"
-                       android:layout_gravity="center_vertical"
-                       android:src="@drawable/ic_collect_menu" />
-
-                   <LinearLayout style="@style/VerticalLinearLayout">
-
-                       <androidx.appcompat.widget.SwitchCompat
-                           android:id="@+id/collect_switch"
-                           android:layout_width="match_parent"
-                           android:layout_height="wrap_content"
-                           android:gravity="center_vertical"
-                           android:text="@string/settings.docu_connect.to.servers_enable_action"
-                           android:theme="@style/SettingsTextViewSwitch" />
-
-                       <TextView
-                           android:id="@+id/enable_collect_info"
-                           style="@style/SettingsTextViewGray"
-                           android:text="@string/settings.docu_connect.to.servers_enable_action.expl" />
-                   </LinearLayout>
-               </LinearLayout>-->
-
-            <!--<LinearLayout
-                android:id="@+id/servers_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">-->
-            <!--
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="2dp">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        style="@style/SettingsTitleImageViewStyle"
-                        android:layout_gravity="center_vertical"
-                        android:src="@drawable/assignment_black_24dp" />
-
-                    <LinearLayout style="@style/VerticalLinearLayout">
-
-                        <TextView
-                            style="@style/SettingsTextViewTitleNormal"
-                            android:paddingBottom="6dp"
-                            android:text="@string/collect_servers"
-                            android:textAlignment="viewStart" />
-
-                        <TextView
-                            android:id="@+id/collect_servers_info"
-                            style="@style/SettingsTextViewGray"
-                            android:text="@string/manage_collect_servers"
-                            android:textAlignment="viewStart" />
-                    </LinearLayout>
-                </LinearLayout>  -->
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -125,7 +31,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="12dp"
+                    android:paddingStart="12dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
                     android:weightSum="1">
 
                     <androidx.appcompat.widget.LinearLayoutCompat
@@ -140,10 +48,10 @@
                             style="@style/SettingsTitleText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textStyle="bold"
                             android:gravity="start"
                             android:padding="2dp"
-                            android:text="@string/settings.servers.title_server.settings" />
+                            android:text="@string/settings.servers.title_server.settings"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/explainTV"
@@ -173,8 +81,6 @@
                     android:orientation="vertical" />
 
             </LinearLayout>
-            <!-- </LinearLayout>-->
-            <!-- </LinearLayout>-->
 
             <LinearLayout
                 android:id="@+id/auto_upload_switch_view"
@@ -184,37 +90,7 @@
                 android:animateLayoutChanges="true"
                 android:background="@drawable/rounded_light_purple_background"
                 android:orientation="vertical">
-                <!--
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:paddingStart="20dp"
-                                    android:paddingEnd="2dp">
 
-                                    <androidx.appcompat.widget.AppCompatImageView
-                                        style="@style/SettingsTitleImageViewStyle"
-                                        android:layout_gravity="center_vertical"
-                                        android:src="@drawable/ic_cloud_upload_black_24dp"
-                                        android:tint="@color/wa_black"/>
-
-                                    <LinearLayout style="@style/VerticalLinearLayout">
-
-                                        <androidx.appcompat.widget.SwitchCompat
-                                            android:id="@+id/auto_upload_switch"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:gravity="center_vertical"
-                                            android:text="@string/settings.docu_auto.upload_action"
-                                            android:theme="@style/SettingsTextViewSwitch" />
-
-                                        <TextView
-                                            android:id="@+id/auto_upload_info"
-                                            style="@style/SettingsTextViewGray"
-                                            android:text="@string/settings.docu_auto.upload_action.expl" />
-                                    </LinearLayout>
-                                </LinearLayout>
-                -->
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -290,72 +166,19 @@
 
                         <TextView
                             android:id="@+id/server_name"
-                            android:layout_marginStart="16dp"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_alignParentEnd="true"
+                            android:layout_marginStart="16dp"
                             android:layout_toEndOf="@+id/server_title"
                             android:gravity="center_vertical"
-                            android:textColor="@color/wa_white"
                             android:text="@string/settings.docu_field_server.name"
+                            android:textColor="@color/wa_white"
                             tools:ignore="RelativeOverlap" />
                     </RelativeLayout>
 
                     <View style="@style/SettingsMainShadowLine" />
-                    <!--
-                                        <LinearLayout
-                                            android:id="@+id/metadata_layout"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:orientation="horizontal"
-                                            android:paddingStart="48dp"
-                                            android:paddingEnd="2dp">
 
-                                            <LinearLayout style="@style/VerticalLinearLayout">
-                                                <androidx.appcompat.widget.AppCompatCheckBox
-                                                    android:id="@+id/metadata_check"
-                                                    android:layoutDirection="rtl"
-                                                    android:layout_width="match_parent"
-                                                    android:layout_height="wrap_content"
-                                                    android:gravity="center_vertical"
-                                                    android:text="@string/settings.docu_auto.upload.metadata_action"
-                                                    android:theme="@style/SettingsTextViewCheck" />
-
-                                                <TextView
-                                                    android:id="@+id/metadata_info"
-                                                    style="@style/SettingsTextViewGray"
-                                                    android:text="@string/settings.docu_auto.upload.metadata_action.expl" />
-                                            </LinearLayout>
-                                        </LinearLayout>
-
-                                            <View style="@style/SettingsMainShadowLine" />
-                    -->
-                    <!--
-                            <LinearLayout
-                                android:id="@+id/auto_delete_layout"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:paddingStart="48dp"
-                                android:paddingEnd="2dp">
-
-                                <LinearLayout style="@style/VerticalLinearLayout">
-                                    <androidx.appcompat.widget.AppCompatCheckBox
-                                        android:id="@+id/auto_delete_check"
-                                        android:layoutDirection="rtl"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center_vertical"
-                                        android:text="@string/settings.docu_auto.delete_action"
-                                        android:theme="@style/SettingsTextViewCheck" />
-
-                                    <TextView
-                                        android:id="@+id/auto_delete_info"
-                                        style="@style/SettingsTextViewGray"
-                                        android:text="@string/settings.docu_auto.delete_action.expl" />
-                                </LinearLayout>
-                            </LinearLayout>
--->
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/auto_delete_layout"
                         android:layout_width="match_parent"
@@ -402,39 +225,8 @@
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
-
                 </LinearLayout>
             </LinearLayout>
-
-            <!--   <LinearLayout
-                   android:id="@+id/offline_switch_layout"
-                   style="@style/SettingsClickableHorizontalShadowLinearLayout">
-
-                   <androidx.appcompat.widget.AppCompatImageView
-                       style="@style/SettingsTitleImageViewStyle"
-                       android:layout_gravity="center_vertical"
-                       android:src="@drawable/ic_cloud_off_white_24dp"
-                       android:tint="@color/wa_black" />
-
-                   <LinearLayout style="@style/VerticalLinearLayout">
-
-                       <androidx.appcompat.widget.SwitchCompat
-                           android:id="@+id/offline_mode"
-                           android:layout_width="match_parent"
-                           android:layout_height="wrap_content"
-                           android:gravity="center_vertical"
-                           android:paddingBottom="6dp"
-                           android:text="@string/offline_dialog.title"
-                           android:theme="@style/SettingsTextViewSwitch" />
-
-                       <TextView
-                           style="@style/SettingsTextViewGray"
-                           android:layout_marginEnd="30dp"
-                           android:paddingBottom="6dp"
-                           android:text="@string/offline_dialog.expl"
-                           android:textAlignment="viewStart" />
-                   </LinearLayout>
-               </LinearLayout> -->
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
