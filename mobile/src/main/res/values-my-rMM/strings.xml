@@ -172,7 +172,6 @@
   <string name="collect.form_dialog.expl_add.first.group">မေးခွန်းများအားလုံးကို“ 1” တွင်ဖြေဆိုနိုင်ပါလိမ့်မည်။</string>
   <string name="collect.form_dialog.action_dont.add.group">ပေါင်းမထည့်ပါနဲ့။</string>
   <string name="collect.form_select.attachment_app.bar">ဖိုင်ရွေးချယ်ပါ။</string>
-  <string name="recorder_toast_recording.saved">အသံဖမ်းယူမှုကိုသင်၏ပြခန်းသို့သိမ်းဆည်းထားသည်။</string>
   <string name="collect.form_geopoint_app.bar">စံချိန်တင်အနေအထား</string>
   <string name="collect.form_geopoint_marker_content.desc">ရာထူးမှတ်တမ်းတင်ခဲ့သည်။</string>
   <string name="collect.form_geopoint_meta_latitude">လပ်တီတွဒ် %1$s</string>
@@ -487,4 +486,7 @@
   <string name="settings.camo_time">Time</string>
   <string name="settings.camo_stopwatch">StopWatch</string>
   <string name="fragment_mic">Microphone</string>
+  <string name="mic_recording">Recording</string>
+  <string name="mic_rename_recording">Rename recording</string>
+  <string name="recorder_toast_recording.saved">The audio recording was saved to your Tella files</string>
 </resources>

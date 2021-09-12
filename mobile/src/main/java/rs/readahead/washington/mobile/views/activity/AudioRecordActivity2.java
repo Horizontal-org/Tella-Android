@@ -236,7 +236,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
             cancelRecorder();
 
             audioRecorder = new AudioRecorder(this);
-            disposable.add(audioRecorder.startRecording()
+            disposable.add(audioRecorder.startRecording("novi recording")
                     .subscribe(this::onRecordingStopped, throwable -> {
                         Timber.d(throwable);
                         onRecordingError();

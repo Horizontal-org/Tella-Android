@@ -174,7 +174,6 @@
   <string name="collect.form_dialog.expl_add.first.group">Você vai poder responder a todas as perguntas em \" %s \"</string>
   <string name="collect.form_dialog.action_dont.add.group">Não adicionar</string>
   <string name="collect.form_select.attachment_app.bar">Selecionar arquivo</string>
-  <string name="recorder_toast_recording.saved">A gravação de áudio foi salva na sua galeria</string>
   <string name="collect.form_geopoint_app.bar">Gravar geolocalização</string>
   <string name="collect.form_geopoint_marker_content.desc">Localização geográfica selecionada</string>
   <string name="collect.form_geopoint_meta_latitude">Latitude: %1$s</string>
@@ -492,4 +491,7 @@
   <string name="settings.camo_time">Time</string>
   <string name="settings.camo_stopwatch">StopWatch</string>
   <string name="fragment_mic">Microphone</string>
+  <string name="mic_recording">Recording</string>
+  <string name="mic_rename_recording">Rename recording</string>
+  <string name="recorder_toast_recording.saved">The audio recording was saved to your Tella files</string>
 </resources>

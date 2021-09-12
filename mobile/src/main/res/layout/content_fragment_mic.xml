@@ -16,15 +16,30 @@
     tools:showIn="@layout/fragment_mic">
 
     <TextView
+        android:id="@+id/rec_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text=""
+        android:textColor="@color/wa_orange"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:drawablePadding="8dp"
+        app:drawableEndCompat="@drawable/ic_edit_orange_24" />
+
+    <TextView
         android:id="@+id/audio_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/rec_name"
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="@string/start_time"
-        android:textColor="@color/wa_gray"
-        android:textSize="48sp" />
+        android:textColor="@color/wa_white"
+        android:textSize="50sp" />
 
     <TextView
         android:id="@+id/free_space"
@@ -60,7 +75,7 @@
         android:paddingStart="16dp"
         android:paddingTop="8dp"
         android:paddingEnd="0dp"
-        android:paddingBottom="20dp">
+        android:paddingBottom="12dp">
 
         <ImageButton
             android:id="@+id/stop_audio"
