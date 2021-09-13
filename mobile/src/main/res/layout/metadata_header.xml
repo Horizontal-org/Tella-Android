@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:textAlignment="center"
-    android:padding="5dp"
-    android:textAllCaps="true"
-    android:textColor="@color/wa_darker_gray"
+    android:textSize="17sp"
+    android:padding="16dp"
+    android:textColor="@color/wa_white"
     android:textStyle="bold"/>

@@ -45,6 +45,7 @@ import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
+import rs.readahead.washington.mobile.views.fragment.MetadataViewerFragment;
 import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment;
 
@@ -313,9 +314,14 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     }
 
     private void showMetadata() {
-        Intent viewMetadata = new Intent(this, MetadataViewerActivity.class);
+        /*Intent viewMetadata = new Intent(this, MetadataViewerActivity.class);
         viewMetadata.putExtra(VIEW_METADATA, vaultFile);
-        startActivity(viewMetadata);
+        startActivity(viewMetadata);*/
+        toolbar.setStartTextTitle(getString(R.string.vault_file_info));
+        menu.findItem(R.id.menu_item_more).setVisible(false);
+        menu.findItem(R.id.menu_item_metadata).setVisible(false);
+        invalidateOptionsMenu();
+        addFragment(new MetadataViewerFragment().newInstance(vaultFile),R.id.photo_viewer_container);
     }
 
     private void stopPresenter() {
