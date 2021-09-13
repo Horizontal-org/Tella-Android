@@ -4,7 +4,6 @@ import android.Manifest
 import android.animation.AnimatorInflater
 import android.animation.ObjectAnimator
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,7 +16,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import com.hzontal.tella_vault.VaultFile
-import com.hzontal.tella_vault.filter.FilterType
 import io.reactivex.disposables.CompositeDisposable
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.R
@@ -32,7 +30,6 @@ import rs.readahead.washington.mobile.mvp.presenter.MetadataAttacher
 import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulePresenter
 import rs.readahead.washington.mobile.util.DateUtil.getDateTimeString
 import rs.readahead.washington.mobile.util.StringUtils
-import rs.readahead.washington.mobile.views.activity.GalleryActivity
 import rs.readahead.washington.mobile.views.base_ui.MetadataBaseLockFragment
 import timber.log.Timber
 
@@ -318,12 +315,6 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
     //            presenter.addMediaFile(handlingMediaFile);
     //        }
     //    }
-    private fun openRecordings() {
-        val intent: Intent = Intent(activity, GalleryActivity::class.java)
-        intent.putExtra(GalleryActivity.GALLERY_FILTER, FilterType.AUDIO.name)
-        intent.putExtra(GalleryActivity.GALLERY_ALLOWS_ADDING, false)
-        startActivity(intent)
-    }
 
     private fun handleStop() {
         notRecording = true
@@ -409,12 +400,9 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
         button.alpha = .2f
     }
 
-    /* private fun openRecordings() {
-         val intent: Intent = Intent(this, GalleryActivity::class.java)
-         intent.putExtra(GalleryActivity.GALLERY_FILTER, FilterType.AUDIO.name)
-         intent.putExtra(GalleryActivity.GALLERY_ALLOWS_ADDING, false)
-         startActivity(intent)
-     }*/
+     private fun openRecordings() {
+         nav().navigate(R.id.action_micScreen_to_attachments_screen)
+     }
 
     private fun stopRecorder() {
         if (audioRecorder != null) {

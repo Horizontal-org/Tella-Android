@@ -62,7 +62,7 @@
         android:layout_margin="20dp"
         android:contentDescription="@string/recorder_content.desc_blinking.red.dot"
         android:gravity="center"
-        android:src="@drawable/record_orange_circle_background"
+        android:src="@drawable/record_light_red_circle_background"
         android:visibility="gone" />
 
     <LinearLayout

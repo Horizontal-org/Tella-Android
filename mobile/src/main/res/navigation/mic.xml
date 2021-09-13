@@ -11,11 +11,17 @@
         android:name="rs.readahead.washington.mobile.views.fragment.MicFragment"
         android:label="Microphone"
         tools:layout="@layout/fragment_mic">
+        <action
+            android:id="@+id/action_micScreen_to_attachments_screen"
+            app:destination="@id/attachments_screen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"/>
     </fragment>
-    <!--<activity
-        android:id="@+id/micScreen"
-        android:name="rs.readahead.washington.mobile.views.activity.AudioRecordActivity2"
-        android:label="Microphone"
-        tools:layout="@layout/activity_audio_record">
-    </activity> -->
+
+
+    <fragment
+        android:id="@+id/attachments_screen"
+        android:name="rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment"
+        tools:layout="@layout/fragment_vault_attachments">
+    </fragment>
 </navigation>
