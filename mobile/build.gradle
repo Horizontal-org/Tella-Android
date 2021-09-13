@@ -83,19 +83,13 @@ dependencies {
         exclude group: 'stax', module: 'stax'
     }
 
-    apply plugin: 'kotlin-kapt'
-
-
     implementation("org.permissionsdispatcher:permissionsdispatcher:${permissionDispatcherVersion}") {
         exclude module: "support-v13"
     }
-    kapt "org.permissionsdispatcher:permissionsdispatcher-processor:${permissionDispatcherVersion}"
-    annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:${permissionDispatcherVersion}"
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.navigation:navigation-runtime:2.3.0'
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
-
+    annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:${permissionDispatcherVersion}"
 
     implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
     implementation 'com.squareup:tape:1.2.3' // todo: follow this, v2 should be soon
