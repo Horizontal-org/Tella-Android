@@ -3,7 +3,9 @@ package rs.readahead.washington.mobile.views.fragment
 import android.Manifest
 import android.animation.AnimatorInflater
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,13 +15,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.app.ActivityCompat
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import io.reactivex.disposables.CompositeDisposable
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
-import permissions.dispatcher.NeedsPermission
-import permissions.dispatcher.OnNeverAskAgain
-import permissions.dispatcher.OnPermissionDenied
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.media.AudioRecorder
 import rs.readahead.washington.mobile.media.AudioRecorder.AudioRecordInterface
@@ -41,6 +41,8 @@ import java.util.concurrent.TimeUnit
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+
+const val RECORD_REQUEST_CODE = 2001
 
 class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
     IAudioCapturePresenterContract.IView,
@@ -107,7 +109,11 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
         recordingName = view.findViewById(R.id.rec_name)
         mRecord.setOnClickListener {
             if (notRecording) {
-                handleRecord()
+                if (hastRecordingPermissions(requireContext())) {
+                    handleRecord()
+                } else {
+                    requestRecordingPermissions(RECORD_REQUEST_CODE)
+                }
             } else {
                 handlePause()
             }
@@ -193,28 +199,25 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
         }
     }
 
-    /*override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String?>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        MicFragmentPermissionsDispatcher.onRequestPermissionsResult(
-            this,
-            requestCode,
-            grantResults
+
+    fun hastRecordingPermissions(context: Context): Boolean {
+        if (ActivityCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.RECORD_AUDIO
+                ) == PackageManager.PERMISSION_GRANTED
         )
-    }*/
-
-    @OnPermissionDenied(Manifest.permission.RECORD_AUDIO)
-    fun onRecordAudioPermissionDenied() {
+            return true
+        return false
     }
 
-    @OnNeverAskAgain(Manifest.permission.RECORD_AUDIO)
-    fun onRecordAudioNeverAskAgain() {
+    fun requestRecordingPermissions(requestCode: Int) {
+        requestPermissions(
+                arrayOf(
+                        Manifest.permission.RECORD_AUDIO
+                ), requestCode
+        )
     }
 
-    @NeedsPermission(Manifest.permission.RECORD_AUDIO)
     fun handleRecord() {
         notRecording = false
         if (audioRecorder == null) {   //first start or restart
