@@ -65,7 +65,6 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
 
     }
 
-
     override fun addNewVaultFiles() {
         view?.onMediaFilesAdded()
     }
@@ -107,6 +106,34 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
                     view?.onMediaFilesDeletionError(throwable)
                 }
         )
+    }
+
+    override fun moveFiles(parentId: String?, vaultFiles: List<VaultFile?>?) {
+        if (vaultFiles == null || parentId == null) return
+
+        val completable: MutableList<Single<Boolean>> = ArrayList()
+
+        for (vaultFile in vaultFiles) {
+            vaultFile?.let { moveFile(parentId,it) }?.let { completable.add(it) }
+        }
+
+        disposables.add(
+            Single.zip(
+                completable
+            ) { objects: Array<Any?> -> objects.size }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { view?.onMoveFilesSuccess() }
+                ) { throwable: Throwable? ->
+                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                    view?.onMoveFilesError(throwable)
+                }
+        )
+    }
+    private fun moveFile(parentId: String, vaultFile: VaultFile): Single<Boolean> {
+        return MyApplication.rxVault.move(vaultFile,parentId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
     private fun deleteFile(vaultFile: VaultFile): Single<Boolean> {
@@ -206,10 +233,8 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
             }.dispose()
     }
 
-
     override fun countTUServers() {
     }
-
 
     override fun destroy() {
         disposables.dispose()

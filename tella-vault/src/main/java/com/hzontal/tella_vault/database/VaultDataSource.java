@@ -219,9 +219,9 @@ public class VaultDataSource implements IVaultDatabase {
     }
 
     @Override
-    public boolean move(VaultFile vaultFile, VaultFile newParent) {
+    public boolean move(VaultFile vaultFile, String newParent) {
         ContentValues values = new ContentValues();
-        values.put(D.C_PARENT_ID, newParent.id);
+        values.put(D.C_PARENT_ID, newParent);
 
         int count = database.update(D.T_VAULT_FILE, values, D.C_ID + " = ?",
                 new String[]{vaultFile.id});
@@ -321,7 +321,6 @@ public class VaultDataSource implements IVaultDatabase {
     private String cn(String table, String column, String as) {
         return table + "." + column + " AS " + as;
     }
-
 
     private void deleteTable(String table) {
         database.execSQL("DELETE FROM " + table);
