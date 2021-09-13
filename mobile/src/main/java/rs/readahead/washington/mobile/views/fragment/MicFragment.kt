@@ -17,9 +17,7 @@ import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import io.reactivex.disposables.CompositeDisposable
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
-import permissions.dispatcher.NeedsPermission
-import permissions.dispatcher.OnNeverAskAgain
-import permissions.dispatcher.OnPermissionDenied
+import permissions.dispatcher.*
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.media.AudioRecorder
 import rs.readahead.washington.mobile.media.AudioRecorder.AudioRecordInterface
@@ -31,6 +29,7 @@ import rs.readahead.washington.mobile.mvp.presenter.AudioCapturePresenter
 import rs.readahead.washington.mobile.mvp.presenter.MetadataAttacher
 import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulePresenter
 import rs.readahead.washington.mobile.util.DateUtil.getDateTimeString
+import rs.readahead.washington.mobile.util.PermissionUtil
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.views.activity.GalleryActivity
 import rs.readahead.washington.mobile.views.base_ui.MetadataBaseLockFragment
@@ -42,6 +41,7 @@ import java.util.concurrent.TimeUnit
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
+@RuntimePermissions
 class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
     IAudioCapturePresenterContract.IView,
     ITellaFileUploadSchedulePresenterContract.IView,
@@ -64,7 +64,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
     // recording
     private var uploadPresenter: TellaFileUploadSchedulePresenter? = null
     private val disposable = CompositeDisposable()
-    private val rationaleDialog: AlertDialog? = null
+    private var rationaleDialog: AlertDialog? = null
     var presenter: AudioCapturePresenter? = null
     var audioRecorder: AudioRecorder? = null
 
@@ -107,7 +107,8 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
         recordingName = view.findViewById(R.id.rec_name)
         mRecord.setOnClickListener {
             if (notRecording) {
-                handleRecord()
+                //handleRecord()
+                handleRecordWithPermissionCheck();
             } else {
                 handlePause()
             }
@@ -171,8 +172,8 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
 
     override fun onStop() {
         activity.stopLocationMetadataListening()
-        if (rationaleDialog != null && rationaleDialog.isShowing) {
-            rationaleDialog.dismiss()
+        if (rationaleDialog != null && rationaleDialog!!.isShowing) {
+            rationaleDialog!!.dismiss()
         }
         super.onStop()
     }
@@ -193,18 +194,20 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
         }
     }
 
-    /*override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String?>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        MicFragmentPermissionsDispatcher.onRequestPermissionsResult(
-            this,
-            requestCode,
-            grantResults
+        // NOTE: delegate the permission handling to generated function
+        onRequestPermissionsResult(requestCode, grantResults)
+    }
+
+    @OnShowRationale(Manifest.permission.RECORD_AUDIO)
+    fun showRecordAudioRationale(request: PermissionRequest?) {
+        rationaleDialog = PermissionUtil.showRationale(
+            requireContext(),
+            request,
+            getString(R.string.permission_dialog_expl_mic)
         )
-    }*/
+    }
 
     @OnPermissionDenied(Manifest.permission.RECORD_AUDIO)
     fun onRecordAudioPermissionDenied() {
