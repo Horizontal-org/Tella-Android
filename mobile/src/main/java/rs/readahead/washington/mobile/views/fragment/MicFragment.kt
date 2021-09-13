@@ -63,7 +63,6 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
     // recording
     private var uploadPresenter: TellaFileUploadSchedulePresenter? = null
     private val disposable = CompositeDisposable()
-    private val rationaleDialog: AlertDialog? = null
     var presenter: AudioCapturePresenter? = null
     var audioRecorder: AudioRecorder? = null
 
@@ -174,9 +173,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
 
     override fun onStop() {
         activity.stopLocationMetadataListening()
-        if (rationaleDialog != null && rationaleDialog.isShowing) {
-            rationaleDialog.dismiss()
-        }
+
         super.onStop()
     }
 
