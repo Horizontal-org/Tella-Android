@@ -12,6 +12,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.content.res.AppCompatResources
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import io.reactivex.disposables.CompositeDisposable
@@ -361,7 +362,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
 
     private fun disableRecord() {
         mRecord.background =
-            activity.resources.getDrawable(R.drawable.light_purple_circle_background)
+            AppCompatResources.getDrawable(requireContext(),R.drawable.light_purple_circle_background)
         mRecord.setImageResource(R.drawable.ic__pause__white_24)
         redDot.visibility = View.VISIBLE
         animator!!.target = redDot
@@ -370,7 +371,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
 
     private fun enableRecord() {
         mRecord.background =
-            activity.resources.getDrawable(R.drawable.audio_record_button_background)
+            AppCompatResources.getDrawable(requireContext(),R.drawable.audio_record_button_background)
         mRecord.setImageResource(R.drawable.ic_mic_white)
         redDot.visibility = View.GONE
         animator!!.end()
