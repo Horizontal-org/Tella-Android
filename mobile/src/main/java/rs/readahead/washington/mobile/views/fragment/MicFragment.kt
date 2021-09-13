@@ -49,7 +49,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
 
     // TODO: Rename and change types of parameters
     private val TIME_FORMAT: String = "%02d:%02d"
-    var RECORDER_MODE = "rm"
+    //var RECORDER_MODE = "rm"
 
     private var animator: ObjectAnimator? = null
 
@@ -243,7 +243,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
     }
 
     override fun onDurationUpdate(duration: Long) {
-        activity.runOnUiThread(Runnable { mTimer.setText(timeToString(duration)) })
+        activity.runOnUiThread({ mTimer.setText(timeToString(duration)) })
 
         if (duration > UPDATE_SPACE_TIME_MS + lastUpdateTime) {
             lastUpdateTime += UPDATE_SPACE_TIME_MS
@@ -259,7 +259,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
 
     override fun onAddSuccess(vaultFile: VaultFile) {
         activity.attachMediaFileMetadata(vaultFile, metadataAttacher)
-        activity.showToast(
+        showToast(
             String.format(
                 getString(R.string.recorder_toast_recording_saved),
                 getString(R.string.app_name)
@@ -268,7 +268,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
     }
 
     override fun onAddError(error: Throwable?) {
-        activity.showToast(R.string.gallery_toast_fail_saving_file)
+        showToast(getString(R.string.gallery_toast_fail_saving_file))
     }
 
     override fun onAvailableStorage(memory: Long) {
@@ -294,7 +294,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
     }
 
     override fun onMetadataAttachError(throwable: Throwable?) {
-        activity.showToast(R.string.gallery_toast_fail_saving_file)
+        showToast(getString(R.string.gallery_toast_fail_saving_file))
     }
 
     override fun onMediaFilesUploadScheduled() {
@@ -357,7 +357,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
         disablePlay()
         enableRecord()
         mTimer.text = timeToString(0)
-        activity.showToast(R.string.recorder_toast_fail_recording)
+        showToast(getString(R.string.recorder_toast_fail_recording))
     }
 
     private fun disableRecord() {

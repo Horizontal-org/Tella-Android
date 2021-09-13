@@ -53,4 +53,10 @@ open class MetadataBaseLockFragment  : Fragment(){
     }
 
     open fun onBackPressed() = true
+
+    protected fun showToast(message: String) {
+        if (isAdded) {
+            activity.showToast(message)
+        }
+    }
 }
