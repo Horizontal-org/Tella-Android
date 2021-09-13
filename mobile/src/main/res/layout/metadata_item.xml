@@ -5,8 +5,8 @@
     android:orientation="horizontal"
     android:paddingLeft="12dp"
     android:paddingRight="12dp"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
     android:weightSum="1">
 
     <TextView
@@ -15,7 +15,8 @@
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/wa_gray"
+        android:textStyle="bold"
+        android:textColor="@color/wa_white"
         android:layout_weight="0.7" />
 
     <TextView
@@ -24,6 +25,6 @@
         android:id="@+id/data"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/wa_darker_gray"
+        android:textColor="@color/wa_white"
         android:layout_weight="0.3" />
 </LinearLayout>
