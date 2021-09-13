@@ -1,27 +1,22 @@
 package rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import androidx.annotation.LayoutRes;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.utils.MediaFile;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,8 +28,6 @@ import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.DateUtil;
-import rs.readahead.washington.mobile.util.Util;
-import rs.readahead.washington.mobile.util.helper.OrderType;
 
 enum ViewType {
     SMALL,
@@ -43,11 +36,11 @@ enum ViewType {
 
 public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<AttachmentsRecycleViewAdapter.ViewHolder> {
     private List<VaultFile> files = new ArrayList<>();
-    private VaultFileUrlLoader glideLoader;
-    private IGalleryVaultHandler galleryMediaHandler;
-    private Set<VaultFile> selected;
+    private final VaultFileUrlLoader glideLoader;
+    private final IGalleryVaultHandler galleryMediaHandler;
+    private final Set<VaultFile> selected;
     private boolean selectable;
-    private boolean singleSelection;
+    private final boolean singleSelection;
     private GridLayoutManager layoutManager;
 
 
@@ -96,13 +89,11 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
 
         checkItemState(holder, vaultFile);
         onMoreSelected(holder,vaultFile);
-        holder.maybeShowMetadataIcon(vaultFile);
         holder.showFileInfo(vaultFile);
         holder.maybeEnableCheckBox(selectable);
 
         if (vaultFile.mimeType != null){
             if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
-                holder.showImageInfo();
                 Glide.with(holder.mediaView.getContext())
                         .using(glideLoader)
                         .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
@@ -110,9 +101,9 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
                         .skipMemoryCache(true)
                         .into(holder.mediaView);
             } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
-                holder.showAudioInfo(vaultFile);
+                holder.showAudioInfo();
             } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
-                holder.showVideoInfo(vaultFile);
+                holder.showVideoInfo();
                 Glide.with(holder.mediaView.getContext())
                         .using(glideLoader)
                         .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
@@ -120,7 +111,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
                         .skipMemoryCache(true)
                         .into(holder.mediaView);
             }else if (MediaFile.INSTANCE.isTextFileType(vaultFile.mimeType)){
-                 holder.showDocumentInfo(vaultFile);
+                 holder.showDocumentInfo();
             }
         }else {
             if (VaultFile.Type.fromValue(vaultFile.type.getValue()) == VaultFile.Type.DIRECTORY){
@@ -216,6 +207,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
         boolean checked = selected.contains(vaultFile);
        // holder.selectionDimmer.setVisibility(checked ? View.VISIBLE : View.GONE);
         holder.checkBox.setImageResource(checked ? R.drawable.ic_check_box_on : R.drawable.ic_check_box_off);
+        holder.maybeEnableCheckBox(checked);
     }
 
     public void setSelectedMediaFiles(@NonNull List<VaultFile> selectedMediaFiles) {
@@ -235,30 +227,23 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
         @BindView(R.id.icAttachmentImg)
         ImageView icAttachmentImg;
 
-        public ViewHolder(View itemView, boolean selectable) {
+        public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        void showVideoInfo(VaultFile vaultFile) {
+        void showVideoInfo() {
             icAttachmentImg.setBackgroundResource(R.drawable.ic_play);
         }
 
-        void showAudioInfo(VaultFile vaultFile) {
+        void showAudioInfo() {
             icAttachmentImg.setBackgroundResource(R.drawable.ic_audio_w_small);
         }
 
-        void showDocumentInfo(VaultFile vaultFile) {
+        void showDocumentInfo() {
             icAttachmentImg.setBackgroundResource(R.drawable.ic_document_24px_filled);
         }
 
-        void showImageInfo() {
-
-        }
-
-        void maybeShowMetadataIcon(VaultFile vaultFile) {
-
-        }
         void showFolderInfo(){
             icAttachmentImg.setBackgroundResource(R.drawable.ic_folder_24px);
         }
@@ -276,7 +261,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
     static class GridViewHolder extends ViewHolder{
 
         public GridViewHolder(View itemView, boolean selectable) {
-            super(itemView, selectable);
+            super(itemView);
         }
     }
 
@@ -285,7 +270,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
         TextView fileDateTextView;
 
         public ListViewHolder(View itemView, boolean selectable) {
-            super(itemView, selectable);
+            super(itemView);
         }
 
         public void setFileDateTextView(VaultFile vaultFile){

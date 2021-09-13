@@ -74,18 +74,21 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private lateinit var listCheck: ImageView
     private lateinit var gridCheck: ImageView
     private lateinit var filterNameTv: TextView
+    private lateinit var cancelMove: TextView
+    private lateinit var moveHere: TextView
     private lateinit var emptyViewMsgContainer: LinearLayout
     private lateinit var checkBoxList: AppCompatImageView
-    private lateinit var root : View
+    private lateinit var root: View
     private lateinit var breadcrumbView: BreadcrumbsView
-    private lateinit var appBar : AppBarLayout
+    private lateinit var appBar: AppBarLayout
+    private lateinit var moveContainer : LinearLayout
     private var progressDialog: ProgressDialog? = null
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
     private var filterType = FilterType.ALL
     private lateinit var sort: Sort
     private var vaultFile: VaultFile? = null
     private var currentRootID: String? = null
-    private var currentMove : String? = null
+    private var currentMove: String? = null
     private var isListCheckOn = false
     private var isMoveModeEnabled = false
 
@@ -157,9 +160,12 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         gridCheck = view.findViewById(R.id.gridCheck)
         emptyViewMsgContainer = view.findViewById(R.id.emptyViewMsgContainer)
         filterNameTv = view.findViewById(R.id.filterNameTv)
+        cancelMove = view.findViewById(R.id.cancelMove)
+        moveHere = view.findViewById(R.id.moveHere)
         toolbar = view.findViewById(R.id.toolbar)
         root = view.findViewById(R.id.root)
         appBar = view.findViewById(R.id.appbar)
+        moveContainer = view.findViewById(R.id.moveContainer)
         gridLayoutManager = GridLayoutManager(activity, 1)
         attachmentsRecyclerView.apply {
             adapter = attachmentsAdapter
@@ -167,16 +173,22 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         }
         detailsFab = view.findViewById(R.id.fab_button)
         checkBoxList = view.findViewById(R.id.checkBoxList)
+        // enableMoveTheme()
+        initListeners()
+        handleOnBackPressed()
+        setUpToolbar()
+        initData()
+        setUpBreadCrumb()
+    }
+
+    private fun initListeners(){
         detailsFab.setOnClickListener(this)
         listCheck.setOnClickListener(this)
         gridCheck.setOnClickListener(this)
         checkBoxList.setOnClickListener(this)
         filterNameTv.setOnClickListener(this)
-       // enableMoveTheme()
-        handleOnBackPressed()
-        setUpToolbar()
-        initData()
-        setUpBreadCrumb()
+        moveHere.setOnClickListener(this)
+        cancelMove.setOnClickListener(this)
     }
 
     private fun initData() {
@@ -297,6 +309,14 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                     }
                 )
             }
+            R.id.moveHere -> {
+                if (attachmentsAdapter.selectedMediaFiles.size > 0){
+                    attachmentsPresenter.moveFiles(currentRootID,attachmentsAdapter.selectedMediaFiles)
+                }
+            }
+            R.id.cancelMove ->{
+                moveContainer.visibility = View.GONE
+            }
         }
     }
 
@@ -388,7 +408,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
                 override fun move() {
                     isMoveModeEnabled = true
-                   // enableMoveTheme()
+                    enableMoveTheme()
                 }
 
                 override fun rename() {
@@ -575,6 +595,13 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     }
 
+    override fun onMoveFilesSuccess() {
+    }
+
+    override fun onMoveFilesError(error: Throwable?) {
+        TODO("Not yet implemented")
+    }
+
     private fun exportVaultFiles() {
         val selected: List<VaultFile> = attachmentsAdapter.selectedMediaFiles
         attachmentsPresenter.exportMediaFiles(selected)
@@ -646,7 +673,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             CaptureEvent::class.java,
             object : EventObserver<CaptureEvent?>() {
                 override fun onNext(event: CaptureEvent) {
-                   attachmentsPresenter.getFiles(currentRootID,filterType,sort)
+                    attachmentsPresenter.getFiles(currentRootID, filterType, sort)
                 }
             })
     }
@@ -720,9 +747,9 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                     attachmentsPresenter.importVaultFiles(listVaultFilesUris, currentRootID)
                 }
             }
-             C.CAMERA_CAPTURE or C.RECORDED_AUDIO -> {
-                 attachmentsPresenter.getFiles(currentRootID, filterType, sort)
-             }
+            C.CAMERA_CAPTURE or C.RECORDED_AUDIO -> {
+                attachmentsPresenter.getFiles(currentRootID, filterType, sort)
+            }
             WRITE_REQUEST_CODE -> {
                 vaultFile?.let { exportVaultFile(vaultFile = it) }
             }
@@ -794,12 +821,22 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         }
     }
 
-    private fun enableMoveTheme(){
-        if (!isMoveModeEnabled){
-            toolbar.setBackgroundColor(R.color.prussian_blue)
-            attachmentsRecyclerView.setBackgroundColor(R.color.wa_white_12)
-            root.setBackgroundColor(R.color.prussian_blue)
-            appBar.setBackgroundColor(R.color.prussian_blue)
+    private fun enableMoveTheme() {
+        moveContainer.visibility = View.VISIBLE
+      /*  root.background = null
+        attachmentsRecyclerView.background = null
+        appBar.background = null
+        toolbar.background = null
+
+        toolbar.setBackgroundColor(R.color.prussian_blue)
+        attachmentsRecyclerView.setBackgroundColor(R.color.wa_white_12)
+        root.setBackgroundColor(R.color.prussian_blue)
+        appBar.setBackgroundColor(R.color.prussian_blue)
+        (activity as MainActivity).enableMoveMode(true)
+        (activity as MainActivity).setTheme(R.style.AppTheme_DarkNoActionBar_Blue)*/
+      /*
+    if (isMoveModeEnabled){
+
             (activity as MainActivity).enableMoveMode(true)
         }else{
             toolbar.setBackgroundColor(R.color.space_cadet)
@@ -808,8 +845,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             appBar.setBackgroundColor(R.color.space_cadet)
             (activity as MainActivity).enableMoveMode(false)
 
-        }
-
-
+        }*/
     }
+
 }
