@@ -28,6 +28,7 @@ import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePrese
 import rs.readahead.washington.mobile.mvp.presenter.AudioCapturePresenter
 import rs.readahead.washington.mobile.mvp.presenter.MetadataAttacher
 import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulePresenter
+import rs.readahead.washington.mobile.util.C.RECORD_REQUEST_CODE
 import rs.readahead.washington.mobile.util.DateUtil.getDateTimeString
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.views.base_ui.MetadataBaseLockFragment
@@ -36,18 +37,13 @@ import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+const val TIME_FORMAT: String = "%02d:%02d"
 
-const val RECORD_REQUEST_CODE = 2001
 
 class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
     IAudioCapturePresenterContract.IView,
     ITellaFileUploadSchedulePresenterContract.IView,
     IMetadataAttachPresenterContract.IView {
-
-    // TODO: Rename and change types of parameters
-    private val TIME_FORMAT: String = "%02d:%02d"
     //var RECORDER_MODE = "rm"
 
     private var animator: ObjectAnimator? = null
@@ -74,17 +70,6 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
     lateinit var freeSpace: TextView
     lateinit var redDot: ImageView
     lateinit var recordingName: TextView
-
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -115,7 +100,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
             }
         }
 
-        recordingName.setText(getString(R.string.mic_recording).plus(" ").plus(getDateTimeString()))
+        recordingName.text = getString(R.string.mic_recording).plus(" ").plus(getDateTimeString())
         recordingName.setOnClickListener {
             BottomSheetUtils.showFileRenameSheet(
                 activity.supportFragmentManager,
@@ -146,26 +131,6 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
         disableStop()
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MicFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MicFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
-
     override fun onStart() {
         super.onStart()
         activity.startLocationMetadataListening()
@@ -178,7 +143,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
     }
 
     override fun onDestroy() {
-        animator!!.end()
+        animator?.end()
         animator = null
         disposable.dispose()
         cancelRecorder()
@@ -356,8 +321,8 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
             AppCompatResources.getDrawable(requireContext(),R.drawable.light_purple_circle_background)
         mRecord.setImageResource(R.drawable.ic__pause__white_24)
         redDot.visibility = View.VISIBLE
-        animator!!.target = redDot
-        animator!!.start()
+        animator?.target = redDot
+        animator?.start()
     }
 
     private fun enableRecord() {
@@ -365,7 +330,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
             AppCompatResources.getDrawable(requireContext(),R.drawable.audio_record_button_background)
         mRecord.setImageResource(R.drawable.ic_mic_white)
         redDot.visibility = View.GONE
-        animator!!.end()
+        animator?.end()
     }
 
     private fun disablePlay() {
