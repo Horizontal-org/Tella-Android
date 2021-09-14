@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.InflateException;
 import android.view.Menu;
@@ -88,6 +89,12 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         setTitle(null);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            findViewById(R.id.appbar).setOutlineProvider(null);
+        } else {
+            findViewById(R.id.appbar).bringToFront();
+        }
 
         presenter = new MediaFileViewerPresenter(this);
 
@@ -314,14 +321,14 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     }
 
     private void showMetadata() {
-        /*Intent viewMetadata = new Intent(this, MetadataViewerActivity.class);
+        Intent viewMetadata = new Intent(this, MetadataViewerActivity.class);
         viewMetadata.putExtra(VIEW_METADATA, vaultFile);
-        startActivity(viewMetadata);*/
-        toolbar.setStartTextTitle(getString(R.string.vault_file_info));
+        startActivity(viewMetadata);
+       /* toolbar.setStartTextTitle(getString(R.string.vault_file_info));
         menu.findItem(R.id.menu_item_more).setVisible(false);
         menu.findItem(R.id.menu_item_metadata).setVisible(false);
         invalidateOptionsMenu();
-        addFragment(new MetadataViewerFragment().newInstance(vaultFile),R.id.photo_viewer_container);
+        addFragment(new MetadataViewerFragment().newInstance(vaultFile),R.id.photo_viewer_container);*/
     }
 
     private void stopPresenter() {

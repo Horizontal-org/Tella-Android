@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.views.activity;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
@@ -37,6 +38,12 @@ public class MetadataHelpActivity extends BaseLockActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(R.string.verification_help_info_app_bar);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            findViewById(R.id.appbar).setOutlineProvider(null);
+        } else {
+            findViewById(R.id.appbar).bringToFront();
         }
 
         showMetadataHelp();
