@@ -12,15 +12,11 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import com.hzontal.tella_vault.VaultFile
-import io.reactivex.disposables.CompositeDisposable
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.media.AudioRecorder
-import rs.readahead.washington.mobile.media.AudioRecorder.AudioRecordInterface
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.mvp.contract.IAudioCapturePresenterContract
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract
@@ -32,7 +28,6 @@ import rs.readahead.washington.mobile.util.C.RECORD_REQUEST_CODE
 import rs.readahead.washington.mobile.util.DateUtil.getDateTimeString
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.views.base_ui.MetadataBaseLockFragment
-import timber.log.Timber
 
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -40,7 +35,7 @@ import java.util.concurrent.TimeUnit
 const val TIME_FORMAT: String = "%02d:%02d"
 
 
-class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
+class MicFragment : MetadataBaseLockFragment(),
     IAudioCapturePresenterContract.IView,
     ITellaFileUploadSchedulePresenterContract.IView,
     IMetadataAttachPresenterContract.IView {
@@ -57,10 +52,8 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
     private var handlingMediaFile: VaultFile? = null
 
     // recording
-    private var uploadPresenter: TellaFileUploadSchedulePresenter? = null
-    private val disposable = CompositeDisposable()
-    var presenter: AudioCapturePresenter? = null
-    var audioRecorder: AudioRecorder? = null
+    private val presenter by lazy { AudioCapturePresenter(this) }
+    private val uploadPresenter by lazy { TellaFileUploadSchedulePresenter(this) }
 
     lateinit var metadataAttacher: MetadataAttacher
     lateinit var mRecord: ImageButton
@@ -116,8 +109,6 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
 
         mPlay.setOnClickListener { openRecordings() }
 
-        presenter = AudioCapturePresenter(this)
-        uploadPresenter = TellaFileUploadSchedulePresenter(this)
         metadataAttacher = MetadataAttacher(this)
 
         notRecording = true
@@ -145,7 +136,6 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
     override fun onDestroy() {
         animator?.end()
         animator = null
-        disposable.dispose()
         cancelRecorder()
         stopPresenter()
         super.onDestroy()
@@ -153,9 +143,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
 
     override fun onResume() {
         super.onResume()
-        if (presenter != null) {
-            presenter!!.checkAvailableStorage()
-        }
+        presenter.checkAvailableStorage()
     }
 
 
@@ -179,24 +167,11 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
 
     fun handleRecord() {
         notRecording = false
-        if (audioRecorder == null) {   //first start or restart
+        if (presenter.isAudioRecorder) {   //first start or restart
             disablePlay()
             handlingMediaFile = null
             cancelRecorder()
-            audioRecorder = AudioRecorder(this)
-            disposable.add(
-                audioRecorder!!.startRecording(recordingName.text.toString())
-                    .subscribe(
-                        { vaultFile: VaultFile? ->
-                            onRecordingStopped(
-                                vaultFile
-                            )
-                        }
-                    ) { throwable: Throwable? ->
-                        Timber.d(throwable)
-                        onRecordingError()
-                    }
-            )
+            presenter.startRecording(recordingName.text.toString())
         } else {
             cancelPauseRecorder()
         }
@@ -209,7 +184,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
 
         if (duration > UPDATE_SPACE_TIME_MS + lastUpdateTime) {
             lastUpdateTime += UPDATE_SPACE_TIME_MS
-            presenter?.checkAvailableStorage()
+            presenter.checkAvailableStorage()
         }
     }
 
@@ -289,7 +264,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
         notRecording = true
     }
 
-    private fun onRecordingStopped(vaultFile: VaultFile?) {
+    override fun onRecordingStopped(vaultFile: VaultFile?) {
         if (vaultFile == null) {
             handlingMediaFile = null
             disableStop()
@@ -307,7 +282,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
         }
     }
 
-    private fun onRecordingError() {
+    override fun onRecordingError() {
         handlingMediaFile = null
         disableStop()
         disablePlay()
@@ -367,36 +342,23 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
      }
 
     private fun stopRecorder() {
-        if (audioRecorder != null) {
-            audioRecorder!!.stopRecording()
-            audioRecorder = null
-        }
+        presenter.stopRecorder()
     }
 
     private fun pauseRecorder() {
-        if (audioRecorder != null) {
-            audioRecorder!!.pauseRecording()
-        }
+        presenter.pauseRecorder()
     }
 
     private fun cancelPauseRecorder() {
-        if (audioRecorder != null) {
-            audioRecorder!!.cancelPause()
-        }
+        presenter.cancelPauseRecorder()
     }
 
     private fun cancelRecorder() {
-        if (audioRecorder != null) {
-            audioRecorder!!.cancelRecording()
-            audioRecorder = null
-        }
+        presenter.cancelRecorder()
     }
 
     private fun stopPresenter() {
-        if (presenter != null) {
-            presenter!!.destroy()
-            presenter = null
-        }
+        presenter.stopRecorder()
     }
 
     private fun timeToString(duration: Long): String {
