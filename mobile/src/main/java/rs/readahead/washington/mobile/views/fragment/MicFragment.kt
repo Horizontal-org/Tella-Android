@@ -12,15 +12,12 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import com.hzontal.tella_vault.VaultFile
-import io.reactivex.disposables.CompositeDisposable
+import com.hzontal.tella_vault.filter.FilterType
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.media.AudioRecorder
-import rs.readahead.washington.mobile.media.AudioRecorder.AudioRecordInterface
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.mvp.contract.IAudioCapturePresenterContract
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract
@@ -28,26 +25,22 @@ import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePrese
 import rs.readahead.washington.mobile.mvp.presenter.AudioCapturePresenter
 import rs.readahead.washington.mobile.mvp.presenter.MetadataAttacher
 import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulePresenter
+import rs.readahead.washington.mobile.util.C.RECORD_REQUEST_CODE
 import rs.readahead.washington.mobile.util.DateUtil.getDateTimeString
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.views.base_ui.MetadataBaseLockFragment
-import timber.log.Timber
+import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+const val TIME_FORMAT: String = "%02d:%02d"
 
-const val RECORD_REQUEST_CODE = 2001
 
-class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
+class MicFragment : MetadataBaseLockFragment(),
     IAudioCapturePresenterContract.IView,
     ITellaFileUploadSchedulePresenterContract.IView,
     IMetadataAttachPresenterContract.IView {
-
-    // TODO: Rename and change types of parameters
-    private val TIME_FORMAT: String = "%02d:%02d"
     //var RECORDER_MODE = "rm"
 
     private var animator: ObjectAnimator? = null
@@ -61,10 +54,10 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
     private var handlingMediaFile: VaultFile? = null
 
     // recording
-    private var uploadPresenter: TellaFileUploadSchedulePresenter? = null
-    private val disposable = CompositeDisposable()
-    var presenter: AudioCapturePresenter? = null
-    var audioRecorder: AudioRecorder? = null
+    private val presenter by lazy { AudioCapturePresenter(this) }
+    private val uploadPresenter by lazy { TellaFileUploadSchedulePresenter(this) }
+
+    private val bundle by lazy { Bundle() }
 
     lateinit var metadataAttacher: MetadataAttacher
     lateinit var mRecord: ImageButton
@@ -74,17 +67,6 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
     lateinit var freeSpace: TextView
     lateinit var redDot: ImageView
     lateinit var recordingName: TextView
-
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -115,7 +97,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
             }
         }
 
-        recordingName.setText(getString(R.string.mic_recording).plus(" ").plus(getDateTimeString()))
+        recordingName.text = getString(R.string.mic_recording).plus(" ").plus(getDateTimeString())
         recordingName.setOnClickListener {
             BottomSheetUtils.showFileRenameSheet(
                 activity.supportFragmentManager,
@@ -131,8 +113,6 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
 
         mPlay.setOnClickListener { openRecordings() }
 
-        presenter = AudioCapturePresenter(this)
-        uploadPresenter = TellaFileUploadSchedulePresenter(this)
         metadataAttacher = MetadataAttacher(this)
 
         notRecording = true
@@ -144,26 +124,6 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
 
         mTimer.text = timeToString(0)
         disableStop()
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MicFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MicFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 
     override fun onStart() {
@@ -178,9 +138,8 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
     }
 
     override fun onDestroy() {
-        animator!!.end()
+        animator?.end()
         animator = null
-        disposable.dispose()
         cancelRecorder()
         stopPresenter()
         super.onDestroy()
@@ -188,9 +147,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
 
     override fun onResume() {
         super.onResume()
-        if (presenter != null) {
-            presenter!!.checkAvailableStorage()
-        }
+        presenter.checkAvailableStorage()
     }
 
 
@@ -214,24 +171,11 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
 
     fun handleRecord() {
         notRecording = false
-        if (audioRecorder == null) {   //first start or restart
+        if (presenter.isAudioRecorder) {   //first start or restart
             disablePlay()
             handlingMediaFile = null
             cancelRecorder()
-            audioRecorder = AudioRecorder(this)
-            disposable.add(
-                audioRecorder!!.startRecording(recordingName.text.toString())
-                    .subscribe(
-                        { vaultFile: VaultFile? ->
-                            onRecordingStopped(
-                                vaultFile
-                            )
-                        }
-                    ) { throwable: Throwable? ->
-                        Timber.d(throwable)
-                        onRecordingError()
-                    }
-            )
+            presenter.startRecording(recordingName.text.toString())
         } else {
             cancelPauseRecorder()
         }
@@ -244,7 +188,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
 
         if (duration > UPDATE_SPACE_TIME_MS + lastUpdateTime) {
             lastUpdateTime += UPDATE_SPACE_TIME_MS
-            presenter?.checkAvailableStorage()
+            presenter.checkAvailableStorage()
         }
     }
 
@@ -324,7 +268,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
         notRecording = true
     }
 
-    private fun onRecordingStopped(vaultFile: VaultFile?) {
+    override fun onRecordingStopped(vaultFile: VaultFile?) {
         if (vaultFile == null) {
             handlingMediaFile = null
             disableStop()
@@ -342,7 +286,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
         }
     }
 
-    private fun onRecordingError() {
+    override fun onRecordingError() {
         handlingMediaFile = null
         disableStop()
         disablePlay()
@@ -356,8 +300,8 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
             AppCompatResources.getDrawable(requireContext(),R.drawable.light_purple_circle_background)
         mRecord.setImageResource(R.drawable.ic__pause__white_24)
         redDot.visibility = View.VISIBLE
-        animator!!.target = redDot
-        animator!!.start()
+        animator?.target = redDot
+        animator?.start()
     }
 
     private fun enableRecord() {
@@ -365,7 +309,7 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
             AppCompatResources.getDrawable(requireContext(),R.drawable.audio_record_button_background)
         mRecord.setImageResource(R.drawable.ic_mic_white)
         redDot.visibility = View.GONE
-        animator!!.end()
+        animator?.end()
     }
 
     private fun disablePlay() {
@@ -398,40 +342,28 @@ class MicFragment : MetadataBaseLockFragment(), AudioRecordInterface,
     }
 
      private fun openRecordings() {
-         nav().navigate(R.id.action_micScreen_to_attachments_screen)
+         bundle.putString(VAULT_FILTER, FilterType.AUDIO.name)
+         nav().navigate(R.id.action_micScreen_to_attachments_screen, bundle)
      }
 
     private fun stopRecorder() {
-        if (audioRecorder != null) {
-            audioRecorder!!.stopRecording()
-            audioRecorder = null
-        }
+        presenter.stopRecorder()
     }
 
     private fun pauseRecorder() {
-        if (audioRecorder != null) {
-            audioRecorder!!.pauseRecording()
-        }
+        presenter.pauseRecorder()
     }
 
     private fun cancelPauseRecorder() {
-        if (audioRecorder != null) {
-            audioRecorder!!.cancelPause()
-        }
+        presenter.cancelPauseRecorder()
     }
 
     private fun cancelRecorder() {
-        if (audioRecorder != null) {
-            audioRecorder!!.cancelRecording()
-            audioRecorder = null
-        }
+        presenter.cancelRecorder()
     }
 
     private fun stopPresenter() {
-        if (presenter != null) {
-            presenter!!.destroy()
-            presenter = null
-        }
+        presenter.stopRecorder()
     }
 
     private fun timeToString(duration: Long): String {

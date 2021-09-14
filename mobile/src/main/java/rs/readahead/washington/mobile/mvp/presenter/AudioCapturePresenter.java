@@ -10,13 +10,14 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+import rs.readahead.washington.mobile.media.AudioRecorder;
 import rs.readahead.washington.mobile.mvp.contract.IAudioCapturePresenterContract;
 
 
-public class AudioCapturePresenter implements IAudioCapturePresenterContract.IPresenter {
+public class AudioCapturePresenter implements IAudioCapturePresenterContract.IPresenter, AudioRecorder.AudioRecordInterface {
     private IAudioCapturePresenterContract.IView view;
     private final CompositeDisposable disposables = new CompositeDisposable();
-
+    private AudioRecorder audioRecorder = null;
 
     public AudioCapturePresenter(IAudioCapturePresenterContract.IView view) {
         this.view = view;
@@ -48,8 +49,57 @@ public class AudioCapturePresenter implements IAudioCapturePresenterContract.IPr
     }
 
     @Override
+    public boolean isAudioRecorder() {
+        return (audioRecorder == null);
+    }
+
+    @Override
+    public void startRecording(String filename) {
+        audioRecorder = new AudioRecorder(this);
+        disposables.add(audioRecorder.startRecording(filename)
+                .subscribe(vaultFile -> view.onRecordingStopped(vaultFile), throwable -> view.onRecordingError())
+        );
+    }
+
+    @Override
+    public void stopRecorder() {
+        if (audioRecorder != null) {
+            audioRecorder.stopRecording();
+            audioRecorder = null;
+        }
+    }
+
+    @Override
+    public void pauseRecorder() {
+        if (audioRecorder != null) {
+            audioRecorder.pauseRecording();
+        }
+    }
+
+    @Override
+    public void cancelPauseRecorder() {
+        if (audioRecorder != null) {
+            audioRecorder.cancelPause();
+        }
+    }
+
+    @Override
+    public void cancelRecorder() {
+        if (audioRecorder != null) {
+            audioRecorder.cancelRecording();
+            audioRecorder = null;
+        }
+    }
+
+    @Override
     public void destroy() {
         disposables.dispose();
+        cancelRecorder();
         view = null;
+    }
+
+    @Override
+    public void onDurationUpdate(long duration) {
+        view.onDurationUpdate(duration);
     }
 }

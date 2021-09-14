@@ -31,6 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -234,7 +235,6 @@ public class AudioRecordActivity2 extends MetadataActivity implements
             disablePlay();
             handlingMediaFile = null;
             cancelRecorder();
-
             audioRecorder = new AudioRecorder(this);
             disposable.add(audioRecorder.startRecording("novi recording")
                     .subscribe(this::onRecordingStopped, throwable -> {
@@ -357,7 +357,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void onRecordingStopped(@Nullable VaultFile vaultFile) {
+    public void onRecordingStopped(@Nullable VaultFile vaultFile) {
         if (vaultFile == null) {
             handlingMediaFile = null;
 
@@ -379,7 +379,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void onRecordingError() {
+    public void onRecordingError() {
         handlingMediaFile = null;
 
         disableStop();
