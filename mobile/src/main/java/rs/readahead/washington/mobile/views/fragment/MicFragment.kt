@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import com.hzontal.tella_vault.VaultFile
+import com.hzontal.tella_vault.filter.FilterType
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.media.MediaFileHandler
@@ -28,6 +29,7 @@ import rs.readahead.washington.mobile.util.C.RECORD_REQUEST_CODE
 import rs.readahead.washington.mobile.util.DateUtil.getDateTimeString
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.views.base_ui.MetadataBaseLockFragment
+import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -54,6 +56,8 @@ class MicFragment : MetadataBaseLockFragment(),
     // recording
     private val presenter by lazy { AudioCapturePresenter(this) }
     private val uploadPresenter by lazy { TellaFileUploadSchedulePresenter(this) }
+
+    private val bundle by lazy { Bundle() }
 
     lateinit var metadataAttacher: MetadataAttacher
     lateinit var mRecord: ImageButton
@@ -338,7 +342,8 @@ class MicFragment : MetadataBaseLockFragment(),
     }
 
      private fun openRecordings() {
-         nav().navigate(R.id.action_micScreen_to_attachments_screen)
+         bundle.putString(VAULT_FILTER, FilterType.AUDIO.name)
+         nav().navigate(R.id.action_micScreen_to_attachments_screen, bundle)
      }
 
     private fun stopRecorder() {
