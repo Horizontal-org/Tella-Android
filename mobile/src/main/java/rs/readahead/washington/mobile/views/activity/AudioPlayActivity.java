@@ -451,7 +451,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
     }
 
     private void disablePlay() {
-        mPlay.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_pause_black_24dp));
+        mPlay.setImageDrawable(getContext().getResources().getDrawable(R.drawable.white_pause_24p));
         enableButton(forward, mFwd);
         enableButton(rewind, mRwd);
     }
