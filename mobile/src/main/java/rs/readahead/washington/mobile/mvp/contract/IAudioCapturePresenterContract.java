@@ -13,11 +13,20 @@ public class IAudioCapturePresenterContract {
         void onAddError(Throwable error);
         void onAvailableStorage(long memory);
         void onAvailableStorageFailed(Throwable throwable);
+        void onRecordingStopped(VaultFile vaultFile);
+        void onRecordingError();
+        void onDurationUpdate(long duration);
         Context getContext();
     }
 
     public interface IPresenter extends IBasePresenter {
         void addMediaFile(VaultFile vaultFile);
         void checkAvailableStorage();
+        void stopRecorder();
+        void pauseRecorder();
+        void cancelRecorder();
+        void cancelPauseRecorder();
+        boolean isAudioRecorder();
+        void startRecording(String filename);
     }
 }

@@ -83,7 +83,7 @@
             android:layout_height="64dp"
             android:paddingTop="20dp"
             android:layout_margin="2dp"
-            android:background="@drawable/white_circle_background"
+            android:background="@drawable/red_circle_background"
             android:padding="5dp"
             android:src="@drawable/ic_play_arrow_black_24dp"
             android:contentDescription="@string/action_play"/>

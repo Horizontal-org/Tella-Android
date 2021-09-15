@@ -27,6 +27,7 @@
     <color name="rich_black">#071013</color>
     <color name="prussian_blue">#2c6c97</color>
     <color name="dark_purple">#2C275A</color>
+    <color name="light_red">#FC4444</color>
 
     <color name="colorPrimary">@color/space_cadet</color>
     <color name="colorSecundary">@color/tigers_eye</color>

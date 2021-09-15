@@ -30,7 +30,7 @@
     <integer name="ra_config_short_fling">300</integer>
     <string name="tella_location_field_prefix" translatable="false">_geometadata_</string>
     <string name="tella_metadata_field_prefix" translatable="false">_textmetadata_</string>
-    <string name="start_time" translatable="false">00:00:00</string>
+    <string name="start_time" translatable="false">00:00</string>
     <string name="title_activity_lock_screen" translatable="false">Tella Security</string>
     <string name="title_activity_security" translatable="false">Lock screen</string>
     <string name="title_activity_location_map" translatable="false">Location</string>
