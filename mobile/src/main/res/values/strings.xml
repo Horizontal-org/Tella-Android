@@ -493,4 +493,14 @@
     <string name="settings.camo_clock">Clock</string>
     <string name="settings.camo_time">Time</string>
     <string name="settings.camo_stopwatch">StopWatch</string>
+
+    <string name="onboard.intro_title">Welcome to Tella</string>
+    <string name="onboard.intro_get_started">Get started</string>
+    <string name="onboard.intro_organization_code">I have a code from my organization</string>
+    <string name="onboard.title_camera">Camera</string>
+    <string name="onboard.expl_camera">Take photos and videos directly in Tella. These files are automatically encrypted and saved in Tella, and will not visible from your phone’s regular gallery.</string>
+    <string name="onboard.title_recorder">Recorder</string>
+    <string name="onboard.expl_recorder">Record interviews or any sound around you with Tella’s voice recorder.  The audio files are automatically encrypted and saved in Tella’s hidden folder.</string>
+    <string name="onboard.title_files">Encrypted files &amp; folders</string>
+    <string name="onboard.expl_files">Securely store and organize all your files. As long as Tella is locked, your files and folders will remain inaccessible to someone seizing or searching the device.</string>
 </resources>

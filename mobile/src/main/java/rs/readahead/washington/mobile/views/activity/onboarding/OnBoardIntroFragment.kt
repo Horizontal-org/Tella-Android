@@ -4,19 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.TextView
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 
 class OnBoardIntroFragment : BaseFragment() {
 
-    private lateinit var startBtn: Button
+    private lateinit var startBtn: TextView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.onboard_intro_fragment, container, false)
+        return inflater.inflate(R.layout.onboard_intro_fragment_1, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,7 +30,7 @@ class OnBoardIntroFragment : BaseFragment() {
         startBtn.setOnClickListener {
             activity.addFragment(
                 this,
-                OnBoardSetUpFragment(),
+                OnBoardCameraFragment(),
                 R.id.rootOnboard
             )
         }
