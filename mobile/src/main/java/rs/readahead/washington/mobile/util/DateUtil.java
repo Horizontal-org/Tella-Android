@@ -16,7 +16,7 @@ public class DateUtil {
         return dateFormatter.format(date);
     }
 
-    public static Date getCurrentDate(){
+    public static Date getCurrentDate() {
         return Calendar.getInstance().getTime();
     }
 
@@ -31,14 +31,19 @@ public class DateUtil {
         Calendar reportTime = Calendar.getInstance();
         reportTime.setTime(date);
 
-        mCurrentCalendar.add(Calendar.DATE,-1);
+        mCurrentCalendar.add(Calendar.DATE, -1);
 
         return mCurrentCalendar.get(Calendar.YEAR) == reportTime.get(Calendar.YEAR)
                 && mCurrentCalendar.get(Calendar.MONTH) == reportTime.get(Calendar.MONTH)
                 && mCurrentCalendar.get(Calendar.DATE) == reportTime.get(Calendar.DATE);
     }
 
-    public static String getDate(Long time){
+    public static String getDateTimeString() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd-HH:mm", Locale.ROOT);
+        return format.format(getCurrentDate());
+    }
+
+    public static String getDate(Long time) {
         return dateFormatter.format(time);
     }
 }
