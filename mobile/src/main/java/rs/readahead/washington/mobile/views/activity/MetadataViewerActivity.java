@@ -42,6 +42,7 @@ public class MetadataViewerActivity extends BaseLockActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_metadata_viewer);
+        overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
         ButterKnife.bind(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -68,6 +69,17 @@ public class MetadataViewerActivity extends BaseLockActivity {
         metadata = vaultFile.metadata;
 
         showMetadata();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_end, R.anim.slide_out_start);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
     @Override
