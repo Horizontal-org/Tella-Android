@@ -65,7 +65,6 @@ public class MainActivity extends MetadataActivity implements
     View background;
     @BindView(R.id.main_container)
     View root;
-
     private boolean mExit = false;
     private Handler handler;
     private EventCompositeDisposable disposables;
@@ -520,11 +519,12 @@ public class MainActivity extends MetadataActivity implements
         btmNavMain.setVisibility(View.VISIBLE);
     }
     public void enableMoveMode(Boolean isEnabled){
-        if (isEnabled){
-            root.setBackgroundColor(R.color.prussian_blue);
+        root.setBackgroundColor(R.color.prussian_blue);
+       /* if (!isEnabled){
+
         }else{
             root.setBackgroundColor(R.color.space_cadet);
-        }
+        }*/
     }
 }
 

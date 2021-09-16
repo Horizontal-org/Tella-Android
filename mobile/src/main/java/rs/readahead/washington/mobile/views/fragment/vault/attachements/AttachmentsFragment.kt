@@ -7,6 +7,8 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
@@ -21,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.hzontal.tella_locking_ui.common.extensions.toggleVisibility
+import com.hzontal.tella_locking_ui.ui.pin.pinview.ResourceUtils.getColor
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Sort
@@ -81,7 +84,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private lateinit var root: View
     private lateinit var breadcrumbView: BreadcrumbsView
     private lateinit var appBar: AppBarLayout
-    private lateinit var moveContainer : LinearLayout
+    private lateinit var moveContainer: LinearLayout
     private var progressDialog: ProgressDialog? = null
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
     private var filterType = FilterType.ALL
@@ -181,7 +184,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         setUpBreadCrumb()
     }
 
-    private fun initListeners(){
+    private fun initListeners() {
         detailsFab.setOnClickListener(this)
         listCheck.setOnClickListener(this)
         gridCheck.setOnClickListener(this)
@@ -217,12 +220,14 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 }
                 currentRootID = item?.items?.get(item.selectedIndex)?.id
                 attachmentsPresenter.getFiles(currentRootID, filterType, sort)
+                highlightMoveBackground()
             }
 
             override fun onNavigateNewLocation(newItem: BreadcrumbItem?, changedPosition: Int) {
                 showToast(changedPosition.toString())
                 currentRootID = newItem?.items?.get(newItem.selectedIndex)?.id
                 attachmentsPresenter.getFiles(currentRootID, filterType, sort)
+                highlightMoveBackground()
             }
         })
     }
@@ -310,12 +315,18 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 )
             }
             R.id.moveHere -> {
-                if (attachmentsAdapter.selectedMediaFiles.size > 0){
-                    attachmentsPresenter.moveFiles(currentRootID,attachmentsAdapter.selectedMediaFiles)
+                if (attachmentsAdapter.selectedMediaFiles.size > 0) {
+                    attachmentsPresenter.moveFiles(
+                        currentRootID,
+                        attachmentsAdapter.selectedMediaFiles
+                    )
                 }
             }
-            R.id.cancelMove ->{
-                moveContainer.visibility = View.GONE
+            R.id.cancelMove -> {
+                isMoveModeEnabled = false
+                enableMoveTheme(enable = false)
+                attachmentsAdapter.clearSelected()
+                updateAttachmentsToolbar(false)
             }
         }
     }
@@ -329,18 +340,26 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         } else {
             toolbar.setToolbarNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
             setToolbarLabel()
+            attachmentsAdapter.clearSelected()
         }
     }
 
     override fun playMedia(vaultFile: VaultFile) {
         when (vaultFile.type) {
             VaultFile.Type.DIRECTORY -> {
-                if (currentRootID != vaultFile.id) {
-                    currentRootID = vaultFile.id
-                    attachmentsPresenter.getFiles(currentRootID, filterType, sort)
-                    breadcrumbView.visibility = View.VISIBLE
-                    breadcrumbView.addItem(createItem(vaultFile))
+                if (isMoveModeEnabled) {
+                    if (isMoveModeEnabled && attachmentsAdapter.selectedMediaFiles.contains(
+                            vaultFile
+                        )
+                    ) return
+                    openDirectory(vaultFile)
+                } else {
+                    attachmentsAdapter.clearSelected()
+                    isListCheckOn = false
+                    updateAttachmentsToolbar(false)
+                    openDirectory(vaultFile)
                 }
+
             }
             VaultFile.Type.FILE -> {
                 if (vaultFile.mimeType != null) {
@@ -367,8 +386,16 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
             }
         }
+    }
 
-
+    private fun openDirectory(vaultFile: VaultFile) {
+        if (currentRootID != vaultFile.id) {
+            currentRootID = vaultFile.id
+            highlightMoveBackground()
+            attachmentsPresenter.getFiles(currentRootID, filterType, sort)
+            breadcrumbView.visibility = View.VISIBLE
+            breadcrumbView.addItem(createItem(vaultFile))
+        }
     }
 
     override fun onSelectionNumChange(num: Int) {
@@ -407,8 +434,15 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 }
 
                 override fun move() {
+                    currentMove = currentRootID
+                    if (vaultFile != null) {
+                        isListCheckOn = true
+                        attachmentsAdapter.enableSelectMode(isListCheckOn)
+                        attachmentsAdapter.selectMediaFile(vaultFile)
+                        updateAttachmentsToolbar(true)
+                    }
                     isMoveModeEnabled = true
-                    enableMoveTheme()
+                    enableMoveTheme(enable = true)
                 }
 
                 override fun rename() {
@@ -487,6 +521,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             emptyViewMsgContainer.visibility = View.GONE
         }
         attachmentsAdapter.setFiles(files)
+        attachmentsAdapter.enableSelectMode(isListCheckOn)
     }
 
     override fun onGetFilesError(error: Throwable?) {
@@ -596,10 +631,14 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     override fun onMoveFilesSuccess() {
+        attachmentsPresenter.getFiles(currentRootID, filterType, sort)
+        enableMoveTheme(false)
+        currentMove = null
     }
 
     override fun onMoveFilesError(error: Throwable?) {
-        TODO("Not yet implemented")
+        enableMoveTheme(false)
+        currentMove = null
     }
 
     private fun exportVaultFiles() {
@@ -821,31 +860,34 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         }
     }
 
-    private fun enableMoveTheme() {
-        moveContainer.visibility = View.VISIBLE
-      /*  root.background = null
-        attachmentsRecyclerView.background = null
-        appBar.background = null
-        toolbar.background = null
-
-        toolbar.setBackgroundColor(R.color.prussian_blue)
-        attachmentsRecyclerView.setBackgroundColor(R.color.wa_white_12)
-        root.setBackgroundColor(R.color.prussian_blue)
-        appBar.setBackgroundColor(R.color.prussian_blue)
-        (activity as MainActivity).enableMoveMode(true)
-        (activity as MainActivity).setTheme(R.style.AppTheme_DarkNoActionBar_Blue)*/
-      /*
-    if (isMoveModeEnabled){
-
+    private fun enableMoveTheme(enable: Boolean) {
+        if (enable) {
+            (activity as MainActivity).setTheme(R.style.AppTheme_DarkNoActionBar_Blue)
+            toolbar.background = ColorDrawable(getColor(activity,R.color.prussian_blue))
+            attachmentsRecyclerView.background =  ColorDrawable(resources.getColor(R.color.wa_white_12))
+            root.background = ColorDrawable(getColor(activity,R.color.prussian_blue))
+            appBar.background = ColorDrawable(getColor(activity,R.color.prussian_blue))
             (activity as MainActivity).enableMoveMode(true)
-        }else{
-            toolbar.setBackgroundColor(R.color.space_cadet)
-            attachmentsRecyclerView.setBackgroundColor(R.color.space_cadet)
-            root.setBackgroundColor(R.color.space_cadet)
-            appBar.setBackgroundColor(R.color.space_cadet)
+            activity.supportActionBar?.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.prussian_blue)))
+            moveContainer.visibility = View.VISIBLE
+        } else {
+            (activity as MainActivity).setTheme(R.style.AppTheme_DarkNoActionBar)
+            toolbar.background = ColorDrawable(getColor(activity,R.color.space_cadet))
+            attachmentsRecyclerView.background = ColorDrawable(getColor(activity,R.color.space_cadet))
+            root.background = ColorDrawable(getColor(activity,R.color.space_cadet))
+            appBar.background = ColorDrawable(getColor(activity,R.color.space_cadet))
             (activity as MainActivity).enableMoveMode(false)
-
-        }*/
+            activity.supportActionBar?.setBackgroundDrawable(ColorDrawable(getColor(activity,R.color.space_cadet)))
+            moveContainer.visibility = View.GONE
+        }
     }
-
+    private fun highlightMoveBackground(){
+        if (currentMove != currentRootID ){
+            moveHere.setOnClickListener(this)
+            moveHere.setTextColor(getColor(activity,R.color.wa_white))
+        }else{
+            moveHere.setOnClickListener(null)
+            moveHere.setTextColor(getColor(activity,R.color.wa_white_12))
+        }
+    }
 }

@@ -53,7 +53,6 @@
           app:layout_constraintTop_toTopOf="parent"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintBottom_toBottomOf="parent"
-          android:layout_marginEnd="70dp"
           android:layout_width="0dp"
           android:layout_height="@dimen/navigation_panic_height"
           android:max="100"
@@ -84,27 +83,9 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:id="@+id/seekBarGrp"
-          android:visibility="gone"
+          android:visibility="visible"
           app:constraint_referenced_ids="panic_seek,deleteTv"
           />
-
-      <com.google.android.material.floatingactionbutton.FloatingActionButton
-          android:id="@+id/fab_button"
-          android:layout_width="50dp"
-          android:layout_height="50dp"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintTop_toTopOf="parent"
-          app:layout_constraintBottom_toBottomOf="parent"
-          android:background="@color/dark_orange"
-          app:backgroundTint="@color/dark_orange"
-          app:fabCustomSize="50dp"
-          app:layout_anchorGravity="center"
-          app:maxImageSize="30dp"
-          app:srcCompat="@drawable/ic_plus"
-          app:useCompatPadding="true"
-          tools:ignore="VectorDrawableCompat"
-          android:layout_marginEnd="16dp"
-          android:contentDescription="TODO" />
 
    </androidx.constraintlayout.widget.ConstraintLayout>
 

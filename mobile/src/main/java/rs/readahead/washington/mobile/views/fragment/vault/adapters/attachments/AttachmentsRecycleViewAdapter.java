@@ -182,7 +182,6 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
             selected.add(vaultFile);
             galleryMediaHandler.onMediaSelected(vaultFile);
         }
-
         checkItemState(holder, vaultFile);
         galleryMediaHandler.onSelectionNumChange(selected.size());
     }
@@ -200,14 +199,13 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
     }
 
     private void onMoreSelected(ViewHolder holder, VaultFile vaultFile){
-        holder.more.setOnClickListener(v -> { galleryMediaHandler.onMoreClicked(vaultFile);});
+        holder.more.setOnClickListener(v -> galleryMediaHandler.onMoreClicked(vaultFile));
     }
 
     private void checkItemState(ViewHolder holder, VaultFile vaultFile) {
         boolean checked = selected.contains(vaultFile);
        // holder.selectionDimmer.setVisibility(checked ? View.VISIBLE : View.GONE);
         holder.checkBox.setImageResource(checked ? R.drawable.ic_check_box_on : R.drawable.ic_check_box_off);
-        holder.maybeEnableCheckBox(checked);
     }
 
     public void setSelectedMediaFiles(@NonNull List<VaultFile> selectedMediaFiles) {
