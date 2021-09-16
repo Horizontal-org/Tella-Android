@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:id="@+id/root"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/space_cadet"
     android:backgroundTint="@color/wa_white_20"

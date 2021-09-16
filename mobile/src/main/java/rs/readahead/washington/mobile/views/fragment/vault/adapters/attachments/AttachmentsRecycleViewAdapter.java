@@ -122,7 +122,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
 
         holder.mediaView.setOnClickListener(v -> galleryMediaHandler.playMedia(vaultFile));
 
-        holder.checkBox.setOnClickListener(v -> checkboxClickHandler(holder, vaultFile));
+        holder.root.setOnClickListener(v -> checkboxClickHandler(holder, vaultFile));
 
         if (holder instanceof ListViewHolder) {
             ( (ListViewHolder) holder).setFileDateTextView(vaultFile);
@@ -224,6 +224,8 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
         ImageView more;
         @BindView(R.id.icAttachmentImg)
         ImageView icAttachmentImg;
+        @BindView(R.id.root)
+        View root;
 
         public ViewHolder(View itemView) {
             super(itemView);
