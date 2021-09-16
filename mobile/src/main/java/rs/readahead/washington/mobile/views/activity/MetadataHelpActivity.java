@@ -29,6 +29,7 @@ public class MetadataHelpActivity extends BaseLockActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_metadata_help);
+        overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
 
         ButterKnife.bind(this);
 
@@ -59,6 +60,17 @@ public class MetadataHelpActivity extends BaseLockActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_end, R.anim.slide_out_start);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
     private View createMetadataTitle(@StringRes int titleResId) {

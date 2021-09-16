@@ -83,6 +83,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_photo_viewer);
+        overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
         ButterKnife.bind(this);
 
         setTitle(null);
@@ -145,6 +146,12 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_end, R.anim.slide_out_start);
     }
 
     @Override
@@ -244,6 +251,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         menu.findItem(R.id.menu_item_more).setVisible(true);
         menu.findItem(R.id.menu_item_metadata).setVisible(true);
         toolbar.setStartTextTitle(vaultFile.name);
+        finish();
     }
 
     @Override

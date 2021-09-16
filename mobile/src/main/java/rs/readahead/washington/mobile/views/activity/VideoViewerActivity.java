@@ -94,6 +94,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_video_viewer);
+        overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
         ButterKnife.bind(this);
 
         if (getIntent().hasExtra(NO_ACTIONS)) {
@@ -112,6 +113,12 @@ public class VideoViewerActivity extends BaseLockActivity implements
         presenter = new MediaFileViewerPresenter(this);
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_end, R.anim.slide_out_start);
+    }
+    
     @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -516,5 +523,6 @@ public class VideoViewerActivity extends BaseLockActivity implements
         setupMetadataMenuItem(vaultFile.metadata != null);
         invalidateOptionsMenu();
         isInfoShown = false;
+        finish();
     }
 }
