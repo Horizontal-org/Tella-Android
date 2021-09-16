@@ -352,6 +352,7 @@ public class MainActivity extends MetadataActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        btmNavMain.setSelectedItemId(R.id.home);
 
         homeScreenPresenter.countCollectServers();
 
