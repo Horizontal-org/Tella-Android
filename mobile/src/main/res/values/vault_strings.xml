@@ -41,4 +41,6 @@
     <string name="vault_create_new_folder" translatable="false">Create a new folder</string>
     <string name="vault_new_folder_title" translatable="false">New folder title</string>
     <string name="vault_move_here" translatable="false">move here</string>
+    <string name="vault_viewer_other_msg" translatable="false">This file format cannot be opened inside Tella. Would you like to export the file to your device to open it through a different app? This may expose the content of the file. </string>
+    <string name="vault_export">Export</string>
 </resources>

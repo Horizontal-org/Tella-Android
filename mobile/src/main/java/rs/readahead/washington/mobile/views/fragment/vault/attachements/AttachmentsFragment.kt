@@ -31,6 +31,7 @@ import com.hzontal.utils.MediaFile.isAudioFileType
 import com.hzontal.utils.MediaFile.isImageFileType
 import com.hzontal.utils.MediaFile.isVideoFileType
 import org.hzontal.shared_ui.appbar.ToolbarComponent
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils
@@ -128,11 +129,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             }
 
             R.id.action_upload -> {
-                if (hasStoragePermissions(activity)) {
-                    exportVaultFiles()
-                } else {
-                    requestStoragePermissions(WRITE_REQUEST_CODE)
-                }
+                exportVaultFiles(true,null)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -383,6 +380,16 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                             intent.putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile)
                             startActivity(intent)
                         }
+                        else -> {
+                            BottomSheetUtils.showStandardSheet(
+                                activity.supportFragmentManager,
+                                activity.getString(R.string.vault_export) + " "+vaultFile.name+ "?",
+                                activity.getString(R.string.vault_viewer_other_msg),
+                                activity.getString(R.string.vault_export),
+                                activity.getString(R.string.action_cancel),
+                                onConfirmClick = {exportVaultFiles(false,vaultFile)}
+                            )
+                        }
                     }
                 }
             }
@@ -464,15 +471,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
                 override fun save() {
                     this@AttachmentsFragment.vaultFile = vaultFile
-                    if (hasStoragePermissions(activity)) {
-                        if (isMultipleFiles) {
-                            exportVaultFiles()
-                        } else {
-                            vaultFile?.let { exportVaultFile(it) }
-                        }
-                    } else {
-                        requestStoragePermissions(WRITE_REQUEST_CODE)
-                    }
+                    exportVaultFiles(isMultipleFiles,vaultFile)
                 }
 
                 override fun info() {
@@ -647,15 +646,20 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         updateAttachmentsToolbar(false)
     }
 
-    private fun exportVaultFiles() {
-        val selected: List<VaultFile> = attachmentsAdapter.selectedMediaFiles
-        attachmentsPresenter.exportMediaFiles(selected)
-    }
 
-    private fun exportVaultFile(vaultFile: VaultFile) {
-        attachmentsPresenter.exportMediaFiles(arrayListOf(vaultFile))
-    }
+    private fun exportVaultFiles(isMultipleFiles: Boolean,vaultFile: VaultFile?) {
+        if (hasStoragePermissions(activity)) {
+            if (isMultipleFiles) {
+                val selected: List<VaultFile> = attachmentsAdapter.selectedMediaFiles
+                attachmentsPresenter.exportMediaFiles(selected)
+            } else {
+                vaultFile?.let { attachmentsPresenter.exportMediaFiles(arrayListOf(vaultFile)) }
+            }
+        } else {
+            requestStoragePermissions(WRITE_REQUEST_CODE)
+        }
 
+    }
     private fun hideProgressDialog() {
         if (progressDialog != null) {
             progressDialog?.dismiss()
@@ -682,13 +686,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == WRITE_REQUEST_CODE) {
             context?.let {
-                if (hasStoragePermissions(it)) {
-                    if (attachmentsAdapter.selectedMediaFiles.size == 0)
-                        vaultFile?.let { it1 -> exportVaultFile(it1) }
-                    else
-                        exportVaultFiles()
-                }
-
+                exportVaultFiles(attachmentsAdapter.selectedMediaFiles.size == 0,vaultFile)
             }
         }
     }
@@ -796,13 +794,13 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 attachmentsPresenter.getFiles(currentRootID, filterType, sort)
             }
             WRITE_REQUEST_CODE -> {
-                vaultFile?.let { exportVaultFile(vaultFile = it) }
+                exportVaultFiles(false,vaultFile)
             }
 
         }
     }
 
-    fun hasStoragePermissions(context: Context): Boolean {
+    private fun hasStoragePermissions(context: Context): Boolean {
         if (ActivityCompat.checkSelfPermission(
                 context,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -812,7 +810,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         return false
     }
 
-    fun requestStoragePermissions(requestCode: Int) {
+    private fun requestStoragePermissions(requestCode: Int) {
         requestPermissions(
             arrayOf(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
