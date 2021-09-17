@@ -147,7 +147,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:padding="@dimen/activity_vertical_margin">
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingEnd="@dimen/activity_vertical_margin"
+                        android:paddingStart="@dimen/activity_vertical_margin">
 
                         <TextView
                             android:id="@+id/delete_vault_title"
@@ -187,7 +190,10 @@
                         android:layout_gravity="center_vertical"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:padding="@dimen/activity_vertical_margin">
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingEnd="@dimen/activity_vertical_margin"
+                        android:paddingStart="@dimen/activity_vertical_margin">
 
                         <TextView
                             android:id="@+id/delete_forms_title"
@@ -222,7 +228,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:padding="@dimen/activity_vertical_margin">
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingEnd="@dimen/activity_vertical_margin"
+                        android:paddingStart="@dimen/activity_vertical_margin">
 
                         <TextView
                             android:id="@+id/delete_server_settings_title"
@@ -259,7 +268,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:padding="@dimen/activity_vertical_margin">
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingEnd="@dimen/activity_vertical_margin"
+                        android:paddingStart="@dimen/activity_vertical_margin">
 
                         <TextView
                             android:id="@+id/delete_tella_title"
