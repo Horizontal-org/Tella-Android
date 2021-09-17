@@ -1,17 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- <FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/background_light"
-    tools:context="rs.readahead.washington.mobile.views.activity.SettingsActivity">
-
-
-</FrameLayout>-->
-
-
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -32,12 +19,11 @@
         app:layout_constraintBottom_toTopOf="@+id/my_nav_host_fragment"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <androidx.appcompat.widget.Toolbar
+        <org.hzontal.shared_ui.appbar.ToolbarComponent
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/dark_purple"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:arrowBackIcon="@drawable/ic_back_white" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
