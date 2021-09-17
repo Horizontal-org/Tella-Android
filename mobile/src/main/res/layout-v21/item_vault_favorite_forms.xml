@@ -13,7 +13,7 @@
         style="@style/Tella_Main_White_Text.Meduim"
         android:text="@string/vault_favorite_forms"
         android:textColor="@color/wa_white_90"
-        android:letterSpacing="0.1"
+        android:letterSpacing="0.05"
         >
     </TextView>
 
