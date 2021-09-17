@@ -308,6 +308,7 @@ public class MediaFileHandler {
 
             InputStream is = context.getContentResolver().openInputStream(uri);
 
+            assert DocumentFile.fromSingleUri(context, uri) != null;
             return MyApplication.rxVault
                     .builder(is)
                     .setMimeType(mimeType)

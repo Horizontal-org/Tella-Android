@@ -94,7 +94,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private var currentMove: String? = null
     private var isListCheckOn = false
     private var isMoveModeEnabled = false
-
+    private var importAndDelete = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -190,7 +190,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         gridCheck.setOnClickListener(this)
         checkBoxList.setOnClickListener(this)
         filterNameTv.setOnClickListener(this)
-        moveHere.setOnClickListener(this)
+        moveHere.setOnClickListener(null)
         cancelMove.setOnClickListener(this)
     }
 
@@ -220,14 +220,14 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 }
                 currentRootID = item?.items?.get(item.selectedIndex)?.id
                 attachmentsPresenter.getFiles(currentRootID, filterType, sort)
-                highlightMoveBackground()
+                if (isMoveModeEnabled) highlightMoveBackground()
             }
 
             override fun onNavigateNewLocation(newItem: BreadcrumbItem?, changedPosition: Int) {
                 showToast(changedPosition.toString())
                 currentRootID = newItem?.items?.get(newItem.selectedIndex)?.id
                 attachmentsPresenter.getFiles(currentRootID, filterType, sort)
-                highlightMoveBackground()
+                if (isMoveModeEnabled) highlightMoveBackground()
             }
         })
     }
@@ -268,6 +268,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                     getString(R.string.vault_import_delete_file),
                     getString(R.string.vault_create_new_folder),
                     getString(R.string.vault_manage_files),
+                    getString(R.string.vault_delete_origial_files_msg),
                     action = object : VaultSheetUtils.IVaultManageFiles {
                         override fun goToCamera() {
                             activity.startActivity(Intent(activity, CameraActivity::class.java))
@@ -284,17 +285,20 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                         }
 
                         override fun import() {
+                            importAndDelete = false
                             MediaFileHandler.startImportFiles(activity, true)
                         }
 
                         override fun importAndDelete() {
+                            importAndDelete = true
+                            MediaFileHandler.startImportFiles(activity, true)
 
                         }
 
                         override fun createFolder() {
                             VaultSheetUtils.showVaultRenameSheet(
                                 activity.supportFragmentManager,
-                                getString(R.string.vault_rename_file),
+                                getString(R.string.vault_create_new_folder),
                                 getString(R.string.action_cancel),
                                 getString(R.string.action_ok),
                                 requireActivity(),
@@ -634,11 +638,13 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         attachmentsPresenter.getFiles(currentRootID, filterType, sort)
         enableMoveTheme(false)
         currentMove = null
+        updateAttachmentsToolbar(false)
     }
 
     override fun onMoveFilesError(error: Throwable?) {
         enableMoveTheme(false)
         currentMove = null
+        updateAttachmentsToolbar(false)
     }
 
     private fun exportVaultFiles() {
@@ -783,7 +789,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                             listVaultFilesUris.add(returnedUri)
                         }
                     }
-                    attachmentsPresenter.importVaultFiles(listVaultFilesUris, currentRootID)
+                    attachmentsPresenter.importVaultFiles(listVaultFilesUris, currentRootID,importAndDelete)
                 }
             }
             C.CAMERA_CAPTURE or C.RECORDED_AUDIO -> {
@@ -813,6 +819,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             ), requestCode
         )
     }
+
 
     private fun createItem(file: VaultFile): BreadcrumbItem {
         val list: MutableList<Item> = ArrayList()

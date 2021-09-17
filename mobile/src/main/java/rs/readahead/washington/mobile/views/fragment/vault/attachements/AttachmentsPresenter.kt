@@ -1,6 +1,8 @@
 package rs.readahead.washington.mobile.views.fragment.vault.attachements
 
+import android.content.Context
 import android.net.Uri
+import android.provider.MediaStore
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
@@ -13,6 +15,7 @@ import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.media.FileWalker
 import rs.readahead.washington.mobile.media.MediaFileHandler
+import java.io.File
 
 class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
     IAttachmentsPresenter.IPresenter {
@@ -44,7 +47,7 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
             }.dispose()
     }
 
-    override fun importVaultFiles(uris: List<Uri?>, parentId: String?) {
+    override fun importVaultFiles(uris: List<Uri?>, parentId: String?,deleteOriginal : Boolean) {
         disposables.add(Observable.fromCallable {
             MediaFileHandler.importVaultFilesUris(
                 view?.getContext(), uris, parentId
@@ -56,6 +59,9 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
             .doFinally { view?.onImportEnded() }
             .subscribe(
                 { vaultFiles ->
+                    if (deleteOriginal){
+                        deleteOriginalFiles(uris)
+                    }
                     view?.onMediaImported(vaultFiles)
                 }
             ) { throwable: Throwable? ->
@@ -63,6 +69,14 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
                 view?.onImportError(throwable)
             })
 
+    }
+
+    private fun deleteOriginalFiles(uris: List<Uri?>){
+        for (uri in uris) {
+            uri?.let {
+                view?.getContext()?.contentResolver?.delete(uri,null,null)
+            }
+        }
     }
 
     override fun addNewVaultFiles() {
@@ -240,4 +254,23 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
         disposables.dispose()
         view = null
     }
+}
+
+fun File.delete(context: Context): Boolean {
+    var selectionArgs = arrayOf(this.absolutePath)
+    val contentResolver = context.contentResolver
+    var where: String? = null
+    var filesUri: Uri? = null
+    if (android.os.Build.VERSION.SDK_INT >= 29) {
+        filesUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        where = MediaStore.Images.Media._ID + "=?"
+        selectionArgs = arrayOf(this.name)
+    } else {
+        where = MediaStore.MediaColumns.DATA + "=?"
+        filesUri = MediaStore.Files.getContentUri("external")
+    }
+
+    val int = contentResolver.delete(filesUri!!, where, selectionArgs)
+
+    return !this.exists()
 }

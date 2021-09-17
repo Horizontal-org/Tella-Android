@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.StringSignature;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.utils.MediaFile;
 
@@ -99,6 +100,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
                         .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
+                        .signature(new StringSignature(String.valueOf(System.currentTimeMillis())))
                         .into(holder.mediaView);
             } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
                 holder.showAudioInfo();
@@ -109,6 +111,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
                         .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
+                        .signature(new StringSignature(String.valueOf(System.currentTimeMillis())))
                         .into(holder.mediaView);
             }else if (MediaFile.INSTANCE.isTextFileType(vaultFile.mimeType)){
                  holder.showDocumentInfo();
@@ -123,6 +126,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
         holder.mediaView.setOnClickListener(v -> galleryMediaHandler.playMedia(vaultFile));
 
         holder.root.setOnClickListener(v -> checkboxClickHandler(holder, vaultFile));
+        holder.checkBox.setOnClickListener(v -> checkboxClickHandler(holder, vaultFile));
 
         if (holder instanceof ListViewHolder) {
             ( (ListViewHolder) holder).setFileDateTextView(vaultFile);
@@ -254,6 +258,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
 
         void maybeEnableCheckBox(boolean selectable) {
             checkBox.setVisibility(selectable ? View.VISIBLE : View.GONE);
+            more.setVisibility(selectable ? View.GONE : View.VISIBLE);
             checkBox.setEnabled(selectable);
         }
     }

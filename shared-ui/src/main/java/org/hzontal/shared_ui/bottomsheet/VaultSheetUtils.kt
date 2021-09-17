@@ -2,12 +2,12 @@ package org.hzontal.shared_ui.bottomsheet
 
 import android.app.Activity
 import android.opengl.Visibility
+import android.view.Gravity
 import android.view.View
-import android.widget.EditText
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.TextView
+import android.widget.*
+import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.FragmentManager
+import com.tooltip.Tooltip
 import org.hzontal.shared_ui.R
 import org.hzontal.shared_ui.utils.DialogUtils
 
@@ -288,6 +288,7 @@ object VaultSheetUtils {
         importDeleteLabel: String,
         createFolderLabel: String,
         titleText: String,
+        toolTipText : String,
         action: IVaultManageFiles
     ) {
         val vaultManageFilesSheet = CustomBottomSheetFragment.with(fragmentManager)
@@ -330,6 +331,18 @@ object VaultSheetUtils {
                         vaultManageFilesSheet.dismiss()
                         action.createFolder()
                     }
+                    deleteVaultTooltip.setOnClickListener {
+                        Tooltip.Builder(deleteVaultTooltip)
+                            .setText(toolTipText)
+                            .setTextColor(getColor(deleteVaultTooltip.context,R.color.wa_black))
+                            .setBackgroundColor(getColor(deleteVaultTooltip.context,R.color.wa_white))
+                            .setGravity( Gravity.TOP)
+                            .setCornerRadius(12f)
+                            .setPadding(24)
+                            .setDismissOnClick(true)
+                            .setCancelable(true)
+                            .show<Tooltip>()
+                    }
 
                 }
             }
@@ -344,6 +357,7 @@ object VaultSheetUtils {
         lateinit var importActionTV: TextView
         lateinit var createDeleteActionTV: TextView
         lateinit var createFolderActionTV: TextView
+        lateinit var deleteVaultTooltip : ImageView
         lateinit var title: TextView
 
         override fun bindView(view: View) {
@@ -352,6 +366,7 @@ object VaultSheetUtils {
             importActionTV = view.findViewById(R.id.importActionTV)
             createDeleteActionTV = view.findViewById(R.id.createDeleteActionTV)
             createFolderActionTV = view.findViewById(R.id.createFolderActionTV)
+            deleteVaultTooltip = view.findViewById(R.id.delete_vault_tooltip)
             title = view.findViewById(R.id.sheetTitleTv)
         }
     }
