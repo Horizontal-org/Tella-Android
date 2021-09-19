@@ -109,11 +109,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private fun setUpToolbar() {
         val activity = context as MainActivity
         activity.setSupportActionBar(toolbar)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            view?.findViewById<View>(R.id.appbar)?.outlineProvider = null
-        } else {
-            view?.findViewById<View>(R.id.appbar)?.bringToFront()
-        }
     }
 
     override fun onRecentFilesItemClickListener(vaultFile: VaultFile) {

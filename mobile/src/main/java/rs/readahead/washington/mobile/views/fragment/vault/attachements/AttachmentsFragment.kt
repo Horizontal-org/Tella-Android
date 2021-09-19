@@ -7,7 +7,6 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
@@ -234,14 +233,14 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             R.id.gridCheck -> {
                 gridCheck.toggleVisibility(false)
                 listCheck.toggleVisibility(true)
-                gridLayoutManager.spanCount = 1
+                gridLayoutManager.spanCount = 4
                 attachmentsAdapter.setLayoutManager(gridLayoutManager)
                 attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
             }
             R.id.listCheck -> {
                 gridCheck.toggleVisibility(true)
                 listCheck.toggleVisibility(false)
-                gridLayoutManager.spanCount = 4
+                gridLayoutManager.spanCount = 1
                 attachmentsAdapter.setLayoutManager(gridLayoutManager)
                 attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
             }
@@ -383,11 +382,11 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                         else -> {
                             BottomSheetUtils.showStandardSheet(
                                 activity.supportFragmentManager,
-                                activity.getString(R.string.vault_export) + " "+vaultFile.name+ "?",
+                                activity.getString(R.string.vault_export) + " " + vaultFile.name + "?",
                                 activity.getString(R.string.vault_viewer_other_msg),
                                 activity.getString(R.string.vault_export),
                                 activity.getString(R.string.action_cancel),
-                                onConfirmClick = {exportVaultFiles(false,vaultFile)}
+                                onConfirmClick = { exportVaultFiles(false, vaultFile) }
                             )
                         }
                     }
@@ -471,7 +470,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
                 override fun save() {
                     this@AttachmentsFragment.vaultFile = vaultFile
-                    exportVaultFiles(isMultipleFiles,vaultFile)
+                    exportVaultFiles(isMultipleFiles, vaultFile)
                 }
 
                 override fun info() {
@@ -647,7 +646,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
 
-    private fun exportVaultFiles(isMultipleFiles: Boolean,vaultFile: VaultFile?) {
+    private fun exportVaultFiles(isMultipleFiles: Boolean, vaultFile: VaultFile?) {
         if (hasStoragePermissions(activity)) {
             if (isMultipleFiles) {
                 val selected: List<VaultFile> = attachmentsAdapter.selectedMediaFiles
@@ -656,10 +655,11 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 vaultFile?.let { attachmentsPresenter.exportMediaFiles(arrayListOf(vaultFile)) }
             }
         } else {
-            requestStoragePermissions(WRITE_REQUEST_CODE)
+            requestStoragePermissions()
         }
 
     }
+
     private fun hideProgressDialog() {
         if (progressDialog != null) {
             progressDialog?.dismiss()
@@ -686,7 +686,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == WRITE_REQUEST_CODE) {
             context?.let {
-                exportVaultFiles(attachmentsAdapter.selectedMediaFiles.size == 0,vaultFile)
+                exportVaultFiles(attachmentsAdapter.selectedMediaFiles.size == 0, vaultFile)
             }
         }
     }
@@ -787,14 +787,18 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                             listVaultFilesUris.add(returnedUri)
                         }
                     }
-                    attachmentsPresenter.importVaultFiles(listVaultFilesUris, currentRootID,importAndDelete)
+                    attachmentsPresenter.importVaultFiles(
+                        listVaultFilesUris,
+                        currentRootID,
+                        importAndDelete
+                    )
                 }
             }
             C.CAMERA_CAPTURE or C.RECORDED_AUDIO -> {
                 attachmentsPresenter.getFiles(currentRootID, filterType, sort)
             }
             WRITE_REQUEST_CODE -> {
-                exportVaultFiles(false,vaultFile)
+                exportVaultFiles(false, vaultFile)
             }
 
         }
@@ -804,17 +808,28 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         if (ActivityCompat.checkSelfPermission(
                 context,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.READ_EXTERNAL_STORAGE
             ) == PackageManager.PERMISSION_GRANTED
+                    )
         )
             return true
         return false
     }
 
-    private fun requestStoragePermissions(requestCode: Int) {
-        requestPermissions(
-            arrayOf(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ), requestCode
+    private fun requestStoragePermissions() {
+        val permissions = arrayOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+        ActivityCompat.requestPermissions(
+            //1
+            activity,
+            //2
+            permissions,
+            //3
+            WRITE_REQUEST_CODE
         )
     }
 
@@ -868,31 +883,41 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private fun enableMoveTheme(enable: Boolean) {
         if (enable) {
             (activity as MainActivity).setTheme(R.style.AppTheme_DarkNoActionBar_Blue)
-            toolbar.background = ColorDrawable(getColor(activity,R.color.prussian_blue))
-            attachmentsRecyclerView.background =  ColorDrawable(resources.getColor(R.color.wa_white_12))
-            root.background = ColorDrawable(getColor(activity,R.color.prussian_blue))
-            appBar.background = ColorDrawable(getColor(activity,R.color.prussian_blue))
+            toolbar.background = ColorDrawable(getColor(activity, R.color.prussian_blue))
+            attachmentsRecyclerView.background =
+                ColorDrawable(resources.getColor(R.color.wa_white_12))
+            root.background = ColorDrawable(getColor(activity, R.color.prussian_blue))
+            appBar.background = ColorDrawable(getColor(activity, R.color.prussian_blue))
             (activity as MainActivity).enableMoveMode(true)
             activity.supportActionBar?.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.prussian_blue)))
             moveContainer.visibility = View.VISIBLE
         } else {
             (activity as MainActivity).setTheme(R.style.AppTheme_DarkNoActionBar)
-            toolbar.background = ColorDrawable(getColor(activity,R.color.space_cadet))
-            attachmentsRecyclerView.background = ColorDrawable(getColor(activity,R.color.space_cadet))
-            root.background = ColorDrawable(getColor(activity,R.color.space_cadet))
-            appBar.background = ColorDrawable(getColor(activity,R.color.space_cadet))
+            toolbar.background = ColorDrawable(getColor(activity, R.color.space_cadet))
+            attachmentsRecyclerView.background =
+                ColorDrawable(getColor(activity, R.color.space_cadet))
+            root.background = ColorDrawable(getColor(activity, R.color.space_cadet))
+            appBar.background = ColorDrawable(getColor(activity, R.color.space_cadet))
             (activity as MainActivity).enableMoveMode(false)
-            activity.supportActionBar?.setBackgroundDrawable(ColorDrawable(getColor(activity,R.color.space_cadet)))
+            activity.supportActionBar?.setBackgroundDrawable(
+                ColorDrawable(
+                    getColor(
+                        activity,
+                        R.color.space_cadet
+                    )
+                )
+            )
             moveContainer.visibility = View.GONE
         }
     }
-    private fun highlightMoveBackground(){
-        if (currentMove != currentRootID ){
+
+    private fun highlightMoveBackground() {
+        if (currentMove != currentRootID) {
             moveHere.setOnClickListener(this)
-            moveHere.setTextColor(getColor(activity,R.color.wa_white))
-        }else{
+            moveHere.setTextColor(getColor(activity, R.color.wa_white))
+        } else {
             moveHere.setOnClickListener(null)
-            moveHere.setTextColor(getColor(activity,R.color.wa_white_12))
+            moveHere.setTextColor(getColor(activity, R.color.wa_white_12))
         }
     }
 }
