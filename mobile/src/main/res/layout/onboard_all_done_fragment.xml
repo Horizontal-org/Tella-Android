@@ -25,7 +25,7 @@
         android:paddingStart="32dp"
         android:paddingEnd="0dp"
         android:layout_marginTop="10dp"
-        android:src="@drawable/ic_welcome"
+        android:src="@drawable/ic_onboard_finish"
         android:textColor="@color/wa_white"
         tools:ignore="ContentDescription" />
 
@@ -40,7 +40,7 @@
         android:visibility="visible"
         android:paddingStart="12dp"
         android:paddingEnd="0dp"
-        android:text="@string/onboard.intro_title"
+        android:text="@string/onboard.title_all_done"
         android:layout_marginTop="40dp"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
@@ -57,11 +57,13 @@
         android:paddingStart="12dp"
         android:paddingEnd="0dp"
         android:visibility="visible"
-        android:text="@string/intro_document_protect"
+        android:textAlignment="center"
+        android:text="@string/onboard.expl_all_done"
         android:layout_marginTop="16dp"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        tools:ignore="RtlCompat" />
 
     <TextView
         android:id="@+id/startBtn"
@@ -79,7 +81,7 @@
         android:paddingEnd="16dp"
         android:textStyle="bold"
         android:textAllCaps="true"
-        android:text="@string/onboard.intro_get_started"
+        android:text="@string/onboard.go_btn_all_done"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
         android:textSize="16sp"/>
@@ -87,7 +89,7 @@
     <TextView
         android:id="@+id/sheet_two_btn"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="50dp"
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -99,7 +101,7 @@
         android:paddingEnd="16dp"
         android:textStyle="bold"
         android:textAllCaps="true"
-        android:text="@string/onboard.intro_organization_code"
+        android:text="@string/onboard.advanced_btn_all_done"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
         android:textSize="16sp"/>

@@ -23,11 +23,11 @@
         app:layout_constraintGuide_percent="0.95" />
 
     <ImageView
-        android:id="@+id/recorder_icon"
-        android:layout_width="79dp"
-        android:layout_height="100dp"
+        android:id="@+id/camera_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/hide_tella_big_margin"
-        android:src="@drawable/ic_mic_illustration"
+        android:src="@drawable/lock_bg"
         android:textColor="@color/wa_white"
         app:layout_constraintBottom_toTopOf="@+id/sheet_title"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,7 +43,7 @@
         android:fontFamily="@font/open_sans"
         android:gravity="center"
         android:padding="6dp"
-        android:text="@string/onboard.title_recorder"
+        android:text="@string/onboard.title_lock_finish"
         android:textColor="@color/wa_white"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/sheet_subtitle"
@@ -58,7 +58,7 @@
         android:fontFamily="@font/open_sans"
         android:gravity="center"
         android:padding="@dimen/hide_tella_small_margin"
-        android:text="@string/onboard.expl_recorder"
+        android:text="@string/onboard.expl_lock_finish"
         android:textColor="@color/wa_white"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -66,17 +66,31 @@
         app:layout_constraintTop_toTopOf="@+id/guidelineCenter"
         tools:ignore="RtlSymmetry" />
 
+    <ImageView
+        android:id="@+id/check_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="82dp"
+        android:layout_marginBottom="@dimen/hide_tella_big_margin"
+        android:src="@drawable/checked_circle"
+        android:textColor="@color/wa_white"
+        android:padding="@dimen/hide_tella_small_margin"
+        app:layout_constraintTop_toBottomOf="@+id/sheet_subtitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="ContentDescription" />
+
     <TextView
         android:id="@+id/back_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:fontFamily="@font/open_sans"
+        android:padding="24dp"
+        android:visibility="gone"
         android:text="@string/pl_back"
         android:textColor="@color/wa_white"
         android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guidelineBottom" />
 
@@ -86,6 +100,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:fontFamily="@font/open_sans"
+        android:padding="24dp"
         android:text="@string/action_next"
         android:textColor="@color/wa_white"
         android:textSize="17sp"
@@ -93,6 +108,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintTop_toBottomOf="@+id/guidelineBottom" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

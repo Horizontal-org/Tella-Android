@@ -13,9 +13,9 @@ class OnBoardFilesFragment : BaseFragment() {
     private lateinit var backBtn: TextView
     private lateinit var nextBtn: TextView
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         return inflater.inflate(R.layout.onboard_files_fragment, container, false)
     }
@@ -27,6 +27,8 @@ class OnBoardFilesFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
+        (activity as OnBoardActivityInterface).setCurrentIndicator(2)
+
         backBtn = view.findViewById(R.id.back_btn)
         backBtn.setOnClickListener {
             activity.onBackPressed()
@@ -34,10 +36,11 @@ class OnBoardFilesFragment : BaseFragment() {
 
         nextBtn = view.findViewById(R.id.next_btn)
         nextBtn.setOnClickListener {
+            (activity as OnBoardActivityInterface).setCurrentIndicator(3)
             activity.addFragment(
-                    this,
-                    OnBoardSetUpFragment(),
-                    R.id.rootOnboard
+                this,
+                OnBoardLockFragment.newInstance(true),
+                R.id.rootOnboard
             )
         }
     }

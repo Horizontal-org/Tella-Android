@@ -27,6 +27,8 @@ class OnBoardRecorderFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
+        (activity as OnBoardActivityInterface).setCurrentIndicator(1)
+
         backBtn = view.findViewById(R.id.back_btn)
         backBtn.setOnClickListener {
             activity.onBackPressed()

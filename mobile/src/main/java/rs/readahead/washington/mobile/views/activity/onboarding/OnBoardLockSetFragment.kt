@@ -7,17 +7,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
-import rs.readahead.washington.mobile.views.settings.OnFragmentSelected
 
-class OnBoardIntroFragment : BaseFragment() {
+class OnBoardLockSetFragment : BaseFragment() {
 
-    private lateinit var startBtn: TextView
+   // private lateinit var backBtn: TextView
+    private lateinit var nextBtn: TextView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.onboard_intro_fragment_1, container, false)
+        return inflater.inflate(R.layout.onboard_lock_set_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -27,12 +27,18 @@ class OnBoardIntroFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        (activity as OnBoardActivityInterface).hideProgress()
-        startBtn = view.findViewById(R.id.startBtn)
-        startBtn.setOnClickListener {
+        (activity as OnBoardActivityInterface).setCurrentIndicator(3)
+
+        /*backBtn = view.findViewById(R.id.back_btn)
+        backBtn.setOnClickListener {
+            activity.onBackPressed()
+        }*/
+
+        nextBtn = view.findViewById(R.id.next_btn)
+        nextBtn.setOnClickListener {
             activity.addFragment(
                 this,
-                OnBoardCameraFragment(),
+                OnBoardAllDoneFragment(),
                 R.id.rootOnboard
             )
         }

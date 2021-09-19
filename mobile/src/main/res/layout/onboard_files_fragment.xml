@@ -66,18 +66,6 @@
         app:layout_constraintTop_toTopOf="@+id/guidelineCenter"
         tools:ignore="RtlSymmetry" />
 
-    <ImageView
-        android:id="@+id/progress_ind"
-        android:layout_width="90dp"
-        android:layout_height="10dp"
-        android:layout_marginBottom="24dp"
-        android:src="@drawable/ic_progress_indicator_3_of_5"
-        android:textColor="@color/wa_white"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="ContentDescription" />
-
     <TextView
         android:id="@+id/back_btn"
         android:layout_width="wrap_content"

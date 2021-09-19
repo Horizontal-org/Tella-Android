@@ -66,17 +66,6 @@
         app:layout_constraintTop_toTopOf="@+id/guidelineCenter"
         tools:ignore="RtlSymmetry" />
 
-    <ImageView
-        android:id="@+id/progress_ind"
-        android:layout_width="90dp"
-        android:layout_height="10dp"
-        android:layout_marginBottom="24dp"
-        android:src="@drawable/ic_progress_indicator_1_of_5"
-        android:textColor="@color/wa_white"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/back_btn"
@@ -84,11 +73,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:fontFamily="@font/open_sans"
+        android:padding="24dp"
         android:text="@string/pl_back"
         android:textColor="@color/wa_white"
         android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guidelineBottom" />
 
@@ -98,6 +87,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:fontFamily="@font/open_sans"
+        android:padding="24dp"
         android:text="@string/action_next"
         android:textColor="@color/wa_white"
         android:textSize="17sp"
@@ -105,6 +95,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintTop_toBottomOf="@+id/guidelineBottom" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

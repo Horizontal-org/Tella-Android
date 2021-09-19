@@ -71,8 +71,12 @@ open class BaseActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         } else {
-            startActivity(Intent(this, ConfirmCredentialsActivity::class.java))
+            val intent = Intent(this, Class.forName(ReturnActivity.SETTINGS.activityName))
+            intent.putExtra(IS_ONBOARD_LOCK_SET, true)
+            startActivity(intent)
             finishAffinity()
+           // startActivity(Intent(this, ConfirmCredentialsActivity::class.java))
+            //finishAffinity()
         }
     }
 

@@ -7,17 +7,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
-import rs.readahead.washington.mobile.views.settings.OnFragmentSelected
 
-class OnBoardIntroFragment : BaseFragment() {
+class OnBoardHideTellaFragment: BaseFragment() {
 
-    private lateinit var startBtn: TextView
+    private lateinit var hideBtn: TextView
+    private lateinit var defaultBtn: View
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.onboard_intro_fragment_1, container, false)
+        return inflater.inflate(R.layout.onboard_hide_tella_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -27,12 +27,19 @@ class OnBoardIntroFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        (activity as OnBoardActivityInterface).hideProgress()
-        startBtn = view.findViewById(R.id.startBtn)
-        startBtn.setOnClickListener {
+        (activity as OnBoardActivityInterface).setCurrentIndicator(1)
+
+        hideBtn = view.findViewById(R.id.startBtn)
+        hideBtn.setOnClickListener {
+
+            //activity.onBackPressed()
+        }
+
+        defaultBtn = view.findViewById(R.id.sheet_two_btn)
+        defaultBtn.setOnClickListener {
             activity.addFragment(
                 this,
-                OnBoardCameraFragment(),
+                OnBoardAdvancedComplete (),
                 R.id.rootOnboard
             )
         }
