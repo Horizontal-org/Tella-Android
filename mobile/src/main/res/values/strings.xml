@@ -506,30 +506,25 @@
     <string name="onboard.expl_recorder">Record interviews or any sound around you with Tella’s voice recorder.  The audio files are automatically encrypted and saved in Tella’s hidden folder.</string>
     <string name="onboard.title_files">Encrypted files &amp; folders</string>
     <string name="onboard.expl_files">Securely store and organize all your files. As long as Tella is locked, your files and folders will remain inaccessible to someone seizing or searching the device.</string>
-
     <string name="onboard.title_lock_finish">Lock</string>
     <string name="onboard.expl_lock_finish">Your lock is set up! You can change it anytime in Settings.</string>
-
     <string name="onboard.title_all_done">You’re all done!</string>
     <string name="onboard.expl_all_done">You can go to Tella now, or continue customizing Tella to set up advanced settings.</string>
     <string name="onboard.go_btn_all_done">Go to Tella</string>
     <string name="onboard.advanced_btn_all_done">Advanced settings</string>
-
-
     <string name="onboard.title_share_data">Share data you collect</string>
     <string name="onboard.expl_share_data">If you work with an organization, connect to the organization’s server to send files and data with them. Your organization should provide you with the server details.</string>
     <string name="onboard.connect_btn_share_data">Connect to server</string>
-    <string name="onboard.continue_btn_share_data">Continue without connecting to a server</string>
-
-
+    <string name="onboard.continue_btn_share_data">Continue without\nconnecting to a server</string>
     <string name="onboard.expl_hide_tella">To make it harder to find on your device, you can hide Tella by changing the way it looks on your homescreen.</string>
     <string name="onboard.default_btn_title_hide_tella">KEEP tella’s default look</string>
     <string name="onboard.default_btn_subtitle_hide_tella">Tella remains visible on the home screen</string>
-
     <string name="onboard.title_advanced_complete">Advanced customization complete!</string>
     <string name="onboard.expl_advanced_complete">You can always continue changing your preferences in Settings.</string>
-
     <string name="onboard.title_connected_server">Connected to server</string>
     <string name="onboard.expl_connected_server">You have successfully connected Tella to the server and will be able to share your data.</string>
-
+    <string name="onboard.expl_hide_tella_set">Your camouflage is set up! You can change it anytime in Settings.</string>
+    <string name="onboard.hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you use a PIN lock.</string>
+    <string name="onboard.calculator_button">Select calculator</string>
+    <string name="onboard.calculator_expl">Tella will be hidden behind a Calculator app. And you can use the calculator to do actual math! Unlock Tella by entering your PIN on the calculator.</string>
 </resources>

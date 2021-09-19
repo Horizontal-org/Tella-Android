@@ -32,7 +32,7 @@ class OnBoardConnectedFragment : BaseFragment() {
         nextBtn.setOnClickListener {
             activity.addFragment(
                 this,
-                OnBoardHideTellaFragment(),
+                OnBoardHideOptionFragment(),
                 R.id.rootOnboard
             )
         }

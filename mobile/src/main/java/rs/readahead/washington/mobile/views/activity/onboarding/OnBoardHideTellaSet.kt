@@ -8,16 +8,15 @@ import android.widget.TextView
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 
-class OnBoardShareDataFragment : BaseFragment() {
+class OnBoardHideTellaSet : BaseFragment() {
 
-    private lateinit var connectBtn: TextView
-    private lateinit var continueBtn: TextView
+    private lateinit var nextBtn: TextView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.onboard_share_data_fragment, container, false)
+        return inflater.inflate(R.layout.onboard_hide_set_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -27,19 +26,14 @@ class OnBoardShareDataFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        (activity as OnBoardActivityInterface).initProgress(2)
-        (activity as OnBoardActivityInterface).setCurrentIndicator(0)
+        (activity as OnBoardActivityInterface).showProgress()
+        (activity as OnBoardActivityInterface).setCurrentIndicator(1)
 
-        connectBtn = view.findViewById(R.id.startBtn)
-        connectBtn.setOnClickListener {
-            (activity as OnBoardActivityInterface).showChooseServerTypeDialog()
-        }
-
-        continueBtn = view.findViewById(R.id.sheet_two_btn)
-        continueBtn.setOnClickListener {
+        nextBtn = view.findViewById(R.id.next_btn)
+        nextBtn.setOnClickListener {
             activity.addFragment(
                 this,
-                OnBoardHideOptionFragment(),
+                OnBoardAdvancedComplete(),
                 R.id.rootOnboard
             )
         }

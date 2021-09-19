@@ -31,6 +31,7 @@ class OnBoardFilesFragment : BaseFragment() {
 
         backBtn = view.findViewById(R.id.back_btn)
         backBtn.setOnClickListener {
+            (activity as OnBoardActivityInterface).setCurrentIndicator(1)
             activity.onBackPressed()
         }
 
