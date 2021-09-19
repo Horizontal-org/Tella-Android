@@ -529,4 +529,7 @@
     <string name="onboard.title_advanced_complete">Advanced customization complete!</string>
     <string name="onboard.expl_advanced_complete">You can always continue changing your preferences in Settings.</string>
 
+    <string name="onboard.title_connected_server">Connected to server</string>
+    <string name="onboard.expl_connected_server">You have successfully connected Tella to the server and will be able to share your data.</string>
+
 </resources>

@@ -10,7 +10,6 @@ import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 
 class OnBoardLockSetFragment : BaseFragment() {
 
-   // private lateinit var backBtn: TextView
     private lateinit var nextBtn: TextView
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,11 +27,6 @@ class OnBoardLockSetFragment : BaseFragment() {
 
     override fun initView(view: View) {
         (activity as OnBoardActivityInterface).setCurrentIndicator(3)
-
-        /*backBtn = view.findViewById(R.id.back_btn)
-        backBtn.setOnClickListener {
-            activity.onBackPressed()
-        }*/
 
         nextBtn = view.findViewById(R.id.next_btn)
         nextBtn.setOnClickListener {

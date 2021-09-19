@@ -6,4 +6,5 @@ interface OnBoardActivityInterface {
     fun hideProgress()
     fun showProgress()
     fun initProgress(itemCount: Int)
+    fun showChooseServerTypeDialog ()
 }
