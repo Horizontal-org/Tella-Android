@@ -1,7 +1,9 @@
 package rs.readahead.washington.mobile.views.fragment.vault.attachements
 
+import android.app.RecoverableSecurityException
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
@@ -74,7 +76,16 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
     private fun deleteOriginalFiles(uris: List<Uri?>){
         for (uri in uris) {
             uri?.let {
-                view?.getContext()?.contentResolver?.delete(uri,null,null)
+                try {
+                    view?.getContext()?.contentResolver?.delete(uri,null,null)
+                }
+                catch (securityException: SecurityException) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+                    } else {
+                        throw securityException
+                    }
+                }
             }
         }
     }
