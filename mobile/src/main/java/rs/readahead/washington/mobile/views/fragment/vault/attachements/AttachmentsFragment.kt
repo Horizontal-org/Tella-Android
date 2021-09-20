@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
@@ -175,7 +176,11 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         toolbar = view.findViewById(R.id.toolbar)
         root = view.findViewById(R.id.root)
         appBar = view.findViewById(R.id.appbar)
-        moveContainer = view.findViewById(R.id.moveContainer)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            appBar.outlineProvider = null
+        } else {
+            appBar.bringToFront()
+        }
         gridLayoutManager = GridLayoutManager(activity, 1)
         attachmentsRecyclerView.apply {
             adapter = attachmentsAdapter

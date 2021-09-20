@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import timber.log.Timber
 
-open class BaseLockFragment  : Fragment(){
+open class BaseLockFragment : Fragment(){
 
     protected lateinit var activity: BaseLockActivity
 

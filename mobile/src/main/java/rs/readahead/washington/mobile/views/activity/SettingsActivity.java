@@ -6,11 +6,9 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
+import android.view.View;
 
-import android.view.MenuItem;
-
+import org.hzontal.shared_ui.appbar.ToolbarComponent;
 import org.jetbrains.annotations.NotNull;
 
 import butterknife.BindView;
@@ -30,9 +28,8 @@ import rs.readahead.washington.mobile.views.settings.OnFragmentSelected;
 public class SettingsActivity extends BaseLockActivity implements OnFragmentSelected {
     @SuppressLint("NonConstantResourceId")
     @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
-    private ActionBar actionBar;
+    ToolbarComponent toolbar;
+    
     private EventCompositeDisposable disposables;
     private final CamouflageManager cm = CamouflageManager.getInstance();
     protected boolean isCamouflage = false;
@@ -44,12 +41,13 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        actionBar = getSupportActionBar();
+        toolbar.setStartTextTitle(getResources().getString(R.string.settings_app_bar));
+        setSupportActionBar(toolbar);
 
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.settings_app_bar);
-        }
+        toolbar.setBackClickListener(() -> {
+            onBackPressed();
+            return null;
+        });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             findViewById(R.id.appbar).setOutlineProvider(null);
@@ -83,36 +81,24 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
         super.onDestroy();
     }
 
-   @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @Override
     public void setToolbarLabel(int labelRes) {
-        actionBar.setTitle(getString(labelRes));
+        toolbar.setStartTextTitle(getString(labelRes));
     }
 
     @Override
     public void hideAppbar() {
-        actionBar.hide();
+        toolbar.setVisibility(View.GONE);
     }
 
     @Override
     public void showAppbar() {
-        actionBar.show();
+        toolbar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void setToolbarHomeIcon(int iconRes) {
-        actionBar.setHomeAsUpIndicator(iconRes);
+        toolbar.setToolbarNavigationIcon(iconRes);
     }
 
     @Override

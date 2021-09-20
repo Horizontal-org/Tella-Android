@@ -69,7 +69,7 @@
     <TextView
         android:id="@+id/sheet_one_btn"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="54dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/standard_sheet_content"
@@ -87,7 +87,7 @@
     <TextView
         android:id="@+id/sheet_two_btn"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="54dp"
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

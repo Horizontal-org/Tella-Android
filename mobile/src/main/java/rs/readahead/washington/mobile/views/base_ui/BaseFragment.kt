@@ -59,7 +59,7 @@ abstract class BaseFragment : Fragment() {
     protected open fun nav(): NavController {
         return NavHostFragment.findNavController(this)
     }
-    
+
     protected fun showTooltip(v: View, text: String, gravity: Int) {
         val tooltip = Tooltip.Builder(v)
                 .setText(text)

@@ -30,10 +30,10 @@
         <ImageView
             android:id="@+id/offline_tooltip"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/activity_vertical_margin"
-            android:layout_marginTop="4dp"
+            android:layout_height="@dimen/tooltip_icon_size"
+            android:layout_marginStart="@dimen/tooltip_icon_margin_start"
+            android:layout_marginTop="@dimen/tooltip_icon_margin_top"
             android:layout_toEndOf="@id/offline_title"
             android:contentDescription="@string/offline_dialog.expl"
             android:src="@drawable/orange_help_24"
