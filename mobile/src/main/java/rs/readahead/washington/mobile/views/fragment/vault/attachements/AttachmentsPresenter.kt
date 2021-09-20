@@ -65,6 +65,7 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
             .subscribe(
                 { vaultFiles ->
                     view?.onMediaImported(vaultFiles)
+
                 }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)

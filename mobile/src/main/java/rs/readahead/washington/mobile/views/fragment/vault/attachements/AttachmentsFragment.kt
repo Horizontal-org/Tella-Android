@@ -4,28 +4,21 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
-import android.app.RecoverableSecurityException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -104,8 +97,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private var progressDialog: ProgressDialog? = null
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
     private lateinit var intentSenderLauncher: ActivityResultLauncher<IntentSenderRequest>
-    private lateinit var permissionsLauncher: ActivityResultLauncher<Array<String>>
-
     private var filterType = FilterType.ALL
     private lateinit var sort: Sort
     private var vaultFile: VaultFile? = null
@@ -114,8 +105,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private var isListCheckOn = false
     private var isMoveModeEnabled = false
     private var importAndDelete = false
-    private var readPermissionGranted = false
-    private var writePermissionGranted = false
     private var uriToDelete: Uri? = null
 
     override fun onCreateView(
@@ -200,7 +189,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         setUpToolbar()
         initData()
         setUpBreadCrumb()
-        initPermissions()
     }
 
     private fun initListeners() {
@@ -231,27 +219,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         sort.direction = Sort.Direction.ASC
     }
 
-    private fun initPermissions(){
-        permissionsLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            readPermissionGranted = permissions[Manifest.permission.READ_EXTERNAL_STORAGE] ?: readPermissionGranted
-            writePermissionGranted = permissions[Manifest.permission.WRITE_EXTERNAL_STORAGE] ?: writePermissionGranted
-            LockTimeoutManager().lockTimeout = Preferences.getLockTimeout()
-        }
-        intentSenderLauncher =
-            registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) {
-                if (it.resultCode == AppCompatActivity.RESULT_OK) {
-                    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q) {
-                        lifecycleScope.launch {
-                            deleteFileFromExternalStorage(uriToDelete ?: return@launch)
-                        }
-                    }
-                    Toast.makeText(activity, "File deleted successfully", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(activity, "File couldn't be deleted", Toast.LENGTH_SHORT).show()
-                }
-
-            }
-    }
     private fun setUpBreadCrumb() {
         breadcrumbView.setCallback(object : DefaultBreadcrumbsCallback<BreadcrumbItem?>() {
             override fun onNavigateBack(item: BreadcrumbItem?, position: Int) {
@@ -582,10 +549,9 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         for (uri in uris) {
             lifecycleScope.launch {
                 uri?.let {
-                    MediaFileHandler.getUriFromDisplayName(activity, it)?.let { realUri ->
-                        deleteFileFromExternalStorage(realUri)
-                        uriToDelete = realUri
-                    }
+
+                        deleteFileFromExternalStorage(it)
+                        uriToDelete = it
                 }
             }
         }
@@ -705,7 +671,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
 
     private fun exportVaultFiles(isMultipleFiles: Boolean, vaultFile: VaultFile?) {
-        if (readPermissionGranted && writePermissionGranted) {
+        if (hasStoragePermissions(activity)) {
             if (isMultipleFiles) {
                 val selected: List<VaultFile> = attachmentsAdapter.selectedMediaFiles
                 attachmentsPresenter.exportMediaFiles(selected)
@@ -713,9 +679,9 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 vaultFile?.let { attachmentsPresenter.exportMediaFiles(arrayListOf(vaultFile)) }
             }
         } else {
-            handleTimeOut()
-            updateOrRequestPermissions()
+            requestStoragePermissions()
         }
+
     }
 
     private fun hideProgressDialog() {
@@ -869,36 +835,33 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         }
     }
 
-    private fun updateOrRequestPermissions() {
-        val hasReadPermission = ContextCompat.checkSelfPermission(
-            activity,
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-        val hasWritePermission = ContextCompat.checkSelfPermission(
-            activity,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-        val minSdk29 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
-
-        readPermissionGranted = hasReadPermission
-        writePermissionGranted = hasWritePermission || minSdk29
-
-        val permissionsToRequest = mutableListOf<String>()
-        if(!writePermissionGranted) {
-            permissionsToRequest.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        }
-        if(!readPermissionGranted) {
-            permissionsToRequest.add(Manifest.permission.READ_EXTERNAL_STORAGE)
-        }
-        if(permissionsToRequest.isNotEmpty()) {
-            permissionsLauncher.launch(permissionsToRequest.toTypedArray())
-        }
+    private fun hasStoragePermissions(context: Context): Boolean {
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+                    )
+        )
+            return true
+        return false
     }
 
-    private fun handleTimeOut(){
-        if(MyApplication.getMainKeyHolder().timeout == 0L){
-            MyApplication.getMainKeyHolder().timeout = 1800000L
-        }
+    private fun requestStoragePermissions() {
+        val permissions = arrayOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+        ActivityCompat.requestPermissions(
+            //1
+            activity,
+            //2
+            permissions,
+            //3
+            WRITE_REQUEST_CODE
+        )
     }
 
 
@@ -994,24 +957,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             try {
                 activity.contentResolver.delete(uri, null, null)
             } catch (e: SecurityException) {
-                //TODO HANDLE DELETE UP TO API 30
-                val intentSender = when {
-                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
-                         MediaStore.createDeleteRequest(activity.contentResolver, listOf(uri)).intentSender
-                     }
-                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> {
-                        val recoverableSecurityException = e as? RecoverableSecurityException
-                        recoverableSecurityException?.userAction?.actionIntent?.intentSender
-                    }
-                    else -> null
-                }
-                intentSender?.let { sender ->
-                    intentSenderLauncher.launch(
-                        IntentSenderRequest.Builder(sender).build()
-                    )
+
                 }
             }
         }
     }
-
-}

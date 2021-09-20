@@ -33,6 +33,7 @@
             android:visibility="gone"
             app:crumbsPadding="5dp"
             app:crumbsTextColor="@color/wa_white_92"
+            app:crumbsSelectedTextColor="@color/wa_white_92"
             app:crumbsTextSize="13sp"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 

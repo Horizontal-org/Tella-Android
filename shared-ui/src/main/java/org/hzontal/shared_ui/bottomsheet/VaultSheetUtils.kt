@@ -1,7 +1,6 @@
 package org.hzontal.shared_ui.bottomsheet
 
 import android.app.Activity
-import android.opengl.Visibility
 import android.view.Gravity
 import android.view.View
 import android.widget.*
@@ -320,6 +319,8 @@ object VaultSheetUtils {
                         action.import()
                     }
                     //Share action
+                    createDeleteActionTV.visibility = View.GONE
+                    deleteVaultTooltip.visibility = View.GONE
                     createDeleteActionTV.text = importDeleteLabel
                     createDeleteActionTV.setOnClickListener {
                         vaultManageFilesSheet.dismiss()
