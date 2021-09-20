@@ -9,22 +9,21 @@
     android:padding="21dp">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineTop"
+        android:id="@+id/guidelineCenter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.15" />
+        app:layout_constraintGuide_percent="0.5" />
 
     <ImageView
         android:id="@+id/server_icon"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guidelineTop"
+        app:layout_constraintBottom_toTopOf="@id/onboard_title"
         app:layout_constraintEnd_toEndOf="parent"
         android:paddingStart="32dp"
         android:paddingEnd="0dp"
-        android:layout_marginTop="10dp"
         android:src="@drawable/ic_onboard_finish"
         android:textColor="@color/wa_white"
         tools:ignore="ContentDescription" />
@@ -35,13 +34,13 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/server_icon"
+        app:layout_constraintBottom_toTopOf="@+id/standard_sheet_content"
         android:gravity="center_vertical"
         android:visibility="visible"
         android:paddingStart="12dp"
         android:paddingEnd="0dp"
         android:text="@string/onboard.title_all_done"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="16dp"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
         android:textSize="32sp"/>
@@ -52,7 +51,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/onboard_title"
+        app:layout_constraintTop_toBottomOf="@+id/guidelineCenter"
         android:gravity="center_vertical"
         android:paddingStart="12dp"
         android:paddingEnd="0dp"
@@ -75,7 +74,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         android:background="@drawable/round_orange_button_selector"
         app:backgroundTint="@color/wa_orange"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="24dp"
         android:gravity="center"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
@@ -96,7 +95,7 @@
         app:layout_constraintTop_toBottomOf="@+id/startBtn"
         app:layout_constraintHorizontal_chainStyle="packed"
         android:background="@drawable/round_button_selector"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:textStyle="bold"

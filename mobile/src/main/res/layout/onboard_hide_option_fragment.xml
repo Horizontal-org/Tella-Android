@@ -9,31 +9,31 @@
     app:behavior_hideable="true">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineTop"
+        android:id="@+id/guidelineCenter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.15" />
+        app:layout_constraintGuide_percent="0.50" />
 
     <ImageView
         android:id="@+id/server_icon"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_marginTop="10dp"
-        android:paddingStart="32dp"
+        android:paddingStart="16dp"
         android:paddingEnd="0dp"
         android:src="@drawable/ic_camouflage"
         android:textColor="@color/wa_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guidelineTop"
+        app:layout_constraintBottom_toTopOf="@id/onboard_title"
         tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/onboard_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginBottom="16dp"
         android:fontFamily="@font/open_sans"
         android:gravity="center_vertical"
         android:paddingStart="12dp"
@@ -44,7 +44,7 @@
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/server_icon" />
+        app:layout_constraintBottom_toTopOf="@+id/standard_sheet_content" />
 
     <TextView
         android:id="@+id/standard_sheet_content"
@@ -62,14 +62,14 @@
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/onboard_title"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineCenter"
         tools:ignore="RtlCompat" />
 
     <TextView
         android:id="@+id/startBtn"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/round_orange_button_selector"
         android:fontFamily="@font/open_sans"
         android:gravity="center"
@@ -84,7 +84,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/standard_sheet_content" />
+        app:layout_constraintTop_toBottomOf="@+id/guidelineCenter" />
 
     <LinearLayout
         android:id="@+id/sheet_two_btn"
