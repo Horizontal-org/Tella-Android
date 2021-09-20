@@ -16,12 +16,17 @@ class IHomeVaultPresenter {
         fun onCountCollectServersFailed(throwable: Throwable?)
         fun onGetFilesSuccess(files: List<VaultFile?>)
         fun onGetFilesError(error: Throwable?)
+        fun onMediaExported(num: Int)
+        fun onExportError(error: Throwable?)
+        fun onExportStarted()
+        fun onExportEnded()
     }
 
     interface IPresenter : IBasePresenter {
         fun executePanicMode()
         fun countTUServers()
         fun countCollectServers()
+        fun exportMediaFiles(vaultFiles: List<VaultFile?>)
         fun getRecentFiles(filterType: FilterType?, sort: Sort?,limits: Limits)
     }
 }

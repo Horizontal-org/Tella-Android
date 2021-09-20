@@ -10,11 +10,9 @@ import com.hzontal.tella_vault.filter.Limits
 import com.hzontal.tella_vault.filter.Sort
 import com.hzontal.tella_vault.rx.RxVault
 import io.reactivex.Completable
-import io.reactivex.CompletableSource
-import io.reactivex.SingleSource
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.BuildConfig
 import rs.readahead.washington.mobile.MyApplication
@@ -29,7 +27,7 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
     private var keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private var disposable = CompositeDisposable()
     private var appContext: Context? = null
-    private var rxVault : RxVault? = null
+    private var rxVault: RxVault? = null
 
     init {
         appContext = view?.getContext()?.applicationContext
@@ -73,7 +71,7 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
     }
 
     override fun countCollectServers() {
-        disposable?.add(keyDataSource.dataSource
+        disposable.add(keyDataSource.dataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .flatMapSingle { obj: DataSource -> obj.countCollectServers() }
@@ -89,6 +87,31 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
             }
         )
     }
+
+
+    override fun exportMediaFiles(vaultFiles: List<VaultFile?>) {
+        disposables.add(
+            Single
+                .fromCallable {
+                    val resultList = MediaFileHandler.walkAllFiles(vaultFiles)
+                    for (vaultFile in resultList) {
+                        vaultFile?.let { MediaFileHandler.exportMediaFile(view?.getContext(), it) }
+                    }
+                    vaultFiles.size
+                }
+                .subscribeOn(Schedulers.computation())
+                .doOnSubscribe { view?.onExportStarted() }
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally { view?.onExportEnded() }
+                .subscribe(
+                    { num: Int? -> view?.onMediaExported(num!!) }
+                ) { throwable: Throwable? ->
+                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                    view?.onExportError(throwable)
+                }
+        )
+    }
+
 
     override fun getRecentFiles(filterType: FilterType?, sort: Sort?, limits: Limits) {
         rxVault?.list(filterType, sort, limits)
