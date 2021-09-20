@@ -33,6 +33,7 @@ class OnBoardAdvancedComplete : BaseFragment() {
         startBtn = view.findViewById(R.id.startBtn)
         startBtn.setOnClickListener {
             TellaKeysUI.getCredentialsCallback().onLockConfirmed(requireContext())
+            activity.finish()
         }
     }
 }

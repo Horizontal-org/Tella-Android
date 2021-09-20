@@ -7,4 +7,5 @@ interface OnBoardActivityInterface {
     fun showProgress()
     fun initProgress(itemCount: Int)
     fun showChooseServerTypeDialog ()
+    fun enterCustomizationCode()
 }

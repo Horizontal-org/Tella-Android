@@ -11,7 +11,6 @@ import rs.readahead.washington.mobile.views.settings.OnFragmentSelected
 
 class OnBoardIntroFragment : BaseFragment() {
 
-    private lateinit var startBtn: TextView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -28,7 +27,13 @@ class OnBoardIntroFragment : BaseFragment() {
 
     override fun initView(view: View) {
         (activity as OnBoardActivityInterface).hideProgress()
-        startBtn = view.findViewById(R.id.startBtn)
+
+        val enterCodeButton = view.findViewById<TextView>(R.id.sheet_two_btn)
+        enterCodeButton.setOnClickListener {
+            (activity as OnBoardActivityInterface).enterCustomizationCode()
+        }
+
+        val startBtn = view.findViewById<TextView>(R.id.startBtn)
         startBtn.setOnClickListener {
             activity.addFragment(
                 this,

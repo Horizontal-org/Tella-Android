@@ -33,7 +33,7 @@ class OnBoardAllDoneFragment : BaseFragment() {
         startBtn = view.findViewById(R.id.startBtn)
         startBtn.setOnClickListener {
             TellaKeysUI.getCredentialsCallback().onLockConfirmed(requireContext())
-            //activity.onBackPressed()
+            activity.finish()
         }
 
         advancedBtn = view.findViewById(R.id.sheet_two_btn)

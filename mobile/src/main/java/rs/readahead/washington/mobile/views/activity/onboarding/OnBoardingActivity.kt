@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.IS_ONBOARD_LOCK_SET
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.DualChoiceConsumer
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showDualChoiceTypeSheet
 import org.hzontal.shared_ui.utils.DialogUtils
@@ -179,5 +180,23 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     private fun showTellaUploadServerDialog() {
         TellaUploadServerDialogFragment.newInstance(null)
             .show(supportFragmentManager, TellaUploadServerDialogFragment.TAG)
+    }
+
+    override fun enterCustomizationCode() {
+        BottomSheetUtils.showEnterCustomizationCodeSheet(this.supportFragmentManager,
+            getString(R.string.onboard_customization_title),
+            getString(R.string.onboard_customization_subtitle),
+            getString(R.string.onboard_customization_expl),
+            getString(R.string.action_next),
+            object : BottomSheetUtils.StringConsumer {
+                override fun accept(code: String) {
+                    handleCustomizationCode(code)
+                }
+            }
+        )
+    }
+
+    private fun handleCustomizationCode(code: String) {
+        showToast(code)
     }
 }
