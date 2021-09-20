@@ -583,4 +583,69 @@ BottomSheetUtils {
         renameFileSheet.transparentBackground()
         renameFileSheet.launch()
     }
+
+
+    class EnterCodeSheetHolder : CustomBottomSheetFragment.PageHolder() {
+        lateinit var title: TextView
+        lateinit var subtitle: TextView
+        lateinit var description: TextView
+        lateinit var enterText: EditText
+        lateinit var buttonNext: TextView
+        lateinit var cancelButton: ImageView
+
+
+        override fun bindView(view: View) {
+            title = view.findViewById(R.id.sheet_title)
+            subtitle = view.findViewById(R.id.sheet_subtitle)
+            description = view.findViewById(R.id.sheet_description)
+            enterText = view.findViewById(R.id.code_editText)
+            buttonNext = view.findViewById(R.id.next_btn)
+            cancelButton = view.findViewById(R.id.standard_sheet_cancel_btn)
+        }
+    }
+
+    @JvmStatic
+    fun showEnterCustomizationCodeSheet(
+        fragmentManager: FragmentManager,
+        titleText: String?,
+        subTitle: String?,
+        descriptionText: String?,
+        nextButton: String?,
+        consumer: StringConsumer? = null
+    ) {
+
+        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.enter_string_bottomsheet_layout)
+            .cancellable(true)
+            .fullScreen()
+            .statusBarColor(R.color.space_cadet)
+        customSheetFragment.holder(EnterCodeSheetHolder(), object :
+            CustomBottomSheetFragment.Binder<EnterCodeSheetHolder> {
+            override fun onBind(holder: EnterCodeSheetHolder) {
+                with(holder) {
+                    title.text = titleText
+                    subtitle.text = subTitle
+                    description.text = descriptionText
+                    buttonNext.text = nextButton
+                    buttonNext.setOnClickListener {
+                        if (enterText.text.isNotEmpty()) {
+                            consumer?.accept(enterText.text.toString())
+                            customSheetFragment.dismiss()
+                        }
+                    }
+                    cancelButton.setOnClickListener {
+                        customSheetFragment.dismiss()
+                    }
+                }
+            }
+        })
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
+    }
+
+    interface StringConsumer {
+        fun accept(code: String)
+    }
+
 }

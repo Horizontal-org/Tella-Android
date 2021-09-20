@@ -7,16 +7,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
-import rs.readahead.washington.mobile.views.settings.OnFragmentSelected
 
-class OnBoardIntroFragment : BaseFragment() {
+class OnBoardFilesFragment : BaseFragment() {
 
+    private lateinit var backBtn: TextView
+    private lateinit var nextBtn: TextView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.onboard_intro_fragment_1, container, false)
+        return inflater.inflate(R.layout.onboard_files_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -26,18 +27,20 @@ class OnBoardIntroFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        (activity as OnBoardActivityInterface).hideProgress()
+        (activity as OnBoardActivityInterface).setCurrentIndicator(2)
 
-        val enterCodeButton = view.findViewById<TextView>(R.id.sheet_two_btn)
-        enterCodeButton.setOnClickListener {
-            (activity as OnBoardActivityInterface).enterCustomizationCode()
+        backBtn = view.findViewById(R.id.back_btn)
+        backBtn.setOnClickListener {
+            (activity as OnBoardActivityInterface).setCurrentIndicator(1)
+            activity.onBackPressed()
         }
 
-        val startBtn = view.findViewById<TextView>(R.id.startBtn)
-        startBtn.setOnClickListener {
+        nextBtn = view.findViewById(R.id.next_btn)
+        nextBtn.setOnClickListener {
+            (activity as OnBoardActivityInterface).setCurrentIndicator(3)
             activity.addFragment(
                 this,
-                OnBoardCameraFragment(),
+                OnBoardLockFragment.newInstance(true),
                 R.id.rootOnboard
             )
         }

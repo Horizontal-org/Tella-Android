@@ -5,18 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.hzontal.tella_locking_ui.TellaKeysUI
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
-import rs.readahead.washington.mobile.views.settings.OnFragmentSelected
 
-class OnBoardIntroFragment : BaseFragment() {
+class OnBoardAllDoneFragment : BaseFragment() {
 
+    private lateinit var startBtn: TextView
+    private lateinit var advancedBtn: TextView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.onboard_intro_fragment_1, container, false)
+        return inflater.inflate(R.layout.onboard_all_done_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -26,18 +28,19 @@ class OnBoardIntroFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        (activity as OnBoardActivityInterface).hideProgress()
+        (activity as OnBoardActivityInterface).setCurrentIndicator(4)
 
-        val enterCodeButton = view.findViewById<TextView>(R.id.sheet_two_btn)
-        enterCodeButton.setOnClickListener {
-            (activity as OnBoardActivityInterface).enterCustomizationCode()
+        startBtn = view.findViewById(R.id.startBtn)
+        startBtn.setOnClickListener {
+            TellaKeysUI.getCredentialsCallback().onLockConfirmed(requireContext())
+            activity.finish()
         }
 
-        val startBtn = view.findViewById<TextView>(R.id.startBtn)
-        startBtn.setOnClickListener {
+        advancedBtn = view.findViewById(R.id.sheet_two_btn)
+        advancedBtn.setOnClickListener {
             activity.addFragment(
                 this,
-                OnBoardCameraFragment(),
+                OnBoardShareDataFragment(),
                 R.id.rootOnboard
             )
         }

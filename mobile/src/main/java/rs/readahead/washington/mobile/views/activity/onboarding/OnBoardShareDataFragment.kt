@@ -7,16 +7,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
-import rs.readahead.washington.mobile.views.settings.OnFragmentSelected
 
-class OnBoardIntroFragment : BaseFragment() {
+class OnBoardShareDataFragment : BaseFragment() {
 
+    private lateinit var connectBtn: TextView
+    private lateinit var continueBtn: TextView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.onboard_intro_fragment_1, container, false)
+        return inflater.inflate(R.layout.onboard_share_data_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -26,18 +27,19 @@ class OnBoardIntroFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        (activity as OnBoardActivityInterface).hideProgress()
+        (activity as OnBoardActivityInterface).initProgress(2)
+        (activity as OnBoardActivityInterface).setCurrentIndicator(0)
 
-        val enterCodeButton = view.findViewById<TextView>(R.id.sheet_two_btn)
-        enterCodeButton.setOnClickListener {
-            (activity as OnBoardActivityInterface).enterCustomizationCode()
+        connectBtn = view.findViewById(R.id.startBtn)
+        connectBtn.setOnClickListener {
+            (activity as OnBoardActivityInterface).showChooseServerTypeDialog()
         }
 
-        val startBtn = view.findViewById<TextView>(R.id.startBtn)
-        startBtn.setOnClickListener {
+        continueBtn = view.findViewById(R.id.sheet_two_btn)
+        continueBtn.setOnClickListener {
             activity.addFragment(
                 this,
-                OnBoardCameraFragment(),
+                OnBoardHideOptionFragment(),
                 R.id.rootOnboard
             )
         }

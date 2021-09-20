@@ -46,4 +46,6 @@
     <!-- elevation for Plant Detail toolbar - used to convert to pixels when hiding/showing -->
     <dimen name="toolbar_elevation">5dp</dimen>
     <dimen name="tella_main_vertical">17dp</dimen>
+
+    <dimen name="onboardingIndicator">8dp</dimen>
 </resources>
