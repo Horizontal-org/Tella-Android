@@ -125,6 +125,7 @@ public class CameraActivity extends MetadataActivity implements
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_camera);
+        overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out);
         ButterKnife.bind(this);
 
         presenter = new CameraPresenter(this);
@@ -207,6 +208,13 @@ public class CameraActivity extends MetadataActivity implements
     public void onBackPressed() {
         if (maybeStopVideoRecording()) return;
         super.onBackPressed();
+        finish();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_up);
     }
 
     @Override

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -17,10 +16,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.appcompat.widget.Toolbar;
 
+import org.hzontal.shared_ui.appbar.ToolbarComponent;
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 import org.hzontal.shared_ui.utils.DialogUtils;
 
@@ -89,14 +87,14 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         setContentView(R.layout.activity_documentation_settings);
         ButterKnife.bind(this);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        ToolbarComponent toolbar = findViewById(R.id.toolbar);
+        toolbar.setStartTextTitle(getContext().getResources().getString(R.string.settings_servers_title_server_settings));
         setSupportActionBar(toolbar);
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.settings_servers_title_server_settings);
-        }
+        toolbar.setBackClickListener(() -> {
+            onBackPressed();
+            return null;
+        });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             findViewById(R.id.appbar).setOutlineProvider(null);
@@ -126,16 +124,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
         stopPresenting();
         stopRefreshPresenter();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @OnClick(R.id.add_server)

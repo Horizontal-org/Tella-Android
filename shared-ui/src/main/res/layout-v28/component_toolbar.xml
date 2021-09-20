@@ -83,7 +83,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/titleImg"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:textFontWeight="700"
+       />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/right_img"
