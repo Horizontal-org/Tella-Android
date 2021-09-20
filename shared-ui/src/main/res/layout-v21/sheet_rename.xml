@@ -13,6 +13,7 @@
         android:id="@+id/standard_sheet_title"
         tools:text="Rename File"
         style="@style/Tella_Main_White_Text.MeduimbBold"
+        android:letterSpacing="0.1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
@@ -31,6 +32,7 @@
         tools:text="Testtt"
         android:gravity="start"
         android:textSize="14sp"
+        android:letterSpacing="0"
         android:autofillHints="" />
 
     <TextView
