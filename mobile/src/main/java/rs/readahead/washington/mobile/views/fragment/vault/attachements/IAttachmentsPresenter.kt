@@ -14,6 +14,7 @@ class IAttachmentsPresenter {
         fun onGetFilesSuccess(files: List<VaultFile?>)
         fun onGetFilesError(error: Throwable?)
         fun onMediaImported(vaultFile: List<VaultFile?>)
+        fun onMediaImportedWithDelete(vaultFile: List<VaultFile?>,uris: List<Uri?>)
         fun onImportError(error: Throwable?)
         fun onImportStarted()
         fun onImportEnded()
