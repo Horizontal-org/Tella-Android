@@ -3,8 +3,9 @@ package com.hzontal.tella_vault;
 import android.content.Context;
 import android.text.TextUtils;
 
+import androidx.annotation.WorkerThread;
+
 import com.hzontal.tella_vault.database.VaultDataSource;
-import com.hzontal.tella_vault.filter.Filter;
 import com.hzontal.tella_vault.filter.FilterType;
 import com.hzontal.tella_vault.filter.Limits;
 import com.hzontal.tella_vault.filter.Sort;
@@ -24,8 +25,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-import androidx.annotation.WorkerThread;
-
 
 /**
  * Vault stores supplied data as encrypted files with supplied metadata, thumbnails and actual
@@ -33,10 +32,10 @@ import androidx.annotation.WorkerThread;
  * directories.
  */
 public abstract class BaseVault {
+    protected final static char[] hexArray = "0123456789ABCDEF".toCharArray();
     public static LifecycleMainKey mainKeyHolder = null; // todo: this should be interface with `MainKey get()` method
     protected final IVaultDatabase database;
     protected final Config config;
-    protected final static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
     public BaseVault(Context context, LifecycleMainKey mainKeyHolder, Config config)
             throws VaultException, LifecycleMainKey.MainKeyUnavailableException {
@@ -63,6 +62,7 @@ public abstract class BaseVault {
 
     /**
      * Returns a stream of VaultFile's data. For directories empty InputStream will be returned.
+     *
      * @param vaultFile Data to read.
      * @return Stream of data.
      */
@@ -81,6 +81,7 @@ public abstract class BaseVault {
 
     /**
      * Returns a stream of VaultFile's data. For directories empty OutputStream will be returned.
+     *
      * @param vaultFile Data to read.
      * @return Stream of data.
      */
@@ -99,6 +100,7 @@ public abstract class BaseVault {
 
     /**
      * Get root VaultFile of this Vault.
+     *
      * @return The root.
      */
     protected VaultFile baseGetRoot() {
@@ -107,6 +109,7 @@ public abstract class BaseVault {
 
     /**
      * Deletes a VaultFile.
+     *
      * @param file VaultFile to delete.
      */
     protected boolean baseDelete(VaultFile file) {
@@ -116,16 +119,18 @@ public abstract class BaseVault {
 
     /**
      * Deletes a VaultFile.
-     * @param id VaultFile id to rename.
+     *
+     * @param id   VaultFile id to rename.
      * @param name New VaultFile name
      */
     protected VaultFile baseRename(String id, String name) {
-        return database.rename(id,name);
+        return database.rename(id, name);
     }
 
 
     /**
      * List all files in path.
+     *
      * @param parent Parent VaultFile or null for root listing.
      * @return List of vault files.
      */
@@ -136,6 +141,7 @@ public abstract class BaseVault {
 
     /**
      * List all files in path.
+     *
      * @param parent Parent VaultFile or null for root listing.
      * @return List of vault files.
      */
@@ -150,7 +156,7 @@ public abstract class BaseVault {
         database.destroy();
     }
 
-    protected VaultFile baseGet(String id){
+    protected VaultFile baseGet(String id) {
         return database.get(id);
     }
 
@@ -185,16 +191,12 @@ public abstract class BaseVault {
         }
     }
 
-    protected VaultFile baseUpdateMetadata(VaultFile vaultFile, Metadata metadata) {
-        return database.updateMetadata(vaultFile, metadata);
+    protected Boolean baseMove(VaultFile vaultFile, String newParent) throws VaultException {
+        return database.move(vaultFile, newParent);
     }
 
-    public static class Config { // todo: make this VaultConfig
-        /**
-         * Filesystem root where Vault should create content files if chosen
-         * to be saved on file system.
-         */
-        public File root;
+    protected VaultFile baseUpdateMetadata(VaultFile vaultFile, Metadata metadata) {
+        return database.updateMetadata(vaultFile, metadata);
     }
 
     protected String hexString(byte[] bytes) {
@@ -215,6 +217,7 @@ public abstract class BaseVault {
 
     /**
      * Returns File that holds encrypted contents of VaultFile.
+     *
      * @param vaultFile VaultFile that we need File with contents.
      * @return File holding contents of VaultFile.
      */
@@ -236,6 +239,14 @@ public abstract class BaseVault {
     protected String getFileName(VaultFile vaultFile) {
         String ext = VaultFileBuilder.getExtensionFromMimeType(vaultFile.mimeType);
         return vaultFile.id + (!TextUtils.isEmpty(ext) ? "." + ext : "");
+    }
+
+    public static class Config { // todo: make this VaultConfig
+        /**
+         * Filesystem root where Vault should create content files if chosen
+         * to be saved on file system.
+         */
+        public File root;
     }
 
     public class VaultOutputStream extends DigestOutputStream {

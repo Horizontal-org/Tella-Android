@@ -298,11 +298,6 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         }
     }
 
-    private void showExportDialog() {
-        alertDialog = DialogsUtil.showExportMediaDialog(this, (dialog, which) ->
-                PhotoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(PhotoViewerActivity.this));
-    }
-
     private void showGalleryImage(VaultFile vaultFile) {
         Glide.with(this)
                 .using(new VaultFileUrlLoader(this, new MediaFileHandler()))

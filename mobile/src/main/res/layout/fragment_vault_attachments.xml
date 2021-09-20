@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
+    android:background="@color/space_cadet"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/space_cadet"
  >
 
     <com.google.android.material.appbar.AppBarLayout
@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         android:background="@color/space_cadet"
         android:fitsSystemWindows="true"
-        android:theme="@style/AppTheme.DarkNoActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -34,6 +33,7 @@
             android:visibility="gone"
             app:crumbsPadding="5dp"
             app:crumbsTextColor="@color/wa_white_92"
+            app:crumbsSelectedTextColor="@color/wa_white_92"
             app:crumbsTextSize="13sp"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
@@ -74,7 +74,7 @@
                 android:layout_marginHorizontal="@dimen/tella_main_vertical"
                 android:src="@drawable/ic_unchecked_rectangle"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/listCheck"
+                app:layout_constraintEnd_toStartOf="@id/gridCheck"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatImageView
@@ -83,6 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="6dp"
                 android:src="@drawable/ic_list_check"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -92,8 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="6dp"
-                android:visibility="gone"
-                android:src="@drawable/ic_grid_on_white_24dp"
+                android:src="@drawable/grid"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -115,8 +115,8 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="end|bottom"
-        android:layout_marginHorizontal="6dp"
-        android:layout_marginBottom="55dp"
+        android:layout_marginHorizontal="@dimen/tella_main_vertical"
+        android:layout_marginBottom="@dimen/tella_main_vertical"
         android:background="@color/dark_orange"
         app:backgroundTint="@color/dark_orange"
         app:fabCustomSize="50dp"

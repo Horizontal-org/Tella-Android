@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.views.base_ui
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -31,6 +32,12 @@ abstract class BaseFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         Timber.d("***** ${this.javaClass.name} onCreateView")
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            view?.findViewById<View>(R.id.appbar)?.outlineProvider = null
+        } else {
+            view?.findViewById<View>(R.id.appbar)?.bringToFront()
+        }
 
         return super.onCreateView(inflater, container, savedInstanceState)
     }

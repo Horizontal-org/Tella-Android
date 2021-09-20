@@ -29,6 +29,16 @@
         <item name="android:fontFamily">@font/open_sans</item>
     </style>
 
+    <style name="AppTheme.DarkNoActionBar.Blue" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/prussian_blue</item>
+        <item name="colorPrimaryDark">@color/prussian_blue</item>
+        <item name="colorAccent">@color/prussian_blue</item>
+        <item name="patternViewStyle">@style/PatternView</item>
+        <item name="android:textColorPrimaryInverse">@color/colorPrimaryInverse</item>
+        <item name="android:textColorSecondary">@color/colorPrimaryInverse</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+    </style>
+
     <style name="PhotoViewerTheme.NoActionBar" parent="AppTheme.NoActionBar">
         <!-- <item name="colorAccent">@color/wa_white</item> -->
     </style>
