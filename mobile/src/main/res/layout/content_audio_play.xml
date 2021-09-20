@@ -87,7 +87,7 @@
             android:layout_width="75dp"
             android:layout_height="75dp"
             android:layout_margin="2dp"
-            android:background="@drawable/white_circle_background"
+            android:background="@drawable/audio_record_button_background"
             android:contentDescription="@string/action_play"
             android:padding="5dp"
             android:paddingTop="20dp"
