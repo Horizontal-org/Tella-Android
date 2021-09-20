@@ -9,6 +9,7 @@
     tools:context="rs.readahead.washington.mobile.views.activity.AudioPlayActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -23,13 +24,16 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_audio_play" />
+    <include
+        android:id="@+id/include"
+        layout="@layout/content_audio_play" />
 
     <FrameLayout
+        android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
-        android:id="@+id/root"
-        />
+        app:layout_anchor="@+id/include"
+        app:layout_anchorGravity="center" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

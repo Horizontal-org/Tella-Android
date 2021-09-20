@@ -105,6 +105,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_audio_play);
+        overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
         ButterKnife.bind(this);
 
         toolbar = findViewById(R.id.toolbar);
@@ -157,6 +158,12 @@ public class AudioPlayActivity extends BaseLockActivity implements
                 presenter.getMediaFile(id);
             }
         }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_end, R.anim.slide_out_start);
     }
 
     @Override
@@ -221,7 +228,6 @@ public class AudioPlayActivity extends BaseLockActivity implements
             stopPlayer();
             finish();
         }
-
     }
 
     @Override
@@ -451,7 +457,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
     }
 
     private void disablePlay() {
-        mPlay.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_pause_black_24dp));
+        mPlay.setImageDrawable(getContext().getResources().getDrawable(R.drawable.white_pause_24p));
         enableButton(forward, mFwd);
         enableButton(rewind, mRwd);
     }
