@@ -275,7 +275,7 @@
   <string name="verification.prompt_dialog.expl">အတည်ပြု mode သည် ON ပေမယ့် GPS ကိုပိတ်ထားသည်။ သင်၏သက်သေအထောက်အထားနေရာကိုမှတ်တမ်းတင်ရန် GPS ကိုဖွင့်ပါ။</string>
   <string name="verification.prompt_action_ignore">လျစ်လျူရှုပါ</string>
   <string name="verification.prompt_action_enable.GPS">GPS ဖွင့်မည်</string>
-  <string name="collect.blank_dialog.expl_updating.form.definitions">ပုံစံများစာရင်းကိုအဆင့်မြှင့်ခြင်း ...</string>
+  <string name="collect.blank_dialog.expl_updating.form.definitions">ပုံစံများစာရင်းကိုအဆင့်မြှင့်ခြင်း …</string>
   <string name="collect.blank_toast_refresh.canceled">နောက်ဆုံးတင်ခြင်းဖျက်သိမ်းခဲ့သည်။</string>
   <string name="collect.blank_toast_form.definition.updated">လုံးဝမွမ်းမံ</string>
   <string name="verification.share_dialog.title">စိစစ်အတည်ပြုအချက်အလက်များထည့်သွင်းလိုပါသလား။</string>
@@ -391,8 +391,8 @@
   <string name="pl_access_pattern_area">ဧရိယာပုံစံ</string>
   <string name="collect.blank_action.desc_more.options">နောက်ထပ်ရွေးချယ်စရာများ</string>
   <string name="action_next">နောက်သို့</string>
-  <string name="meter">မီတာ</string>
-  <string name="meter_per_second">တစ်စက္ကန့်တစ်မီတာနှုန်း</string>
+  <string name="meter">%f မီတာ</string>
+  <string name="meter_per_second">%f တစ်စက္ကန့်တစ်မီတာနှုန်း</string>
   <string name="intro_welcome">Welcome to</string>
   <string name="tella">Tella</string>
   <string name="intro_start">START</string>

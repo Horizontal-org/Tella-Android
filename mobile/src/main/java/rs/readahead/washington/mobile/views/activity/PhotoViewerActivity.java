@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.InflateException;
 import android.view.Menu;
@@ -82,11 +83,18 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_photo_viewer);
+        overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
         ButterKnife.bind(this);
 
         setTitle(null);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            findViewById(R.id.appbar).setOutlineProvider(null);
+        } else {
+            findViewById(R.id.appbar).bringToFront();
+        }
 
         presenter = new MediaFileViewerPresenter(this);
 
@@ -138,6 +146,12 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_end, R.anim.slide_out_start);
     }
 
     @Override
@@ -237,6 +251,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         menu.findItem(R.id.menu_item_more).setVisible(true);
         menu.findItem(R.id.menu_item_metadata).setVisible(true);
         toolbar.setStartTextTitle(vaultFile.name);
+        finish();
     }
 
     @Override

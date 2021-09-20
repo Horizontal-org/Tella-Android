@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.views.activity;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
@@ -28,6 +29,7 @@ public class MetadataHelpActivity extends BaseLockActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_metadata_help);
+        overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
 
         ButterKnife.bind(this);
 
@@ -37,6 +39,12 @@ public class MetadataHelpActivity extends BaseLockActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(R.string.verification_help_info_app_bar);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            findViewById(R.id.appbar).setOutlineProvider(null);
+        } else {
+            findViewById(R.id.appbar).bringToFront();
         }
 
         showMetadataHelp();
@@ -52,6 +60,17 @@ public class MetadataHelpActivity extends BaseLockActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_end, R.anim.slide_out_start);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
     private View createMetadataTitle(@StringRes int titleResId) {
