@@ -49,7 +49,7 @@
 
         <View style="@style/SettingsMainShadowLine" />
 
-        <RelativeLayout
+        <!--<RelativeLayout
             android:id="@+id/customization_settings_button"
             android:layout_width="wrap_content"
             android:layout_height="56dp"
@@ -75,7 +75,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/settings.lang_select_default"
                 tools:ignore="RelativeOverlap" />
-        </RelativeLayout>
+        </RelativeLayout> -->
 
         <View style="@style/SettingsMainShadowLine" />
 
@@ -99,5 +99,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/options_layout"
         app:titleText="@string/settings.docu_verification_action" />
+
+    <LinearLayout
+        android:id="@+id/home_screen_settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:background="@drawable/rounded_light_purple_background"
+        app:layout_constraintTop_toBottomOf="@+id/verification_switch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="vertical">
+
+        <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+            android:id="@+id/recent_files_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_light_purple_background"
+            app:explainText="@string/settings.general_recent_files_switch_expl"
+            app:titleText="@string/settings.general_recent_files_switch_title" />
+
+        <View style="@style/SettingsMainShadowLine" />
+
+        <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+            android:id="@+id/favorite_forms_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_light_purple_background"
+            app:explainText="@string/settings.general_favorite_forms_switch_expl"
+            app:titleText="@string/settings.general_favorite_forms_switch_title" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

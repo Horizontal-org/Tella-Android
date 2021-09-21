@@ -134,6 +134,22 @@ public class Preferences {
         setBoolean(SharedPrefs.SUBMIT_CRASH_REPORTS, value);
     }
 
+    public static boolean isShowFavoriteForms() {
+        return getBoolean(SharedPrefs.SHOW_FAVORITE_FORMS, true);
+    }
+
+    public static void setShowFavoriteForms(boolean value) {
+        setBoolean(SharedPrefs.SHOW_FAVORITE_FORMS, value);
+    }
+
+    public static boolean isShowRecentFiles() {
+        return getBoolean(SharedPrefs.SHOW_RECENT_FILES, true);
+    }
+
+    public static void setShowRecentFiles(boolean value) {
+        setBoolean(SharedPrefs.SHOW_RECENT_FILES, value);
+    }
+
     public static boolean isCameraPreviewEnabled() {
         return getBoolean(SharedPrefs.ENABLE_CAMERA_PREVIEW, false);
     }
