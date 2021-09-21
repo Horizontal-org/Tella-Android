@@ -29,6 +29,7 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.entity.XFormEntity
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.util.LockTimeoutManager
+import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.views.activity.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity
@@ -47,7 +48,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private lateinit var panicModeView: RelativeLayout
     private lateinit var countDownTextView: CountdownTextView
     private lateinit var seekBar : SeekBar
-    private lateinit var seekBarGrp : Group
+    private lateinit var seekBarContainer : View
     private var timerDuration = 0
     private var panicActivated = false
     private val vaultAdapter by lazy { VaultAdapter(this) }
@@ -70,7 +71,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         panicModeView = view.findViewById(R.id.panic_mode_view)
         countDownTextView = view.findViewById(R.id.countdown_timer)
         seekBar = view.findViewById(R.id.panic_seek)
-        seekBarGrp = view.findViewById(R.id.seekBarGrp)
+        seekBarContainer = view.findViewById(R.id.panicSeekContainer)
         setUpToolbar()
         initData()
         initListeners()
@@ -247,9 +248,12 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     private fun setupPanicView() {
         if (Preferences.isQuickExit()) {
-            seekBarGrp.visibility = View.VISIBLE
+            seekBarContainer.visibility = View.VISIBLE
+            vaultRecyclerView.setMargins(null,null,null,110)
         } else {
-            seekBarGrp.visibility = View.GONE
+            seekBarContainer.visibility = View.GONE
+            vaultRecyclerView.setMargins(null,null,null,55)
+
         }
     }
 
