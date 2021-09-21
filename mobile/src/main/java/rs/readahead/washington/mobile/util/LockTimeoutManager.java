@@ -9,11 +9,12 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 
 
 public class LockTimeoutManager {
+    public static long IMMEDIATE_SHUTDOWN = 0L;
     private final LinkedHashMap<Long, Integer> options;
 
     public LockTimeoutManager() {
         options = new LinkedHashMap<>();
-        options.put(0L,R.string.settings_sec_lock_timeout_immediately);
+        options.put(IMMEDIATE_SHUTDOWN,R.string.settings_sec_lock_timeout_immediately);
         options.put(60000L, R.string.settings_sec_lock_timeout_1min);
         options.put(300000L, R.string.settings_sec_lock_timeout_5min);
         options.put(1800000L, R.string.settings_sec_lock_timeout_30min);

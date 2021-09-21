@@ -129,7 +129,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         })
         panicModeView.setOnClickListener { onPanicClicked() }
         toolbar.onLeftClickListener = {nav().navigate(R.id.main_settings)}
-        toolbar.onRightClickListener = {MyApplication.exit(activity)}
+        toolbar.onRightClickListener = {
+            MyApplication.exit(activity)
+            LockTimeoutManager().lockTimeout = LockTimeoutManager.IMMEDIATE_SHUTDOWN
+        }
     }
 
     private fun setUpToolbar() {
