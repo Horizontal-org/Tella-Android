@@ -104,7 +104,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         sort.direction = Sort.Direction.ASC
         sort.type = Sort.Type.DATE
         val limits = Limits()
-        limits.limit = 5
+        limits.limit = 10
         homeVaultPresenter.getRecentFiles(FilterType.ALL_WITHOUT_DIRECTORY, sort, limits)
     }
 
