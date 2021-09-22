@@ -54,9 +54,9 @@ public class AudioCapturePresenter implements IAudioCapturePresenterContract.IPr
     }
 
     @Override
-    public void startRecording(String filename) {
+    public void startRecording(String filename, String parent) {
         audioRecorder = new AudioRecorder(this);
-        disposables.add(audioRecorder.startRecording(filename)
+        disposables.add(audioRecorder.startRecording(filename, parent)
                 .subscribe(vaultFile -> view.onRecordingStopped(vaultFile), throwable -> view.onRecordingError())
         );
     }

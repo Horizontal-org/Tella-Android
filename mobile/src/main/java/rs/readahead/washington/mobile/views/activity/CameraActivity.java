@@ -12,6 +12,10 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -38,16 +42,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.CaptureEvent;
-import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
@@ -74,6 +74,7 @@ public class CameraActivity extends MetadataActivity implements
         ITellaFileUploadSchedulePresenterContract.IView,
         IMetadataAttachPresenterContract.IView {
     public static final String MEDIA_FILE_KEY = "mfk";
+    public static final String VAULT_CURRENT_ROOT_PARENT = "vcrf";
     private final static int CLICK_DELAY = 1200;
     private final static int CLICK_MODE_DELAY = 2000;
     public static String CAMERA_MODE = "cm";
@@ -119,6 +120,7 @@ public class CameraActivity extends MetadataActivity implements
     private VideoResolutionManager videoResolutionManager;
     private long lastClickTime = System.currentTimeMillis();
     private RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
+    private String currentRootParent = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -141,6 +143,10 @@ public class CameraActivity extends MetadataActivity implements
         intentMode = IntentMode.RETURN;
         if (getIntent().hasExtra(INTENT_MODE)) {
             intentMode = IntentMode.valueOf(getIntent().getStringExtra(INTENT_MODE));
+        }
+
+        if (getIntent().hasExtra(VAULT_CURRENT_ROOT_PARENT)){
+            currentRootParent = getIntent().getStringExtra(VAULT_CURRENT_ROOT_PARENT);
         }
 
         MediaFileHandler mediaFileHandler = new MediaFileHandler();
@@ -479,7 +485,7 @@ public class CameraActivity extends MetadataActivity implements
     private void showConfirmVideoView(final File video) {
         captureButton.displayVideoButton();
         durationView.stop();
-        presenter.addMp4Video(video);
+        presenter.addMp4Video(video, currentRootParent);
     }
 
     private void setupCameraView() {
@@ -499,7 +505,7 @@ public class CameraActivity extends MetadataActivity implements
         cameraView.addCameraListener(new CameraListener() {
             @Override
             public void onPictureTaken(@NotNull PictureResult result) {
-                presenter.addJpegPhoto(result.getData());
+                presenter.addJpegPhoto(result.getData() ,currentRootParent);
             }
 
             @Override

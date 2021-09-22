@@ -27,6 +27,6 @@ public class IAudioCapturePresenterContract {
         void cancelRecorder();
         void cancelPauseRecorder();
         boolean isAudioRecorder();
-        void startRecording(String filename);
+        void startRecording(String filename, String parent);
     }
 }

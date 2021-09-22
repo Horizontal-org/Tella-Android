@@ -35,6 +35,7 @@ import com.hzontal.tella_vault.VaultException;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.Limits;
 import com.hzontal.tella_vault.filter.Sort;
+import com.hzontal.tella_vault.rx.RxVaultFileBuilder;
 import com.hzontal.utils.MediaFile;
 
 import org.apache.commons.io.IOUtils;
@@ -43,7 +44,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -190,7 +190,7 @@ public class MediaFileHandler {
         }
     }
 
-    public static VaultFile importPhotoUri(Context context, Uri uri,@Nullable String parentId) throws Exception {
+    public static VaultFile importPhotoUri(Context context, Uri uri, @Nullable String parentId) throws Exception {
         // Vault replacement methods
         InputStream v_input = context.getContentResolver().openInputStream(uri); // original photo
         Bitmap v_bm = modifyOrientation(BitmapFactory.decodeStream(v_input), v_input); // bitmap of photo
@@ -214,7 +214,7 @@ public class MediaFileHandler {
                 .blockingGet();
     }
 
-    public static Single<VaultFile> saveJpegPhoto(@NonNull byte[] jpegPhoto) throws Exception {
+    public static Single<VaultFile> saveJpegPhoto(@NonNull byte[] jpegPhoto, @Nullable String parent) throws Exception {
         // create thumb
         BitmapFactory.Options opt = new BitmapFactory.Options();
         opt.inSampleSize = 8;
@@ -229,17 +229,24 @@ public class MediaFileHandler {
 
         input.reset();
         String uid = UUID.randomUUID().toString();
-
-        return MyApplication.rxVault
+        RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault
                 .builder(input)
                 .setMimeType("image/jpeg")
                 .setName(uid + ".jpg")
                 .setAnonymous(true)
                 .setType(VaultFile.Type.FILE)
                 .setId(uid)
-                .setThumb(getThumbByteArray(thumb))
-                .build()
-                .subscribeOn(Schedulers.io());
+                .setThumb(getThumbByteArray(thumb));
+        if (parent == null) {
+            return rxVaultFileBuilder
+                    .build()
+                    .subscribeOn(Schedulers.io());
+        } else {
+            return rxVaultFileBuilder
+                    .build(parent)
+                    .subscribeOn(Schedulers.io());
+        }
+
     }
 
     public static VaultFile savePngImage(@NonNull byte[] pngImage) {
@@ -265,7 +272,7 @@ public class MediaFileHandler {
                 .blockingGet();
     }
 
-    public static VaultFile importVideoUri(Context context, Uri uri,String parentID) throws Exception {
+    public static VaultFile importVideoUri(Context context, Uri uri, String parentID) throws Exception {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         String mimeType = context.getContentResolver().getType(uri);
 
@@ -304,7 +311,7 @@ public class MediaFileHandler {
         }
     }
 
-    public static VaultFile importOthersUri(Context context, Uri uri,String parentId) throws Exception {
+    public static VaultFile importOthersUri(Context context, Uri uri, String parentId) throws Exception {
         String mimeType = context.getContentResolver().getType(uri);
 
         try {
@@ -330,7 +337,7 @@ public class MediaFileHandler {
     }
 
     @WorkerThread
-    public static VaultFile saveMp4Video(File video) throws IOException {
+    public static VaultFile saveMp4Video(File video, String parent) throws IOException {
         FileInputStream vis = null;
         InputStream is = null;
         DigestOutputStream os = null;
@@ -347,15 +354,23 @@ public class MediaFileHandler {
             // thumbnail
             byte[] thumb = getThumbByteArray(retriever.getFrameAtTime());
 
-            return MyApplication.rxVault
+            RxVaultFileBuilder rxVaultFileBuilder =  MyApplication.rxVault
                     .builder(new FileInputStream(video))
                     .setAnonymous(false)
                     .setDuration(Long.parseLong(time))
                     .setType(VaultFile.Type.FILE)
                     .setMimeType("video/mp4")
-                    .setThumb(thumb)
-                    .build()
-                    .blockingGet();
+                    .setThumb(thumb);
+
+            if (parent == null) {
+                return rxVaultFileBuilder
+                        .build()
+                        .blockingGet();
+            } else {
+                return rxVaultFileBuilder
+                        .build(parent)
+                        .blockingGet();
+            }
         } catch (IOException e) {
             FirebaseCrashlytics.getInstance().recordException(e);
             Timber.e(e, MediaFileHandler.class.getName());
@@ -373,18 +388,18 @@ public class MediaFileHandler {
         }
     }
 
-    public static List<VaultFile>  importVaultFilesUris(Context context,@Nullable List<Uri> uris,String parentId) throws Exception {
+    public static List<VaultFile> importVaultFilesUris(Context context, @Nullable List<Uri> uris, String parentId) throws Exception {
         List<VaultFile> vaultFiles = new ArrayList<>();
         assert uris != null;
-        for (Uri uri:uris) {
-            String mimeType = getMimeType(uri,context.getContentResolver());
-            if (mimeType != null){
-               if (MediaFile.INSTANCE.isImageFileType(mimeType)){
-                    vaultFiles.add(importPhotoUri(context,uri,parentId));
-                }else if (MediaFile.INSTANCE.isVideoFileType(mimeType)){
-                    vaultFiles.add(importVideoUri(context,uri,parentId));
-                }else {
-                   vaultFiles.add(importOthersUri(context,uri,parentId));
+        for (Uri uri : uris) {
+            String mimeType = getMimeType(uri, context.getContentResolver());
+            if (mimeType != null) {
+                if (MediaFile.INSTANCE.isImageFileType(mimeType)) {
+                    vaultFiles.add(importPhotoUri(context, uri, parentId));
+                } else if (MediaFile.INSTANCE.isVideoFileType(mimeType)) {
+                    vaultFiles.add(importVideoUri(context, uri, parentId));
+                } else {
+                    vaultFiles.add(importOthersUri(context, uri, parentId));
                 }
             }
         }
@@ -392,13 +407,13 @@ public class MediaFileHandler {
     }
 
     @Nullable
-    private static String getMimeType(Uri uri, ContentResolver contentResolver ) {
+    private static String getMimeType(Uri uri, ContentResolver contentResolver) {
         String mimeType;
-         if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
-             mimeType = contentResolver.getType(uri);
+        if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+            mimeType = contentResolver.getType(uri);
         } else {
             String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri.toString());
-             mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+            mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
                     fileExtension.toLowerCase(Locale.getDefault()));
         }
         return mimeType;
@@ -614,19 +629,11 @@ public class MediaFileHandler {
         );
     }
 
-    @Nullable
-    public InputStream getThumbnailStream(final VaultFile vaultFile) {
-        if (vaultFile.thumb != null) {
-            return new ByteArrayInputStream(vaultFile.thumb);
-        }
-
-        return null;
-    }
-    public static Uri getUriFromDisplayName(Context context,Uri uri) {
+    public static Uri getUriFromDisplayName(Context context, Uri uri) {
 
         String[] projection;
         projection = new String[]{MediaStore.Files.FileColumns._ID};
-        String displayName = getOriginalFileName(context,uri);
+        String displayName = getOriginalFileName(context, uri);
 
         // TODO This will break if we have no matching item in the MediaStore.
         Cursor cursor = context.getContentResolver().query(uri, projection,
@@ -644,6 +651,7 @@ public class MediaFileHandler {
             return null;
         }
     }
+
     public static List<VaultFile> walkAllFiles(List<VaultFile> vaultFiles) {
         List<VaultFile> resultList = new ArrayList<>(vaultFiles);
         for (VaultFile vaultFile : resultList) {
@@ -674,10 +682,20 @@ public class MediaFileHandler {
         FileWalker fileWalker = new FileWalker();
         return fileWalker.walk(vaultFile);
     }
+
     private static String getOriginalFileName(Context context, Uri uri) {
         Cursor query = context.getContentResolver().query(uri, null, null, null, null);
         int nameColumnIndex = query.getColumnIndex(OpenableColumns.DISPLAY_NAME);
         query.moveToFirst();
         return query.getString(nameColumnIndex);
+    }
+
+    @Nullable
+    public InputStream getThumbnailStream(final VaultFile vaultFile) {
+        if (vaultFile.thumb != null) {
+            return new ByteArrayInputStream(vaultFile.thumb);
+        }
+
+        return null;
     }
 }

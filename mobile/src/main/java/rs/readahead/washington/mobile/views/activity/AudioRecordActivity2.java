@@ -1,5 +1,7 @@
 package rs.readahead.washington.mobile.views.activity;
 
+import static rs.readahead.washington.mobile.views.activity.CameraActivity.VAULT_CURRENT_ROOT_PARENT;
+
 import android.Manifest;
 import android.animation.AnimatorInflater;
 import android.animation.ObjectAnimator;
@@ -31,7 +33,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -94,6 +95,8 @@ public class AudioRecordActivity2 extends MetadataActivity implements
     private MetadataAttacher metadataAttacher;
     private final CompositeDisposable disposable = new CompositeDisposable();
     private AlertDialog rationaleDialog;
+    private String currentRootParent = null;
+
 
 
     public enum Mode {
@@ -124,6 +127,10 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         uploadPresenter = new TellaFileUploadSchedulePresenter(this);
         metadataAttacher = new MetadataAttacher(this);
 
+        if (getIntent().hasExtra(VAULT_CURRENT_ROOT_PARENT)){
+            currentRootParent = getIntent().getStringExtra(VAULT_CURRENT_ROOT_PARENT);
+        }
+
         notRecording = true;
 
         mode = Mode.STAND;
@@ -131,7 +138,6 @@ public class AudioRecordActivity2 extends MetadataActivity implements
             mode = Mode.valueOf(getIntent().getStringExtra(RECORDER_MODE));
         }
         animator = (ObjectAnimator) AnimatorInflater.loadAnimator(AudioRecordActivity2.this, R.animator.fade_in);
-
         mTimer.setText(timeToString(0));
         disableStop();
     }
@@ -235,7 +241,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
             handlingMediaFile = null;
             cancelRecorder();
             audioRecorder = new AudioRecorder(this);
-            disposable.add(audioRecorder.startRecording("novi recording")
+            disposable.add(audioRecorder.startRecording("novi recording",currentRootParent)
                     .subscribe(this::onRecordingStopped, throwable -> {
                         Timber.d(throwable);
                         onRecordingError();
