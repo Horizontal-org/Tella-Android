@@ -14,11 +14,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.Key;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.utils.MediaFile;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -106,8 +109,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
                 Glide.with(holder.mediaView.getContext())
                         .using(glideLoader)
                         .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
+                        .signature(messageDigest -> { })
                         .into(holder.mediaView);
             } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
                 holder.showAudioInfo(vaultFile);
@@ -116,8 +118,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
                 Glide.with(holder.mediaView.getContext())
                         .using(glideLoader)
                         .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
+                        .signature(messageDigest -> { })
                         .into(holder.mediaView);
             }else if (MediaFile.INSTANCE.isTextFileType(vaultFile.mimeType)){
                  holder.showDocumentInfo(vaultFile);
@@ -128,10 +129,11 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
             }
         }
 
-
-        holder.mediaView.setOnClickListener(v -> galleryMediaHandler.playMedia(vaultFile));
-
-        holder.checkBox.setOnClickListener(v -> checkboxClickHandler(holder, vaultFile));
+        if (selectable){
+            holder.itemView.setOnClickListener(v -> checkboxClickHandler(holder, vaultFile));
+        }else {
+            holder.itemView.setOnClickListener(v -> galleryMediaHandler.playMedia(vaultFile));
+        }
 
         if (holder instanceof ListViewHolder) {
             ( (ListViewHolder) holder).setFileDateTextView(vaultFile);
