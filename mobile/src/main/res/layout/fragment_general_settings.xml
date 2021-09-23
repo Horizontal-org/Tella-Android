@@ -24,26 +24,27 @@
             android:id="@+id/language_settings_button"
             android:layout_width="wrap_content"
             android:layout_height="56dp"
+            android:orientation="horizontal"
             android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:orientation="horizontal">
+            android:paddingEnd="12dp">
+
             <TextView
                 android:id="@+id/language"
-                android:layout_height="match_parent"
                 android:layout_width="wrap_content"
-                android:textColor="@color/wa_white"
-                android:gravity="center_vertical"
+                android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
-                android:text="@string/settings.lang_app.bar" />
+                android:gravity="center_vertical"
+                android:text="@string/settings.lang_app.bar"
+                android:textColor="@color/wa_white" />
 
             <TextView
                 android:id="@+id/language_setting"
-                android:layout_alignParentEnd="true"
-                android:textColor="@color/wa_white"
-                android:gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:gravity="center_vertical"
                 android:text="@string/settings.lang_select_default"
+                android:textColor="@color/wa_white"
                 tools:ignore="RelativeOverlap" />
         </RelativeLayout>
 
@@ -83,7 +84,6 @@
             android:id="@+id/crash_report_switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_light_purple_background"
             app:explainText="@string/settings.gen_crash.reports_action.expl"
             app:titleText="@string/settings.gen_crash.reports_action" />
     </LinearLayout>
@@ -115,7 +115,6 @@
             android:id="@+id/recent_files_switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_light_purple_background"
             app:explainText="@string/settings.general_recent_files_switch_expl"
             app:titleText="@string/settings.general_recent_files_switch_title" />
 
@@ -125,7 +124,7 @@
             android:id="@+id/favorite_forms_switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_light_purple_background"
+
             app:explainText="@string/settings.general_favorite_forms_switch_expl"
             app:titleText="@string/settings.general_favorite_forms_switch_title" />
     </LinearLayout>
