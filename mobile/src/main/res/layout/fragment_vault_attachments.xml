@@ -30,12 +30,14 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dp"
             android:paddingHorizontal="@dimen/tella_main_vertical"
-            android:visibility="gone"
             app:crumbsPadding="5dp"
             app:crumbsTextColor="@color/wa_white_92"
             app:crumbsSelectedTextColor="@color/wa_white_92"
             app:crumbsTextSize="13sp"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:homeIcon="@drawable/ic_home_folder"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            android:visibility="gone"
+            />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

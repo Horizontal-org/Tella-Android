@@ -94,7 +94,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private lateinit var breadcrumbView: BreadcrumbsView
     private lateinit var appBar: AppBarLayout
     private lateinit var moveContainer: LinearLayout
-    private var intent : Intent? = null
+    private var intent: Intent? = null
     private var progressDialog: ProgressDialog? = null
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
     private var filterType = FilterType.ALL
@@ -283,13 +283,13 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                     action = object : VaultSheetUtils.IVaultManageFiles {
                         override fun goToCamera() {
                             val intent = Intent(activity, CameraActivity::class.java)
-                            intent.putExtra(VAULT_CURRENT_ROOT_PARENT,currentRootID)
+                            intent.putExtra(VAULT_CURRENT_ROOT_PARENT, currentRootID)
                             activity.startActivity(intent)
                         }
 
                         override fun goToRecorder() {
-                            val intent =Intent(activity, AudioRecordActivity2::class.java)
-                            intent.putExtra(VAULT_CURRENT_ROOT_PARENT,currentRootID)
+                            val intent = Intent(activity, AudioRecordActivity2::class.java)
+                            intent.putExtra(VAULT_CURRENT_ROOT_PARENT, currentRootID)
                             activity.startActivity(intent)
                         }
 
@@ -552,8 +552,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             lifecycleScope.launch {
                 uri?.let {
 
-                        deleteFileFromExternalStorage(it)
-                        uriToDelete = it
+                    deleteFileFromExternalStorage(it)
+                    uriToDelete = it
                 }
             }
         }
@@ -959,12 +959,12 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 activity.contentResolver.delete(uri, null, null)
             } catch (e: SecurityException) {
 
-                }
             }
         }
+    }
 
     override fun onResume() {
         super.onResume()
         handleOnBackPressed()
     }
-    }
+}

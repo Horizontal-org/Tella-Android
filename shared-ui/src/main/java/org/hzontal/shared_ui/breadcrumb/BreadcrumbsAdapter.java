@@ -3,6 +3,7 @@ package org.hzontal.shared_ui.breadcrumb;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -134,13 +136,19 @@ class BreadcrumbsAdapter extends RecyclerView.Adapter<BreadcrumbsAdapter.ItemHol
 		public void setItem(@NonNull IBreadcrumbItem item) {
 			super.setItem(item);
 			button.setText(((Item) item.getSelectedItem()).getName());
-			/*button.setTextColor(
-					ViewUtils.getColorFromAttr(getContext(),
-							getAdapterPosition() == getItemCount() - 1
-									? android.R.attr.textColorPrimary : android.R.attr.textColorSecondary)
-			);*/
 			button.setTextColor(getAdapterPosition() == getItemCount() - 1 ? parent.getSelectedTextColor()
 					: parent.getTextColor());
+			Log.d("Text position", button.getText() + " position : "+ getAdapterPosition());
+
+			if (getAdapterPosition() == 0){
+				Drawable img =ResourcesCompat.getDrawable(getContext().getResources(), parent.getHomeIcon(), null);
+				assert img != null;
+				img.setBounds(0, 0, 60, 60);
+				button.setCompoundDrawables(img,null,null,null);
+			}
+			else {
+				button.setCompoundDrawables(null,null,null,null);
+			}
 		}
 	}
 
