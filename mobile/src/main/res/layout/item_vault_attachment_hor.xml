@@ -17,6 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/attachmentImgContainer"
+        android:background="@color/wa_white_20"
         android:backgroundTint="@color/wa_white_20"
         >
         <ImageView
