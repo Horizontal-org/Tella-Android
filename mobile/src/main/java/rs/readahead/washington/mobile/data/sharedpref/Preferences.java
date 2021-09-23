@@ -135,7 +135,7 @@ public class Preferences {
     }
 
     public static boolean isShowFavoriteForms() {
-        return getBoolean(SharedPrefs.SHOW_FAVORITE_FORMS, true);
+        return getBoolean(SharedPrefs.SHOW_FAVORITE_FORMS, false);
     }
 
     public static void setShowFavoriteForms(boolean value) {
@@ -143,7 +143,7 @@ public class Preferences {
     }
 
     public static boolean isShowRecentFiles() {
-        return getBoolean(SharedPrefs.SHOW_RECENT_FILES, true);
+        return getBoolean(SharedPrefs.SHOW_RECENT_FILES, false);
     }
 
     public static void setShowRecentFiles(boolean value) {
