@@ -47,7 +47,6 @@ import butterknife.OnClick;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.CaptureEvent;
-import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
@@ -207,7 +206,8 @@ public class CameraActivity extends MetadataActivity implements
     @Override
     public void onBackPressed() {
         if (maybeStopVideoRecording()) return;
-        super.onBackPressed();
+        //super.onBackPressed();
+        MainActivity.getInstance().navigateToMainActivity();
         finish();
     }
 

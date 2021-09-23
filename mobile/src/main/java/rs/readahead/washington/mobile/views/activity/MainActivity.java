@@ -24,6 +24,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hzontal.tella_vault.VaultFile;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Objects;
 
@@ -54,6 +55,7 @@ import rs.readahead.washington.mobile.views.custom.HomeScreenGradient;
 
 @RuntimePermissions
 public class MainActivity extends MetadataActivity implements
+
         IMetadataAttachPresenterContract.IView,
         IHomeScreenPresenterContract.IView,
         ICollectCreateFormControllerContract.IView {
@@ -76,6 +78,7 @@ public class MainActivity extends MetadataActivity implements
     private NavController navController;
     private AppBarConfiguration appBarConfiguration;
     private long numOfCollectServers;
+    public static WeakReference<MainActivity> mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +101,7 @@ public class MainActivity extends MetadataActivity implements
     private void initSetup() {
         //handleOrbot();
         //setupPanicSeek();
-
+        mainActivity = new WeakReference<>(MainActivity.this);
         setOrientationListener();
 
         disposables = MyApplication.bus().createCompositeDisposable();
@@ -122,9 +125,14 @@ public class MainActivity extends MetadataActivity implements
             if (navDestination.getId() == (R.id.homeScreen) || navDestination.getId() == R.id.formScreen || navDestination.getId() == R.id.micScreen) {
                 showBottomNavigation();
             } else {
+                btmNavMain.setSelectedItemId(R.id.home);
                 hideBottomNavigation();
             }
         });
+    }
+
+    public static MainActivity getInstance() {
+        return mainActivity.get();
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -138,7 +146,7 @@ public class MainActivity extends MetadataActivity implements
         }
     }
 
-    //@OnClick(R.id.microphone)
+    //@OnClick(PozR.id.microphone)
     void onMicrophoneClicked() {
         if (Preferences.isAnonymousMode()) {
             startAudioRecorderActivityAnonymous();
@@ -520,12 +528,16 @@ public class MainActivity extends MetadataActivity implements
         btmNavMain.setVisibility(View.VISIBLE);
     }
     public void enableMoveMode(Boolean isEnabled){
-        root.setBackgroundColor(R.color.prussian_blue);
+        root.setBackgroundColor(getResources().getColor(R.color.prussian_blue));
        /* if (!isEnabled){
 
         }else{
             root.setBackgroundColor(R.color.space_cadet);
         }*/
+    }
+
+    public void navigateToMainActivity(){
+        btmNavMain.setSelectedItemId(R.id.home);
     }
 }
 
