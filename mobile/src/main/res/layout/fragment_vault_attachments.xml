@@ -136,7 +136,8 @@
         android:gravity="center"
         android:orientation="vertical"
         android:paddingHorizontal="31dp"
-        android:visibility="gone">
+        android:layout_marginTop="30dp"
+        android:visibility="visible">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -149,6 +150,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:gravity="center"
+            android:textColor="@color/wa_white_88"
             android:text="@string/vault_empty_msg" />
     </LinearLayout>
 

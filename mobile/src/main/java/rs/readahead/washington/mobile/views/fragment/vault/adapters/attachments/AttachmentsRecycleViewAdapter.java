@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.utils.MediaFile;
 
@@ -36,11 +35,11 @@ enum ViewType {
 
 public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<AttachmentsRecycleViewAdapter.ViewHolder> {
     private List<VaultFile> files = new ArrayList<>();
-    private VaultFileUrlLoader glideLoader;
-    private IGalleryVaultHandler galleryMediaHandler;
-    private Set<VaultFile> selected;
+    private final VaultFileUrlLoader glideLoader;
+    private final IGalleryVaultHandler galleryMediaHandler;
+    private final Set<VaultFile> selected;
     private boolean selectable;
-    private boolean singleSelection;
+    private final boolean singleSelection;
     private GridLayoutManager layoutManager;
 
 
