@@ -24,7 +24,6 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hzontal.tella_vault.VaultFile;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Objects;
 
@@ -55,7 +54,6 @@ import rs.readahead.washington.mobile.views.custom.HomeScreenGradient;
 
 @RuntimePermissions
 public class MainActivity extends MetadataActivity implements
-
         IMetadataAttachPresenterContract.IView,
         IHomeScreenPresenterContract.IView,
         ICollectCreateFormControllerContract.IView {
@@ -78,7 +76,6 @@ public class MainActivity extends MetadataActivity implements
     private NavController navController;
     private AppBarConfiguration appBarConfiguration;
     private long numOfCollectServers;
-    public static WeakReference<MainActivity> mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +98,6 @@ public class MainActivity extends MetadataActivity implements
     private void initSetup() {
         //handleOrbot();
         //setupPanicSeek();
-        mainActivity = new WeakReference<>(MainActivity.this);
         setOrientationListener();
 
         disposables = MyApplication.bus().createCompositeDisposable();
@@ -129,10 +125,6 @@ public class MainActivity extends MetadataActivity implements
                 hideBottomNavigation();
             }
         });
-    }
-
-    public static MainActivity getInstance() {
-        return mainActivity.get();
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -360,6 +352,7 @@ public class MainActivity extends MetadataActivity implements
     protected void onResume() {
         super.onResume();
         //btmNavMain.setSelectedItemId(R.id.home);
+        btmNavMain.getMenu().findItem(R.id.home).setChecked(true);
 
         homeScreenPresenter.countCollectServers();
 
@@ -534,10 +527,6 @@ public class MainActivity extends MetadataActivity implements
         }else{
             root.setBackgroundColor(R.color.space_cadet);
         }*/
-    }
-
-    public void navigateToMainActivity(){
-        btmNavMain.setSelectedItemId(R.id.home);
     }
 }
 

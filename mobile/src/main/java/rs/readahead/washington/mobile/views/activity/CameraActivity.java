@@ -206,8 +206,7 @@ public class CameraActivity extends MetadataActivity implements
     @Override
     public void onBackPressed() {
         if (maybeStopVideoRecording()) return;
-        //super.onBackPressed();
-        MainActivity.getInstance().navigateToMainActivity();
+        super.onBackPressed();
         finish();
     }
 
