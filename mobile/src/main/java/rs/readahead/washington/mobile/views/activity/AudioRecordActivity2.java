@@ -126,6 +126,7 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         presenter = new AudioCapturePresenter(this);
         uploadPresenter = new TellaFileUploadSchedulePresenter(this);
         metadataAttacher = new MetadataAttacher(this);
+        changeTemporaryTimeout();
 
         if (getIntent().hasExtra(VAULT_CURRENT_ROOT_PARENT)){
             currentRootParent = getIntent().getStringExtra(VAULT_CURRENT_ROOT_PARENT);

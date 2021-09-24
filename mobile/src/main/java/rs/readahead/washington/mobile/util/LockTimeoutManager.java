@@ -10,6 +10,7 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 
 public class LockTimeoutManager {
     public static long IMMEDIATE_SHUTDOWN = 0L;
+    public static long FIVE_MUNITES_SHUTDOWN = 300000L;
     private final LinkedHashMap<Long, Integer> options;
 
     public LockTimeoutManager() {

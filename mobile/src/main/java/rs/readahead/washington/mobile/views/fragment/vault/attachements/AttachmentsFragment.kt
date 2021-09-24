@@ -295,6 +295,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
                         override fun import() {
                             importAndDelete = false
+                            activity.changeTemporaryTimeout()
                             MediaFileHandler.startImportFiles(activity, true)
                         }
 
@@ -851,6 +852,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     private fun requestStoragePermissions() {
+        activity.changeTemporaryTimeout()
         val permissions = arrayOf(
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE

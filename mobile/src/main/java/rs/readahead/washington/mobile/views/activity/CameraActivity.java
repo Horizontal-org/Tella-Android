@@ -133,7 +133,7 @@ public class CameraActivity extends MetadataActivity implements
         presenter = new CameraPresenter(this);
         uploadPresenter = new TellaFileUploadSchedulePresenter(this);
         metadataAttacher = new MetadataAttacher(this);
-
+        changeTemporaryTimeout();
         mode = CameraMode.PHOTO;
         if (getIntent().hasExtra(CAMERA_MODE)) {
             mode = CameraMode.valueOf(getIntent().getStringExtra(CAMERA_MODE));

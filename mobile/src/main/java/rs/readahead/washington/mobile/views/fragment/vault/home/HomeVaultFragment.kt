@@ -12,7 +12,6 @@ import android.widget.RelativeLayout
 import android.widget.SeekBar
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.constraintlayout.widget.Group
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -323,17 +322,12 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         if (writePermissionGranted) {
              vaultFile.let { homeVaultPresenter.exportMediaFiles(arrayListOf(vaultFile)) }
         } else {
-            handleTimeOut()
             updateOrRequestPermissions()
         }
     }
-    private fun handleTimeOut(){
-        if(MyApplication.getMainKeyHolder().timeout == 0L){
-            MyApplication.getMainKeyHolder().timeout = 1800000L
-        }
-    }
-
     private fun updateOrRequestPermissions() {
+        activity.changeTemporaryTimeout()
+
         val hasWritePermission = ContextCompat.checkSelfPermission(
             activity,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
