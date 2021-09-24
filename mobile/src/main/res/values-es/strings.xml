@@ -528,4 +528,8 @@
   <string name="onboard.customization_title">Customization</string>
   <string name="onboard.customization_subtitle">Enter your customization code</string>
   <string name="onboard.customization_expl">Your organization may provide a code for you to set up Tella according to their settings.</string>
+  <string name="settings.general_recent_files_switch_title">Recent files</string>
+  <string name="settings.general_recent_files_switch_expl">Show previews of and a shortcut to your recent files on Tella’s homescreen.</string>
+  <string name="settings.general_favorite_forms_switch_title">Favorite forms</string>
+  <string name="settings.general_favorite_forms_switch_expl">Show shortcuts to your favorite forms on Tella’s homescreen.</string>
 </resources>
