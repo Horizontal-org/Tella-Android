@@ -142,7 +142,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_empty_view" />
+            android:background="@drawable/ic_files_illustration" />
 
         <TextView
             style="@style/Tella_Main_White_Text.Meduim"
