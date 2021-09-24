@@ -233,12 +233,13 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         (activity as MainActivity).showBottomNavigation()
         setupPanicView()
         panicModeView.visibility = View.GONE
+        toolbar.visibility = View.VISIBLE
     }
 
     private fun showPanicScreens() {
         // really show panic screen
         (activity as MainActivity).hideBottomNavigation()
-
+        toolbar.visibility = View.GONE
         panicModeView.visibility = View.VISIBLE
         panicModeView.alpha = 1f
         countDownTextView.start(

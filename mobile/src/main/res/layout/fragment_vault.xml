@@ -77,6 +77,7 @@
           app:layout_constraintBottom_toBottomOf="@id/panic_seek"
           android:textSize="15sp"
           style="@style/Tella_Main_White_Text.MeduimbBold"
+          android:textColor="@color/wa_white_80"
           />
 
       <androidx.constraintlayout.widget.Group
