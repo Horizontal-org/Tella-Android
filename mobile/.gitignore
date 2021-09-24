@@ -1,4 +1,22 @@
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+/.idea/
+/projectFilesBackup/
+.DS_Store
 /build
-fabric.properties
+/captures
+java_pid18084.hprof
+/mobile/release/
 
-/google-services.json
+# Google Maps API keys
+/mobile/src/debug/res/values/google_maps_api.xml
+/mobile/src/main/res/values/google_maps_api.xml
+/mobile/src/release/res/values/google_maps_api.xml
+
+# Google services configuration
+/mobile/src/debug/google-services.json
+/mobile/src/main/google-services.json
+/mobile/src/release/google-services.json
