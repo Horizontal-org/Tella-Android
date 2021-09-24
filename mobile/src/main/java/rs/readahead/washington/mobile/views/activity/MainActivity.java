@@ -98,7 +98,6 @@ public class MainActivity extends MetadataActivity implements
     private void initSetup() {
         //handleOrbot();
         //setupPanicSeek();
-
         setOrientationListener();
 
         disposables = MyApplication.bus().createCompositeDisposable();
@@ -138,7 +137,7 @@ public class MainActivity extends MetadataActivity implements
         }
     }
 
-    //@OnClick(R.id.microphone)
+    //@OnClick(PozR.id.microphone)
     void onMicrophoneClicked() {
         if (Preferences.isAnonymousMode()) {
             startAudioRecorderActivityAnonymous();
@@ -352,6 +351,8 @@ public class MainActivity extends MetadataActivity implements
     protected void onResume() {
         super.onResume();
         //btmNavMain.setSelectedItemId(R.id.home);
+        showBottomNavigation();
+        btmNavMain.getMenu().findItem(R.id.home).setChecked(true);
 
         homeScreenPresenter.countCollectServers();
 
@@ -520,7 +521,7 @@ public class MainActivity extends MetadataActivity implements
         btmNavMain.setVisibility(View.VISIBLE);
     }
     public void enableMoveMode(Boolean isEnabled){
-        root.setBackgroundColor(R.color.prussian_blue);
+        root.setBackgroundColor(getResources().getColor(R.color.prussian_blue));
        /* if (!isEnabled){
 
         }else{

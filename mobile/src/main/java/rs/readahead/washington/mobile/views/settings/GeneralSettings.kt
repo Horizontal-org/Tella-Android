@@ -53,6 +53,18 @@ class GeneralSettings : BaseFragment() {
             Preferences.setAnonymousMode(!isChecked)
         }
         verificationSwitch.mSwitch.setChecked(!Preferences.isAnonymousMode())
+
+        val favoriteFormsSwitch = view.findViewById<TellaSwitchWithMessage>(R.id.favorite_forms_switch)
+        favoriteFormsSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+            Preferences.setShowFavoriteForms(isChecked)
+        }
+        favoriteFormsSwitch.mSwitch.setChecked(Preferences.isShowFavoriteForms())
+
+        val recentFilesSwitch = view.findViewById<TellaSwitchWithMessage>(R.id.recent_files_switch)
+        recentFilesSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+            Preferences.setShowRecentFiles(isChecked)
+        }
+        recentFilesSwitch.mSwitch.setChecked(Preferences.isShowRecentFiles())
     }
 
 
