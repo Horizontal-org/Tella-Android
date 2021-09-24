@@ -7,8 +7,11 @@ import android.media.MediaCodecInfo;
 import android.media.MediaFormat;
 import android.media.MediaRecorder;
 
+import androidx.annotation.Nullable;
+
 import com.hzontal.tella_vault.BaseVault;
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.tella_vault.rx.RxVaultFileBuilder;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -16,7 +19,6 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import androidx.annotation.Nullable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -27,30 +29,22 @@ import timber.log.Timber;
 
 @SuppressWarnings("MethodOnlyUsedFromInnerClass")
 public class AudioRecorder {
+    private static final long REFRESH_TIME_MS = 500;
+    private static final String ENCODER_TYPE = "audio/mp4a-latm";
+    private static final long kTimeoutUs = 10000;
+    private static final int SAMPLE_RATE = 44100;
+    private static final int CHANNELS = 1;
+    private static final int BIT_RATE = 32000;
     private final Executor executor;
-
+    @Nullable
+    private final AudioRecordInterface caller;
     private boolean recording;
     private boolean cancelled;
     private boolean paused;
     private long startTime;
     private long pausedTime = 0L;
     private long duration = 0L;
-
-    @Nullable
-    private final AudioRecordInterface caller;
-    private static final long REFRESH_TIME_MS = 500;
     private long callTime;
-
-    private static final String ENCODER_TYPE = "audio/mp4a-latm";
-    private static final long kTimeoutUs = 10000;
-    private static final int SAMPLE_RATE = 44100;
-    private static final int CHANNELS = 1;
-    private static final int BIT_RATE = 32000;
-
-    public interface AudioRecordInterface {
-        void onDurationUpdate(long duration);
-    }
-
 
     public AudioRecorder(@Nullable AudioRecordInterface caller) {
         this.caller = caller;
@@ -59,13 +53,21 @@ public class AudioRecorder {
         cancelled = false;
     }
 
-    public Observable<VaultFile> startRecording(String filemane) {
+    public Observable<VaultFile> startRecording(String filemane, @Nullable String parent) {
         return Observable.fromCallable(() -> {
-            VaultFile vaultFile = MyApplication.rxVault.builder()
+            VaultFile vaultFile;
+            RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault.builder()
                     .setName(filemane)
-                    .setMimeType("audio/aac")
-                    .build()
-                    .blockingGet();
+                    .setMimeType("audio/aac");
+            if (parent == null) {
+                vaultFile = rxVaultFileBuilder.
+                        build()
+                        .blockingGet();
+            } else {
+                vaultFile = rxVaultFileBuilder.
+                        build(parent)
+                        .blockingGet();
+            }
 
             BaseVault.VaultOutputStream outputStream = MyApplication.rxVault.getOutStream(vaultFile);
 
@@ -279,5 +281,9 @@ public class AudioRecorder {
                 MediaCodec.CONFIGURE_FLAG_ENCODE);
 
         return mediaCodec;
+    }
+
+    public interface AudioRecordInterface {
+        void onDurationUpdate(long duration);
     }
 }

@@ -30,12 +30,14 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dp"
             android:paddingHorizontal="@dimen/tella_main_vertical"
-            android:visibility="gone"
             app:crumbsPadding="5dp"
             app:crumbsTextColor="@color/wa_white_92"
             app:crumbsSelectedTextColor="@color/wa_white_92"
             app:crumbsTextSize="13sp"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:homeIcon="@drawable/ic_home_folder"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            android:visibility="gone"
+            />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -134,12 +136,13 @@
         android:gravity="center"
         android:orientation="vertical"
         android:paddingHorizontal="31dp"
-        android:visibility="gone">
+        android:layout_marginTop="30dp"
+        android:visibility="visible">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_empty_view" />
+            android:background="@drawable/ic_files_illustration" />
 
         <TextView
             style="@style/Tella_Main_White_Text.Meduim"
@@ -147,6 +150,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:gravity="center"
+            android:textColor="@color/wa_white_88"
             android:text="@string/vault_empty_msg" />
     </LinearLayout>
 

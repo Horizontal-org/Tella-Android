@@ -36,16 +36,16 @@
        app:layout_behavior="@string/appbar_scrolling_view_behavior"
        tools:listitem="@layout/item_vault_attachment_hor"
        tools:itemCount="30"
-       android:layout_marginBottom="110dp"
        />
 
    <androidx.constraintlayout.widget.ConstraintLayout
        android:layout_width="match_parent"
        android:layout_height="55dp"
        android:layout_gravity="bottom"
-       android:layout_marginBottom="55dp"
        android:id="@+id/panicSeekContainer"
        android:background="@color/space_cadet"
+       android:visibility="gone"
+       android:layout_marginBottom="55dp"
        >
       <SeekBar
           android:id="@+id/panic_seek"
@@ -77,6 +77,7 @@
           app:layout_constraintBottom_toBottomOf="@id/panic_seek"
           android:textSize="15sp"
           style="@style/Tella_Main_White_Text.MeduimbBold"
+          android:textColor="@color/wa_white_80"
           />
 
       <androidx.constraintlayout.widget.Group

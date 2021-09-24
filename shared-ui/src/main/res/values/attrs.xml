@@ -46,5 +46,6 @@
         <attr name="crumbsSelectedTextColor" format="color"/>
         <attr name="crumbsTextSize" format="dimension"/>
         <attr name="crumbsPadding" format="dimension"/>
+        <attr name="homeIcon" format="reference"/>
     </declare-styleable>
 </resources>

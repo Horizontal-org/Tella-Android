@@ -20,8 +20,8 @@ public class ICameraPresenterContract {
     }
 
     public interface IPresenter extends IBasePresenter {
-        void addJpegPhoto(byte[] jpeg);
-        void addMp4Video(File file);
+        void addJpegPhoto(byte[] jpeg, String parent);
+        void addMp4Video(File file, String parent);
         void handleRotation(int orientation);
         void getLastMediaFile();
     }

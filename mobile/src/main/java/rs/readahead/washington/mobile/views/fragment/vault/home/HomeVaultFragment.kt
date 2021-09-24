@@ -12,7 +12,6 @@ import android.widget.RelativeLayout
 import android.widget.SeekBar
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.constraintlayout.widget.Group
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,6 +28,7 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.entity.XFormEntity
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.util.LockTimeoutManager
+import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.views.activity.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity
@@ -47,7 +47,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private lateinit var panicModeView: RelativeLayout
     private lateinit var countDownTextView: CountdownTextView
     private lateinit var seekBar : SeekBar
-    private lateinit var seekBarGrp : Group
+    private lateinit var seekBarContainer : View
     private var timerDuration = 0
     private var panicActivated = false
     private val vaultAdapter by lazy { VaultAdapter(this) }
@@ -70,7 +70,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         panicModeView = view.findViewById(R.id.panic_mode_view)
         countDownTextView = view.findViewById(R.id.countdown_timer)
         seekBar = view.findViewById(R.id.panic_seek)
-        seekBarGrp = view.findViewById(R.id.seekBarGrp)
+        seekBarContainer = view.findViewById(R.id.panicSeekContainer)
         setUpToolbar()
         initData()
         initListeners()
@@ -103,7 +103,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         sort.direction = Sort.Direction.ASC
         sort.type = Sort.Type.DATE
         val limits = Limits()
-        limits.limit = 5
+        limits.limit = 10
         homeVaultPresenter.getRecentFiles(FilterType.ALL_WITHOUT_DIRECTORY, sort, limits)
     }
 
@@ -128,7 +128,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         })
         panicModeView.setOnClickListener { onPanicClicked() }
         toolbar.onLeftClickListener = {nav().navigate(R.id.main_settings)}
-        toolbar.onRightClickListener = {MyApplication.exit(activity)}
+        toolbar.onRightClickListener = {
+            MyApplication.exit(activity)
+            LockTimeoutManager().lockTimeout = LockTimeoutManager.IMMEDIATE_SHUTDOWN
+        }
     }
 
     private fun setUpToolbar() {
@@ -230,12 +233,13 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         (activity as MainActivity).showBottomNavigation()
         setupPanicView()
         panicModeView.visibility = View.GONE
+        toolbar.visibility = View.VISIBLE
     }
 
     private fun showPanicScreens() {
         // really show panic screen
         (activity as MainActivity).hideBottomNavigation()
-
+        toolbar.visibility = View.GONE
         panicModeView.visibility = View.VISIBLE
         panicModeView.alpha = 1f
         countDownTextView.start(
@@ -247,9 +251,12 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     private fun setupPanicView() {
         if (Preferences.isQuickExit()) {
-            seekBarGrp.visibility = View.VISIBLE
+            seekBarContainer.visibility = View.VISIBLE
+            vaultRecyclerView.setMargins(null,null,null,110)
         } else {
-            seekBarGrp.visibility = View.GONE
+            seekBarContainer.visibility = View.GONE
+            vaultRecyclerView.setMargins(null,null,null,55)
+
         }
     }
 
@@ -316,17 +323,12 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         if (writePermissionGranted) {
              vaultFile.let { homeVaultPresenter.exportMediaFiles(arrayListOf(vaultFile)) }
         } else {
-            handleTimeOut()
             updateOrRequestPermissions()
         }
     }
-    private fun handleTimeOut(){
-        if(MyApplication.getMainKeyHolder().timeout == 0L){
-            MyApplication.getMainKeyHolder().timeout = 1800000L
-        }
-    }
-
     private fun updateOrRequestPermissions() {
+        activity.changeTemporaryTimeout()
+
         val hasWritePermission = ContextCompat.checkSelfPermission(
             activity,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
