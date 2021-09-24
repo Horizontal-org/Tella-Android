@@ -264,6 +264,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
 
         void maybeEnableCheckBox(boolean selectable) {
             checkBox.setVisibility(selectable ? View.VISIBLE : View.GONE);
+            more.setVisibility(selectable ? View.GONE : View.VISIBLE);
             checkBox.setEnabled(selectable);
         }
     }
