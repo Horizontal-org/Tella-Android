@@ -286,9 +286,9 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     override fun onGetFilesSuccess(files: List<VaultFile?>) {
-        if (!files.isNullOrEmpty()) {
+        if (!files.isNullOrEmpty() && Preferences.isShowRecentFiles()) {
             vaultAdapter.addRecentFiles(files)
-        }else{
+        } else {
             vaultAdapter.removeRecentFiles()
         }
     }
