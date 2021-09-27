@@ -102,14 +102,18 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     private fun getFiles() {
-        val sort = Sort().apply {
-            direction = Sort.Direction.DESC
-            type = Sort.Type.DATE
+        if (Preferences.isShowRecentFiles()) {
+            val sort = Sort().apply {
+                direction = Sort.Direction.DESC
+                type = Sort.Type.DATE
+            }
+            val limits = Limits().apply {
+                limit = 10
+            }
+            homeVaultPresenter.getRecentFiles(FilterType.ALL_WITHOUT_DIRECTORY, sort, limits)
+        } else {
+            vaultAdapter.removeRecentFiles()
         }
-        val limits = Limits().apply {
-            limit = 10
-        }
-        homeVaultPresenter.getRecentFiles(FilterType.ALL_WITHOUT_DIRECTORY, sort, limits)
     }
 
     private fun initListeners() {
@@ -135,7 +139,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         toolbar.onLeftClickListener = { nav().navigate(R.id.main_settings) }
         toolbar.onRightClickListener = {
             MyApplication.exit(activity)
-            LockTimeoutManager().lockTimeout = LockTimeoutManager.IMMEDIATE_SHUTDOWN
+            MyApplication.getMainKeyHolder().timeout = LockTimeoutManager.IMMEDIATE_SHUTDOWN
         }
     }
 
@@ -263,6 +267,16 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             vaultRecyclerView.setMargins(null, null, null, 55)
 
         }
+    }
+
+    private fun setUpRecentFilesView() {
+        if (Preferences.isShowRecentFiles()) {
+
+        }
+    }
+
+    private fun setUpFavoriteFormsView() {
+
     }
 
     private fun executePanicMode() {
