@@ -27,6 +27,7 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.entity.XFormEntity
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
+import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.views.activity.AudioPlayActivity
@@ -101,15 +102,27 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             }
     }
 
-    private fun getFiles() {
-        val sort = Sort().apply {
-            direction = Sort.Direction.DESC
-            type = Sort.Type.DATE
+    private fun maybeGetFiles() {
+        if (Preferences.isShowRecentFiles()) {
+            val sort = Sort().apply {
+                direction = Sort.Direction.DESC
+                type = Sort.Type.DATE
+            }
+            val limits = Limits().apply {
+                limit = 10
+            }
+            homeVaultPresenter.getRecentFiles(FilterType.ALL_WITHOUT_DIRECTORY, sort, limits)
+        } else {
+            vaultAdapter.removeRecentFiles()
         }
-        val limits = Limits().apply {
-            limit = 10
+    }
+
+    private fun maybeGetRecentForms(){
+        if (Preferences.isShowFavoriteForms()){
+            homeVaultPresenter.getFavoriteCollectForms()
+        }else{
+            vaultAdapter.removeFavoriteForms()
         }
-        homeVaultPresenter.getRecentFiles(FilterType.ALL_WITHOUT_DIRECTORY, sort, limits)
     }
 
     private fun initListeners() {
@@ -135,7 +148,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         toolbar.onLeftClickListener = { nav().navigate(R.id.main_settings) }
         toolbar.onRightClickListener = {
             MyApplication.exit(activity)
-            LockTimeoutManager().lockTimeout = LockTimeoutManager.IMMEDIATE_SHUTDOWN
+            MyApplication.getMainKeyHolder().timeout = LockTimeoutManager.IMMEDIATE_SHUTDOWN
         }
     }
 
@@ -174,7 +187,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         }
     }
 
-    override fun onFavoriteItemClickListener(form: XFormEntity) {
+    override fun onFavoriteItemClickListener(form: CollectForm) {
+
     }
 
     override fun allFilesClickListener() {
@@ -223,7 +237,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         } else {
             maybeClosePanic()
         }
-        getFiles()
+        maybeGetFiles()
+        maybeGetRecentForms()
     }
 
     private fun maybeClosePanic(): Boolean {
@@ -263,6 +278,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             vaultRecyclerView.setMargins(null, null, null, 55)
 
         }
+    }
+
+    private fun setUpFavoriteFormsView() {
+
     }
 
     private fun executePanicMode() {
@@ -321,6 +340,18 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     override fun onExportEnded() {
         activity.toggleLoading(false)
+    }
+
+    override fun onGetFavoriteCollectFormsSuccess(files: List<CollectForm>) {
+        if (files.isNullOrEmpty()){
+            vaultAdapter.addFavoriteForms(files)
+        }else{
+            vaultAdapter.removeFavoriteForms()
+        }
+    }
+
+    override fun onGetFavoriteCollectFormsError(error: Throwable?) {
+       Timber.d(error)
     }
 
     private fun navigateToAttachmentsList(bundle: Bundle?) {
