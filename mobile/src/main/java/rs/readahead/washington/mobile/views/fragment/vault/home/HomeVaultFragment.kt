@@ -27,6 +27,7 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.entity.XFormEntity
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
+import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.views.activity.AudioPlayActivity
@@ -101,7 +102,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             }
     }
 
-    private fun getFiles() {
+    private fun maybeGetFiles() {
         if (Preferences.isShowRecentFiles()) {
             val sort = Sort().apply {
                 direction = Sort.Direction.DESC
@@ -113,6 +114,14 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             homeVaultPresenter.getRecentFiles(FilterType.ALL_WITHOUT_DIRECTORY, sort, limits)
         } else {
             vaultAdapter.removeRecentFiles()
+        }
+    }
+
+    private fun maybeGetRecentForms(){
+        if (Preferences.isShowFavoriteForms()){
+            homeVaultPresenter.getFavoriteCollectForms()
+        }else{
+            vaultAdapter.removeFavoriteForms()
         }
     }
 
@@ -178,7 +187,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         }
     }
 
-    override fun onFavoriteItemClickListener(form: XFormEntity) {
+    override fun onFavoriteItemClickListener(form: CollectForm) {
+
     }
 
     override fun allFilesClickListener() {
@@ -227,7 +237,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         } else {
             maybeClosePanic()
         }
-        getFiles()
+        maybeGetFiles()
+        maybeGetRecentForms()
     }
 
     private fun maybeClosePanic(): Boolean {
@@ -265,12 +276,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         } else {
             seekBarContainer.visibility = View.GONE
             vaultRecyclerView.setMargins(null, null, null, 55)
-
-        }
-    }
-
-    private fun setUpRecentFilesView() {
-        if (Preferences.isShowRecentFiles()) {
 
         }
     }
@@ -335,6 +340,18 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     override fun onExportEnded() {
         activity.toggleLoading(false)
+    }
+
+    override fun onGetFavoriteCollectFormsSuccess(files: List<CollectForm>) {
+        if (files.isNullOrEmpty()){
+            vaultAdapter.addFavoriteForms(files)
+        }else{
+            vaultAdapter.removeFavoriteForms()
+        }
+    }
+
+    override fun onGetFavoriteCollectFormsError(error: Throwable?) {
+       Timber.d(error)
     }
 
     private fun navigateToAttachmentsList(bundle: Bundle?) {

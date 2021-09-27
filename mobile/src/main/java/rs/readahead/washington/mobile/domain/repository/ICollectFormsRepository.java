@@ -17,6 +17,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.ListFormResult;
 
 public interface ICollectFormsRepository {
     Single<List<CollectForm>> listBlankForms();
+    Single<List<CollectForm>> listFavoriteCollectForms();
     Single<ListFormResult> updateBlankForms(ListFormResult listFormResult);
     Maybe<FormDef> getBlankFormDef(CollectForm form);
     Single<FormDef> updateBlankFormDef(CollectForm form, FormDef formDef);

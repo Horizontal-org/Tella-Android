@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import rs.readahead.washington.mobile.data.entity.XFormEntity
+import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.FavoriteFormsViewHolder
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.FileActionsViewHolder
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.PanicModeViewHolder
@@ -45,7 +46,15 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     }
     fun removeRecentFiles(){
         adapterScope.launch {
-            items = favoriteForms - recentFiles + actions
+            items = items - recentFiles
+            withContext(Dispatchers.Main) {
+                submitList(items)
+            }
+        }
+    }
+    fun removeFavoriteForms(){
+        adapterScope.launch {
+            items =  items - favoriteForms
             withContext(Dispatchers.Main) {
                 submitList(items)
             }
@@ -61,7 +70,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
         renderList()
     }
 
-    fun addFavoriteForms(forms: List<XFormEntity>) {
+    fun addFavoriteForms(forms: List<CollectForm>) {
         favoriteForms = listOf(DataItem.FavoriteForms(forms))
         renderList()
     }

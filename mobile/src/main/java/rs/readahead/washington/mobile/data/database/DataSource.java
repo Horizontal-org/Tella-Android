@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.text.TextUtils;
 
+import androidx.annotation.ColorLong;
 import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
@@ -230,6 +231,12 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     @Override
     public Single<List<CollectForm>> listBlankForms() {
         return Single.fromCallable(() -> dataSource.getBlankCollectForms())
+                .compose(applySchedulers());
+    }
+
+    @Override
+    public Single<List<CollectForm>> listFavoriteCollectForms() {
+        return Single.fromCallable(() -> dataSource.getFavoriteCollectForms())
                 .compose(applySchedulers());
     }
 
@@ -645,6 +652,68 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return forms;
     }
 
+    private List<CollectForm> getFavoriteCollectForms(){
+        Cursor cursor = null;
+        List<CollectForm> forms = new ArrayList<>();
+
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_COLLECT_BLANK_FORM + " JOIN " + D.T_COLLECT_SERVER + " ON " +
+                            D.T_COLLECT_BLANK_FORM + "." + D.C_COLLECT_SERVER_ID + " = " + D.T_COLLECT_SERVER + "." + D.C_ID,
+                    new String[]{
+                            cn(D.T_COLLECT_BLANK_FORM, D.C_ID, D.A_COLLECT_BLANK_FORM_ID),
+                            D.C_COLLECT_SERVER_ID,
+                            D.C_FORM_ID,
+                            D.T_COLLECT_BLANK_FORM + "." + D.C_NAME,
+                            D.C_VERSION,
+                            D.C_HASH,
+                            D.C_DOWNLOADED,
+                            D.C_UPDATED,
+                            D.C_FAVORITE,
+                            D.C_DOWNLOAD_URL,
+                            cn(D.T_COLLECT_SERVER, D.C_NAME, D.A_SERVER_NAME),
+                            cn(D.T_COLLECT_SERVER, D.C_USERNAME, D.A_SERVER_USERNAME)},
+                    D.C_FAVORITE +" = true " , null, null,
+                    cn(D.T_COLLECT_BLANK_FORM, D.C_FAVORITE) + " DESC, " + cn(D.T_COLLECT_BLANK_FORM, D.C_ID) + " DESC",
+                    null
+            );
+
+            cursor = database.rawQuery(query, null);
+
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                OdkForm form = cursorToOdkForm(cursor);
+
+                // todo: implement cursorToCollectForm
+                long id = cursor.getLong(cursor.getColumnIndexOrThrow(D.A_COLLECT_BLANK_FORM_ID));
+                long serverId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_COLLECT_SERVER_ID));
+                boolean downloaded = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_DOWNLOADED)) == 1;
+                boolean favorite = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_FAVORITE)) == 1;
+                boolean updated = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_UPDATED)) == 1;
+                String serverName = cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_NAME));
+                String username = cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_USERNAME));
+
+                CollectForm collectForm = new CollectForm(serverId, form);
+                collectForm.setId(id);
+                collectForm.setServerName(serverName);
+                collectForm.setUsername(username);
+                collectForm.setDownloaded(downloaded);
+                collectForm.setFavorite(favorite);
+                collectForm.setUpdated(updated);
+
+                forms.add(collectForm);
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return forms;
+    }
+
     private CollectServer createServer(final CollectServer server) {
         ContentValues values = new ContentValues();
         values.put(D.C_NAME, server.getName());
@@ -793,7 +862,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         throw new NotFountException();
     }
 
-
     private List<VaultFile> getMediaFilesFromDb(long[] ids) {
         List<VaultFile> mediaFiles = new ArrayList<>();
         Cursor cursor = null;
@@ -877,7 +945,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
         throw new NotFountException();
     }
-
 
     private VaultFile getMediaFileFromDb(String uid) throws NotFountException {
         Cursor cursor = null;
@@ -1544,7 +1611,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return fileUploadBundles;
     }
 
-
     private FormDef updateCollectFormDef(CollectForm form, FormDef formDef) {
         try {
             ContentValues values = new ContentValues();
@@ -1924,7 +1990,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return fileUploadBundle;
     }
 
-
     private FileUploadInstance cursorToFileUploadInstance(Cursor cursor) {
         FileUploadInstance instance = new FileUploadInstance();
         instance.setId(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID)));
@@ -1960,26 +2025,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return table + "." + column + " AS " + as;
     }
 
-    /*private boolean dbExistsSetting(String name) {
-        Cursor cursor = null;
-
-        try {
-            cursor = database.query(D.T_SETTINGS, new String[] {D.C_NAME},
-                    D.C_NAME + "= ?", new String[] {name},
-                    null, null, null);
-
-            return cursor.getCount() > 0;
-        } catch (Exception e) {
-            Timber.d(e, getClass().getName());
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return false;
-    }*/
-
     private Setting cursorToSetting(Cursor cursor) {
         int intIndex = cursor.getColumnIndexOrThrow(D.C_INT_VALUE),
                 stringIndex = cursor.getColumnIndexOrThrow(D.C_TEXT_VALUE);
@@ -2001,27 +2046,4 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         Integer intValue;
         String stringValue;
     }
-
-    /*TODO: Are we going to re*/
-   /* private boolean mediaFileFilter(MediaFile mediaFile, Filter filter) {
-        switch (filter) {
-            case AUDIO:
-                return mediaFile.getType() == MediaFile.Type.AUDIO;
-
-            case PHOTO:
-                return mediaFile.getType() == MediaFile.Type.IMAGE;
-
-            case VIDEO:
-                return mediaFile.getType() == MediaFile.Type.VIDEO;
-
-            case WITH_METADATA:
-                return mediaFile.getMetadata() != null;
-
-            case WITHOUT_METADATA:
-                return mediaFile.getMetadata() == null;
-
-            default:
-                return true;
-        }
-    }*/
 }
