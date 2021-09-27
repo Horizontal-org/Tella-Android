@@ -97,7 +97,8 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     }
 
     override fun showChooseServerTypeDialog() {
-        showDualChoiceTypeSheet(this.supportFragmentManager,
+        showCollectServerDialog()
+       /* showDualChoiceTypeSheet(this.supportFragmentManager,
             getString(R.string.settings_servers_add_server_dialog_title),
             getString(R.string.settings_serv_add_server_selection_dialog_title),
             getString(R.string.settings_servers_add_server_forms),
@@ -110,7 +111,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
                         showTellaUploadServerDialog()
                     }
                 }
-            })
+            })*/
     }
 
     override fun hideProgress() {
