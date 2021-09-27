@@ -265,6 +265,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 if (!isListCheckOn) {
                     attachmentsAdapter.clearSelected()
                     updateAttachmentsToolbar(false)
+                    enableMoveTheme(false)
                 }
             }
             R.id.filterNameTv -> {
