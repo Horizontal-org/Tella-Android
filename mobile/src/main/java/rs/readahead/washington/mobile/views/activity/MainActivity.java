@@ -361,7 +361,6 @@ public class MainActivity extends MetadataActivity implements
     protected void onResume() {
         super.onResume();
         //btmNavMain.setSelectedItemId(R.id.home);
-        showBottomNavigation();
         btmNavMain.getMenu().findItem(R.id.home).setChecked(true);
 
         homeScreenPresenter.countCollectServers();
