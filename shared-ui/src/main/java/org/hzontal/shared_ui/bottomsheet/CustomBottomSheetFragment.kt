@@ -7,20 +7,17 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Pair
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
-import androidx.annotation.ColorRes
-import androidx.annotation.IdRes
-import androidx.annotation.LayoutRes
-import androidx.annotation.StyleRes
+import android.view.*
+import android.widget.FrameLayout
+import androidx.annotation.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.coroutines.launch
 import org.hzontal.shared_ui.R
 import java.util.*
 
@@ -167,15 +164,22 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
                 it.window?.let { window ->
                     if (animationStyle != null) window.attributes.windowAnimations =
                         animationStyle!!
-                    if (isTransparent) window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))else {
-                    if (isFullscreen) window.setBackgroundDrawable(ColorDrawable(getResources().getColor(R.color.dark_purple)))}
+                    if (isTransparent) window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) else {
+                        if (isFullscreen) window.setBackgroundDrawable(
+                            ColorDrawable(
+                                resources.getColor(
+                                    R.color.dark_purple
+                                )
+                            )
+                        )
+                    }
                 }
             }
 
         }
         super.onStart()
 
-        if (isFullscreen){
+        if (isFullscreen) {
             val sheetContainer = requireView().parent as? ViewGroup ?: return
             sheetContainer.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
         }
@@ -191,9 +195,9 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         return inflater.inflate(layoutRes, container, false)
@@ -214,11 +218,13 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
         isCancelable = isCancellable
         configBackPressCallback()
         if (statusBarColor != null) applyStatusBarColor(statusBarColor!!)
+
+        KeyboardUtil(activity, view)
     }
 
     private fun configBackPressCallback() {
         dialog!!.setOnKeyListener(DialogInterface.OnKeyListener { _, keyCode, _ ->
-            if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
                 backClickListener?.invoke()
                 return@OnKeyListener true
             }
@@ -237,12 +243,20 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        if (isFullscreen)
-            return BottomSheetDialog(requireContext(), theme).apply {
-                behavior.state = BottomSheetBehavior.STATE_EXPANDED
-                behavior.peekHeight = 1000
+        val dialog = super.onCreateDialog(savedInstanceState)
+
+        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        dialog.setOnShowListener {
+            lifecycleScope.launch {
+                val bottomSheet =
+                    (dialog as? BottomSheetDialog)?.findViewById<View>(R.id.design_bottom_sheet) as? FrameLayout
+                bottomSheet?.let {
+                    BottomSheetBehavior.from(it).state = BottomSheetBehavior.STATE_EXPANDED
+                }
             }
-        else return super.onCreateDialog(savedInstanceState)
+        }
+
+        return dialog
     }
 
     interface Binder<T : PageHolder> {

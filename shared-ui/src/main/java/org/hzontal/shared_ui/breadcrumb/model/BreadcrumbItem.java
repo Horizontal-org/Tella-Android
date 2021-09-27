@@ -23,7 +23,7 @@ public class BreadcrumbItem implements IBreadcrumbItem<Item> {
 			this.mItems = items;
 			this.mSelectedIndex = selectedIndex;
 		} else {
-			throw new IllegalArgumentException("Items shouldn\'t be null empty.");
+			throw new IllegalArgumentException("Items shouldn't be null empty.");
 		}
 	}
 

@@ -175,7 +175,7 @@ class MicFragment : MetadataBaseLockFragment(),
             disablePlay()
             handlingMediaFile = null
             cancelRecorder()
-            presenter.startRecording(recordingName.text.toString())
+            presenter.startRecording(recordingName.text.toString(),null)
         } else {
             cancelPauseRecorder()
         }

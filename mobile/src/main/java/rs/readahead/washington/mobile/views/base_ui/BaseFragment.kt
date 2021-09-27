@@ -61,7 +61,7 @@ abstract class BaseFragment : Fragment() {
     }
 
     protected fun showTooltip(v: View, text: String, gravity: Int) {
-        val tooltip = Tooltip.Builder(v)
+        Tooltip.Builder(v)
                 .setText(text)
                 .setTextColor(resources.getColor(R.color.wa_black))
                 .setBackgroundColor(resources.getColor(R.color.wa_white))

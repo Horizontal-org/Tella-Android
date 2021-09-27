@@ -16,8 +16,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.IntentSenderRequest
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
@@ -59,6 +57,7 @@ import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.DialogsUtil
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.views.activity.*
+import rs.readahead.washington.mobile.views.activity.CameraActivity.VAULT_CURRENT_ROOT_PARENT
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.custom.SpacesItemDecoration
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.AttachmentsRecycleViewAdapter
@@ -95,9 +94,9 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private lateinit var breadcrumbView: BreadcrumbsView
     private lateinit var appBar: AppBarLayout
     private lateinit var moveContainer: LinearLayout
+    private var intent: Intent? = null
     private var progressDialog: ProgressDialog? = null
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
-    private lateinit var intentSenderLauncher: ActivityResultLauncher<IntentSenderRequest>
     private var filterType = FilterType.ALL
     private lateinit var sort: Sort
     private var vaultFile: VaultFile? = null
@@ -173,6 +172,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         filterNameTv = view.findViewById(R.id.filterNameTv)
         cancelMove = view.findViewById(R.id.cancelMove)
         moveHere = view.findViewById(R.id.moveHere)
+        moveContainer = view.findViewById(R.id.moveContainer)
         toolbar = view.findViewById(R.id.toolbar)
         root = view.findViewById(R.id.root)
         appBar = view.findViewById(R.id.appbar)
@@ -190,7 +190,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         checkBoxList = view.findViewById(R.id.checkBoxList)
         // enableMoveTheme()
         initListeners()
-        handleOnBackPressed()
         setUpToolbar()
         initData()
         setUpBreadCrumb()
@@ -266,6 +265,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 if (!isListCheckOn) {
                     attachmentsAdapter.clearSelected()
                     updateAttachmentsToolbar(false)
+                    enableMoveTheme(false)
                 }
             }
             R.id.filterNameTv -> {
@@ -283,21 +283,20 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                     getString(R.string.vault_delete_origial_files_msg),
                     action = object : VaultSheetUtils.IVaultManageFiles {
                         override fun goToCamera() {
-                            activity.startActivity(Intent(activity, CameraActivity::class.java))
+                            val intent = Intent(activity, CameraActivity::class.java)
+                            intent.putExtra(VAULT_CURRENT_ROOT_PARENT, currentRootID)
+                            activity.startActivity(intent)
                         }
 
                         override fun goToRecorder() {
-                            activity.startActivity(
-                                Intent(
-                                    activity,
-                                    AudioRecordActivity2::class.java
-                                )
-                            )
-
+                            val intent = Intent(activity, AudioRecordActivity2::class.java)
+                            intent.putExtra(VAULT_CURRENT_ROOT_PARENT, currentRootID)
+                            activity.startActivity(intent)
                         }
 
                         override fun import() {
                             importAndDelete = false
+                            activity.changeTemporaryTimeout()
                             MediaFileHandler.startImportFiles(activity, true)
                         }
 
@@ -555,8 +554,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             lifecycleScope.launch {
                 uri?.let {
 
-                        deleteFileFromExternalStorage(it)
-                        uriToDelete = it
+                    deleteFileFromExternalStorage(it)
+                    uriToDelete = it
                 }
             }
         }
@@ -653,7 +652,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     override fun onGetRootIdSuccess(vaultFile: VaultFile?) {
         currentRootID = vaultFile?.id
-        breadcrumbView.addItem(BreadcrumbItem.createSimpleItem(Item("Origin", vaultFile?.id)))
+        breadcrumbView.addItem(BreadcrumbItem.createSimpleItem(Item("", vaultFile?.id)))
         attachmentsPresenter.addNewVaultFiles()
     }
 
@@ -673,7 +672,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         currentMove = null
         updateAttachmentsToolbar(false)
     }
-
 
     private fun exportVaultFiles(isMultipleFiles: Boolean, vaultFile: VaultFile?) {
         if (hasStoragePermissions(activity)) {
@@ -855,6 +853,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     private fun requestStoragePermissions() {
+        activity.changeTemporaryTimeout()
         val permissions = arrayOf(
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -963,7 +962,12 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 activity.contentResolver.delete(uri, null, null)
             } catch (e: SecurityException) {
 
-                }
             }
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        handleOnBackPressed()
+    }
+}
