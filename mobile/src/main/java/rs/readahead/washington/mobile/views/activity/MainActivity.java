@@ -1,5 +1,7 @@
 package rs.readahead.washington.mobile.views.activity;
 
+import static rs.readahead.washington.mobile.views.fragment.vault.home.HomeVaultFragmentKt.VAULT_FILTER;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -23,6 +25,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.tella_vault.filter.FilterType;
 
 import java.util.List;
 import java.util.Objects;
@@ -57,6 +60,7 @@ public class MainActivity extends MetadataActivity implements
         IMetadataAttachPresenterContract.IView,
         IHomeScreenPresenterContract.IView,
         ICollectCreateFormControllerContract.IView {
+    public static final String PHOTO_VIDEO_FILTER = "gallery_filter";
     @BindView(R.id.home_screen_gradient)
     HomeScreenGradient homeScreenGradient;
     @BindView(R.id.nav_bar_holder)
@@ -93,6 +97,12 @@ public class MainActivity extends MetadataActivity implements
 
         // todo: check this..
         //SafetyNetCheck.setApiKey(getString(R.string.share_in_report));
+
+        if (getIntent().hasExtra(PHOTO_VIDEO_FILTER)) {
+            Bundle bundle = new Bundle();
+            bundle.putString(VAULT_FILTER, FilterType.PHOTO_VIDEO.name());
+            navController.navigate(R.id.action_homeScreen_to_attachments_screen, bundle);
+        }
     }
 
     private void initSetup() {

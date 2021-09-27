@@ -446,7 +446,9 @@ public class CameraActivity extends MetadataActivity implements
 
     @OnClick(R.id.preview_image)
     void onPreviewClicked() {
-        startActivity(new Intent(this, GalleryActivity.class));
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(MainActivity.PHOTO_VIDEO_FILTER, "filter");
+        startActivity(intent);
     }
 
     private void resetZoom() {
