@@ -42,6 +42,7 @@
         android:layout_marginBottom="@dimen/hide_tella_big_margin"
         android:fontFamily="@font/open_sans"
         android:gravity="center"
+        android:textStyle="bold"
         android:padding="6dp"
         android:text="@string/onboard.title_camera"
         android:textColor="@color/wa_white"
@@ -73,11 +74,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:fontFamily="@font/open_sans"
-        android:padding="24dp"
         android:text="@string/pl_back"
         android:textColor="@color/wa_white"
         android:textSize="17sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guidelineBottom" />
 
@@ -87,11 +86,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:fontFamily="@font/open_sans"
-        android:padding="24dp"
+
         android:text="@string/action_next"
         android:textColor="@color/wa_white"
         android:textSize="17sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintTop_toBottomOf="@+id/guidelineBottom" />
