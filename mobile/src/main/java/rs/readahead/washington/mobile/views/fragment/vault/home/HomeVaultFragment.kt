@@ -392,8 +392,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     private fun maybeHideFilesTitle() {
         if (!Preferences.isShowRecentFiles() && !Preferences.isShowFavoriteForms()) {
-            val title = view?.findViewById<TextView>(R.id.filesText)
-            if (title != null) title.visibility = View.GONE
+            vaultAdapter.removeTitle()
         }
     }
 }

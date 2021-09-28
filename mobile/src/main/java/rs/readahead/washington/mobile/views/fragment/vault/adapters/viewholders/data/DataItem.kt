@@ -18,4 +18,8 @@ sealed class DataItem {
     data class FileActions(val idActions: String) : DataItem() {
         override val id = idActions
     }
+
+    data class Titles(val idTitles: String) : DataItem() {
+        override val id = idTitles
+    }
 }

@@ -9,20 +9,20 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import rs.readahead.washington.mobile.data.entity.XFormEntity
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
-import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.FavoriteFormsViewHolder
-import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.FileActionsViewHolder
-import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.PanicModeViewHolder
-import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.RecentFilesViewHolder
+import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.*
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.BaseViewHolder
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.DataItem
+import timber.log.Timber
 
 const val ITEM_RECENT_FILES = 0
 const val ITEM_FAVORITES_FORMS = 1
 const val ITEM_PANIC_BUTTON = 2
 const val ITEM_FILES_ACTIONS = 3
+const val ITEM_TITLE = 4
 
 private const val ID_FILES_ACTIONS = "1"
 private const val ID_PANIC_MODE = "2"
+private const val ID_FILES_TITLE = "3"
 
 
 class VaultAdapter(private val onClick: VaultClickListener) :
@@ -33,17 +33,19 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     private var recentFiles = listOf<DataItem.RecentFiles>()
     private var favoriteForms = listOf<DataItem.FavoriteForms>()
     private var actions = listOf<DataItem.FileActions>()
+    private var titles = listOf<DataItem.Titles>()
     private var items = listOf<DataItem>()
 
     init {
+        addTitle()
         addFileActions()
     }
-
 
     fun addRecentFiles(vaultFiles: List<VaultFile?>) {
         recentFiles = listOf(DataItem.RecentFiles(vaultFiles))
         renderList()
     }
+
     fun removeRecentFiles(){
         adapterScope.launch {
             items = items - recentFiles
@@ -52,6 +54,16 @@ class VaultAdapter(private val onClick: VaultClickListener) :
             }
         }
     }
+
+    fun removeTitle(){
+        adapterScope.launch {
+            items =  items - titles
+            withContext(Dispatchers.Main) {
+                submitList(items)
+            }
+        }
+    }
+
     fun removeFavoriteForms(){
         adapterScope.launch {
             items =  items - favoriteForms
@@ -75,9 +87,14 @@ class VaultAdapter(private val onClick: VaultClickListener) :
         renderList()
     }
 
+    fun addTitle() {
+        titles = listOf(DataItem.Titles(ID_FILES_TITLE))
+        renderList()
+    }
+
     fun renderList() {
         adapterScope.launch {
-            items = favoriteForms + recentFiles + actions
+            items = favoriteForms + recentFiles + titles + actions
             withContext(Dispatchers.Main) {
                 submitList(items)
             }
@@ -93,10 +110,14 @@ class VaultAdapter(private val onClick: VaultClickListener) :
                 FavoriteFormsViewHolder.from(view)
             }
             ITEM_PANIC_BUTTON -> {
-                PanicModeViewHolder.from(view)
+                val from = PanicModeViewHolder.from(view)
+                from
             }
             ITEM_FILES_ACTIONS -> {
                 FileActionsViewHolder.from(view)
+            }
+            ITEM_TITLE -> {
+                TitleViewHolder.from(view)
             }
             else -> throw ClassCastException("Unknown viewType $viewType")
         }
@@ -116,6 +137,10 @@ class VaultAdapter(private val onClick: VaultClickListener) :
                 val recentFiles = getItem(position) as DataItem.FileActions
                 holder.bind(recentFiles.idActions, onClick)
             }
+            is TitleViewHolder -> {
+                val titles = getItem(position) as DataItem.Titles
+                holder.bind(titles.idTitles, onClick)
+            }
         }
     }
 
@@ -124,6 +149,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
             is DataItem.FileActions -> ITEM_FILES_ACTIONS
             is DataItem.RecentFiles -> ITEM_RECENT_FILES
             is DataItem.FavoriteForms -> ITEM_FAVORITES_FORMS
+            is DataItem.Titles -> ITEM_TITLE
             else -> throw ClassCastException("Unknown position $position")
         }
     }
