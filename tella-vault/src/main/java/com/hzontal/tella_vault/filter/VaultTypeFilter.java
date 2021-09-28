@@ -29,7 +29,6 @@ public class VaultTypeFilter implements Filter {
                 return vaultFile.mimeType != null && MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType);
             case PHOTO:
                 return vaultFile.mimeType != null && MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType);
-
             case VIDEO:
                 return vaultFile.mimeType != null && MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType);
             default:

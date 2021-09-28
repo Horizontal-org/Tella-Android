@@ -75,8 +75,6 @@ open class BaseActivity : AppCompatActivity() {
             intent.putExtra(IS_ONBOARD_LOCK_SET, true)
             startActivity(intent)
             finishAffinity()
-           // startActivity(Intent(this, ConfirmCredentialsActivity::class.java))
-            //finishAffinity()
         }
     }
 

@@ -196,13 +196,13 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
     }
 
     override fun getRootId() {
-        MyApplication.rxVault.root
-            .subscribe(
+        MyApplication.rxVault?.root
+            ?.subscribe(
                 { vaultFile: VaultFile? -> view?.onGetRootIdSuccess(vaultFile) }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 view?.onGetRootIdError(throwable)
-            }.dispose()
+            }?.dispose()
     }
 
     override fun countTUServers() {

@@ -39,25 +39,28 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
     private final IGalleryVaultHandler galleryMediaHandler;
     private final Set<VaultFile> selected;
     private boolean selectable;
+    private boolean isMoveMode;
     private final boolean singleSelection;
     private GridLayoutManager layoutManager;
 
 
     public AttachmentsRecycleViewAdapter(Context context, IGalleryVaultHandler galleryMediaHandler,
                                          MediaFileHandler mediaFileHandler, GridLayoutManager layoutManager) {
-        this(context, galleryMediaHandler, mediaFileHandler, layoutManager, false, false);
+        this(context, galleryMediaHandler, mediaFileHandler, layoutManager, false, false, false);
     }
 
     public AttachmentsRecycleViewAdapter(Context context, IGalleryVaultHandler galleryMediaHandler,
                                          MediaFileHandler mediaFileHandler, GridLayoutManager layoutManager,
                                          boolean selectable,
-                                         boolean singleSelection) {
+                                         boolean singleSelection,
+                                         boolean isMoveMode) {
         this.glideLoader = new VaultFileUrlLoader(context.getApplicationContext(), mediaFileHandler);
         this.galleryMediaHandler = galleryMediaHandler;
         this.selected = new LinkedHashSet<>();
         this.selectable = selectable;
         this.singleSelection = singleSelection;
         this.layoutManager = layoutManager;
+        this.isMoveMode = isMoveMode;
     }
 
     @NonNull
@@ -119,15 +122,11 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
             }
         }
 
-        if (selectable) {
-            holder.itemView.setOnClickListener(v -> checkboxClickHandler(holder, vaultFile));
-        } else {
-            holder.itemView.setOnClickListener(v -> galleryMediaHandler.playMedia(vaultFile));
-        }
-
         if (holder instanceof ListViewHolder) {
             ((ListViewHolder) holder).setFileDateTextView(vaultFile);
         }
+        handleClickMode(holder,vaultFile);
+        setMoveModeView(holder);
     }
 
     @Override
@@ -196,6 +195,34 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
     public void enableSelectMode(Boolean selectable) {
         this.selectable = selectable;
         notifyDataSetChanged();
+    }
+
+    public void enableMoveMode(Boolean isMoveMode){
+        this.isMoveMode = isMoveMode;
+        notifyDataSetChanged();
+    }
+
+    private void setMoveModeView(ViewHolder holder){
+        if (isMoveMode){
+            holder.more.setVisibility(View.GONE);
+            holder.checkBox.setVisibility(View.GONE);
+        }
+    }
+
+    public void handleClickMode(ViewHolder holder, VaultFile vaultFile){
+        if (isMoveMode){
+            if (vaultFile.type == VaultFile.Type.DIRECTORY){
+                holder.itemView.setOnClickListener(v -> galleryMediaHandler.playMedia(vaultFile));
+            }else {
+                holder.itemView.setOnClickListener(null);
+            }
+        }else {
+            if (selectable) {
+                holder.itemView.setOnClickListener(v -> checkboxClickHandler(holder, vaultFile));
+            } else {
+                holder.itemView.setOnClickListener(v -> galleryMediaHandler.playMedia(vaultFile));
+            }
+        }
     }
 
     private void removeAllSelections() {

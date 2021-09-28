@@ -10,15 +10,6 @@
     android:layout_marginTop="17dp"
     >
 
-    <TextView
-        android:id="@+id/filesText"
-        style="@style/Tella_Main_White_Text.Meduim"
-        android:textColor="@color/wa_white_90"
-        android:letterSpacing="0.05"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="@string/vault_files" />
-
     <org.hzontal.shared_ui.buttons.HomeButton
         android:id="@+id/allFilesBtn"
         android:layout_width="0dp"

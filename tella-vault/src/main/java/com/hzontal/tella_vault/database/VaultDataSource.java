@@ -312,6 +312,8 @@ public class VaultDataSource implements IVaultDatabase {
                         + ")";
             case ALL_WITHOUT_DIRECTORY:
                 return cn(D.C_TYPE) + " != '" + VaultFile.Type.DIRECTORY.getValue() + "'";
+            case PHOTO_VIDEO:
+                return cn(D.C_MIME_TYPE) + " LIKE '" + "image/%" + "' OR " + cn(D.C_MIME_TYPE) + " LIKE '" + "video/%" + "'";
             default:
                 return cn(D.C_PARENT_ID) + " = '" + parentId + "'";
 
