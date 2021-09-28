@@ -674,7 +674,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                             D.C_DOWNLOAD_URL,
                             cn(D.T_COLLECT_SERVER, D.C_NAME, D.A_SERVER_NAME),
                             cn(D.T_COLLECT_SERVER, D.C_USERNAME, D.A_SERVER_USERNAME)},
-                    D.C_FAVORITE +" = true " , null, null,
+                    D.C_FAVORITE +" =1 " , null, null,
                     cn(D.T_COLLECT_BLANK_FORM, D.C_FAVORITE) + " DESC, " + cn(D.T_COLLECT_BLANK_FORM, D.C_ID) + " DESC",
                     null
             );
