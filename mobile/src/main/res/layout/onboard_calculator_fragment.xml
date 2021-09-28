@@ -34,6 +34,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/open_sans"
         android:gravity="center"
+        android:textAlignment="center"
         android:padding="@dimen/hide_tella_small_margin"
         android:text="@string/onboard.expl_hide_tella_set"
         android:textColor="@color/wa_white"

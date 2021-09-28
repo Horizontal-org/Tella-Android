@@ -154,6 +154,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             FilterType.DOCUMENTS -> toolbar.setStartTextTitle("Documents")
             FilterType.OTHERS -> toolbar.setStartTextTitle("Others")
             FilterType.ALL -> toolbar.setStartTextTitle("All files")
+            FilterType.PHOTO_VIDEO -> toolbar.setStartTextTitle("Photos and Videos")
         }
     }
 
@@ -265,6 +266,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 if (!isListCheckOn) {
                     attachmentsAdapter.clearSelected()
                     updateAttachmentsToolbar(false)
+                    enableMoveTheme(false)
                 }
             }
             R.id.filterNameTv -> {

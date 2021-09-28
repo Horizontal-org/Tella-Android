@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.SeekBar
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -239,6 +240,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         }
         maybeGetFiles()
         maybeGetRecentForms()
+        maybeHideFilesTitle()
     }
 
     private fun maybeClosePanic(): Boolean {
@@ -310,7 +312,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     override fun onGetFilesSuccess(files: List<VaultFile?>) {
-        if (!files.isNullOrEmpty()) {
+        if (!files.isNullOrEmpty() && Preferences.isShowRecentFiles()) {
             vaultAdapter.addRecentFiles(files)
         } else {
             vaultAdapter.removeRecentFiles()
@@ -385,6 +387,14 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             if (permissionsToRequest.isNotEmpty()) {
                 permissionsLauncher.launch(permissionsToRequest.toTypedArray())
             }
+        }
+    }
+
+    private fun maybeHideFilesTitle() {
+        if (!Preferences.isShowRecentFiles() && !Preferences.isShowFavoriteForms()) {
+            vaultAdapter.removeTitle()
+        } else {
+            vaultAdapter.addTitle()
         }
     }
 }
