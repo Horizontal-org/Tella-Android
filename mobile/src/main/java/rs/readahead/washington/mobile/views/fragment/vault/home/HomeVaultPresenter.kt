@@ -20,6 +20,7 @@ import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.data.sharedpref.SharedPrefs
+import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.media.MediaFileHandler
 
 class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
@@ -127,6 +128,29 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 view?.onGetFilesError(throwable)
             }?.let { disposables.add(it) }
+    }
+
+    override fun getFavoriteCollectForms() {
+        disposables.add(keyDataSource.dataSource
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .flatMap { dataSource: DataSource ->
+                dataSource.listFavoriteCollectForms().toObservable()
+            }
+            .subscribe(
+                { forms: List<CollectForm>? ->
+                    if (forms != null) {
+                        view?.onGetFavoriteCollectFormsSuccess(
+                            forms
+                        )
+                    }
+                }
+            ) { throwable: Throwable? ->
+                view?.onGetFavoriteCollectFormsError(
+                    throwable
+                )
+            }
+        )
     }
 
     private fun clearSharedPreferences() {

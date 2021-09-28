@@ -43,6 +43,7 @@
         android:fontFamily="@font/open_sans"
         android:gravity="center"
         android:padding="6dp"
+        android:textStyle="bold"
         android:text="@string/onboard.title_recorder"
         android:textColor="@color/wa_white"
         android:textSize="18sp"
@@ -75,7 +76,6 @@
         android:text="@string/pl_back"
         android:textColor="@color/wa_white"
         android:textSize="17sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guidelineBottom" />
@@ -89,7 +89,6 @@
         android:text="@string/action_next"
         android:textColor="@color/wa_white"
         android:textSize="17sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintTop_toBottomOf="@+id/guidelineBottom" />

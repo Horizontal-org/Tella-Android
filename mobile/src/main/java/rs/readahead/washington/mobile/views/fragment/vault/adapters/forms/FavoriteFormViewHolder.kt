@@ -5,16 +5,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.entity.XFormEntity
+import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.BaseViewHolder
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.inflate
 
-class FavoriteFormViewHolder(val view: View) : BaseViewHolder<XFormEntity>(view) {
+class FavoriteFormViewHolder(val view: View) : BaseViewHolder<CollectForm>(view) {
        private lateinit var formsTitleTextView : TextView
-    override fun bind(item: XFormEntity, vaultClickListener: VaultClickListener) {
+    override fun bind(item: CollectForm, vaultClickListener: VaultClickListener) {
         formsTitleTextView = view.findViewById(R.id.formTitleTv)
         item.apply {
-            formsTitleTextView.text = name
+            formsTitleTextView.text = serverName
         }
 
         view.setOnClickListener {
