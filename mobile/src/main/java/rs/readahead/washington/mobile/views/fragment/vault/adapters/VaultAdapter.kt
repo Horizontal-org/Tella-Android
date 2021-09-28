@@ -52,19 +52,18 @@ class VaultAdapter(private val onClick: VaultClickListener) :
             }
         }
     }
-
-    fun removeTitle(){
+    fun removeFavoriteForms(){
         adapterScope.launch {
-            items =  items - titles
+            items =  items - favoriteForms
             withContext(Dispatchers.Main) {
                 submitList(items)
             }
         }
     }
 
-    fun removeFavoriteForms(){
+    fun removeTitle(){
         adapterScope.launch {
-            items =  items - favoriteForms
+            items =  items - titles
             withContext(Dispatchers.Main) {
                 submitList(items)
             }

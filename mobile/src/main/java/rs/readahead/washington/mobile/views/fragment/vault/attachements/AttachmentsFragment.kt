@@ -118,7 +118,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        if (isListCheckOn) inflater.inflate(R.menu.home_menu_selected, menu)
+        if (isListCheckOn && !isMoveModeEnabled) inflater.inflate(R.menu.home_menu_selected, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -918,6 +918,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     private fun enableMoveTheme(enable: Boolean) {
         if (enable) {
+            isMoveModeEnabled = true
             (activity as MainActivity).setTheme(R.style.AppTheme_DarkNoActionBar_Blue)
             toolbar.background = ColorDrawable(getColor(activity, R.color.prussian_blue))
             attachmentsRecyclerView.background =
@@ -927,7 +928,9 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             (activity as MainActivity).enableMoveMode(true)
             activity.supportActionBar?.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.prussian_blue)))
             moveContainer.visibility = View.VISIBLE
+            checkBoxList.visibility = View.GONE
         } else {
+            isMoveModeEnabled = false
             (activity as MainActivity).setTheme(R.style.AppTheme_DarkNoActionBar)
             toolbar.background = ColorDrawable(getColor(activity, R.color.space_cadet))
             attachmentsRecyclerView.background =
@@ -944,7 +947,10 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 )
             )
             moveContainer.visibility = View.GONE
+            checkBoxList.visibility = View.VISIBLE
         }
+        activity.invalidateOptionsMenu()
+        attachmentsAdapter.enableMoveMode(enable)
     }
 
     private fun highlightMoveBackground() {

@@ -345,7 +345,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     override fun onGetFavoriteCollectFormsSuccess(files: List<CollectForm>) {
-        if (files.isNullOrEmpty()){
+        if (!files.isNullOrEmpty()){
             vaultAdapter.addFavoriteForms(files)
         }else{
             vaultAdapter.removeFavoriteForms()
