@@ -393,6 +393,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private fun maybeHideFilesTitle() {
         if (!Preferences.isShowRecentFiles() && !Preferences.isShowFavoriteForms()) {
             vaultAdapter.removeTitle()
+        } else {
+            vaultAdapter.addTitle()
         }
     }
 }

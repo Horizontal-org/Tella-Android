@@ -7,12 +7,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import rs.readahead.washington.mobile.data.entity.XFormEntity
+import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.*
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.BaseViewHolder
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.DataItem
-import timber.log.Timber
 
 const val ITEM_RECENT_FILES = 0
 const val ITEM_FAVORITES_FORMS = 1
@@ -37,7 +36,6 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     private var items = listOf<DataItem>()
 
     init {
-        addTitle()
         addFileActions()
     }
 
@@ -89,12 +87,28 @@ class VaultAdapter(private val onClick: VaultClickListener) :
 
     fun addTitle() {
         titles = listOf(DataItem.Titles(ID_FILES_TITLE))
-        renderList()
+        renderListAfterward()
     }
 
     fun renderList() {
         adapterScope.launch {
             items = favoriteForms + recentFiles + titles + actions
+            withContext(Dispatchers.Main) {
+                submitList(items)
+            }
+        }
+    }
+
+    fun renderListAfterward() {
+        items = emptyList()
+        adapterScope.launch {
+            if (Preferences.isShowFavoriteForms()) {
+                items = items + favoriteForms
+            }
+            if (Preferences.isShowRecentFiles()) {
+                items = items + recentFiles
+            }
+            items = items + titles + actions
             withContext(Dispatchers.Main) {
                 submitList(items)
             }
