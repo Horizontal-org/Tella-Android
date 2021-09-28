@@ -7,12 +7,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import rs.readahead.washington.mobile.data.entity.XFormEntity
+import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
-import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.FavoriteFormsViewHolder
-import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.FileActionsViewHolder
-import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.PanicModeViewHolder
-import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.RecentFilesViewHolder
+import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.*
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.BaseViewHolder
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.DataItem
 
@@ -67,15 +64,6 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     fun removeTitle(){
         adapterScope.launch {
             items =  items - titles
-            withContext(Dispatchers.Main) {
-                submitList(items)
-            }
-        }
-    }
-
-    fun removeFavoriteForms(){
-        adapterScope.launch {
-            items =  items - favoriteForms
             withContext(Dispatchers.Main) {
                 submitList(items)
             }
