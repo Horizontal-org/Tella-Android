@@ -14,6 +14,7 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.DualChoiceConsumer
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showDualChoiceTypeSheet
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity
@@ -40,6 +41,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         indicatorsContainer = findViewById(R.id.indicatorsContainer)
 
         if (isOnboardLockSet) {
+            Preferences.setFirstStart(false)
             replaceFragmentNoAddToBackStack(OnBoardLockSetFragment(), R.id.rootOnboard)
         } else {
             replaceFragmentNoAddToBackStack(
