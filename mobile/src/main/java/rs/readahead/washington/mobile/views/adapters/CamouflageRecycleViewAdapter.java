@@ -1,5 +1,7 @@
 package rs.readahead.washington.mobile.views.adapters;
 
+import static rs.readahead.washington.mobile.util.CamouflageManager.defaultAliasPosition;
+
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,12 +41,11 @@ public class CamouflageRecycleViewAdapter extends RecyclerView.Adapter<Camouflag
 
         holder.rootView.setSelected(position == selectedPosition);
 
-        holder.rootView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setSelectedPosition(holder.getAdapterPosition());
-            }
-        });
+        holder.rootView.setOnClickListener(v -> setSelectedPosition(holder.getAdapterPosition()));
+
+        if (position == defaultAliasPosition){
+            holder.itemView.setVisibility(View.GONE);
+        }
     }
 
     @Override

@@ -19,6 +19,7 @@ public class CamouflageManager {
     private static CamouflageManager instance;
     private static final String defaultAlias = SplashActivity.class.getCanonicalName();
     private final List<CamouflageOption> options;
+    public static final int defaultAliasPosition = 15;
 
     public final CamouflageOption calculatorOption = new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calculator, R.string.settings_camo_calculator2);
 
@@ -32,7 +33,6 @@ public class CamouflageManager {
 
     private CamouflageManager() {
         options = new ArrayList<>();
-        //options.add(new CamouflageOption(defaultAlias, R.drawable.tella_black, R.string.app_name));
         options.add(new CamouflageOption(getOptionAlias("iCamera"), R.drawable.icamera_foreground, R.string.settings_camo_icamera));
         options.add(new CamouflageOption(getOptionAlias("SelfieCam"), R.drawable.selfiecamera_foreground, R.string.settings_camo_selfie_cam));
         options.add(new CamouflageOption(getOptionAlias("SnapCamera"), R.drawable.snapcamera_foreground, R.string.settings_camo_snap_camera));
@@ -48,6 +48,7 @@ public class CamouflageManager {
         options.add(new CamouflageOption(getOptionAlias("Clock"), R.drawable.clock_foreground, R.string.settings_camo_clock));
         options.add(new CamouflageOption(getOptionAlias("Time"), R.drawable.time_foreground, R.string.settings_camo_time));
         options.add(new CamouflageOption(getOptionAlias("StopWatch"), R.drawable.stopwatch_foreground, R.string.settings_camo_stopwatch));
+        options.add(new CamouflageOption(defaultAlias, R.drawable.tella_black, R.string.app_name));
         //options.add(new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calculator, R.string.settings_camo_calculator2));
     }
 
