@@ -18,7 +18,6 @@ class ChangeRemoveCamouflage : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_change_remove_camouflage, container, false)
-        (activity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_prot_select_camouflage)
 
         initView(view)
 
@@ -26,6 +25,8 @@ class ChangeRemoveCamouflage : BaseFragment() {
     }
 
     override fun initView(view: View) {
+        (activity as OnFragmentSelected?)?.showAppbar()
+        (activity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_prot_select_camouflage)
 
         val fragmentTitle = view.findViewById<TextView>(R.id.title)
         fragmentTitle.text = getString(R.string.settings_servers_add_camouflage_subtitle, cm.getLauncherName(requireContext()))

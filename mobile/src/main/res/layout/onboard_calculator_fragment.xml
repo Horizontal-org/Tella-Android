@@ -75,7 +75,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:fontFamily="@font/open_sans"
-        android:padding="24dp"
         android:text="@string/pl_back"
         android:textColor="@color/wa_white"
         android:textSize="17sp"

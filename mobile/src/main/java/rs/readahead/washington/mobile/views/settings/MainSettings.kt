@@ -7,14 +7,10 @@ import android.widget.ImageView
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.R.*
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
-import rs.readahead.washington.mobile.util.CamouflageManager
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 
 
 class MainSettings : BaseFragment() {
-
-    private val cm = CamouflageManager.getInstance()
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
