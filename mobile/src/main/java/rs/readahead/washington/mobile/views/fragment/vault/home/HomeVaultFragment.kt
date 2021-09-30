@@ -298,7 +298,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         } else {
             seekBarContainer.visibility = View.GONE
             vaultRecyclerView.setMargins(null, null, null, 55)
-
         }
     }
 

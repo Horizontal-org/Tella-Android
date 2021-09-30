@@ -71,7 +71,8 @@ const val WRITE_REQUEST_CODE = 1002
 
 class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.IGalleryVaultHandler,
-    IAttachmentsPresenter.IView {
+    IAttachmentsPresenter.IView,
+    OnNavBckListener {
     private lateinit var attachmentsRecyclerView: RecyclerView
     private val attachmentsAdapter by lazy {
         AttachmentsRecycleViewAdapter(
@@ -94,7 +95,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private lateinit var breadcrumbView: BreadcrumbsView
     private lateinit var appBar: AppBarLayout
     private lateinit var moveContainer: LinearLayout
-    private var intent: Intent? = null
     private var progressDialog: ProgressDialog? = null
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
     private var filterType = FilterType.ALL
@@ -976,5 +976,10 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     override fun onResume() {
         super.onResume()
         handleOnBackPressed()
+    }
+
+    override fun onBackPressed(): Boolean {
+        handleBackStack()
+        return true
     }
 }
