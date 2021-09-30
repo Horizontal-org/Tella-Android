@@ -216,12 +216,19 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         onFileDeletedEventListener()
         onFileRenameEventListener()
         onCaptureEventListener()
+        initViewType()
     }
 
     private fun initSorting() {
         sort = Sort()
         sort.type = Sort.Type.NAME
         sort.direction = Sort.Direction.ASC
+    }
+
+    private fun initViewType() {
+        if (filterType == FilterType.PHOTO_VIDEO) {
+            setGridView()
+        }
     }
 
     private fun setUpBreadCrumb() {
@@ -244,14 +251,18 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         })
     }
 
+    private fun setGridView() {
+        gridCheck.toggleVisibility(false)
+        listCheck.toggleVisibility(true)
+        gridLayoutManager.spanCount = 4
+        attachmentsAdapter.setLayoutManager(gridLayoutManager)
+        attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
+    }
+
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.gridCheck -> {
-                gridCheck.toggleVisibility(false)
-                listCheck.toggleVisibility(true)
-                gridLayoutManager.spanCount = 4
-                attachmentsAdapter.setLayoutManager(gridLayoutManager)
-                attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
+                setGridView()
             }
             R.id.listCheck -> {
                 gridCheck.toggleVisibility(true)
@@ -644,7 +655,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     override fun onCreateFolderSuccess() {
         attachmentsPresenter.addNewVaultFiles()
-
     }
 
     override fun onCreateFolderError(error: Throwable?) {
@@ -685,7 +695,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         } else {
             requestStoragePermissions()
         }
-
     }
 
     private fun hideProgressDialog() {
@@ -868,7 +877,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             WRITE_REQUEST_CODE
         )
     }
-
 
     private fun createItem(file: VaultFile): BreadcrumbItem {
         val list: MutableList<Item> = ArrayList()
