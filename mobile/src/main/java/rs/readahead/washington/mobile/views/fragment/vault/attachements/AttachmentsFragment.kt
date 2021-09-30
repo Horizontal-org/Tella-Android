@@ -56,6 +56,7 @@ import rs.readahead.washington.mobile.media.MediaFileHandler.walkAllFilesWithDir
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.DialogsUtil
 import rs.readahead.washington.mobile.util.LockTimeoutManager
+import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.views.activity.*
 import rs.readahead.washington.mobile.views.activity.CameraActivity.VAULT_CURRENT_ROOT_PARENT
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
@@ -357,6 +358,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             toolbar.setToolbarNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
             setToolbarLabel()
             attachmentsAdapter.clearSelected()
+            enableMoveTheme(false)
         }
     }
 
@@ -929,6 +931,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             activity.supportActionBar?.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.prussian_blue)))
             moveContainer.visibility = View.VISIBLE
             checkBoxList.visibility = View.GONE
+            detailsFab.setMargins(17,0,17,67)
+            attachmentsRecyclerView.setMargins(17,0,17,37)
         } else {
             isMoveModeEnabled = false
             (activity as MainActivity).setTheme(R.style.AppTheme_DarkNoActionBar)
@@ -948,6 +952,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             )
             moveContainer.visibility = View.GONE
             checkBoxList.visibility = View.VISIBLE
+            detailsFab.setMargins(17,0,17,17)
+            attachmentsRecyclerView.setMargins(17,0,17,17)
         }
         activity.invalidateOptionsMenu()
         attachmentsAdapter.enableMoveMode(enable)
