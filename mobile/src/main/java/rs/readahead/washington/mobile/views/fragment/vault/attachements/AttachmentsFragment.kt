@@ -918,6 +918,10 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 currentRootID = breadcrumbView.getCurrentItem<BreadcrumbItem>().selectedItem.id
                 attachmentsPresenter.addNewVaultFiles()
             }
+            filterType == FilterType.PHOTO_VIDEO -> {
+                nav().navigate(R.id.action_attachments_screen_to_camera)
+                activity.finish()
+            }
             else -> {
                 nav().navigateUp()
             }
