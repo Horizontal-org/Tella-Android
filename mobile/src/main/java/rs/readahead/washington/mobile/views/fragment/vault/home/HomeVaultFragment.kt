@@ -151,6 +151,26 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             MyApplication.exit(activity)
             MyApplication.getMainKeyHolder().timeout = LockTimeoutManager.IMMEDIATE_SHUTDOWN
         }
+        vaultAdapter.registerAdapterDataObserver(object: RecyclerView.AdapterDataObserver() {
+            override fun onChanged() {
+                vaultRecyclerView.scrollToPosition(0)
+            }
+            override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
+                vaultRecyclerView.scrollToPosition(0)
+            }
+            override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
+                vaultRecyclerView.scrollToPosition(0)
+            }
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                vaultRecyclerView.scrollToPosition(0)
+            }
+            override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
+                vaultRecyclerView.scrollToPosition(0)
+            }
+            override fun onItemRangeChanged(positionStart: Int, itemCount: Int, payload: Any?) {
+                vaultRecyclerView.scrollToPosition(0)
+            }
+        })
     }
 
     private fun setUpToolbar() {
@@ -280,10 +300,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             vaultRecyclerView.setMargins(null, null, null, 55)
 
         }
-    }
-
-    private fun setUpFavoriteFormsView() {
-
     }
 
     private fun executePanicMode() {
