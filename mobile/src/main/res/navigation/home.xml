@@ -15,7 +15,6 @@
             app:destination="@id/main_settings"
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out"/>
-
         <action
             android:id="@+id/action_homeScreen_to_attachments_screen"
             app:destination="@id/attachments_screen"
@@ -34,6 +33,10 @@
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out">
         </action>
+        <action
+            android:id="@+id/action_attachments_screen_to_camera"
+            app:destination="@id/cameraScreen">
+        </action>
     </fragment>
 
 
@@ -49,5 +52,12 @@
         android:name="rs.readahead.washington.mobile.views.activity.SettingsActivity"
         android:label="Settings"
         tools:layout="@layout/activity_settings">
+    </activity>
+
+    <activity
+        android:id="@+id/cameraScreen"
+        android:name="rs.readahead.washington.mobile.views.activity.CameraActivity"
+        android:label="Camera"
+        tools:layout="@layout/activity_camera">
     </activity>
 </navigation>

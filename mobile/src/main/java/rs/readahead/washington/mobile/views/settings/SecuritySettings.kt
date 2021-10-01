@@ -240,6 +240,7 @@ class SecuritySettings : BaseFragment() {
         intent!!.putExtra(RETURN_ACTIVITY, returnCall.getActivityOrder())
         intent.putExtra(IS_FROM_SETTINGS, true)
         startActivity(intent)
+        activity.finish()
     }
 
     private fun setupQuickExitSwitch(quickExitSwitch: SwitchCompat, view: View) {
