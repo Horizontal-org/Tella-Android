@@ -48,6 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/more"
+        android:padding="6dp"
         app:layout_constraintStart_toEndOf="@id/fileNameTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/fileNameTextView"
