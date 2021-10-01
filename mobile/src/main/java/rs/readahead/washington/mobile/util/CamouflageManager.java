@@ -21,7 +21,7 @@ public class CamouflageManager {
     private final List<CamouflageOption> options;
     public static final int defaultAliasPosition = 15;
 
-    public final CamouflageOption calculatorOption = new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calculator, R.string.settings_camo_calculator2);
+    public final CamouflageOption calculatorOption = new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calculator_foreground, R.string.settings_camo_calculator2);
 
     public synchronized static CamouflageManager getInstance() {
         if (instance == null) {

@@ -9,13 +9,13 @@
       android:translateX="16.74"
       android:translateY="16.74">
     <path
-        android:pathData="M512,512m-512,0a512,512 0,1 1,1024 0a512,512 0,1 1,-1024 0">
+        android:pathData="M0.5,-0.04h1024v1024h-1024z">
       <aapt:attr name="android:fillColor">
         <gradient 
-            android:startY="149.96"
-            android:startX="149.96"
-            android:endY="663.58"
-            android:endX="663.58"
+            android:startY="-0.04"
+            android:startX="0.5"
+            android:endY="726.33"
+            android:endX="726.87"
             android:type="linear">
           <item android:offset="0.02" android:color="#FFB293CC"/>
           <item android:offset="0.93" android:color="#FF5B4C8B"/>
@@ -23,22 +23,22 @@
       </aapt:attr>
     </path>
     <path
-        android:pathData="M348.7,332.25l331.92,0l-165.96,169.15l-165.96,-169.15z"
+        android:pathData="M348.17,332.21l331.92,0l-165.96,169.15l-165.96,-169.15z"
         android:fillColor="#f3f9fe"/>
     <path
-        android:pathData="M348.7,501.4l326.6,0l-160.64,320.21l-165.96,-320.21z"
+        android:pathData="M348.17,501.36l326.6,0l-160.64,320.21l-165.96,-320.21z"
         android:fillColor="#ddeffc"/>
     <path
-        android:pathData="M842.32,501.4l-167.02,0l-160.64,320.21l327.66,-320.21z"
+        android:pathData="M841.79,501.36l-167.02,0l-160.64,320.21l327.66,-320.21z"
         android:fillColor="#c4e8ff"/>
     <path
-        android:pathData="M190.19,501.4l158.51,0l165.96,320.21l-324.47,-320.21z"
+        android:pathData="M189.66,501.36l158.51,0l165.96,320.21l-324.47,-320.21z"
         android:fillColor="#c4e8ff"/>
     <path
-        android:pathData="M348.7,332.25l165.96,169.15l-324.47,0l158.51,-169.15z"
+        android:pathData="M348.17,332.21l165.96,169.15l-324.47,0l158.51,-169.15z"
         android:fillColor="#ddeffc"/>
     <path
-        android:pathData="M680.62,332.25l-165.96,169.15l327.66,0l-161.7,-169.15z"
+        android:pathData="M680.09,332.21l-165.96,169.15l327.66,0l-161.7,-169.15z"
         android:fillColor="#ddeffc"/>
   </group>
 </vector>

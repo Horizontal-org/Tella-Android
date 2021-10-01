@@ -9,7 +9,7 @@
       android:translateX="16.74"
       android:translateY="16.74">
     <path
-        android:pathData="M512,512m-512,0a512,512 0,1 1,1024 0a512,512 0,1 1,-1024 0">
+        android:pathData="M0,0h1024v1024h-1024z">
       <aapt:attr name="android:fillColor">
         <gradient 
             android:gradientRadius="512"
