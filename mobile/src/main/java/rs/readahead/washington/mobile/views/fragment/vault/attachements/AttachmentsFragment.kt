@@ -56,6 +56,7 @@ import rs.readahead.washington.mobile.media.MediaFileHandler.walkAllFilesWithDir
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.DialogsUtil
 import rs.readahead.washington.mobile.util.LockTimeoutManager
+import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.views.activity.*
 import rs.readahead.washington.mobile.views.activity.CameraActivity.VAULT_CURRENT_ROOT_PARENT
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
@@ -71,7 +72,8 @@ const val WRITE_REQUEST_CODE = 1002
 
 class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.IGalleryVaultHandler,
-    IAttachmentsPresenter.IView {
+    IAttachmentsPresenter.IView,
+    OnNavBckListener {
     private lateinit var attachmentsRecyclerView: RecyclerView
     private val attachmentsAdapter by lazy {
         AttachmentsRecycleViewAdapter(
@@ -94,7 +96,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private lateinit var breadcrumbView: BreadcrumbsView
     private lateinit var appBar: AppBarLayout
     private lateinit var moveContainer: LinearLayout
-    private var intent: Intent? = null
     private var progressDialog: ProgressDialog? = null
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
     private var filterType = FilterType.ALL
@@ -216,12 +217,19 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         onFileDeletedEventListener()
         onFileRenameEventListener()
         onCaptureEventListener()
+        initViewType()
     }
 
     private fun initSorting() {
         sort = Sort()
         sort.type = Sort.Type.NAME
         sort.direction = Sort.Direction.ASC
+    }
+
+    private fun initViewType() {
+        if (filterType == FilterType.PHOTO_VIDEO) {
+            setGridView()
+        }
     }
 
     private fun setUpBreadCrumb() {
@@ -244,14 +252,18 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         })
     }
 
+    private fun setGridView() {
+        gridCheck.toggleVisibility(false)
+        listCheck.toggleVisibility(true)
+        gridLayoutManager.spanCount = 4
+        attachmentsAdapter.setLayoutManager(gridLayoutManager)
+        attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
+    }
+
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.gridCheck -> {
-                gridCheck.toggleVisibility(false)
-                listCheck.toggleVisibility(true)
-                gridLayoutManager.spanCount = 4
-                attachmentsAdapter.setLayoutManager(gridLayoutManager)
-                attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
+                setGridView()
             }
             R.id.listCheck -> {
                 gridCheck.toggleVisibility(true)
@@ -357,6 +369,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             toolbar.setToolbarNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
             setToolbarLabel()
             attachmentsAdapter.clearSelected()
+            enableMoveTheme(false)
         }
     }
 
@@ -644,7 +657,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     override fun onCreateFolderSuccess() {
         attachmentsPresenter.addNewVaultFiles()
-
     }
 
     override fun onCreateFolderError(error: Throwable?) {
@@ -685,7 +697,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         } else {
             requestStoragePermissions()
         }
-
     }
 
     private fun hideProgressDialog() {
@@ -869,7 +880,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         )
     }
 
-
     private fun createItem(file: VaultFile): BreadcrumbItem {
         val list: MutableList<Item> = ArrayList()
         list.add(Item(file.name, file.id))
@@ -910,6 +920,10 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 currentRootID = breadcrumbView.getCurrentItem<BreadcrumbItem>().selectedItem.id
                 attachmentsPresenter.addNewVaultFiles()
             }
+            filterType == FilterType.PHOTO_VIDEO -> {
+                nav().navigate(R.id.action_attachments_screen_to_camera)
+                activity.finish()
+            }
             else -> {
                 nav().navigateUp()
             }
@@ -929,6 +943,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             activity.supportActionBar?.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.prussian_blue)))
             moveContainer.visibility = View.VISIBLE
             checkBoxList.visibility = View.GONE
+            detailsFab.setMargins(17,0,17,67)
+            attachmentsRecyclerView.setMargins(17,0,17,37)
         } else {
             isMoveModeEnabled = false
             (activity as MainActivity).setTheme(R.style.AppTheme_DarkNoActionBar)
@@ -948,6 +964,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             )
             moveContainer.visibility = View.GONE
             checkBoxList.visibility = View.VISIBLE
+            detailsFab.setMargins(17,0,17,17)
+            attachmentsRecyclerView.setMargins(17,0,17,17)
         }
         activity.invalidateOptionsMenu()
         attachmentsAdapter.enableMoveMode(enable)
@@ -976,5 +994,10 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     override fun onResume() {
         super.onResume()
         handleOnBackPressed()
+    }
+
+    override fun onBackPressed(): Boolean {
+        handleBackStack()
+        return true
     }
 }

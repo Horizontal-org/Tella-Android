@@ -449,6 +449,7 @@ public class CameraActivity extends MetadataActivity implements
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(MainActivity.PHOTO_VIDEO_FILTER, "filter");
         startActivity(intent);
+        finish();
     }
 
     private void resetZoom() {

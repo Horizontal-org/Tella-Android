@@ -53,6 +53,7 @@ import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.views.custom.HomeScreenGradient;
+import rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment;
 
 
 @RuntimePermissions
@@ -315,8 +316,20 @@ public class MainActivity extends MetadataActivity implements
     @Override
     public void onBackPressed() {
         // if (maybeCloseCamera()) return;
+        if (checkCurrentFragment()) return;
         if (!checkIfShouldExit()) return;
         closeApp();
+    }
+
+    private boolean checkCurrentFragment() {
+        List<Fragment> fragments = Objects.requireNonNull(getSupportFragmentManager().getPrimaryNavigationFragment()).getChildFragmentManager().getFragments();
+        for (Fragment fragment : fragments) {
+            if (fragment instanceof AttachmentsFragment) {
+                ((AttachmentsFragment) fragment).onBackPressed();
+                return true;
+            }
+        }
+        return false;
     }
 
     private void closeApp() {
@@ -529,7 +542,8 @@ public class MainActivity extends MetadataActivity implements
     public void showBottomNavigation() {
         btmNavMain.setVisibility(View.VISIBLE);
     }
-    public void enableMoveMode(Boolean isEnabled){
+
+    public void enableMoveMode(Boolean isEnabled) {
         root.setBackgroundColor(getResources().getColor(R.color.prussian_blue));
        /* if (!isEnabled){
 
