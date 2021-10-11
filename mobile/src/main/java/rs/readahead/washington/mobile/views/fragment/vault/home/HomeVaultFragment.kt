@@ -78,6 +78,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         initData()
         initListeners()
         initPermissions()
+        fixAppBarShadow(view)
     }
 
     private fun initData() {
@@ -87,7 +88,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             layoutManager = LinearLayoutManager(activity)
         }
         timerDuration = resources.getInteger(R.integer.panic_countdown_duration)
-
     }
 
     private fun initPermissions() {
@@ -118,10 +118,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         }
     }
 
-    private fun maybeGetRecentForms(){
-        if (Preferences.isShowFavoriteForms()){
+    private fun maybeGetRecentForms() {
+        if (Preferences.isShowFavoriteForms()) {
             homeVaultPresenter.getFavoriteCollectForms()
-        }else{
+        } else {
             vaultAdapter.removeFavoriteForms()
         }
     }
@@ -151,7 +151,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             MyApplication.exit(activity)
             MyApplication.getMainKeyHolder().timeout = LockTimeoutManager.IMMEDIATE_SHUTDOWN
         }
-        vaultAdapter.registerAdapterDataObserver(object: RecyclerView.AdapterDataObserver() {
+        vaultAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onChanged() {
                 vaultRecyclerView.scrollToPosition(0)
             }
@@ -360,15 +360,15 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     override fun onGetFavoriteCollectFormsSuccess(files: List<CollectForm>) {
-        if (!files.isNullOrEmpty()){
+        if (!files.isNullOrEmpty()) {
             vaultAdapter.addFavoriteForms(files)
-        }else{
+        } else {
             vaultAdapter.removeFavoriteForms()
         }
     }
 
     override fun onGetFavoriteCollectFormsError(error: Throwable?) {
-       Timber.d(error)
+        Timber.d(error)
     }
 
     private fun navigateToAttachmentsList(bundle: Bundle?) {
@@ -410,6 +410,15 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             vaultAdapter.removeTitle()
         } else {
             vaultAdapter.addTitle()
+        }
+    }
+
+    private fun fixAppBarShadow(view: View) {
+        val appBar = view.findViewById<View>(R.id.appbar)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            appBar.outlineProvider = null
+        } else {
+            appBar.bringToFront()
         }
     }
 }
