@@ -82,10 +82,10 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="12dp"
-            android:background="@drawable/red_circle_background"
+            android:background="@drawable/light_purple_circle_background"
             android:contentDescription="@string/action_stop"
             android:padding="5dp"
-            android:src="@drawable/stop_white" />
+            android:src="@drawable/ic_pause_white_24" />
     </LinearLayout>
 
     <LinearLayout
