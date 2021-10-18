@@ -50,6 +50,7 @@ class HideTella : BaseFragment() {
             }
             btnTwoLabel.setAlpha(0.38f)
             btnTwo.setClickable(false)
+            btnTwo.setOnClickListener { }
         } else {
             hideNotPossible.visibility = View.GONE
             btnTwoLabel.setAlpha(1f)
