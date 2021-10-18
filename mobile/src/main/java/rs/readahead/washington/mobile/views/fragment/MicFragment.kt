@@ -29,6 +29,7 @@ import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulePrese
 import rs.readahead.washington.mobile.util.C.RECORD_REQUEST_CODE
 import rs.readahead.washington.mobile.util.DateUtil.getDateTimeString
 import rs.readahead.washington.mobile.util.StringUtils
+import rs.readahead.washington.mobile.views.activity.CameraActivity.VAULT_CURRENT_ROOT_PARENT
 import rs.readahead.washington.mobile.views.base_ui.MetadataBaseLockFragment
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 
@@ -68,6 +69,7 @@ class MicFragment : MetadataBaseLockFragment(),
     lateinit var freeSpace: TextView
     lateinit var redDot: ImageView
     lateinit var recordingName: TextView
+    private var currentRootParent: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -125,6 +127,7 @@ class MicFragment : MetadataBaseLockFragment(),
 
         mTimer.text = timeToString(0)
         disablePause()
+        initData()
     }
 
     override fun onStart() {
@@ -176,7 +179,7 @@ class MicFragment : MetadataBaseLockFragment(),
             disablePlay()
             handlingMediaFile = null
             cancelRecorder()
-            presenter.startRecording(recordingName.text.toString(),null)
+            presenter.startRecording(recordingName.text.toString(),currentRootParent)
         } else {
             cancelPauseRecorder()
         }
@@ -405,5 +408,11 @@ class MicFragment : MetadataBaseLockFragment(),
 
     private fun updateRecordingName(name: String) {
         recordingName.setText(name)
+    }
+
+    private fun initData() {
+        arguments?.getString(VAULT_CURRENT_ROOT_PARENT)?.let {
+            currentRootParent = it
+        }
     }
 }
