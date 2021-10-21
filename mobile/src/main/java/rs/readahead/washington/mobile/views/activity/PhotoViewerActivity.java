@@ -348,6 +348,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                 getString(R.string.action_delete),
                 false,
                 false,
+                false,
                 Preferences.isOfflineMode(),
                 new VaultSheetUtils.IVaultActions() {
                     @Override

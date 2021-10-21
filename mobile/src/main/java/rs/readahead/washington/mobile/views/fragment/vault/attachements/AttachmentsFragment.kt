@@ -468,6 +468,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             isDirectory = vaultFile?.type == VaultFile.Type.DIRECTORY,
             isMultipleFiles = isMultipleFiles,
             isUploadVisible = Preferences.isOfflineMode(),
+            isMoveVisible = filterType == FilterType.ALL,
             action = object : VaultSheetUtils.IVaultActions {
                 override fun upload() {
                 }

@@ -5,6 +5,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat.getColor
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import com.tooltip.Tooltip
 import org.hzontal.shared_ui.R
@@ -35,8 +36,8 @@ object VaultSheetUtils {
         isDirectory : Boolean = false,
         isMultipleFiles: Boolean = false,
         isUploadVisible : Boolean = false,
+        isMoveVisible : Boolean = false,
         action: IVaultActions
-
     ) {
         val vaultActionSheet = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.vault_actions_sheet_layout)
@@ -85,6 +86,7 @@ object VaultSheetUtils {
                         action.share()
                     }
                     //Move action
+                    actionMove.isVisible = isMoveVisible
                     actionMove.text = moveLabel
                     actionMove.setOnClickListener {
                         vaultActionSheet.dismiss()
