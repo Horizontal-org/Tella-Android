@@ -43,6 +43,7 @@ class CamouflageNameAndLogo : BaseFragment() {
         adapter.setIcons(cm.options, cm.selectedAliasPosition)
 
         view.findViewById<View>(R.id.back).setOnClickListener {
+            (activity as OnFragmentSelected?)?.showAppbar()
             activity.onBackPressed()
         }
 
