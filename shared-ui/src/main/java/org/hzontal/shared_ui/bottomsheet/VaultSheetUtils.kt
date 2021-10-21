@@ -34,6 +34,7 @@ object VaultSheetUtils {
         deleteLabel: String,
         isDirectory : Boolean = false,
         isMultipleFiles: Boolean = false,
+        isUploadVisible : Boolean = false,
         action: IVaultActions
 
     ) {
@@ -69,6 +70,9 @@ object VaultSheetUtils {
                         action.delete()
                     }
                     //Upload action
+                    if (!isUploadVisible){
+                        actionUpload.visibility = View.GONE
+                    }
                     actionUpload.text = uploadLabel
                     actionUpload.setOnClickListener {
                         vaultActionSheet.dismiss()

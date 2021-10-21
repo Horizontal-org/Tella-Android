@@ -49,6 +49,7 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
 import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent;
+import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.exo.ExoEventListener;
 import rs.readahead.washington.mobile.media.exo.MediaFileDataSourceFactory;
@@ -439,6 +440,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
                 getString(R.string.action_delete),
                 false,
                 false,
+                Preferences.isOfflineMode(),
                 new VaultSheetUtils.IVaultActions() {
                     @Override
                     public void upload() {

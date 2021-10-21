@@ -119,7 +119,10 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        if (isListCheckOn && !isMoveModeEnabled) inflater.inflate(R.menu.home_menu_selected, menu)
+        if (isListCheckOn && !isMoveModeEnabled){
+            inflater.inflate(R.menu.home_menu_selected, menu)
+            maybeShowUploadIcon(menu)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -464,6 +467,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             getString(R.string.action_delete),
             isDirectory = vaultFile?.type == VaultFile.Type.DIRECTORY,
             isMultipleFiles = isMultipleFiles,
+            isUploadVisible = Preferences.isOfflineMode(),
             action = object : VaultSheetUtils.IVaultActions {
                 override fun upload() {
                 }
@@ -989,6 +993,10 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
             }
         }
+    }
+
+    private fun maybeShowUploadIcon(menu: Menu){
+        menu.findItem(R.id.action_upload).isVisible = Preferences.isOfflineMode()
     }
 
     override fun onResume() {
