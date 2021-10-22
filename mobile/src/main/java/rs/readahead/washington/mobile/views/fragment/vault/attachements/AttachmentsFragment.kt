@@ -948,7 +948,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             activity.supportActionBar?.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.prussian_blue)))
             moveContainer.visibility = View.VISIBLE
             checkBoxList.visibility = View.GONE
-            detailsFab.setMargins(17,0,17,67)
+            detailsFab.setMargins(17,0,17,70)
             attachmentsRecyclerView.setMargins(17,0,17,37)
         } else {
             isMoveModeEnabled = false
