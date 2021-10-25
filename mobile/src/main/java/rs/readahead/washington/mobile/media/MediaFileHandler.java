@@ -68,6 +68,7 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.provider.EncryptedFileProvider;
 import rs.readahead.washington.mobile.presentation.entity.mapper.PublicMetadataMapper;
 import rs.readahead.washington.mobile.util.C;
+import rs.readahead.washington.mobile.util.DateUtil;
 import rs.readahead.washington.mobile.util.FileUtil;
 import timber.log.Timber;
 
@@ -233,7 +234,7 @@ public class MediaFileHandler {
         RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault
                 .builder(input)
                 .setMimeType("image/jpeg")
-                .setName(uid + ".jpg")
+                .setName("Photo "+ DateUtil.getDate(System.currentTimeMillis()) + ".jpg")
                 .setAnonymous(true)
                 .setType(VaultFile.Type.FILE)
                 .setId(uid)
@@ -265,6 +266,7 @@ public class MediaFileHandler {
         return MyApplication.rxVault
                 .builder(input)
                 .setMimeType("image/png")
+                .setName("Photo "+ DateUtil.getDate(System.currentTimeMillis()) + ".png")
                 .setAnonymous(true)
                 .setType(VaultFile.Type.FILE)
                 .setThumb(getThumbByteArray(thumb))
@@ -360,7 +362,9 @@ public class MediaFileHandler {
                     .setAnonymous(false)
                     .setDuration(Long.parseLong(time))
                     .setType(VaultFile.Type.FILE)
+                    .setName("Video "+ DateUtil.getDate(System.currentTimeMillis()) + ".mp4")
                     .setMimeType("video/mp4")
+
                     .setThumb(thumb);
 
             if (parent == null) {

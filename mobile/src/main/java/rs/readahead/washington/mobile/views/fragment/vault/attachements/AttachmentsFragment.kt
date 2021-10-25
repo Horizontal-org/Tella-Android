@@ -66,6 +66,7 @@ import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import rs.readahead.washington.mobile.views.fragment.vault.info.VAULT_FILE_INFO_TOOLBAR
 import timber.log.Timber
 import java.util.*
+import kotlin.collections.ArrayList
 
 const val VAULT_FILE_ARG = "VaultFileArg"
 const val WRITE_REQUEST_CODE = 1002
@@ -1008,5 +1009,31 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     override fun onBackPressed(): Boolean {
         handleBackStack()
         return true
+    }
+
+    private fun getCurrentType() : ArrayList<String> {
+        val result = arrayListOf<String>()
+        when (filterType) {
+            FilterType.ALL -> result.add("*/*")
+            FilterType.DOCUMENTS -> result.add("application/*")
+            FilterType.PHOTO_VIDEO -> {
+                result.add("video/*")
+                result.add("image/*")
+            }
+            FilterType.PHOTO -> {
+                result.add("image/*")
+            }
+            FilterType.VIDEO -> {
+                result.add("video/*")
+            }
+            FilterType.AUDIO -> {
+                result.add("audio/*")
+            }
+            FilterType.OTHERS -> {
+                result.add("*/*")
+            }
+        }
+
+        return result
     }
 }

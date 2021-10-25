@@ -89,7 +89,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
         renderListAfterward()
     }
 
-    fun renderList() {
+    private fun renderList() {
         adapterScope.launch {
             items = favoriteForms + recentFiles + titles + actions
             withContext(Dispatchers.Main) {
@@ -98,7 +98,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
         }
     }
 
-    fun renderListAfterward() {
+    private fun renderListAfterward() {
         items = emptyList()
         adapterScope.launch {
             if (Preferences.isShowFavoriteForms()) {
