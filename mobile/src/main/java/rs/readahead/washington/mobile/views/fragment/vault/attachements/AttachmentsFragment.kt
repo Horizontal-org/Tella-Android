@@ -468,7 +468,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             getString(R.string.action_delete),
             isDirectory = vaultFile?.type == VaultFile.Type.DIRECTORY,
             isMultipleFiles = isMultipleFiles,
-            isUploadVisible = Preferences.isOfflineMode(),
+            isUploadVisible = false,
             isMoveVisible = filterType == FilterType.ALL,
             action = object : VaultSheetUtils.IVaultActions {
                 override fun upload() {

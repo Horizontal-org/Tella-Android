@@ -349,7 +349,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                 false,
                 false,
                 false,
-                Preferences.isOfflineMode(),
+                false,
                 new VaultSheetUtils.IVaultActions() {
                     @Override
                     public void upload() {

@@ -441,7 +441,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
                 false,
                 false,
                 false,
-                Preferences.isOfflineMode(),
+                false,
                 new VaultSheetUtils.IVaultActions() {
                     @Override
                     public void upload() {
