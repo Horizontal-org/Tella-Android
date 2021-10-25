@@ -100,7 +100,7 @@ class MicFragment : MetadataBaseLockFragment(),
             }
         }
 
-        recordingName.text = getString(R.string.mic_recording).plus(" ").plus(getDateTimeString())
+        updateRecordingName()
         recordingName.setOnClickListener {
             BottomSheetUtils.showFileRenameSheet(
                 activity.supportFragmentManager,
@@ -211,6 +211,7 @@ class MicFragment : MetadataBaseLockFragment(),
                 getString(R.string.app_name)
             ), false
         )
+        updateRecordingName()
     }
 
     override fun onAddError(error: Throwable?) {
@@ -414,5 +415,9 @@ class MicFragment : MetadataBaseLockFragment(),
         arguments?.getString(VAULT_CURRENT_ROOT_PARENT)?.let {
             currentRootParent = it
         }
+    }
+
+    private fun updateRecordingName(){
+        recordingName.text = getString(R.string.mic_recording).plus(" ").plus(getDateTimeString())
     }
 }
