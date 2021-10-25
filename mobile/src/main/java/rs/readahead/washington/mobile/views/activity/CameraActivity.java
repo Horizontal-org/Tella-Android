@@ -242,6 +242,7 @@ public class CameraActivity extends MetadataActivity implements
     public void onAddSuccess(VaultFile bundle) {
         capturedMediaFile = bundle;
         if (intentMode != IntentMode.COLLECT) {
+            previewView.setVisibility(View.VISIBLE);
             Glide.with(this).load(bundle.thumb).into(previewView);
         }
         attachMediaFileMetadata(capturedMediaFile, metadataAttacher);
