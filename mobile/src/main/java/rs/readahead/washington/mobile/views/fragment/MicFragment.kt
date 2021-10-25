@@ -178,6 +178,7 @@ class MicFragment : MetadataBaseLockFragment(),
     fun handleRecord() {
         notRecording = false
         if (presenter.isAudioRecorder) {   //first start or restart
+            updateRecordingName()
             disablePlay()
             handlingMediaFile = null
             cancelRecorder()
@@ -213,7 +214,6 @@ class MicFragment : MetadataBaseLockFragment(),
                 getString(R.string.app_name)
             ), false
         )
-        updateRecordingName()
     }
 
     override fun onAddError(error: Throwable?) {
