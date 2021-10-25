@@ -66,6 +66,7 @@ import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import rs.readahead.washington.mobile.views.fragment.vault.info.VAULT_FILE_INFO_TOOLBAR
 import timber.log.Timber
 import java.util.*
+import kotlin.collections.ArrayList
 
 const val VAULT_FILE_ARG = "VaultFileArg"
 const val WRITE_REQUEST_CODE = 1002
@@ -119,7 +120,10 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        if (isListCheckOn && !isMoveModeEnabled) inflater.inflate(R.menu.home_menu_selected, menu)
+        if (isListCheckOn && !isMoveModeEnabled){
+            inflater.inflate(R.menu.home_menu_selected, menu)
+            maybeShowUploadIcon(menu)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -464,6 +468,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             getString(R.string.action_delete),
             isDirectory = vaultFile?.type == VaultFile.Type.DIRECTORY,
             isMultipleFiles = isMultipleFiles,
+            isUploadVisible = false,
+            isMoveVisible = filterType == FilterType.ALL,
             action = object : VaultSheetUtils.IVaultActions {
                 override fun upload() {
                 }
@@ -943,7 +949,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             activity.supportActionBar?.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.prussian_blue)))
             moveContainer.visibility = View.VISIBLE
             checkBoxList.visibility = View.GONE
-            detailsFab.setMargins(17,0,17,67)
+            detailsFab.setMargins(17,0,17,70)
             attachmentsRecyclerView.setMargins(17,0,17,37)
         } else {
             isMoveModeEnabled = false
@@ -991,6 +997,10 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         }
     }
 
+    private fun maybeShowUploadIcon(menu: Menu){
+        menu.findItem(R.id.action_upload).isVisible = Preferences.isOfflineMode()
+    }
+
     override fun onResume() {
         super.onResume()
         handleOnBackPressed()
@@ -999,5 +1009,31 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     override fun onBackPressed(): Boolean {
         handleBackStack()
         return true
+    }
+
+    private fun getCurrentType() : ArrayList<String> {
+        val result = arrayListOf<String>()
+        when (filterType) {
+            FilterType.ALL -> result.add("*/*")
+            FilterType.DOCUMENTS -> result.add("application/*")
+            FilterType.PHOTO_VIDEO -> {
+                result.add("video/*")
+                result.add("image/*")
+            }
+            FilterType.PHOTO -> {
+                result.add("image/*")
+            }
+            FilterType.VIDEO -> {
+                result.add("video/*")
+            }
+            FilterType.AUDIO -> {
+                result.add("audio/*")
+            }
+            FilterType.OTHERS -> {
+                result.add("*/*")
+            }
+        }
+
+        return result
     }
 }

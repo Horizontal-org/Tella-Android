@@ -33,7 +33,6 @@ public class CameraPresenter implements ICameraPresenterContract.IPresenter {
                     FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onAddError(throwable);
                 })
-
         );
     }
 

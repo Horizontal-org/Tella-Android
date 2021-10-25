@@ -38,6 +38,7 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
 import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent;
+import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.media.AudioPlayer;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IAudioPlayPresenterContract;
@@ -526,6 +527,8 @@ public class AudioPlayActivity extends BaseLockActivity implements
                 getString(R.string.action_save),
                 getString(R.string.vault_file_information),
                 getString(R.string.action_delete),
+                false,
+                false,
                 false,
                 false,
                 new VaultSheetUtils.IVaultActions() {

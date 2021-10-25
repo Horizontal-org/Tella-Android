@@ -97,8 +97,8 @@
         app:layout_constraintTop_toBottomOf="@id/createDeleteActionTV"
         android:layout_marginTop="20dp"
         android:drawablePadding="17dp"
-        app:drawableStartCompat="@drawable/ic_save_alt_24px"
-        android:drawableStart="@drawable/ic_upload_cloud"
+        app:drawableStartCompat="@drawable/ic_new_folder"
+        android:drawableStart="@drawable/ic_new_folder"
         android:gravity="center"
         tools:text="Create a new folder"
         />
