@@ -18,15 +18,19 @@ import rs.readahead.washington.mobile.util.LocaleManager
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class LanguageSettings : BaseFragment(), View.OnClickListener {
     var LanguageList: LinearLayout? = null
+    var languages: ArrayList<String?> = arrayListOf()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_language_settings, container, false)
-        
+
         initView(view)
 
         return view
@@ -36,21 +40,24 @@ class LanguageSettings : BaseFragment(), View.OnClickListener {
         (activity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_lang_app_bar)
         (activity as OnFragmentSelected?)?.setToolbarHomeIcon(R.drawable.ic_close_white_24dp)
 
-        LanguageList =view.findViewById(R.id.language_list)
+        LanguageList = view.findViewById(R.id.language_list)
+
         createLangViews()
     }
 
     private fun createLangViews() {
-        val languages =
-            ArrayList(Arrays.asList(*resources.getStringArray(R.array.ra_lang_codes)))
-        languages.add(0, null)
+        if (languages.isEmpty()) {
+            languages =
+                ArrayList(Arrays.asList(*resources.getStringArray(R.array.ra_lang_codes)))
+            languages.add(0, null)
 
-        val prefferedLang = LocaleManager.getInstance().languageSetting
+            val prefferedLang = LocaleManager.getInstance().languageSetting
 
-        for (language in languages) {
-            val item = getLanguageItem(language, TextUtils.equals(prefferedLang, language))
-            item.setOnClickListener(this)
-            LanguageList!!.addView(item)
+            for (language in languages) {
+                val item = getLanguageItem(language, TextUtils.equals(prefferedLang, language))
+                item.setOnClickListener(this)
+                LanguageList!!.addView(item)
+            }
         }
     }
 
@@ -71,7 +78,12 @@ class LanguageSettings : BaseFragment(), View.OnClickListener {
             langInfo.setText(StringUtils.capitalize(locale.getDisplayName(locale), locale))
         }
         imageView.setVisibility(if (selected) View.VISIBLE else View.GONE)
-        item.setBackgroundColor(if (selected) ContextCompat.getColor(requireContext(),R.color.light_purple) else ContextCompat.getColor(requireContext(),R.color.dark_purple))
+        item.setBackgroundColor(
+            if (selected) ContextCompat.getColor(
+                requireContext(),
+                R.color.light_purple
+            ) else ContextCompat.getColor(requireContext(), R.color.dark_purple)
+        )
         return item
     }
 

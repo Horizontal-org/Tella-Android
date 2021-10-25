@@ -43,6 +43,7 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
+import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent;
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.mvp.contract.ICollectCreateFormControllerContract;
@@ -116,6 +117,12 @@ public class MainActivity extends MetadataActivity implements
             @Override
             public void onNext(LocaleChangedEvent event) {
                 recreate();
+            }
+        });
+        disposables.wire(CamouflageAliasChangedEvent.class, new EventObserver<CamouflageAliasChangedEvent>() {
+            @Override
+            public void onNext(CamouflageAliasChangedEvent event) {
+                closeApp();
             }
         });
     }
@@ -541,6 +548,10 @@ public class MainActivity extends MetadataActivity implements
 
     public void showBottomNavigation() {
         btmNavMain.setVisibility(View.VISIBLE);
+    }
+
+    public void selectNavMic() {
+        btmNavMain.getMenu().findItem(R.id.mic).setChecked(true);
     }
 
     public void enableMoveMode(Boolean isEnabled) {

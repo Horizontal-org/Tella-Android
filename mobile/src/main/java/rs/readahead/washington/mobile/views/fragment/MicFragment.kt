@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.mvp.contract.IAudioCapturePresenterContract
@@ -28,6 +29,8 @@ import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulePrese
 import rs.readahead.washington.mobile.util.C.RECORD_REQUEST_CODE
 import rs.readahead.washington.mobile.util.DateUtil.getDateTimeString
 import rs.readahead.washington.mobile.util.StringUtils
+import rs.readahead.washington.mobile.views.activity.CameraActivity.VAULT_CURRENT_ROOT_PARENT
+import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.base_ui.MetadataBaseLockFragment
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 
@@ -62,11 +65,12 @@ class MicFragment : MetadataBaseLockFragment(),
     lateinit var metadataAttacher: MetadataAttacher
     lateinit var mRecord: ImageButton
     lateinit var mPlay: ImageButton
-    lateinit var mStop: ImageButton
+    lateinit var mPause: ImageButton
     lateinit var mTimer: TextView
     lateinit var freeSpace: TextView
     lateinit var redDot: ImageView
     lateinit var recordingName: TextView
+    private var currentRootParent: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,7 +84,7 @@ class MicFragment : MetadataBaseLockFragment(),
     fun initView(view: View) {
         mRecord = view.findViewById(R.id.record_audio)
         mPlay = view.findViewById(R.id.play_audio)
-        mStop = view.findViewById(R.id.stop_audio)
+        mPause = view.findViewById(R.id.stop_audio)
         mTimer = view.findViewById(R.id.audio_time)
         freeSpace = view.findViewById(R.id.free_space)
         redDot = view.findViewById(R.id.red_dot)
@@ -93,11 +97,11 @@ class MicFragment : MetadataBaseLockFragment(),
                     requestRecordingPermissions(RECORD_REQUEST_CODE)
                 }
             } else {
-                handlePause()
+                handleStop()
             }
         }
 
-        recordingName.text = getString(R.string.mic_recording).plus(" ").plus(getDateTimeString())
+        updateRecordingName()
         recordingName.setOnClickListener {
             BottomSheetUtils.showFileRenameSheet(
                 activity.supportFragmentManager,
@@ -109,7 +113,7 @@ class MicFragment : MetadataBaseLockFragment(),
             ) { it1 -> updateRecordingName(it1) }
         }
 
-        mStop.setOnClickListener { handleStop() }
+        mPause.setOnClickListener { handlePause() }
 
         mPlay.setOnClickListener { openRecordings() }
 
@@ -123,7 +127,8 @@ class MicFragment : MetadataBaseLockFragment(),
         ) as ObjectAnimator
 
         mTimer.text = timeToString(0)
-        disableStop()
+        disablePause()
+        initData()
     }
 
     override fun onStart() {
@@ -147,6 +152,7 @@ class MicFragment : MetadataBaseLockFragment(),
 
     override fun onResume() {
         super.onResume()
+        (activity as MainActivity).selectNavMic()
         presenter.checkAvailableStorage()
     }
 
@@ -172,15 +178,16 @@ class MicFragment : MetadataBaseLockFragment(),
     fun handleRecord() {
         notRecording = false
         if (presenter.isAudioRecorder) {   //first start or restart
+            updateRecordingName()
             disablePlay()
             handlingMediaFile = null
             cancelRecorder()
-            presenter.startRecording(recordingName.text.toString(),null)
+            presenter.startRecording(recordingName.text.toString(),currentRootParent)
         } else {
             cancelPauseRecorder()
         }
         disableRecord()
-        enableStop()
+        enablePause()
     }
 
     override fun onDurationUpdate(duration: Long) {
@@ -200,16 +207,17 @@ class MicFragment : MetadataBaseLockFragment(),
 
     override fun onAddSuccess(vaultFile: VaultFile) {
         activity.attachMediaFileMetadata(vaultFile, metadataAttacher)
-        showToast(
+        DialogUtils.showBottomMessage(
+            activity,
             String.format(
                 getString(R.string.recorder_toast_recording_saved),
                 getString(R.string.app_name)
-            )
+            ), false
         )
     }
 
     override fun onAddError(error: Throwable?) {
-        showToast(getString(R.string.gallery_toast_fail_saving_file))
+        DialogUtils.showBottomMessage(activity, getString(R.string.gallery_toast_fail_saving_file), true)
     }
 
     override fun onAvailableStorage(memory: Long) {
@@ -235,7 +243,11 @@ class MicFragment : MetadataBaseLockFragment(),
     }
 
     override fun onMetadataAttachError(throwable: Throwable?) {
-        showToast(getString(R.string.gallery_toast_fail_saving_file))
+        DialogUtils.showBottomMessage(
+            activity,
+            getString(R.string.gallery_toast_fail_saving_file),
+            true
+        )
     }
 
     override fun onMediaFilesUploadScheduled() {
@@ -258,6 +270,7 @@ class MicFragment : MetadataBaseLockFragment(),
     //    }
 
     private fun handleStop() {
+        disablePause()
         notRecording = true
         stopRecorder()
     }
@@ -271,13 +284,13 @@ class MicFragment : MetadataBaseLockFragment(),
     override fun onRecordingStopped(vaultFile: VaultFile?) {
         if (vaultFile == null) {
             handlingMediaFile = null
-            disableStop()
+            disablePause()
             disablePlay()
             enableRecord()
         } else {
             handlingMediaFile = vaultFile
             handlingMediaFile!!.size = MediaFileHandler.getSize(vaultFile)
-            disableStop()
+            disablePause()
             enablePlay()
             enableRecord()
 
@@ -288,17 +301,21 @@ class MicFragment : MetadataBaseLockFragment(),
 
     override fun onRecordingError() {
         handlingMediaFile = null
-        disableStop()
+        disablePause()
         disablePlay()
         enableRecord()
         mTimer.text = timeToString(0)
-        showToast(getString(R.string.recorder_toast_fail_recording))
+        DialogUtils.showBottomMessage(
+            activity,
+            getString(R.string.recorder_toast_fail_recording),
+            true
+        )
     }
 
     private fun disableRecord() {
         mRecord.background =
-            AppCompatResources.getDrawable(requireContext(),R.drawable.light_purple_circle_background)
-        mRecord.setImageResource(R.drawable.ic__pause__white_24)
+            AppCompatResources.getDrawable(requireContext(),R.drawable.red_circle_background)
+        mRecord.setImageResource(R.drawable.stop_white)
         redDot.visibility = View.VISIBLE
         animator?.target = redDot
         animator?.start()
@@ -320,15 +337,16 @@ class MicFragment : MetadataBaseLockFragment(),
         enableButton(mPlay)
     }
 
-    private fun disableStop() {
-        mStop.isEnabled = false
-        mStop.visibility = View.INVISIBLE
-        //disableButton(mStop)
+    private fun disablePause() {
+        //mStop.isEnabled = false
+        //mStop.visibility = View.INVISIBLE
+        disableButton(mPause)
     }
 
-    private fun enableStop() {
-        mStop.isEnabled = true
-        mStop.visibility = View.VISIBLE
+    private fun enablePause() {
+        //mStop.isEnabled = true
+        //mStop.visibility = View.VISIBLE
+        enableButton(mPause)
     }
 
     private fun enableButton(button: ImageButton) {
@@ -393,5 +411,15 @@ class MicFragment : MetadataBaseLockFragment(),
 
     private fun updateRecordingName(name: String) {
         recordingName.setText(name)
+    }
+
+    private fun initData() {
+        arguments?.getString(VAULT_CURRENT_ROOT_PARENT)?.let {
+            currentRootParent = it
+        }
+    }
+
+    private fun updateRecordingName(){
+        recordingName.text = getString(R.string.mic_recording).plus(" ").plus(getDateTimeString())
     }
 }

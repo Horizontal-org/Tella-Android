@@ -39,7 +39,7 @@ public class DateUtil {
     }
 
     public static String getDateTimeString() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd-HH:mm", Locale.ROOT);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd-HH:mm:ss", Locale.ROOT);
         return format.format(getCurrentDate());
     }
 

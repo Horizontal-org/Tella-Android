@@ -37,6 +37,9 @@
             android:id="@+id/action_attachments_screen_to_camera"
             app:destination="@id/cameraScreen">
         </action>
+        <action
+            android:id="@+id/action_attachments_screen_to_micScreen"
+            app:destination="@id/micScreen" />
     </fragment>
 
 
@@ -60,4 +63,11 @@
         android:label="Camera"
         tools:layout="@layout/activity_camera">
     </activity>
+
+    <fragment
+        android:id="@+id/micScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.MicFragment"
+        android:label="Microphone"
+        tools:layout="@layout/fragment_mic">
+    </fragment>
 </navigation>

@@ -91,7 +91,7 @@
             android:contentDescription="@string/action_play"
             android:padding="5dp"
             android:paddingTop="20dp"
-            android:src="@drawable/ic_play_arrow_black_24dp" />
+            android:src="@drawable/ic_play_arrow_white_24dp" />
 
     </LinearLayout>
 

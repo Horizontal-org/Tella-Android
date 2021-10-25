@@ -108,6 +108,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private var isMoveModeEnabled = false
     private var importAndDelete = false
     private var uriToDelete: Uri? = null
+    private val bundle by lazy { Bundle() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -306,9 +307,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                         }
 
                         override fun goToRecorder() {
-                            val intent = Intent(activity, AudioRecordActivity2::class.java)
-                            intent.putExtra(VAULT_CURRENT_ROOT_PARENT, currentRootID)
-                            activity.startActivity(intent)
+                            bundle.putString(VAULT_CURRENT_ROOT_PARENT, currentRootID)
+                            nav().navigate(R.id.action_attachments_screen_to_micScreen,bundle)
                         }
 
                         override fun import() {

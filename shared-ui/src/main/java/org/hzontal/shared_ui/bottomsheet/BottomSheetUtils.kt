@@ -2,6 +2,7 @@ package org.hzontal.shared_ui.bottomsheet
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -343,6 +344,74 @@ BottomSheetUtils {
 
                     cancelButton.setOnClickListener {
                         customSheetFragment.dismiss()
+                    }
+
+                    actionButton.visibility =
+                        if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+
+                }
+            }
+        })
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
+    }
+
+    class ConfirmImageSheetHolder : CustomBottomSheetFragment.PageHolder() {
+        lateinit var actionButton: TextView
+        lateinit var cancelButton: TextView
+        lateinit var title: TextView
+        lateinit var description: TextView
+        lateinit var imageView: ImageView
+
+        override fun bindView(view: View) {
+            actionButton = view.findViewById(R.id.standard_sheet_confirm_btn)
+            cancelButton = view.findViewById(R.id.standard_sheet_cancel_btn)
+            title = view.findViewById(R.id.standard_sheet_title)
+            description = view.findViewById(R.id.standard_sheet_content)
+            imageView = view.findViewById(R.id.sheet_image)
+        }
+    }
+
+    @JvmStatic
+    fun showConfirmSheetWithImage(
+        fragmentManager: FragmentManager,
+        titleText: String?,
+        descriptionText: String?,
+        actionButtonLabel: String? = null,
+        cancelButtonLabel: String? = null,
+        confirmDrawable: Drawable? = null,
+        consumer: ActionConfirmed
+    ) {
+
+        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.confirm_image_sheet_layout)
+            .cancellable(true)
+            .screenTag("ConfirmImageSheet")
+        customSheetFragment.holder(ConfirmImageSheetHolder(), object :
+            CustomBottomSheetFragment.Binder<ConfirmImageSheetHolder> {
+            override fun onBind(holder: ConfirmImageSheetHolder) {
+                with(holder) {
+                    title.text = titleText
+                    description.text = descriptionText
+                    actionButtonLabel?.let {
+                        actionButton.text = it
+                    }
+                    cancelButtonLabel?.let {
+                        cancelButton.text = it
+                    }
+
+                    actionButton.setOnClickListener {
+                        consumer.accept(isConfirmed = true)
+                        customSheetFragment.dismiss()
+                    }
+
+                    cancelButton.setOnClickListener {
+                        customSheetFragment.dismiss()
+                    }
+
+                    confirmDrawable?.let {
+                        imageView.setImageDrawable(it)
                     }
 
                     actionButton.visibility =

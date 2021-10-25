@@ -14,9 +14,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.hzontal.tella_vault.VaultFile;
@@ -458,13 +456,13 @@ public class AudioPlayActivity extends BaseLockActivity implements
     }
 
     private void disablePlay() {
-        mPlay.setImageDrawable(getContext().getResources().getDrawable(R.drawable.white_pause_24p));
+        mPlay.setImageDrawable(getContext().getResources().getDrawable(R.drawable.big_white_pause_24p));
         enableButton(forward, mFwd);
         enableButton(rewind, mRwd);
     }
 
     private void enablePlay() {
-        mPlay.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+        mPlay.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
         disableButton(forward, mFwd);
         disableButton(rewind, mRwd);
     }
