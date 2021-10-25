@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent
@@ -48,8 +50,24 @@ class CamouflageNameAndLogo : BaseFragment() {
         }
 
         view.findViewById<View>(R.id.next).setOnClickListener {
-            camouflage(adapter.selectedPosition)
+            confirmCamouflage(adapter.selectedPosition)
         }
+    }
+
+    private fun confirmCamouflage(position: Int) {
+        BottomSheetUtils.showConfirmSheetWithImage(
+            activity.supportFragmentManager,
+            getString(R.string.settings_sec_confirm_camouflage_title),
+            getString(R.string.settings_sec_confirm_camouflage_desc, getString(cm.options[position].stringResId)),
+            getString(R.string.settings_sec_confirm_exit_tella),
+            getString(R.string.action_cancel),
+            ContextCompat.getDrawable(activity,cm.options[position].drawableResId),
+            consumer = object : BottomSheetUtils.ActionConfirmed {
+                override fun accept(isConfirmed: Boolean) {
+                    camouflage(position)
+                }
+            }
+        )
     }
 
     private fun camouflage(position: Int) {
