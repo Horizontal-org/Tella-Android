@@ -33,6 +33,7 @@ import androidx.exifinterface.media.ExifInterface;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultException;
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.tella_vault.filter.FilterType;
 import com.hzontal.tella_vault.filter.Limits;
 import com.hzontal.tella_vault.filter.Sort;
 import com.hzontal.tella_vault.rx.RxVaultFileBuilder;
@@ -610,10 +611,11 @@ public class MediaFileHandler {
 
     public static Observable<List<VaultFile>> getLastVaultFileFromDb() {
         Limits limits = new Limits();
-        limits.limit = 2;
+        limits.limit = 1;
         Sort sort = new Sort();
+        sort.type = Sort.Type.DATE;
         sort.direction = Sort.Direction.DESC;
-        return MyApplication.rxVault.list(null, null, sort, limits)
+        return MyApplication.rxVault.list(null, FilterType.PHOTO_VIDEO, sort, limits)
                 .toObservable();
     }
 

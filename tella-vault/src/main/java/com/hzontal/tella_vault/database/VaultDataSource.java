@@ -144,7 +144,7 @@ public class VaultDataSource implements IVaultDatabase {
 
     private String getSortQuery(Sort sort) {
         if (sort == null)
-            return D.C_NAME + " " + Sort.Direction.ASC.name();
+            return D.C_NAME + " " + Sort.Direction.DESC.name();
 
         if (sort.type.name().equals(Sort.Type.DATE.name()))
             return D.C_CREATED + " " + sort.direction.name();
