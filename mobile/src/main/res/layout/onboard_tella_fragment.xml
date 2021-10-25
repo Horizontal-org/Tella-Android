@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineCenter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="79dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="@dimen/hide_tella_big_margin"
+        android:src="@drawable/ic_mic_illustration"
+        android:textColor="@color/wa_white"
+        app:layout_constraintBottom_toTopOf="@+id/titleTV"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/titleTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/hide_tella_big_margin"
+        android:layout_marginBottom="@dimen/hide_tella_big_margin"
+        android:fontFamily="@font/open_sans"
+        android:gravity="center"
+        android:padding="6dp"
+        android:text="@string/onboard.title_recorder"
+        android:textColor="@color/wa_white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/descriptionTV"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="RtlSymmetry" />
+
+    <TextView
+        android:id="@+id/descriptionTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/open_sans"
+        android:gravity="center"
+        android:padding="@dimen/hide_tella_small_margin"
+        android:text="@string/onboard.expl_recorder"
+        android:textColor="@color/wa_white"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guidelineCenter"
+        tools:ignore="RtlSymmetry" />
+
+    <ImageView
+        android:id="@+id/image_wide"
+        android:layout_width="79dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="@dimen/hide_tella_big_margin"
+        android:src="@drawable/ic_mic_illustration"
+        android:textColor="@color/wa_white"
+        app:layout_constraintTop_toBottomOf="@+id/descriptionTV"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="ContentDescription" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+

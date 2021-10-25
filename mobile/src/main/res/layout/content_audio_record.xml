@@ -48,7 +48,7 @@
         android:layout_margin="20dp"
         android:gravity="center"
         android:visibility="gone"
-        android:src="@drawable/record_red_circle_background"/>
+        android:src="@drawable/record_orange_circle_background"/>
 
     <LinearLayout
         android:id="@+id/stop_audio_layout"
@@ -67,7 +67,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="2dp"
-            android:background="@drawable/white_circle_background"
+            android:background="@drawable/red_circle_background"
             android:padding="5dp"
             android:src="@drawable/ic_stop_light_red"
             android:contentDescription="@string/action_stop"/>
@@ -108,9 +108,9 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="2dp"
-            android:background="@drawable/white_circle_background"
+            android:background="@drawable/red_circle_background"
             android:padding="5dp"
-            android:src="@drawable/ic_headset_black_24dp"
+            android:src="@drawable/ic_headset_white_24dp"
             android:contentDescription="@string/action_play"/>
     </LinearLayout>
 

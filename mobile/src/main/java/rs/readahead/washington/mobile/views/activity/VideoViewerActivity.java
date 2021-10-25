@@ -49,6 +49,7 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
 import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent;
+import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.exo.ExoEventListener;
 import rs.readahead.washington.mobile.media.exo.MediaFileDataSourceFactory;
@@ -94,6 +95,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_video_viewer);
+        overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
         ButterKnife.bind(this);
 
         if (getIntent().hasExtra(NO_ACTIONS)) {
@@ -112,6 +114,12 @@ public class VideoViewerActivity extends BaseLockActivity implements
         presenter = new MediaFileViewerPresenter(this);
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_end, R.anim.slide_out_start);
+    }
+    
     @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -432,6 +440,8 @@ public class VideoViewerActivity extends BaseLockActivity implements
                 getString(R.string.action_delete),
                 false,
                 false,
+                false,
+                false,
                 new VaultSheetUtils.IVaultActions() {
                     @Override
                     public void upload() {
@@ -516,5 +526,6 @@ public class VideoViewerActivity extends BaseLockActivity implements
         setupMetadataMenuItem(vaultFile.metadata != null);
         invalidateOptionsMenu();
         isInfoShown = false;
+        finish();
     }
 }

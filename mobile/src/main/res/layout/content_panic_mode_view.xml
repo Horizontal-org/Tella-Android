@@ -20,21 +20,19 @@
         android:background="@drawable/ic_panic_circle" />
 
     <TextView
+        style="@style/Tella_Main_White_Text.Bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/countdown_timer"
         android:layout_centerHorizontal="true"
-        android:textAlignment="center"
-        android:text="@string/homescreen_heading_quick.delete"
-        style="@style/Tella_Main_White_Text"
-        android:textSize="35sp"
         android:lineSpacingExtra="0.4dp"
-        />
+        android:text="@string/homescreen_heading_quick.delete"
+        android:textAlignment="center"
+        android:textSize="35sp" />
 
     <TextView
         style="@style/Tella_Main_White_Text"
-        android:lineHeight="47dp"
-        android:textSize="35sp"
+        android:textSize="28sp"
         android:lineSpacingExtra="0.4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

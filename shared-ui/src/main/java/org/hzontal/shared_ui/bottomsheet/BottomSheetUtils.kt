@@ -1,36 +1,35 @@
 package org.hzontal.shared_ui.bottomsheet
 
+import android.app.Activity
 import android.content.Context
-import android.content.DialogInterface
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageView
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.fragment.app.FragmentManager
 import org.hzontal.shared_ui.R
+import org.hzontal.shared_ui.utils.DialogUtils
 
 object
 BottomSheetUtils {
 
     @JvmStatic
     fun showStandardSheet(
-            fragmentManager: FragmentManager,
-            titleText: String?,
-            descriptionText: String?,
-            actionButtonLabel: String? = null,
-            cancelButtonLabel: String? = null,
-            onConfirmClick: (() -> Unit)? = null,
-            onCancelClick: (() -> Unit)? = null
+        fragmentManager: FragmentManager,
+        titleText: String?,
+        descriptionText: String?,
+        actionButtonLabel: String? = null,
+        cancelButtonLabel: String? = null,
+        onConfirmClick: (() -> Unit)? = null,
+        onCancelClick: (() -> Unit)? = null
     ) {
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
-                .page(R.layout.standar_sheet_layout)
-                .cancellable(true)
+            .page(R.layout.standar_sheet_layout)
+            .cancellable(true)
         customSheetFragment.holder(GenericSheetHolder(), object :
-                CustomBottomSheetFragment.Binder<GenericSheetHolder> {
+            CustomBottomSheetFragment.Binder<GenericSheetHolder> {
             override fun onBind(holder: GenericSheetHolder) {
                 with(holder) {
                     title.text = titleText
@@ -53,7 +52,7 @@ BottomSheetUtils {
                     }
 
                     actionButton.visibility =
-                            if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+                        if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
 
                 }
             }
@@ -82,22 +81,22 @@ BottomSheetUtils {
     }
 
     fun showRadioListSheet(
-            fragmentManager: FragmentManager,
-            context: Context,
-            currentTimeout: Long,
-            radioList: LinkedHashMap<Long, Int>,
-            titleText: String?,
-            descriptionText: String?,
-            actionButtonLabel: String? = null,
-            cancelButtonLabel: String? = null,
-            consumer: LockOptionConsumer
+        fragmentManager: FragmentManager,
+        context: Context,
+        currentTimeout: Long,
+        radioList: LinkedHashMap<Long, Int>,
+        titleText: String?,
+        descriptionText: String?,
+        actionButtonLabel: String? = null,
+        cancelButtonLabel: String? = null,
+        consumer: LockOptionConsumer
     ) {
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
-                .page(R.layout.radio_list_sheet_layout)
-                .cancellable(true)
+            .page(R.layout.radio_list_sheet_layout)
+            .cancellable(true)
         customSheetFragment.holder(RadioListSheetHolder(), object :
-                CustomBottomSheetFragment.Binder<RadioListSheetHolder> {
+            CustomBottomSheetFragment.Binder<RadioListSheetHolder> {
             override fun onBind(holder: RadioListSheetHolder) {
                 with(holder) {
                     title.text = titleText
@@ -110,7 +109,8 @@ BottomSheetUtils {
                     }
 
                     actionButton.setOnClickListener {
-                        val radioButton: AppCompatRadioButton = radioGroup.findViewById(radioGroup.checkedRadioButtonId)
+                        val radioButton: AppCompatRadioButton =
+                            radioGroup.findViewById(radioGroup.checkedRadioButtonId)
                         val option = radioButton.tag as Long
                         consumer.accept(option)
                         customSheetFragment.dismiss()
@@ -122,7 +122,8 @@ BottomSheetUtils {
 
                     for (option in radioList) {
                         val inflater = LayoutInflater.from(context)
-                        val button = inflater.inflate(R.layout.radio_list_item_layout, null) as RadioButton
+                        val button =
+                            inflater.inflate(R.layout.radio_list_item_layout, null) as RadioButton
                         button.tag = option.key
                         button.setText(option.value)
                         radioGroup.addView(button)
@@ -132,7 +133,7 @@ BottomSheetUtils {
                     }
 
                     actionButton.visibility =
-                            if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+                        if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
 
                 }
             }
@@ -285,8 +286,8 @@ BottomSheetUtils {
                     buttonTwoSubtitle.text = subtitleTwo
 
                     buttonOne.setOnClickListener {
-                    consumer?.accept(true)
-                    customSheetFragment.dismiss()
+                        consumer?.accept(true)
+                        customSheetFragment.dismiss()
                     }
 
                     buttonTwo.setOnClickListener {
@@ -356,6 +357,74 @@ BottomSheetUtils {
         customSheetFragment.launch()
     }
 
+    class ConfirmImageSheetHolder : CustomBottomSheetFragment.PageHolder() {
+        lateinit var actionButton: TextView
+        lateinit var cancelButton: TextView
+        lateinit var title: TextView
+        lateinit var description: TextView
+        lateinit var imageView: ImageView
+
+        override fun bindView(view: View) {
+            actionButton = view.findViewById(R.id.standard_sheet_confirm_btn)
+            cancelButton = view.findViewById(R.id.standard_sheet_cancel_btn)
+            title = view.findViewById(R.id.standard_sheet_title)
+            description = view.findViewById(R.id.standard_sheet_content)
+            imageView = view.findViewById(R.id.sheet_image)
+        }
+    }
+
+    @JvmStatic
+    fun showConfirmSheetWithImage(
+        fragmentManager: FragmentManager,
+        titleText: String?,
+        descriptionText: String?,
+        actionButtonLabel: String? = null,
+        cancelButtonLabel: String? = null,
+        confirmDrawable: Drawable? = null,
+        consumer: ActionConfirmed
+    ) {
+
+        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.confirm_image_sheet_layout)
+            .cancellable(true)
+            .screenTag("ConfirmImageSheet")
+        customSheetFragment.holder(ConfirmImageSheetHolder(), object :
+            CustomBottomSheetFragment.Binder<ConfirmImageSheetHolder> {
+            override fun onBind(holder: ConfirmImageSheetHolder) {
+                with(holder) {
+                    title.text = titleText
+                    description.text = descriptionText
+                    actionButtonLabel?.let {
+                        actionButton.text = it
+                    }
+                    cancelButtonLabel?.let {
+                        cancelButton.text = it
+                    }
+
+                    actionButton.setOnClickListener {
+                        consumer.accept(isConfirmed = true)
+                        customSheetFragment.dismiss()
+                    }
+
+                    cancelButton.setOnClickListener {
+                        customSheetFragment.dismiss()
+                    }
+
+                    confirmDrawable?.let {
+                        imageView.setImageDrawable(it)
+                    }
+
+                    actionButton.visibility =
+                        if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+
+                }
+            }
+        })
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
+    }
+
     interface UploadServerConsumer {
         fun accept(serverId: Long)
     }
@@ -390,7 +459,8 @@ BottomSheetUtils {
                     }
 
                     actionButton.setOnClickListener {
-                        val radioButton: AppCompatRadioButton = radioGroup.findViewById(radioGroup.checkedRadioButtonId)
+                        val radioButton: AppCompatRadioButton =
+                            radioGroup.findViewById(radioGroup.checkedRadioButtonId)
                         val option = radioButton.tag as Long
                         consumer.accept(option)
                         customSheetFragment.dismiss()
@@ -402,7 +472,8 @@ BottomSheetUtils {
 
                     for (option in radioList) {
                         val inflater = LayoutInflater.from(context)
-                        val button = inflater.inflate(R.layout.radio_list_item_layout, null) as RadioButton
+                        val button =
+                            inflater.inflate(R.layout.radio_list_item_layout, null) as RadioButton
                         button.tag = option.key
                         button.setText(option.value)
                         radioGroup.addView(button)
@@ -521,4 +592,129 @@ BottomSheetUtils {
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
     }
+
+    class RenameFileSheetHolder : CustomBottomSheetFragment.PageHolder() {
+        lateinit var actionCancel: TextView
+        lateinit var actionRename: TextView
+        lateinit var title: TextView
+        lateinit var renameEditText: EditText
+
+        override fun bindView(view: View) {
+            actionRename = view.findViewById(R.id.standard_sheet_confirm_btn)
+            actionCancel = view.findViewById(R.id.standard_sheet_cancel_btn)
+            title = view.findViewById(R.id.standard_sheet_title)
+            renameEditText = view.findViewById(R.id.renameEditText)
+        }
+    }
+
+    @JvmStatic
+    fun showFileRenameSheet(
+        fragmentManager: FragmentManager,
+        titleText: String?,
+        cancelLabel: String,
+        confirmLabel: String,
+        context: Activity,
+        fileName: String?,
+        onConfirmClick: ((String) -> Unit)? = null
+    ) {
+        val renameFileSheet = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.sheet_rename)
+            .screenTag("FileRenameSheet")
+            .cancellable(true)
+        renameFileSheet.holder(RenameFileSheetHolder(), object :
+            CustomBottomSheetFragment.Binder<RenameFileSheetHolder> {
+            override fun onBind(holder: RenameFileSheetHolder) {
+                with(holder) {
+                    title.text = titleText
+                    renameEditText.setText(fileName)
+                    //Cancel action
+                    actionCancel.text = cancelLabel
+                    actionCancel.setOnClickListener { renameFileSheet.dismiss() }
+
+                    //Rename action
+                    actionRename.text = confirmLabel
+                    actionRename.setOnClickListener {
+                        if (!renameEditText.text.isNullOrEmpty()) {
+                            renameFileSheet.dismiss()
+                            onConfirmClick?.invoke(renameEditText.text.toString())
+                        } else {
+                            DialogUtils.showBottomMessage(
+                                context,
+                                "Please fill in the new name",
+                                true
+                            )
+                        }
+
+                    }
+                }
+            }
+        })
+        renameFileSheet.transparentBackground()
+        renameFileSheet.launch()
+    }
+
+
+    class EnterCodeSheetHolder : CustomBottomSheetFragment.PageHolder() {
+        lateinit var title: TextView
+        lateinit var subtitle: TextView
+        lateinit var description: TextView
+        lateinit var enterText: EditText
+        lateinit var buttonNext: TextView
+        lateinit var cancelButton: ImageView
+
+
+        override fun bindView(view: View) {
+            title = view.findViewById(R.id.sheet_title)
+            subtitle = view.findViewById(R.id.sheet_subtitle)
+            description = view.findViewById(R.id.sheet_description)
+            enterText = view.findViewById(R.id.code_editText)
+            buttonNext = view.findViewById(R.id.next_btn)
+            cancelButton = view.findViewById(R.id.standard_sheet_cancel_btn)
+        }
+    }
+
+    @JvmStatic
+    fun showEnterCustomizationCodeSheet(
+        fragmentManager: FragmentManager,
+        titleText: String?,
+        subTitle: String?,
+        descriptionText: String?,
+        nextButton: String?,
+        consumer: StringConsumer? = null
+    ) {
+
+        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.enter_string_bottomsheet_layout)
+            .cancellable(true)
+            .fullScreen()
+            .statusBarColor(R.color.space_cadet)
+        customSheetFragment.holder(EnterCodeSheetHolder(), object :
+            CustomBottomSheetFragment.Binder<EnterCodeSheetHolder> {
+            override fun onBind(holder: EnterCodeSheetHolder) {
+                with(holder) {
+                    title.text = titleText
+                    subtitle.text = subTitle
+                    description.text = descriptionText
+                    buttonNext.text = nextButton
+                    buttonNext.setOnClickListener {
+                        if (enterText.text.isNotEmpty()) {
+                            consumer?.accept(enterText.text.toString())
+                            customSheetFragment.dismiss()
+                        }
+                    }
+                    cancelButton.setOnClickListener {
+                        customSheetFragment.dismiss()
+                    }
+                }
+            }
+        })
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
+    }
+
+    interface StringConsumer {
+        fun accept(code: String)
+    }
+
 }

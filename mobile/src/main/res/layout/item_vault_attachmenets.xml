@@ -12,7 +12,7 @@
         android:layout_height="70dp"
         android:layout_marginStart="2dp"
         android:layout_marginEnd="2dp"
-        android:background="@color/wa_white_32"
+        android:background="@color/wa_white_20"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,25 +24,24 @@
         app:layout_constraintBottom_toBottomOf="@id/attachmentImg"
         app:layout_constraintStart_toStartOf="@id/attachmentImg"
         app:layout_constraintEnd_toEndOf="@id/attachmentImg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         >
     </androidx.appcompat.widget.AppCompatImageView>
 
     <TextView
-        android:layout_width="40dp"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@id/attachmentImg"
-        app:layout_constraintEnd_toEndOf="@id/attachmentImg"
         app:layout_constraintBottom_toBottomOf="@id/attachmentImg"
         style="@style/Tella_Main_White_Text.Small"
         android:id="@+id/fileNameTextView"
         tools:text="TestTestTestTestTestTest "
         android:ellipsize="end"
         android:maxLines="1"
-        android:textSize="9sp"
         android:layout_marginBottom="3dp"
-        android:visibility="gone"
+        android:visibility="visible"
+        android:layout_marginStart="3dp"
         />
 
     <ImageView
@@ -54,6 +53,7 @@
         app:layout_constraintTop_toTopOf="@id/fileNameTextView"
         android:background="@drawable/ic_more"
         android:visibility="gone"
+        android:padding="8dp"
         >
     </ImageView>
 

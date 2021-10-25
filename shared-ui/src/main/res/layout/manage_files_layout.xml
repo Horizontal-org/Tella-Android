@@ -67,12 +67,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/importActionTV"
         android:layout_marginTop="20dp"
-        android:drawablePadding="17dp"
+        android:drawablePadding="15dp"
         app:drawableStartCompat="@drawable/ic_pen"
         android:drawableStart="@drawable/ic_upload_cloud"
         android:gravity="center"
         tools:text="Import and delete original device"
         />
+
+    <ImageView
+        android:id="@+id/delete_vault_tooltip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toEndOf="@id/createDeleteActionTV"
+        app:layout_constraintTop_toTopOf="@id/createDeleteActionTV"
+        app:layout_constraintBottom_toBottomOf="@id/createDeleteActionTV"
+        android:contentDescription="help"
+        android:src="@drawable/orange_help_24"
+        android:textColor="@color/wa_white" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -83,8 +97,8 @@
         app:layout_constraintTop_toBottomOf="@id/createDeleteActionTV"
         android:layout_marginTop="20dp"
         android:drawablePadding="17dp"
-        app:drawableStartCompat="@drawable/ic_save_alt_24px"
-        android:drawableStart="@drawable/ic_upload_cloud"
+        app:drawableStartCompat="@drawable/ic_new_folder"
+        android:drawableStart="@drawable/ic_new_folder"
         android:gravity="center"
         tools:text="Create a new folder"
         />

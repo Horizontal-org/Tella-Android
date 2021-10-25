@@ -6,11 +6,11 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
+import android.view.View;
 
-import android.view.MenuItem;
+import androidx.fragment.app.Fragment;
 
+import org.hzontal.shared_ui.appbar.ToolbarComponent;
 import org.jetbrains.annotations.NotNull;
 
 import butterknife.BindView;
@@ -24,15 +24,16 @@ import rs.readahead.washington.mobile.util.CamouflageManager;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.settings.ChangeRemoveCamouflage;
 import rs.readahead.washington.mobile.views.settings.HideTella;
+import rs.readahead.washington.mobile.views.settings.MainSettings;
 import rs.readahead.washington.mobile.views.settings.OnFragmentSelected;
+import rs.readahead.washington.mobile.views.settings.SecuritySettings;
 
 
 public class SettingsActivity extends BaseLockActivity implements OnFragmentSelected {
     @SuppressLint("NonConstantResourceId")
     @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
-    private ActionBar actionBar;
+    ToolbarComponent toolbar;
+    
     private EventCompositeDisposable disposables;
     private final CamouflageManager cm = CamouflageManager.getInstance();
     protected boolean isCamouflage = false;
@@ -44,12 +45,13 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        actionBar = getSupportActionBar();
+        toolbar.setStartTextTitle(getResources().getString(R.string.settings_app_bar));
+        setSupportActionBar(toolbar);
 
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.settings_app_bar);
-        }
+        toolbar.setBackClickListener(() -> {
+            onBackPressed();
+            return null;
+        });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             findViewById(R.id.appbar).setOutlineProvider(null);
@@ -58,6 +60,8 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
         }
 
         if (getIntent().hasExtra(IS_CAMOUFLAGE)) {
+            addFragment(new MainSettings(),R.id.my_nav_host_fragment);
+            addFragment(new SecuritySettings(),R.id.my_nav_host_fragment);
             if (cm.isDefaultLauncherActivityAlias()) {
                 addFragment(new HideTella(),R.id.my_nav_host_fragment);
             } else {
@@ -83,40 +87,43 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
         super.onDestroy();
     }
 
-   @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @Override
     public void setToolbarLabel(int labelRes) {
-        actionBar.setTitle(getString(labelRes));
+        toolbar.setStartTextTitle(getString(labelRes));
     }
 
     @Override
     public void hideAppbar() {
-        actionBar.hide();
+        toolbar.setVisibility(View.GONE);
     }
 
     @Override
     public void showAppbar() {
-        actionBar.show();
+        toolbar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void setToolbarHomeIcon(int iconRes) {
-        actionBar.setHomeAsUpIndicator(iconRes);
+        toolbar.setToolbarNavigationIcon(iconRes);
     }
 
     @Override
     public boolean isCamouflage() {
         return isCamouflage;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.my_nav_host_fragment);
+
+        if (f instanceof MainSettings) {
+            showAppbar();
+            setToolbarLabel(R.string.settings_app_bar);
+        } else if (f instanceof SecuritySettings) {
+            showAppbar();
+            setToolbarLabel(R.string.settings_sec_app_bar);
+        }
     }
 }

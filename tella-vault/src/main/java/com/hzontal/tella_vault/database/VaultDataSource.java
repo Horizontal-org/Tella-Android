@@ -144,7 +144,7 @@ public class VaultDataSource implements IVaultDatabase {
 
     private String getSortQuery(Sort sort) {
         if (sort == null)
-            return D.C_NAME + " " + Sort.Direction.ASC.name();
+            return D.C_NAME + " " + Sort.Direction.DESC.name();
 
         if (sort.type.name().equals(Sort.Type.DATE.name()))
             return D.C_CREATED + " " + sort.direction.name();
@@ -219,9 +219,9 @@ public class VaultDataSource implements IVaultDatabase {
     }
 
     @Override
-    public boolean move(VaultFile vaultFile, VaultFile newParent) {
+    public boolean move(VaultFile vaultFile, String newParent) {
         ContentValues values = new ContentValues();
-        values.put(D.C_PARENT_ID, newParent.id);
+        values.put(D.C_PARENT_ID, newParent);
 
         int count = database.update(D.T_VAULT_FILE, values, D.C_ID + " = ?",
                 new String[]{vaultFile.id});
@@ -312,6 +312,8 @@ public class VaultDataSource implements IVaultDatabase {
                         + ")";
             case ALL_WITHOUT_DIRECTORY:
                 return cn(D.C_TYPE) + " != '" + VaultFile.Type.DIRECTORY.getValue() + "'";
+            case PHOTO_VIDEO:
+                return cn(D.C_MIME_TYPE) + " LIKE '" + "image/%" + "' OR " + cn(D.C_MIME_TYPE) + " LIKE '" + "video/%" + "'";
             default:
                 return cn(D.C_PARENT_ID) + " = '" + parentId + "'";
 
@@ -321,7 +323,6 @@ public class VaultDataSource implements IVaultDatabase {
     private String cn(String table, String column, String as) {
         return table + "." + column + " AS " + as;
     }
-
 
     private void deleteTable(String table) {
         database.execSQL("DELETE FROM " + table);

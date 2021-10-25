@@ -10,10 +10,12 @@
     >
     <TextView
         android:id="@+id/recentFilesText"
-        style="@style/Tella_Main_White_Text.MeduimbBold"
+        style="@style/Tella_Main_White_Text.Meduim"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:text="@string/vault_recent_files"
+        android:textColor="@color/wa_white_90"
+        android:letterSpacing="0.05"
         />
 
     <androidx.recyclerview.widget.RecyclerView

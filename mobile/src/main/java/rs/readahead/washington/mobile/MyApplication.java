@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.StrictMode;
 
+import com.bumptech.glide.Glide;
 import com.evernote.android.job.JobManager;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_locking_ui.TellaKeysUI;
@@ -216,6 +217,13 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         // in Tella1 this can be here and fixed, but in Tella2 we need to read saved active method
         // when starting the app and set it (that functionality is missing from active registry, with changing method support)
        // unlockRegistry.setActiveMethod(getApplicationContext(), UnlockRegistry.Method.TELLA_PATTERN);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        super.onLowMemory();
+        Glide.get(this).clearMemory();
     }
 
     @Override

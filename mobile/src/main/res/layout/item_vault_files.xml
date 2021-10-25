@@ -10,21 +10,13 @@
     android:layout_marginTop="17dp"
     >
 
-    <TextView
-        android:id="@+id/filesText"
-        style="@style/Tella_Main_White_Text.MeduimbBold"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="@string/vault_files" />
-
     <org.hzontal.shared_ui.buttons.HomeButton
         android:id="@+id/allFilesBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/imagesBtn"
-        app:layout_constraintTop_toBottomOf="@id/filesText"
+        app:layout_constraintTop_toTopOf="parent"
         app:mainTitleText="@string/vault_my_files"
         app:rightImg="@drawable/ic_myfiles"
         android:layout_marginEnd="17dp"
@@ -36,7 +28,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/allFilesBtn"
-        app:layout_constraintTop_toBottomOf="@id/filesText"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:mainTitleText="@string/vault_images"
         app:rightImg="@drawable/ic_gallery"

@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.VaultFile;
 
 import java.io.File;
 
@@ -23,8 +24,8 @@ public class CameraPresenter implements ICameraPresenterContract.IPresenter {
     }
 
     @Override
-    public void addJpegPhoto(final byte[] jpeg) {
-        disposables.add(Observable.fromCallable(() -> MediaFileHandler.saveJpegPhoto(jpeg))
+    public void addJpegPhoto(final byte[] jpeg, String parent) {
+        disposables.add(Observable.fromCallable(() -> MediaFileHandler.saveJpegPhoto(jpeg,parent))
                 .doOnSubscribe(disposable -> view.onAddingStart())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onAddingEnd())
@@ -32,13 +33,12 @@ public class CameraPresenter implements ICameraPresenterContract.IPresenter {
                     FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onAddError(throwable);
                 })
-
         );
     }
 
     @Override
-    public void addMp4Video(final File file) {
-        disposables.add(Observable.fromCallable(() -> MediaFileHandler.saveMp4Video(file))
+    public void addMp4Video(final File file, String parent) {
+        disposables.add(Observable.fromCallable(() -> MediaFileHandler.saveMp4Video(file, parent))
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> view.onAddingStart())
                 .observeOn(AndroidSchedulers.mainThread())

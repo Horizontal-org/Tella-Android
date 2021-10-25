@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.views.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -41,6 +42,7 @@ public class MetadataViewerActivity extends BaseLockActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_metadata_viewer);
+        overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
         ButterKnife.bind(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -49,6 +51,12 @@ public class MetadataViewerActivity extends BaseLockActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            findViewById(R.id.appbar).setOutlineProvider(null);
+        } else {
+            findViewById(R.id.appbar).bringToFront();
         }
 
         if (getIntent().hasExtra(VIEW_METADATA)) {
@@ -61,6 +69,17 @@ public class MetadataViewerActivity extends BaseLockActivity {
         metadata = vaultFile.metadata;
 
         showMetadata();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_end, R.anim.slide_out_start);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
     @Override
@@ -163,8 +182,10 @@ public class MetadataViewerActivity extends BaseLockActivity {
             metadataList.addView(createMetadataItem(getString(R.string.verification_info_field_metadata_not_available), getResources().getString(R.string.verification_info_field_location)));
         }
 
-        String cells = StringUtils.join(", ", metadata.getCells());
-        metadataList.addView(createMetadataItem(cells, getResources().getString(R.string.verification_info_field_cell_towers)));
+        if (metadata.getCells() != null) {
+            String cells = StringUtils.join(", ", metadata.getCells());
+            metadataList.addView(createMetadataItem(cells, getResources().getString(R.string.verification_info_field_cell_towers)));
+        }
 
         metadataList.addView(createMetadataItem(
                 metadata.getWifis() != null ? TextUtils.join(", ", metadata.getWifis()) : getString(R.string.verification_info_field_metadata_not_available),

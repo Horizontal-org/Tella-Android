@@ -7,22 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.navigation.Navigation
-import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder
 import org.hzontal.tella.keys.config.UnlockRegistry
-import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent
-import rs.readahead.washington.mobile.presentation.entity.CamouflageOption
-import rs.readahead.washington.mobile.util.CamouflageManager
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
-import timber.log.Timber
 
 
 class HideTella : BaseFragment() {
-
-    private val cm = CamouflageManager.getInstance()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -34,7 +25,8 @@ class HideTella : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        (activity as OnFragmentSelected?)?.hideAppbar()
+        (activity as OnFragmentSelected?)?.showAppbar()
+        (activity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_servers_hide_tella_title)
 
         val btnOneDesc = view.findViewById<TextView>(R.id.subtitle_btn_one)
         btnOneDesc.setText(Html.fromHtml(getString(R.string.settings_servers_setup_change_name_icon_subtitle)))
@@ -59,24 +51,19 @@ class HideTella : BaseFragment() {
             }
             btnTwoLabel.setAlpha(0.38f)
             btnTwo.setClickable(false)
+            btnTwo.setOnClickListener { }
         } else {
             hideNotPossible.visibility = View.GONE
             btnTwoLabel.setAlpha(1f)
             btnTwo.setClickable(true)
             btnTwo.setOnClickListener {
-                hideTellaBehindCalculator()
+                activity.addFragment(HideBehindCalculator(), R.id.my_nav_host_fragment)
             }
         }
 
         view.findViewById<View>(R.id.back_btn).setOnClickListener {
+            (activity as OnFragmentSelected?)?.showAppbar()
             activity.onBackPressed()
-        }
-    }
-
-    private fun hideTellaBehindCalculator(){
-        if (cm.setLauncherActivityAlias(requireContext(), CALCULATOR_ALIAS)) {
-            MyApplication.bus()
-                .post(CamouflageAliasChangedEvent())
         }
     }
 }

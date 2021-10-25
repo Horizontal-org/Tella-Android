@@ -147,6 +147,16 @@ public class RxVault extends BaseVault {
         });
     }
 
+    public Single<Boolean> move(VaultFile vaultFile, String newParent) {
+        return Single.defer(() -> {
+            try {
+                return Single.just(baseMove(vaultFile, newParent));
+            } catch (Exception e) {
+                return Single.error(e);
+            }
+        });
+    }
+
     protected Single<VaultFile> create(BaseVaultFileBuilder<?, ?> builder) {
         return Single.defer(() -> {
             try {

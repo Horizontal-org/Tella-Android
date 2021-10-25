@@ -29,9 +29,11 @@
     <color name="wa_purple">#2C275A</color>
     <color name="wa_orange">#D6933B</color>
     <color name="delimiter">#47426F</color>
+    <color name="onboardingIndicatorInactive">#DCDCDC</color>
+    <color name="onboardingIndicatorActive">#D6933B</color>
 
-    <color name="colorPrimary">@color/dark_purple</color>
-    <color name="colorPrimaryDark">@color/wa_dark_gray</color>
+    <color name="colorPrimary">@color/space_cadet</color>
+    <color name="colorPrimaryDark">@color/space_cadet</color>
     <color name="colorAccent">@color/wa_white</color>
     <color name="colorPrimaryInverse">@color/wa_white</color>
 

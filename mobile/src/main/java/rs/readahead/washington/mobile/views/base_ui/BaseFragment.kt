@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.views.base_ui
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -32,6 +33,12 @@ abstract class BaseFragment : Fragment() {
     ): View? {
         Timber.d("***** ${this.javaClass.name} onCreateView")
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            view?.findViewById<View>(R.id.appbar)?.outlineProvider = null
+        } else {
+            view?.findViewById<View>(R.id.appbar)?.bringToFront()
+        }
+
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
@@ -52,9 +59,9 @@ abstract class BaseFragment : Fragment() {
     protected open fun nav(): NavController {
         return NavHostFragment.findNavController(this)
     }
-    
+
     protected fun showTooltip(v: View, text: String, gravity: Int) {
-        val tooltip = Tooltip.Builder(v)
+        Tooltip.Builder(v)
                 .setText(text)
                 .setTextColor(resources.getColor(R.color.wa_black))
                 .setBackgroundColor(resources.getColor(R.color.wa_white))
@@ -71,6 +78,4 @@ abstract class BaseFragment : Fragment() {
     }
 
     abstract fun initView(view: View)
-
-    open fun onBackPressed() = true
 }

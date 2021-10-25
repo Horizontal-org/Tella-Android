@@ -29,6 +29,16 @@
         <item name="android:fontFamily">@font/open_sans</item>
     </style>
 
+    <style name="AppTheme.DarkNoActionBar.Blue" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/prussian_blue</item>
+        <item name="colorPrimaryDark">@color/prussian_blue</item>
+        <item name="colorAccent">@color/prussian_blue</item>
+        <item name="patternViewStyle">@style/PatternView</item>
+        <item name="android:textColorPrimaryInverse">@color/colorPrimaryInverse</item>
+        <item name="android:textColorSecondary">@color/colorPrimaryInverse</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+    </style>
+
     <style name="PhotoViewerTheme.NoActionBar" parent="AppTheme.NoActionBar">
         <!-- <item name="colorAccent">@color/wa_white</item> -->
     </style>
@@ -69,8 +79,8 @@
 
     <style name="SettingsMainShadowLine">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1dp</item>
-        <item name="android:background">#80CCCCCC</item>
+        <item name="android:layout_height">0.5dp</item>
+        <item name="android:background">#47426F</item>
     </style>
 
     <style name="CameraModeText">
@@ -660,5 +670,13 @@
         <item name="android:textAlignment">center</item>
         <item name="android:paddingTop">16dp</item>
         <item name="android:paddingBottom">16dp</item>
+    </style>
+
+    <style name="MetadataLine">
+        <item name="android:layout_width">240dp</item>
+        <item name="android:layout_height">0.1dp</item>
+        <item name="android:padding">0.1dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@color/wa_white</item>
     </style>
 </resources>

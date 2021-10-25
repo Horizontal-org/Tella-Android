@@ -5,7 +5,6 @@
     android:layout_gravity="center"
     android:textAlignment="center"
     android:textSize="17sp"
-    android:paddingTop="26dp"
-    android:paddingBottom="22dp"
+    android:padding="16dp"
     android:textColor="@color/wa_white"
     android:textStyle="bold"/>

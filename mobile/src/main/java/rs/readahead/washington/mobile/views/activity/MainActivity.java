@@ -1,5 +1,7 @@
 package rs.readahead.washington.mobile.views.activity;
 
+import static rs.readahead.washington.mobile.views.fragment.vault.home.HomeVaultFragmentKt.VAULT_FILTER;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -23,6 +25,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.tella_vault.filter.FilterType;
 
 import java.util.List;
 import java.util.Objects;
@@ -40,6 +43,7 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
+import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent;
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.mvp.contract.ICollectCreateFormControllerContract;
@@ -50,6 +54,7 @@ import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.views.custom.HomeScreenGradient;
+import rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment;
 
 
 @RuntimePermissions
@@ -57,6 +62,7 @@ public class MainActivity extends MetadataActivity implements
         IMetadataAttachPresenterContract.IView,
         IHomeScreenPresenterContract.IView,
         ICollectCreateFormControllerContract.IView {
+    public static final String PHOTO_VIDEO_FILTER = "gallery_filter";
     @BindView(R.id.home_screen_gradient)
     HomeScreenGradient homeScreenGradient;
     @BindView(R.id.nav_bar_holder)
@@ -65,7 +71,6 @@ public class MainActivity extends MetadataActivity implements
     View background;
     @BindView(R.id.main_container)
     View root;
-
     private boolean mExit = false;
     private Handler handler;
     private EventCompositeDisposable disposables;
@@ -94,12 +99,17 @@ public class MainActivity extends MetadataActivity implements
 
         // todo: check this..
         //SafetyNetCheck.setApiKey(getString(R.string.share_in_report));
+
+        if (getIntent().hasExtra(PHOTO_VIDEO_FILTER)) {
+            Bundle bundle = new Bundle();
+            bundle.putString(VAULT_FILTER, FilterType.PHOTO_VIDEO.name());
+            navController.navigate(R.id.action_homeScreen_to_attachments_screen, bundle);
+        }
     }
 
     private void initSetup() {
         //handleOrbot();
         //setupPanicSeek();
-
         setOrientationListener();
 
         disposables = MyApplication.bus().createCompositeDisposable();
@@ -107,6 +117,12 @@ public class MainActivity extends MetadataActivity implements
             @Override
             public void onNext(LocaleChangedEvent event) {
                 recreate();
+            }
+        });
+        disposables.wire(CamouflageAliasChangedEvent.class, new EventObserver<CamouflageAliasChangedEvent>() {
+            @Override
+            public void onNext(CamouflageAliasChangedEvent event) {
+                closeApp();
             }
         });
     }
@@ -139,7 +155,7 @@ public class MainActivity extends MetadataActivity implements
         }
     }
 
-    //@OnClick(R.id.microphone)
+    //@OnClick(PozR.id.microphone)
     void onMicrophoneClicked() {
         if (Preferences.isAnonymousMode()) {
             startAudioRecorderActivityAnonymous();
@@ -307,8 +323,20 @@ public class MainActivity extends MetadataActivity implements
     @Override
     public void onBackPressed() {
         // if (maybeCloseCamera()) return;
+        if (checkCurrentFragment()) return;
         if (!checkIfShouldExit()) return;
         closeApp();
+    }
+
+    private boolean checkCurrentFragment() {
+        List<Fragment> fragments = Objects.requireNonNull(getSupportFragmentManager().getPrimaryNavigationFragment()).getChildFragmentManager().getFragments();
+        for (Fragment fragment : fragments) {
+            if (fragment instanceof AttachmentsFragment) {
+                ((AttachmentsFragment) fragment).onBackPressed();
+                return true;
+            }
+        }
+        return false;
     }
 
     private void closeApp() {
@@ -352,6 +380,8 @@ public class MainActivity extends MetadataActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        //btmNavMain.setSelectedItemId(R.id.home);
+        btmNavMain.getMenu().findItem(R.id.home).setChecked(true);
 
         homeScreenPresenter.countCollectServers();
 
@@ -519,12 +549,18 @@ public class MainActivity extends MetadataActivity implements
     public void showBottomNavigation() {
         btmNavMain.setVisibility(View.VISIBLE);
     }
-    public void enableMoveMode(Boolean isEnabled){
-        if (isEnabled){
-            root.setBackgroundColor(R.color.prussian_blue);
+
+    public void selectNavMic() {
+        btmNavMain.getMenu().findItem(R.id.mic).setChecked(true);
+    }
+
+    public void enableMoveMode(Boolean isEnabled) {
+        root.setBackgroundColor(getResources().getColor(R.color.prussian_blue));
+       /* if (!isEnabled){
+
         }else{
             root.setBackgroundColor(R.color.space_cadet);
-        }
+        }*/
     }
 }
 

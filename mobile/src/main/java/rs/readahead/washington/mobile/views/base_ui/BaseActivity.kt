@@ -10,8 +10,10 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.util.LocaleManager
+import rs.readahead.washington.mobile.util.LockTimeoutManager
 
 abstract class BaseActivity : AppCompatActivity() {
     var isManualOrientation = false
@@ -57,6 +59,11 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
+    fun changeTemporaryTimeout(){
+        if (LockTimeoutManager().lockTimeout == LockTimeoutManager.IMMEDIATE_SHUTDOWN) {
+            MyApplication.getMainKeyHolder().timeout  = LockTimeoutManager.FIVE_MUNITES_SHUTDOWN
+        }
+    }
 
     fun replaceFragmentNoAddToBackStack(fragment: Fragment, cont: Int) {
         val className = fragment.javaClass.name

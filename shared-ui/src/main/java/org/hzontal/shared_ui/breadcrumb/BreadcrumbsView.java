@@ -38,6 +38,7 @@ public class BreadcrumbsView extends FrameLayout {
 	private ColorStateList mSelectedTextColor;
 	private int mTextSize;
 	private int mTextPadding;
+	private int mHomeIcon;
 
     private static final String KEY_SUPER_STATES = BuildConfig.APPLICATION_ID + ".superStates";
     private static final String KEY_BREADCRUMBS = BuildConfig.APPLICATION_ID + ".breadcrumbs";
@@ -60,6 +61,7 @@ public class BreadcrumbsView extends FrameLayout {
 			mSelectedTextColor = a.getColorStateList(R.styleable.BreadcrumbsView_crumbsSelectedTextColor);
             mTextSize = a.getDimensionPixelSize(R.styleable.BreadcrumbsView_crumbsTextSize, -1);
             mTextPadding = a.getDimensionPixelSize(R.styleable.BreadcrumbsView_crumbsPadding, -1);
+			mHomeIcon = a.getResourceId(R.styleable.BreadcrumbsView_homeIcon, -1);
 			a.recycle();
 		}
 
@@ -236,7 +238,7 @@ public class BreadcrumbsView extends FrameLayout {
 		if (state instanceof Bundle) {
             Bundle bundle = (Bundle) state;
             super.onRestoreInstanceState(bundle.getParcelable(KEY_SUPER_STATES));
-            setItems(bundle.<IBreadcrumbItem>getParcelableArrayList(KEY_BREADCRUMBS));
+            setItems(bundle.getParcelableArrayList(KEY_BREADCRUMBS));
             return;
 		}
 		super.onRestoreInstanceState(BaseSavedState.EMPTY_STATE);
@@ -268,4 +270,7 @@ public class BreadcrumbsView extends FrameLayout {
     public int getTextPadding() {
 	    return mTextPadding;
     }
+	public int getHomeIcon() {
+		return mHomeIcon;
+	}
 }

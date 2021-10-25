@@ -3,18 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="17dp"
     android:background="@color/space_cadet"
-    android:paddingStart="17dp"
-   >
+    android:paddingStart="17dp">
     <TextView
         android:id="@+id/favoritesText"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        style="@style/Tella_Main_White_Text.MeduimbBold"
-        android:textSize="14sp"
+        style="@style/Tella_Main_White_Text.Meduim"
         android:text="@string/vault_favorite_forms"
+        android:textColor="@color/wa_white_90"
+        android:letterSpacing="0.1"
         >
     </TextView>
 

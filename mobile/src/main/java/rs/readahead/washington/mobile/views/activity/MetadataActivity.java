@@ -145,7 +145,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements
         sensorListenerRegistered = true;
     }
 
-    protected void startLocationMetadataListening() {
+    public void startLocationMetadataListening() {
         if (Preferences.isAnonymousMode()) {
             return;
         }
@@ -224,7 +224,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements
         sensorListenerRegistered = false;
     }
 
-    protected void stopLocationMetadataListening() {
+    public void stopLocationMetadataListening() {
         stopLocationListening();
         stopWifiListening();
     }
@@ -422,7 +422,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements
     }
 
     // UI stuff
-    protected void attachMediaFileMetadata(final VaultFile vaultFile, final IMetadataAttachPresenterContract.IPresenter metadataAttacher) {
+    public void attachMediaFileMetadata(final VaultFile vaultFile, final IMetadataAttachPresenterContract.IPresenter metadataAttacher) {
         // skip metadata if anonymous mode..
         if (Preferences.isAnonymousMode()) {
             return;

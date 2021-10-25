@@ -70,7 +70,10 @@ class OnBoardLockFragment : BaseFragment() {
             goUnlockingActivity(PatternSetActivity())
         }
 
-        cancelBtn.setOnClickListener { activity.finish() }
+        cancelBtn.setOnClickListener {
+            (activity as OnBoardActivityInterface).setCurrentIndicator(2)
+            activity.onBackPressed()
+        }
     }
 
     private fun toggleButtons(passwordState: Boolean, pinState: Boolean, patternState: Boolean) {
