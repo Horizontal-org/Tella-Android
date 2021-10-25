@@ -550,6 +550,10 @@ public class MainActivity extends MetadataActivity implements
         btmNavMain.setVisibility(View.VISIBLE);
     }
 
+    public void selectNavMic() {
+        btmNavMain.getMenu().findItem(R.id.mic).setChecked(true);
+    }
+
     public void enableMoveMode(Boolean isEnabled) {
         root.setBackgroundColor(getResources().getColor(R.color.prussian_blue));
        /* if (!isEnabled){

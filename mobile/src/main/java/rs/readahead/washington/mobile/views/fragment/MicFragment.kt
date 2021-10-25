@@ -30,6 +30,7 @@ import rs.readahead.washington.mobile.util.C.RECORD_REQUEST_CODE
 import rs.readahead.washington.mobile.util.DateUtil.getDateTimeString
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.views.activity.CameraActivity.VAULT_CURRENT_ROOT_PARENT
+import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.base_ui.MetadataBaseLockFragment
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 
@@ -151,6 +152,7 @@ class MicFragment : MetadataBaseLockFragment(),
 
     override fun onResume() {
         super.onResume()
+        (activity as MainActivity).selectNavMic()
         presenter.checkAvailableStorage()
     }
 
