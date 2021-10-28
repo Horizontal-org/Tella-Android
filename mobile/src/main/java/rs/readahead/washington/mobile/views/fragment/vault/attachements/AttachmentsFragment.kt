@@ -108,6 +108,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private var importAndDelete = false
     private var uriToDelete: Uri? = null
     private val bundle by lazy { Bundle() }
+    private var selectAll = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -140,7 +141,14 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             }
 
             R.id.action_check -> {
-                true
+                selectAll = ! selectAll
+                if (selectAll){
+                    attachmentsAdapter.selectAll()
+                }else {
+                    attachmentsAdapter.clearSelected()
+                    updateAttachmentsToolbar(false)
+                }
+                return true
             }
 
             R.id.action_upload -> {

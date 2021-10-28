@@ -232,6 +232,13 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
         }
     }
 
+    public void selectAll(){
+        for (VaultFile selection : files) {
+            selectMediaFile(selection);
+            galleryMediaHandler.onMediaSelected(selection);
+        }
+    }
+
     private void onMoreSelected(ViewHolder holder, VaultFile vaultFile) {
         holder.more.setOnClickListener(v -> {
             galleryMediaHandler.onMoreClicked(vaultFile);
