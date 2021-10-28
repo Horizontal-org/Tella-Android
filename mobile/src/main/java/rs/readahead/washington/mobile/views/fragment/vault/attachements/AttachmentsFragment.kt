@@ -18,6 +18,7 @@ import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.ActivityCompat
+import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -950,13 +951,14 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             moveContainer.visibility = View.VISIBLE
             checkBoxList.visibility = View.GONE
             detailsFab.setMargins(17,0,17,70)
-            attachmentsRecyclerView.setMargins(17,0,17,37)
+            with(attachmentsRecyclerView) {
+                setMargins(17,0,17,37)
+                updatePadding(right = 2,left = 2)
+            }
         } else {
             isMoveModeEnabled = false
             (activity as MainActivity).setTheme(R.style.AppTheme_DarkNoActionBar)
             toolbar.background = ColorDrawable(getColor(activity, R.color.space_cadet))
-            attachmentsRecyclerView.background =
-                ColorDrawable(getColor(activity, R.color.space_cadet))
             root.background = ColorDrawable(getColor(activity, R.color.space_cadet))
             appBar.background = ColorDrawable(getColor(activity, R.color.space_cadet))
             (activity as MainActivity).enableMoveMode(false)
@@ -971,7 +973,11 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             moveContainer.visibility = View.GONE
             checkBoxList.visibility = View.VISIBLE
             detailsFab.setMargins(17,0,17,17)
-            attachmentsRecyclerView.setMargins(17,0,17,17)
+            with(attachmentsRecyclerView) {
+                setMargins(17,0,17,17)
+                updatePadding(right = 0,left = 0)
+                background = ColorDrawable(getColor(activity, R.color.space_cadet))
+            }
         }
         activity.invalidateOptionsMenu()
         attachmentsAdapter.enableMoveMode(enable)

@@ -198,4 +198,5 @@
             android:textColor="@color/wa_white_12" />
 
     </LinearLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
