@@ -54,10 +54,7 @@ import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.media.MediaFileHandler.walkAllFilesWithDirectories
-import rs.readahead.washington.mobile.util.C
-import rs.readahead.washington.mobile.util.DialogsUtil
-import rs.readahead.washington.mobile.util.LockTimeoutManager
-import rs.readahead.washington.mobile.util.setMargins
+import rs.readahead.washington.mobile.util.*
 import rs.readahead.washington.mobile.views.activity.*
 import rs.readahead.washington.mobile.views.activity.CameraActivity.VAULT_CURRENT_ROOT_PARENT
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
@@ -68,6 +65,7 @@ import rs.readahead.washington.mobile.views.fragment.vault.info.VAULT_FILE_INFO_
 import timber.log.Timber
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 const val VAULT_FILE_ARG = "VaultFileArg"
 const val WRITE_REQUEST_CODE = 1002
@@ -942,26 +940,31 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             isMoveModeEnabled = true
             (activity as MainActivity).setTheme(R.style.AppTheme_DarkNoActionBar_Blue)
             toolbar.background = ColorDrawable(getColor(activity, R.color.prussian_blue))
-            attachmentsRecyclerView.background =
-                ColorDrawable(resources.getColor(R.color.wa_white_12))
             root.background = ColorDrawable(getColor(activity, R.color.prussian_blue))
             appBar.background = ColorDrawable(getColor(activity, R.color.prussian_blue))
-            (activity as MainActivity).enableMoveMode(true)
-            activity.supportActionBar?.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.prussian_blue)))
+            activity.supportActionBar?.setBackgroundDrawable(
+                ColorDrawable(
+                    getColor(
+                        activity,
+                        R.color.prussian_blue
+                    )
+                )
+            )
             moveContainer.visibility = View.VISIBLE
             checkBoxList.visibility = View.GONE
             detailsFab.setMargins(17,0,17,70)
             with(attachmentsRecyclerView) {
                 setMargins(17,0,17,37)
                 updatePadding(right = 2,left = 2)
+                background = ColorDrawable(resources.getColor(R.color.wa_white_12))
             }
+            activity.window.changeStatusColor(activity,R.color.prussian_blue)
         } else {
             isMoveModeEnabled = false
             (activity as MainActivity).setTheme(R.style.AppTheme_DarkNoActionBar)
             toolbar.background = ColorDrawable(getColor(activity, R.color.space_cadet))
             root.background = ColorDrawable(getColor(activity, R.color.space_cadet))
             appBar.background = ColorDrawable(getColor(activity, R.color.space_cadet))
-            (activity as MainActivity).enableMoveMode(false)
             activity.supportActionBar?.setBackgroundDrawable(
                 ColorDrawable(
                     getColor(
@@ -978,6 +981,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 updatePadding(right = 0,left = 0)
                 background = ColorDrawable(getColor(activity, R.color.space_cadet))
             }
+            activity.window.changeStatusColor(activity,R.color.space_cadet)
         }
         activity.invalidateOptionsMenu()
         attachmentsAdapter.enableMoveMode(enable)
