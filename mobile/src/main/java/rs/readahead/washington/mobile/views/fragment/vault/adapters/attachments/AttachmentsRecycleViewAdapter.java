@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -248,6 +249,10 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
     private void checkItemState(ViewHolder holder, VaultFile vaultFile) {
         boolean checked = selected.contains(vaultFile);
         // holder.selectionDimmer.setVisibility(checked ? View.VISIBLE : View.GONE);
+        holder.itemView.setBackgroundColor(checked ? ContextCompat.getColor(holder.itemView.getContext(),R.color.wa_white_16) :
+                isMoveMode ? ContextCompat.getColor(holder.itemView.getContext(),R.color.wa_white_12)
+                    : ContextCompat.getColor(holder.itemView.getContext(),R.color.space_cadet)
+                );
         holder.checkBox.setImageResource(checked ? R.drawable.ic_check_box_on : R.drawable.ic_check_box_off);
     }
 
