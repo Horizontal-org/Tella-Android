@@ -61,7 +61,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     fun changeTemporaryTimeout(){
         if (LockTimeoutManager().lockTimeout == LockTimeoutManager.IMMEDIATE_SHUTDOWN) {
-            MyApplication.getMainKeyHolder().timeout  = LockTimeoutManager.FIVE_MUNITES_SHUTDOWN
+            MyApplication.getMainKeyHolder().timeout  = LockTimeoutManager.ONE_MINUTES_SHUTDOWN
         }
     }
 
