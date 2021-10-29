@@ -121,7 +121,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        if (isListCheckOn && !isMoveModeEnabled){
+        if (isListCheckOn && !isMoveModeEnabled) {
             inflater.inflate(R.menu.home_menu_selected, menu)
             maybeShowUploadIcon(menu)
         }
@@ -141,13 +141,13 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             }
 
             R.id.action_check -> {
-                selectAll = ! selectAll
-                if (selectAll){
+                selectAll = !selectAll
+                if (selectAll) {
                     attachmentsAdapter.selectAll()
-                }else {
+                } else {
                     attachmentsAdapter.clearSelected()
-                    updateAttachmentsToolbar(false)
                 }
+                updateAttachmentsToolbar(true)
                 return true
             }
 
@@ -285,13 +285,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
             }
             R.id.checkBoxList -> {
-                isListCheckOn = !isListCheckOn
-                attachmentsAdapter.enableSelectMode(isListCheckOn)
-                if (!isListCheckOn) {
-                    attachmentsAdapter.clearSelected()
-                    updateAttachmentsToolbar(false)
-                    enableMoveTheme(false)
-                }
+                handleSelectMode()
             }
             R.id.filterNameTv -> {
                 handleSortSheet()
@@ -315,7 +309,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
                         override fun goToRecorder() {
                             bundle.putString(VAULT_CURRENT_ROOT_PARENT, currentRootID)
-                            nav().navigate(R.id.action_attachments_screen_to_micScreen,bundle)
+                            nav().navigate(R.id.action_attachments_screen_to_micScreen, bundle)
                         }
 
                         override fun import() {
@@ -370,15 +364,32 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         }
     }
 
+    private fun handleSelectMode() {
+        isListCheckOn = !isListCheckOn
+        attachmentsAdapter.enableSelectMode(isListCheckOn)
+        updateAttachmentsToolbar(isListCheckOn)
+        if (!isListCheckOn) {
+            attachmentsAdapter.clearSelected()
+            enableMoveTheme(false)
+        }
+    }
+
     private fun updateAttachmentsToolbar(isItemsChecked: Boolean) {
         activity.invalidateOptionsMenu()
 
         if (isItemsChecked) {
             toolbar.setToolbarNavigationIcon(R.drawable.ic_close_white_24dp)
-            toolbar.setStartTextTitle(attachmentsAdapter.selectedMediaFiles.size.toString() + " items")
+            val itemsSize = attachmentsAdapter.selectedMediaFiles.size
+            toolbar.setToolbarNavigationIcon(R.drawable.ic_close_white_24dp)
+            if (itemsSize == 0) {
+                toolbar.setStartTextTitle("Select files")
+            } else {
+                toolbar.setStartTextTitle(attachmentsAdapter.selectedMediaFiles.size.toString() + " items")
+            }
         } else {
             toolbar.setToolbarNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
             setToolbarLabel()
+
             attachmentsAdapter.clearSelected()
             enableMoveTheme(false)
         }
@@ -921,6 +932,9 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     private fun handleBackStack() {
         when {
+            attachmentsAdapter.selectedMediaFiles.size == 0 && isListCheckOn -> {
+                handleSelectMode()
+            }
             attachmentsAdapter.selectedMediaFiles.size > 0 -> {
                 attachmentsAdapter.clearSelected()
                 updateAttachmentsToolbar(false)
@@ -960,13 +974,13 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             )
             moveContainer.visibility = View.VISIBLE
             checkBoxList.visibility = View.GONE
-            detailsFab.setMargins(17,0,17,70)
+            detailsFab.setMargins(17, 0, 17, 70)
             with(attachmentsRecyclerView) {
-                setMargins(17,0,17,37)
-                updatePadding(right = 2,left = 2)
+                setMargins(17, 0, 17, 37)
+                updatePadding(right = 2, left = 2)
                 background = ColorDrawable(resources.getColor(R.color.wa_white_12))
             }
-            activity.window.changeStatusColor(activity,R.color.prussian_blue)
+            activity.window.changeStatusColor(activity, R.color.prussian_blue)
         } else {
             isMoveModeEnabled = false
             (activity as MainActivity).setTheme(R.style.AppTheme_DarkNoActionBar)
@@ -983,13 +997,13 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             )
             moveContainer.visibility = View.GONE
             checkBoxList.visibility = View.VISIBLE
-            detailsFab.setMargins(17,0,17,17)
+            detailsFab.setMargins(17, 0, 17, 17)
             with(attachmentsRecyclerView) {
-                setMargins(17,0,17,17)
-                updatePadding(right = 0,left = 0)
+                setMargins(17, 0, 17, 17)
+                updatePadding(right = 0, left = 0)
                 background = ColorDrawable(getColor(activity, R.color.space_cadet))
             }
-            activity.window.changeStatusColor(activity,R.color.space_cadet)
+            activity.window.changeStatusColor(activity, R.color.space_cadet)
         }
         activity.invalidateOptionsMenu()
         attachmentsAdapter.enableMoveMode(enable)
@@ -1015,7 +1029,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         }
     }
 
-    private fun maybeShowUploadIcon(menu: Menu){
+    private fun maybeShowUploadIcon(menu: Menu) {
         menu.findItem(R.id.action_upload).isVisible = Preferences.isOfflineMode()
     }
 
@@ -1029,7 +1043,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         return true
     }
 
-    private fun getCurrentType() : ArrayList<String> {
+    private fun getCurrentType(): ArrayList<String> {
         val result = arrayListOf<String>()
         when (filterType) {
             FilterType.ALL -> result.add("*/*")
