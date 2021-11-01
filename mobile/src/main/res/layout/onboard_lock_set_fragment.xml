@@ -83,29 +83,25 @@
         android:id="@+id/back_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:fontFamily="@font/open_sans"
-        android:padding="24dp"
-        android:visibility="gone"
+        style="@style/Unlock_White_Text"
+        android:layout_marginStart="34dp"
+        android:layout_marginBottom="13dp"
+        android:visibility="visible"
         android:text="@string/pl_back"
-        android:textColor="@color/wa_white"
-        android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guidelineBottom" />
+         />
 
     <TextView
         android:id="@+id/next_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:fontFamily="@font/open_sans"
-        android:padding="24dp"
+        style="@style/Unlock_White_Text"
+        android:layout_marginEnd="34dp"
+        android:layout_marginBottom="13dp"
         android:text="@string/action_next"
-        android:textColor="@color/wa_white"
-        android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintTop_toBottomOf="@+id/guidelineBottom" />
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
