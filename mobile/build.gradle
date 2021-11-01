@@ -15,7 +15,7 @@ android {
     compileSdkVersion 30
     defaultConfig {
         applicationId "org.hzontal.tella"
-        minSdkVersion 17
+        minSdkVersion 19
         compileSdkVersion 29
         targetSdkVersion 30
         versionCode 68
