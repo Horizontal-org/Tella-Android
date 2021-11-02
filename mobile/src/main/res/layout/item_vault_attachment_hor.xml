@@ -87,7 +87,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="@drawable/ic_more"
         android:padding="6dp"
-        android:layout_marginEnd="17dp"
+        android:layout_marginEnd="11dp"
         >
     </ImageView>
 
@@ -95,12 +95,12 @@
         android:id="@+id/checkbox_type_single"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/gallery_checkbox_selector"
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginEnd="17dp"
+        android:padding="6dp"
+        android:layout_marginEnd="11dp"
         >
     </ImageView>
 
