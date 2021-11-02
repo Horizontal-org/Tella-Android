@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/drag_anchor_drawable"
+    app:behavior_hideable="true"
+    android:padding="21dp">
+
+    <ImageView
+        android:id="@+id/sheet_image"
+        android:maxHeight="48dp"
+        android:maxWidth="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_camouflage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/standard_sheet_title"
+        android:contentDescription="image" />
+
+    <TextView
+        android:id="@+id/standard_sheet_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sheet_image"
+        tools:text="Test "
+        android:textFontWeight="700"
+        android:textStyle="bold"
+        android:textColor="@color/wa_white"
+        android:fontFamily="@font/open_sans"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"
+        />
+
+    <TextView
+        android:id="@+id/standard_sheet_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/standard_sheet_title"
+        tools:text="TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest "
+        android:layout_marginTop="10dp"
+        android:textColor="@color/wa_white"
+        android:fontFamily="@font/open_sans"
+        android:textSize="14sp"
+        />
+
+
+    <TextView
+        android:id="@+id/standard_sheet_cancel_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@id/standard_sheet_confirm_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/standard_sheet_content"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        tools:text="Cancel"
+        android:layout_marginTop="40dp"
+        style="@style/Tella_Main_White_Text.MeduimbBold"
+        android:layout_marginEnd="30dp"
+        />
+
+    <TextView
+        android:id="@+id/standard_sheet_confirm_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/standard_sheet_content"
+        tools:text="Confirm "
+        android:layout_marginTop="40dp"
+        style="@style/Tella_Main_White_Text.MeduimbBold"
+        android:textSize="14sp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

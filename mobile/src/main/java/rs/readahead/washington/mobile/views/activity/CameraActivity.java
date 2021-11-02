@@ -242,6 +242,7 @@ public class CameraActivity extends MetadataActivity implements
     public void onAddSuccess(VaultFile bundle) {
         capturedMediaFile = bundle;
         if (intentMode != IntentMode.COLLECT) {
+            previewView.setVisibility(View.VISIBLE);
             Glide.with(this).load(bundle.thumb).into(previewView);
         }
         attachMediaFileMetadata(capturedMediaFile, metadataAttacher);
@@ -295,6 +296,7 @@ public class CameraActivity extends MetadataActivity implements
     @Override
     public void onLastMediaFileSuccess(VaultFile vaultFile) {
         if (intentMode != IntentMode.COLLECT) {
+            previewView.setVisibility(View.VISIBLE);
             glide.load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
@@ -305,7 +307,7 @@ public class CameraActivity extends MetadataActivity implements
     @Override
     public void onLastMediaFileError(Throwable throwable) {
         if (intentMode != IntentMode.COLLECT) {
-            previewView.setImageResource(R.drawable.white);
+            previewView.setVisibility(View.GONE);
         }
     }
 

@@ -162,6 +162,7 @@
                             android:text="@string/settings.prot_select_delete.vault"
                             android:textColor="@color/wa_white" />
 
+
                         <ImageView
                             android:id="@+id/delete_vault_tooltip"
                             android:layout_width="wrap_content"
@@ -196,7 +197,7 @@
 
                         <TextView
                             android:id="@+id/delete_forms_title"
-                            android:layout_width="180dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_marginTop="6dp"

@@ -114,6 +114,14 @@ public class MetadataViewerActivity extends BaseLockActivity {
         return textView;
     }
 
+    private LinearLayout createMetadataLine() {
+        @SuppressLint("InflateParams")
+        LinearLayout layout = (LinearLayout) LayoutInflater.from(this)
+                .inflate(R.layout.metadata_line, null);
+
+        return layout;
+    }
+
     private View createMetadataItem(CharSequence value, String name) {
         @SuppressLint("InflateParams")
         LinearLayout layout = (LinearLayout) LayoutInflater.from(this)
@@ -146,6 +154,7 @@ public class MetadataViewerActivity extends BaseLockActivity {
                 vaultFile.hash : metadata.getFileHashSHA256(), getResources().getString(R.string.verification_info_field_hash)));
         metadataList.addView(createMetadataItem(
                 Util.getDateTimeString(vaultFile.created, "dd-MM-yyyy HH:mm:ss Z"), getResources().getString(R.string.verification_info_field_file_modified)));
+        metadataList.addView(createMetadataLine());
 
         metadataList.addView(createMetadataTitle(R.string.verification_info_subheading_device_metadata));
         metadataList.addView(createMetadataItem(metadata.getManufacturer(), getResources().getString(R.string.verification_info_field_manufacturer)));
@@ -160,6 +169,7 @@ public class MetadataViewerActivity extends BaseLockActivity {
         metadataList.addView(createMetadataItem(metadata.getWifiMac(), getResources().getString(R.string.verification_info_field_wifi_mac)));
         metadataList.addView(createMetadataItem(metadata.getIPv4(), getResources().getString(R.string.verification_info_field_ipv4)));
         metadataList.addView(createMetadataItem(metadata.getIPv6(), getResources().getString(R.string.verification_info_field_ipv6)));
+        metadataList.addView(createMetadataLine());
 
         metadataList.addView(createMetadataTitle(R.string.verification_info_subheading_context_metadata));
 

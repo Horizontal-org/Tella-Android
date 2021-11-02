@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent
@@ -32,8 +34,24 @@ class HideBehindCalculator: BaseFragment()  {
         }
 
         view.findViewById<View>(R.id.calculatorBtn).setOnClickListener {
-            hideTellaBehindCalculator()
+            confirmHideBehindCalculator()
         }
+    }
+
+    private fun confirmHideBehindCalculator() {
+        BottomSheetUtils.showConfirmSheetWithImage(
+            activity.supportFragmentManager,
+            getString(R.string.settings_sec_confirm_camouflage_title),
+            getString(R.string.settings_sec_confirm_calc_camouflage_desc),
+            getString(R.string.settings_sec_confirm_exit_tella),
+            getString(R.string.action_cancel),
+            ContextCompat.getDrawable(activity,cm.calculatorOption.drawableResId),
+            consumer = object : BottomSheetUtils.ActionConfirmed {
+                override fun accept(isConfirmed: Boolean) {
+                    hideTellaBehindCalculator()
+                }
+            }
+        )
     }
 
     private fun hideTellaBehindCalculator(){

@@ -29,8 +29,6 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:navGraph="@navigation/nav_graph" />
 
-
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
@@ -40,7 +38,8 @@
         android:layout_height="50dp"
         android:layout_gravity="bottom"
         app:labelVisibilityMode="labeled"
-        android:background="@color/space_cadet"
+        app:elevation="0dp"
+        android:background="@color/light_space_cadet"
         app:itemIconTint="@color/bottom_nav_item_color"
         app:itemTextColor="@color/bottom_nav_item_color"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -1,132 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/dark_purple"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/dark_purple">
 
-    <LinearLayout
-        android:id="@+id/options_layout"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_vertical_margin"
-        android:gravity="top"
-        android:background="@drawable/rounded_light_purple_background"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/verification_switch"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
-            android:id="@+id/language_settings_button"
-            android:layout_width="wrap_content"
-            android:layout_height="56dp"
-            android:orientation="horizontal"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp">
-
-            <TextView
-                android:id="@+id/language"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
-                android:gravity="center_vertical"
-                android:text="@string/settings.lang_app.bar"
-                android:textColor="@color/wa_white" />
-
-            <TextView
-                android:id="@+id/language_setting"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:gravity="center_vertical"
-                android:text="@string/settings.lang_select_default"
-                android:textColor="@color/wa_white"
-                tools:ignore="RelativeOverlap" />
-        </RelativeLayout>
-
-        <View style="@style/SettingsMainShadowLine" />
-
-        <!--<RelativeLayout
-            android:id="@+id/customization_settings_button"
-            android:layout_width="wrap_content"
-            android:layout_height="56dp"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/customization"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
-                android:gravity="center_vertical"
-                android:text="@string/settings.select_customization"
-                android:textColor="@color/wa_white" />
-
-            <TextView
-                android:id="@+id/customization_setting"
-                android:layout_alignParentEnd="true"
-                android:textColor="@color/wa_white"
-                android:gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/settings.lang_select_default"
-                tools:ignore="RelativeOverlap" />
-        </RelativeLayout> -->
-
-        <View style="@style/SettingsMainShadowLine" />
-
-        <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
-            android:id="@+id/crash_report_switch"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:explainText="@string/settings.gen_crash.reports_action.expl"
-            app:titleText="@string/settings.gen_crash.reports_action" />
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:paddingBottom="24dp">
 
-    <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
-        android:id="@+id/verification_switch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_vertical_margin"
-        android:background="@drawable/rounded_light_purple_background"
-        app:explainText="@string/settings.docu_verification_action.expl"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/options_layout"
-        app:titleText="@string/settings.docu_verification_action" />
+            <LinearLayout
+                android:id="@+id/options_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:background="@drawable/rounded_light_purple_background"
+                android:gravity="top"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@+id/verification_switch"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-    <LinearLayout
-        android:id="@+id/home_screen_settings"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_vertical_margin"
-        android:background="@drawable/rounded_light_purple_background"
-        app:layout_constraintTop_toBottomOf="@+id/verification_switch"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:orientation="vertical">
+                <RelativeLayout
+                    android:id="@+id/language_settings_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="56dp"
+                    android:orientation="horizontal"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp">
 
-        <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
-            android:id="@+id/recent_files_switch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:explainText="@string/settings.general_recent_files_switch_expl"
-            app:titleText="@string/settings.general_recent_files_switch_title" />
+                    <TextView
+                        android:id="@+id/language"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:gravity="center_vertical"
+                        android:text="@string/settings.lang_app.bar"
+                        android:textColor="@color/wa_white" />
 
-        <View style="@style/SettingsMainShadowLine" />
+                    <TextView
+                        android:id="@+id/language_setting"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:gravity="center_vertical"
+                        android:text="@string/settings.lang_select_default"
+                        android:textColor="@color/wa_white"
+                        tools:ignore="RelativeOverlap" />
+                </RelativeLayout>
 
-        <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
-            android:id="@+id/favorite_forms_switch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                <View style="@style/SettingsMainShadowLine" />
 
-            app:explainText="@string/settings.general_favorite_forms_switch_expl"
-            app:titleText="@string/settings.general_favorite_forms_switch_title" />
-    </LinearLayout>
+                <!--<RelativeLayout
+                    android:id="@+id/customization_settings_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="56dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:orientation="horizontal">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/customization"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:gravity="center_vertical"
+                        android:text="@string/settings.select_customization"
+                        android:textColor="@color/wa_white" />
+
+                    <TextView
+                        android:id="@+id/customization_setting"
+                        android:layout_alignParentEnd="true"
+                        android:textColor="@color/wa_white"
+                        android:gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/settings.lang_select_default"
+                        tools:ignore="RelativeOverlap" />
+                </RelativeLayout> -->
+
+                <View style="@style/SettingsMainShadowLine" />
+
+                <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+                    android:id="@+id/crash_report_switch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:explainText="@string/settings.gen_crash.reports_action.expl"
+                    app:titleText="@string/settings.gen_crash.reports_action" />
+            </LinearLayout>
+
+            <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+                android:id="@+id/verification_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:background="@drawable/rounded_light_purple_background"
+                app:explainText="@string/settings.docu_verification_action.expl"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/options_layout"
+                app:titleText="@string/settings.docu_verification_action" />
+
+            <LinearLayout
+                android:id="@+id/home_screen_settings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:background="@drawable/rounded_light_purple_background"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/verification_switch">
+
+                <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+                    android:id="@+id/recent_files_switch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:explainText="@string/settings.general_recent_files_switch_expl"
+                    app:titleText="@string/settings.general_recent_files_switch_title" />
+
+                <View style="@style/SettingsMainShadowLine" />
+
+                <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+                    android:id="@+id/favorite_forms_switch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    app:explainText="@string/settings.general_favorite_forms_switch_expl"
+                    app:titleText="@string/settings.general_favorite_forms_switch_title" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

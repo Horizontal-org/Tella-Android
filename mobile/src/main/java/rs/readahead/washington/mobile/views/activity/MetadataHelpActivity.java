@@ -99,12 +99,21 @@ public class MetadataHelpActivity extends BaseLockActivity {
         return layout;
     }
 
+    private LinearLayout createMetadataLine() {
+        @SuppressLint("InflateParams")
+        LinearLayout layout = (LinearLayout) LayoutInflater.from(this)
+                .inflate(R.layout.metadata_line, null);
+
+        return layout;
+    }
+
     private void showMetadataHelp() {
 
         metadataList.addView(createMetadataTitle(R.string.verification_info_subheading_file_metadata));
         metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_file_path_expl), getResources().getString(R.string.verification_info_field_file_path)));
         metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_hash_expl), getResources().getString(R.string.verification_info_field_hash)));
         metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_date_time_modified_expl), getResources().getString(R.string.verification_info_field_file_modified)));
+        metadataList.addView(createMetadataLine());
 
         metadataList.addView(createMetadataTitle(R.string.verification_info_subheading_device_metadata));
         metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_manufacturer_expl), getResources().getString(R.string.verification_info_field_manufacturer)));
@@ -118,6 +127,7 @@ public class MetadataHelpActivity extends BaseLockActivity {
         metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_wifi_mac_expl), getResources().getString(R.string.verification_info_field_wifi_mac)));
         metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_ipv4_expl), getResources().getString(R.string.verification_info_field_ipv4)));
         metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_ipv6_expl), getResources().getString(R.string.verification_info_field_ipv6)));
+        metadataList.addView(createMetadataLine());
 
         metadataList.addView(createMetadataTitle(R.string.verification_info_subheading_context_metadata));
         metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_location_expl), getResources().getString(R.string.verification_info_field_location)));

@@ -30,8 +30,8 @@ import android.view.inputmethod.InputMethodManager;
  * Basic idea for this solution found here: http://stackoverflow.com/a/9108219/325479
  */
 public class KeyboardUtil {
-    private View decorView;
-    private View contentView;
+    private final View decorView;
+    private final View contentView;
 
     public KeyboardUtil(Activity act, View contentView) {
         this.decorView = act.getWindow().getDecorView();
@@ -72,9 +72,13 @@ public class KeyboardUtil {
             if (diff != 0) {
                 // if the use-able screen height differs from the total screen height we assume that it shows a keyboard now
                 //check if the padding is 0 (if yes set the padding for the keyboard)
-                if (contentView.getPaddingBottom() != diff) {
-                    //set the padding of the contentView for the keyboard
-                    contentView.setPadding(30, 30, 30, diff+25);
+                if (contentView.getPaddingBottom() < diff) {
+                    if (Build.VERSION.SDK_INT > 19) {
+                        //set the padding of the contentView for the keyboard
+                        contentView.setPadding(30, 30, 30, diff+30);
+                    }else {
+                        contentView.setPadding(30, 30, 30, 30);
+                    }
                 }
             } else {
                 //check if the padding is != 0 (if yes reset the padding)

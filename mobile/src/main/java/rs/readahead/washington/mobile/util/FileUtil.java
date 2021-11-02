@@ -48,7 +48,6 @@ public class FileUtil {
         if (TextUtils.isEmpty(mimeType)) {
             return null;
         }
-
         //noinspection LoopStatementThatDoesntLoop
         for (String token : mimeType.split("/")) {
             return token.toLowerCase();

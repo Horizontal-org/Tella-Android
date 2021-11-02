@@ -839,4 +839,8 @@ This is one of the two options available. -->
   <string name="settings.general_recent_files_switch_expl">Show previews of and a shortcut to your recent files on Tella’s homescreen.</string>
   <string name="settings.general_favorite_forms_switch_title">Favorite forms</string>
   <string name="settings.general_favorite_forms_switch_expl">Show shortcuts to your favorite forms on Tella’s homescreen.</string>
+  <string name="settings.sec_confirm_camouflage_title">Exit Tella to enable camouflage?</string>
+  <string name="settings.sec_confirm_camouflage_desc">To re-open Tella, look for the %s app icon among your apps.</string>
+  <string name="settings.sec_confirm_calc_camouflage_desc">To re-open Tella, look for the Calculator app icon among your apps. Unlock Tella by entering your PIN in the Calculator followed by “=”. </string>
+  <string name="settings.sec_confirm_exit_tella">Exit Tella</string>
 </resources>

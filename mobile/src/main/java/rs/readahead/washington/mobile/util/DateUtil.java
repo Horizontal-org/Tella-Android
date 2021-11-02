@@ -9,7 +9,7 @@ import java.util.Locale;
 
 
 public class DateUtil {
-    private static SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MM yyyy", Locale.ROOT);
+    private static SimpleDateFormat dateFormatter = new SimpleDateFormat("dd.MM.yyyy-hh:mm:ss", Locale.ROOT);
     private static Calendar mCurrentCalendar;
 
     public static String getStringFromDate(@NonNull Date date) {
@@ -39,7 +39,7 @@ public class DateUtil {
     }
 
     public static String getDateTimeString() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd-HH:mm", Locale.ROOT);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd-HH:mm:ss", Locale.ROOT);
         return format.format(getCurrentDate());
     }
 
