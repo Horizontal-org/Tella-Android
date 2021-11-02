@@ -50,6 +50,7 @@
             <TextView
                 android:id="@+id/filterNameTv"
                 style="@style/Tella_Main_White_Text.Small"
+                android:textSize="13sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Name"
@@ -58,9 +59,9 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="6dp"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginHorizontal="10dp"
                 android:src="@drawable/ic_arrow_up_white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/filterNameTv"
@@ -96,7 +97,6 @@
                 android:id="@+id/gridCheck"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="6dp"
                 android:src="@drawable/grid"
                 android:padding="6dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -112,6 +112,8 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="17dp"
         android:visibility="gone"
+        tools:itemCount="10"
+        tools:listitem="@layout/item_vault_attachment_hor"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
