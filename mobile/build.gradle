@@ -118,7 +118,7 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer:2.10.0'
 
     // camera
-    implementation('com.otaliastudios:cameraview:2.6.1') {
+    implementation('com.otaliastudios:cameraview:2.7.2') {
         exclude module: "exifinterface"
         exclude module: "animated-vector-drawble"
     }
