@@ -623,9 +623,9 @@ public class MediaFileHandler {
                 .toObservable();
     }
 
-    public static void startImportFiles(Activity context, Boolean multipleFile) {
+    public static void startImportFiles(Activity context, Boolean multipleFile,String type) {
         Intent intent = new Intent()
-                .setType("*/*")
+                .setType(type)
                 .setAction(Intent.ACTION_GET_CONTENT)
                 .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, multipleFile);
 

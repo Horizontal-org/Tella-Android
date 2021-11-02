@@ -50,6 +50,7 @@
             <TextView
                 android:id="@+id/filterNameTv"
                 style="@style/Tella_Main_White_Text.Small"
+                android:textSize="13sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Name"
@@ -58,9 +59,9 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="6dp"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginHorizontal="10dp"
                 android:src="@drawable/ic_arrow_up_white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/filterNameTv"
@@ -74,8 +75,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
                 android:layout_marginHorizontal="@dimen/tella_main_vertical"
-                android:padding="6dp"
-                android:src="@drawable/ic_unchecked_rectangle"
+                android:padding="5dp"
+                android:src="@drawable/gallery_checkbox_selector"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/gridCheck"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -96,7 +97,6 @@
                 android:id="@+id/gridCheck"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="6dp"
                 android:src="@drawable/grid"
                 android:padding="6dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -110,9 +110,12 @@
         android:id="@+id/attachmentsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="@dimen/tella_main_vertical"
         android:layout_marginBottom="17dp"
-        android:visibility="gone"
+        android:visibility="visible"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="3"
+        tools:itemCount="9"
+        tools:listitem="@layout/item_vault_attachment_grid"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -198,4 +201,5 @@
             android:textColor="@color/wa_white_12" />
 
     </LinearLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

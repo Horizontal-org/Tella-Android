@@ -1,7 +1,9 @@
 package com.hzontal.tella_locking_ui.ui.pattern
 
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.TellaKeysUI
 import com.hzontal.tella_locking_ui.common.CommonStates
 import com.hzontal.tella_locking_ui.patternlock.PatternUtils
@@ -21,6 +23,8 @@ class PatternSetConfirmActivity : SetPatternActivity() {
         updateStage(Stage.Confirm)
         pattern = intent.extras?.getString(PATTERN_CELL_BYTES)
         mRightButton.isVisible = false
+        mTopImageView.background = ContextCompat.getDrawable(this, R.drawable.pattern_draw_bg)
+
     }
 
     override fun onPatternDetected(newPattern: MutableList<PatternView.Cell>?) {

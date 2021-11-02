@@ -1,9 +1,14 @@
 package rs.readahead.washington.mobile.util
 
 import android.content.Context
+import android.os.Build
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
+import androidx.annotation.ColorInt
+import rs.readahead.washington.mobile.R
 
 fun View.setMargins(
     leftMarginDp: Int? = null,
@@ -24,4 +29,12 @@ fun View.setMargins(
 fun Int.dpToPx(context: Context): Int {
     val metrics = context.resources.displayMetrics
     return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), metrics).toInt()
+}
+
+fun Window.changeStatusColor(context: Context,color: Int){
+    if (Build.VERSION.SDK_INT >= 21) {
+        addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        statusBarColor = context.resources.getColor(color)
+    }
 }

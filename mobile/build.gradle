@@ -15,7 +15,7 @@ android {
     compileSdkVersion 30
     defaultConfig {
         applicationId "org.hzontal.tella"
-        minSdkVersion 17
+        minSdkVersion 19
         compileSdkVersion 29
         targetSdkVersion 30
         versionCode 68
@@ -48,6 +48,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     buildToolsVersion = '28.0.3'
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 
 dependencies {
@@ -115,7 +118,7 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer:2.10.0'
 
     // camera
-    implementation('com.otaliastudios:cameraview:2.6.1') {
+    implementation('com.otaliastudios:cameraview:2.7.2') {
         exclude module: "exifinterface"
         exclude module: "animated-vector-drawble"
     }

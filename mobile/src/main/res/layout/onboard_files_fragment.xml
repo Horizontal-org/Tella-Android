@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/wa_purple"
-    android:paddingStart="21dp"
-    android:paddingEnd="21dp">
+   >
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineCenter"
@@ -62,36 +61,28 @@
         android:text="@string/onboard.expl_files"
         android:textColor="@color/wa_white"
         android:textSize="14sp"
+        android:paddingHorizontal="21dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guidelineCenter"
         tools:ignore="RtlSymmetry" />
 
     <TextView
+        style="@style/Unlock_White_Text_Back"
         android:id="@+id/back_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:fontFamily="@font/open_sans"
         android:text="@string/pl_back"
-        android:textColor="@color/wa_white"
-        android:textSize="17sp"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guidelineBottom" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <TextView
+        style="@style/Unlock_White_Text_Back"
         android:id="@+id/next_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:fontFamily="@font/open_sans"
         android:text="@string/action_next"
-        android:textColor="@color/wa_white"
-        android:textSize="17sp"
+        android:layout_marginEnd="34dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintTop_toBottomOf="@+id/guidelineBottom" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
