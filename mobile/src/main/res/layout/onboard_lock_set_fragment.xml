@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/wa_purple"
-    android:paddingStart="21dp"
-    android:paddingEnd="21dp">
+   >
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineCenter"
@@ -57,7 +56,8 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/open_sans"
         android:gravity="center"
-        android:padding="@dimen/hide_tella_small_margin"
+        android:paddingHorizontal="21dp"
+        android:paddingVertical="@dimen/hide_tella_small_margin"
         android:text="@string/onboard.expl_lock_finish"
         android:textColor="@color/wa_white"
         android:textSize="14sp"

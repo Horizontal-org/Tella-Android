@@ -268,6 +268,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         gridLayoutManager.spanCount = 4
         attachmentsAdapter.setLayoutManager(gridLayoutManager)
         attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
+        attachmentsRecyclerView.setMargins(leftMarginDp = 13,rightMarginDp = 13)
     }
 
     override fun onClick(v: View?) {
@@ -281,6 +282,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 gridLayoutManager.spanCount = 1
                 attachmentsAdapter.setLayoutManager(gridLayoutManager)
                 attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
+                attachmentsRecyclerView.setMargins(leftMarginDp = 0,rightMarginDp = 0)
             }
             R.id.checkBoxList -> {
                 handleSelectMode()

@@ -111,9 +111,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="17dp"
-        android:visibility="gone"
-        tools:itemCount="10"
-        tools:listitem="@layout/item_vault_attachment_hor"
+        android:visibility="visible"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="3"
+        tools:itemCount="9"
+        tools:listitem="@layout/item_vault_attachment_grid"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
