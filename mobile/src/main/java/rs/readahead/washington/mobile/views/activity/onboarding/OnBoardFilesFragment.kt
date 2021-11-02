@@ -40,7 +40,7 @@ class OnBoardFilesFragment : BaseFragment() {
             (activity as OnBoardActivityInterface).setCurrentIndicator(3)
             activity.addFragment(
                 this,
-                OnBoardLockFragment.newInstance(true),
+                OnBoardLockFragment.newInstance(false),
                 R.id.rootOnboard
             )
         }

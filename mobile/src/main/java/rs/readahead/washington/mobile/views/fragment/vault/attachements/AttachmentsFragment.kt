@@ -18,6 +18,7 @@ import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.ActivityCompat
+import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -53,20 +54,17 @@ import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.media.MediaFileHandler.walkAllFilesWithDirectories
-import rs.readahead.washington.mobile.util.C
-import rs.readahead.washington.mobile.util.DialogsUtil
-import rs.readahead.washington.mobile.util.LockTimeoutManager
-import rs.readahead.washington.mobile.util.setMargins
+import rs.readahead.washington.mobile.util.*
 import rs.readahead.washington.mobile.views.activity.*
 import rs.readahead.washington.mobile.views.activity.CameraActivity.VAULT_CURRENT_ROOT_PARENT
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
-import rs.readahead.washington.mobile.views.custom.SpacesItemDecoration
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.AttachmentsRecycleViewAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import rs.readahead.washington.mobile.views.fragment.vault.info.VAULT_FILE_INFO_TOOLBAR
 import timber.log.Timber
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 const val VAULT_FILE_ARG = "VaultFileArg"
 const val WRITE_REQUEST_CODE = 1002
@@ -109,6 +107,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private var importAndDelete = false
     private var uriToDelete: Uri? = null
     private val bundle by lazy { Bundle() }
+    private var selectAll = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -121,7 +120,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        if (isListCheckOn && !isMoveModeEnabled){
+        if (isListCheckOn && !isMoveModeEnabled) {
             inflater.inflate(R.menu.home_menu_selected, menu)
             maybeShowUploadIcon(menu)
         }
@@ -141,7 +140,14 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             }
 
             R.id.action_check -> {
-                true
+                selectAll = !selectAll
+                if (selectAll) {
+                    attachmentsAdapter.selectAll()
+                } else {
+                    attachmentsAdapter.clearSelected()
+                }
+                updateAttachmentsToolbar(true)
+                return true
             }
 
             R.id.action_upload -> {
@@ -172,7 +178,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     override fun initView(view: View) {
         breadcrumbView = view.findViewById(R.id.breadcrumbs_view)
         attachmentsRecyclerView = view.findViewById(R.id.attachmentsRecyclerView)
-        attachmentsRecyclerView.addItemDecoration(SpacesItemDecoration(5))
         listCheck = view.findViewById(R.id.listCheck)
         gridCheck = view.findViewById(R.id.gridCheck)
         emptyViewMsgContainer = view.findViewById(R.id.emptyViewMsgContainer)
@@ -263,6 +268,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         gridLayoutManager.spanCount = 4
         attachmentsAdapter.setLayoutManager(gridLayoutManager)
         attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
+        attachmentsRecyclerView.setMargins(leftMarginDp = 13,rightMarginDp = 13)
     }
 
     override fun onClick(v: View?) {
@@ -276,15 +282,10 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 gridLayoutManager.spanCount = 1
                 attachmentsAdapter.setLayoutManager(gridLayoutManager)
                 attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
+                attachmentsRecyclerView.setMargins(leftMarginDp = 0,rightMarginDp = 0)
             }
             R.id.checkBoxList -> {
-                isListCheckOn = !isListCheckOn
-                attachmentsAdapter.enableSelectMode(isListCheckOn)
-                if (!isListCheckOn) {
-                    attachmentsAdapter.clearSelected()
-                    updateAttachmentsToolbar(false)
-                    enableMoveTheme(false)
-                }
+                handleSelectMode()
             }
             R.id.filterNameTv -> {
                 handleSortSheet()
@@ -299,6 +300,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                     getString(R.string.vault_create_new_folder),
                     getString(R.string.vault_manage_files),
                     getString(R.string.vault_delete_origial_files_msg),
+                    filterType != FilterType.OTHERS,
                     action = object : VaultSheetUtils.IVaultManageFiles {
                         override fun goToCamera() {
                             val intent = Intent(activity, CameraActivity::class.java)
@@ -308,19 +310,18 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
                         override fun goToRecorder() {
                             bundle.putString(VAULT_CURRENT_ROOT_PARENT, currentRootID)
-                            nav().navigate(R.id.action_attachments_screen_to_micScreen,bundle)
+                            nav().navigate(R.id.action_attachments_screen_to_micScreen, bundle)
                         }
 
                         override fun import() {
                             importAndDelete = false
                             activity.changeTemporaryTimeout()
-                            MediaFileHandler.startImportFiles(activity, true)
+                            MediaFileHandler.startImportFiles(activity, true,getCurrentType())
                         }
 
                         override fun importAndDelete() {
                             importAndDelete = true
-                            MediaFileHandler.startImportFiles(activity, true)
-
+                            MediaFileHandler.startImportFiles(activity, true,getCurrentType())
                         }
 
                         override fun createFolder() {
@@ -363,15 +364,32 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         }
     }
 
+    private fun handleSelectMode() {
+        isListCheckOn = !isListCheckOn
+        attachmentsAdapter.enableSelectMode(isListCheckOn)
+        updateAttachmentsToolbar(isListCheckOn)
+        if (!isListCheckOn) {
+            attachmentsAdapter.clearSelected()
+            enableMoveTheme(false)
+        }
+    }
+
     private fun updateAttachmentsToolbar(isItemsChecked: Boolean) {
         activity.invalidateOptionsMenu()
 
         if (isItemsChecked) {
             toolbar.setToolbarNavigationIcon(R.drawable.ic_close_white_24dp)
-            toolbar.setStartTextTitle(attachmentsAdapter.selectedMediaFiles.size.toString() + " items")
+            val itemsSize = attachmentsAdapter.selectedMediaFiles.size
+            toolbar.setToolbarNavigationIcon(R.drawable.ic_close_white_24dp)
+            if (itemsSize == 0) {
+                toolbar.setStartTextTitle("Select files")
+            } else {
+                toolbar.setStartTextTitle(attachmentsAdapter.selectedMediaFiles.size.toString() + " items")
+            }
         } else {
             toolbar.setToolbarNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
             setToolbarLabel()
+
             attachmentsAdapter.clearSelected()
             enableMoveTheme(false)
         }
@@ -914,6 +932,9 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     private fun handleBackStack() {
         when {
+            attachmentsAdapter.selectedMediaFiles.size == 0 && isListCheckOn -> {
+                handleSelectMode()
+            }
             attachmentsAdapter.selectedMediaFiles.size > 0 -> {
                 attachmentsAdapter.clearSelected()
                 updateAttachmentsToolbar(false)
@@ -941,25 +962,31 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             isMoveModeEnabled = true
             (activity as MainActivity).setTheme(R.style.AppTheme_DarkNoActionBar_Blue)
             toolbar.background = ColorDrawable(getColor(activity, R.color.prussian_blue))
-            attachmentsRecyclerView.background =
-                ColorDrawable(resources.getColor(R.color.wa_white_12))
             root.background = ColorDrawable(getColor(activity, R.color.prussian_blue))
             appBar.background = ColorDrawable(getColor(activity, R.color.prussian_blue))
-            (activity as MainActivity).enableMoveMode(true)
-            activity.supportActionBar?.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.prussian_blue)))
+            activity.supportActionBar?.setBackgroundDrawable(
+                ColorDrawable(
+                    getColor(
+                        activity,
+                        R.color.prussian_blue
+                    )
+                )
+            )
             moveContainer.visibility = View.VISIBLE
             checkBoxList.visibility = View.GONE
-            detailsFab.setMargins(17,0,17,70)
-            attachmentsRecyclerView.setMargins(17,0,17,37)
+            detailsFab.setMargins(17, 0, 17, 70)
+            with(attachmentsRecyclerView) {
+                setMargins(17, 0, 17, 37)
+                updatePadding(right = 2, left = 2)
+                background = ColorDrawable(resources.getColor(R.color.wa_white_12))
+            }
+            activity.window.changeStatusColor(activity, R.color.prussian_blue)
         } else {
             isMoveModeEnabled = false
             (activity as MainActivity).setTheme(R.style.AppTheme_DarkNoActionBar)
             toolbar.background = ColorDrawable(getColor(activity, R.color.space_cadet))
-            attachmentsRecyclerView.background =
-                ColorDrawable(getColor(activity, R.color.space_cadet))
             root.background = ColorDrawable(getColor(activity, R.color.space_cadet))
             appBar.background = ColorDrawable(getColor(activity, R.color.space_cadet))
-            (activity as MainActivity).enableMoveMode(false)
             activity.supportActionBar?.setBackgroundDrawable(
                 ColorDrawable(
                     getColor(
@@ -970,8 +997,13 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             )
             moveContainer.visibility = View.GONE
             checkBoxList.visibility = View.VISIBLE
-            detailsFab.setMargins(17,0,17,17)
-            attachmentsRecyclerView.setMargins(17,0,17,17)
+            detailsFab.setMargins(17, 0, 17, 17)
+            with(attachmentsRecyclerView) {
+                setMargins(0, 0, 0, 17)
+                updatePadding(right = 0, left = 0)
+                background = ColorDrawable(getColor(activity, R.color.space_cadet))
+            }
+            activity.window.changeStatusColor(activity, R.color.space_cadet)
         }
         activity.invalidateOptionsMenu()
         attachmentsAdapter.enableMoveMode(enable)
@@ -997,7 +1029,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         }
     }
 
-    private fun maybeShowUploadIcon(menu: Menu){
+    private fun maybeShowUploadIcon(menu: Menu) {
         menu.findItem(R.id.action_upload).isVisible = Preferences.isOfflineMode()
     }
 
@@ -1011,29 +1043,15 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         return true
     }
 
-    private fun getCurrentType() : ArrayList<String> {
-        val result = arrayListOf<String>()
-        when (filterType) {
-            FilterType.ALL -> result.add("*/*")
-            FilterType.DOCUMENTS -> result.add("application/*")
-            FilterType.PHOTO_VIDEO -> {
-                result.add("video/*")
-                result.add("image/*")
-            }
-            FilterType.PHOTO -> {
-                result.add("image/*")
-            }
-            FilterType.VIDEO -> {
-                result.add("video/*")
-            }
-            FilterType.AUDIO -> {
-                result.add("audio/*")
-            }
-            FilterType.OTHERS -> {
-                result.add("*/*")
-            }
+    private fun getCurrentType(): String {
+        return when (filterType) {
+            FilterType.ALL -> "*/*"
+            FilterType.DOCUMENTS -> "application/*"
+            FilterType.PHOTO -> "image/*"
+            FilterType.VIDEO -> "video/*"
+            FilterType.AUDIO -> "audio/*"
+            FilterType.PHOTO_VIDEO -> "image/*|video/*"
+            else -> "image/*"
         }
-
-        return result
     }
 }

@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/wa_purple"
-    android:paddingStart="21dp"
-    android:paddingEnd="21dp">
+    android:background="@color/wa_purple">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineCenter"
@@ -58,7 +56,8 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/open_sans"
         android:gravity="center"
-        android:padding="@dimen/hide_tella_small_margin"
+        android:paddingVertical="@dimen/hide_tella_small_margin"
+        android:paddingHorizontal="21dp"
         android:text="@string/onboard.expl_recorder"
         android:textColor="@color/wa_white"
         android:textSize="14sp"
@@ -69,29 +68,21 @@
 
     <TextView
         android:id="@+id/back_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:fontFamily="@font/open_sans"
+        style="@style/Unlock_White_Text_Back"
         android:text="@string/pl_back"
-        android:textColor="@color/wa_white"
-        android:textSize="17sp"
-        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guidelineBottom" />
+        android:layout_marginStart="34dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
     <TextView
         android:id="@+id/next_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:fontFamily="@font/open_sans"
-        android:text="@string/action_next"
-        android:textColor="@color/wa_white"
-        android:textSize="17sp"
+        style="@style/Unlock_White_Text_Back"
+        android:layout_marginEnd="34dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintTop_toBottomOf="@+id/guidelineBottom" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/action_next"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
