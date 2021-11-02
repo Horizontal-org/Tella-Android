@@ -58,7 +58,6 @@ import rs.readahead.washington.mobile.util.*
 import rs.readahead.washington.mobile.views.activity.*
 import rs.readahead.washington.mobile.views.activity.CameraActivity.VAULT_CURRENT_ROOT_PARENT
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
-import rs.readahead.washington.mobile.views.custom.SpacesItemDecoration
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.AttachmentsRecycleViewAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import rs.readahead.washington.mobile.views.fragment.vault.info.VAULT_FILE_INFO_TOOLBAR
@@ -179,7 +178,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     override fun initView(view: View) {
         breadcrumbView = view.findViewById(R.id.breadcrumbs_view)
         attachmentsRecyclerView = view.findViewById(R.id.attachmentsRecyclerView)
-        attachmentsRecyclerView.addItemDecoration(SpacesItemDecoration(5))
         listCheck = view.findViewById(R.id.listCheck)
         gridCheck = view.findViewById(R.id.gridCheck)
         emptyViewMsgContainer = view.findViewById(R.id.emptyViewMsgContainer)
@@ -300,6 +298,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                     getString(R.string.vault_create_new_folder),
                     getString(R.string.vault_manage_files),
                     getString(R.string.vault_delete_origial_files_msg),
+                    filterType != FilterType.OTHERS,
                     action = object : VaultSheetUtils.IVaultManageFiles {
                         override fun goToCamera() {
                             val intent = Intent(activity, CameraActivity::class.java)
@@ -315,13 +314,12 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                         override fun import() {
                             importAndDelete = false
                             activity.changeTemporaryTimeout()
-                            MediaFileHandler.startImportFiles(activity, true)
+                            MediaFileHandler.startImportFiles(activity, true,getCurrentType())
                         }
 
                         override fun importAndDelete() {
                             importAndDelete = true
-                            MediaFileHandler.startImportFiles(activity, true)
-
+                            MediaFileHandler.startImportFiles(activity, true,getCurrentType())
                         }
 
                         override fun createFolder() {
@@ -999,7 +997,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             checkBoxList.visibility = View.VISIBLE
             detailsFab.setMargins(17, 0, 17, 17)
             with(attachmentsRecyclerView) {
-                setMargins(17, 0, 17, 17)
+                setMargins(0, 0, 0, 17)
                 updatePadding(right = 0, left = 0)
                 background = ColorDrawable(getColor(activity, R.color.space_cadet))
             }
@@ -1043,29 +1041,15 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         return true
     }
 
-    private fun getCurrentType(): ArrayList<String> {
-        val result = arrayListOf<String>()
-        when (filterType) {
-            FilterType.ALL -> result.add("*/*")
-            FilterType.DOCUMENTS -> result.add("application/*")
-            FilterType.PHOTO_VIDEO -> {
-                result.add("video/*")
-                result.add("image/*")
-            }
-            FilterType.PHOTO -> {
-                result.add("image/*")
-            }
-            FilterType.VIDEO -> {
-                result.add("video/*")
-            }
-            FilterType.AUDIO -> {
-                result.add("audio/*")
-            }
-            FilterType.OTHERS -> {
-                result.add("*/*")
-            }
+    private fun getCurrentType(): String {
+        return when (filterType) {
+            FilterType.ALL -> "*/*"
+            FilterType.DOCUMENTS -> "application/*"
+            FilterType.PHOTO -> "image/*"
+            FilterType.VIDEO -> "video/*"
+            FilterType.AUDIO -> "audio/*"
+            FilterType.PHOTO_VIDEO -> "image/*|video/*"
+            else -> "image/*"
         }
-
-        return result
     }
 }
