@@ -460,6 +460,7 @@ public class MainActivity extends MetadataActivity implements
     public void onCountCollectServersEnded(Long num) {
         this.numOfCollectServers = num;
         homeScreenPresenter.countTUServers();
+        maybeShowFormsMenu(num);
     }
 
     @Override
@@ -552,6 +553,11 @@ public class MainActivity extends MetadataActivity implements
 
     public void selectNavMic() {
         btmNavMain.getMenu().findItem(R.id.mic).setChecked(true);
+    }
+
+    private void maybeShowFormsMenu(Long num){
+        btmNavMain.getMenu().findItem(R.id.form).setVisible(num>0);
+        invalidateOptionsMenu();
     }
 }
 
