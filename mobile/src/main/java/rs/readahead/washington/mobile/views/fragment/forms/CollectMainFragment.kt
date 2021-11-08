@@ -73,7 +73,7 @@ class CollectMainFragment : BaseFragment(),
     ): View? {
         setHasOptionsMenu(true)
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.activity_collect_main, container, false)
+        return inflater.inflate(R.layout.fragment_collect_main, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -86,8 +86,8 @@ class CollectMainFragment : BaseFragment(),
 
         val actionBar: ActionBar? = activity.supportActionBar
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setTitle(R.string.collect_app_bar)
+            actionBar.setDisplayHomeAsUpEnabled(false)
+            actionBar.setTitle(R.string.settings_servers_add_server_forms)
         }
 
         presenter = CollectMainPresenter(this)
