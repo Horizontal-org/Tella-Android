@@ -17,8 +17,8 @@
 
     <ImageView
         android:id="@+id/server_icon"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginTop="10dp"
         android:paddingStart="16dp"
         android:paddingEnd="0dp"
