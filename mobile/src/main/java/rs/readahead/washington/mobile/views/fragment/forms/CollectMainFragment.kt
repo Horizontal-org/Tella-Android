@@ -15,6 +15,9 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import butterknife.ButterKnife
@@ -31,11 +34,6 @@ import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus
 import rs.readahead.washington.mobile.javarosa.FormUtils
-import rs.readahead.washington.mobile.mvp.contract.ICollectCreateFormControllerContract
-import rs.readahead.washington.mobile.mvp.contract.ICollectMainPresenterContract
-import rs.readahead.washington.mobile.mvp.presenter.CollectCreateFormControllerPresenter
-import rs.readahead.washington.mobile.mvp.presenter.CollectMainPresenter
-import rs.readahead.washington.mobile.odk.FormController
 import rs.readahead.washington.mobile.util.DialogsUtil
 import rs.readahead.washington.mobile.util.PermissionUtil
 import rs.readahead.washington.mobile.util.StringUtils
@@ -44,15 +42,10 @@ import rs.readahead.washington.mobile.views.activity.CollectHelpActivity
 import rs.readahead.washington.mobile.views.activity.FormSubmitActivity
 import rs.readahead.washington.mobile.views.adapters.ViewPagerAdapter
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
-import rs.readahead.washington.mobile.views.fragment.BlankFormsListFragment
-import rs.readahead.washington.mobile.views.fragment.DraftFormsListFragment
-import rs.readahead.washington.mobile.views.fragment.FormListFragment
 import rs.readahead.washington.mobile.views.fragment.SubmittedFormsListFragment
 import timber.log.Timber
 
-class CollectMainFragment : BaseFragment(),
-    ICollectMainPresenterContract.IView,
-    ICollectCreateFormControllerContract.IView {
+class CollectMainFragment : BaseFragment(){
     private var blankFragmentPosition = 0
     private lateinit var fab: FloatingActionButton
     private lateinit var tabLayout: TabLayout
@@ -60,12 +53,22 @@ class CollectMainFragment : BaseFragment(),
     private lateinit var  noServersView: View
     private lateinit var blankFormsText: TextView
     private val disposables by lazy {MyApplication.bus().createCompositeDisposable()}
-    private var presenter : CollectMainPresenter? = null
-    private var formControllerPresenter: CollectCreateFormControllerPresenter? = null
     private var alertDialog: AlertDialog? = null
     private lateinit var mViewPager: ViewPager
     private val adapter by lazy { ViewPagerAdapter(activity.supportFragmentManager) }
     private var numOfCollectServers: Long = 0
+    private val model: SharedFormsViewModel by activityViewModels()
+
+    companion object {
+        // Use this function to create instance of current fragment
+        @JvmStatic
+        fun newInstance(): CollectMainFragment {
+            val args = Bundle()
+            val fragment = CollectMainFragment()
+            fragment.arguments = args
+            return fragment
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,8 +93,7 @@ class CollectMainFragment : BaseFragment(),
             actionBar.setTitle(R.string.settings_servers_add_server_forms)
         }
 
-        presenter = CollectMainPresenter(this)
-
+        initObservers()
         initViewPageAdapter()
 
         mViewPager = view.findViewById(R.id.container)
@@ -191,7 +193,7 @@ class CollectMainFragment : BaseFragment(),
             CollectFormInstanceDeletedEvent::class.java,
             object : EventObserver<CollectFormInstanceDeletedEvent?>() {
                 override fun onNext(event: CollectFormInstanceDeletedEvent) {
-                    onFormInstanceDeleteSuccess()
+                    //onFormInstanceDeleteSuccess()
                 }
             })
         disposables.wire(
@@ -218,11 +220,13 @@ class CollectMainFragment : BaseFragment(),
     }
 
     override fun initView(view: View) {
-        fab = view.findViewById(R.id.fab)
-        tabLayout = view.findViewById(R.id.tabs)
-        formsViewPager = view.findViewById(R.id.container)
-        noServersView = view.findViewById(R.id.blank_forms_layout)
-        blankFormsText = view.findViewById(R.id.blank_forms_text)
+        view.apply {
+            fab = findViewById(R.id.fab)
+            tabLayout = findViewById(R.id.tabs)
+            formsViewPager = findViewById(R.id.container)
+            noServersView = findViewById(R.id.blank_forms_layout)
+            blankFormsText = findViewById(R.id.blank_forms_text)
+        }
     }
 
     override fun onResume() {
@@ -230,11 +234,7 @@ class CollectMainFragment : BaseFragment(),
         countServers()
     }
 
-     override fun onPause() {
-        super.onPause()
-    }
-
-     override fun onStop() {
+    override fun onStop() {
         if (alertDialog != null && alertDialog!!.isShowing) {
             alertDialog!!.dismiss()
         }
@@ -245,8 +245,6 @@ class CollectMainFragment : BaseFragment(),
         if (disposables != null) {
             disposables.dispose()
         }
-        stopPresenter()
-        stopCreateFormControllerPresenter()
         super.onDestroy()
     }
 
@@ -277,69 +275,70 @@ class CollectMainFragment : BaseFragment(),
         )*/
     }
 
-    override fun onGetBlankFormDefSuccess(collectForm: CollectForm?, formDef: FormDef?) {
-        startCreateFormControllerPresenter(collectForm!!, formDef!!)
-    }
+    private fun initObservers() {
+        model.onError.observe(viewLifecycleOwner, Observer {error ->
+                 Timber.d(error, javaClass.name)
+        })
+        model.onGetBlankFormDefSuccess.observe(viewLifecycleOwner, Observer { result ->
+            result.second?.let { result.first?.let { it1 ->
+                startCreateFormControllerPresenter(it,
+                    it1
+                )
+            } }
+        })
+        model.onInstanceFormDefSuccess.observe(viewLifecycleOwner, Observer {instance->
+            startCreateInstanceFormControllerPresenter(instance)
+        })
 
-    override fun onInstanceFormDefSuccess(instance: CollectFormInstance?) {
-        startCreateInstanceFormControllerPresenter(instance!!)
-    }
+        model.onFormDefError.observe(viewLifecycleOwner, Observer {error ->
+            val errorMessage = FormUtils.getFormDefErrorMessage(activity, error)
+            activity.showToast(errorMessage)
+        })
 
-    override fun onFormDefError(error: Throwable?) {
-        val errorMessage = FormUtils.getFormDefErrorMessage(activity, error)
-        activity.showToast(errorMessage)
-    }
+        model.onFormDefError.observe(viewLifecycleOwner, Observer {error ->
+            val errorMessage = FormUtils.getFormDefErrorMessage(activity, error)
+            activity.showToast(errorMessage)
+        })
 
-    override fun onFormControllerCreated(formController: FormController?) {
-        if (Preferences.isAnonymousMode()) {
-            startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
-        } else {
-            PermissionUtil.checkPermission(activity,getString(R.string.permission_dialog_expl_GPS))
-        }
-    }
-
-    override fun onFormControllerError(error: Throwable?) {
-        Timber.d(error, javaClass.name)
-    }
-
-    override fun onToggleFavoriteSuccess(form: CollectForm?) {
-        getBlankFormsListFragment().listBlankForms()
-    }
-
-    override fun onToggleFavoriteError(error: Throwable?) {
-        Timber.d(error, javaClass.name)
-    }
-
-    override fun onFormInstanceDeleteSuccess() {
-        Toast.makeText(activity, R.string.collect_toast_form_deleted, Toast.LENGTH_SHORT).show()
-        getSubmittedFormsListFragment().listSubmittedForms()
-        getDraftFormsListFragment().listDraftForms()
-    }
-
-    override fun onFormInstanceDeleteError(throwable: Throwable?) {
-        Timber.d(throwable, javaClass.name)
-    }
-
-    override fun onCountCollectServersEnded(num: Long) {
-        numOfCollectServers = num
-        if (numOfCollectServers < 1) {
-            tabLayout.visibility = View.GONE
-            formsViewPager.setVisibility(View.GONE)
-            fab.setVisibility(View.GONE)
-            noServersView.visibility = View.VISIBLE
-        } else {
-            tabLayout.visibility = View.VISIBLE
-            formsViewPager.visibility = View.VISIBLE
-            noServersView.visibility = View.GONE
-            if (mViewPager.currentItem == blankFragmentPosition) {
-                fab.visibility = View.VISIBLE
+        model.onCreateFormController.observe(viewLifecycleOwner, Observer {
+            if (Preferences.isAnonymousMode()) {
+                startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
+            } else {
+                PermissionUtil.checkPermission(activity,getString(R.string.permission_dialog_expl_GPS))
             }
-        }
+        })
+        model.onToggleFavoriteSuccess.observe(viewLifecycleOwner, Observer {
+            getBlankFormsListFragment().listBlankForms()
+        })
+
+        model.onFormInstanceDeleteSuccess.observe(viewLifecycleOwner, Observer {
+            Toast.makeText(activity, R.string.collect_toast_form_deleted, Toast.LENGTH_SHORT).show()
+            getSubmittedFormsListFragment().listSubmittedForms()
+            getDraftFormsListFragment().listDraftForms()
+        })
+
+        model.onCountCollectServersEnded.observe(viewLifecycleOwner, Observer { num ->
+            numOfCollectServers = num
+            if (numOfCollectServers < 1) {
+                tabLayout.visibility = View.GONE
+                formsViewPager.visibility = View.GONE
+                fab.visibility = View.GONE
+                noServersView.visibility = View.VISIBLE
+            } else {
+                tabLayout.visibility = View.VISIBLE
+                formsViewPager.visibility = View.VISIBLE
+                noServersView.visibility = View.GONE
+                if (mViewPager.currentItem == blankFragmentPosition) {
+                    fab.visibility = View.VISIBLE
+                }
+            }
+        })
+
+        model.showFab.observe(viewLifecycleOwner, Observer { show ->
+            fab.isVisible = show
+        })
     }
 
-    override fun onCountCollectServersFailed(throwable: Throwable?) {
-        Timber.d(throwable, javaClass.name)
-    }
 
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     fun startCollectFormEntryActivity() {
@@ -370,7 +369,7 @@ class CollectMainFragment : BaseFragment(),
     }
 
     private fun toggleFormFavorite(form: CollectForm) {
-        presenter?.toggleFavorite(form)
+        model.toggleFavorite(form)
     }
 
     private fun showFormInstanceEntry(instanceId: Long) {
@@ -382,7 +381,7 @@ class CollectMainFragment : BaseFragment(),
             activity,
             status
         ) { _: DialogInterface?, which: Int ->
-            presenter?.deleteFormInstance(
+            model.deleteFormInstance(
                 instanceId
             )
         }
@@ -392,7 +391,7 @@ class CollectMainFragment : BaseFragment(),
         alertDialog = AlertDialog.Builder(activity)
             .setMessage(R.string.collect_sent_dialog_expl_discard_unsent_form)
             .setPositiveButton(R.string.action_discard) { _, _ ->
-                presenter?.deleteFormInstance(
+                model.deleteFormInstance(
                     instanceId
                 )
             }
@@ -409,41 +408,23 @@ class CollectMainFragment : BaseFragment(),
     }
 
     private fun countServers() {
-        presenter?.countCollectServers()
+        model.countCollectServers()
     }
 
     private fun startGetFormDefPresenter(form: CollectForm) {
-        presenter?.getBlankFormDef(form)
+        model.getBlankFormDef(form)
     }
 
     private fun startGetInstanceFormDefPresenter(instanceId: Long) {
-        presenter?.getInstanceFormDef(instanceId)
-    }
-
-    private fun stopPresenter() {
-        if (presenter != null) {
-            presenter?.destroy()
-            presenter = null
-        }
+        model.getInstanceFormDef(instanceId)
     }
 
     private fun startCreateFormControllerPresenter(form: CollectForm, formDef: FormDef) {
-        stopCreateFormControllerPresenter()
-        formControllerPresenter = CollectCreateFormControllerPresenter(this)
-        formControllerPresenter!!.createFormController(form, formDef)
+        model.createFormController(form, formDef)
     }
 
     private fun startCreateInstanceFormControllerPresenter(instance: CollectFormInstance) {
-        stopCreateFormControllerPresenter()
-        formControllerPresenter = CollectCreateFormControllerPresenter(this)
-        formControllerPresenter!!.createFormController(instance)
-    }
-
-    private fun stopCreateFormControllerPresenter() {
-        if (formControllerPresenter != null) {
-            formControllerPresenter!!.destroy()
-            formControllerPresenter = null
-        }
+        model.createFormController(instance)
     }
 
     private fun initViewPageAdapter() {
@@ -485,7 +466,7 @@ class CollectMainFragment : BaseFragment(),
     }
 
     private fun getFragmentPosition(type: FormListFragment.Type): Int {
-        for (i in 0 until adapter.getCount()) {
+        for (i in 0 until adapter.count) {
             val fragment = adapter.getItem(i) as FormListFragment
             if (fragment.formListType == type) {
                 return i
@@ -501,14 +482,6 @@ class CollectMainFragment : BaseFragment(),
 
     private fun startCollectHelp() {
         startActivity(Intent(activity, CollectHelpActivity::class.java))
-    }
-
-    fun hideFab() {
-        fab.visibility = View.GONE
-    }
-
-    fun showFab() {
-        fab.visibility = View.VISIBLE
     }
 
 }

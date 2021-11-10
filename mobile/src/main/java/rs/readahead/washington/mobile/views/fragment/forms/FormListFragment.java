@@ -1,11 +1,11 @@
-package rs.readahead.washington.mobile.views.fragment;
+package rs.readahead.washington.mobile.views.fragment.forms;
 
 import androidx.fragment.app.Fragment;
 
 
 public abstract class FormListFragment extends Fragment {
     public enum Type {
-        DRAFT, BLANK, SUBMITTED
+        DRAFT, BLANK, SUBMITTED,OUTBOX
     }
 
     public abstract Type getFormListType();

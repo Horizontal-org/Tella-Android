@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.fragment;
+package rs.readahead.washington.mobile.views.fragment.forms;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;

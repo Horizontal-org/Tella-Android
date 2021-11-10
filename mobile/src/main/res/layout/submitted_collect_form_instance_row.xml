@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:textDirection="locale"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/space_cadet"
+    >
 
     <RelativeLayout
         android:id="@+id/instanceRow"
@@ -126,6 +128,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/wa_gray"
+        android:background="@color/space_cadet"
         android:layout_gravity="bottom" />
 </FrameLayout>

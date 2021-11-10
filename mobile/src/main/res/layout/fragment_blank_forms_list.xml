@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="@color/wa_light_gray"
+    android:background="@color/space_cadet"
     android:visibility="gone"
-    tools:context="rs.readahead.washington.mobile.views.fragment.BlankFormsListFragment">
+    tools:context="rs.readahead.washington.mobile.views.fragment.forms.BlankFormsListFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -2,7 +2,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textDirection="locale">
+    android:textDirection="locale"
+    android:background="@color/space_cadet"
+    >
 
     <LinearLayout
         android:id="@+id/instanceRow"
@@ -33,7 +35,7 @@
 
             <TextView
                 android:id="@+id/name"
-                android:visibility="gone"
+                android:visibility="visible"
                 style="@style/LineTextViewBlack"
                 android:ellipsize="end"
                 android:lines="1" />
