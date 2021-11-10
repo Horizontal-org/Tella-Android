@@ -65,7 +65,7 @@ import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.fragment.forms.BlankFormsListFragment;
 import rs.readahead.washington.mobile.views.fragment.forms.DraftFormsListFragment;
 import rs.readahead.washington.mobile.views.fragment.forms.FormListFragment;
-import rs.readahead.washington.mobile.views.fragment.SubmittedFormsListFragment;
+import rs.readahead.washington.mobile.views.fragment.forms.SubmittedFormsListFragment;
 import timber.log.Timber;
 
 

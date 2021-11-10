@@ -1,15 +1,16 @@
 package rs.readahead.washington.mobile.views.fragment.forms;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -18,8 +19,6 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
-import rs.readahead.washington.mobile.mvp.contract.ICollectFormInstanceListPresenterContract;
-import rs.readahead.washington.mobile.mvp.presenter.CollectFormInstanceListPresenter;
 import rs.readahead.washington.mobile.views.adapters.CollectDraftFormInstanceRecycleViewAdapter;
 import timber.log.Timber;
 
@@ -66,6 +65,7 @@ public class DraftFormsListFragment extends FormListFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initObservers();
         listDraftForms();
     }
 

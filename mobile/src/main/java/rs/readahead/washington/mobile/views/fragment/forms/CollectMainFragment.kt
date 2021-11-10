@@ -42,7 +42,6 @@ import rs.readahead.washington.mobile.views.activity.CollectHelpActivity
 import rs.readahead.washington.mobile.views.activity.FormSubmitActivity
 import rs.readahead.washington.mobile.views.adapters.ViewPagerAdapter
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
-import rs.readahead.washington.mobile.views.fragment.SubmittedFormsListFragment
 import timber.log.Timber
 
 class CollectMainFragment : BaseFragment(){
