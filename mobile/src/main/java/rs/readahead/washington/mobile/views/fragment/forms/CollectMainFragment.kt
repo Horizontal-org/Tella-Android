@@ -92,12 +92,11 @@ class CollectMainFragment : BaseFragment(){
             actionBar.setDisplayHomeAsUpEnabled(false)
             actionBar.setTitle(R.string.settings_servers_add_server_forms)
         }
-
         initObservers()
         initViewPageAdapter()
-
         mViewPager = view.findViewById(R.id.container)
         mViewPager.adapter = adapter
+
         mViewPager.currentItem = blankFragmentPosition
 
         val tabLayout: TabLayout = view.findViewById(R.id.tabs)
@@ -134,20 +133,6 @@ class CollectMainFragment : BaseFragment(){
         blankFormsText.movementMethod = LinkMovementMethod.getInstance()
         StringUtils.stripUnderlines(blankFormsText)
 
-        disposables.wire(
-            ShowBlankFormEntryEvent::class.java,
-            object : EventObserver<ShowBlankFormEntryEvent?>() {
-                override fun onNext(event: ShowBlankFormEntryEvent) {
-                    showFormEntry(event.form)
-                }
-            })
-        disposables.wire(
-            ToggleBlankFormPinnedEvent::class.java,
-            object : EventObserver<ToggleBlankFormPinnedEvent?>() {
-                override fun onNext(event: ToggleBlankFormPinnedEvent) {
-                    toggleFormFavorite(event.form)
-                }
-            })
         disposables.wire(
             ShowFormInstanceEntryEvent::class.java,
             object : EventObserver<ShowFormInstanceEntryEvent?>() {
@@ -364,14 +349,6 @@ class CollectMainFragment : BaseFragment(){
         startCollectFormEntryActivity()
     }
 
-    private fun showFormEntry(form: CollectForm) {
-        startGetFormDefPresenter(form)
-    }
-
-    private fun toggleFormFavorite(form: CollectForm) {
-        model.toggleFavorite(form)
-    }
-
     private fun showFormInstanceEntry(instanceId: Long) {
         startGetInstanceFormDefPresenter(instanceId)
     }
@@ -380,7 +357,7 @@ class CollectMainFragment : BaseFragment(){
         alertDialog = DialogsUtil.showFormInstanceDeleteDialog(
             activity,
             status
-        ) { _: DialogInterface?, which: Int ->
+        ) { _: DialogInterface?, _: Int ->
             model.deleteFormInstance(
                 instanceId
             )
@@ -409,10 +386,6 @@ class CollectMainFragment : BaseFragment(){
 
     private fun countServers() {
         model.countCollectServers()
-    }
-
-    private fun startGetFormDefPresenter(form: CollectForm) {
-        model.getBlankFormDef(form)
     }
 
     private fun startGetInstanceFormDefPresenter(instanceId: Long) {

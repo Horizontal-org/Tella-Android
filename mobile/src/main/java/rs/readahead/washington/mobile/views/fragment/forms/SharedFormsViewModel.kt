@@ -9,8 +9,10 @@ import io.reactivex.Single
 import io.reactivex.SingleSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.Consumer
 import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.AsyncSubject
 import org.javarosa.core.model.FormDef
 import org.javarosa.core.model.instance.InstanceInitializationFactory
 import org.javarosa.core.reference.ReferenceManager
@@ -24,6 +26,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.*
 import rs.readahead.washington.mobile.domain.exception.NoConnectivityException
 import rs.readahead.washington.mobile.domain.repository.IOpenRosaRepository
 import rs.readahead.washington.mobile.odk.FormController
+import java.lang.Error
 import java.util.*
 
 class SharedFormsViewModel(private val mApplication: Application) : AndroidViewModel(mApplication) {
@@ -46,10 +49,14 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
     var onCountCollectServersEnded = MutableLiveData<Long>()
     var onUserCancel = MutableLiveData<Boolean>()
     var showFab = MutableLiveData<Boolean>()
+    var onFormInstanceListSuccess = MutableLiveData<List<CollectFormInstance>>()
+    var onFormInstanceListError = MutableLiveData<Throwable>()
 
     private var keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private val disposables = CompositeDisposable()
     private var odkRepository: IOpenRosaRepository = OpenRosaRepository()
+    private val asyncDataSource = AsyncSubject.create<DataSource>()
+
 
     fun createFormController(collectForm: CollectForm, formDef: FormDef) {
         try {
@@ -393,6 +400,46 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 onFormDefError.postValue(throwable)
             }
+        )
+    }
+
+    fun listDraftFormInstances() {
+        disposables.add(asyncDataSource
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .flatMapSingle { obj: DataSource -> obj.listDraftForms() }
+            .subscribe(
+                { forms: List<CollectFormInstance> ->
+                    onFormInstanceListSuccess.postValue(
+                        forms
+                    )
+                },
+                { throwable: Throwable? ->
+                   onFormInstanceListError.postValue(
+                        throwable
+                    )
+                }
+            )
+        )
+    }
+
+    fun listSubmitFormInstances() {
+        disposables.add(asyncDataSource
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .flatMapSingle { obj: DataSource -> obj.listSentForms() }
+            .subscribe(
+                { forms: List<CollectFormInstance> ->
+                    onFormInstanceListSuccess.postValue(
+                        forms
+                    )
+                },
+                { throwable: Throwable? ->
+                   onFormInstanceListError.postValue(
+                        throwable
+                    )
+                }
+            )
         )
     }
 

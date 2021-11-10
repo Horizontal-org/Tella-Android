@@ -27,14 +27,11 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.bus.event.ShowBlankFormEntryEvent;
-import rs.readahead.washington.mobile.bus.event.ToggleBlankFormPinnedEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.ListFormResult;
 import rs.readahead.washington.mobile.javarosa.FormUtils;
-import rs.readahead.washington.mobile.mvp.presenter.CollectBlankFormListPresenter;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.DialogsUtil;
 import timber.log.Timber;
@@ -56,7 +53,6 @@ public class BlankFormsListFragment extends FormListFragment {
     @BindView(R.id.banner)
     TextView banner;
     SharedFormsViewModel model = null;
-    private CollectBlankFormListPresenter presenter;
     private Unbinder unbinder;
     private List<CollectForm> availableForms;
     private List<CollectForm> downloadedForms;
@@ -306,7 +302,7 @@ public class BlankFormsListFragment extends FormListFragment {
                 dlOpenButton.setImageDrawable(row.getContext().getResources().getDrawable(R.drawable.ic_more_vert_black_24dp));
                 dlOpenButton.setContentDescription(getString(R.string.collect_blank_action_desc_more_options));
                 dlOpenButton.setOnClickListener(view -> showDownloadedPopupMenu(collectForm, row, dlOpenButton));
-                rowLayout.setOnClickListener(view -> MyApplication.bus().post(new ShowBlankFormEntryEvent(collectForm)));
+                rowLayout.setOnClickListener(view -> model.getBlankFormDef(collectForm));
                 if (collectForm.isUpdated()) {
                     updateButton.setVisibility(View.VISIBLE);
                     updateButton.setOnClickListener(view -> {
@@ -356,7 +352,7 @@ public class BlankFormsListFragment extends FormListFragment {
         popup.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.pin_server:
-                    MyApplication.bus().post(new ToggleBlankFormPinnedEvent(collectForm));
+                    model.toggleFavorite(collectForm);
                     updateFormViews();
                     break;
                 case R.id.removeForm:
@@ -383,4 +379,5 @@ public class BlankFormsListFragment extends FormListFragment {
             banner.setVisibility(View.GONE);
         }
     }
+
 }

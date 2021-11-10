@@ -114,4 +114,5 @@ public class SubmittedFormsListFragment extends FormListFragment implements
             presenter = null;
         }
     }
+
 }
