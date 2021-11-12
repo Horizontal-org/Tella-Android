@@ -291,7 +291,7 @@ public class BlankFormsListFragment extends FormListFragment {
         TextView organization = item.findViewById(R.id.organization);
         ImageButton dlOpenButton = item.findViewById(R.id.dl_open_button);
         ImageView pinnedIcon = item.findViewById(R.id.favorites_button);
-        View rowLayout = item.findViewById(R.id.row_layout);
+       // View rowLayout = item.findViewById(R.id.row_layout);
         ImageButton updateButton = item.findViewById(R.id.later_button);
 
         if (collectForm != null) {
@@ -299,11 +299,18 @@ public class BlankFormsListFragment extends FormListFragment {
             organization.setText(collectForm.getServerName());
 
             if (collectForm.isDownloaded()) {
-                dlOpenButton.setImageDrawable(row.getContext().getResources().getDrawable(R.drawable.ic_more_vert_black_24dp));
+                dlOpenButton.setImageDrawable(row.getContext().getResources().getDrawable(R.drawable.ic_more));
                 dlOpenButton.setContentDescription(getString(R.string.collect_blank_action_desc_more_options));
                 dlOpenButton.setOnClickListener(view -> showDownloadedPopupMenu(collectForm, row, dlOpenButton));
-                rowLayout.setOnClickListener(view -> model.getBlankFormDef(collectForm));
+
+                pinnedIcon.setOnClickListener(view -> {
+                    model.toggleFavorite(collectForm);
+                    updateFormViews();
+                });
+
+              //  rowLayout.setOnClickListener(view -> model.getBlankFormDef(collectForm));
                 if (collectForm.isUpdated()) {
+                    pinnedIcon.setVisibility(View.VISIBLE);
                     updateButton.setVisibility(View.VISIBLE);
                     updateButton.setOnClickListener(view -> {
                         if (MyApplication.isConnectedToInternet(requireContext())) {
@@ -317,6 +324,7 @@ public class BlankFormsListFragment extends FormListFragment {
                     updateButton.setVisibility(View.GONE);
                 }
             } else {
+                pinnedIcon.setVisibility(View.GONE);
                 dlOpenButton.setImageDrawable(row.getContext().getResources().getDrawable(R.drawable.ic_cloud_download_black_24dp));
                 dlOpenButton.setContentDescription(getString(R.string.collect_blank_action_download_form));
                 dlOpenButton.setOnClickListener(view -> {
@@ -330,9 +338,9 @@ public class BlankFormsListFragment extends FormListFragment {
             }
 
             if (collectForm.isPinned()) {
-                pinnedIcon.setVisibility(View.VISIBLE);
+                pinnedIcon.setImageDrawable(row.getContext().getResources().getDrawable(R.drawable.star_filled_24dp));
             } else {
-                pinnedIcon.setVisibility(View.GONE);
+                pinnedIcon.setImageDrawable(row.getContext().getResources().getDrawable(R.drawable.star_border_24dp));
             }
         }
 
@@ -350,16 +358,10 @@ public class BlankFormsListFragment extends FormListFragment {
         }
 
         popup.setOnMenuItemClickListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.pin_server:
-                    model.toggleFavorite(collectForm);
-                    updateFormViews();
-                    break;
-                case R.id.removeForm:
-                    downloadedForms.remove(collectForm);
-                    model.removeBlankFormDef(collectForm);
-                    updateFormViews();
-                    break;
+            if (item.getItemId() == R.id.removeForm) {
+                downloadedForms.remove(collectForm);
+                model.removeBlankFormDef(collectForm);
+                updateFormViews();
             }
             return false;
         });
