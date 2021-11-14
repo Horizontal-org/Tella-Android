@@ -415,6 +415,10 @@ class CollectMainFragment : BaseFragment(){
             getString(R.string.collect_tab_title_blank)
         )
         adapter.addFragment(
+            OutboxFormListFragment.newInstance(),
+            getString(R.string.collect_outbox_tab_title)
+        )
+        adapter.addFragment(
             SubmittedFormsListFragment.newInstance(),
             getString(R.string.collect_sent_tab_title)
         )
@@ -431,6 +435,10 @@ class CollectMainFragment : BaseFragment(){
 
     private fun getSubmittedFormsListFragment(): SubmittedFormsListFragment {
         return getFormListFragment(FormListFragment.Type.SUBMITTED)
+    }
+
+    private fun getOutboxFormListFragment(): OutboxFormListFragment {
+        return getFormListFragment(FormListFragment.Type.OUTBOX)
     }
 
     private fun <T> getFormListFragment(type: FormListFragment.Type): T {

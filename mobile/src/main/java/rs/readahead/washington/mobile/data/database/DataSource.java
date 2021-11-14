@@ -1640,11 +1640,11 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
     private List<CollectFormInstance> getSubmitCollectFormInstances() {
         return getCollectFormInstances(new CollectFormInstanceStatus[]{
-                CollectFormInstanceStatus.FINALIZED,
+                //CollectFormInstanceStatus.FINALIZED,
                 CollectFormInstanceStatus.SUBMITTED,
-                CollectFormInstanceStatus.SUBMISSION_ERROR,
-                CollectFormInstanceStatus.SUBMISSION_PENDING,
-                CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS
+                CollectFormInstanceStatus.SUBMISSION_ERROR//,
+               // CollectFormInstanceStatus.SUBMISSION_PENDING,
+               //CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS
         });
     }
 

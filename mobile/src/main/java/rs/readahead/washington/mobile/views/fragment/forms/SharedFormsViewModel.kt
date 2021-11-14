@@ -23,6 +23,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.*
 import rs.readahead.washington.mobile.domain.exception.NoConnectivityException
 import rs.readahead.washington.mobile.domain.repository.IOpenRosaRepository
 import rs.readahead.washington.mobile.odk.FormController
+import timber.log.Timber
 import java.util.*
 
 class SharedFormsViewModel(private val mApplication: Application) : AndroidViewModel(mApplication) {
@@ -46,6 +47,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
     var onUserCancel = MutableLiveData<Boolean>()
     var showFab = MutableLiveData<Boolean>()
     var onFormInstanceListSuccess = MutableLiveData<List<CollectFormInstance>>()
+    var onDraftFormInstanceListSuccess = MutableLiveData<List<CollectFormInstance>>()
     var onFormInstanceListError = MutableLiveData<Throwable>()
 
     private var keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
@@ -411,9 +413,8 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
             .flatMapSingle { obj: DataSource -> obj.listDraftForms() }
             .subscribe(
                 { forms: List<CollectFormInstance> ->
-                    onFormInstanceListSuccess.postValue(
-                        forms
-                    )
+                    Timber.d("++++++ onDraftFormInstanceListSuccess drafts %d", forms.size)
+                    onDraftFormInstanceListSuccess.postValue(forms)
                 },
                 { throwable: Throwable? ->
                    onFormInstanceListError.postValue(

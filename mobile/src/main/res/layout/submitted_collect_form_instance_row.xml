@@ -4,16 +4,18 @@
     android:textDirection="locale"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/space_cadet"
-    >
+    android:background="@color/space_cadet">
 
     <RelativeLayout
         android:id="@+id/instanceRow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_margin="@dimen/activity_vertical_margin"
-        android:paddingTop="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:padding="16dp"
         android:paddingBottom="16dp"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
@@ -73,7 +75,7 @@
                 android:layout_below="@id/title_layout"
                 android:layout_toStartOf="@id/popupMenu"
                 android:paddingTop="2dp"
-                style="@style/LineTextViewGray"
+                style="@style/Tella_Main_White_Text.Small"
                 android:lines="1"
                 android:ellipsize="end"/>
 
