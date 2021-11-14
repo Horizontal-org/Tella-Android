@@ -133,6 +133,14 @@ class CollectMainFragment : BaseFragment(){
         StringUtils.stripUnderlines(blankFormsText)
 
         disposables.wire(
+            ShowBlankFormEntryEvent::class.java,
+            object : EventObserver<ShowBlankFormEntryEvent?>() {
+                override fun onNext(event: ShowBlankFormEntryEvent) {
+                    // this should be called on observed onGetBlankFormDefSuccess ?
+                    startCreateFormControllerPresenter(event.form.form,event.form.formDef)
+                }
+            })
+        disposables.wire(
             ShowFormInstanceEntryEvent::class.java,
             object : EventObserver<ShowFormInstanceEntryEvent?>() {
                 override fun onNext(event: ShowFormInstanceEntryEvent) {
@@ -264,11 +272,9 @@ class CollectMainFragment : BaseFragment(){
                  Timber.d(error, javaClass.name)
         })
         model.onGetBlankFormDefSuccess.observe(viewLifecycleOwner, Observer { result ->
-            result.second?.let { result.first?.let { it1 ->
-                startCreateFormControllerPresenter(it,
-                    it1
-                )
-            } }
+                result.let {
+                    startCreateFormControllerPresenter(it.form, it.formDef)
+                }
         })
         model.onInstanceFormDefSuccess.observe(viewLifecycleOwner, Observer {instance->
             startCreateInstanceFormControllerPresenter(instance)

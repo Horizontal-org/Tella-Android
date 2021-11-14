@@ -47,6 +47,7 @@ public class StringWidget extends QuestionWidget {
         super(context, prompt);
 
         answer = new EditText(context);
+        answer.setTextColor(getResources().getColor(R.color.colorPrimaryInverse));
         answer.setId(QuestionWidget.newUniqueId());
         readOnly = prompt.isReadOnly() || readOnlyOverride;
 

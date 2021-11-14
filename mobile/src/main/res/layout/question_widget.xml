@@ -20,7 +20,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_gravity="start"
                 android:layout_toStartOf="@+id/iconsLayout"
-                android:textColor="?android:attr/textColorPrimary"
+                android:textColor="?android:attr/textColorPrimaryInverse"
                 android:textSize="16sp" />
 
             <LinearLayout

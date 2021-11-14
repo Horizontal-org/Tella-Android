@@ -152,7 +152,7 @@ public class CollectMainActivity extends BaseLockActivity implements
         disposables.wire(ShowBlankFormEntryEvent.class, new EventObserver<ShowBlankFormEntryEvent>() {
             @Override
             public void onNext(ShowBlankFormEntryEvent event) {
-                showFormEntry(event.getForm());
+                // showFormEntry(event.getForm());
             }
         });
         disposables.wire(ToggleBlankFormPinnedEvent.class, new EventObserver<ToggleBlankFormPinnedEvent>() {

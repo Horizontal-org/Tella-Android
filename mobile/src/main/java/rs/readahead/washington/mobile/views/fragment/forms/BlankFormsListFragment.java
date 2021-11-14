@@ -291,7 +291,7 @@ public class BlankFormsListFragment extends FormListFragment {
         TextView organization = item.findViewById(R.id.organization);
         ImageButton dlOpenButton = item.findViewById(R.id.dl_open_button);
         ImageView pinnedIcon = item.findViewById(R.id.favorites_button);
-       // View rowLayout = item.findViewById(R.id.row_layout);
+        View rowLayout = item.findViewById(R.id.row_layout);
         ImageButton updateButton = item.findViewById(R.id.later_button);
 
         if (collectForm != null) {
@@ -302,7 +302,7 @@ public class BlankFormsListFragment extends FormListFragment {
                 dlOpenButton.setImageDrawable(row.getContext().getResources().getDrawable(R.drawable.ic_more));
                 dlOpenButton.setContentDescription(getString(R.string.collect_blank_action_desc_more_options));
                 dlOpenButton.setOnClickListener(view -> showDownloadedPopupMenu(collectForm, row, dlOpenButton));
-
+                rowLayout.setOnClickListener(view -> model.getBlankFormDef(collectForm));
                 pinnedIcon.setOnClickListener(view -> {
                     model.toggleFavorite(collectForm);
                     updateFormViews();
@@ -325,7 +325,7 @@ public class BlankFormsListFragment extends FormListFragment {
                 }
             } else {
                 pinnedIcon.setVisibility(View.GONE);
-                dlOpenButton.setImageDrawable(row.getContext().getResources().getDrawable(R.drawable.ic_cloud_download_black_24dp));
+                dlOpenButton.setImageDrawable(row.getContext().getResources().getDrawable(R.drawable.ic_download));
                 dlOpenButton.setContentDescription(getString(R.string.collect_blank_action_download_form));
                 dlOpenButton.setOnClickListener(view -> {
                     if (MyApplication.isConnectedToInternet(requireContext())) {

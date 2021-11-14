@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:textDirection="locale"
+    android:background="@color/wa_purple"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="rs.readahead.washington.mobile.views.activity.CollectFormEntryActivity"
     tools:showIn="@layout/activity_collect_form_entry">

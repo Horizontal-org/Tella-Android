@@ -3,14 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textDirection="locale"
+    android:textDirection="locale">
 
-    >
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
+    <LinearLayout
+        android:id="@+id/row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/form_row"
@@ -18,69 +17,75 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:background="@drawable/bg_row_forms"
-        android:padding="16dp"
-        >
+        android:padding="16dp">
 
-        <ImageView
-            android:id="@+id/favorites_button"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/row_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/small_text_margin"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@null"
-            android:src="@drawable/star_border_24dp" />
+            android:layout_toStartOf="@id/later_button"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/name"
-            style="@style/Tella_Main_White_Text.Meduim"
-            android:ellipsize="end"
-            android:lines="1"
-            tools:text="Test TesT"
-            android:layout_toEndOf="@id/favorites_button"
-            />
+            <ImageView
+                android:id="@+id/favorites_button"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginEnd="@dimen/small_text_margin"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@null"
+                android:src="@drawable/star_border_24dp" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                tools:ignore="UseCompoundDrawables">
 
-        <TextView
-            android:id="@+id/organization"
-            style="@style/Tella_Main_White_Text.Small"
-            android:ellipsize="end"
-            android:lines="1"
-            tools:text="Test TesT"
-            android:paddingTop="2dp"
-            android:layout_toEndOf="@id/favorites_button"
-            android:layout_below="@id/name"
-            />
+                <TextView
+                    android:id="@+id/name"
+                    style="@style/Tella_Main_White_Text.Meduim"
+                    android:ellipsize="end"
+                    android:lines="1" />
+
+                <TextView
+                    android:id="@+id/organization"
+                    style="@style/Tella_Main_White_Text.Small"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:paddingTop="2dp" />
+            </LinearLayout>
+        </LinearLayout>
+
         <ImageButton
             android:id="@+id/dl_open_button"
-            android:layout_height="32dp"
             android:layout_width="32dp"
-            android:background="@color/wa_transparent"
+            android:layout_height="32dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:alpha=".5"
             android:layout_marginStart="10dp"
+            android:alpha=".5"
+            android:background="@color/wa_transparent"
             android:contentDescription="@string/collect.blank_action_download.form" />
 
         <ImageButton
             android:id="@+id/later_button"
-            android:layout_height="32dp"
             android:layout_width="32dp"
-            android:background="@color/wa_transparent"
-            android:layout_toStartOf="@id/dl_open_button"
-            android:src="@drawable/ic_update_black_24dp"
-            android:alpha=".5"
+            android:layout_height="32dp"
             android:layout_centerVertical="true"
-            android:visibility="gone"
             android:layout_marginStart="10dp"
-            android:contentDescription="@string/collect.blank_action_update.form" />
+            android:layout_toStartOf="@id/dl_open_button"
+            android:alpha=".5"
+            android:background="@color/wa_transparent"
+            android:contentDescription="@string/collect.blank_action_update.form"
+            android:src="@drawable/ic_update_black_24dp"
+            android:visibility="gone" />
     </RelativeLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="12dp"
         android:layout_gravity="bottom"
         android:background="@color/space_cadet" />
-</LinearLayout>
-
+    </LinearLayout>
 
 </FrameLayout>

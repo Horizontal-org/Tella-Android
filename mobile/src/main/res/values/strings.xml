@@ -538,4 +538,5 @@
     <string name="settings.sec_confirm_camouflage_desc">To re-open Tella, look for the %s app icon among your apps.</string>
     <string name="settings.sec_confirm_calc_camouflage_desc">To re-open Tella, look for the Calculator app icon among your apps. Unlock Tella by entering your PIN in the Calculator followed by “=”. </string>
     <string name="settings.sec_confirm_exit_tella">Exit Tella</string>
+    <string name="collect.outbox_tab.title">Outbox</string>
 </resources>

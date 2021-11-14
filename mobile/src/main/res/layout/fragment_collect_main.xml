@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="@color/space_cadet"
+    android:layout_marginBottom="@dimen/main_navigation_bar_height"
     tools:context="rs.readahead.washington.mobile.views.activity.CollectMainActivity">
 
     <androidx.viewpager.widget.ViewPager
@@ -54,8 +55,6 @@
                 />
     </com.google.android.material.appbar.AppBarLayout>
 
-
-
     <LinearLayout
         android:id="@+id/blank_forms_layout"
         android:layout_width="match_parent"
@@ -95,6 +94,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
+        android:background="@color/dark_orange"
+        app:backgroundTint="@color/dark_orange"
+        android:layout_marginHorizontal="@dimen/tella_main_vertical"
+        android:layout_marginBottom="@dimen/tella_main_vertical"
         android:src="@drawable/ic_autorenew_white_24dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

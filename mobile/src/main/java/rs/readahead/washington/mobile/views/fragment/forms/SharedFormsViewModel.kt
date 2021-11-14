@@ -4,13 +4,9 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import io.reactivex.CompletableSource
 import io.reactivex.Single
-import io.reactivex.SingleSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Consumer
-import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.AsyncSubject
 import org.javarosa.core.model.FormDef
@@ -19,6 +15,7 @@ import org.javarosa.core.reference.ReferenceManager
 import org.javarosa.form.api.FormEntryController
 import org.javarosa.form.api.FormEntryModel
 import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.bus.event.ShowBlankFormEntryEvent
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.data.repository.OpenRosaRepository
@@ -26,13 +23,12 @@ import rs.readahead.washington.mobile.domain.entity.collect.*
 import rs.readahead.washington.mobile.domain.exception.NoConnectivityException
 import rs.readahead.washington.mobile.domain.repository.IOpenRosaRepository
 import rs.readahead.washington.mobile.odk.FormController
-import java.lang.Error
 import java.util.*
 
 class SharedFormsViewModel(private val mApplication: Application) : AndroidViewModel(mApplication) {
 
     var onCreateFormController = MutableLiveData<FormController>()
-    var onGetBlankFormDefSuccess = MutableLiveData<Pair<FormDef?,CollectForm?>>()
+    var onGetBlankFormDefSuccess = MutableLiveData<FormPair>()
     var onBlankFormsListResult = MutableLiveData<ListFormResult>()
     var onError = MutableLiveData<Throwable>()
     var onFormDefError = MutableLiveData<Throwable>()
@@ -114,25 +110,30 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
     }
 
     fun getBlankFormDef(form: CollectForm?) {
-        disposables.add(
-            keyDataSource.dataSource
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMap { dataSource: DataSource ->
-                    dataSource.getBlankFormDef(
-                        form
-                    ).toObservable()
-                }
-                ?.subscribe(
-                    { formDef: FormDef? ->
-                        onGetBlankFormDefSuccess.postValue(Pair(formDef,form))
-                    },
-                    { throwable: Throwable? ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                        onFormDefError.postValue(throwable)
+        keyDataSource.dataSource
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .flatMap { dataSource: DataSource ->
+                dataSource.getBlankFormDef(form).toObservable()
+            }
+            ?.subscribe(
+                { formDef: FormDef? ->
+                    //onGetBlankFormDefSuccess.postValue(FormPair(form, formDef))
+                    if (form != null && formDef != null) {
+                        onGetBlankFormDefSuccess.postValue(FormPair(form, formDef))
+                        //OMG
+                        MyApplication.bus().post(ShowBlankFormEntryEvent(FormPair(form, formDef)))
                     }
-                )!!
-        )
+                },
+                { throwable: Throwable? ->
+                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                    onFormDefError.postValue(throwable)
+                }
+            )?.let {
+                disposables.add(
+                    it
+            )
+            }
     }
 
     fun getInstanceFormDef(instanceId: Long) {
