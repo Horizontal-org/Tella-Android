@@ -37,14 +37,14 @@
             android:id="@+id/questionHelpText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?android:attr/textColorSecondary"
+            android:textColor="?android:attr/textColorPrimaryInverse"
             android:textSize="14sp" />
 
         <TextView
             android:id="@+id/constraintValidationView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/wa_red"
+            android:textColor="@color/wa_orange"
             android:textSize="14sp"
             android:visibility="gone" />
     </LinearLayout>
