@@ -1,17 +1,18 @@
 package rs.readahead.washington.mobile.data.rest
 
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import rs.readahead.washington.mobile.data.entity.uwazi.LoginEntity
-import rs.readahead.washington.mobile.data.entity.uwazi.Template
+import rs.readahead.washington.mobile.data.UWAZI_BASE_URL
 
-interface UwaziApi {
+object UwaziApi : BaseApi() {
 
-    @GET("templates")
-    fun getTemplates(): Template
+    private var builder = Builder().build(UWAZI_BASE_URL)
 
-    @POST("login")
-    fun login(@Body loginEntity: LoginEntity)
+    private val api = getBaseRetrofit()
+        .newBuilder()
+        .baseUrl(UWAZI_BASE_URL)
+        .build()
+        .create(IUwaziApi::class.java)
+
+    fun getApi(): IUwaziApi {
+        return api
+    }
 }
-
