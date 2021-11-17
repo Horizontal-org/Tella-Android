@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.StrictMode;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.evernote.android.job.JobManager;
@@ -241,6 +242,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
             vault = new Vault(this, mainKeyHolder, vaultConfig);
             rxVault = new RxVault(this, vault);
             if (Preferences.isUpdateTella2()) {
+                Toast.makeText(context,"Hold on while we transfering your files to the Vault!", Toast.LENGTH_LONG).show();
+                Timber.d("++++ updating...");
                 updateTella2(context);
             }
         } catch (Exception e) {
@@ -250,7 +253,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     }
 
     private void updateTella2(Context context){
-        DialogUtils.showBottomMessage((Activity) context,"Hold on while we transfering your files to the Vault!", false);
         try {
             byte[] key;
             if ((key = getMainKeyHolder().get().getKey().getEncoded()) != null) {
