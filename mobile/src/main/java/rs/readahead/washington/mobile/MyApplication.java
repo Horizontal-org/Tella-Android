@@ -53,6 +53,7 @@ import rs.readahead.washington.mobile.javarosa.PropertyManager;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.LocaleManager;
+import rs.readahead.washington.mobile.util.TellaUpdater;
 import rs.readahead.washington.mobile.util.jobs.TellaJobCreator;
 import rs.readahead.washington.mobile.views.activity.ExitActivity;
 import rs.readahead.washington.mobile.views.activity.MainActivity;
@@ -236,17 +237,37 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         try {
             vault = new Vault(this, mainKeyHolder, vaultConfig);
             rxVault = new RxVault(this, vault);
+            Timber.d("++++ isUpdateTella2 %b", Preferences.isUpdateTella2());
+            if (Preferences.isUpdateTella2()) {
+                if (updateTella2(context)) {
+                    Preferences.setUpdateTella2(false);
+                }
+            }
         } catch (Exception e) {
             Timber.e(e);
         }
         startMainActivity(context);
     }
 
+    private boolean updateTella2(Context context){
+        Timber.d("++++ updateTella2");
+        try {
+            byte[] key;
+            if ((key = getMainKeyHolder().get().getKey().getEncoded()) != null) {
+                TellaUpdater.updateV2(context,key);
+                return true;
+            }
+        } catch (LifecycleMainKey.MainKeyUnavailableException e) {
+            Timber.d(e);
+            return false;
+        }
+        return false;
+    }
+
     @Override
     public void onUnSuccessfulUnlock(String tag, Throwable throwable) {
         FirebaseCrashlytics.getInstance().recordException(throwable);
     }
-
 
     @Override
     public void onLockConfirmed(Context context) {

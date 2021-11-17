@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.text.TextUtils;
 
-import androidx.annotation.ColorLong;
 import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
@@ -46,6 +45,7 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.FileUploadBundle;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
+import rs.readahead.washington.mobile.domain.entity.OldMediaFile;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
@@ -63,6 +63,7 @@ import rs.readahead.washington.mobile.domain.repository.IServersRepository;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadServersRepository;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 import rs.readahead.washington.mobile.util.C;
+import rs.readahead.washington.mobile.util.FileUtil;
 import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
 
@@ -361,6 +362,12 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return Single.fromCallable(() -> getMediaFiles(filter, sort))
                 .compose(applySchedulers());
     }
+
+    public Single<List<OldMediaFile>> listOldMediaFiles() {
+        return Single.fromCallable(() -> getAllOldMediaFiles())
+                .compose(applySchedulers());
+    }
+
 
     public Single<List<FileUploadInstance>> getFileUploadInstances() {
         return Single.fromCallable(this::getFileUploadInstancesDB)
@@ -1522,6 +1529,49 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return mediaFiles;
     }
 
+    private List<OldMediaFile> getAllOldMediaFiles() {
+            Cursor cursor = null;
+            List<OldMediaFile> mediaFiles = new ArrayList<>();
+
+            String order = "DESC";
+
+            try {
+                final String query = SQLiteQueryBuilder.buildQueryString(
+                        false,
+                        D.T_MEDIA_FILE,
+                        new String[]{
+                                cn(D.T_MEDIA_FILE, D.C_ID, D.A_MEDIA_FILE_ID),
+                                D.C_PATH,
+                                D.C_UID,
+                                D.C_FILE_NAME,
+                                D.C_METADATA,
+                                D.C_CREATED,
+                                D.C_DURATION,
+                                D.C_ANONYMOUS,
+                                D.C_SIZE,
+                                D.C_HASH},
+                        null, null, null,
+                        D.C_CREATED + " " + order,
+                        null
+                );
+
+                cursor = database.rawQuery(query, null);
+
+                for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                    OldMediaFile mediaFile = cursorToOldMediaFile(cursor);
+                    mediaFiles.add(mediaFile);
+                }
+            } catch (Exception e) {
+                Timber.d(e, getClass().getName());
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+
+            return mediaFiles;
+        }
+
     private List<VaultFile> getUploadMediaFilesDB(final UploadStatus status) {
         Cursor cursor = null;
         List<VaultFile> vaultFiles = new ArrayList<>();
@@ -1932,6 +1982,24 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         instance.setFormPartStatus(FormMediaFileStatus.values()[formPartStatusOrdinal]);
 
         return instance;
+    }
+
+    private OldMediaFile cursorToOldMediaFile(Cursor cursor) {
+        String path = cursor.getString(cursor.getColumnIndexOrThrow(D.C_PATH));
+        String uid = cursor.getString(cursor.getColumnIndexOrThrow(D.C_UID));
+        String fileName = cursor.getString(cursor.getColumnIndexOrThrow(D.C_FILE_NAME));
+        MetadataEntity metadataEntity = new Gson().fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_METADATA)), MetadataEntity.class);
+
+        OldMediaFile mediaFile = new OldMediaFile(path, uid, fileName, FileUtil.getOldMediaFileType(fileName));
+        mediaFile.setId(cursor.getLong(cursor.getColumnIndexOrThrow(D.A_MEDIA_FILE_ID)));
+        mediaFile.setMetadata(new EntityMapper().transform(metadataEntity));
+        mediaFile.setCreated(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_CREATED)));
+        mediaFile.setDuration(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_DURATION)));
+        mediaFile.setSize(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_SIZE)));
+        mediaFile.setAnonymous(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_ANONYMOUS)) == 1);
+        mediaFile.setHash(cursor.getString(cursor.getColumnIndexOrThrow(D.C_HASH)));
+
+        return mediaFile;
     }
 
     private FormMediaFile cursorToFormMediaFile(Cursor cursor) {
