@@ -1,32 +1,36 @@
 package rs.readahead.washington.mobile.util;
 
 import android.content.Context;
+import android.os.AsyncTask;
+
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.database.VaultDataSource;
 
 import java.util.List;
 
 import rs.readahead.washington.mobile.data.database.DataSource;
+import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.OldMediaFile;
 import timber.log.Timber;
 
 public class TellaUpdater {
 
-    public static boolean updateV2(Context context, byte[] key){
-        Timber.d("++++ updateV2");
+    public static void updateV2(Context context, byte[] key){
         DataSource dataSource = DataSource.getInstance(context,key);
         VaultDataSource vaultDataSource = VaultDataSource.getInstance(context,key);
 
-        List<OldMediaFile> allMediaFiles = dataSource.listOldMediaFiles().blockingGet();
+        AsyncTask.execute(() -> {
+            List<OldMediaFile> allMediaFiles = dataSource.listOldMediaFiles().blockingGet();
 
-        for (OldMediaFile mediaFile: allMediaFiles) {
-            vaultDataSource.create(null,getVaultFile(mediaFile) );
-        }
-        return true;
+            for (OldMediaFile mediaFile: allMediaFiles) {
+                vaultDataSource.create(null,getVaultFile(mediaFile) );
+            }
+
+            Preferences.setUpdateTella2(false);
+        });
     }
 
     private static VaultFile getVaultFile(OldMediaFile mediaFile){
-        Timber.d("++++ getVaultFile name %s, created %d, size %d path %s",mediaFile.getFileName(), mediaFile.getCreated(), mediaFile.getSize(), mediaFile.getPath() );
         VaultFile vaultFile = new VaultFile();
 
         vaultFile.id = mediaFile.getUid();

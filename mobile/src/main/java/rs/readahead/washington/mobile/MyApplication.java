@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -21,6 +22,7 @@ import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity;
 import com.hzontal.tella_vault.Vault;
 import com.hzontal.tella_vault.rx.RxVault;
 
+import org.hzontal.shared_ui.utils.DialogUtils;
 import org.hzontal.tella.keys.MainKeyStore;
 import org.hzontal.tella.keys.TellaKeys;
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder;
@@ -52,6 +54,7 @@ import rs.readahead.washington.mobile.javarosa.JavaRosa;
 import rs.readahead.washington.mobile.javarosa.PropertyManager;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.util.C;
+import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.LocaleManager;
 import rs.readahead.washington.mobile.util.TellaUpdater;
 import rs.readahead.washington.mobile.util.jobs.TellaJobCreator;
@@ -237,11 +240,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         try {
             vault = new Vault(this, mainKeyHolder, vaultConfig);
             rxVault = new RxVault(this, vault);
-            Timber.d("++++ isUpdateTella2 %b", Preferences.isUpdateTella2());
             if (Preferences.isUpdateTella2()) {
-                if (updateTella2(context)) {
-                    Preferences.setUpdateTella2(false);
-                }
+                updateTella2(context);
             }
         } catch (Exception e) {
             Timber.e(e);
@@ -249,19 +249,16 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         startMainActivity(context);
     }
 
-    private boolean updateTella2(Context context){
-        Timber.d("++++ updateTella2");
+    private void updateTella2(Context context){
+        DialogUtils.showBottomMessage((Activity) context,"Hold on while we transfering your files to the Vault!", false);
         try {
             byte[] key;
             if ((key = getMainKeyHolder().get().getKey().getEncoded()) != null) {
                 TellaUpdater.updateV2(context,key);
-                return true;
             }
         } catch (LifecycleMainKey.MainKeyUnavailableException e) {
             Timber.d(e);
-            return false;
         }
-        return false;
     }
 
     @Override

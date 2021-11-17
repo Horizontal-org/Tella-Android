@@ -364,7 +364,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     public Single<List<OldMediaFile>> listOldMediaFiles() {
-        return Single.fromCallable(() -> getAllOldMediaFiles())
+        return Single.fromCallable(this::getAllOldMediaFiles)
                 .compose(applySchedulers());
     }
 
