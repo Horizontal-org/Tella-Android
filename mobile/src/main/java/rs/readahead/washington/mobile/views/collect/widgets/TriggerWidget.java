@@ -43,6 +43,8 @@ public class TriggerWidget extends QuestionWidget {
         this.prompt = prompt;
 
         triggerButton = new AppCompatCheckBox(getContext());
+        triggerButton.setTextColor(getResources().getColor(R.color.colorPrimaryInverse));
+        triggerButton.setBackground(getResources().getDrawable(R.drawable.checkbox_background));
         triggerButton.setId(QuestionWidget.newUniqueId());
         triggerButton.setText(getContext().getString(R.string.collect_form_acknowledge_select_expl));
         triggerButton.setEnabled(!prompt.isReadOnly());
