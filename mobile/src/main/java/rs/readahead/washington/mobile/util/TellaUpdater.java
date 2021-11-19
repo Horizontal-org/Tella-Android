@@ -11,6 +11,7 @@ import java.util.List;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.OldMediaFile;
+import rs.readahead.washington.mobile.domain.entity.collect.CollectInstanceVaultFile;
 import timber.log.Timber;
 
 public class TellaUpdater {
@@ -23,8 +24,10 @@ public class TellaUpdater {
             List<OldMediaFile> allMediaFiles = dataSource.listOldMediaFiles().blockingGet();
 
             for (OldMediaFile mediaFile: allMediaFiles) {
-                vaultDataSource.create(null,getVaultFile(mediaFile) );
+                vaultDataSource.create(null,getVaultFile(mediaFile));
             }
+
+            List<CollectInstanceVaultFile> collectInstanceVaultFiles = dataSource.getCollectInstanceVaultFilesDB();
 
             Preferences.setUpdateTella2(false);
         });

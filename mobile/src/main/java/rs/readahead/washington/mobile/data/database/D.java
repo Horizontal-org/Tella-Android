@@ -24,6 +24,7 @@ class D {
     static final String T_SETTINGS = "t_settings";
     static final String T_TELLA_UPLOAD_SERVER = "t_tella_upload_server";
     static final String T_MEDIA_FILE_UPLOAD = "t_media_file_upload";
+    static final String T_COLLECT_FORM_INSTANCE_VAULT_FILE = "t_collect_xform_instance_vault_file";
 
     /* DATABASE COLUMNS */
     static final String C_ID = "c_id";
@@ -69,6 +70,7 @@ class D {
     static final String C_INCLUDE_METADATA = "c_include_metadata";
     static final String C_SERVER_ID = "c_server_id";
     static final String C_MANUAL_UPLOAD = "c_manual_upload";
+    static final String C_VAULT_FILE_ID = "c_vault_file_id";
 
 
     static final String A_SERVER_NAME = "a_server_name";

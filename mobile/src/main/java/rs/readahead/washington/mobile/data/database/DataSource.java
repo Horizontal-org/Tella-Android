@@ -50,6 +50,7 @@ import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
+import rs.readahead.washington.mobile.domain.entity.collect.CollectInstanceVaultFile;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
@@ -367,7 +368,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return Single.fromCallable(this::getAllOldMediaFiles)
                 .compose(applySchedulers());
     }
-
 
     public Single<List<FileUploadInstance>> getFileUploadInstances() {
         return Single.fromCallable(this::getFileUploadInstancesDB)
@@ -719,6 +719,45 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }
 
         return forms;
+    }
+
+    public List<CollectInstanceVaultFile> getCollectInstanceVaultFilesDB(){
+        List<CollectInstanceVaultFile> files = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_MEDIA_FILE + " JOIN " + D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE + " ON " +
+                            cn(D.T_MEDIA_FILE, D.C_ID) + " = " + cn(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE, D.C_MEDIA_FILE_ID),
+                    new String[]{
+                            cn(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE, D.C_ID, D.A_COLLECT_FORM_INSTANCE_ID),
+                            D.C_COLLECT_FORM_INSTANCE_ID,
+                            D.C_UID,
+                            cn(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE, D.C_STATUS, D.A_FORM_MEDIA_FILE_STATUS)},
+                    "1 = 1",
+                    null, null, null, null
+            );
+
+            cursor = database.rawQuery(query, null);
+
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                long id = cursor.getLong(cursor.getColumnIndexOrThrow(D.A_COLLECT_FORM_INSTANCE_ID));
+                long instanceId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_COLLECT_FORM_INSTANCE_ID));
+                String vaultFileId = cursor.getString(cursor.getColumnIndexOrThrow(D.C_UID));
+                int status = cursor.getInt(cursor.getColumnIndexOrThrow(D.A_FORM_MEDIA_FILE_STATUS));
+
+                files.add(new CollectInstanceVaultFile(id, instanceId,vaultFileId,status));
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return files;
     }
 
     private CollectServer createServer(final CollectServer server) {
