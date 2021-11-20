@@ -22,12 +22,14 @@ public class TellaUpdater {
 
         AsyncTask.execute(() -> {
             List<OldMediaFile> allMediaFiles = dataSource.listOldMediaFiles().blockingGet();
-
             for (OldMediaFile mediaFile: allMediaFiles) {
                 vaultDataSource.create(null,getVaultFile(mediaFile));
             }
 
             List<CollectInstanceVaultFile> collectInstanceVaultFiles = dataSource.getCollectInstanceVaultFilesDB();
+            for (CollectInstanceVaultFile instanceVaultFile: collectInstanceVaultFiles) {
+                dataSource.insertCollectInstanceVaultFile(instanceVaultFile);
+            }
 
             Preferences.setUpdateTella2(false);
         });
