@@ -322,6 +322,8 @@
   <string name="settings.docu_auto.upload.server.selection_dialog.expl">На які сервер вы хацелі б загрузіць файлы?</string>
   <string name="settings.serv_add.server.selection_dialog.title">Які тып сервера?</string>
   <string name="settings.docu_add.server_dialog.select_odk">Адкрыты набор дадзеных (АНД)</string>
+  <string name="settings.docu_add.server_dialog.select_tella_web">Tella WEB</string>
+  <string name="settings.docu_add.server_dialog.select_tella_uwazi">Uwazi</string>
   <string name="settings.docu_add.server_dialog.expl">Выберыце тып сервера, да якога вы хочаце падключыцца. Калі вы не ўпэўненыя, запытайце арганізацыю, якая каардынуе забеспячэнне дакументамі.</string>
   <string name="settings.docu_add.server_dialog.select_tus">Прамая загрузка</string>
   <string name="settings.docu_connect.to.servers_enable_action">Падключэнне да сервераў</string>

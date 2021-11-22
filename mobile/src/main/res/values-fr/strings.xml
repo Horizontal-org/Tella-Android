@@ -316,6 +316,8 @@
   <string name="settings.docu_auto.upload.server.selection_dialog.expl">Vers quel serveur voulez-vous téléverser les fichiers ?</string>
   <string name="settings.serv_add.server.selection_dialog.title">Quel type de serveur ?</string>
   <string name="settings.docu_add.server_dialog.select_odk">Trousse de données ouvertes (ODK)</string>
+  <string name="settings.docu_add.server_dialog.select_tella_web">Tella WEB</string>
+  <string name="settings.docu_add.server_dialog.select_tella_uwazi">Uwazi</string>
   <string name="settings.docu_add.server_dialog.expl">Sélectionnez le type de serveur auquel vous voulez vous connecter. Si vous n’êtes pas certain, demandez à votre organisation.</string>
   <string name="settings.docu_add.server_dialog.select_tus">Téléversement direct</string>
   <string name="settings.docu_connect.to.servers_enable_action">Se connecter aux serveurs</string>

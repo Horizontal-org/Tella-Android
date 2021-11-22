@@ -572,8 +572,12 @@ This is one of the two options available. -->
   <string name="settings.docu_auto.upload.server.selection_dialog.expl">ಫೈಲ್‌ಗಳನ್ನು ಯಾವ ಸರ್ವರ್‌ಗೆ ಅಪ್‌ಲೋಡ್ ಮಾಡಲು ನೀವು ಬಯಸುತ್ತೀರಿ?</string>
   <!-- The title of the dialog where the user selects the type of server they want to connect to. -->
   <string name="settings.serv_add.server.selection_dialog.title">ಯಾವ ಬಗೆಯ ಸರ್ವರ್?</string>
-  <!-- When connecting to a server, users have to select which of the two kinds of servers they want to connect to. "Open Data Kit" is one of the two server types. -->
+  <!-- When connecting to a server, users have to select which of the two kinds of servers they want to connect to. "Open Data Kit" is one of the three server types. -->
   <string name="settings.docu_add.server_dialog.select_odk">ಒಪನ್ ಡೇಟಾ ಕಿಟ್ (ODK)</string>
+  <!-- When connecting to a server, users have to select which of the two kinds of servers they want to connect to. "TELLA WEB" is one of the three server types. -->
+  <string name="settings.docu_add.server_dialog.select_tella_web">Tella WEB</string>
+  <!-- When connecting to a server, users have to select which of the two kinds of servers they want to connect to. "UWAZI" is one of the three server types. -->
+  <string name="settings.docu_add.server_dialog.select_tella_uwazi">Uwazi</string>
   <!-- This is the explanation in the dialog where the users selects what server to connect to. -->
   <string name="settings.docu_add.server_dialog.expl">ನೀವು ಸಂಪರ್ಕಿಸಲು ಬಯಸುವ ಸರ್ವರ್ ಬಗೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ.</string>
   <!-- When connecting to a server, users have to select which of the two kinds of servers they want to connect to. "Direct Upload" is one of the two server types. -->

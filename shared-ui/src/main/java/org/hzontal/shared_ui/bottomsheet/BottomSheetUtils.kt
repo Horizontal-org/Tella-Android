@@ -163,6 +163,7 @@ BottomSheetUtils {
         lateinit var cancelButton: ImageView
         lateinit var buttonOne: TextView
         lateinit var buttonTwo: TextView
+        lateinit var buttonThree: TextView
         lateinit var title: TextView
         lateinit var description: TextView
 
@@ -170,6 +171,7 @@ BottomSheetUtils {
             cancelButton = view.findViewById(R.id.standard_sheet_cancel_btn)
             buttonOne = view.findViewById(R.id.sheet_one_btn)
             buttonTwo = view.findViewById(R.id.sheet_two_btn)
+            buttonThree = view.findViewById(R.id.sheet_three_btn)
             title = view.findViewById(R.id.standard_sheet_title)
             description = view.findViewById(R.id.standard_sheet_content)
         }
@@ -186,6 +188,7 @@ BottomSheetUtils {
         descriptionText: String?,
         buttonOneLabel: String? = null,
         buttonTwoLabel: String? = null,
+        buttonThreeLabel: String? = null,
         consumer: DualChoiceConsumer? = null
     ) {
 
@@ -206,6 +209,9 @@ BottomSheetUtils {
                     buttonTwoLabel?.let {
                         buttonTwo.text = it
                     }
+                    buttonThreeLabel?.let {
+                        buttonThree.text = it
+                    }
 
                     buttonOne.setOnClickListener {
                         consumer?.accept(true)
@@ -213,6 +219,11 @@ BottomSheetUtils {
                     }
 
                     buttonTwo.setOnClickListener {
+                        consumer?.accept(false)
+                        customSheetFragment.dismiss()
+                    }
+
+                    buttonThree.setOnClickListener {
                         consumer?.accept(false)
                         customSheetFragment.dismiss()
                     }

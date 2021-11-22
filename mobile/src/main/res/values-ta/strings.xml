@@ -572,8 +572,12 @@ This is one of the two options available. -->
   <string name="settings.docu_auto.upload.server.selection_dialog.expl">கோப்புகளை எந்த சேவையகத்தில் பதிவேற்ற விரும்புகிறீர்கள்?</string>
   <!-- The title of the dialog where the user selects the type of server they want to connect to. -->
   <string name="settings.serv_add.server.selection_dialog.title">எந்த வகை சேவையகம்?</string>
-  <!-- When connecting to a server, users have to select which of the two kinds of servers they want to connect to. "Open Data Kit" is one of the two server types. -->
+  <!-- When connecting to a server, users have to select which of the three kinds of servers they want to connect to. "Open Data Kit" is one of the two server types. -->
   <string name="settings.docu_add.server_dialog.select_odk">திறந்த தரவு கிட் (ஓபென் டேட்டா கிட் - ODK)</string>
+  <!-- When connecting to a server, users have to select which of the three kinds of servers they want to connect to. "TELLA WEB" is one of the three server types. -->
+  <string name="settings.docu_add.server_dialog.select_tella_web">Tella WEB</string>
+  <!-- When connecting to a server, users have to select which of the three kinds of servers they want to connect to. "UWAZI" is one of the three server types. -->
+  <string name="settings.docu_add.server_dialog.select_tella_uwazi">Uwazi</string>
   <!-- This is the explanation in the dialog where the users selects what server to connect to. -->
   <string name="settings.docu_add.server_dialog.expl">நீங்கள் இணைக்க விரும்பும் சேவையக வகையைத் தேர்ந்தெடுக்கவும். உங்களுக்குத் தெரியாவிட்டால், உங்கள் நிறுவனத்திடம் கேளுங்கள்.</string>
   <!-- When connecting to a server, users have to select which of the two kinds of servers they want to connect to. "Direct Upload" is one of the two server types. -->

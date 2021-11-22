@@ -316,6 +316,8 @@
   <string name="settings.docu_auto.upload.server.selection_dialog.expl">¿A qué servidor te gustaría subir los archivos?</string>
   <string name="settings.serv_add.server.selection_dialog.title">¿Qué tipo de servidor?</string>
   <string name="settings.docu_add.server_dialog.select_odk">Open Data Kit (ODK)</string>
+  <string name="settings.docu_add.server_dialog.select_tella_web">Tella WEB</string>
+  <string name="settings.docu_add.server_dialog.select_tella_uwazi">Uwazi</string>
   <string name="settings.docu_add.server_dialog.expl">Selecciona el tipo de servidor al que deseas conectarte. Si no estás seguro, consulta con tu organización.</string>
   <string name="settings.docu_add.server_dialog.select_tus">Subida directa</string>
   <string name="settings.docu_connect.to.servers_enable_action">Conectar a servidores</string>

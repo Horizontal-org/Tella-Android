@@ -313,6 +313,8 @@
   <string name="settings.docu_auto.upload.server.selection_dialog.expl">ဘယ်ဆာဗာကိုဖိုင်တွေတင်ချင်ပါသလဲ။</string>
   <string name="settings.serv_add.server.selection_dialog.title">ဘယ်ဆာဗာအမျိုးအစားလဲ။</string>
   <string name="settings.docu_add.server_dialog.select_odk">ပွင့်လင်းဒေတာကိရိယာအစုံ</string>
+  <string name="settings.docu_add.server_dialog.select_tella_web">Tella WEB</string>
+  <string name="settings.docu_add.server_dialog.select_tella_uwazi">Uwazi</string>
   <string name="settings.docu_add.server_dialog.expl">သင်ဆက်သွယ်လိုသော ဆာဗာအမျိုးအစားကိုရွေးချယ်ပါ။  သင်မသေချာပါကသင့်အဖွဲ့အစည်းကိုမေးမြန်းပါ။</string>
   <string name="settings.docu_add.server_dialog.select_tus">တိုက်ရိုက်တင်ပါ</string>
   <string name="settings.docu_connect.to.servers_enable_action">ဆာဗာများနှင့်ချိတ်ဆက်ပါ</string>

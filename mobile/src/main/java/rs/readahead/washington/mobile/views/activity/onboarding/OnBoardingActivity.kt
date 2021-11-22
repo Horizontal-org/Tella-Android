@@ -10,8 +10,6 @@ import androidx.core.view.get
 import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.IS_ONBOARD_LOCK_SET
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.DualChoiceConsumer
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showDualChoiceTypeSheet
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/wa_purple"
+    android:background="@color/space_cadet"
     app:behavior_hideable="true"
     android:padding="21dp">
 
@@ -67,6 +67,22 @@
         tools:ignore="RtlSymmetry" />
 
     <TextView
+        android:id="@+id/standard_sheet_content_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/server_icon"
+        android:gravity="center"
+        android:paddingStart="12dp"
+        tools:text="Add Server"
+        android:layout_marginTop="40dp"
+        android:textColor="@color/wa_white"
+        android:fontFamily="@font/open_sans"
+        android:textSize="21sp"
+        tools:ignore="RtlSymmetry" />
+
+    <TextView
         android:id="@+id/sheet_one_btn"
         android:layout_width="match_parent"
         android:layout_height="54dp"
@@ -102,5 +118,22 @@
         android:fontFamily="@font/open_sans"
         android:textSize="18sp"/>
 
+    <TextView
+        android:id="@+id/sheet_three_btn"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sheet_two_btn"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        android:background="@drawable/round_button_selector"
+        android:layout_marginTop="20dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textStyle="bold"
+        android:textColor="@color/wa_white"
+        android:fontFamily="@font/open_sans"
+        android:textSize="18sp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
