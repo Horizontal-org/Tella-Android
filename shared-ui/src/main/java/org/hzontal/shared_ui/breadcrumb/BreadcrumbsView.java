@@ -1,5 +1,7 @@
 package org.hzontal.shared_ui.breadcrumb;
 
+import static org.hzontal.shared_ui.BuildConfig.LIBRARY_PACKAGE_NAME;
+
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
@@ -14,7 +16,6 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.hzontal.shared_ui.BuildConfig;
 import org.hzontal.shared_ui.R;
 import org.hzontal.shared_ui.breadcrumb.model.IBreadcrumbItem;
 
@@ -40,8 +41,8 @@ public class BreadcrumbsView extends FrameLayout {
 	private int mTextPadding;
 	private int mHomeIcon;
 
-    private static final String KEY_SUPER_STATES = BuildConfig.APPLICATION_ID + ".superStates";
-    private static final String KEY_BREADCRUMBS = BuildConfig.APPLICATION_ID + ".breadcrumbs";
+    private static final String KEY_SUPER_STATES = LIBRARY_PACKAGE_NAME + ".superStates";
+    private static final String KEY_BREADCRUMBS = LIBRARY_PACKAGE_NAME + ".breadcrumbs";
 
 	public BreadcrumbsView(Context context) {
 		this(context, null);

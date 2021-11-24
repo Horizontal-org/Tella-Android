@@ -1,5 +1,7 @@
 package com.hzontal.provider;
 
+import static com.hzontal.tella_vault.BuildConfig.LIBRARY_PACKAGE_NAME;
+
 import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
@@ -42,7 +44,7 @@ import timber.log.Timber;
 
 public class VaultProvider  extends FileProvider {
 
-    public static final String AUTHORITY = BuildConfig.APPLICATION_ID + "." + "VaultProvider";
+    public static final String AUTHORITY = LIBRARY_PACKAGE_NAME + "." + "VaultProvider";
 
     public static final int IV_SIZE = 16;
 

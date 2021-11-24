@@ -166,6 +166,10 @@ BottomSheetUtils {
         lateinit var buttonThree: TextView
         lateinit var title: TextView
         lateinit var description: TextView
+        lateinit var nextButton: TextView
+        lateinit var backButton: TextView
+        lateinit var descriptionContent: TextView
+
 
         override fun bindView(view: View) {
             cancelButton = view.findViewById(R.id.standard_sheet_cancel_btn)
@@ -174,6 +178,9 @@ BottomSheetUtils {
             buttonThree = view.findViewById(R.id.sheet_three_btn)
             title = view.findViewById(R.id.standard_sheet_title)
             description = view.findViewById(R.id.standard_sheet_content)
+            descriptionContent = view.findViewById(R.id.standard_sheet_content_description)
+            nextButton = view.findViewById(R.id.back_btn)
+            backButton = view.findViewById(R.id.next_btn)
         }
     }
 
@@ -186,6 +193,9 @@ BottomSheetUtils {
         fragmentManager: FragmentManager,
         titleText: String?,
         descriptionText: String?,
+        descriptionContentText: String?,
+        backText: String?,
+        nextText: String?,
         buttonOneLabel: String? = null,
         buttonTwoLabel: String? = null,
         buttonThreeLabel: String? = null,
@@ -203,6 +213,9 @@ BottomSheetUtils {
                 with(holder) {
                     title.text = titleText
                     description.text = descriptionText
+                    backButton.text = backText
+                    nextButton.text = nextText
+                    descriptionContent.text = descriptionContentText
                     buttonOneLabel?.let {
                         buttonOne.text = it
                     }
@@ -231,6 +244,7 @@ BottomSheetUtils {
                     cancelButton.setOnClickListener {
                         customSheetFragment.dismiss()
                     }
+
                 }
             }
         })
