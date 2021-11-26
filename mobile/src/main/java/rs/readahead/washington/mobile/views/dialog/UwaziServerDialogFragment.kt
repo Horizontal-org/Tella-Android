@@ -30,8 +30,8 @@ import timber.log.Timber
 private const val TITLE_KEY = "tk"
 private const val ID_KEY = "ik"
 private const val OBJECT_KEY = "ok"
-class UwaziServerDialogFragment  : AppCompatDialogFragment() {
-    val TAG = TellaUploadServerDialogFragment::class.java.simpleName
+public class UwaziServerDialogFragment  : AppCompatDialogFragment() {
+    val TAG = UwaziServerDialogFragment::class.java.simpleName
     private var unbinder: Unbinder? = null
     private var validated = true
     private var presenter: CheckTUSServerPresenter? = null
@@ -43,7 +43,6 @@ class UwaziServerDialogFragment  : AppCompatDialogFragment() {
         fun onTellaUploadServerDialogUpdate(server: TellaUploadServer?)
         fun onDialogDismiss()
     }
-
 
     fun newInstance(server: TellaUploadServer?): TellaUploadServerDialogFragment? {
         val frag = TellaUploadServerDialogFragment()
@@ -64,14 +63,13 @@ class UwaziServerDialogFragment  : AppCompatDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        assert(arguments != null)
-        val serverId = requireArguments().getLong(ID_KEY, 0)
-        val obj: Any? = requireArguments().getSerializable(OBJECT_KEY)
+       // val serverId = requireArguments().getLong(ID_KEY, 0)
+        //val obj: Any? = requireArguments().getSerializable(OBJECT_KEY)
         binding = DialogCollectServerBinding.inflate(layoutInflater)
         val dialogView = binding.root
         unbinder = ButterKnife.bind(this, dialogView)
        // presenter = CheckTUSServerPresenter(this)
-        if (obj != null) {
+     /*   if (obj != null) {
             val server = obj as TellaUploadServer
             binding.name.setText(server.name)
             binding.url.setText(server.url)
@@ -80,7 +78,7 @@ class UwaziServerDialogFragment  : AppCompatDialogFragment() {
                 binding.username.setText(server.username)
                 binding.password.setText(server.password)
             }
-        }
+        }*/
         binding.toggleButton.setOnStateChangedListener { open: Boolean -> maybeShowAdvancedPanel() }
         maybeShowAdvancedPanel()
         binding.cancel.setOnClickListener { dismissDialog() }
@@ -88,7 +86,7 @@ class UwaziServerDialogFragment  : AppCompatDialogFragment() {
         binding.next.setOnClickListener {
             validate()
             if (validated) {
-                checkServer(copyFields(TellaUploadServer(serverId)), false)
+              //  checkServer(copyFields(TellaUploadServer(serverId)), false)
             }
         }
         return dialogView

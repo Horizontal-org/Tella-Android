@@ -78,26 +78,20 @@
         android:layout_marginTop="16dp"
         tools:ignore="RtlSymmetry" />
 
-    <TextView
+    <org.hzontal.shared_ui.buttons.RoundButton
         android:id="@+id/sheet_one_btn"
         android:layout_width="match_parent"
         android:layout_height="54dp"
+        app:text="knjkenkk"
+        android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/standard_sheet_content_description"
         app:layout_constraintBottom_toTopOf="@id/sheet_two_btn"
         app:layout_constraintHorizontal_chainStyle="packed"
-        android:background="@drawable/round_button_selector"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:textStyle="bold"
-        android:textColor="@color/wa_white"
-        android:fontFamily="@font/open_sans"
-        android:textSize="18sp"/>
+        app:check_state="false" />
 
-    <TextView
+    <org.hzontal.shared_ui.buttons.RoundButton
         android:id="@+id/sheet_two_btn"
         android:layout_width="match_parent"
         android:layout_height="54dp"
@@ -107,34 +101,21 @@
         app:layout_constraintTop_toBottomOf="@+id/sheet_one_btn"
         app:layout_constraintBottom_toTopOf="@id/sheet_three_btn"
         app:layout_constraintHorizontal_chainStyle="packed"
-        android:background="@drawable/round_button_selector"
         android:layout_marginTop="16dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:textStyle="bold"
-        android:textColor="@color/wa_white"
-        android:fontFamily="@font/open_sans"
-        android:textSize="18sp"/>
+        app:check_state="false"
+        />
 
-    <TextView
+    <org.hzontal.shared_ui.buttons.RoundButton
         android:id="@+id/sheet_three_btn"
         android:layout_width="match_parent"
         android:layout_height="54dp"
-        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sheet_two_btn"
         app:layout_constraintHorizontal_chainStyle="packed"
-        android:background="@drawable/round_button_selector"
         android:layout_marginTop="16dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:textStyle="bold"
-        android:textColor="@color/wa_white"
-        android:fontFamily="@font/open_sans"
-        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:check_state="false" />
 
     <TextView
         style="@style/Tella_Main_White_Text"

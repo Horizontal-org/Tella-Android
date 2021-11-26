@@ -9,6 +9,7 @@ import android.widget.*
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.fragment.app.FragmentManager
 import org.hzontal.shared_ui.R
+import org.hzontal.shared_ui.buttons.RoundButton
 import org.hzontal.shared_ui.utils.DialogUtils
 
 object
@@ -161,9 +162,9 @@ BottomSheetUtils {
 
     class DualChoiceSheetHolder : CustomBottomSheetFragment.PageHolder() {
         lateinit var cancelButton: ImageView
-        lateinit var buttonOne: TextView
-        lateinit var buttonTwo: TextView
-        lateinit var buttonThree: TextView
+        lateinit var buttonOne: RoundButton
+        lateinit var buttonTwo: RoundButton
+        lateinit var buttonThree: RoundButton
         lateinit var title: TextView
         lateinit var description: TextView
         lateinit var nextButton: TextView
@@ -179,15 +180,19 @@ BottomSheetUtils {
             title = view.findViewById(R.id.standard_sheet_title)
             description = view.findViewById(R.id.standard_sheet_content)
             descriptionContent = view.findViewById(R.id.standard_sheet_content_description)
-            nextButton = view.findViewById(R.id.back_btn)
-            backButton = view.findViewById(R.id.next_btn)
+            nextButton = view.findViewById(R.id.next_btn)
+            backButton = view.findViewById(R.id.back_btn)
         }
     }
 
     interface DualChoiceConsumer {
         fun accept(option: Boolean)
     }
-
+    interface IServerChoiceActions{
+        fun addODKServer()
+        fun addTellaWebServer()
+        fun addUwaziServer()
+    }
     @JvmStatic
     fun showDualChoiceTypeSheet(
         fragmentManager: FragmentManager,
@@ -199,7 +204,7 @@ BottomSheetUtils {
         buttonOneLabel: String? = null,
         buttonTwoLabel: String? = null,
         buttonThreeLabel: String? = null,
-        consumer: DualChoiceConsumer? = null
+        consumer: IServerChoiceActions
     ) {
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
@@ -216,36 +221,50 @@ BottomSheetUtils {
                     backButton.text = backText
                     nextButton.text = nextText
                     descriptionContent.text = descriptionContentText
-                    buttonOneLabel?.let {
-                        buttonOne.text = it
-                    }
-                    buttonTwoLabel?.let {
-                        buttonTwo.text = it
-                    }
-                    buttonThreeLabel?.let {
-                        buttonThree.text = it
-                    }
+                    buttonOne.setText(buttonOneLabel)
+                    buttonTwo.setText(buttonTwoLabel)
+                    buttonThree.setText(buttonThreeLabel)
 
                     buttonOne.setOnClickListener {
-                        consumer?.accept(true)
-                        customSheetFragment.dismiss()
+                        buttonOne.isChecked = true
+                        buttonTwo.isChecked = false
+                        buttonThree.isChecked = false
                     }
 
                     buttonTwo.setOnClickListener {
-                        consumer?.accept(false)
-                        customSheetFragment.dismiss()
+                        buttonOne.isChecked = false
+                        buttonTwo.isChecked = true
+                        buttonThree.isChecked = false
                     }
 
                     buttonThree.setOnClickListener {
-                        consumer?.accept(false)
-                        customSheetFragment.dismiss()
+                        buttonOne.isChecked = false
+                        buttonTwo.isChecked = false
+                        buttonThree.isChecked = true
                     }
 
                     cancelButton.setOnClickListener {
                         customSheetFragment.dismiss()
                     }
+                    backButton.setOnClickListener {
+                        customSheetFragment.dismiss()
+                    }
+                    nextButton.setOnClickListener {
+                        when {
+                            buttonOne.isChecked -> {
+                                consumer.addODKServer()
+                            }
+                            buttonTwo.isChecked -> {
+                                consumer.addTellaWebServer()
+                            }
+                            else -> {
+                                consumer.addUwaziServer()
+                            }
+                        }
+                    }
 
                 }
+
             }
         })
 

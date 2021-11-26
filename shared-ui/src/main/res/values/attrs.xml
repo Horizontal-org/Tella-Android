@@ -14,7 +14,10 @@
         <attr name="rightImg" format="reference" />
     </declare-styleable>
 
-
+    <declare-styleable name="RoundButton">
+        <attr name="text" format="reference|string" />
+        <attr name="check_state" format="boolean"/>
+    </declare-styleable>
 
     <declare-styleable name="TellaSwitchWithMessage">
         <attr name="titleText" format="reference|string" />

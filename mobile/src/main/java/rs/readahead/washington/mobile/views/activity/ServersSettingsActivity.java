@@ -44,6 +44,7 @@ import rs.readahead.washington.mobile.domain.entity.ServerType;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragment;
+import rs.readahead.washington.mobile.views.dialog.UwaziServerDialogFragment;
 import timber.log.Timber;
 
 
@@ -321,13 +322,23 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 getString(R.string.settings_docu_add_server_dialog_select_odk),
                 getString(R.string.settings_docu_add_server_dialog_select_tella_web),
                 getString(R.string.settings_docu_add_server_dialog_select_tella_uwazi),
-                isCollectServer -> {
-                    if (isCollectServer) {
-                        showCollectServerDialog(null);
-                    } else {
+                new BottomSheetUtils.IServerChoiceActions() {
+                    @Override
+                    public void addUwaziServer() {
+                        showUwaziServerDialog();
+                    }
+
+                    @Override
+                    public void addTellaWebServer() {
                         showTellaUploadServerDialog(null);
                     }
-                });
+
+                    @Override
+                    public void addODKServer() {
+                        showCollectServerDialog(null);
+                    }
+                }
+        );
     }
 
     private void showChooseAutoUploadServerDialog(List<TellaUploadServer>  tellaUploadServers) {
@@ -422,6 +433,10 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     private void showTellaUploadServerDialog(@Nullable TellaUploadServer server) {
         TellaUploadServerDialogFragment.newInstance(server)
                 .show(getSupportFragmentManager(), TellaUploadServerDialogFragment.TAG);
+    }
+
+    private void showUwaziServerDialog() {
+        new UwaziServerDialogFragment().show(getSupportFragmentManager(), TellaUploadServerDialogFragment.TAG);
     }
 
     private void stopPresenting() {
