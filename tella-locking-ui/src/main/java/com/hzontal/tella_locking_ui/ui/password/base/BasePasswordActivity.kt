@@ -8,7 +8,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.constraintlayout.widget.Guideline
 import androidx.core.content.ContextCompat
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.common.BaseActivity
@@ -46,7 +45,7 @@ abstract class BasePasswordActivity : BaseActivity(), View.OnClickListener, OnVa
         passwordRightButton = findViewById(R.id.password_right_button)
         enterPasswordTextView = findViewById(R.id.password_enterTV)
         passwordMsgTextView = findViewById(R.id.password_msgTV)
-        passwordLeftButton.text = if(isFromSettings) getString(R.string.pl_cancel) else getString(R.string.pl_back)
+        passwordLeftButton.text = if(isFromSettings) getString(R.string.LockSelect_Action_Cancel) else getString(R.string.LockSelect_Action_Back)
     }
 
     private fun initListeners() {

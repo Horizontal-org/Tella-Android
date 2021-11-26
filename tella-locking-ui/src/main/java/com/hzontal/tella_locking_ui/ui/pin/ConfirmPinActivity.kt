@@ -16,8 +16,8 @@ class ConfirmPinActivity  : BasePinActivity() {
     private val mConfirmPin by lazy { intent.getStringExtra(CONFIRM_PIN) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        pinTopText.text = getString(R.string.confirm_pin)
-        pinMsgText.text = getString(R.string.confirm_pin_msg)
+        pinTopText.text = getString(R.string.LockPinSet_Message_Confirm)
+        pinMsgText.text = getString(R.string.LockPinConfirm_Message_Confirm)
     }
 
     override fun onSuccessSetPin(pin: String?) {
@@ -39,7 +39,7 @@ class ConfirmPinActivity  : BasePinActivity() {
            })
         }
        else{
-            onFailureSetPin(getString(R.string.confirm_pin_error_msg))
+            onFailureSetPin(getString(R.string.LockPinConfirm_Message_Error_TryAgain))
        }
     }
 

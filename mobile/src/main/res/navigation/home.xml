@@ -46,7 +46,7 @@
     <fragment
         android:id="@+id/info_screen"
         android:name="rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment"
-        android:label="@string/vault_file_info"
+        android:label="@string/Vault_FileInfo"
         tools:layout="@layout/fragment_vault_attachments">
     </fragment>
 

@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:arrowBackIcon="@drawable/ic_back_white"
-            app:startTitle="@string/vault_file_info"/>
+            app:startTitle="@string/Vault_FileInfo"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <TextView
@@ -30,7 +30,7 @@
         app:layout_constraintTop_toBottomOf="@id/appbar"
         app:layout_constraintStart_toStartOf="parent"
         android:paddingHorizontal="@dimen/tella_main_vertical"
-        android:text="@string/vault_file_info"
+        android:text="@string/Vault_FileInfo"
         android:id="@+id/fileInfoLabelTv"
         android:layout_marginTop="20dp"
         />
@@ -55,7 +55,7 @@
         app:layout_constraintTop_toBottomOf="@id/fileInfoLabelTv"
         app:layout_constraintStart_toStartOf="parent"
         android:paddingHorizontal="@dimen/tella_main_vertical"
-        android:text="@string/vault_file_size"
+        android:text="@string/Vault_FileSize"
         android:id="@+id/fileSizeLabelTv"
         android:layout_marginTop="12dp"
         />
@@ -79,7 +79,7 @@
         app:layout_constraintTop_toBottomOf="@id/fileSizeLabelTv"
         app:layout_constraintStart_toStartOf="parent"
         android:paddingHorizontal="@dimen/tella_main_vertical"
-        android:text="@string/vault_file_format"
+        android:text="@string/Vault_FileFormat"
         android:id="@+id/fileFormatLabelTv"
         android:layout_marginTop="12dp"
         />
@@ -103,7 +103,7 @@
         app:layout_constraintTop_toBottomOf="@id/fileFormatLabelTv"
         app:layout_constraintStart_toStartOf="parent"
         android:paddingHorizontal="@dimen/tella_main_vertical"
-        android:text="@string/vault_file_created"
+        android:text="@string/Vault_FileCreated"
         android:id="@+id/fileCreatedLabelTv"
         android:layout_marginTop="12dp"
         />
@@ -127,7 +127,7 @@
         app:layout_constraintTop_toBottomOf="@id/fileCreatedLabelTv"
         app:layout_constraintStart_toStartOf="parent"
         android:paddingHorizontal="@dimen/tella_main_vertical"
-        android:text="@string/vault_file_resolution"
+        android:text="@string/Vault_FileResolution"
         android:id="@+id/fileResolutionLabelTv"
         android:layout_marginTop="12dp"
         />
@@ -151,7 +151,7 @@
         app:layout_constraintTop_toBottomOf="@id/fileResolutionLabelTv"
         app:layout_constraintStart_toStartOf="parent"
         android:paddingHorizontal="@dimen/tella_main_vertical"
-        android:text="@string/vault_file_length"
+        android:text="@string/Vault_FileLength"
         android:id="@+id/fileLengthLabelTv"
         android:layout_marginTop="12dp"
         />
@@ -175,8 +175,7 @@
         app:layout_constraintTop_toBottomOf="@id/fileLengthLabelTv"
         app:layout_constraintStart_toStartOf="parent"
         android:paddingHorizontal="@dimen/tella_main_vertical"
-        android:text="@string/vault_file_path"
-        android:id="@+id/filePathLabelTv"
+        android:text="@string/Vault_FilePath"
         android:layout_marginTop="12dp"
         />
     <TextView

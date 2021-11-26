@@ -27,7 +27,6 @@
                 android:text="@string/collect.help_expl_intro" />
 
             <LinearLayout
-                android:id="@+id/collect_server_help"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -48,7 +47,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/odk_forms_help"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -69,7 +67,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/connected_help"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"

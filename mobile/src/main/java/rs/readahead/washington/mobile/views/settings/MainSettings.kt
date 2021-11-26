@@ -24,12 +24,6 @@ class MainSettings : BaseFragment() {
     override fun initView(view: View) {
         (activity as OnFragmentSelected?)?.setToolbarLabel(string.settings_app_bar)
 
-        val offlineSwitch = view.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.offline_switch)
-        offlineSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
-            Preferences.setOfflineMode(isChecked)
-        }
-        offlineSwitch.setChecked(Preferences.isOfflineMode())
-
         view.findViewById<View>(R.id.general_settings_button).setOnClickListener {
             nav().navigate(R.id.action_main_to_general_settings)
         }
@@ -45,15 +39,6 @@ class MainSettings : BaseFragment() {
         view.findViewById<View>(R.id.about_n_help_settings_button).setOnClickListener {
             nav().navigate(R.id.action_main_settings_to_about_n_help_settings)
         }
-
-        val offlineTooltip = view.findViewById<ImageView>(R.id.offline_tooltip)
-        offlineTooltip.setOnClickListener({
-            showTooltip(
-                    offlineTooltip,
-                    resources.getString(R.string.offline_dialog_expl),
-                    Gravity.BOTTOM
-            )
-        })
     }
 
 }

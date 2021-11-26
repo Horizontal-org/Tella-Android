@@ -22,7 +22,6 @@
         app:layout_constraintGuide_percent="0.95" />
 
     <ImageView
-        android:id="@+id/camera_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/hide_tella_big_margin"
@@ -67,7 +66,6 @@
         tools:ignore="RtlSymmetry" />
 
     <ImageView
-        android:id="@+id/check_icon"
         android:layout_width="wrap_content"
         android:layout_height="82dp"
         android:layout_marginBottom="@dimen/hide_tella_big_margin"
@@ -83,7 +81,7 @@
         style="@style/Unlock_White_Text_Back"
         android:id="@+id/back_btn"
         android:visibility="gone"
-        android:text="@string/pl_back"
+        android:text="@string/LockSelect_Action_Back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />

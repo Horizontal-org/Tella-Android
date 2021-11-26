@@ -157,7 +157,7 @@
             android:layout_marginTop="40dp"
             android:gravity="center"
             android:textColor="@color/wa_white_88"
-            android:text="@string/vault_empty_msg" />
+            android:text="@string/Vault_Empty_Msg" />
     </LinearLayout>
 
     <LinearLayout
@@ -179,7 +179,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center_horizontal|center_vertical"
-            android:text="@string/pl_cancel"
+            android:text="@string/action_cancel"
             android:textAllCaps="true" />
 
         <View
@@ -196,7 +196,7 @@
             android:layout_marginStart="1dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/vault_move_here"
+            android:text="@string/Vault_MoveHere"
             android:textAllCaps="true"
             android:textColor="@color/wa_white_12" />
 

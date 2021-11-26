@@ -375,21 +375,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 isConfirmed -> collectServersPresenter.remove(server));
     }
 
-    private void removeTUServer(final TellaUploadServer server) {
-        BottomSheetUtils.showConfirmSheet(
-                this.getSupportFragmentManager(),
-                String.format(getResources().getString(R.string.settings_servers_delete_server_dialog_title), server.getName()),
-                getString(R.string.settings_docu_delete_upload_server_dialog_expl),
-                getString(R.string.action_delete),
-                getString(R.string.action_cancel),
-                isConfirmed -> {
-                    tellaUploadServersPresenter.remove(server);
-                    if (server.getId() == serversPresenter.getAutoUploadServerId()) {
-                        turnOffAutoUpload();
-                    }
-                });
-    }
-
     private void turnOffAutoUpload() {
         autoUploadSwitch.setChecked(false);
         serversPresenter.removeAutoUploadServersSettings();

@@ -58,7 +58,6 @@ class MicFragment : MetadataBaseLockFragment(),
 
     // recording
     private val presenter by lazy { AudioCapturePresenter(this) }
-    private val uploadPresenter by lazy { TellaFileUploadSchedulePresenter(this) }
 
     private val bundle by lazy { Bundle() }
 

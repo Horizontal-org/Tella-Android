@@ -10,7 +10,6 @@ import rs.readahead.washington.mobile.mvp.contract.IBasePresenter;
 public interface IFormReSubmitterContract {
     interface IView {
         void formReSubmitError(Throwable error);
-        void formResubmitOfflineMode();
         void formReSubmitNoConnectivity();
         void formPartResubmitStart(CollectFormInstance instance, String partName);
         void formPartUploadProgress(String partName, float pct);
