@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/hide_tella_big_margin"
-        android:src="@drawable/lock_bg"
+        android:src="@drawable/lock_bg_s"
         android:textColor="@color/wa_white"
         app:layout_constraintBottom_toTopOf="@+id/sheet_title"
         app:layout_constraintEnd_toEndOf="parent"
@@ -69,7 +69,8 @@
     <ImageView
         android:id="@+id/check_icon"
         android:layout_width="wrap_content"
-        android:layout_height="82dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="24dp"
         android:layout_marginBottom="@dimen/hide_tella_big_margin"
         android:src="@drawable/checked_circle"
         android:textColor="@color/wa_white"
