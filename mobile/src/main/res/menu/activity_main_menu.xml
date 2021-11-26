@@ -10,12 +10,6 @@
         tools:ignore="AlwaysShowAction" />
 
     <item
-        android:id="@+id/nav_offline_mode"
-        android:icon="@drawable/ic_cloud_queue_white_24dp"
-        android:title="@string/collect.form_action.desc_offline"
-        app:showAsAction="never"/>
-
-    <item
         android:id="@+id/nav_settings"
         android:icon="@drawable/ic_settings_white"
         android:title="@string/settings_app.bar"

@@ -1030,7 +1030,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     private fun maybeShowUploadIcon(menu: Menu) {
-        menu.findItem(R.id.action_upload).isVisible = Preferences.isOfflineMode()
+        menu.findItem(R.id.action_upload).isVisible = false
     }
 
     override fun onResume() {

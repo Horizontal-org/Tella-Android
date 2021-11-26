@@ -62,7 +62,7 @@ public class TellaUploadJob extends Job {
             return Result.SUCCESS;
         }
 
-        if (Preferences.isAutoUploadPaused() || Preferences.isOfflineMode()) {
+        if (Preferences.isAutoUploadPaused()) {
             return exit(Result.RESCHEDULE);
         }
 

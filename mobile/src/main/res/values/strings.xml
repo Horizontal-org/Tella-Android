@@ -241,15 +241,11 @@
     <string name="settings.prot_select_delete.forms">Delete draft and submitted forms</string>
     <string name="settings.prot_select_delete.servers">Delete server settings</string>
     <string name="settings.prot_select_delete.app">Delete Tella</string>
-    <string name="offline_dialog.title">Offline Mode</string>
-    <string name="offline_dialog.expl">In Offline Mode, all data is saved for later submission. It\'s useful to save cellular data or if you have a bad connection. Disable when you\'re ready to submit forms.</string>
-    <string name="collect.form_action.desc_offline">Offline Mode</string>
     <string name="collect.sent_action_edit.to.resend">Edit to resend</string>
     <string name="collect_toast_form.submitted">Form submitted</string>
     <string name="collect.end_heading_confirmation.form.submitted">Form submitted</string>
     <string name="settings.docu_add.server_field_password">Password</string>
     <string name="settings.camo_error_fail.retrieve.app.name">App</string>
-    <string name="collect.end_toast_saved.for.later">The form was saved for later submission because Offline Mode is activated</string>
     <string name="collect.end_item_form.data">Form responses</string>
     <string name="collect_toast_fail.loading.form.instance">There was an error loading the form. Please try again</string>
     <string name="collect_toast_fail.connection.too.weak">Your internet connection is too weak to send the form. Please try again</string>
