@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.50" />
+        app:layout_constraintGuide_percent="0.57" />
 
     <ImageView
         android:id="@+id/server_icon"
@@ -25,7 +25,7 @@
         android:paddingStart="32dp"
         android:paddingEnd="0dp"
         android:layout_marginBottom="24dp"
-        android:src="@drawable/ic_onboard_finish"
+        android:src="@drawable/ic_welcome"
         android:textColor="@color/wa_white"
         tools:ignore="ContentDescription" />
 
@@ -36,13 +36,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/standard_sheet_content"
-        android:gravity="center"
-        android:textAlignment="center"
+        android:gravity="center_vertical"
         android:visibility="visible"
         android:textStyle="bold"
         android:paddingStart="12dp"
         android:paddingEnd="0dp"
-        android:text="@string/onboard.title_advanced_complete"
+        android:text="@string/onboard.intro_title"
         android:layout_marginBottom="8dp"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
@@ -60,7 +59,7 @@
         android:paddingStart="12dp"
         android:paddingEnd="0dp"
         android:visibility="visible"
-        android:text="@string/onboard.expl_all_done"
+        android:text="@string/intro_document_protect"
         android:layout_marginBottom="16dp"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
@@ -82,9 +81,31 @@
         android:paddingEnd="16dp"
         android:textStyle="bold"
         android:textAllCaps="true"
-        android:text="@string/onboard.go_btn_all_done"
+        android:text="@string/onboard.intro_get_started"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
         android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/sheet_two_btn"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/startBtn"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        android:background="@drawable/round_button_selector"
+        android:layout_marginTop="20dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:text="@string/onboard.intro_organization_code"
+        android:textColor="@color/wa_white"
+        android:fontFamily="@font/open_sans"
+        android:textSize="16sp"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
