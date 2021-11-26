@@ -32,10 +32,10 @@ public class SetPatternActivity extends BasePatternActivity
 
     private enum LeftButtonState {
 
-        Cancel(R.string.pl_back, true),
-        CancelDisabled(R.string.pl_back, false),
-        Redraw(R.string.pl_redraw, true),
-        RedrawDisabled(R.string.pl_redraw, false);
+        Cancel(R.string.LockSelect_Action_Back, true),
+        CancelDisabled(R.string.LockSelect_Action_Back, false),
+        Redraw(R.string.LockPatternSet_Action_Redraw, true),
+        RedrawDisabled(R.string.LockPatternSet_Action_Redraw, false);
 
         public final int textId;
         public final boolean enabled;
@@ -48,10 +48,10 @@ public class SetPatternActivity extends BasePatternActivity
 
     private enum RightButtonState {
 
-        Continue(R.string.pl_continue, true),
-        ContinueDisabled(R.string.pl_continue, false),
-        Confirm(R.string.pl_confirm, true),
-        ConfirmDisabled(R.string.pl_confirm, false);
+        Continue(R.string.LockSelect_Action_Continue, true),
+        ContinueDisabled(R.string.LockSelect_Action_Continue, false),
+        Confirm(R.string.LockSelect_Action_Confirm, true),
+        ConfirmDisabled(R.string.LockSelect_Action_Confirm, false);
 
         public final int textId;
         public final boolean enabled;
@@ -63,17 +63,17 @@ public class SetPatternActivity extends BasePatternActivity
     }
 
     protected enum Stage {
-        Draw(R.string.pl_pattern_too_short, LeftButtonState.Cancel, RightButtonState.ContinueDisabled,
+        Draw(R.string.UnlockPattern_PatternTooShort, LeftButtonState.Cancel, RightButtonState.ContinueDisabled,
                 true),
-        DrawTooShort(R.string.pl_pattern_too_short, LeftButtonState.Redraw,
+        DrawTooShort(R.string.UnlockPattern_PatternTooShort, LeftButtonState.Redraw,
                 RightButtonState.ContinueDisabled, true),
-        DrawValid(R.string.pl_pattern_too_short, LeftButtonState.Redraw, RightButtonState.Continue,
+        DrawValid(R.string.UnlockPattern_PatternTooShort, LeftButtonState.Redraw, RightButtonState.Continue,
                 false),
-        Confirm(R.string.pl_confirm_pattern, LeftButtonState.Cancel,
+        Confirm(R.string.LockPatternConfirm_Action_Confirm, LeftButtonState.Cancel,
                 RightButtonState.ConfirmDisabled, true),
-        ConfirmWrong(R.string.pl_wrong_pattern, LeftButtonState.Cancel,
+        ConfirmWrong(R.string.LockPatternConfirm_Message_WrongPattern, LeftButtonState.Cancel,
                 RightButtonState.ConfirmDisabled, true),
-        ConfirmCorrect(R.string.pl_pattern_confirmed, LeftButtonState.Cancel,
+        ConfirmCorrect(R.string.LockPatternConfirm_Pattern_Confirmed, LeftButtonState.Cancel,
                 RightButtonState.Confirm, false);
 
         public final int messageId;
@@ -223,7 +223,7 @@ public class SetPatternActivity extends BasePatternActivity
         }
         if (isFromSettings()) {
             if (newStage.leftButtonState == LeftButtonState.Cancel)
-                mLeftButton.setText(getString(R.string.pl_cancel));
+                mLeftButton.setText(getString(R.string.LockSelect_Action_Cancel));
             else mLeftButton.setText(mStage.leftButtonState.textId);
         } else {
             mLeftButton.setText(mStage.leftButtonState.textId);
@@ -246,7 +246,7 @@ public class SetPatternActivity extends BasePatternActivity
                 postClearPatternRunnable();
                 break;
             case ConfirmWrong:
-                DialogUtils.showBottomMessage(this, getString(R.string.pl_incorrect_confirm_pattern), false);
+                DialogUtils.showBottomMessage(this, getString(R.string.UnLockPattern_Message_IncorrectPattern), false);
                 mPatternView.setDisplayMode(PatternView.DisplayMode.Wrong);
                 postClearPatternRunnable();
                 break;

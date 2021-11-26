@@ -90,7 +90,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/Unlock_White_Text_Back"
-        android:text="@string/pl_back"
+        android:text="@string/LockSelect_Action_Back"
         android:id="@+id/cancelBtn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

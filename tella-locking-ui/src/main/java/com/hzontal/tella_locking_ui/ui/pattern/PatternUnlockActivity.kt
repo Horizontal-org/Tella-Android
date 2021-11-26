@@ -1,9 +1,7 @@
 package com.hzontal.tella_locking_ui.ui.pattern
 
 import android.os.Bundle
-import android.view.View
 import android.widget.ImageView
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.ReturnActivity
@@ -64,13 +62,13 @@ class PatternUnlockActivity : ConfirmPatternActivity() {
                 backBtn = findViewById(R.id.backBtn)
                 backBtn.isVisible = true
                 backBtn.setOnClickListener { finish() }
-                mMessageText.text = getString(R.string.settings_current_pattern_msg)
+                mMessageText.text = getString(R.string.LockPatternSet_Settings_DrawCurrentPattern)
             }
             ReturnActivity.CAMOUFLAGE.getActivityOrder() -> {
                 backBtn = findViewById(R.id.backBtn)
                 backBtn.isVisible = true
                 backBtn.setOnClickListener { finish() }
-                mMessageText.text = getString(R.string.settings_current_camo_pattern_msg)
+                mMessageText.text = getString(R.string.LockPatternSet_Settings_DrawCurrentPatternToChangeCamouflage)
             }
             else -> {
             }

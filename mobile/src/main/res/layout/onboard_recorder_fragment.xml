@@ -21,7 +21,6 @@
         app:layout_constraintGuide_percent="0.95" />
 
     <ImageView
-        android:id="@+id/recorder_icon"
         android:layout_width="79dp"
         android:layout_height="100dp"
         android:layout_marginBottom="@dimen/hide_tella_big_margin"
@@ -69,7 +68,7 @@
     <TextView
         android:id="@+id/back_btn"
         style="@style/Unlock_White_Text_Back"
-        android:text="@string/pl_back"
+        android:text="@string/LockSelect_Action_Back"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="34dp"
         app:layout_constraintBottom_toBottomOf="parent"

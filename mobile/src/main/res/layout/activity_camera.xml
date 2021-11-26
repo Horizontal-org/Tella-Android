@@ -9,7 +9,6 @@
     android:keepScreenOn="true">
 
     <RelativeLayout
-        android:id="@+id/top_camera_layout"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:paddingStart="16dp"
@@ -99,7 +98,6 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/buttonsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -128,7 +126,6 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/mode_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/camera_mode_links_margin"

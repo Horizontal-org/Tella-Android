@@ -127,8 +127,6 @@ dependencies {
     implementation 'com.simplify:ink:1.0.2'
     implementation 'com.mikhaellopez:circularimageview:3.2.0'
     implementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
-    implementation 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:3.2.0'
-    implementation 'com.github.lzyzsd:circleprogress:1.2.1'
 
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}"
 

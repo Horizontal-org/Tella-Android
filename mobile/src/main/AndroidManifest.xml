@@ -276,31 +276,7 @@
             </intent-filter>
             <nav-graph android:value="@navigation/settings_navigation"/>
         </activity>
-        <activity
-            android:name=".views.activity.CamouflageAliasActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:label="@string/settings.camo_app.bar"
-            android:parentActivityName=".views.activity.ProtectionSettingsActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="rs.readahead.washington.mobile.views.activity.ProtectionSettingsActivity" />
-        </activity>
-        <activity
-            android:name=".views.activity.AudioRecordActivity2"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:label="@string/recorder_app.bar"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".views.activity.ProtectionSettingsActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:label="@string/settings.prot_app.bar"
-            android:parentActivityName=".views.activity.SettingsActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="rs.readahead.washington.mobile.views.activity.SettingsActivity" />
-        </activity>
+
         <activity
             android:name=".views.activity.PatternUpgradeActivity"
             android:label="@string/title_activity_security"
@@ -375,35 +351,10 @@
             android:label="@string/collect.form_select.attachment_app.bar"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".views.activity.GalleryActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:label="@string/gallery_app.bar"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".views.activity.MetadataViewerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:label="@string/verification.info_app.bar"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".views.activity.UploadsActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:label="@string/home_upload.button"
-            android:parentActivityName=".views.activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="rs.readahead.washington.mobile.views.activity.MainActivity" />
-        </activity>
-        <activity
-            android:name=".views.activity.UploadInformationActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:label="@string/upload.info_app.bar"
-            android:parentActivityName=".views.activity.UploadsActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="rs.readahead.washington.mobile.views.activity.UploadsActivity" />
-        </activity>
         <activity
             android:name=".views.activity.MetadataHelpActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
@@ -418,32 +369,6 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:label="@string/play.audio_app.bar"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".views.activity.LanguageSettingsActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:label="@string/settings.lang_app.bar"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".views.activity.GeneralSettingsActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:label="@string/settings_select_general"
-            android:parentActivityName=".views.activity.SettingsActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="rs.readahead.washington.mobile.views.activity.SettingsActivity" />
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="open.general.settings.activity"
-                    android:scheme="tella_scheme" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".views.activity.VideoViewerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"

@@ -86,7 +86,6 @@ public class FormSubmitActivity extends BaseLockActivity implements
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
         getMenuInflater().inflate(R.menu.form_submit_menu, menu);
-        setOfflineMenuIcon(menu.findItem(R.id.offlineMenuItem), Preferences.isOfflineMode());
         enableMenuItems(menu);
         return true;
     }
@@ -105,14 +104,6 @@ public class FormSubmitActivity extends BaseLockActivity implements
                 } else {
                     finish();
                 }
-                return true;
-
-            case R.id.offlineMenuItem:
-                DialogsUtil.showOfflineSwitchDialog(this, offline -> {
-                    setOfflineMenuIcon(item, offline);
-                    updateFormSubmitButton(offline);
-                    refreshFormEndView(offline);
-                });
                 return true;
         }
 
@@ -168,13 +159,6 @@ public class FormSubmitActivity extends BaseLockActivity implements
         String errorMessage = FormUtils.getFormSubmitErrorMessage(this, error);
         Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
         MyApplication.bus().post(new CollectFormSubmissionErrorEvent());
-        finish();
-    }
-
-    @Override
-    public void formResubmitOfflineMode() {
-        Toast.makeText(this, R.string.collect_end_toast_saved_for_later, Toast.LENGTH_LONG).show();
-        MyApplication.bus().post(new CollectFormSubmittedEvent());
         finish();
     }
 
@@ -238,7 +222,7 @@ public class FormSubmitActivity extends BaseLockActivity implements
 
     @Override
     public void submissionStoppedByUser() {
-        showFormEndView(Preferences.isOfflineMode());
+        showFormEndView(false);
         showFormSubmitButton();
         hideFormCancelButton();
     }
@@ -246,7 +230,7 @@ public class FormSubmitActivity extends BaseLockActivity implements
     @Override
     public void onGetFormInstanceSuccess(CollectFormInstance instance) {
         this.instance = instance;
-        showFormEndView(Preferences.isOfflineMode());
+        showFormEndView(false);
     }
 
     @Override
@@ -267,13 +251,7 @@ public class FormSubmitActivity extends BaseLockActivity implements
         endViewContainer.removeAllViews();
         endViewContainer.addView(endView);
 
-        updateFormSubmitButton(Preferences.isOfflineMode());
-    }
-
-    private void refreshFormEndView(boolean offline) {
-        if (endView != null) {
-            endView.refreshInstance(offline);
-        }
+        updateFormSubmitButton(false);
     }
 
     private void enableMenuItems(Menu menu) {
@@ -282,10 +260,6 @@ public class FormSubmitActivity extends BaseLockActivity implements
         for (int i = 0; i < menu.size(); i++) {
             menu.getItem(i).setEnabled(!disabled);
         }
-    }
-
-    private void setOfflineMenuIcon(MenuItem menuItem, boolean offline) {
-        menuItem.setIcon(offline ? R.drawable.ic_cloud_off_white_24dp : R.drawable.ic_cloud_queue_white_24dp);
     }
 
     private void updateFormSubmitButton(boolean offline) {

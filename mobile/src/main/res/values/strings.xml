@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Tella</string>
     <string name="collect.blank_action_update.form">Update</string>
     <string name="settings.about_app.bar">About &amp; Help</string>
-    <string name="settings.gen_select_about">About &amp; Help</string>
+    <string name="settings.gen_select_about" tools:ignore="UnusedResources">About &amp; Help</string>
     <string name="collect.form_exit.unsaved_dialog.title">Exit form?</string>
     <string name="verification_prompt_dialog_title">Enable GPS?</string>
     <string name="collect_tab.title_blank">Blank</string>
     <string name="action_cancel">Cancel</string>
-    <string name="lock_set.pattern_expl">To best protect your data, please create your application lock pattern. This pattern will be used for unlocking the app and access your data. The pattern must contain at least 6 dots.</string>
+    <string name="lock_set.pattern_expl" tools:ignore="UnusedResources">To best protect your data, please create your application lock pattern. This pattern will be used for unlocking the app and access your data. The pattern must contain at least 6 dots.</string>
     <string name="settings_menu.item_contact">Contact us</string>
-    <string name="home_collect.button">Collect</string>
-    <string name="onboard_collect_heading">Collect</string>
+    <string name="home_collect.button" tools:ignore="UnusedResources">Collect</string>
+    <string name="onboard_collect_heading" tools:ignore="UnusedResources">Collect</string>
     <string name="collect_dialog.text_download.progress">Downloading the form</string>
     <string name="collect_toast_download.completed">Download completed</string>
     <string name="action_delete">Delete</string>
     <string name="collect.draft_tab.title">Draft</string>
     <string name="collect.blank_action_download.form">Download</string>
-    <string name="upload_toast_fail.finding.metadata.to.upload">There was an error locating the file\'s verification information. Please try again</string>
-    <string name="upload_toast.fail.finding.file.to.upload">There was an error locating the file to upload. Please try again</string>
+    <string name="upload_toast_fail.finding.metadata.to.upload" tools:ignore="UnusedResources">There was an error locating the file\'s verification information. Please try again</string>
+    <string name="upload_toast.fail.finding.file.to.upload" tools:ignore="UnusedResources">There was an error locating the file to upload. Please try again</string>
     <string name="settings_text_empty.field">This field cannot be empty.</string>
     <string name="home_toast_back.exit">Tap the \"Back\" button again to exit the app</string>
     <string name="settings.docu_toast_fail.load.list.connected.servers">There was an error loading the list of servers. Please try again</string>
@@ -26,14 +26,14 @@
     <string name="settings.docu_toast_fail.update.server">There was an error updating the server settings. Please try again</string>
     <string name="settings.docu_toast_fail.delete.server">There was an error deleting the server settings. Please try again</string>
     <string name="settings.about_list.item_faq">FAQ</string>
-    <string name="gallery_app.bar">Gallery</string>
-    <string name="home_gallery.button">Gallery</string>
-    <string name="onboarding_action_create.pattern">Create pattern</string>
+    <string name="gallery_app.bar" tools:ignore="UnusedResources">Gallery</string>
+    <string name="home_gallery.button" tools:ignore="UnusedResources">Gallery</string>
+    <string name="onboarding_action_create.pattern" tools:ignore="UnusedResources">Create pattern</string>
     <string name="action_ok">OK</string>
     <string name="collect.form_toast_validation.error">This response is invalid</string>
     <string name="collect.form_error_response.mandatory">This response is mandatory.</string>
     <string name="homescreen_heading_quick.delete">Quick Delete\nmode activation</string>
-    <string name="permission_dialog.expl_mic">In order to record audio, Tella needs permission to access your microphone.</string>
+    <string name="permission_dialog.expl_mic" tools:ignore="UnusedResources">In order to record audio, Tella needs permission to access your microphone.</string>
     <string name="settings.about_list.item_privacy.policy">Privacy policy</string>
     <string name="recorder_toast_fail.recording">There was an error recording the audio. Please try again</string>
     <string name="recorder_content.desc_blinking.red.dot">Recording audio</string>
@@ -54,7 +54,7 @@
     <string name="home_expl_cancel.quick.delete">Tap anywhere to cancel</string>
     <string name="recorder_app.bar">Recorder</string>
     <string name="collect_app.bar">Collect</string>
-    <string name="home_action.expl_camera">Tap anywhere to open the camera</string>
+    <string name="home_action.expl_camera" tools:ignore="UnusedResources">Tap anywhere to open the camera</string>
     <string name="settings.docu_field_username">Username</string>
     <string name="collect.draft_meta_date.updated">Updated: %1$s</string>
     <string name="settings.about_app.version">Version</string>
@@ -81,7 +81,7 @@
     <string name="collect_dialog.text_delete.sent.form">Are you sure you want to delete this form from your device? Note that because it was already submitted, the data will remain on your organization\'s server.</string>
     <string name="collect_dialog.text_delete.draft.form">Are you sure you want to delete this draft form?</string>
     <string name="collect_toast_form.deleted">The form was deleted</string>
-    <string name="settings.gen_select_language">Language</string>
+    <string name="settings.gen_select_language" tools:ignore="UnusedResources">Language</string>
     <string name="settings.lang_select.expl_default">Keep Tella in the same language as my device</string>
     <string name="settings.lang_select_default">Default</string>
     <string name="settings.lang_app.bar">Language</string>
@@ -93,10 +93,10 @@
     <string name="collect.sent_dialog.expl_discard.unsent.form">Parts or all of the form wasn\'t sent. Are you sure you want to discard it?</string>
     <string name="action_discard">Discard</string>
     <string name="collect.end_action_submit">Submit</string>
-    <string name="gallery_toast_file.imported.from.device">The file was added to your gallery</string>
+    <string name="gallery_toast_file.imported.from.device" tools:ignore="UnusedResources">The file was added to your gallery</string>
     <string name="gallery_toast_fail.exporting.to.device">There was an error exporting the files. Please try again</string>
     <string name="permission_dialog.expl_device.storage">In order to export files, Tella needs permission to write on the device\'s storage.</string>
-    <plurals name="gallery_toast_files.deleted">
+    <plurals name="gallery_toast_files.deleted" tools:ignore="UnusedResources">
         <item quantity="one">File deleted</item>
         <item quantity="other">%1$d files deleted</item>
     </plurals>
@@ -112,14 +112,14 @@
     <string name="gallery_dialog.expl_encrypting">Encrypting</string>
     <string name="gallery_save.to.device_dialog.progress.expl">Decrypting</string>
     <string name="gallery_toast_fail.import">There was an error opening the gallery to import the files. Please try again</string>
-    <string name="permission_dialog.expl_camera.mic">In order to capture photo, video, and audio files, Tella needs access to your camera and microphone.</string>
+    <string name="permission_dialog.expl_camera.mic" tools:ignore="UnusedResources">In order to capture photo, video, and audio files, Tella needs access to your camera and microphone.</string>
     <string name="gallery_toast_fail.saving.file">There was an error saving the file. Please try again</string>
     <string name="collect_toast_fail.attaching.file.to.form">There was an error attaching the file. Please try again</string>
     <string name="collect_toast_fail.fetch.form.from.server.unknown.error">There was an error downloading the form. Please try again</string>
     <string name="collect_toast_fail.fetch.form.from.server.display.error">There was an error downloading the form: %s</string>
     <string name="collect_toast_reason.fail.fetch.form.from.server">The form could not be found. It may have been deleted from your organization\'s server</string>
     <string name="gallery_heading_files.from.Tella.gallery">Tella Gallery</string>
-    <string name="permission_dialog.expl_camera">In order to take photos and videos, Tella needs permission to access your camera.</string>
+    <string name="permission_dialog.expl_camera" tools:ignore="UnusedResources">In order to take photos and videos, Tella needs permission to access your camera.</string>
     <string name="settings_select_general">General</string>
     <string name="collect.form_exit_dialog.expl">Your draft will be lost.</string>
     <string name="collect.form_exit_dialog.action_save.exit">SAVE AND EXIT</string>
@@ -127,31 +127,31 @@
     <string name="settings.docu_error_not.valid.URL">This is not a valid URL.</string>
     <string name="home_action.label_quick.delete">Delete</string>
     <string name="gallery_subheading_sort.by">Sort by</string>
-    <string name="gallery_subheading_show">Show</string>
+    <string name="gallery_subheading_show" tools:ignore="UnusedResources">Show</string>
     <string name="gallery_list.item_newest.to.oldest">Newest to oldest</string>
     <string name="gallery_list.item_oldest.to.newest">Oldest to newest</string>
-    <string name="gallery_list.item_show.all.files">All</string>
-    <string name="gallery_list.items_show.only.photos">Photos</string>
-    <string name="gallery_list.items_show.only.videos">Videos</string>
-    <string name="gallery_list.items_show.only.audio">Audio recordings</string>
+    <string name="gallery_list.item_show.all.files" tools:ignore="UnusedResources">All</string>
+    <string name="gallery_list.items_show.only.photos" tools:ignore="UnusedResources">Photos</string>
+    <string name="gallery_list.items_show.only.videos" tools:ignore="UnusedResources">Videos</string>
+    <string name="gallery_list.items_show.only.audio" tools:ignore="UnusedResources">Audio recordings</string>
     <string name="action_exit">Exit</string>
-    <string name="home_action.desc_quick.exit">Exit</string>
+    <string name="home_action.desc_quick.exit" tools:ignore="UnusedResources">Exit</string>
     <string name="settings.prot_select_camouflage">Camouflage</string>
-    <string name="settings.prot_select_lock" translatable="false">Lock</string>
-    <string name="onboard.camo_heading">Camouflage</string>
-    <string name="settings_dialog.action_save.server.no.internet">Save anyway</string>
+    <string name="settings.prot_select_lock" translatable="false" tools:ignore="UnusedResources">Lock</string>
+    <string name="onboard.camo_heading" tools:ignore="UnusedResources">Camouflage</string>
+    <string name="settings_dialog.action_save.server.no.internet" tools:ignore="UnusedResources">Save anyway</string>
     <string name="settings.docu_error_wrong.credentials">The username or password is incorrect.</string>
     <string name="settings.docu_error_domain.doesnt.exit">The server URL is incorrect.</string>
     <string name="settings.docu_error_unknown.connection.error">There was an error trying to connect to the server.</string>
     <string name="settings.docu_error_no.internet">You’re not connected to the internet. Try again when connected.</string>
     <string name="settings.docu_dialog.action_try.again.connecting">Try again</string>
     <string name="settings.about_select_tutorial">Tutorial</string>
-    <string name="gallery_heading_selected_files">Selected files</string>
+    <string name="gallery_heading_selected_files" tools:ignore="UnusedResources">Selected files</string>
     <string name="settings.camo_expl">Select a custom icon and name to better hide Tella on your device. Note that the Tella icon will remain visible from the Android settings.</string>
-    <string name="settings.camo_camera4">Camera</string>
-    <string name="settings.camo_camera3">CameraPro</string>
-    <string name="settings.camo_camera2">SuperCam</string>
-    <string name="settings.camo_camera1">EasyCam</string>
+    <string name="settings.camo_camera4" tools:ignore="UnusedResources">Camera</string>
+    <string name="settings.camo_camera3" tools:ignore="UnusedResources">CameraPro</string>
+    <string name="settings.camo_camera2" tools:ignore="UnusedResources">SuperCam</string>
+    <string name="settings.camo_camera1" tools:ignore="UnusedResources">EasyCam</string>
     <string name="gallery_action.desc_save.to.device">Save to device</string>
     <string name="settings.docu_verification_action">Verification mode</string>
     <string name="settings.docu_verification_action.expl">Makes your media files verifiable by collecting information about your device and location.</string>
@@ -207,16 +207,16 @@
     <string name="verification.info_field_location.provider">Location provider</string>
     <string name="verification.info_field_location.speed">Location speed</string>
     <string name="verification.info_field_cell.towers">Cell info</string>
-    <string name="settings.camo_weather3">Weather now</string>
-    <string name="settings.camo_weather2">Local weather</string>
+    <string name="settings.camo_weather3" tools:ignore="UnusedResources">Weather now</string>
+    <string name="settings.camo_weather2" tools:ignore="UnusedResources">Local weather</string>
     <string name="settings.camo_calculator2">Calculator</string>
-    <string name="settings.camo_calculator1">Easy Math</string>
-    <string name="settings.camo_weather1">Weather</string>
+    <string name="settings.camo_calculator1" tools:ignore="UnusedResources">Easy Math</string>
+    <string name="settings.camo_weather1" tools:ignore="UnusedResources">Weather</string>
     <string name="verification.info_subheading_file.metadata">File</string>
     <string name="verification.info_subheading_device.metadata">Device</string>
     <string name="verification.info_subheading_context.metadata">Context</string>
     <string name="verification.info_field_metadata.not.available">Not Available</string>
-    <string name="home_content.desc_background">Not Available</string>
+    <string name="home_content.desc_background" tools:ignore="UnusedResources">Not Available</string>
     <string name="verification.info_field_latitude">Latitude:</string>
     <string name="verification.info_field_longitude">Longitude:</string>
     <string name="verification.info_field_altitude">Altitude:</string>
@@ -234,21 +234,14 @@
         <item quantity="other">%d files</item>
     </plurals>
     <string name="settings.docu_app.bar">Documentation</string>
-    <string name="settings.gen_select_documentation">Documentation</string>
+    <string name="settings.gen_select_documentation" tools:ignore="UnusedResources">Documentation</string>
     <string name="settings.prot_app.bar">Protection</string>
-    <string name="settings.gen_select_protection">Protection</string>
+    <string name="settings.gen_select_protection" tools:ignore="UnusedResources">Protection</string>
     <string name="action_learn.more">Learn more</string>
     <string name="settings.servers_add.server_dialog.title">Add server</string>
-    <string name="settings.prot_quick.delete_action">Activate QUICK DELETE button</string>
-    <string name="settings.prot_quick.delete_action.expl">Shows a sliding button on the homescreen to quickly delete Tella data in emergency situations.</string>
-    <string name="settings.prot_select_delete.gallery">Delete Gallery</string>
-    <string name="settings.prot_select.expl_delete.gallery">This will delete all photos, videos, and audio recordings from the Tella Gallery.</string>
     <string name="settings.prot_select_delete.forms">Delete draft and submitted forms</string>
-    <string name="settings.prot_select.expl_delete.forms">This will delete draft and submitted forms, and all the data they contain</string>
     <string name="settings.prot_select_delete.servers">Delete server settings</string>
-    <string name="settings.prot_select.expl_delete.servers">This will delete your connections to servers and all forms associated with them.</string>
     <string name="settings.prot_select_delete.app">Delete Tella</string>
-    <string name="settings.prot_select.expl_delete.app">This will delete the app and the data it contains. You will be asked \"Do you want to uninstall the app?\" Unless you confirm, Tella will not be deleted.</string>
     <string name="offline_dialog.title">Offline Mode</string>
     <string name="offline_dialog.expl">In Offline Mode, all data is saved for later submission. It\'s useful to save cellular data or if you have a bad connection. Disable when you\'re ready to submit forms.</string>
     <string name="collect.form_action.desc_offline">Offline Mode</string>
@@ -256,13 +249,13 @@
     <string name="collect_toast_form.submitted">Form submitted</string>
     <string name="collect.end_heading_confirmation.form.submitted">Form submitted</string>
     <string name="settings.docu_add.server_field_password">Password</string>
-    <string name="settings.camo_error_fail.retrieve.app.name">App</string>
     <string name="collect.end_toast_saved.for.later">The form was saved for later submission because Offline Mode is activated</string>
+    <string name="settings.camo_error_fail.retrieve.app.name">App</string>
     <string name="collect.end_item_form.data">Form responses</string>
     <string name="collect_toast_fail.loading.form.instance">There was an error loading the form. Please try again</string>
     <string name="collect_toast_fail.connection.too.weak">Your internet connection is too weak to send the form. Please try again</string>
     <string name="gallery_toast_file.encrypted">File encrypted</string>
-    <string name="settings.docu_dialog.action_hide">Hide</string>
+    <string name="settings.docu_dialog.action_hide" tools:ignore="UnusedResources">Hide</string>
     <string name="settings.docu_toast_disconnect.servers.delete">All forms and servers have been deleted</string>
     <string name="collect.help_expl_not.connected.to.server"><![CDATA[To receive forms and submit data, you must first connect to a server. Ask your organization for the server information and set up the server.]]></string>
     <string name="collect.help_expl_odk"><![CDATA[If you would like to create your own forms, <a href=\"https://hzontal.org/contact/\">contact us</a> or use <a href=\"https://opendatakit.org/help/help-for-hire/\">any service based on the Open Data Kit (ODK)</a>]]></string>
@@ -312,18 +305,18 @@
     <string name="verification.info_cell.towers.expl">The identifying numbers of all the cell towers the device is connected to.</string>
     <string name="verification.info_wifi.expl">The name of all Wi-Fi networks in the vicinity of the device.</string>
     <string name="collect.blank_banner_forms.updated">Some forms have been updated. Tap the update button next to the forms to get the latest version.</string>
-    <string name="settings.docu_auto.upload.server.selection_select">Server</string>
-    <string name="upload_dialog.title_select.server">Server selection</string>
+    <string name="settings.docu_auto.upload.server.selection_select" tools:ignore="UnusedResources">Server</string>
+    <string name="upload_dialog.title_select.server" tools:ignore="UnusedResources">Server selection</string>
     <string name="settings.docu_auto.upload.server.selection_dialog.expl">Which server would you like to upload the files to?</string>
     <string name="settings.serv_add.server.selection_dialog.title">What type of server?</string>
     <string name="settings.docu_add.server_dialog.select_odk">Open Data Kit (ODK)</string>
     <string name="settings.docu_add.server_dialog.expl">Select the type of server you want to connect to. If you are unsure, ask your organization.</string>
     <string name="settings.docu_add.server_dialog.select_tus">Direct Upload</string>
-    <string name="settings.docu_connect.to.servers_enable_action">Connect to servers</string>
-    <string name="settings.docu_connect.to.servers_enable_action.expl">Manage your connection to servers to send data.</string>
-    <string name="settings.docu_disable.servers_dialog.title">Disconnect servers</string>
-    <string name="settings.docu_connect.to.servers_disable_dialog.expl">Would you like to delete your server connections altogether, or simply hide them? Hiding will keep server information in memory so that you can easily reconnect and submit data to the servers.</string>
-    <string name="settings.docu_delete.auto.server_dialog.expl">If you delete this server, your files will no longer be auto-uploaded.</string>
+    <string name="settings.docu_connect.to.servers_enable_action" tools:ignore="UnusedResources">Connect to servers</string>
+    <string name="settings.docu_connect.to.servers_enable_action.expl" tools:ignore="UnusedResources">Manage your connection to servers to send data.</string>
+    <string name="settings.docu_disable.servers_dialog.title" tools:ignore="UnusedResources">Disconnect servers</string>
+    <string name="settings.docu_connect.to.servers_disable_dialog.expl" tools:ignore="UnusedResources">Would you like to delete your server connections altogether, or simply hide them? Hiding will keep server information in memory so that you can easily reconnect and submit data to the servers.</string>
+    <string name="settings.docu_delete.auto.server_dialog.expl" tools:ignore="UnusedResources">If you delete this server, your files will no longer be auto-uploaded.</string>
     <string name="play.audio_action.expl_plus15s">+15s</string>
     <string name="play.audio_action.expl_minus15s">-15s</string>
     <string name="recorder_meta_space.available.days">%1$d days %2$d hours (%3$s) left</string>
@@ -334,74 +327,41 @@
     <string name="camera_video.resolution_select_1080p">High (1080p)</string>
     <string name="camera_video.resolution_select_720p">Medium (720p)</string>
     <string name="camera_video.resolution_select_480p">Low (480p)</string>
-    <string name="settings.docu_auto.upload_action">Auto-upload</string>
+    <string name="settings.docu_auto.upload_action" tools:ignore="UnusedResources">Auto-upload</string>
     <string name="settings.docu_auto.upload_action.expl">Tella will upload your photos, videos, or audio recordings to the server as soon as they are recorded or imported into Tella.</string>
     <string name="settings.docu_auto.delete_action">Auto-delete</string>
-    <string name="settings.docu_auto.delete_action.expl">Tella will automatically delete the files from your device as soon as they are uploaded to the server.</string>
+    <string name="settings.docu_auto.delete_action.expl" tools:ignore="UnusedResources">Tella will automatically delete the files from your device as soon as they are uploaded to the server.</string>
     <string name="settings.docu_choose.auto.upload.server_dialog.expl">Which server would you like to auto-upload the files to?</string>
-    <string name="settings.docu_delete.upload.server_dialog.expl">You will no longer be able to upload files to this server.</string>
-    <string name="home_upload.button">Upload</string>
-    <string name="upload.main_meta_status.uploading">Uploading</string>
-    <string name="upload_meta_date.started">Started on:</string>
-    <string name="upload.main_action_more.details">More details</string>
-    <plurals name="upload.main_meta_number.of.files">
-        <item quantity="one">%d file</item>
-        <item quantity="other">%d files</item>
-    </plurals>
-    <plurals name="upload.main_meta_number.of.files.uploaded">
-        <item quantity="one">%d file uploaded</item>
-        <item quantity="other">%d files uploaded</item>
-    </plurals>
-    <plurals name="upload.main_meta_minutes.left">
-        <item quantity="one">%d minute left</item>
-        <item quantity="other">%d minutes left</item>
-    </plurals>
-    <string name="upload.main_dialog.expl_clear.history">This will delete the list of past uploads.</string>
-    <string name="upload.main_stop.upload_dialog.expl">Are you sure you want to stop the upload?</string>
-    <string name="upload.info_stop.upload_dialog.expl">Are you sure you want to stop the upload?</string>
-    <string name="upload.info_app.bar">Upload information</string>
-    <string name="upload.info_meta_number.of.files">Number of files:</string>
-    <string name="upload.main_dialog.action_clear">Clear</string>
-    <string name="upload.main_nothing.to.show">There is no past upload to show.</string>
-    <string name="upload.info_meta_date.completed">Completed:</string>
-    <string name="upload.info_meta_file.type">File type:</string>
-    <string name="upload.main_meta_status.attempting">Attempting to connect</string>
-    <string name="upload.main_meta_less.minute.left">less than a minute left</string>
-    <string name="upload.main_meta_status.stopped">Stopped</string>
-    <string name="upload.main_meta_more.hour.left">more than an hour left</string>
+    <string name="settings.docu_delete.upload.server_dialog.expl" tools:ignore="UnusedResources">You will no longer be able to upload files to this server.</string>
     <string name="settings.docu_error_must.select.auto.upload.server">You must select a server.</string>
-    <string name="upload.info_dialog.expl_delete.upload">Are you sure you want to delete the upload information?</string>
-    <string name="upload.main_dialog.title_clear.history">Clear upload history?</string>
-    <string name="settings.docu_auto.upload.metadata_action">Include verification information</string>
-    <string name="settings.docu_auto.upload.metadata_action.expl">If your files include verification information, it will automatically be uploaded alongside your files.</string>
     <string name="camera_tab.title_video">Video</string>
     <string name="camera_tab.title_photo">Photo</string>
     <string name="action_upload">Upload</string>
-    <string name="pl_cancel">Cancel</string>
-    <string name="pl_confirm">Next</string>
-    <string name="pl_confirm_pattern">Confirm your pattern</string>
-    <string name="pl_continue">Next</string>
-    <string name="pl_draw_pattern">Draw an unlock pattern</string>
-    <string name="pl_draw_pattern_to_unlock">Draw pattern to unlock</string>
-    <string name="pl_pattern_confirmed">Your new unlock pattern</string>
-    <string name="pl_pattern_recorded">Pattern recorded</string>
-    <string name="pl_pattern_too_short">Draw your pattern by\n connecting at least six dots</string>
-    <string name="pl_recording_pattern">Release finger when done</string>
-    <string name="pl_redraw">Clear</string>
-    <string name="pl_wrong_pattern">Incorrect pattern,\n please try again</string>
-    <string name="pl_access_pattern_start">Pattern started</string>
-    <string name="pl_access_pattern_cleared">Pattern cleared</string>
-    <string name="pl_access_pattern_cell_added">Cell added</string>
-    <string name="pl_access_pattern_cell_added_verbose">Cell <xliff:g example="3" id="cell_index">%1$d</xliff:g> added</string>
-    <string name="pl_access_pattern_detected">Pattern completed</string>
-    <string name="pl_access_pattern_area">Pattern area.</string>
+    <string name="LockSelect_Action_Cancel">Cancel</string>
+    <string name="LockSelect_Action_Confirm">Next</string>
+    <string name="LockPatternConfirm_Action_Confirm">Confirm your pattern</string>
+    <string name="LockSelect_Action_Continue">Next</string>
+    <string name="LockPatternSet_Draw_Pattern">Draw an unlock pattern</string>
+    <string name="UnlockPattern_DrawToUnlock">Draw pattern to unlock</string>
+    <string name="LockPatternConfirm_Pattern_Confirmed">Your new unlock pattern</string>
+    <string name="LockPatternSet_Pattern_Recorded" tools:ignore="UnusedResources">Pattern recorded</string>
+    <string name="UnlockPattern_PatternTooShort">Draw your pattern by\n connecting at least six dots</string>
+    <string name="LockPatternSet_RecordingPattern" tools:ignore="UnusedResources">Release finger when done</string>
+    <string name="LockPatternSet_Action_Redraw">Clear</string>
+    <string name="LockPatternConfirm_Message_WrongPattern">Incorrect pattern,\n please try again</string>
+    <string name="LockPatternSet_Message_PatternStarted">Pattern started</string>
+    <string name="LockPatternSet_Message_PatternCleared">Pattern cleared</string>
+    <string name="LockPatternSet_Message_CellAdded">Cell added</string>
+    <string name="LockPatternSet_Message_CellAddedVerbose">Cell <xliff:g example="3" id="cell_index">%1$d</xliff:g> added</string>
+    <string name="LockPatternSet_Message_PatternDetected">Pattern completed</string>
+    <string name="UnLockPattern_PatternArea">Pattern area.</string>
     <string name="collect.blank_action.desc_more.options">More options</string>
     <string name="action_next">Next</string>
     <string name="meter">%f m</string>
     <string name="meter_per_second">%f m/s</string>
-    <string name="intro_welcome">Welcome to</string>
+    <string name="intro_welcome" tools:ignore="UnusedResources">Welcome to</string>
     <string name="tella">Tella</string>
-    <string name="intro_start">START</string>
+    <string name="intro_start" tools:ignore="UnusedResources">START</string>
     <string name="intro_document_protect"><![CDATA[Document & Protect]]></string>
     <string name="onboard_setup_text">How would you like to set up Tella?</string>
     <string name="onboard_full_setup">FULL SETUP</string>
@@ -419,7 +379,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="settings.sec_app.bar">Security</string>
     <string name="settings.select_security">Security</string>
-    <string name="settings.select_customization">Customization</string>
+    <string name="settings.select_customization" tools:ignore="UnusedResources">Customization</string>
     <string name="settings.select_lock_timeout">Lock Timeout</string>
     <string name="settings.sec_camera.mute_switch">Camera silent mode</string>
     <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
@@ -446,12 +406,12 @@
     <string name="action_edit">Edit</string>
     <string name="settings.server_add.server_dialog_advanced">Advanced</string>
     <string name="settings.docu_error_auth.required">Authentication required</string>
-    <string name="settings.sec_lock_timeout_immediately">Immediately</string>
-    <string name="settings.sec_lock_timeout_1min">1 minute</string>
-    <string name="settings.sec_lock_timeout_5min">5 minutes</string>
-    <string name="settings.sec_lock_timeout_30min">30 minutes</string>
-    <string name="settings.sec_lock_timeout_1hour">1 hour</string>
-    <string name="settings.sec_lock_timeout_desc">Decide how long it takes for Tella to lock</string>
+  <string name="settings.sec_lock_timeout_immediately">Immediately</string>
+  <string name="settings.sec_lock_timeout_1min">1 minute</string>
+  <string name="settings.sec_lock_timeout_5min">5 minutes</string>
+  <string name="settings.sec_lock_timeout_30min">30 minutes</string>
+  <string name="settings.sec_lock_timeout_1hour">1 hour</string>
+  <string name="settings.sec_lock_timeout_desc">Decide how long it takes for Tella to lock</string>
     <string name="settings.prot_select_delete.vault">Delete Vault</string>
     <string name="settings.sec_delete.vault_tooltip">Delete all the files stored in Tella.</string>
     <string name="settings.sec_delete.forms_tooltip">Delete all draft and submitted forms.</string>
@@ -459,7 +419,7 @@
     <string name="settings.sec_delete.app_tooltip">Delete the app and all the data it contains. You will be asked “Do you want to uninstall this app?” Unless you confirm, Tella will not be deleted.</string>
     <string name="settings.sec_bypass_switch_title">Bypass censorship</string>
     <string name="settings.sec_bypass_switch_expl">Overcome attempts to block Tella in your region. Note that enabling this will make it slower to send data to the servers.</string>
-    <string name="settings.servers_add_camouflage.subtitle">Your app is currently camouflaged \n with a %s app</string>
+    <string name="settings.servers_add_camouflage.subtitle">Your app is currently camouflaged \n with a Calculator app</string>
     <string name="settings.servers_change.camouflage.method">CHANGE CAMOUFLAGE METHOD</string>
     <string name="settings.servers_remove.camouflage.method">REMOVE CAMOUFLAGE</string>
     <string name="settings.servers_hide_tella_title">Hide Tella</string>
@@ -474,68 +434,68 @@
     <string name="settings.servers_setup_change_name_icon_subtitle"><![CDATA[<b>Less secure:</b> Tella will appear on the home screen with a different app name and icon. Tapping on the new icon opens the actual Tella.]]></string>
     <string name="settings.servers_setup_hide_behind_calculator_title">hide behind a calculator app</string>
     <string name="settings.servers_setup_hide_behind_calculator_subtitle"><![CDATA[<b>More secure:</b> Camouflage Tella behind an actual functioning calculator app. Input your PIN on the calculator to unlock Tella.]]></string>
-    <string name="settings.servers_setup_hide_behind_calculator_not_possible"><![CDATA[<center>The Calculator camouflage is only possible if you<br> use a PIN lock.<font color="#D6933B"><b> Change lock here</b></font></center>]]></string>
+    <string name="settings.servers_setup_hide_behind_calculator_not_possible"><![CDATA[The Calculator camouflage is only possible if you \n use a PIN lock.<font color="#D6933B"><b> Change lock here</b></font>]]></string>
     <string name="settings.sec_change_lock_type_warning">If you change your lock method, Camouflage will be disabled</string>
     <string name="action_continue">Continue</string>
-    <string name="settings.camo_icamera">iCamera</string>
-    <string name="settings.camo_selfie_cam">Selfie Cam</string>
-    <string name="settings.camo_snap_camera">Snap Camera</string>
-    <string name="settings.camo_calculate">Calculate</string>
-    <string name="settings.camo_calculator_plus">Calculator Plus</string>
-    <string name="settings.camo_icalculator">iCalculator</string>
-    <string name="settings.camo_weather">Weather</string>
-    <string name="settings.camo_easyweather">EasyWeather</string>
-    <string name="settings.camo_sunnyday">SunnyDay</string>
-    <string name="settings.camo_gamestation">GameStation</string>
-    <string name="settings.camo_playnow">PlayNow</string>
-    <string name="settings.camo_jeweldash">Jewel Dash</string>
-    <string name="settings.camo_clock">Clock</string>
-    <string name="settings.camo_time">Time</string>
-    <string name="settings.camo_stopwatch">StopWatch</string>
-    <string name="fragment_mic">Microphone</string>
-    <string name="mic_recording">Recording</string>
-    <string name="mic_rename_recording">Rename recording</string>
-    <string name="recorder_toast_recording.saved">The audio recording was saved to your Tella files</string>
+  <string name="settings.camo_icamera">iCamera</string>
+  <string name="settings.camo_selfie_cam">Selfie Cam</string>
+  <string name="settings.camo_snap_camera">Snap Camera</string>
+  <string name="settings.camo_calculate">Calculate</string>
+  <string name="settings.camo_calculator_plus">Calculator Plus</string>
+  <string name="settings.camo_icalculator">iCalculator</string>
+  <string name="settings.camo_weather">Weather</string>
+  <string name="settings.camo_easyweather">EasyWeather</string>
+  <string name="settings.camo_sunnyday">SunnyDay</string>
+  <string name="settings.camo_gamestation">GameStation</string>
+  <string name="settings.camo_playnow">PlayNow</string>
+  <string name="settings.camo_jeweldash">Jewel Dash</string>
+  <string name="settings.camo_clock">Clock</string>
+  <string name="settings.camo_time">Time</string>
+  <string name="settings.camo_stopwatch">StopWatch</string>
+  <string name="fragment_mic">Microphone</string>
+  <string name="mic_recording">Recording</string>
+  <string name="mic_rename_recording">Rename recording</string>
+  <string name="recorder_toast_recording.saved">The audio recording was saved to your Tella files</string>
 
-    <string name="onboard.intro_title">Welcome to Tella</string>
-    <string name="onboard.intro_get_started">Get started</string>
-    <string name="onboard.intro_organization_code">I have a code from my organization</string>
-    <string name="onboard.title_camera">Camera</string>
-    <string name="onboard.expl_camera">Take photos and videos directly in Tella. These files are automatically encrypted and saved in Tella, and will not visible from your phone’s regular gallery.</string>
-    <string name="onboard.title_recorder">Recorder</string>
-    <string name="onboard.expl_recorder">Record interviews or any sound around you with Tella’s voice recorder.  The audio files are automatically encrypted and saved in Tella’s hidden folder.</string>
-    <string name="onboard.title_files">Encrypted files &amp; folders</string>
-    <string name="onboard.expl_files">Securely store and organize all your files. As long as Tella is locked, your files and folders will remain inaccessible to someone seizing or searching the device.</string>
-    <string name="onboard.title_lock_finish">Lock</string>
-    <string name="onboard.expl_lock_finish">Your lock is set up! You can change it anytime in Settings.</string>
-    <string name="onboard.title_all_done">You’re all done!</string>
-    <string name="onboard.expl_all_done">You can go to Tella now, or continue customizing Tella to set up advanced settings.</string>
-    <string name="onboard.go_btn_all_done">Go to Tella</string>
-    <string name="onboard.advanced_btn_all_done">Advanced settings</string>
-    <string name="onboard.title_share_data">Share data you collect</string>
-    <string name="onboard.expl_share_data">If you work with an organization, connect to the organization’s server to send files and data with them. Your organization should provide you with the server details.</string>
-    <string name="onboard.connect_btn_share_data">Connect to server</string>
-    <string name="onboard.continue_btn_share_data">Continue without\nconnecting to a server</string>
-    <string name="onboard.expl_hide_tella">To make it harder to find on your device, you can hide Tella by changing the way it looks on your homescreen.</string>
-    <string name="onboard.default_btn_title_hide_tella">KEEP tella’s default look</string>
-    <string name="onboard.default_btn_subtitle_hide_tella">Tella remains visible on the home screen</string>
-    <string name="onboard.title_advanced_complete">Advanced customization complete!</string>
-    <string name="onboard.expl_advanced_complete">You can always continue changing your preferences in Settings.</string>
-    <string name="onboard.title_connected_server">Connected to server</string>
-    <string name="onboard.expl_connected_server">You have successfully connected Tella to the server and will be able to share your data.</string>
-    <string name="onboard.expl_hide_tella_set">Your camouflage is set up! You can change it anytime in Settings.</string>
-    <string name="onboard.hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you use a PIN lock.</string>
-    <string name="onboard.calculator_button">Select calculator</string>
-    <string name="onboard.calculator_expl">Tella will be hidden behind a Calculator app. And you can use the calculator to do actual math! Unlock Tella by entering your PIN on the calculator.</string>
-    <string name="onboard.customization_title">Customization</string>
-    <string name="onboard.customization_subtitle">Enter your customization code</string>
-    <string name="onboard.customization_expl">Your organization may provide a code for you to set up Tella according to their settings.</string>
-    <string name="settings.general_recent_files_switch_title">Recent files</string>
-    <string name="settings.general_recent_files_switch_expl">Show previews of and a shortcut to your recent files on Tella’s homescreen.</string>
-    <string name="settings.general_favorite_forms_switch_title">Favorite forms</string>
-    <string name="settings.general_favorite_forms_switch_expl">Show shortcuts to your favorite forms on Tella’s homescreen.</string>
-    <string name="settings.sec_confirm_camouflage_title">Exit Tella to enable camouflage?</string>
-    <string name="settings.sec_confirm_camouflage_desc">To re-open Tella, look for the %s app icon among your apps.</string>
-    <string name="settings.sec_confirm_calc_camouflage_desc">To re-open Tella, look for the Calculator app icon among your apps. Unlock Tella by entering your PIN in the Calculator followed by “=”. </string>
-    <string name="settings.sec_confirm_exit_tella">Exit Tella</string>
+  <string name="onboard.intro_title">Welcome to Tella</string>
+  <string name="onboard.intro_get_started">Get started</string>
+  <string name="onboard.intro_organization_code">I have a code from my organization</string>
+  <string name="onboard.title_camera">Camera</string>
+  <string name="onboard.expl_camera">Take photos and videos directly in Tella. These files are automatically encrypted and saved in Tella, and will not visible from your phone’s regular gallery.</string>
+  <string name="onboard.title_recorder">Recorder</string>
+  <string name="onboard.expl_recorder">Record interviews or any sound around you with Tella’s voice recorder.  The audio files are automatically encrypted and saved in Tella’s hidden folder.</string>
+  <string name="onboard.title_files">Encrypted files &amp; folders</string>
+  <string name="onboard.expl_files">Securely store and organize all your files. As long as Tella is locked, your files and folders will remain inaccessible to someone seizing or searching the device.</string>
+  <string name="onboard.title_lock_finish">Lock</string>
+  <string name="onboard.expl_lock_finish">Your lock is set up! You can change it anytime in Settings.</string>
+  <string name="onboard.title_all_done">You’re all done!</string>
+  <string name="onboard.expl_all_done">You can go to Tella now, or continue customizing Tella to set up advanced settings.</string>
+  <string name="onboard.go_btn_all_done">Go to Tella</string>
+  <string name="onboard.advanced_btn_all_done">Advanced settings</string>
+  <string name="onboard.title_share_data">Share data you collect</string>
+  <string name="onboard.expl_share_data">If you work with an organization, connect to the organization’s server to send files and data with them. Your organization should provide you with the server details.</string>
+  <string name="onboard.connect_btn_share_data">Connect to server</string>
+  <string name="onboard.continue_btn_share_data">Continue without\nconnecting to a server</string>
+  <string name="onboard.expl_hide_tella">To make it harder to find on your device, you can hide Tella by changing the way it looks on your homescreen.</string>
+  <string name="onboard.default_btn_title_hide_tella">KEEP tella’s default look</string>
+  <string name="onboard.default_btn_subtitle_hide_tella">Tella remains visible on the home screen</string>
+  <string name="onboard.title_advanced_complete">Advanced customization complete!</string>
+  <string name="onboard.expl_advanced_complete">You can always continue changing your preferences in Settings.</string>
+  <string name="onboard.title_connected_server">Connected to server</string>
+  <string name="onboard.expl_connected_server">You have successfully connected Tella to the server and will be able to share your data.</string>
+  <string name="onboard.expl_hide_tella_set">Your camouflage is set up! You can change it anytime in Settings.</string>
+  <string name="onboard.hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you use a PIN lock.</string>
+  <string name="onboard.calculator_button">Select calculator</string>
+  <string name="onboard.calculator_expl">Tella will be hidden behind a Calculator app. And you can use the calculator to do actual math! Unlock Tella by entering your PIN on the calculator.</string>
+  <string name="onboard.customization_title">Customization</string>
+  <string name="onboard.customization_subtitle">Enter your customization code</string>
+  <string name="onboard.customization_expl">Your organization may provide a code for you to set up Tella according to their settings.</string>
+  <string name="settings.general_recent_files_switch_title">Recent files</string>
+  <string name="settings.general_recent_files_switch_expl">Show previews of and a shortcut to your recent files on Tella’s homescreen.</string>
+  <string name="settings.general_favorite_forms_switch_title">Favorite forms</string>
+  <string name="settings.general_favorite_forms_switch_expl">Show shortcuts to your favorite forms on Tella’s homescreen.</string>
+  <string name="settings.sec_confirm_camouflage_title">Exit Tella to enable camouflage?</string>
+  <string name="settings.sec_confirm_camouflage_desc">To re-open Tella, look for the %s app icon among your apps.</string>
+  <string name="settings.sec_confirm_calc_camouflage_desc">To re-open Tella, look for the Calculator app icon among your apps. Unlock Tella by entering your PIN in the Calculator followed by “=”. </string>
+  <string name="settings.sec_confirm_exit_tella">Exit Tella</string>
 </resources>

@@ -191,31 +191,6 @@ public class DialogsUtil {
         void accept(boolean t);
     }
 
-    public static AlertDialog showOfflineSwitchDialog(final Context context, PreferenceConsumer consumer) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        LayoutInflater inflater = LayoutInflater.from(context);
-
-        @SuppressLint("InflateParams")
-        View view = inflater.inflate(R.layout.enable_offline_dialog_layout, null);
-
-        final SwitchCompat offlineSwitch = view.findViewById(R.id.offline_mode_switch);
-        offlineSwitch.setChecked(Preferences.isOfflineMode());
-
-        builder.setView(view)
-                .setPositiveButton(R.string.action_save, (dialog, which) -> {
-                    boolean offline = offlineSwitch.isChecked();
-                    Preferences.setOfflineMode(offline);
-                    consumer.accept(offline);
-                })
-                .setNegativeButton(R.string.action_cancel, null)
-                .setCancelable(true);
-
-        final AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-
-        return alertDialog;
-    }
-
     public static AlertDialog showMetadataProgressBarDialog(Context context, DialogInterface.OnClickListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.BrightBackgroundDarkLettersDialogTheme);
         LayoutInflater inflater = LayoutInflater.from(context);

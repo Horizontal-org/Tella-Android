@@ -7,11 +7,8 @@ import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import com.hzontal.tella_locking_ui.FINISH_ACTIVITY_REQUEST_CODE
 import com.hzontal.tella_locking_ui.R
-import com.hzontal.tella_locking_ui.TellaKeysUI
-import com.hzontal.tella_locking_ui.common.CommonStates
 import com.hzontal.tella_locking_ui.patternlock.PatternView
 import com.hzontal.tella_locking_ui.patternlock.SetPatternActivity
 import timber.log.Timber
@@ -21,7 +18,7 @@ class PatternSetActivity : SetPatternActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mMessageText.text = getString(R.string.pl_pattern_too_short, minPatternSize)
+        mMessageText.text = getString(R.string.UnlockPattern_PatternTooShort, minPatternSize)
         mTopImageView.background = ContextCompat.getDrawable(this,R.drawable.pattern_draw_bg)
 
     }

@@ -14,12 +14,6 @@
         <item name="pl_successColor">?colorControlActivated</item>
     </style>
 
-    <style name="PatternView.Light" parent="Base.PatternView">
-        <item name="pl_regularColor">?colorControlNormal</item>
-        <item name="pl_errorColor">#fff4511e</item>
-        <item name="pl_successColor">?colorControlActivated</item>
-    </style>
-
     <style name="Unlock_White_Text">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -138,12 +132,4 @@
         <item name="android:textColor">@color/wa_white</item>
     </style>
 
-    <style name="DialogTheme" parent="@android:style/Theme.Panel">
-        <item name="android:windowAnimationStyle">@style/DialogAnimation</item>
-    </style>
-
-    <style name="DialogAnimation">
-        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
-        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
-    </style>
 </resources>

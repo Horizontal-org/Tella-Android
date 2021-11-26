@@ -198,18 +198,15 @@ public class CollectFormEntryActivity extends MetadataActivity implements
             menuItem.setVisible(false);
         }
 
-        boolean offline = Preferences.isOfflineMode();
         boolean forLater = formParser != null && (formParser.isFormFinal() || formParser.isFormEnd());
-
-        setOfflineMenuIcon(menu.findItem(R.id.offlineMenuItem), offline);
 
         menuItem = menu.findItem(R.id.saveFormMenuItem);
         menuItem.setVisible(!forLater);
         menuItem.setEnabled(!forLater);
 
         menuItem = menu.findItem(R.id.saveForLaterMenuItem);
-        menuItem.setVisible(forLater && !offline);
-        menuItem.setEnabled(forLater && !offline);
+        menuItem.setVisible(forLater);
+        menuItem.setEnabled(forLater);
 
         return true;
     }
@@ -240,16 +237,6 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
         if (id == android.R.id.home) {
             onBackPressed();
-            return true;
-        }
-
-        if (id == R.id.offlineMenuItem) {
-            alertDialog = DialogsUtil.showOfflineSwitchDialog(this, offline -> {
-                setOfflineMenuIcon(item, offline);
-                setSubmitButtonText(offline);
-                refreshFormEndView(offline);
-                invalidateOptionsMenu();
-            });
             return true;
         }
 
@@ -366,10 +353,6 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         return submitting;
     }
 
-    private void setOfflineMenuIcon(MenuItem menuItem, boolean offline) {
-        menuItem.setIcon(offline ? R.drawable.ic_cloud_off_white_24dp : R.drawable.ic_cloud_queue_white_24dp);
-    }
-
     private void setToolbarIcon() {
         toolbar.setEnabled(true);
 
@@ -426,7 +409,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
         if (isPresenterSubmitting()) {
             stopPresenterSubmission();
-            refreshFormEndView(Preferences.isOfflineMode());
+            refreshFormEndView(false);
             hideFormCancelButton();
             showFormEndButtons();
             invalidateOptionsMenu();
@@ -646,13 +629,6 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     }
 
     @Override
-    public void formSubmitOfflineMode() {
-        Toast.makeText(getApplicationContext(), R.string.collect_end_toast_saved_for_later, Toast.LENGTH_LONG).show();
-        MyApplication.bus().post(new CollectFormSubmittedEvent());
-        finish();
-    }
-
-    @Override
     public void formSubmitNoConnectivity() {
         Toast.makeText(getApplicationContext(), R.string.collect_end_toast_notification_form_not_sent_no_connection, Toast.LENGTH_LONG).show();
         MyApplication.bus().post(new CollectFormSubmittedEvent());
@@ -692,7 +668,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     @Override
     public void submissionStoppedByUser() {
         MyApplication.bus().post(new CollectFormSubmitStoppedEvent());
-        refreshFormEndView(Preferences.isOfflineMode());
+        refreshFormEndView(false);
         hideFormCancelButton();
         showFormEndButtons();
     }
@@ -846,7 +822,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     private void showFormEndView(CollectFormInstance instance) {
         hideKeyboard();
         showFormEndButtons();
-        endView.setInstance(instance, Preferences.isOfflineMode());
+        endView.setInstance(instance, false);
         showScreenView(endView);
     }
 
