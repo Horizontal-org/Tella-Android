@@ -1,9 +1,9 @@
 package rs.readahead.washington.mobile.views.custom;
 
 import android.content.Context;
-import androidx.appcompat.widget.AppCompatImageButton;
 import android.util.AttributeSet;
-import android.view.View;
+
+import androidx.appcompat.widget.AppCompatImageButton;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
@@ -26,12 +26,7 @@ public class CameraPreviewAnonymousButton extends AppCompatImageButton {
 
     private void init() {
         displayDrawable();
-        setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogsUtil.showMetadataSwitchDialog(getContext(), CameraPreviewAnonymousButton.this);
-            }
-        });
+        setOnClickListener(view -> DialogsUtil.showMetadataSwitchDialog(getContext(), CameraPreviewAnonymousButton.this));
     }
 
     public void displayDrawable() {
