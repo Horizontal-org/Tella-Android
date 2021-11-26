@@ -157,7 +157,6 @@
   <string name="collect.draft_expl_no.forms">ဖော်ပြရန်ပုံစံမူကြမ်းများမရှိပါ။</string>
   <string name="collect.sent_expl_no.forms">တင်ပြရန်တင်သွင်းထားသောပုံစံများမရှိပါ။</string>
   <string name="collect.blank_expl_no.forms">ပြသရန်ပုံစံမရှိပါ။ သင်ဆက်သွယ်ထားသောဆာဗာများတွင်ပုံစံများရှိမရှိစစ်ဆေးရန် Refresh ခလုတ်ကိုနှိပ်ပါ။</string>
-  <string name="settings.camo_app.bar">ပုံဖျက်သည်</string>
   <string name="settings.camo_heading">တခြား အမည်နှင့် လိုဂိုအားရွေးချယ်ပါ</string>
   <string name="gallery_expl_empty">ပြသရန်ဖိုင်များမရှိပါ။ ဖိုင်များကိုတင်သွင်းရန် + ခလုတ်ကိုနှိပ်ပါ။</string>
   <string name="collect.help_app.bar">စုဆောင်းမှုအကူအညီ</string>
@@ -231,22 +230,17 @@
   </plurals>
   <string name="settings.docu_app.bar">မှတ်တမ်းတင်ခြင်း</string>
   <string name="settings.gen_select_documentation">မှတ်တမ်းတင်ခြင်း</string>
-  <string name="settings.prot_app.bar">အကာအကွယ်</string>
   <string name="settings.gen_select_protection">အကာအကွယ်</string>
   <string name="action_learn.more">ပိုမိုသိရန်</string>
   <string name="settings.servers_add.server_dialog.title">ဆာဗာ‌အသစ်ပေါင်းရန်</string>
     <string name="settings.prot_select_delete.forms">အကြမ်းသိမ်းဆည်းထားသည့် ဖောင်ပုံစံများ ၊ ပို့လွှတ်ပြီး ‌ဖောင်ပုံစံများ ကို ဖျက်မှာဖြစ်ပါတယ်။</string>
     <string name="settings.prot_select_delete.servers">ဆာဗာချိန်ညှိထားမှုအားဖျက်မည်။</string>
     <string name="settings.prot_select_delete.app">တဲလ်လာအားဖုန်းမှဖျက်မည်။</string>
-    <string name="offline_dialog.title">အင်တာနက်မပါပဲသုံးစွဲနိုင်သည့်စနစ်</string>
-  <string name="offline_dialog.expl">သင်အွန်လိုင်းမဟုတ်လျှင်အချက်အလက်အားလုံးကိုသိမ်းဆည်းထားသည်။ သင်၌မကောင်းသောဆက်သွယ်မှုရှိပါကဆယ်လူလာဒေတာများကိုသိမ်းဆည်းရန်အသုံးဝင်သည်။ ပုံစံများကိုတင်ရန်အဆင်သင့်ဖြစ်ချိန်တွင်ပိတ်ပါ။</string>
-  <string name="collect.form_action.desc_offline">အင်တာနက်မပါပဲသုံးစွဲနိုင်သည့်စနစ်</string>
   <string name="collect.sent_action_edit.to.resend">ပြန်လည်၍ပေးပို့ရန်အတွက်တည်းဖြတ်သည်။</string>
   <string name="collect_toast_form.submitted">ပုံစံတင်ပြီးခဲ့သည်</string>
   <string name="collect.end_heading_confirmation.form.submitted">ဖောင်ပုံစံပေးပို့သည်</string>
   <string name="settings.docu_add.server_field_password">စကားဝှက်</string>
   <string name="settings.camo_error_fail.retrieve.app.name">App</string>
-  <string name="collect.end_toast_saved.for.later">အော့ဖ်လိုင်းအသုံးစနစ်ကိုသက်ဝင်နေသောကြောင့်ထိုပုံစံကိုနောက်ပိုင်းတွင်တင်သွင်းရန်သိမ်းဆည်းထားသည်။</string>
   <string name="collect.end_item_form.data">တုံ့ပြန်မှုပုံစံ</string>
   <string name="collect_toast_fail.loading.form.instance">ပုံစံတင်သည့်အမှားတစ်ခုရှိခဲ့သည်။ ကျေးဇူးပြု၍ ထပ်မံကြိုးစားပါ။</string>
   <string name="collect_toast_fail.connection.too.weak">ပုံစံကိုပို့ရန်သင်၏အင်တာနက်ဆက်သွယ်မှုသည်အလွန်အားနည်းနေသည်။ ကျေးဇူးပြု၍ ထပ်မံကြိုးစားပါ။</string>

@@ -159,7 +159,6 @@
   <string name="collect.draft_expl_no.forms">Il n’y a aucun brouillon à afficher</string>
   <string name="collect.sent_expl_no.forms">Il n’y a aucun formulaire envoyé à afficher.</string>
   <string name="collect.blank_expl_no.forms">Il n’y a aucun formulaire à afficher. Toucher le bouton d’actualisation pour vérifier si des formulaires sont disponibles sur les serveurs auxquels vous êtes connecté.</string>
-  <string name="settings.camo_app.bar">Camouflage</string>
   <string name="settings.camo_heading">Sélectionner un nom et un logo différents</string>
   <string name="gallery_expl_empty">Il n’y a aucun fichier à afficher. Toucher le bouton + pour importer des fichiers.</string>
   <string name="collect.help_app.bar">Aide de Collecte</string>
@@ -234,22 +233,17 @@
   </plurals>
   <string name="settings.docu_app.bar">Documentation</string>
   <string name="settings.gen_select_documentation">Documentation</string>
-  <string name="settings.prot_app.bar">Protection</string>
   <string name="settings.gen_select_protection">Protection</string>
   <string name="action_learn.more">En savoir plus</string>
   <string name="settings.servers_add.server_dialog.title">Ajouter un serveur</string>
     <string name="settings.prot_select_delete.forms">Supprimer brouillons et formulaires envoyés</string>
     <string name="settings.prot_select_delete.servers">Supprimer les paramètres des serveurs</string>
     <string name="settings.prot_select_delete.app">Supprimer Tella</string>
-    <string name="offline_dialog.title">Mode Hors ligne</string>
-  <string name="offline_dialog.expl">En Mode Hors ligne, toutes les données sont enregistrées pour un envoi ultérieur. Cela est utile pour économiser les données cellulaires ou si votre connexion est mauvaise. Désactivez l’option quand vous êtes prêt à envoyer des formulaires.</string>
-  <string name="collect.form_action.desc_offline">Mode Hors ligne</string>
   <string name="collect.sent_action_edit.to.resend">Modifier pour renvoyer</string>
   <string name="collect_toast_form.submitted">Le formulaire a été envoyé</string>
   <string name="collect.end_heading_confirmation.form.submitted">Le formulaire a été envoyé</string>
   <string name="settings.docu_add.server_field_password">Mot de passe</string>
   <string name="settings.camo_error_fail.retrieve.app.name">Le nom n\'est pas défini</string>
-  <string name="collect.end_toast_saved.for.later">Le formulaire a été enregistré pour un envoi ultérieur, car le Mode Hors ligne est activé</string>
   <string name="collect.end_item_form.data">Réponses du formulaire</string>
   <string name="collect_toast_fail.loading.form.instance">Erreur de chargement du formulaire. Veuillez réessayer</string>
   <string name="collect_toast_fail.connection.too.weak">Votre connexion à Internet est trop faible pour envoyer le formulaire. Veuillez réessayer</string>

@@ -159,7 +159,6 @@
   <string name="collect.draft_expl_no.forms">Não há rascunhos de formulários a serem exibidos.</string>
   <string name="collect.sent_expl_no.forms">Não há formulários enviados a serem exibidos.</string>
   <string name="collect.blank_expl_no.forms">Não há formulários para mostrar. Toque no botão Atualizar para verificar se há formulários disponíveis nos servidores aos quais você está conectado(a).</string>
-  <string name="settings.camo_app.bar">Camuflagem</string>
   <string name="settings.camo_heading">Selecione um nome e logotipo diferentes</string>
   <string name="gallery_expl_empty">Não há arquivos para mostrar. Toque no botão + para importar arquivos.</string>
   <string name="collect.help_app.bar">Ajuda de Coletar</string>
@@ -234,22 +233,17 @@
   </plurals>
   <string name="settings.docu_app.bar">Documentação</string>
   <string name="settings.gen_select_documentation">Documentação</string>
-  <string name="settings.prot_app.bar">Proteção</string>
   <string name="settings.gen_select_protection">Proteção</string>
   <string name="action_learn.more">Saiba Mais</string>
   <string name="settings.servers_add.server_dialog.title">Adicionar servidor</string>
     <string name="settings.prot_select_delete.forms">Excluir os rascunhos e formulários enviados</string>
     <string name="settings.prot_select_delete.servers">Excluir as configurações do servidor</string>
     <string name="settings.prot_select_delete.app">Excluir o aplicativo Tella</string>
-    <string name="offline_dialog.title">Modo Offline</string>
-  <string name="offline_dialog.expl">No Modo Offline, todos os dados serão salvos para envio posterior. Esse recurso é útil para economizar o uso de dados móveis do celular ou se você tiver uma conexão ruim. Desabilite-o quando estiver pronto(a) para enviar os formulários.</string>
-  <string name="collect.form_action.desc_offline">Modo Offline</string>
   <string name="collect.sent_action_edit.to.resend">Editar para reenviar</string>
   <string name="collect_toast_form.submitted">Formulário enviado</string>
   <string name="collect.end_heading_confirmation.form.submitted">Formulário enviado</string>
   <string name="settings.docu_add.server_field_password">Senha</string>
   <string name="settings.camo_error_fail.retrieve.app.name">O nome não está definido</string>
-  <string name="collect.end_toast_saved.for.later">Formulário salvo para envio posterior porque o Modo Off-line está ativado</string>
   <string name="collect.end_item_form.data">Dados do formulário</string>
   <string name="collect_toast_fail.loading.form.instance">Erro ao carregar o formulário. Por favor, tente novamente</string>
   <string name="collect_toast_fail.connection.too.weak">A sua conexão com a Internet é muito fraca para enviar o formulário. Por favor, tente novamente</string>

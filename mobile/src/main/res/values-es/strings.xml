@@ -159,7 +159,6 @@
   <string name="collect.draft_expl_no.forms">No hay borradores de formularios para mostrar.</string>
   <string name="collect.sent_expl_no.forms">No hay formularios enviados para mostrar.</string>
   <string name="collect.blank_expl_no.forms">No hay formularios para mostrar. Pulsa el botón actualizar para comprobar si hay formularios disponibles en los servidores a los que estás conectado.</string>
-  <string name="settings.camo_app.bar">Camuflar</string>
   <string name="settings.camo_heading">Seleccionar nombre y logotipo diferentes</string>
   <string name="gallery_expl_empty">No hay archivos para mostrar. Pulsa el botón + para importar archivos.</string>
   <string name="collect.help_app.bar">Ayuda de Recopilar</string>
@@ -234,22 +233,17 @@
   </plurals>
   <string name="settings.docu_app.bar">Documentación</string>
   <string name="settings.gen_select_documentation">Documentación</string>
-  <string name="settings.prot_app.bar">Protección</string>
   <string name="settings.gen_select_protection">Protección</string>
   <string name="action_learn.more">Aprende más</string>
   <string name="settings.servers_add.server_dialog.title">Añadir servidor</string>
     <string name="settings.prot_select_delete.forms">Eliminar borradores y formularios enviados</string>
     <string name="settings.prot_select_delete.servers">Eliminar la configuración del servidor</string>
     <string name="settings.prot_select_delete.app">Eliminar Tella</string>
-    <string name="offline_dialog.title">Modo Sin Conexión</string>
-  <string name="offline_dialog.expl">En el Modo Sin Conexión, todos los datos son guardados para su posterior envío. Es útil para guardar datos celulares o cuando la conectividad es pobre. Desactívalo cuando estés listo para enviar formularios.</string>
-  <string name="collect.form_action.desc_offline">Modo Sin Conexión</string>
   <string name="collect.sent_action_edit.to.resend">Editar para reenviar</string>
   <string name="collect_toast_form.submitted">Formulario enviado</string>
   <string name="collect.end_heading_confirmation.form.submitted">Formulario enviado</string>
   <string name="settings.docu_add.server_field_password">Contraseña</string>
   <string name="settings.camo_error_fail.retrieve.app.name">El nombre no está establecido</string>
-  <string name="collect.end_toast_saved.for.later">Formulario guardado para su posterior envío porque el modo sin conexión está activado</string>
   <string name="collect.end_item_form.data">Respuestas del formulario</string>
   <string name="collect_toast_fail.loading.form.instance">Hubo un error al cargar el formulario. Por favor, inténtalo de nuevo</string>
   <string name="collect_toast_fail.connection.too.weak">Tu conexión a Internet es demasiado débil para enviar el formulario. Por favor, inténtalo de nuevo</string>

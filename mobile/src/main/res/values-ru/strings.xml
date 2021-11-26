@@ -164,7 +164,6 @@
   <string name="collect.draft_expl_no.forms">Нет черновиков форм для просмотра</string>
   <string name="collect.sent_expl_no.forms">Нет отправленных форм для просмотра</string>
   <string name="collect.blank_expl_no.forms">Нет форм для просмотра. Нажмите кнопку \"обновить\", чтобы проверить, есть ли доступные для заполнения формы на серверах, к которым Вы подключены.</string>
-  <string name="settings.camo_app.bar">Изменить внешний вид</string>
   <string name="settings.camo_heading">Выберите другое имя и логотип</string>
   <string name="gallery_expl_empty">Нет файлов для просмотра. Нажмите кнопку +, чтобы добавить или импортировать файлы</string>
   <string name="collect.help_app.bar">Справка Collect</string>
@@ -248,15 +247,11 @@
     <string name="settings.prot_select_delete.forms">Удалить черновик и отправленные формы</string>
     <string name="settings.prot_select_delete.servers">Очистить настройки сервера</string>
     <string name="settings.prot_select_delete.app">Удалить Tella</string>
-    <string name="offline_dialog.title">Автономный режим</string>
-  <string name="offline_dialog.expl">В автономном режиме все данные сохраняются для последующей отправки. Это нужно для экономии мобильного интернета или если у вас плохое соединение. Отключите, когда будете готовы отправить формы.</string>
-  <string name="collect.form_action.desc_offline">Автономный режим</string>
   <string name="collect.sent_action_edit.to.resend">Редактировать для повторной отправки</string>
   <string name="collect_toast_form.submitted">Форма отправлена</string>
   <string name="collect.end_heading_confirmation.form.submitted">Форма отправлена</string>
   <string name="settings.docu_add.server_field_password">Пароль</string>
   <string name="settings.camo_error_fail.retrieve.app.name">Имя не установлено</string>
-  <string name="collect.end_toast_saved.for.later">Форма сохранена для последующей отправки, поскольку активирован автономный режим</string>
   <string name="collect.end_item_form.data">Данные формы</string>
   <string name="collect_toast_fail.loading.form.instance">Ошибка при загрузке формы</string>
   <string name="collect_toast_fail.connection.too.weak">Подключение к Интернету слишком слабое</string>

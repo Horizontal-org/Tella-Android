@@ -281,8 +281,6 @@ A toast notification informing the user that their files were successfully delet
   <!-- Explanatory text displayed when the Collect main screen doesn't display any form. -->
   <string name="collect.blank_expl_no.forms">ತೋರಿಸಲು ಯಾವುದೇ ಫಾರ್ಮ್‌ಗಳಿಲ್ಲ. ನೀವು ಸಂಪರ್ಕಗೊಂಡಿರುವ ಸರ್ವರ್‌ಗಳಲ್ಲಿ ಫಾರ್ಮ್‌ಗಳು ಲಭ್ಯವಿದೆಯೇ ಎಂದು ಪರಿಶೀಲಿಸಲು ರಿಫ್ರೆಶ್ ಬಟನ್ ಟ್ಯಾಪ್ ಮಾಡಿ.</string>
   <!-- The screen title (in the app bar) for the Camouflage feature in Settings > Protection > Camouflage -->
-  <string name="settings.camo_app.bar">ಮರೆಮಾಚುವಿಕೆ</string>
-  <!-- The heading of the Camouflage screen where the user selects how to hide the app. -->
   <string name="settings.camo_heading">ಬೇರೆ ಹೆಸರು ಮತ್ತು ಲೋಗೋ ಆಯ್ಕೆಮಾಡಿ</string>
   <string name="gallery_expl_empty">ತೋರಿಸಲು ಯಾವುದೇ ಫೈಲ್‌ಗಳಿಲ್ಲ. ಫೈಲ್‌ಗಳನ್ನು ಆಮದು ಮಾಡಲು + ಬಟನ್ ಟ್ಯಾಪ್ ಮಾಡಿ.</string>
   <!-- The screen title (in the app bar) where the user can read some information about the Collect feature (on data collection) -->
@@ -435,12 +433,6 @@ A toast notification informing the user that their files were successfully delet
   <string name="settings.prot_select_delete.servers">ಸರ್ವರ್ ಸಿದ್ಧತೆಗಳನ್ನು ಅಳಿಸಿ</string>
     <!-- The checkbox to select what triggering the 'Quick Delete' button does -->
   <string name="settings.prot_select_delete.app">Tella ವನ್ನು ಅಳಿಸಿ</string>
-    <!-- The title of the dialog to enable or disable Offline mode. -->
-  <string name="offline_dialog.title">ಆಫ್‍ಲೈನ್ ವಿಧಾನ</string>
-  <!-- The explanation for Offline Mode. -->
-  <string name="offline_dialog.expl">ಆಫ್‌ಲೈನ್ ಮೋಡ್‌ನಲ್ಲಿ, ನಂತರದ ಸಲ್ಲಿಕೆಗಾಗಿ ಎಲ್ಲಾ ಡೇಟಾ ಉಳಿಸಲಾಗಿದೆ. ಸೆಲ್ಯುಲಾರ್ ಡೇಟಾ ಉಳಿಸಲು ಇದು ಉಪಯುಕ್ತವಾಗಿದೆ ಅಥವಾ ನೀವು ಕೆಟ್ಟ ಸಂಪರ್ಕವನ್ನು ಹೊಂದಿದ್ದರೆ. ನೀವು ಫಾರ್ಮ್‌ಗಳನ್ನು ಸಲ್ಲಿಸಲು ಸಿದ್ಧರಾದಾಗ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ.</string>
-  <!-- The name of the action button to enable Offline mode from the data collection section. It is only visible when long pressing the button or when using the screen reader. -->
-  <string name="collect.form_action.desc_offline">ಆಫ್‍ಲೈನ್ ವಿಧಾನ</string>
   <!-- The menu item in the screen showing all sent forms to open a form in order to edit it and resend. -->
   <string name="collect.sent_action_edit.to.resend">ಮರುಕಳುಹಿಸಲು ಸಂಪಾದಿಸಿ</string>
   <!-- The toast message informing the user that the form was successfully submitted. -->
@@ -451,8 +443,6 @@ A toast notification informing the user that their files were successfully delet
   <string name="settings.docu_add.server_field_password">ಪಾಸ್‌ವರ್ಡ್</string>
   <!-- A placeholder for the name of the app, when the app encounters an error retrieving the name of the app. -->
   <string name="settings.camo_error_fail.retrieve.app.name">ಆ್ಯಪ್</string>
-  <string name="collect.end_toast_saved.for.later">ಆಫ್‌ಲೈನ್ ಮೋಡ್ ಅನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿರುವುದರಿಂದ ಫಾರ್ಮ್ ಅನ್ನು ನಂತರದ ಸಲ್ಲಿಕೆಗಾಗಿ ಉಳಿಸಲಾಗಿದೆ</string>
-  <!-- The submissions screen shows all the different elements to be submitted. This refers to the responses to form questions (not file attachments) -->
   <string name="collect.end_item_form.data">ಫಾರ್ಮ್ ಪ್ರತಿಕ್ರಿಯೆಗಳು</string>
   <string name="collect_toast_fail.loading.form.instance">ಫಾರ್ಮ್ ಅನ್ನು ಲೋಡ್ ಮಾಡುವಲ್ಲಿ ದೋಷ ಕಂಡುಬಂದಿದೆ. ದಯವಿಟ್ಟು ಪುನಃ ಪ್ರಯತ್ನಿಸಿ</string>
   <string name="collect_toast_fail.connection.too.weak">ಫಾರ್ಮ್ ಕಳುಹಿಸಲು ನಿಮ್ಮ ಇಂಟರ್ನೆಟ್ ಸಂಪರ್ಕವು ತುಂಬಾ ದುರ್ಬಲವಾಗಿದೆ. ದಯವಿಟ್ಟು ಪುನಃ ಪ್ರಯತ್ನಿಸಿ</string>

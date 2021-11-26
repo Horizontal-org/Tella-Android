@@ -163,7 +163,6 @@
   <string name="collect.draft_expl_no.forms">Няма праектаў формаў для паказу</string>
   <string name="collect.sent_expl_no.forms">Няма адпраўленых формаў для паказу</string>
   <string name="collect.blank_expl_no.forms">Няма формаў для паказу. Націсніце кнопку абнаўлення, каб праверыць наяўнасць пустых формаў на серверах, да якіх вы падлучаныя.</string>
-  <string name="settings.camo_app.bar">Змяніць знешні выгляд</string>
   <string name="settings.camo_heading">Абярыце іншае імя і лагатып</string>
   <string name="gallery_expl_empty">Няма файлаў для паказу. Націсніце кнопку +, каб захапіць альбо імпартаваць файлы</string>
   <string name="collect.help_app.bar">Даведка Збору</string>
@@ -240,22 +239,17 @@
   </plurals>
   <string name="settings.docu_app.bar">Дакументацыя</string>
   <string name="settings.gen_select_documentation">Дакументацыя</string>
-  <string name="settings.prot_app.bar">Абарона</string>
   <string name="settings.gen_select_protection">Абарона</string>
   <string name="action_learn.more">Даведайцеся больш</string>
   <string name="settings.servers_add.server_dialog.title">Дадаць сервер</string>
     <string name="settings.prot_select_delete.forms">Выдаліць праект (чарнавік) і дасланыя формы</string>
     <string name="settings.prot_select_delete.servers">Выдаліць налады сервера</string>
     <string name="settings.prot_select_delete.app">Выдаліць Tella</string>
-    <string name="offline_dialog.title">Аўтаномны рэжым</string>
-  <string name="offline_dialog.expl">У аўтаномным рэжыме ўсе дадзеныя захоўваюцца для наступнай адпраўкі. Гэта карысна для захавання дадзеных ці калі ў вас дрэнная сувязь. Адключыць, калі вы будзеце гатовыя адпраўляць формы.</string>
-  <string name="collect.form_action.desc_offline">Аўтаномны рэжым</string>
   <string name="collect.sent_action_edit.to.resend">Рэдагаваць, каб адправіць</string>
   <string name="collect_toast_form.submitted">Форма адпраўлена</string>
   <string name="collect.end_heading_confirmation.form.submitted">Форма адпраўлена</string>
   <string name="settings.docu_add.server_field_password">Пароль</string>
   <string name="settings.camo_error_fail.retrieve.app.name">Імя не ўведзена</string>
-  <string name="collect.end_toast_saved.for.later">Форма захавана для наступнага адпраўкі, бо актываваны аўтаномны рэжым</string>
   <string name="collect.end_item_form.data">Форма дадзеных</string>
   <string name="collect_toast_fail.loading.form.instance">Памылка загрузкі формы</string>
   <string name="collect_toast_fail.connection.too.weak">Інтэрнэт-сувязь занадта слабая</string>
