@@ -21,7 +21,6 @@ public class AboutHelpActivity extends BaseLockActivity {
     @BindView(R.id.version)
     TextView version;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
