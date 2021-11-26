@@ -68,7 +68,7 @@
     <TextView
         android:id="@+id/back_btn"
         style="@style/Unlock_White_Text_Back"
-        android:text="@string/pl_back"
+        android:text="@string/LockSelect_Action_Back"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="34dp"
         app:layout_constraintBottom_toBottomOf="parent"

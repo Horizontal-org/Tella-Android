@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.ReturnActivity
 import com.hzontal.tella_locking_ui.TellaKeysUI
@@ -33,16 +32,16 @@ class PinUnlockActivity : BasePinActivity() {
                 backBtn = findViewById(R.id.backBtn)
                 backBtn.visibility = View.VISIBLE
                 backBtn.setOnClickListener { finish() }
-                pinTopText.text = getString(R.string.settings_current_pin_msg)
+                pinTopText.text = getString(R.string.LockPinSet_Settings_EnterCurrentPin)
             }
             ReturnActivity.CAMOUFLAGE.getActivityOrder() -> {
                 backBtn = findViewById(R.id.backBtn)
                 backBtn.visibility = View.VISIBLE
                 backBtn.setOnClickListener { finish() }
-                pinTopText.text = getString(R.string.settings_current_camo_pin_msg)
+                pinTopText.text = getString(R.string.LockPinSet_Settings_EnterCurrentPinToChangeCamouflage)
             }
             else -> {
-                pinTopText.text = getString(R.string.enter_pin_unlock_tella)
+                pinTopText.text = getString(R.string.UnlockPin_Message_EnterPin)
             }
         }
     }
@@ -56,7 +55,7 @@ class PinUnlockActivity : BasePinActivity() {
             }
 
             override fun onError(throwable: Throwable) {
-                onFailureSetPin(getString(R.string.incorrect_pin_error_msg))
+                onFailureSetPin(getString(R.string.LockPinConfirm_Message_Error_IncorrectPin))
                 TellaKeysUI.getCredentialsCallback().onUnSuccessfulUnlock(TAG, throwable)
             }
         })
@@ -72,9 +71,9 @@ class PinUnlockActivity : BasePinActivity() {
         pinTopText.setTextColor(ContextCompat.getColor(this, R.color.wa_white))
         pinTopText.text =  getString(
             when (returnActivity) {
-                ReturnActivity.SETTINGS.getActivityOrder() -> R.string.settings_current_pin_msg
-                ReturnActivity.CAMOUFLAGE.getActivityOrder() -> R.string.settings_current_camo_pin_msg
-                else -> R.string.enter_pin_unlock_tella
+                ReturnActivity.SETTINGS.getActivityOrder() -> R.string.LockPinSet_Settings_EnterCurrentPin
+                ReturnActivity.CAMOUFLAGE.getActivityOrder() -> R.string.LockPinSet_Settings_EnterCurrentPinToChangeCamouflage
+                else -> R.string.UnlockPin_Message_EnterPin
             })
     }
 

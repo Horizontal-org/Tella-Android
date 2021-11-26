@@ -634,30 +634,30 @@ This is one of the two options available. -->
     <string name="camera_tab.title_video">വീഡിയോ</string>
   <string name="camera_tab.title_photo">ഫോട്ടോ</string>
   <string name="action_upload">അപ്‌ലോഡ്</string>
-  <string name="pl_cancel">റദ്ദാക്കുക </string>
-  <string name="pl_confirm">സ്ഥിരീകരിക്കുക</string>
-  <string name="pl_confirm_pattern">സ്ഥിരീകരിക്കുന്നതിനായി പാറ്റേൺ/മാതൃക ഒന്നുകൂടി വരക്കുക</string>
-  <string name="pl_continue">തുടരുക</string>
-  <string name="pl_draw_pattern">ഒരു അൺലോക്ക് പാറ്റേൺ/മാതൃക വരയ്‌ക്കുക</string>
-  <string name="pl_draw_pattern_to_unlock">അൺലോക്ക് ചെയ്യുവാനായി പാറ്റേൺ/മാതൃക  വരക്കുക</string>
-  <string name="pl_pattern_confirmed">Tella (റ്റെല്ല) അൺലോക്കുചെയ്യാനുള്ള നിങ്ങളുടെ പാറ്റേൺ/മാതൃക ഇതായിരിക്കും</string>
-  <string name="pl_pattern_recorded">പാറ്റേൺ/മാതൃക റെക്കോർഡ്‌ചെയ്തു</string>
-  <string name="pl_pattern_too_short">കുറഞ്ഞത് %d ഡോട്ടുകളെങ്കിലും കണക്ട് ചെയ്യുക, ദയവായി വീണ്ടും വരയ്ക്കുക</string>
-  <string name="pl_recording_pattern">പൂർത്തിയാകുമ്പോൾ വിരൽ മാറ്റുക</string>
-  <string name="pl_redraw">വീണ്ടും വരയ്ക്കുക</string>
-  <string name="pl_wrong_pattern">തെറ്റായ പാറ്റേൺ/മാതൃക, ദയവായി വീണ്ടും ശ്രമിക്കുക.</string>
+  <string name="LockSelect_Action_Cancel">റദ്ദാക്കുക </string>
+  <string name="LockSelect_Action_Confirm">സ്ഥിരീകരിക്കുക</string>
+  <string name="LockPatternConfirm_Action_Confirm">സ്ഥിരീകരിക്കുന്നതിനായി പാറ്റേൺ/മാതൃക ഒന്നുകൂടി വരക്കുക</string>
+  <string name="LockSelect_Action_Continue">തുടരുക</string>
+  <string name="LockPatternSet_Draw_Pattern">ഒരു അൺലോക്ക് പാറ്റേൺ/മാതൃക വരയ്‌ക്കുക</string>
+  <string name="UnlockPattern_DrawToUnlock">അൺലോക്ക് ചെയ്യുവാനായി പാറ്റേൺ/മാതൃക  വരക്കുക</string>
+  <string name="LockPatternConfirm_Pattern_Confirmed">Tella (റ്റെല്ല) അൺലോക്കുചെയ്യാനുള്ള നിങ്ങളുടെ പാറ്റേൺ/മാതൃക ഇതായിരിക്കും</string>
+  <string name="LockPatternSet_Pattern_Recorded">പാറ്റേൺ/മാതൃക റെക്കോർഡ്‌ചെയ്തു</string>
+  <string name="UnlockPattern_PatternTooShort">കുറഞ്ഞത് %d ഡോട്ടുകളെങ്കിലും കണക്ട് ചെയ്യുക, ദയവായി വീണ്ടും വരയ്ക്കുക</string>
+  <string name="LockPatternSet_RecordingPattern">പൂർത്തിയാകുമ്പോൾ വിരൽ മാറ്റുക</string>
+  <string name="LockPatternSet_Action_Redraw">വീണ്ടും വരയ്ക്കുക</string>
+  <string name="LockPatternConfirm_Message_WrongPattern">തെറ്റായ പാറ്റേൺ/മാതൃക, ദയവായി വീണ്ടും ശ്രമിക്കുക.</string>
   <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_start">പാറ്റേൺ/മാതൃക തുടങ്ങി</string>
+  <string name="LockPatternSet_Message_PatternStarted">പാറ്റേൺ/മാതൃക തുടങ്ങി</string>
   <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_cleared">പാറ്റേൺ/മാതൃക മായ്ച്ചു</string>
+  <string name="LockPatternSet_Message_PatternCleared">പാറ്റേൺ/മാതൃക മായ്ച്ചു</string>
   <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_cell_added">കളം ചേർത്തു</string>
+  <string name="LockPatternSet_Message_CellAdded">കളം ചേർത്തു</string>
   <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern. The screen reader will add the cell number that the user added. For example, if the user selects the bottom left cell, the screen reader will read "cell 7 added". -->
-  <string name="pl_access_pattern_cell_added_verbose"><xliff:g id="cell_index" example="3">%1$d</xliff:g> - ആം കളം ചേർത്തു</string>
+  <string name="LockPatternSet_Message_CellAddedVerbose"><xliff:g id="cell_index" example="3">%1$d</xliff:g> - ആം കളം ചേർത്തു</string>
   <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_detected">പാറ്റേണ്‍/മാതൃക പൂർത്തിയായി </string>
+  <string name="LockPatternSet_Message_PatternDetected">പാറ്റേണ്‍/മാതൃക പൂർത്തിയായി </string>
   <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_area">പാറ്റേണ്‍ ഏരിയ (മാതൃക പ്രദേശം)</string>
+  <string name="UnLockPattern_PatternArea">പാറ്റേണ്‍ ഏരിയ (മാതൃക പ്രദേശം)</string>
   <!-- The button to get access to more options. -->
   <string name="collect.blank_action.desc_more.options">കൂടുതൽ ഓപ്ഷനുകൾ / ഐച്ഛികങ്ങള്‍</string>
   <string name="action_next">അടുത്തത്</string>

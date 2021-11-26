@@ -254,12 +254,6 @@ public class FormSubmitActivity extends BaseLockActivity implements
         updateFormSubmitButton(false);
     }
 
-    private void refreshFormEndView(boolean offline) {
-        if (endView != null) {
-            endView.refreshInstance(offline);
-        }
-    }
-
     private void enableMenuItems(Menu menu) {
         boolean disabled = formReSubmitter != null && formReSubmitter.isReSubmitting();
 

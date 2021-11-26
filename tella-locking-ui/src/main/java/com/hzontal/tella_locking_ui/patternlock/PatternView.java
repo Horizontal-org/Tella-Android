@@ -512,21 +512,21 @@ public class PatternView extends View {
     }
 
     private void notifyPatternStarted() {
-        sendAccessEvent(R.string.pl_access_pattern_start);
+        sendAccessEvent(R.string.LockPatternSet_Message_PatternStarted);
         if (mOnPatternListener != null) {
             mOnPatternListener.onPatternStart();
         }
     }
 
     private void notifyPatternDetected() {
-        sendAccessEvent(R.string.pl_access_pattern_detected);
+        sendAccessEvent(R.string.LockPatternSet_Message_PatternDetected);
         if (mOnPatternListener != null) {
             mOnPatternListener.onPatternDetected(mPattern);
         }
     }
 
     private void notifyPatternCleared() {
-        sendAccessEvent(R.string.pl_access_pattern_cleared);
+        sendAccessEvent(R.string.LockPatternSet_Message_PatternCleared);
         if (mOnPatternListener != null) {
             mOnPatternListener.onPatternCleared();
         }
@@ -1385,7 +1385,7 @@ public class PatternView extends View {
             super.onPopulateAccessibilityEvent(host, event);
             if (!mPatternInProgress) {
                 CharSequence contentDescription = getContext().getText(
-                        R.string.pl_access_pattern_area);
+                        R.string.UnLockPattern_PatternArea);
                 event.setContentDescription(contentDescription);
             }
         }
@@ -1500,8 +1500,8 @@ public class PatternView extends View {
         private CharSequence getTextForVirtualView(int virtualViewId) {
             final Resources res = getResources();
             return shouldSpeakPassword() ?
-                    res.getString(R.string.pl_access_pattern_cell_added_verbose, virtualViewId)
-                    : res.getString(R.string.pl_access_pattern_cell_added);
+                    res.getString(R.string.LockPatternSet_Message_CellAddedVerbose, virtualViewId)
+                    : res.getString(R.string.LockPatternSet_Message_CellAdded);
         }
 
         /**

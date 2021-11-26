@@ -70,7 +70,7 @@
 
     <TextView
         android:id="@+id/back_btn"
-        android:text="@string/pl_back"
+        android:text="@string/LockSelect_Action_Back"
         style="@style/Unlock_White_Text_Back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

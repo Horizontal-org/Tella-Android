@@ -64,7 +64,7 @@
             android:paddingStart="32dp"
             android:paddingEnd="32dp"
             android:paddingBottom="4dp"
-            android:text="@string/pl_back"
+            android:text="@string/LockSelect_Action_Back"
             android:textAlignment="center"
             android:textColor="@color/wa_white"
             android:background="@color/dark_purple"

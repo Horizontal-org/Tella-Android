@@ -82,7 +82,7 @@
         style="@style/Unlock_White_Text_Back"
         android:id="@+id/back_btn"
         android:visibility="gone"
-        android:text="@string/pl_back"
+        android:text="@string/LockSelect_Action_Back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

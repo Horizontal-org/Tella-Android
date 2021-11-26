@@ -215,7 +215,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/open_sans"
         android:layout_gravity="bottom"
-        android:text="@string/pl_back"
+        android:text="@string/LockSelect_Action_Back"
         android:textColor="@color/wa_white"
         android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"

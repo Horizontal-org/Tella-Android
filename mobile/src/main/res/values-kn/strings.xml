@@ -634,30 +634,30 @@ This is one of the two options available. -->
     <string name="camera_tab.title_video">ವಿಡಿಯೋ</string>
   <string name="camera_tab.title_photo">ಫೋಟೋ</string>
   <string name="action_upload">ಅಪ್‌ಲೋಡ್</string>
-  <string name="pl_cancel">ರದ್ದುಮಾಡಿ</string>
-  <string name="pl_confirm">ಖಚಿತಪಡಿಸಿ</string>
-  <string name="pl_confirm_pattern">ಖಚಿತಪಡಿಸಲು ವಿನ್ಯಾಸವನ್ನು ಮತ್ತೆ ಚಿತ್ರಸಿ</string>
-  <string name="pl_continue">ಮುಂದುವರಿಸಿ</string>
-  <string name="pl_draw_pattern">ಅನ್ಲಾಕ್ ವಿನ್ಯಾಸವನ್ನು ಚಿತ್ರಿಸಿ</string>
-  <string name="pl_draw_pattern_to_unlock">ಅನ್ಲಾಕ್ ಮಾಡಲು ವಿನ್ಯಾಸವನ್ನು ಚಿತ್ರಸಿ</string>
-  <string name="pl_pattern_confirmed">Tella ಅನ್ಲಾಕ್ ಮಾಡಲು ಇದು ಈಗ ನಿಮ್ಮ ವಿನ್ಯಾಸವಾಗಿದೆ.</string>
-  <string name="pl_pattern_recorded">ವಿನ್ಯಾಸವನ್ನು ರೆಕಾರ್ಡ್‌ ಮಾಡಲಾಗಿದೆ</string>
-  <string name="pl_pattern_too_short">ಕನಿಷ್ಠ %d ಚುಕ್ಕೆಗಳನ್ನು ಸಂಪರ್ಕಿಸಿ, ದಯವಿಟ್ಟು ಮತ್ತೆ ಚಿತ್ರಿಸಿರಿ</string>
-  <string name="pl_recording_pattern">ಮುಗಿದಾಗ ಬೆರಳನ್ನು ಬಿಡುಗಡೆ ಮಾಡಿ</string>
-  <string name="pl_redraw">ಮತ್ತೆ ಚಿತ್ರಿಸಿರಿ</string>
-  <string name="pl_wrong_pattern">ತಪ್ಪಾದ ವಿನ್ಯಾಸವಿದು, ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
+  <string name="LockSelect_Action_Cancel">ರದ್ದುಮಾಡಿ</string>
+  <string name="LockSelect_Action_Confirm">ಖಚಿತಪಡಿಸಿ</string>
+  <string name="LockPatternConfirm_Action_Confirm">ಖಚಿತಪಡಿಸಲು ವಿನ್ಯಾಸವನ್ನು ಮತ್ತೆ ಚಿತ್ರಸಿ</string>
+  <string name="LockSelect_Action_Continue">ಮುಂದುವರಿಸಿ</string>
+  <string name="LockPatternSet_Draw_Pattern">ಅನ್ಲಾಕ್ ವಿನ್ಯಾಸವನ್ನು ಚಿತ್ರಿಸಿ</string>
+  <string name="UnlockPattern_DrawToUnlock">ಅನ್ಲಾಕ್ ಮಾಡಲು ವಿನ್ಯಾಸವನ್ನು ಚಿತ್ರಸಿ</string>
+  <string name="LockPatternConfirm_Pattern_Confirmed">Tella ಅನ್ಲಾಕ್ ಮಾಡಲು ಇದು ಈಗ ನಿಮ್ಮ ವಿನ್ಯಾಸವಾಗಿದೆ.</string>
+  <string name="LockPatternSet_Pattern_Recorded">ವಿನ್ಯಾಸವನ್ನು ರೆಕಾರ್ಡ್‌ ಮಾಡಲಾಗಿದೆ</string>
+  <string name="UnlockPattern_PatternTooShort">ಕನಿಷ್ಠ %d ಚುಕ್ಕೆಗಳನ್ನು ಸಂಪರ್ಕಿಸಿ, ದಯವಿಟ್ಟು ಮತ್ತೆ ಚಿತ್ರಿಸಿರಿ</string>
+  <string name="LockPatternSet_RecordingPattern">ಮುಗಿದಾಗ ಬೆರಳನ್ನು ಬಿಡುಗಡೆ ಮಾಡಿ</string>
+  <string name="LockPatternSet_Action_Redraw">ಮತ್ತೆ ಚಿತ್ರಿಸಿರಿ</string>
+  <string name="LockPatternConfirm_Message_WrongPattern">ತಪ್ಪಾದ ವಿನ್ಯಾಸವಿದು, ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
   <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_start">ವಿನ್ಯಾಸವನ್ನು ಪ್ರಾರಂಭಿಸಲಾಗಿದೆ</string>
+  <string name="LockPatternSet_Message_PatternStarted">ವಿನ್ಯಾಸವನ್ನು ಪ್ರಾರಂಭಿಸಲಾಗಿದೆ</string>
   <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_cleared">ವಿನ್ಯಾಸವನ್ನು ತೆರವುಗೊಳಿಸಲಾಗಿದೆ</string>
+  <string name="LockPatternSet_Message_PatternCleared">ವಿನ್ಯಾಸವನ್ನು ತೆರವುಗೊಳಿಸಲಾಗಿದೆ</string>
   <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_cell_added">ಸೆಲ್ ಸೇರಿಸಲಾಗಿದೆ</string>
+  <string name="LockPatternSet_Message_CellAdded">ಸೆಲ್ ಸೇರಿಸಲಾಗಿದೆ</string>
   <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern. The screen reader will add the cell number that the user added. For example, if the user selects the bottom left cell, the screen reader will read "cell 7 added". -->
-  <string name="pl_access_pattern_cell_added_verbose">ಸೆಲ್ <xliff:g id="cell_index" example="3"> %1$d </xliff:g> ಸೇರಿಸಲಾಗಿದೆ</string>
+  <string name="LockPatternSet_Message_CellAddedVerbose">ಸೆಲ್ <xliff:g id="cell_index" example="3"> %1$d </xliff:g> ಸೇರಿಸಲಾಗಿದೆ</string>
   <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_detected">ವಿನ್ಯಾಸವನ್ನು ಪೂರ್ಣಗೊಳಿಸಲಾಗಿದೆ</string>
+  <string name="LockPatternSet_Message_PatternDetected">ವಿನ್ಯಾಸವನ್ನು ಪೂರ್ಣಗೊಳಿಸಲಾಗಿದೆ</string>
   <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_area">ವಿನ್ಯಾಸದ ಪ್ರದೇಶ</string>
+  <string name="UnLockPattern_PatternArea">ವಿನ್ಯಾಸದ ಪ್ರದೇಶ</string>
   <!-- The button to get access to more options. -->
   <string name="collect.blank_action.desc_more.options">ಹೆಚ್ಚಿನ ಆಯ್ಕೆಗಳು</string>
   <string name="action_next">ಮುಂದೆ</string>

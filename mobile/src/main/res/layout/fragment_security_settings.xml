@@ -42,7 +42,7 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentStart="true"
                         android:gravity="center_vertical"
-                        android:text="@string/settings_lock"
+                        android:text="@string/Settings_Action_SetLock"
                         android:textColor="@color/wa_white" />
 
                     <TextView

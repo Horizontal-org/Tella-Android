@@ -634,30 +634,30 @@ This is one of the two options available. -->
     <string name="camera_tab.title_video">வீடியோ</string>
   <string name="camera_tab.title_photo">புகைப்படம்</string>
   <string name="action_upload">பதிவேற்று</string>
-  <string name="pl_cancel">ரத்துசெய்யவும்</string>
-  <string name="pl_confirm">உறுதிப்படுத்து</string>
-  <string name="pl_confirm_pattern">உறுதிப்படுத்த மீண்டும் வடிவத்தை வரையவும்</string>
-  <string name="pl_continue">தொடர்</string>
-  <string name="pl_draw_pattern">பூட்டுநீக்கு வடிவத்தை வரையவும்</string>
-  <string name="pl_draw_pattern_to_unlock">டெல்லாவைத் திறக்க வடிவத்தை வரையவும்.</string>
-  <string name="pl_pattern_confirmed">இப்போது, டெல்லா கணக்கைத் திறக்கப் பயன்படுத்தப்படும் உங்கள் வடிவம் இது</string>
-  <string name="pl_pattern_recorded">வடிவம் பதிவு செய்யப்பட்டது</string>
-  <string name="pl_pattern_too_short">குறைந்தது %d புள்ளிகளை இணைக்கவும். தயவுசெய்து மீண்டும் வரையவும்.</string>
-  <string name="pl_recording_pattern">முடிந்ததும் விரலை விடுவிக்கவும்</string>
-  <string name="pl_redraw">தயவுசெய்து மீண்டும் வரையவும்</string>
-  <string name="pl_wrong_pattern">தவறான வடிவம். தயவுசெய்து மீண்டும் முயற்சிக்கவும்.</string>
+  <string name="LockSelect_Action_Cancel">ரத்துசெய்யவும்</string>
+  <string name="LockSelect_Action_Confirm">உறுதிப்படுத்து</string>
+  <string name="LockPatternConfirm_Action_Confirm">உறுதிப்படுத்த மீண்டும் வடிவத்தை வரையவும்</string>
+  <string name="LockSelect_Action_Continue">தொடர்</string>
+  <string name="LockPatternSet_Draw_Pattern">பூட்டுநீக்கு வடிவத்தை வரையவும்</string>
+  <string name="UnlockPattern_DrawToUnlock">டெல்லாவைத் திறக்க வடிவத்தை வரையவும்.</string>
+  <string name="LockPatternConfirm_Pattern_Confirmed">இப்போது, டெல்லா கணக்கைத் திறக்கப் பயன்படுத்தப்படும் உங்கள் வடிவம் இது</string>
+  <string name="LockPatternSet_Pattern_Recorded">வடிவம் பதிவு செய்யப்பட்டது</string>
+  <string name="UnlockPattern_PatternTooShort">குறைந்தது %d புள்ளிகளை இணைக்கவும். தயவுசெய்து மீண்டும் வரையவும்.</string>
+  <string name="LockPatternSet_RecordingPattern">முடிந்ததும் விரலை விடுவிக்கவும்</string>
+  <string name="LockPatternSet_Action_Redraw">தயவுசெய்து மீண்டும் வரையவும்</string>
+  <string name="LockPatternConfirm_Message_WrongPattern">தவறான வடிவம். தயவுசெய்து மீண்டும் முயற்சிக்கவும்.</string>
   <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_start">வடிவம் தொடங்கியது</string>
+  <string name="LockPatternSet_Message_PatternStarted">வடிவம் தொடங்கியது</string>
   <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_cleared">வடிவம் அழிக்கப்பட்டது</string>
+  <string name="LockPatternSet_Message_PatternCleared">வடிவம் அழிக்கப்பட்டது</string>
   <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_cell_added">செல் வடிவம் சேர்க்கப்பட்டது</string>
+  <string name="LockPatternSet_Message_CellAdded">செல் வடிவம் சேர்க்கப்பட்டது</string>
   <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern. The screen reader will add the cell number that the user added. For example, if the user selects the bottom left cell, the screen reader will read "cell 7 added". -->
-  <string name="pl_access_pattern_cell_added_verbose"><xliff:g id="cell_index" example="3">%1$d</xliff:g>செல் சேர்க்கப்பட்டது</string>
+  <string name="LockPatternSet_Message_CellAddedVerbose"><xliff:g id="cell_index" example="3">%1$d</xliff:g>செல் சேர்க்கப்பட்டது</string>
   <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_detected">வடிவம் முடிந்தது</string>
+  <string name="LockPatternSet_Message_PatternDetected">வடிவம் முடிந்தது</string>
   <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_area">வடிவ பகுதி</string>
+  <string name="UnLockPattern_PatternArea">வடிவ பகுதி</string>
   <!-- The button to get access to more options. -->
   <string name="collect.blank_action.desc_more.options">கூடுதல் விருப்பங்கள்</string>
   <string name="action_next">அடுத்த</string>
