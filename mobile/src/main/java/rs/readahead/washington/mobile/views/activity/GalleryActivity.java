@@ -43,12 +43,9 @@ import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.GalleryFlingTopEvent;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
-import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IGalleryPresenterContract;
-import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.GalleryPresenter;
-import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulePresenter;
 import rs.readahead.washington.mobile.presentation.entity.ViewType;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.DialogsUtil;
@@ -58,7 +55,6 @@ import rs.readahead.washington.mobile.views.adapters.AttachmentsRecycleViewAdapt
 import rs.readahead.washington.mobile.views.adapters.GalleryRecycleViewAdapter;
 import rs.readahead.washington.mobile.views.custom.GalleryRecyclerView;
 import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
-import rs.readahead.washington.mobile.views.fragment.TellaUploadDialogFragment;
 import rs.readahead.washington.mobile.views.interfaces.IAttachmentsMediaHandler;
 import rs.readahead.washington.mobile.views.interfaces.IGalleryMediaHandler;
 import timber.log.Timber;
@@ -66,9 +62,7 @@ import timber.log.Timber;
 //TODO CHECK FILTER AND SORTS
 @RuntimePermissions
 public class GalleryActivity extends MetadataActivity implements
-        TellaUploadDialogFragment.IServerMetadataChosenHandler,
         IGalleryPresenterContract.IView,
-        ITellaFileUploadSchedulePresenterContract.IView,
         IGalleryMediaHandler, IAttachmentsMediaHandler,
         ShareDialogFragment.IShareDialogFragmentHandler {
     public static final String GALLERY_ANIMATED = "ga";
@@ -92,7 +86,6 @@ public class GalleryActivity extends MetadataActivity implements
     private boolean adding = true;
     private GalleryRecycleViewAdapter adapter;
     private GalleryPresenter presenter;
-    private TellaFileUploadSchedulePresenter uploadPresenter;
     private EventCompositeDisposable disposables;
 
     private AttachmentsRecycleViewAdapter attachmentsAdapter;
@@ -115,7 +108,6 @@ public class GalleryActivity extends MetadataActivity implements
         ButterKnife.bind(this);
 
         presenter = new GalleryPresenter(this);
-        uploadPresenter = new TellaFileUploadSchedulePresenter(this);
 
         if (getIntent().hasExtra(GALLERY_ANIMATED)) {
             animated = getIntent().getBooleanExtra(GALLERY_ANIMATED, false);
@@ -194,12 +186,6 @@ public class GalleryActivity extends MetadataActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         if (selectedNum > 0) {
             getMenuInflater().inflate(R.menu.gallery_menu, menu);
-            MenuItem item = menu.findItem(R.id.menu_item_tu);
-            if (numOfTUServers > 0) {
-                item.setVisible(true);
-            } else {
-                item.setVisible(false);
-            }
         }
         return true;
     }
@@ -228,12 +214,6 @@ public class GalleryActivity extends MetadataActivity implements
                 showExportDialog();
                 return true;
             }
-
-            if (id == R.id.menu_item_tu && numOfTUServers > 0) {
-                uploadVaultFiles();
-                return true;
-            }
-
         }
 
         return super.onOptionsItemSelected(item);
@@ -292,7 +272,6 @@ public class GalleryActivity extends MetadataActivity implements
         hideProgressDialog();
 
         dismissShareDialog();
-        dismissTellaUploadDialog();
 
         super.onDestroy();
     }
@@ -430,13 +409,6 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     @Override
-    public void uploadOnServer(TellaUploadServer server, boolean metadata) {
-        List<VaultFile> selected = adapter.getSelectedMediaFiles();
-
-        uploadPresenter.scheduleUploadMediaFilesWithPriority(selected, server.getId(), metadata);
-    }
-
-    @Override
     public void onGetFilesStart() {
     }
 
@@ -550,28 +522,6 @@ public class GalleryActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onMediaFilesUploadScheduled() {
-        clearSelection();
-        Intent intent = new Intent(this, UploadsActivity.class);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onMediaFilesUploadScheduleError(Throwable throwable) {
-
-    }
-
-    @Override
-    public void onGetMediaFilesSuccess(List<VaultFile> vaultFiles) {
-
-    }
-
-    @Override
-    public void onGetMediaFilesError(Throwable error) {
-
-    }
-
-    @Override
     public void playMedia(VaultFile vaultFile) {
         if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
             Intent intent = new Intent(this, PhotoViewerActivity.class);
@@ -676,20 +626,6 @@ public class GalleryActivity extends MetadataActivity implements
         }
     }
 
-    private void uploadVaultFiles() {
-        boolean metadata = false;
-        List<VaultFile> selected = adapter.getSelectedMediaFiles();
-
-        for (VaultFile vaultFile : selected) {
-            if (vaultFile.metadata != null) {
-                metadata = true;
-                break;
-            }
-        }
-
-        TellaUploadDialogFragment.newInstance(metadata).show(getSupportFragmentManager(), TellaUploadDialogFragment.TAG);
-    }
-
     @Override
     public void onMediaSelected(VaultFile vaultFile) {
         addAttachmentsAttachment(vaultFile);
@@ -712,10 +648,6 @@ public class GalleryActivity extends MetadataActivity implements
         if (presenter != null) {
             presenter.destroy();
         }
-
-        if (uploadPresenter != null) {
-            uploadPresenter.destroy();
-        }
     }
 
     private void hideProgressDialog() {
@@ -729,13 +661,6 @@ public class GalleryActivity extends MetadataActivity implements
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(ShareDialogFragment.TAG);
         if (fragment instanceof ShareDialogFragment) {
             ((ShareDialogFragment) fragment).dismiss();
-        }
-    }
-
-    private void dismissTellaUploadDialog() {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(TellaUploadDialogFragment.TAG);
-        if (fragment instanceof TellaUploadDialogFragment) {
-            ((TellaUploadDialogFragment) fragment).dismiss();
         }
     }
 

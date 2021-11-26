@@ -90,7 +90,6 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
     // recording
     private AudioRecorder audioRecorder;
-    private TellaFileUploadSchedulePresenter uploadPresenter;
     private AudioCapturePresenter presenter;
     private MetadataAttacher metadataAttacher;
     private final CompositeDisposable disposable = new CompositeDisposable();
@@ -124,7 +123,6 @@ public class AudioRecordActivity2 extends MetadataActivity implements
         }
 
         presenter = new AudioCapturePresenter(this);
-        uploadPresenter = new TellaFileUploadSchedulePresenter(this);
         metadataAttacher = new MetadataAttacher(this);
         changeTemporaryTimeout();
 
@@ -302,8 +300,6 @@ public class AudioRecordActivity2 extends MetadataActivity implements
 
         setResult(Activity.RESULT_OK, intent);
         mTimer.setText(timeToString(0));
-
-        scheduleFileUpload(handlingMediaFile);
     }
 
     @Override
@@ -508,15 +504,6 @@ public class AudioRecordActivity2 extends MetadataActivity implements
             freeSpace.setText(getString(R.string.recorder_meta_space_available_hours, hours, minutes, spaceLeft));
         } else {
             freeSpace.setText(getString(R.string.recorder_meta_space_available_days, days, hours, spaceLeft));
-        }
-    }
-
-    private void scheduleFileUpload(VaultFile vaultFile) {
-        if (Preferences.isAutoUploadEnabled()) {
-            List<VaultFile> upload = Collections.singletonList(vaultFile);
-            uploadPresenter.scheduleUploadMediaFiles(upload);
-        } else {
-            onMediaFilesUploadScheduled();
         }
     }
 }

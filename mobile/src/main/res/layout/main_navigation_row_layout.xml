@@ -60,21 +60,4 @@
             android:layout_below="@+id/microphone"
             android:text="@string/action_record" />
     </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/tab_button_uploads"
-        style="@style/NavigationRowElement"
-        android:background="@drawable/round_right_button_background">
-
-        <ImageView
-            android:id="@+id/uploads"
-            style="@style/NavigationTabImage"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_cloud_upload_white_24dp" />
-
-        <TextView
-            style="@style/NavigationTabText"
-            android:layout_below="@+id/uploads"
-            android:text="@string/home_upload.button" />
-    </RelativeLayout>
 </LinearLayout>

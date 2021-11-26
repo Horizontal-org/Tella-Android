@@ -270,10 +270,6 @@ public class MainActivity extends MetadataActivity implements
         }
     }
 
-    private void startUploadsActivity() {
-        startActivity(new Intent(MainActivity.this, UploadsActivity.class));
-    }
-
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     public void startGalleryActivity(boolean animated) {
         startActivity(new Intent(MainActivity.this, GalleryActivity.class)
@@ -511,34 +507,29 @@ public class MainActivity extends MetadataActivity implements
 
         View buttonCollect = navbar.findViewById(R.id.tab_button_collect);
         View buttonRecord = navbar.findViewById(R.id.tab_button_record);
-        View buttonUploads = navbar.findViewById(R.id.tab_button_uploads);
         View buttonGallery = navbar.findViewById(R.id.tab_button_gallery);
 
         buttonGallery.setOnClickListener(v -> showGallery(false));
         buttonCollect.setOnClickListener(v -> startCollectActivity());
         buttonRecord.setOnClickListener(v -> onMicrophoneClicked());
-        buttonUploads.setOnClickListener(v -> startUploadsActivity());
 
         navBarHolder.removeAllViews();
         navBarHolder.addView(navbar);
 
         if (numOfCollectServers == 0 && numOfTUS == 0) { //row layout of 2
             buttonCollect.setVisibility(View.GONE);
-            buttonUploads.setVisibility(View.GONE);
             return;
         }
 
         if (numOfCollectServers > 0 && numOfTUS == 0) {  //nav layout of 3 with collect
             buttonGallery.setBackground(getResources().getDrawable(R.drawable.central_button_background));
             buttonCollect.setBackground(getResources().getDrawable(R.drawable.round_left_button_background));
-            buttonUploads.setVisibility(View.GONE);
             return;
         }
 
         if (numOfCollectServers == 0 && numOfTUS > 0) { //nav layout of 3 with uploads
             buttonCollect.setVisibility(View.GONE);
             buttonRecord.setBackground(getResources().getDrawable(R.drawable.central_button_background));
-            buttonUploads.setBackground(getResources().getDrawable(R.drawable.round_right_button_background));
         }
     }
 
