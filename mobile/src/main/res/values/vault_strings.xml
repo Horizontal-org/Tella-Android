@@ -1,40 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="vault_my_files" translatable="false">All files</string>
-    <string name="vault_images" translatable="false">Images</string>
-    <string name="vault_files" translatable="false">Tella files</string>
-    <string name="vault_documents" translatable="false">Documents</string>
-    <string name="vault_audio" translatable="false">Audio</string>
-    <string name="vault_videos" translatable="false">Videos</string>
-    <string name="vault_others" translatable="false">Others</string>
-    <string name="vault_recent_files" translatable="false">Recent files</string>
-    <string name="vault_favorite_forms" translatable="false">Favorite forms</string>
-    <string name="vault_empty_msg" translatable="false">You don’t have any files on your Tella yet. Click the “+” button below to import your first file, or go to the Camera or Microphone to create one. You can also create folders to keep your files organized.</string>
-    <string name="vault_move_to_another_folder" translatable="false">Move to another folder</string>
-    <string name="vault_rename" translatable="false">Rename</string>
-    <string name="vault_file_information" translatable="false">File information</string>
-    <string name="vault_file_info" translatable="false">File info</string>
-    <string name="vault_file_size" translatable="false">Size</string>
-    <string name="vault_file_format" translatable="false">Format</string>
-    <string name="vault_file_created" translatable="false">Created</string>
-    <string name="vault_file_resolution" translatable="false">Resolution</string>
-    <string name="vault_file_length" translatable="false">Length</string>
-    <string name="vault_file_path" translatable="false">path</string>
-    <string name="vault_rename_file" translatable="false">Rename file</string>
-    <string name="vault_delete_file" translatable="false">Delete file?</string>
-    <string name="vault_delete_file_msg" translatable="false">The selected file will be permanently delated from Tella.</string>
-    <string name="vault_sort_name_asc" translatable="false">Name A > Z</string>
-    <string name="vault_sort_name_desc" translatable="false">Name Z > A</string>
-    <string name="vault_sort_date_asc" translatable="false">Newest to oldest</string>
-    <string name="vault_sort_date_desc" translatable="false">Oldest to newest</string>
-    <string name="vault_manage_files" translatable="false">Manage files</string>
-    <string name="vault_delete_origial_files_msg" translatable="false">After importing the file to Tella, the original file will be deleted from your device. The only remaining copy will be the one in Tella.</string>
-    <string name="vault_take_photo_video" translatable="false">Take photo/video</string>
-    <string name="vault_record_audio" translatable="false">Record audio</string>
-    <string name="vault_import_from_device" translatable="false">Import from device</string>
-    <string name="vault_import_delete_file" translatable="false">Import and delete original file</string>
-    <string name="vault_create_new_folder" translatable="false">Create a new folder</string>
-    <string name="vault_move_here" translatable="false">move here</string>
-    <string name="vault_viewer_other_msg" translatable="false">This file format cannot be opened inside Tella. Would you like to export the file to your device to open it through a different app? This may expose the content of the file. </string>
-    <string name="vault_export">Export</string>
+    <string name="Vault_AllFiles_Title" translatable="false">All files</string>
+    <string name="Vault_Images_Title" translatable="false">Images</string>
+    <string name="Vault_Files_Title" translatable="false">Tella files</string>
+    <string name="Vault_Documents_Title" translatable="false">Documents</string>
+    <string name="Vault_Audios_Title" translatable="false">Audios</string>
+    <string name="Vault_Videos_Title" translatable="false">Videos</string>
+    <string name="Vault_Others_Title" translatable="false">Others</string>
+    <string name="Vault_Select_Title" translatable="false">Select files</string>
+    <string name="Vault_RecentFiles" translatable="false">Recent files</string>
+    <string name="Vault_PhotosAndVideos_Title" translatable="false">Photos and Videos</string>
+    <string name="Vault_FavoriteForms_Title" translatable="false">Favorite forms</string>
+    <string name="Vault_Empty_Msg" translatable="false">You don’t have any files on your Tella yet. Click the “+” button below to import your first file, or go to the Camera or Microphone to create one. You can also create folders to keep your files organized.</string>
+    <string name="Vault_Move_SheetDesc" translatable="false">Move to another folder</string>
+    <string name="Vault_Rename_SheetAction" translatable="false">Rename</string>
+    <string name="Vault_Save_SheetAction" translatable="false">Save</string>
+    <string name="Vault_Delete_SheetAction" translatable="false">Delete</string>
+    <string name="Vault_Share_SheetAction" translatable="false">Share</string>
+    <string name="Vault_Upload_SheetAction" translatable="false">Upload</string>
+    <string name="Vault_File_SheetAction" translatable="false">File information</string>
+    <string name="Vault_FileInfo" translatable="false">File info</string>
+    <string name="Vault_FileSize" translatable="false">Size</string>
+    <string name="Vault_FileFormat" translatable="false">Format</string>
+    <string name="Vault_FileCreated" translatable="false">Created</string>
+    <string name="Vault_FileResolution" translatable="false">Resolution</string>
+    <string name="Vault_FileLength" translatable="false">Length</string>
+    <string name="Vault_FilePath" translatable="false">path</string>
+    <string name="Vault_RenameFile_SheetTitle" translatable="false">Rename file</string>
+    <string name="Vault_DeleteFile_SheetTitle" translatable="false">Delete file?</string>
+    <string name="Vault_deleteFile_SheetDesc" translatable="false">The selected file will be permanently delated from Tella.</string>
+    <string name="Vault_SortNameAsc_SheetAction" translatable="false">Name A > Z</string>
+    <string name="Vault_SortNameDesc_SheetAction" translatable="false">Name Z > A</string>
+    <string name="Vault_SortDateAsc_SheetAction" translatable="false">Newest to oldest</string>
+    <string name="Vault_SortDateDesc_SheetAction" translatable="false">Oldest to newest</string>
+    <string name="Vault_ManageFiles_SheetTitle" translatable="false">Manage files</string>
+    <string name="Vault_DeleteFile_SheetDesc" translatable="false">After importing the file to Tella, the original file will be deleted from your device. The only remaining copy will be the one in Tella.</string>
+    <string name="Vault_TakePhotoVideo_SheetAction" translatable="false">Take photo/video</string>
+    <string name="Vault_RecordAudio_SheetAction" translatable="false">Record audio</string>
+    <string name="Vault_Import_SheetAction" translatable="false">Import from device</string>
+    <string name="Vault_ImportDelete_SheetAction" translatable="false">Import and delete original file</string>
+    <string name="Vault_CreateFolder_SheetAction" translatable="false">Create a new folder</string>
+    <string name="Vault_MoveHere" translatable="false">move here</string>
+    <string name="Vault_ViewerOther_SheetDesc" translatable="false">This file format cannot be opened inside Tella. Would you like to export the file to your device to open it through a different app? This may expose the content of the file. </string>
+    <string name="Vault_Export_SheetAction">Export</string>
+    <string name="Vault_Items">items</string>
 </resources>

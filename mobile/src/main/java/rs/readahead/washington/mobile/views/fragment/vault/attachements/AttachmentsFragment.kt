@@ -160,13 +160,13 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     private fun setToolbarLabel() {
         when (filterType) {
-            FilterType.PHOTO -> toolbar.setStartTextTitle("Images")
-            FilterType.VIDEO -> toolbar.setStartTextTitle("Videos")
-            FilterType.AUDIO -> toolbar.setStartTextTitle("Audios")
-            FilterType.DOCUMENTS -> toolbar.setStartTextTitle("Documents")
-            FilterType.OTHERS -> toolbar.setStartTextTitle("Others")
-            FilterType.ALL -> toolbar.setStartTextTitle("All files")
-            FilterType.PHOTO_VIDEO -> toolbar.setStartTextTitle("Photos and Videos")
+            FilterType.PHOTO -> toolbar.setStartTextTitle(getString(R.string.Vault_Images_Title))
+            FilterType.VIDEO -> toolbar.setStartTextTitle(getString(R.string.Vault_Videos_Title))
+            FilterType.AUDIO -> toolbar.setStartTextTitle(getString(R.string.Vault_Audios_Title))
+            FilterType.DOCUMENTS -> toolbar.setStartTextTitle(getString(R.string.Vault_Documents_Title))
+            FilterType.OTHERS -> toolbar.setStartTextTitle(getString(R.string.Vault_Others_Title))
+            FilterType.ALL -> toolbar.setStartTextTitle(getString(R.string.Vault_AllFiles_Title))
+            FilterType.PHOTO_VIDEO -> toolbar.setStartTextTitle(getString(R.string.Vault_PhotosAndVideos_Title))
         }
     }
 
@@ -293,13 +293,13 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             R.id.fab_button -> {
                 VaultSheetUtils.showVaultManageFilesSheet(
                     activity.supportFragmentManager,
-                    getString(R.string.vault_take_photo_video),
-                    getString(R.string.vault_record_audio),
-                    getString(R.string.vault_import_from_device),
-                    getString(R.string.vault_import_delete_file),
-                    getString(R.string.vault_create_new_folder),
-                    getString(R.string.vault_manage_files),
-                    getString(R.string.vault_delete_origial_files_msg),
+                    getString(R.string.Vault_TakePhotoVideo_SheetAction),
+                    getString(R.string.Vault_RecordAudio_SheetAction),
+                    getString(R.string.Vault_Import_SheetAction),
+                    getString(R.string.Vault_ImportDelete_SheetAction),
+                    getString(R.string.Vault_CreateFolder_SheetAction),
+                    getString(R.string.Vault_ManageFiles_SheetTitle),
+                    getString(R.string.Vault_DeleteFile_SheetDesc),
                     filterType != FilterType.OTHERS,
                     action = object : VaultSheetUtils.IVaultManageFiles {
                         override fun goToCamera() {
@@ -327,7 +327,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                         override fun createFolder() {
                             VaultSheetUtils.showVaultRenameSheet(
                                 activity.supportFragmentManager,
-                                getString(R.string.vault_create_new_folder),
+                                getString(R.string.Vault_CreateFolder_SheetAction),
                                 getString(R.string.action_cancel),
                                 getString(R.string.action_ok),
                                 requireActivity(),
@@ -382,9 +382,9 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             val itemsSize = attachmentsAdapter.selectedMediaFiles.size
             toolbar.setToolbarNavigationIcon(R.drawable.ic_close_white_24dp)
             if (itemsSize == 0) {
-                toolbar.setStartTextTitle("Select files")
+                toolbar.setStartTextTitle(getString(R.string.Vault_Select_Title))
             } else {
-                toolbar.setStartTextTitle(attachmentsAdapter.selectedMediaFiles.size.toString() + " items")
+                toolbar.setStartTextTitle(attachmentsAdapter.selectedMediaFiles.size.toString() + " "+getString(R.string.Vault_Items))
             }
         } else {
             toolbar.setToolbarNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
@@ -433,9 +433,9 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                         else -> {
                             BottomSheetUtils.showStandardSheet(
                                 activity.supportFragmentManager,
-                                activity.getString(R.string.vault_export) + " " + vaultFile.name + "?",
-                                activity.getString(R.string.vault_viewer_other_msg),
-                                activity.getString(R.string.vault_export),
+                                activity.getString(R.string.Vault_Export_SheetAction) + " " + vaultFile.name + "?",
+                                activity.getString(R.string.Vault_ViewerOther_SheetDesc),
+                                activity.getString(R.string.Vault_Export_SheetAction),
                                 activity.getString(R.string.action_cancel),
                                 onConfirmClick = { exportVaultFiles(false, vaultFile) }
                             )
@@ -477,13 +477,13 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private fun showFileActionsSheet(vaultFile: VaultFile?, isMultipleFiles: Boolean) {
         VaultSheetUtils.showVaultActionsSheet(activity.supportFragmentManager,
             getSheetName(vaultFile, isMultipleFiles),
-            getString(R.string.action_upload),
-            getString(R.string.action_share),
-            getString(R.string.vault_move_to_another_folder),
-            getString(R.string.vault_rename),
-            getString(R.string.action_save),
-            getString(R.string.vault_file_information),
-            getString(R.string.action_delete),
+            getString(R.string.Vault_Upload_SheetAction),
+            getString(R.string.Vault_Share_SheetAction),
+            getString(R.string.Vault_Move_SheetDesc),
+            getString(R.string.Vault_Rename_SheetAction),
+            getString(R.string.Vault_Save_SheetAction),
+            getString(R.string.Vault_File_SheetAction),
+            getString(R.string.Vault_Delete_SheetAction),
             isDirectory = vaultFile?.type == VaultFile.Type.DIRECTORY,
             isMultipleFiles = isMultipleFiles,
             isUploadVisible = false,
@@ -511,7 +511,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 override fun rename() {
                     VaultSheetUtils.showVaultRenameSheet(
                         activity.supportFragmentManager,
-                        getString(R.string.vault_rename_file),
+                        getString(R.string.Vault_RenameFile_SheetTitle),
                         getString(R.string.action_cancel),
                         getString(R.string.action_ok),
                         requireActivity(),
@@ -538,8 +538,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 override fun delete() {
                     showConfirmSheet(
                         activity.supportFragmentManager,
-                        getString(R.string.vault_delete_file),
-                        getString(R.string.vault_delete_file_msg),
+                        getString(R.string.Vault_DeleteFile_SheetTitle),
+                        getString(R.string.Vault_deleteFile_SheetDesc),
                         getString(R.string.action_delete),
                         getString(R.string.action_cancel),
                         consumer = object : ActionConfirmed {
@@ -795,34 +795,34 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         VaultSheetUtils.showVaultSortSheet(
             activity.supportFragmentManager,
             getString(R.string.gallery_subheading_sort_by),
-            getString(R.string.vault_sort_name_asc),
-            getString(R.string.vault_sort_name_desc),
-            getString(R.string.vault_sort_date_asc),
-            getString(R.string.vault_sort_date_desc),
+            getString(R.string.Vault_SortNameAsc_SheetAction),
+            getString(R.string.Vault_SortNameDesc_SheetAction),
+            getString(R.string.Vault_SortDateAsc_SheetAction),
+            getString(R.string.Vault_SortDateDesc_SheetAction),
             sort = object : VaultSheetUtils.IVaultSortActions {
                 override fun onSortDateASC() {
-                    filterNameTv.text = getString(R.string.vault_sort_date_asc)
+                    filterNameTv.text = getString(R.string.Vault_SortDateAsc_SheetAction)
                     sort.type = Sort.Type.DATE
                     sort.direction = Sort.Direction.ASC
                     attachmentsPresenter.addNewVaultFiles()
                 }
 
                 override fun onSortDateDESC() {
-                    filterNameTv.text = getString(R.string.vault_sort_date_desc)
+                    filterNameTv.text = getString(R.string.Vault_SortDateDesc_SheetAction)
                     sort.type = Sort.Type.DATE
                     sort.direction = Sort.Direction.DESC
                     attachmentsPresenter.addNewVaultFiles()
                 }
 
                 override fun onSortNameDESC() {
-                    filterNameTv.text = getString(R.string.vault_sort_name_desc)
+                    filterNameTv.text = getString(R.string.Vault_SortNameDesc_SheetAction)
                     sort.type = Sort.Type.NAME
                     sort.direction = Sort.Direction.DESC
                     attachmentsPresenter.addNewVaultFiles()
                 }
 
                 override fun onSortNameASC() {
-                    filterNameTv.text = getString(R.string.vault_sort_name_asc)
+                    filterNameTv.text = getString(R.string.Vault_SortNameAsc_SheetAction)
                     sort.type = Sort.Type.NAME
                     sort.direction = Sort.Direction.ASC
                     attachmentsPresenter.addNewVaultFiles()

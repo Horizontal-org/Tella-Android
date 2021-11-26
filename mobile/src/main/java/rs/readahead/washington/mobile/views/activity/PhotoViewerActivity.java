@@ -339,13 +339,13 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     private void showVaultActionsDialog(VaultFile vaultFile){
         VaultSheetUtils.showVaultActionsSheet(getSupportFragmentManager(),
                 vaultFile.name,
-                getString(R.string.action_upload),
-                getString(R.string.action_share),
-                getString(R.string.vault_move_to_another_folder),
-                getString(R.string.vault_rename),
-                getString(R.string.action_save),
-                getString(R.string.vault_file_information),
-                getString(R.string.action_delete),
+                getString(R.string.Vault_Upload_SheetAction),
+                getString(R.string.Vault_Share_SheetAction),
+                getString(R.string.Vault_Move_SheetDesc),
+                getString(R.string.Vault_Rename_SheetAction),
+                getString(R.string.Vault_Save_SheetAction),
+                getString(R.string.Vault_File_SheetAction),
+                getString(R.string.Vault_Delete_SheetAction),
                 false,
                 false,
                 false,
@@ -370,7 +370,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                     public void rename() {
                         VaultSheetUtils.showVaultRenameSheet(
                                 getSupportFragmentManager(),
-                                getString(R.string.vault_rename_file),
+                                getString(R.string.Vault_CreateFolder_SheetAction),
                                 getString(R.string.action_cancel),
                                 getString(R.string.action_ok),
                                 PhotoViewerActivity.this,
@@ -397,7 +397,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
                     @Override
                     public void info() {
-                        toolbar.setStartTextTitle(getString(R.string.vault_file_info));
+                        toolbar.setStartTextTitle(getString(R.string.Vault_FileInfo));
                         menu.findItem(R.id.menu_item_more).setVisible(false);
                         menu.findItem(R.id.menu_item_metadata).setVisible(false);
                         invalidateOptionsMenu();
@@ -408,8 +408,8 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                     public void delete() {
                         BottomSheetUtils.showConfirmSheet(
                                 getSupportFragmentManager(),
-                                getString(R.string.vault_delete_file),
-                                getString(R.string.vault_delete_file_msg),
+                                getString(R.string.Vault_DeleteFile_SheetTitle),
+                                getString(R.string.Vault_deleteFile_SheetDesc),
                                 getString(R.string.action_delete),
                                 getString(R.string.action_cancel),
                                 isConfirmed -> {
