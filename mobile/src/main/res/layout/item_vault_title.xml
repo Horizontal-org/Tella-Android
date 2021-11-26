@@ -10,7 +10,6 @@
     >
 
     <TextView
-        android:id="@+id/filesText"
         style="@style/Tella_Main_White_Text.Meduim"
         android:textColor="@color/wa_white_90"
         android:letterSpacing="0.1"

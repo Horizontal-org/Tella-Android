@@ -61,7 +61,6 @@
             android:src="@drawable/ic_fast_rewind_black_24dp" />
 
         <TextView
-            android:id="@+id/minus15"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -119,7 +118,6 @@
             android:src="@drawable/ic_fast_forward_black_24dp" />
 
         <TextView
-            android:id="@+id/plus15"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"

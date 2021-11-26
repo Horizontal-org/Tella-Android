@@ -74,7 +74,6 @@
                 android:ellipsize="end"/>
 
             <LinearLayout
-                android:id="@+id/date_layout"
                 android:layout_gravity="start"
                 android:textAlignment="gravity"
                 android:layout_width="wrap_content"

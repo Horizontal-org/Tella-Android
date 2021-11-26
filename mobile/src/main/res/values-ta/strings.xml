@@ -426,23 +426,16 @@ A toast notification informing the user that their files were successfully delet
   <!-- The button to add a connection to a server -->
   <string name="settings.servers_add.server_dialog.title">சேவையகத்தை சேர்</string>
   <!-- The name of the feature in Settings > Protection -->
-  <string name="settings.prot_quick.delete_action">\"விரைவு நீக்கு\" பொத்தானை இயக்கவும்</string>
-  <!-- The explanation of the Quick Delete feature in Settings > Protection -->
-  <string name="settings.prot_quick.delete_action.expl">அவசரகால சூழ்நிலைகளில் டெல்லா தரவை விரைவாக நீக்க டெல்லா பயன்பாடு முகப்புத் திரையில் ஒரு நெகிழ் பொத்தானைக் காட்டுகிறது.</string>
-  <!-- The checkbox to select what the 'Quick Delete' button deletes -->
-  <string name="settings.prot_select_delete.gallery">கேலரியை நீக்கு</string>
-  <!-- In the Settings protection screen, the explanation on what "Delete gallery" will do. -->
-  <string name="settings.prot_select.expl_delete.gallery">இது டெல்லா கேலரியில் இருந்து அனைத்து புகைப்படங்கள், வீடியோக்கள் மற்றும் ஆடியோ பதிவுகளை நீக்கும்.</string>
-  <!-- The checkbox to select what the 'Quick Delete' button deletes -->
+    <!-- The explanation of the Quick Delete feature in Settings > Protection -->
+    <!-- The checkbox to select what the 'Quick Delete' button deletes -->
+    <!-- In the Settings protection screen, the explanation on what "Delete gallery" will do. -->
+    <!-- The checkbox to select what the 'Quick Delete' button deletes -->
   <string name="settings.prot_select_delete.forms">வரைவு மற்றும் சமர்ப்பிக்கப்பட்ட படிவங்களை நீக்கு</string>
-  <string name="settings.prot_select.expl_delete.forms">இது வரைவு மற்றும் சமர்ப்பிக்கப்பட்ட படிவங்களையும், அவற்றில் உள்ள எல்லா தரவையும் நீக்கும்</string>
-  <!-- The checkbox to select what the 'Quick Delete' button deletes -->
+    <!-- The checkbox to select what the 'Quick Delete' button deletes -->
   <string name="settings.prot_select_delete.servers">சேவையக அமைப்புகளை நீக்கு</string>
-  <string name="settings.prot_select.expl_delete.servers">இது சேவையக இணைப்புகள் மற்றும் அந்த சேவையகங்களில் சேமிக்கப்பட்ட படிவங்களையும் நீக்கும்.</string>
-  <!-- The checkbox to select what triggering the 'Quick Delete' button does -->
+    <!-- The checkbox to select what triggering the 'Quick Delete' button does -->
   <string name="settings.prot_select_delete.app">டெல்லாவை நீக்கு</string>
-  <string name="settings.prot_select.expl_delete.app">இது பயன்பாட்டையும் அதில் உள்ள தரவையும் நீக்கும். \"டெல்லா பயன்பாட்டை நிறுவல் நீக்க விரும்புகிறீர்களா?\" நீங்கள் உறுதிப்படுத்தாவிட்டால், டெல்லா நீக்கப்படாது.</string>
-  <!-- The title of the dialog to enable or disable Offline mode. -->
+    <!-- The title of the dialog to enable or disable Offline mode. -->
   <string name="offline_dialog.title">ஆஃப்லைன் பயன்முறை</string>
   <!-- The explanation for Offline Mode. -->
   <string name="offline_dialog.expl">ஆஃப்லைன் பயன்முறையில், எல்லா தரவுகளும் பின்னர் சமர்ப்பிக்க சேமிக்கப்படும். செல்லுலார் தரவைச் சேமிக்க அல்லது உங்களுக்கு மோசமான அல்லது குறைந்த இணைய இணைப்பு இருந்தால் இது பயனுள்ளதாக இருக்கும். படிவங்களை சமர்ப்பிக்க நீங்கள் தயாராக இருக்கும்போது ஆஃப்லைன் அமைப்பை முடக்கவும்.</string>
@@ -621,57 +614,24 @@ This is one of the two options available. -->
   <!-- The explanation in the dialog that is displayed when deleting an Upload server. -->
   <string name="settings.docu_delete.upload.server_dialog.expl">இந்த சேவையகத்தில் நீங்கள் இனி கோப்புகளை பதிவேற்ற முடியாது.</string>
   <!-- The label for the homescreen button to access the Upload feature. -->
-  <string name="home_upload.button">பதிவேற்று</string>
-  <!-- This is displayed to let the user that the files are being uploaded. -->
-  <string name="upload.main_meta_status.uploading">பதிவேற்றுகிறது…</string>
-  <string name="upload_meta_date.started">தொடங்கியது:</string>
-  <!-- The button to see more information about each upload. -->
-  <string name="upload.main_action_more.details">கூடுதல் விவரங்கள்</string>
-  <plurals name="upload.main_meta_number.of.files">
-    <item quantity="one">%d கோப்பு</item>
-    <item quantity="other">%dகோப்புகள்</item>
-  </plurals>
-  <!-- This is used to show how many files were uploaded -->
-  <plurals name="upload.main_meta_number.of.files.uploaded">
-    <item quantity="one">%dகோப்பு பதிவேற்றப்பட்டது</item>
-    <item quantity="other">%d கோப்புகள் பதிவேற்றப்பட்டன</item>
-  </plurals>
-  <!-- This is used to show the number of minutes left to complete the upload of files to the server. -->
-  <plurals name="upload.main_meta_minutes.left">
-    <item quantity="one">%d நிமிடம் மீதமுள்ளது</item>
-    <item quantity="other">%dநிமிடங்கள் மீதமுள்ளன</item>
-  </plurals>
-  <!-- The explanation in the dialog when tapping the "clear" button in the Upload main screen. -->
-  <string name="upload.main_dialog.expl_clear.history">இது கடந்த பதிவேற்றங்களின் பட்டியலை நீக்கும்.</string>
-  <!-- A dialog displayed when the user attempts to stop the entire upload. -->
-  <string name="upload.main_stop.upload_dialog.expl">பதிவேற்றத்தை நிறுத்த விரும்புகிறீர்களா?</string>
-  <!-- A dialog displayed when the user attempts to stop the upload of one particular file. -->
-  <string name="upload.info_stop.upload_dialog.expl">பதிவேற்றத்தை நிறுத்த விரும்புகிறீர்களா?</string>
-  <!-- The title of the screen (in the app bar) when looking at the details of an 'upload' of files to the server. -->
-  <string name="upload.info_app.bar">தகவலைப் பதிவேற்றுக</string>
-  <!-- The field where Tella shows how many files are included in an upload. -->
-  <string name="upload.info_meta_number.of.files">கோப்புகளின் எண்ணிக்கை:</string>
-  <!-- The action button to "clear" the upload history. -->
-  <string name="upload.main_dialog.action_clear">அழிக்கவும்</string>
-  <string name="upload.main_nothing.to.show">உங்களுக்குக் காண்பிக்க கடந்த பதிவேற்றம் எதுவும் இல்லை</string>
-  <string name="upload.info_meta_date.completed">நிறைவு:</string>
-  <!-- The field to show what file is being uploaded. -->
-  <string name="upload.info_meta_file.type">கோப்பு வகை:</string>
-  <string name="upload.main_meta_status.attempting">இணைக்க முயற்சிக்கிறது</string>
-  <!-- The description of how much time is left for the upload to complete. -->
-  <string name="upload.main_meta_less.minute.left">ஒரு நிமிடத்திற்கும் குறைவாகவே உள்ளது</string>
-  <string name="upload.main_meta_status.stopped">நிறுத்தப்பட்டது</string>
-  <!-- The description of how much time is left for the upload to complete. -->
-  <string name="upload.main_meta_more.hour.left">ஒரு மணி நேரத்திற்கும் மேலாக உள்ளது</string>
-  <!-- The error message notifying the user that they must select a server where their file will be auto-uploaded. -->
+    <!-- This is displayed to let the user that the files are being uploaded. -->
+    <!-- The button to see more information about each upload. -->
+    <!-- This is used to show how many files were uploaded -->
+    <!-- This is used to show the number of minutes left to complete the upload of files to the server. -->
+    <!-- The explanation in the dialog when tapping the "clear" button in the Upload main screen. -->
+    <!-- A dialog displayed when the user attempts to stop the entire upload. -->
+    <!-- A dialog displayed when the user attempts to stop the upload of one particular file. -->
+    <!-- The title of the screen (in the app bar) when looking at the details of an 'upload' of files to the server. -->
+    <!-- The field where Tella shows how many files are included in an upload. -->
+    <!-- The action button to "clear" the upload history. -->
+    <!-- The field to show what file is being uploaded. -->
+    <!-- The description of how much time is left for the upload to complete. -->
+    <!-- The description of how much time is left for the upload to complete. -->
+    <!-- The error message notifying the user that they must select a server where their file will be auto-uploaded. -->
   <string name="settings.docu_error_must.select.auto.upload.server">நீங்கள் ஒரு சேவையகத்தைத் தேர்ந்தெடுக்க வேண்டும்.</string>
   <!-- The explanation in the dialog when the user attempts to "clear" the upload information. -->
-  <string name="upload.info_dialog.expl_delete.upload">பதிவேற்றும் தகவலை நீக்க விரும்புகிறீர்களா?</string>
-  <!-- The title in the dialog when tapping the "clear" button in the Upload main screen. -->
-  <string name="upload.main_dialog.title_clear.history">பதிவேற்ற வரலாற்றை அழிக்கவா?</string>
-  <string name="settings.docu_auto.upload.metadata_action">சரிபார்ப்பு தகவலைச் சேர்க்கவும்</string>
-  <string name="settings.docu_auto.upload.metadata_action.expl">உங்கள் கோப்புகளில் சரிபார்ப்பு தகவல்கள் இருந்தால், அது தானாகவே உங்கள் கோப்புகளுடன் பதிவேற்றப்படும்.</string>
-  <string name="camera_tab.title_video">வீடியோ</string>
+    <!-- The title in the dialog when tapping the "clear" button in the Upload main screen. -->
+    <string name="camera_tab.title_video">வீடியோ</string>
   <string name="camera_tab.title_photo">புகைப்படம்</string>
   <string name="action_upload">பதிவேற்று</string>
   <string name="pl_cancel">ரத்துசெய்யவும்</string>

@@ -15,7 +15,6 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/camouflage_title"
             style="@style/CamouflageOptionStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,7 +22,6 @@
             android:text="@string/settings.camo_heading" />
 
         <TextView
-            android:id="@+id/camouflage_info"
             android:textColor="@color/wa_white"
             android:textSize="14sp"
             android:paddingStart="16dp"

@@ -176,7 +176,6 @@
         app:layout_constraintStart_toStartOf="parent"
         android:paddingHorizontal="@dimen/tella_main_vertical"
         android:text="@string/vault_file_path"
-        android:id="@+id/filePathLabelTv"
         android:layout_marginTop="12dp"
         />
     <TextView

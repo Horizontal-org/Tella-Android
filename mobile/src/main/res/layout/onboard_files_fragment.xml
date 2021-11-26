@@ -22,7 +22,6 @@
         app:layout_constraintGuide_percent="0.95" />
 
     <ImageView
-        android:id="@+id/camera_icon"
         android:layout_width="101dp"
         android:layout_height="81dp"
         android:layout_marginBottom="@dimen/hide_tella_big_margin"

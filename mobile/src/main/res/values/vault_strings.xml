@@ -3,7 +3,6 @@
     <string name="vault_my_files" translatable="false">All files</string>
     <string name="vault_images" translatable="false">Images</string>
     <string name="vault_files" translatable="false">Tella files</string>
-    <string name="vault_my_gallery" translatable="false">Gallery</string>
     <string name="vault_documents" translatable="false">Documents</string>
     <string name="vault_audio" translatable="false">Audio</string>
     <string name="vault_videos" translatable="false">Videos</string>
@@ -15,7 +14,6 @@
     <string name="vault_rename" translatable="false">Rename</string>
     <string name="vault_file_information" translatable="false">File information</string>
     <string name="vault_file_info" translatable="false">File info</string>
-    <string name="vault_file_name" translatable="false">File name</string>
     <string name="vault_file_size" translatable="false">Size</string>
     <string name="vault_file_format" translatable="false">Format</string>
     <string name="vault_file_created" translatable="false">Created</string>
@@ -23,11 +21,8 @@
     <string name="vault_file_length" translatable="false">Length</string>
     <string name="vault_file_path" translatable="false">path</string>
     <string name="vault_rename_file" translatable="false">Rename file</string>
-    <string name="vault_delete_files" translatable="false">Delete files?</string>
-    <string name="vault_delete_files_msg" translatable="false">The selected files will be permanently delated from Tella.</string>
     <string name="vault_delete_file" translatable="false">Delete file?</string>
     <string name="vault_delete_file_msg" translatable="false">The selected file will be permanently delated from Tella.</string>
-    <string name="vault_sort_by" translatable="false">Sort by</string>
     <string name="vault_sort_name_asc" translatable="false">Name A > Z</string>
     <string name="vault_sort_name_desc" translatable="false">Name Z > A</string>
     <string name="vault_sort_date_asc" translatable="false">Newest to oldest</string>
@@ -39,7 +34,6 @@
     <string name="vault_import_from_device" translatable="false">Import from device</string>
     <string name="vault_import_delete_file" translatable="false">Import and delete original file</string>
     <string name="vault_create_new_folder" translatable="false">Create a new folder</string>
-    <string name="vault_new_folder_title" translatable="false">New folder title</string>
     <string name="vault_move_here" translatable="false">move here</string>
     <string name="vault_viewer_other_msg" translatable="false">This file format cannot be opened inside Tella. Would you like to export the file to your device to open it through a different app? This may expose the content of the file. </string>
     <string name="vault_export">Export</string>

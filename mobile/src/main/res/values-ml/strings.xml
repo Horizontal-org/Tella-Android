@@ -426,23 +426,16 @@ A toast notification informing the user that their files were successfully delet
   <!-- The button to add a connection to a server -->
   <string name="settings.servers_add.server_dialog.title">സെര്‍വര്‍ ചേർക്കുക</string>
   <!-- The name of the feature in Settings > Protection -->
-  <string name="settings.prot_quick.delete_action">QUICK DELETE (ദ്രുത ഇല്ലാതാക്കൽ) ബട്ടൺ സജീവമാക്കുക</string>
-  <!-- The explanation of the Quick Delete feature in Settings > Protection -->
-  <string name="settings.prot_quick.delete_action.expl">അടിയന്തിര സാഹചര്യങ്ങളിൽ Tella (റ്റെല്ല) ഡാറ്റ വേഗത്തിൽ ഇല്ലാതാക്കാൻ ഹോംസ്‌ക്രീനിൽ ഒരു സ്ലൈഡിംഗ് ബട്ടൺ കാണിക്കുന്നു.</string>
-  <!-- The checkbox to select what the 'Quick Delete' button deletes -->
-  <string name="settings.prot_select_delete.gallery">ഗ്യാലറി നീക്കം ചെയ്യുക</string>
-  <!-- In the Settings protection screen, the explanation on what "Delete gallery" will do. -->
-  <string name="settings.prot_select.expl_delete.gallery">ഇത് ടെല്ല ഗ്യാലറിയിൽ നിന്നുള്ള എല്ലാ ഫോട്ടോകളും വീഡിയോകളും ഓഡിയോ റെക്കോർഡിംഗുകളും നീക്കം ചെയ്യും.</string>
-  <!-- The checkbox to select what the 'Quick Delete' button deletes -->
+    <!-- The explanation of the Quick Delete feature in Settings > Protection -->
+    <!-- The checkbox to select what the 'Quick Delete' button deletes -->
+    <!-- In the Settings protection screen, the explanation on what "Delete gallery" will do. -->
+    <!-- The checkbox to select what the 'Quick Delete' button deletes -->
   <string name="settings.prot_select_delete.forms">ഡ്രാഫ്റ്റും സമർപ്പിച്ച ഫോമുകളും ഇല്ലാതാക്കുക</string>
-  <string name="settings.prot_select.expl_delete.forms">ഇത് ഡ്രാഫ്റ്റും സമർപ്പിച്ച ഫോമുകളും അവയിൽ അടങ്ങിയിരിക്കുന്ന എല്ലാ ഡാറ്റയും ഇല്ലാതാക്കും</string>
-  <!-- The checkbox to select what the 'Quick Delete' button deletes -->
+    <!-- The checkbox to select what the 'Quick Delete' button deletes -->
   <string name="settings.prot_select_delete.servers">സെർവർ ക്രമീകരണങ്ങൾ ഇല്ലാതാക്കുക</string>
-  <string name="settings.prot_select.expl_delete.servers">ഇത് സെർവറുകളിലേക്കും അവയുമായി ബന്ധപ്പെട്ട എല്ലാ ഫോമുകളിലേക്കും നിങ്ങളുടെ കണക്ഷനുകൾ ഇല്ലാതാക്കും.</string>
-  <!-- The checkbox to select what triggering the 'Quick Delete' button does -->
+    <!-- The checkbox to select what triggering the 'Quick Delete' button does -->
   <string name="settings.prot_select_delete.app">Tella (റ്റെല്ല) ഇല്ലാതാക്കുക</string>
-  <string name="settings.prot_select.expl_delete.app">ഇത് ആപ്ലിക്കേഷനും അതിൽ അടങ്ങിയിരിക്കുന്ന ഡാറ്റയും ഇല്ലാതാക്കും. നിങ്ങളോട് ചോദിക്കും \"നിങ്ങൾക്ക് അപ്ലിക്കേഷൻ അൺഇൻസ്റ്റാൾ ചെയ്യണോ?\" നിങ്ങൾ സ്ഥിരീകരിച്ചില്ലെങ്കിൽ, Tella (റ്റെല്ല) ഇല്ലാതാക്കില്ല</string>
-  <!-- The title of the dialog to enable or disable Offline mode. -->
+    <!-- The title of the dialog to enable or disable Offline mode. -->
   <string name="offline_dialog.title">ഓഫ്ലൈന് മോഡ്</string>
   <!-- The explanation for Offline Mode. -->
   <string name="offline_dialog.expl">ഓഫ്‌ലൈൻ മോഡിൽ, പിന്നീട് സമർപ്പിക്കുന്നതിനായി എല്ലാ ഡാറ്റയും സംരക്ഷിക്കുന്നു. സെല്ലുലാർ ഡാറ്റ സംരക്ഷിക്കുന്നതിനോ  അല്ലെങ്കിൽ നിങ്ങൾക്ക് ഒരു മോശം കണക്ഷൻ ഉണ്ടെങ്കിലോ ഇത് ഉപയോഗപ്രദമാണ് . ഫോമുകൾ സമർപ്പിക്കാൻ നിങ്ങൾ തയ്യാറാകുമ്പോൾ അപ്രാപ്തമാക്കുക/ഡിസേബിൾ ചെയ്യുക.</string>
@@ -621,57 +614,24 @@ This is one of the two options available. -->
   <!-- The explanation in the dialog that is displayed when deleting an Upload server. -->
   <string name="settings.docu_delete.upload.server_dialog.expl">നിങ്ങൾക്ക് ഇനി ഈ സെർവറിലേക്ക് ഫയലുകൾ അപ്‌ലോഡ് ചെയ്യാൻ കഴിയില്ല.</string>
   <!-- The label for the homescreen button to access the Upload feature. -->
-  <string name="home_upload.button">അപ്‌ലോഡ്</string>
-  <!-- This is displayed to let the user that the files are being uploaded. -->
-  <string name="upload.main_meta_status.uploading">അപ്‍ലോഡ് ചെയ്യുന്നു</string>
-  <string name="upload_meta_date.started">ആരംഭിച്ചത്:</string>
-  <!-- The button to see more information about each upload. -->
-  <string name="upload.main_action_more.details">കൂടുതൽ വിശദാംശങ്ങൾ</string>
-  <plurals name="upload.main_meta_number.of.files">
-    <item quantity="one">%d ഫയൽ </item>
-    <item quantity="other">%d ഫയലുകൾ</item>
-  </plurals>
-  <!-- This is used to show how many files were uploaded -->
-  <plurals name="upload.main_meta_number.of.files.uploaded">
-    <item quantity="one">%d ഫയൽ  അപ്‌ലോഡുചെയ്‌തു</item>
-    <item quantity="other">%d ഫയലുകൾ അപ്‌ലോഡുചെയ്‌തു</item>
-  </plurals>
-  <!-- This is used to show the number of minutes left to complete the upload of files to the server. -->
-  <plurals name="upload.main_meta_minutes.left">
-    <item quantity="one">%d മിനിറ്റ് ശേഷിക്കുന്നു</item>
-    <item quantity="other">%d മിനിറ്റുകൾ  ശേഷിക്കുന്നു</item>
-  </plurals>
-  <!-- The explanation in the dialog when tapping the "clear" button in the Upload main screen. -->
-  <string name="upload.main_dialog.expl_clear.history">ഇത് പഴയ അപ്‌ലോഡുകളുടെ ലിസ്റ്റ് ഇല്ലാതാക്കും.</string>
-  <!-- A dialog displayed when the user attempts to stop the entire upload. -->
-  <string name="upload.main_stop.upload_dialog.expl">അപ്‌ലോഡ് നിർത്തണമെന്ന് നിങ്ങൾക്ക് ഉറപ്പാണോ?</string>
-  <!-- A dialog displayed when the user attempts to stop the upload of one particular file. -->
-  <string name="upload.info_stop.upload_dialog.expl">അപ്‌ലോഡ് നിർത്തണമെന്ന് നിങ്ങൾക്ക് ഉറപ്പാണോ?</string>
-  <!-- The title of the screen (in the app bar) when looking at the details of an 'upload' of files to the server. -->
-  <string name="upload.info_app.bar">അപ്‌ലോഡ് വിവരങ്ങൾ </string>
-  <!-- The field where Tella shows how many files are included in an upload. -->
-  <string name="upload.info_meta_number.of.files">ഫയലുകളുടെ എണ്ണം:</string>
-  <!-- The action button to "clear" the upload history. -->
-  <string name="upload.main_dialog.action_clear">മായ്ക്കുക</string>
-  <string name="upload.main_nothing.to.show">കാണിക്കുവാനായി പഴയ അപ്‌ലോഡുകളൊന്നുമില്ല.</string>
-  <string name="upload.info_meta_date.completed">പൂര്‍ത്തിയാക്കി</string>
-  <!-- The field to show what file is being uploaded. -->
-  <string name="upload.info_meta_file.type">ഫയൽ തരം:</string>
-  <string name="upload.main_meta_status.attempting">കണക്റ്റുചെയ്യാൻ ശ്രമിക്കുന്നു</string>
-  <!-- The description of how much time is left for the upload to complete. -->
-  <string name="upload.main_meta_less.minute.left">ഒരു മിനിറ്റിൽ താഴെ മാത്രം ശേഷിക്കുന്നു</string>
-  <string name="upload.main_meta_status.stopped">നിര്‍ത്തി</string>
-  <!-- The description of how much time is left for the upload to complete. -->
-  <string name="upload.main_meta_more.hour.left">ഒരു മണിക്കൂറിൽ കൂടുതൽ ശേഷിക്കുന്നു</string>
-  <!-- The error message notifying the user that they must select a server where their file will be auto-uploaded. -->
+    <!-- This is displayed to let the user that the files are being uploaded. -->
+    <!-- The button to see more information about each upload. -->
+    <!-- This is used to show how many files were uploaded -->
+    <!-- This is used to show the number of minutes left to complete the upload of files to the server. -->
+    <!-- The explanation in the dialog when tapping the "clear" button in the Upload main screen. -->
+    <!-- A dialog displayed when the user attempts to stop the entire upload. -->
+    <!-- A dialog displayed when the user attempts to stop the upload of one particular file. -->
+    <!-- The title of the screen (in the app bar) when looking at the details of an 'upload' of files to the server. -->
+    <!-- The field where Tella shows how many files are included in an upload. -->
+    <!-- The action button to "clear" the upload history. -->
+    <!-- The field to show what file is being uploaded. -->
+    <!-- The description of how much time is left for the upload to complete. -->
+    <!-- The description of how much time is left for the upload to complete. -->
+    <!-- The error message notifying the user that they must select a server where their file will be auto-uploaded. -->
   <string name="settings.docu_error_must.select.auto.upload.server">നിങ്ങൾ ഒരു സെർവർ തിരഞ്ഞെടുത്തിരിക്കണം.</string>
   <!-- The explanation in the dialog when the user attempts to "clear" the upload information. -->
-  <string name="upload.info_dialog.expl_delete.upload">അപ്‌ലോഡ് ചെയ്‌ത വിവരങ്ങൾ ഇല്ലാതാക്കാൻ നിങ്ങൾ ആഗ്രഹിക്കുന്നുണ്ടോ?</string>
-  <!-- The title in the dialog when tapping the "clear" button in the Upload main screen. -->
-  <string name="upload.main_dialog.title_clear.history">അപ്‌ലോഡ് ചരിത്രം മായ്‌ക്കണോ?</string>
-  <string name="settings.docu_auto.upload.metadata_action">പരിശോധിച്ചുറപ്പിക്കല്‍ വിവരങ്ങള്‍ ഉൾപ്പെടുത്തുക</string>
-  <string name="settings.docu_auto.upload.metadata_action.expl">നിങ്ങളുടെ ഫയലുകളിൽ സ്ഥിരീകരണ വിവരങ്ങൾ ഉൾപ്പെടുന്നുവെങ്കിൽ, അത് നിങ്ങളുടെ ഫയലുകൾക്കൊപ്പം സ്വയമേവ അപ്‌ലോഡ് ചെയ്യപ്പെടും.</string>
-  <string name="camera_tab.title_video">വീഡിയോ</string>
+    <!-- The title in the dialog when tapping the "clear" button in the Upload main screen. -->
+    <string name="camera_tab.title_video">വീഡിയോ</string>
   <string name="camera_tab.title_photo">ഫോട്ടോ</string>
   <string name="action_upload">അപ്‌ലോഡ്</string>
   <string name="pl_cancel">റദ്ദാക്കുക </string>
