@@ -322,7 +322,7 @@
         <activity
             android:name=".views.activity.ServersSettingsActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:label="@string/settings.docu_app.bar"
+            android:label="@string/settings.servers.title_server.settings"
             android:parentActivityName=".views.activity.SettingsActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
