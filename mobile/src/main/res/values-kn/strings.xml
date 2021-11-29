@@ -5,8 +5,6 @@
   <string name="collect.blank_action_update.form">ನವೀಕರಣ</string>
   <!-- The screen title (in the app bar) of the "About & Help" menu, where users can read more about the app and find contact information. -->
   <string name="settings.about_app.bar">ಅಪ್ಲಿಕೇಶನ್ ಕುರಿತು &amp; ಸಹಾಯ</string>
-  <!-- In the Settings menu, the button to access the "About & Help" section. -->
-  <string name="settings.gen_select_about">ಅಪ್ಲಿಕೇಶನ್ ಕುರಿತು &amp; ಸಹಾಯ</string>
   <!-- The title of the dialog when attempting to exit a form that hasn't been saved. -->
   <string name="collect.form_exit.unsaved_dialog.title">ಫಾರ್ಮ್ ನಿರ್ಗಮಿಸಲು ಬಯಸುವಿರಾ?</string>
   <!-- The title of the dialog when the user opens the Camera or the Recorder when they have Verification Mode activated but GPS is not activated. Verification Mode is more effective if GPS is activated. -->
@@ -15,14 +13,8 @@
   <string name="collect_tab.title_blank">ಖಾಲಿ</string>
   <!-- A button used throughout the app to cancel actions. -->
   <string name="action_cancel">ರದ್ದುಮಾಡಿ</string>
-  <!-- This is an explanation available when first installing the app, on the very first screen. -->
-  <string name="lock_set.pattern_expl">ನಿಮ್ಮ ಡೇಟಾ ಉತ್ತಮವಾಗಿ ರಕ್ಷಿಸಲು, ದಯವಿಟ್ಟು ನಿಮ್ಮ ಅಪ್ಲಿಕೇಶನ್ ಲಾಕ್ ಮಾದರಿಯನ್ನು ರಚಿಸಿ. ಅಪ್ಲಿಕೇಶನ್ ಅನ್ನು ಅನ್ಲಾಕ್ ಮಾಡಲು ಮತ್ತು ನಿಮ್ಮ ಡೇಟಾ ಪ್ರವೇಶಿಸಲು ಈ ಮಾದರಿಯನ್ನು ಬಳಸಲಾಗುತ್ತದೆ. ಮಾದರಿಯು ಕನಿಷ್ಠ 6 ಚುಕ್ಕೆಗಳನ್ನು ಹೊಂದಿರಬೇಕು.</string>
   <!-- A menu item in the About & Help screen -->
   <string name="settings_menu.item_contact">ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ</string>
-  <!-- The label on the homescreen button to access the data-collection feature. -->
-  <string name="home_collect.button">ಸಂಗ್ರಹಿಸಿ</string>
-  <!-- The heading of the Onboarding screen explaining the data collection feature -->
-  <string name="onboard_collect_heading">ಸಂಗ್ರಹಿಸಿ</string>
   <!-- The dialog informing the user that their form is being downloaded. -->
   <string name="collect_dialog.text_download.progress">ಫಾರ್ಮ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ</string>
   <!-- The dialog informing the user that their form was successfully downloaded. -->
@@ -33,8 +25,6 @@
   <string name="collect.draft_tab.title">ಕರಡು</string>
   <!-- The button to download a form -->
   <string name="collect.blank_action_download.form">ಡೌನ್‌ಲೋಡ್</string>
-  <string name="upload_toast_fail.finding.metadata.to.upload">ಫೈಲ್‌ನ ಪರಿಶೀಲನೆ ಮಾಹಿತಿಯನ್ನು ಪತ್ತೆ ಮಾಡುವಲ್ಲಿ ದೋಷ ಕಂಡುಬಂದಿದೆ. ದಯವಿಟ್ಟು ಪುನಃ ಪ್ರಯತ್ನಿಸಿ</string>
-  <string name="upload_toast.fail.finding.file.to.upload"> ಫೈಲ್ ಅನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಲು ಪತ್ತೆ ಮಾಡುವಲ್ಲಿ ದೋಷ ಕಂಡುಬಂದಿದೆ. ದಯವಿಟ್ಟು ಪುನಃ ಪ್ರಯತ್ನಿಸಿ</string>
   <!-- An error message -->
   <string name="settings_text_empty.field">ಈ ಕ್ಷೇತ್ರ ಖಾಲಿ ಆಗಿರಬಾರದು</string>
   <!-- A toast notification informing the user that by pressing the "back" button again, they will exit the app. -->
@@ -46,12 +36,6 @@
   <string name="settings.docu_toast_fail.delete.server">ಸರ್ವರ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಅಳಿಸುವಲ್ಲಿ ದೋಷ ಕಂಡುಬಂದಿದೆ. ದಯವಿಟ್ಟು ಪುನಃ ಪ್ರಯತ್ನಿಸಿ</string>
   <!-- The menu item, in Settings > About & Help, linking to the webpage with all the Tella FAQ. -->
   <string name="settings.about_list.item_faq">ಸಾಮಾನ್ಯವಾಗಿ ಕೇಳಲಾಗುವ ಪ್ರಶ್ನೆಗಳು</string>
-  <!-- The title of the screen (in the app bar) for the Gallery. -->
-  <string name="gallery_app.bar">ಗ್ಯಾಲರಿ</string>
-  <!-- The label of the homescreen button to access the Tella gallery. -->
-  <string name="home_gallery.button">ಗ್ಯಾಲರಿ</string>
-  <!-- The action button after the user created their pattern. -->
-  <string name="onboarding_action_create.pattern">ಮಾದರಿ ರಚಿಸಿ</string>
   <!-- A generic action button used throughout the app to confirm an action. -->
   <string name="action_ok">ಸರಿ</string>
   <!-- An error message informing the user that the response to the form's question is invalid. For example, if the question asks for a number and the user entered letters. -->
@@ -60,7 +44,6 @@
   <string name="collect.form_error_response.mandatory">ಈ ಪ್ರತಿಕ್ರಿಯೆ ಕಡ್ಡಾಯವಾಗಿದೆ</string>
   <!-- The heading of the screen when Quick Delete is being activated -->
   <string name="homescreen_heading_quick.delete">ತ್ವರಿತ ಅಳಿಸುವ ಮೋಡ್ ಸಕ್ರಿಯಗೊಳಿಸುವಿಕೆ</string>
-  <string name="permission_dialog.expl_mic">ಆಡಿಯೊವನ್ನು ರೆಕಾರ್ಡ್ ಮಾಡಲು,Tella ಗೆ ನಿಮ್ಮ ಮೈಕ್ರೊಫೋನ್ ಪ್ರವೇಶಿಸಲು ಅನುಮತಿ ಅಗತ್ಯವಿದೆ.</string>
   <!-- The menu item to open the app's privacy policy from the "About & Help" menu. -->
   <string name="settings.about_list.item_privacy.policy">ಗೌಪತಾ ನೀತಿ</string>
   <!-- An error message shown when Tella encounters an error recording the audio. -->
@@ -101,8 +84,6 @@
   <string name="recorder_app.bar">ರೆಕಾರ್ಡರ್</string>
   <!-- The screen title (in the app bar) for the section on data-collection. -->
   <string name="collect_app.bar">ಸಂಗ್ರಹಿಸಿ</string>
-  <!-- A prompt on the homescreen -->
-  <string name="home_action.expl_camera">ಕ್ಯಾಮೆರಾ ತೆರೆಯಲು ಎಲ್ಲಿಯಾದರೂ ಟ್ಯಾಪ್ ಮಾಡಿ</string>
   <!-- In the server settings dialog, the label of the field to enter the username. -->
   <string name="settings.docu_field_username">ಬಳಕೆದಾರಹೆಸರು</string>
   <!-- In the screen showing all draft forms, this shows the date when the draft was last updated. -->
@@ -150,8 +131,6 @@
   <string name="collect_dialog.text_delete.sent.form">ನಿಮ್ಮ ಸಾಧನದಿಂದ ಈ ಫಾರ್ಮ್ ಅನ್ನು ಅಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ? ಈಗಾಗಲೇ ಸಲ್ಲಿಸಲ್ಪಟ್ಟ ಕಾರಣ, ಈ ಡೇಟಾ ನಿಮ್ಮ ಸಂಸ್ಥೆಯ ಸರ್ವರ್‌ನಲ್ಲಿ ಉಳಿಯುತ್ತದೆ ಎಂಬುದನ್ನು ಗಮನಿಸಿ.</string>
   <string name="collect_dialog.text_delete.draft.form">ಈ ಡ್ರಾಫ್ಟ್ ಫಾರ್ಮ್ ಅನ್ನು ಅಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?</string>
   <string name="collect_toast_form.deleted">ಫಾರ್ಮ್ ಅನ್ನು ಅಳಿಸಲಾಗಿದೆ</string>
-  <!-- The button in Settings > General to select the app's language -->
-  <string name="settings.gen_select_language">ಭಾಷೆ</string>
   <!-- In Settings > General > Language, the explanation for the option to keep the app in the default language of the device. -->
   <string name="settings.lang_select.expl_default">Tella ವನ್ನು ನನ್ನ ಸಾಧನದ ಭಾಷೆಯಲ್ಲಿ ಇರಿಸಿ</string>
   <!-- In Settings > General > Language, the option to keep the app in the default language of the device. -->
@@ -171,18 +150,9 @@
   <string name="action_discard">ತ್ಯಜಿಸು</string>
   <!-- The action button to submit a form once filled -->
   <string name="collect.end_action_submit">ಸಲ್ಲಿಸು</string>
-  <string name="gallery_toast_file.imported.from.device">ಫೈಲನ್ನು ನಮ್ಮ ಗ್ಯಾಲರಿ ಗೆ ಸೇರಿಸಲಾಗಿದೆ</string>
   <string name="gallery_toast_fail.exporting.to.device">ಫೈಲ್‌ಗಳನ್ನು ರಫ್ತು ಮಾಡುವಲ್ಲಿ ದೋಷ ಕಂಡುಬಂದಿದೆ. ದಯವಿಟ್ಟು ಪುನಃ ಪ್ರಯತ್ನಿಸಿ</string>
   <string name="permission_dialog.expl_device.storage">ಫೈಲ್‌ಗಳನ್ನು ರಫ್ತು ಮಾಡಲು, ಸಾಧನದ ಸಂಗ್ರಹಣೆಯಲ್ಲಿ ಬರೆಯಲು Tella ಗೆ ಅನುಮತಿ ಬೇಕು.</string>
-  <!-- Why one has a full stop and not the other?
-
-A toast notification informing the user that their files were successfully deleted. -->
-  <plurals name="gallery_toast_files.deleted">
-    <item quantity="one">%1$d ಫೈಲ್‌ ಅಳಿಸಲಾಗಿದೆ</item>
-    <item quantity="other">%1$d ಫೈಲ್‌ಗಳು ಅಳಿಸಲಾಗಿದೆ</item>
-  </plurals>
   <string name="gallery_toast_fail.deleting.files">ಫೈಲ್‌ಗಳನ್ನು ಅಳಿಸುವಲ್ಲಿ ದೋಷ ಕಂಡುಬಂದಿದೆ. ದಯವಿಟ್ಟು ಪುನಃ ಪ್ರಯತ್ನಿಸಿ.</string>
-  <!-- A toast notification informing the user that their files were successfully exported from Tella and saved to the device's gallery. -->
   <plurals name="gallery_toast_files.exported">
     <item quantity="one">%1$d ಫೈಲ್ ಅನ್ನು ಸಾಧನಕ್ಕೆ ಉಳಿಸಲಾಗಿದೆ</item>
     <item quantity="other">%1$d ಫೈಲ್‌ಗಳು ಸಾಧನಕ್ಕೆ ಉಳಿಸಲಾಗಿದೆ</item>
@@ -199,7 +169,6 @@ A toast notification informing the user that their files were successfully delet
   <!-- The dialog when saving a file to the device's gallery -->
   <string name="gallery_save.to.device_dialog.progress.expl">ಡೀಕ್ರಿಪ್ಟ್ ಮಾಡಲಾಗುತ್ತಿದೆ</string>
   <string name="gallery_toast_fail.import">ಫೈಲ್‌ಗಳನ್ನು ಆಮದು ಮಾಡಲು ಗ್ಯಾಲರಿಯನ್ನು ತೆರೆಯುವಲ್ಲಿ ದೋಷ ಕಂಡುಬಂದಿದೆ. ದಯವಿಟ್ಟು ಪುನಃ ಪ್ರಯತ್ನಿಸಿ</string>
-  <string name="permission_dialog.expl_camera.mic">ಫೋಟೋ,ವಿಡಿಯೋ ಮತ್ತು ಆಡಿಯೊ  ಫೈಲ್ ಸೆರೆಹಿಡಿಯಲು,Tella ಗೆ ನಿಮ್ಮ ಕ್ಯಾಮೆರಾ ಮತ್ತು ಮೈಕ್ರೊಫೋನ್ ಪ್ರವೇಶಿಸಲು ಅನುಮತಿ ಅಗತ್ಯವಿದೆ.</string>
   <string name="gallery_toast_fail.saving.file">ಫೈಲ್‌ಗಳನ್ನು ಉಳಿಸುವಲ್ಲಿ ದೋಷ ಕಂಡುಬಂದಿದೆ. ದಯವಿಟ್ಟು ಪುನಃ ಪ್ರಯತ್ನಿಸಿ.</string>
   <string name="collect_toast_fail.attaching.file.to.form">ಫೈಲ್ ಅನ್ನು ಲಗತ್ತಿಸುವಲ್ಲಿ ದೋಷ ಕಂಡುಬಂದಿದೆ. ದಯವಿಟ್ಟು ಪುನಃ ಪ್ರಯತ್ನಿಸಿ</string>
   <string name="collect_toast_fail.fetch.form.from.server.unknown.error">ಫಾರ್ಮ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡುವಲ್ಲಿ ದೋಷ ಕಂಡುಬಂದಿದೆ. ದಯವಿಟ್ಟು ಪುನಃ ಪ್ರಯತ್ನಿಸಿ</string>
@@ -207,7 +176,6 @@ A toast notification informing the user that their files were successfully delet
   <string name="collect_toast_reason.fail.fetch.form.from.server">ಫಾರ್ಮ್ ಅನ್ನು ಕಂಡುಹಿಡಿಯಲಾಗಲಿಲ್ಲ. ಇದನ್ನು ನಿಮ್ಮ ಸಂಸ್ಥೆಯ ಸರ್ವರ್‌ನಿಂದ ಅಳಿಸಿರಬಹುದು</string>
   <!-- The heading in the Gallery, to show all the files that are in the Gallery (by contrast to the "Selected files") -->
   <string name="gallery_heading_files.from.Tella.gallery">Tella ಗ್ಯಾಲರಿ</string>
-  <string name="permission_dialog.expl_camera">ಫೋಟೋ ಮತ್ತು ವಿಡಿಯೋ ಸೆರೆಹಿಡಿಯಲು, Tella ಗೆ ನಿಮ್ಮ ಕ್ಯಾಮೆರಾ ಪ್ರವೇಶಿಸಲು ಅನುಮತಿ ಅಗತ್ಯವಿದೆ.</string>
   <!-- The menu button in Settings to access the general settings (language, share crash reports, etc) -->
   <string name="settings_select_general">ಸಾಮಾನ್ಯ</string>
   <!-- The explanatory text in the dialog warning the user that exiting the form without saving will lose the draft. -->
@@ -222,30 +190,14 @@ A toast notification informing the user that their files were successfully delet
   <string name="home_action.label_quick.delete">ಅಳಿಸು</string>
   <!-- The text in the filtering menu to reorder the files by date -->
   <string name="gallery_subheading_sort.by">ವಿಂಗಡಿಸಿ</string>
-  <!-- The text in the filtering menu to only show photos, videos, or audio recordings. -->
-  <string name="gallery_subheading_show">ತೋರಿಸಿ</string>
   <!-- The button to reorder files from newest to oldest -->
   <string name="gallery_list.item_newest.to.oldest">ಹೊಸದರಿಂದ ಹಳೆಯದರ ತನಕ</string>
   <!-- The button to reorder files from oldest to newest -->
   <string name="gallery_list.item_oldest.to.newest">ಹಳೆಯದಿಂದ ಹೊಸದರ ತನಕ</string>
-  <!-- The button to show "all" files (not just the photos, videos, or audio recordings) -->
-  <string name="gallery_list.item_show.all.files">ಎಲ್ಲಾ</string>
-  <!-- The button to show only photos in the Gallery -->
-  <string name="gallery_list.items_show.only.photos">ಫೋಟೋಗಳು</string>
-  <!-- The button to show only videos in the Gallery -->
-  <string name="gallery_list.items_show.only.videos">ವೀಡಿಯೊಗಳು</string>
-  <!-- The button to show only audio recordings in the Gallery -->
-  <string name="gallery_list.items_show.only.audio">ಆಡಿಯೋ ರೆಕಾರ್ಡಿಂಗ್‌ಗಳು</string>
   <!-- The generic action button used throughout the app -->
   <string name="action_exit">ನಿರ್ಗಮಿಸು</string>
-  <!-- The description of the "Quick Exit" button on the homescreen. -->
-  <string name="home_action.desc_quick.exit">ನಿರ್ಗಮಿಸು</string>
   <!-- In Settings > Protection, the button to access the Camouflage settings -->
   <string name="settings.prot_select_camouflage">ಮರೆಮಾಚುವಿಕೆ</string>
-  <!-- The heading of the Onboarding screen explanation the Camouflage feature -->
-  <string name="onboard.camo_heading">ಮರೆಮಾಚುವಿಕೆ</string>
-  <!-- The action button to save the server settings even if there is no internet connection -->
-  <string name="settings_dialog.action_save.server.no.internet">ಹೇಗಾದರೂ ಉಳಿಸಿ</string>
   <string name="settings.docu_error_wrong.credentials">ಸದಸ್ಯನಾಮ ಮತ್ತು ಪಾಸ್‌ವರ್ಡ್ ತಪ್ಪಾಗಿದೆ.</string>
   <string name="settings.docu_error_domain.doesnt.exit">ಸರ್ವರ್ URL ತಪ್ಪಾಗಿದೆ</string>
   <!-- An error message displayed when trying to connect to the server and an unknown error makes it impossible. -->
@@ -256,17 +208,7 @@ A toast notification informing the user that their files were successfully delet
   <string name="settings.docu_dialog.action_try.again.connecting">ಮರಳಿ ಪ್ರಯತ್ನಿಸಿ</string>
   <!-- The link to Tutorial-->
   <string name="settings.about_select_tutorial">Tutorial</string>
-  <!-- The heading in the Gallery, to show all the files that are selected -->
-  <string name="gallery_heading_selected_files">ಆಯಿಕೆಮಡಿದ ಫೈಲ್‌ಗಳು</string>
   <string name="settings.camo_expl">ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿ Tellaಗೆ ಮರೆಮಾಡಲು ಆ ಕಸ್ಟಮ್ ಐಕಾನ್ ಮತ್ತು ಹೆಸರನ್ನು ಆಯ್ಕೆಮಾಡಿ. ಆಂಡ್ರಾಯ್ಡ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳಿಂದ Tella ಐಕಾನ್  ಕಾಣಬರುತ್ತದೆ ಎಂಬುದನ್ನು ಗಮನಿಸಿ.</string>
-  <!-- The name of a "fake" app to hide Tella as a camera app. -->
-  <string name="settings.camo_camera4">Camera</string>
-  <!-- The name of a "fake" app to hide Tella as a camera app. -->
-  <string name="settings.camo_camera3">CameraPro</string>
-  <!-- The name of a "fake" app to hide Tella as a camera app. -->
-  <string name="settings.camo_camera2">SuperCam</string>
-  <!-- The name of a "fake" app to hide Tella as a camera app. -->
-  <string name="settings.camo_camera1">EasyCam</string>
   <!-- The description of the button to save a file from the Tella Gallery to the device's default gallery. -->
   <string name="gallery_action.desc_save.to.device">ಸಾಧನದಲ್ಲಿ ಉಳಿಸಿರಿ</string>
   <!-- The name of the feature in Settings > Documentation. -->
@@ -362,16 +304,8 @@ A toast notification informing the user that their files were successfully delet
   <string name="verification.info_field_location.speed">ಸ್ಥಳದ ವೇಗ</string>
   <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
   <string name="verification.info_field_cell.towers">ಸೆಲ್ ಮಾಹಿತಿ</string>
-  <!-- The name of a "fake" app to hide Tella as a weather app. -->
-  <string name="settings.camo_weather3">Weather now</string>
-  <!-- The name of a "fake" app to hide Tella as a weather app. -->
-  <string name="settings.camo_weather2">Local weather</string>
   <!-- The name of a "fake" app to hide Tella as a calculator. -->
   <string name="settings.camo_calculator2">Calculator</string>
-  <!-- The name of a "fake" app to hide Tella as a calculator. -->
-  <string name="settings.camo_calculator1">Easy Math</string>
-  <!-- The name of a "fake" app to hide Tella as a weather app. -->
-  <string name="settings.camo_weather1">Weather</string>
   <!-- The subheading to show all the metadata on the file -->
   <string name="verification.info_subheading_file.metadata">ಫೈಲ್</string>
   <!-- The subheading to show all the metadata on the device -->
@@ -380,8 +314,6 @@ A toast notification informing the user that their files were successfully delet
   <string name="verification.info_subheading_context.metadata">ಸಂದರ್ಭ</string>
   <!-- This is displayed when a piece of verification information isn't available. -->
   <string name="verification.info_field_metadata.not.available">ಲಭ್ಯವಿಲ್ಲ</string>
-  <!-- The content description for the homepage background. It is never visible to the user. -->
-  <string name="home_content.desc_background">ಲಭ್ಯವಿಲ್ಲ</string>
   <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
   <string name="verification.info_field_latitude">ಅಕ್ಷಾಂಶ:</string>
   <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
@@ -411,14 +343,6 @@ A toast notification informing the user that their files were successfully delet
     <item quantity="one">%d ಫೈಲ್‌ಗಳು</item>
     <item quantity="other">%d ಫೈಲ್‌ಗಳು</item>
   </plurals>
-  <!-- The screen title (in the app bar) where the user manages their settings on documentation. -->
-  <string name="settings.docu_app.bar">ದಾಖಲೆ</string>
-  <!-- The button in Settings to access the documentation settings -->
-  <string name="settings.gen_select_documentation">ದಾಖಲೆ</string>
-  <!-- The screen title (in the app bar) for the Settings > Protection menu -->
-  <string name="settings.prot_app.bar">ಸಂರಕ್ಷಣೆ</string>
-  <!-- The button in Settings to access the protection settings -->
-  <string name="settings.gen_select_protection">ಸಂರಕ್ಷಣೆ</string>
   <!-- A button to open a screen or webpage with more information -->
   <string name="action_learn.more">ಹೆಚ್ಚು ಕಲಿಯಿರಿ</string>
   <!-- The button to add a connection to a server -->
@@ -448,8 +372,6 @@ A toast notification informing the user that their files were successfully delet
   <string name="collect_toast_fail.connection.too.weak">ಫಾರ್ಮ್ ಕಳುಹಿಸಲು ನಿಮ್ಮ ಇಂಟರ್ನೆಟ್ ಸಂಪರ್ಕವು ತುಂಬಾ ದುರ್ಬಲವಾಗಿದೆ. ದಯವಿಟ್ಟು ಪುನಃ ಪ್ರಯತ್ನಿಸಿ</string>
   <!-- The toast message informing the user that a file was successfully encrypted (after recording it or importing it into the app) -->
   <string name="gallery_toast_file.encrypted">ಫೈಲ್ಅನ್ನು ಎನ್‌ಕ್ರಿಪ್ಟ್ ಮಾಡಲಾಗಿದೆ</string>
-  <!-- The button in the dialog where the user decides whether to hide or delete the server connections. -->
-  <string name="settings.docu_dialog.action_hide">ಹಡಗಿಸಿ</string>
   <string name="settings.docu_toast_disconnect.servers.delete">ಎಲ್ಲಾ ಫಾರ್ಮ್‌ಗಳು ಮತ್ತು ಸರ್ವರ್‌ಗಳನ್ನು ಅಳಿಸಲಾಗಿದೆ</string>
   <string name="collect.help_expl_not.connected.to.server"><![CDATA[ಫಾರ್ಮ್‌ಗಳನ್ನು ಸ್ವೀಕರಿಸಲು ಮತ್ತು ಡೇಟಾ ಸಲ್ಲಿಸಲು, ನೀವು ಮೊದಲು ಸರ್ವರ್‌ಗೆ ಸಂಪರ್ಕ ಹೊಂದಬೇಕು. ಸರ್ವರ್ ಮಾಹಿತಿಗಾಗಿ ನಿಮ್ಮ ಸಂಸ್ಥೆಯನ್ನು ಕೇಳಿ ಮತ್ತು ಸರ್ವರ್ ಅನ್ನು ಹೊಂದಿಸಿ.]]></string>
   <string name="collect.help_expl_odk"><![CDATA[ನಿಮ್ಮ ಫಾರ್ಮ್‌ಗಳನ್ನು ನೀವೇ ರಚಿಸುವುದಾದರೆ, <a href=\"https://hzontal.org/contact/\">ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ</a> ಅಥವಾ <a href=\"https://opendatakit.org/help/help-for-hire/\"> ಬಳಸಿ ಓಪನ್ ಡೇಟಾ ಕಿಟ್ (ಒಡಿಕೆ) ಆಧಾರಿತ ಯಾವುದೇ ಸೇವೆ</a>ಅನ್ನು ಬಳಸಿ]]></string>
@@ -547,10 +469,6 @@ This is one of the two options available. -->
   <string name="verification.info_wifi.expl">ಸಾಧನದ ಸುತ್ತಮುತ್ತಲಿನ ಎಲ್ಲಾ ವೈ-ಫೈ ನೆಟ್‌ವರ್ಕ್‌ಗಳ ಹೆಸರು.</string>
   <!-- When some forms are updated on the server by project managers, a banner is displayed in Tella to let the user know and explain how to update their forms. -->
   <string name="collect.blank_banner_forms.updated">ಕೆಲವು ಫಾರ್ಮ್‌ಗಳನ್ನು ನವೀಕರಿಸಲಾಗಿದೆ. ಇತ್ತೀಚಿನ ಆವೃತ್ತಿಯನ್ನು ಪಡೆಯಲು ಫಾರ್ಮ್‌ಗಳ ಪಕ್ಕದಲ್ಲಿರುವ ನವೀಕರಣ ಬಟನ್ ಟ್ಯಾಪ್ ಮಾಡಿ.</string>
-  <!-- This is the button to select which server the files should be auto-uploaded to. -->
-  <string name="settings.docu_auto.upload.server.selection_select">ಸರ್ವರ್</string>
-  <!-- If the user is connected to more than one Direct Upload server, they have to select which server to upload the files to. This is the title of the dialog asking them to select the server. -->
-  <string name="upload_dialog.title_select.server">ಸರ್ವರ್ ಅನ್ನು ಆಯ್ಕೆಮಾಡಿ</string>
   <!-- If the user is connected to more than one Direct Upload server, they have to select which server to upload the files to. This is the explanation in the dialog asking them to select the server. -->
   <string name="settings.docu_auto.upload.server.selection_dialog.expl">ಫೈಲ್‌ಗಳನ್ನು ಯಾವ ಸರ್ವರ್‌ಗೆ ಅಪ್‌ಲೋಡ್ ಮಾಡಲು ನೀವು ಬಯಸುತ್ತೀರಿ?</string>
   <!-- The title of the dialog where the user selects the type of server they want to connect to. -->
@@ -561,16 +479,6 @@ This is one of the two options available. -->
   <string name="settings.docu_add.server_dialog.expl">ನೀವು ಸಂಪರ್ಕಿಸಲು ಬಯಸುವ ಸರ್ವರ್ ಬಗೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ.</string>
   <!-- When connecting to a server, users have to select which of the two kinds of servers they want to connect to. "Direct Upload" is one of the two server types. -->
   <string name="settings.docu_add.server_dialog.select_tus">ನೇರವಾಗಿ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ</string>
-  <!-- The text next to the switch to enable the connection to servers. -->
-  <string name="settings.docu_connect.to.servers_enable_action">ಸರ್ವರ್‌ಗಳಿಗೆ ಸಂಪರ್ಕವನ್ನು ಸಾಧಿಸಿ</string>
-  <!-- The explanation of the settings to connect to servers. -->
-  <string name="settings.docu_connect.to.servers_enable_action.expl">ಡೇಟಾ ಕಳುಹಿಸಲು ಸರ್ವರ್‌ಗಳಿಗೆ ನಿಮ್ಮ ಸಂಪರ್ಕವನ್ನು ನಿರ್ವಹಿಸಿ.</string>
-  <!-- The title of the dialog to disconnect servers. -->
-  <string name="settings.docu_disable.servers_dialog.title">ಸರ್ವರ್‌ಗಳಿಗೆ ಸಂಪರ್ಕ ಕಡಿತಗೊಳಿಸಿ</string>
-  <!-- The explanation in the dialog when disabling the connection to servers. -->
-  <string name="settings.docu_connect.to.servers_disable_dialog.expl">ನಿಮ್ಮ ಸರ್ವರ್ ಸಂಪರ್ಕಗಳನ್ನು ಸಂಪೂರ್ಣವಾಗಿ ಅಳಿಸಲು ನೀವು ಬಯಸುವಿರಾ, ಅಥವಾ ಅವುಗಳನ್ನು ಮರೆಮಾಡಲು ಬಯಸುವಿರಾ? ಮರೆಮಾಡುವುದರಿಂದ ಸರ್ವರ್ ಮಾಹಿತಿಯನ್ನು ಮೆಮೊರಿಯಲ್ಲಿ ಇಡುತ್ತದೆ ಇದರಿಂದ ನೀವು ಸುಲಭವಾಗಿ ಮರುಸಂಪರ್ಕಿಸಬಹುದು ಮತ್ತು ಸರ್ವರ್‌ಗಳಿಗೆ ಡೇಟಾ ಸಲ್ಲಿಸಬಹುದು.</string>
-  <!-- The explanation in the dialog that is displayed when deleting an Upload server used for auto-uploading files. -->
-  <string name="settings.docu_delete.auto.server_dialog.expl">ನೀವು ಈ ಸರ್ವರ್ ಅನ್ನು ತೆಗೆದರೆ, ನಿಮ್ಮ ಫೈಲ್‌ಗಳನ್ನು ಇನ್ನು ಮುಂದೆ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಅಪ್‌ಲೋಡ್ ಮಾಡಲಾಗುವುದಿಲ್ಲ.</string>
   <!-- This is the label of the button in the screen to play an audio file, to move forward in the file by 15 seconds. -->
   <string name="play.audio_action.expl_plus15s">+15ಸೆ</string>
   <!-- This is the label of the button in the screen to play an audio file, to move backward in the file by 15 seconds. -->
@@ -591,18 +499,12 @@ This is one of the two options available. -->
   <string name="camera_video.resolution_select_720p">ಮಧ್ಯಮ (720p)</string>
   <!-- One of the options that the user can select when setting the resolution of the videos they record in the Tella camera. -->
   <string name="camera_video.resolution_select_480p">ಕನಿಷ್ಠ (480p)</string>
-  <!-- The name of the feature in the Settings > Documentation settings -->
-  <string name="settings.docu_auto.upload_action">ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ</string>
   <!-- The explanation of the feature in the Settings menu. -->
   <string name="settings.docu_auto.upload_action.expl">Tella ನಿಮ್ಮ ಫೋಟೋಗಳು, ವೀಡಿಯೊಗಳು ಅಥವಾ ಆಡಿಯೊ ರೆಕಾರ್ಡಿಂಗ್‌ಗಳನ್ನು ರೆಕಾರ್ಡ್ ಮಾಡಿದ ತಕ್ಷಣ ಅಥವಾ Tella ಗೆ ಆಮದು ಮಾಡಿದ ತಕ್ಷಣ ಸರ್ವರ್‌ಗೆ ಅಪ್‌ಲೋಡ್ ಮಾಡುತ್ತದೆ.</string>
   <!-- The label next to the switch to activate the auto-delete feature. -->
   <string name="settings.docu_auto.delete_action">ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಅಳಿಸು</string>
-  <!-- The explanation of the auto-delete feature in the Settings menu. -->
-  <string name="settings.docu_auto.delete_action.expl">ನಿಮ್ಮ ಸಾಧನದಿಂದ ಫೈಲ್‌ಗಳನ್ನು ಸರ್ವರ್‌ಗೆ ಅಪ್‌ಲೋಡ್ ಮಾಡಿದ ತಕ್ಷಣ Tella ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಅಳಿಸುತ್ತದೆ.</string>
   <!-- The explanation on the dialog to select a server to auto-upload files. -->
   <string name="settings.docu_choose.auto.upload.server_dialog.expl">ಯಾವ ಸರ್ವರ್‌ಗೆ ಫೈಲ್‌ಗಳನ್ನು ನೀವು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಅಪ್‌ಲೋಡ್ ಮಾಡಲು ಬಯಸುತ್ತೀರಿ?</string>
-  <!-- The explanation in the dialog that is displayed when deleting an Upload server. -->
-  <string name="settings.docu_delete.upload.server_dialog.expl">ನೀವು ಇನ್ನು ಮುಂದೆ ಈ ಸರ್ವರ್‌ಗೆ ಫೈಲ್‌ಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗುವುದಿಲ್ಲ.</string>
   <!-- The label for the homescreen button to access the Upload feature. -->
     <!-- This is displayed to let the user that the files are being uploaded. -->
     <!-- The button to see more information about each upload. -->
@@ -624,30 +526,6 @@ This is one of the two options available. -->
     <string name="camera_tab.title_video">ವಿಡಿಯೋ</string>
   <string name="camera_tab.title_photo">ಫೋಟೋ</string>
   <string name="action_upload">ಅಪ್‌ಲೋಡ್</string>
-  <string name="LockSelect_Action_Cancel">ರದ್ದುಮಾಡಿ</string>
-  <string name="LockSelect_Action_Confirm">ಖಚಿತಪಡಿಸಿ</string>
-  <string name="LockPatternConfirm_Action_Confirm">ಖಚಿತಪಡಿಸಲು ವಿನ್ಯಾಸವನ್ನು ಮತ್ತೆ ಚಿತ್ರಸಿ</string>
-  <string name="LockSelect_Action_Continue">ಮುಂದುವರಿಸಿ</string>
-  <string name="LockPatternSet_Draw_Pattern">ಅನ್ಲಾಕ್ ವಿನ್ಯಾಸವನ್ನು ಚಿತ್ರಿಸಿ</string>
-  <string name="UnlockPattern_DrawToUnlock">ಅನ್ಲಾಕ್ ಮಾಡಲು ವಿನ್ಯಾಸವನ್ನು ಚಿತ್ರಸಿ</string>
-  <string name="LockPatternConfirm_Pattern_Confirmed">Tella ಅನ್ಲಾಕ್ ಮಾಡಲು ಇದು ಈಗ ನಿಮ್ಮ ವಿನ್ಯಾಸವಾಗಿದೆ.</string>
-  <string name="LockPatternSet_Pattern_Recorded">ವಿನ್ಯಾಸವನ್ನು ರೆಕಾರ್ಡ್‌ ಮಾಡಲಾಗಿದೆ</string>
-  <string name="UnlockPattern_PatternTooShort">ಕನಿಷ್ಠ %d ಚುಕ್ಕೆಗಳನ್ನು ಸಂಪರ್ಕಿಸಿ, ದಯವಿಟ್ಟು ಮತ್ತೆ ಚಿತ್ರಿಸಿರಿ</string>
-  <string name="LockPatternSet_RecordingPattern">ಮುಗಿದಾಗ ಬೆರಳನ್ನು ಬಿಡುಗಡೆ ಮಾಡಿ</string>
-  <string name="LockPatternSet_Action_Redraw">ಮತ್ತೆ ಚಿತ್ರಿಸಿರಿ</string>
-  <string name="LockPatternConfirm_Message_WrongPattern">ತಪ್ಪಾದ ವಿನ್ಯಾಸವಿದು, ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
-  <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="LockPatternSet_Message_PatternStarted">ವಿನ್ಯಾಸವನ್ನು ಪ್ರಾರಂಭಿಸಲಾಗಿದೆ</string>
-  <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="LockPatternSet_Message_PatternCleared">ವಿನ್ಯಾಸವನ್ನು ತೆರವುಗೊಳಿಸಲಾಗಿದೆ</string>
-  <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="LockPatternSet_Message_CellAdded">ಸೆಲ್ ಸೇರಿಸಲಾಗಿದೆ</string>
-  <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern. The screen reader will add the cell number that the user added. For example, if the user selects the bottom left cell, the screen reader will read "cell 7 added". -->
-  <string name="LockPatternSet_Message_CellAddedVerbose">ಸೆಲ್ <xliff:g id="cell_index" example="3"> %1$d </xliff:g> ಸೇರಿಸಲಾಗಿದೆ</string>
-  <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="LockPatternSet_Message_PatternDetected">ವಿನ್ಯಾಸವನ್ನು ಪೂರ್ಣಗೊಳಿಸಲಾಗಿದೆ</string>
-  <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="UnLockPattern_PatternArea">ವಿನ್ಯಾಸದ ಪ್ರದೇಶ</string>
   <!-- The button to get access to more options. -->
   <string name="collect.blank_action.desc_more.options">ಹೆಚ್ಚಿನ ಆಯ್ಕೆಗಳು</string>
   <string name="action_next">ಮುಂದೆ</string>
@@ -655,9 +533,7 @@ This is one of the two options available. -->
   <string name="meter">%f ಮಿ</string>
   <!-- The value expressed in meters per second -->
   <string name="meter_per_second">%f ಮಿ/ಸೆ</string>
-  <string name="intro_welcome">Welcome to</string>
   <string name="tella">Tella</string>
-  <string name="intro_start">START</string>
   <string name="intro_document_protect"><![CDATA[Document & Protect]]></string>
   <string name="onboard_setup_text">How would you like to set up Tella?</string>
   <string name="onboard_full_setup">FULL SETUP</string>
@@ -674,7 +550,6 @@ This is one of the two options available. -->
   <string name="onboard_pattern_description">The least secure option</string>
   <string name="settings.sec_app.bar">Security</string>
   <string name="settings.select_security">Security</string>
-    <string name="settings.select_customization">Customization</string>
     <string name="settings.select_lock_timeout">Lock Timeout</string>
     <string name="settings.sec_camera.mute_switch">Camera silent mode</string>
     <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
@@ -751,7 +626,6 @@ This is one of the two options available. -->
   <string name="mic_recording">Recording</string>
   <string name="mic_rename_recording">Rename recording</string>
   <string name="recorder_toast_recording.saved">The audio recording was saved to your Tella files</string>
-
   <string name="onboard.intro_title">Welcome to Tella</string>
   <string name="onboard.intro_get_started">Get started</string>
   <string name="onboard.intro_organization_code">I have a code from my organization</string>
