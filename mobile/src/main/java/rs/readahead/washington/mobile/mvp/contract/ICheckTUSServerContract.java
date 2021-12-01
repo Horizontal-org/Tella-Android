@@ -2,6 +2,9 @@ package rs.readahead.washington.mobile.mvp.contract;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
+import rs.readahead.washington.mobile.data.upload.NetCipherTUSClient;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 
@@ -20,5 +23,7 @@ public class ICheckTUSServerContract {
 
     public interface IPresenter extends IBasePresenter {
         void checkServer(TellaUploadServer server, boolean connectionRequired);
+        void checkServerWithNetCipher(TellaUploadServer server, boolean connectionRequired);
+        void initNetCipher(NetCipherTUSClient.IOnNetCipherConnect onNetCipherConnect);
     }
 }

@@ -28,12 +28,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+import org.hzontal.shared_ui.utils.DialogUtils;
 import org.jetbrains.annotations.NotNull;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.data.sharedpref.Preferences;
+import rs.readahead.washington.mobile.data.upload.NetCipherTUSClient;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.mvp.contract.ICheckTUSServerContract;
@@ -43,7 +46,7 @@ import timber.log.Timber;
 
 
 public class TellaUploadServerDialogFragment extends AppCompatDialogFragment implements
-        ICheckTUSServerContract.IView {
+        ICheckTUSServerContract.IView, NetCipherTUSClient.IOnNetCipherConnect {
     public static final String TAG = TellaUploadServerDialogFragment.class.getSimpleName();
 
     private static final String TITLE_KEY = "tk";
@@ -85,7 +88,7 @@ public class TellaUploadServerDialogFragment extends AppCompatDialogFragment imp
     private boolean validated = true;
     private CheckTUSServerPresenter presenter;
     private boolean securityProviderUpgradeAttempted = false;
-
+    private long serverId;
     public interface TellaUploadServerDialogHandler {
         void onTellaUploadServerDialogCreate(TellaUploadServer server);
         void onTellaUploadServerDialogUpdate(TellaUploadServer server);
@@ -114,7 +117,7 @@ public class TellaUploadServerDialogFragment extends AppCompatDialogFragment imp
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         assert getArguments() != null;
-        final long serverId = getArguments().getLong(ID_KEY, 0);
+        serverId = getArguments().getLong(ID_KEY, 0);
         Object obj = getArguments().getSerializable(OBJECT_KEY);
 
         final View dialogView;
@@ -320,7 +323,11 @@ public class TellaUploadServerDialogFragment extends AppCompatDialogFragment imp
         }
 
         if (presenter != null) {
-            presenter.checkServer(server, connectionRequired);
+            if (Preferences.isBypassCensorship()){
+                presenter.initNetCipher(this);
+            }else {
+                presenter.checkServer(server, connectionRequired);
+            }
         }
     }
 
@@ -372,5 +379,18 @@ public class TellaUploadServerDialogFragment extends AppCompatDialogFragment imp
 
     private void maybeShowAdvancedPanel() {
         advancedPanel.setVisibility(advancedToggle.isOpen() ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void onConnected() {
+        if (presenter != null){
+            presenter.checkServerWithNetCipher(new TellaUploadServer(serverId),false);
+        }
+    }
+
+    @Override
+    public void onException(Exception e) {
+        Timber.d(e);
+        DialogUtils.showBottomMessage(requireActivity(),"Enable to connect to server",true);
     }
 }

@@ -7,6 +7,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.openrosa.OpenRosaService;
+import rs.readahead.washington.mobile.data.upload.NetCipherTUSClient;
 import rs.readahead.washington.mobile.data.upload.TUSClient;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
@@ -18,6 +19,7 @@ public class CheckTUSServerPresenter implements
     private ICheckTUSServerContract.IView view;
     private CompositeDisposable disposables = new CompositeDisposable();
     private boolean saveAnyway = false;
+    private NetCipherTUSClient netCipherTUSClient;
 
 
     public CheckTUSServerPresenter(ICheckTUSServerContract.IView view) {
@@ -40,7 +42,6 @@ public class CheckTUSServerPresenter implements
                 setSaveAnyway(false);
             }
         }
-
         TUSClient client = new TUSClient(view.getContext().getApplicationContext(),
                 server.getUrl(), server.getUsername(), server.getPassword());
 
@@ -63,6 +64,53 @@ public class CheckTUSServerPresenter implements
                     view.onServerCheckError(throwable);
                 })
         );
+    }
+
+
+    @Override
+    public void checkServerWithNetCipher(TellaUploadServer server, boolean connectionRequired) {
+        if (! MyApplication.isConnectedToInternet(view.getContext())) {
+            if (saveAnyway && !connectionRequired) {
+                server.setChecked(false);
+                view.onServerCheckSuccess(server);
+            } else {
+                view.onNoConnectionAvailable();
+                setSaveAnyway(true);
+            }
+            return;
+        } else {
+            if (saveAnyway) {
+                setSaveAnyway(false);
+            }
+        }
+        netCipherTUSClient.buildClient(server.getUrl(),server.getUsername(),server.getPassword());
+
+        OpenRosaService.clearCache();
+
+        disposables.add(netCipherTUSClient.check()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> view.showServerCheckLoading())
+                .doFinally(() -> view.hideServerCheckLoading())
+                .subscribe((uploadProgressInfo) -> {
+                    if (uploadProgressInfo.status == UploadProgressInfo.Status.OK) {
+                        server.setChecked(true);
+                        view.onServerCheckSuccess(server);
+                    } else {
+                        view.onServerCheckFailure(uploadProgressInfo.status);
+                    }
+                }, throwable -> {
+                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    view.onServerCheckError(throwable);
+                })
+        );
+    }
+
+    @Override
+    public void initNetCipher(NetCipherTUSClient.IOnNetCipherConnect onNetCipherConnect) {
+            NetCipherTUSClient netCipherTUSClient = new NetCipherTUSClient(view.getContext(),onNetCipherConnect);
+            netCipherTUSClient.init();
+            this.netCipherTUSClient = netCipherTUSClient;
     }
 
     @Override

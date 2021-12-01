@@ -41,6 +41,7 @@ import androidx.multidex.MultiDexApplication;
 
 import java.io.File;
 
+import info.guardianproject.netcipher.proxy.OrbotHelper;
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
 import rs.readahead.washington.mobile.bus.TellaBus;
@@ -125,6 +126,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     @Override
     public void onCreate() {
         super.onCreate();
+
+        OrbotHelper.get(this).init();
 
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 

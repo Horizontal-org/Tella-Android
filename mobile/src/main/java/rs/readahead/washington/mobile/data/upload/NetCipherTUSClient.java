@@ -10,6 +10,8 @@ import java.net.URI;
 import java.net.UnknownHostException;
 import java.util.Locale;
 
+import info.guardianproject.netcipher.client.StrongBuilder;
+import info.guardianproject.netcipher.client.StrongOkHttpClientBuilder;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Emitter;
 import io.reactivex.Flowable;
@@ -27,21 +29,34 @@ import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
 
-// you'll be surprised in what you might find
-
-public class TUSClient {
-    private final OkHttpClient okHttpClient;
-    private final URI baseUrl;
-
+public class NetCipherTUSClient  implements StrongBuilder.Callback<OkHttpClient> {
+    private OkHttpClient okHttpClient = null;
+    private URI baseUrl = null;
     private final Context context;
+    private final IOnNetCipherConnect onNetCipherConnect;
 
-    public TUSClient(Context context, String url, String username, String password) {
+    public NetCipherTUSClient(Context context,IOnNetCipherConnect onNetCipherConnect) {
+        this.onNetCipherConnect = onNetCipherConnect;
         this.context = context.getApplicationContext();
 
-        okHttpClient = buildOkHttpClient(username, password);
-        baseUrl = URI.create(url);
     }
 
+    public void init(){
+        try {
+            StrongOkHttpClientBuilder
+                    .forMaxSecurity(context)
+                    .withBestProxy()
+                    .build(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+            onNetCipherConnect.onException(e);
+        }
+    }
+
+    public void buildClient(String url,String username, String password){
+        this.baseUrl = URI.create(url);
+        this.okHttpClient = buildOkHttpClient(username,password);
+    }
     public Flowable<UploadProgressInfo> upload(VaultFile mediaFile) {
         return getStatus(mediaFile)
                 .flatMapPublisher(skipBytes -> appendFile(mediaFile, skipBytes))
@@ -73,9 +88,9 @@ public class TUSClient {
                     return;
                 }
 
-                emitter.onError(new UploadError(response));
+                emitter.onError(new NetCipherTUSClient.UploadError(response));
             } catch (Exception e) {
-                emitter.onError(new UploadError(e));
+                emitter.onError(new NetCipherTUSClient.UploadError(e));
             }
         });
     }
@@ -85,7 +100,7 @@ public class TUSClient {
             try {
                 final long size = vaultFile.size;
                 final String fileName = vaultFile.name;
-                final UploadEmitter uploadEmitter = new UploadEmitter();
+                final NetCipherTUSClient.UploadEmitter uploadEmitter = new NetCipherTUSClient.UploadEmitter();
 
                 emitter.onNext(new UploadProgressInfo(vaultFile, skipBytes, UploadProgressInfo.Status.STARTED));
 
@@ -98,7 +113,7 @@ public class TUSClient {
                 Response response = okHttpClient.newCall(appendRequest).execute();
 
                 if (!response.isSuccessful()) {
-                    emitter.onError(new UploadError(response));
+                    emitter.onError(new NetCipherTUSClient.UploadError(response));
                     return;
                 }
 
@@ -111,7 +126,7 @@ public class TUSClient {
                 response = okHttpClient.newCall(closeRequest).execute();
 
                 if (!response.isSuccessful()) {
-                    emitter.onError(new UploadError(response));
+                    emitter.onError(new NetCipherTUSClient.UploadError(response));
                     return;
                 }
 
@@ -119,22 +134,21 @@ public class TUSClient {
 
                 emitter.onComplete();
             } catch (Exception e) {
-                emitter.onError(new UploadError(e));
+                emitter.onError(new NetCipherTUSClient.UploadError(e));
             }
         }, BackpressureStrategy.LATEST);
     }
 
-    @NonNull
-    private OkHttpClient buildOkHttpClient(String username, String password) {
-        final OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
+    @NonNull
+    private  OkHttpClient buildOkHttpClient(String username, String password) {
         if (BuildConfig.DEBUG) {
-            builder.addNetworkInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS));
+            okHttpClient.newBuilder().addNetworkInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS));
         }
 
         final String credential = Credentials.basic(username, password);
 
-        builder.addNetworkInterceptor(chain -> {
+        okHttpClient.newBuilder().addNetworkInterceptor(chain -> {
             Request newRequest = chain.request().newBuilder()
                     .addHeader("authorization", credential)
                     .build();
@@ -142,11 +156,11 @@ public class TUSClient {
             return chain.proceed(newRequest);
         });
 
-        builder.authenticator((route, response) -> response.request().newBuilder()
+        okHttpClient.newBuilder().authenticator((route, response) -> response.request().newBuilder()
                 .header("authorization", credential)
                 .build());
 
-        return builder.build();
+        return okHttpClient.newBuilder().build();
     }
 
     @NonNull
@@ -158,8 +172,8 @@ public class TUSClient {
         Timber.d(throwable);
 
         UploadProgressInfo.Status status = UploadProgressInfo.Status.ERROR;
-        if (throwable instanceof UploadError) {
-            status = toStatus(((UploadError) throwable).code);
+        if (throwable instanceof NetCipherTUSClient.UploadError) {
+            status = toStatus(((NetCipherTUSClient.UploadError) throwable).code);
         } else if (throwable instanceof UnknownHostException) {
             status = UploadProgressInfo.Status.UNKNOWN_HOST;
         }
@@ -185,6 +199,28 @@ public class TUSClient {
         }
 
         return UploadProgressInfo.Status.UNKNOWN;
+    }
+
+    @Override
+    public void onConnected(OkHttpClient connection) {
+        this.okHttpClient = connection;
+        onNetCipherConnect.onConnected();
+    }
+
+    @Override
+    public void onConnectionException(Exception e) {
+        Timber.d(e);
+        onNetCipherConnect.onException(e);
+    }
+
+    @Override
+    public void onTimeout() {
+        onNetCipherConnect.onException(new Exception("** Timeout **"));
+    }
+
+    @Override
+    public void onInvalid() {
+        onNetCipherConnect.onException(new Exception("** INVALID CONNEXION **"));
     }
 
     // maybe there is a better way to emit once per 500ms?
@@ -214,5 +250,9 @@ public class TUSClient {
         UploadError(Throwable cause) {
             super(cause);
         }
+    }
+    public interface IOnNetCipherConnect {
+        void onConnected();
+        void onException(Exception e);
     }
 }
