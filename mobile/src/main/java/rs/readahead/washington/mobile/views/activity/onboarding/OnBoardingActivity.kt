@@ -187,9 +187,9 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
 
     override fun enterCustomizationCode() {
         BottomSheetUtils.showEnterCustomizationCodeSheet(this.supportFragmentManager,
-            getString(R.string.onboard_customization_title),
-            getString(R.string.onboard_customization_subtitle),
-            getString(R.string.onboard_customization_expl),
+            "Customization",
+            "Enter your customization code",
+            "Your organization may provide a code for you to set up Tella according to their settings.",
             getString(R.string.action_next),
             object : BottomSheetUtils.StringConsumer {
                 override fun accept(code: String) {
