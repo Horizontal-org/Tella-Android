@@ -38,7 +38,6 @@ public class NetCipherTUSClient  implements StrongBuilder.Callback<OkHttpClient>
     public NetCipherTUSClient(Context context,IOnNetCipherConnect onNetCipherConnect) {
         this.onNetCipherConnect = onNetCipherConnect;
         this.context = context.getApplicationContext();
-
     }
 
     public void init(){

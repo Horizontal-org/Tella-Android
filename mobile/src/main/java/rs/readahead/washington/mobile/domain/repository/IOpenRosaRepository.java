@@ -19,7 +19,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaResponse;
 
 
 public interface IOpenRosaRepository {
-    Single<ListFormResult> formList(CollectServer server);
+    Single<ListFormResult> formList(CollectServer server,Context context);
     Single<FormDef> getFormDef(CollectServer server, CollectForm form);
     Single<NegotiatedCollectServer> submitFormNegotiate(CollectServer server);
     Single<OpenRosaResponse> submitForm(Context applicationContext, NegotiatedCollectServer server, CollectFormInstance instance);

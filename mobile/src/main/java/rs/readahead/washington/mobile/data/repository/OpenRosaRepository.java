@@ -28,7 +28,9 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import rs.readahead.washington.mobile.data.entity.XFormEntity;
 import rs.readahead.washington.mobile.data.entity.mapper.OpenRosaDataMapper;
+import rs.readahead.washington.mobile.data.openrosa.OpenRosaNetCipherService;
 import rs.readahead.washington.mobile.data.openrosa.OpenRosaService;
+import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.IProgressListener;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
@@ -48,10 +50,48 @@ public class OpenRosaRepository implements IOpenRosaRepository {
     private static final String FORM_LIST_PATH = "formList";
     private static final String SUBMISSION_PATH = "submission";
 
-
     @Override
-    public Single<ListFormResult> formList(final CollectServer server) {
+    public Single<ListFormResult> formList(final CollectServer server, Context context) {
+       if (Preferences.isBypassCensorship()){
+           return formListNetCipher(server,context);
+       }else {
+           return formListLocal(server);
+       }
+    }
+
+    private Single<ListFormResult> formListLocal(final CollectServer server){
         return OpenRosaService.newInstance(server.getUsername(), server.getPassword())
+                .getServices().formList(null, StringUtils.append('/', server.getUrl(), FORM_LIST_PATH))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(formsEntity -> {
+                    List<CollectForm> forms = new ArrayList<>();
+                    OpenRosaDataMapper mapper = new OpenRosaDataMapper();
+
+                    for (XFormEntity form: formsEntity.xforms) {
+                        forms.add(new CollectForm(server.getId(), mapper.transform(form)));
+                    }
+
+                    ListFormResult listFormResult = new ListFormResult();
+                    listFormResult.setForms(forms);
+
+                    return listFormResult;
+                })
+                .onErrorResumeNext(throwable -> {
+                    ListFormResult listFormResult = new ListFormResult();
+                    ErrorBundle errorBundle = new ErrorBundle(throwable);
+                    errorBundle.setServerId(server.getId());
+                    errorBundle.setServerName(server.getName());
+                    listFormResult.setErrors(Collections.singletonList(errorBundle));
+
+                    return Single.just(listFormResult);
+                });
+    }
+    private Single<ListFormResult> formListNetCipher(final CollectServer server,Context context){
+        OpenRosaNetCipherService openRosaNetCipherService = new OpenRosaNetCipherService(context);
+
+        return openRosaNetCipherService.connect(server.getUsername(), server.getPassword())
+                .blockingGet()
                 .getServices().formList(null, StringUtils.append('/', server.getUrl(), FORM_LIST_PATH))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

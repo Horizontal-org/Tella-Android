@@ -1,6 +1,9 @@
 package rs.readahead.washington.mobile.data.openrosa;
 
+import android.content.Context;
 import android.os.Build;
+
+import androidx.annotation.NonNull;
 
 import com.burgstaller.okhttp.AuthenticationCacheInterceptor;
 import com.burgstaller.okhttp.CachingAuthenticatorDecorator;
@@ -28,7 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.net.ssl.X509TrustManager;
 
-import androidx.annotation.NonNull;
+import io.reactivex.Single;
 import okhttp3.ConnectionSpec;
 import okhttp3.CookieJar;
 import okhttp3.Interceptor;
@@ -44,28 +47,47 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import rs.readahead.washington.mobile.BuildConfig;
 import rs.readahead.washington.mobile.data.http.QuotePreservingCookieJar;
 import rs.readahead.washington.mobile.data.repository.TLSSocketFactory;
+import rs.readahead.washington.mobile.data.upload.NetCipherTUSClient;
+import rs.readahead.washington.mobile.data.upload.TUSClient;
+import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
 
-
-public class OpenRosaService {
-    private static OpenRosaService instance;
-    private final Retrofit retrofit;
+public class OpenRosaNetCipherService  {
+    private Retrofit retrofit ;
     private final static Map<String, CachingAuthenticator> authCache = new ConcurrentHashMap<>();
     private volatile static CookieJar cookieJar = new QuotePreservingCookieJar(new CookieManager());
+    private final NetCipherTUSClient.IOnNetCipherConnect onNetCipherConnect = null;
+    private NetCipherStrongBuilder netCipherStrongBuilder;
+    private OkHttpClient okHttpClient  ;
+    private Context context;
 
-    // todo: keep it like this for now, lets see what we need..
-    public static synchronized OpenRosaService getInstance() {
-        if (instance == null) {
-            instance = new OpenRosaService.Builder().build();
-        }
-
-        return instance;
+    public OpenRosaNetCipherService(Context context){
+        this.context = context;
     }
 
-    // todo: keep it like this for now, lets see what we need..
-    public static synchronized OpenRosaService newInstance(String username, String password) {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+    public Single<OpenRosaNetCipherService> connect(String username, String password){
+        return Single.create(emitter -> {
+            try {
+                new NetCipherStrongBuilder(context, new NetCipherStrongBuilder.IOnNetCipherConnect() {
+                    @Override
+                    public void onConnected(OkHttpClient okHttpClient) {
+                        setOkHttpClient(okHttpClient);
+                        emitter.onSuccess(newInstance(username, password));
+                    }
 
+                    @Override
+                    public void onException(Exception e) {
+                        emitter.onError(e);
+                    }
+                }).init();
+
+            } catch (Exception e) {
+                emitter.onError(e);
+            }
+        });
+    }
+    // todo: keep it like this for now, lets see what we need..
+    private OpenRosaNetCipherService newInstance(String username, String password) {
         // enable TLS 1.2 explicitly (allow androids < 5.1 to use it)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
             try {
@@ -73,7 +95,7 @@ public class OpenRosaService {
                 X509TrustManager trustManager = tlsSocketFactory.getTrustManager();
 
                 if (trustManager != null) {
-                    builder.sslSocketFactory(tlsSocketFactory, trustManager);
+                    okHttpClient.newBuilder().sslSocketFactory(tlsSocketFactory, trustManager);
 
                     List<ConnectionSpec> specs = new ArrayList<>();
                     specs.add(new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
@@ -82,7 +104,7 @@ public class OpenRosaService {
                     specs.add(ConnectionSpec.COMPATIBLE_TLS);
                     specs.add(ConnectionSpec.CLEARTEXT);
 
-                    builder.connectionSpecs(specs);
+                    okHttpClient.newBuilder().connectionSpecs(specs);
                 }
             } catch (Exception e) {
                 Timber.d(e);
@@ -98,30 +120,27 @@ public class OpenRosaService {
                 .with("basic", basicAuthenticator)
                 .build();
 
-        builder.cookieJar(cookieJar)
+        okHttpClient.newBuilder().cookieJar(cookieJar)
                 .authenticator(new CachingAuthenticatorDecorator(authenticator, authCache))
                 .addInterceptor(new AuthenticationCacheInterceptor(authCache));
 
-        return new OpenRosaService.Builder(builder).build();
-    }
-
-    public static synchronized void clearCache() {
-        cookieJar = new QuotePreservingCookieJar(new CookieManager());
-        authCache.clear();
-    }
-
-    private OpenRosaService(Retrofit retrofit) {
-        this.retrofit = retrofit;
+        return new OpenRosaNetCipherService.Builder().build();
     }
 
     public IOpenRosaApi getServices() {
         return retrofit.create(IOpenRosaApi.class);
     }
+    private OpenRosaNetCipherService(Retrofit retrofit) {
+        this.retrofit = retrofit;
+    }
+
+    public void setOkHttpClient(OkHttpClient okHttpClient) {
+        this.okHttpClient = okHttpClient;
+    }
 
     public static class Builder {
         private final Retrofit.Builder retrofitBuilder;
-        private final OkHttpClient.Builder okClientBuilder;
-
+        private OkHttpClient okHttpClient;
 
         public Builder() {
             this(new OkHttpClient.Builder());
@@ -131,20 +150,20 @@ public class OpenRosaService {
             retrofitBuilder = new Retrofit.Builder();
             retrofitBuilder.baseUrl("https://www.hzontal.org/"); // dummy baseUrl to keep retrofit happy, all calls have @Url parameter
 
-            okClientBuilder = builder
+            okHttpClient.newBuilder()
                     .proxy(Proxy.NO_PROXY)
                     .protocols(Collections.singletonList(Protocol.HTTP_1_1))
                     .addInterceptor(new OpenRosaRequestInterceptor());
 
             if (BuildConfig.DEBUG) {
-                okClientBuilder.addNetworkInterceptor(
+                okHttpClient.newBuilder().addNetworkInterceptor(
                         new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)); // or BODY
             }
         }
 
-        public OpenRosaService build() {
+        public OpenRosaNetCipherService build() {
             // set client to baseRetrofit builder
-            retrofitBuilder.client(okClientBuilder.build());
+            retrofitBuilder.client(okHttpClient.newBuilder().build());
 
             // build them
             Retrofit retrofit = retrofitBuilder
@@ -152,7 +171,7 @@ public class OpenRosaService {
                     .addConverterFactory(SimpleXmlConverterFactory.createNonStrict(new Persister(new AnnotationStrategy())))
                     .build();
 
-            return new OpenRosaService(retrofit);
+            return new OpenRosaNetCipherService(retrofit);
         }
     }
 
@@ -179,4 +198,6 @@ public class OpenRosaService {
             return chain.proceed(newRequest);
         }
     }
+
+
 }

@@ -46,7 +46,7 @@ public class CheckOdkServerPresenter implements
 
         OpenRosaService.clearCache();
 
-        disposables.add(odkRepository.formList(server)
+        disposables.add(odkRepository.formList(server, view.getContext())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> view.showServerCheckLoading())

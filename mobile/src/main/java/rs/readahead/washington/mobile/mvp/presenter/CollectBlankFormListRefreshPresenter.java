@@ -51,7 +51,7 @@ public class CollectBlankFormListRefreshPresenter implements
 
                     List<Single<ListFormResult>> singles = new ArrayList<>();
                     for (CollectServer server : servers) {
-                        singles.add(odkRepository.formList(server));
+                        singles.add(odkRepository.formList(server, view.getContext()));
                     }
 
                     // result and errors are wrapped - no error should be thrown => for zip to work..
