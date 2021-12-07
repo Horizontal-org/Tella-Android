@@ -243,7 +243,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
             rxVault = new RxVault(this, vault);
             if (Preferences.isUpdateTella2()) {
                 Toast.makeText(context,"Hold on while we transfering your files to the Vault!", Toast.LENGTH_LONG).show();
-                Timber.d("++++ updating...");
                 updateTella2(context);
             }
         } catch (Exception e) {

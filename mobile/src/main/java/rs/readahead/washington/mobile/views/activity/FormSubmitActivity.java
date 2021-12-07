@@ -34,6 +34,7 @@ import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.collect.CollectFormEndView;
 import rs.readahead.washington.mobile.views.custom.FormSubmitButtonView;
+import timber.log.Timber;
 
 
 public class FormSubmitActivity extends BaseLockActivity implements

@@ -54,7 +54,7 @@ public class OutboxFormListFragment extends FormListFragment implements
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_submitted_forms_list, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_outbox_form_list, container, false);
         unbinder = ButterKnife.bind(this, rootView);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());

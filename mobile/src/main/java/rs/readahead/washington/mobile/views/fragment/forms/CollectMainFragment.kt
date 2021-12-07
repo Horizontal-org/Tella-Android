@@ -161,8 +161,8 @@ class CollectMainFragment : BaseFragment(){
             object : EventObserver<CollectFormSubmitStoppedEvent?>() {
                 override fun onNext(event: CollectFormSubmitStoppedEvent) {
                     getDraftFormsListFragment().listDraftForms()
-                    getSubmittedFormsListFragment().listSubmittedForms()
-                    setPagerToSubmittedFragment()
+                    getOutboxFormListFragment().listOutboxForms()
+                    setPagerToOutboxFragment()
                 }
             })
         disposables.wire(
@@ -463,6 +463,11 @@ class CollectMainFragment : BaseFragment(){
 
     private fun setPagerToSubmittedFragment() {
         mViewPager.currentItem = getFragmentPosition(FormListFragment.Type.SUBMITTED)
+        fab.visibility = View.GONE
+    }
+
+    private fun setPagerToOutboxFragment() {
+        mViewPager.currentItem = getFragmentPosition(FormListFragment.Type.OUTBOX)
         fab.visibility = View.GONE
     }
 

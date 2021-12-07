@@ -1276,10 +1276,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
                 instance.setFormDef(deserializeFormDef(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF))));
 
-                List<FormMediaFile> mediaFiles = getFormInstanceMediaFilesFromDb(instance.getId());
-                for (FormMediaFile mediaFile : mediaFiles) {
-                    instance.setWidgetMediaFile(mediaFile.id, mediaFile);
-                }
+                List<String> vaultFileIds = getFormInstanceMediaFilesIdsFromDb(instance.getId());
+                instance.setWidgetMediaFilesIds(vaultFileIds);
 
                 return instance;
             }
@@ -1411,6 +1409,39 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }
 
         return instances;
+    }
+
+    private List<String> getFormInstanceMediaFilesIdsFromDb(long instanceId) {
+
+        List<String> ids = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_COLLECT_FORM_INSTANCE_VAULT_FILE,
+                    new String[]{
+                            D.C_VAULT_FILE_ID},
+                    D.C_COLLECT_FORM_INSTANCE_ID + "= ?",
+                    null, null, D.C_VAULT_FILE_ID + " DESC", null
+            );
+
+            cursor = database.rawQuery(query, new String[]{Long.toString(instanceId)});
+
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                String vaultFileId = cursor.getString(cursor.getColumnIndexOrThrow(D.C_VAULT_FILE_ID));
+                ids.add(vaultFileId);
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return ids;
     }
 
     private List<FormMediaFile> getFormInstanceMediaFilesFromDb(long instanceId) {
@@ -1740,8 +1771,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     private List<CollectFormInstance> getSubmitCollectFormInstances() {
         return getCollectFormInstances(new CollectFormInstanceStatus[]{
                 //CollectFormInstanceStatus.FINALIZED,
-                CollectFormInstanceStatus.SUBMITTED,
-                CollectFormInstanceStatus.SUBMISSION_ERROR//,
+                CollectFormInstanceStatus.SUBMITTED//,
+                //CollectFormInstanceStatus.SUBMISSION_ERROR,
                // CollectFormInstanceStatus.SUBMISSION_PENDING,
                //CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS
         });
@@ -1750,6 +1781,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     private List<CollectFormInstance> getPendingCollectFormInstances() {
         return getCollectFormInstances(new CollectFormInstanceStatus[]{
                 CollectFormInstanceStatus.FINALIZED,
+                CollectFormInstanceStatus.SUBMISSION_ERROR,
                 CollectFormInstanceStatus.SUBMISSION_PENDING,
                 CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS
         });
@@ -1789,7 +1821,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     cn(D.T_COLLECT_FORM_INSTANCE, D.C_ID) + " DESC",
                     null
             );
-
             cursor = database.rawQuery(query, null);
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
@@ -1797,11 +1828,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 CollectFormInstance instance = cursorToCollectFormInstance(cursor);
                 instance.setFormDef(deserializeFormDef(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF))));
 
-                List<FormMediaFile> mediaFiles = getFormInstanceMediaFilesFromDb(instance.getId());
+               /* List<FormMediaFile> mediaFiles = getFormInstanceMediaFilesFromDb(instance.getId());
                 for (FormMediaFile mediaFile : mediaFiles) {
                     instance.setWidgetMediaFile(mediaFile.id, mediaFile);
-                }
-
+                }*/
                 instances.add(instance);
             }
         } catch (Exception e) {
@@ -1855,7 +1885,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             // clear FormMediaFiles
             database.delete(
-                    D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE,
+                    D.T_COLLECT_FORM_INSTANCE_VAULT_FILE,
                     D.C_COLLECT_FORM_INSTANCE_ID + " = ?",
                     new String[]{Long.toString(id)});
 
@@ -1864,10 +1894,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             for (FormMediaFile mediaFile : mediaFiles) {
                 values = new ContentValues();
                 values.put(D.C_COLLECT_FORM_INSTANCE_ID, id);
-                values.put(D.C_MEDIA_FILE_ID, mediaFile.id);
+                values.put(D.C_VAULT_FILE_ID, mediaFile.id);
                 values.put(D.C_STATUS, mediaFile.status.ordinal());
 
-                database.insert(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE, null, values);
+                database.insert(D.T_COLLECT_FORM_INSTANCE_VAULT_FILE, null, values);
             }
 
             database.setTransactionSuccessful();
@@ -2029,7 +2059,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         instance.setInstanceName(cursor.getString(cursor.getColumnIndexOrThrow(D.C_INSTANCE_NAME)));
         int formPartStatusOrdinal = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_FORM_PART_STATUS));
         instance.setFormPartStatus(FormMediaFileStatus.values()[formPartStatusOrdinal]);
-
         return instance;
     }
 

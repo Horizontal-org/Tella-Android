@@ -413,7 +413,6 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
             .flatMapSingle { obj: DataSource -> obj.listDraftForms() }
             .subscribe(
                 { forms: List<CollectFormInstance> ->
-                    Timber.d("++++++ onDraftFormInstanceListSuccess drafts %d", forms.size)
                     onDraftFormInstanceListSuccess.postValue(forms)
                 },
                 { throwable: Throwable? ->

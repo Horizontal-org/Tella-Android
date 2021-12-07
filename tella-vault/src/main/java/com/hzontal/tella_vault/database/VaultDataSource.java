@@ -5,6 +5,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import android.text.TextUtils;
+
 import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
@@ -231,6 +233,38 @@ public class VaultDataSource implements IVaultDatabase {
 
     @Override
     public List<VaultFile> get(String[] ids) {
+        List<VaultFile> files = new ArrayList<>();
+        String selection = "(" + TextUtils.join(", ", ids) + ")";
+
+        try (Cursor cursor = database.query(
+                D.T_VAULT_FILE,
+                new String[]{
+                        D.C_ID,
+                        D.C_PATH,
+                        D.C_NAME,
+                        D.C_METADATA,
+                        D.C_CREATED,
+                        D.C_DURATION,
+                        D.C_ANONYMOUS,
+                        D.C_SIZE,
+                        D.C_HASH,
+                        D.C_MIME_TYPE,
+                        D.C_TYPE,
+                        D.C_THUMBNAIL
+                },
+                cn(D.C_ID) + " IN " + selection,
+                null, null, null, null
+        )) {
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                VaultFile file = cursorToVaultFile(cursor);
+                files.add(file);
+            }
+            return files;
+
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        }
+
         return null;
     }
 

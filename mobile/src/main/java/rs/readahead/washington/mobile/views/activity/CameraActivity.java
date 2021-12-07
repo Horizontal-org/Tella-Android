@@ -67,6 +67,7 @@ import rs.readahead.washington.mobile.views.custom.CameraFlashButton;
 import rs.readahead.washington.mobile.views.custom.CameraGridButton;
 import rs.readahead.washington.mobile.views.custom.CameraResolutionButton;
 import rs.readahead.washington.mobile.views.custom.CameraSwitchButton;
+import timber.log.Timber;
 
 
 public class CameraActivity extends MetadataActivity implements
@@ -135,6 +136,7 @@ public class CameraActivity extends MetadataActivity implements
         metadataAttacher = new MetadataAttacher(this);
         changeTemporaryTimeout();
         mode = CameraMode.PHOTO;
+
         if (getIntent().hasExtra(CAMERA_MODE)) {
             mode = CameraMode.valueOf(getIntent().getStringExtra(CAMERA_MODE));
             modeLocked = true;
@@ -245,7 +247,13 @@ public class CameraActivity extends MetadataActivity implements
             previewView.setVisibility(View.VISIBLE);
             Glide.with(this).load(bundle.thumb).into(previewView);
         }
-        attachMediaFileMetadata(capturedMediaFile, metadataAttacher);
+
+        if (!Preferences.isAnonymousMode()) {
+            attachMediaFileMetadata(capturedMediaFile, metadataAttacher);
+        } else {
+            returnIntent(bundle);
+        }
+
         MyApplication.bus().post(new CaptureEvent());
     }
 
@@ -256,6 +264,12 @@ public class CameraActivity extends MetadataActivity implements
 
     @Override
     public void onMetadataAttached(VaultFile vaultFile) {
+        returnIntent(vaultFile);
+
+        scheduleFileUpload(capturedMediaFile);
+    }
+
+    private void returnIntent(VaultFile vaultFile){
         Intent data = new Intent();
         if (intentMode == IntentMode.COLLECT) {
             capturedMediaFile.metadata = vaultFile.metadata;
@@ -264,8 +278,6 @@ public class CameraActivity extends MetadataActivity implements
             data.putExtra(C.CAPTURED_MEDIA_FILE_ID, vaultFile.metadata);
         }
         setResult(RESULT_OK, data);
-
-        scheduleFileUpload(capturedMediaFile);
     }
 
     @Override
