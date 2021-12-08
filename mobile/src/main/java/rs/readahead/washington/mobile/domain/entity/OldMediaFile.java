@@ -23,8 +23,8 @@ public class OldMediaFile extends RawFile implements Serializable {
     private Metadata metadata;
     private long duration; // milliseconds
     private Type type;
-
     private String hash;
+    private byte[] thumb;
 
     public static OldMediaFile newPng() {
         String uid = UUID.randomUUID().toString();
@@ -95,5 +95,13 @@ public class OldMediaFile extends RawFile implements Serializable {
 
     public void setHash(String hash) {
         this.hash = hash;
+    }
+
+    public byte[] getThumb() {
+        return thumb;
+    }
+
+    public void setThumb(byte[] thumb) {
+        this.thumb = thumb;
     }
 }

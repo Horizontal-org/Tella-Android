@@ -1629,7 +1629,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                                 D.C_DURATION,
                                 D.C_ANONYMOUS,
                                 D.C_SIZE,
-                                D.C_HASH},
+                                D.C_HASH,
+                                D.C_THUMBNAIL},
                         null, null, null,
                         D.C_CREATED + " " + order,
                         null
@@ -2076,6 +2077,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         mediaFile.setSize(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_SIZE)));
         mediaFile.setAnonymous(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_ANONYMOUS)) == 1);
         mediaFile.setHash(cursor.getString(cursor.getColumnIndexOrThrow(D.C_HASH)));
+        mediaFile.setThumb(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_THUMBNAIL)));
 
         return mediaFile;
     }

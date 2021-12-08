@@ -51,6 +51,7 @@ public class TellaUpgrader {
         vaultFile.hash = mediaFile.getHash();
         vaultFile.mimeType = FileUtil.getMimeType(mediaFile.getFileName());
         vaultFile.path = mediaFile.getPath();
+        vaultFile.thumb = mediaFile.getThumb();
         mediaFile.setMetadata(mediaFile.getMetadata());
 
         return vaultFile;
