@@ -1,11 +1,14 @@
 package rs.readahead.washington.mobile.util;
 
+import static com.hzontal.tella_vault.database.VaultDataSource.ROOT_UID;
+
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.database.VaultDataSource;
+import com.hzontal.utils.MediaFile;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -27,7 +30,7 @@ public class TellaUpgrader {
             {
                 List<OldMediaFile> allMediaFiles = dataSource.listOldMediaFiles().blockingGet();
                 for (OldMediaFile mediaFile : allMediaFiles) {
-                    vaultDataSource.create(null, getVaultFile(mediaFile));
+                    vaultDataSource.create(ROOT_UID, getVaultFile(mediaFile));
                 }
                 List<CollectInstanceVaultFile> collectInstanceVaultFiles = dataSource.getCollectInstanceVaultFilesDB();
                 for (CollectInstanceVaultFile instanceVaultFile : collectInstanceVaultFiles) {
@@ -49,7 +52,7 @@ public class TellaUpgrader {
         vaultFile.size = mediaFile.getSize();
         vaultFile.anonymous = mediaFile.isAnonymous();
         vaultFile.hash = mediaFile.getHash();
-        vaultFile.mimeType = FileUtil.getMimeType(mediaFile.getFileName());
+        vaultFile.mimeType = MediaFile.INSTANCE.getMimeTypeForFormatCode(MediaFile.INSTANCE.getFormatCode(mediaFile.getFileName(), FileUtil.getMimeType(mediaFile.getFileName())));
         vaultFile.path = mediaFile.getPath();
         vaultFile.thumb = mediaFile.getThumb();
         mediaFile.setMetadata(mediaFile.getMetadata());
