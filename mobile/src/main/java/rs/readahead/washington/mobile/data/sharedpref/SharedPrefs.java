@@ -52,7 +52,7 @@ public class SharedPrefs {
     static final String MUTE_CAMERA_SHUTTER = "mute_camera_shutter";
     static final String SHOW_FAVORITE_FORMS = "show_favorite_forms";
     static final String SHOW_RECENT_FILES = "show_recent_files";
-    static final String UPDATE_TELLA_2 = "update_tella_2";
+    static final String UPGRADE_TELLA_2 = "update_tella_2";
 
     private static SharedPrefs instance;
     private SharedPreferences pref;
