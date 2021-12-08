@@ -20,6 +20,7 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
+import rs.readahead.washington.mobile.databinding.ActivitySettingsBinding;
 import rs.readahead.washington.mobile.util.CamouflageManager;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.settings.ChangeRemoveCamouflage;
@@ -30,10 +31,7 @@ import rs.readahead.washington.mobile.views.settings.SecuritySettings;
 
 
 public class SettingsActivity extends BaseLockActivity implements OnFragmentSelected {
-    @SuppressLint("NonConstantResourceId")
-    @BindView(R.id.toolbar)
-    ToolbarComponent toolbar;
-    
+    private ActivitySettingsBinding binding;
     private EventCompositeDisposable disposables;
     private final CamouflageManager cm = CamouflageManager.getInstance();
     protected boolean isCamouflage = false;
@@ -41,14 +39,15 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
-        ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
+        binding = ActivitySettingsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        toolbar.setStartTextTitle(getResources().getString(R.string.settings_app_bar));
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbar);
 
-        toolbar.setBackClickListener(() -> {
+        binding.toolbar.setStartTextTitle(getResources().getString(R.string.settings_app_bar));
+        setSupportActionBar(binding.toolbar);
+
+        binding.toolbar.setBackClickListener(() -> {
             onBackPressed();
             return null;
         });
@@ -89,22 +88,22 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
 
     @Override
     public void setToolbarLabel(int labelRes) {
-        toolbar.setStartTextTitle(getString(labelRes));
+        binding.toolbar.setStartTextTitle(getString(labelRes));
     }
 
     @Override
     public void hideAppbar() {
-        toolbar.setVisibility(View.GONE);
+        binding.toolbar.setVisibility(View.GONE);
     }
 
     @Override
     public void showAppbar() {
-        toolbar.setVisibility(View.VISIBLE);
+        binding.toolbar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void setToolbarHomeIcon(int iconRes) {
-        toolbar.setToolbarNavigationIcon(iconRes);
+        binding.toolbar.setToolbarNavigationIcon(iconRes);
     }
 
     @Override

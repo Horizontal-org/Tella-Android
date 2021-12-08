@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.data.upload;
+package rs.readahead.washington.mobile.data.uwazi;
 
 import android.content.Context;
 
@@ -23,22 +23,21 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import rs.readahead.washington.mobile.BuildConfig;
 import rs.readahead.washington.mobile.data.http.HttpStatus;
 import rs.readahead.washington.mobile.data.repository.SkippableMediaFileRequestBody;
+import rs.readahead.washington.mobile.data.upload.TUSClient;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
 
-// you'll be surprised in what you might find
-
-public class TUSClient {
+public class UwaziClient {
     private final OkHttpClient okHttpClient;
     private final URI baseUrl;
 
     private Context context;
 
-    public TUSClient(Context context, String url, String username, String password) {
+    public UwaziClient(Context context, String url, String username, String password) {
         this.context = context.getApplicationContext();
 
-        okHttpClient = buildOkHttpClient();
+        okHttpClient = buildOkHttpClient(username, password);
         baseUrl = URI.create(url);
     }
 
@@ -125,14 +124,26 @@ public class TUSClient {
     }
 
     @NonNull
-    private OkHttpClient buildOkHttpClient() {
+    private OkHttpClient buildOkHttpClient(String username, String password) {
         final OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
         if (BuildConfig.DEBUG) {
             builder.addNetworkInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS));
         }
 
+        final String credential = Credentials.basic(username, password);
 
+        builder.addNetworkInterceptor(chain -> {
+            Request newRequest = chain.request().newBuilder()
+                    .addHeader("authorization", credential)
+                    .build();
+
+            return chain.proceed(newRequest);
+        });
+
+        builder.authenticator((route, response) -> response.request().newBuilder()
+                .header("authorization", credential)
+                .build());
 
         return builder.build();
     }

@@ -1,7 +1,6 @@
 package rs.readahead.washington.mobile.views.dialog
 
 import android.app.Dialog
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
@@ -11,7 +10,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.*
+import android.widget.EditText
+import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDialogFragment
 import butterknife.ButterKnife
 import butterknife.Unbinder
@@ -23,14 +24,16 @@ import com.google.android.material.textfield.TextInputLayout
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.DialogCollectServerBinding
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer
+import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
+import rs.readahead.washington.mobile.mvp.contract.ICheckUwaziServerContract
 import rs.readahead.washington.mobile.mvp.presenter.CheckTUSServerPresenter
-import rs.readahead.washington.mobile.views.custom.PanelToggleButton
 import timber.log.Timber
+
 private const val TITLE_KEY = "tk"
 private const val ID_KEY = "ik"
 private const val OBJECT_KEY = "ok"
-public class UwaziServerDialogFragment  : AppCompatDialogFragment() {
+public class UwaziServerDialogFragment  : AppCompatDialogFragment(), ICheckUwaziServerContract.IView {
     val TAG = UwaziServerDialogFragment::class.java.simpleName
     private var unbinder: Unbinder? = null
     private var validated = true
@@ -38,9 +41,9 @@ public class UwaziServerDialogFragment  : AppCompatDialogFragment() {
     private var securityProviderUpgradeAttempted = false
     private lateinit var binding : DialogCollectServerBinding
 
-    interface TellaUploadServerDialogHandler {
-        fun onTellaUploadServerDialogCreate(server: TellaUploadServer?)
-        fun onTellaUploadServerDialogUpdate(server: TellaUploadServer?)
+    interface UwaziServerDialogHandler {
+        fun onUwaziServerDialogCreate(server: UWaziUploadServer?)
+        fun onUwaziServerDialogUpdate(server: UWaziUploadServer?)
         fun onDialogDismiss()
     }
 
@@ -82,7 +85,7 @@ public class UwaziServerDialogFragment  : AppCompatDialogFragment() {
         binding.toggleButton.setOnStateChangedListener { open: Boolean -> maybeShowAdvancedPanel() }
         maybeShowAdvancedPanel()
         binding.cancel.setOnClickListener { dismissDialog() }
-        binding.back.setOnClickListener { v -> dismissDialog() }
+        binding.back.setOnClickListener { dismissDialog() }
         binding.next.setOnClickListener {
             validate()
             if (validated) {
@@ -137,14 +140,12 @@ public class UwaziServerDialogFragment  : AppCompatDialogFragment() {
             presenter = null
         }
     }
-    override fun getContext(): Context? {
-        return activity
-    }
 
-    fun onServerCheckSuccess(server: TellaUploadServer) {
+    override fun onServerCheckSuccess(server: UWaziUploadServer) {
         save(server)
     }
 
+    override
     fun onServerCheckFailure(status: UploadProgressInfo.Status) {
         if (status == UploadProgressInfo.Status.UNAUTHORIZED) {
             if (binding.username.text.isNotEmpty() || binding.password.text.isNotEmpty()) {
@@ -161,7 +162,8 @@ public class UwaziServerDialogFragment  : AppCompatDialogFragment() {
         validated = false
     }
 
-    fun onServerCheckError(error: Throwable?) {
+    override
+    fun onServerCheckError(error: Throwable) {
         Toast.makeText(
             activity,
             getString(R.string.settings_docu_error_unknown_connection_error),
@@ -170,16 +172,19 @@ public class UwaziServerDialogFragment  : AppCompatDialogFragment() {
         validated = false
     }
 
+    override
     fun showServerCheckLoading() {
         binding.progressBar.visibility = View.VISIBLE
         setEnabledViews(false)
     }
 
+    override
     fun hideServerCheckLoading() {
         setEnabledViews(true)
         binding.progressBar.visibility = View.GONE
     }
 
+    override
     fun onNoConnectionAvailable() {
         Toast.makeText(
             activity,
@@ -190,11 +195,14 @@ public class UwaziServerDialogFragment  : AppCompatDialogFragment() {
         validated = false
     }
 
+    override
     fun setSaveAnyway(enabled: Boolean) {
         //dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setVisibility(enabled ? View.VISIBLE : View.GONE);
         //dialog.getButton(AlertDialog.BUTTON_POSITIVE).setText(
         //        getString(enabled ? R.string.settings_dialog_action_save_server_no_internet : R.string.action_ok));
     }
+
+    override fun getContext()  = requireContext()
 
     private fun validate() {
         validated = true
@@ -258,13 +266,13 @@ public class UwaziServerDialogFragment  : AppCompatDialogFragment() {
         return server
     }
 
-    private fun save(server: TellaUploadServer) {
+    private fun save(server: UWaziUploadServer) {
         dismiss()
-        val activity = activity as TellaUploadServerDialogHandler? ?: return
+        val activity = activity as UwaziServerDialogHandler? ?: return
         if (server.id == 0L) {
-            activity.onTellaUploadServerDialogCreate(server)
+            activity.onUwaziServerDialogCreate(server)
         } else {
-            activity.onTellaUploadServerDialogUpdate(server)
+            activity.onUwaziServerDialogUpdate(server)
         }
     }
 
@@ -276,7 +284,7 @@ public class UwaziServerDialogFragment  : AppCompatDialogFragment() {
     }
 
     private fun onDialogDismiss() {
-        val activity = activity as TellaUploadServerDialogHandler? ?: return
+        val activity = activity as UwaziServerDialogHandler? ?: return
         activity.onDialogDismiss()
     }
 

@@ -9,17 +9,18 @@ import rs.readahead.washington.mobile.data.URL_TEMPLATES
 import rs.readahead.washington.mobile.data.entity.uwazi.LoginEntity
 import rs.readahead.washington.mobile.data.entity.uwazi.TemplateResponse
 import rs.readahead.washington.mobile.data.entity.uwazi.UwaziEntity
+import rs.readahead.washington.mobile.domain.entity.LoginResponse
 
 interface IUwaziApi  {
 
     @GET(URL_TEMPLATES)
-    fun getTemplates(): TemplateResponse
+    suspend fun getTemplates(): TemplateResponse
 
     @POST(URL_LOGIN)
-    fun login(@Body loginEntity: LoginEntity)
+    suspend fun login(@Body loginEntity: LoginEntity) : LoginResponse
 
     @GET(URL_ENTITIES)
-    fun submitEntity(@Body uwaziEntity: UwaziEntity)
+    suspend fun submitEntity(@Body uwaziEntity: UwaziEntity)
 
 }
 
