@@ -35,6 +35,6 @@ public class FormMediaFile extends VaultFile {
     }
 
     public String getPartName() {
-        return name;
+        return id;
     }
 }

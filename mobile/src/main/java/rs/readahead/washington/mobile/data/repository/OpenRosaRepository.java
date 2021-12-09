@@ -159,7 +159,7 @@ public class OpenRosaRepository implements IOpenRosaRepository {
                     RequestBody.create(MediaType.parse("text/xml"), IOUtils.toByteArray(payload.getPayloadStream())));
 
             if (attachment != null) {
-                parts.put(getPartKey(attachment.getPartName(), attachment.name),
+                parts.put(getPartKey(attachment.getPartName(), attachment.id),
                         new MediaFileRequestBody(context, attachment, progressListener));
             }
         } catch (IOException e) {
