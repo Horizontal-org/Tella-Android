@@ -10,26 +10,23 @@ public class FormMediaFile extends VaultFile {
     public FormMediaFileStatus status; // break away from getters/setters :)
     public boolean uploading;
 
-    private FormMediaFile(String path, String uid, String filename, Type type) {
-        //super(path, uid, filename, type);
-
+    private FormMediaFile() {
+        super();
         status = FormMediaFileStatus.UNKNOWN;
         uploading = true;
     }
 
     public static FormMediaFile fromMediaFile(@NonNull VaultFile vaultFile) {
-        FormMediaFile formMediaFile = new FormMediaFile(
-                vaultFile.path,
-                vaultFile.id,
-                vaultFile.name,
-                vaultFile.type
-        );
+        FormMediaFile formMediaFile = new FormMediaFile();
         formMediaFile.id = vaultFile.id;
         formMediaFile.created = vaultFile.created;
         formMediaFile.duration = vaultFile.duration;
         formMediaFile.metadata = vaultFile.metadata;
         formMediaFile.size = vaultFile.size;
         formMediaFile.anonymous = vaultFile.anonymous;
+        formMediaFile.mimeType = vaultFile.mimeType;
+        formMediaFile.thumb = vaultFile.thumb;
+        formMediaFile.type = vaultFile.type;
 
         return formMediaFile;
     }
