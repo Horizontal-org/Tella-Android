@@ -760,14 +760,26 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return files;
     }
 
-    public void insertCollectInstanceVaultFile(final CollectInstanceVaultFile file) {
-        ContentValues values = new ContentValues();
-        values.put(D.C_ID, file.getId());
-        values.put(D.C_COLLECT_FORM_INSTANCE_ID, file.getInstanceId());
-        values.put(D.C_VAULT_FILE_ID, file.getVaultFileId());
-        values.put(D.C_STATUS, file.getStatus());
+    public boolean insertCollectInstanceVaultFiles(final List<CollectInstanceVaultFile> files) {
+        long count = files.size();
+        try {
+            database.beginTransaction();
+            for (CollectInstanceVaultFile file : files) {
+                ContentValues values = new ContentValues();
+                values.put(D.C_ID, file.getId());
+                values.put(D.C_COLLECT_FORM_INSTANCE_ID, file.getInstanceId());
+                values.put(D.C_VAULT_FILE_ID, file.getVaultFileId());
+                values.put(D.C_STATUS, file.getStatus());
 
-        database.insert(D.T_COLLECT_FORM_INSTANCE_VAULT_FILE, null, values);
+                count = count - database.insert(D.T_COLLECT_FORM_INSTANCE_VAULT_FILE, null, values);
+            }
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            database.endTransaction();
+        }
+        return (count == 0);
     }
 
     private CollectServer createServer(final CollectServer server) {

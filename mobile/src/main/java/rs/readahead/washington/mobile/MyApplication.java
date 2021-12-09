@@ -236,16 +236,18 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         unlockRegistry = TellaKeysUI.getUnlockRegistry();
         keyDataSource.initKeyDataSource();
 
-        try {
-            vault = new Vault(this, mainKeyHolder, vaultConfig);
-            rxVault = new RxVault(this, vault);
-            if (Preferences.isUpgradeTella2()) {
-                Toast.makeText(context,"Hold tight while we transferring your files to the Vault!", Toast.LENGTH_LONG).show();
+        if (Preferences.isUpgradeTella2()) {
+            try {
+                vault = new Vault(this, mainKeyHolder, vaultConfig);
+                rxVault = new RxVault(this, vault);
+                Toast.makeText(context, "Hold tight while we transferring your files to the Vault!", Toast.LENGTH_LONG).show();
                 upgradeTella2(context);
+
+            } catch (Exception e) {
+                Timber.e(e);
             }
-        } catch (Exception e) {
-            Timber.e(e);
         }
+
         startMainActivity(context);
     }
 

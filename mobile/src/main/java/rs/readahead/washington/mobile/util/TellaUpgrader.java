@@ -3,9 +3,6 @@ package rs.readahead.washington.mobile.util;
 import static com.hzontal.tella_vault.database.VaultDataSource.ROOT_UID;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
-
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.database.VaultDataSource;
 import com.hzontal.utils.MediaFile;
@@ -33,11 +30,11 @@ public class TellaUpgrader {
                     vaultDataSource.create(ROOT_UID, getVaultFile(mediaFile));
                 }
                 List<CollectInstanceVaultFile> collectInstanceVaultFiles = dataSource.getCollectInstanceVaultFilesDB();
-                for (CollectInstanceVaultFile instanceVaultFile : collectInstanceVaultFiles) {
-                    dataSource.insertCollectInstanceVaultFile(instanceVaultFile);
+
+                if (dataSource.insertCollectInstanceVaultFiles(collectInstanceVaultFiles)) {
+                    Preferences.setUpgradeTella2(false);
                 }
             }
-            new Handler(Looper.getMainLooper()).post(() -> Preferences.setUpgradeTella2(false));
         });
     }
 
