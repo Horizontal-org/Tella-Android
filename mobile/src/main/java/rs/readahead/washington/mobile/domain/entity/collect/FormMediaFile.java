@@ -27,7 +27,7 @@ public class FormMediaFile extends VaultFile {
         formMediaFile.mimeType = vaultFile.mimeType;
         formMediaFile.thumb = vaultFile.thumb;
         formMediaFile.type = vaultFile.type;
-
+        formMediaFile.name = vaultFile.name;
         return formMediaFile;
     }
 
