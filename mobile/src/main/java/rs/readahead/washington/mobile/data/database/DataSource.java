@@ -771,7 +771,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 values.put(D.C_VAULT_FILE_ID, file.getVaultFileId());
                 values.put(D.C_STATUS, file.getStatus());
 
-                count = count - database.insert(D.T_COLLECT_FORM_INSTANCE_VAULT_FILE, null, values);
+                database.insert(D.T_COLLECT_FORM_INSTANCE_VAULT_FILE, null, values);
+                count = count - 1;
             }
             database.setTransactionSuccessful();
         } catch (Exception e) {
