@@ -16,6 +16,7 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.OldMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectInstanceVaultFile;
 
+
 public class TellaUpgrader {
 
     public static void upgradeV2(Context context, byte[] key) {
@@ -52,7 +53,7 @@ public class TellaUpgrader {
         vaultFile.mimeType = MediaFile.INSTANCE.getMimeTypeForFormatCode(MediaFile.INSTANCE.getFormatCode(mediaFile.getFileName(), FileUtil.getMimeType(mediaFile.getFileName())));
         vaultFile.path = mediaFile.getPath();
         vaultFile.thumb = mediaFile.getThumb();
-        mediaFile.setMetadata(mediaFile.getMetadata());
+        vaultFile.metadata = mediaFile.getMetadata();
 
         return vaultFile;
     }
