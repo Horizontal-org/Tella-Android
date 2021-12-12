@@ -23,6 +23,8 @@ import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import butterknife.ButterKnife
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
 import org.javarosa.core.model.FormDef
 import permissions.dispatcher.*
 import rs.readahead.washington.mobile.MyApplication
@@ -359,14 +361,20 @@ class CollectMainFragment : BaseFragment(){
     }
 
     private fun showDeleteInstanceDialog(instanceId: Long, status: CollectFormInstanceStatus) {
-        alertDialog = DialogsUtil.showFormInstanceDeleteDialog(
-            activity,
-            status
-        ) { _: DialogInterface?, _: Int ->
-            model.deleteFormInstance(
-                instanceId
-            )
+        var msgResId = R.string.collect_dialog_text_delete_draft_form
+
+        if (status == CollectFormInstanceStatus.SUBMITTED) {
+            msgResId = R.string.collect_dialog_text_delete_sent_form
         }
+
+        showStandardSheet(
+            activity.getSupportFragmentManager(),
+            getString(R.string.Collect_RemoveForm_SheetTitle),
+            getString(msgResId),
+            getString(R.string.action_remove),
+            getString(R.string.action_cancel),
+            { this.model.deleteFormInstance(instanceId) },
+            { })
     }
 
     private fun showCancelPendingFormDialog(instanceId: Long) {
@@ -407,12 +415,12 @@ class CollectMainFragment : BaseFragment(){
 
     private fun initViewPageAdapter() {
         adapter.addFragment(
-            DraftFormsListFragment.newInstance(),
-            getString(R.string.collect_draft_tab_title)
-        )
-        adapter.addFragment(
             BlankFormsListFragment.newInstance(),
             getString(R.string.collect_tab_title_blank)
+        )
+        adapter.addFragment(
+            DraftFormsListFragment.newInstance(),
+            getString(R.string.collect_draft_tab_title)
         )
         adapter.addFragment(
             OutboxFormListFragment.newInstance(),

@@ -496,7 +496,6 @@
     <string name="mic_recording">Recording</string>
     <string name="mic_rename_recording">Rename recording</string>
     <string name="recorder_toast_recording.saved">The audio recording was saved to your Tella files</string>
-
     <string name="onboard.intro_title">Welcome to Tella</string>
     <string name="onboard.intro_get_started">Get started</string>
     <string name="onboard.intro_organization_code">I have a code from my organization</string>
@@ -539,4 +538,5 @@
     <string name="settings.sec_confirm_calc_camouflage_desc">To re-open Tella, look for the Calculator app icon among your apps. Unlock Tella by entering your PIN in the Calculator followed by “=”. </string>
     <string name="settings.sec_confirm_exit_tella">Exit Tella</string>
     <string name="collect.outbox_tab.title">Outbox</string>
+    <string name="Collect_RemoveForm_SheetTitle">Remove form?</string>
 </resources>
