@@ -913,6 +913,26 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Nullable
+    private FormDef getCollectFormDef(String formId, String versionId) {
+
+        try (Cursor cursor = database.query(
+                D.T_COLLECT_BLANK_FORM,
+                new String[]{D.C_FORM_DEF},
+                D.C_FORM_ID + "= ? AND " + D.C_VERSION + " = ?",
+                new String[]{formId, versionId},
+                null, null, null, null)) {
+
+            if (cursor.moveToFirst()) {
+                return deserializeFormDef(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF)));
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        }
+
+        return null;
+    }
+
+    @Nullable
     private void removeCollectFormDef(Long formId) throws NotFountException {
         try {
             database.beginTransaction();
@@ -1287,7 +1307,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             if (cursor.moveToFirst()) {
                 CollectFormInstance instance = cursorToCollectFormInstance(cursor);
 
-                instance.setFormDef(deserializeFormDef(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF))));
+                //instance.setFormDef(deserializeFormDef(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF))));
+                instance.setFormDef(getCollectFormDef(instance.getFormID(),instance.getVersion()));
 
                 List<String> vaultFileIds = getFormInstanceMediaFilesIdsFromDb(instance.getId());
                 instance.setWidgetMediaFilesIds(vaultFileIds);
@@ -1840,7 +1861,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 // todo: this is bad, we need to make this not loading everything in loop
                 CollectFormInstance instance = cursorToCollectFormInstance(cursor);
-                instance.setFormDef(deserializeFormDef(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF))));
+
+                //instance.setFormDef(deserializeFormDef(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF))));
+                instance.setFormDef(getCollectFormDef(instance.getFormID(),instance.getVersion()));
 
                /* List<FormMediaFile> mediaFiles = getFormInstanceMediaFilesFromDb(instance.getId());
                 for (FormMediaFile mediaFile : mediaFiles) {
