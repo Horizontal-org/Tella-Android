@@ -281,8 +281,6 @@ A toast notification informing the user that their files were successfully delet
   <!-- Explanatory text displayed when the Collect main screen doesn't display any form. -->
   <string name="collect.blank_expl_no.forms">ತೋರಿಸಲು ಯಾವುದೇ ಫಾರ್ಮ್‌ಗಳಿಲ್ಲ. ನೀವು ಸಂಪರ್ಕಗೊಂಡಿರುವ ಸರ್ವರ್‌ಗಳಲ್ಲಿ ಫಾರ್ಮ್‌ಗಳು ಲಭ್ಯವಿದೆಯೇ ಎಂದು ಪರಿಶೀಲಿಸಲು ರಿಫ್ರೆಶ್ ಬಟನ್ ಟ್ಯಾಪ್ ಮಾಡಿ.</string>
   <!-- The screen title (in the app bar) for the Camouflage feature in Settings > Protection > Camouflage -->
-  <string name="settings.camo_app.bar">ಮರೆಮಾಚುವಿಕೆ</string>
-  <!-- The heading of the Camouflage screen where the user selects how to hide the app. -->
   <string name="settings.camo_heading">ಬೇರೆ ಹೆಸರು ಮತ್ತು ಲೋಗೋ ಆಯ್ಕೆಮಾಡಿ</string>
   <string name="gallery_expl_empty">ತೋರಿಸಲು ಯಾವುದೇ ಫೈಲ್‌ಗಳಿಲ್ಲ. ಫೈಲ್‌ಗಳನ್ನು ಆಮದು ಮಾಡಲು + ಬಟನ್ ಟ್ಯಾಪ್ ಮಾಡಿ.</string>
   <!-- The screen title (in the app bar) where the user can read some information about the Collect feature (on data collection) -->
@@ -426,28 +424,15 @@ A toast notification informing the user that their files were successfully delet
   <!-- The button to add a connection to a server -->
   <string name="settings.servers_add.server_dialog.title">ಸರ್ವರ್ ಅನ್ನು ಸೇರಿಸಿ</string>
   <!-- The name of the feature in Settings > Protection -->
-  <string name="settings.prot_quick.delete_action">ತ್ವರಿತವಾಗಿ ಅಳಿಸುವ ಬಟನ್ಅನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ</string>
-  <!-- The explanation of the Quick Delete feature in Settings > Protection -->
-  <string name="settings.prot_quick.delete_action.expl">ತುರ್ತು ಸಂದರ್ಭಗಳಲ್ಲಿ Tella ಡೇಟಾವನ್ನು ತ್ವರಿತವಾಗಿ ಅಳಿಸಲು ಹೋಮ್‌ಸ್ಕ್ರೀನ್‌ನಲ್ಲಿ ಸ್ಲೈಡಿಂಗ್ ಬಟನ್ ತೋರಿಸುತ್ತದೆ.</string>
-  <!-- The checkbox to select what the 'Quick Delete' button deletes -->
-  <string name="settings.prot_select_delete.gallery">ಗ್ಯಾಲರಿ ಅನ್ನು ಅಳಿಸಿ</string>
-  <!-- In the Settings protection screen, the explanation on what "Delete gallery" will do. -->
-  <string name="settings.prot_select.expl_delete.gallery">ಇದು Tella ಗ್ಯಾಲರಿ ಇಂದ ಎಲ್ಲಾ ಫೋಟೋಗಳು, ವೀಡಿಯೊಗಳು ಮತ್ತು ಆಡಿಯೊ ರೆಕಾರ್ಡಿಂಗ್‌ಗಳನ್ನು ಅಳಿಸುತ್ತದೆ.</string>
-  <!-- The checkbox to select what the 'Quick Delete' button deletes -->
+    <!-- The explanation of the Quick Delete feature in Settings > Protection -->
+    <!-- The checkbox to select what the 'Quick Delete' button deletes -->
+    <!-- In the Settings protection screen, the explanation on what "Delete gallery" will do. -->
+    <!-- The checkbox to select what the 'Quick Delete' button deletes -->
   <string name="settings.prot_select_delete.forms">ಡ್ರಾಫ್ಟ್ ಮತ್ತು ಸಲ್ಲಿಸಲಾದ ಫಾರ್ಮ್‌ಗಳನ್ನು ಅಳಿಸಿ</string>
-  <string name="settings.prot_select.expl_delete.forms">ಇದು ಡ್ರಾಫ್ಟ್ ಮತ್ತು ಸಲ್ಲಿಸಿದ ಫಾರ್ಮ್‌ಗಳನ್ನು ಮತ್ತು ಅವು ಒಳಗೊಂಡಿರುವ ಎಲ್ಲಾ ಡೇಟಾವನ್ನು ಅಳಿಸುತ್ತದೆ</string>
-  <!-- The checkbox to select what the 'Quick Delete' button deletes -->
+    <!-- The checkbox to select what the 'Quick Delete' button deletes -->
   <string name="settings.prot_select_delete.servers">ಸರ್ವರ್ ಸಿದ್ಧತೆಗಳನ್ನು ಅಳಿಸಿ</string>
-  <string name="settings.prot_select.expl_delete.servers">ಇದು ಸರ್ವರ್‌ಗಳಿಗೆ ನಿಮ್ಮ ಸಂಪರ್ಕಗಳನ್ನು ಮತ್ತು ಅವುಗಳಿಗೆ ಸಂಬಂಧಿಸಿದ ಎಲ್ಲಾ ಫಾರ್ಮ್‌ಗಳನ್ನು ಅಳಿಸುತ್ತದೆ.</string>
-  <!-- The checkbox to select what triggering the 'Quick Delete' button does -->
+    <!-- The checkbox to select what triggering the 'Quick Delete' button does -->
   <string name="settings.prot_select_delete.app">Tella ವನ್ನು ಅಳಿಸಿ</string>
-  <string name="settings.prot_select.expl_delete.app">ಇದು ಅಪ್ಲಿಕೇಶನ್ ಮತ್ತು ಅದರಲ್ಲಿರುವ ಡೇಟಾ ಅಳಿಸುತ್ತದೆ. ನಿಮಗೆ  \"ಅಪ್ಲಿಕೇಶನ್ ಅಸ್ಥಾಪಿಸಲು ನೀವು ಬಯಸುವಿರಾ?\" ಎಂದು ಕೇಳಲಾಗುತ್ತದೆ. ನೀವು ಖಚಿತಪಡಿಸದಿದ್ದರೆ, Tella ಅನ್ನು ಅಳಿಸಲಾಗುವುದಿಲ್ಲ.</string>
-  <!-- The title of the dialog to enable or disable Offline mode. -->
-  <string name="offline_dialog.title">ಆಫ್‍ಲೈನ್ ವಿಧಾನ</string>
-  <!-- The explanation for Offline Mode. -->
-  <string name="offline_dialog.expl">ಆಫ್‌ಲೈನ್ ಮೋಡ್‌ನಲ್ಲಿ, ನಂತರದ ಸಲ್ಲಿಕೆಗಾಗಿ ಎಲ್ಲಾ ಡೇಟಾ ಉಳಿಸಲಾಗಿದೆ. ಸೆಲ್ಯುಲಾರ್ ಡೇಟಾ ಉಳಿಸಲು ಇದು ಉಪಯುಕ್ತವಾಗಿದೆ ಅಥವಾ ನೀವು ಕೆಟ್ಟ ಸಂಪರ್ಕವನ್ನು ಹೊಂದಿದ್ದರೆ. ನೀವು ಫಾರ್ಮ್‌ಗಳನ್ನು ಸಲ್ಲಿಸಲು ಸಿದ್ಧರಾದಾಗ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ.</string>
-  <!-- The name of the action button to enable Offline mode from the data collection section. It is only visible when long pressing the button or when using the screen reader. -->
-  <string name="collect.form_action.desc_offline">ಆಫ್‍ಲೈನ್ ವಿಧಾನ</string>
   <!-- The menu item in the screen showing all sent forms to open a form in order to edit it and resend. -->
   <string name="collect.sent_action_edit.to.resend">ಮರುಕಳುಹಿಸಲು ಸಂಪಾದಿಸಿ</string>
   <!-- The toast message informing the user that the form was successfully submitted. -->
@@ -458,8 +443,6 @@ A toast notification informing the user that their files were successfully delet
   <string name="settings.docu_add.server_field_password">ಪಾಸ್‌ವರ್ಡ್</string>
   <!-- A placeholder for the name of the app, when the app encounters an error retrieving the name of the app. -->
   <string name="settings.camo_error_fail.retrieve.app.name">ಆ್ಯಪ್</string>
-  <string name="collect.end_toast_saved.for.later">ಆಫ್‌ಲೈನ್ ಮೋಡ್ ಅನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿರುವುದರಿಂದ ಫಾರ್ಮ್ ಅನ್ನು ನಂತರದ ಸಲ್ಲಿಕೆಗಾಗಿ ಉಳಿಸಲಾಗಿದೆ</string>
-  <!-- The submissions screen shows all the different elements to be submitted. This refers to the responses to form questions (not file attachments) -->
   <string name="collect.end_item_form.data">ಫಾರ್ಮ್ ಪ್ರತಿಕ್ರಿಯೆಗಳು</string>
   <string name="collect_toast_fail.loading.form.instance">ಫಾರ್ಮ್ ಅನ್ನು ಲೋಡ್ ಮಾಡುವಲ್ಲಿ ದೋಷ ಕಂಡುಬಂದಿದೆ. ದಯವಿಟ್ಟು ಪುನಃ ಪ್ರಯತ್ನಿಸಿ</string>
   <string name="collect_toast_fail.connection.too.weak">ಫಾರ್ಮ್ ಕಳುಹಿಸಲು ನಿಮ್ಮ ಇಂಟರ್ನೆಟ್ ಸಂಪರ್ಕವು ತುಂಬಾ ದುರ್ಬಲವಾಗಿದೆ. ದಯವಿಟ್ಟು ಪುನಃ ಪ್ರಯತ್ನಿಸಿ</string>
@@ -621,83 +604,50 @@ This is one of the two options available. -->
   <!-- The explanation in the dialog that is displayed when deleting an Upload server. -->
   <string name="settings.docu_delete.upload.server_dialog.expl">ನೀವು ಇನ್ನು ಮುಂದೆ ಈ ಸರ್ವರ್‌ಗೆ ಫೈಲ್‌ಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗುವುದಿಲ್ಲ.</string>
   <!-- The label for the homescreen button to access the Upload feature. -->
-  <string name="home_upload.button">ಅಪ್‌ಲೋಡ್</string>
-  <!-- This is displayed to let the user that the files are being uploaded. -->
-  <string name="upload.main_meta_status.uploading">ಅಪ್‌ಲೋಡ್‌ ಆಗುತ್ತಿದೆ</string>
-  <string name="upload_meta_date.started">ಪ್ರಾರಂಭಿಸಲಾಗಿದೆ:</string>
-  <!-- The button to see more information about each upload. -->
-  <string name="upload.main_action_more.details">ಹೆಚ್ಚಿನ ವಿವರಗಳು</string>
-  <plurals name="upload.main_meta_number.of.files">
-    <item quantity="one">%dಫೈಲ್‌ಗಳು</item>
-    <item quantity="other">%d ಫೈಲ್‌ಗಳು</item>
-  </plurals>
-  <!-- This is used to show how many files were uploaded -->
-  <plurals name="upload.main_meta_number.of.files.uploaded">
-    <item quantity="one">%d ಫೈಲ್‌ಅನ್ನು ಅಪ್ಲೋಡ್ ಮಾಡಲಾಗಿದೆ</item>
-    <item quantity="other">%d ಫೈಲ್‌ಗಳು ಅಪ್ಲೋಡ್ ಮಾಡಲಾಗಿದೆ</item>
-  </plurals>
-  <!-- This is used to show the number of minutes left to complete the upload of files to the server. -->
-  <plurals name="upload.main_meta_minutes.left">
-    <item quantity="one">%d </item>
-    <item quantity="other">%d ನಿಮಿಷಗಳು ಉಳಿದಿವೆ</item>
-  </plurals>
-  <!-- The explanation in the dialog when tapping the "clear" button in the Upload main screen. -->
-  <string name="upload.main_dialog.expl_clear.history">ಇದು ಹಿಂದಿನ ಅಪ್‌ಲೋಡ್‌ಗಳ ಪಟ್ಟಿಯನ್ನು ಅಳಿಸುತ್ತದೆ.</string>
-  <!-- A dialog displayed when the user attempts to stop the entire upload. -->
-  <string name="upload.main_stop.upload_dialog.expl">ನೀವು ಅಪ್‌ಲೋಡ್‌ಅನ್ನು ಖಚಿತವಾಗಿಯೂ ನಿಲ್ಲಿಸಲು ಬಯಸುವಿರಾ?</string>
-  <!-- A dialog displayed when the user attempts to stop the upload of one particular file. -->
-  <string name="upload.info_stop.upload_dialog.expl">ನೀವು ಅಪ್‌ಲೋಡ್‌ಅನ್ನು ಖಚಿತವಾಗಿಯೂ ನಿಲ್ಲಿಸಲು ಬಯಸುವಿರಾ?</string>
-  <!-- The title of the screen (in the app bar) when looking at the details of an 'upload' of files to the server. -->
-  <string name="upload.info_app.bar">ಅಪ್‌ಲೋಡ್ ಮಾಹಿತಿ</string>
-  <!-- The field where Tella shows how many files are included in an upload. -->
-  <string name="upload.info_meta_number.of.files">ಫೈಲ್‌ಗಳ ಸಂಖ್ಯೆ:</string>
-  <!-- The action button to "clear" the upload history. -->
-  <string name="upload.main_dialog.action_clear">ತೆರವುಗೊಳಿಸಿ</string>
-  <string name="upload.main_nothing.to.show">ತೋರಿಸಲು ಹಿಂದಿನ ಅಪ್‌ಲೋಡ್‌ಗಳು ಇಲ್ಲ.</string>
-  <string name="upload.info_meta_date.completed">ಪೂರ್ಣಗೊಂಡಿದೆ:</string>
-  <!-- The field to show what file is being uploaded. -->
-  <string name="upload.info_meta_file.type">ಫೈಲ್ ಬಗೆ:</string>
-  <string name="upload.main_meta_status.attempting">ಸಂಪರ್ಕಿಸಲು ಪ್ರಯತ್ನಿಸಲಾಗುತ್ತಿದೆ</string>
-  <!-- The description of how much time is left for the upload to complete. -->
-  <string name="upload.main_meta_less.minute.left">ಒಂದು ನಿಮಿಷಕ್ಕಿಂತ ಕಡಿಮೆ ಸಮಯ ಉಳಿದಿದೆ</string>
-  <string name="upload.main_meta_status.stopped">ನಿಲ್ಲಿಸಲಾಗಿದೆ</string>
-  <!-- The description of how much time is left for the upload to complete. -->
-  <string name="upload.main_meta_more.hour.left">ಒಂದು ಗಂಟೆಗಿಂತ ಹೆಚ್ಚು ಸಮಯ ಉಳಿದಿದೆ</string>
-  <!-- The error message notifying the user that they must select a server where their file will be auto-uploaded. -->
+    <!-- This is displayed to let the user that the files are being uploaded. -->
+    <!-- The button to see more information about each upload. -->
+    <!-- This is used to show how many files were uploaded -->
+    <!-- This is used to show the number of minutes left to complete the upload of files to the server. -->
+    <!-- The explanation in the dialog when tapping the "clear" button in the Upload main screen. -->
+    <!-- A dialog displayed when the user attempts to stop the entire upload. -->
+    <!-- A dialog displayed when the user attempts to stop the upload of one particular file. -->
+    <!-- The title of the screen (in the app bar) when looking at the details of an 'upload' of files to the server. -->
+    <!-- The field where Tella shows how many files are included in an upload. -->
+    <!-- The action button to "clear" the upload history. -->
+    <!-- The field to show what file is being uploaded. -->
+    <!-- The description of how much time is left for the upload to complete. -->
+    <!-- The description of how much time is left for the upload to complete. -->
+    <!-- The error message notifying the user that they must select a server where their file will be auto-uploaded. -->
   <string name="settings.docu_error_must.select.auto.upload.server">ನೀವು ಸರ್ವರ್ ಅನ್ನು ಆಯ್ಕೆ ಮಾಡಿಕೊಳ್ಳಬೇಕು.</string>
   <!-- The explanation in the dialog when the user attempts to "clear" the upload information. -->
-  <string name="upload.info_dialog.expl_delete.upload">ನೀವು ಈ ಅಪ್‌ಲೋಡ್ ಮಾಹಿತಿಗಳನ್ನು ಖಚಿತವಾಗಿಯೂ ಅಳಿಸಲು ಬಯಸುತ್ತೀರೆ?</string>
-  <!-- The title in the dialog when tapping the "clear" button in the Upload main screen. -->
-  <string name="upload.main_dialog.title_clear.history">ಅಪ್‌ಲೋಡ್ ಇತಿಹಾಸವನ್ನು ಅಳಿಸಿರಿ</string>
-  <string name="settings.docu_auto.upload.metadata_action">ಪರಿಶೀಲನೆ ಮಾಹಿತಿಯನ್ನು ಸೇರಿಸಿ</string>
-  <string name="settings.docu_auto.upload.metadata_action.expl">ನಿಮ್ಮ ಫೈಲ್‌ಗಳು ಪರಿಶೀಲನೆ ಮಾಹಿತಿಯನ್ನು ಒಳಗೊಂಡಿದ್ದರೆ, ಅದು ನಿಮ್ಮ ಫೈಲ್‌ಗಳ ಜೊತೆಗೆ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಅಪ್‌ಲೋಡ್ ಆಗುತ್ತದೆ.</string>
-  <string name="camera_tab.title_video">ವಿಡಿಯೋ</string>
+    <!-- The title in the dialog when tapping the "clear" button in the Upload main screen. -->
+    <string name="camera_tab.title_video">ವಿಡಿಯೋ</string>
   <string name="camera_tab.title_photo">ಫೋಟೋ</string>
   <string name="action_upload">ಅಪ್‌ಲೋಡ್</string>
-  <string name="pl_cancel">ರದ್ದುಮಾಡಿ</string>
-  <string name="pl_confirm">ಖಚಿತಪಡಿಸಿ</string>
-  <string name="pl_confirm_pattern">ಖಚಿತಪಡಿಸಲು ವಿನ್ಯಾಸವನ್ನು ಮತ್ತೆ ಚಿತ್ರಸಿ</string>
-  <string name="pl_continue">ಮುಂದುವರಿಸಿ</string>
-  <string name="pl_draw_pattern">ಅನ್ಲಾಕ್ ವಿನ್ಯಾಸವನ್ನು ಚಿತ್ರಿಸಿ</string>
-  <string name="pl_draw_pattern_to_unlock">ಅನ್ಲಾಕ್ ಮಾಡಲು ವಿನ್ಯಾಸವನ್ನು ಚಿತ್ರಸಿ</string>
-  <string name="pl_pattern_confirmed">Tella ಅನ್ಲಾಕ್ ಮಾಡಲು ಇದು ಈಗ ನಿಮ್ಮ ವಿನ್ಯಾಸವಾಗಿದೆ.</string>
-  <string name="pl_pattern_recorded">ವಿನ್ಯಾಸವನ್ನು ರೆಕಾರ್ಡ್‌ ಮಾಡಲಾಗಿದೆ</string>
-  <string name="pl_pattern_too_short">ಕನಿಷ್ಠ %d ಚುಕ್ಕೆಗಳನ್ನು ಸಂಪರ್ಕಿಸಿ, ದಯವಿಟ್ಟು ಮತ್ತೆ ಚಿತ್ರಿಸಿರಿ</string>
-  <string name="pl_recording_pattern">ಮುಗಿದಾಗ ಬೆರಳನ್ನು ಬಿಡುಗಡೆ ಮಾಡಿ</string>
-  <string name="pl_redraw">ಮತ್ತೆ ಚಿತ್ರಿಸಿರಿ</string>
-  <string name="pl_wrong_pattern">ತಪ್ಪಾದ ವಿನ್ಯಾಸವಿದು, ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
+  <string name="LockSelect_Action_Cancel">ರದ್ದುಮಾಡಿ</string>
+  <string name="LockSelect_Action_Confirm">ಖಚಿತಪಡಿಸಿ</string>
+  <string name="LockPatternConfirm_Action_Confirm">ಖಚಿತಪಡಿಸಲು ವಿನ್ಯಾಸವನ್ನು ಮತ್ತೆ ಚಿತ್ರಸಿ</string>
+  <string name="LockSelect_Action_Continue">ಮುಂದುವರಿಸಿ</string>
+  <string name="LockPatternSet_Draw_Pattern">ಅನ್ಲಾಕ್ ವಿನ್ಯಾಸವನ್ನು ಚಿತ್ರಿಸಿ</string>
+  <string name="UnlockPattern_DrawToUnlock">ಅನ್ಲಾಕ್ ಮಾಡಲು ವಿನ್ಯಾಸವನ್ನು ಚಿತ್ರಸಿ</string>
+  <string name="LockPatternConfirm_Pattern_Confirmed">Tella ಅನ್ಲಾಕ್ ಮಾಡಲು ಇದು ಈಗ ನಿಮ್ಮ ವಿನ್ಯಾಸವಾಗಿದೆ.</string>
+  <string name="LockPatternSet_Pattern_Recorded">ವಿನ್ಯಾಸವನ್ನು ರೆಕಾರ್ಡ್‌ ಮಾಡಲಾಗಿದೆ</string>
+  <string name="UnlockPattern_PatternTooShort">ಕನಿಷ್ಠ %d ಚುಕ್ಕೆಗಳನ್ನು ಸಂಪರ್ಕಿಸಿ, ದಯವಿಟ್ಟು ಮತ್ತೆ ಚಿತ್ರಿಸಿರಿ</string>
+  <string name="LockPatternSet_RecordingPattern">ಮುಗಿದಾಗ ಬೆರಳನ್ನು ಬಿಡುಗಡೆ ಮಾಡಿ</string>
+  <string name="LockPatternSet_Action_Redraw">ಮತ್ತೆ ಚಿತ್ರಿಸಿರಿ</string>
+  <string name="LockPatternConfirm_Message_WrongPattern">ತಪ್ಪಾದ ವಿನ್ಯಾಸವಿದು, ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
   <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_start">ವಿನ್ಯಾಸವನ್ನು ಪ್ರಾರಂಭಿಸಲಾಗಿದೆ</string>
+  <string name="LockPatternSet_Message_PatternStarted">ವಿನ್ಯಾಸವನ್ನು ಪ್ರಾರಂಭಿಸಲಾಗಿದೆ</string>
   <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_cleared">ವಿನ್ಯಾಸವನ್ನು ತೆರವುಗೊಳಿಸಲಾಗಿದೆ</string>
+  <string name="LockPatternSet_Message_PatternCleared">ವಿನ್ಯಾಸವನ್ನು ತೆರವುಗೊಳಿಸಲಾಗಿದೆ</string>
   <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_cell_added">ಸೆಲ್ ಸೇರಿಸಲಾಗಿದೆ</string>
+  <string name="LockPatternSet_Message_CellAdded">ಸೆಲ್ ಸೇರಿಸಲಾಗಿದೆ</string>
   <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern. The screen reader will add the cell number that the user added. For example, if the user selects the bottom left cell, the screen reader will read "cell 7 added". -->
-  <string name="pl_access_pattern_cell_added_verbose">ಸೆಲ್ <xliff:g id="cell_index" example="3"> %1$d </xliff:g> ಸೇರಿಸಲಾಗಿದೆ</string>
+  <string name="LockPatternSet_Message_CellAddedVerbose">ಸೆಲ್ <xliff:g id="cell_index" example="3"> %1$d </xliff:g> ಸೇರಿಸಲಾಗಿದೆ</string>
   <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_detected">ವಿನ್ಯಾಸವನ್ನು ಪೂರ್ಣಗೊಳಿಸಲಾಗಿದೆ</string>
+  <string name="LockPatternSet_Message_PatternDetected">ವಿನ್ಯಾಸವನ್ನು ಪೂರ್ಣಗೊಳಿಸಲಾಗಿದೆ</string>
   <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_area">ವಿನ್ಯಾಸದ ಪ್ರದೇಶ</string>
+  <string name="UnLockPattern_PatternArea">ವಿನ್ಯಾಸದ ಪ್ರದೇಶ</string>
   <!-- The button to get access to more options. -->
   <string name="collect.blank_action.desc_more.options">ಹೆಚ್ಚಿನ ಆಯ್ಕೆಗಳು</string>
   <string name="action_next">ಮುಂದೆ</string>
@@ -843,4 +793,6 @@ This is one of the two options available. -->
   <string name="settings.sec_confirm_camouflage_desc">To re-open Tella, look for the %s app icon among your apps.</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">To re-open Tella, look for the Calculator app icon among your apps. Unlock Tella by entering your PIN in the Calculator followed by “=”. </string>
   <string name="settings.sec_confirm_exit_tella">Exit Tella</string>
+  <string name="collect.outbox_tab.title">Outbox</string>
+  <string name="Collect_RemoveForm_SheetTitle">Remove form?</string>
 </resources>

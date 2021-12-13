@@ -21,7 +21,7 @@
     <TextView
         android:id="@+id/setupMainLockTv"
         style="@style/Unlock_White_Text_Bold"
-        android:text="@string/settings_lock"
+        android:text="@string/Settings_Action_SetLock"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/setupMsgLockTv"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +31,7 @@
     <TextView
         android:id="@+id/setupMsgLockTv"
         style="@style/Unlock_White_Text_Bold"
-        android:text="@string/settings_lock_success_msg"
+        android:text="@string/Settings_Message_LockChanged"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/successImgV"
         app:layout_constraintEnd_toEndOf="parent"

@@ -13,7 +13,7 @@
         style="@style/Tella_Main_White_Text.Meduim"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="@string/vault_recent_files"
+        android:text="@string/Vault_RecentFiles"
         android:textColor="@color/wa_white_90"
         android:letterSpacing="0.05"
         />

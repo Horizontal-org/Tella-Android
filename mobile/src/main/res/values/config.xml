@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="api_base_url" translatable="false">https://www.hzontal.org/rest/v1/</string>
-    <string name="upload_url" translatable="false">https://www.hzontal.org/files/</string> <!-- todo: make this version enabled -->
-    <string name="ra_media_upload_url" translatable="false">https://www.hzontal.org/media/</string> <!-- todo: make this version enabled -->
-    <string name="evidence_queue_file" translatable="false">evidence_queue.db</string>
-    <string name="ra_media_file_queue_file" translatable="false">media_file_queue.db</string>
+    <!-- todo: make this version enabled -->
+    <!-- todo: make this version enabled -->
     <string name="config_faq_url" translatable="false">https://tella-app.org/faq/</string>
     <string name="config_contact_url" translatable="false">https://tella-app.org/contact/</string>
     <string name="config_privacy_url" translatable="false">https://tella-app.org/privacy/</string>
-    <string name="config_licence_url" translatable="false">http://www.apache.org/licenses/LICENSE-2.0</string>
-    <string name="config_source_code_url" translatable="false">https://github.com/H0rizontal/Tella</string>
-    <string name="ra_config_form_attachment_field" translatable="false">tella_attachments</string>
-    <string name="ra_config_form_attachment_url" translatable="false">https://hzontal.org/attachments/%1$s</string>
     <string-array name="ra_lang_codes" translatable="false">
         <item>ar</item>
         <item>be</item>
@@ -31,10 +25,8 @@
     <string name="tella_location_field_prefix" translatable="false">_geometadata_</string>
     <string name="tella_metadata_field_prefix" translatable="false">_textmetadata_</string>
     <string name="start_time" translatable="false">00:00</string>
-    <string name="title_activity_lock_screen" translatable="false">Tella Security</string>
     <string name="title_activity_security" translatable="false">Lock screen</string>
     <string name="title_activity_location_map" translatable="false">Location</string>
     <string name="signature" translatable="false">Signature</string>
     <string name="inches" translatable="false">″</string>
-    <string name="pl_forgot_pattern" translatable="false">Forgot pattern</string>
 </resources>

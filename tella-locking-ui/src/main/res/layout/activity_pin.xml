@@ -34,7 +34,7 @@
     <TextView
         android:id="@+id/pin_enterTV"
         style="@style/Unlock_White_Text_Bold"
-        android:text="@string/enter_your_pin"
+        android:text="@string/LockPinSet_Message_EnterPin"
         app:layout_constraintBottom_toTopOf="@+id/pin_msgTV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -44,7 +44,7 @@
     <TextView
         android:id="@+id/pin_msgTV"
         style="@style/Unlock_White_Text_Medium"
-        android:text="@string/pin_message"
+        android:text="@string/LockPinSet_Message_Hint"
         app:layout_constraintBottom_toTopOf="@+id/pin_editText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -106,14 +106,14 @@
     <TextView
         android:id="@+id/pin_left_button"
         style="@style/Unlock_White_Text_Back"
-        android:text="@string/pl_cancel"
+        android:text="@string/LockSelect_Action_Cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/pin_right_button"
         style="@style/Unlock_White_Text_Next"
-        android:text="@string/pl_continue"
+        android:text="@string/LockSelect_Action_Continue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

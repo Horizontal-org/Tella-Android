@@ -22,7 +22,6 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.repository.OpenRosaRepository;
-import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.IProgressListener;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
@@ -114,7 +113,7 @@ public class FormSubmitter implements IFormSubmitterContract.IFormSubmitter {
 
     @Override
     public void submitFormInstanceGranular(final CollectFormInstance instance) {
-        final boolean offlineMode = Preferences.isOfflineMode();
+        final boolean offlineMode = false;
         final CollectFormInstanceStatus startStatus = instance.getStatus();
 
         disposables.add(keyDataSource.getDataSource()
@@ -147,9 +146,7 @@ public class FormSubmitter implements IFormSubmitterContract.IFormSubmitter {
                 .subscribe(
                         response -> view.formPartSubmitSuccess(instance, response),
                         throwable -> {
-                            if (throwable instanceof OfflineModeException) {
-                                view.formSubmitOfflineMode();
-                            } else if (throwable instanceof NoConnectivityException) {
+                            if (throwable instanceof NoConnectivityException) {
                                 // PendingFormSendJob.scheduleJob();
                                 view.formSubmitNoConnectivity();
                             } else {

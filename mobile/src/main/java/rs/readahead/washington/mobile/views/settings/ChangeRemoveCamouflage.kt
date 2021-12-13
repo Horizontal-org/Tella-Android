@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.util.CamouflageManager
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
@@ -18,8 +20,10 @@ class ChangeRemoveCamouflage : BaseFragment() {
 
     private val cm = CamouflageManager.getInstance()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_change_remove_camouflage, container, false)
 
         initView(view)
@@ -32,7 +36,10 @@ class ChangeRemoveCamouflage : BaseFragment() {
         (activity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_servers_hide_tella_title)
 
         val fragmentTitle = view.findViewById<TextView>(R.id.title)
-        fragmentTitle.text = getString(R.string.settings_servers_add_camouflage_subtitle, cm.getLauncherName(requireContext()))
+        fragmentTitle.text = getString(
+            R.string.settings_servers_add_camouflage_subtitle,
+            cm.getLauncherName(requireContext())
+        )
 
         val camoImage = view.findViewById<ImageView>(R.id.server_icon)
         if (getCamoImage() != null) {
@@ -55,15 +62,17 @@ class ChangeRemoveCamouflage : BaseFragment() {
         }
     }
 
-    private fun  removeCamouflage() {
-        cm.setDefaultLauncherActivityAlias(requireContext())
+    private fun removeCamouflage() {
+        if (cm.setDefaultLauncherActivityAlias(requireContext())) {
+            MyApplication.bus().post(CamouflageAliasChangedEvent())
+        }
     }
 
     private fun getCamoImage(): Drawable? {
         var drawable = ContextCompat.getDrawable(activity, R.drawable.ic_server)
         val currentAlias = Preferences.getAppAlias()
 
-        if (currentAlias == cm.calculatorOption.alias){
+        if (currentAlias == cm.calculatorOption.alias) {
             return ContextCompat.getDrawable(activity, cm.calculatorOption.drawableResId)
         }
 

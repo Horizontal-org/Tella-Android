@@ -23,7 +23,6 @@
         android:contentDescription="Mic"
         android:title="Mic" />
     <item
-        android:id="@+id/reports"
         android:icon="@drawable/ic_reports"
         android:contentDescription="Reports"
         android:title="Reports"

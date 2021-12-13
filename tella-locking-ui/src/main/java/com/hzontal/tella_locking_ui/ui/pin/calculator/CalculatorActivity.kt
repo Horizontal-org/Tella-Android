@@ -47,7 +47,7 @@ class CalculatorActivity : BasePinActivity(), ResultListener {
                 }
 
                 override fun onError(throwable: Throwable) {
-                    onFailureSetPin(getString(R.string.incorrect_pin_error_msg))
+                    onFailureSetPin(getString(R.string.LockPinConfirm_Message_Error_IncorrectPin))
                     TellaKeysUI.getCredentialsCallback().onUnSuccessfulUnlock(TAG, throwable)
                 }
             })

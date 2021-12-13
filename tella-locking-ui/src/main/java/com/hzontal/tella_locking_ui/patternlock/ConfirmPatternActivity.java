@@ -30,7 +30,7 @@ public class ConfirmPatternActivity extends BasePatternActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mMessageText.setText(R.string.pl_draw_pattern_to_unlock);
+        mMessageText.setText(R.string.UnlockPattern_DrawToUnlock);
         mPatternView.setInStealthMode(isStealthModeEnabled());
         mPatternView.setOnPatternListener(this);
         //mLeftButton.setText(R.string.pl_cancel);
@@ -70,7 +70,7 @@ public class ConfirmPatternActivity extends BasePatternActivity
         if (isPatternCorrect(pattern)) {
             onConfirmed();
         } else {
-            mMessageText.setText(R.string.pl_wrong_pattern);
+            mMessageText.setText(R.string.LockPatternConfirm_Message_WrongPattern);
             mPatternView.setDisplayMode(PatternView.DisplayMode.Wrong);
             postClearPatternRunnable();
             ViewAccessibilityCompat.announceForAccessibility(mMessageText, mMessageText.getText());

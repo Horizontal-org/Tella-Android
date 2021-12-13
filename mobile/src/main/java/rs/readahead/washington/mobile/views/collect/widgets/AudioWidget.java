@@ -21,7 +21,6 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.util.C;
-import rs.readahead.washington.mobile.views.activity.AudioRecordActivity2;
 import rs.readahead.washington.mobile.views.activity.QuestionAttachmentActivity;
 import rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView;
 
@@ -132,10 +131,10 @@ public class AudioWidget extends MediaFileBinaryWidget {
             Activity activity = (Activity) getContext();
             FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
 
-            activity.startActivityForResult(new Intent(getContext(), AudioRecordActivity2.class)
+          /*  activity.startActivityForResult(new Intent(getContext(), AudioRecordActivity2.class)
                             .putExtra(AudioRecordActivity2.RECORDER_MODE, AudioRecordActivity2.Mode.COLLECT.name()),
                     C.MEDIA_FILE_ID
-            );
+            );*/
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
             FormController.getActive().setIndexWaitingForData(null);

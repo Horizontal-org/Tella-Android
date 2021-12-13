@@ -37,7 +37,6 @@
                     android:paddingEnd="12dp">
 
                     <TextView
-                        android:id="@+id/language"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignParentStart="true"
@@ -109,7 +108,6 @@
                 app:titleText="@string/settings.docu_verification_action" />
 
             <LinearLayout
-                android:id="@+id/home_screen_settings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_vertical_margin"
