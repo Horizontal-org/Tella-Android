@@ -912,7 +912,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return null; // let rx crash for this..
     }
 
-    @Nullable
+   /* @Nullable
     private FormDef getCollectFormDef(String formId, String versionId) {
 
         try (Cursor cursor = database.query(
@@ -930,7 +930,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }
 
         return null;
-    }
+    }*/
 
     @Nullable
     private void removeCollectFormDef(Long formId) throws NotFountException {
@@ -1307,8 +1307,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             if (cursor.moveToFirst()) {
                 CollectFormInstance instance = cursorToCollectFormInstance(cursor);
 
-                //instance.setFormDef(deserializeFormDef(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF))));
-                instance.setFormDef(getCollectFormDef(instance.getFormID(),instance.getVersion()));
+                instance.setFormDef(deserializeFormDef(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF))));
+               // instance.setFormDef(getCollectFormDef(instance.getFormID(),instance.getVersion()));
 
                 List<String> vaultFileIds = getFormInstanceMediaFilesIdsFromDb(instance.getId());
                 instance.setWidgetMediaFilesIds(vaultFileIds);
@@ -1862,8 +1862,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 // todo: this is bad, we need to make this not loading everything in loop
                 CollectFormInstance instance = cursorToCollectFormInstance(cursor);
 
-                //instance.setFormDef(deserializeFormDef(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF))));
-                instance.setFormDef(getCollectFormDef(instance.getFormID(),instance.getVersion()));
+                instance.setFormDef(deserializeFormDef(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF))));
+                //instance.setFormDef(getCollectFormDef(instance.getFormID(),instance.getVersion()));
 
                /* List<FormMediaFile> mediaFiles = getFormInstanceMediaFilesFromDb(instance.getId());
                 for (FormMediaFile mediaFile : mediaFiles) {
