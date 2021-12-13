@@ -4,6 +4,8 @@ import android.Manifest
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
@@ -223,12 +225,15 @@ class CollectMainFragment : BaseFragment(){
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        Handler(Looper.getMainLooper()).post {
+            adapter.notifyDataSetChanged()
+        }
+    }
     override fun onResume() {
         super.onResume()
         countServers()
-        if (adapter != null){
-            adapter.notifyDataSetChanged()
-        }
     }
 
     override fun onStop() {
