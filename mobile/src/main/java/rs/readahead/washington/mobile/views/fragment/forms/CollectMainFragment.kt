@@ -226,6 +226,9 @@ class CollectMainFragment : BaseFragment(){
     override fun onResume() {
         super.onResume()
         countServers()
+        if (adapter != null){
+            adapter.notifyDataSetChanged()
+        }
     }
 
     override fun onStop() {
