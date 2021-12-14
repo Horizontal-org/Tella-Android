@@ -121,6 +121,7 @@ public class FormSubmitActivity extends BaseLockActivity implements
         } else {
             super.onBackPressed();
         }
+        finish();
     }
 
     @Override
