@@ -78,7 +78,7 @@ public class AudioWidget extends MediaFileBinaryWidget {
 
         View view = inflater.inflate(R.layout.collect_widget_media, linearLayout, true);
 
-        captureButton = addButton(R.drawable.ic_mic_black_24dp);
+        captureButton = addButton(R.drawable.ic_mic_white_small);
         captureButton.setAlpha((float).5);
         captureButton.setId(QuestionWidget.newUniqueId());
         captureButton.setEnabled(!formEntryPrompt.isReadOnly());
@@ -90,7 +90,7 @@ public class AudioWidget extends MediaFileBinaryWidget {
         selectButton.setEnabled(!formEntryPrompt.isReadOnly());
         selectButton.setOnClickListener(v -> showAttachmentsActivity());
 
-        clearButton = addButton(R.drawable.ic_delete_grey_24px);
+        clearButton = addButton(R.drawable.ic_delete_white_24px);
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!formEntryPrompt.isReadOnly());
         clearButton.setOnClickListener(v -> clearAnswer());

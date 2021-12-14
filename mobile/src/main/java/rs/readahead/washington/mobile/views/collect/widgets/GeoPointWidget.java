@@ -168,7 +168,7 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
 
         View view = inflater.inflate(R.layout.collect_widget_geo_point, linearLayout, true);
 
-        selectButton = addButton(R.drawable.gps_fixed_icon_gray);
+        selectButton = addButton(R.drawable.gps_fixed_icon_white);
         selectButton.setId(QuestionWidget.newUniqueId());
         selectButton.setEnabled(!isReadonly());
         selectButton.setOnClickListener(v -> {
@@ -185,7 +185,7 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
             }
         });
 
-        clearButton = addButton(R.drawable.ic_delete_grey_24px);
+        clearButton = addButton(R.drawable.ic_delete_white_24px);
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!isReadonly());
         clearButton.setOnClickListener(v -> clearAnswer());
@@ -288,7 +288,7 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
         if (APPEARANCE_NONE.equalsIgnoreCase(appearance)) {
             selectButton.setImageDrawable(locationGathering ?
                     getResources().getDrawable(R.drawable.ic_stop_red) :
-                    getResources().getDrawable(R.drawable.gps_fixed_icon_gray));
+                    getResources().getDrawable(R.drawable.gps_fixed_icon_white));
         }
     }
 

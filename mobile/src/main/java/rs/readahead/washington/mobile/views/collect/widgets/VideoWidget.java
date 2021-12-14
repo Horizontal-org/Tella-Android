@@ -81,7 +81,7 @@ public class VideoWidget extends MediaFileBinaryWidget {
 
         View view = inflater.inflate(R.layout.collect_widget_media, linearLayout, true);
 
-        captureButton = addButton(R.drawable.ic_videocam_black_24dp);
+        captureButton = addButton(R.drawable.ic_videocam);
         captureButton.setAlpha((float).5);
         captureButton.setId(QuestionWidget.newUniqueId());
         captureButton.setEnabled(!formEntryPrompt.isReadOnly());
@@ -93,13 +93,13 @@ public class VideoWidget extends MediaFileBinaryWidget {
         selectButton.setEnabled(!formEntryPrompt.isReadOnly());
         selectButton.setOnClickListener(v -> showAttachmentsActivity());
 
-        importButton = addButton(R.drawable.ic_smartphone_black_24dp);
+        importButton = addButton(R.drawable.ic_smartphone_white_24dp);
         importButton.setAlpha((float).5);
         importButton.setId(QuestionWidget.newUniqueId());
         importButton.setEnabled(!formEntryPrompt.isReadOnly());
         importButton.setOnClickListener(v -> importVideo());
 
-        clearButton = addButton(R.drawable.ic_delete_grey_24px);
+        clearButton = addButton(R.drawable.ic_delete_white_24px);
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!formEntryPrompt.isReadOnly());
         clearButton.setOnClickListener(v -> clearAnswer());

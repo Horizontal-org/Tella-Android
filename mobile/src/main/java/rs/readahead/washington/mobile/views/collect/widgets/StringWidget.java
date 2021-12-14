@@ -84,7 +84,7 @@ public class StringWidget extends QuestionWidget {
         if (readOnly) {
             answer.setBackground(null);
             answer.setEnabled(false);
-            answer.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
+            answer.setTextColor(ContextCompat.getColor(context, R.color.light_gray));
             answer.setFocusable(false);
             answer.setVisibility(GONE);
         }
