@@ -124,18 +124,6 @@ public class TellaUploadServerDialogFragment extends AppCompatDialogFragment imp
 
         presenter = new CheckTUSServerPresenter(this);
 
-        if (obj != null) {
-            TellaUploadServer server = (TellaUploadServer) obj;
-            name.setText(server.getName());
-            url.setText(server.getUrl());
-
-            if (!server.getName().isEmpty() && !server.getPassword().isEmpty()){
-                advancedToggle.setOpen();
-                username.setText(server.getUsername());
-                password.setText(server.getPassword());
-            }
-        }
-
         advancedToggle.setOnStateChangedListener(open -> maybeShowAdvancedPanel());
 
         maybeShowAdvancedPanel();

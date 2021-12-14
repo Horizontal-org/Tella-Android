@@ -34,10 +34,10 @@ public class UwaziClient {
 
     private Context context;
 
-    public UwaziClient(Context context, String url, String username, String password) {
+    public UwaziClient(Context context, String url) {
         this.context = context.getApplicationContext();
 
-        okHttpClient = buildOkHttpClient(username, password);
+        okHttpClient = buildOkHttpClient();
         baseUrl = URI.create(url);
     }
 
@@ -124,25 +124,22 @@ public class UwaziClient {
     }
 
     @NonNull
-    private OkHttpClient buildOkHttpClient(String username, String password) {
+    private OkHttpClient buildOkHttpClient() {
         final OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
         if (BuildConfig.DEBUG) {
             builder.addNetworkInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS));
         }
 
-        final String credential = Credentials.basic(username, password);
 
         builder.addNetworkInterceptor(chain -> {
             Request newRequest = chain.request().newBuilder()
-                    .addHeader("authorization", credential)
                     .build();
 
             return chain.proceed(newRequest);
         });
 
         builder.authenticator((route, response) -> response.request().newBuilder()
-                .header("authorization", credential)
                 .build());
 
         return builder.build();

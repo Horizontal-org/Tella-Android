@@ -14,16 +14,18 @@ import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer
+import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment.CollectServerDialogHandler
 import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragment
 import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragment.TellaUploadServerDialogHandler
+import rs.readahead.washington.mobile.views.dialog.UwaziServerDialogFragment
 
 class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     IOnBoardPresenterContract.IView, CollectServerDialogHandler,
-    TellaUploadServerDialogHandler {
+    TellaUploadServerDialogHandler, UwaziServerDialogFragment.UwaziServerDialogHandler {
 
     private val isFromSettings by lazy { intent.getBooleanExtra(IS_FROM_SETTINGS, false)  }
     private val isOnboardLockSet by lazy { intent.getBooleanExtra(IS_ONBOARD_LOCK_SET, false)  }
@@ -156,6 +158,10 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         addFragment(OnBoardConnectedFragment(),R.id.rootOnboard)
     }
 
+    override fun onCreatedUwaziServer(server: UWaziUploadServer?) {
+        addFragment(OnBoardConnectedFragment(),R.id.rootOnboard)
+    }
+
     override fun onCollectServerDialogCreate(server: CollectServer?) {
         presenter.create(server)
     }
@@ -170,7 +176,16 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     override fun onTellaUploadServerDialogUpdate(server: TellaUploadServer?) {
     }
 
+    override fun onUwaziServerDialogCreate(server: UWaziUploadServer?) {
+        presenter.create(server)
+    }
+
+    override fun onUwaziServerDialogUpdate(server: UWaziUploadServer?) {
+       // presenter.create(server)
+    }
+
     override fun onDialogDismiss() {
+
     }
 
     private fun showCollectServerDialog() {

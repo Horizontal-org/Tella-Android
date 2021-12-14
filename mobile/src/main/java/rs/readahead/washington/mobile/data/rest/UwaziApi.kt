@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.data.rest
 
-import rs.readahead.washington.mobile.data.UWAZI_BASE_URL
+import rs.readahead.washington.mobile.data.ParamsNetwork.UWAZI_BASE_URL
 
 object UwaziApi : BaseApi() {
 

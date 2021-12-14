@@ -47,6 +47,7 @@ import rs.readahead.washington.mobile.domain.entity.FileUploadBundle;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
+import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
@@ -62,12 +63,13 @@ import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordReposito
 import rs.readahead.washington.mobile.domain.repository.IServersRepository;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadServersRepository;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
+import rs.readahead.washington.mobile.domain.repository.IUWAZIServersRepository;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
 
 public class DataSource implements IServersRepository, ITellaUploadServersRepository, ITellaUploadsRepository, ICollectServersRepository, ICollectFormsRepository,
-        IMediaFileRecordRepository {
+        IMediaFileRecordRepository, IUWAZIServersRepository {
     private static DataSource dataSource;
     private SQLiteDatabase database;
 
@@ -188,6 +190,17 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 .compose(applySchedulers());
     }
 
+    @Override
+    public Single<List<UWaziUploadServer>> listUwaziServers() {
+        return Single.fromCallable(() -> dataSource.getUwaziServers())
+                .compose(applySchedulers());
+    }
+
+    @Override
+    public Single<UWaziUploadServer> createUWAZIServer(UWaziUploadServer server) {
+        return Single.fromCallable(() -> dataSource.createUZIServer(server))
+                .compose(applySchedulers());
+    }
     @Override
     public Completable deleteAllServers() {
         return Completable.fromCallable((Callable<Void>) () -> {
@@ -492,6 +505,35 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return servers;
     }
 
+    //TODO ask djodje what isChecked state for ?
+    private List<UWaziUploadServer> getUwaziServers() {
+        Cursor cursor = null;
+        List<UWaziUploadServer> servers = new ArrayList<>();
+
+        try {
+            cursor = database.query(
+                    D.T_UWAZI_SERVER,
+                    new String[]{D.C_ID, D.C_NAME, D.C_URL, D.C_USERNAME, D.C_PASSWORD,D.C_COOKIES},
+                    null,
+                    null,
+                    null, null,
+                    D.C_ID + " ASC",
+                    null);
+
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                UWaziUploadServer server = cursorToUwaziServer(cursor);
+                servers.add(server);
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return servers;
+    }
     @Nullable
     private CollectServer getServer(long id) {
         try (Cursor cursor = database.query(
@@ -529,6 +571,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
         return TellaUploadServer.NONE;
     }
+
 
     @Nullable
     private CollectForm getBlankCollectForm(String formID) {
@@ -736,6 +779,18 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         values.put(D.C_CHECKED, server.isChecked() ? 1 : 0);
 
         server.setId(database.insert(D.T_TELLA_UPLOAD_SERVER, null, values));
+
+        return server;
+    }
+
+    private UWaziUploadServer createUZIServer(final UWaziUploadServer server) {
+        ContentValues values = new ContentValues();
+        values.put(D.C_NAME, server.getName());
+        values.put(D.C_URL, server.getUrl());
+        values.put(D.C_USERNAME, server.getUsername());
+        values.put(D.C_PASSWORD, server.getPassword());
+
+        server.setId(database.insert(D.T_UWAZI_SERVER, null, values));
 
         return server;
     }
@@ -1904,6 +1959,18 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return server;
     }
 
+    private UWaziUploadServer cursorToUwaziServer(Cursor cursor) {
+        UWaziUploadServer server = new UWaziUploadServer();
+        server.setId(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID)));
+        server.setName(cursor.getString(cursor.getColumnIndexOrThrow(D.C_NAME)));
+        server.setUrl(cursor.getString(cursor.getColumnIndexOrThrow(D.C_URL)));
+        server.setUsername(cursor.getString(cursor.getColumnIndexOrThrow(D.C_USERNAME)));
+        server.setPassword(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PASSWORD)));
+        server.setCookies(cursor.getString(cursor.getColumnIndexOrThrow(D.C_COOKIES)));
+
+        return server;
+    }
+
     private OdkForm cursorToOdkForm(Cursor cursor) {
         OdkForm odkForm = new OdkForm();
         odkForm.setFormID(cursor.getString(cursor.getColumnIndexOrThrow(D.C_FORM_ID)));
@@ -2041,6 +2108,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
         return setting;
     }
+
+
 
     private static class Setting {
         Integer intValue;

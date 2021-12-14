@@ -56,6 +56,10 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         db.execSQL(alterTableMediaFileUploadsAddMetadata());
         db.execSQL(alterTableMediaFileUploadsAddManual());
         db.execSQL(alterTableMediaFileUploadsAddServer());
+
+        //DBV9
+        db.execSQL(createTableUwaziServer());
+
     }
 
     @Override
@@ -84,6 +88,8 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 db.execSQL(alterTableMediaFileUploadsAddServer());
                 db.execSQL(alterTableMediaFileUploadsAddManual());
                 db.execSQL(alterTableMediaFileUploadsAddMetadata());
+            case 9:
+                db.execSQL(createTableUwaziServer());
         }
     }
 
@@ -92,6 +98,17 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_NAME, D.TEXT) + " , " +
                 cddl(D.C_URL, D.TEXT) + " , " +
+                cddl(D.C_USERNAME, D.TEXT) + " , " +
+                cddl(D.C_PASSWORD, D.TEXT) +
+                ");";
+    }
+
+    private String createTableUwaziServer() {
+        return "CREATE TABLE " + sq(D.T_UWAZI_SERVER) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_NAME, D.TEXT) + " , " +
+                cddl(D.C_URL, D.TEXT) + " , " +
+                cddl(D.C_COOKIES, D.TEXT) + " , " +
                 cddl(D.C_USERNAME, D.TEXT) + " , " +
                 cddl(D.C_PASSWORD, D.TEXT) +
                 ");";

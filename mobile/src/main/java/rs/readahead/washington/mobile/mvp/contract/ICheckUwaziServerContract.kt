@@ -13,7 +13,7 @@ class ICheckUwaziServerContract {
         fun hideServerCheckLoading()
         fun onNoConnectionAvailable()
         fun setSaveAnyway(enabled: Boolean)
-        fun getContext() : Context
+        fun getContext(): Context?
     }
 
     interface IPresenter : IBasePresenter {

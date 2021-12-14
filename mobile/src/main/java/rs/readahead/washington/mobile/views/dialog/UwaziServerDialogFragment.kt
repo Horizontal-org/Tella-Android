@@ -14,8 +14,6 @@ import android.widget.EditText
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDialogFragment
-import butterknife.ButterKnife
-import butterknife.Unbinder
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
@@ -27,17 +25,17 @@ import rs.readahead.washington.mobile.domain.entity.TellaUploadServer
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.mvp.contract.ICheckUwaziServerContract
-import rs.readahead.washington.mobile.mvp.presenter.CheckTUSServerPresenter
+import rs.readahead.washington.mobile.mvp.presenter.CheckUwaziServerPresenter
 import timber.log.Timber
 
 private const val TITLE_KEY = "tk"
 private const val ID_KEY = "ik"
 private const val OBJECT_KEY = "ok"
-public class UwaziServerDialogFragment  : AppCompatDialogFragment(), ICheckUwaziServerContract.IView {
-    val TAG = UwaziServerDialogFragment::class.java.simpleName
-    private var unbinder: Unbinder? = null
+
+
+class UwaziServerDialogFragment  : AppCompatDialogFragment(), ICheckUwaziServerContract.IView {
     private var validated = true
-    private var presenter: CheckTUSServerPresenter? = null
+    private  var presenter: CheckUwaziServerPresenter? = null
     private var securityProviderUpgradeAttempted = false
     private lateinit var binding : DialogCollectServerBinding
 
@@ -47,18 +45,23 @@ public class UwaziServerDialogFragment  : AppCompatDialogFragment(), ICheckUwazi
         fun onDialogDismiss()
     }
 
-    fun newInstance(server: TellaUploadServer?): TellaUploadServerDialogFragment? {
-        val frag = TellaUploadServerDialogFragment()
-        val args = Bundle()
-        if (server == null) {
-            args.putInt(TITLE_KEY, R.string.settings_servers_add_server_dialog_title)
-        } else {
-            args.putInt(TITLE_KEY, R.string.settings_docu_dialog_title_server_settings)
-            args.putSerializable(ID_KEY, server.id)
-            args.putSerializable(OBJECT_KEY, server)
+    companion object{
+        val TAG = UwaziServerDialogFragment::class.java.simpleName
+
+        @JvmStatic
+        fun newInstance(server: UWaziUploadServer?): UwaziServerDialogFragment {
+            val frag = UwaziServerDialogFragment()
+            val args = Bundle()
+            if (server == null) {
+                args.putInt(TITLE_KEY, R.string.settings_servers_add_server_dialog_title)
+            } else {
+                args.putInt(TITLE_KEY, R.string.settings_docu_dialog_title_server_settings)
+                args.putSerializable(ID_KEY, server.id)
+                args.putSerializable(OBJECT_KEY, server)
+            }
+            frag.arguments = args
+            return frag
         }
-        frag.arguments = args
-        return frag
     }
 
     override fun onCreateView(
@@ -66,13 +69,13 @@ public class UwaziServerDialogFragment  : AppCompatDialogFragment(), ICheckUwazi
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-       // val serverId = requireArguments().getLong(ID_KEY, 0)
-        //val obj: Any? = requireArguments().getSerializable(OBJECT_KEY)
+        val serverId = requireArguments().getLong(ID_KEY, 0) ?: 0
+        val obj: Any? = requireArguments().getSerializable(OBJECT_KEY)
         binding = DialogCollectServerBinding.inflate(layoutInflater)
         val dialogView = binding.root
-        unbinder = ButterKnife.bind(this, dialogView)
-       // presenter = CheckTUSServerPresenter(this)
-     /*   if (obj != null) {
+
+        presenter = CheckUwaziServerPresenter(this)
+        if (obj != null) {
             val server = obj as TellaUploadServer
             binding.name.setText(server.name)
             binding.url.setText(server.url)
@@ -81,15 +84,15 @@ public class UwaziServerDialogFragment  : AppCompatDialogFragment(), ICheckUwazi
                 binding.username.setText(server.username)
                 binding.password.setText(server.password)
             }
-        }*/
-        binding.toggleButton.setOnStateChangedListener { open: Boolean -> maybeShowAdvancedPanel() }
+        }
+        binding.toggleButton.setOnStateChangedListener { maybeShowAdvancedPanel() }
         maybeShowAdvancedPanel()
         binding.cancel.setOnClickListener { dismissDialog() }
         binding.back.setOnClickListener { dismissDialog() }
         binding.next.setOnClickListener {
             validate()
             if (validated) {
-              //  checkServer(copyFields(TellaUploadServer(serverId)), false)
+                checkServer(copyFields(UWaziUploadServer(serverId)))
             }
         }
         return dialogView
@@ -134,7 +137,6 @@ public class UwaziServerDialogFragment  : AppCompatDialogFragment(), ICheckUwazi
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        unbinder!!.unbind()
         if (presenter != null) {
             presenter!!.destroy()
             presenter = null
@@ -202,7 +204,7 @@ public class UwaziServerDialogFragment  : AppCompatDialogFragment(), ICheckUwazi
         //        getString(enabled ? R.string.settings_dialog_action_save_server_no_internet : R.string.action_ok));
     }
 
-    override fun getContext()  = requireContext()
+    override fun getContext()  = activity?.baseContext
 
     private fun validate() {
         validated = true
@@ -237,7 +239,7 @@ public class UwaziServerDialogFragment  : AppCompatDialogFragment(), ICheckUwazi
         }
     }
 
-    private fun checkServer(server: TellaUploadServer, connectionRequired: Boolean) {
+    private fun checkServer(server: UWaziUploadServer) {
         // lets go with sync solution as this will not influence UX too much here
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1 &&
             !securityProviderUpgradeAttempted && context != null
@@ -253,15 +255,15 @@ public class UwaziServerDialogFragment  : AppCompatDialogFragment(), ICheckUwazi
                 Timber.d(e)
             }
         }
-        if (presenter != null) {
-            presenter!!.checkServer(server, connectionRequired)
-        }
+
+        presenter?.checkServer(server)
+
     }
 
-    private fun copyFields(server: TellaUploadServer): TellaUploadServer {
+    private fun copyFields(server: UWaziUploadServer): UWaziUploadServer {
         server.name = binding.name.text.toString()
-        server.url = binding.url.text.toString().trim { it <= ' ' }
-        server.username = binding.username.text.toString().trim { it <= ' ' }
+        server.url = binding.url.text.toString().trim (' ')
+        server.username = binding.username.text.toString().trim(' ')
         server.password = binding.password.text.toString()
         return server
     }

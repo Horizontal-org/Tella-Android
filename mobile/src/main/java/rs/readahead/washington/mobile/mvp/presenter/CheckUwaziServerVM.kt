@@ -14,18 +14,6 @@ class CheckUwaziServerVM constructor(val uwaziRepository: UwaziRepository) : Vie
 
     fun checkServer(uwaziServer: UWaziUploadServer){
 
-        viewModelScope.launch {
-            uwaziRepository.login(LoginEntity(uwaziServer.name,uwaziServer.password))
-                .onStart {
-
-                }
-                .catch {
-
-                }
-                .collect {
-
-            }
-        }
       /*  val client = TUSClient(
             view.getContext().getApplicationContext(),
             server.getUrl(), server.getUsername(), server.getPassword()

@@ -19,6 +19,7 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.domain.entity.Server
 import rs.readahead.washington.mobile.domain.entity.ServerType
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer
+import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer
 import rs.readahead.washington.mobile.mvp.contract.ICollectBlankFormListRefreshPresenterContract
 import rs.readahead.washington.mobile.mvp.contract.ICollectServersPresenterContract
@@ -379,6 +380,7 @@ TellaUploadServerDialogHandler {
     override fun onCreateTUServerError(throwable: Throwable?) {
        // showToast(R.string.settings_docu_toast_fail_create_server)
     }
+
 
     override fun onRemovedTUServer(server: TellaUploadServer?) {
         servers.remove(server)

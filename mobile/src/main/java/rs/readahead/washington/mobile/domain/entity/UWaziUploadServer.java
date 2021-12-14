@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class UWaziUploadServer extends Server implements Serializable {
     public static final UWaziUploadServer NONE = new UWaziUploadServer();
-
+    private String cookies;
 
     public UWaziUploadServer() {
         this(0);
@@ -25,12 +25,20 @@ public class UWaziUploadServer extends Server implements Serializable {
             return true;
         }
 
-        if (! (obj instanceof TellaUploadServer)) {
+        if (! (obj instanceof UWaziUploadServer)) {
             return false;
         }
 
-        final TellaUploadServer that = (TellaUploadServer) obj;
+        final UWaziUploadServer that = (UWaziUploadServer) obj;
 
         return this.getId() == that.getId();
+    }
+
+    public String getCookies() {
+        return cookies;
+    }
+
+    public void setCookies(String cookies) {
+        this.cookies = cookies;
     }
 }

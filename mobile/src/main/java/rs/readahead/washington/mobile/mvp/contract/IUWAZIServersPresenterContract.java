@@ -1,0 +1,27 @@
+package rs.readahead.washington.mobile.mvp.contract;
+
+import android.content.Context;
+
+import java.util.List;
+
+import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
+
+public class IUWAZIServersPresenterContract {
+
+  public interface IView {
+        Context getContext();
+        void showLoading();
+        void hideLoading();
+        void onUwaziServersLoaded(List<UWaziUploadServer> uzServers);
+        void onLoadUwaziServersError(Throwable throwable);
+        void onCreatedUwaziServer(UWaziUploadServer server);
+        void onCreateUwaziServerError(Throwable throwable);
+    }
+
+    public interface IPresenter extends IBasePresenter {
+        void getUwaziServers();
+        void create(UWaziUploadServer server);
+        void update(UWaziUploadServer server);
+        void remove(UWaziUploadServer server);
+    }
+}

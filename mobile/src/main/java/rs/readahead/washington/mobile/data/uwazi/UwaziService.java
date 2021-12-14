@@ -11,6 +11,8 @@ import com.burgstaller.okhttp.basic.BasicAuthenticator;
 import com.burgstaller.okhttp.digest.CachingAuthenticator;
 import com.burgstaller.okhttp.digest.Credentials;
 import com.burgstaller.okhttp.digest.DigestAuthenticator;
+import com.ihsanbal.logging.Level;
+import com.ihsanbal.logging.LoggingInterceptor;
 
 import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
@@ -38,15 +40,18 @@ import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.TlsVersion;
+import okhttp3.internal.platform.Platform;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import rs.readahead.washington.mobile.BuildConfig;
 import rs.readahead.washington.mobile.data.http.QuotePreservingCookieJar;
 import rs.readahead.washington.mobile.data.openrosa.IOpenRosaApi;
 import rs.readahead.washington.mobile.data.openrosa.OpenRosaService;
 import rs.readahead.washington.mobile.data.repository.TLSSocketFactory;
+import rs.readahead.washington.mobile.data.rest.IUwaziApi;
 import rs.readahead.washington.mobile.data.rest.UwaziApi;
 import timber.log.Timber;
 
@@ -62,12 +67,11 @@ public class UwaziService {
         if (instance == null) {
             instance = new UwaziService.Builder().build();
         }
-
         return instance;
     }
 
     // todo: keep it like this for now, lets see what we need..
-    public static synchronized OpenRosaService newInstance(String username, String password) {
+    public static synchronized UwaziService newInstance() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
         // enable TLS 1.2 explicitly (allow androids < 5.1 to use it)
@@ -97,7 +101,8 @@ public class UwaziService {
         builder.cookieJar(cookieJar)
                 .addInterceptor(new AuthenticationCacheInterceptor(authCache));
 
-        return new OpenRosaService.Builder(builder).build();
+
+        return new UwaziService.Builder(builder).build();
     }
 
     public static synchronized void clearCache() {
@@ -109,8 +114,8 @@ public class UwaziService {
         this.retrofit = retrofit;
     }
 
-    public UwaziApi getServices() {
-        return retrofit.create(UwaziApi.class);
+    public IUwaziApi getServices() {
+        return retrofit.create(IUwaziApi.class);
     }
 
     public static class Builder {
@@ -131,9 +136,21 @@ public class UwaziService {
                     .protocols(Collections.singletonList(Protocol.HTTP_1_1))
                     .addInterceptor(new OpenRosaRequestInterceptor());
 
+            LoggingInterceptor logger = new LoggingInterceptor.Builder()
+                    .loggable(true)
+                    .setLevel(Level.BASIC)
+                    .log(Platform.INFO)
+                    .request("Request")
+                    .response("Response")
+                    .build();
+
             if (BuildConfig.DEBUG) {
                 okClientBuilder.addNetworkInterceptor(
-                        new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)); // or BODY
+                        new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
+                .addInterceptor(logger)
+                ; // or BODY
+
+
             }
         }
 
@@ -144,7 +161,7 @@ public class UwaziService {
             // build them
             Retrofit retrofit = retrofitBuilder
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .addConverterFactory(SimpleXmlConverterFactory.createNonStrict(new Persister(new AnnotationStrategy())))
+                    .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
             return new UwaziService(retrofit);
@@ -167,7 +184,7 @@ public class UwaziService {
             Request originalRequest = chain.request();
 
             Request newRequest = originalRequest.newBuilder()
-                    .header("X-OpenRosa-Version", "1.0")
+                    .addHeader("Content-Type", "application/json")
                     .header("Date", df.format(new Date()) + TZ + "+00:00") // OdkCollect does it like this, not "standard"
                     .build();
 

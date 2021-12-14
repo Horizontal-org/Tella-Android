@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 
@@ -31,16 +32,19 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.Server;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
+import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
 import rs.readahead.washington.mobile.mvp.contract.ICollectBlankFormListRefreshPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.ICollectServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.ITellaUploadServersPresenterContract;
+import rs.readahead.washington.mobile.mvp.contract.IUWAZIServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CollectBlankFormListRefreshPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.CollectServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.ServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.TellaUploadServersPresenter;
 import rs.readahead.washington.mobile.domain.entity.ServerType;
+import rs.readahead.washington.mobile.mvp.presenter.UwaziServersPresenter;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragment;
@@ -54,7 +58,9 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         ITellaUploadServersPresenterContract.IView,
         ICollectBlankFormListRefreshPresenterContract.IView,
         CollectServerDialogFragment.CollectServerDialogHandler,
-        TellaUploadServerDialogFragment.TellaUploadServerDialogHandler {
+        TellaUploadServerDialogFragment.TellaUploadServerDialogHandler,
+        UwaziServerDialogFragment.UwaziServerDialogHandler,
+        IUWAZIServersPresenterContract.IView{
 
     @BindView(R.id.collect_servers_list)
     LinearLayout listView;
@@ -76,10 +82,12 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     private ServersPresenter serversPresenter;
     private CollectServersPresenter collectServersPresenter;
+    private UwaziServersPresenter uwaziServersPresenter;
     private TellaUploadServersPresenter tellaUploadServersPresenter;
     private CollectBlankFormListRefreshPresenter refreshPresenter;
     private List<Server> servers;
     private List<TellaUploadServer> tuServers;
+    private List<UWaziUploadServer> uwaziServers;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -107,15 +115,14 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
         servers = new ArrayList<>();
         tuServers = new ArrayList<>();
-
+        uwaziServers = new ArrayList<>();
         serversPresenter = new ServersPresenter(this);
-
         collectServersPresenter = new CollectServersPresenter(this);
         collectServersPresenter.getCollectServers();
-
         tellaUploadServersPresenter = new TellaUploadServersPresenter(this);
         tellaUploadServersPresenter.getTUServers();
-
+        uwaziServersPresenter = new UwaziServersPresenter(this);
+        uwaziServersPresenter.getUwaziServers();
         createRefreshPresenter();
     }
 
@@ -146,6 +153,15 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     @Override
+    public void onUwaziServersLoaded(List<UWaziUploadServer> uzServers) {
+        listView.removeAllViews();
+        this.servers.addAll(uzServers);
+        createServerViews(servers);
+
+        uwaziServers = uzServers;
+    }
+
+    @Override
     public void onTUServersLoaded(List<TellaUploadServer> tellaUploadServers) {
         listView.removeAllViews();
         this.servers.addAll(tellaUploadServers);
@@ -163,7 +179,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     @Override
     public void onLoadTUServersError(Throwable throwable) {
-
+        Timber.d(throwable);
     }
 
     @Override
@@ -187,6 +203,19 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     @Override
     public void onCreateTUServerError(Throwable throwable) {
         DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_fail_create_server), true);
+    }
+
+    @Override
+    public void onCreatedUwaziServer(UWaziUploadServer server) {
+        servers.add(server);
+        listView.addView(getServerItem(server), servers.indexOf(server));
+
+        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_server_created), false);
+    }
+
+    @Override
+    public void onCreateUwaziServerError(Throwable throwable) {
+
     }
 
     @Override
@@ -317,15 +346,15 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 getString(R.string.settings_servers_add_server_dialog_title),
                 getString(R.string.settings_serv_add_server_selection_dialog_title),
                 getString(R.string.settings_serv_add_server_selection_dialog_description),
-                getString(R.string.pl_confirm),
                 getString(R.string.pl_back),
+                getString(R.string.pl_confirm),
                 getString(R.string.settings_docu_add_server_dialog_select_odk),
                 getString(R.string.settings_docu_add_server_dialog_select_tella_web),
                 getString(R.string.settings_docu_add_server_dialog_select_tella_uwazi),
                 new BottomSheetUtils.IServerChoiceActions() {
                     @Override
                     public void addUwaziServer() {
-                        showUwaziServerDialog();
+                        showUwaziServerDialog(null);
                     }
 
                     @Override
@@ -435,10 +464,10 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 .show(getSupportFragmentManager(), TellaUploadServerDialogFragment.TAG);
     }
 
-    private void showUwaziServerDialog() {
-        new UwaziServerDialogFragment().show(getSupportFragmentManager(), TellaUploadServerDialogFragment.TAG);
+    private void showUwaziServerDialog(@Nullable UWaziUploadServer server) {
+         UwaziServerDialogFragment.newInstance(server)
+                .show(getSupportFragmentManager(), UwaziServerDialogFragment.Companion.getTAG());
     }
-
     private void stopPresenting() {
         if (collectServersPresenter != null) {
             collectServersPresenter.destroy();
@@ -651,4 +680,21 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     public void onTellaUploadServerDialogUpdate(TellaUploadServer server) {
         tellaUploadServersPresenter.update(server);
     }
+
+    @Override
+    public void onUwaziServerDialogCreate(@Nullable UWaziUploadServer server) {
+        assert server != null;
+        uwaziServersPresenter.create(server);
+    }
+
+    @Override
+    public void onUwaziServerDialogUpdate(@Nullable UWaziUploadServer server) {
+
+    }
+
+    @Override
+    public void onLoadUwaziServersError(@NonNull Throwable throwable) {
+
+    }
+
 }
