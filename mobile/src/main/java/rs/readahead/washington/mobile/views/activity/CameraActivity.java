@@ -266,7 +266,7 @@ public class CameraActivity extends MetadataActivity implements
     public void onMetadataAttached(VaultFile vaultFile) {
         returnIntent(vaultFile);
 
-        scheduleFileUpload(capturedMediaFile);
+        //scheduleFileUpload(capturedMediaFile);
     }
 
     private void returnIntent(VaultFile vaultFile){

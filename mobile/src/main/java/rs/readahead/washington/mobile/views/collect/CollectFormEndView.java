@@ -129,7 +129,7 @@ public class CollectFormEndView extends FrameLayout {
 
         nameView.setText(R.string.collect_end_item_form_data);
         sizeView.setText(FileUtil.getFileSizeString(size));
-        iconView.setImageResource(R.drawable.ic_assignment_black_24dp);
+        iconView.setImageResource(R.drawable.ic_assignment_white_24dp);
 
         if (instance.getFormPartStatus() == FormMediaFileStatus.SUBMITTED ||
                 instance.getStatus() == CollectFormInstanceStatus.SUBMITTED || // back compatibility down
@@ -165,14 +165,14 @@ public class CollectFormEndView extends FrameLayout {
         nameView.setText(mediaFile.name);
         sizeView.setText(FileUtil.getFileSizeString(mediaFile.size));
 
-        int typeResId = R.drawable.ic_attach_file_black_24dp;
+        int typeResId = R.drawable.ic_attach_file_white_24dp;
 
         if (MediaFile.INSTANCE.isImageFileType(mediaFile.mimeType)) {
             typeResId = R.drawable.ic_menu_camera;
         } else if (MediaFile.INSTANCE.isVideoFileType(mediaFile.mimeType)) {
-            typeResId = R.drawable.ic_videocam_black_24dp;
+            typeResId = R.drawable.ic_videocam;
         } else if (MediaFile.INSTANCE.isAudioFileType(mediaFile.mimeType)) {
-            typeResId = R.drawable.ic_mic_black_24dp;
+            typeResId = R.drawable.ic_mic_white;
         }
 
         iconView.setImageResource(typeResId);
