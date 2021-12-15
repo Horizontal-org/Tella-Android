@@ -274,10 +274,12 @@ public class CameraActivity extends MetadataActivity implements
         if (intentMode == IntentMode.COLLECT) {
             capturedMediaFile.metadata = vaultFile.metadata;
             data.putExtra(MEDIA_FILE_KEY, capturedMediaFile);
+            setResult(RESULT_OK, data);
+            finish();
         } else {
             data.putExtra(C.CAPTURED_MEDIA_FILE_ID, vaultFile.metadata);
+            setResult(RESULT_OK, data);
         }
-        setResult(RESULT_OK, data);
     }
 
     @Override
