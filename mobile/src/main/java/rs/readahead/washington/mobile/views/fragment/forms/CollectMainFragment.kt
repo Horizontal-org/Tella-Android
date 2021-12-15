@@ -325,7 +325,12 @@ class CollectMainFragment : BaseFragment(){
                 if (Preferences.isAnonymousMode()) {
                     startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
                 } else {
-                    if (!hasLocationPermissions(activity)) requestLocationPermissions()
+                    if (!hasLocationPermissions(activity))
+                    {
+                        requestLocationPermissions()
+                    }else{
+                        startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
+                    }
                 }
             }
         })
