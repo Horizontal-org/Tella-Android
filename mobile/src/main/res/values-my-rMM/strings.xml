@@ -327,25 +327,6 @@
     <string name="camera_tab.title_video">ဗွီဒီယို</string>
   <string name="camera_tab.title_photo">ဓာတ်ပုံ</string>
   <string name="action_upload">တင်ပါ</string>
-  <string name="LockSelect_Action_Cancel">ပယ်ဖျက်ပါ</string>
-  <string name="LockSelect_Action_Confirm">အတည်ပြုပါ</string>
-  <string name="LockPatternConfirm_Action_Confirm">အတည်ပြုရန်ပုံစံကိုထပ်ဆွဲပါ</string>
-  <string name="LockSelect_Action_Continue">ဆက်သွားပါ</string>
-  <string name="LockPatternSet_Draw_Pattern">သော့ဖွင့်ပုံစံဆွဲပါ</string>
-  <string name="UnlockPattern_DrawToUnlock">သော့ဖွင့်ရန်ပုံစံဆွဲပါ</string>
-  <string name="LockPatternConfirm_Pattern_Confirmed">ယခု သင်သည် တဲလ်လာသော့ဖွင့်ရန်ပုံစံဖြစ်သည်</string>
-  <string name="LockPatternSet_Pattern_Recorded">ပုံစံမှတ်တမ်းတင်ပြီးပါပြီ</string>
-  <string name="UnlockPattern_PatternTooShort">အနည်းဆုံး အစက်တစ်စက်ချိတ်ဆက်ပါ၊ ကျေးဇူးပြု၍ပြန်ဆွဲပါ</string>
-  <string name="LockPatternSet_RecordingPattern">ပြီးသောအခါလက်ချောင်းကိုလွှတ်ပါ</string>
-  <string name="LockPatternSet_Action_Redraw">ပြန်ဆွဲပါ</string>
-  <string name="LockPatternConfirm_Message_WrongPattern">ပုံစံမှားယွင်းနေပါသည်
-၊ကျေးဇူးပြုပြီးထပ်မံကြိုးစားပါ</string>
-  <string name="LockPatternSet_Message_PatternStarted">ပုံစံစတင်ခဲ့သည်</string>
-  <string name="LockPatternSet_Message_PatternCleared">ပုံစံရှင်းလင်းသည်</string>
-  <string name="LockPatternSet_Message_CellAdded">ဆဲလ်ထည့်ပါ</string>
-  <string name="LockPatternSet_Message_CellAddedVerbose">ဆဲလ်၁၂၁ထည့်ပါ</string>
-  <string name="LockPatternSet_Message_PatternDetected">ပုံစံပြီးစီးခဲ့သည်</string>
-  <string name="UnLockPattern_PatternArea">ဧရိယာပုံစံ</string>
   <string name="collect.blank_action.desc_more.options">နောက်ထပ်ရွေးချယ်စရာများ</string>
   <string name="action_next">နောက်သို့</string>
   <string name="meter">%f မီတာ</string>

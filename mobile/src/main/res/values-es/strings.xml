@@ -330,24 +330,6 @@
     <string name="camera_tab.title_video">Vídeo</string>
   <string name="camera_tab.title_photo">Foto</string>
   <string name="action_upload">Subir</string>
-  <string name="LockSelect_Action_Cancel">Cancelar</string>
-  <string name="LockSelect_Action_Confirm">Confirmar</string>
-  <string name="LockPatternConfirm_Action_Confirm">Dibuja el patrón nuevamente para confirmar</string>
-  <string name="LockSelect_Action_Continue">Continuar</string>
-  <string name="LockPatternSet_Draw_Pattern">Dibuja un patrón de desbloqueo</string>
-  <string name="UnlockPattern_DrawToUnlock">Dibujar el patrón para desbloquear</string>
-  <string name="LockPatternConfirm_Pattern_Confirmed">Ahora, este es tu patrón para desbloquear Tella</string>
-  <string name="LockPatternSet_Pattern_Recorded">Patrón registrado</string>
-  <string name="UnlockPattern_PatternTooShort">Conecta al menos %d puntos, por favor redibuja</string>
-  <string name="LockPatternSet_RecordingPattern">Suelta el dedo cuando termines</string>
-  <string name="LockPatternSet_Action_Redraw">Redibujar</string>
-  <string name="LockPatternConfirm_Message_WrongPattern">Patrón incorrecto, por favor, inténtalo de nuevo</string>
-  <string name="LockPatternSet_Message_PatternStarted">Patrón iniciado</string>
-  <string name="LockPatternSet_Message_PatternCleared">Patrón eliminado</string>
-  <string name="LockPatternSet_Message_CellAdded">Celda añadida</string>
-  <string name="LockPatternSet_Message_CellAddedVerbose">Celda <xliff:g id="cell_index" example="3">%1$d</xliff:g> añadida</string>
-  <string name="LockPatternSet_Message_PatternDetected">Patrón completado</string>
-  <string name="UnLockPattern_PatternArea">Área del patrón</string>
   <string name="collect.blank_action.desc_more.options">Más opciones</string>
   <string name="action_next">Siguiente</string>
   <string name="meter">%f m</string>

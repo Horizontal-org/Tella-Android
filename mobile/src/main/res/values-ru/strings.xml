@@ -240,7 +240,6 @@
   </plurals>
   <string name="settings.docu_app.bar">Документации</string>
   <string name="settings.gen_select_documentation">Документации</string>
-  <string name="settings.prot_app.bar">Защита</string>
   <string name="settings.gen_select_protection">Защита</string>
   <string name="action_learn.more">Узнать больше</string>
   <string name="settings.servers_add.server_dialog.title">Добавить сервер</string>
@@ -338,24 +337,6 @@
     <string name="camera_tab.title_video">Видео</string>
   <string name="camera_tab.title_photo">Фото</string>
   <string name="action_upload">Загрузить</string>
-  <string name="LockSelect_Action_Cancel">Отменить</string>
-  <string name="LockSelect_Action_Confirm">Подтвердить</string>
-  <string name="LockPatternConfirm_Action_Confirm">Нарисуйте шаблон еще раз, чтобы подтвердить</string>
-  <string name="LockSelect_Action_Continue">Продолжить</string>
-  <string name="LockPatternSet_Draw_Pattern">Нарисуйте шаблон разблокировки</string>
-  <string name="UnlockPattern_DrawToUnlock">Нарисуйте шаблон для разблокировки</string>
-  <string name="LockPatternConfirm_Pattern_Confirmed">Теперь это ваш шаблон для разблокировки Tella</string>
-  <string name="LockPatternSet_Pattern_Recorded">Шаблон записан</string>
-  <string name="UnlockPattern_PatternTooShort">Соедините хотя бы %d точек, пожалуйста перерисуйте</string>
-  <string name="LockPatternSet_RecordingPattern">Отпустите палец, когда закончите</string>
-  <string name="LockPatternSet_Action_Redraw">Перерисовать</string>
-  <string name="LockPatternConfirm_Message_WrongPattern">Неправильный шаблон, попробуйте еще раз</string>
-  <string name="LockPatternSet_Message_PatternStarted">Шаблон начался</string>
-  <string name="LockPatternSet_Message_PatternCleared">Шаблон очищен</string>
-  <string name="LockPatternSet_Message_CellAdded">Ячейка добавлена</string>
-  <string name="LockPatternSet_Message_CellAddedVerbose">Ячейка <xliff:g id="cell_index" example="3"> %1$d </xliff:g> добавлена</string>
-  <string name="LockPatternSet_Message_PatternDetected">Шаблон завершен</string>
-  <string name="UnLockPattern_PatternArea">Область шаблона</string>
   <string name="collect.blank_action.desc_more.options">Больше вариантов</string>
   <string name="action_next">Дальше</string>
   <string name="meter">%f m</string>

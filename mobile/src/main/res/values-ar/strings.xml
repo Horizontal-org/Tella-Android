@@ -330,24 +330,6 @@
   <string name="camera_tab.title_video">فيديو</string>
   <string name="camera_tab.title_photo">صورة</string>
   <string name="action_upload">Upload</string>
-  <string name="LockSelect_Action_Cancel">Cancel</string>
-  <string name="LockSelect_Action_Confirm">Next</string>
-  <string name="LockPatternConfirm_Action_Confirm">Confirm your pattern</string>
-  <string name="LockSelect_Action_Continue">Next</string>
-  <string name="LockPatternSet_Draw_Pattern">Draw an unlock pattern</string>
-  <string name="UnlockPattern_DrawToUnlock">Draw pattern to unlock</string>
-  <string name="LockPatternConfirm_Pattern_Confirmed">Your new unlock pattern</string>
-  <string name="LockPatternSet_Pattern_Recorded">Pattern recorded</string>
-  <string name="UnlockPattern_PatternTooShort">Draw your pattern by\n connecting at least six dots</string>
-  <string name="LockPatternSet_RecordingPattern">Release finger when done</string>
-  <string name="LockPatternSet_Action_Redraw">Clear</string>
-  <string name="LockPatternConfirm_Message_WrongPattern">Incorrect pattern,\n please try again</string>
-  <string name="LockPatternSet_Message_PatternStarted">Pattern started</string>
-  <string name="LockPatternSet_Message_PatternCleared">Pattern cleared</string>
-  <string name="LockPatternSet_Message_CellAdded">Cell added</string>
-  <string name="LockPatternSet_Message_CellAddedVerbose">Cell <xliff:g id="cell_index" example="3">%1$d</xliff:g> added</string>
-  <string name="LockPatternSet_Message_PatternDetected">Pattern completed</string>
-  <string name="UnLockPattern_PatternArea">Pattern area.</string>
   <string name="collect.blank_action.desc_more.options">More options</string>
   <string name="action_next">Next</string>
   <string name="meter">%f m</string>
