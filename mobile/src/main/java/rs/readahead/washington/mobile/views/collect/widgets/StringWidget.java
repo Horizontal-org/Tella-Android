@@ -16,6 +16,8 @@ package rs.readahead.washington.mobile.views.collect.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.core.content.ContextCompat;
+
+import android.os.Build;
 import android.text.Selection;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -42,12 +44,15 @@ public class StringWidget extends QuestionWidget {
     protected boolean readOnly;
     protected EditText answer;
 
-
+    @SuppressLint("NewApi")
     public StringWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
         super(context, prompt);
 
         answer = new EditText(context);
         answer.setTextColor(getResources().getColor(R.color.colorPrimaryInverse));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            answer.setBackgroundTintList(context.getColorStateList(R.color.dialog_white_tint));
+        }
         answer.setId(QuestionWidget.newUniqueId());
         readOnly = prompt.isReadOnly() || readOnlyOverride;
 
