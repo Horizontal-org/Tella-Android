@@ -1,8 +1,10 @@
 package rs.readahead.washington.mobile.views.fragment.forms
 
 import android.Manifest
-import android.content.DialogInterface
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,9 +16,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -25,7 +29,6 @@ import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import butterknife.ButterKnife
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
 import org.javarosa.core.model.FormDef
 import permissions.dispatcher.*
@@ -38,15 +41,18 @@ import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus
 import rs.readahead.washington.mobile.javarosa.FormUtils
-import rs.readahead.washington.mobile.util.DialogsUtil
 import rs.readahead.washington.mobile.util.PermissionUtil
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.views.activity.CollectFormEntryActivity
 import rs.readahead.washington.mobile.views.activity.CollectHelpActivity
 import rs.readahead.washington.mobile.views.activity.FormSubmitActivity
 import rs.readahead.washington.mobile.views.adapters.ViewPagerAdapter
+import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
+import rs.readahead.washington.mobile.views.fragment.vault.attachements.WRITE_REQUEST_CODE
 import timber.log.Timber
+
+const val LOCATION_REQUEST_CODE = 1003
 
 class CollectMainFragment : BaseFragment(){
     private var blankFragmentPosition = 0
@@ -263,18 +269,33 @@ class CollectMainFragment : BaseFragment(){
         return super.onOptionsItemSelected(item)
     }
 
+    private fun hasLocationPermissions(context: Context): Boolean {
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        )
+            return true
+        return false
+    }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String?>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        /*CollectMainActivityPermissionsDispatcher.onRequestPermissionsResult(
-            this,
-            requestCode,
-            grantResults
-        )*/
+   private fun requestLocationPermissions() {
+        activity.changeTemporaryTimeout()
+        val permissions = arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+        ActivityCompat.requestPermissions(
+            //1
+            activity,
+            //2
+            permissions,
+            //3
+            LOCATION_REQUEST_CODE
+        )
     }
 
     private fun initObservers() {
@@ -304,7 +325,7 @@ class CollectMainFragment : BaseFragment(){
             if (Preferences.isAnonymousMode()) {
                 startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
             } else {
-                PermissionUtil.checkPermission(activity,getString(R.string.permission_dialog_expl_GPS))
+                if (!hasLocationPermissions(activity)) requestLocationPermissions()
             }
         })
         model.onToggleFavoriteSuccess.observe(viewLifecycleOwner, Observer {
@@ -352,16 +373,6 @@ class CollectMainFragment : BaseFragment(){
             request,
             getString(R.string.permission_dialog_expl_GPS)
         )
-    }
-
-    @OnPermissionDenied(Manifest.permission.ACCESS_FINE_LOCATION)
-    fun onFineLocationPermissionDenied() {
-        startCollectFormEntryActivity()
-    }
-
-    @OnNeverAskAgain(Manifest.permission.ACCESS_FINE_LOCATION)
-    fun onFineLocationNeverAskAgain() {
-        startCollectFormEntryActivity()
     }
 
     private fun showFormInstanceEntry(instanceId: Long) {
