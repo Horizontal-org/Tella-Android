@@ -66,7 +66,7 @@ public class VideoWidget extends MediaFileBinaryWidget {
     @Override
     public String setBinaryData(@NonNull Object data) {
         VaultFile vaultFile = (VaultFile) data;
-        setFilename(vaultFile.name);
+        setFilename(vaultFile.id);
         setFileId(vaultFile.id);
         showPreview();
         return getFilename();

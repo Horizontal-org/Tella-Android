@@ -68,6 +68,7 @@ public class ImageWidget extends MediaFileBinaryWidget {
     public String setBinaryData(@NonNull Object data) {
         VaultFile vaultFile = (VaultFile) data;
         setFilename(vaultFile.id);
+        setFileId(vaultFile.id);
         showPreview();
         return getFilename();
     }
