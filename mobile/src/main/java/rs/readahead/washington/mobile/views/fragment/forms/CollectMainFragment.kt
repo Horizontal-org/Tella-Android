@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -16,7 +15,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
@@ -31,7 +29,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
 import org.javarosa.core.model.FormDef
-import permissions.dispatcher.*
+import permissions.dispatcher.NeedsPermission
+import permissions.dispatcher.OnShowRationale
+import permissions.dispatcher.PermissionRequest
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.EventObserver
@@ -47,9 +47,7 @@ import rs.readahead.washington.mobile.views.activity.CollectFormEntryActivity
 import rs.readahead.washington.mobile.views.activity.CollectHelpActivity
 import rs.readahead.washington.mobile.views.activity.FormSubmitActivity
 import rs.readahead.washington.mobile.views.adapters.ViewPagerAdapter
-import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
-import rs.readahead.washington.mobile.views.fragment.vault.attachements.WRITE_REQUEST_CODE
 import timber.log.Timber
 
 const val LOCATION_REQUEST_CODE = 1003
@@ -253,7 +251,8 @@ class CollectMainFragment : BaseFragment(){
         if (disposables != null) {
             disposables.dispose()
         }
-        super.onDestroy()
+         model.onCreateFormController.value = null
+         super.onDestroy()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -321,11 +320,13 @@ class CollectMainFragment : BaseFragment(){
             activity.showToast(errorMessage)
         })
 
-        model.onCreateFormController.observe(viewLifecycleOwner, Observer {
-            if (Preferences.isAnonymousMode()) {
-                startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
-            } else {
-                if (!hasLocationPermissions(activity)) requestLocationPermissions()
+        model.onCreateFormController.observe(viewLifecycleOwner, Observer { form ->
+            form?.let {
+                if (Preferences.isAnonymousMode()) {
+                    startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
+                } else {
+                    if (!hasLocationPermissions(activity)) requestLocationPermissions()
+                }
             }
         })
         model.onToggleFavoriteSuccess.observe(viewLifecycleOwner, Observer {

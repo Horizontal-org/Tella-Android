@@ -28,7 +28,7 @@ import java.util.*
 
 class SharedFormsViewModel(private val mApplication: Application) : AndroidViewModel(mApplication) {
 
-    var onCreateFormController = MutableLiveData<FormController>()
+    var onCreateFormController = MutableLiveData<FormController?>()
     var onGetBlankFormDefSuccess = MutableLiveData<FormPair>()
     var onBlankFormsListResult = MutableLiveData<ListFormResult>()
     var onError = MutableLiveData<Throwable>()
