@@ -63,7 +63,8 @@ public class AudioWidget extends MediaFileBinaryWidget {
     @Override
     public String setBinaryData(@NonNull Object data) {
         VaultFile vaultFile = (VaultFile) data;
-        setFilename(vaultFile.id);
+        setFilename(vaultFile.name);
+        setFileId(vaultFile.id);
         showPreview();
         return getFilename();
     }
@@ -146,7 +147,7 @@ public class AudioWidget extends MediaFileBinaryWidget {
         captureButton.setVisibility(GONE);
         clearButton.setVisibility(VISIBLE);
 
-        attachmentPreview.showPreview(getFilename());
+        attachmentPreview.showPreview(getFileId());
         attachmentPreview.setEnabled(true);
         attachmentPreview.setVisibility(VISIBLE);
         separator.setVisibility(VISIBLE);

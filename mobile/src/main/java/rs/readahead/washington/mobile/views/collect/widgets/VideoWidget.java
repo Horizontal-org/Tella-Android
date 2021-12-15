@@ -67,6 +67,7 @@ public class VideoWidget extends MediaFileBinaryWidget {
     public String setBinaryData(@NonNull Object data) {
         VaultFile vaultFile = (VaultFile) data;
         setFilename(vaultFile.name);
+        setFileId(vaultFile.id);
         showPreview();
         return getFilename();
     }
@@ -162,7 +163,7 @@ public class VideoWidget extends MediaFileBinaryWidget {
         importButton.setVisibility(GONE);
         clearButton.setVisibility(VISIBLE);
 
-        attachmentPreview.showPreview(getFilename());
+        attachmentPreview.showPreview(getFileId());
         attachmentPreview.setEnabled(true);
         attachmentPreview.setVisibility(VISIBLE);
         separator.setVisibility(VISIBLE);

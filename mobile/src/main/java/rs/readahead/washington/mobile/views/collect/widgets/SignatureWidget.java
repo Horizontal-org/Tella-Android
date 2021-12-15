@@ -78,7 +78,8 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
     @Override
     public String setBinaryData(@NonNull Object data) {
         VaultFile vaultFile = (VaultFile) data;
-        setFilename(vaultFile.id);
+        setFilename(vaultFile.name);
+        setFileId(vaultFile.id);
         showPreview();
         return getFilename();
     }
