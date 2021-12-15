@@ -249,7 +249,9 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        menu.findItem(R.id.menu_item_more).setVisible(true);
+        if (menu.findItem(R.id.menu_item_more) != null){
+            menu.findItem(R.id.menu_item_more).setVisible(true);
+        }
         if (vaultFile.metadata != null) {menu.findItem(R.id.menu_item_metadata).setVisible(true);}
         toolbar.setStartTextTitle(vaultFile.name);
         finish();
