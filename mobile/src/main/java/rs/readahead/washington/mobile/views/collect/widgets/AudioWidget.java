@@ -79,11 +79,11 @@ public class AudioWidget extends MediaFileBinaryWidget {
 
         View view = inflater.inflate(R.layout.collect_widget_media, linearLayout, true);
 
-        captureButton = addButton(R.drawable.ic_mic_white_small);
+       /*captureButton = addButton(R.drawable.ic_mic_white_small);
         captureButton.setAlpha((float).5);
         captureButton.setId(QuestionWidget.newUniqueId());
         captureButton.setEnabled(!formEntryPrompt.isReadOnly());
-        captureButton.setOnClickListener(v -> showAudioRecorderActivity());
+        captureButton.setOnClickListener(v -> showAudioRecorderActivity());*/
 
         selectButton = addButton(R.drawable.ic_menu_gallery);
         selectButton.setAlpha((float).5);
@@ -144,7 +144,7 @@ public class AudioWidget extends MediaFileBinaryWidget {
 
     private void showPreview() {
         selectButton.setVisibility(GONE);
-        captureButton.setVisibility(GONE);
+        //captureButton.setVisibility(GONE);
         clearButton.setVisibility(VISIBLE);
 
         attachmentPreview.showPreview(getFileId());
@@ -155,7 +155,7 @@ public class AudioWidget extends MediaFileBinaryWidget {
 
     private void hidePreview() {
         selectButton.setVisibility(VISIBLE);
-        captureButton.setVisibility(VISIBLE);
+        //captureButton.setVisibility(VISIBLE);
         clearButton.setVisibility(GONE);
 
         attachmentPreview.setEnabled(false);

@@ -172,7 +172,7 @@ public class CollectFormEndView extends FrameLayout {
         } else if (MediaFile.INSTANCE.isVideoFileType(mediaFile.mimeType)) {
             typeResId = R.drawable.ic_videocam;
         } else if (MediaFile.INSTANCE.isAudioFileType(mediaFile.mimeType)) {
-            typeResId = R.drawable.ic_mic_white;
+            typeResId = R.drawable.ic_mic_white_small;
         }
 
         iconView.setImageResource(typeResId);
