@@ -6,7 +6,8 @@
         android:contentDescription="Home"
         android:title="Home" />
     <item
-        android:icon="@drawable/ic_forms"
+        android:id="@+id/form"
+        android:icon="@drawable/ic_list_numbered_24"
         android:contentDescription="Forms"
         android:title="Forms"
         android:visible="false"

@@ -14,6 +14,7 @@ import rs.readahead.washington.mobile.bus.event.MediaFileBinaryWidgetCleared;
 
 public abstract class MediaFileBinaryWidget extends QuestionWidget {
     private String filename;
+    private String fileId;
 
     public MediaFileBinaryWidget(Context context, @NonNull FormEntryPrompt formEntryPrompt) {
         super(context, formEntryPrompt);
@@ -35,5 +36,13 @@ public abstract class MediaFileBinaryWidget extends QuestionWidget {
 
     protected void setFilename(String filename) {
         this.filename = filename;
+    }
+
+    public String getFileId() {
+        return fileId;
+    }
+
+    public void setFileId(String fileId) {
+        this.fileId = fileId;
     }
 }

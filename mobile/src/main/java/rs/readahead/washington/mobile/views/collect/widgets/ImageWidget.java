@@ -68,6 +68,7 @@ public class ImageWidget extends MediaFileBinaryWidget {
     public String setBinaryData(@NonNull Object data) {
         VaultFile vaultFile = (VaultFile) data;
         setFilename(vaultFile.id);
+        setFileId(vaultFile.id);
         showPreview();
         return getFilename();
     }
@@ -94,13 +95,13 @@ public class ImageWidget extends MediaFileBinaryWidget {
         selectButton.setEnabled(!formEntryPrompt.isReadOnly());
         selectButton.setOnClickListener(v -> showAttachmentsActivity());
 
-        importButton = addButton(R.drawable.ic_smartphone_black_24dp);
+        importButton = addButton(R.drawable.ic_smartphone_white_24dp);
         importButton.setAlpha((float).5);
         importButton.setId(QuestionWidget.newUniqueId());
         importButton.setEnabled(!formEntryPrompt.isReadOnly());
         importButton.setOnClickListener(v -> importPhoto());
 
-        clearButton = addButton(R.drawable.ic_delete_grey_24px);
+        clearButton = addButton(R.drawable.ic_delete_white_24px);
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!formEntryPrompt.isReadOnly());
         clearButton.setOnClickListener(v -> clearAnswer());

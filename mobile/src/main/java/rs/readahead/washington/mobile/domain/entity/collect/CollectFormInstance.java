@@ -26,6 +26,7 @@ public class CollectFormInstance implements Serializable {
     private Map<String, FormMediaFile> widgetMediaFiles = new HashMap<>();
     private long clonedId; // id of submitted instance we are clone of
     private FormMediaFileStatus formPartStatus = FormMediaFileStatus.UNKNOWN;
+    private String[] widgetMediaFileIds;
 
 
     public long getId() {
@@ -126,6 +127,16 @@ public class CollectFormInstance implements Serializable {
 
     public List<FormMediaFile> getWidgetMediaFiles() {
         return new ArrayList<>(widgetMediaFiles.values());
+    }
+
+    public String[] getWidgetMediaFilesIds(){
+        return this.widgetMediaFileIds;
+    }
+
+    public void setWidgetMediaFilesIds(List<String> ids){
+        String[] iDs = new String[ids.size()];
+        ids.toArray(iDs);
+        this.widgetMediaFileIds = iDs;
     }
 
     public void setWidgetMediaFile(String name, FormMediaFile mediaFile) {

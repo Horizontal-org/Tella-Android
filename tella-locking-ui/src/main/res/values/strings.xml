@@ -46,5 +46,4 @@
     <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">Enter your current PIN to\n change your camouflage   </string>
     <string name="Settings_Action_SetLock">Lock</string>
     <string name="Settings_Message_LockChanged">Your lock has been changed!</string>
-
 </resources>

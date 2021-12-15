@@ -85,8 +85,8 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
         super.onDetachedFromWindow();
     }
 
-    public void showPreview(String filename) {
-        presenter.getMediaFile(filename);
+    public void showPreview(String id) {
+        presenter.getMediaFile(id);
     }
 
     @Override

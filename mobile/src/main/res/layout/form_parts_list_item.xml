@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -38,6 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="start"
+                android:textColor="@color/wa_white"
                 android:layout_marginBottom="2dp"
                 android:singleLine="true" />
 
@@ -52,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="start"
                     android:singleLine="true"
-                    android:textColor="@color/wa_gray"
+                    android:textColor="@color/wa_white"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"/>
 
                 <ProgressBar
@@ -76,17 +78,19 @@
 
             <CheckBox
                 android:id="@+id/partCheckBox"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:buttonTint="@color/radio_buttons_color"
+                android:visibility="gone" />
+            <!--android:background="@drawable/checkbox_background"-->
 
             <ImageView
                 android:id="@+id/partCheckIcon"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_check_circle_green"
                 android:contentDescription="@null"
-                android:visibility="gone"/>
+                android:src="@drawable/ic_check_circle_green"
+                android:visibility="gone" />
         </FrameLayout>
 
     </LinearLayout>

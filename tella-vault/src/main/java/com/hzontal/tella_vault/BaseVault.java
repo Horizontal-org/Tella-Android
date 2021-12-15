@@ -160,6 +160,10 @@ public abstract class BaseVault {
         return database.get(id);
     }
 
+    protected List<VaultFile> baseGet(String[] ids) {
+        return database.get(ids);
+    }
+
     protected VaultFile baseCreate(BaseVaultFileBuilder<?, ?> builder) throws VaultException {
         return baseCreate(builder, VaultDataSource.ROOT_UID);
     }

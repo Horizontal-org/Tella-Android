@@ -36,6 +36,7 @@ import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent;
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
+import rs.readahead.washington.mobile.mvp.contract.IHomeScreenPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.HomeScreenPresenter;
 import rs.readahead.washington.mobile.util.C;
@@ -44,6 +45,7 @@ import rs.readahead.washington.mobile.views.fragment.vault.attachements.Attachme
 
 @RuntimePermissions
 public class MainActivity extends MetadataActivity implements
+        IHomeScreenPresenterContract.IView,
         IMetadataAttachPresenterContract.IView {
     public static final String PHOTO_VIDEO_FILTER = "gallery_filter";
     @BindView(R.id.main_container)
@@ -57,6 +59,7 @@ public class MainActivity extends MetadataActivity implements
     private BottomNavigationView btmNavMain;
     private NavController navController;
     private AppBarConfiguration appBarConfiguration;
+    private long numOfCollectServers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +70,7 @@ public class MainActivity extends MetadataActivity implements
         //  setupToolbar();
         setupNavigation();
         handler = new Handler();
-
+        homeScreenPresenter = new HomeScreenPresenter(this);
         initSetup();
         // todo: check this..
         //SafetyNetCheck.setApiKey(getString(R.string.share_in_report));
@@ -200,6 +203,7 @@ public class MainActivity extends MetadataActivity implements
     protected void onResume() {
         super.onResume();
         btmNavMain.getMenu().findItem(R.id.home).setChecked(true);
+        homeScreenPresenter.countCollectServers();
         startLocationMetadataListening();
         mOrientationEventListener.enable();
     }
@@ -240,6 +244,28 @@ public class MainActivity extends MetadataActivity implements
         return this;
     }
 
+    @Override
+    public void onCountTUServersEnded(Long num) {
+
+    }
+
+    @Override
+    public void onCountTUServersFailed(Throwable throwable) {
+
+    }
+
+    @Override
+    public void onCountCollectServersEnded(Long num) {
+        this.numOfCollectServers = num;
+        maybeShowFormsMenu(num);
+        //homeScreenPresenter.countTUServers();
+    }
+
+    @Override
+    public void onCountCollectServersFailed(Throwable throwable) {
+
+    }
+
     private void stopPresenter() {
         if (homeScreenPresenter != null) {
             homeScreenPresenter.destroy();
@@ -275,6 +301,11 @@ public class MainActivity extends MetadataActivity implements
 
     public void selectNavMic() {
         btmNavMain.getMenu().findItem(R.id.mic).setChecked(true);
+    }
+
+    private void maybeShowFormsMenu(Long num){
+        btmNavMain.getMenu().findItem(R.id.form).setVisible(num>0);
+        invalidateOptionsMenu();
     }
 }
 

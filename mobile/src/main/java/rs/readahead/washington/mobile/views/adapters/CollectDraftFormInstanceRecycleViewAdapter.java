@@ -42,27 +42,16 @@ public class CollectDraftFormInstanceRecycleViewAdapter extends RecyclerView.Ada
         holder.organization.setText(instance.getServerName());
         holder.updated.setText(String.format(context.getString(R.string.collect_draft_meta_date_updated),
                 Util.getDateTimeString(instance.getUpdated())));
-        holder.instanceRow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MyApplication.bus().post(new ShowFormInstanceEntryEvent(instance.getId()));
-            }
-        });
-        holder.popupMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(context, v);
+        holder.instanceRow.setOnClickListener(v -> MyApplication.bus().post(new ShowFormInstanceEntryEvent(instance.getId())));
+        holder.popupMenu.setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(context, v);
 
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        MyApplication.bus().post(new DeleteFormInstanceEvent(instance.getId(), instance.getStatus()));
-                        return true;
-                    }
-                });
-                popup.inflate(R.menu.draft_forms_list_item_menu);
-                popup.show();
-            }
+            popup.setOnMenuItemClickListener(item -> {
+                MyApplication.bus().post(new DeleteFormInstanceEvent(instance.getId(), instance.getStatus()));
+                return true;
+            });
+            popup.inflate(R.menu.draft_forms_list_item_menu);
+            popup.show();
         });
     }
 

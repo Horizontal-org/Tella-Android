@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="@color/wa_light_gray"
+    android:background="@color/space_cadet"
     android:visibility="gone"
-    tools:context="rs.readahead.washington.mobile.views.fragment.BlankFormsListFragment">
+    tools:context="rs.readahead.washington.mobile.views.fragment.forms.BlankFormsListFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
             android:textColor="@color/wa_gray"
             android:textStyle="bold"
             android:textSize="14sp"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -36,7 +36,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/wa_transparent"
+                android:background="@color/space_cadet"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:paddingBottom="@dimen/fab_clear_padding">
@@ -59,11 +59,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/downloaded_forms_title"
-                    android:background="@drawable/shadow_border"
                     android:clipToPadding="false"
                     android:orientation="vertical"
                     android:scrollbarStyle="outsideOverlay"
                     android:scrollbars="vertical"
+                    android:background="@color/space_cadet"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
                 <TextView
@@ -84,7 +84,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/avaivable_forms_title"
-                    android:background="@drawable/shadow_border"
+                    android:background="@color/space_cadet"
                     android:clipToPadding="false"
                     android:orientation="vertical"
                     android:scrollbarStyle="outsideOverlay"

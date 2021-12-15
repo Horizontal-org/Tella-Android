@@ -3,16 +3,22 @@
   <string name="app_name">Tella</string>
   <string name="collect.blank_action_update.form">Обновить</string>
   <string name="settings.about_app.bar">О приложении &amp; Справка</string>
+  <string name="settings.gen_select_about">О приложении &amp; Справка</string>
   <string name="collect.form_exit.unsaved_dialog.title">Выйти из формы?</string>
   <string name="verification_prompt_dialog_title">Внимание</string>
   <string name="collect_tab.title_blank">Пустая</string>
   <string name="action_cancel">Отменить</string>
+  <string name="lock_set.pattern_expl">Для обеспечения максимальной безопасности, пожалуйста, задайте графический ключ для защиты входа в приложение. Он будет использован для входа в приложение Tella при каждом запуске, чтобы никто кроме Вас не мог получить доступ к данным. Ключ должна соединять минимум 6 точек.</string>
   <string name="settings_menu.item_contact">Свяжитесь с нами</string>
+  <string name="home_collect.button">Collect</string>
+  <string name="onboard_collect_heading">Collect</string>
   <string name="collect_dialog.text_download.progress">Загрузка в процессе…</string>
   <string name="collect_toast_download.completed">Загрузка завершена</string>
   <string name="action_delete">Удалить</string>
   <string name="collect.draft_tab.title">Черновик</string>
   <string name="collect.blank_action_download.form">Загрузить</string>
+  <string name="upload_toast_fail.finding.metadata.to.upload">Произошла ошибка при обнаружении верификационной  информации файла. Пожалуйста, повторите попытку</string>
+  <string name="upload_toast.fail.finding.file.to.upload">Не удалось найти файл для загрузки. Пожалуйста, попробуйте еще раз</string>
   <string name="settings_text_empty.field">Это поле не должно оставаться незаполненным.</string>
   <string name="home_toast_back.exit">Нажмите кнопку назад еще раз, чтобы выйти</string>
   <string name="settings.docu_toast_fail.load.list.connected.servers">При попытке получить список серверов произошла ошибка. Пожалуйста, повторите попытку</string>
@@ -20,10 +26,15 @@
   <string name="settings.docu_toast_fail.update.server">При попытке обновить настройки сервера произошла ошибка. Пожалуйста, повторите попытку</string>
   <string name="settings.docu_toast_fail.delete.server">При попытке удалить настройки сервера произошла ошибка. Пожалуйста, повторите попытку</string>
   <string name="settings.about_list.item_faq">Часто задаваемые вопросы</string>
+  <string name="gallery_app.bar">Галерея</string>
+  <string name="home_gallery.button">Галерея</string>
+  <string name="onboarding_action_create.pattern">Создать графический код</string>
   <string name="action_ok">OK</string>
   <string name="collect.form_toast_validation.error">Извините, этот ввод данных недействителен!</string>
   <string name="collect.form_error_response.mandatory">Извините, здесь требуется ввести данные!</string>
   <string name="homescreen_heading_quick.delete">Активизация режима Быстрого удаления</string>
+  <string name="permission_dialog.expl_mic">Для записи аудио-файлы предоставьте доступ к микрофону.
+</string>
   <string name="settings.about_list.item_privacy.policy">Политика конфиденциальности</string>
   <string name="recorder_toast_fail.recording">Аудио не было записано, пожалуйста, повторите попытку</string>
   <string name="recorder_content.desc_blinking.red.dot">ЗАПИСЬ АУДИО.</string>
@@ -44,6 +55,7 @@
   <string name="home_expl_cancel.quick.delete">Нажмите в любом месте, чтобы отменить</string>
   <string name="recorder_app.bar">Записать аудио</string>
   <string name="collect_app.bar">Collect</string>
+  <string name="home_action.expl_camera">Нажмите в любом месте, чтобы открыть камеру</string>
   <string name="settings.docu_field_username">Логин</string>
   <string name="collect.draft_meta_date.updated">Обновлено: %1$s</string>
   <string name="settings.about_app.version">Версия</string>
@@ -70,6 +82,7 @@
   <string name="collect_dialog.text_delete.sent.form">Этим действием Вы удалите формы только со своего устройства. Так как они уже были отправлены, данные останутся доступны на сервере.</string>
   <string name="collect_dialog.text_delete.draft.form">Черновик формы будет удален.</string>
   <string name="collect_toast_form.deleted">Форма удалена</string>
+  <string name="settings.gen_select_language">Язык</string>
   <string name="settings.lang_select.expl_default">Настроить Tella на работу на том же языке, что и мое устройство</string>
   <string name="settings.lang_select_default">По умолчанию</string>
   <string name="settings.lang_app.bar">Выбор языка</string>
@@ -81,8 +94,15 @@
   <string name="collect.sent_dialog.expl_discard.unsent.form">Отложенная отправка формы будет отменена.</string>
   <string name="action_discard">Отменить</string>
   <string name="collect.end_action_submit">Отправить</string>
+  <string name="gallery_toast_file.imported.from.device">Файл добавлен в вашу галерею</string>
   <string name="gallery_toast_fail.exporting.to.device">При экспорте файлов произошла ошибка. Пожалуйста, попробуйте еще раз</string>
   <string name="permission_dialog.expl_device.storage">Для экспорта мультимедиа файлов приложению требуется разрешение на доступ ко внешнему хранилищу</string>
+  <plurals name="gallery_toast_files.deleted">
+    <item quantity="one" tools:ignore="ImpliedQuantity">файл удален</item>
+    <item quantity="few">%1$d файлов удалены</item>
+    <item quantity="many">%1$d файлов удалены</item>
+    <item quantity="other">файлы</item>
+  </plurals>
   <string name="gallery_toast_fail.deleting.files">Ошибка при удалении файлов. Некоторые мультимедиа файлы не удалены</string>
   <plurals name="gallery_toast_files.exported">
     <item quantity="one" tools:ignore="ImpliedQuantity">%1$d файл сохранен на ваше устройство</item>
@@ -97,12 +117,14 @@
   <string name="gallery_dialog.expl_encrypting">Идет шифрование мультимедиа файлов…</string>
   <string name="gallery_save.to.device_dialog.progress.expl">Идет расшифровка мультимедиа файлов…</string>
   <string name="gallery_toast_fail.import">Ошибка при открытии галереи устройства для импорта</string>
+  <string name="permission_dialog.expl_camera.mic">Для получения мультимедиа файлов приложению требуется доступ к вашей камере и аудио.</string>
   <string name="gallery_toast_fail.saving.file">Ошибка при записи мультимедиа файла</string>
   <string name="collect_toast_fail.attaching.file.to.form">Ошибка при присоединении мультимедиа файла</string>
   <string name="collect_toast_fail.fetch.form.from.server.unknown.error">Ошибка при получении форм для заполнения</string>
   <string name="collect_toast_fail.fetch.form.from.server.display.error">Ошибка при получении форм для заполнения: %s</string>
   <string name="collect_toast_reason.fail.fetch.form.from.server">Не найдено</string>
   <string name="gallery_heading_files.from.Tella.gallery">Галерея Tella</string>
+  <string name="permission_dialog.expl_camera">Для предварительного просмотра приложению требуется доступ к вашей камере.</string>
   <string name="settings_select_general">Общие</string>
   <string name="collect.form_exit_dialog.expl">Ваш черновик не будет сохранен.</string>
   <string name="collect.form_exit_dialog.action_save.exit">СОХРАНИТЬ И ВЫЙТИ</string>
@@ -110,17 +132,30 @@
   <string name="settings.docu_error_not.valid.URL">Поле не является действительным URL-адресом веб-сайта</string>
   <string name="home_action.label_quick.delete">Удалить</string>
   <string name="gallery_subheading_sort.by">Сортировать</string>
+  <string name="gallery_subheading_show">Показать</string>
   <string name="gallery_list.item_newest.to.oldest">От новейшего к старейшему</string>
   <string name="gallery_list.item_oldest.to.newest">От старейшего к новейшему</string>
+  <string name="gallery_list.item_show.all.files">Все</string>
+  <string name="gallery_list.items_show.only.photos">Фото</string>
+  <string name="gallery_list.items_show.only.videos">Видео</string>
+  <string name="gallery_list.items_show.only.audio">Аудио</string>
   <string name="action_exit">Выход</string>
+  <string name="home_action.desc_quick.exit">Выход</string>
   <string name="settings.prot_select_camouflage">Маскировка</string>
+  <string name="onboard.camo_heading">Маскировка</string>
+  <string name="settings_dialog.action_save.server.no.internet">Сохранить в любом случае</string>
   <string name="settings.docu_error_wrong.credentials">Неправильные учетные данные, пожалуйста, проверьте имя пользователя и пароль</string>
   <string name="settings.docu_error_domain.doesnt.exit">URL-адрес сервера неверен.</string>
   <string name="settings.docu_error_unknown.connection.error">При попытке подключения к серверу произошла ошибка</string>
   <string name="settings.docu_error_no.internet">Tella не удалось подключиться к Интернету и подтвердить информацию о сервере</string>
   <string name="settings.docu_dialog.action_try.again.connecting">Попробуйте еще раз</string>
   <string name="settings.about_select_tutorial">Tutorial</string>
+  <string name="gallery_heading_selected_files">Выбранные файлы</string>
   <string name="settings.camo_expl">Выберите пользовательскую иконку и имя, чтобы лучше скрыть Tella на устройстве. Обратите внимание, что иконка Tella будет отображаться в меню настроек Android.</string>
+  <string name="settings.camo_camera4">Камера</string>
+  <string name="settings.camo_camera3">CameraPro</string>
+  <string name="settings.camo_camera2">SuperCam</string>
+  <string name="settings.camo_camera1">EasyCam</string>
   <string name="gallery_action.desc_save.to.device">Сохранить на устройстве</string>
   <string name="settings.docu_verification_action">Режим верификации</string>
   <string name="settings.docu_verification_action.expl">Обеспечивает возможность верификации мультимедийных файлов путем сбора информации о вашем устройстве и местоположении.</string>
@@ -175,11 +210,16 @@
   <string name="verification.info_field_location.provider">Идентификатор местоположения</string>
   <string name="verification.info_field_location.speed">Скорость определения местоположения</string>
   <string name="verification.info_field_cell.towers">Информация о вышке сотовой связи</string>
+  <string name="settings.camo_weather3">Погода сейчас</string>
+  <string name="settings.camo_weather2">Местная погода</string>
   <string name="settings.camo_calculator2">Калькулятор</string>
+  <string name="settings.camo_calculator1">Простая математика</string>
+  <string name="settings.camo_weather1">Погодные условия</string>
   <string name="verification.info_subheading_file.metadata">Файл</string>
   <string name="verification.info_subheading_device.metadata">Устройство</string>
   <string name="verification.info_subheading_context.metadata">Контекст</string>
   <string name="verification.info_field_metadata.not.available">Недоступно</string>
+  <string name="home_content.desc_background">Недоступно</string>
   <string name="verification.info_field_latitude">Широта</string>
   <string name="verification.info_field_longitude">Долгота</string>
   <string name="verification.info_field_altitude">Высота над уровнем моря</string>
@@ -198,6 +238,10 @@
     <item quantity="many">множество элементов</item>
     <item quantity="other">%d элементы</item>
   </plurals>
+  <string name="settings.docu_app.bar">Документации</string>
+  <string name="settings.gen_select_documentation">Документации</string>
+  <string name="settings.prot_app.bar">Защита</string>
+  <string name="settings.gen_select_protection">Защита</string>
   <string name="action_learn.more">Узнать больше</string>
   <string name="settings.servers_add.server_dialog.title">Добавить сервер</string>
     <string name="settings.prot_select_delete.forms">Удалить черновик и отправленные формы</string>
@@ -212,6 +256,7 @@
   <string name="collect_toast_fail.loading.form.instance">Ошибка при загрузке формы</string>
   <string name="collect_toast_fail.connection.too.weak">Подключение к Интернету слишком слабое</string>
   <string name="gallery_toast_file.encrypted">Файл зашифрован</string>
+  <string name="settings.docu_dialog.action_hide">Скрыть.</string>
   <string name="settings.docu_toast_disconnect.servers.delete">Формы и серверы были удалены</string>
   <string name="collect.help_expl_not.connected.to.server"><![CDATA[Для получения форм и отправки данных необходимо сначала подключиться к серверу. Спросите у своей организации информацию о сервере и настройте <a href=\"tella_scheme://open.collect.manage.servers.activity\">сервер здесь</a>.]]></string>
   <string name="collect.help_expl_odk"><![CDATA[Если Вы хотите создать свои собственные формы, <a href=\"https://hzontal.org/contact/\"> свяжитесь с нами </a> или используйте <a href=\"https://opendatakit.org/help/help-for-hire/\"> любой инструмент на основе Open Data Kit (ODK) </a>]]></string>
@@ -261,11 +306,18 @@
   <string name="verification.info_cell.towers.expl">Идентификационные номера всех вышек сотовой связи, к которым подключено устройство.</string>
   <string name="verification.info_wifi.expl">Название всех сетей Wi-Fi в непосредственной близости от устройства.</string>
   <string name="collect.blank_banner_forms.updated">Некоторые формы были обновлены. Нажмите кнопку обновления, чтобы получить последнюю версию.</string>
+  <string name="settings.docu_auto.upload.server.selection_select">Сервер</string>
+  <string name="upload_dialog.title_select.server">Выбор сервера</string>
   <string name="settings.docu_auto.upload.server.selection_dialog.expl">На какой сервер Вы хотите загрузить файлы?</string>
   <string name="settings.serv_add.server.selection_dialog.title">Какой тип сервера?</string>
   <string name="settings.docu_add.server_dialog.select_odk">Набор открытых данных (НОД)</string>
   <string name="settings.docu_add.server_dialog.expl">Выберите тип сервера, к которому Вы хотите подключиться. Если Вы не уверены, обратитесь в организацию, координирующую документацию.</string>
   <string name="settings.docu_add.server_dialog.select_tus">Прямая загрузка</string>
+  <string name="settings.docu_connect.to.servers_enable_action">Подключиться к серверам</string>
+  <string name="settings.docu_connect.to.servers_enable_action.expl">Управлять подключением к серверам для отправки данных.</string>
+  <string name="settings.docu_disable.servers_dialog.title">Отсоединить сервер (а)</string>
+  <string name="settings.docu_connect.to.servers_disable_dialog.expl">Вы хотите полностью удалить соединения с сервером или просто скрыть их? Скрытие сохранит информацию о сервере в памяти, так что Вы сможете легко восстановить соединение и отправить данные на сервер (а).</string>
+  <string name="settings.docu_delete.auto.server_dialog.expl">Если Вы удалите этот сервер, то больше не сможете отправлять файл.</string>
   <string name="play.audio_action.expl_plus15s">+15s</string>
   <string name="play.audio_action.expl_minus15s">-15s</string>
   <string name="recorder_meta_space.available.days">%1$d дней %2$d часов (%3$s) оставшееся</string>
@@ -276,19 +328,48 @@
   <string name="camera_video.resolution_select_1080p">Высокое (1080p)</string>
   <string name="camera_video.resolution_select_720p">Среднее (720p)</string>
   <string name="camera_video.resolution_select_480p">Низкое (480p)</string>
+  <string name="settings.docu_auto.upload_action">Автозагрузка</string>
   <string name="settings.docu_auto.upload_action.expl">Tella загрузит ваши фотографии, видео или аудиозаписи на сервер, как только они будут записаны или импортированы в Tella.</string>
   <string name="settings.docu_auto.delete_action">Автоудаление</string>
+  <string name="settings.docu_auto.delete_action.expl">Tella автоматически удалит файлы с вашего устройства, как только они будут загружены на сервер.</string>
   <string name="settings.docu_choose.auto.upload.server_dialog.expl">На какой сервер вы хотите автоматически загружать файлы?</string>
+  <string name="settings.docu_delete.upload.server_dialog.expl">Вы больше не сможете загружать файлы на этот сервер.</string>
     <string name="settings.docu_error_must.select.auto.upload.server">Вы должны выбрать сервер.</string>
     <string name="camera_tab.title_video">Видео</string>
   <string name="camera_tab.title_photo">Фото</string>
   <string name="action_upload">Загрузить</string>
+  <string name="LockSelect_Action_Cancel">Отменить</string>
+  <string name="LockSelect_Action_Confirm">Подтвердить</string>
+  <string name="LockPatternConfirm_Action_Confirm">Нарисуйте шаблон еще раз, чтобы подтвердить</string>
+  <string name="LockSelect_Action_Continue">Продолжить</string>
+  <string name="LockPatternSet_Draw_Pattern">Нарисуйте шаблон разблокировки</string>
+  <string name="UnlockPattern_DrawToUnlock">Нарисуйте шаблон для разблокировки</string>
+  <string name="LockPatternConfirm_Pattern_Confirmed">Теперь это ваш шаблон для разблокировки Tella</string>
+  <string name="LockPatternSet_Pattern_Recorded">Шаблон записан</string>
+  <string name="UnlockPattern_PatternTooShort">Соедините хотя бы %d точек, пожалуйста перерисуйте</string>
+  <string name="LockPatternSet_RecordingPattern">Отпустите палец, когда закончите</string>
+  <string name="LockPatternSet_Action_Redraw">Перерисовать</string>
+  <string name="LockPatternConfirm_Message_WrongPattern">Неправильный шаблон, попробуйте еще раз</string>
+  <string name="LockPatternSet_Message_PatternStarted">Шаблон начался</string>
+  <string name="LockPatternSet_Message_PatternCleared">Шаблон очищен</string>
+  <string name="LockPatternSet_Message_CellAdded">Ячейка добавлена</string>
+  <string name="LockPatternSet_Message_CellAddedVerbose">Ячейка <xliff:g id="cell_index" example="3"> %1$d </xliff:g> добавлена</string>
+  <string name="LockPatternSet_Message_PatternDetected">Шаблон завершен</string>
+  <string name="UnLockPattern_PatternArea">Область шаблона</string>
   <string name="collect.blank_action.desc_more.options">Больше вариантов</string>
   <string name="action_next">Дальше</string>
   <string name="meter">%f m</string>
   <string name="meter_per_second">%f м / с</string>
+  <string name="intro_welcome">Welcome to</string>
   <string name="tella">Tella</string>
+  <string name="intro_start">START</string>
   <string name="intro_document_protect"><![CDATA[Document & Protect]]></string>
+  <string name="onboard_setup_text">How would you like to set up Tella?</string>
+  <string name="onboard_full_setup">FULL SETUP</string>
+  <string name="onboard_quick_setup">QUICK SETUP</string>
+  <string name="onboard_setup_explore_custom">Explore and fully customize the app</string>
+  <string name="onboard_setup_start">Set the lock and get started immediately</string>
+  <string name="onboard_setup_customization">Have a customization code/file?</string>
   <string name="onboard_setup_lock">How would you like to lock Tella?</string>
   <string name="onboard_password">Password</string>
   <string name="onboard_password_description">The most secure option</string>
@@ -298,6 +379,7 @@
   <string name="onboard_pattern_description">The least secure option</string>
   <string name="settings.sec_app.bar">Security</string>
   <string name="settings.select_security">Security</string>
+    <string name="settings.select_customization">Customization</string>
     <string name="settings.select_lock_timeout">Lock Timeout</string>
     <string name="settings.sec_camera.mute_switch">Camera silent mode</string>
     <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
@@ -374,6 +456,7 @@
   <string name="mic_recording">Recording</string>
   <string name="mic_rename_recording">Rename recording</string>
   <string name="recorder_toast_recording.saved">The audio recording was saved to your Tella files</string>
+
   <string name="onboard.intro_title">Welcome to Tella</string>
   <string name="onboard.intro_get_started">Get started</string>
   <string name="onboard.intro_organization_code">I have a code from my organization</string>
@@ -404,6 +487,9 @@
   <string name="onboard.hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you use a PIN lock.</string>
   <string name="onboard.calculator_button">Select calculator</string>
   <string name="onboard.calculator_expl">Tella will be hidden behind a Calculator app. And you can use the calculator to do actual math! Unlock Tella by entering your PIN on the calculator.</string>
+  <string name="onboard.customization_title">Customization</string>
+  <string name="onboard.customization_subtitle">Enter your customization code</string>
+  <string name="onboard.customization_expl">Your organization may provide a code for you to set up Tella according to their settings.</string>
   <string name="settings.general_recent_files_switch_title">Recent files</string>
   <string name="settings.general_recent_files_switch_expl">Show previews of and a shortcut to your recent files on Tella’s homescreen.</string>
   <string name="settings.general_favorite_forms_switch_title">Favorite forms</string>
@@ -412,4 +498,6 @@
   <string name="settings.sec_confirm_camouflage_desc">To re-open Tella, look for the %s app icon among your apps.</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">To re-open Tella, look for the Calculator app icon among your apps. Unlock Tella by entering your PIN in the Calculator followed by “=”. </string>
   <string name="settings.sec_confirm_exit_tella">Exit Tella</string>
+  <string name="collect.outbox_tab.title">Outbox</string>
+  <string name="Collect_RemoveForm_SheetTitle">Remove form?</string>
 </resources>

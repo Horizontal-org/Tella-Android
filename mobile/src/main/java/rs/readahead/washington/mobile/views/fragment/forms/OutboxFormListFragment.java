@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.fragment;
+package rs.readahead.washington.mobile.views.fragment.forms;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -23,7 +23,7 @@ import rs.readahead.washington.mobile.views.adapters.CollectSubmittedFormInstanc
 import timber.log.Timber;
 
 
-public class SubmittedFormsListFragment extends FormListFragment implements
+public class OutboxFormListFragment extends FormListFragment implements
         ICollectFormInstanceListPresenterContract.IView {
 
     @BindView(R.id.submittFormInstances)
@@ -36,13 +36,13 @@ public class SubmittedFormsListFragment extends FormListFragment implements
     private CollectFormInstanceListPresenter presenter;
 
 
-    public static SubmittedFormsListFragment newInstance() {
-        return new SubmittedFormsListFragment();
+    public static OutboxFormListFragment newInstance() {
+        return new OutboxFormListFragment();
     }
 
     @Override
     public Type getFormListType() {
-        return Type.SUBMITTED;
+        return Type.OUTBOX;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class SubmittedFormsListFragment extends FormListFragment implements
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_submitted_forms_list, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_outbox_form_list, container, false);
         unbinder = ButterKnife.bind(this, rootView);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -69,7 +69,7 @@ public class SubmittedFormsListFragment extends FormListFragment implements
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        listSubmittedForms();
+        listOutboxForms();
     }
 
     @Override
@@ -95,9 +95,9 @@ public class SubmittedFormsListFragment extends FormListFragment implements
         Timber.d(error, getClass().getName());
     }
 
-    public void listSubmittedForms() {
+    public void listOutboxForms() {
         if (presenter != null) {
-            presenter.listSubmitFormInstances();
+            presenter.listOutboxFormInstances();
         }
     }
 
@@ -113,4 +113,5 @@ public class SubmittedFormsListFragment extends FormListFragment implements
             presenter = null;
         }
     }
+
 }

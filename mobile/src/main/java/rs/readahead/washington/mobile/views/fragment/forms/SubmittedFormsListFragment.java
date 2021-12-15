@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.fragment;
+package rs.readahead.washington.mobile.views.fragment.forms;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -19,40 +19,42 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.mvp.contract.ICollectFormInstanceListPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CollectFormInstanceListPresenter;
-import rs.readahead.washington.mobile.views.adapters.CollectDraftFormInstanceRecycleViewAdapter;
+import rs.readahead.washington.mobile.views.adapters.CollectSubmittedFormInstanceRecycleViewAdapter;
 import timber.log.Timber;
 
 
-public class DraftFormsListFragment extends FormListFragment implements
+public class SubmittedFormsListFragment extends FormListFragment implements
         ICollectFormInstanceListPresenterContract.IView {
-    @BindView(R.id.draftFormInstances)
+
+    @BindView(R.id.submittFormInstances)
     RecyclerView recyclerView;
-    @BindView(R.id.blank_draft_forms_info)
+    @BindView(R.id.blank_submitted_forms_info)
     TextView blankFormsInfo;
 
     private Unbinder unbinder;
-    private CollectDraftFormInstanceRecycleViewAdapter adapter;
+    private CollectSubmittedFormInstanceRecycleViewAdapter adapter;
     private CollectFormInstanceListPresenter presenter;
 
-    public static DraftFormsListFragment newInstance() {
-        return new DraftFormsListFragment();
+
+    public static SubmittedFormsListFragment newInstance() {
+        return new SubmittedFormsListFragment();
     }
 
     @Override
     public Type getFormListType() {
-        return Type.DRAFT;
+        return Type.SUBMITTED;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new CollectDraftFormInstanceRecycleViewAdapter();
+        adapter = new CollectSubmittedFormInstanceRecycleViewAdapter();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_draft_forms_list, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_submitted_forms_list, container, false);
         unbinder = ButterKnife.bind(this, rootView);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -67,7 +69,7 @@ public class DraftFormsListFragment extends FormListFragment implements
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        listDraftForms();
+        listSubmittedForms();
     }
 
     @Override
@@ -93,9 +95,9 @@ public class DraftFormsListFragment extends FormListFragment implements
         Timber.d(error, getClass().getName());
     }
 
-    public void listDraftForms() {
+    public void listSubmittedForms() {
         if (presenter != null) {
-            presenter.listDraftFormInstances();
+            presenter.listSubmitFormInstances();
         }
     }
 
@@ -111,4 +113,5 @@ public class DraftFormsListFragment extends FormListFragment implements
             presenter = null;
         }
     }
+
 }

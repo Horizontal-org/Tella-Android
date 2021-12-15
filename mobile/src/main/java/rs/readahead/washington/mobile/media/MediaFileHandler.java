@@ -364,7 +364,6 @@ public class MediaFileHandler {
                     .setType(VaultFile.Type.FILE)
                     .setName("Video "+ DateUtil.getDate(System.currentTimeMillis()) + ".mp4")
                     .setMimeType("video/mp4")
-
                     .setThumb(thumb);
 
             if (parent == null) {

@@ -79,6 +79,7 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
     public String setBinaryData(@NonNull Object data) {
         VaultFile vaultFile = (VaultFile) data;
         setFilename(vaultFile.id);
+        setFileId(vaultFile.id);
         showPreview();
         return getFilename();
     }
@@ -107,7 +108,7 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
         signatureButton.setEnabled(!formEntryPrompt.isReadOnly());
         signatureButton.setOnClickListener(v -> showSignatureActivity());
 
-        clearButton = addButton(R.drawable.ic_delete_grey_24px);
+        clearButton = addButton(R.drawable.ic_delete_white_24px);
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!formEntryPrompt.isReadOnly());
         clearButton.setOnClickListener(v -> clearAnswer());
