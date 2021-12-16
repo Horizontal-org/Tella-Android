@@ -86,7 +86,9 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
     }
 
     public void showPreview(String id) {
-        presenter.getMediaFile(id);
+        if (id != null) {
+            presenter.getMediaFile(id);
+        }
     }
 
     @Override

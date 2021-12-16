@@ -147,7 +147,7 @@ public class AudioWidget extends MediaFileBinaryWidget {
         //captureButton.setVisibility(GONE);
         clearButton.setVisibility(VISIBLE);
 
-        attachmentPreview.showPreview(getFileId());
+        attachmentPreview.showPreview(getFilename());
         attachmentPreview.setEnabled(true);
         attachmentPreview.setVisibility(VISIBLE);
         separator.setVisibility(VISIBLE);

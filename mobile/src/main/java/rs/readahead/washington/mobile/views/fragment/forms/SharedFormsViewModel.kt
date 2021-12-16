@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.hzontal.tella_vault.VaultFile
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -139,20 +140,30 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
     }
 
     fun getInstanceFormDef(instanceId: Long) {
+        var collectFormInstance: CollectFormInstance? = null
         disposables.add(keyDataSource.dataSource
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
             .flatMapSingle { dataSource: DataSource ->
                 dataSource.getInstance(
                     instanceId
                 )
-            }.subscribe(
-                { instance: CollectFormInstance ->
-                    onInstanceFormDefSuccess.postValue(
-                        maybeCloneInstance(instance)
+            }
+            .flatMapSingle { instance: CollectFormInstance ->
+                collectFormInstance = instance
+                MyApplication.rxVault[instance.widgetMediaFilesIds]
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ vaultFiles: List<VaultFile> ->
+                for (file in vaultFiles) {
+                    collectFormInstance?.setWidgetMediaFile(
+                        file.name,
+                        FormMediaFile.fromMediaFile(file)
                     )
                 }
-            ) { throwable: Throwable? ->
+                onInstanceFormDefSuccess.postValue(
+                    collectFormInstance?.let { maybeCloneInstance(it) }
+                )
+            }) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 onFormDefError.postValue(throwable)
             }
