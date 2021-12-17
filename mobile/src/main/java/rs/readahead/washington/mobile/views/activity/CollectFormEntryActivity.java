@@ -29,6 +29,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import permissions.dispatcher.NeedsPermission;
@@ -115,6 +117,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     private ProgressDialog progressDialog;
     private boolean deleteEnabled = false;
     private boolean draftAutoSaved = false;
+    private MicFragment micFragment = null;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -266,27 +269,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         switch (requestCode) {
             case C.MEDIA_FILE_ID:
                 VaultFile vaultFile = (VaultFile) data.getSerializableExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY);
-
-                if (currentScreenView instanceof CollectFormView) {
-                    CollectFormView cfv = (CollectFormView) currentScreenView;
-
-                    if (vaultFile != null) {
-                        String filename = cfv.setBinaryData(vaultFile);
-
-                        if (filename != null) {
-                            formParser.setWidgetMediaFile(filename, vaultFile);
-                            formParser.setTellaMetadataFields(cfv, vaultFile.metadata);
-                        } else {
-                            Timber.e("Binary data not set on waiting widget");
-                        }
-                    } else {
-                        formParser.removeWidgetMediaFile(cfv.clearBinaryData());
-                        formParser.clearTellaMetadataFields(cfv);
-                    }
-                }
-
-                formParser.stopWaitingBinaryData();
-                saveCurrentScreen(false);
+                putVaultFileInForm(vaultFile);
                 break;
 
             case C.SELECTED_LOCATION:
@@ -320,6 +303,29 @@ public class CollectFormEntryActivity extends MetadataActivity implements
                 }
                 break;
         }
+    }
+
+    private void putVaultFileInForm(VaultFile vaultFile){
+        if (currentScreenView instanceof CollectFormView) {
+            CollectFormView cfv = (CollectFormView) currentScreenView;
+
+            if (vaultFile != null) {
+                String filename = cfv.setBinaryData(vaultFile);
+
+                if (filename != null) {
+                    formParser.setWidgetMediaFile(filename, vaultFile);
+                    formParser.setTellaMetadataFields(cfv, vaultFile.metadata);
+                } else {
+                    Timber.e("Binary data not set on waiting widget");
+                }
+            } else {
+                formParser.removeWidgetMediaFile(cfv.clearBinaryData());
+                formParser.clearTellaMetadataFields(cfv);
+            }
+        }
+
+        formParser.stopWaitingBinaryData();
+        saveCurrentScreen(false);
     }
 
     @Override
@@ -1025,6 +1031,26 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     @Override
     public void openAudioRecorder() {
         entryLayout.setVisibility(View.GONE);
-        addFragment(MicFragment.newInstance(true),R.id.rootOnboard);
+        micFragment = MicFragment.newInstance(true);
+        addFragment(micFragment,R.id.rootCollectEntry);
+    }
+
+    @Override
+    public void returnFileToForm(VaultFile file) {
+
+        entryLayout.setVisibility(View.VISIBLE);
+
+        putVaultFileInForm(file);
+
+        if (micFragment != null) {
+            getSupportFragmentManager().beginTransaction().remove((Fragment) micFragment).commit();
+        }
+    }
+
+    @Override
+    public void stopWaitingForData() {
+        entryLayout.setVisibility(View.VISIBLE);
+        formParser.stopWaitingBinaryData();
+        saveCurrentScreen(false);
     }
 }

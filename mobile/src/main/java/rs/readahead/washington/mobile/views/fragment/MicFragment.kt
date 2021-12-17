@@ -19,13 +19,13 @@ import com.hzontal.tella_vault.filter.FilterType
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.mvp.contract.IAudioCapturePresenterContract
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePresenterContract
 import rs.readahead.washington.mobile.mvp.presenter.AudioCapturePresenter
 import rs.readahead.washington.mobile.mvp.presenter.MetadataAttacher
-import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulePresenter
 import rs.readahead.washington.mobile.util.C.RECORD_REQUEST_CODE
 import rs.readahead.washington.mobile.util.DateUtil.getDateTimeString
 import rs.readahead.washington.mobile.util.StringUtils
@@ -33,6 +33,7 @@ import rs.readahead.washington.mobile.views.activity.CameraActivity.VAULT_CURREN
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.base_ui.MetadataBaseLockFragment
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
+import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface
 
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -105,6 +106,11 @@ class MicFragment : MetadataBaseLockFragment(),
         freeSpace = view.findViewById(R.id.free_space)
         redDot = view.findViewById(R.id.red_dot)
         recordingName = view.findViewById(R.id.rec_name)
+
+        if (isCollect) {
+            mPlay.visibility = View.GONE
+        }
+
         mRecord.setOnClickListener {
             if (notRecording) {
                 if (hastRecordingPermissions(requireContext())) {
@@ -155,8 +161,15 @@ class MicFragment : MetadataBaseLockFragment(),
 
     override fun onStop() {
         activity.stopLocationMetadataListening()
-
         super.onStop()
+    }
+
+    override fun onDestroyView() {
+        if (isCollect) {
+            val activity = context as ICollectEntryInterface
+            activity.stopWaitingForData()
+        }
+        super.onDestroyView()
     }
 
     override fun onDestroy() {
@@ -178,9 +191,9 @@ class MicFragment : MetadataBaseLockFragment(),
 
     fun hastRecordingPermissions(context: Context): Boolean {
         if (ActivityCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.RECORD_AUDIO
-                ) == PackageManager.PERMISSION_GRANTED
+                context,
+                Manifest.permission.RECORD_AUDIO
+            ) == PackageManager.PERMISSION_GRANTED
         )
             return true
         return false
@@ -188,9 +201,9 @@ class MicFragment : MetadataBaseLockFragment(),
 
     fun requestRecordingPermissions(requestCode: Int) {
         requestPermissions(
-                arrayOf(
-                        Manifest.permission.RECORD_AUDIO
-                ), requestCode
+            arrayOf(
+                Manifest.permission.RECORD_AUDIO
+            ), requestCode
         )
     }
 
@@ -201,7 +214,7 @@ class MicFragment : MetadataBaseLockFragment(),
             disablePlay()
             handlingMediaFile = null
             cancelRecorder()
-            presenter.startRecording(recordingName.text.toString(),currentRootParent)
+            presenter.startRecording(recordingName.text.toString(), currentRootParent)
         } else {
             cancelPauseRecorder()
         }
@@ -225,18 +238,27 @@ class MicFragment : MetadataBaseLockFragment(),
     }
 
     override fun onAddSuccess(vaultFile: VaultFile) {
-        activity.attachMediaFileMetadata(vaultFile, metadataAttacher)
-        DialogUtils.showBottomMessage(
-            activity,
-            String.format(
-                getString(R.string.recorder_toast_recording_saved),
-                getString(R.string.app_name)
-            ), false
-        )
+        if (!isCollect) {
+            DialogUtils.showBottomMessage(
+                activity,
+                String.format(
+                    getString(R.string.recorder_toast_recording_saved),
+                    getString(R.string.app_name)
+                ), false
+            )
+        }
+
+        if (!Preferences.isAnonymousMode()) {
+            activity.attachMediaFileMetadata(vaultFile, metadataAttacher)
+        } else onMetadataAttached(vaultFile)
     }
 
     override fun onAddError(error: Throwable?) {
-        DialogUtils.showBottomMessage(activity, getString(R.string.gallery_toast_fail_saving_file), true)
+        DialogUtils.showBottomMessage(
+            activity,
+            getString(R.string.gallery_toast_fail_saving_file),
+            true
+        )
     }
 
     override fun onAvailableStorage(memory: Long) {
@@ -247,18 +269,16 @@ class MicFragment : MetadataBaseLockFragment(),
     }
 
     override fun onMetadataAttached(vaultFile: VaultFile?) {
-        /*val intent = Intent()
-
-        if (mode == AudioRecordActivity2.Mode.COLLECT) {
-            intent.putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, handlingMediaFile)
-        } else {
-            intent.putExtra(C.CAPTURED_MEDIA_FILE_ID, vaultFile!!.id)
-        }*/
-
-        //setResult(Activity.RESULT_OK, intent)
         mTimer.text = timeToString(0)
-
+        maybeReturnCollectRecording(vaultFile)
         //scheduleFileUpload(handlingMediaFile)
+    }
+
+    private fun maybeReturnCollectRecording(vaultFile: VaultFile?) {
+        if (isCollect) {
+            val activity = context as ICollectEntryInterface
+            activity.returnFileToForm(vaultFile)
+        }
     }
 
     override fun onMetadataAttachError(throwable: Throwable?) {
@@ -333,7 +353,7 @@ class MicFragment : MetadataBaseLockFragment(),
 
     private fun disableRecord() {
         mRecord.background =
-            AppCompatResources.getDrawable(requireContext(),R.drawable.red_circle_background)
+            AppCompatResources.getDrawable(requireContext(), R.drawable.red_circle_background)
         mRecord.setImageResource(R.drawable.stop_white)
         redDot.visibility = View.VISIBLE
         animator?.target = redDot
@@ -342,7 +362,10 @@ class MicFragment : MetadataBaseLockFragment(),
 
     private fun enableRecord() {
         mRecord.background =
-            AppCompatResources.getDrawable(requireContext(),R.drawable.audio_record_button_background)
+            AppCompatResources.getDrawable(
+                requireContext(),
+                R.drawable.audio_record_button_background
+            )
         mRecord.setImageResource(R.drawable.ic_mic_white)
         redDot.visibility = View.GONE
         animator?.end()
@@ -378,10 +401,10 @@ class MicFragment : MetadataBaseLockFragment(),
         button.alpha = .2f
     }
 
-     private fun openRecordings() {
-         bundle.putString(VAULT_FILTER, FilterType.AUDIO.name)
-         nav().navigate(R.id.action_micScreen_to_attachments_screen, bundle)
-     }
+    private fun openRecordings() {
+        bundle.putString(VAULT_FILTER, FilterType.AUDIO.name)
+        nav().navigate(R.id.action_micScreen_to_attachments_screen, bundle)
+    }
 
     private fun stopRecorder() {
         presenter.stopRecorder()
@@ -438,7 +461,7 @@ class MicFragment : MetadataBaseLockFragment(),
         }
     }
 
-    private fun updateRecordingName(){
+    private fun updateRecordingName() {
         recordingName.text = getString(R.string.mic_recording).plus(" ").plus(getDateTimeString())
     }
 }

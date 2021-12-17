@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:animateLayoutChanges="true"
+    android:background="@color/wa_purple"
     tools:context="rs.readahead.washington.mobile.views.activity.CollectMainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -25,7 +26,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
-        android:id="@+id/rootOnboard"
+        android:id="@+id/rootCollectEntry"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
