@@ -70,11 +70,14 @@ import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.views.collect.CollectFormEndView;
 import rs.readahead.washington.mobile.views.collect.CollectFormView;
 import rs.readahead.washington.mobile.views.custom.FormSubmitButtonView;
+import rs.readahead.washington.mobile.views.fragment.MicFragment;
+import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface;
 import timber.log.Timber;
 
 
 @RuntimePermissions
 public class CollectFormEntryActivity extends MetadataActivity implements
+        ICollectEntryInterface,
         IQuestionAttachmentPresenterContract.IView,
         IFormParserContract.IView,
         IFormSaverContract.IView,
@@ -93,6 +96,8 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     Toolbar toolbar;
     @BindView(R.id.button_bottom_layout)
     ViewGroup buttonBottomLayout;
+    @BindView(R.id.entry_layout)
+    ViewGroup entryLayout;
 
     private Drawable upNavigationIcon;
 
@@ -1015,5 +1020,11 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     private void enableScreenTimeout() {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    @Override
+    public void openAudioRecorder() {
+        entryLayout.setVisibility(View.GONE);
+        addFragment(MicFragment.newInstance(true),R.id.rootOnboard);
     }
 }

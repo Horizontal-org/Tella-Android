@@ -38,7 +38,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 const val TIME_FORMAT: String = "%02d:%02d"
-
+private const val COLLECT_ENTRY = "collect_entry"
 
 class MicFragment : MetadataBaseLockFragment(),
     IAudioCapturePresenterContract.IView,
@@ -47,7 +47,7 @@ class MicFragment : MetadataBaseLockFragment(),
     //var RECORDER_MODE = "rm"
 
     private var animator: ObjectAnimator? = null
-
+    private var isCollect: Boolean = false
     private var notRecording = false
 
     private val UPDATE_SPACE_TIME_MS: Long = 60000
@@ -60,6 +60,16 @@ class MicFragment : MetadataBaseLockFragment(),
     private val presenter by lazy { AudioCapturePresenter(this) }
 
     private val bundle by lazy { Bundle() }
+
+    companion object {
+        @JvmStatic
+        fun newInstance(value: Boolean) =
+            MicFragment().apply {
+                arguments = Bundle().apply {
+                    putBoolean(COLLECT_ENTRY, value)
+                }
+            }
+    }
 
     lateinit var metadataAttacher: MetadataAttacher
     lateinit var mRecord: ImageButton
@@ -78,6 +88,13 @@ class MicFragment : MetadataBaseLockFragment(),
         val view = inflater.inflate(R.layout.fragment_mic, container, false)
         initView(view)
         return view
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            isCollect = it.getBoolean(COLLECT_ENTRY)
+        }
     }
 
     fun initView(view: View) {
@@ -152,7 +169,9 @@ class MicFragment : MetadataBaseLockFragment(),
 
     override fun onResume() {
         super.onResume()
-        (activity as MainActivity).selectNavMic()
+        if (!isCollect) {
+            (activity as MainActivity).selectNavMic()
+        }
         presenter.checkAvailableStorage()
     }
 
