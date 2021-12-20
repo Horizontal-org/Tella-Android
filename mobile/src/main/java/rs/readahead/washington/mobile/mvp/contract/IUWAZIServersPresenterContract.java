@@ -16,6 +16,10 @@ public class IUWAZIServersPresenterContract {
         void onLoadUwaziServersError(Throwable throwable);
         void onCreatedUwaziServer(UWaziUploadServer server);
         void onCreateUwaziServerError(Throwable throwable);
+        void onRemovedUwaziServer(UWaziUploadServer server);
+        void onRemoveUwaziServerError(Throwable throwable);
+        void onUpdatedUwaziServer(UWaziUploadServer server);
+        void onUpdateUwaziServerError(Throwable throwable);
     }
 
     public interface IPresenter extends IBasePresenter {

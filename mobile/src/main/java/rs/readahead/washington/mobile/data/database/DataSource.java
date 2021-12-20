@@ -201,6 +201,21 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return Single.fromCallable(() -> dataSource.createUZIServer(server))
                 .compose(applySchedulers());
     }
+
+    @Override
+    public Completable removeUwaziServer(long id) {
+        return Completable.fromCallable((Callable<Void>) () -> {
+            removeUzServer(id);
+            return null;
+        }).compose(applyCompletableSchedulers());
+    }
+
+    @Override
+    public Single<UWaziUploadServer> updateUwaziServer(UWaziUploadServer server) {
+        return Single.fromCallable(() -> dataSource.updateUzServer(server))
+                .compose(applySchedulers());
+    }
+
     @Override
     public Completable deleteAllServers() {
         return Completable.fromCallable((Callable<Void>) () -> {
@@ -1884,6 +1899,19 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return server;
     }
 
+    private UWaziUploadServer updateUzServer(final UWaziUploadServer server) {
+        ContentValues values = new ContentValues();
+        values.put(D.C_NAME, server.getName());
+        values.put(D.C_URL, server.getUrl());
+        values.put(D.C_USERNAME, server.getUsername());
+        values.put(D.C_PASSWORD, server.getPassword());
+        values.put(D.C_COOKIES, server.getCookies());
+
+        database.update(D.T_UWAZI_SERVER, values, D.C_ID + "= ?", new String[]{Long.toString(server.getId())});
+
+        return server;
+    }
+
     private void removeTUServerDB(long id) {
         database.delete(D.T_TELLA_UPLOAD_SERVER, D.C_ID + " = ?", new String[]{Long.toString(id)});
         deleteTable(D.T_MEDIA_FILE_UPLOAD);
@@ -1900,6 +1928,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         } finally {
             database.endTransaction();
         }
+    }
+    private void removeUzServer(long id){
+        database.delete(D.T_UWAZI_SERVER, D.C_ID + " = ?", new String[]{Long.toString(id)});
     }
 
     private void deleteTable(String table) {
@@ -1927,6 +1958,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         deleteTable(D.T_COLLECT_FORM_INSTANCE);
         deleteTable(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE);
         deleteTable(D.T_COLLECT_SERVER);
+        deleteTable(D.T_UWAZI_SERVER);
         deleteTable(D.T_TELLA_UPLOAD_SERVER);
         deleteTable(D.T_MEDIA_FILE_UPLOAD);
     }

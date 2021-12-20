@@ -21,7 +21,6 @@ import com.google.android.gms.security.ProviderInstaller
 import com.google.android.material.textfield.TextInputLayout
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.DialogCollectServerBinding
-import rs.readahead.washington.mobile.domain.entity.TellaUploadServer
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.mvp.contract.ICheckUwaziServerContract
@@ -76,7 +75,7 @@ class UwaziServerDialogFragment  : AppCompatDialogFragment(), ICheckUwaziServerC
 
         presenter = CheckUwaziServerPresenter(this)
         if (obj != null) {
-            val server = obj as TellaUploadServer
+            val server = obj as UWaziUploadServer
             binding.name.setText(server.name)
             binding.url.setText(server.url)
             if (server.name.isNotEmpty() && server.password.isNotEmpty()) {
@@ -212,7 +211,7 @@ class UwaziServerDialogFragment  : AppCompatDialogFragment(), ICheckUwaziServerC
         validateUrl(binding.url, binding.urlLayout)
         validateRequired(binding.username, binding.usernameLayout)
         validateRequired(binding.password, binding.passwordLayout)
-        // internetError.setVisibility(View.GONE);
+      //  binding.internetError.setVisibility(View.GONE);
     }
 
     private fun validateRequired(field: EditText?, layout: TextInputLayout?) {

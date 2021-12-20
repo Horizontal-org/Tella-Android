@@ -2,19 +2,14 @@ package rs.readahead.washington.mobile.views.activity;
 
 import static com.hzontal.tella_locking_ui.ConstantsKt.IS_CAMOUFLAGE;
 
-import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
-
 import android.view.View;
 
 import androidx.fragment.app.Fragment;
 
-import org.hzontal.shared_ui.appbar.ToolbarComponent;
 import org.jetbrains.annotations.NotNull;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable;

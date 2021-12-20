@@ -219,6 +219,37 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     @Override
+    public void onRemovedUwaziServer(UWaziUploadServer server) {
+        servers.remove(server);
+        listView.removeAllViews();
+        createServerViews(servers);
+        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_server_deleted), false);
+
+    }
+
+    @Override
+    public void onRemoveUwaziServerError(Throwable throwable) {
+        Timber.d(throwable);
+    }
+
+    @Override
+    public void onUpdatedUwaziServer(UWaziUploadServer server) {
+        int i = servers.indexOf(server);
+
+        if (i != -1) {
+            servers.set(i, server);
+            listView.removeViewAt(i);
+            listView.addView(getServerItem(server), i);
+            DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_server_updated), false);
+        }
+    }
+
+    @Override
+    public void onUpdateUwaziServerError(Throwable throwable) {
+        Timber.d(throwable);
+    }
+
+    @Override
     public void onRemovedTUServer(TellaUploadServer server) {
         servers.remove(server);
         listView.removeAllViews();
@@ -408,6 +439,10 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         showTellaUploadServerDialog(server);
     }
 
+    private void editUwaziServer(UWaziUploadServer uWaziUploadServer){
+        showUwaziServerDialog(uWaziUploadServer);
+    }
+
     private void removeCollectServer(final CollectServer server) {
         BottomSheetUtils.showConfirmSheet(
                 this.getSupportFragmentManager(),
@@ -565,18 +600,30 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private void editServer(Server server){
-        if (server.getServerType() == ServerType.ODK_COLLECT) {
-            editCollectServer((CollectServer) server);
-        } else {
-            editTUServer((TellaUploadServer) server);
+        switch (server.getServerType()) {
+            case ODK_COLLECT:
+                editCollectServer((CollectServer) server);
+                break;
+            case UWAZI:
+                editUwaziServer((UWaziUploadServer) server);
+                break;
+            default:
+                editTUServer((TellaUploadServer) server);
+                break;
         }
     }
 
     private void removeServer(Server server){
-        if (server.getServerType() == ServerType.ODK_COLLECT) {
-            collectServersPresenter.remove((CollectServer) server);
-        } else {
-            tellaUploadServersPresenter.remove((TellaUploadServer) server);
+        switch (server.getServerType()) {
+            case ODK_COLLECT:
+                collectServersPresenter.remove((CollectServer) server);
+                break;
+            case UWAZI:
+                uwaziServersPresenter.remove((UWaziUploadServer) server);
+                break;
+            default:
+                tellaUploadServersPresenter.remove((TellaUploadServer) server);
+                break;
         }
     }
 
@@ -689,12 +736,13 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     @Override
     public void onUwaziServerDialogUpdate(@Nullable UWaziUploadServer server) {
-
+        assert server != null;
+        uwaziServersPresenter.update(server);
     }
 
     @Override
     public void onLoadUwaziServersError(@NonNull Throwable throwable) {
-
+        Timber.d(throwable);
     }
 
 }
