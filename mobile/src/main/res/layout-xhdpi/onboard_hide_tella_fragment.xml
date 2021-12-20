@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/wa_purple">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineCenter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <ImageView
+        android:id="@+id/server_icon"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/sheet_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/ic_camouflage"
+        android:textColor="@color/wa_white"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/sheet_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/sheet_subtitle"
+        android:gravity="center"
+        android:padding="6dp"
+        android:text="@string/settings.servers_hide_tella_title"
+        android:layout_marginTop="@dimen/hide_tella_big_margin"
+        android:textColor="@color/wa_white"
+        android:fontFamily="@font/open_sans"
+        android:textSize="18sp"
+        tools:ignore="RtlSymmetry" />
+
+    <TextView
+        android:id="@+id/sheet_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/sheet_one_btn"
+        android:gravity="center"
+        android:padding="@dimen/hide_tella_small_margin"
+        android:text="@string/settings.servers_hide_tella_desc"
+        android:textColor="@color/wa_white"
+        android:fontFamily="@font/open_sans"
+        android:textSize="14sp"
+        tools:ignore="RtlSymmetry" />
+
+    <LinearLayout
+        android:id="@+id/sheet_one_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/hide_tella_small_button_height"
+        android:layout_marginTop="@dimen/hide_tella_small_margin"
+        android:layout_marginBottom="@dimen/hide_tella_small_margin"
+        android:background="@drawable/round_button_selector"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/hide_tella_big_margin"
+        android:paddingEnd="@dimen/hide_tella_big_margin"
+        android:layout_marginStart="21dp"
+        android:layout_marginEnd="21dp"
+        android:weightSum="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineCenter">
+
+        <ImageView
+            android:padding="@dimen/hide_tella_big_margin"
+            android:layout_marginTop="@dimen/hide_tella_small_margin"
+            android:layout_marginBottom="@dimen/hide_tella_small_margin"
+            android:layout_marginEnd="@dimen/hide_tella_big_margin"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="0.25"
+            android:gravity="start"
+            android:src="@drawable/ic_camo_name_and_icon"
+            android:contentDescription="@string/settings.servers_setup_change_name_icon_title" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.75"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title_btn_one"
+                android:layout_marginTop="@dimen/hide_tella_big_margin"
+                android:textAlignment="viewStart"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:fontFamily="@font/open_sans"
+                android:textColor="@color/wa_white"
+                android:text="@string/settings.servers_setup_change_name_icon_title"
+                android:textAllCaps="true"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_marginTop="@dimen/hide_tella_big_margin"
+                android:layout_marginBottom="@dimen/hide_tella_big_margin"
+                android:id="@+id/subtitle_btn_one"
+                android:layout_height="wrap_content"
+                android:textAlignment="viewStart"
+                android:layout_width="match_parent"
+                android:text="@string/settings.servers_setup_change_name_icon_subtitle"
+                android:fontFamily="@font/open_sans"
+                android:textColor="@color/wa_white"
+                android:textSize="12sp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sheet_two_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/hide_tella_big_button_height"
+        android:layout_marginTop="@dimen/hide_tella_small_margin"
+        android:layout_marginBottom="6dp"
+        android:layout_marginStart="21dp"
+        android:layout_marginEnd="21dp"
+        android:background="@drawable/round_button_selector"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/hide_tella_big_margin"
+        android:paddingEnd="@dimen/hide_tella_big_margin"
+        android:weightSum="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guidelineCenter"
+        app:layout_constraintHorizontal_chainStyle="packed">
+
+        <ImageView
+            android:padding="@dimen/hide_tella_big_margin"
+            android:layout_marginTop="@dimen/hide_tella_small_margin"
+            android:layout_marginBottom="@dimen/hide_tella_small_margin"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="0.3"
+            android:gravity="start"
+            android:src="@drawable/ic_notes_camo_real_app"
+            android:contentDescription="@string/settings.servers_setup_hide_behind_calculator_title" />
+
+        <LinearLayout
+            android:id="@+id/sheet_two_btn_label"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.70"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title_btn_two"
+                android:layout_marginTop="@dimen/hide_tella_big_margin"
+                android:textAlignment="viewStart"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:fontFamily="@font/open_sans"
+                android:textColor="@color/wa_white"
+                android:textAllCaps="true"
+                android:text="@string/settings.servers_setup_hide_behind_calculator_title"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/subtitle_btn_two"
+                android:layout_marginTop="@dimen/hide_tella_big_margin"
+                android:layout_marginBottom="@dimen/hide_tella_big_margin"
+                android:layout_height="wrap_content"
+                android:textAlignment="viewStart"
+                android:layout_width="match_parent"
+                android:fontFamily="@font/open_sans"
+                android:text="@string/settings.servers_setup_hide_behind_calculator_subtitle"
+                android:textColor="@color/wa_white"
+                android:textSize="12sp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/hide_behind_calc_not_possible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textAlignment="center"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/sheet_two_btn"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
+        android:text="@string/onboard.hide_behind_calculator_not_possible"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/wa_white"
+        android:fontFamily="@font/open_sans"
+        android:textSize="12sp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"/>
+
+    <TextView
+        style="@style/Unlock_White_Text_Back"
+        android:id="@+id/back_btn"
+        android:text="@string/LockSelect_Action_Back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

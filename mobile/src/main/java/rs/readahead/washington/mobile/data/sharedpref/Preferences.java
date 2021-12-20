@@ -150,6 +150,14 @@ public class Preferences {
         setBoolean(SharedPrefs.SHOW_RECENT_FILES, value);
     }
 
+    public static boolean isUpgradeTella2() {
+        return getBoolean(SharedPrefs.UPGRADE_TELLA_2, true);
+    }
+
+    public static void setUpgradeTella2(boolean value) {
+        setBoolean(SharedPrefs.UPGRADE_TELLA_2, value);
+    }
+
     public static boolean isCameraPreviewEnabled() {
         return getBoolean(SharedPrefs.ENABLE_CAMERA_PREVIEW, false);
     }

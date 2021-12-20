@@ -7,7 +7,7 @@
         android:title="Home" />
     <item
         android:id="@+id/form"
-        android:icon="@drawable/ic_forms"
+        android:icon="@drawable/ic_list_numbered_24"
         android:contentDescription="Forms"
         android:title="Forms"
         android:visible="false"
@@ -23,7 +23,6 @@
         android:contentDescription="Mic"
         android:title="Mic" />
     <item
-        android:id="@+id/reports"
         android:icon="@drawable/ic_reports"
         android:contentDescription="Reports"
         android:title="Reports"

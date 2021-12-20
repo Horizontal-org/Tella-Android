@@ -2,7 +2,6 @@ package com.hzontal.tella_locking_ui.ui.password
 
 import android.os.Bundle
 import android.view.KeyEvent
-import android.view.View
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -47,18 +46,18 @@ class PasswordUnlockActivity : BasePasswordActivity() {
                 backBtn = findViewById(R.id.backBtn)
                 backBtn.isVisible = true
                 backBtn.setOnClickListener { finish() }
-                passwordMsgTextView.text = getString(R.string.settings_current_password_msg)
+                passwordMsgTextView.text = getString(R.string.LockPasswordSet_Settings_EnterCurrentPassword)
             }
             ReturnActivity.CAMOUFLAGE.getActivityOrder() -> {
                 backBtn = findViewById(R.id.backBtn)
                 backBtn.isVisible = true
                 backBtn.setOnClickListener { finish() }
-                passwordMsgTextView.text = getString(R.string.settings_current_camo_password_msg)
+                passwordMsgTextView.text = getString(R.string.LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage)
             }
             else -> {
-                passwordMsgTextView.text = getText(R.string.enter_password_tella)
+                passwordMsgTextView.text = getText(R.string.UnlockPassword_Message_EnterPassword)
                 passwordEditText.onChange {
-                    passwordMsgTextView.text = getText(R.string.enter_password_tella)
+                    passwordMsgTextView.text = getText(R.string.UnlockPassword_Message_EnterPassword)
                 }
             }
         }
@@ -75,7 +74,7 @@ class PasswordUnlockActivity : BasePasswordActivity() {
 
             override fun onError(throwable: Throwable) {
                 Timber.d(throwable, "*** MainKeyStore.UnlockRegistry.IUnlocker.onError")
-                onFailureSetPassword(getString(R.string.incorrect_password_error_msg))
+                onFailureSetPassword(getString(R.string.LockPasswordSet_Message_Error_IncorrectPassword))
                 TellaKeysUI.getCredentialsCallback().onUnSuccessfulUnlock(TAG, throwable)
             }
         })

@@ -16,7 +16,9 @@ package rs.readahead.washington.mobile.views.collect.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.appcompat.widget.AppCompatCheckBox;
+
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
@@ -42,7 +44,10 @@ public class TriggerWidget extends QuestionWidget {
         super(context, prompt);
         this.prompt = prompt;
 
-        triggerButton = new AppCompatCheckBox(getContext());
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        triggerButton = (AppCompatCheckBox) inflater.inflate(R.layout.collect_checkbox_item, null);
+        triggerButton.setTextColor(getResources().getColor(R.color.wa_white));
+        triggerButton.setBackground(getResources().getDrawable(R.drawable.transparent_solid));
         triggerButton.setId(QuestionWidget.newUniqueId());
         triggerButton.setText(getContext().getString(R.string.collect_form_acknowledge_select_expl));
         triggerButton.setEnabled(!prompt.isReadOnly());

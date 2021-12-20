@@ -16,8 +16,8 @@ class ConfirmPasswordActivity : BasePasswordActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTopText(getString(R.string.confirm_password))
-        setMessageText(getString(R.string.confirm_password_msg))
+        setTopText(getString(R.string.LockPasswordConfirm_Message_ConfirmPassword))
+        setMessageText(getString(R.string.LockPasswordConfirm_Message_EnterPasswordAgain))
 
     }
 
@@ -40,7 +40,7 @@ class ConfirmPasswordActivity : BasePasswordActivity() {
                 }
             })
         } else
-            onFailureSetPassword(getString(R.string.confirm_password_error_msg))
+            onFailureSetPassword(getString(R.string.LockPasswordConfirm_Message_Error_PasswordsNotMatch))
 
     }
 

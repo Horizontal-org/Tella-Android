@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.StrictMode;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.evernote.android.job.JobManager;
@@ -53,6 +54,7 @@ import rs.readahead.washington.mobile.javarosa.PropertyManager;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.LocaleManager;
+import rs.readahead.washington.mobile.util.TellaUpgrader;
 import rs.readahead.washington.mobile.util.jobs.TellaJobCreator;
 import rs.readahead.washington.mobile.views.activity.ExitActivity;
 import rs.readahead.washington.mobile.views.activity.MainActivity;
@@ -74,6 +76,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         Intent intent;
         if (Preferences.isFirstStart()) {
             intent = new Intent(context, OnBoardingActivity.class);
+            Preferences.setUpgradeTella2(false);
         } else {
             intent = new Intent(context, MainActivity.class);
         }
@@ -236,17 +239,32 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         try {
             vault = new Vault(this, mainKeyHolder, vaultConfig);
             rxVault = new RxVault(this, vault);
+            if (Preferences.isUpgradeTella2()) {
+                Toast.makeText(context, "Hold tight while we transferring your files to the Vault!", Toast.LENGTH_LONG).show();
+                upgradeTella2(context);
+            }
         } catch (Exception e) {
             Timber.e(e);
         }
+
         startMainActivity(context);
+    }
+
+    private void upgradeTella2(Context context){
+        try {
+            byte[] key;
+            if ((key = getMainKeyHolder().get().getKey().getEncoded()) != null) {
+                TellaUpgrader.upgradeV2(context,key);
+            }
+        } catch (LifecycleMainKey.MainKeyUnavailableException e) {
+            Timber.d(e);
+        }
     }
 
     @Override
     public void onUnSuccessfulUnlock(String tag, Throwable throwable) {
         FirebaseCrashlytics.getInstance().recordException(throwable);
     }
-
 
     @Override
     public void onLockConfirmed(Context context) {

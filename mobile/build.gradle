@@ -18,8 +18,8 @@ android {
         minSdkVersion 19
         compileSdkVersion 29
         targetSdkVersion 30
-        versionCode 69
-        versionName "2.0.0-alpha8"
+        versionCode 71
+        versionName "2.0.0-alpha10"
         multiDexEnabled true
         // vectorDrawables.useSupportLibrary = true // don't care about apk size, care about crashes
     }
@@ -113,7 +113,8 @@ dependencies {
     implementation 'com.burgstaller:okhttp-digest:1.15'
 
     // collect
-    implementation group: 'org.getodk', name: 'javarosa', version: '3.0.3'
+    //implementation group: 'org.getodk', name: 'javarosa', version: '3.0.3'
+    implementation "org.opendatakit:opendatakit-javarosa:2.4.0"
     implementation 'net.sf.kxml:kxml2:2.3.0'
     implementation "commons-io:commons-io:2.4"
 
@@ -130,8 +131,6 @@ dependencies {
     implementation 'com.simplify:ink:1.0.2'
     implementation 'com.mikhaellopez:circularimageview:3.2.0'
     implementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
-    implementation 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:3.2.0'
-    implementation 'com.github.lzyzsd:circleprogress:1.2.1'
 
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}"
 

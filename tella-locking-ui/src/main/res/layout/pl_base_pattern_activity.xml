@@ -39,7 +39,7 @@
         android:id="@+id/pl_message_text"
         style="@style/Unlock_White_Text"
         android:layout_marginTop="20dp"
-        android:text="@string/pl_draw_pattern_msg"
+        android:text="@string/UnLockPattern_Message_DrawPattern"
         app:layout_constraintBottom_toTopOf="@+id/pl_pattern"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -67,7 +67,7 @@
         style="@style/Unlock_White_Text"
         android:layout_marginStart="34dp"
         android:layout_marginBottom="13dp"
-        android:text="@string/pl_cancel"
+        android:text="@string/LockSelect_Action_Cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -76,7 +76,7 @@
         style="@style/Unlock_White_Text"
         android:layout_marginEnd="34dp"
         android:layout_marginBottom="13dp"
-        android:text="@string/pl_continue"
+        android:text="@string/LockSelect_Action_Continue"
         android:textColor="@color/wa_white_40"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

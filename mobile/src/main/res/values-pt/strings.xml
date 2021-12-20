@@ -159,7 +159,6 @@
   <string name="collect.draft_expl_no.forms">Não há rascunhos de formulários a serem exibidos.</string>
   <string name="collect.sent_expl_no.forms">Não há formulários enviados a serem exibidos.</string>
   <string name="collect.blank_expl_no.forms">Não há formulários para mostrar. Toque no botão Atualizar para verificar se há formulários disponíveis nos servidores aos quais você está conectado(a).</string>
-  <string name="settings.camo_app.bar">Camuflagem</string>
   <string name="settings.camo_heading">Selecione um nome e logotipo diferentes</string>
   <string name="gallery_expl_empty">Não há arquivos para mostrar. Toque no botão + para importar arquivos.</string>
   <string name="collect.help_app.bar">Ajuda de Coletar</string>
@@ -234,29 +233,17 @@
   </plurals>
   <string name="settings.docu_app.bar">Documentação</string>
   <string name="settings.gen_select_documentation">Documentação</string>
-  <string name="settings.prot_app.bar">Proteção</string>
   <string name="settings.gen_select_protection">Proteção</string>
   <string name="action_learn.more">Saiba Mais</string>
   <string name="settings.servers_add.server_dialog.title">Adicionar servidor</string>
-  <string name="settings.prot_quick.delete_action">Ativar o botão EXCLUIR RÁPIDO</string>
-  <string name="settings.prot_quick.delete_action.expl">Mostra um botão deslizante na tela inicial para excluir rapidamente os dados do Tella em situações de urgência.</string>
-  <string name="settings.prot_select_delete.gallery">Excluir Galeria</string>
-  <string name="settings.prot_select.expl_delete.gallery">Isso excluirá todas as fotos, vídeos e gravações de áudio da Galeria Tella.</string>
-  <string name="settings.prot_select_delete.forms">Excluir os rascunhos e formulários enviados</string>
-  <string name="settings.prot_select.expl_delete.forms">Isso excluirá os rascunhos e os formulários enviados e todos os dados que eles contêm</string>
-  <string name="settings.prot_select_delete.servers">Excluir as configurações do servidor</string>
-  <string name="settings.prot_select.expl_delete.servers">Isso excluirá suas conexões com os servidores e todos os formulários associados a eles.</string>
-  <string name="settings.prot_select_delete.app">Excluir o aplicativo Tella</string>
-  <string name="settings.prot_select.expl_delete.app">O aplicativo e os dados que ele contém serão excluídos. Você vai receber a pergunta \"Deseja desinstalar o aplicativo?\" A menos que você confirme, Tella não será excluído.</string>
-  <string name="offline_dialog.title">Modo Offline</string>
-  <string name="offline_dialog.expl">No Modo Offline, todos os dados serão salvos para envio posterior. Esse recurso é útil para economizar o uso de dados móveis do celular ou se você tiver uma conexão ruim. Desabilite-o quando estiver pronto(a) para enviar os formulários.</string>
-  <string name="collect.form_action.desc_offline">Modo Offline</string>
+    <string name="settings.prot_select_delete.forms">Excluir os rascunhos e formulários enviados</string>
+    <string name="settings.prot_select_delete.servers">Excluir as configurações do servidor</string>
+    <string name="settings.prot_select_delete.app">Excluir o aplicativo Tella</string>
   <string name="collect.sent_action_edit.to.resend">Editar para reenviar</string>
   <string name="collect_toast_form.submitted">Formulário enviado</string>
   <string name="collect.end_heading_confirmation.form.submitted">Formulário enviado</string>
   <string name="settings.docu_add.server_field_password">Senha</string>
   <string name="settings.camo_error_fail.retrieve.app.name">O nome não está definido</string>
-  <string name="collect.end_toast_saved.for.later">Formulário salvo para envio posterior porque o Modo Off-line está ativado</string>
   <string name="collect.end_item_form.data">Dados do formulário</string>
   <string name="collect_toast_fail.loading.form.instance">Erro ao carregar o formulário. Por favor, tente novamente</string>
   <string name="collect_toast_fail.connection.too.weak">A sua conexão com a Internet é muito fraca para enviar o formulário. Por favor, tente novamente</string>
@@ -341,61 +328,10 @@
   <string name="settings.docu_auto.delete_action.expl">Tella excluirá automaticamente os arquivos do seu aparelho assim que eles forem carregados no servidor.</string>
   <string name="settings.docu_choose.auto.upload.server_dialog.expl">Para qual servidor você gostaria de enviar arquivos automaticamente?</string>
   <string name="settings.docu_delete.upload.server_dialog.expl">Você não poderá mais enviar arquivos para este servidor.</string>
-  <string name="home_upload.button">Carregar</string>
-  <string name="upload.main_meta_status.uploading">Carregando</string>
-  <string name="upload_meta_date.started">Iniciou em</string>
-  <string name="upload.main_action_more.details">Mais detalhes</string>
-  <plurals name="upload.main_meta_number.of.files">
-    <item quantity="one">%d arquivo</item>
-    <item quantity="other">%d arquivos</item>
-  </plurals>
-  <plurals name="upload.main_meta_number.of.files.uploaded">
-    <item quantity="one">%d arquivo enviado</item>
-    <item quantity="other">%d arquivos enviados</item>
-  </plurals>
-  <plurals name="upload.main_meta_minutes.left">
-    <item quantity="one">%d minuto restante</item>
-    <item quantity="other">%d minutos restantes</item>
-  </plurals>
-  <string name="upload.main_dialog.expl_clear.history">Isso excluirá a lista de envios anteriores.</string>
-  <string name="upload.main_stop.upload_dialog.expl">Você tem certeza de que deseja interromper o envio?</string>
-  <string name="upload.info_stop.upload_dialog.expl">Você tem certeza de que deseja interromper o envio?</string>
-  <string name="upload.info_app.bar">Carregar informações</string>
-  <string name="upload.info_meta_number.of.files">Número de arquivos</string>
-  <string name="upload.main_dialog.action_clear">Limpar</string>
-  <string name="upload.main_nothing.to.show">Não há envios anteriores a serem mostrados.</string>
-  <string name="upload.info_meta_date.completed">Concluído</string>
-  <string name="upload.info_meta_file.type">Tipo de arquivo</string>
-  <string name="upload.main_meta_status.attempting">Tentando se conectar</string>
-  <string name="upload.main_meta_less.minute.left">menos de um minuto restante</string>
-  <string name="upload.main_meta_status.stopped">Interrompido</string>
-  <string name="upload.main_meta_more.hour.left">mais de uma hora restante</string>
-  <string name="settings.docu_error_must.select.auto.upload.server">Você deve selecionar um servidor.</string>
-  <string name="upload.info_dialog.expl_delete.upload">Você tem certeza de que deseja apagar as informações de envio?</string>
-  <string name="upload.main_dialog.title_clear.history">Limpar o histórico de envios?</string>
-  <string name="settings.docu_auto.upload.metadata_action">Incluir informações de verificação</string>
-  <string name="settings.docu_auto.upload.metadata_action.expl">Se seus arquivos incluírem informações de verificação, elas serão carregadas automaticamente junto aos arquivos.</string>
-  <string name="camera_tab.title_video">Vídeo</string>
+    <string name="settings.docu_error_must.select.auto.upload.server">Você deve selecionar um servidor.</string>
+    <string name="camera_tab.title_video">Vídeo</string>
   <string name="camera_tab.title_photo">Foto</string>
   <string name="action_upload">Carregar</string>
-  <string name="pl_cancel">Cancelar</string>
-  <string name="pl_confirm">Confirmar</string>
-  <string name="pl_confirm_pattern">Desenhe o padrão novamente para confirmar</string>
-  <string name="pl_continue">Continuar</string>
-  <string name="pl_draw_pattern">Desenhe um padrão de desbloqueio</string>
-  <string name="pl_draw_pattern_to_unlock">Desenhe o padrão para desbloquear</string>
-  <string name="pl_pattern_confirmed">Agora, este é o seu padrão para desbloquear Tella</string>
-  <string name="pl_pattern_recorded">Padrão registrado</string>
-  <string name="pl_pattern_too_short">Conecte pelo menos %d pontos. Por favor, redesenhe</string>
-  <string name="pl_recording_pattern">Solte o dedo quando terminar</string>
-  <string name="pl_redraw">Redesenhar</string>
-  <string name="pl_wrong_pattern">Padrão incorreto. Por favor, tente novamente</string>
-  <string name="pl_access_pattern_start">Padrão iniciado</string>
-  <string name="pl_access_pattern_cleared">Padrão apagado</string>
-  <string name="pl_access_pattern_cell_added">Célula adicionada</string>
-  <string name="pl_access_pattern_cell_added_verbose">Célula <xliff:g id="cell_index" example="3"> %1$d </xliff:g> adicionada</string>
-  <string name="pl_access_pattern_detected">Padrão concluído</string>
-  <string name="pl_access_pattern_area">Área padrão</string>
   <string name="collect.blank_action.desc_more.options">Mais opções</string>
   <string name="action_next">Próximo</string>
   <string name="meter">%f m</string>
@@ -538,4 +474,6 @@
   <string name="settings.sec_confirm_camouflage_desc">To re-open Tella, look for the %s app icon among your apps.</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">To re-open Tella, look for the Calculator app icon among your apps. Unlock Tella by entering your PIN in the Calculator followed by “=”. </string>
   <string name="settings.sec_confirm_exit_tella">Exit Tella</string>
+  <string name="collect.outbox_tab.title">Outbox</string>
+  <string name="Collect_RemoveForm_SheetTitle">Remove form?</string>
 </resources>

@@ -164,7 +164,6 @@
   <string name="collect.draft_expl_no.forms">Нет черновиков форм для просмотра</string>
   <string name="collect.sent_expl_no.forms">Нет отправленных форм для просмотра</string>
   <string name="collect.blank_expl_no.forms">Нет форм для просмотра. Нажмите кнопку \"обновить\", чтобы проверить, есть ли доступные для заполнения формы на серверах, к которым Вы подключены.</string>
-  <string name="settings.camo_app.bar">Изменить внешний вид</string>
   <string name="settings.camo_heading">Выберите другое имя и логотип</string>
   <string name="gallery_expl_empty">Нет файлов для просмотра. Нажмите кнопку +, чтобы добавить или импортировать файлы</string>
   <string name="collect.help_app.bar">Справка Collect</string>
@@ -241,29 +240,17 @@
   </plurals>
   <string name="settings.docu_app.bar">Документации</string>
   <string name="settings.gen_select_documentation">Документации</string>
-  <string name="settings.prot_app.bar">Защита</string>
   <string name="settings.gen_select_protection">Защита</string>
   <string name="action_learn.more">Узнать больше</string>
   <string name="settings.servers_add.server_dialog.title">Добавить сервер</string>
-  <string name="settings.prot_quick.delete_action">Активировать кнопку БЫСТРОГО УДАЛЕНИЯ</string>
-  <string name="settings.prot_quick.delete_action.expl">Показывает скользящую кнопку на главном экране для быстрого удаления данных Tella в экстренных ситуациях.</string>
-  <string name="settings.prot_select_delete.gallery">Удалить галерею</string>
-  <string name="settings.prot_select.expl_delete.gallery">Этим Вы удалите все фотографии, видео и аудиозаписи из галереи Tella</string>
-  <string name="settings.prot_select_delete.forms">Удалить черновик и отправленные формы</string>
-  <string name="settings.prot_select.expl_delete.forms">Этим Вы удалите все черновики, отправленные формы и все содержащиеся в них данные.</string>
-  <string name="settings.prot_select_delete.servers">Очистить настройки сервера</string>
-  <string name="settings.prot_select.expl_delete.servers">Этим Вы удалите ваши подключения к серверам и все формы, связанные с ними.</string>
-  <string name="settings.prot_select_delete.app">Удалить Tella</string>
-  <string name="settings.prot_select.expl_delete.app">Этим Вы удалите приложение и содержащиеся в нем данные. Вас попросят подтвердить: \"Вы хотите удалить приложение?\" Если Вы не подтвердите свое намерение, Tella не будет удалена.</string>
-  <string name="offline_dialog.title">Автономный режим</string>
-  <string name="offline_dialog.expl">В автономном режиме все данные сохраняются для последующей отправки. Это нужно для экономии мобильного интернета или если у вас плохое соединение. Отключите, когда будете готовы отправить формы.</string>
-  <string name="collect.form_action.desc_offline">Автономный режим</string>
+    <string name="settings.prot_select_delete.forms">Удалить черновик и отправленные формы</string>
+    <string name="settings.prot_select_delete.servers">Очистить настройки сервера</string>
+    <string name="settings.prot_select_delete.app">Удалить Tella</string>
   <string name="collect.sent_action_edit.to.resend">Редактировать для повторной отправки</string>
   <string name="collect_toast_form.submitted">Форма отправлена</string>
   <string name="collect.end_heading_confirmation.form.submitted">Форма отправлена</string>
   <string name="settings.docu_add.server_field_password">Пароль</string>
   <string name="settings.camo_error_fail.retrieve.app.name">Имя не установлено</string>
-  <string name="collect.end_toast_saved.for.later">Форма сохранена для последующей отправки, поскольку активирован автономный режим</string>
   <string name="collect.end_item_form.data">Данные формы</string>
   <string name="collect_toast_fail.loading.form.instance">Ошибка при загрузке формы</string>
   <string name="collect_toast_fail.connection.too.weak">Подключение к Интернету слишком слабое</string>
@@ -348,67 +335,10 @@
   <string name="settings.docu_auto.delete_action.expl">Tella автоматически удалит файлы с вашего устройства, как только они будут загружены на сервер.</string>
   <string name="settings.docu_choose.auto.upload.server_dialog.expl">На какой сервер вы хотите автоматически загружать файлы?</string>
   <string name="settings.docu_delete.upload.server_dialog.expl">Вы больше не сможете загружать файлы на этот сервер.</string>
-  <string name="home_upload.button">Загрузить</string>
-  <string name="upload.main_meta_status.uploading">Загрузка</string>
-  <string name="upload_meta_date.started">Загрузка началась</string>
-  <string name="upload.main_action_more.details">Подробнее</string>
-  <plurals name="upload.main_meta_number.of.files">
-    <item quantity="one">%d file</item>
-    <item quantity="few">%d file</item>
-    <item quantity="many">%d files</item>
-    <item quantity="other"></item>
-  </plurals>
-  <plurals name="upload.main_meta_number.of.files.uploaded">
-    <item quantity="one">%d file uploaded</item>
-    <item quantity="few">%d file uploaded</item>
-    <item quantity="many">%d files uploaded</item>
-    <item quantity="other"></item>
-  </plurals>
-  <plurals name="upload.main_meta_minutes.left">
-    <item quantity="one" tools:ignore="ImpliedQuantity">минута осталась</item>
-    <item quantity="few">%d минут осталось</item>
-    <item quantity="many">%d минут осталось</item>
-    <item quantity="other">%d минут осталось</item>
-  </plurals>
-  <string name="upload.main_dialog.expl_clear.history">Это удалит список прошлых загрузок.</string>
-  <string name="upload.main_stop.upload_dialog.expl">Вы уверены, что хотите остановить загрузку?</string>
-  <string name="upload.info_stop.upload_dialog.expl">Вы уверены, что хотите остановить загрузку?</string>
-  <string name="upload.info_app.bar">Загрузить информацию</string>
-  <string name="upload.info_meta_number.of.files">Количество файлов:</string>
-  <string name="upload.main_dialog.action_clear">Очистить</string>
-  <string name="upload.main_nothing.to.show">Нет прошлых загрузок для отображения.</string>
-  <string name="upload.info_meta_date.completed">Завершено:</string>
-  <string name="upload.info_meta_file.type">Тип файла:</string>
-  <string name="upload.main_meta_status.attempting">Попытка подключиться</string>
-  <string name="upload.main_meta_less.minute.left">осталось меньше минуты</string>
-  <string name="upload.main_meta_status.stopped">Остановлен</string>
-  <string name="upload.main_meta_more.hour.left">осталось больше часа</string>
-  <string name="settings.docu_error_must.select.auto.upload.server">Вы должны выбрать сервер.</string>
-  <string name="upload.info_dialog.expl_delete.upload">Вы уверены, что хотите удалить информацию о загрузке?</string>
-  <string name="upload.main_dialog.title_clear.history">Очистить историю загрузок?</string>
-  <string name="settings.docu_auto.upload.metadata_action">Включить верификационную информацию</string>
-  <string name="settings.docu_auto.upload.metadata_action.expl">Если ваши файлы содержат верификационную информацию, она будет автоматически загружена вместе с вашими файлами.</string>
-  <string name="camera_tab.title_video">Видео</string>
+    <string name="settings.docu_error_must.select.auto.upload.server">Вы должны выбрать сервер.</string>
+    <string name="camera_tab.title_video">Видео</string>
   <string name="camera_tab.title_photo">Фото</string>
   <string name="action_upload">Загрузить</string>
-  <string name="pl_cancel">Отменить</string>
-  <string name="pl_confirm">Подтвердить</string>
-  <string name="pl_confirm_pattern">Нарисуйте шаблон еще раз, чтобы подтвердить</string>
-  <string name="pl_continue">Продолжить</string>
-  <string name="pl_draw_pattern">Нарисуйте шаблон разблокировки</string>
-  <string name="pl_draw_pattern_to_unlock">Нарисуйте шаблон для разблокировки</string>
-  <string name="pl_pattern_confirmed">Теперь это ваш шаблон для разблокировки Tella</string>
-  <string name="pl_pattern_recorded">Шаблон записан</string>
-  <string name="pl_pattern_too_short">Соедините хотя бы %d точек, пожалуйста перерисуйте</string>
-  <string name="pl_recording_pattern">Отпустите палец, когда закончите</string>
-  <string name="pl_redraw">Перерисовать</string>
-  <string name="pl_wrong_pattern">Неправильный шаблон, попробуйте еще раз</string>
-  <string name="pl_access_pattern_start">Шаблон начался</string>
-  <string name="pl_access_pattern_cleared">Шаблон очищен</string>
-  <string name="pl_access_pattern_cell_added">Ячейка добавлена</string>
-  <string name="pl_access_pattern_cell_added_verbose">Ячейка <xliff:g id="cell_index" example="3"> %1$d </xliff:g> добавлена</string>
-  <string name="pl_access_pattern_detected">Шаблон завершен</string>
-  <string name="pl_access_pattern_area">Область шаблона</string>
   <string name="collect.blank_action.desc_more.options">Больше вариантов</string>
   <string name="action_next">Дальше</string>
   <string name="meter">%f m</string>
@@ -551,4 +481,6 @@
   <string name="settings.sec_confirm_camouflage_desc">To re-open Tella, look for the %s app icon among your apps.</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">To re-open Tella, look for the Calculator app icon among your apps. Unlock Tella by entering your PIN in the Calculator followed by “=”. </string>
   <string name="settings.sec_confirm_exit_tella">Exit Tella</string>
+  <string name="collect.outbox_tab.title">Outbox</string>
+  <string name="Collect_RemoveForm_SheetTitle">Remove form?</string>
 </resources>

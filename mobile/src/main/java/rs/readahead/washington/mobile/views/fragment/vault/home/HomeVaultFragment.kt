@@ -198,9 +198,9 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             else -> {
                 BottomSheetUtils.showStandardSheet(
                     activity.supportFragmentManager,
-                    activity.getString(R.string.vault_export) + " " + vaultFile.name + "?",
-                    activity.getString(R.string.vault_viewer_other_msg),
-                    activity.getString(R.string.vault_export),
+                    activity.getString(R.string.Vault_Export_SheetAction) + " " + vaultFile.name + "?",
+                    activity.getString(R.string.Vault_ViewerOther_SheetDesc),
+                    activity.getString(R.string.Vault_Export_SheetAction),
                     activity.getString(R.string.action_cancel),
                     onConfirmClick = { exportVaultFiles(vaultFile) }
                 )
@@ -327,9 +327,9 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     override fun onGetFilesSuccess(files: List<VaultFile?>) {
-        if (!files.isNullOrEmpty() && Preferences.isShowRecentFiles()) {
+        if (!files.isNullOrEmpty()) {
             vaultAdapter.addRecentFiles(files)
-        } else {
+        }else{
             vaultAdapter.removeRecentFiles()
         }
     }

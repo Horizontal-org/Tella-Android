@@ -17,5 +17,6 @@ public class ICollectFormInstanceListPresenterContract {
     public interface IPresenter extends IBasePresenter {
         void listDraftFormInstances();
         void listSubmitFormInstances();
+        void listOutboxFormInstances();
     }
 }

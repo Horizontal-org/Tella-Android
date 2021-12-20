@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 
@@ -231,6 +232,16 @@ public class VaultDataSource implements IVaultDatabase {
 
     @Override
     public List<VaultFile> get(String[] ids) {
+        List<VaultFile> files = new ArrayList<>();
+
+        try {
+            for (String id : ids){
+               files.add(get(id));
+            }
+            return files;
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        }
         return null;
     }
 

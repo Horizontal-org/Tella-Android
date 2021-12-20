@@ -15,8 +15,9 @@ package rs.readahead.washington.mobile.views.collect.widgets;
 
 import android.content.Context;
 import androidx.appcompat.widget.AppCompatCheckBox;
+
 import android.text.method.LinkMovementMethod;
-import android.widget.CompoundButton;
+import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
 import org.javarosa.core.model.SelectChoice;
@@ -28,6 +29,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import java.util.ArrayList;
 import java.util.List;
 
+import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.util.StringUtils;
 
@@ -56,11 +58,13 @@ public class SelectMultiWidget extends QuestionWidget {
         // Layout holds the vertical list of check boxes
         LinearLayout choicesLayout = new LinearLayout(context);
         choicesLayout.setOrientation(LinearLayout.VERTICAL);
+        LayoutInflater inflater = LayoutInflater.from(getContext());
 
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
                 // no checkbox group so id by answer + offset
-                AppCompatCheckBox c = new AppCompatCheckBox(getContext());
+
+                AppCompatCheckBox c = (AppCompatCheckBox) inflater.inflate(R.layout.collect_checkbox_item, null);
                 c.setTag(i);
                 c.setId(QuestionWidget.newUniqueId());
                 c.setText(getChoiceDisplayName(prompt.getSelectChoiceText(items.get(i))));
@@ -68,6 +72,8 @@ public class SelectMultiWidget extends QuestionWidget {
                 //c.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
                 c.setFocusable(!prompt.isReadOnly());
                 c.setEnabled(!prompt.isReadOnly());
+
+                c.setTextColor(getResources().getColor(R.color.wa_white));
 
                 for (int vi = 0; vi < ve.size(); vi++) {
                     // match based on value, not key
@@ -80,12 +86,9 @@ public class SelectMultiWidget extends QuestionWidget {
                 checkBoxes.add(c);
 
                 // when clicked, check for readonly before toggling
-                c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (!checkBoxInit && formEntryPrompt.isReadOnly()) {
-                            buttonView.setChecked(! isChecked);
-                        }
+                c.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    if (!checkBoxInit && formEntryPrompt.isReadOnly()) {
+                        buttonView.setChecked(! isChecked);
                     }
                 });
 

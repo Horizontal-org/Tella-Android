@@ -7,18 +7,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
-        layout="@layout/app_bar_main2"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toTopOf="@id/btm_nav_main"
         app:layout_constraintTop_toTopOf="parent">
-
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_nav_host"
@@ -35,7 +28,7 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/btm_nav_main"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/main_navigation_bar_height"
         android:layout_gravity="bottom"
         app:labelVisibilityMode="labeled"
         app:elevation="0dp"

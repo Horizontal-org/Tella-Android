@@ -2,16 +2,17 @@ package rs.readahead.washington.mobile.bus.event;
 
 import rs.readahead.washington.mobile.bus.IEvent;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
+import rs.readahead.washington.mobile.domain.entity.collect.FormPair;
 
 
 public class ShowBlankFormEntryEvent implements IEvent {
-    private CollectForm form;
+    private FormPair form;
 
-    public ShowBlankFormEntryEvent(CollectForm form) {
+    public ShowBlankFormEntryEvent(FormPair form) {
         this.form = form;
     }
 
-    public CollectForm getForm() {
+    public FormPair getForm() {
         return form;
     }
 }

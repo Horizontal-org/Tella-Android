@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:textDirection="locale"
+    android:background="@color/wa_purple"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -17,7 +18,7 @@
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:textAllCaps="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="?android:attr/textColorPrimary"
+        android:textColor="@color/wa_white"
         android:textStyle="bold"/>
 
     <TextView
@@ -28,12 +29,11 @@
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:visibility="gone"
         android:text="@string/collect.end_subheading.expl_unchecked.items"
-        android:textColor="@color/wa_gray"/>
+        android:textColor="@color/wa_white"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/shadow_border"
         android:orientation="vertical">
 
         <TextView
@@ -43,6 +43,7 @@
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:textColor="@color/wa_white"
             android:ellipsize="end"/>
 
         <LinearLayout
@@ -59,13 +60,15 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"/>
+                android:layout_gravity="start"
+                android:textColor="@color/wa_white"/>
 
             <TextView
                 android:id="@+id/formSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"/>
+                android:layout_gravity="end"
+                android:textColor="@color/wa_white"/>
         </LinearLayout>
 
         <LinearLayout

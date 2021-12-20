@@ -11,7 +11,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         style="@style/Tella_Main_White_Text.Meduim"
-        android:text="@string/vault_favorite_forms"
+        android:text="@string/Vault_FavoriteForms_Title"
         android:textColor="@color/wa_white_90"
         android:letterSpacing="0.05"
         >

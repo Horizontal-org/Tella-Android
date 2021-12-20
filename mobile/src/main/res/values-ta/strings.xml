@@ -280,8 +280,6 @@ A toast notification informing the user that their files were successfully delet
   <string name="collect.sent_expl_no.forms">உங்களுக்கு காண்பிக்க சமர்ப்பிக்கப்பட்ட படிவங்கள் எதுவும் இல்லை.</string>
   <!-- Explanatory text displayed when the Collect main screen doesn't display any form. -->
   <string name="collect.blank_expl_no.forms">உங்களுக்கு காண்பிக்க படிவங்கள் எதுவும் இல்லை. நீங்கள் இணைக்கப்பட்ட சேவையகங்களில் படிவங்கள் உள்ளனவா என்பதை அறிய \"புத்தாக்க\" பொத்தானைத் தட்டவும்.</string>
-  <!-- The screen title (in the app bar) for the Camouflage feature in Settings > Protection > Camouflage -->
-  <string name="settings.camo_app.bar">உரு மறைப்பு</string>
   <!-- The heading of the Camouflage screen where the user selects how to hide the app. -->
   <string name="settings.camo_heading">வேறு பெயர் மற்றும் சின்னத்தை தேர்ந்தெடுக்கவும்</string>
   <string name="gallery_expl_empty">உங்களுக்குக் காண்பிக்க கோப்புகள் எதுவும் இல்லை. கோப்புகளை இறக்குமதி செய்ய + பொத்தானைத் தட்டவும்.</string>
@@ -417,8 +415,6 @@ A toast notification informing the user that their files were successfully delet
   <string name="settings.docu_app.bar">ஆவணமாக்கம்</string>
   <!-- The button in Settings to access the documentation settings -->
   <string name="settings.gen_select_documentation">ஆவணமாக்கம்</string>
-  <!-- The screen title (in the app bar) for the Settings > Protection menu -->
-  <string name="settings.prot_app.bar">பாதுகாப்பு</string>
   <!-- The button in Settings to access the protection settings -->
   <string name="settings.gen_select_protection">பாதுகாப்பு</string>
   <!-- A button to open a screen or webpage with more information -->
@@ -426,28 +422,15 @@ A toast notification informing the user that their files were successfully delet
   <!-- The button to add a connection to a server -->
   <string name="settings.servers_add.server_dialog.title">சேவையகத்தை சேர்</string>
   <!-- The name of the feature in Settings > Protection -->
-  <string name="settings.prot_quick.delete_action">\"விரைவு நீக்கு\" பொத்தானை இயக்கவும்</string>
-  <!-- The explanation of the Quick Delete feature in Settings > Protection -->
-  <string name="settings.prot_quick.delete_action.expl">அவசரகால சூழ்நிலைகளில் டெல்லா தரவை விரைவாக நீக்க டெல்லா பயன்பாடு முகப்புத் திரையில் ஒரு நெகிழ் பொத்தானைக் காட்டுகிறது.</string>
-  <!-- The checkbox to select what the 'Quick Delete' button deletes -->
-  <string name="settings.prot_select_delete.gallery">கேலரியை நீக்கு</string>
-  <!-- In the Settings protection screen, the explanation on what "Delete gallery" will do. -->
-  <string name="settings.prot_select.expl_delete.gallery">இது டெல்லா கேலரியில் இருந்து அனைத்து புகைப்படங்கள், வீடியோக்கள் மற்றும் ஆடியோ பதிவுகளை நீக்கும்.</string>
-  <!-- The checkbox to select what the 'Quick Delete' button deletes -->
+    <!-- The explanation of the Quick Delete feature in Settings > Protection -->
+    <!-- The checkbox to select what the 'Quick Delete' button deletes -->
+    <!-- In the Settings protection screen, the explanation on what "Delete gallery" will do. -->
+    <!-- The checkbox to select what the 'Quick Delete' button deletes -->
   <string name="settings.prot_select_delete.forms">வரைவு மற்றும் சமர்ப்பிக்கப்பட்ட படிவங்களை நீக்கு</string>
-  <string name="settings.prot_select.expl_delete.forms">இது வரைவு மற்றும் சமர்ப்பிக்கப்பட்ட படிவங்களையும், அவற்றில் உள்ள எல்லா தரவையும் நீக்கும்</string>
-  <!-- The checkbox to select what the 'Quick Delete' button deletes -->
+    <!-- The checkbox to select what the 'Quick Delete' button deletes -->
   <string name="settings.prot_select_delete.servers">சேவையக அமைப்புகளை நீக்கு</string>
-  <string name="settings.prot_select.expl_delete.servers">இது சேவையக இணைப்புகள் மற்றும் அந்த சேவையகங்களில் சேமிக்கப்பட்ட படிவங்களையும் நீக்கும்.</string>
-  <!-- The checkbox to select what triggering the 'Quick Delete' button does -->
+    <!-- The checkbox to select what triggering the 'Quick Delete' button does -->
   <string name="settings.prot_select_delete.app">டெல்லாவை நீக்கு</string>
-  <string name="settings.prot_select.expl_delete.app">இது பயன்பாட்டையும் அதில் உள்ள தரவையும் நீக்கும். \"டெல்லா பயன்பாட்டை நிறுவல் நீக்க விரும்புகிறீர்களா?\" நீங்கள் உறுதிப்படுத்தாவிட்டால், டெல்லா நீக்கப்படாது.</string>
-  <!-- The title of the dialog to enable or disable Offline mode. -->
-  <string name="offline_dialog.title">ஆஃப்லைன் பயன்முறை</string>
-  <!-- The explanation for Offline Mode. -->
-  <string name="offline_dialog.expl">ஆஃப்லைன் பயன்முறையில், எல்லா தரவுகளும் பின்னர் சமர்ப்பிக்க சேமிக்கப்படும். செல்லுலார் தரவைச் சேமிக்க அல்லது உங்களுக்கு மோசமான அல்லது குறைந்த இணைய இணைப்பு இருந்தால் இது பயனுள்ளதாக இருக்கும். படிவங்களை சமர்ப்பிக்க நீங்கள் தயாராக இருக்கும்போது ஆஃப்லைன் அமைப்பை முடக்கவும்.</string>
-  <!-- The name of the action button to enable Offline mode from the data collection section. It is only visible when long pressing the button or when using the screen reader. -->
-  <string name="collect.form_action.desc_offline">ஆஃப்லைன் பயன்முறை</string>
   <!-- The menu item in the screen showing all sent forms to open a form in order to edit it and resend. -->
   <string name="collect.sent_action_edit.to.resend">மீண்டும் அனுப்ப திருத்து</string>
   <!-- The toast message informing the user that the form was successfully submitted. -->
@@ -458,7 +441,6 @@ A toast notification informing the user that their files were successfully delet
   <string name="settings.docu_add.server_field_password">கடவுச்சொல்</string>
   <!-- A placeholder for the name of the app, when the app encounters an error retrieving the name of the app. -->
   <string name="settings.camo_error_fail.retrieve.app.name">பயன்பாடு</string>
-  <string name="collect.end_toast_saved.for.later">ஆஃப்லைன் பயன்முறை இயக்கப்பட்டிருப்பதால் படிவம் பின்னர் சமர்ப்பிக்க சேமிக்கப்பட்டது</string>
   <!-- The submissions screen shows all the different elements to be submitted. This refers to the responses to form questions (not file attachments) -->
   <string name="collect.end_item_form.data">படிவத்திற்கான பதில்கள்</string>
   <string name="collect_toast_fail.loading.form.instance">படிவத்தை ஏற்றுவதில் பிழை ஏற்பட்டது. தயவு செய்து மீண்டும் முயற்சிக்கவும்</string>
@@ -625,83 +607,26 @@ This is one of the two options available. -->
   <!-- The explanation in the dialog that is displayed when deleting an Upload server. -->
   <string name="settings.docu_delete.upload.server_dialog.expl">இந்த சேவையகத்தில் நீங்கள் இனி கோப்புகளை பதிவேற்ற முடியாது.</string>
   <!-- The label for the homescreen button to access the Upload feature. -->
-  <string name="home_upload.button">பதிவேற்று</string>
-  <!-- This is displayed to let the user that the files are being uploaded. -->
-  <string name="upload.main_meta_status.uploading">பதிவேற்றுகிறது…</string>
-  <string name="upload_meta_date.started">தொடங்கியது:</string>
-  <!-- The button to see more information about each upload. -->
-  <string name="upload.main_action_more.details">கூடுதல் விவரங்கள்</string>
-  <plurals name="upload.main_meta_number.of.files">
-    <item quantity="one">%d கோப்பு</item>
-    <item quantity="other">%dகோப்புகள்</item>
-  </plurals>
-  <!-- This is used to show how many files were uploaded -->
-  <plurals name="upload.main_meta_number.of.files.uploaded">
-    <item quantity="one">%dகோப்பு பதிவேற்றப்பட்டது</item>
-    <item quantity="other">%d கோப்புகள் பதிவேற்றப்பட்டன</item>
-  </plurals>
-  <!-- This is used to show the number of minutes left to complete the upload of files to the server. -->
-  <plurals name="upload.main_meta_minutes.left">
-    <item quantity="one">%d நிமிடம் மீதமுள்ளது</item>
-    <item quantity="other">%dநிமிடங்கள் மீதமுள்ளன</item>
-  </plurals>
-  <!-- The explanation in the dialog when tapping the "clear" button in the Upload main screen. -->
-  <string name="upload.main_dialog.expl_clear.history">இது கடந்த பதிவேற்றங்களின் பட்டியலை நீக்கும்.</string>
-  <!-- A dialog displayed when the user attempts to stop the entire upload. -->
-  <string name="upload.main_stop.upload_dialog.expl">பதிவேற்றத்தை நிறுத்த விரும்புகிறீர்களா?</string>
-  <!-- A dialog displayed when the user attempts to stop the upload of one particular file. -->
-  <string name="upload.info_stop.upload_dialog.expl">பதிவேற்றத்தை நிறுத்த விரும்புகிறீர்களா?</string>
-  <!-- The title of the screen (in the app bar) when looking at the details of an 'upload' of files to the server. -->
-  <string name="upload.info_app.bar">தகவலைப் பதிவேற்றுக</string>
-  <!-- The field where Tella shows how many files are included in an upload. -->
-  <string name="upload.info_meta_number.of.files">கோப்புகளின் எண்ணிக்கை:</string>
-  <!-- The action button to "clear" the upload history. -->
-  <string name="upload.main_dialog.action_clear">அழிக்கவும்</string>
-  <string name="upload.main_nothing.to.show">உங்களுக்குக் காண்பிக்க கடந்த பதிவேற்றம் எதுவும் இல்லை</string>
-  <string name="upload.info_meta_date.completed">நிறைவு:</string>
-  <!-- The field to show what file is being uploaded. -->
-  <string name="upload.info_meta_file.type">கோப்பு வகை:</string>
-  <string name="upload.main_meta_status.attempting">இணைக்க முயற்சிக்கிறது</string>
-  <!-- The description of how much time is left for the upload to complete. -->
-  <string name="upload.main_meta_less.minute.left">ஒரு நிமிடத்திற்கும் குறைவாகவே உள்ளது</string>
-  <string name="upload.main_meta_status.stopped">நிறுத்தப்பட்டது</string>
-  <!-- The description of how much time is left for the upload to complete. -->
-  <string name="upload.main_meta_more.hour.left">ஒரு மணி நேரத்திற்கும் மேலாக உள்ளது</string>
-  <!-- The error message notifying the user that they must select a server where their file will be auto-uploaded. -->
+    <!-- This is displayed to let the user that the files are being uploaded. -->
+    <!-- The button to see more information about each upload. -->
+    <!-- This is used to show how many files were uploaded -->
+    <!-- This is used to show the number of minutes left to complete the upload of files to the server. -->
+    <!-- The explanation in the dialog when tapping the "clear" button in the Upload main screen. -->
+    <!-- A dialog displayed when the user attempts to stop the entire upload. -->
+    <!-- A dialog displayed when the user attempts to stop the upload of one particular file. -->
+    <!-- The title of the screen (in the app bar) when looking at the details of an 'upload' of files to the server. -->
+    <!-- The field where Tella shows how many files are included in an upload. -->
+    <!-- The action button to "clear" the upload history. -->
+    <!-- The field to show what file is being uploaded. -->
+    <!-- The description of how much time is left for the upload to complete. -->
+    <!-- The description of how much time is left for the upload to complete. -->
+    <!-- The error message notifying the user that they must select a server where their file will be auto-uploaded. -->
   <string name="settings.docu_error_must.select.auto.upload.server">நீங்கள் ஒரு சேவையகத்தைத் தேர்ந்தெடுக்க வேண்டும்.</string>
   <!-- The explanation in the dialog when the user attempts to "clear" the upload information. -->
-  <string name="upload.info_dialog.expl_delete.upload">பதிவேற்றும் தகவலை நீக்க விரும்புகிறீர்களா?</string>
-  <!-- The title in the dialog when tapping the "clear" button in the Upload main screen. -->
-  <string name="upload.main_dialog.title_clear.history">பதிவேற்ற வரலாற்றை அழிக்கவா?</string>
-  <string name="settings.docu_auto.upload.metadata_action">சரிபார்ப்பு தகவலைச் சேர்க்கவும்</string>
-  <string name="settings.docu_auto.upload.metadata_action.expl">உங்கள் கோப்புகளில் சரிபார்ப்பு தகவல்கள் இருந்தால், அது தானாகவே உங்கள் கோப்புகளுடன் பதிவேற்றப்படும்.</string>
-  <string name="camera_tab.title_video">வீடியோ</string>
+    <!-- The title in the dialog when tapping the "clear" button in the Upload main screen. -->
+    <string name="camera_tab.title_video">வீடியோ</string>
   <string name="camera_tab.title_photo">புகைப்படம்</string>
   <string name="action_upload">பதிவேற்று</string>
-  <string name="pl_cancel">ரத்துசெய்யவும்</string>
-  <string name="pl_confirm">உறுதிப்படுத்து</string>
-  <string name="pl_confirm_pattern">உறுதிப்படுத்த மீண்டும் வடிவத்தை வரையவும்</string>
-  <string name="pl_continue">தொடர்</string>
-  <string name="pl_draw_pattern">பூட்டுநீக்கு வடிவத்தை வரையவும்</string>
-  <string name="pl_draw_pattern_to_unlock">டெல்லாவைத் திறக்க வடிவத்தை வரையவும்.</string>
-  <string name="pl_pattern_confirmed">இப்போது, டெல்லா கணக்கைத் திறக்கப் பயன்படுத்தப்படும் உங்கள் வடிவம் இது</string>
-  <string name="pl_pattern_recorded">வடிவம் பதிவு செய்யப்பட்டது</string>
-  <string name="pl_pattern_too_short">குறைந்தது %d புள்ளிகளை இணைக்கவும். தயவுசெய்து மீண்டும் வரையவும்.</string>
-  <string name="pl_recording_pattern">முடிந்ததும் விரலை விடுவிக்கவும்</string>
-  <string name="pl_redraw">தயவுசெய்து மீண்டும் வரையவும்</string>
-  <string name="pl_wrong_pattern">தவறான வடிவம். தயவுசெய்து மீண்டும் முயற்சிக்கவும்.</string>
-  <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_start">வடிவம் தொடங்கியது</string>
-  <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_cleared">வடிவம் அழிக்கப்பட்டது</string>
-  <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_cell_added">செல் வடிவம் சேர்க்கப்பட்டது</string>
-  <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern. The screen reader will add the cell number that the user added. For example, if the user selects the bottom left cell, the screen reader will read "cell 7 added". -->
-  <string name="pl_access_pattern_cell_added_verbose"><xliff:g id="cell_index" example="3">%1$d</xliff:g>செல் சேர்க்கப்பட்டது</string>
-  <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_detected">வடிவம் முடிந்தது</string>
-  <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
-  <string name="pl_access_pattern_area">வடிவ பகுதி</string>
   <!-- The button to get access to more options. -->
   <string name="collect.blank_action.desc_more.options">கூடுதல் விருப்பங்கள்</string>
   <string name="action_next">அடுத்த</string>
@@ -847,4 +772,6 @@ This is one of the two options available. -->
   <string name="settings.sec_confirm_camouflage_desc">To re-open Tella, look for the %s app icon among your apps.</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">To re-open Tella, look for the Calculator app icon among your apps. Unlock Tella by entering your PIN in the Calculator followed by “=”. </string>
   <string name="settings.sec_confirm_exit_tella">Exit Tella</string>
+  <string name="collect.outbox_tab.title">Outbox</string>
+  <string name="Collect_RemoveForm_SheetTitle">Remove form?</string>
 </resources>

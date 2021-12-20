@@ -62,10 +62,10 @@ import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.util.StringUtils;
 import rs.readahead.washington.mobile.views.adapters.ViewPagerAdapter;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
-import rs.readahead.washington.mobile.views.fragment.BlankFormsListFragment;
-import rs.readahead.washington.mobile.views.fragment.DraftFormsListFragment;
-import rs.readahead.washington.mobile.views.fragment.FormListFragment;
-import rs.readahead.washington.mobile.views.fragment.SubmittedFormsListFragment;
+import rs.readahead.washington.mobile.views.fragment.forms.BlankFormsListFragment;
+import rs.readahead.washington.mobile.views.fragment.forms.DraftFormsListFragment;
+import rs.readahead.washington.mobile.views.fragment.forms.FormListFragment;
+import rs.readahead.washington.mobile.views.fragment.forms.SubmittedFormsListFragment;
 import timber.log.Timber;
 
 
@@ -152,7 +152,7 @@ public class CollectMainActivity extends BaseLockActivity implements
         disposables.wire(ShowBlankFormEntryEvent.class, new EventObserver<ShowBlankFormEntryEvent>() {
             @Override
             public void onNext(ShowBlankFormEntryEvent event) {
-                showFormEntry(event.getForm());
+                // showFormEntry(event.getForm());
             }
         });
         disposables.wire(ToggleBlankFormPinnedEvent.class, new EventObserver<ToggleBlankFormPinnedEvent>() {

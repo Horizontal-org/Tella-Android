@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.hzontal.tella_vault.BaseVault;
 import com.hzontal.tella_vault.BaseVaultFileBuilder;
-import com.hzontal.tella_vault.filter.Filter;
 import com.hzontal.tella_vault.IVaultDatabase;
 import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.Vault;
@@ -110,6 +109,16 @@ public class RxVault extends BaseVault {
         return Single.defer(() -> {
             try {
                 return Single.just(baseGet(id));
+            } catch (Exception e) {
+                return Single.error(e);
+            }
+        });
+    }
+
+    public Single<List<VaultFile>> get(String[] ids) {
+        return Single.defer(() -> {
+            try {
+                return Single.just(baseGet(ids));
             } catch (Exception e) {
                 return Single.error(e);
             }

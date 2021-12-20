@@ -60,6 +60,9 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         //DBV9
         db.execSQL(createTableUwaziServer());
 
+
+        //DBv9
+        db.execSQL(createTableCollectFormInstanceVaultFile());
     }
 
     @Override
@@ -88,6 +91,9 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 db.execSQL(alterTableMediaFileUploadsAddServer());
                 db.execSQL(alterTableMediaFileUploadsAddManual());
                 db.execSQL(alterTableMediaFileUploadsAddMetadata());
+
+            case 8:
+                db.execSQL(createTableCollectFormInstanceVaultFile());
             case 9:
                 db.execSQL(createTableUwaziServer());
         }
@@ -175,6 +181,18 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 "FOREIGN KEY(" + sq(D.C_MEDIA_FILE_ID) + ") REFERENCES " +
                 sq(D.T_MEDIA_FILE) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE," +
                 "UNIQUE(" + sq(D.C_COLLECT_FORM_INSTANCE_ID) + ", " + sq(D.C_MEDIA_FILE_ID) + ") ON CONFLICT IGNORE" +
+                ");";
+    }
+
+    private String createTableCollectFormInstanceVaultFile() {
+        return "CREATE TABLE " + sq(D.T_COLLECT_FORM_INSTANCE_VAULT_FILE) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_COLLECT_FORM_INSTANCE_ID, D.INTEGER, true) + " , " +
+                cddl(D.C_VAULT_FILE_ID, D.TEXT, true) + " , " +
+                cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0," +
+                "FOREIGN KEY(" + sq(D.C_COLLECT_FORM_INSTANCE_ID) + ") REFERENCES " +
+                sq(D.T_COLLECT_FORM_INSTANCE) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE," +
+                "UNIQUE(" + sq(D.C_COLLECT_FORM_INSTANCE_ID) + ", " + sq(D.C_VAULT_FILE_ID) + ") ON CONFLICT IGNORE" +
                 ");";
     }
 

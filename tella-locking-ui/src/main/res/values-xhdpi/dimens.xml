@@ -3,7 +3,6 @@
     <dimen name="calc_key_size">72dp</dimen>
     <dimen name="calc_key_wide">160dp</dimen>
     <dimen name="calc_text_size">30sp</dimen>
-    <dimen name="pinview_height_percent">.37</dimen>
     <dimen name="hide_tella_big_margin">16dp</dimen>
     <dimen name="hide_tella_small_margin">8dp</dimen>
     <dimen name="hide_tella_big_button_height">164dp</dimen>

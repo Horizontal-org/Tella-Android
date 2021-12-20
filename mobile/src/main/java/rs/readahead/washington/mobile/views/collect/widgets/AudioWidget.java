@@ -21,7 +21,6 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.util.C;
-import rs.readahead.washington.mobile.views.activity.AudioRecordActivity2;
 import rs.readahead.washington.mobile.views.activity.QuestionAttachmentActivity;
 import rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView;
 
@@ -65,6 +64,7 @@ public class AudioWidget extends MediaFileBinaryWidget {
     public String setBinaryData(@NonNull Object data) {
         VaultFile vaultFile = (VaultFile) data;
         setFilename(vaultFile.id);
+        setFileId(vaultFile.id);
         showPreview();
         return getFilename();
     }
@@ -79,11 +79,11 @@ public class AudioWidget extends MediaFileBinaryWidget {
 
         View view = inflater.inflate(R.layout.collect_widget_media, linearLayout, true);
 
-        captureButton = addButton(R.drawable.ic_mic_black_24dp);
+       /*captureButton = addButton(R.drawable.ic_mic_white_small);
         captureButton.setAlpha((float).5);
         captureButton.setId(QuestionWidget.newUniqueId());
         captureButton.setEnabled(!formEntryPrompt.isReadOnly());
-        captureButton.setOnClickListener(v -> showAudioRecorderActivity());
+        captureButton.setOnClickListener(v -> showAudioRecorderActivity());*/
 
         selectButton = addButton(R.drawable.ic_menu_gallery);
         selectButton.setAlpha((float).5);
@@ -91,7 +91,7 @@ public class AudioWidget extends MediaFileBinaryWidget {
         selectButton.setEnabled(!formEntryPrompt.isReadOnly());
         selectButton.setOnClickListener(v -> showAttachmentsActivity());
 
-        clearButton = addButton(R.drawable.ic_delete_grey_24px);
+        clearButton = addButton(R.drawable.ic_delete_white_24px);
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!formEntryPrompt.isReadOnly());
         clearButton.setOnClickListener(v -> clearAnswer());
@@ -132,10 +132,10 @@ public class AudioWidget extends MediaFileBinaryWidget {
             Activity activity = (Activity) getContext();
             FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
 
-            activity.startActivityForResult(new Intent(getContext(), AudioRecordActivity2.class)
+          /*  activity.startActivityForResult(new Intent(getContext(), AudioRecordActivity2.class)
                             .putExtra(AudioRecordActivity2.RECORDER_MODE, AudioRecordActivity2.Mode.COLLECT.name()),
                     C.MEDIA_FILE_ID
-            );
+            );*/
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
             FormController.getActive().setIndexWaitingForData(null);
@@ -144,10 +144,10 @@ public class AudioWidget extends MediaFileBinaryWidget {
 
     private void showPreview() {
         selectButton.setVisibility(GONE);
-        captureButton.setVisibility(GONE);
+        //captureButton.setVisibility(GONE);
         clearButton.setVisibility(VISIBLE);
 
-        attachmentPreview.showPreview(getFilename());
+        attachmentPreview.showPreview(getFileId());
         attachmentPreview.setEnabled(true);
         attachmentPreview.setVisibility(VISIBLE);
         separator.setVisibility(VISIBLE);
@@ -155,7 +155,7 @@ public class AudioWidget extends MediaFileBinaryWidget {
 
     private void hidePreview() {
         selectButton.setVisibility(VISIBLE);
-        captureButton.setVisibility(VISIBLE);
+        //captureButton.setVisibility(VISIBLE);
         clearButton.setVisibility(GONE);
 
         attachmentPreview.setEnabled(false);

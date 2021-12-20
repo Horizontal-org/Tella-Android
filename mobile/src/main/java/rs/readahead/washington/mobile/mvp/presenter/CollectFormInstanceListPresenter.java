@@ -52,6 +52,18 @@ public class CollectFormInstanceListPresenter implements
         );
     }
 
+    @Override
+    public void listOutboxFormInstances() {
+        disposables.add(asyncDataSource
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMapSingle((Function<DataSource, SingleSource<List<CollectFormInstance>>>) DataSource::listPendingForms)
+                .subscribe(forms -> view.onFormInstanceListSuccess(forms),
+                        throwable -> view.onFormInstanceListError(throwable)
+                )
+        );
+    }
+
     private void initDataSource() {
         if (view != null) {
             DataSource dataSource;

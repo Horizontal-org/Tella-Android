@@ -27,7 +27,6 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/add_servers"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -106,7 +105,6 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/title_auto_upload"
                             style="@style/SettingsTitleText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -116,7 +114,6 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/auto_upload_info"
                             style="@style/SettingsMessageText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -180,7 +177,6 @@
                     <View style="@style/SettingsMainShadowLine" />
 
                     <androidx.appcompat.widget.LinearLayoutCompat
-                        android:id="@+id/auto_delete_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -195,7 +191,6 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/title_auto_delete"
                                 style="@style/SettingsTitleText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -205,7 +200,6 @@
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/auto_delete_info"
                                 style="@style/SettingsMessageText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
