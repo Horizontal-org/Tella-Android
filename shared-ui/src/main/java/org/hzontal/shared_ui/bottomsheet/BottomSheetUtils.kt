@@ -514,7 +514,7 @@ BottomSheetUtils {
     }
 
     @JvmStatic
-    fun showServerMenuSheet(
+    fun showEditDeleteMenuSheet(
         fragmentManager: FragmentManager,
         titleText: String?,
         actionEditLabel: String? = null,
