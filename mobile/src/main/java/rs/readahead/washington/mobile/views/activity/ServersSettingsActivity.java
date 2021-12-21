@@ -377,8 +377,8 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 getString(R.string.settings_servers_add_server_dialog_title),
                 getString(R.string.settings_serv_add_server_selection_dialog_title),
                 getString(R.string.settings_serv_add_server_selection_dialog_description),
-                getString(R.string.pl_back),
-                getString(R.string.pl_confirm),
+                "bACK", //TODO CHECk THIS
+                "Confirm",//TODO CHECk THIS
                 getString(R.string.settings_docu_add_server_dialog_select_odk),
                 getString(R.string.settings_docu_add_server_dialog_select_tella_web),
                 getString(R.string.settings_docu_add_server_dialog_select_tella_uwazi),

@@ -41,6 +41,7 @@ import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContr
 import rs.readahead.washington.mobile.mvp.presenter.HomeScreenPresenter;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment;
+import timber.log.Timber;
 
 
 @RuntimePermissions
@@ -106,13 +107,19 @@ public class MainActivity extends MetadataActivity implements
         navController = navHostFragment.getNavController();
         btmNavMain = findViewById(R.id.btm_nav_main);
         appBarConfiguration =
-                new AppBarConfiguration.Builder(R.id.homeScreen, R.id.cameraScreen, R.id.reportsScreen, R.id.micScreen, R.id.formScreen).build();
+                new AppBarConfiguration.Builder(R.id.homeScreen, R.id.cameraScreen, R.id.reportsScreen, R.id.uwaziScreen, R.id.micScreen, R.id.formScreen).build();
         NavigationUI.setupWithNavController(btmNavMain, navController);
         navController.addOnDestinationChangedListener((navController1, navDestination, bundle) -> {
-            if (navDestination.getId() == (R.id.homeScreen) || navDestination.getId() == R.id.formScreen || navDestination.getId() == R.id.micScreen) {
-                showBottomNavigation();
-            } else {
-                hideBottomNavigation();
+            switch (navDestination.getId()) {
+                case (R.id.homeScreen):
+                case R.id.formScreen:
+                case R.id.micScreen:
+                case R.id.uwaziScreen:
+                    showBottomNavigation();
+                    break;
+                default:
+                    hideBottomNavigation();
+                    break;
             }
         });
     }
@@ -204,6 +211,7 @@ public class MainActivity extends MetadataActivity implements
         super.onResume();
         btmNavMain.getMenu().findItem(R.id.home).setChecked(true);
         homeScreenPresenter.countCollectServers();
+        homeScreenPresenter.countUwaziServers();
         startLocationMetadataListening();
         mOrientationEventListener.enable();
     }
@@ -251,7 +259,7 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     public void onCountTUServersFailed(Throwable throwable) {
-
+        Timber.d(throwable);
     }
 
     @Override
@@ -263,6 +271,16 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     public void onCountCollectServersFailed(Throwable throwable) {
+
+    }
+
+    @Override
+    public void onCountUwaziServersEnded(Long num) {
+        maybeShowUwaziMenu(num);
+    }
+
+    @Override
+    public void onCountUwaziServersFailed(Throwable throwable) {
 
     }
 
@@ -305,6 +323,10 @@ public class MainActivity extends MetadataActivity implements
 
     private void maybeShowFormsMenu(Long num){
         btmNavMain.getMenu().findItem(R.id.form).setVisible(num>0);
+        invalidateOptionsMenu();
+    }
+    private void maybeShowUwaziMenu(Long num){
+        btmNavMain.getMenu().findItem(R.id.uwazi).setVisible(num>0);
         invalidateOptionsMenu();
     }
 }

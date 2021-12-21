@@ -102,6 +102,22 @@ public class HomeScreenPresenter implements IHomeScreenPresenterContract.IPresen
     }
 
     @Override
+    public void countUwaziServers() {
+        disposable.add(keyDataSource.getDataSource()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMapSingle((Function<DataSource, SingleSource<Long>>) DataSource::countUwaziServers)
+                .subscribe(
+                        num -> view.onCountUwaziServersEnded(num),
+                        throwable -> {
+                            FirebaseCrashlytics.getInstance().recordException(throwable);
+                            view.onCountUwaziServersFailed(throwable);
+                        }
+                )
+        );
+    }
+
+    @Override
     public void destroy() {
         disposable.dispose();
         view = null;

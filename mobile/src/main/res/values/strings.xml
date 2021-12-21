@@ -490,4 +490,5 @@
     <string name="settings.sec_confirm_exit_tella">Exit Tella</string>
     <string name="collect.outbox_tab.title">Outbox</string>
     <string name="Collect_RemoveForm_SheetTitle">Remove form?</string>
+    <string name="fragment_uwazi">Uwazi</string>
 </resources>

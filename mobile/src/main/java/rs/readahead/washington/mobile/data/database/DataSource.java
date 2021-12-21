@@ -193,6 +193,12 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
+    public Single<Long> countUwaziServers() {
+        return Single.fromCallable(() -> dataSource.countDBUwaziServers())
+                .compose(applySchedulers());
+    }
+
+    @Override
     public Single<List<UWaziUploadServer>> listUwaziServers() {
         return Single.fromCallable(() -> dataSource.getUwaziServers())
                 .compose(applySchedulers());
@@ -217,6 +223,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return Single.fromCallable(() -> dataSource.updateUzServer(server))
                 .compose(applySchedulers());
     }
+
 
     @Override
     public Completable deleteAllServers() {
@@ -467,6 +474,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
     private long countDBTUServers() {
         return net.sqlcipher.DatabaseUtils.queryNumEntries(database, D.T_TELLA_UPLOAD_SERVER);
+    }
+
+    private long countDBUwaziServers() {
+        return net.sqlcipher.DatabaseUtils.queryNumEntries(database, D.T_UWAZI_SERVER);
     }
 
     private List<TellaUploadServer> getTUServers() {

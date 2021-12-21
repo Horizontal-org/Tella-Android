@@ -11,4 +11,6 @@ public interface IUWAZIServersRepository {
     Single<UWaziUploadServer> createUWAZIServer(UWaziUploadServer server);
     Completable removeUwaziServer(long id);
     Single<UWaziUploadServer> updateUwaziServer(UWaziUploadServer server);
+    Single<Long> countUwaziServers();
+
 }
