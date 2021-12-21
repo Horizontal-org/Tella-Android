@@ -388,20 +388,21 @@ class CollectMainFragment : BaseFragment(){
     }
 
     private fun showDeleteInstanceDialog(instanceId: Long, status: CollectFormInstanceStatus) {
-        var msgResId = R.string.collect_dialog_text_delete_draft_form
+        if (status == CollectFormInstanceStatus.DRAFT) {
+            this.model.deleteFormInstance(instanceId)
+        } else {
 
-        if (status == CollectFormInstanceStatus.SUBMITTED) {
-            msgResId = R.string.collect_dialog_text_delete_sent_form
+            val msgResId = R.string.collect_dialog_text_delete_sent_form
+
+            showStandardSheet(
+                activity.getSupportFragmentManager(),
+                getString(R.string.Collect_RemoveForm_SheetTitle),
+                getString(msgResId),
+                getString(R.string.action_remove),
+                getString(R.string.action_cancel),
+                { this.model.deleteFormInstance(instanceId) },
+                { })
         }
-
-        showStandardSheet(
-            activity.getSupportFragmentManager(),
-            getString(R.string.Collect_RemoveForm_SheetTitle),
-            getString(msgResId),
-            getString(R.string.action_remove),
-            getString(R.string.action_cancel),
-            { this.model.deleteFormInstance(instanceId) },
-            { })
     }
 
     private fun showCancelPendingFormDialog(instanceId: Long) {

@@ -59,7 +59,6 @@ public class CollectDraftFormInstanceRecycleViewAdapter extends RecyclerView.Ada
                     }
                     if (action == BottomSheetUtils.Action.DELETE) {
                         deleteForm(instance);
-
                     }
                 },
                 context.getString(R.string.Collect_RemoveForm_SheetTitle),

@@ -24,7 +24,6 @@ import rs.readahead.washington.mobile.domain.entity.collect.*
 import rs.readahead.washington.mobile.domain.exception.NoConnectivityException
 import rs.readahead.washington.mobile.domain.repository.IOpenRosaRepository
 import rs.readahead.washington.mobile.odk.FormController
-import timber.log.Timber
 import java.util.*
 
 class SharedFormsViewModel(private val mApplication: Application) : AndroidViewModel(mApplication) {
