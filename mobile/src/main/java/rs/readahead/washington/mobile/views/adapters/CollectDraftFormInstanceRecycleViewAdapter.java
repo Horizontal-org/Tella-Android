@@ -3,7 +3,6 @@ package rs.readahead.washington.mobile.views.adapters;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,24 +10,24 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
-
 import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.bus.event.DeleteFormInstanceEvent;
-import rs.readahead.washington.mobile.bus.event.ShowFormInstanceEntryEvent;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.util.Util;
-import rs.readahead.washington.mobile.views.activity.MainActivity;
+import rs.readahead.washington.mobile.views.fragment.forms.ISavedFormsInterface;
 
 
 public class CollectDraftFormInstanceRecycleViewAdapter extends RecyclerView.Adapter<CollectDraftFormInstanceRecycleViewAdapter.ViewHolder> {
     private List<CollectFormInstance> instances = Collections.emptyList();
+    private final ISavedFormsInterface draftFormsInterface;
+
+    public CollectDraftFormInstanceRecycleViewAdapter(ISavedFormsInterface draftFormsInterface) {
+        this.draftFormsInterface = draftFormsInterface;
+    }
 
     @NonNull
     @Override
@@ -40,32 +39,13 @@ public class CollectDraftFormInstanceRecycleViewAdapter extends RecyclerView.Ada
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final CollectFormInstance instance = instances.get(position);
-
         final Context context = holder.name.getContext();
-        FragmentManager fragmentManager = ((MainActivity) context).getSupportFragmentManager();
 
         holder.name.setText(instance.getInstanceName());
         holder.organization.setText(instance.getServerName());
         holder.updated.setText(String.format(context.getString(R.string.collect_draft_meta_date_updated),
                 Util.getDateTimeString(instance.getUpdated())));
-        holder.popupMenu.setOnClickListener(v -> BottomSheetUtils.showEditDeleteMenuSheet(
-                fragmentManager,
-                instance.getInstanceName(),
-                context.getString(R.string.Collect_Action_FillForm),
-                context.getString(R.string.action_delete),
-                action -> {
-                    if (action == BottomSheetUtils.Action.EDIT) {
-                        MyApplication.bus().post(new ShowFormInstanceEntryEvent(instance.getId()));
-                    }
-                    if (action == BottomSheetUtils.Action.DELETE) {
-                        deleteForm(instance);
-                    }
-                },
-                context.getString(R.string.Collect_RemoveForm_SheetTitle),
-                String.format(context.getResources().getString(R.string.Collect_Subtitle_RemoveForm), instance.getInstanceName()),
-                context.getString(R.string.action_remove),
-                context.getString(R.string.action_cancel)
-        ));
+        holder.popupMenu.setOnClickListener(v -> draftFormsInterface.showFormsMenu(instance));
     }
 
     @Override
@@ -94,9 +74,5 @@ public class CollectDraftFormInstanceRecycleViewAdapter extends RecyclerView.Ada
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
-    }
-
-    private void deleteForm(CollectFormInstance instance){
-        MyApplication.bus().post(new DeleteFormInstanceEvent(instance.getId(), instance.getStatus()));
     }
 }
