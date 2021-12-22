@@ -769,4 +769,6 @@ This is one of the two options available. -->
   <string name="settings.sec_confirm_exit_tella">Exit Tella</string>
   <string name="collect.outbox_tab.title">Outbox</string>
   <string name="Collect_RemoveForm_SheetTitle">Remove form?</string>
+  <string name="Collect_Action_FillForm">Fill form</string>
+  <string name="Collect_Subtitle_RemoveForm">Are you sure you want to remove "%1$s"? </string>
 </resources>

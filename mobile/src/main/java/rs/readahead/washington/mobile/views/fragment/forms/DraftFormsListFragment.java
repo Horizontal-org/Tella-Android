@@ -12,12 +12,17 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
+import org.hzontal.shared_ui.utils.DialogUtils;
+
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.bus.event.ShowFormInstanceEntryEvent;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.mvp.contract.ICollectFormInstanceListPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CollectFormInstanceListPresenter;
@@ -26,7 +31,7 @@ import timber.log.Timber;
 
 
 public class DraftFormsListFragment extends FormListFragment implements
-        ICollectFormInstanceListPresenterContract.IView  {
+        ICollectFormInstanceListPresenterContract.IView, ISavedFormsInterface {
     @BindView(R.id.draftFormInstances)
     RecyclerView recyclerView;
     @BindView(R.id.blank_draft_forms_info)
@@ -48,7 +53,7 @@ public class DraftFormsListFragment extends FormListFragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new CollectDraftFormInstanceRecycleViewAdapter();
+        adapter = new CollectDraftFormInstanceRecycleViewAdapter(this);
     }
 
     @Nullable
@@ -76,6 +81,14 @@ public class DraftFormsListFragment extends FormListFragment implements
     private void initObservers(){
         model.getOnDraftFormInstanceListSuccess().observe(getViewLifecycleOwner(),this::onDraftFormInstanceListSuccess);
         model.getOnFormInstanceListError().observe(getViewLifecycleOwner(),this::onFormInstanceListError);
+        model.getOnFormInstanceDeleteSuccess().observe(getViewLifecycleOwner(),this::onFormInstanceDeleted);
+    }
+
+    private void onFormInstanceDeleted(Boolean success) {
+        if (success) {
+            DialogUtils.showBottomMessage(getActivity(),getString(R.string.collect_toast_form_deleted), false);
+            this.listDraftForms();
+        }
     }
 
     @Override
@@ -126,5 +139,31 @@ public class DraftFormsListFragment extends FormListFragment implements
             presenter.destroy();
             presenter = null;
         }
+    }
+
+    @Override
+    public void showFormsMenu(CollectFormInstance instance) {
+        BottomSheetUtils.showEditDeleteMenuSheet(
+                requireActivity().getSupportFragmentManager(),
+                instance.getInstanceName(),
+                requireContext().getString(R.string.Collect_Action_FillForm),
+                requireContext().getString(R.string.action_delete),
+                action -> {
+                    if (action == BottomSheetUtils.Action.EDIT) {
+                        MyApplication.bus().post(new ShowFormInstanceEntryEvent(instance.getId()));
+                    }
+                    if (action == BottomSheetUtils.Action.DELETE) {
+                        deleteFormInstance(instance.getId());
+                    }
+                },
+                requireContext().getString(R.string.Collect_RemoveForm_SheetTitle),
+                String.format(requireContext().getResources().getString(R.string.Collect_Subtitle_RemoveForm), instance.getInstanceName()),
+                requireContext().getString(R.string.action_remove),
+                requireContext().getString(R.string.action_cancel)
+        );
+    }
+
+    public void deleteFormInstance(long instanceId) {
+        model.deleteFormInstance(instanceId);
     }
 }

@@ -478,7 +478,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         if (server != null) {
             name.setText(server.getName());
             row.setOnClickListener(view -> {
-                BottomSheetUtils.showServerMenuSheet(
+                BottomSheetUtils.showEditDeleteMenuSheet(
                         this.getSupportFragmentManager(),
                         server.getName(),
                         getString(R.string.action_edit),

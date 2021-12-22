@@ -302,6 +302,9 @@ public class MainActivity extends MetadataActivity implements
     public void selectNavMic() {
         btmNavMain.getMenu().findItem(R.id.mic).setChecked(true);
     }
+    public void selectNavForm() {
+        btmNavMain.getMenu().findItem(R.id.form).setChecked(true);
+    }
 
     private void maybeShowFormsMenu(Long num){
         btmNavMain.getMenu().findItem(R.id.form).setVisible(num>0);

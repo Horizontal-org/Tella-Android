@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -20,20 +19,21 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.bus.event.CancelPendingFormInstanceEvent;
-import rs.readahead.washington.mobile.bus.event.DeleteFormInstanceEvent;
-import rs.readahead.washington.mobile.bus.event.ReSubmitFormInstanceEvent;
-import rs.readahead.washington.mobile.bus.event.ShowFormInstanceEntryEvent;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
 import rs.readahead.washington.mobile.util.StringUtils;
 import rs.readahead.washington.mobile.util.ViewUtil;
+import rs.readahead.washington.mobile.views.fragment.forms.ISavedFormsInterface;
 
 
 public class CollectSubmittedFormInstanceRecycleViewAdapter extends RecyclerView.Adapter<CollectSubmittedFormInstanceRecycleViewAdapter.ViewHolder> {
     private List<CollectFormInstance> instances = Collections.emptyList();
+    private final ISavedFormsInterface savedFormsInterface;
+
+    public CollectSubmittedFormInstanceRecycleViewAdapter(ISavedFormsInterface savedFormsInterface) {
+        this.savedFormsInterface = savedFormsInterface;
+    }
 
     @NonNull
     @Override
@@ -45,8 +45,6 @@ public class CollectSubmittedFormInstanceRecycleViewAdapter extends RecyclerView
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final CollectFormInstance instance = instances.get(position);
-
-        final Context context = holder.name.getContext();
 
         holder.name.setText(instance.getFormName());
         holder.organization.setText(instance.getServerName());
@@ -64,7 +62,9 @@ public class CollectSubmittedFormInstanceRecycleViewAdapter extends RecyclerView
             holder.setPendingIcon();
         }
 
-        holder.instanceRow.setOnClickListener(v -> MyApplication.bus().post(new ReSubmitFormInstanceEvent(instance)));
+        holder.popupMenu.setOnClickListener(v -> savedFormsInterface.showFormsMenu(instance));
+
+        /*holder.instanceRow.setOnClickListener(v -> MyApplication.bus().post(new ReSubmitFormInstanceEvent(instance)));
 
         holder.popupMenu.setOnClickListener(v -> {
             PopupMenu popup = new PopupMenu(context, v);
@@ -98,7 +98,7 @@ public class CollectSubmittedFormInstanceRecycleViewAdapter extends RecyclerView
             }
 
             popup.show();
-        });
+        });*/
     }
 
     @Override

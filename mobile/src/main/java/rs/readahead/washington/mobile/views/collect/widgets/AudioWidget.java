@@ -23,6 +23,7 @@ import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.views.activity.QuestionAttachmentActivity;
 import rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView;
+import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface;
 
 /**
  * Based on ODK AudioWidget.
@@ -79,11 +80,11 @@ public class AudioWidget extends MediaFileBinaryWidget {
 
         View view = inflater.inflate(R.layout.collect_widget_media, linearLayout, true);
 
-       /*captureButton = addButton(R.drawable.ic_mic_white_small);
+        captureButton = addButton(R.drawable.ic_mic_white_small);
         captureButton.setAlpha((float).5);
         captureButton.setId(QuestionWidget.newUniqueId());
         captureButton.setEnabled(!formEntryPrompt.isReadOnly());
-        captureButton.setOnClickListener(v -> showAudioRecorderActivity());*/
+        captureButton.setOnClickListener(v -> showAudioRecorderActivity());
 
         selectButton = addButton(R.drawable.ic_menu_gallery);
         selectButton.setAlpha((float).5);
@@ -129,10 +130,11 @@ public class AudioWidget extends MediaFileBinaryWidget {
 
     private void showAudioRecorderActivity() {
         try {
-            Activity activity = (Activity) getContext();
+            ICollectEntryInterface activity = (ICollectEntryInterface) getContext();
             FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
 
-          /*  activity.startActivityForResult(new Intent(getContext(), AudioRecordActivity2.class)
+            activity.openAudioRecorder();
+            /*activity.startActivityForResult(new Intent(getContext(), AudioRecordActivity2.class)
                             .putExtra(AudioRecordActivity2.RECORDER_MODE, AudioRecordActivity2.Mode.COLLECT.name()),
                     C.MEDIA_FILE_ID
             );*/
@@ -144,10 +146,10 @@ public class AudioWidget extends MediaFileBinaryWidget {
 
     private void showPreview() {
         selectButton.setVisibility(GONE);
-        //captureButton.setVisibility(GONE);
+        captureButton.setVisibility(GONE);
         clearButton.setVisibility(VISIBLE);
 
-        attachmentPreview.showPreview(getFileId());
+        attachmentPreview.showPreview(getFilename());
         attachmentPreview.setEnabled(true);
         attachmentPreview.setVisibility(VISIBLE);
         separator.setVisibility(VISIBLE);
@@ -155,7 +157,7 @@ public class AudioWidget extends MediaFileBinaryWidget {
 
     private void hidePreview() {
         selectButton.setVisibility(VISIBLE);
-        //captureButton.setVisibility(VISIBLE);
+        captureButton.setVisibility(VISIBLE);
         clearButton.setVisibility(GONE);
 
         attachmentPreview.setEnabled(false);

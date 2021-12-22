@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.hzontal.tella_vault.VaultFile
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -15,6 +16,7 @@ import org.javarosa.core.reference.ReferenceManager
 import org.javarosa.form.api.FormEntryController
 import org.javarosa.form.api.FormEntryModel
 import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.bus.event.ShowBlankFormEntryEvent
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.database.KeyDataSource
@@ -23,32 +25,31 @@ import rs.readahead.washington.mobile.domain.entity.collect.*
 import rs.readahead.washington.mobile.domain.exception.NoConnectivityException
 import rs.readahead.washington.mobile.domain.repository.IOpenRosaRepository
 import rs.readahead.washington.mobile.odk.FormController
-import timber.log.Timber
 import java.util.*
 
 class SharedFormsViewModel(private val mApplication: Application) : AndroidViewModel(mApplication) {
 
-    var onCreateFormController = MutableLiveData<FormController?>()
+    var onCreateFormController = SingleLiveEvent<FormController?>()
     var onGetBlankFormDefSuccess = MutableLiveData<FormPair>()
     var onBlankFormsListResult = MutableLiveData<ListFormResult>()
-    var onError = MutableLiveData<Throwable>()
-    var onFormDefError = MutableLiveData<Throwable>()
-    var showBlankFormRefreshLoading = MutableLiveData<Boolean>()
-    var onNoConnectionAvailable = MutableLiveData<Boolean>()
-    var onBlankFormDefRemoved = MutableLiveData<Boolean>()
-    var onDownloadBlankFormDefStart = MutableLiveData<Boolean>()
-    var onUpdateBlankFormDefStart = MutableLiveData<Boolean>()
+    var onError = SingleLiveEvent<Throwable>()
+    var onFormDefError = SingleLiveEvent<Throwable>()
+    var showBlankFormRefreshLoading = SingleLiveEvent<Boolean>()
+    var onNoConnectionAvailable = SingleLiveEvent<Boolean>()
+    var onBlankFormDefRemoved = SingleLiveEvent<Boolean?>()
+    var onDownloadBlankFormDefStart = SingleLiveEvent<Boolean?>()
+    var onUpdateBlankFormDefStart = SingleLiveEvent<Boolean>()
     var onUpdateBlankFormDefSuccess = MutableLiveData<Pair<CollectForm, FormDef?>>()
     var onDownloadBlankFormDefSuccess = MutableLiveData<CollectForm?>()
     var onInstanceFormDefSuccess = MutableLiveData<CollectFormInstance>()
     var onToggleFavoriteSuccess = MutableLiveData<CollectForm?>()
-    var onFormInstanceDeleteSuccess = MutableLiveData<Boolean>()
+    var onFormInstanceDeleteSuccess = SingleLiveEvent<Boolean?>()
     var onCountCollectServersEnded = MutableLiveData<Long>()
-    var onUserCancel = MutableLiveData<Boolean>()
+    var onUserCancel = SingleLiveEvent<Boolean>()
     var showFab = MutableLiveData<Boolean>()
     var onFormInstanceListSuccess = MutableLiveData<List<CollectFormInstance>>()
     var onDraftFormInstanceListSuccess = MutableLiveData<List<CollectFormInstance>>()
-    var onFormInstanceListError = MutableLiveData<Throwable>()
+    var onFormInstanceListError = SingleLiveEvent<Throwable>()
 
     private var keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private val disposables = CompositeDisposable()
@@ -139,20 +140,30 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
     }
 
     fun getInstanceFormDef(instanceId: Long) {
+        var collectFormInstance: CollectFormInstance? = null
         disposables.add(keyDataSource.dataSource
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
             .flatMapSingle { dataSource: DataSource ->
                 dataSource.getInstance(
                     instanceId
                 )
-            }.subscribe(
-                { instance: CollectFormInstance ->
-                    onInstanceFormDefSuccess.postValue(
-                        maybeCloneInstance(instance)
+            }
+            .flatMapSingle { instance: CollectFormInstance ->
+                collectFormInstance = instance
+                MyApplication.rxVault[instance.widgetMediaFilesIds]
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ vaultFiles: List<VaultFile> ->
+                for (file in vaultFiles) {
+                    collectFormInstance?.setWidgetMediaFile(
+                        file.name,
+                        FormMediaFile.fromMediaFile(file)
                     )
                 }
-            ) { throwable: Throwable? ->
+                onInstanceFormDefSuccess.postValue(
+                    collectFormInstance?.let { maybeCloneInstance(it) }
+                )
+            }) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 onFormDefError.postValue(throwable)
             }

@@ -175,18 +175,18 @@ BottomSheetUtils {
         }
     }
 
-    interface DualChoiceConsumer {
+    interface BinaryConsumer {
         fun accept(option: Boolean)
     }
 
     @JvmStatic
-    fun showDualChoiceTypeSheet(
+    fun showBinaryTypeSheet(
         fragmentManager: FragmentManager,
         titleText: String?,
         descriptionText: String?,
         buttonOneLabel: String? = null,
         buttonTwoLabel: String? = null,
-        consumer: DualChoiceConsumer? = null
+        consumer: BinaryConsumer? = null
     ) {
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
@@ -265,7 +265,7 @@ BottomSheetUtils {
         subtitleOne: String?,
         titleTwo: String?,
         subtitleTwo: String?,
-        consumer: DualChoiceConsumer? = null
+        consumer: BinaryConsumer? = null
     ) {
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
@@ -514,7 +514,7 @@ BottomSheetUtils {
     }
 
     @JvmStatic
-    fun showServerMenuSheet(
+    fun showEditDeleteMenuSheet(
         fragmentManager: FragmentManager,
         titleText: String?,
         actionEditLabel: String? = null,
