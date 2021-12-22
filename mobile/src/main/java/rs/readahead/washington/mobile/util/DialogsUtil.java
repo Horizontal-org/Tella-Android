@@ -223,7 +223,9 @@ public class DialogsUtil {
 
 
         final AlertDialog alertDialog = builder.create();
+        alertDialog.setOnShowListener(arg0 -> alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundColor(context.getResources().getColor(R.color.dark_purple)));
         alertDialog.show();
+        alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.purple_background));
 
         return alertDialog;
     }
@@ -241,7 +243,10 @@ public class DialogsUtil {
 
 
         final AlertDialog alertDialog = builder.create();
+
+        alertDialog.setOnShowListener(arg0 -> alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundColor(context.getResources().getColor(R.color.dark_purple)));
         alertDialog.show();
+        alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.purple_background));
 
         return alertDialog;
     }

@@ -5,6 +5,7 @@
     android:layout_height="80dp"
     android:gravity="center"
     android:background="@color/dark_purple"
+    android:windowBackground="@color/dark_purple"
     android:orientation="horizontal">
 
     <ProgressBar
