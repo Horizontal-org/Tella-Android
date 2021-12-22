@@ -251,9 +251,6 @@ class CollectMainFragment : BaseFragment() {
         if (disposables != null) {
             disposables.dispose()
         }
-        model.onCreateFormController.value = null
-        model.onDownloadBlankFormDefStart.value = null
-        model.onFormInstanceDeleteSuccess.value = false
         super.onDestroy()
     }
 

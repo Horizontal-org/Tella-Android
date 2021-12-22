@@ -46,8 +46,6 @@ public class CollectSubmittedFormInstanceRecycleViewAdapter extends RecyclerView
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final CollectFormInstance instance = instances.get(position);
 
-        final Context context = holder.name.getContext();
-
         holder.name.setText(instance.getFormName());
         holder.organization.setText(instance.getServerName());
         holder.setDates(instance.getUpdated());
