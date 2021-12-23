@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
-
     <LinearLayout
         android:id="@+id/questionHeader"
         android:layout_width="match_parent"
@@ -15,12 +14,12 @@
 
             <TextView
                 android:id="@+id/questionTitle"
+                style="@style/Tella2_White_Text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_gravity="start"
                 android:layout_toStartOf="@+id/iconsLayout"
-                android:textColor="?android:attr/textColorPrimary"
                 android:textSize="16sp" />
 
             <LinearLayout
@@ -35,9 +34,9 @@
 
         <TextView
             android:id="@+id/questionHelpText"
+            style="@style/Tella2_White_Text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?android:attr/textColorSecondary"
             android:textSize="14sp" />
 
         <TextView

@@ -4,7 +4,6 @@ import android.content.Context;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
-
 class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
     private static final String OBJ_QUOTE = "`";
 
@@ -52,10 +51,18 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         // DBv7
         db.execSQL(createTableMediaFileUploads());
 
-        //DBv8
+        // DBv8
         db.execSQL(alterTableMediaFileUploadsAddMetadata());
         db.execSQL(alterTableMediaFileUploadsAddManual());
         db.execSQL(alterTableMediaFileUploadsAddServer());
+
+        // DBv9
+        db.execSQL(turnForeignKeysOff());
+        db.execSQL(createCollectFormInstanceVaultFile());
+        db.execSQL(copyCollectFormInstanceMediaFiles());
+        db.execSQL(dropCollectFormInstanceMediaFileTable());
+        db.execSQL(turnForeignKeysOn());
+        // copy procedure from media_file for vault must be performed
     }
 
     @Override
@@ -84,6 +91,13 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 db.execSQL(alterTableMediaFileUploadsAddServer());
                 db.execSQL(alterTableMediaFileUploadsAddManual());
                 db.execSQL(alterTableMediaFileUploadsAddMetadata());
+
+            case 8:
+                db.execSQL(turnForeignKeysOff());
+                db.execSQL(createCollectFormInstanceVaultFile());
+                db.execSQL(copyCollectFormInstanceMediaFiles());
+                db.execSQL(dropCollectFormInstanceMediaFileTable());
+                db.execSQL(turnForeignKeysOn());
         }
     }
 
@@ -237,6 +251,44 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 ");";
     }
 
+    private String turnForeignKeysOff() {
+        return "PRAGMA foreign_keys=OFF;";
+    }
+
+    private String createCollectFormInstanceVaultFile() {
+        return
+                "CREATE TABLE " + sq(D.T_COLLECT_FORM_INSTANCE_VAULT_FILE) + " (" +
+                        cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                        cddl(D.C_COLLECT_FORM_INSTANCE_ID, D.INTEGER, true) + " , " +
+                        cddl(D.C_VAULT_FILE_ID, D.TEXT, true) + " , " +
+                        cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0, " +
+                        "FOREIGN KEY(" + sq(D.C_COLLECT_FORM_INSTANCE_ID) + ") REFERENCES " +
+                        sq(D.T_COLLECT_FORM_INSTANCE) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE," +
+                        "UNIQUE(" + sq(D.C_COLLECT_FORM_INSTANCE_ID) + ", " + sq(D.C_VAULT_FILE_ID) + ") ON CONFLICT IGNORE" +
+                        "); ";
+    }
+
+    private String copyCollectFormInstanceMediaFiles() {
+        return
+                "INSERT INTO " + sq(D.T_COLLECT_FORM_INSTANCE_VAULT_FILE) + " " +
+                "(" + sq(D.C_COLLECT_FORM_INSTANCE_ID) + " , " + sq(D.C_VAULT_FILE_ID) + " , " + sq(D.C_STATUS) + ") " +
+                "SELECT " +
+                cn(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE, D.C_COLLECT_FORM_INSTANCE_ID) + " , " +
+                cn(D.T_MEDIA_FILE, D.C_UID) + " , " +
+                cn(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE, D.C_STATUS) + " " +
+                "FROM " +
+                sq(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE) + " JOIN " + sq(D.T_MEDIA_FILE) + " ON " +
+                cn(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE, D.C_MEDIA_FILE_ID) + " = " + cn(D.T_MEDIA_FILE, D.C_ID) + ";";
+    }
+
+    private String dropCollectFormInstanceMediaFileTable() {
+        return "DROP TABLE " + sq(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE) + ";";
+    }
+
+    private String turnForeignKeysOn() {
+        return "PRAGMA foreign_keys=ON;";
+    }
+
     private static String objQuote(String str) {
         return OBJ_QUOTE + str + OBJ_QUOTE;
     }
@@ -251,5 +303,9 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
     private static String cddl(String columnName, String columnType, boolean notNull) {
         return objQuote(columnName) + " " + columnType + (notNull ? " NOT NULL" : "");
+    }
+
+    private static String cn(String table, String column) {
+        return objQuote(table) + "." + objQuote(column);
     }
 }

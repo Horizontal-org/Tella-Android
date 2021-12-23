@@ -13,6 +13,7 @@
  */
 package rs.readahead.washington.mobile.views.collect.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import android.text.method.LinkMovementMethod;
@@ -28,6 +29,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import java.util.ArrayList;
 import java.util.List;
 
+import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.util.StringUtils;
 
@@ -35,10 +37,11 @@ import rs.readahead.washington.mobile.util.StringUtils;
 /**
  * Based on ODK Collect SelectMultiWidget.
  */
+@SuppressLint("ViewConstructor")
 public class SelectMultiWidget extends QuestionWidget {
     private boolean checkBoxInit = true; // todo: check the need for this..
-    private List<SelectChoice> items;
-    private ArrayList<AppCompatCheckBox> checkBoxes;
+    private final List<SelectChoice> items;
+    private final ArrayList<AppCompatCheckBox> checkBoxes;
 
 
     @SuppressWarnings("unchecked")
@@ -64,6 +67,7 @@ public class SelectMultiWidget extends QuestionWidget {
                 c.setTag(i);
                 c.setId(QuestionWidget.newUniqueId());
                 c.setText(getChoiceDisplayName(prompt.getSelectChoiceText(items.get(i))));
+                c.setTextColor(getContext().getResources().getColor(R.color.primaryTextColor)); // todo: set in theme?
                 c.setMovementMethod(LinkMovementMethod.getInstance());
                 //c.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
                 c.setFocusable(!prompt.isReadOnly());

@@ -69,6 +69,24 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="Tella2_Gray_Text">
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:textColor">@color/tella2_gray_text</item>
+    </style>
+
+    <style name="Tella2_White_Text">
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:textColor">@color/tella2_white_text</item>
+    </style>
+
+    <style name="Tella2_White_Bold_Text" parent="Tella2_White_Text">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Tella2_Gray_Bold_Text" parent="Tella2_Gray_Text">
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="Tella_Main_White_Text.MeduimbBold" parent="Tella_Main_White_Text.Bold">
         <item name="android:textSize">14sp</item>
     </style>

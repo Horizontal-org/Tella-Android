@@ -1,85 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/form_row"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/rounded_light_purple_background"
+    android:padding="16dp"
     android:textDirection="locale">
 
-    <RelativeLayout
-        android:id="@+id/form_row"
-        android:layout_width="match_parent"
+    <ImageButton
+        android:id="@+id/star_button"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="@color/wa_transparent"
+        android:src="@drawable/ic_baseline_white_star_outline_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/form_name"
+        style="@style/Tella2_White_Bold_Text"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:padding="16dp">
+        app:layout_constraintBottom_toTopOf="@id/server_name"
+        app:layout_constraintEnd_toStartOf="@id/menu"
+        app:layout_constraintStart_toEndOf="@id/star_button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        tools:text="Volunteer registration form" />
 
-        <ImageButton
-            android:id="@+id/dl_open_button"
-            android:layout_height="32dp"
-            android:layout_width="32dp"
-            android:background="@color/wa_transparent"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:alpha=".5"
-            android:layout_marginStart="10dp"
-            android:contentDescription="@string/collect.blank_action_download.form" />
+    <TextView
+        android:id="@+id/server_name"
+        style="@style/Tella2_White_Text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/menu"
+        app:layout_constraintStart_toEndOf="@id/star_button"
+        app:layout_constraintTop_toBottomOf="@id/form_name"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        tools:text="BERSIH Malaysia" />
 
-        <ImageButton
-            android:id="@+id/later_button"
-            android:layout_height="32dp"
-            android:layout_width="32dp"
-            android:background="@color/wa_transparent"
-            android:layout_toStartOf="@id/dl_open_button"
-            android:src="@drawable/ic_update_black_24dp"
-            android:alpha=".5"
-            android:layout_centerVertical="true"
-            android:visibility="gone"
-            android:layout_marginStart="10dp"
-            android:contentDescription="@string/collect.blank_action_update.form" />
+    <ImageButton
+        android:id="@+id/menu"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="@color/wa_transparent"
+        android:src="@drawable/ic_baseline_more_vert_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
-        <LinearLayout
-            android:id="@+id/row_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@id/later_button"
-            android:layout_alignParentStart="true"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/name"
-                style="@style/SettingsTextViewBlack"
-                android:ellipsize="end"
-                android:lines="1" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                tools:ignore="UseCompoundDrawables">
-
-                <ImageView
-                    android:id="@+id/favorites_button"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginEnd="@dimen/small_text_margin"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_pin"
-                    android:contentDescription="@null" />
-
-                <TextView
-                    android:id="@+id/organization"
-                    style="@style/SettingsTextViewGray"
-                    android:ellipsize="end"
-                    android:lines="1"
-                    android:paddingTop="2dp" />
-            </LinearLayout>
-        </LinearLayout>
-
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_gravity="bottom"
-        android:background="@color/wa_gray" />
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

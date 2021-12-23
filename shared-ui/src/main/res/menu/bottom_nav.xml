@@ -10,7 +10,7 @@
         android:icon="@drawable/ic_forms"
         android:contentDescription="Forms"
         android:title="Forms"
-        android:visible="false"
+        android:visible="true"
         />
     <item
         android:id="@+id/camera"

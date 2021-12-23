@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/drag_anchor_drawable"
+    android:paddingTop="@dimen/activity_vertical_large_margin"
+    android:paddingBottom="@dimen/activity_vertical_large_margin"
+    android:paddingStart="@dimen/activity_horizontal_large_margin"
+    android:paddingEnd="@dimen/activity_horizontal_large_margin"
+    app:behavior_hideable="true">
+
+    <!-- todo: add btm sheet padding in res -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/first_step"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/Tella2_White_Bold_Text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Election monitoring checklist"/>
+
+        <TextView
+            android:id="@+id/share"
+            style="@style/Tella2_White_Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            android:layout_marginTop="@dimen/activity_vertical_larger_margin"
+            android:drawablePadding="@dimen/activity_horizontal_margin"
+            app:drawableStartCompat="@drawable/ic_share"
+            android:text="Share"/>
+
+        <TextView
+            android:id="@+id/delete"
+            style="@style/Tella2_White_Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/share"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:drawablePadding="@dimen/activity_horizontal_margin"
+            app:drawableStartCompat="@drawable/ic_delete_outline_white_24"
+            android:text="Delete"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/second_step"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/title2"
+            style="@style/Tella2_White_Bold_Text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Delete 'Volunteer registration form'"/>
+
+        <TextView
+            android:id="@+id/content"
+            style="@style/Tella2_White_Text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title2"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:text="Are you sure you want to delete this form?"/>
+
+        <!-- todo: button -->
+
+        <TextView
+            android:id="@+id/yes"
+            style="@style/Tella2_White_Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/content"
+            android:layout_marginTop="@dimen/activity_vertical_larger_margin"
+            android:paddingStart="@dimen/activity_horizontal_large_margin"
+            android:paddingEnd="@dimen/activity_horizontal_large_margin"
+            android:textAllCaps="true"
+            android:text="YES"/>
+
+        <TextView
+            android:id="@+id/no"
+            style="@style/Tella2_White_Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@id/yes"
+            app:layout_constraintTop_toBottomOf="@id/content"
+            android:layout_marginTop="@dimen/activity_vertical_larger_margin"
+            android:paddingStart="@dimen/activity_horizontal_large_margin"
+            android:paddingEnd="@dimen/activity_horizontal_large_margin"
+            android:textAllCaps="true"
+            android:text="NO"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

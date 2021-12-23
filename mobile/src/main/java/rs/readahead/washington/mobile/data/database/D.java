@@ -13,7 +13,8 @@ class D {
     static final String DATABASE_NAME = "tella.db";
     // 1=start,2=form media file status,3=updated flag in xforms
     // 4=xml form part status,5=media file hash,6=tella upload server,7=file uploads table
-    static final int DATABASE_VERSION = 8;
+    // 9=vault
+    static final int DATABASE_VERSION = 9;
 
     /* DATABASE TABLES */
     static final String T_COLLECT_SERVER = "t_collect_server";
@@ -21,6 +22,7 @@ class D {
     static final String T_COLLECT_FORM_INSTANCE = "t_collect_xform_instance";
     static final String T_MEDIA_FILE = "t_media_file";
     static final String T_COLLECT_FORM_INSTANCE_MEDIA_FILE = "t_collect_xform_instance_media_file";
+    static final String T_COLLECT_FORM_INSTANCE_VAULT_FILE = "t_collect_xform_instance_vault_file";
     static final String T_SETTINGS = "t_settings";
     static final String T_TELLA_UPLOAD_SERVER = "t_tella_upload_server";
     static final String T_MEDIA_FILE_UPLOAD = "t_media_file_upload";
@@ -54,6 +56,7 @@ class D {
     static final String C_THUMBNAIL = "c_thumbnail";
     static final String C_FILE_NAME = "c_file_name";
     static final String C_MEDIA_FILE_ID = "c_media_file_id";
+    static final String C_VAULT_FILE_ID = "c_vault_file_id";
     static final String C_CREATED = "c_created";
     static final String C_COLLECT_FORM_INSTANCE_ID = "c_collect_form_instance_id";
     static final String C_DURATION = "c_duration";

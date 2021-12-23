@@ -559,6 +559,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     @Override
     public void formParseError(Throwable error) {
+        Timber.d(error);
         showToast(R.string.collect_toast_fail_parsing_form);
     }
 

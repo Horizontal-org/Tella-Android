@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="130dp"
     android:layout_weight="1"
     android:orientation="horizontal"
     android:baselineAligned="false">
@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginBottom="5dp"
-        android:layout_weight="0.35"
+        android:layout_weight="0.30"
         android:padding="@dimen/gallery_strip_padding">
 
         <ImageView
@@ -19,92 +19,39 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
+            android:background="@drawable/rounded_light_purple_background"
             android:clickable="true"
             android:focusable="true"
             android:scaleType="centerCrop"
             tools:ignore="ContentDescription" />
 
-        <View
-            android:id="@+id/thumbGradient"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/gallery_gradient"
-            android:visibility="gone"/>
-
-        <RelativeLayout
-            android:id="@+id/videoInfo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:orientation="horizontal"
-            android:padding="@dimen/gallery_strip_padding"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/videoDuration"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/gallery_strip_height"
-                android:layout_alignParentEnd="true"
-                android:gravity="end|center_vertical"
-                android:textColor="@color/wa_white"
-                android:textSize="@dimen/gallery_video_duration_text_size" />
-
-            <ImageView
-                android:layout_width="@dimen/gallery_strip_height"
-                android:layout_height="@dimen/gallery_strip_height"
-                android:layout_marginTop="1dp"
-                android:layout_marginEnd="1dp"
-                android:layout_toStartOf="@id/videoDuration"
-                android:adjustViewBounds="true"
-                android:contentDescription="@null"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_videocam" />
-        </RelativeLayout>
-
-        <FrameLayout
-            android:id="@+id/audioInfo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:padding="@dimen/gallery_strip_padding"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/audioDuration"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/gallery_strip_height"
-                android:layout_gravity="bottom"
-                android:gravity="end|center_vertical"
-                android:textColor="@color/wa_white"
-                android:textSize="@dimen/gallery_video_duration_text_size" />
-        </FrameLayout>
-
+        <!-- todo: just add ic_baseline_headset_white_24 as image above background -->
     </FrameLayout>
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="0.65"
+        android:layout_weight="0.70"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/fileName"
+            style="@style/Tella2_Gray_Bold_Text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginBottom="5dp"
-            android:gravity="start|center_vertical"
-            android:textColor="@color/wa_gray" />
+            android:layout_marginStart="@dimen/activity_horizontal_tiny_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_tiny_margin"
+            android:gravity="start|center_vertical"/>
 
         <TextView
             android:id="@+id/fileSize"
+            style="@style/Tella2_Gray_Text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:gravity="start|center_vertical"
-            android:textColor="@color/wa_gray" />
+            android:layout_marginStart="@dimen/activity_horizontal_tiny_margin"
+            android:layout_marginTop="@dimen/activity_vertical_tiny_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_tiny_margin"
+            android:gravity="start|center_vertical"/>
 
     </LinearLayout>
 

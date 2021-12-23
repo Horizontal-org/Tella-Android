@@ -1,13 +1,21 @@
 package rs.readahead.washington.mobile.domain.entity.collect;
 
+import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.tella_vault.rx.RxVault;
+
 import org.javarosa.core.model.FormDef;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.functions.Function;
 
 public class CollectFormInstance implements Serializable {
     public static final CollectFormInstance NONE = new CollectFormInstance();
@@ -23,10 +31,28 @@ public class CollectFormInstance implements Serializable {
     private String formName;
     private String instanceName;
     private FormDef formDef;
-    private Map<String, FormMediaFile> widgetMediaFiles = new HashMap<>();
+    private final Map<String, FormMediaFile> widgetMediaFiles = new HashMap<>();
     private long clonedId; // id of submitted instance we are clone of
     private FormMediaFileStatus formPartStatus = FormMediaFileStatus.UNKNOWN;
+    private final Set<String> widgetVaultFileIds = new HashSet<>();
 
+    /**
+     * Load this instance widget FormMediaFiles from Vault, if they are
+     * found there.
+     * @param vault Vault to use for loading.
+     */
+    public Observable<CollectFormInstance> loadWidgetMediaFiles(RxVault vault) {
+        return vault.get(widgetVaultFileIds)
+                .flatMapObservable((Function<Set<VaultFile>, ObservableSource<CollectFormInstance>>) vaultFiles -> {
+                    widgetMediaFiles.clear();
+
+                    for (VaultFile vaultFile : vaultFiles) {
+                        widgetMediaFiles.put(vaultFile.id, FormMediaFile.fromMediaFile(vaultFile));
+                    }
+
+                    return Observable.just(CollectFormInstance.this);
+                });
+    }
 
     public long getId() {
         return id;
@@ -146,5 +172,13 @@ public class CollectFormInstance implements Serializable {
 
     public void setFormPartStatus(FormMediaFileStatus formPartStatus) {
         this.formPartStatus = formPartStatus;
+    }
+
+    public void addWidgetVaultFileId(String id) {
+        widgetVaultFileIds.add(id);
+    }
+
+    public Set<String> getWidgetVaultFileIds() {
+        return widgetVaultFileIds;
     }
 }

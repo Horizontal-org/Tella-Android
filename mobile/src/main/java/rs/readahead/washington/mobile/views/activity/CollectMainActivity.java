@@ -4,28 +4,22 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+
+import org.javarosa.core.model.FormDef;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
-import androidx.viewpager.widget.ViewPager;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
-
-import org.javarosa.core.model.FormDef;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import androidx.viewpager2.widget.ViewPager2;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -47,7 +41,9 @@ import rs.readahead.washington.mobile.bus.event.ReSubmitFormInstanceEvent;
 import rs.readahead.washington.mobile.bus.event.ShowBlankFormEntryEvent;
 import rs.readahead.washington.mobile.bus.event.ShowFormInstanceEntryEvent;
 import rs.readahead.washington.mobile.bus.event.ToggleBlankFormPinnedEvent;
+import rs.readahead.washington.mobile.data.Tella2UpgradeHandler;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
+import rs.readahead.washington.mobile.databinding.ActivityCollectMainBinding;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
@@ -59,45 +55,28 @@ import rs.readahead.washington.mobile.mvp.presenter.CollectMainPresenter;
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.PermissionUtil;
-import rs.readahead.washington.mobile.util.StringUtils;
-import rs.readahead.washington.mobile.views.adapters.ViewPagerAdapter;
+import rs.readahead.washington.mobile.views.adapters.FormPagerAdapter;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
-import rs.readahead.washington.mobile.views.fragment.BlankFormsListFragment;
-import rs.readahead.washington.mobile.views.fragment.DraftFormsListFragment;
-import rs.readahead.washington.mobile.views.fragment.FormListFragment;
-import rs.readahead.washington.mobile.views.fragment.SubmittedFormsListFragment;
 import timber.log.Timber;
-
 
 @RuntimePermissions
 public class CollectMainActivity extends BaseLockActivity implements
         ICollectMainPresenterContract.IView,
         ICollectCreateFormControllerContract.IView {
-    int blankFragmentPosition;
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
-    @BindView(R.id.tabs)
-    TabLayout tabLayout;
-    @BindView(R.id.container)
-    View formsViewPager;
-    @BindView(R.id.blank_forms_layout)
-    View noServersView;
-    @BindView(R.id.blank_forms_text)
-    TextView blankFormsText;
+    private ActivityCollectMainBinding binding;
+
     private EventCompositeDisposable disposables;
     private CollectMainPresenter presenter;
     private CollectCreateFormControllerPresenter formControllerPresenter;
     private AlertDialog alertDialog;
-    private ViewPager mViewPager;
-    private ViewPagerAdapter adapter;
     private long numOfCollectServers = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_collect_main);
-        ButterKnife.bind(this);
+        binding = ActivityCollectMainBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -110,43 +89,37 @@ public class CollectMainActivity extends BaseLockActivity implements
 
         presenter = new CollectMainPresenter(this);
 
-        initViewPageAdapter();
-
-        mViewPager = findViewById(R.id.container);
-        mViewPager.setAdapter(adapter);
-        mViewPager.setCurrentItem(blankFragmentPosition);
+        binding.viewPager.setAdapter(new FormPagerAdapter(this));
+        binding.viewPager.setCurrentItem(FormPagerAdapter.BLANK_POSITION);
 
         TabLayout tabLayout = findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
+        new TabLayoutMediator(tabLayout, binding.viewPager,
+                (tab, position) -> tab.setText(getFragmentTabName(position))
+        ).attach();
 
-        fab.setOnClickListener(view -> {
+        binding.fab.setOnClickListener(v -> {
             if (MyApplication.isConnectedToInternet(getContext())) {
-                if (mViewPager.getCurrentItem() == blankFragmentPosition) {
-                    getBlankFormsListFragment().refreshBlankForms();
+                if (binding.viewPager.getCurrentItem() == FormPagerAdapter.BLANK_POSITION) {
+                    // getBlankFormsListFragment().refreshBlankForms();
+                    //todo: shared viewmodel
+                    try {
+                        Tella2UpgradeHandler.copyMediaFilesToVault(MyApplication.getKeyDataSource(), MyApplication.getKeyRxVault())
+                            .blockingAwait();
+                    } catch (Throwable t) {
+                        Timber.d(t);
+                    }
                 }
             } else {
                 showToast(getString(R.string.collect_blank_toast_not_connected));
             }
         });
 
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
+        binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                fab.setVisibility((position == blankFragmentPosition && numOfCollectServers > 0) ? View.VISIBLE : View.GONE);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
+                binding.fab.setVisibility((position == FormPagerAdapter.BLANK_POSITION && numOfCollectServers > 0) ? View.VISIBLE : View.GONE);
             }
         });
-
-        blankFormsText.setText(Html.fromHtml(getString(R.string.collect_expl_not_connected_to_server)));
-        blankFormsText.setMovementMethod(LinkMovementMethod.getInstance());
-        StringUtils.stripUnderlines(blankFormsText);
 
         disposables = MyApplication.bus().createCompositeDisposable();
         disposables.wire(ShowBlankFormEntryEvent.class, new EventObserver<ShowBlankFormEntryEvent>() {
@@ -170,31 +143,35 @@ public class CollectMainActivity extends BaseLockActivity implements
         disposables.wire(CollectFormSubmittedEvent.class, new EventObserver<CollectFormSubmittedEvent>() {
             @Override
             public void onNext(CollectFormSubmittedEvent event) {
-                getDraftFormsListFragment().listDraftForms();
-                getSubmittedFormsListFragment().listSubmittedForms();
+                //todo: shared viewmodel
+//                getDraftFormsListFragment().listDraftForms();
+//                getSubmittedFormsListFragment().listSubmittedForms();
                 setPagerToSubmittedFragment();
             }
         });
         disposables.wire(CollectFormSubmitStoppedEvent.class, new EventObserver<CollectFormSubmitStoppedEvent>() {
             @Override
             public void onNext(CollectFormSubmitStoppedEvent event) {
-                getDraftFormsListFragment().listDraftForms();
-                getSubmittedFormsListFragment().listSubmittedForms();
+//                getDraftFormsListFragment().listDraftForms();
+//                getSubmittedFormsListFragment().listSubmittedForms();
+                //todo: shared viewmodel
                 setPagerToSubmittedFragment();
             }
         });
         disposables.wire(CollectFormSubmissionErrorEvent.class, new EventObserver<CollectFormSubmissionErrorEvent>() {
             @Override
             public void onNext(CollectFormSubmissionErrorEvent event) {
-                getDraftFormsListFragment().listDraftForms();
-                getSubmittedFormsListFragment().listSubmittedForms();
+//                getDraftFormsListFragment().listDraftForms();
+//                getSubmittedFormsListFragment().listSubmittedForms();
+                //todo: shared viewmodel
                 setPagerToSubmittedFragment();
             }
         });
         disposables.wire(CollectFormSavedEvent.class, new EventObserver<CollectFormSavedEvent>() {
             @Override
             public void onNext(CollectFormSavedEvent event) {
-                getDraftFormsListFragment().listDraftForms();
+//                getDraftFormsListFragment().listDraftForms();
+                //todo: shared viewmodel
             }
         });
         disposables.wire(CollectFormInstanceDeletedEvent.class, new EventObserver<CollectFormInstanceDeletedEvent>() {
@@ -277,7 +254,6 @@ public class CollectMainActivity extends BaseLockActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -316,7 +292,8 @@ public class CollectMainActivity extends BaseLockActivity implements
 
     @Override
     public void onToggleFavoriteSuccess(CollectForm form) {
-        getBlankFormsListFragment().listBlankForms();
+//        getBlankFormsListFragment().listBlankForms();
+        //todo: shared viewmodel
     }
 
     @Override
@@ -327,8 +304,9 @@ public class CollectMainActivity extends BaseLockActivity implements
     @Override
     public void onFormInstanceDeleteSuccess() {
         Toast.makeText(this, R.string.collect_toast_form_deleted, Toast.LENGTH_SHORT).show();
-        getSubmittedFormsListFragment().listSubmittedForms();
-        getDraftFormsListFragment().listDraftForms();
+//        getSubmittedFormsListFragment().listSubmittedForms();
+//        getDraftFormsListFragment().listDraftForms();
+        //todo: shared viewmodel
     }
 
     @Override
@@ -346,17 +324,15 @@ public class CollectMainActivity extends BaseLockActivity implements
         numOfCollectServers = num;
 
         if (numOfCollectServers < 1) {
-            tabLayout.setVisibility(View.GONE);
-            formsViewPager.setVisibility(View.GONE);
-            fab.setVisibility(View.GONE);
-            noServersView.setVisibility(View.VISIBLE);
+            binding.tabs.setVisibility(View.GONE);
+            binding.viewPager.setVisibility(View.GONE);
+            binding.fab.setVisibility(View.GONE);
         } else {
-            tabLayout.setVisibility(View.VISIBLE);
-            formsViewPager.setVisibility(View.VISIBLE);
-            noServersView.setVisibility(View.GONE);
+            binding.tabs.setVisibility(View.VISIBLE);
+            binding.viewPager.setVisibility(View.VISIBLE);
 
-            if (mViewPager.getCurrentItem() == blankFragmentPosition) {
-                fab.setVisibility(View.VISIBLE);
+            if (binding.viewPager.getCurrentItem() == FormPagerAdapter.BLANK_POSITION) {
+                binding.fab.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -464,65 +440,69 @@ public class CollectMainActivity extends BaseLockActivity implements
         }
     }
 
-    private void initViewPageAdapter() {
-        adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(DraftFormsListFragment.newInstance(), getString(R.string.collect_draft_tab_title));
-        adapter.addFragment(BlankFormsListFragment.newInstance(), getString(R.string.collect_tab_title_blank));
-        adapter.addFragment(SubmittedFormsListFragment.newInstance(), getString(R.string.collect_sent_tab_title));
-        blankFragmentPosition = getFragmentPosition(FormListFragment.Type.BLANK);
-    }
+//    private DraftFormsListFragment getDraftFormsListFragment() {
+//        return getFormListFragment(FormListFragment.Type.DRAFT);
+//    }
+//
+//    private BlankFormsListFragment getBlankFormsListFragment() {
+//        return getFormListFragment(FormListFragment.Type.BLANK);
+//    }
+//
+//    private SubmittedFormsListFragment getSubmittedFormsListFragment() {
+//        return getFormListFragment(FormListFragment.Type.SUBMITTED);
+//    }
 
-    private DraftFormsListFragment getDraftFormsListFragment() {
-        return getFormListFragment(FormListFragment.Type.DRAFT);
-    }
-
-    private BlankFormsListFragment getBlankFormsListFragment() {
-        return getFormListFragment(FormListFragment.Type.BLANK);
-    }
-
-    private SubmittedFormsListFragment getSubmittedFormsListFragment() {
-        return getFormListFragment(FormListFragment.Type.SUBMITTED);
-    }
-
-    private <T> T getFormListFragment(FormListFragment.Type type) {
-        for (int i = 0; i < adapter.getCount(); i++) {
-            FormListFragment fragment = (FormListFragment) adapter.getItem(i);
-            if (fragment.getFormListType() == type) {
-                //noinspection unchecked
-                return (T) fragment;
-            }
-        }
-        throw new IllegalArgumentException();
-    }
-
-    private int getFragmentPosition(FormListFragment.Type type) {
-        for (int i = 0; i < adapter.getCount(); i++) {
-            FormListFragment fragment = (FormListFragment) adapter.getItem(i);
-            if (fragment.getFormListType() == type) {
-                return i;
-            }
-        }
-        throw new IllegalArgumentException();
-    }
+//    private <T> T getFormListFragment(FormListFragment.Type type) {
+//        for (int i = 0; i < adapter.getCount(); i++) {
+//            FormListFragment fragment = (FormListFragment) adapter.getItem(i);
+//            if (fragment.getFormListType() == type) {
+//                //noinspection unchecked
+//                return (T) fragment;
+//            }
+//        }
+//        throw new IllegalArgumentException();
+//    }
+//
+//    private int getFragmentPosition(FormListFragment.Type type) {
+//        for (int i = 0; i < adapter.getItemCount(); i++) {
+//            FormListFragment fragment = (FormListFragment) adapter.getItemId(i);
+//            if (fragment.getFormListType() == type) {
+//                return i;
+//            }
+//        }
+//        throw new IllegalArgumentException();
+//    }
 
     private void setPagerToSubmittedFragment() {
-        mViewPager.setCurrentItem(getFragmentPosition(FormListFragment.Type.SUBMITTED));
-        fab.setVisibility(View.GONE);
+        binding.viewPager.setCurrentItem(FormPagerAdapter.SUBMITTED_POSITION);
+        binding.fab.setVisibility(View.GONE);
     }
 
     private void startCollectHelp() {
         startActivity(new Intent(CollectMainActivity.this, CollectHelpActivity.class));
     }
 
-    public void hideFab() {
-        if (fab != null) {
-            fab.setVisibility(View.GONE);
+
+    public CharSequence getFragmentTabName(int position) {
+        switch (position) {
+            case FormPagerAdapter.BLANK_POSITION:
+                return getString(R.string.collect_tab_title_blank);
+            case FormPagerAdapter.DRAFT_POSITION:
+                return getString(R.string.collect_draft_tab_title);
+            case FormPagerAdapter.OUTBOX_POSITION:
+                return "Outbox";
+            case FormPagerAdapter.SUBMITTED_POSITION:
+                return getString(R.string.collect_sent_tab_title);
+            default:
+                throw new IllegalArgumentException();
         }
     }
 
+    public void hideFab() {
+        binding.fab.setVisibility(View.GONE);
+    }
+
     public void showFab() {
-        if (fab != null) {
-            fab.setVisibility(View.VISIBLE);
-        }
+        binding.fab.setVisibility(View.VISIBLE);
     }
 }

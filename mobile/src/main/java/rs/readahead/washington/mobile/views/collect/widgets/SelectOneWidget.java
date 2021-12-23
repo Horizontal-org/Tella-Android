@@ -16,6 +16,7 @@ package rs.readahead.washington.mobile.views.collect.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.method.LinkMovementMethod;
+import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageButton;
@@ -32,9 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.util.StringUtils;
-
+import rs.readahead.washington.mobile.util.Util;
 
 /**
  * Based on ODK Collect SelectOneWidget.
@@ -57,12 +57,18 @@ public class SelectOneWidget extends QuestionWidget implements
 
         // Layout holds the vertical list of buttons
         LinearLayout buttonLayout = new LinearLayout(context);
+        buttonLayout.setOrientation(LinearLayout.VERTICAL);
+
         addDeleteButton();
 
         String s = null;
         if (prompt.getAnswerValue() != null) {
             s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
         }
+
+        // LayoutParams for every rdio row
+        ViewGroup.MarginLayoutParams rowLayoutParams = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        rowLayoutParams.setMargins(0, context.getResources().getDimensionPixelSize(R.dimen.activity_vertical_small_margin), 0, 0);
 
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
@@ -73,7 +79,10 @@ public class SelectOneWidget extends QuestionWidget implements
                 } else {
                     choiceDisplayName = "";
                 }
-                RadioButton r = new RadioButton(getContext());
+
+                ViewGroup vg = (ViewGroup) inflate(getContext(), R.layout.collect_widget_select_one_radio, null);
+                RadioButton r = vg.findViewById(R.id.radio_button);
+
                 r.setText(choiceDisplayName);
                 r.setMovementMethod(LinkMovementMethod.getInstance());
                 r.setTag(i);
@@ -90,11 +99,9 @@ public class SelectOneWidget extends QuestionWidget implements
 
                 r.setOnCheckedChangeListener(this);
 
-                buttonLayout.addView(r);
+                buttonLayout.addView(vg, rowLayoutParams);
             }
         }
-
-        buttonLayout.setOrientation(LinearLayout.VERTICAL);
 
         // The buttons take up the right half of the screen
         addAnswerView(buttonLayout);
@@ -171,7 +178,7 @@ public class SelectOneWidget extends QuestionWidget implements
     }
 
     private void addDeleteButton() {
-        deleteButton = addButton(R.drawable.ic_delete_grey_24px);
+        deleteButton = addButton(R.drawable.ic_cancel_white_24dp);
         deleteButton.setOnClickListener(v -> clearAnswer());
         deleteButton.setVisibility(GONE);
     }

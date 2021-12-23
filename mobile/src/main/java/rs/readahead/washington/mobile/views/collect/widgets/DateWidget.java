@@ -20,7 +20,6 @@ import android.view.LayoutInflater;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.IAnswerData;
@@ -33,7 +32,6 @@ import java.util.Date;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.util.Util;
 
-
 /**
  * Based on ODK DateWidget.
  */
@@ -42,8 +40,7 @@ public class DateWidget extends QuestionWidget {
     private DatePickerDialog datePickerDialog;
 
     private Button dateButton;
-    private TextView dateText;
-    ImageButton clearButton;
+    private final ImageButton clearButton;
 
     private int year;
     private int month;
@@ -60,7 +57,7 @@ public class DateWidget extends QuestionWidget {
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-        clearButton = addButton(R.drawable.ic_delete_grey_24px);
+        clearButton = addButton(R.drawable.ic_cancel_white_24dp);
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!formEntryPrompt.isReadOnly());
         clearButton.setVisibility(GONE);
@@ -89,8 +86,7 @@ public class DateWidget extends QuestionWidget {
         nullAnswer = true;
         dateVisible = false;
         dateButton.setVisibility(VISIBLE);
-        dateButton.setText(getResources().getString(R.string.collect_form_action_select_date)); // todo: say something smart here..
-        dateText.setVisibility(GONE);
+        dateButton.setText(getResources().getString(R.string.collect_form_action_select_date));
         clearButton.setVisibility(GONE);
     }
 
@@ -119,10 +115,8 @@ public class DateWidget extends QuestionWidget {
 
     private void setWidgetDate() {
         nullAnswer = false;
-        dateButton.setVisibility(GONE);
+        dateButton.setText(getFormattedDate(getContext(), (Date) getAnswer().getValue()));
         clearButton.setVisibility(VISIBLE);
-        dateText.setVisibility(VISIBLE);
-        dateText.setText(getFormattedDate(getContext(), (Date) getAnswer().getValue()));
         dateVisible = true;
     }
 
@@ -142,7 +136,6 @@ public class DateWidget extends QuestionWidget {
         inflater.inflate(R.layout.collect_widget_date, linearLayout, true);
 
         dateButton = linearLayout.findViewById(R.id.dateWidgetButton);
-        dateText = linearLayout.findViewById(R.id.dateText);
 
         dateButton.setId(QuestionWidget.newUniqueId());
         dateButton.setText(getResources().getString(R.string.collect_form_action_select_date));

@@ -56,7 +56,7 @@ public class StringWidget extends QuestionWidget {
         String height = prompt.getQuestion().getAdditionalAttribute(null, ROWS);
         if (height != null && height.length() != 0) {
             try {
-                int rows = Integer.valueOf(height);
+                int rows = Integer.parseInt(height);
                 answer.setMinLines(rows);
                 answer.setGravity(Gravity.TOP);
             } catch (Exception e) {

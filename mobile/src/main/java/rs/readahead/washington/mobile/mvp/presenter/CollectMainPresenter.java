@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.rx.RxVault;
 
 import org.javarosa.core.model.FormDef;
 
@@ -11,6 +12,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
+import rs.readahead.washington.mobile.data.KeyRxVault;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.repository.OpenRosaRepository;
@@ -21,17 +23,18 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.mvp.contract.ICollectMainPresenterContract;
 
-
 public class CollectMainPresenter implements ICollectMainPresenterContract.IPresenter {
     private ICollectMainPresenterContract.IView view;
-    private KeyDataSource keyDataSource;
-    private CompositeDisposable disposables = new CompositeDisposable();
+    private final KeyDataSource keyDataSource;
+    private final KeyRxVault keyRxVault;
+    private final CompositeDisposable disposables = new CompositeDisposable();
 
 
     public CollectMainPresenter(ICollectMainPresenterContract.IView view) {
         new OpenRosaRepository();
         this.view = view;
         this.keyDataSource = MyApplication.getKeyDataSource();
+        this.keyRxVault = MyApplication.getKeyRxVault();
     }
 
     @Override
@@ -59,7 +62,10 @@ public class CollectMainPresenter implements ICollectMainPresenterContract.IPres
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapSingle((Function<DataSource, SingleSource<CollectFormInstance>>) dataSource ->
                         dataSource.getInstance(instanceId)
-                ).subscribe(
+                ).flatMap(instance ->
+                        keyRxVault.getRxVault().flatMap((Function<RxVault, ObservableSource<CollectFormInstance>>)
+                                instance::loadWidgetMediaFiles))
+                .subscribe(
                         instance -> view.onInstanceFormDefSuccess(maybeCloneInstance(instance)),
                         throwable -> {
                             FirebaseCrashlytics.getInstance().recordException(throwable);

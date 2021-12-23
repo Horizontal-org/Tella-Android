@@ -21,7 +21,6 @@ import android.view.LayoutInflater;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.TimeData;
@@ -33,7 +32,6 @@ import java.util.Date;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.util.Util;
 
-
 /**
  * Based on ODK TimeWidget.
  */
@@ -42,8 +40,7 @@ public class TimeWidget extends QuestionWidget {
     private TimePickerDialog timePickerDialog;
 
     private Button timeButton;
-    private TextView timeText;
-    ImageButton clearButton;
+    private final ImageButton clearButton;
 
     private int hour;
     private int minute;
@@ -60,7 +57,7 @@ public class TimeWidget extends QuestionWidget {
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-        clearButton = addButton(R.drawable.ic_delete_grey_24px);
+        clearButton = addButton(R.drawable.ic_cancel_white_24dp);
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!formEntryPrompt.isReadOnly());
         clearButton.setVisibility(GONE);
@@ -88,8 +85,7 @@ public class TimeWidget extends QuestionWidget {
         nullAnswer = true;
         timeVisible = false;
         timeButton.setVisibility(VISIBLE);
-        timeButton.setText(getResources().getString(R.string.collect_form_action_select_time)); // todo: say something smart here..
-        timeText.setVisibility(GONE);
+        timeButton.setText(getResources().getString(R.string.collect_form_action_select_time));
         clearButton.setVisibility(GONE);
     }
 
@@ -114,10 +110,8 @@ public class TimeWidget extends QuestionWidget {
 
     private void setWidgetTime() {
         nullAnswer = false;
-        timeButton.setVisibility(GONE);
-        timeText.setVisibility(VISIBLE);
-        timeText.setText(getAnswer().getDisplayText());
         timeVisible = true;
+        timeButton.setText(getAnswer().getDisplayText());
         clearButton.setVisibility(VISIBLE);
     }
 
@@ -136,7 +130,6 @@ public class TimeWidget extends QuestionWidget {
         inflater.inflate(R.layout.collect_widget_time, linearLayout, true);
 
         timeButton = linearLayout.findViewById(R.id.timeWidgetButton);
-        timeText = linearLayout.findViewById(R.id.timeText);
 
         timeButton.setId(QuestionWidget.newUniqueId());
         timeButton.setText(getResources().getString(R.string.collect_form_action_select_time));

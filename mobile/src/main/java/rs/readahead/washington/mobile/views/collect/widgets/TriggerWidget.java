@@ -18,6 +18,7 @@ import android.content.Context;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.javarosa.core.model.data.IAnswerData;
@@ -25,7 +26,6 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 
 import rs.readahead.washington.mobile.R;
-
 
 /**
  * Based on ODK TriggerWidget.
@@ -42,7 +42,8 @@ public class TriggerWidget extends QuestionWidget {
         super(context, prompt);
         this.prompt = prompt;
 
-        triggerButton = new AppCompatCheckBox(getContext());
+        ViewGroup vg = (ViewGroup) inflate(context, R.layout.collect_widget_trigger, null);
+        triggerButton = vg.findViewById(R.id.radio_button);
         triggerButton.setId(QuestionWidget.newUniqueId());
         triggerButton.setText(getContext().getString(R.string.collect_form_acknowledge_select_expl));
         triggerButton.setEnabled(!prompt.isReadOnly());
@@ -64,17 +65,12 @@ public class TriggerWidget extends QuestionWidget {
 
         String s = prompt.getAnswerText();
         if (s != null) {
-            if (s.equals(OK_TEXT)) {
-                triggerButton.setChecked(true);
-            } else {
-                triggerButton.setChecked(false);
-            }
+            triggerButton.setChecked(s.equals(OK_TEXT));
             stringAnswer.setText(s);
-
         }
 
         // finish complex layout
-        addAnswerView(triggerButton);
+        addAnswerView(vg);
     }
 
     public FormEntryPrompt getFormEntryPrompt() {

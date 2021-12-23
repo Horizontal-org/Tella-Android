@@ -13,6 +13,11 @@ ext {
 
 android {
     compileSdkVersion 30
+
+    viewBinding {
+        enabled = true
+    }
+
     defaultConfig {
         applicationId "org.hzontal.tella"
         minSdkVersion 17

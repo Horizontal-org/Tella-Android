@@ -1,36 +1,33 @@
 package rs.readahead.washington.mobile.views.fragment;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import org.hzontal.shared_ui.bottomsheet.CustomBottomSheetFragment;
+import org.hzontal.shared_ui.utils.DialogUtils;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.databinding.FragmentDraftFormsListBinding;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.mvp.contract.ICollectFormInstanceListPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CollectFormInstanceListPresenter;
+import rs.readahead.washington.mobile.util.ViewUtil;
 import rs.readahead.washington.mobile.views.adapters.CollectDraftFormInstanceRecycleViewAdapter;
+import rs.readahead.washington.mobile.views.custom.TopSpaceItemDecoration;
 import timber.log.Timber;
 
-
 public class DraftFormsListFragment extends FormListFragment implements
-        ICollectFormInstanceListPresenterContract.IView {
-    @BindView(R.id.draftFormInstances)
-    RecyclerView recyclerView;
-    @BindView(R.id.blank_draft_forms_info)
-    TextView blankFormsInfo;
+        ICollectFormInstanceListPresenterContract.IView,
+        DraftFormListListener {
+    private FragmentDraftFormsListBinding binding;
 
-    private Unbinder unbinder;
     private CollectDraftFormInstanceRecycleViewAdapter adapter;
     private CollectFormInstanceListPresenter presenter;
 
@@ -46,18 +43,19 @@ public class DraftFormsListFragment extends FormListFragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new CollectDraftFormInstanceRecycleViewAdapter();
+
+        adapter = new CollectDraftFormInstanceRecycleViewAdapter(this);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_draft_forms_list, container, false);
-        unbinder = ButterKnife.bind(this, rootView);
+        binding = FragmentDraftFormsListBinding.inflate(inflater, container, false);
+        View rootView = binding.getRoot();
 
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setAdapter(adapter);
+        binding.draftFormInstances.setLayoutManager(new LinearLayoutManager(getActivity()));
+        binding.draftFormInstances.addItemDecoration(new TopSpaceItemDecoration(ViewUtil.getDpInPixels(requireContext(), 16)));
+        binding.draftFormInstances.setAdapter(adapter);
 
         createPresenter();
 
@@ -79,18 +77,52 @@ public class DraftFormsListFragment extends FormListFragment implements
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        binding = null;
     }
 
     @Override
     public void onFormInstanceListSuccess(List<CollectFormInstance> instances) {
-        blankFormsInfo.setVisibility(instances.isEmpty() ? View.VISIBLE : View.GONE);
+        binding.emptyContainer.setVisibility(instances.isEmpty() ? View.VISIBLE : View.GONE);
+        binding.notEmptyContainer.setVisibility(instances.isEmpty() ? View.GONE : View.VISIBLE);
+
         adapter.setInstances(instances);
     }
 
     @Override
     public void onFormInstanceListError(Throwable error) {
         Timber.d(error, getClass().getName());
+    }
+
+    @Override
+    public void onFormInstanceDeleteSuccess(String name) {
+        DialogUtils.showBottomMessage(requireActivity(), String.format("%s has been deleted.", name), false); // todo: string
+    }
+
+    @Override
+    public void onFormInstanceDeleteError(Throwable throwable) {
+        // todo: do this
+    }
+
+    @Override
+    public void showDeleteBottomSheet(CollectFormInstance instance) {
+        final CustomBottomSheetFragment bottomSheet = CustomBottomSheetFragment.Companion.with(requireActivity().getSupportFragmentManager())
+                .page(R.layout.form_fragment_delete_btm_sheet)
+                .cancellable(true);
+
+        bottomSheet.holder(new BlankFormsListFragment.DeleteBottomSheetHolder(), holder -> {
+            holder.title.setText(instance.getInstanceName());
+            holder.title2.setText(String.format("Delete \"%s\"?", instance.getInstanceName())); // todo: string
+            holder.delete.setOnClickListener(v -> {
+                holder.firstStep.setVisibility(View.GONE);
+                holder.secondStep.setVisibility(View.VISIBLE);
+            });
+            holder.yes.setOnClickListener(v -> {
+                // presenter.deleteFormInstance(instance);
+                onFormInstanceDeleteSuccess(instance.getInstanceName());
+                bottomSheet.dismiss();
+            });
+            holder.no.setOnClickListener(v -> bottomSheet.dismiss());
+        }).transparentBackground().launch();
     }
 
     public void listDraftForms() {

@@ -19,6 +19,7 @@ import org.hzontal.tella.keys.key.LifecycleMainKey;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Set;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
@@ -110,6 +111,16 @@ public class RxVault extends BaseVault {
         return Single.defer(() -> {
             try {
                 return Single.just(baseGet(id));
+            } catch (Exception e) {
+                return Single.error(e);
+            }
+        });
+    }
+
+    public Single<Set<VaultFile>> get(Set<String> ids) {
+        return Single.defer(() -> {
+            try {
+                return Single.just(baseGet(ids));
             } catch (Exception e) {
                 return Single.error(e);
             }

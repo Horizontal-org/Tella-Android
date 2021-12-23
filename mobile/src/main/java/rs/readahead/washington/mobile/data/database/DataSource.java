@@ -1,13 +1,10 @@
 package rs.readahead.washington.mobile.data.database;
 
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.text.TextUtils;
-
-import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -31,8 +28,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import androidx.annotation.Nullable;
+import io.reactivex.BackpressureStrategy;
 import io.reactivex.Completable;
 import io.reactivex.CompletableTransformer;
+import io.reactivex.Flowable;
+import io.reactivex.FlowableTransformer;
 import io.reactivex.Maybe;
 import io.reactivex.MaybeTransformer;
 import io.reactivex.Single;
@@ -68,7 +69,7 @@ import timber.log.Timber;
 public class DataSource implements IServersRepository, ITellaUploadServersRepository, ITellaUploadsRepository, ICollectServersRepository, ICollectFormsRepository,
         IMediaFileRecordRepository {
     private static DataSource dataSource;
-    private SQLiteDatabase database;
+    private final SQLiteDatabase database;
 
     final private SingleTransformer schedulersTransformer =
             observable -> observable.subscribeOn(Schedulers.io())
@@ -79,6 +80,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     .observeOn(AndroidSchedulers.mainThread());
 
     final private MaybeTransformer schedulersMaybeTransformer =
+            observable -> observable.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+
+    final private FlowableTransformer schedulersFlowableTransformer =
             observable -> observable.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread());
 
@@ -109,6 +114,11 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     private <T> MaybeTransformer<T, T> applyMaybeSchedulers() {
         //noinspection unchecked
         return (MaybeTransformer<T, T>) schedulersMaybeTransformer;
+    }
+
+    private <T> FlowableTransformer<T, T> applyFlowableSchedulers() {
+        //noinspection unchecked
+        return (FlowableTransformer<T, T>) schedulersFlowableTransformer;
     }
 
     @Override
@@ -349,7 +359,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }).compose(applyCompletableSchedulers());
     }
 
-
     public Single<List<VaultFile>> listMediaFiles(final Filter filter, final Sort sort) {
         return Single.fromCallable(() -> getMediaFiles(filter, sort))
                 .compose(applySchedulers());
@@ -418,6 +427,16 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 .compose(applySchedulers());
     }
 
+    public Single<List<MediaFileUpgradeData>> listAllMediaFiles() {
+        return Single.fromCallable(this::listAllMediaFilesDb);
+    }
+
+    public Completable deleteAllMediaFiles() {
+        return Completable.fromCallable(() -> {
+            deleteTable(D.T_MEDIA_FILE);
+            return null;
+        });
+    }
 
     private long countDBCollectServers() {
         return net.sqlcipher.DatabaseUtils.queryNumEntries(database, D.T_COLLECT_SERVER);
@@ -790,7 +809,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         } finally {
             database.endTransaction();
         }
-        throw new NotFountException();
     }
 
 
@@ -914,6 +932,44 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }
 
         throw new NotFountException();
+    }
+
+    private List<MediaFileUpgradeData> listAllMediaFilesDb() {
+        List<MediaFileUpgradeData> mediaFileUpgradeDataList = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_MEDIA_FILE,
+                    new String[]{
+                            cn(D.T_MEDIA_FILE, D.C_ID, D.A_MEDIA_FILE_ID),
+                            D.C_PATH,
+                            D.C_UID,
+                            D.C_FILE_NAME,
+                            D.C_METADATA,
+                            D.C_CREATED,
+                            D.C_DURATION,
+                            D.C_ANONYMOUS,
+                            D.C_SIZE,
+                            D.C_HASH},
+                    null, null, null, null, null
+            );
+
+            cursor = database.rawQuery(query, null);
+
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                mediaFileUpgradeDataList.add(cursorToMediaFileUpgradeData(cursor));
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return mediaFileUpgradeDataList;
     }
 
     private VaultFile deleteMediaFileFromDb(VaultFile vaultFile, IMediaFileDeleter deleter) throws NotFountException {
@@ -1153,9 +1209,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
                 instance.setFormDef(deserializeFormDef(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF))));
 
-                List<FormMediaFile> mediaFiles = getFormInstanceMediaFilesFromDb(instance.getId());
-                for (FormMediaFile mediaFile : mediaFiles) {
-                    instance.setWidgetMediaFile(mediaFile.id, mediaFile);
+                List<String> vaultFileIds = getFormInstanceVaultFileIdsFromDb(instance.getId());
+                for (String vaultFileId : vaultFileIds) {
+                    instance.addWidgetVaultFileId(vaultFileId);
                 }
 
                 return instance;
@@ -1290,35 +1346,25 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return instances;
     }
 
-    private List<FormMediaFile> getFormInstanceMediaFilesFromDb(long instanceId) {
-        List<FormMediaFile> mediaFiles = new ArrayList<>();
+    private List<String> getFormInstanceVaultFileIdsFromDb(long instanceId) {
+        List<String> vaultFileIds = new ArrayList<>();
         Cursor cursor = null;
 
         try {
             final String query = SQLiteQueryBuilder.buildQueryString(
                     false,
-                    D.T_MEDIA_FILE + " JOIN " + D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE + " ON " +
-                            cn(D.T_MEDIA_FILE, D.C_ID) + " = " + cn(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE, D.C_MEDIA_FILE_ID),
+                    D.T_COLLECT_FORM_INSTANCE_VAULT_FILE,
                     new String[]{
-                            cn(D.T_MEDIA_FILE, D.C_ID, D.A_MEDIA_FILE_ID),
-                            D.C_PATH,
-                            D.C_UID,
-                            D.C_FILE_NAME,
-                            D.C_METADATA,
-                            D.C_CREATED,
-                            D.C_DURATION,
-                            D.C_ANONYMOUS,
-                            D.C_SIZE,
-                            D.C_HASH,
-                            cn(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE, D.C_STATUS, D.A_FORM_MEDIA_FILE_STATUS)},
-                    cn(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE, D.C_COLLECT_FORM_INSTANCE_ID) + "= ?",
+                            D.C_VAULT_FILE_ID
+                    },
+                    D.C_COLLECT_FORM_INSTANCE_ID + "= ?",
                     null, null, null, null
             );
 
             cursor = database.rawQuery(query, new String[]{Long.toString(instanceId)});
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                mediaFiles.add(cursorToFormMediaFile(cursor));
+                vaultFileIds.add(cursor.getString(cursor.getColumnIndexOrThrow(D.C_VAULT_FILE_ID)));
             }
         } catch (Exception e) {
             Timber.d(e, getClass().getName());
@@ -1328,8 +1374,50 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             }
         }
 
-        return mediaFiles;
+        return vaultFileIds;
     }
+
+//    private List<FormMediaFile> getFormInstanceMediaFilesFromDb(long instanceId) {
+//        // todo: handle this !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//        List<FormMediaFile> mediaFiles = new ArrayList<>();
+//        Cursor cursor = null;
+//
+//        try {
+//            final String query = SQLiteQueryBuilder.buildQueryString(
+//                    false,
+//                    D.T_MEDIA_FILE + " JOIN " + D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE + " ON " +
+//                            cn(D.T_MEDIA_FILE, D.C_ID) + " = " + cn(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE, D.C_MEDIA_FILE_ID),
+//                    new String[]{
+//                            cn(D.T_MEDIA_FILE, D.C_ID, D.A_MEDIA_FILE_ID),
+//                            D.C_PATH,
+//                            D.C_UID,
+//                            D.C_FILE_NAME,
+//                            D.C_METADATA,
+//                            D.C_CREATED,
+//                            D.C_DURATION,
+//                            D.C_ANONYMOUS,
+//                            D.C_SIZE,
+//                            D.C_HASH,
+//                            cn(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE, D.C_STATUS, D.A_FORM_MEDIA_FILE_STATUS)},
+//                    cn(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE, D.C_COLLECT_FORM_INSTANCE_ID) + "= ?",
+//                    null, null, null, null
+//            );
+//
+//            cursor = database.rawQuery(query, new String[]{Long.toString(instanceId)});
+//
+//            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+//                mediaFiles.add(cursorToFormMediaFile(cursor));
+//            }
+//        } catch (Exception e) {
+//            Timber.d(e, getClass().getName());
+//        } finally {
+//            if (cursor != null) {
+//                cursor.close();
+//            }
+//        }
+//
+//        return mediaFiles;
+//    }
 
     @Nullable
     private VaultFile getThumbnail(long id) {
@@ -1574,11 +1662,11 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
     private List<CollectFormInstance> getSubmitCollectFormInstances() {
         return getCollectFormInstances(new CollectFormInstanceStatus[]{
-                CollectFormInstanceStatus.FINALIZED,
+//                CollectFormInstanceStatus.FINALIZED,
                 CollectFormInstanceStatus.SUBMITTED,
                 CollectFormInstanceStatus.SUBMISSION_ERROR,
-                CollectFormInstanceStatus.SUBMISSION_PENDING,
-                CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS
+//                CollectFormInstanceStatus.SUBMISSION_PENDING,
+//                CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS
         });
     }
 
@@ -1632,9 +1720,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 CollectFormInstance instance = cursorToCollectFormInstance(cursor);
                 instance.setFormDef(deserializeFormDef(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF))));
 
-                List<FormMediaFile> mediaFiles = getFormInstanceMediaFilesFromDb(instance.getId());
-                for (FormMediaFile mediaFile : mediaFiles) {
-                    instance.setWidgetMediaFile(mediaFile.id, mediaFile);
+                List<String> vaultFileIds = getFormInstanceVaultFileIdsFromDb(instance.getId());
+                for (String vaultFileId : vaultFileIds) {
+                    instance.addWidgetVaultFileId(vaultFileId);
                 }
 
                 instances.add(instance);
@@ -1690,7 +1778,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             // clear FormMediaFiles
             database.delete(
-                    D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE,
+                    D.T_COLLECT_FORM_INSTANCE_VAULT_FILE,
                     D.C_COLLECT_FORM_INSTANCE_ID + " = ?",
                     new String[]{Long.toString(id)});
 
@@ -1699,10 +1787,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             for (FormMediaFile mediaFile : mediaFiles) {
                 values = new ContentValues();
                 values.put(D.C_COLLECT_FORM_INSTANCE_ID, id);
-                values.put(D.C_MEDIA_FILE_ID, mediaFile.id);
+                values.put(D.C_VAULT_FILE_ID, mediaFile.id);
                 values.put(D.C_STATUS, mediaFile.status.ordinal());
 
-                database.insert(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE, null, values);
+                database.insert(D.T_COLLECT_FORM_INSTANCE_VAULT_FILE, null, values);
             }
 
             database.setTransactionSuccessful();
@@ -1788,7 +1876,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     public void deleteDatabase() {
         deleteTable(D.T_COLLECT_BLANK_FORM);
         deleteTable(D.T_COLLECT_FORM_INSTANCE);
-        deleteTable(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE);
+        deleteTable(D.T_COLLECT_FORM_INSTANCE_VAULT_FILE);
         //deleteTable(D.T_MEDIA_FILE);
         deleteTable(D.T_COLLECT_SERVER);
         deleteTable(D.T_TELLA_UPLOAD_SERVER);
@@ -1798,13 +1886,13 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     public void deleteForms() {
         //deleteTable(D.T_COLLECT_BLANK_FORM); // only draft and sent forms are to be deleted
         deleteTable(D.T_COLLECT_FORM_INSTANCE);
-        deleteTable(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE);
+        deleteTable(D.T_COLLECT_FORM_INSTANCE_VAULT_FILE);
     }
 
     private void deleteAllServersDB() {
         deleteTable(D.T_COLLECT_BLANK_FORM);
         deleteTable(D.T_COLLECT_FORM_INSTANCE);
-        deleteTable(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE);
+        deleteTable(D.T_COLLECT_FORM_INSTANCE_VAULT_FILE);
         deleteTable(D.T_COLLECT_SERVER);
         deleteTable(D.T_TELLA_UPLOAD_SERVER);
         deleteTable(D.T_MEDIA_FILE_UPLOAD);
@@ -1875,6 +1963,22 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         formMediaFile.status = FormMediaFileStatus.values()[statusOrdinal];
 
         return formMediaFile;
+    }
+
+    private MediaFileUpgradeData cursorToMediaFileUpgradeData(Cursor cursor) {
+        MediaFileUpgradeData mediaFileUpgradeData = new MediaFileUpgradeData();
+
+        mediaFileUpgradeData.id = cursor.getString(cursor.getColumnIndexOrThrow(D.C_UID));
+        mediaFileUpgradeData.path = cursor.getString(cursor.getColumnIndexOrThrow(D.C_PATH));
+        mediaFileUpgradeData.name = cursor.getString(cursor.getColumnIndexOrThrow(D.C_FILE_NAME));
+        mediaFileUpgradeData.metadata = new Gson().fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_METADATA)), MetadataEntity.class);
+        mediaFileUpgradeData.created = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_CREATED));
+        mediaFileUpgradeData.duration = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_DURATION));
+        mediaFileUpgradeData.size = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_SIZE));
+        mediaFileUpgradeData.anonymous = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_ANONYMOUS)) == 1;
+        mediaFileUpgradeData.hash = cursor.getString(cursor.getColumnIndexOrThrow(D.C_HASH));
+
+        return mediaFileUpgradeData;
     }
 
     //TODO CHECK UID INSIDE VAULT KEEP IT OR NOT ?
@@ -2000,6 +2104,20 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     private static class Setting {
         Integer intValue;
         String stringValue;
+    }
+
+    public static class MediaFileUpgradeData {
+        public String id; // uuid
+        public String hash;
+        public String path;
+        public String mimeType;
+        public String name;
+        public long size;
+        public long created;
+        public long duration;
+        public boolean anonymous;
+        public MetadataEntity metadata;
+        public byte[] thumb;
     }
 
     /*TODO: Are we going to re*/

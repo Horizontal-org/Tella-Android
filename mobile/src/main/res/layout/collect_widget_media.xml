@@ -4,14 +4,24 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <View
-        android:id="@+id/line_separator"
-        style="@style/SettingsMainShadowLine"
-        android:layout_marginTop="8dp"
-        android:visibility="gone" />
+    <Button
+        android:id="@+id/add_attachment_button"
+        style="@style/CollectFormWidgetButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:gravity="start|center_vertical"
+        android:drawableStart="@drawable/ic_baseline_add_circle_outline_white_24"
+        android:drawablePadding="@dimen/activity_horizontal_margin"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:text="Add attachment"/> <!-- todo: resource -->
+        <!-- todo: margins not working & not defined on one place -->
 
     <rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView
         android:id="@+id/attachedMedia"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_small_margin"/>
 </LinearLayout>

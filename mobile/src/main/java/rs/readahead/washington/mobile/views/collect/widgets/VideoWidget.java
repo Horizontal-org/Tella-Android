@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
@@ -31,11 +32,8 @@ import rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView;
  */
 @SuppressLint("ViewConstructor")
 public class VideoWidget extends MediaFileBinaryWidget {
-    ImageButton selectButton;
     ImageButton clearButton;
-    ImageButton captureButton;
-    ImageButton importButton;
-    View separator;
+    Button addAttachmentButton;
 
     private CollectAttachmentPreviewView attachmentPreview;
 
@@ -81,31 +79,18 @@ public class VideoWidget extends MediaFileBinaryWidget {
 
         View view = inflater.inflate(R.layout.collect_widget_media, linearLayout, true);
 
-        captureButton = addButton(R.drawable.ic_videocam_black_24dp);
-        captureButton.setAlpha((float).5);
-        captureButton.setId(QuestionWidget.newUniqueId());
-        captureButton.setEnabled(!formEntryPrompt.isReadOnly());
-        captureButton.setOnClickListener(v -> showCameraActivity());
-
-        selectButton = addButton(R.drawable.ic_menu_gallery);
-        selectButton.setAlpha((float).5);
-        selectButton.setId(QuestionWidget.newUniqueId());
-        selectButton.setEnabled(!formEntryPrompt.isReadOnly());
-        selectButton.setOnClickListener(v -> showAttachmentsActivity());
-
-        importButton = addButton(R.drawable.ic_smartphone_black_24dp);
-        importButton.setAlpha((float).5);
-        importButton.setId(QuestionWidget.newUniqueId());
-        importButton.setEnabled(!formEntryPrompt.isReadOnly());
-        importButton.setOnClickListener(v -> importVideo());
-
-        clearButton = addButton(R.drawable.ic_delete_grey_24px);
+        clearButton = addButton(R.drawable.ic_cancel_white_24dp);
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!formEntryPrompt.isReadOnly());
         clearButton.setOnClickListener(v -> clearAnswer());
 
+        addAttachmentButton = view.findViewById(R.id.add_attachment_button);
+        addAttachmentButton.setOnClickListener(v -> showDeleteBottomSheet(
+                this::showCameraActivity,
+                this::showAttachmentsActivity,
+                this::importVideo)
+        );
         attachmentPreview = view.findViewById(R.id.attachedMedia);
-        separator = view.findViewById(R.id.line_separator);
 
         if (getFilename() != null) {
             showPreview();
@@ -157,25 +142,19 @@ public class VideoWidget extends MediaFileBinaryWidget {
     }
 
     private void showPreview() {
-        selectButton.setVisibility(GONE);
-        captureButton.setVisibility(GONE);
-        importButton.setVisibility(GONE);
         clearButton.setVisibility(VISIBLE);
 
+        addAttachmentButton.setVisibility(GONE);
         attachmentPreview.showPreview(getFilename());
         attachmentPreview.setEnabled(true);
         attachmentPreview.setVisibility(VISIBLE);
-        separator.setVisibility(VISIBLE);
     }
 
     private void hidePreview() {
-        selectButton.setVisibility(VISIBLE);
-        captureButton.setVisibility(VISIBLE);
-        importButton.setVisibility(VISIBLE);
         clearButton.setVisibility(GONE);
 
+        addAttachmentButton.setVisibility(VISIBLE);
         attachmentPreview.setEnabled(false);
         attachmentPreview.setVisibility(GONE);
-        separator.setVisibility(GONE);
     }
 }

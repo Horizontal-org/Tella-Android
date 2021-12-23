@@ -22,16 +22,15 @@ import rs.readahead.washington.mobile.odk.exception.JavaRosaException;
 import rs.readahead.washington.mobile.views.collect.CollectFormView;
 import timber.log.Timber;
 
-
 public class FormParser implements IFormParserContract.IFormParser {
     private IFormParserContract.IView view;
-    private FormController formController;
+    private final FormController formController;
 
     private FormEntryPrompt[] prompts;
     private FormEntryCaption[] groups;
 
-    private String locationFieldPrefix;
-    private String metadataFieldPrefix;
+    private final String locationFieldPrefix;
+    private final String metadataFieldPrefix;
 
     private enum Direction {
         PREVIOUS,

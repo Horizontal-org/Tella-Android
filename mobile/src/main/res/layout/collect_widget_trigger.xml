@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_light_purple_background"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
+    android:paddingStart="@dimen/activity_horizontal_small_margin"
+    android:paddingEnd="@dimen/activity_horizontal_small_margin">
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/radio_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/primaryTextColor"
+        android:buttonTint="@color/wa_white"
+        tools:text="Radio Button">
+    </androidx.appcompat.widget.AppCompatCheckBox>
+
+    <!-- todo: set drawable here for checkbox color -->
+</FrameLayout>

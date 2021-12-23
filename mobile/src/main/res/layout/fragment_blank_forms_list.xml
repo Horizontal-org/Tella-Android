@@ -1,108 +1,47 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/blankFormView"
+    style="@style/Tella2_Forms_Fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="@color/wa_light_gray"
-    android:visibility="gone"
+    android:visibility="visible"
     tools:context="rs.readahead.washington.mobile.views.fragment.BlankFormsListFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/banner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/light_yellow"
-            android:text="@string/collect.blank_banner_forms.updated"
-            android:padding="16dp"
-            android:textAlignment="center"
-            android:textColor="@color/wa_gray"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:visibility="gone" />
-
-        <ScrollView
-            android:id="@+id/form_lists"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:scrollbars="vertical">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/wa_transparent"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:paddingBottom="@dimen/fab_clear_padding">
-
-                <TextView
-                    android:id="@+id/downloaded_forms_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_alignParentTop="true"
-                    android:gravity="center_vertical"
-                    android:text="@string/collect.blank_subheading_downloaded.forms"
-                    android:textAlignment="center"
-                    android:textColor="@color/wa_gray"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
-
-                <LinearLayout
-                    android:id="@+id/downloadedForms"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/downloaded_forms_title"
-                    android:background="@drawable/shadow_border"
-                    android:clipToPadding="false"
-                    android:orientation="vertical"
-                    android:scrollbarStyle="outsideOverlay"
-                    android:scrollbars="vertical"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-                <TextView
-                    android:id="@+id/avaivable_forms_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_below="@id/downloadedForms"
-                    android:gravity="center_vertical"
-                    android:text="@string/collect.blank_subheading_forms.on.servers"
-                    android:textAlignment="center"
-                    android:textColor="@color/wa_gray"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
-
-                <LinearLayout
-                    android:id="@+id/blankForms"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/avaivable_forms_title"
-                    android:background="@drawable/shadow_border"
-                    android:clipToPadding="false"
-                    android:orientation="vertical"
-                    android:scrollbarStyle="outsideOverlay"
-                    android:scrollbars="vertical"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-            </RelativeLayout>
-        </ScrollView>
-    </LinearLayout>
-
     <TextView
-        android:id="@+id/blank_forms_info"
-        style="@style/ExplanatoryEmptyMessage"
+        android:id="@+id/submitted_forms_title"
+        style="@style/Tella2_Gray_Text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:text="@string/collect.blank_expl_no.forms"
-        android:visibility="gone" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/downloaded_forms"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:gravity="center"
+        android:text="These are the forms you can fill out."
+        android:visibility="visible"/>
 
-</FrameLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/downloaded_forms"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:paddingTop="0dp"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/submitted_forms_title"
+        app:layout_constraintVertical_bias="0.0" />
+</androidx.constraintlayout.widget.ConstraintLayout>

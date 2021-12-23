@@ -4,8 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-
-import androidx.annotation.Nullable;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,10 +19,12 @@ import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteQueryBuilder;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import androidx.annotation.Nullable;
 import timber.log.Timber;
-
 
 public class VaultDataSource implements IVaultDatabase {
     public static final String ROOT_UID = "11223344-5566-4777-8899-aabbccddeeff";
@@ -106,21 +107,7 @@ public class VaultDataSource implements IVaultDatabase {
             final String query = SQLiteQueryBuilder.buildQueryString(
                     false,
                     D.T_VAULT_FILE,
-                    new String[]{
-                            D.C_ID,
-                            D.C_TYPE,
-                            D.C_PARENT_ID,
-                            D.C_NAME,
-                            D.C_CREATED,
-                            D.C_DURATION,
-                            D.C_SIZE,
-                            D.C_HASH,
-                            D.C_ANONYMOUS,
-                            D.C_THUMBNAIL,
-                            D.C_MIME_TYPE,
-                            D.C_PATH,
-                            D.C_METADATA
-                    },
+                    VAULT_FILE_COLUMNS,
                     where,
                     null,
                     null,
@@ -179,20 +166,7 @@ public class VaultDataSource implements IVaultDatabase {
     public VaultFile get(String id) {
         try (Cursor cursor = database.query(
                 D.T_VAULT_FILE,
-                new String[]{
-                        D.C_ID,
-                        D.C_PATH,
-                        D.C_NAME,
-                        D.C_METADATA,
-                        D.C_CREATED,
-                        D.C_DURATION,
-                        D.C_ANONYMOUS,
-                        D.C_SIZE,
-                        D.C_HASH,
-                        D.C_MIME_TYPE,
-                        D.C_TYPE,
-                        D.C_THUMBNAIL
-                },
+                VAULT_FILE_COLUMNS,
                 cn(D.C_ID) + " = ?", new String[]{id},
                 null, null, null, null
         )) {
@@ -204,6 +178,41 @@ public class VaultDataSource implements IVaultDatabase {
         }
 
         return null;
+    }
+
+    @Override
+    public Set<VaultFile> get(Set<String> ids) {
+        Set<VaultFile> vaultFiles = new HashSet<>();
+        Cursor cursor = null;
+
+        try {
+            List<String> quoted = new ArrayList<>(ids.size());
+            for (String id: ids) {
+                quoted.add(quote(id));
+            }
+
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_VAULT_FILE,
+                    VAULT_FILE_COLUMNS,
+                    cn(D.C_ID) + " IN (" + TextUtils.join(", ", quoted) + ")",
+                    null, null, null, null
+            );
+
+            cursor = database.rawQuery(query, null);
+
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                vaultFiles.add(cursorToVaultFile(cursor));
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return vaultFiles;
     }
 
     @Override
@@ -322,8 +331,27 @@ public class VaultDataSource implements IVaultDatabase {
         return table + "." + column + " AS " + as;
     }
 
+    private String quote(String value) {
+        return "'" + value + "'";
+    }
 
     private void deleteTable(String table) {
         database.execSQL("DELETE FROM " + table);
     }
+
+    private final static String[] VAULT_FILE_COLUMNS = new String[]{
+            D.C_ID,
+            D.C_TYPE,
+            // D.C_PARENT_ID,
+            D.C_PATH,
+            D.C_NAME,
+            D.C_METADATA,
+            D.C_CREATED,
+            D.C_DURATION,
+            D.C_ANONYMOUS,
+            D.C_SIZE,
+            D.C_HASH,
+            D.C_MIME_TYPE,
+            D.C_THUMBNAIL
+    };
 }

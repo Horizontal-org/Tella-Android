@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment;
 
 public abstract class FormListFragment extends Fragment {
     public enum Type {
-        DRAFT, BLANK, SUBMITTED
+        DRAFT, BLANK, OUTBOX, SUBMITTED
     }
 
     public abstract Type getFormListType();

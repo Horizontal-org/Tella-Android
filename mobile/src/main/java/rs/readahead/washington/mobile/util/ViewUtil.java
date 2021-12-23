@@ -85,5 +85,13 @@ public class ViewUtil {
         v.setImageAlpha(255);
     }
 
+    public static int getDpInPixels(Context context, int dp) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+
+        return (int) (GESTURE_THRESHOLD_DP * scale + 0.5f);
+    }
+
     private ViewUtil() {}
+
+    private static final float GESTURE_THRESHOLD_DP = 16.0f;
 }

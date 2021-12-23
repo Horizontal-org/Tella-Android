@@ -37,40 +37,8 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
-        android:id="@+id/blank_forms_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:background="@color/wa_light_gray"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/blank_forms_title"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/wa_black"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|center_horizontal"
-            android:textAlignment="center"
-            android:text="@string/collect_no.form_heading" />
-
-        <TextView
-            android:id="@+id/blank_forms_text"
-            style="@style/EmptyScreenExplanatoryText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/collect_expl_not.connected.to.server" />
-
-    </LinearLayout>
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/container"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -83,6 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_autorenew_white_24dp" />
+        android:src="@drawable/ic_autorenew_white_24dp"
+        tools:ignore="ContentDescription" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

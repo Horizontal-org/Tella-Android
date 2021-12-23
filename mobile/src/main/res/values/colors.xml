@@ -36,5 +36,5 @@
     <color name="colorPrimaryInverse">@color/wa_white</color>
 
     <!-- Collect -->
-    <color name="primaryTextColor">#000000</color>
+    <color name="primaryTextColor">@color/colorAccent</color>
 </resources>

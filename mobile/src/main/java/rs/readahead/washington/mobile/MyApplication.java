@@ -32,24 +32,28 @@ import org.hzontal.tella.keys.wrapper.AndroidKeyStoreWrapper;
 import org.hzontal.tella.keys.wrapper.PBEKeyWrapper;
 import org.hzontal.tella.keys.wrapper.UnencryptedKeyWrapper;
 
+import java.io.File;
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.multidex.MultiDexApplication;
-
-import java.io.File;
-
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
 import rs.readahead.washington.mobile.bus.TellaBus;
+import rs.readahead.washington.mobile.data.KeyRxVault;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.rest.BaseApi;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.data.sharedpref.SharedPrefs;
+import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
 import rs.readahead.washington.mobile.javarosa.JavaRosa;
 import rs.readahead.washington.mobile.javarosa.PropertyManager;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
+import rs.readahead.washington.mobile.mvp.contract.ICollectServersPresenterContract;
+import rs.readahead.washington.mobile.mvp.presenter.CollectServersPresenter;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.LocaleManager;
 import rs.readahead.washington.mobile.util.jobs.TellaJobCreator;
@@ -66,9 +70,11 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     private static MainKeyStore mainKeyStore;
     private static UnlockRegistry unlockRegistry;
     private static KeyDataSource keyDataSource;
+    private static KeyRxVault keyRxVault;
     public static Vault vault;
     public static RxVault rxVault;
     Vault.Config vaultConfig;
+
     public static void startMainActivity(@NonNull Context context) {
         Intent intent;
         if (Preferences.isFirstStart()) {
@@ -163,6 +169,9 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         PropertyManager mgr = new PropertyManager();
         JavaRosa.initializeJavaRosa(mgr);
 
+        vaultConfig = new Vault.Config();
+        vaultConfig.root = new File(this.getFilesDir(), C.MEDIA_DIR);
+
         //Tella keys
         TellaKeys.initialize();
         initializeLockConfigRegistry();
@@ -170,11 +179,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         //mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), LifecycleMainKey.NO_TIMEOUT);
         mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), Preferences.getLockTimeout());
         keyDataSource = new KeyDataSource(getApplicationContext());
+        keyRxVault = new KeyRxVault(getApplicationContext(), mainKeyHolder, vaultConfig);
         TellaKeysUI.initialize(mainKeyStore, mainKeyHolder, unlockRegistry, this);
-
-        vaultConfig = new Vault.Config();
-        vaultConfig.root = new File(this.getFilesDir(), C.MEDIA_DIR);
-
     }
 
     private void configureCrashlytics() {
@@ -220,10 +226,18 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
     @Override
     public void onSuccessfulUnlock(Context context) {
-        mainKeyHolder = TellaKeysUI.getMainKeyHolder();
-        mainKeyStore = TellaKeysUI.getMainKeyStore();
-        unlockRegistry = TellaKeysUI.getUnlockRegistry();
+        // todo: check this
+//        mainKeyHolder = TellaKeysUI.getMainKeyHolder();
+//        mainKeyStore = TellaKeysUI.getMainKeyStore();
+//        unlockRegistry = TellaKeysUI.getUnlockRegistry();
         keyDataSource.initKeyDataSource();
+        keyRxVault.initKeyRxVault();
+
+//        try {
+//             Tella2UpgradeHandler.copyMediaFilesToVault(keyDataSource, keyRxVault);
+//        } catch (Throwable t) {
+//            Timber.d(t);
+//        }
 
         try {
             vault = new Vault(this, mainKeyHolder, vaultConfig);
@@ -231,6 +245,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         } catch (Exception e) {
             Timber.e(e);
         }
+
         startMainActivity(context);
     }
 
@@ -239,9 +254,73 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         FirebaseCrashlytics.getInstance().recordException(throwable);
     }
 
-
     @Override
     public void onLockConfirmed(Context context) {
+        // todo: remove this
+        if (Preferences.isFirstStart()) {
+            CollectServer srv = new CollectServer();
+            srv.setUrl("https://collect.tella-app.org");
+            srv.setUsername("tomislav");
+            srv.setPassword("345toms");
+            srv.setChecked(true);
+            new CollectServersPresenter(new ICollectServersPresenterContract.IView() {
+                @Override
+                public Context getContext() {
+                    return null;
+                }
+
+                @Override
+                public void showLoading() {
+
+                }
+
+                @Override
+                public void hideLoading() {
+
+                }
+
+                @Override
+                public void onServersLoaded(List<CollectServer> servers) {
+
+                }
+
+                @Override
+                public void onLoadServersError(Throwable throwable) {
+
+                }
+
+                @Override
+                public void onCreatedServer(CollectServer server) {
+
+                }
+
+                @Override
+                public void onCreateCollectServerError(Throwable throwable) {
+
+                }
+
+                @Override
+                public void onRemovedServer(CollectServer server) {
+
+                }
+
+                @Override
+                public void onRemoveServerError(Throwable throwable) {
+
+                }
+
+                @Override
+                public void onUpdatedServer(CollectServer server) {
+
+                }
+
+                @Override
+                public void onUpdateServerError(Throwable throwable) {
+
+                }
+            }).create(srv);
+        }
+
         Preferences.setFirstStart(false);
         onSuccessfulUnlock(context);
     }
@@ -266,6 +345,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     public static KeyDataSource getKeyDataSource() {
         return keyDataSource;
     }
+
+    public static KeyRxVault getKeyRxVault() { return keyRxVault; }
 
     public static MainKeyStore getMainKeyStore() {
         return mainKeyStore;

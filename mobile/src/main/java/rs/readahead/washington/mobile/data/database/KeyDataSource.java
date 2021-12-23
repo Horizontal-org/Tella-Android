@@ -11,8 +11,8 @@ import io.reactivex.subjects.AsyncSubject;
 import rs.readahead.washington.mobile.MyApplication;
 
 public class KeyDataSource  {
-    private AsyncSubject<DataSource> asyncSubject;
-    private Context context;
+    private final AsyncSubject<DataSource> asyncSubject;
+    private final Context context;
 
 
     public KeyDataSource(Context context) {

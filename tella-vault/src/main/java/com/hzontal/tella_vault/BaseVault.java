@@ -4,7 +4,6 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.hzontal.tella_vault.database.VaultDataSource;
-import com.hzontal.tella_vault.filter.Filter;
 import com.hzontal.tella_vault.filter.FilterType;
 import com.hzontal.tella_vault.filter.Limits;
 import com.hzontal.tella_vault.filter.Sort;
@@ -23,6 +22,7 @@ import java.security.DigestOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Set;
 
 import androidx.annotation.WorkerThread;
 
@@ -152,6 +152,10 @@ public abstract class BaseVault {
 
     protected VaultFile baseGet(String id){
         return database.get(id);
+    }
+
+    protected Set<VaultFile> baseGet(Set<String> ids) {
+        return database.get(ids);
     }
 
     protected VaultFile baseCreate(BaseVaultFileBuilder<?, ?> builder) throws VaultException {

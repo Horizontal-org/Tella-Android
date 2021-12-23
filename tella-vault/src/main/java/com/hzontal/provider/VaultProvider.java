@@ -42,7 +42,7 @@ import timber.log.Timber;
 
 public class VaultProvider  extends FileProvider {
 
-    public static final String AUTHORITY = BuildConfig.APPLICATION_ID + "." + "VaultProvider";
+    public static final String AUTHORITY = "org.hzontal.tella" + "." + "VaultProvider";
 
     public static final int IV_SIZE = 16;
 

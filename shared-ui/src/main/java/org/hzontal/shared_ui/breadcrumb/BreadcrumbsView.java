@@ -39,8 +39,8 @@ public class BreadcrumbsView extends FrameLayout {
 	private int mTextSize;
 	private int mTextPadding;
 
-    private static final String KEY_SUPER_STATES = BuildConfig.APPLICATION_ID + ".superStates";
-    private static final String KEY_BREADCRUMBS = BuildConfig.APPLICATION_ID + ".breadcrumbs";
+    private static final String KEY_SUPER_STATES = "org.hzontal.tella" + ".superStates";
+    private static final String KEY_BREADCRUMBS = "org.hzontal.tella" + ".breadcrumbs";
 
 	public BreadcrumbsView(Context context) {
 		this(context, null);

@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-import org.hzontal.tella.keys.key.LifecycleMainKey;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.List;
 
@@ -9,28 +9,27 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subjects.AsyncSubject;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.mvp.contract.ICollectFormInstanceListPresenterContract;
-
 
 public class CollectFormInstanceListPresenter implements
         ICollectFormInstanceListPresenterContract.IPresenter {
     private ICollectFormInstanceListPresenterContract.IView view;
-    private CompositeDisposable disposables = new CompositeDisposable();
-    private AsyncSubject<DataSource> asyncDataSource = AsyncSubject.create();
+    private final CompositeDisposable disposables = new CompositeDisposable();
+    private final KeyDataSource keyDataSource;
 
 
     public CollectFormInstanceListPresenter(ICollectFormInstanceListPresenterContract.IView view) {
         this.view = view;
-        initDataSource();
+        this.keyDataSource = MyApplication.getKeyDataSource();
     }
 
     @Override
     public void listDraftFormInstances() {
-        disposables.add(asyncDataSource
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapSingle((Function<DataSource, SingleSource<List<CollectFormInstance>>>) DataSource::listDraftForms)
@@ -42,7 +41,7 @@ public class CollectFormInstanceListPresenter implements
 
     @Override
     public void listSubmitFormInstances() {
-        disposables.add(asyncDataSource
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapSingle((Function<DataSource, SingleSource<List<CollectFormInstance>>>) DataSource::listSentForms)
@@ -52,17 +51,32 @@ public class CollectFormInstanceListPresenter implements
         );
     }
 
-    private void initDataSource() {
-        if (view != null) {
-            DataSource dataSource;
-            try {
-                dataSource = DataSource.getInstance(view.getContext(), MyApplication.getMainKeyHolder().get().getKey().getEncoded());
-                asyncDataSource.onNext(dataSource);
-                asyncDataSource.onComplete();
-            } catch (LifecycleMainKey.MainKeyUnavailableException e) {
-                e.printStackTrace();
-            }
-        }
+    @Override
+    public void listOutboxFormInstances() {
+        disposables.add(keyDataSource.getDataSource()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMapSingle((Function<DataSource, SingleSource<List<CollectFormInstance>>>) DataSource::listPendingForms)
+                .subscribe(forms -> view.onFormInstanceListSuccess(forms),
+                        throwable -> view.onFormInstanceListError(throwable)
+                )
+        );
+    }
+
+    @Override
+    public void deleteFormInstance(final CollectFormInstance instance) {
+        disposables.add(keyDataSource.getDataSource()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMapCompletable(dataSource -> dataSource.deleteInstance(instance.getId()))
+                .subscribe(
+                        () -> view.onFormInstanceDeleteSuccess(instance.getInstanceName()),
+                        throwable -> {
+                            FirebaseCrashlytics.getInstance().recordException(throwable);
+                            view.onFormInstanceDeleteError(throwable);
+                        }
+                )
+        );
     }
 
     @Override
@@ -70,5 +84,4 @@ public class CollectFormInstanceListPresenter implements
         disposables.dispose();
         view = null;
     }
-
 }

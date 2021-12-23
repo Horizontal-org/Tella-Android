@@ -12,7 +12,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:text="@string/collect.form_signature_action" />
+        android:text="@string/collect.form_signature_action"
+        android:gravity="start|center_vertical"
+        android:drawableStart="@drawable/ic_edit_grey_24px"
+        android:drawablePadding="@dimen/activity_horizontal_margin"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"/>
 
     <LinearLayout
         android:id="@+id/attachedMedia"

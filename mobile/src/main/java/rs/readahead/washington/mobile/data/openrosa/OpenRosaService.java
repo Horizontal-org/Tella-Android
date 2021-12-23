@@ -139,7 +139,7 @@ public class OpenRosaService {
 
             if (BuildConfig.DEBUG) {
                 okClientBuilder.addNetworkInterceptor(
-                        new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)); // or BODY
+                        new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)); // or BODY
             }
         }
 

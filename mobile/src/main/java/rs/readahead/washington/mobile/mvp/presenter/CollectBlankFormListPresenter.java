@@ -120,7 +120,7 @@ public class CollectBlankFormListPresenter implements
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapCompletable(dataSource -> dataSource.removeBlankFormDef(form))
-                .subscribe(() -> view.onBlankFormDefRemoved(),
+                .subscribe(() -> view.onBlankFormDefRemoved(form.getForm().getName()),
                         throwable -> {
                             FirebaseCrashlytics.getInstance().recordException(throwable);
                             view.onBlankFormDefRemoveError(throwable);

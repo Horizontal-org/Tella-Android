@@ -19,7 +19,7 @@ public class ICollectBlankFormListPresenterContract {
         void onDownloadBlankFormDefEnd();
         void onUpdateBlankFormDefStart();
         void onUpdateBlankFormDefEnd();
-        void onBlankFormDefRemoved();
+        void onBlankFormDefRemoved(String formName);
         void onBlankFormDefRemoveError(Throwable error);
         void onUpdateBlankFormDefSuccess(CollectForm collectForm, FormDef formDef);
         void onUserCancel();

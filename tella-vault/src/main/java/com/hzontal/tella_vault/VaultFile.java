@@ -1,6 +1,9 @@
 package com.hzontal.tella_vault;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.UUID;
 
 public class VaultFile  implements Serializable {
     public String id; // generated uuid
@@ -16,7 +19,9 @@ public class VaultFile  implements Serializable {
     public Metadata metadata;
     public byte[] thumb;
 
+    // todo: make this private and remove body
     public VaultFile() {
+        this.id = UUID.randomUUID().toString();
     }
 
     protected VaultFile(BaseVaultFileBuilder<?, ?> builder) {

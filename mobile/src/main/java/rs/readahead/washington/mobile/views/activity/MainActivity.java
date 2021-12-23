@@ -76,7 +76,6 @@ public class MainActivity extends MetadataActivity implements
     private BottomNavigationView btmNavMain;
     private NavController navController;
     private AppBarConfiguration appBarConfiguration;
-    private long numOfCollectServers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -419,7 +418,6 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     public void onCountTUServersEnded(Long num) {
-        setupButtonsTab(num);
     }
 
     @Override
@@ -428,8 +426,7 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     public void onCountCollectServersEnded(Long num) {
-        this.numOfCollectServers = num;
-        homeScreenPresenter.countTUServers();
+        setupBottomNavigationView(num);
     }
 
     @Override
@@ -468,47 +465,9 @@ public class MainActivity extends MetadataActivity implements
         };
     }
 
-
-    private void setupButtonsTab(long numOfTUS) {
-        LinearLayout navbar;
-        LayoutInflater inflater = LayoutInflater.from(this);
-
-        if (numOfCollectServers > 0 && numOfTUS > 0) {
-            navbar = (LinearLayout) inflater.inflate(R.layout.main_navigation_table_layout, null);
-        } else {
-            navbar = (LinearLayout) inflater.inflate(R.layout.main_navigation_row_layout, null);
-        }
-
-        View buttonCollect = navbar.findViewById(R.id.tab_button_collect);
-        View buttonRecord = navbar.findViewById(R.id.tab_button_record);
-        View buttonUploads = navbar.findViewById(R.id.tab_button_uploads);
-        View buttonGallery = navbar.findViewById(R.id.tab_button_gallery);
-
-        buttonGallery.setOnClickListener(v -> showGallery(false));
-        buttonCollect.setOnClickListener(v -> startCollectActivity());
-        buttonRecord.setOnClickListener(v -> onMicrophoneClicked());
-        buttonUploads.setOnClickListener(v -> startUploadsActivity());
-
-        navBarHolder.removeAllViews();
-        navBarHolder.addView(navbar);
-
-        if (numOfCollectServers == 0 && numOfTUS == 0) { //row layout of 2
-            buttonCollect.setVisibility(View.GONE);
-            buttonUploads.setVisibility(View.GONE);
-            return;
-        }
-
-        if (numOfCollectServers > 0 && numOfTUS == 0) {  //nav layout of 3 with collect
-            buttonGallery.setBackground(getResources().getDrawable(R.drawable.central_button_background));
-            buttonCollect.setBackground(getResources().getDrawable(R.drawable.round_left_button_background));
-            buttonUploads.setVisibility(View.GONE);
-            return;
-        }
-
-        if (numOfCollectServers == 0 && numOfTUS > 0) { //nav layout of 3 with uploads
-            buttonCollect.setVisibility(View.GONE);
-            buttonRecord.setBackground(getResources().getDrawable(R.drawable.central_button_background));
-            buttonUploads.setBackground(getResources().getDrawable(R.drawable.round_right_button_background));
+    private void setupBottomNavigationView(long collectServersNum) {
+        if (collectServersNum == 0) {
+            btmNavMain.getMenu().removeItem(R.id.form);
         }
     }
 
@@ -519,6 +478,7 @@ public class MainActivity extends MetadataActivity implements
     public void showBottomNavigation() {
         btmNavMain.setVisibility(View.VISIBLE);
     }
+
     public void enableMoveMode(Boolean isEnabled){
         if (isEnabled){
             root.setBackgroundColor(R.color.prussian_blue);

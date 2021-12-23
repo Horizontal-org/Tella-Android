@@ -486,7 +486,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
                         toolbar.getMenu().findItem(R.id.menu_item_more).setVisible(false);
                         toolbar.getMenu().findItem(R.id.menu_item_metadata).setVisible(false);
                         invalidateOptionsMenu();
-                        addFragment(new VaultInfoFragment().newInstance(vaultFile, false), R.id.container);
+                        addFragment(new VaultInfoFragment().newInstance(vaultFile, false), R.id.view_pager);
 
                     }
 

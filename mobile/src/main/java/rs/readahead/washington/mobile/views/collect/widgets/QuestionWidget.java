@@ -18,8 +18,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -40,6 +38,9 @@ import org.javarosa.form.api.FormEntryPrompt;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.odk.exception.JavaRosaException;
@@ -65,9 +66,9 @@ public abstract class QuestionWidget extends RelativeLayout {
 
     protected FormEntryPrompt formEntryPrompt;
 
-    private LinearLayout questionHeader;
-    private TextView helpTextView;
-    private TextView constraintValidationView;
+    private final LinearLayout questionHeader;
+    private final TextView helpTextView;
+    private final TextView constraintValidationView;
 
     public QuestionWidget(Context context, @NonNull FormEntryPrompt formEntryPrompt) {
         super(context);
@@ -245,15 +246,15 @@ public abstract class QuestionWidget extends RelativeLayout {
                 }
                 formController.jumpToIndex(startFormIndex);
             } catch (JavaRosaException e) {
-                Timber.e(e, null);
+                Timber.e(e);
             }
         }
     }
 
     protected ImageButton addButton(int drawableResource) {
         ImageButton button = new ImageButton(getContext());
-        button.setBackground(getResources().getDrawable(R.drawable.collect_widget_menu_background));
-        button.setImageDrawable(getResources().getDrawable(drawableResource));
+        button.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.collect_widget_menu_background, null));
+        button.setImageDrawable(ResourcesCompat.getDrawable(getResources(), drawableResource, null));
 
         int padding = getResources().getDimensionPixelSize(R.dimen.collect_widget_icon_padding);
         button.setPadding(padding, 0, padding, 0);
@@ -261,7 +262,7 @@ public abstract class QuestionWidget extends RelativeLayout {
         LinearLayout iconsLayout = findViewById(R.id.iconsLayout);
         iconsLayout.addView(button);
 
-        return button;
+        return button; // todo: onclick animation is bad here
     }
 
     protected View getQuestionRootView() {
