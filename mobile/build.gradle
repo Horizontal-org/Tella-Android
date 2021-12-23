@@ -87,6 +87,7 @@ dependencies {
         exclude group: 'stax', module: 'stax-api'
         exclude group: 'stax', module: 'stax'
     }
+    implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
 
     implementation("org.permissionsdispatcher:permissionsdispatcher:${permissionDispatcherVersion}") {
         exclude module: "support-v13"
@@ -131,6 +132,9 @@ dependencies {
     implementation 'com.simplify:ink:1.0.2'
     implementation 'com.mikhaellopez:circularimageview:3.2.0'
     implementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
+    implementation 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:3.2.0'
+    implementation 'com.github.lzyzsd:circleprogress:1.2.1'
+    implementation "com.github.ihsanbal:LoggingInterceptor:3.0.0"
 
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}"
 
