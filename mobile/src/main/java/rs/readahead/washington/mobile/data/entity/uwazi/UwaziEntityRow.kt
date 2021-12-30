@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.data.entity.uwazi
 
-data class Row(
+data class UwaziEntityRow(
     val __v: Int,
     val _id: String,
     val color: String,

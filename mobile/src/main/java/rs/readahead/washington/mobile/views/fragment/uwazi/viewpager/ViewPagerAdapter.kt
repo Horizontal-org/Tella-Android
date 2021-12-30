@@ -2,7 +2,6 @@ package rs.readahead.washington.mobile.views.fragment.uwazi.viewpager
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import rs.readahead.washington.mobile.views.fragment.forms.FormListFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.*
 
 const val TEMPLATES_LIST_PAGE_INDEX = 0
@@ -27,13 +26,5 @@ class ViewPagerAdapter (fragment: Fragment) : FragmentStateAdapter(fragment) {
     override fun createFragment(position: Int): Fragment {
         return tabFragmentsCreators[position]?.invoke() ?: throw IndexOutOfBoundsException()
     }
-    private fun <T> getFormListFragment(type: FormListFragment.Type): T {
-        for (i in 0 until itemCount) {
-            val fragment = getItemId(i) as FormListFragment
-            if (fragment.formListType == type) {
-                return fragment as T
-            }
-        }
-        throw IllegalArgumentException()
-    }
+
 }

@@ -1,18 +1,17 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import rs.readahead.washington.mobile.R
+import androidx.fragment.app.viewModels
 import rs.readahead.washington.mobile.databinding.FragmentTemplatesUwaziBinding
-import rs.readahead.washington.mobile.databinding.FragmentUwaziBinding
-import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.ViewPagerAdapter
+import rs.readahead.washington.mobile.views.adapters.UwaziTemplatesAdapter
 
 
 class TemplatesUwaziFragment : UwaziListFragment() {
-
+    private val viewModel : SharedUwaziViewModel by viewModels()
+    private val uwaziTemplatesAdapter : UwaziTemplatesAdapter by lazy { UwaziTemplatesAdapter() }
     private lateinit var binding: FragmentTemplatesUwaziBinding
 
     override fun getFormListType(): Type {
@@ -21,6 +20,8 @@ class TemplatesUwaziFragment : UwaziListFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        getTemplates()
+        initObservers()
     }
 
     override fun onCreateView(
@@ -30,5 +31,16 @@ class TemplatesUwaziFragment : UwaziListFragment() {
         binding = FragmentTemplatesUwaziBinding.inflate(inflater, container, false)
         return binding.root
     }
+
+    private fun getTemplates(){
+      viewModel.getTemplates()
+    }
+
+    private fun initObservers(){
+        viewModel.templates.observe(this, {
+            uwaziTemplatesAdapter.submitList(it)
+        })
+    }
+
 
 }

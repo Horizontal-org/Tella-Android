@@ -95,6 +95,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.navigation:navigation-runtime:2.3.0'
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
+    implementation 'androidx.databinding:databinding-runtime:7.0.4'
     annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:${permissionDispatcherVersion}"
 
     implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'

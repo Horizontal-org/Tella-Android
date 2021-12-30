@@ -2,57 +2,35 @@ package rs.readahead.washington.mobile.data.uwazi;
 
 import android.os.Build;
 
-import androidx.annotation.NonNull;
-
 import com.burgstaller.okhttp.AuthenticationCacheInterceptor;
-import com.burgstaller.okhttp.CachingAuthenticatorDecorator;
-import com.burgstaller.okhttp.DispatchingAuthenticator;
-import com.burgstaller.okhttp.basic.BasicAuthenticator;
 import com.burgstaller.okhttp.digest.CachingAuthenticator;
-import com.burgstaller.okhttp.digest.Credentials;
-import com.burgstaller.okhttp.digest.DigestAuthenticator;
 import com.ihsanbal.logging.Level;
 import com.ihsanbal.logging.LoggingInterceptor;
 
-import org.simpleframework.xml.convert.AnnotationStrategy;
-import org.simpleframework.xml.core.Persister;
-
-import java.io.IOException;
 import java.net.CookieManager;
 import java.net.Proxy;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.net.ssl.X509TrustManager;
 
 import okhttp3.ConnectionSpec;
 import okhttp3.CookieJar;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
-import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.TlsVersion;
 import okhttp3.internal.platform.Platform;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import rs.readahead.washington.mobile.BuildConfig;
 import rs.readahead.washington.mobile.data.http.QuotePreservingCookieJar;
-import rs.readahead.washington.mobile.data.openrosa.IOpenRosaApi;
-import rs.readahead.washington.mobile.data.openrosa.OpenRosaService;
 import rs.readahead.washington.mobile.data.repository.TLSSocketFactory;
 import rs.readahead.washington.mobile.data.rest.IUwaziApi;
-import rs.readahead.washington.mobile.data.rest.UwaziApi;
 import timber.log.Timber;
 
 public class UwaziService {
@@ -60,7 +38,6 @@ public class UwaziService {
     private final Retrofit retrofit;
     private final static Map<String, CachingAuthenticator> authCache = new ConcurrentHashMap<>();
     private volatile static CookieJar cookieJar = new QuotePreservingCookieJar(new CookieManager());
-
 
     // todo: keep it like this for now, lets see what we need..
     public static synchronized UwaziService getInstance() {
@@ -133,8 +110,7 @@ public class UwaziService {
 
             okClientBuilder = builder
                     .proxy(Proxy.NO_PROXY)
-                    .protocols(Collections.singletonList(Protocol.HTTP_1_1))
-                    .addInterceptor(new OpenRosaRequestInterceptor());
+                    .protocols(Collections.singletonList(Protocol.HTTP_1_1));
 
             LoggingInterceptor logger = new LoggingInterceptor.Builder()
                     .loggable(true)
@@ -168,27 +144,4 @@ public class UwaziService {
         }
     }
 
-    private static class OpenRosaRequestInterceptor implements Interceptor {
-        private final String TZ = "GMT";
-        private final SimpleDateFormat df;
-
-
-        OpenRosaRequestInterceptor() {
-            df = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss ", Locale.US);
-            df.setTimeZone(TimeZone.getTimeZone(TZ));
-        }
-
-        @NonNull
-        @Override
-        public Response intercept(@NonNull Chain chain) throws IOException {
-            Request originalRequest = chain.request();
-
-            Request newRequest = originalRequest.newBuilder()
-                    .addHeader("Content-Type", "application/json")
-                    .header("Date", df.format(new Date()) + TZ + "+00:00") // OdkCollect does it like this, not "standard"
-                    .build();
-
-            return chain.proceed(newRequest);
-        }
-    }
 }

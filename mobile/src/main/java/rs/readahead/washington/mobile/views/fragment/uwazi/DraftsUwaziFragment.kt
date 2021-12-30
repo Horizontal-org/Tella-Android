@@ -25,5 +25,4 @@ class DraftsUwaziFragment : UwaziListFragment() {
         return inflater.inflate(R.layout.fragment_drafts_uwazi, container, false)
     }
 
-
 }
