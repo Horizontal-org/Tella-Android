@@ -32,11 +32,14 @@ class UwaziRepository : IUwaziUserRepository {
             }.flowOn(Dispatchers.IO)
 
 
-    override suspend fun getTemplates(): Flow<TemplateResponse> =
+    override suspend fun getTemplates(uWaziUploadServer: UWaziUploadServer): Flow<TemplateResponse> =
         flow {
-            val templateResponse = uwaziApi.getTemplates()
+            val templateResponse = uwaziApi.getTemplates(url = StringUtils.append(
+                '/',
+                uWaziUploadServer.url,
+                ParamsNetwork.URL_TEMPLATES
+            ), cookie = "connect.sid="+ "s%3A_tcG2esa0JgXAi7SOH-ZzSC77CF9V6LW.YsBo04ABLviq0FIjAg9yxxdtXyuicXMlOTtllhVNddE")
             emit(templateResponse)
         }.flowOn(Dispatchers.IO)
-
 
 }

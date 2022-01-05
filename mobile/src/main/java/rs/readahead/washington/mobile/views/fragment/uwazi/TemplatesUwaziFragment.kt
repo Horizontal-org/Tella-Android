@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import rs.readahead.washington.mobile.databinding.FragmentTemplatesUwaziBinding
 import rs.readahead.washington.mobile.views.adapters.UwaziTemplatesAdapter
+import timber.log.Timber
 
 
 class TemplatesUwaziFragment : UwaziListFragment() {
@@ -32,14 +34,28 @@ class TemplatesUwaziFragment : UwaziListFragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
+    }
+
     private fun getTemplates(){
-      viewModel.getTemplates()
+      viewModel.getServers()
     }
 
     private fun initObservers(){
-        viewModel.templates.observe(this, {
-            uwaziTemplatesAdapter.submitList(it)
+       viewModel.templates.observe(this, { servers ->
+           servers.forEach {
+               uwaziTemplatesAdapter.submitList(it.value)
+           }
         })
+    }
+
+    private fun initView(){
+        binding.templatesRecyclerView.apply {
+            layoutManager = LinearLayoutManager(activity)
+            adapter = uwaziTemplatesAdapter
+        }
     }
 
 

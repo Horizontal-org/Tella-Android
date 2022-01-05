@@ -1,38 +1,32 @@
 package rs.readahead.washington.mobile.views.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
+import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.data.entity.uwazi.Template
 import rs.readahead.washington.mobile.data.entity.uwazi.UwaziEntityRow
-import rs.readahead.washington.mobile.databinding.BlankCollectFormRowBinding
 
 class UwaziTemplatesAdapter : ListAdapter<UwaziEntityRow, UwaziTemplatesAdapter.EntityViewHolder>(EntityDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EntityViewHolder {
         return EntityViewHolder(
-            DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context),
-                R.layout.blank_collect_form_row,
-                parent,
-                false
-            )
-        )
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.templates_uwazi_row, parent, false))
     }
 
     override fun onBindViewHolder(holder: EntityViewHolder, position: Int) {
         holder.bind(entityRow = getItem(position))
     }
 
-    inner class EntityViewHolder(private val binding : BlankCollectFormRowBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class EntityViewHolder(val view : View) : RecyclerView.ViewHolder(view) {
         fun bind(entityRow: UwaziEntityRow) {
-            with(binding) {
-                name.text = entityRow.name
-                organization.text = entityRow.entityViewPage
+            view.apply{
+                view.findViewById<TextView>(R.id.name).text = entityRow.name
+                view.findViewById<TextView>(R.id.organization).text = entityRow.entityViewPage
             }
         }
     }

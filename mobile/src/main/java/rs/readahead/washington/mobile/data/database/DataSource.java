@@ -884,6 +884,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         values.put(D.C_URL, server.getUrl());
         values.put(D.C_USERNAME, server.getUsername());
         values.put(D.C_PASSWORD, server.getPassword());
+        values.put(D.C_COOKIES, server.getCookies());
 
         server.setId(database.insert(D.T_UWAZI_SERVER, null, values));
 

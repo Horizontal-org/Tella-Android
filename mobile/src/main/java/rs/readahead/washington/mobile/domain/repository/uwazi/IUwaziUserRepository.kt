@@ -9,5 +9,5 @@ import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 interface IUwaziUserRepository {
     suspend fun login(uWaziUploadServer: UWaziUploadServer) : Flow<LoginResponse>
 
-    suspend fun getTemplates() : Flow<TemplateResponse>
+    suspend fun getTemplates(uWaziUploadServer: UWaziUploadServer) : Flow<TemplateResponse>
 }
