@@ -7,10 +7,12 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.VaultFile;
 
@@ -41,6 +43,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.data.entity.MetadataEntity;
 import rs.readahead.washington.mobile.data.entity.mapper.EntityMapper;
+import rs.readahead.washington.mobile.data.entity.uwazi.CommonProperty;
+import rs.readahead.washington.mobile.data.entity.uwazi.Property;
+import rs.readahead.washington.mobile.data.entity.uwazi.UwaziEntityRow;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.FileUploadBundle;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
@@ -57,6 +62,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.ListFormResult;
 import rs.readahead.washington.mobile.domain.entity.collect.OdkForm;
+import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate;
 import rs.readahead.washington.mobile.domain.exception.NotFountException;
 import rs.readahead.washington.mobile.domain.repository.ICollectFormsRepository;
 import rs.readahead.washington.mobile.domain.repository.ICollectServersRepository;
@@ -65,13 +71,14 @@ import rs.readahead.washington.mobile.domain.repository.IServersRepository;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadServersRepository;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 import rs.readahead.washington.mobile.domain.repository.IUWAZIServersRepository;
+import rs.readahead.washington.mobile.domain.repository.uwazi.ICollectUwaziTemplatesRepository;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.FileUtil;
 import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
 
 public class DataSource implements IServersRepository, ITellaUploadServersRepository, ITellaUploadsRepository, ICollectServersRepository, ICollectFormsRepository,
-        IMediaFileRecordRepository, IUWAZIServersRepository {
+        IMediaFileRecordRepository, IUWAZIServersRepository, ICollectUwaziTemplatesRepository {
     private static DataSource dataSource;
     private SQLiteDatabase database;
 
@@ -464,7 +471,24 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     @Override
     public Single<VaultFile> attachMetadata(final String mediaFileId, final Metadata metadata) {
         return Single.fromCallable(() -> attachMediaFileMetadataDb(mediaFileId, metadata))
+
                 .compose(applySchedulers());
+    }
+
+    @Override
+    public Single<List<CollectTemplate>> listBlankTemplates() {
+        return null;
+    }
+
+    @Override
+    public Single<List<CollectTemplate>> listFavoriteTemplates() {
+        return null;
+    }
+
+    @NonNull
+    @Override
+    public Single<CollectTemplate> updateBlankTemplates(@NonNull List<CollectTemplate> templates) {
+        return null;
     }
 
 
@@ -2107,6 +2131,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             database.endTransaction();
         }
     }
+
     private void removeUzServer(long id){
         database.delete(D.T_UWAZI_SERVER, D.C_ID + " = ?", new String[]{Long.toString(id)});
     }
@@ -2238,7 +2263,108 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return formMediaFile;
     }
 
-    //TODO CHECK UID INSIDE VAULT KEEP IT OR NOT ?
+    //Uwazi integration
+
+    private UwaziEntityRow cursorToUwaziTemplate(Cursor cursor){
+        Gson gson = new Gson();
+            return new UwaziEntityRow(
+                    cursor.getInt(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_VERSION)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_ID)),
+                    gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_PROPERTIES)),new TypeToken<List<CommonProperty>>(){}.getType()),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(D.C_UWAZI_DEFAULT_TEMPLATE)) == 1,
+                    cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_NAME)) ,
+                    gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_PROPERTIES)),new TypeToken<List<Property>>(){}.getType()));
+    }
+    @Nullable
+    private CollectTemplate getBlankTemplate(String templateID) {
+        Cursor cursor = null;
+
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_UWAZI_BLANK_TEMPLATES + " JOIN " + D.T_UWAZI_SERVER + " ON " +
+                            D.T_UWAZI_BLANK_TEMPLATES + "." + D.C_UWAZI_SERVER_ID + " = " + D.T_UWAZI_SERVER + "." + D.C_ID,
+                    new String[]{
+                            cn(D.T_UWAZI_BLANK_TEMPLATES, D.C_ID, D.A_COLLECT_BLANK_FORM_ID),
+                            D.C_UWAZI_SERVER_ID,
+                            D.C_TEMPLATE_ID,
+                            D.T_COLLECT_BLANK_FORM + "." + D.C_TEMPLATE_NAME,
+                            D.C_TEMPLATE_VERSION,
+                            D.C_DOWNLOADED,
+                            D.C_FAVORITE,
+                            D.C_UPDATED,
+                            cn(D.T_UWAZI_SERVER, D.C_NAME, D.A_SERVER_NAME),
+                            cn(D.T_UWAZI_SERVER, D.C_USERNAME, D.A_SERVER_USERNAME)},
+                    D.C_FORM_ID + " = ?",
+                    null, null, null, null
+            );
+
+            cursor = database.rawQuery(query, new String[]{templateID});
+
+            if (cursor.moveToFirst()) {
+
+                long id = cursor.getLong(cursor.getColumnIndexOrThrow(D.A_COLLECT_BLANK_FORM_ID));
+                long serverId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_COLLECT_SERVER_ID));
+                boolean downloaded = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_DOWNLOADED)) == 1;
+                boolean favorite = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_FAVORITE)) == 1;
+                boolean updated = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_UPDATED)) == 1;
+                String serverName = cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_NAME));
+                String username = cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_USERNAME));
+
+                UwaziEntityRow uwaziEntityRow = cursorToUwaziTemplate(cursor);
+
+                CollectTemplate template = new CollectTemplate(serverId, uwaziEntityRow);
+                template.setId(id);
+                template.setServerName(serverName);
+                template.setUsername(username);
+                template.setDownloaded(downloaded);
+                template.setFavorite(favorite);
+                template.setUpdated(updated);
+
+                return template;
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return null;
+    }
+
+    private void updateUBlankTemplates(List<CollectTemplate> collectTemplateList){
+
+        for (CollectTemplate template : collectTemplateList) {
+
+            CollectTemplate current = getBlankTemplate(""+template.getId());
+            ContentValues values = new ContentValues();
+
+            if (current != null) {
+
+                values.put(D.C_UPDATED, true);
+
+                int num = database.update(D.T_UWAZI_BLANK_TEMPLATES, values, D.C_ID + " = ?",
+                        new String[]{Long.toString(current.getId())});
+                if (num > 0) {
+                    template.setUpdated(true);
+                }
+            } else {
+                values.put(D.C_UWAZI_SERVER_ID, template.getServerId());
+                values.put(D.C_TEMPLATE_ID, template.getEntityRow().get_id());
+                values.put(D.C_VERSION, template.getEntityRow().get__v());
+                values.put(D.C_NAME, template.getEntityRow().getName());
+
+                long id = database.insert(D.T_COLLECT_BLANK_FORM, null, values);
+                if (id != -1) {
+                    template.setId(id);
+                }
+            }
+        }
+
+    }
+
     private VaultFile cursorToMediaFile(Cursor cursor) {
         String path = cursor.getString(cursor.getColumnIndexOrThrow(D.C_PATH));
         String uid = cursor.getString(cursor.getColumnIndexOrThrow(D.C_UID));
@@ -2336,6 +2462,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
         return setting;
     }
+
 
 
 

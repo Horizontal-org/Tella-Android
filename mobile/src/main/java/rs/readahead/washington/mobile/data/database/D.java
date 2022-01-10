@@ -17,7 +17,6 @@ class D {
 
     /* DATABASE TABLES */
     static final String T_COLLECT_SERVER = "t_collect_server";
-    static final String T_UWAZI_SERVER = "t_uwazi_server";
     static final String T_COLLECT_BLANK_FORM = "t_collect_blank_xform";
     static final String T_COLLECT_FORM_INSTANCE = "t_collect_xform_instance";
     static final String T_MEDIA_FILE = "t_media_file";
@@ -26,7 +25,9 @@ class D {
     static final String T_TELLA_UPLOAD_SERVER = "t_tella_upload_server";
     static final String T_MEDIA_FILE_UPLOAD = "t_media_file_upload";
     static final String T_COLLECT_FORM_INSTANCE_VAULT_FILE = "t_collect_xform_instance_vault_file";
-
+    /* UWAZI DATABASE TABLE*/
+    static final String T_UWAZI_SERVER = "t_uwazi_server";
+    static  final String T_UWAZI_BLANK_TEMPLATES = "t_collect_blank_templates";
     /* DATABASE COLUMNS */
     static final String C_ID = "c_id";
 
@@ -74,6 +75,14 @@ class D {
     static final String C_MANUAL_UPLOAD = "c_manual_upload";
     static final String C_VAULT_FILE_ID = "c_vault_file_id";
 
+    //Uwazi cloumns
+    static final String C_TEMPLATE_ID = "c_template_id";
+    static final String C_TEMPLATE_NAME = "c_template_name";
+    static final String C_TEMPLATE_PROPERTIES = "c_template_properties";
+    static final String C_TEMPLATE_COMMON_PROPERTIES = "c_common_template_properties";
+    static final String C_TEMPLATE_VERSION = "c_template_version";
+    static  final String C_UWAZI_DEFAULT_TEMPLATE= "c_template_default";
+    static  final String C_UWAZI_SERVER_ID= "c_uwazi_server_id";
 
     static final String A_SERVER_NAME = "a_server_name";
     static final String A_COLLECT_BLANK_FORM_ID = "a_collect_blank_xform_id";

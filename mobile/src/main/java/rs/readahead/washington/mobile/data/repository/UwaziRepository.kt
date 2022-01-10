@@ -28,7 +28,10 @@ class UwaziRepository : IUwaziUserRepository {
                        )
 
                    )
-                emit(loginResponse)
+                if(loginResponse.success){
+                    emit(loginResponse)
+                }
+
             }.flowOn(Dispatchers.IO)
 
 
