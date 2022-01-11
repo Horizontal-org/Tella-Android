@@ -40,6 +40,13 @@
         <attr name="endTitle" format="reference|string" />
     </declare-styleable>
 
+    <declare-styleable name="SubmittingItem">
+        <attr name="partNameRes" format="reference" />
+        <attr name="partIconRes" format="reference" />
+        <attr name="partSizeRes" format="reference" />
+        <attr name="partCheckIconRes" format="reference" />
+    </declare-styleable>
+
     <declare-styleable name="BreadcrumbsView">
         <attr name="popupTheme"/>
         <attr name="crumbsTextColor" format="color"/>
