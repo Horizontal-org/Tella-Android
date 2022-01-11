@@ -63,6 +63,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.ListFormResult;
 import rs.readahead.washington.mobile.domain.entity.collect.OdkForm;
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate;
+import rs.readahead.washington.mobile.domain.entity.uwazi.ListTemplateResult;
 import rs.readahead.washington.mobile.domain.exception.NotFountException;
 import rs.readahead.washington.mobile.domain.repository.ICollectFormsRepository;
 import rs.readahead.washington.mobile.domain.repository.ICollectServersRepository;
@@ -477,7 +478,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
     @Override
     public Single<List<CollectTemplate>> listBlankTemplates() {
-        return null;
+        return Single.fromCallable(()-> dataSource.getBlankCollectTemplates());
     }
 
     @Override
@@ -487,8 +488,12 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
     @NonNull
     @Override
-    public Single<CollectTemplate> updateBlankTemplates(@NonNull List<CollectTemplate> templates) {
-        return null;
+    public Single<ListTemplateResult> updateBlankTemplates(@NonNull ListTemplateResult listTemplateResult) {
+        return Single.fromCallable(() -> {
+            dataSource.updateUBlankTemplates(listTemplateResult);
+            listTemplateResult.setTemplates(dataSource.getBlankCollectTemplates());
+            return listTemplateResult;
+        }).compose(applySchedulers());
     }
 
 
@@ -2334,9 +2339,77 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return null;
     }
 
-    private void updateUBlankTemplates(List<CollectTemplate> collectTemplateList){
+    private List<CollectTemplate> getBlankCollectTemplates() {
+        Cursor cursor = null;
+        List<CollectTemplate> templates = new ArrayList<>();
 
-        for (CollectTemplate template : collectTemplateList) {
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_UWAZI_BLANK_TEMPLATES + " JOIN " + D.T_UWAZI_SERVER + " ON " +
+                            D.T_UWAZI_BLANK_TEMPLATES + "." + D.C_UWAZI_SERVER_ID + " = " + D.T_UWAZI_SERVER + "." + D.C_ID,
+                    new String[]{
+                            cn(D.T_UWAZI_BLANK_TEMPLATES, D.C_ID, D.A_COLLECT_BLANK_FORM_ID),
+                            D.C_UWAZI_SERVER_ID,
+                            D.C_TEMPLATE_ID,
+                            D.T_UWAZI_BLANK_TEMPLATES + "." + D.C_TEMPLATE_NAME,
+                            D.C_TEMPLATE_VERSION,
+                            D.C_DOWNLOADED,
+                            D.C_UPDATED,
+                            D.C_FAVORITE,
+                            D.C_DOWNLOAD_URL,
+                            cn(D.T_UWAZI_SERVER, D.C_NAME, D.A_SERVER_NAME),
+                            cn(D.T_UWAZI_SERVER, D.C_USERNAME, D.A_SERVER_USERNAME)},
+                    null, null, null,
+                    cn(D.T_UWAZI_BLANK_TEMPLATES, D.C_FAVORITE) + " DESC, " + cn(D.T_UWAZI_BLANK_TEMPLATES, D.C_ID) + " DESC",
+                    null
+            );
+
+            cursor = database.rawQuery(query, null);
+
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                UwaziEntityRow entity = cursorToUwaziTemplate(cursor);
+
+                // todo: implement cursorToCollectForm
+                long id = cursor.getLong(cursor.getColumnIndexOrThrow(D.A_COLLECT_BLANK_FORM_ID));
+                long serverId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_COLLECT_SERVER_ID));
+                boolean downloaded = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_DOWNLOADED)) == 1;
+                boolean favorite = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_FAVORITE)) == 1;
+                boolean updated = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_UPDATED)) == 1;
+                String serverName = cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_NAME));
+                String username = cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_USERNAME));
+
+                CollectTemplate collectForm = new CollectTemplate(serverId, entity);
+                collectForm.setId(id);
+                collectForm.setServerName(serverName);
+                collectForm.setUsername(username);
+                collectForm.setDownloaded(downloaded);
+                collectForm.setFavorite(favorite);
+                collectForm.setUpdated(updated);
+
+                templates.add(collectForm);
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return forms;
+    }
+
+
+    private void updateUBlankTemplates(ListTemplateResult result){
+
+        List<CollectTemplate> templates = result.getTemplates();
+        List<IErrorBundle> errors = result.getErrors();
+
+        List<String> templatesIDs = new ArrayList<>(templates.size());
+        List<String> errorServerIDs = new ArrayList<>(errors.size());
+
+        for (CollectTemplate template : templates) {
 
             CollectTemplate current = getBlankTemplate(""+template.getId());
             ContentValues values = new ContentValues();
