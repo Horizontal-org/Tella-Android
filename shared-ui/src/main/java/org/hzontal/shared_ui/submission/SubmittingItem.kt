@@ -3,13 +3,12 @@ package org.hzontal.shared_ui.submission
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import org.hzontal.shared_ui.R
+
 
 class SubmittingItem @JvmOverloads  constructor(
     context: Context,
@@ -17,12 +16,11 @@ class SubmittingItem @JvmOverloads  constructor(
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-
     private lateinit var partName: TextView
     private lateinit var partIcon: ImageView
     private lateinit var partSize: TextView
     private lateinit var uploadProgress: ProgressBar
-    private lateinit var partCheckBox: CheckBox
+    lateinit var partCheckBox: CheckBox
     private lateinit var partCheckIcon: ImageView
 
     @DrawableRes
@@ -97,38 +95,54 @@ class SubmittingItem @JvmOverloads  constructor(
         }
     }
 
-    fun setPartCleared(layout: ViewGroup) {
-        layout.findViewById<View>(R.id.uploadProgress).visibility = GONE
-        layout.findViewById<View>(R.id.partCheckBox).visibility = GONE
-        layout.findViewById<View>(R.id.partCheckIcon).visibility = GONE
+    fun setPartCleared() {
+        uploadProgress.visibility = GONE
+        partCheckBox.visibility = GONE
+        partCheckIcon.visibility = GONE
     }
 
-    fun setPartPrepared(layout: ViewGroup, offline: Boolean) {
-        layout.findViewById<View>(R.id.uploadProgress).visibility = GONE
-        layout.findViewById<View>(R.id.partCheckBox).visibility = if (offline) GONE else VISIBLE
-        layout.findViewById<View>(R.id.partCheckIcon).visibility = GONE
+    fun setPartPrepared(offline: Boolean) {
+        uploadProgress.visibility = GONE
+        partCheckBox.visibility = if (offline) GONE else VISIBLE
+        partCheckIcon.visibility = GONE
     }
 
-    fun setPartUploading(layout: ViewGroup) {
-        layout.findViewById<View>(R.id.uploadProgress).visibility = VISIBLE
-        layout.findViewById<View>(R.id.partCheckBox).visibility = GONE
-        layout.findViewById<View>(R.id.partCheckIcon).visibility = GONE
+    fun setPartUploading() {
+        uploadProgress.visibility = VISIBLE
+        partCheckBox.visibility = GONE
+        partCheckIcon.visibility = GONE
     }
 
-    fun setPartUploaded(layout: ViewGroup) {
-        layout.findViewById<View>(R.id.uploadProgress).visibility = GONE
-        layout.findViewById<View>(R.id.partCheckBox).visibility = GONE
-        layout.findViewById<View>(R.id.partCheckIcon).visibility = VISIBLE
+    fun setPartUploaded() {
+        uploadProgress.visibility = GONE
+        partCheckBox.visibility = GONE
+        partCheckIcon.visibility = VISIBLE
     }
 
-    fun setUploadProgress(partName: String?, pct: Float) {
+    fun setUploadProgress(pct: Float) {
         if (pct < 0 || pct > 1) {
             return
         }
-        if (uploadProgress != null) {
-            uploadProgress.progress = (uploadProgress.max * pct).toInt()
-        }
+        uploadProgress.progress = (uploadProgress.max * pct).toInt()
     }
 
+    fun setPartName(nameId: Int){
+        partName.setText(nameId)
+    }
 
+    fun setPartSize(size: String){
+        partSize.setText(size)
+    }
+
+    fun setPartIcon(iconId: Int){
+        partIcon.setImageResource(iconId)
+    }
+
+    fun setChecked(checked: Boolean){
+        partCheckBox.setChecked(checked)
+    }
+
+    fun setCheckEnabled(enabled: Boolean){
+        partCheckBox.setEnabled(enabled)
+    }
 }
