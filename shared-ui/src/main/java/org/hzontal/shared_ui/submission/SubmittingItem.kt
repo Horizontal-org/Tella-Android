@@ -130,6 +130,10 @@ class SubmittingItem @JvmOverloads  constructor(
         partName.setText(nameId)
     }
 
+    fun setPartName(name: String){
+        partName.setText(name)
+    }
+
     fun setPartSize(size: String){
         partSize.setText(size)
     }

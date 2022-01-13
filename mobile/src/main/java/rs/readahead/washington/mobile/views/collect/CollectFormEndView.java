@@ -145,7 +145,7 @@ public class CollectFormEndView extends FrameLayout {
         SubmittingItem item = new SubmittingItem(getContext(), null, 0);
         item.setTag(mediaFile.getPartName());
 
-        item.setPartName(R.string.collect_end_item_form_data);
+        item.setPartName(mediaFile.name);
         item.setPartSize(FileUtil.getFileSizeString(mediaFile.size));
 
         int typeResId = R.drawable.ic_attach_file_white_24dp;
