@@ -106,7 +106,6 @@ public class CollectFormEndView extends FrameLayout {
             item.setUploadProgress(pct);
         }
     }
-
     public void clearPartsProgress(CollectFormInstance instance) {
         setPartsCleared(instance);
     }
@@ -118,7 +117,7 @@ public class CollectFormEndView extends FrameLayout {
         item.setTag(C.OPEN_ROSA_XML_PART_NAME);
 
         item.setPartName(R.string.collect_end_item_form_data);
-        item.setPartSize(FileUtil.getFileSizeString(size));
+        item.setPartSize(size);
         item.setPartIcon(R.drawable.ic_assignment_white_24dp);
 
         if (instance.getFormPartStatus() == FormMediaFileStatus.SUBMITTED ||
@@ -126,8 +125,6 @@ public class CollectFormEndView extends FrameLayout {
                 instance.getStatus() == CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS) {
             item.setPartUploaded();
         } else {
-            item.setChecked(true);
-            item.setCheckEnabled(false);
             item.setPartPrepared(offline);
         }
 
@@ -146,7 +143,7 @@ public class CollectFormEndView extends FrameLayout {
         item.setTag(mediaFile.getPartName());
 
         item.setPartName(mediaFile.name);
-        item.setPartSize(FileUtil.getFileSizeString(mediaFile.size));
+        item.setPartSize(mediaFile.size);
 
         int typeResId = R.drawable.ic_attach_file_white_24dp;
 
@@ -163,10 +160,6 @@ public class CollectFormEndView extends FrameLayout {
         if (mediaFile.status == FormMediaFileStatus.SUBMITTED) {
             item.setPartUploaded();
         } else {
-            item.setChecked(mediaFile.uploading);
-            item.setCheckEnabled(true);
-            item.partCheckBox.setOnCheckedChangeListener((buttonView, isChecked) ->
-                    mediaFile.uploading = isChecked);
             item.setPartPrepared(offline);
         }
 

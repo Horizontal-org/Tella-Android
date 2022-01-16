@@ -48,6 +48,7 @@
 
                 <TextView
                     android:id="@+id/partSize"
+                    android:textSize="11sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
@@ -73,14 +74,6 @@
             android:layout_height="25dp"
             android:layout_gravity="center"
             android:padding="0dp">
-
-            <CheckBox
-                android:id="@+id/partCheckBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:buttonTint="@color/radio_buttons_color" />
-            <!--android:background="@drawable/checkbox_background"-->
 
             <ImageView
                 android:id="@+id/partCheckIcon"
