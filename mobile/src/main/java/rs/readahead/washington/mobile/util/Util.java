@@ -14,6 +14,8 @@ import java.util.Locale;
 
 import androidx.annotation.Nullable;
 
+import rs.readahead.washington.mobile.R;
+
 
 public class Util {
     private Util() {}
@@ -83,4 +85,24 @@ public class Util {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
+
+    public static String getElapsedTimeFromTimestamp(long timestamp, Context context){
+        double interval = (System.currentTimeMillis() - timestamp) / 1000f;
+
+        double years = Math.floor(interval / 31536000); //year = 31536000 sec
+        if (years > 0) return context.getString(R.string.Util_ellapsedTime_Year);
+
+        /*int months = (int) Math.floor(interval / 2592000); //month = 2592000 sec
+        if (months > 0) { return String.format(context.getResources().getString(R.string.Util_ellapsedTime_Months), months);}*/
+
+
+        int hours = (int) Math.floor(interval / 3600);
+        if (hours > 0) { return String.format(context.getString(R.string.ellapsedTime_Hours), hours);}
+
+        /*int minutes = (int) Math.floor(interval / 60); //minute = 60 sec
+        if (minutes > 0) { return String.format(context.getString(R.string.ellapsedTime_Minutes), minutes);}*/
+
+        return context.getString(R.string.Util_ellapsedTime_Seconds);
+    }
+
 }

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/instanceRow"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="4dp"
+    android:background="@drawable/bg_row_forms"
+    android:padding="16dp"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    android:paddingBottom="16dp">
+    <!--android:background="@drawable/button_pressed"-->
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerInParent="true"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:contentDescription="@null"
+        android:gravity="center" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/icon">
+
+        <ImageButton
+            android:id="@+id/popupMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:contentDescription="@null"
+            android:focusable="true"
+            android:padding="8dp"
+            android:src="@drawable/ic_more" />
+
+        <LinearLayout
+            android:id="@+id/title_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/popupMenu"
+            android:orientation="horizontal"
+            tools:ignore="UseCompoundDrawables">
+
+            <TextView
+                android:id="@+id/name"
+                style="@style/Tella_Main_White_Text.Meduim"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:ellipsize="end"
+                android:lines="1" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/organization"
+            style="@style/Tella_Main_White_Text.Small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title_layout"
+            android:layout_toStartOf="@id/popupMenu"
+            android:ellipsize="end"
+            android:lines="1"
+            android:paddingTop="2dp" />
+
+        <TextView
+            android:id="@+id/updated"
+            style="@style/Tella_Main_White_Text.Small"
+            android:layout_below="@id/organization"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="start"
+            android:layout_toStartOf="@id/popupMenu"
+            android:ellipsize="end"
+            android:lines="1"
+            android:paddingTop="2dp"
+            android:textAlignment="viewStart" />
+
+        <!--      <LinearLayout
+                  android:id="@+id/date_layout"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_below="@id/organization"
+                  android:layout_alignParentStart="true"
+                  android:layout_gravity="start"
+                  android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                  android:layout_toStartOf="@id/popupMenu"
+                  android:orientation="horizontal"
+                  android:textAlignment="gravity">
+
+                  <TextView
+                      android:id="@+id/date_day"
+                      style="@style/Tella_Main_White_Text.Small"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_gravity="start|center_vertical"
+                      android:padding="2dp" />
+
+                  <TextView
+                      android:id="@+id/date_month"
+                      style="@style/Tella_Main_White_Text.Small"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_gravity="start|center_vertical"
+                      android:padding="2dp" />
+
+                  <TextView
+                      android:id="@+id/date_year"
+                      style="@style/Tella_Main_White_Text.Small"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_gravity="start|center_vertical"
+                      android:padding="2dp" />
+
+                  <TextView
+                      android:id="@+id/time"
+                      style="@style/Tella_Main_White_Text.Small"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_gravity="start|center_vertical"
+                      android:padding="2dp" />
+
+              </LinearLayout> -->
+
+    </RelativeLayout>
+
+</RelativeLayout>

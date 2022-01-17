@@ -1,15 +1,13 @@
 package rs.readahead.washington.mobile.views.adapters;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
+
+import org.hzontal.shared_ui.submission.SubmittedItem;
 
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -23,6 +21,7 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
 import rs.readahead.washington.mobile.util.StringUtils;
+import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.util.ViewUtil;
 import rs.readahead.washington.mobile.views.fragment.forms.ISavedFormsInterface;
 
@@ -46,8 +45,8 @@ public class CollectSubmittedFormInstanceRecycleViewAdapter extends RecyclerView
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final CollectFormInstance instance = instances.get(position);
 
-        holder.name.setText(instance.getFormName());
-        holder.organization.setText(instance.getServerName());
+        holder.setName(instance.getFormName());
+        holder.setOrganization(instance.getServerName());
         holder.setDates(instance.getUpdated());
 
         CollectFormInstanceStatus status = instance.getStatus();
@@ -62,7 +61,7 @@ public class CollectSubmittedFormInstanceRecycleViewAdapter extends RecyclerView
             holder.setPendingIcon();
         }
 
-        holder.popupMenu.setOnClickListener(v -> savedFormsInterface.showFormsMenu(instance));
+        holder.item.popupMenu.setOnClickListener(v -> savedFormsInterface.showFormsMenu(instance));
 
         /*holder.instanceRow.setOnClickListener(v -> MyApplication.bus().post(new ReSubmitFormInstanceEvent(instance)));
 
@@ -112,24 +111,8 @@ public class CollectSubmittedFormInstanceRecycleViewAdapter extends RecyclerView
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.instanceRow)
-        ViewGroup instanceRow;
-        @BindView(R.id.name)
-        TextView name;
-        @BindView(R.id.organization)
-        TextView organization;
-        @BindView(R.id.date_month)
-        TextView dateMonth;
-        @BindView(R.id.date_day)
-        TextView dateDay;
-        @BindView(R.id.date_year)
-        TextView dateYear;
-        @BindView(R.id.time)
-        TextView timeText;
-        @BindView(R.id.icon)
-        ImageView icon;
-        @BindView(R.id.popupMenu)
-        ImageButton popupMenu;
+        @BindView(R.id.submittedItem)
+        SubmittedItem item;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -137,38 +120,36 @@ public class CollectSubmittedFormInstanceRecycleViewAdapter extends RecyclerView
         }
 
         void setDates(long timestamp) {
-            Date date = new Date(timestamp);
-
-            String month = StringUtils.first(new SimpleDateFormat("MMMM", Locale.getDefault()).format(date), 10);
-            String day = new SimpleDateFormat("dd", Locale.US).format(date);
-            String year = new SimpleDateFormat("yyyy", Locale.US).format(date);
-            String time = new SimpleDateFormat("hh:mm:ss", Locale.US).format(date);
-
-            dateMonth.setText(month);
-            dateDay.setText(day);
-            dateYear.setText(year);
-            timeText.setText(time);
+            item.setUpdated(Util.getElapsedTimeFromTimestamp(timestamp,item.getContext()));
         }
 
         private void setSubmittedIcon() {
-            Drawable drawable = ViewUtil.getTintedDrawable(instanceRow.getContext(), R.drawable.ic_check_circle, R.color.wa_green);
+            Drawable drawable = ViewUtil.getTintedDrawable(item.getContext(), R.drawable.ic_check_circle, R.color.wa_green);
             if (drawable != null) {
-                icon.setImageDrawable(drawable);
+                item.setIconDrawable(drawable);
             }
         }
 
         private void setSubmitErrorIcon() {
-            Drawable drawable = ViewUtil.getTintedDrawable(instanceRow.getContext(), R.drawable.ic_error, R.color.wa_red);
+            Drawable drawable = ViewUtil.getTintedDrawable(item.getContext(), R.drawable.ic_error, R.color.wa_red);
             if (drawable != null) {
-                icon.setImageDrawable(drawable);
+                item.setIconDrawable(drawable);
             }
         }
 
         private void setPendingIcon() {
-            Drawable drawable = ViewUtil.getTintedDrawable(instanceRow.getContext(), R.drawable.ic_watch_later_black_24dp, R.color.wa_gray);
+            Drawable drawable = ViewUtil.getTintedDrawable(item.getContext(), R.drawable.ic_watch_later_black_24dp, R.color.wa_gray);
             if (drawable != null) {
-                icon.setImageDrawable(drawable);
+                item.setIconDrawable(drawable);
             }
+        }
+
+        private void setOrganization(String organization) {
+            item.setOrganization(organization);
+        }
+
+        private void setName(String name) {
+            item.setName(name);
         }
     }
 }

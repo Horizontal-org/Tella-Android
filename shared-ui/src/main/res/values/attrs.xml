@@ -47,6 +47,14 @@
         <attr name="partCheckIconRes" format="reference" />
     </declare-styleable>
 
+    <declare-styleable name="SubmittedItem">
+        <attr name="iconRes" format="reference" />
+        <attr name="popupMenuRes" format="reference" />
+        <attr name="nameRes" format="reference" />
+        <attr name="organizationRes" format="reference" />
+        <attr name="updatedRes" format="reference" />
+    </declare-styleable>
+
     <declare-styleable name="BreadcrumbsView">
         <attr name="popupTheme"/>
         <attr name="crumbsTextColor" format="color"/>
