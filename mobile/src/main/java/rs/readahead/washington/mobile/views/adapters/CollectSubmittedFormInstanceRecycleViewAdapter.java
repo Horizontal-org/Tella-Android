@@ -9,18 +9,14 @@ import android.view.ViewGroup;
 
 import org.hzontal.shared_ui.submission.SubmittedItem;
 
-import java.text.SimpleDateFormat;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
-import rs.readahead.washington.mobile.util.StringUtils;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.util.ViewUtil;
 import rs.readahead.washington.mobile.views.fragment.forms.ISavedFormsInterface;
@@ -62,42 +58,6 @@ public class CollectSubmittedFormInstanceRecycleViewAdapter extends RecyclerView
         }
 
         holder.item.popupMenu.setOnClickListener(v -> savedFormsInterface.showFormsMenu(instance));
-
-        /*holder.instanceRow.setOnClickListener(v -> MyApplication.bus().post(new ReSubmitFormInstanceEvent(instance)));
-
-        holder.popupMenu.setOnClickListener(v -> {
-            PopupMenu popup = new PopupMenu(context, v);
-
-            popup.setOnMenuItemClickListener(item -> {
-                if (item.getItemId() == R.id.delete) {
-                    MyApplication.bus().post(new DeleteFormInstanceEvent(instance.getId(), instance.getStatus()));
-                    return true;
-                }
-
-                if (item.getItemId() == R.id.discard) {
-                    MyApplication.bus().post(new CancelPendingFormInstanceEvent(instance.getId()));
-                    return true;
-                }
-
-                if (item.getItemId() == R.id.edit) {
-                    MyApplication.bus().post(new ShowFormInstanceEntryEvent(instance.getId()));
-                    return true;
-                }
-
-                return false;
-            });
-
-            if (instance.getStatus() == CollectFormInstanceStatus.SUBMISSION_PENDING ||
-                    instance.getStatus() == CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS) {
-                popup.inflate(R.menu.pending_forms_list_item_menu);
-            } else if (instance.getStatus() == CollectFormInstanceStatus.SUBMISSION_ERROR) {
-                popup.inflate(R.menu.submit_error_forms_list_item_menu);
-            } else {
-                popup.inflate(R.menu.submitted_forms_list_item_menu);
-            }
-
-            popup.show();
-        });*/
     }
 
     @Override
