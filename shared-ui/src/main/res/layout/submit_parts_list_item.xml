@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -36,7 +35,7 @@
                 android:id="@+id/partName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
+                android:layout_marginBottom="6dp"
                 android:ellipsize="start"
                 android:singleLine="true"
                 android:textColor="@color/wa_white" />
@@ -58,7 +57,7 @@
 
                 <ProgressBar
                     android:id="@+id/uploadProgress"
-                    style="?android:attr/progressBarStyleHorizontal"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
                     android:layout_gravity="center_vertical"

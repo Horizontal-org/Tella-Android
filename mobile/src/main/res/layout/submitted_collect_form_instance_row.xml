@@ -9,6 +9,7 @@
     <org.hzontal.shared_ui.submission.SubmittedItem
         android:id="@+id/submittedItem"
         android:layout_width="match_parent"
+        app:popupMenuRes="@drawable/ic_more"
         android:layout_height="wrap_content" />
 
     <View

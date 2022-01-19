@@ -42,7 +42,7 @@
             android:contentDescription="@null"
             android:focusable="true"
             android:padding="8dp"
-            android:src="@drawable/ic_more" />
+            android:layout_marginEnd="8dp" />
 
         <LinearLayout
             android:id="@+id/title_layout"

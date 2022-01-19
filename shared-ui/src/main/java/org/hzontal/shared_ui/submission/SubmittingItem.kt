@@ -1,6 +1,9 @@
 package org.hzontal.shared_ui.submission
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.*
@@ -44,6 +47,9 @@ class SubmittingItem @JvmOverloads  constructor(
         partSize = findViewById(R.id.partSize)
         uploadProgress = findViewById(R.id.uploadProgress)
         partCheckIcon = findViewById(R.id.partCheckIcon)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            uploadProgress.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
+        }
     }
 
     private fun extractAttributes(attrs: AttributeSet?, defStyleAttr: Int) {
