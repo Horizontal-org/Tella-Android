@@ -27,7 +27,7 @@ class D {
     static final String T_COLLECT_FORM_INSTANCE_VAULT_FILE = "t_collect_xform_instance_vault_file";
     /* UWAZI DATABASE TABLE*/
     static final String T_UWAZI_SERVER = "t_uwazi_server";
-    static  final String T_UWAZI_BLANK_TEMPLATES = "t_collect_blank_templates";
+    static  final String T_UWAZI_BLANK_TEMPLATES = "t_uwazi_collect_blank_templates";
     /* DATABASE COLUMNS */
     static final String C_ID = "c_id";
 

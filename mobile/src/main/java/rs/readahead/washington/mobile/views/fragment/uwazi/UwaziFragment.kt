@@ -36,6 +36,10 @@ class UwaziFragment : BaseFragment() {
         TabLayoutMediator(binding.tabs, binding.viewPager) { tab, position ->
             tab.text = getTabTitle(position)
         }.attach()
+
+        binding.fabButton.setOnClickListener {
+            nav().navigate(R.id.action_uwaziScreen_to_uwaziDownloadScreen)
+        }
     }
 
     private fun getTabTitle(position: Int): String? {

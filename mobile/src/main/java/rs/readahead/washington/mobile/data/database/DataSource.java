@@ -496,6 +496,23 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }).compose(applySchedulers());
     }
 
+    @Override
+    public Single<ListTemplateResult> updateBlankTemplatesIfNeeded(ListTemplateResult listTemplateResult) {
+        return Single.fromCallable(() -> {
+            dataSource.updateBlankTemplatesIfNeeded(listTemplateResult);
+          //  listTemplateResult.setTemplates(dataSource.getBlankCollectTemplates());
+            return listTemplateResult;
+        }).compose(applySchedulers());
+    }
+
+    @Override
+    public Single<CollectTemplate> updateBlankTemplate(CollectTemplate template) {
+        return Single.fromCallable(() -> {
+            dataSource.updateUBlankTemplateIfNeeded(template);
+           return template;
+        }).compose(applySchedulers());
+    }
+
 
     private long countDBCollectServers() {
         return net.sqlcipher.DatabaseUtils.queryNumEntries(database, D.T_COLLECT_SERVER);
@@ -1897,7 +1914,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             database.update(D.T_COLLECT_BLANK_FORM, values,
                     D.C_FORM_ID + "= ? AND " + D.C_VERSION + " = ?",
                     new String[]{form.getForm().getFormID(), form.getForm().getVersion()});
-
             form.setDownloaded(true);
             form.setUpdated(false);
         } catch (IOException e) {
@@ -2397,7 +2413,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             }
         }
 
-        return forms;
+        return templates;
     }
 
 
@@ -2429,13 +2445,57 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 values.put(D.C_VERSION, template.getEntityRow().get__v());
                 values.put(D.C_NAME, template.getEntityRow().getName());
 
-                long id = database.insert(D.T_COLLECT_BLANK_FORM, null, values);
+                long id = database.insert(D.T_UWAZI_BLANK_TEMPLATES, null, values);
                 if (id != -1) {
                     template.setId(id);
                 }
             }
         }
 
+    }
+
+    private void updateUBlankTemplatesIfNeeded(ListTemplateResult result){
+
+        List<CollectTemplate> templates = result.getTemplates();
+        List<IErrorBundle> errors = result.getErrors();
+
+        List<String> templatesIDs = new ArrayList<>(templates.size());
+        List<String> errorServerIDs = new ArrayList<>(errors.size());
+
+        for (CollectTemplate template : templates) {
+
+            CollectTemplate current = getBlankTemplate(""+template.getId());
+            ContentValues values = new ContentValues();
+
+            if (current != null) {
+
+                values.put(D.C_UPDATED, true);
+
+                int num = database.update(D.T_UWAZI_BLANK_TEMPLATES, values, D.C_ID + " = ?",
+                        new String[]{Long.toString(current.getId())});
+                if (num > 0) {
+                    template.setUpdated(true);
+                }
+            }
+        }
+
+    }
+
+    private void updateUBlankTemplateIfNeeded(CollectTemplate collectTemplate) {
+
+        CollectTemplate current = getBlankTemplate(String.valueOf(collectTemplate.getId()));
+        ContentValues values = new ContentValues();
+
+        if (current != null) {
+            values.put(D.C_UPDATED, true);
+            values.put(D.C_TEMPLATE_NAME,collectTemplate.getEntityRow().getName());
+            values.put(D.C_TEMPLATE_PROPERTIES,collectTemplate.getEntityRow().getName());
+            int num = database.update(D.T_UWAZI_BLANK_TEMPLATES, values, D.C_ID + " = ?",
+                    new String[]{Long.toString(current.getId())});
+            if (num > 0) {
+                collectTemplate.setUpdated(true);
+            }
+        }
     }
 
     private VaultFile cursorToMediaFile(Cursor cursor) {

@@ -26,7 +26,7 @@ class UwaziTemplatesAdapter : ListAdapter<UwaziEntityRow, UwaziTemplatesAdapter.
         fun bind(entityRow: UwaziEntityRow) {
             view.apply{
                 view.findViewById<TextView>(R.id.name).text = entityRow.name
-                view.findViewById<TextView>(R.id.organization).text = entityRow.entityViewPage
+                view.findViewById<TextView>(R.id.organization).text = entityRow.name
             }
         }
     }

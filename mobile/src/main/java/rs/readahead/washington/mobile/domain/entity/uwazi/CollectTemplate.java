@@ -12,8 +12,8 @@ public class CollectTemplate {
     private boolean favorite;
     private boolean updated;
 
-    public CollectTemplate(long id, UwaziEntityRow entityRow) {
-        this.id = id;
+    public CollectTemplate(long serverId, UwaziEntityRow entityRow) {
+        this.serverId = serverId;
         this.entityRow = entityRow;
     }
 
@@ -86,5 +86,9 @@ public class CollectTemplate {
 
     public void setUpdated(boolean updated) {
         this.updated = updated;
+    }
+
+    public boolean isUpdated() {
+        return updated;
     }
 }

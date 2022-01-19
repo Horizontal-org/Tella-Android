@@ -8,6 +8,20 @@
         android:id="@+id/uwaziScreen"
         android:name="rs.readahead.washington.mobile.views.fragment.uwazi.UwaziFragment"
         android:label="Uwazi"
-        tools:layout="@layout/fragment_uwazi">
+        tools:layout="@layout/fragment_uwazi"
+        >
+        <action
+            android:id="@+id/action_uwaziScreen_to_uwaziDownloadScreen"
+            app:destination="@id/uwaziDownloadScreen"
+            >
+        </action>
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/uwaziDownloadScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.uwazi.download.DownloadedTemplatesFragment"
+        android:label="Uwazi"
+        tools:layout="@layout/fragment_downloaded_templates">
     </fragment>
 </navigation>

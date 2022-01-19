@@ -56,5 +56,15 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+   <com.google.android.material.floatingactionbutton.FloatingActionButton
+    android:id="@+id/fab_button"
+    app:backgroundTint="@color/dark_orange"
+    app:fabCustomSize="50dp"
+    app:layout_anchorGravity="center"
+    app:maxImageSize="30dp"
+    app:srcCompat="@drawable/ic_plus"
+    app:useCompatPadding="true"
+    tools:ignore="VectorDrawableCompat"
+    style="@style/Main_Floating_Action_Button_Style" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

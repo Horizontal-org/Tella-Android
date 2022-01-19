@@ -492,4 +492,5 @@
     <string name="uwazi.outbox_tab.title">Templates</string>
     <string name="Collect_RemoveForm_SheetTitle">Remove form?</string>
     <string name="fragment_uwazi">Uwazi</string>
+    <string name="Uwazi_Dowload_Temapltes_Header_Title">Download templates</string>
 </resources>

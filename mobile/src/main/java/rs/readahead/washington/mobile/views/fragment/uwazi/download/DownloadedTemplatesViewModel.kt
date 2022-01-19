@@ -16,23 +16,26 @@ import kotlinx.coroutines.launch
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.database.KeyDataSource
-import rs.readahead.washington.mobile.data.entity.uwazi.UwaziEntityRow
 import rs.readahead.washington.mobile.data.repository.UwaziRepository
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
+import rs.readahead.washington.mobile.domain.entity.uwazi.ListTemplateResult
+import rs.readahead.washington.mobile.views.fragment.uwazi.download.adapter.ViewTemplateItem
+import rs.readahead.washington.mobile.views.fragment.uwazi.download.adapter.toViewTemplateItem
 import timber.log.Timber
 
 class DownloadedTemplatesViewModel : ViewModel(){
 
     private val uwaziRepository by lazy { UwaziRepository() }
     var error = MutableLiveData<String>()
-    private val _templates = MutableLiveData<List<CollectTemplate>>()
-    val templates: LiveData<List<CollectTemplate>> get() = _templates
+    private val _templates = MutableLiveData<List<ViewTemplateItem>>()
+    val templates: LiveData<List<ViewTemplateItem>> get() = _templates
     private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private val disposables = CompositeDisposable()
 
     private fun getTemplates(servers: List<UWaziUploadServer>) {
         val list = mutableListOf<CollectTemplate>()
+        val listTemplateResult = ListTemplateResult()
         viewModelScope.launch {
             if (!servers.isNullOrEmpty()) {
                 servers.asFlow().map { server ->
@@ -43,24 +46,53 @@ class DownloadedTemplatesViewModel : ViewModel(){
                         .collect {
                             it.rows.map { entity ->
                                 val collectTemplate = CollectTemplate(server.id,entity)
-                                collectTemplate.apply {
-                                    serverName = server.name
-                                }
+                                collectTemplate.serverName = server.name
                                 list.add(collectTemplate)
                             }
+                            listTemplateResult.apply {
+                                templates = list
+                            }
+                            getTemplateInfo(listTemplateResult)
                         }
-                }.catch { e -> error.postValue(e.toString())  }
-                    .collect {
-                        _templates.postValue(list)
-                    }
+                }.catch { e -> error.postValue(e.toString())  }.collect {
+
+                }
+
             }
         }
+    }
+
+    fun updateIfNeeded(templates : CollectTemplate){
+        viewModelScope.launch {
+
+        }
+    }
+
+  private fun getTemplateInfo(result : ListTemplateResult) {
+        disposables.add(keyDataSource.dataSource
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe{}
+            .flatMapSingle { obj: DataSource ->  obj.updateBlankTemplatesIfNeeded(result)  }
+            .subscribe {
+                val listResult = mutableListOf<ViewTemplateItem>()
+                it.templates.forEach { template ->
+                    val mappedTemplate = template.toViewTemplateItem(onDownloadClicked = { onDownloadClicked(template.id,template.serverId) },
+                        onMoreClicked = {onMoreClicked(template.id,template.serverId)}
+                    )
+                    listResult.add(mappedTemplate)
+                }
+                _templates.postValue(listResult)
+            }
+        )
+    }
+
+    private fun onDownloadClicked(id : Long, serverId : Long){
 
     }
 
-    fun getTemplateInfo(template: CollectTemplate) {
-    //TODO COMPLETE THIS
-    //return CollectTemplate()
+    private fun onMoreClicked(id : Long, serverId : Long){
+
     }
 
     fun getServers() {

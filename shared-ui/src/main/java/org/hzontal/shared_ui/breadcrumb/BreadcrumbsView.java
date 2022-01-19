@@ -123,12 +123,7 @@ public class BreadcrumbsView extends FrameLayout {
 	public <E extends IBreadcrumbItem> void setItems(@NonNull List<E> items) {
 		mAdapter.setItems(items);
 		mAdapter.notifyDataSetChanged();
-		postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				performSafeSmoothScrollToPosition(mAdapter.getItemCount() - 1);
-			}
-		}, 500);
+		postDelayed(() -> performSafeSmoothScrollToPosition(mAdapter.getItemCount() - 1), 500);
 	}
 
 	private void performSafeSmoothScrollToPosition(int position) {

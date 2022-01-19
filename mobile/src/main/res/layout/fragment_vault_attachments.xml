@@ -120,19 +120,14 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="end|bottom"
-        android:layout_marginHorizontal="@dimen/tella_main_vertical"
-        android:layout_marginBottom="@dimen/tella_main_vertical"
-        android:background="@color/dark_orange"
         app:backgroundTint="@color/dark_orange"
         app:fabCustomSize="50dp"
         app:layout_anchorGravity="center"
         app:maxImageSize="30dp"
         app:srcCompat="@drawable/ic_plus"
         app:useCompatPadding="true"
-        tools:ignore="VectorDrawableCompat" />
+        tools:ignore="VectorDrawableCompat"
+        style="@style/Main_Floating_Action_Button_Style" />
 
     <LinearLayout
         android:id="@+id/emptyViewMsgContainer"
