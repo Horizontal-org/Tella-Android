@@ -298,29 +298,29 @@ class CollectMainFragment : BaseFragment(){
     }
 
     private fun initObservers() {
-        model.onError.observe(viewLifecycleOwner, Observer {error ->
+        model.onError.observe(viewLifecycleOwner, { error ->
                  Timber.d(error, javaClass.name)
         })
-        model.onGetBlankFormDefSuccess.observe(viewLifecycleOwner, Observer { result ->
+        model.onGetBlankFormDefSuccess.observe(viewLifecycleOwner, { result ->
                 result.let {
                     startCreateFormControllerPresenter(it.form, it.formDef)
                 }
         })
-        model.onInstanceFormDefSuccess.observe(viewLifecycleOwner, Observer {instance->
+        model.onInstanceFormDefSuccess.observe(viewLifecycleOwner, { instance->
             startCreateInstanceFormControllerPresenter(instance)
         })
 
-        model.onFormDefError.observe(viewLifecycleOwner, Observer {error ->
+        model.onFormDefError.observe(viewLifecycleOwner, { error ->
             val errorMessage = FormUtils.getFormDefErrorMessage(activity, error)
             activity.showToast(errorMessage)
         })
 
-        model.onFormDefError.observe(viewLifecycleOwner, Observer {error ->
+        model.onFormDefError.observe(viewLifecycleOwner, { error ->
             val errorMessage = FormUtils.getFormDefErrorMessage(activity, error)
             activity.showToast(errorMessage)
         })
 
-        model.onCreateFormController.observe(viewLifecycleOwner, Observer { form ->
+        model.onCreateFormController.observe(viewLifecycleOwner, { form ->
             form?.let {
                 if (Preferences.isAnonymousMode()) {
                     startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
@@ -334,7 +334,7 @@ class CollectMainFragment : BaseFragment(){
                 }
             }
         })
-        model.onToggleFavoriteSuccess.observe(viewLifecycleOwner, Observer {
+        model.onToggleFavoriteSuccess.observe(viewLifecycleOwner, {
             getBlankFormsListFragment().listBlankForms()
         })
 
@@ -393,7 +393,7 @@ class CollectMainFragment : BaseFragment(){
         }
 
         showStandardSheet(
-            activity.getSupportFragmentManager(),
+            activity.supportFragmentManager,
             getString(R.string.Collect_RemoveForm_SheetTitle),
             getString(msgResId),
             getString(R.string.action_remove),

@@ -267,7 +267,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
                     allResults
                 }.toObservable()
             }
-            .flatMap { listFormResult: ListFormResult? ->
+            .flatMap { listFormResult ->
                 keyDataSource.dataSource.flatMap { dataSource: DataSource ->
                     dataSource.updateBlankForms(
                         listFormResult

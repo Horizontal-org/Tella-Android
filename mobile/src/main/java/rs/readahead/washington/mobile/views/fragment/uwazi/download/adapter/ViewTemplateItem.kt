@@ -1,7 +1,7 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.download.adapter
 
 data class ViewTemplateItem(
-    val id: Long,
+    val id: String,
     val serverId: Long,
     val isDownloaded: Boolean,
     val isUpdated: Boolean,

@@ -7,12 +7,10 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.text.TextUtils;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.VaultFile;
 
@@ -43,16 +41,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.data.entity.MetadataEntity;
 import rs.readahead.washington.mobile.data.entity.mapper.EntityMapper;
-import rs.readahead.washington.mobile.data.entity.uwazi.CommonProperty;
-import rs.readahead.washington.mobile.data.entity.uwazi.Property;
-import rs.readahead.washington.mobile.data.entity.uwazi.UwaziEntityRow;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.FileUploadBundle;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.OldMediaFile;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
-import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
@@ -62,8 +56,6 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.ListFormResult;
 import rs.readahead.washington.mobile.domain.entity.collect.OdkForm;
-import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate;
-import rs.readahead.washington.mobile.domain.entity.uwazi.ListTemplateResult;
 import rs.readahead.washington.mobile.domain.exception.NotFountException;
 import rs.readahead.washington.mobile.domain.repository.ICollectFormsRepository;
 import rs.readahead.washington.mobile.domain.repository.ICollectServersRepository;
@@ -71,17 +63,15 @@ import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordReposito
 import rs.readahead.washington.mobile.domain.repository.IServersRepository;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadServersRepository;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
-import rs.readahead.washington.mobile.domain.repository.IUWAZIServersRepository;
-import rs.readahead.washington.mobile.domain.repository.uwazi.ICollectUwaziTemplatesRepository;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.FileUtil;
 import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
 
 public class DataSource implements IServersRepository, ITellaUploadServersRepository, ITellaUploadsRepository, ICollectServersRepository, ICollectFormsRepository,
-        IMediaFileRecordRepository, IUWAZIServersRepository, ICollectUwaziTemplatesRepository {
+        IMediaFileRecordRepository{
     private static DataSource dataSource;
-    private SQLiteDatabase database;
+    private final SQLiteDatabase database;
 
     final private SingleTransformer schedulersTransformer =
             observable -> observable.subscribeOn(Schedulers.io())
@@ -199,39 +189,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return Single.fromCallable(() -> dataSource.countDBTUServers())
                 .compose(applySchedulers());
     }
-
-    @Override
-    public Single<Long> countUwaziServers() {
-        return Single.fromCallable(() -> dataSource.countDBUwaziServers())
-                .compose(applySchedulers());
-    }
-
-    @Override
-    public Single<List<UWaziUploadServer>> listUwaziServers() {
-        return Single.fromCallable(() -> dataSource.getUwaziServers())
-                .compose(applySchedulers());
-    }
-
-    @Override
-    public Single<UWaziUploadServer> createUWAZIServer(UWaziUploadServer server) {
-        return Single.fromCallable(() -> dataSource.createUZIServer(server))
-                .compose(applySchedulers());
-    }
-
-    @Override
-    public Completable removeUwaziServer(long id) {
-        return Completable.fromCallable((Callable<Void>) () -> {
-            removeUzServer(id);
-            return null;
-        }).compose(applyCompletableSchedulers());
-    }
-
-    @Override
-    public Single<UWaziUploadServer> updateUwaziServer(UWaziUploadServer server) {
-        return Single.fromCallable(() -> dataSource.updateUzServer(server))
-                .compose(applySchedulers());
-    }
-
 
     @Override
     public Completable deleteAllServers() {
@@ -476,54 +433,12 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 .compose(applySchedulers());
     }
 
-    @Override
-    public Single<List<CollectTemplate>> listBlankTemplates() {
-        return Single.fromCallable(()-> dataSource.getBlankCollectTemplates());
-    }
-
-    @Override
-    public Single<List<CollectTemplate>> listFavoriteTemplates() {
-        return null;
-    }
-
-    @NonNull
-    @Override
-    public Single<ListTemplateResult> updateBlankTemplates(@NonNull ListTemplateResult listTemplateResult) {
-        return Single.fromCallable(() -> {
-            dataSource.updateUBlankTemplates(listTemplateResult);
-            listTemplateResult.setTemplates(dataSource.getBlankCollectTemplates());
-            return listTemplateResult;
-        }).compose(applySchedulers());
-    }
-
-    @Override
-    public Single<ListTemplateResult> updateBlankTemplatesIfNeeded(ListTemplateResult listTemplateResult) {
-        return Single.fromCallable(() -> {
-            dataSource.updateBlankTemplatesIfNeeded(listTemplateResult);
-          //  listTemplateResult.setTemplates(dataSource.getBlankCollectTemplates());
-            return listTemplateResult;
-        }).compose(applySchedulers());
-    }
-
-    @Override
-    public Single<CollectTemplate> updateBlankTemplate(CollectTemplate template) {
-        return Single.fromCallable(() -> {
-            dataSource.updateUBlankTemplateIfNeeded(template);
-           return template;
-        }).compose(applySchedulers());
-    }
-
-
     private long countDBCollectServers() {
         return net.sqlcipher.DatabaseUtils.queryNumEntries(database, D.T_COLLECT_SERVER);
     }
 
     private long countDBTUServers() {
         return net.sqlcipher.DatabaseUtils.queryNumEntries(database, D.T_TELLA_UPLOAD_SERVER);
-    }
-
-    private long countDBUwaziServers() {
-        return net.sqlcipher.DatabaseUtils.queryNumEntries(database, D.T_UWAZI_SERVER);
     }
 
     private List<TellaUploadServer> getTUServers() {
@@ -584,35 +499,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return servers;
     }
 
-    //TODO ask djodje what isChecked state for ?
-    private List<UWaziUploadServer> getUwaziServers() {
-        Cursor cursor = null;
-        List<UWaziUploadServer> servers = new ArrayList<>();
-
-        try {
-            cursor = database.query(
-                    D.T_UWAZI_SERVER,
-                    new String[]{D.C_ID, D.C_NAME, D.C_URL, D.C_USERNAME, D.C_PASSWORD,D.C_COOKIES},
-                    null,
-                    null,
-                    null, null,
-                    D.C_ID + " ASC",
-                    null);
-
-            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                UWaziUploadServer server = cursorToUwaziServer(cursor);
-                servers.add(server);
-            }
-        } catch (Exception e) {
-            Timber.d(e, getClass().getName());
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return servers;
-    }
     @Nullable
     private CollectServer getServer(long id) {
         try (Cursor cursor = database.query(
@@ -920,19 +806,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         values.put(D.C_CHECKED, server.isChecked() ? 1 : 0);
 
         server.setId(database.insert(D.T_TELLA_UPLOAD_SERVER, null, values));
-
-        return server;
-    }
-
-    private UWaziUploadServer createUZIServer(final UWaziUploadServer server) {
-        ContentValues values = new ContentValues();
-        values.put(D.C_NAME, server.getName());
-        values.put(D.C_URL, server.getUrl());
-        values.put(D.C_USERNAME, server.getUsername());
-        values.put(D.C_PASSWORD, server.getPassword());
-        values.put(D.C_COOKIES, server.getCookies());
-
-        server.setId(database.insert(D.T_UWAZI_SERVER, null, values));
 
         return server;
     }
@@ -2122,18 +1995,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return server;
     }
 
-    private UWaziUploadServer updateUzServer(final UWaziUploadServer server) {
-        ContentValues values = new ContentValues();
-        values.put(D.C_NAME, server.getName());
-        values.put(D.C_URL, server.getUrl());
-        values.put(D.C_USERNAME, server.getUsername());
-        values.put(D.C_PASSWORD, server.getPassword());
-        values.put(D.C_COOKIES, server.getCookies());
-
-        database.update(D.T_UWAZI_SERVER, values, D.C_ID + "= ?", new String[]{Long.toString(server.getId())});
-
-        return server;
-    }
 
     private void removeTUServerDB(long id) {
         database.delete(D.T_TELLA_UPLOAD_SERVER, D.C_ID + " = ?", new String[]{Long.toString(id)});
@@ -2151,10 +2012,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         } finally {
             database.endTransaction();
         }
-    }
-
-    private void removeUzServer(long id){
-        database.delete(D.T_UWAZI_SERVER, D.C_ID + " = ?", new String[]{Long.toString(id)});
     }
 
     private void deleteTable(String table) {
@@ -2215,18 +2072,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return server;
     }
 
-    private UWaziUploadServer cursorToUwaziServer(Cursor cursor) {
-        UWaziUploadServer server = new UWaziUploadServer();
-        server.setId(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID)));
-        server.setName(cursor.getString(cursor.getColumnIndexOrThrow(D.C_NAME)));
-        server.setUrl(cursor.getString(cursor.getColumnIndexOrThrow(D.C_URL)));
-        server.setUsername(cursor.getString(cursor.getColumnIndexOrThrow(D.C_USERNAME)));
-        server.setPassword(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PASSWORD)));
-        server.setCookies(cursor.getString(cursor.getColumnIndexOrThrow(D.C_COOKIES)));
-
-        return server;
-    }
-
     private OdkForm cursorToOdkForm(Cursor cursor) {
         OdkForm odkForm = new OdkForm();
         odkForm.setFormID(cursor.getString(cursor.getColumnIndexOrThrow(D.C_FORM_ID)));
@@ -2282,220 +2127,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         formMediaFile.status = FormMediaFileStatus.values()[statusOrdinal];
 
         return formMediaFile;
-    }
-
-    //Uwazi integration
-
-    private UwaziEntityRow cursorToUwaziTemplate(Cursor cursor){
-        Gson gson = new Gson();
-            return new UwaziEntityRow(
-                    cursor.getInt(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_VERSION)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_ID)),
-                    gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_PROPERTIES)),new TypeToken<List<CommonProperty>>(){}.getType()),
-                    cursor.getInt(cursor.getColumnIndexOrThrow(D.C_UWAZI_DEFAULT_TEMPLATE)) == 1,
-                    cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_NAME)) ,
-                    gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_PROPERTIES)),new TypeToken<List<Property>>(){}.getType()));
-    }
-    @Nullable
-    private CollectTemplate getBlankTemplate(String templateID) {
-        Cursor cursor = null;
-
-        try {
-            final String query = SQLiteQueryBuilder.buildQueryString(
-                    false,
-                    D.T_UWAZI_BLANK_TEMPLATES + " JOIN " + D.T_UWAZI_SERVER + " ON " +
-                            D.T_UWAZI_BLANK_TEMPLATES + "." + D.C_UWAZI_SERVER_ID + " = " + D.T_UWAZI_SERVER + "." + D.C_ID,
-                    new String[]{
-                            cn(D.T_UWAZI_BLANK_TEMPLATES, D.C_ID, D.A_COLLECT_BLANK_FORM_ID),
-                            D.C_UWAZI_SERVER_ID,
-                            D.C_TEMPLATE_ID,
-                            D.T_COLLECT_BLANK_FORM + "." + D.C_TEMPLATE_NAME,
-                            D.C_TEMPLATE_VERSION,
-                            D.C_DOWNLOADED,
-                            D.C_FAVORITE,
-                            D.C_UPDATED,
-                            cn(D.T_UWAZI_SERVER, D.C_NAME, D.A_SERVER_NAME),
-                            cn(D.T_UWAZI_SERVER, D.C_USERNAME, D.A_SERVER_USERNAME)},
-                    D.C_FORM_ID + " = ?",
-                    null, null, null, null
-            );
-
-            cursor = database.rawQuery(query, new String[]{templateID});
-
-            if (cursor.moveToFirst()) {
-
-                long id = cursor.getLong(cursor.getColumnIndexOrThrow(D.A_COLLECT_BLANK_FORM_ID));
-                long serverId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_COLLECT_SERVER_ID));
-                boolean downloaded = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_DOWNLOADED)) == 1;
-                boolean favorite = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_FAVORITE)) == 1;
-                boolean updated = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_UPDATED)) == 1;
-                String serverName = cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_NAME));
-                String username = cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_USERNAME));
-
-                UwaziEntityRow uwaziEntityRow = cursorToUwaziTemplate(cursor);
-
-                CollectTemplate template = new CollectTemplate(serverId, uwaziEntityRow);
-                template.setId(id);
-                template.setServerName(serverName);
-                template.setUsername(username);
-                template.setDownloaded(downloaded);
-                template.setFavorite(favorite);
-                template.setUpdated(updated);
-
-                return template;
-            }
-        } catch (Exception e) {
-            Timber.d(e, getClass().getName());
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return null;
-    }
-
-    private List<CollectTemplate> getBlankCollectTemplates() {
-        Cursor cursor = null;
-        List<CollectTemplate> templates = new ArrayList<>();
-
-        try {
-            final String query = SQLiteQueryBuilder.buildQueryString(
-                    false,
-                    D.T_UWAZI_BLANK_TEMPLATES + " JOIN " + D.T_UWAZI_SERVER + " ON " +
-                            D.T_UWAZI_BLANK_TEMPLATES + "." + D.C_UWAZI_SERVER_ID + " = " + D.T_UWAZI_SERVER + "." + D.C_ID,
-                    new String[]{
-                            cn(D.T_UWAZI_BLANK_TEMPLATES, D.C_ID, D.A_COLLECT_BLANK_FORM_ID),
-                            D.C_UWAZI_SERVER_ID,
-                            D.C_TEMPLATE_ID,
-                            D.T_UWAZI_BLANK_TEMPLATES + "." + D.C_TEMPLATE_NAME,
-                            D.C_TEMPLATE_VERSION,
-                            D.C_DOWNLOADED,
-                            D.C_UPDATED,
-                            D.C_FAVORITE,
-                            D.C_DOWNLOAD_URL,
-                            cn(D.T_UWAZI_SERVER, D.C_NAME, D.A_SERVER_NAME),
-                            cn(D.T_UWAZI_SERVER, D.C_USERNAME, D.A_SERVER_USERNAME)},
-                    null, null, null,
-                    cn(D.T_UWAZI_BLANK_TEMPLATES, D.C_FAVORITE) + " DESC, " + cn(D.T_UWAZI_BLANK_TEMPLATES, D.C_ID) + " DESC",
-                    null
-            );
-
-            cursor = database.rawQuery(query, null);
-
-            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                UwaziEntityRow entity = cursorToUwaziTemplate(cursor);
-
-                // todo: implement cursorToCollectForm
-                long id = cursor.getLong(cursor.getColumnIndexOrThrow(D.A_COLLECT_BLANK_FORM_ID));
-                long serverId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_COLLECT_SERVER_ID));
-                boolean downloaded = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_DOWNLOADED)) == 1;
-                boolean favorite = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_FAVORITE)) == 1;
-                boolean updated = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_UPDATED)) == 1;
-                String serverName = cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_NAME));
-                String username = cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_USERNAME));
-
-                CollectTemplate collectForm = new CollectTemplate(serverId, entity);
-                collectForm.setId(id);
-                collectForm.setServerName(serverName);
-                collectForm.setUsername(username);
-                collectForm.setDownloaded(downloaded);
-                collectForm.setFavorite(favorite);
-                collectForm.setUpdated(updated);
-
-                templates.add(collectForm);
-            }
-        } catch (Exception e) {
-            Timber.d(e, getClass().getName());
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return templates;
-    }
-
-
-    private void updateUBlankTemplates(ListTemplateResult result){
-
-        List<CollectTemplate> templates = result.getTemplates();
-        List<IErrorBundle> errors = result.getErrors();
-
-        List<String> templatesIDs = new ArrayList<>(templates.size());
-        List<String> errorServerIDs = new ArrayList<>(errors.size());
-
-        for (CollectTemplate template : templates) {
-
-            CollectTemplate current = getBlankTemplate(""+template.getId());
-            ContentValues values = new ContentValues();
-
-            if (current != null) {
-
-                values.put(D.C_UPDATED, true);
-
-                int num = database.update(D.T_UWAZI_BLANK_TEMPLATES, values, D.C_ID + " = ?",
-                        new String[]{Long.toString(current.getId())});
-                if (num > 0) {
-                    template.setUpdated(true);
-                }
-            } else {
-                values.put(D.C_UWAZI_SERVER_ID, template.getServerId());
-                values.put(D.C_TEMPLATE_ID, template.getEntityRow().get_id());
-                values.put(D.C_VERSION, template.getEntityRow().get__v());
-                values.put(D.C_NAME, template.getEntityRow().getName());
-
-                long id = database.insert(D.T_UWAZI_BLANK_TEMPLATES, null, values);
-                if (id != -1) {
-                    template.setId(id);
-                }
-            }
-        }
-
-    }
-
-    private void updateUBlankTemplatesIfNeeded(ListTemplateResult result){
-
-        List<CollectTemplate> templates = result.getTemplates();
-        List<IErrorBundle> errors = result.getErrors();
-
-        List<String> templatesIDs = new ArrayList<>(templates.size());
-        List<String> errorServerIDs = new ArrayList<>(errors.size());
-
-        for (CollectTemplate template : templates) {
-
-            CollectTemplate current = getBlankTemplate(""+template.getId());
-            ContentValues values = new ContentValues();
-
-            if (current != null) {
-
-                values.put(D.C_UPDATED, true);
-
-                int num = database.update(D.T_UWAZI_BLANK_TEMPLATES, values, D.C_ID + " = ?",
-                        new String[]{Long.toString(current.getId())});
-                if (num > 0) {
-                    template.setUpdated(true);
-                }
-            }
-        }
-
-    }
-
-    private void updateUBlankTemplateIfNeeded(CollectTemplate collectTemplate) {
-
-        CollectTemplate current = getBlankTemplate(String.valueOf(collectTemplate.getId()));
-        ContentValues values = new ContentValues();
-
-        if (current != null) {
-            values.put(D.C_UPDATED, true);
-            values.put(D.C_TEMPLATE_NAME,collectTemplate.getEntityRow().getName());
-            values.put(D.C_TEMPLATE_PROPERTIES,collectTemplate.getEntityRow().getName());
-            int num = database.update(D.T_UWAZI_BLANK_TEMPLATES, values, D.C_ID + " = ?",
-                    new String[]{Long.toString(current.getId())});
-            if (num > 0) {
-                collectTemplate.setUpdated(true);
-            }
-        }
     }
 
     private VaultFile cursorToMediaFile(Cursor cursor) {

@@ -1,33 +1,26 @@
 package rs.readahead.washington.mobile.mvp.presenter
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
+import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.data.repository.UwaziRepository
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.mvp.contract.ICheckUwaziServerContract
-import kotlin.coroutines.CoroutineContext
 
-class CheckUwaziServerPresenter constructor(private  var view: ICheckUwaziServerContract.IView?):  ICheckUwaziServerContract.IPresenter {
+class CheckUwaziServerPresenter constructor(private var view: ICheckUwaziServerContract.IView?) :
+    ICheckUwaziServerContract.IPresenter {
     private val disposables = CompositeDisposable()
     private var saveAnyway = false
-    private var parentJob = Job()
-    private val coroutineContext: CoroutineContext
-        get() = parentJob + Dispatchers.Main
+    private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
 
-    private val scope = CoroutineScope(coroutineContext)
 
     override fun checkServer(server: UWaziUploadServer) {
         if (!MyApplication.isConnectedToInternet(view!!.getContext())) {
-            if (saveAnyway ) {
+            if (saveAnyway) {
                 server.isChecked = false
                 view?.onServerCheckSuccess(server)
             } else {
@@ -42,30 +35,28 @@ class CheckUwaziServerPresenter constructor(private  var view: ICheckUwaziServer
         }
         val uwaziRepository = UwaziRepository()
 
-        scope.launch {
-            uwaziRepository.login(server)
-                .onStart {
-                    view?.showServerCheckLoading()
+        disposables.add(uwaziRepository.login(server)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {view?.showServerCheckLoading()}
+            .doFinally { view?.hideServerCheckLoading() }
+            .subscribe({ result ->
+                if (result.success) {
+                    server.isChecked = true
+                    view?.onServerCheckSuccess(server)
+                } else {
+                    view?.onServerCheckFailure(UploadProgressInfo.Status.UNAUTHORIZED)
                 }
-                .catch {
-                    FirebaseCrashlytics.getInstance().recordException(it)
-                    view?.onServerCheckError(it)
-                    view?.onServerCheckFailure(UploadProgressInfo.Status.ERROR)
-                    view?.hideServerCheckLoading()
-                }
-                .collect {
-                    if (it.success) {
-                        server.isChecked = true
-                        view?.onServerCheckSuccess(server)
-                    } else {
-                        view?.onServerCheckFailure(UploadProgressInfo.Status.UNAUTHORIZED)
-                    }
-                    view?.hideServerCheckLoading()
-
-                }
-        }
-
-
+                view?.hideServerCheckLoading()
+            }) { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(
+                    throwable
+                        ?: throw NullPointerException("Expression 'throwable' must not be null")
+                )
+                view?.onServerCheckError(throwable)
+                view?.onServerCheckFailure(UploadProgressInfo.Status.ERROR)
+                view?.hideServerCheckLoading()
+            })
     }
 
     override fun destroy() {

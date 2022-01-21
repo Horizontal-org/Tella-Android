@@ -10,6 +10,7 @@ import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
+import rs.readahead.washington.mobile.data.database.UwaziDataSource;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
@@ -60,11 +61,11 @@ public class OnBoardPresenter implements IOnBoardPresenterContract.IPresenter {
 
     @Override
     public void create(UWaziUploadServer server) {
-        disposables.add(keyDataSource.getDataSource()
+        disposables.add(keyDataSource.getUwaziDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> view.showLoading())
-                .flatMapSingle((Function<DataSource, SingleSource<UWaziUploadServer>>)
+                .flatMapSingle((Function<UwaziDataSource, SingleSource<UWaziUploadServer>>)
                         dataSource -> dataSource.createUWAZIServer(server))
                 .doFinally(() -> view.hideLoading())
                 .subscribe(server1 -> view.onCreatedUwaziServer(server1),

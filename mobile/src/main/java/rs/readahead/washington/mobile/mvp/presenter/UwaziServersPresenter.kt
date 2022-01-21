@@ -1,18 +1,14 @@
 package rs.readahead.washington.mobile.mvp.presenter
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import io.reactivex.SingleSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
-import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.database.KeyDataSource
+import rs.readahead.washington.mobile.data.database.UwaziDataSource
 import rs.readahead.washington.mobile.data.openrosa.OpenRosaService
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
-import rs.readahead.washington.mobile.domain.entity.collect.CollectServer
 import rs.readahead.washington.mobile.mvp.contract.IUWAZIServersPresenterContract
 
 class UwaziServersPresenter constructor(var view: IUWAZIServersPresenterContract.IView?) :
@@ -22,11 +18,11 @@ class UwaziServersPresenter constructor(var view: IUWAZIServersPresenterContract
 
 
     override fun getUwaziServers() {
-        disposables.add(keyDataSource.dataSource
+        disposables.add(keyDataSource.uwaziDataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { view!!.showLoading() }
-            .flatMapSingle { obj: DataSource -> obj.listUwaziServers() }
+            .flatMapSingle { obj: UwaziDataSource -> obj.listUwaziServers() }
             .doFinally { view!!.hideLoading() }
             .subscribe(
                 { list: List<UWaziUploadServer> ->
@@ -43,11 +39,11 @@ class UwaziServersPresenter constructor(var view: IUWAZIServersPresenterContract
 
     override fun create(server: UWaziUploadServer) {
         disposables.add(
-            keyDataSource.dataSource
+            keyDataSource.uwaziDataSource
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { view?.showLoading() }
-                .flatMapSingle { dataSource: DataSource ->
+                .flatMapSingle { dataSource: UwaziDataSource ->
                     dataSource.createUWAZIServer(
                         server
                     )
@@ -67,11 +63,11 @@ class UwaziServersPresenter constructor(var view: IUWAZIServersPresenterContract
     }
 
     override fun update(server: UWaziUploadServer) {
-        disposables.add(keyDataSource.dataSource
+        disposables.add(keyDataSource.uwaziDataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { view?.showLoading() }
-            .flatMapSingle { dataSource: DataSource ->
+            .flatMapSingle { dataSource: UwaziDataSource ->
                 dataSource.updateUwaziServer(server)
             }
             .doFinally { view?.hideLoading() }
@@ -85,11 +81,11 @@ class UwaziServersPresenter constructor(var view: IUWAZIServersPresenterContract
     }
 
     override fun remove(server: UWaziUploadServer) {
-        disposables.add(keyDataSource.dataSource
+        disposables.add(keyDataSource.uwaziDataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { view?.showLoading() }
-            .flatMapCompletable { dataSource: DataSource ->
+            .flatMapCompletable { dataSource: UwaziDataSource ->
                 dataSource.removeUwaziServer(server.id)
             }
             .doFinally { view?.hideLoading() }

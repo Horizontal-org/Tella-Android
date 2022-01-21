@@ -12,5 +12,4 @@ public interface IUWAZIServersRepository {
     Completable removeUwaziServer(long id);
     Single<UWaziUploadServer> updateUwaziServer(UWaziUploadServer server);
     Single<Long> countUwaziServers();
-
 }

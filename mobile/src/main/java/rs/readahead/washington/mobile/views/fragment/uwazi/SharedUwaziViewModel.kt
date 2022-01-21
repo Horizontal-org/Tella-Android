@@ -16,53 +16,60 @@ import kotlinx.coroutines.launch
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.database.KeyDataSource
+import rs.readahead.washington.mobile.data.database.UwaziDataSource
 import rs.readahead.washington.mobile.data.entity.uwazi.UwaziEntityRow
 import rs.readahead.washington.mobile.data.repository.UwaziRepository
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
+import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
+import rs.readahead.washington.mobile.domain.entity.collect.ListFormResult
+import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
+import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.ViewEntityTemplateItem
+import rs.readahead.washington.mobile.views.fragment.uwazi.mappers.toViewEntityTemplateItem
 import timber.log.Timber
 
 class SharedUwaziViewModel : ViewModel() {
+
     private val uwaziRepository by lazy { UwaziRepository() }
-    var error = MutableLiveData<String>()
-    private val _templates = MutableLiveData<HashMap<UWaziUploadServer,List<UwaziEntityRow>>>()
-    val templates: LiveData<HashMap<UWaziUploadServer,List<UwaziEntityRow>>> get() = _templates
+    var error = MutableLiveData<Throwable>()
+    private val _templates = MutableLiveData<List<ViewEntityTemplateItem>>()
+    val templates: LiveData<List<ViewEntityTemplateItem>> get() = _templates
     private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private val disposables = CompositeDisposable()
 
-    private fun getTemplates(servers: List<UWaziUploadServer>) {
-        val list = HashMap<UWaziUploadServer,List<UwaziEntityRow>>()
-        viewModelScope.launch {
-            if (!servers.isNullOrEmpty()) {
-                servers.asFlow().map { server ->
-                    uwaziRepository.getTemplates(server)
-                        .catch {
-                            Timber.d(it)
-                        }
-                        .collect {
-                            Timber.d(it.toString())
-                            list[server] = it.rows
-                        }
-                }.catch { e -> error.postValue(e.toString())  }
-                    .collect {
-                        _templates.postValue(list)
-                    }
-
-            }
-        }
-
+    init {
+        listTemplates()
     }
 
-    fun getServers() {
-        disposables.add(keyDataSource.dataSource
+    private fun listTemplates(){
+        disposables.add(keyDataSource.uwaziDataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe { }
-            .flatMapSingle { obj: DataSource -> obj.listUwaziServers() }
+            .flatMap { dataSource: UwaziDataSource ->
+                dataSource.listBlankTemplates().toObservable()
+            }
             .subscribe(
-                { list: List<UWaziUploadServer> -> getTemplates(list) }
+                { templates : List<CollectTemplate> ->
+                    val resultList = mutableListOf<ViewEntityTemplateItem>()
+                    templates.map {
+                        resultList.add(it.toViewEntityTemplateItem(onDownloadClicked = {onDownloadClicked()}, onFavoriteClicked = {onFavoriteClicked()}))
+                    }
+                    _templates.postValue(resultList)
+                }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                error.postValue(
+                    throwable
+                )
             }
         )
     }
+
+    fun onDownloadClicked(){
+
+    }
+
+
+    fun onFavoriteClicked(){
+
+    }
+
 }

@@ -7,8 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import rs.readahead.washington.mobile.databinding.FragmentTemplatesUwaziBinding
-import rs.readahead.washington.mobile.views.adapters.UwaziTemplatesAdapter
-import timber.log.Timber
+import rs.readahead.washington.mobile.views.adapters.uwazi.UwaziTemplatesAdapter
 
 
 class TemplatesUwaziFragment : UwaziListFragment() {
@@ -18,12 +17,6 @@ class TemplatesUwaziFragment : UwaziListFragment() {
 
     override fun getFormListType(): Type {
         return Type.TEMPLATES
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        getTemplates()
-        initObservers()
     }
 
     override fun onCreateView(
@@ -37,18 +30,16 @@ class TemplatesUwaziFragment : UwaziListFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initObservers()
     }
 
-    private fun getTemplates(){
-      viewModel.getServers()
-    }
 
     private fun initObservers(){
-       viewModel.templates.observe(this, { servers ->
-           servers.forEach {
-               uwaziTemplatesAdapter.submitList(it.value)
-           }
-        })
+        with(viewModel){
+            templates.observe(viewLifecycleOwner,{
+                uwaziTemplatesAdapter.setEntityTemplates(it)
+            })
+        }
     }
 
     private fun initView(){

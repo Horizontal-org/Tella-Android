@@ -44,9 +44,15 @@ class DownloadedTemplatesFragment : Fragment() {
     }
 
     private fun initObservers(){
-        viewModel.templates.observe(viewLifecycleOwner, { list ->
-         val result =    list.groupBy { it.serverId }.toMap()
-            templateContainerAdapter.setContainers(result)
-        })
+        with(viewModel){
+            templates.observe(viewLifecycleOwner, { list ->
+                val result =    list.groupBy { it.serverId }.toMap()
+                templateContainerAdapter.setContainers(result)
+            })
+
+            onTemplateDownloaded.observe(viewLifecycleOwner, { list ->
+
+            })
+        }
     }
 }
