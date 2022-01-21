@@ -14,7 +14,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
@@ -27,7 +26,6 @@ import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import butterknife.ButterKnife
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
 import org.javarosa.core.model.FormDef
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnShowRationale
@@ -39,27 +37,27 @@ import rs.readahead.washington.mobile.bus.event.*
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance
-import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus
 import rs.readahead.washington.mobile.javarosa.FormUtils
 import rs.readahead.washington.mobile.util.PermissionUtil
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.views.activity.CollectFormEntryActivity
 import rs.readahead.washington.mobile.views.activity.CollectHelpActivity
 import rs.readahead.washington.mobile.views.activity.FormSubmitActivity
+import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.adapters.ViewPagerAdapter
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import timber.log.Timber
 
 const val LOCATION_REQUEST_CODE = 1003
 
-class CollectMainFragment : BaseFragment(){
+class CollectMainFragment : BaseFragment() {
     private var blankFragmentPosition = 0
     private lateinit var fab: FloatingActionButton
     private lateinit var tabLayout: TabLayout
-    private lateinit var  formsViewPager: View
-    private lateinit var  noServersView: View
+    private lateinit var formsViewPager: View
+    private lateinit var noServersView: View
     private lateinit var blankFormsText: TextView
-    private val disposables by lazy {MyApplication.bus().createCompositeDisposable()}
+    private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
     private var alertDialog: AlertDialog? = null
     private lateinit var mViewPager: ViewPager
     private val adapter by lazy { ViewPagerAdapter(activity.supportFragmentManager) }
@@ -145,7 +143,7 @@ class CollectMainFragment : BaseFragment(){
             object : EventObserver<ShowBlankFormEntryEvent?>() {
                 override fun onNext(event: ShowBlankFormEntryEvent) {
                     // this should be called on observed onGetBlankFormDefSuccess ?
-                    startCreateFormControllerPresenter(event.form.form,event.form.formDef)
+                    startCreateFormControllerPresenter(event.form.form, event.form.formDef)
                 }
             })
         disposables.wire(
@@ -196,13 +194,13 @@ class CollectMainFragment : BaseFragment(){
                     //onFormInstanceDeleteSuccess()
                 }
             })
-        disposables.wire(
-            DeleteFormInstanceEvent::class.java,
-            object : EventObserver<DeleteFormInstanceEvent?>() {
-                override fun onNext(event: DeleteFormInstanceEvent) {
-                    showDeleteInstanceDialog(event.instanceId, event.status)
-                }
-            })
+        /*disposables.wire(
+             DeleteFormInstanceEvent::class.java,
+             object : EventObserver<DeleteFormInstanceEvent?>() {
+                 override fun onNext(event: DeleteFormInstanceEvent) {
+                     showDeleteInstanceDialog(event.instanceId, event.status)
+                 }
+             })*/
         disposables.wire(
             CancelPendingFormInstanceEvent::class.java,
             object : EventObserver<CancelPendingFormInstanceEvent?>() {
@@ -235,8 +233,10 @@ class CollectMainFragment : BaseFragment(){
             adapter.notifyDataSetChanged()
         }
     }
+
     override fun onResume() {
         super.onResume()
+        (activity as MainActivity).selectNavForm()
         countServers()
     }
 
@@ -247,12 +247,11 @@ class CollectMainFragment : BaseFragment(){
         super.onStop()
     }
 
-     override fun onDestroy() {
+    override fun onDestroy() {
         if (disposables != null) {
             disposables.dispose()
         }
-         model.onCreateFormController.value = null
-         super.onDestroy()
+        super.onDestroy()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -281,7 +280,7 @@ class CollectMainFragment : BaseFragment(){
         return false
     }
 
-   private fun requestLocationPermissions() {
+    private fun requestLocationPermissions() {
         activity.changeTemporaryTimeout()
         val permissions = arrayOf(
             Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -298,24 +297,24 @@ class CollectMainFragment : BaseFragment(){
     }
 
     private fun initObservers() {
-        model.onError.observe(viewLifecycleOwner, { error ->
-                 Timber.d(error, javaClass.name)
+        model.onError.observe(viewLifecycleOwner, Observer { error ->
+            Timber.d(error, javaClass.name)
         })
-        model.onGetBlankFormDefSuccess.observe(viewLifecycleOwner, { result ->
-                result.let {
-                    startCreateFormControllerPresenter(it.form, it.formDef)
-                }
+        model.onGetBlankFormDefSuccess.observe(viewLifecycleOwner, Observer { result ->
+            result.let {
+                startCreateFormControllerPresenter(it.form, it.formDef)
+            }
         })
-        model.onInstanceFormDefSuccess.observe(viewLifecycleOwner, { instance->
+        model.onInstanceFormDefSuccess.observe(viewLifecycleOwner, Observer { instance ->
             startCreateInstanceFormControllerPresenter(instance)
         })
 
-        model.onFormDefError.observe(viewLifecycleOwner, { error ->
+        model.onFormDefError.observe(viewLifecycleOwner, Observer { error ->
             val errorMessage = FormUtils.getFormDefErrorMessage(activity, error)
             activity.showToast(errorMessage)
         })
 
-        model.onFormDefError.observe(viewLifecycleOwner, { error ->
+        model.onFormDefError.observe(viewLifecycleOwner, Observer { error ->
             val errorMessage = FormUtils.getFormDefErrorMessage(activity, error)
             activity.showToast(errorMessage)
         })
@@ -325,10 +324,9 @@ class CollectMainFragment : BaseFragment(){
                 if (Preferences.isAnonymousMode()) {
                     startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
                 } else {
-                    if (!hasLocationPermissions(activity))
-                    {
+                    if (!hasLocationPermissions(activity)) {
                         requestLocationPermissions()
-                    }else{
+                    } else {
                         startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
                     }
                 }
@@ -338,11 +336,11 @@ class CollectMainFragment : BaseFragment(){
             getBlankFormsListFragment().listBlankForms()
         })
 
-        model.onFormInstanceDeleteSuccess.observe(viewLifecycleOwner, Observer {
+        /*model.onFormInstanceDeleteSuccess.observe(viewLifecycleOwner, Observer {
             Toast.makeText(activity, R.string.collect_toast_form_deleted, Toast.LENGTH_SHORT).show()
             getSubmittedFormsListFragment().listSubmittedForms()
             getDraftFormsListFragment().listDraftForms()
-        })
+        })*/
 
         model.onCountCollectServersEnded.observe(viewLifecycleOwner, Observer { num ->
             numOfCollectServers = num
@@ -385,22 +383,23 @@ class CollectMainFragment : BaseFragment(){
         startGetInstanceFormDefPresenter(instanceId)
     }
 
-    private fun showDeleteInstanceDialog(instanceId: Long, status: CollectFormInstanceStatus) {
-        var msgResId = R.string.collect_dialog_text_delete_draft_form
+    /*private fun showDeleteInstanceDialog(instanceId: Long, status: CollectFormInstanceStatus) {
+        if (status == CollectFormInstanceStatus.DRAFT) {
+            this.model.deleteFormInstance(instanceId)
+        } else {
 
-        if (status == CollectFormInstanceStatus.SUBMITTED) {
-            msgResId = R.string.collect_dialog_text_delete_sent_form
+            val msgResId = R.string.collect_dialog_text_delete_sent_form
+
+            showStandardSheet(
+                activity.getSupportFragmentManager(),
+                getString(R.string.Collect_RemoveForm_SheetTitle),
+                getString(msgResId),
+                getString(R.string.action_remove),
+                getString(R.string.action_cancel),
+                { this.model.deleteFormInstance(instanceId) },
+                { })
         }
-
-        showStandardSheet(
-            activity.supportFragmentManager,
-            getString(R.string.Collect_RemoveForm_SheetTitle),
-            getString(msgResId),
-            getString(R.string.action_remove),
-            getString(R.string.action_cancel),
-            { this.model.deleteFormInstance(instanceId) },
-            { })
-    }
+    }*/
 
     private fun showCancelPendingFormDialog(instanceId: Long) {
         alertDialog = AlertDialog.Builder(activity)

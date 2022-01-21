@@ -185,7 +185,7 @@ BottomSheetUtils {
         }
     }
 
-    interface DualChoiceConsumer {
+    interface BinaryConsumer {
         fun accept(option: Boolean)
     }
     interface IServerChoiceActions{
@@ -194,7 +194,7 @@ BottomSheetUtils {
         fun addUwaziServer()
     }
     @JvmStatic
-    fun showDualChoiceTypeSheet(
+    fun showBinaryTypeSheet(
         fragmentManager: FragmentManager,
         titleText: String?,
         descriptionText: String?,
@@ -203,6 +203,7 @@ BottomSheetUtils {
         nextText: String?,
         buttonOneLabel: String? = null,
         buttonTwoLabel: String? = null,
+        consumer: BinaryConsumer? = null
         buttonThreeLabel: String? = null,
         consumer: IServerChoiceActions
     ) {
@@ -309,7 +310,7 @@ BottomSheetUtils {
         subtitleOne: String?,
         titleTwo: String?,
         subtitleTwo: String?,
-        consumer: DualChoiceConsumer? = null
+        consumer: BinaryConsumer? = null
     ) {
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
@@ -558,7 +559,7 @@ BottomSheetUtils {
     }
 
     @JvmStatic
-    fun showServerMenuSheet(
+    fun showEditDeleteMenuSheet(
         fragmentManager: FragmentManager,
         titleText: String?,
         actionEditLabel: String? = null,

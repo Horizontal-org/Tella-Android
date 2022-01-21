@@ -14,6 +14,9 @@ import java.util.Locale;
 
 import androidx.annotation.Nullable;
 
+import rs.readahead.washington.mobile.R;
+import timber.log.Timber;
+
 
 public class Util {
     private Util() {}
@@ -83,4 +86,31 @@ public class Util {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
+
+    public static String getElapsedTimeFromTimestamp(long timestamp, Context context){
+        double interval = (System.currentTimeMillis() - timestamp) / 1000f;
+
+        double years = Math.floor(interval / 31536000); //year = 31536000 sec
+        if (years > 0) return context.getString(R.string.Util_ellapsedTime_Year);
+
+        int months = (int) Math.floor(interval / 2592000); //month = 2592000 sec
+        if (months > 0) { return context.getResources().getQuantityString(R.plurals.Util_ellapsedTime_Months, months, months);}
+
+        int weeks = (int) Math.floor(interval / 604800); //week = 604800 sec
+        if (weeks > 0) { return context.getResources().getQuantityString(R.plurals.Util_ellapsedTime_Weeks, weeks, weeks);}
+
+        int days = (int) Math.floor(interval / 86400);
+        if (days > 0) { return context.getResources().getQuantityString(R.plurals.Util_ellapsedTime_Days, days, days);}
+
+        int hours = (int) Math.floor(interval / 3600);
+        Timber.d("+++++ hours %d", hours);
+        if (hours > 0) { return context.getResources().getQuantityString(R.plurals.Util_ellapsedTime_Hours, hours, hours);}
+
+        int minutes = (int) Math.floor(interval / 60); //minute = 60 sec
+        Timber.d("+++++ minutes %d", minutes);
+        if (minutes > 0) { return context.getResources().getQuantityString(R.plurals.Util_ellapsedTime_Minutes, minutes, minutes);}
+
+        return context.getString(R.string.Util_ellapsedTime_Seconds);
+    }
+
 }

@@ -32,20 +32,24 @@
         android:id="@+id/latitude"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/wa_white_80"
         android:layout_marginBottom="2dp"/>
     <TextView
         android:id="@+id/longitude"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/wa_white_80"
         android:layout_marginBottom="2dp"/>
     <TextView
         android:id="@+id/altitude"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/wa_white_80"
         android:layout_marginBottom="2dp"/>
     <TextView
         android:id="@+id/accuracy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/wa_white_80"
         android:layout_marginBottom="5dp"/>
 </LinearLayout>

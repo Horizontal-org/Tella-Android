@@ -25,7 +25,7 @@
 
     <color name="colorPrimary">@color/space_cadet</color>
     <color name="colorPrimaryDark">@color/space_cadet</color>
-    <color name="colorAccent">@color/wa_black</color>
+    <color name="colorAccent">@color/wa_white_80</color>
     <color name="colorPrimaryInverse">@color/wa_white</color>
 
     <!-- Collect -->

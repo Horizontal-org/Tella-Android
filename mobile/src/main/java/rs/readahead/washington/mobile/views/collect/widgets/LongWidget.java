@@ -51,7 +51,7 @@ public class LongWidget extends QuestionWidget {
         super(context, prompt);
 
         answer = new EditText(context);
-        answer.setTextColor(getResources().getColor(R.color.wa_white));
+        answer.setTextColor(getResources().getColor(R.color.wa_white_80));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             answer.setBackgroundTintList(context.getColorStateList(R.color.dialog_white_tint));
         }

@@ -8,7 +8,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
+import org.hzontal.shared_ui.utils.DialogUtils;
 import org.javarosa.core.model.FormDef;
 
 import java.util.ArrayList;
@@ -141,10 +142,9 @@ public class BlankFormsListFragment extends FormListFragment {
         model.getOnDownloadBlankFormDefStart().observe(getViewLifecycleOwner(), show -> {
             if (show) {
                 showBlankFormDownloadingDialog(R.string.collect_dialog_text_download_progress);
-
             } else {
                 hideAlertDialog();
-                Toast.makeText(getActivity(), R.string.collect_toast_download_completed, Toast.LENGTH_SHORT).show();
+                DialogUtils.showBottomMessage(getActivity(),getString(R.string.collect_toast_download_completed), false);
             }
         });
 
@@ -291,7 +291,7 @@ public class BlankFormsListFragment extends FormListFragment {
         TextView organization = item.findViewById(R.id.organization);
         ImageButton dlOpenButton = item.findViewById(R.id.dl_open_button);
         ImageView pinnedIcon = item.findViewById(R.id.favorites_button);
-        View rowLayout = item.findViewById(R.id.row_layout);
+        //View rowLayout = item.findViewById(R.id.row_layout);
         ImageButton updateButton = item.findViewById(R.id.later_button);
 
         if (collectForm != null) {
@@ -301,14 +301,13 @@ public class BlankFormsListFragment extends FormListFragment {
             if (collectForm.isDownloaded()) {
                 dlOpenButton.setImageDrawable(row.getContext().getResources().getDrawable(R.drawable.ic_more));
                 dlOpenButton.setContentDescription(getString(R.string.collect_blank_action_desc_more_options));
-                dlOpenButton.setOnClickListener(view -> showDownloadedPopupMenu(collectForm, row, dlOpenButton));
-                rowLayout.setOnClickListener(view -> model.getBlankFormDef(collectForm));
+                dlOpenButton.setOnClickListener(view -> showDownloadedMenu(collectForm));
+                //rowLayout.setOnClickListener(view -> model.getBlankFormDef(collectForm));
                 pinnedIcon.setOnClickListener(view -> {
                     model.toggleFavorite(collectForm);
                     updateFormViews();
                 });
 
-              //  rowLayout.setOnClickListener(view -> model.getBlankFormDef(collectForm));
                 if (collectForm.isUpdated()) {
                     pinnedIcon.setVisibility(View.VISIBLE);
                     updateButton.setVisibility(View.VISIBLE);
@@ -347,26 +346,27 @@ public class BlankFormsListFragment extends FormListFragment {
         return item;
     }
 
-    private void showDownloadedPopupMenu(CollectForm collectForm, ViewGroup row, ImageButton dlOpenButton) {
-        PopupMenu popup = new PopupMenu(row.getContext(), dlOpenButton);
-        popup.inflate(R.menu.collect_server_item_menu);
-
-        if (collectForm.isPinned()) {
-            popup.getMenu().findItem(R.id.pin_server).setTitle(R.string.collect_blank_action_unpin);
-        } else {
-            popup.getMenu().findItem(R.id.pin_server).setTitle(R.string.collect_blank_action_pin);
-        }
-
-        popup.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.removeForm) {
-                downloadedForms.remove(collectForm);
-                model.removeBlankFormDef(collectForm);
-                updateFormViews();
-            }
-            return false;
-        });
-
-        popup.show();
+    private void showDownloadedMenu(CollectForm collectForm) {
+        BottomSheetUtils.showEditDeleteMenuSheet(
+                requireActivity().getSupportFragmentManager(),
+                collectForm.getForm().getName(),
+                requireContext().getString(R.string.Collect_Action_FillForm),
+                requireContext().getString(R.string.action_delete),
+                action -> {
+                    if (action == BottomSheetUtils.Action.EDIT) {
+                        model.getBlankFormDef(collectForm);
+                    }
+                    if (action == BottomSheetUtils.Action.DELETE) {
+                        downloadedForms.remove(collectForm);
+                        model.removeBlankFormDef(collectForm);
+                        updateFormViews();
+                    }
+                },
+                requireContext().getString(R.string.Collect_RemoveForm_SheetTitle),
+                String.format(requireContext().getResources().getString(R.string.Collect_Subtitle_RemoveForm), collectForm.getForm().getName()),
+                requireContext().getString(R.string.action_remove),
+                requireContext().getString(R.string.action_cancel)
+        );
     }
 
     private boolean checkIfDayHasPassed() {

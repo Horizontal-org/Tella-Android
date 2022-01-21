@@ -5,6 +5,8 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.mvp.contract.ICollectAttachmentMediaFilePresenterContract;
+import rs.readahead.washington.mobile.util.FileUtil;
+
 
 public class CollectAttachmentMediaFilePresenter implements ICollectAttachmentMediaFilePresenterContract.IPresenter {
     private ICollectAttachmentMediaFilePresenterContract.IView view;
@@ -15,7 +17,9 @@ public class CollectAttachmentMediaFilePresenter implements ICollectAttachmentMe
     }
 
     @Override
-    public void getMediaFile(String vaultFileId) {
+    public void getMediaFile(String vaultFileNameId) {
+        String vaultFileId = FileUtil.getBaseName(vaultFileNameId);
+
         disposables.add(MyApplication.rxVault.get(vaultFileId)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())

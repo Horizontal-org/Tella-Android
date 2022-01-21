@@ -42,7 +42,6 @@ import rs.readahead.washington.mobile.bus.event.CollectFormSavedEvent;
 import rs.readahead.washington.mobile.bus.event.CollectFormSubmissionErrorEvent;
 import rs.readahead.washington.mobile.bus.event.CollectFormSubmitStoppedEvent;
 import rs.readahead.washington.mobile.bus.event.CollectFormSubmittedEvent;
-import rs.readahead.washington.mobile.bus.event.DeleteFormInstanceEvent;
 import rs.readahead.washington.mobile.bus.event.ReSubmitFormInstanceEvent;
 import rs.readahead.washington.mobile.bus.event.ShowBlankFormEntryEvent;
 import rs.readahead.washington.mobile.bus.event.ShowFormInstanceEntryEvent;
@@ -203,12 +202,12 @@ public class CollectMainActivity extends BaseLockActivity implements
                 onFormInstanceDeleteSuccess();
             }
         });
-        disposables.wire(DeleteFormInstanceEvent.class, new EventObserver<DeleteFormInstanceEvent>() {
+        /*disposables.wire(DeleteFormInstanceEvent.class, new EventObserver<DeleteFormInstanceEvent>() {
             @Override
             public void onNext(DeleteFormInstanceEvent event) {
                 showDeleteInstanceDialog(event.getInstanceId(), event.getStatus());
             }
-        });
+        });*/
         disposables.wire(CancelPendingFormInstanceEvent.class, new EventObserver<CancelPendingFormInstanceEvent>() {
             @Override
             public void onNext(CancelPendingFormInstanceEvent event) {

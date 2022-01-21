@@ -493,4 +493,38 @@
     <string name="Collect_RemoveForm_SheetTitle">Remove form?</string>
     <string name="fragment_uwazi">Uwazi</string>
     <string name="Uwazi_Dowload_Temapltes_Header_Title">Download templates</string>
+    <string name="Collect_Action_FillForm">Fill form</string>
+    <string name="Collect_Subtitle_RemoveForm">Are you sure you want to remove "%1$s"? </string>
+    <string name="Util_ellapsedTime_Year">More than a year ago</string>
+    <plurals name="Util_ellapsedTime_Months">
+        <item quantity="one">A month ago</item>
+        <item quantity="few">%d months ago</item>
+        <item quantity="many">%d months ago</item>
+        <item quantity="other">%d months ago</item>
+    </plurals>
+    <plurals name="Util_ellapsedTime_Weeks">
+        <item quantity="one">A week ago</item>
+        <item quantity="few">%d weeks ago</item>
+        <item quantity="many">%d weeks ago</item>
+        <item quantity="other">%d weeks ago</item>
+    </plurals>
+    <plurals name="Util_ellapsedTime_Days">
+        <item quantity="one">One day ago</item>
+        <item quantity="few">%d days ago</item>
+        <item quantity="many">%d days ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
+    <plurals name="Util_ellapsedTime_Hours">
+        <item quantity="one">An hour ago</item>
+        <item quantity="few">%d hours ago</item>
+        <item quantity="many">%d hours ago</item>
+        <item quantity="other">%d hours ago</item>
+    </plurals>
+    <plurals name="Util_ellapsedTime_Minutes">
+        <item quantity="one">A minute ago</item>
+        <item quantity="few">%d minutes ago</item>
+        <item quantity="many">%d minutes ago</item>
+        <item quantity="other">%d minutes ago</item>
+    </plurals>
+    <string name="Util_ellapsedTime_Seconds">A seconds a ago</string>
 </resources>
