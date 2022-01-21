@@ -178,9 +178,9 @@
     </style>
 
     <style name="CollectFormWidgetButton" parent="@style/Widget.AppCompat.Button.Borderless">
-        <item name="android:background">@drawable/dark_outlined_button</item>
+        <item name="android:background">@drawable/rounded_light_purple_background</item>
         <item name="android:textColor">@color/wa_gray</item>
-        <item name="android:textAllCaps">true</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="CollectHelpText">
@@ -367,5 +367,20 @@
         <item name="android:padding">0.1dp</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:background">@color/wa_white</item>
+    </style>
+
+    <!-- styles for Forms section -->
+    <style name="Tella2_Forms_Activity" parent="@style/AppTheme.NoActionBar">
+        <item name="android:background">@color/dark_purple</item>
+    </style>
+
+    <style name="Tella2_Forms_Fragment">
+        <item name="android:background">@color/dark_purple</item>
+    </style>
+
+    <style name="Tella2_Widgets_Delimiter">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/activity_vertical_tiny_margin</item>
+        <item name="android:background">@android:color/transparent</item>
     </style>
 </resources>
