@@ -203,7 +203,6 @@ BottomSheetUtils {
         nextText: String?,
         buttonOneLabel: String? = null,
         buttonTwoLabel: String? = null,
-        binaryConsumer: BinaryConsumer? = null,
         buttonThreeLabel: String? = null,
         consumer: IServerChoiceActions
     ) {

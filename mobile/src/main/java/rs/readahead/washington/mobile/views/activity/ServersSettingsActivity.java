@@ -373,13 +373,12 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private void showChooseServerTypeDialog() {
-        /*
-        BottomSheetUtils.showDualChoiceTypeSheet(this.getSupportFragmentManager(),
+        BottomSheetUtils.showBinaryTypeSheet(this.getSupportFragmentManager(),
                 getString(R.string.settings_servers_add_server_dialog_title),
                 getString(R.string.settings_serv_add_server_selection_dialog_title),
                 getString(R.string.settings_serv_add_server_selection_dialog_description),
-                "bACK", //TODO CHECk THIS
-                "Confirm",//TODO CHECk THIS
+                getString(R.string.action_cancel), //TODO CHECk THIS
+                getString(R.string.action_ok),//TODO CHECk THIS
                 getString(R.string.settings_docu_add_server_dialog_select_odk),
                 getString(R.string.settings_docu_add_server_dialog_select_tella_web),
                 getString(R.string.settings_docu_add_server_dialog_select_tella_uwazi),
@@ -400,8 +399,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                     }
                 }
         );
-        $/
-         */
     }
 
     private void showChooseAutoUploadServerDialog(List<TellaUploadServer>  tellaUploadServers) {
