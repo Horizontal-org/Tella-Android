@@ -373,6 +373,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private void showChooseServerTypeDialog() {
+        /*
         BottomSheetUtils.showDualChoiceTypeSheet(this.getSupportFragmentManager(),
                 getString(R.string.settings_servers_add_server_dialog_title),
                 getString(R.string.settings_serv_add_server_selection_dialog_title),
@@ -399,6 +400,8 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                     }
                 }
         );
+        $/
+         */
     }
 
     private void showChooseAutoUploadServerDialog(List<TellaUploadServer>  tellaUploadServers) {

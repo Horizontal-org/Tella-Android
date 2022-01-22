@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import rs.readahead.washington.mobile.databinding.FragmentDownloadedTemplatesBinding
+import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.download.adapter.TemplateContainerAdapter
 
-class DownloadedTemplatesFragment : Fragment() {
+class DownloadedTemplatesFragment : BaseFragment() {
 
 
     private val viewModel : DownloadedTemplatesViewModel by viewModels()
@@ -23,15 +23,19 @@ class DownloadedTemplatesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getServers()
         initObservers()
-        initView()
+        //TODO CLEAR INIT VIEW FROM BASE FRAGMENT
+        initView(binding.root)
     }
 
-    private fun initView() {
+
+    override fun initView(view: View) {
       with(binding){
           templatesRecyclerView.apply {
               layoutManager = LinearLayoutManager(context)
               adapter = templateContainerAdapter
           }
+
+          toolbar.backClickListener = {nav().navigateUp()}
       }
     }
 
