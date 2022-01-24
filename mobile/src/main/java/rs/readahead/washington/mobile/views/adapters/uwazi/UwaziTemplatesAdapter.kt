@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import rs.readahead.washington.mobile.R
@@ -34,6 +35,7 @@ class UwaziTemplatesAdapter : RecyclerView.Adapter<UwaziTemplatesAdapter.EntityV
             view.apply{
                 view.findViewById<TextView>(R.id.name).text = entityRow.templateName
                 view.findViewById<TextView>(R.id.organization).text = entityRow.serverName
+                view.findViewById<ImageButton>(R.id.popupMenu).setOnClickListener { entityRow.onMoreClicked() }
             }
         }
     }

@@ -18,13 +18,13 @@ fun CollectTemplate.toViewTemplateItem(onMoreClicked: () -> Unit, onDownloadClic
 
 fun CollectTemplate.toViewEntityTemplateItem(
     onFavoriteClicked: () -> Unit,
-    onDownloadClicked: () -> Unit
+    onMoreClicked: () -> Unit
 ) = ViewEntityTemplateItem(
     id = id,
     serverId = serverId,
     templateName = entityRow.name,
     serverName = serverName,
-    onDownloadClicked = onDownloadClicked,
+    onMoreClicked = onMoreClicked,
     onFavoriteClicked = onFavoriteClicked
 
 )

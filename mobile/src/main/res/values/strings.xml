@@ -497,6 +497,11 @@
     <string name="fragment_uwazi">Uwazi</string>
     <string name="Uwazi_Dowload_Temapltes_Header_Title">Download templates</string>
     <string name="Uwazi_RemoveTemplate_SheetTitle">Remove from device</string>
+    <string name="Uwazi_Action_FillEntity">Create an entity</string>
+    <string name="Uwazi_Action_RemoveTemplate">Delete Template</string>
+    <string name="Uwazi_Subtitle_RemoveTemplate">Are you sure you want to remove this template? </string>
+
+
 
     <string name="Collect_Action_FillForm">Fill form</string>
     <string name="Collect_Subtitle_RemoveForm">Are you sure you want to remove "%1$s"? </string>

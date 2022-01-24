@@ -251,7 +251,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
             }
             .flatMap { servers: List<CollectServer> ->
                 if (servers.isEmpty()) {
-                   // return Single.just(ListFormResult()).toObservable()
+                     Single.just(ListFormResult()).toObservable()
                 }
                 if (!MyApplication.isConnectedToInternet(mApplication.baseContext)) {
                     throw NoConnectivityException()

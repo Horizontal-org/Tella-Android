@@ -4,9 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionSeleceted
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showEditDeleteMenuSheet
+import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentTemplatesUwaziBinding
+import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
+import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.views.adapters.uwazi.UwaziTemplatesAdapter
 
 
@@ -39,6 +46,14 @@ class TemplatesUwaziFragment : UwaziListFragment() {
             templates.observe(viewLifecycleOwner,{
                 uwaziTemplatesAdapter.setEntityTemplates(it)
             })
+
+            progress.observe(viewLifecycleOwner,{
+                binding.progressCircular.isVisible = it
+            })
+
+            showSheetMore.observe(viewLifecycleOwner,{
+                showDownloadedMenu(it)
+            })
         }
     }
 
@@ -52,6 +67,29 @@ class TemplatesUwaziFragment : UwaziListFragment() {
     override fun onResume() {
         super.onResume()
         viewModel.listTemplates()
+    }
+
+    private fun showDownloadedMenu(template: CollectTemplate) {
+        showEditDeleteMenuSheet(
+            requireActivity().supportFragmentManager,
+            template.entityRow.name,
+            getString(R.string.Uwazi_Action_FillEntity),
+            getString(R.string.Uwazi_Action_RemoveTemplate),
+            object : ActionSeleceted {
+                override fun accept(action: BottomSheetUtils.Action) {
+                    if (action === BottomSheetUtils.Action.EDIT) {
+
+                    }
+                    if (action === BottomSheetUtils.Action.DELETE) {
+                        viewModel.confirmDelete(template)
+                    }
+                }
+            },
+            getString(R.string.action_delete) + " \""+ template.entityRow.name+ "\"?",
+            requireContext().resources.getString(R.string.Uwazi_Subtitle_RemoveTemplate),
+            requireContext().getString(R.string.action_remove),
+            requireContext().getString(R.string.action_cancel)
+        )
     }
 
 

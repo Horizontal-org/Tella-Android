@@ -6,8 +6,8 @@ data class ViewEntityTemplateItem (
     val templateName: String,
     val serverName: String? = "",
     val onFavoriteClicked: () -> Unit,
-    val onDownloadClicked: () -> Unit,
+    val onMoreClicked: () -> Unit,
 ) {
     fun onFavoriteClicked() = onFavoriteClicked.invoke()
-    fun onDownloadClicked() = onDownloadClicked.invoke()
+    fun onMoreClicked() = onMoreClicked.invoke()
 }
