@@ -3,14 +3,18 @@ package org.hzontal.shared_ui.bottomsheet
 import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.util.MutableInt
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.fragment.app.FragmentManager
+import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import org.hzontal.shared_ui.R
 import org.hzontal.shared_ui.buttons.RoundButton
 import org.hzontal.shared_ui.utils.DialogUtils
+import java.util.concurrent.atomic.AtomicInteger
 
 object
 BottomSheetUtils {
@@ -760,5 +764,107 @@ BottomSheetUtils {
     interface StringConsumer {
         fun accept(code: String)
     }
+
+    @JvmStatic
+    fun showDownloadStatus(
+        fragmentManager: FragmentManager,
+        titleText: String?,
+        completeText : String,
+        progressStatus : AtomicInteger,
+        cancelText : String,
+        onCancelClick: (() -> Unit)?
+    ){
+        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.layout_progess_sheet)
+            .cancellable(true)
+            .fullScreen()
+            .statusBarColor(R.color.space_cadet)
+        customSheetFragment.holder(DownloadStatustHolder(), object :
+            CustomBottomSheetFragment.Binder<DownloadStatustHolder> {
+            override fun onBind(holder: DownloadStatustHolder) {
+                with(holder) {
+                    title.text = titleText
+                    subtitle.text = "$progressStatus% $completeText"
+                    cancelTextView.text = cancelText
+                    circularProgress.progress = progressStatus.get()
+                    linearProgress.progress = progressStatus.get()
+                    if (progressStatus.get() == 100){
+                        customSheetFragment.dismiss()
+                    }
+                    cancelTextView.setOnClickListener {
+                        onCancelClick?.invoke()
+                        customSheetFragment.dismiss()
+                    }
+                }
+            }
+        })
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
+    }
+
+    class DownloadStatustHolder : CustomBottomSheetFragment.PageHolder() {
+        lateinit var title: TextView
+        lateinit var subtitle: TextView
+        lateinit var cancelTextView: TextView
+        lateinit var circularProgress : CircularProgressIndicator
+        lateinit var linearProgress : LinearProgressIndicator
+
+
+        override fun bindView(view: View) {
+            title = view.findViewById(R.id.standard_sheet_title)
+            subtitle = view.findViewById(R.id.tv_progress_indicator)
+            cancelTextView = view.findViewById(R.id.tv_cancel)
+            circularProgress = view.findViewById(R.id.progress_circular)
+            linearProgress = view.findViewById(R.id.progress_linear)
+        }
+    }
+
+
+    @JvmStatic
+    fun showConfirmDelete(
+        fragmentManager: FragmentManager,
+        titleText : String,
+        confirm : String,
+        onConfirmClick: (() -> Unit)?
+    ){
+        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.sheet_confirm_delete)
+            .cancellable(true)
+            .statusBarColor(R.color.space_cadet)
+        customSheetFragment.holder(ConfirmDeletetHolder(), object :
+            CustomBottomSheetFragment.Binder<ConfirmDeletetHolder> {
+            override fun onBind(holder: ConfirmDeletetHolder) {
+                with(holder) {
+                    title.text = titleText
+                    confirmTextView.text = confirm
+
+                    confirmTextView.setOnClickListener {
+                        onConfirmClick?.invoke()
+                        customSheetFragment.dismiss()
+                    }
+                }
+            }
+        })
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
+    }
+
+    class ConfirmDeletetHolder : CustomBottomSheetFragment.PageHolder() {
+        lateinit var title: TextView
+        lateinit var confirmTextView: TextView
+
+
+
+        override fun bindView(view: View) {
+            title = view.findViewById(R.id.standard_sheet_title)
+            confirmTextView = view.findViewById(R.id.sheet_cancel)
+        }
+    }
+
+
+
+
 
 }

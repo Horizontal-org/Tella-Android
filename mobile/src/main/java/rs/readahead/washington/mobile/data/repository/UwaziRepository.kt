@@ -57,8 +57,7 @@ class UwaziRepository : IUwaziUserRepository {
             .map{
                 val listTemplates = mutableListOf<CollectTemplate>()
                 it.rows.forEach { entity ->
-                    val collectTemplate = CollectTemplate(server.id,entity)
-                    collectTemplate.serverName = server.name
+                    val collectTemplate = CollectTemplate(serverId = server.id, entityRow = entity, serverName = server.name)
                     listTemplates.add(collectTemplate)
                 }
 

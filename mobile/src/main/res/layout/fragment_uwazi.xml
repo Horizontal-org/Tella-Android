@@ -62,6 +62,7 @@
     app:fabCustomSize="50dp"
     app:layout_anchorGravity="center"
     app:maxImageSize="30dp"
+    android:layout_marginBottom="60dp"
     app:srcCompat="@drawable/ic_plus"
     app:useCompatPadding="true"
     tools:ignore="VectorDrawableCompat"

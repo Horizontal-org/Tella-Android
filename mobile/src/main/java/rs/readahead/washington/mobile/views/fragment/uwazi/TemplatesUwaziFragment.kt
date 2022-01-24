@@ -49,5 +49,10 @@ class TemplatesUwaziFragment : UwaziListFragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.listTemplates()
+    }
+
 
 }

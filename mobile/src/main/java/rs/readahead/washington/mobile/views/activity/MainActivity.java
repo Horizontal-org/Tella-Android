@@ -40,6 +40,7 @@ import rs.readahead.washington.mobile.mvp.contract.IHomeScreenPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.HomeScreenPresenter;
 import rs.readahead.washington.mobile.util.C;
+import rs.readahead.washington.mobile.views.fragment.uwazi.download.DownloadedTemplatesFragment;
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment;
 import timber.log.Timber;
 
@@ -162,6 +163,10 @@ public class MainActivity extends MetadataActivity implements
         for (Fragment fragment : fragments) {
             if (fragment instanceof AttachmentsFragment) {
                 ((AttachmentsFragment) fragment).onBackPressed();
+                return true;
+            }
+            if (fragment instanceof DownloadedTemplatesFragment) {
+                ((DownloadedTemplatesFragment) fragment).onBackPressed();
                 return true;
             }
         }

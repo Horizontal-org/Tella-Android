@@ -4,13 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils
+import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentDownloadedTemplatesBinding
+import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.download.adapter.TemplateContainerAdapter
+import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
 
-class DownloadedTemplatesFragment : BaseFragment() {
+class DownloadedTemplatesFragment : BaseFragment(), OnNavBckListener {
 
 
     private val viewModel : DownloadedTemplatesViewModel by viewModels()
@@ -21,7 +27,6 @@ class DownloadedTemplatesFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getServers()
         initObservers()
         //TODO CLEAR INIT VIEW FROM BASE FRAGMENT
         initView(binding.root)
@@ -35,7 +40,11 @@ class DownloadedTemplatesFragment : BaseFragment() {
               adapter = templateContainerAdapter
           }
 
-          toolbar.backClickListener = {nav().navigateUp()}
+          toolbar.backClickListener = {nav().popBackStack()}
+
+          tvDescription.text = StringUtils.fromHtml(getString(R.string.Donwload_Templates_Title_Description))
+
+          toolbar.onRightClickListener = {viewModel.refreshTemplateList()}
       }
     }
 
@@ -54,9 +63,23 @@ class DownloadedTemplatesFragment : BaseFragment() {
                 templateContainerAdapter.setContainers(result)
             })
 
-            onTemplateDownloaded.observe(viewLifecycleOwner, { list ->
-
+            progress.observe(viewLifecycleOwner, {
+                binding.progressCircular.isVisible = it
             })
+
+            showDeleteSheet.observe(viewLifecycleOwner, {
+                BottomSheetUtils.showConfirmDelete(activity.supportFragmentManager,
+                it.second.entityRow.name,
+                getString(R.string.Uwazi_RemoveTemplate_SheetTitle)
+                ) { viewModel.confirmDelete(it.second) }
+            })
+
         }
     }
+
+    override fun onBackPressed(): Boolean {
+        return  nav().popBackStack()
+     }
+
+
 }

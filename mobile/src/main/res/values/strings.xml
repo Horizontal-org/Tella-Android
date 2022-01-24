@@ -489,10 +489,15 @@
     <string name="settings.sec_confirm_calc_camouflage_desc">To re-open Tella, look for the Calculator app icon among your apps. Unlock Tella by entering your PIN in the Calculator followed by “=”. </string>
     <string name="settings.sec_confirm_exit_tella">Exit Tella</string>
     <string name="collect.outbox_tab.title">Outbox</string>
+    <!-- Uwazi !-->
+
+    <string name="Donwload_Templates_Title_Description">These are the templates available on the Uwazi \ninstances you are connected to. You can \n <font fgcolor='#D6933B'>manage your Uwazi instances here.</font> </string>
     <string name="uwazi.outbox_tab.title">Templates</string>
     <string name="Collect_RemoveForm_SheetTitle">Remove form?</string>
     <string name="fragment_uwazi">Uwazi</string>
     <string name="Uwazi_Dowload_Temapltes_Header_Title">Download templates</string>
+    <string name="Uwazi_RemoveTemplate_SheetTitle">Remove from device</string>
+
     <string name="Collect_Action_FillForm">Fill form</string>
     <string name="Collect_Subtitle_RemoveForm">Are you sure you want to remove "%1$s"? </string>
     <string name="Util_ellapsedTime_Year">More than a year ago</string>

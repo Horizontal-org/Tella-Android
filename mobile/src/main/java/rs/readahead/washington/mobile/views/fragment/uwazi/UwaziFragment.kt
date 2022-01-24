@@ -12,13 +12,8 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.*
 
 class UwaziFragment : BaseFragment() {
 
-    private val viewPagerAdapter by lazy { ViewPagerAdapter(this) }
 
     private lateinit var binding: FragmentUwaziBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,6 +24,8 @@ class UwaziFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
+       val viewPagerAdapter = ViewPagerAdapter(this)
+
         binding.viewPager.apply {
             adapter = viewPagerAdapter
         }
@@ -51,5 +48,6 @@ class UwaziFragment : BaseFragment() {
             else -> null
         }
     }
+
 
 }

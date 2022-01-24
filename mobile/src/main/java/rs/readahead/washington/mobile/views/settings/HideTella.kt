@@ -35,7 +35,7 @@ class HideTella : BaseFragment() {
         btnTwoDesc.setText(Html.fromHtml(getString(R.string.settings_servers_setup_hide_behind_calculator_subtitle)))
 
         val hideNotPossible = view.findViewById<TextView>(R.id.hide_behind_calc_not_possible)
-        hideNotPossible.setText(Html.fromHtml(getString(R.string.settings_servers_setup_hide_behind_calculator_not_possible)))
+        hideNotPossible.text = Html.fromHtml(getString(R.string.settings_servers_setup_hide_behind_calculator_not_possible))
 
         view.findViewById<LinearLayout>(R.id.sheet_one_btn).setOnClickListener {
             activity.addFragment(CamouflageNameAndLogo(), R.id.my_nav_host_fragment)
