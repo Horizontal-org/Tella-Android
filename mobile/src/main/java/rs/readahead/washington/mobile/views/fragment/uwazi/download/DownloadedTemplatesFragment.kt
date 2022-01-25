@@ -18,7 +18,6 @@ import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBck
 
 class DownloadedTemplatesFragment : BaseFragment(), OnNavBckListener {
 
-
     private val viewModel : DownloadedTemplatesViewModel by viewModels()
 
     private lateinit var binding: FragmentDownloadedTemplatesBinding

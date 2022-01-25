@@ -42,7 +42,7 @@ class UwaziRepository : IUwaziUserRepository {
                 server.url,
                 ParamsNetwork.URL_TEMPLATES
             ),
-            cookie = "connect.sid=" + "s%3A_tcG2esa0JgXAi7SOH-ZzSC77CF9V6LW.YsBo04ABLviq0FIjAg9yxxdtXyuicXMlOTtllhVNddE"
+            cookie = "connect.sid=s%3A_Y7aLlCk0R1BGiqou27XijwG8MUb89kf.3LMlgwQx%2FOUofldt3orGmWloySylOOzNBbnfG0kL5H0"
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -78,7 +78,7 @@ class UwaziRepository : IUwaziUserRepository {
                 server.url,
                 ParamsNetwork.URL_SETTINGS
             ),
-            cookie = "connect.sid=" + "s%3A_tcG2esa0JgXAi7SOH-ZzSC77CF9V6LW.YsBo04ABLviq0FIjAg9yxxdtXyuicXMlOTtllhVNddE"
+            cookie = "connect.sid=s%3A_Y7aLlCk0R1BGiqou27XijwG8MUb89kf.3LMlgwQx%2FOUofldt3orGmWloySylOOzNBbnfG0kL5H0"
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -93,7 +93,7 @@ class UwaziRepository : IUwaziUserRepository {
                 server.url,
                 ParamsNetwork.URL_TRANSLATE_SETTINGS
             ),
-            cookie = "connect.sid=" + "s%3A_tcG2esa0JgXAi7SOH-ZzSC77CF9V6LW.YsBo04ABLviq0FIjAg9yxxdtXyuicXMlOTtllhVNddE"
+            cookie = "connect.sid=s%3A_Y7aLlCk0R1BGiqou27XijwG8MUb89kf.3LMlgwQx%2FOUofldt3orGmWloySylOOzNBbnfG0kL5H0"
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

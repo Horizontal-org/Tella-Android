@@ -76,15 +76,10 @@ class D {
     static final String C_VAULT_FILE_ID = "c_vault_file_id";
 
     //Uwazi cloumns
-    static final String C_TEMPLATE_ID = "c_template_id";
-    static final String C_TEMPLATE_NAME = "c_template_name";
-    static final String C_TEMPLATE_PROPERTIES = "c_template_properties";
-    static final String C_TEMPLATE_COMMON_PROPERTIES = "c_common_template_properties";
-    static final String C_TEMPLATE_VERSION = "c_template_version";
-    static  final String C_UWAZI_DEFAULT_TEMPLATE= "c_template_default";
     static  final String C_UWAZI_SERVER_ID= "c_uwazi_server_id";
-
+    static  final String C_TEMPLATE_ENTITY= "c_template_entity";
     static final String A_SERVER_NAME = "a_server_name";
+
     static final String A_COLLECT_BLANK_FORM_ID = "a_collect_blank_xform_id";
     static final String A_COLLECT_FORM_INSTANCE_ID = "a_collect_form_instance_id";
     static final String A_MEDIA_FILE_ID = "a_media_file_id";

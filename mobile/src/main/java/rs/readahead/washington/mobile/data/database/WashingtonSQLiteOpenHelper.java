@@ -94,6 +94,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 db.execSQL(createTableCollectFormInstanceVaultFile());
             case 9:
                 db.execSQL(createTableUwaziServer());
+                db.execSQL(createTableCollectBlankTemplateUwazi());
         }
     }
 
@@ -273,18 +274,14 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         return "CREATE TABLE " + sq(D.T_UWAZI_BLANK_TEMPLATES) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_UWAZI_SERVER_ID, D.INTEGER, true) + " , " +
-                cddl(D.C_TEMPLATE_ID, D.TEXT, true) + " , " +
-                cddl(D.C_TEMPLATE_VERSION, D.TEXT, true) + " , " +
-                cddl(D.C_TEMPLATE_NAME, D.TEXT, true) + " , " +
-                cddl(D.C_TEMPLATE_PROPERTIES, D.TEXT, true) + " , " +
                 cddl(D.C_DOWNLOAD_URL, D.TEXT) + " , " +
-                cddl(D.C_TEMPLATE_COMMON_PROPERTIES, D.TEXT, true) + " , " +
+                cddl(D.C_TEMPLATE_ENTITY, D.TEXT, true) + " , " +
                 cddl(D.C_DOWNLOADED, D.INTEGER, true) + " DEFAULT 0 , " +
                 cddl(D.C_FAVORITE, D.INTEGER, true) + " DEFAULT 0 , " +
                 cddl(D.C_UPDATED, D.INTEGER, true) + " DEFAULT 0 , " +
                 "FOREIGN KEY(" + sq(D.C_UWAZI_SERVER_ID) + ") REFERENCES " +
                 sq(D.T_UWAZI_SERVER) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE, " +
-                "UNIQUE(" + sq(D.C_TEMPLATE_ID) + ") ON CONFLICT REPLACE" +
+                "UNIQUE(" + sq(D.C_ID) + ") ON CONFLICT REPLACE" +
                 ");";
     }
 
