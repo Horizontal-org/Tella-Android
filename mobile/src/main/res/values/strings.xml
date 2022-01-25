@@ -500,7 +500,20 @@
     <string name="Uwazi_Action_FillEntity">Create an entity</string>
     <string name="Uwazi_Action_RemoveTemplate">Delete Template</string>
     <string name="Uwazi_Subtitle_RemoveTemplate">Are you sure you want to remove this template? </string>
+    <string name="UWAZI_Language_Header_Title">Uwazi language</string>
+    <string name="Uwazi_Language_Screen_Description">This Uwazi collection is available in several languages. Please select in which language you would like to download templates. </string>
 
+    <string-array name="Uwazi_Language_Array">
+        <item>English</item>
+        <item>عربي</item>
+        <item>Français</item>
+    </string-array>
+
+    <string-array name="Uwazi_Language_Array_Translated">
+        <item>English</item>
+        <item>Arabic</item>
+        <item>French</item>
+    </string-array>
 
 
     <string name="Collect_Action_FillForm">Fill form</string>

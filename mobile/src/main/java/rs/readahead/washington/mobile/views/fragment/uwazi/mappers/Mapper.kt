@@ -1,6 +1,8 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.mappers
 
+import rs.readahead.washington.mobile.data.entity.uwazi.Language
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
+import rs.readahead.washington.mobile.views.adapters.uwazi.ViewLanguageItem
 import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.ViewEntityTemplateItem
 import rs.readahead.washington.mobile.views.fragment.uwazi.download.adapter.ViewTemplateItem
 
@@ -26,5 +28,11 @@ fun CollectTemplate.toViewEntityTemplateItem(
     serverName = serverName,
     onMoreClicked = onMoreClicked,
     onFavoriteClicked = onFavoriteClicked
-
 )
+
+fun Language.toViewLanguageItem(onLanguageClicked: () -> Unit) = ViewLanguageItem(
+    languageSmallText = label,
+    languageBigText = label,
+    key = key,
+    default = default,
+    onLanguageClicked = onLanguageClicked)

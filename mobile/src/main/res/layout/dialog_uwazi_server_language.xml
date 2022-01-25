@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/wa_purple"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <org.hzontal.shared_ui.appbar.ToolbarComponent
+        android:id="@+id/toolbar"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:arrowBackIcon="@drawable/ic_back_white"
+        app:startTitle="@string/UWAZI_Language_Header_Title"
+        />
+
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        android:text="@string/Uwazi_Language_Screen_Description"
+        style="@style/Tella_Main_White_Text.Meduim"
+        android:gravity="center"
+        android:layout_marginHorizontal="24dp"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/language_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_description"
+        android:layout_marginTop="20dp"
+        tools:itemCount="3"
+        tools:listitem="@layout/item_language_selector"
+        />
+
+    <Button
+        android:id="@+id/cancel"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:background="@drawable/cancel_button_background"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:text="@string/action_cancel"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/wa_white"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/next"
+        />
+
+    <Button
+        android:id="@+id/next"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:background="@drawable/action_button_background"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="12dp"
+        android:maxLines="1"
+        android:text="@string/action_ok"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/wa_white"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="24dp"
+
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

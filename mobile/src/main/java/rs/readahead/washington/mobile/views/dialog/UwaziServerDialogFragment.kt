@@ -27,9 +27,9 @@ import rs.readahead.washington.mobile.mvp.contract.ICheckUwaziServerContract
 import rs.readahead.washington.mobile.mvp.presenter.CheckUwaziServerPresenter
 import timber.log.Timber
 
-private const val TITLE_KEY = "tk"
-private const val ID_KEY = "ik"
-private const val OBJECT_KEY = "ok"
+internal const val TITLE_KEY = "tk"
+internal const val ID_KEY = "ik"
+internal const val OBJECT_KEY = "ok"
 
 
 class UwaziServerDialogFragment  : AppCompatDialogFragment(), ICheckUwaziServerContract.IView {
@@ -37,6 +37,7 @@ class UwaziServerDialogFragment  : AppCompatDialogFragment(), ICheckUwaziServerC
     private  var presenter: CheckUwaziServerPresenter? = null
     private var securityProviderUpgradeAttempted = false
     private lateinit var binding : DialogCollectServerBinding
+    private var serverUWazi: UWaziUploadServer? = null
 
     interface UwaziServerDialogHandler {
         fun onUwaziServerDialogCreate(server: UWaziUploadServer?)
@@ -68,7 +69,7 @@ class UwaziServerDialogFragment  : AppCompatDialogFragment(), ICheckUwaziServerC
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val serverId = requireArguments().getLong(ID_KEY, 0) ?: 0
+        val serverId = requireArguments().getLong(ID_KEY, 0)
         val obj: Any? = requireArguments().getSerializable(OBJECT_KEY)
         binding = DialogCollectServerBinding.inflate(layoutInflater)
         val dialogView = binding.root
@@ -76,6 +77,7 @@ class UwaziServerDialogFragment  : AppCompatDialogFragment(), ICheckUwaziServerC
         presenter = CheckUwaziServerPresenter(this)
         if (obj != null) {
             val server = obj as UWaziUploadServer
+            serverUWazi = server
             binding.name.setText(server.name)
             binding.url.setText(server.url)
             if (server.name.isNotEmpty() && server.password.isNotEmpty()) {
@@ -270,6 +272,7 @@ class UwaziServerDialogFragment  : AppCompatDialogFragment(), ICheckUwaziServerC
     private fun save(server: UWaziUploadServer) {
         dismiss()
         val activity = activity as UwaziServerDialogHandler? ?: return
+        serverUWazi = server
         if (server.id == 0L) {
             activity.onUwaziServerDialogCreate(server)
         } else {
