@@ -19,7 +19,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.util.ViewUtil;
-import rs.readahead.washington.mobile.views.fragment.forms.ISavedFormsInterface;
+import rs.readahead.washington.mobile.views.interfaces.ISavedFormsInterface;
 
 
 public class CollectSubmittedFormInstanceRecycleViewAdapter extends RecyclerView.Adapter<CollectSubmittedFormInstanceRecycleViewAdapter.ViewHolder> {

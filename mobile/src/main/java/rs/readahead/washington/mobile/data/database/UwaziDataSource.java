@@ -146,6 +146,12 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
     }
 
     @Override
+    public Single<CollectTemplate> getBlankCollectTemplateById(String templateID) {
+        return Single.fromCallable(() -> dataSource.getBlankTemplate(templateID))
+                .compose(applySchedulers());
+    }
+
+    @Override
     public Completable deleteTemplate(final long id) {
         return Completable.fromCallable((Callable<Void>) () -> {
             deleteCollectFormInstance(id);
@@ -259,7 +265,6 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 UwaziEntityRow entity = cursorToUwaziTemplate(cursor);
-
                 // long id = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID));
                 long serverId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_UWAZI_SERVER_ID));
                 boolean downloaded = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_DOWNLOADED)) == 1;
@@ -329,7 +334,6 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
                 boolean updated = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_UPDATED)) == 1;
                 String serverName = cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_NAME));
                 String username = cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_USERNAME));
-
                 CollectTemplate collectTemplate = new CollectTemplate(id, serverId, serverName, username, entity, downloaded, favorite, updated);
                 templates.add(collectTemplate);
             }
@@ -457,9 +461,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
                     D.C_FORM_ID + " = ?",
                     null, null, null, null
             );
-
             cursor = database.rawQuery(query, new String[]{templateID});
-
             if (cursor.moveToFirst()) {
 
                 long id = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_ID));

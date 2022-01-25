@@ -26,11 +26,12 @@ import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.mvp.contract.ICollectFormInstanceListPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CollectFormInstanceListPresenter;
 import rs.readahead.washington.mobile.views.adapters.CollectSubmittedFormInstanceRecycleViewAdapter;
+import rs.readahead.washington.mobile.views.interfaces.ISavedFormsInterface;
 import timber.log.Timber;
 
 
 public class OutboxFormListFragment extends FormListFragment implements
-        ICollectFormInstanceListPresenterContract.IView, ISavedFormsInterface  {
+        ICollectFormInstanceListPresenterContract.IView, ISavedFormsInterface {
 
     @BindView(R.id.submittFormInstances)
     RecyclerView recyclerView;

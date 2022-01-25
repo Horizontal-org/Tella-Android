@@ -14,5 +14,6 @@ public interface ICollectUwaziTemplatesRepository {
      Single<ListTemplateResult> updateBlankTemplatesIfNeeded(ListTemplateResult listTemplateResult);
      Single<CollectTemplate> updateBlankTemplate(CollectTemplate template);
      Single<CollectTemplate> saveBlankTemplate(CollectTemplate template);
+     Single<CollectTemplate> getBlankCollectTemplateById(String templateID);
      Completable deleteTemplate(final long id);
 }

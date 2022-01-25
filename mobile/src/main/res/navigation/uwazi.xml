@@ -15,6 +15,11 @@
             app:destination="@id/uwaziDownloadScreen"
             >
         </action>
+        <action
+            android:id="@+id/action_uwaziScreen_to_uwaziEntryScreen"
+            app:destination="@id/uwaziEntryScreen"
+            >
+        </action>
     </fragment>
 
 
@@ -23,5 +28,17 @@
         android:name="rs.readahead.washington.mobile.views.fragment.uwazi.download.DownloadedTemplatesFragment"
         android:label="Uwazi"
         tools:layout="@layout/fragment_downloaded_templates">
+        <action
+            android:id="@+id/action_uwaziDownloadScreen_to_uwaziEntryScreen"
+            app:destination="@id/uwaziEntryScreen"
+            >
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/uwaziEntryScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryFragment"
+        android:label="Uwazi"
+        tools:layout="@layout/uwazi_entry_fragment">
     </fragment>
 </navigation>
