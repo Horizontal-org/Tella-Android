@@ -8,7 +8,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
-import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentDownloadedTemplatesBinding
 import rs.readahead.washington.mobile.util.StringUtils

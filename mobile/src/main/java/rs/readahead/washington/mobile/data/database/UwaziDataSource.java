@@ -29,9 +29,11 @@ import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate;
 import rs.readahead.washington.mobile.domain.entity.uwazi.ListTemplateResult;
+import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance;
 import rs.readahead.washington.mobile.domain.exception.NotFountException;
 import rs.readahead.washington.mobile.domain.repository.IUWAZIServersRepository;
 import rs.readahead.washington.mobile.domain.repository.uwazi.ICollectUwaziTemplatesRepository;
+import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
 
 public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTemplatesRepository {
@@ -145,6 +147,11 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
     @Override
     public Single<CollectTemplate> saveBlankTemplate(CollectTemplate template) {
         return Single.fromCallable(() -> dataSource.saveUBlankTemplate(template)).compose(applySchedulers());
+    }
+
+    @Override
+    public Single<UwaziEntityInstance> saveEntityInstance(UwaziEntityInstance instance) {
+        return Single.fromCallable(() -> dataSource.saveEntityInstanceDB(instance)).compose(applySchedulers());
     }
 
     @Override
@@ -491,7 +498,6 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
 
     private CollectTemplate saveUBlankTemplate(CollectTemplate template) {
         ContentValues values = new ContentValues();
-        Gson gson = new Gson();
         values.put(D.C_UWAZI_SERVER_ID, template.getServerId());
         values.put(D.C_TEMPLATE_ENTITY, new GsonBuilder().create().toJson(template.getEntityRow()));
         values.put(D.C_DOWNLOADED, true);
@@ -503,6 +509,27 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
             template.setDownloaded(true);
         }
         return template;
+    }
+
+    private UwaziEntityInstance saveEntityInstanceDB(UwaziEntityInstance instance) {
+        ContentValues values = new ContentValues();
+        long updated = Util.currentTimestamp();
+        values.put(D.C_UWAZI_SERVER_ID, instance.getCollectTemplate().getServerId());
+        values.put(D.C_TEMPLATE_ENTITY, new GsonBuilder().create().toJson(instance.getCollectTemplate().getEntityRow()));
+        values.put(D.C_STATUS, instance.getStatus().ordinal());
+        values.put(D.C_UPDATED, updated);
+        instance.setUpdated(updated);
+
+        if (instance.getId() == -1) {
+            long id = database.insert(D.T_UWAZI_TEMPLATES, null, values);
+            if (id != -1) {
+                instance.setId(id);
+            }
+        } else {
+            database.update(D.T_UWAZI_TEMPLATES, values, D.C_ID + "= ?", new String[]{Long.toString(instance.getId())});
+        }
+
+        return instance;
     }
 
     private void deleteCollectFormInstance(long id) throws NotFountException {

@@ -6,21 +6,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionSeleceted
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showEditDeleteMenuSheet
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentTemplatesUwaziBinding
-import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.views.adapters.uwazi.UwaziTemplatesAdapter
+import rs.readahead.washington.mobile.views.fragment.uwazi.entry.COLLECT_TEMPLATE
 
 
 class TemplatesUwaziFragment : UwaziListFragment() {
     private val viewModel : SharedUwaziViewModel by viewModels()
     private val uwaziTemplatesAdapter : UwaziTemplatesAdapter by lazy { UwaziTemplatesAdapter() }
     private lateinit var binding: FragmentTemplatesUwaziBinding
+    private val bundle by lazy { Bundle() }
 
     override fun getFormListType(): Type {
         return Type.TEMPLATES
@@ -77,7 +80,9 @@ class TemplatesUwaziFragment : UwaziListFragment() {
             object : ActionSeleceted {
                 override fun accept(action: BottomSheetUtils.Action) {
                     if (action === BottomSheetUtils.Action.EDIT) {
-
+                        val gsonTemplate = Gson().toJson(template)
+                        bundle.putString(COLLECT_TEMPLATE, gsonTemplate)
+                        NavHostFragment.findNavController(this@TemplatesUwaziFragment).navigate(R.id.action_uwaziScreen_to_uwaziEntryScreen, bundle)
                     }
                     if (action === BottomSheetUtils.Action.DELETE) {
                         viewModel.confirmDelete(template)

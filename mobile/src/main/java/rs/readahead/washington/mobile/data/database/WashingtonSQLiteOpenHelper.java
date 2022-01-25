@@ -59,6 +59,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
         //DBV9
         db.execSQL(createTableUwaziServer());
+        db.execSQL(createTableCollectTemplateUwazi());
         db.execSQL(createTableCollectBlankTemplateUwazi());
         db.execSQL(createTableCollectFormInstanceVaultFile());
     }
@@ -278,6 +279,19 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_TEMPLATE_ENTITY, D.TEXT, true) + " , " +
                 cddl(D.C_DOWNLOADED, D.INTEGER, true) + " DEFAULT 0 , " +
                 cddl(D.C_FAVORITE, D.INTEGER, true) + " DEFAULT 0 , " +
+                cddl(D.C_UPDATED, D.INTEGER, true) + " DEFAULT 0 , " +
+                "FOREIGN KEY(" + sq(D.C_UWAZI_SERVER_ID) + ") REFERENCES " +
+                sq(D.T_UWAZI_SERVER) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE, " +
+                "UNIQUE(" + sq(D.C_ID) + ") ON CONFLICT REPLACE" +
+                ");";
+    }
+
+    private String createTableCollectTemplateUwazi(){
+        return "CREATE TABLE " + sq(D.T_UWAZI_TEMPLATES) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_UWAZI_SERVER_ID, D.INTEGER, true) + " , " +
+                cddl(D.C_TEMPLATE_ENTITY, D.TEXT, true) + " , " +
+                cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0 , " +
                 cddl(D.C_UPDATED, D.INTEGER, true) + " DEFAULT 0 , " +
                 "FOREIGN KEY(" + sq(D.C_UWAZI_SERVER_ID) + ") REFERENCES " +
                 sq(D.T_UWAZI_SERVER) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE, " +

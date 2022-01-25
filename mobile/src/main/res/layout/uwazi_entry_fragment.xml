@@ -15,12 +15,26 @@
         android:background="?attr/colorPrimary"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:arrowBackIcon="@drawable/ic_back_white"
-        app:rightIcon="@drawable/ic_refresh"
+        app:rightIcon="@drawable/ic_save_white_24dp"
         app:startTitle="@string/Uwazi_Action_FillEntity"
         />
 
+    <TextView
+        android:id="@+id/updated"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_vertical_margin"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        android:lines="1"
+        android:textColor="@color/wa_white"
+        android:textSize="14sp" />
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/screenFormView"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
@@ -28,5 +42,22 @@
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="vertical">
     </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress_circular"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:indeterminate="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        app:trackColor="@color/wa_white"
+        app:indicatorColor="@color/tigers_eye"
+        app:trackThickness="4dp"
+        android:visibility="gone"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

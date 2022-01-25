@@ -28,6 +28,7 @@ class D {
     /* UWAZI DATABASE TABLE*/
     static final String T_UWAZI_SERVER = "t_uwazi_server";
     static  final String T_UWAZI_BLANK_TEMPLATES = "t_uwazi_collect_blank_templates";
+    static  final String T_UWAZI_TEMPLATES = "t_uwazi_collect_templates";
     /* DATABASE COLUMNS */
     static final String C_ID = "c_id";
 

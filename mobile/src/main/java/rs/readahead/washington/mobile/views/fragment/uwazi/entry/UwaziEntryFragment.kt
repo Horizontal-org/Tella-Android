@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import rs.readahead.washington.mobile.databinding.UwaziEntryFragmentBinding
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
+import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
+import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
 
@@ -17,6 +20,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener  {
     private val viewModel : UwaziEntryViewModel by viewModels()
     private lateinit var binding: UwaziEntryFragmentBinding
     private var template: CollectTemplate? = null
+    private var entityInstance: UwaziEntityInstance = UwaziEntityInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,14 +39,20 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener  {
     override fun initView(view: View) {
         with(binding){
 
+            updated.setText(entityInstance.updated.toString())
+
             toolbar.backClickListener = {nav().popBackStack()}
+
+            toolbar.onRightClickListener = {
+                entityInstance.status = UwaziEntityStatus.DRAFT
+                viewModel.saveEntityInstance(entityInstance)}
         }
     }
 
     private fun initView() {
         arguments?.let {
             template = Gson().fromJson(it.getString(COLLECT_TEMPLATE), CollectTemplate::class.java)
-            template?.entityRow?._id?.let { it1 -> viewModel.getBlankTemplate(it1) }
+            entityInstance.collectTemplate = template
 
         }
     }
@@ -52,6 +62,15 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener  {
             template.observe(viewLifecycleOwner,{
                 val template = it
             })
+
+            progress.observe(viewLifecycleOwner, {
+                binding.progressCircular.isVisible = it
+            })
+
+            instance.observe(viewLifecycleOwner,{
+                entityInstance = it
+                setUpdated(it.updated)
+            })
         }
     }
 
@@ -59,4 +78,8 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener  {
         return  nav().popBackStack()
     }
 
+
+    private fun setUpdated(updatedTime : Long){
+        binding.updated.setText(updatedTime.toString())
+    }
 }
