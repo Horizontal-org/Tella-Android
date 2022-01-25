@@ -7,6 +7,8 @@ import android.database.Cursor;
 import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteQueryBuilder;
@@ -238,6 +240,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
     private List<CollectTemplate> getBlankCollectTemplates() {
         Cursor cursor = null;
         List<CollectTemplate> templates = new ArrayList<>();
+        Gson gson = new Gson();
 
         try {
             final String query = SQLiteQueryBuilder.buildQueryString(
@@ -247,9 +250,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
                     new String[]{
                             cn(D.T_UWAZI_BLANK_TEMPLATES, D.C_ID, D.A_COLLECT_BLANK_FORM_ID),
                             D.C_UWAZI_SERVER_ID,
-                            D.C_TEMPLATE_ID,
-                            D.T_UWAZI_BLANK_TEMPLATES + "." + D.C_TEMPLATE_NAME,
-                            D.C_TEMPLATE_VERSION,
+                            D.C_TEMPLATE_ENTITY,
                             D.C_DOWNLOADED,
                             D.C_UPDATED,
                             D.C_FAVORITE,
@@ -264,8 +265,8 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
             cursor = database.rawQuery(query, null);
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                UwaziEntityRow entity = cursorToUwaziTemplate(cursor);
-                // long id = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID));
+                UwaziEntityRow entity =  gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_ENTITY)),UwaziEntityRow.class);
+             //   long id = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID));
                 long serverId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_UWAZI_SERVER_ID));
                 boolean downloaded = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_DOWNLOADED)) == 1;
                 boolean favorite = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_FAVORITE)) == 1;
@@ -299,6 +300,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
         Cursor cursor = null;
         List<CollectTemplate> templates = new ArrayList<>();
         List<CollectTemplate> resultTemplates = result.getTemplates();
+        Gson gson = new Gson();
         try {
             final String query = SQLiteQueryBuilder.buildQueryString(
                     false,
@@ -307,9 +309,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
                     new String[]{
                             cn(D.T_UWAZI_BLANK_TEMPLATES, D.C_ID, D.A_COLLECT_BLANK_FORM_ID),
                             D.C_UWAZI_SERVER_ID,
-                            D.C_TEMPLATE_ID,
-                            D.T_UWAZI_BLANK_TEMPLATES + "." + D.C_TEMPLATE_NAME,
-                            D.C_TEMPLATE_VERSION,
+                            D.C_TEMPLATE_ENTITY,
                             D.C_DOWNLOADED,
                             D.C_UPDATED,
                             D.C_FAVORITE,
@@ -324,7 +324,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
             cursor = database.rawQuery(query, null);
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                UwaziEntityRow entity = cursorToUwaziTemplate(cursor);
+                UwaziEntityRow entity =  gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_ENTITY)),new TypeToken<UwaziEntityRow>(){}.getType());
 
                 // todo: implement cursorToCollectForm
                 long id = cursor.getLong(cursor.getColumnIndexOrThrow(D.A_COLLECT_BLANK_FORM_ID));
@@ -359,21 +359,6 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
 
     }
 
-    private UwaziEntityRow cursorToUwaziTemplate(Cursor cursor) {
-        Gson gson = new Gson();
-        return new UwaziEntityRow(
-                cursor.getInt(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_VERSION)),
-                cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_ID)),
-                new ArrayList<>(),
-                // gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_COMMON_PROPERTIES)),new TypeToken<List<Property>>(){}.getType()),
-                false,
-                //cursor.getInt(cursor.getColumnIndexOrThrow(D.C_UWAZI_DEFAULT_TEMPLATE)) == 1,
-                cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_NAME)),
-                new ArrayList<>()
-                // gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_PROPERTIES)),new TypeToken<List<Property>>(){}.getType())
-        );
-    }
-
     private void updateUBlankTemplates(ListTemplateResult result) {
 
         List<CollectTemplate> templates = result.getTemplates();
@@ -398,7 +383,6 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
                 }
             } else {
                 values.put(D.C_UWAZI_SERVER_ID, template.getServerId());
-                values.put(D.C_TEMPLATE_ID, template.getEntityRow().get_id());
                 values.put(D.C_VERSION, template.getEntityRow().get__v());
                 values.put(D.C_NAME, template.getEntityRow().getName());
 
@@ -441,6 +425,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
     @Nullable
     private CollectTemplate getBlankTemplate(String templateID) {
         Cursor cursor = null;
+        Gson gson = new Gson();
 
         try {
             final String query = SQLiteQueryBuilder.buildQueryString(
@@ -450,9 +435,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
                     new String[]{
                             cn(D.T_UWAZI_BLANK_TEMPLATES, D.C_ID, D.A_COLLECT_BLANK_FORM_ID),
                             D.C_UWAZI_SERVER_ID,
-                            D.C_TEMPLATE_ID,
-                            D.T_COLLECT_BLANK_FORM + "." + D.C_TEMPLATE_NAME,
-                            D.C_TEMPLATE_VERSION,
+                            D.C_TEMPLATE_ENTITY,
                             D.C_DOWNLOADED,
                             D.C_FAVORITE,
                             D.C_UPDATED,
@@ -461,21 +444,22 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
                     D.C_FORM_ID + " = ?",
                     null, null, null, null
             );
+
             cursor = database.rawQuery(query, new String[]{templateID});
+
             if (cursor.moveToFirst()) {
 
-                long id = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_ID));
+                long id = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID));
                 long serverId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_COLLECT_SERVER_ID));
                 boolean downloaded = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_DOWNLOADED)) == 1;
                 boolean favorite = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_FAVORITE)) == 1;
                 boolean updated = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_UPDATED)) == 1;
                 String serverName = cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_NAME));
                 String username = cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_USERNAME));
+                UwaziEntityRow entity =  gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_ENTITY)),new TypeToken<UwaziEntityRow>(){}.getType());
 
-                UwaziEntityRow uwaziEntityRow = cursorToUwaziTemplate(cursor);
 
-
-                return new CollectTemplate(id, serverId, serverName, username, uwaziEntityRow, downloaded, favorite, updated);
+                return new CollectTemplate(id, serverId, serverName, username, entity, downloaded, favorite, updated);
             }
         } catch (Exception e) {
             Timber.d(e, getClass().getName());
@@ -492,11 +476,11 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
 
         CollectTemplate current = getBlankTemplate(String.valueOf(collectTemplate.getId()));
         ContentValues values = new ContentValues();
+        Gson gson = new Gson();
 
         if (current != null) {
             values.put(D.C_UPDATED, true);
-            values.put(D.C_TEMPLATE_NAME, collectTemplate.getEntityRow().getName());
-            values.put(D.C_TEMPLATE_PROPERTIES, collectTemplate.getEntityRow().getName());
+            values.put(D.C_TEMPLATE_ENTITY, new GsonBuilder().create().toJson(collectTemplate.getEntityRow()));
             int num = database.update(D.T_UWAZI_BLANK_TEMPLATES, values, D.C_ID + " = ?",
                     new String[]{Long.toString(current.getId())});
             if (num > 0) {
@@ -509,12 +493,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
         ContentValues values = new ContentValues();
         Gson gson = new Gson();
         values.put(D.C_UWAZI_SERVER_ID, template.getServerId());
-        values.put(D.C_TEMPLATE_ID, template.getEntityRow().get_id());
-        values.put(D.C_TEMPLATE_VERSION, template.getEntityRow().get__v());
-        values.put(D.C_TEMPLATE_NAME, template.getEntityRow().getName());
-        values.put(D.C_TEMPLATE_PROPERTIES, gson.toJson(template.getEntityRow().getProperties()));
-        values.put(D.C_TEMPLATE_COMMON_PROPERTIES, gson.toJson(template.getEntityRow().getCommonProperties()));
-        //values.put(D.C_UWAZI_DEFAULT_TEMPLATE,template.getEntityRow().getDefault());
+        values.put(D.C_TEMPLATE_ENTITY, new GsonBuilder().create().toJson(template.getEntityRow()));
         values.put(D.C_DOWNLOADED, true);
         values.put(D.C_UPDATED, true);
         long id = database.insert(D.T_UWAZI_BLANK_TEMPLATES, null, values);

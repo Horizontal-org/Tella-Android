@@ -40,7 +40,6 @@ class TemplatesUwaziFragment : UwaziListFragment() {
         initObservers()
     }
 
-
     private fun initObservers(){
         with(viewModel){
             templates.observe(viewLifecycleOwner,{

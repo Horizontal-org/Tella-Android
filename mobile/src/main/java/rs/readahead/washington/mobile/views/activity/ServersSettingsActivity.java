@@ -49,6 +49,7 @@ import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.UwaziServerDialogFragment;
+import rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageDialogFragment;
 import timber.log.Timber;
 
 
@@ -209,7 +210,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     public void onCreatedUwaziServer(UWaziUploadServer server) {
         servers.add(server);
         listView.addView(getServerItem(server), servers.indexOf(server));
-
+        UwaziServerLanguageDialogFragment.newInstance(server).show(getSupportFragmentManager(),UwaziServerLanguageDialogFragment.Companion.getTAG());
         DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_server_created), false);
     }
 
@@ -241,6 +242,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             listView.removeViewAt(i);
             listView.addView(getServerItem(server), i);
             DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_server_updated), false);
+            UwaziServerLanguageDialogFragment.newInstance(server).show(getSupportFragmentManager(),UwaziServerLanguageDialogFragment.Companion.getTAG());
         }
     }
 
