@@ -42,11 +42,8 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener  {
 
     override fun initView(view: View) {
         with(binding){
-
-            updated.setText(entityInstance.updated.toString())
-
+            updated.text = entityInstance.updated.toString()
             toolbar.backClickListener = {nav().popBackStack()}
-
             toolbar.onRightClickListener = {
                 entityInstance.status = UwaziEntityStatus.DRAFT
                 viewModel.saveEntityInstance(entityInstance)}
@@ -85,7 +82,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener  {
 
 
     private fun setUpdated(updatedTime : Long){
-        binding.updated.setText(updatedTime.toString())
+        binding.updated.text = updatedTime.toString()
     }
 
     private fun sendEntity(){

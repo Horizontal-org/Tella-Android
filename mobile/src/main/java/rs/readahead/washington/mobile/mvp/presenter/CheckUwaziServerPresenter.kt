@@ -15,8 +15,6 @@ class CheckUwaziServerPresenter constructor(private var view: ICheckUwaziServerC
     ICheckUwaziServerContract.IPresenter {
     private val disposables = CompositeDisposable()
     private var saveAnyway = false
-    private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
-
 
     override fun checkServer(server: UWaziUploadServer) {
         if (!MyApplication.isConnectedToInternet(view!!.getContext())) {
@@ -41,8 +39,9 @@ class CheckUwaziServerPresenter constructor(private var view: ICheckUwaziServerC
             .doOnSubscribe {view?.showServerCheckLoading()}
             .doFinally { view?.hideServerCheckLoading() }
             .subscribe({ result ->
-                if (result.success) {
+                if (result.isSuccess) {
                     server.isChecked = true
+                    server.cookies = result.cookies
                     view?.onServerCheckSuccess(server)
                 } else {
                     view?.onServerCheckFailure(UploadProgressInfo.Status.UNAUTHORIZED)
