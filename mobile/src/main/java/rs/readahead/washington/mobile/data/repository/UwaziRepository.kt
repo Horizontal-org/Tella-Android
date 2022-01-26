@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.data.repository
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import retrofit2.Response
 import rs.readahead.washington.mobile.data.ParamsNetwork
 import rs.readahead.washington.mobile.data.entity.uwazi.Language
 import rs.readahead.washington.mobile.data.entity.uwazi.LanguageSettingsEntity
@@ -15,13 +16,16 @@ import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.domain.entity.uwazi.ListTemplateResult
 import rs.readahead.washington.mobile.domain.repository.uwazi.IUwaziUserRepository
 import rs.readahead.washington.mobile.util.StringUtils
+import retrofit2.adapter.rxjava2.Result.response
+import rs.readahead.washington.mobile.domain.entity.uwazi.LoginResult
+
 
 class UwaziRepository : IUwaziUserRepository {
 
     private val uwaziApi by lazy { UwaziService.newInstance().services }
 
 
-    override fun login(server: UWaziUploadServer): Single<LoginResponse> {
+    override fun login(server: UWaziUploadServer): Single<LoginResult> {
         return uwaziApi.login(
             loginEntity = LoginEntity(server.username, server.password),
             url = StringUtils.append(
@@ -31,7 +35,11 @@ class UwaziRepository : IUwaziUserRepository {
             )
         ).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .map { LoginResponse(it.success) }
+            .map {
+                val cookieList: List<String> = it.headers().values("Set-Cookie")
+                val jsessionid: String = cookieList[0].split(";")[0]
+                LoginResult(it.isSuccessful,jsessionid)
+            }
 
     }
 
@@ -42,7 +50,7 @@ class UwaziRepository : IUwaziUserRepository {
                 server.url,
                 ParamsNetwork.URL_TEMPLATES
             ),
-            cookie = "connect.sid=s%3A_Y7aLlCk0R1BGiqou27XijwG8MUb89kf.3LMlgwQx%2FOUofldt3orGmWloySylOOzNBbnfG0kL5H0"
+            cookie = server.cookies
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -78,7 +86,7 @@ class UwaziRepository : IUwaziUserRepository {
                 server.url,
                 ParamsNetwork.URL_SETTINGS
             ),
-            cookie = "connect.sid=s%3A_Y7aLlCk0R1BGiqou27XijwG8MUb89kf.3LMlgwQx%2FOUofldt3orGmWloySylOOzNBbnfG0kL5H0"
+            cookie = server.cookies
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -93,7 +101,7 @@ class UwaziRepository : IUwaziUserRepository {
                 server.url,
                 ParamsNetwork.URL_TRANSLATE_SETTINGS
             ),
-            cookie = "connect.sid=s%3A_Y7aLlCk0R1BGiqou27XijwG8MUb89kf.3LMlgwQx%2FOUofldt3orGmWloySylOOzNBbnfG0kL5H0"
+            cookie = server.cookies
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
