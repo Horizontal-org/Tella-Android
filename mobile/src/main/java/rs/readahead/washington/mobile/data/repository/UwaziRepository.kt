@@ -112,7 +112,7 @@ class UwaziRepository : IUwaziUserRepository {
                 server.url,
                 ParamsNetwork.URL_ENTITIES
             ),
-            cookie = "connect.sid=s%3A_Y7aLlCk0R1BGiqou27XijwG8MUb89kf.3LMlgwQx%2FOUofldt3orGmWloySylOOzNBbnfG0kL5H0"
+            cookie = server.cookies
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
