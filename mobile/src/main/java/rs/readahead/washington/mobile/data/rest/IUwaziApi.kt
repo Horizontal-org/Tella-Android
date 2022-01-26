@@ -33,8 +33,13 @@ interface IUwaziApi  {
         @Header("X-Requested-With") requested: String = "XMLHttpRequest"
     ) : Single<SettingsResponse>
 
-    @GET
-    suspend fun submitEntity(@Body uwaziEntity: UwaziEntity)
+    @POST
+    fun submitEntity(
+        @Body uwaziEntityRow: UwaziEntityRow,
+        @Url url: String,
+        @Header("Cookie") cookie: String,
+        @Header("X-Requested-With") requested: String = "XMLHttpRequest"
+    ) : Single<UwaziEntityRow>
 
 }
 

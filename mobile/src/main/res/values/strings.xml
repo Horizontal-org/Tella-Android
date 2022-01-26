@@ -502,6 +502,7 @@
     <string name="Uwazi_Subtitle_RemoveTemplate">Are you sure you want to remove this template? </string>
     <string name="UWAZI_Language_Header_Title">Uwazi language</string>
     <string name="Uwazi_Language_Screen_Description">This Uwazi collection is available in several languages. Please select in which language you would like to download templates. </string>
+    <string name="Uwazi_Send_Header_Title">End of entity</string>
 
     <string-array name="Uwazi_Language_Array">
         <item>English</item>

@@ -28,17 +28,24 @@
         android:name="rs.readahead.washington.mobile.views.fragment.uwazi.download.DownloadedTemplatesFragment"
         android:label="Uwazi"
         tools:layout="@layout/fragment_downloaded_templates">
-        <action
-            android:id="@+id/action_uwaziDownloadScreen_to_uwaziEntryScreen"
-            app:destination="@id/uwaziEntryScreen"
-            >
-        </action>
     </fragment>
 
     <fragment
         android:id="@+id/uwaziEntryScreen"
         android:name="rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryFragment"
-        android:label="Uwazi"
+        android:label="Entry"
         tools:layout="@layout/uwazi_entry_fragment">
+        <action
+            android:id="@+id/action_uwaziEntryScreen_to_uwaziSendScreen"
+            app:destination="@id/uwaziSendScreen"
+            >
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/uwaziSendScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.uwazi.send.UwaziSendFragment"
+        android:label="Send"
+        tools:layout="@layout/uwazi_send_fragment">
     </fragment>
 </navigation>

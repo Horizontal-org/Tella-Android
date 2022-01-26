@@ -4,10 +4,7 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.data.ParamsNetwork
-import rs.readahead.washington.mobile.data.entity.uwazi.Language
-import rs.readahead.washington.mobile.data.entity.uwazi.LanguageSettingsEntity
-import rs.readahead.washington.mobile.data.entity.uwazi.LoginEntity
-import rs.readahead.washington.mobile.data.entity.uwazi.SettingsResponse
+import rs.readahead.washington.mobile.data.entity.uwazi.*
 import rs.readahead.washington.mobile.data.uwazi.UwaziService
 import rs.readahead.washington.mobile.domain.entity.LoginResponse
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
@@ -92,6 +89,20 @@ class UwaziRepository : IUwaziUserRepository {
                 '/',
                 server.url,
                 ParamsNetwork.URL_TRANSLATE_SETTINGS
+            ),
+            cookie = "connect.sid=s%3A_Y7aLlCk0R1BGiqou27XijwG8MUb89kf.3LMlgwQx%2FOUofldt3orGmWloySylOOzNBbnfG0kL5H0"
+        )
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    override fun submitEntity(uwaziEntityRow : UwaziEntityRow, server: UWaziUploadServer): Single<UwaziEntityRow> {
+        return uwaziApi.submitEntity(
+            uwaziEntityRow = uwaziEntityRow,
+            url = StringUtils.append(
+                '/',
+                server.url,
+                ParamsNetwork.URL_ENTITIES
             ),
             cookie = "connect.sid=s%3A_Y7aLlCk0R1BGiqou27XijwG8MUb89kf.3LMlgwQx%2FOUofldt3orGmWloySylOOzNBbnfG0kL5H0"
         )

@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/wa_purple"
-    tools:context=".views.fragment.uwazi.entry.UwaziEntryFragment">
+    tools:context=".views.fragment.uwazi.send.UwaziSendFragment">
 
     <org.hzontal.shared_ui.appbar.ToolbarComponent
         android:id="@+id/toolbar"
@@ -15,33 +15,8 @@
         android:background="?attr/colorPrimary"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:arrowBackIcon="@drawable/ic_back_white"
-        app:rightIcon="@drawable/ic_save_white_24dp"
-        app:startTitle="@string/Uwazi_Action_FillEntity"
+        app:startTitle="@string/Uwazi_Send_Header_Title"
         />
-
-    <TextView
-        android:id="@+id/updated"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/activity_vertical_margin"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintStart_toStartOf="parent"
-        android:lines="1"
-        android:textColor="@color/wa_white"
-        android:textSize="14sp" />
-
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/screenFormView"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:clipToPadding="false"
-        android:scrollbarStyle="outsideOverlay"
-        android:scrollbars="vertical">
-    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progress_circular"
@@ -63,7 +38,7 @@
     <TextView
         style="@style/Unlock_White_Text_Back"
         android:id="@+id/next_btn"
-        android:text="@string/action_next"
+        android:text="@string/collect.end_action_submit"
         android:layout_marginEnd="34dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"

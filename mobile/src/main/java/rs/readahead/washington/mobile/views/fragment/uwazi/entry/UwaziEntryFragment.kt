@@ -6,12 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.NavHostFragment
 import com.google.gson.Gson
+import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.UwaziEntryFragmentBinding
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
+import rs.readahead.washington.mobile.views.fragment.uwazi.send.SEND_ENTITY
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
 
 const val COLLECT_TEMPLATE = "collect_template"
@@ -21,6 +24,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener  {
     private lateinit var binding: UwaziEntryFragmentBinding
     private var template: CollectTemplate? = null
     private var entityInstance: UwaziEntityInstance = UwaziEntityInstance()
+    private val bundle by lazy { Bundle() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +50,8 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener  {
             toolbar.onRightClickListener = {
                 entityInstance.status = UwaziEntityStatus.DRAFT
                 viewModel.saveEntityInstance(entityInstance)}
+
+            nextBtn.setOnClickListener { sendEntity()}
         }
     }
 
@@ -53,7 +59,6 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener  {
         arguments?.let {
             template = Gson().fromJson(it.getString(COLLECT_TEMPLATE), CollectTemplate::class.java)
             entityInstance.collectTemplate = template
-
         }
     }
 
@@ -81,5 +86,11 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener  {
 
     private fun setUpdated(updatedTime : Long){
         binding.updated.setText(updatedTime.toString())
+    }
+
+    private fun sendEntity(){
+        val gsonTemplate = Gson().toJson(entityInstance)
+        bundle.putString(SEND_ENTITY, gsonTemplate)
+        NavHostFragment.findNavController(this@UwaziEntryFragment).navigate(R.id.action_uwaziEntryScreen_to_uwaziSendScreen, bundle)
     }
 }
