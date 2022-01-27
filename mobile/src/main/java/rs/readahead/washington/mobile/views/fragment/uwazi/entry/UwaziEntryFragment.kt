@@ -19,8 +19,8 @@ import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBck
 
 const val COLLECT_TEMPLATE = "collect_template"
 
-class UwaziEntryFragment : BaseFragment(), OnNavBckListener  {
-    private val viewModel : UwaziEntryViewModel by viewModels()
+class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
+    private val viewModel: UwaziEntryViewModel by viewModels()
     private lateinit var binding: UwaziEntryFragmentBinding
     private var template: CollectTemplate? = null
     private var entityInstance: UwaziEntityInstance = UwaziEntityInstance()
@@ -41,14 +41,15 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener  {
     }
 
     override fun initView(view: View) {
-        with(binding){
+        with(binding) {
             updated.text = entityInstance.updated.toString()
-            toolbar.backClickListener = {nav().popBackStack()}
+            toolbar.backClickListener = { nav().popBackStack() }
             toolbar.onRightClickListener = {
                 entityInstance.status = UwaziEntityStatus.DRAFT
-                viewModel.saveEntityInstance(entityInstance)}
+                viewModel.saveEntityInstance(entityInstance)
+            }
 
-            nextBtn.setOnClickListener { sendEntity()}
+            nextBtn.setOnClickListener { sendEntity() }
         }
     }
 
@@ -59,9 +60,9 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener  {
         }
     }
 
-    private fun initObservers(){
-        with(viewModel){
-            template.observe(viewLifecycleOwner,{
+    private fun initObservers() {
+        with(viewModel) {
+            template.observe(viewLifecycleOwner, {
                 val template = it
             })
 
@@ -69,7 +70,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener  {
                 binding.progressCircular.isVisible = it
             })
 
-            instance.observe(viewLifecycleOwner,{
+            instance.observe(viewLifecycleOwner, {
                 entityInstance = it
                 setUpdated(it.updated)
             })
@@ -77,17 +78,17 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener  {
     }
 
     override fun onBackPressed(): Boolean {
-        return  nav().popBackStack()
+        return nav().popBackStack()
     }
 
-
-    private fun setUpdated(updatedTime : Long){
+    private fun setUpdated(updatedTime: Long) {
         binding.updated.text = updatedTime.toString()
     }
 
-    private fun sendEntity(){
+    private fun sendEntity() {
         val gsonTemplate = Gson().toJson(entityInstance)
         bundle.putString(SEND_ENTITY, gsonTemplate)
-        NavHostFragment.findNavController(this@UwaziEntryFragment).navigate(R.id.action_uwaziEntryScreen_to_uwaziSendScreen, bundle)
+        NavHostFragment.findNavController(this@UwaziEntryFragment)
+            .navigate(R.id.action_uwaziEntryScreen_to_uwaziSendScreen, bundle)
     }
 }

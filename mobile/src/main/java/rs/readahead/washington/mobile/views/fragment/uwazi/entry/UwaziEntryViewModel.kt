@@ -70,5 +70,8 @@ class UwaziEntryViewModel : ViewModel(){
             })
     }
 
-
+    override fun onCleared() {
+        disposables.dispose()
+        super.onCleared()
+    }
 }

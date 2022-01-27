@@ -161,6 +161,12 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
     }
 
     @Override
+    public Single<UWaziUploadServer> getUwaziServerById(Long serverID) {
+        return Single.fromCallable(() -> dataSource.getUwaziServer(serverID))
+                .compose(applySchedulers());
+    }
+
+    @Override
     public Completable deleteTemplate(final long id) {
         return Completable.fromCallable((Callable<Void>) () -> {
             deleteCollectFormInstance(id);
@@ -196,6 +202,34 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
         }
 
         return servers;
+    }
+
+    private UWaziUploadServer getUwaziServer(Long serverId) {
+        Cursor cursor = null;
+
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_UWAZI_SERVER,
+                    new String[]{D.C_ID, D.C_NAME, D.C_URL, D.C_USERNAME, D.C_PASSWORD, D.C_COOKIES},
+                    D.C_ID + " = ?",
+                    null, null, null, null
+            );
+
+            cursor = database.rawQuery(query, new String[]{Long.toString(serverId)});
+
+            if (cursor.moveToFirst()) {
+                return cursorToUwaziServer(cursor);
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return null;
     }
 
     private UWaziUploadServer cursorToUwaziServer(Cursor cursor) {
