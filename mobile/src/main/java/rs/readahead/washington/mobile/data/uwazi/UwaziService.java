@@ -110,7 +110,8 @@ public class UwaziService {
 
             okClientBuilder = builder
                     .proxy(Proxy.NO_PROXY)
-                    .protocols(Collections.singletonList(Protocol.HTTP_1_1));
+                    .protocols(Collections.singletonList(Protocol.HTTP_1_1))
+                    .cookieJar(new UvCookieJar());
 
             LoggingInterceptor logger = new LoggingInterceptor.Builder()
                     .loggable(true)
@@ -134,14 +135,19 @@ public class UwaziService {
             // set client to baseRetrofit builder
             retrofitBuilder.client(okClientBuilder.build());
 
+
             // build them
             Retrofit retrofit = retrofitBuilder
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
+
                     .build();
+
+
 
             return new UwaziService(retrofit);
         }
     }
+
 
 }
