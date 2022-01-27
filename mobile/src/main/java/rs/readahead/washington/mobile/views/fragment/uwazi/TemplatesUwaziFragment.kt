@@ -22,7 +22,7 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.entry.COLLECT_TEMPLAT
 class TemplatesUwaziFragment : UwaziListFragment() {
     private val viewModel : SharedUwaziViewModel by viewModels()
     private val uwaziTemplatesAdapter : UwaziTemplatesAdapter by lazy { UwaziTemplatesAdapter() }
-    private lateinit var binding: FragmentTemplatesUwaziBinding
+    private  var binding: FragmentTemplatesUwaziBinding? = null
     private val bundle by lazy { Bundle() }
 
     override fun getFormListType(): Type {
@@ -34,7 +34,7 @@ class TemplatesUwaziFragment : UwaziListFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentTemplatesUwaziBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding?.root!!
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,7 +50,7 @@ class TemplatesUwaziFragment : UwaziListFragment() {
             })
 
             progress.observe(viewLifecycleOwner,{
-                binding.progressCircular.isVisible = it
+                binding?.progressCircular?.isVisible = it
             })
 
             showSheetMore.observe(viewLifecycleOwner,{
@@ -60,7 +60,7 @@ class TemplatesUwaziFragment : UwaziListFragment() {
     }
 
     private fun initView(){
-        binding.templatesRecyclerView.apply {
+        binding?.templatesRecyclerView?.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = uwaziTemplatesAdapter
         }
@@ -94,6 +94,12 @@ class TemplatesUwaziFragment : UwaziListFragment() {
             requireContext().getString(R.string.action_remove),
             requireContext().getString(R.string.action_cancel)
         )
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding?.templatesRecyclerView?.adapter = null
+        binding = null
     }
 
 

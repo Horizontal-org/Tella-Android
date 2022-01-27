@@ -12,31 +12,33 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.*
 
 class UwaziFragment : BaseFragment() {
 
+    private  var binding: FragmentUwaziBinding? = null
 
-    private lateinit var binding: FragmentUwaziBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentUwaziBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding?.root!!
     }
 
     override fun initView(view: View) {
-       val viewPagerAdapter = ViewPagerAdapter(this)
+        val viewPagerAdapter  = ViewPagerAdapter(this)
+        with(binding!!){
+            viewPager.apply {
+                adapter = viewPagerAdapter
+            }
+            // Set the text for each tab
+            TabLayoutMediator(tabs, viewPager) { tab, position ->
+                tab.text = getTabTitle(position)
+            }.attach()
 
-        binding.viewPager.apply {
-            adapter = viewPagerAdapter
+            fabButton.setOnClickListener {
+                nav().navigate(R.id.action_uwaziScreen_to_uwaziDownloadScreen)
+            }
         }
-        // Set the text for each tab
-        TabLayoutMediator(binding.tabs, binding.viewPager) { tab, position ->
-            tab.text = getTabTitle(position)
-        }.attach()
 
-        binding.fabButton.setOnClickListener {
-            nav().navigate(R.id.action_uwaziScreen_to_uwaziDownloadScreen)
-        }
     }
 
     private fun getTabTitle(position: Int): String? {
@@ -49,5 +51,10 @@ class UwaziFragment : BaseFragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding?.viewPager?.adapter = null
+        binding = null
+    }
 
 }
