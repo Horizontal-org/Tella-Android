@@ -26,6 +26,7 @@ fun CollectTemplate.toViewEntityTemplateItem(
     serverId = serverId,
     templateName = entityRow.name,
     serverName = serverName,
+    isFavorite = isFavorite,
     onMoreClicked = onMoreClicked,
     onFavoriteClicked = onFavoriteClicked
 )

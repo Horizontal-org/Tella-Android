@@ -5,6 +5,7 @@ data class ViewEntityTemplateItem (
     val serverId: Long,
     val templateName: String,
     val serverName: String? = "",
+    val isFavorite : Boolean = false,
     val onFavoriteClicked: () -> Unit,
     val onMoreClicked: () -> Unit,
 ) {

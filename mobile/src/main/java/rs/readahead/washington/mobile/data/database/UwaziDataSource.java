@@ -27,6 +27,7 @@ import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.data.entity.uwazi.UwaziEntityRow;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
+import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate;
 import rs.readahead.washington.mobile.domain.entity.uwazi.ListTemplateResult;
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance;
@@ -174,6 +175,12 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
         }).compose(applyCompletableSchedulers());
     }
 
+    @Override
+    public Single<CollectTemplate> toggleFavorite(CollectTemplate template) {
+        return Single.fromCallable(() -> dataSource.toggleFavoriteCollectTemplate(template))
+                .compose(applySchedulers());
+    }
+
     //TODO ask djodje what isChecked state for ?
     private List<UWaziUploadServer> getUwaziServers() {
         Cursor cursor = null;
@@ -289,7 +296,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
                     D.T_UWAZI_BLANK_TEMPLATES + " JOIN " + D.T_UWAZI_SERVER + " ON " +
                             D.T_UWAZI_BLANK_TEMPLATES + "." + D.C_UWAZI_SERVER_ID + " = " + D.T_UWAZI_SERVER + "." + D.C_ID,
                     new String[]{
-                            cn(D.T_UWAZI_BLANK_TEMPLATES, D.C_ID, D.A_COLLECT_BLANK_FORM_ID),
+                            cn(D.T_UWAZI_BLANK_TEMPLATES, D.C_ID),
                             D.C_UWAZI_SERVER_ID,
                             D.C_TEMPLATE_ENTITY,
                             D.C_DOWNLOADED,
@@ -307,7 +314,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 UwaziEntityRow entity =  gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_ENTITY)),UwaziEntityRow.class);
-             //   long id = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID));
+                long id = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID));
                 long serverId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_UWAZI_SERVER_ID));
                 boolean downloaded = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_DOWNLOADED)) == 1;
                 boolean favorite = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_FAVORITE)) == 1;
@@ -315,16 +322,10 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
                 String serverName = cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_NAME));
                 String username = cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_USERNAME));
 
-                CollectTemplate collectForm = new CollectTemplate(0, serverId, serverName, username, entity, downloaded, favorite, updated);
-                //TODO CHECK THIS
-                collectForm.setId(0);
-                collectForm.setServerName(serverName);
-                collectForm.setUsername(username);
-                collectForm.setDownloaded(downloaded);
-                collectForm.setFavorite(favorite);
-                collectForm.setUpdated(updated);
+                CollectTemplate collectTemplate = new CollectTemplate(id, serverId, serverName, username, entity, downloaded, favorite, updated);
 
-                templates.add(collectForm);
+
+                templates.add(collectTemplate);
             }
         } catch (Exception e) {
             Timber.d(e, getClass().getName());
@@ -572,6 +573,18 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
         if (count != 1) {
             throw new NotFountException();
         }
+    }
+
+    private CollectTemplate toggleFavoriteCollectTemplate(CollectTemplate template) {
+        ContentValues values = new ContentValues();
+        values.put(D.C_FAVORITE, !template.isFavorite());
+
+        int num = database.update(D.T_UWAZI_BLANK_TEMPLATES, values, D.C_ID + "= ?", new String[]{Long.toString(template.getId())});
+        if (num > 0) {
+            template.setFavorite(!template.isFavorite());
+        }
+
+        return template;
     }
 
     private String cn(String table, String column) {

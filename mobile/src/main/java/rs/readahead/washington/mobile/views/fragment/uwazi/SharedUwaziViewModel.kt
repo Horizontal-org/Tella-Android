@@ -11,14 +11,12 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.data.database.UwaziDataSource
-import rs.readahead.washington.mobile.data.repository.UwaziRepository
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.ViewEntityTemplateItem
 import rs.readahead.washington.mobile.views.fragment.uwazi.mappers.toViewEntityTemplateItem
 
 class SharedUwaziViewModel : ViewModel() {
 
-    private val uwaziRepository by lazy { UwaziRepository() }
     var error = MutableLiveData<Throwable>()
     private val _templates = MutableLiveData<List<ViewEntityTemplateItem>>()
     val templates: LiveData<List<ViewEntityTemplateItem>> get() = _templates
@@ -46,7 +44,7 @@ class SharedUwaziViewModel : ViewModel() {
                 { templates : List<CollectTemplate> ->
                     val resultList = mutableListOf<ViewEntityTemplateItem>()
                     templates.map {
-                        resultList.add(it.toViewEntityTemplateItem(onMoreClicked = {onMoreClicked(it)}, onFavoriteClicked = {onFavoriteClicked()}))
+                        resultList.add(it.toViewEntityTemplateItem(onMoreClicked = {onMoreClicked(it)}, onFavoriteClicked = {toggleFavorite(it)}))
                     }
                     _templates.postValue(resultList)
                 }
@@ -63,8 +61,17 @@ class SharedUwaziViewModel : ViewModel() {
     }
 
 
-    fun onFavoriteClicked(){
-
+    private fun toggleFavorite(template : CollectTemplate){
+        disposables.add(keyDataSource.uwaziDataSource
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .flatMapSingle { dataSource: UwaziDataSource -> dataSource.toggleFavorite(template) }
+            .subscribe({listTemplates()}
+            ) { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                error.postValue(throwable)
+            }
+        )
     }
 
     fun confirmDelete(template : CollectTemplate){

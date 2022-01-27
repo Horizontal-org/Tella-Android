@@ -18,4 +18,5 @@ public interface ICollectUwaziTemplatesRepository {
      Single<CollectTemplate> getBlankCollectTemplateById(String templateID);
      Single<UwaziEntityInstance> saveEntityInstance(UwaziEntityInstance instance);
      Completable deleteTemplate(final long id);
+     Single<CollectTemplate> toggleFavorite(CollectTemplate template);
 }
