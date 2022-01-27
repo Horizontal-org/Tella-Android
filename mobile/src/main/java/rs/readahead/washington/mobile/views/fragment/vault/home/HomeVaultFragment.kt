@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.SeekBar
-import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -26,9 +25,9 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.data.entity.XFormEntity
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
+import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.views.activity.AudioPlayActivity
@@ -126,6 +125,14 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         }
     }
 
+    private fun maybeGetRecentTemplates() {
+        if (Preferences.isShowFavoriteTemplates()) {
+            homeVaultPresenter.getFavoriteCollectTemplates()
+        } else {
+            vaultAdapter.removeFavoriteTemplates()
+        }
+    }
+
     private fun initListeners() {
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
@@ -212,6 +219,11 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     }
 
+    override fun onFavoriteTemplateClickListener(template: CollectTemplate) {
+
+    }
+
+
     override fun allFilesClickListener() {
         bundle.putString(VAULT_FILTER, FilterType.ALL.name)
         navigateToAttachmentsList(bundle)
@@ -261,6 +273,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         maybeGetFiles()
         maybeGetRecentForms()
         maybeHideFilesTitle()
+        maybeGetRecentTemplates()
     }
 
     private fun maybeClosePanic(): Boolean {
@@ -368,6 +381,18 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     override fun onGetFavoriteCollectFormsError(error: Throwable?) {
+        Timber.d(error)
+    }
+
+    override fun onGetFavoriteCollectTemplatesSuccess(files: List<CollectTemplate>?) {
+        if (!files.isNullOrEmpty()) {
+            vaultAdapter.addFavoriteTemplates(files)
+        } else {
+            vaultAdapter.removeFavoriteTemplates()
+        }
+    }
+
+    override fun onGetFavoriteCollectTemplateError(error: Throwable?) {
         Timber.d(error)
     }
 

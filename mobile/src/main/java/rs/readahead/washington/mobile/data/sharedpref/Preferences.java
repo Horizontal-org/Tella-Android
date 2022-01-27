@@ -142,6 +142,14 @@ public class Preferences {
         setBoolean(SharedPrefs.SHOW_FAVORITE_FORMS, value);
     }
 
+    public static boolean isShowFavoriteTemplates() {
+        return getBoolean(SharedPrefs.SHOW_FAVORITE_TEMPLATES, false);
+    }
+
+    public static void setShowFavoriteTemplates(boolean value) {
+        setBoolean(SharedPrefs.SHOW_FAVORITE_TEMPLATES, value);
+    }
+
     public static boolean isShowRecentFiles() {
         return getBoolean(SharedPrefs.SHOW_RECENT_FILES, false);
     }

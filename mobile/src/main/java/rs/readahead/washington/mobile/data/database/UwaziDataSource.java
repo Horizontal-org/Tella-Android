@@ -28,6 +28,7 @@ import rs.readahead.washington.mobile.data.entity.uwazi.UwaziEntityRow;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
+import rs.readahead.washington.mobile.domain.entity.collect.OdkForm;
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate;
 import rs.readahead.washington.mobile.domain.entity.uwazi.ListTemplateResult;
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance;
@@ -116,7 +117,8 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
 
     @Override
     public Single<List<CollectTemplate>> listFavoriteTemplates() {
-        return null;
+        return Single.fromCallable(() -> dataSource.getFavoriteCollectTemplates())
+                .compose(applySchedulers());
     }
 
     @Override
@@ -573,6 +575,58 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
         if (count != 1) {
             throw new NotFountException();
         }
+    }
+    private List<CollectTemplate> getFavoriteCollectTemplates(){
+        Cursor cursor = null;
+        List<CollectTemplate> templates = new ArrayList<>();
+        Gson gson = new Gson();
+
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_UWAZI_BLANK_TEMPLATES + " JOIN " + D.T_UWAZI_SERVER + " ON " +
+                            D.T_UWAZI_BLANK_TEMPLATES + "." + D.C_UWAZI_SERVER_ID + " = " + D.T_UWAZI_SERVER + "." + D.C_ID,
+                    new String[]{
+                            cn(D.T_UWAZI_BLANK_TEMPLATES, D.C_ID),
+                            D.C_UWAZI_SERVER_ID,
+                            D.C_TEMPLATE_ENTITY,
+                            D.C_DOWNLOADED,
+                            D.C_UPDATED,
+                            D.C_FAVORITE,
+                            D.C_DOWNLOAD_URL,
+                            cn(D.T_UWAZI_SERVER, D.C_NAME, D.A_SERVER_NAME),
+                            cn(D.T_UWAZI_SERVER, D.C_USERNAME, D.A_SERVER_USERNAME)},
+                    D.C_FAVORITE +" =1 " , null, null,
+                    cn(D.T_UWAZI_BLANK_TEMPLATES, D.C_FAVORITE) + " DESC, " + cn(D.T_UWAZI_BLANK_TEMPLATES, D.C_ID) + " DESC",
+                    null
+            );
+
+            cursor = database.rawQuery(query, null);
+
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                UwaziEntityRow entity =  gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_ENTITY)),UwaziEntityRow.class);
+                long id = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID));
+                long serverId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_UWAZI_SERVER_ID));
+                boolean downloaded = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_DOWNLOADED)) == 1;
+                boolean favorite = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_FAVORITE)) == 1;
+                boolean updated = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_UPDATED)) == 1;
+                String serverName = cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_NAME));
+                String username = cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_USERNAME));
+
+                CollectTemplate collectTemplate = new CollectTemplate(id, serverId, serverName, username, entity, downloaded, favorite, updated);
+
+
+                templates.add(collectTemplate);
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return templates;
     }
 
     private CollectTemplate toggleFavoriteCollectTemplate(CollectTemplate template) {

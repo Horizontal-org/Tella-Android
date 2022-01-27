@@ -503,6 +503,8 @@
     <string name="UWAZI_Language_Header_Title">Uwazi language</string>
     <string name="Uwazi_Language_Screen_Description">This Uwazi collection is available in several languages. Please select in which language you would like to download templates. </string>
     <string name="Uwazi_Send_Header_Title">End of entity</string>
+    <string name="Uwazi_General_Favorite_Template_Switch_Expl">Show shortcuts to your favorite templates on Tella’s homescreen.</string>
+    <string name="Uwazi_General_Favorite_Template_Switch_Title">Favorite templates</string>
 
     <string-array name="Uwazi_Language_Array">
         <item>English</item>

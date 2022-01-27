@@ -9,15 +9,17 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
+import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.*
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.BaseViewHolder
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.DataItem
 
 const val ITEM_RECENT_FILES = 0
 const val ITEM_FAVORITES_FORMS = 1
-const val ITEM_PANIC_BUTTON = 2
-const val ITEM_FILES_ACTIONS = 3
-const val ITEM_TITLE = 4
+const val ITEM_FAVORITES_TEMPLATES = 2
+const val ITEM_PANIC_BUTTON = 3
+const val ITEM_FILES_ACTIONS = 4
+const val ITEM_TITLE = 5
 
 private const val ID_FILES_ACTIONS = "1"
 private const val ID_PANIC_MODE = "2"
@@ -31,6 +33,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     private val adapterScope = CoroutineScope(Dispatchers.Default)
     private var recentFiles = listOf<DataItem.RecentFiles>()
     private var favoriteForms = listOf<DataItem.FavoriteForms>()
+    private var favoriteTemplates = listOf<DataItem.FavoriteTemplates>()
     private var actions = listOf<DataItem.FileActions>()
     private var titles = listOf<DataItem.Titles>()
     private var items = listOf<DataItem>()
@@ -54,7 +57,16 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     }
     fun removeFavoriteForms(){
         adapterScope.launch {
-            items =  items - favoriteForms
+            items =  items - favoriteForms.toSet()
+            withContext(Dispatchers.Main) {
+                submitList(items)
+            }
+        }
+    }
+
+    fun removeFavoriteTemplates(){
+        adapterScope.launch {
+            items =  items - favoriteTemplates.toSet()
             withContext(Dispatchers.Main) {
                 submitList(items)
             }
@@ -63,7 +75,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
 
     fun removeTitle(){
         adapterScope.launch {
-            items =  items - titles
+            items =  items - titles.toSet()
             withContext(Dispatchers.Main) {
                 submitList(items)
             }
@@ -89,9 +101,14 @@ class VaultAdapter(private val onClick: VaultClickListener) :
         renderListAfterward()
     }
 
+    fun addFavoriteTemplates(templates: List<CollectTemplate>) {
+        favoriteTemplates = listOf(DataItem.FavoriteTemplates(templates))
+        renderList()
+    }
+
     private fun renderList() {
         adapterScope.launch {
-            items = favoriteForms + recentFiles + titles + actions
+            items = favoriteForms + favoriteTemplates + recentFiles + titles + actions
             withContext(Dispatchers.Main) {
                 submitList(items)
             }
@@ -107,6 +124,9 @@ class VaultAdapter(private val onClick: VaultClickListener) :
             if (Preferences.isShowRecentFiles()) {
                 items = items + recentFiles
             }
+            if (Preferences.isShowFavoriteTemplates()) {
+                items = items + favoriteTemplates
+            }
             items = items + titles + actions
             withContext(Dispatchers.Main) {
                 submitList(items)
@@ -121,6 +141,9 @@ class VaultAdapter(private val onClick: VaultClickListener) :
             }
             ITEM_FAVORITES_FORMS -> {
                 FavoriteFormsViewHolder.from(view)
+            }
+            ITEM_FAVORITES_TEMPLATES -> {
+                FavoriteTemplatesViewHolder.from(view)
             }
             ITEM_PANIC_BUTTON -> {
                 val from = PanicModeViewHolder.from(view)
@@ -142,6 +165,10 @@ class VaultAdapter(private val onClick: VaultClickListener) :
                 val favoriteItem = getItem(position) as DataItem.FavoriteForms
                 holder.bind(favoriteItem.forms, onClick)
             }
+            is FavoriteTemplatesViewHolder -> {
+                val favoriteItemTemplate = getItem(position) as DataItem.FavoriteTemplates
+                holder.bind(favoriteItemTemplate.templates, onClick)
+            }
             is RecentFilesViewHolder -> {
                 val recentFiles = getItem(position) as DataItem.RecentFiles
                 holder.bind(recentFiles.vaultFiles, onClick)
@@ -162,6 +189,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
             is DataItem.FileActions -> ITEM_FILES_ACTIONS
             is DataItem.RecentFiles -> ITEM_RECENT_FILES
             is DataItem.FavoriteForms -> ITEM_FAVORITES_FORMS
+            is DataItem.FavoriteTemplates -> ITEM_FAVORITES_TEMPLATES
             is DataItem.Titles -> ITEM_TITLE
             else -> throw ClassCastException("Unknown position $position")
         }

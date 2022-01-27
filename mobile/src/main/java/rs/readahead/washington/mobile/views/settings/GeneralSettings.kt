@@ -46,25 +46,31 @@ class GeneralSettings : BaseFragment() {
         crashReportsSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
             Preferences.setSubmittingCrashReports(isChecked)
         }
-        crashReportsSwitch.mSwitch.setChecked(Preferences.isSubmittingCrashReports())
+        crashReportsSwitch.mSwitch.isChecked = Preferences.isSubmittingCrashReports()
 
         val verificationSwitch = view.findViewById<TellaSwitchWithMessage>(R.id.verification_switch)
         verificationSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
             Preferences.setAnonymousMode(!isChecked)
         }
-        verificationSwitch.mSwitch.setChecked(!Preferences.isAnonymousMode())
+        verificationSwitch.mSwitch.isChecked = !Preferences.isAnonymousMode()
 
         val favoriteFormsSwitch = view.findViewById<TellaSwitchWithMessage>(R.id.favorite_forms_switch)
-        favoriteFormsSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+        favoriteFormsSwitch.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
             Preferences.setShowFavoriteForms(isChecked)
         }
-        favoriteFormsSwitch.mSwitch.setChecked(Preferences.isShowFavoriteForms())
+        favoriteFormsSwitch.mSwitch.isChecked = Preferences.isShowFavoriteForms()
+
+        val favoriteTemplatesSwitch = view.findViewById<TellaSwitchWithMessage>(R.id.favorite_templates_switch)
+        favoriteTemplatesSwitch.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+            Preferences.setShowFavoriteTemplates(isChecked)
+        }
+        favoriteTemplatesSwitch.mSwitch.isChecked = Preferences.isShowFavoriteTemplates()
 
         val recentFilesSwitch = view.findViewById<TellaSwitchWithMessage>(R.id.recent_files_switch)
         recentFilesSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
             Preferences.setShowRecentFiles(isChecked)
         }
-        recentFilesSwitch.mSwitch.setChecked(Preferences.isShowRecentFiles())
+        recentFilesSwitch.mSwitch.isChecked = Preferences.isShowRecentFiles()
     }
 
 
