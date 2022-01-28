@@ -14,7 +14,6 @@ class UwaziFragment : BaseFragment() {
 
     private  var binding: FragmentUwaziBinding? = null
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

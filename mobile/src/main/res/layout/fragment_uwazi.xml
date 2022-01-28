@@ -37,13 +37,13 @@
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
             app:titleTextColor="@color/wa_white">
 
-            <androidx.appcompat.widget.Toolbar
+            <org.hzontal.shared_ui.appbar.ToolbarComponent
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:textStyle="bold"
                 app:layout_collapseMode="pin"
-                app:title="@string/fragment_uwazi" />
+                app:toolbarTitle="@string/fragment_uwazi"/>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

@@ -11,10 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
@@ -22,6 +18,10 @@ import androidx.appcompat.widget.SwitchCompat;
 import org.hzontal.shared_ui.appbar.ToolbarComponent;
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 import org.hzontal.shared_ui.utils.DialogUtils;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,7 +43,6 @@ import rs.readahead.washington.mobile.mvp.presenter.CollectBlankFormListRefreshP
 import rs.readahead.washington.mobile.mvp.presenter.CollectServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.ServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.TellaUploadServersPresenter;
-import rs.readahead.washington.mobile.domain.entity.ServerType;
 import rs.readahead.washington.mobile.mvp.presenter.UwaziServersPresenter;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment;
@@ -61,6 +60,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         CollectServerDialogFragment.CollectServerDialogHandler,
         TellaUploadServerDialogFragment.TellaUploadServerDialogHandler,
         UwaziServerDialogFragment.UwaziServerDialogHandler,
+        UwaziServerLanguageDialogFragment.UwaziServerLanguageDialogHandler,
         IUWAZIServersPresenterContract.IView{
 
     @BindView(R.id.collect_servers_list)
@@ -208,10 +208,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     @Override
     public void onCreatedUwaziServer(UWaziUploadServer server) {
-        servers.add(server);
-        listView.addView(getServerItem(server), servers.indexOf(server));
-        UwaziServerLanguageDialogFragment.newInstance(server).show(getSupportFragmentManager(),UwaziServerLanguageDialogFragment.Companion.getTAG());
-        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_server_created), false);
+        UwaziServerLanguageDialogFragment.newInstance(server,false).show(getSupportFragmentManager(),UwaziServerLanguageDialogFragment.Companion.getTAG());
     }
 
     @Override
@@ -235,15 +232,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     @Override
     public void onUpdatedUwaziServer(UWaziUploadServer server) {
-        int i = servers.indexOf(server);
-
-        if (i != -1) {
-            servers.set(i, server);
-            listView.removeViewAt(i);
-            listView.addView(getServerItem(server), i);
-            DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_server_updated), false);
-            UwaziServerLanguageDialogFragment.newInstance(server).show(getSupportFragmentManager(),UwaziServerLanguageDialogFragment.Companion.getTAG());
-        }
+        UwaziServerLanguageDialogFragment.newInstance(server,true).show(getSupportFragmentManager(),UwaziServerLanguageDialogFragment.Companion.getTAG());
     }
 
     @Override
@@ -732,4 +721,33 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         Timber.d(throwable);
     }
 
+    @Override
+    public void onUwaziServerLanguageDialog(@NonNull UWaziUploadServer server) {
+        servers.add(server);
+        listView.addView(getServerItem(server), servers.indexOf(server));
+        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_server_created), false);
+    }
+
+    @Override
+    public void onDialogServerLanguageDismiss(@NonNull UWaziUploadServer server) {
+        int i = servers.indexOf(server);
+        if (i != -1) {
+            servers.set(i, server);
+            listView.removeViewAt(i);
+            listView.addView(getServerItem(server), i);
+            DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_server_updated), false);
+        }
+    }
+
+    @Override
+    public void onUpdateServerLanguageDialog(@NonNull UWaziUploadServer server) {
+        int i = servers.indexOf(server);
+
+        if (i != -1) {
+            servers.set(i, server);
+            listView.removeViewAt(i);
+            listView.addView(getServerItem(server), i);
+            DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_server_updated), false);
+        }
+    }
 }

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import rs.readahead.washington.mobile.R
@@ -16,26 +17,40 @@ import rs.readahead.washington.mobile.databinding.DialogUwaziServerLanguageBindi
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.views.adapters.uwazi.LanguageSelectorAdapter
 
+const val IS_UPDATE_SERVER = "is_update_server"
+
 class UwaziServerLanguageDialogFragment : AppCompatDialogFragment() {
     private val languageSelectorAdapter by lazy { LanguageSelectorAdapter() }
-    private lateinit var binding : DialogUwaziServerLanguageBinding
-    private val viewModel : UwaziServerLanguageViewModel by viewModels()
-    private var uwaziServer : UWaziUploadServer? = null
-    private var language : Language? = null
+    private lateinit var binding: DialogUwaziServerLanguageBinding
+    private val viewModel: UwaziServerLanguageViewModel by viewModels()
+    private var uwaziServer: UWaziUploadServer? = null
+    private var language: Language? = null
+    private var isUpdate: Boolean = false
 
-    companion object{
+    interface UwaziServerLanguageDialogHandler {
+        fun onUwaziServerLanguageDialog(server: UWaziUploadServer)
+        fun onUpdateServerLanguageDialog(server: UWaziUploadServer)
+        fun onDialogServerLanguageDismiss(server: UWaziUploadServer)
+    }
+
+    companion object {
         val TAG = UwaziServerLanguageDialogFragment::class.java.simpleName
 
         @JvmStatic
-        fun newInstance(server: UWaziUploadServer?): UwaziServerLanguageDialogFragment {
+        fun newInstance(
+            server: UWaziUploadServer?,
+            isUpdateServer: Boolean
+        ): UwaziServerLanguageDialogFragment {
             val frag = UwaziServerLanguageDialogFragment()
             val args = Bundle()
             if (server == null) {
                 args.putInt(TITLE_KEY, R.string.settings_servers_add_server_dialog_title)
             } else {
+                args.putBoolean(IS_UPDATE_SERVER, isUpdateServer)
                 args.putInt(TITLE_KEY, R.string.settings_docu_dialog_title_server_settings)
                 args.putSerializable(ID_KEY, server.id)
                 args.putSerializable(OBJECT_KEY, server)
+
             }
             frag.arguments = args
             return frag
@@ -96,47 +111,80 @@ class UwaziServerLanguageDialogFragment : AppCompatDialogFragment() {
         return dialog
     }
 
-    private fun initData(){
+    private fun initData() {
         requireArguments().getSerializable(OBJECT_KEY)?.apply {
-            if (this is UWaziUploadServer){
+            if (this is UWaziUploadServer) {
                 uwaziServer = this
                 viewModel.getServerLanguage(this)
             }
         }
+        requireArguments().getBoolean(IS_UPDATE_SERVER).let {
+            isUpdate = it
+        }
     }
 
-    private fun initView(){
-        with(binding){
+    private fun initView() {
+        with(binding) {
             languageRecyclerView.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = languageSelectorAdapter
             }
 
-            cancel.setOnClickListener { dismiss() }
+            cancel.setOnClickListener {
+                dismissDialog()
+            }
 
-            next.setOnClickListener { uwaziServer?.let { it1 -> language?.let { it2 -> viewModel.updateLanguageSettings(server = it1, language = it2) } } }
+            next.setOnClickListener {
+                uwaziServer?.let { server ->
+                    language?.let { language ->
+                        viewModel.updateLanguageSettings(
+                            server = server,
+                            language = language
+                        )
+                    }
+                }
+            }
         }
     }
 
-  private fun initObservers(){
-        with(viewModel){
-            listLanguage.observe(viewLifecycleOwner,{ languageList->
+    private fun initObservers() {
+        with(viewModel) {
+            listLanguage.observe(viewLifecycleOwner, { languageList ->
                 languageSelectorAdapter.setLanguages(languageList)
             })
 
-            languageClicked.observe(viewLifecycleOwner,{
+            languageClicked.observe(viewLifecycleOwner, {
                 language = it
             })
 
-            languageUpdated.observe(viewLifecycleOwner,{ updated ->
-                if (updated){
-                    dismiss()
+            languageUpdated.observe(viewLifecycleOwner, { updated ->
+                if (updated) {
+                    updateLanguage()
                 }
+            })
+            progress.observe(viewLifecycleOwner, {
+              binding.progressCircular.isVisible = it
             })
         }
     }
 
+    private fun updateLanguage() {
+        dismiss()
+        val activity = activity as UwaziServerLanguageDialogHandler? ?: return
+        uwaziServer?.let { server ->
+            if (isUpdate) {
+                activity.onUpdateServerLanguageDialog(server)
+            } else {
+                activity.onUwaziServerLanguageDialog(server)
+            }
+        }
+    }
 
 
+    private fun dismissDialog() {
+        dismiss()
+        val activity = activity as UwaziServerLanguageDialogHandler? ?: return
+        uwaziServer?.let { server -> activity.onDialogServerLanguageDismiss(server) }
+    }
 
 }

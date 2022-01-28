@@ -7,8 +7,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import rs.readahead.washington.mobile.MyApplication
-import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.data.entity.uwazi.Language
 import rs.readahead.washington.mobile.data.entity.uwazi.LanguageSettingsEntity
 import rs.readahead.washington.mobile.data.repository.UwaziRepository
@@ -18,7 +16,6 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.mappers.toViewLanguag
 
 class UwaziServerLanguageViewModel : ViewModel() {
 
-    private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private val repository = UwaziRepository()
     private val disposables = CompositeDisposable()
     private val _progress = MutableLiveData<Boolean>()
@@ -37,6 +34,7 @@ class UwaziServerLanguageViewModel : ViewModel() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { _progress.postValue(true) }
+            .doFinally { _progress.postValue(false) }
             .subscribe({
                 val list = mutableListOf<ViewLanguageItem>()
                 it.map { language ->
