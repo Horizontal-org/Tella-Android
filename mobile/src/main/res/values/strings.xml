@@ -505,6 +505,10 @@
     <string name="Uwazi_Send_Header_Title">End of entity</string>
     <string name="Uwazi_General_Favorite_Template_Switch_Expl">Show shortcuts to your favorite templates on Tella’s homescreen.</string>
     <string name="Uwazi_General_Favorite_Template_Switch_Title">Favorite templates</string>
+    <string name="Uwazi_Templates_Empty_Description">Your have no saved templates. Tap the “+” \nbutton to add a new template.</string>
+    <string name="Uwazi_Submitted_Entities_Empty_Description">You have no submitted entities.</string>
+    <string name="Uwazi_Outbox_Entities_Empty_Description">Your Outbox is currently empty. Entities\n that are ready to send will appear here.</string>
+    <string name="Uwazi_Draft_Entities_Empty_Description">You have no draft entities.</string>
 
     <string-array name="Uwazi_Language_Array">
         <item>English</item>

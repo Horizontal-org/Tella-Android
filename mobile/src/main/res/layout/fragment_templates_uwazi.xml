@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/wa_purple"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".views.fragment.uwazi.TemplatesUwaziFragment">
 
@@ -11,6 +12,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="60dp"
+        />
+
+
+    <org.hzontal.shared_ui.textviews.CenterMessageTextView
+        android:id="@+id/textView_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:topImg="@drawable/ic_uwazi"
+        app:textMessage="@string/Uwazi_Templates_Empty_Description"
         />
 
     <com.google.android.material.progressindicator.CircularProgressIndicator

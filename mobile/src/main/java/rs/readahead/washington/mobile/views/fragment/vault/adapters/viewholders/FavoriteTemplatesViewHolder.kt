@@ -21,7 +21,6 @@ class FavoriteTemplatesViewHolder (val view : View) : BaseViewHolder<List<Collec
         favoriteTemplatesRecyclerView.apply {
             adapter = FavoriteTemplatesAdapter(item, vaultClickListener)
         }
-
     }
 
     companion object {

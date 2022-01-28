@@ -46,7 +46,13 @@ class TemplatesUwaziFragment : UwaziListFragment() {
     private fun initObservers(){
         with(viewModel){
             templates.observe(viewLifecycleOwner,{
-                uwaziTemplatesAdapter.setEntityTemplates(it)
+                if (it.isEmpty()){
+                    binding?.textViewEmpty?.isVisible = true
+                }else{
+                    binding?.textViewEmpty?.isVisible = false
+                    uwaziTemplatesAdapter.setEntityTemplates(it)
+                }
+
             })
 
             progress.observe(viewLifecycleOwner,{
