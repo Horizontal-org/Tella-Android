@@ -233,6 +233,7 @@ BottomSheetUtils {
                         buttonOne.isChecked = true
                         buttonTwo.isChecked = false
                         buttonThree.isChecked = false
+
                     }
 
                     buttonTwo.setOnClickListener {
@@ -257,12 +258,15 @@ BottomSheetUtils {
                         when {
                             buttonOne.isChecked -> {
                                 consumer.addODKServer()
+                                customSheetFragment.dismiss()
                             }
                             buttonTwo.isChecked -> {
                                 consumer.addTellaWebServer()
+                                customSheetFragment.dismiss()
                             }
                             else -> {
                                 consumer.addUwaziServer()
+                                customSheetFragment.dismiss()
                             }
                         }
                     }
