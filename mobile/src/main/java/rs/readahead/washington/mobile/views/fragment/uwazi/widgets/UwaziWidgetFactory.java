@@ -70,6 +70,9 @@ public class UwaziWidgetFactory {
                 questionWidget = new TriggerWidget(context, fep);
                 break;
 */
+            case UwaziConstants.UWAZI_DATATYPE_MEDIA:
+                questionWidget = new UwaziMediaWidget(context, fep);
+                break;
 
             case UwaziConstants.UWAZI_DATATYPE_DATE:
                 questionWidget = new UwaziDateWidget(context, fep);

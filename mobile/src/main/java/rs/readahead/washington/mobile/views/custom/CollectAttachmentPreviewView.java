@@ -126,6 +126,16 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
 
             audioInfo.setVisibility(GONE);
             videoInfo.setVisibility(GONE);
+        } else if (MediaFile.INSTANCE.isTextFileType(vaultFile.mimeType)) {
+            thumbGradient.setVisibility(VISIBLE);
+            thumbView.setImageResource(R.drawable.ic_reports);
+            //thumbView.setOnClickListener(v -> showAudioPlayActivity());
+
+            showMediaFileInfo();
+            audioDuration.setText(Util.getShortVideoDuration((int) (vaultFile.duration / 1000)));
+
+            audioInfo.setVisibility(VISIBLE);
+            videoInfo.setVisibility(GONE);
         }
     }
 

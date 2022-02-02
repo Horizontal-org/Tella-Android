@@ -107,6 +107,10 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
     private fun parseUwaziForm(){
         var metadataArr = JsonArray()
         metadata.put("template", template?.entityRow?._id )
+
+        val entryDoc = UwaziEntryPrompt("123456789", "123456789", "media", "Primary document", true, "Attach primary document")
+        entryPrompts.add(entryDoc)
+
         for(property in template?.entityRow?.properties!!){
             val obj = JSONObject()
             val mArr = JsonArray()
