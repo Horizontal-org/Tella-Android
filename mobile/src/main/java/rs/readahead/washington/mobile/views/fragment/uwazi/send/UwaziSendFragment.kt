@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
+import com.hzontal.tella_vault.VaultFile
 import rs.readahead.washington.mobile.databinding.UwaziSendFragmentBinding
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
@@ -20,6 +21,8 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
     private lateinit var binding: UwaziSendFragmentBinding
     private var entityInstance: UwaziEntityInstance? = null
     private var uwaziServer: UWaziUploadServer? = null
+    //TODO WE WILL NEED TO USE FormMediaFile
+    private var attachmentsList : List<VaultFile>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +45,10 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
             nextBtn.setOnClickListener {
                 if (entityInstance != null) submitEntity()
             }
+
+            cancelBtn.setOnClickListener {
+
+            }
         }
     }
 
@@ -53,6 +60,10 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
 
             progress.observe(viewLifecycleOwner, {
                 binding.progressCircular.isVisible = it
+            })
+
+            attachments.observe(viewLifecycleOwner,{
+                attachmentsList = it
             })
         }
     }
@@ -74,7 +85,8 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
             uwaziServer?.let { it1 ->
                 viewModel.submitEntity(
                     server = it1,
-                    uwaziEntityRow = it.entityRow
+                    sendEntityRequest = MockUwaziData.getEntityVictimRowMock(),
+                    attachments = attachmentsList
                 )
             }
         }

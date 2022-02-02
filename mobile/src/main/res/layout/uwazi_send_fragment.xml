@@ -37,6 +37,15 @@
 
     <TextView
         style="@style/Unlock_White_Text_Back"
+        android:id="@+id/cancel_btn"
+        android:text="@string/action_cancel"
+        android:layout_marginEnd="34dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
+        style="@style/Unlock_White_Text_Back"
         android:id="@+id/next_btn"
         android:text="@string/collect.end_action_submit"
         android:layout_marginEnd="34dp"

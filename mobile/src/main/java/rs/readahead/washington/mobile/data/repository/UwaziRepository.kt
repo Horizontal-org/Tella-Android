@@ -1,21 +1,24 @@
 package rs.readahead.washington.mobile.data.repository
 
+import com.hzontal.tella_vault.VaultFile
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import retrofit2.Response
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import rs.readahead.washington.mobile.data.ParamsNetwork
 import rs.readahead.washington.mobile.data.entity.uwazi.*
 import rs.readahead.washington.mobile.data.uwazi.UwaziService
-import rs.readahead.washington.mobile.domain.entity.LoginResponse
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.domain.entity.uwazi.ListTemplateResult
 import rs.readahead.washington.mobile.domain.repository.uwazi.IUwaziUserRepository
 import rs.readahead.washington.mobile.util.StringUtils
-import retrofit2.adapter.rxjava2.Result.response
 import rs.readahead.washington.mobile.domain.entity.uwazi.LoginResult
+import rs.readahead.washington.mobile.presentation.uwazi.SendEntityRequest
 
+private val MULTIPART_FORM_DATA = "multipart/form-data"
 
 class UwaziRepository : IUwaziUserRepository {
 
@@ -104,9 +107,19 @@ class UwaziRepository : IUwaziUserRepository {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    override fun submitEntity(uwaziEntityRow : UwaziEntityRow, server: UWaziUploadServer): Single<UwaziEntityRow> {
+    override fun submitEntity(
+        server: UWaziUploadServer,
+        title: RequestBody,
+        template: RequestBody,
+        type: RequestBody,
+        metadata : RequestBody,
+        attachments : List<MultipartBody.Part?>): Single<UwaziEntityRow> {
         return uwaziApi.submitEntity(
-            uwaziEntityRow = uwaziEntityRow,
+            attachments = attachments,
+            title = title,
+            template = template,
+            metadata = null,
+            type = type,
             url = StringUtils.append(
                 '/',
                 server.url,
@@ -117,5 +130,6 @@ class UwaziRepository : IUwaziUserRepository {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
+
 
 }

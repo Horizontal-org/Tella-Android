@@ -23,7 +23,7 @@ public class SkippableMediaFileRequestBody extends MediaFileRequestBody implemen
 
 
     public SkippableMediaFileRequestBody(Context context, VaultFile mediaFile, long skip, @Nullable IProgressListener progressListener) {
-        super(context, mediaFile, progressListener);
+        super(mediaFile, progressListener);
 
         this.skip = skip;
     }

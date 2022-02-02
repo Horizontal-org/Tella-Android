@@ -3,14 +3,13 @@ package rs.readahead.washington.mobile.data.repository;
 import android.content.Context;
 import android.text.TextUtils;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.hzontal.tella_vault.Vault;
 import com.hzontal.tella_vault.VaultFile;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -26,23 +25,20 @@ import timber.log.Timber;
 
 public class MediaFileRequestBody extends RequestBody {
     protected final VaultFile mediaFile;
-    protected final Context context;
     private final MediaType contentType;
     private final IProgressListener listener;
 
-    MediaFileRequestBody(Context context, VaultFile mediaFile) {
-        this(context, mediaFile, null);
+    public  MediaFileRequestBody(VaultFile mediaFile) {
+        this(mediaFile, null);
     }
 
-    MediaFileRequestBody(Context context, VaultFile mediaFile, @Nullable IProgressListener progressListener) {
+    MediaFileRequestBody(VaultFile mediaFile, @Nullable IProgressListener progressListener) {
         String filename = mediaFile.name;
         String mime = FileUtil.getMimeType(filename);
 
         if (TextUtils.isEmpty(mime)) {
             mime = "application/octet-stream";
         }
-
-        this.context = context.getApplicationContext();
         this.contentType = MediaType.parse(mime);
         this.mediaFile = mediaFile;
         this.listener = progressListener;

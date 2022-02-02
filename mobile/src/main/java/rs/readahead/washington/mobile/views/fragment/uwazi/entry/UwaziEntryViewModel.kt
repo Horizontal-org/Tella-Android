@@ -70,6 +70,10 @@ class UwaziEntryViewModel : ViewModel(){
             })
     }
 
+    fun prepareUwaziEntityRequest(collectTemplate: CollectTemplate){
+
+    }
+
     override fun onCleared() {
         disposables.dispose()
         super.onCleared()

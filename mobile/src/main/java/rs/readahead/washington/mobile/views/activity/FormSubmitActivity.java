@@ -2,17 +2,16 @@ package rs.readahead.washington.mobile.views.activity;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.core.widget.NestedScrollView;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,7 +20,6 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.CollectFormSubmissionErrorEvent;
 import rs.readahead.washington.mobile.bus.event.CollectFormSubmittedEvent;
-import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaPartResponse;
@@ -34,7 +32,6 @@ import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.collect.CollectFormEndView;
 import rs.readahead.washington.mobile.views.custom.FormSubmitButtonView;
-import timber.log.Timber;
 
 
 public class FormSubmitActivity extends BaseLockActivity implements
