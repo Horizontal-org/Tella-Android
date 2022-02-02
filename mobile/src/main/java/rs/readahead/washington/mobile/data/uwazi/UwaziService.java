@@ -113,6 +113,7 @@ public class UwaziService {
                     .protocols(Collections.singletonList(Protocol.HTTP_1_1))
                     .cookieJar(new UvCookieJar());
 
+
             LoggingInterceptor logger = new LoggingInterceptor.Builder()
                     .loggable(true)
                     .setLevel(Level.BASIC)
@@ -121,11 +122,13 @@ public class UwaziService {
                     .response("Response")
                     .build();
 
+            okClientBuilder.addInterceptor(new SizeInterceptor());
+
             if (BuildConfig.DEBUG) {
                 okClientBuilder.addNetworkInterceptor(
                         new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
-                .addInterceptor(logger)
-                ; // or BODY
+                .addInterceptor(logger);
+                // or BODY
 
 
             }

@@ -20,8 +20,9 @@ import rs.readahead.washington.mobile.data.database.UwaziDataSource
 import rs.readahead.washington.mobile.data.repository.MediaFileRequestBody
 import rs.readahead.washington.mobile.data.repository.UwaziRepository
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
+import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.presentation.uwazi.SendEntityRequest
-val MULTIPART_FORM_DATA = "text/plain"
+const val MULTIPART_FORM_DATA = "text/plain"
 
 class UwaziSendViewModel : ViewModel() {
 
@@ -35,8 +36,8 @@ class UwaziSendViewModel : ViewModel() {
     private val _server = MutableLiveData<UWaziUploadServer>()
     val server: LiveData<UWaziUploadServer> get() = _server
     var error = MutableLiveData<Throwable>()
-    private val _attachments = MutableLiveData<List<VaultFile>>()
-    val attachments: LiveData<List<VaultFile>> get() = _attachments
+    private val _attachments = MutableLiveData<List<FormMediaFile>>()
+    val attachments: LiveData<List<FormMediaFile>> get() = _attachments
 
     init {
         getRootId()
@@ -107,7 +108,11 @@ class UwaziSendViewModel : ViewModel() {
                         .doFinally {  }
                         .subscribe(
                             { vaultFiles: List<VaultFile> ->
-                                _attachments.postValue(vaultFiles)
+                                val listFormMediaFiles = arrayListOf<FormMediaFile>()
+                                vaultFiles.map {
+                                    listFormMediaFiles.add(FormMediaFile.fromMediaFile(it))
+                                }
+                                _attachments.postValue(listFormMediaFiles)
                             }
                         ) { throwable: Throwable? ->
                             FirebaseCrashlytics.getInstance().recordException(throwable!!)

@@ -8,10 +8,16 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import com.hzontal.tella_vault.VaultFile
+import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.UwaziSendFragmentBinding
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
+import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus
+import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
+import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
+import rs.readahead.washington.mobile.views.collect.CollectFormEndView
+import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziFormEndView
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
 
 const val SEND_ENTITY = "send_entity"
@@ -22,7 +28,8 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
     private var entityInstance: UwaziEntityInstance? = null
     private var uwaziServer: UWaziUploadServer? = null
     //TODO WE WILL NEED TO USE FormMediaFile
-    private var attachmentsList : List<VaultFile>? = null
+    private var attachmentsList : List<FormMediaFile>? = null
+    private lateinit var endView: UwaziFormEndView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,6 +71,10 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
 
             attachments.observe(viewLifecycleOwner,{
                 attachmentsList = it
+                entityInstance?.widgetMediaFiles = it
+                entityInstance?.title = MockUwaziData.getEntityVictimRowMock().title
+                entityInstance?.template = MockUwaziData.getEntityVictimRowMock().template
+                showFormEndView(false)
             })
         }
     }
@@ -90,5 +101,19 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
                 )
             }
         }
+    }
+
+    private fun showFormEndView(offline: Boolean) {
+        if (entityInstance == null){
+            return
+        }
+
+        endView = UwaziFormEndView(activity,
+            if (entityInstance!!.status == UwaziEntityStatus.SUBMITTED) R.string.collect_end_heading_confirmation_form_submitted else R.string.collect_end_action_submit
+        )
+        entityInstance?.let { endView.setInstance(it, offline) }
+        binding.endViewContainer.removeAllViews()
+        binding.endViewContainer.addView(endView)
+      //  updateFormSubmitButton(false)
     }
 }
