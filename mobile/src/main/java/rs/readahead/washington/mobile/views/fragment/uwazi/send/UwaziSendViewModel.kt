@@ -6,8 +6,6 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.Gson
 import com.hzontal.tella_vault.VaultFile
-import com.hzontal.tella_vault.filter.FilterType
-import com.hzontal.tella_vault.filter.Sort
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -18,6 +16,7 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.data.database.UwaziDataSource
 import rs.readahead.washington.mobile.data.repository.MediaFileRequestBody
+import rs.readahead.washington.mobile.data.repository.ProgressListener
 import rs.readahead.washington.mobile.data.repository.UwaziRepository
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
@@ -38,7 +37,9 @@ class UwaziSendViewModel : ViewModel() {
     var error = MutableLiveData<Throwable>()
     private val _attachments = MutableLiveData<List<FormMediaFile>>()
     val attachments: LiveData<List<FormMediaFile>> get() = _attachments
-
+    //TODO THIS IS UGLY WILL REPLACE IT FLOWABLE RX LATER
+    private val _progressCallBack = MutableLiveData<Pair<String, Float>>()
+    val progressCallBack: LiveData<Pair<String, Float>> get() = _progressCallBack
     init {
         getRootId()
     }
@@ -71,7 +72,11 @@ class UwaziSendViewModel : ViewModel() {
 
     }
 
-    fun submitEntity(server: UWaziUploadServer, sendEntityRequest: SendEntityRequest,attachments : List<VaultFile>?) {
+    fun submitEntity(
+        server: UWaziUploadServer,
+        sendEntityRequest: SendEntityRequest,
+        attachments: List<VaultFile>?)
+    {
         disposables.add(
             repository.submitEntity(
                 server = server,
@@ -79,7 +84,7 @@ class UwaziSendViewModel : ViewModel() {
                 template = createRequestBody(sendEntityRequest.template),
                 type = createRequestBody(sendEntityRequest.type),
                 metadata = createRequestJson(Gson().toJson(sendEntityRequest.metadata)),
-                attachments = createListOfAttachments(attachments))
+                attachments = createListOfAttachments(attachments,_progressCallBack))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { _progress.postValue(true) }
@@ -135,8 +140,17 @@ class UwaziSendViewModel : ViewModel() {
             }?.dispose()
     }
 
+   private fun createRequestBody(s: String): RequestBody {
+        return RequestBody.create(
+            MediaType.parse(MULTIPART_FORM_DATA), s)
+    }
+   private  fun createRequestJson(s: String): RequestBody {
+        return RequestBody.create(
+            MediaType.parse("application/json"), s)
+    }
     private fun createListOfAttachments(
-        attachments: List<VaultFile?>?
+        attachments: List<VaultFile?>?,
+        progressCallBack : MutableLiveData<Pair<String, Float>>,
     ): List<MultipartBody.Part?> {
 
         val listAttachments: MutableList<MultipartBody.Part?> = mutableListOf()
@@ -146,7 +160,9 @@ class UwaziSendViewModel : ViewModel() {
                 for (i in attachments.indices) {
                     attachments[i]?.let {
 
-                        val requestBody = MediaFileRequestBody(it)
+                        val requestBody = MediaFileRequestBody(it,
+                            ProgressListener(it.id,progressCallBack)
+                        )
                         fileToUpload =
                             requestBody.let { it1 ->
                                 MultipartBody.Part.createFormData(
@@ -165,17 +181,10 @@ class UwaziSendViewModel : ViewModel() {
         return listAttachments.toList()
     }
 
-    fun createRequestBody(s: String): RequestBody {
-        return RequestBody.create(
-            MediaType.parse(MULTIPART_FORM_DATA), s)
-    }
-    fun createRequestJson(s: String): RequestBody {
-        return RequestBody.create(
-            MediaType.parse("application/json"), s)
-    }
-
     override fun onCleared() {
         disposables.dispose()
         super.onCleared()
     }
+
+
 }

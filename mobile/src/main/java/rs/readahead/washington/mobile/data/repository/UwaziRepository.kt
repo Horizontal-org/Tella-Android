@@ -1,10 +1,10 @@
 package rs.readahead.washington.mobile.data.repository
 
 import com.hzontal.tella_vault.VaultFile
+import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import rs.readahead.washington.mobile.data.ParamsNetwork
@@ -13,12 +13,9 @@ import rs.readahead.washington.mobile.data.uwazi.UwaziService
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.domain.entity.uwazi.ListTemplateResult
+import rs.readahead.washington.mobile.domain.entity.uwazi.LoginResult
 import rs.readahead.washington.mobile.domain.repository.uwazi.IUwaziUserRepository
 import rs.readahead.washington.mobile.util.StringUtils
-import rs.readahead.washington.mobile.domain.entity.uwazi.LoginResult
-import rs.readahead.washington.mobile.presentation.uwazi.SendEntityRequest
-
-private val MULTIPART_FORM_DATA = "multipart/form-data"
 
 class UwaziRepository : IUwaziUserRepository {
 
@@ -38,7 +35,7 @@ class UwaziRepository : IUwaziUserRepository {
             .map {
                 val cookieList: List<String> = it.headers().values("Set-Cookie")
                 val jsessionid: String = cookieList[0].split(";")[0]
-                LoginResult(it.isSuccessful,jsessionid)
+                 LoginResult(it.isSuccessful,jsessionid)
             }
 
     }
@@ -113,7 +110,8 @@ class UwaziRepository : IUwaziUserRepository {
         template: RequestBody,
         type: RequestBody,
         metadata : RequestBody,
-        attachments : List<MultipartBody.Part?>): Single<UwaziEntityRow> {
+        attachments :  List<MultipartBody.Part?>,
+        ): Flowable<UwaziEntityRow> {
         return uwaziApi.submitEntity(
             attachments = attachments,
             title = title,
@@ -125,11 +123,14 @@ class UwaziRepository : IUwaziUserRepository {
                 server.url,
                 ParamsNetwork.URL_ENTITIES
             ),
-            cookie = server.cookies
+            cookie = server.cookies,
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .toFlowable()
+
     }
+
 
 
 }

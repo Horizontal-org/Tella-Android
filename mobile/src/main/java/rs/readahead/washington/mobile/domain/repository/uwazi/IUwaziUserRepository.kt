@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.domain.repository.uwazi
 
 import com.hzontal.tella_vault.VaultFile
+import io.reactivex.Flowable
 import io.reactivex.Single
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -30,5 +31,5 @@ interface IUwaziUserRepository {
                       template: RequestBody,
                       type: RequestBody,
                       metadata : RequestBody,
-                      attachments : List<MultipartBody.Part?> ) : Single<UwaziEntityRow>
+                      attachments : List<MultipartBody.Part?> ) : Flowable<UwaziEntityRow>
 }

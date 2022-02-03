@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:textDirection="locale"
     android:background="@color/wa_purple"
@@ -40,6 +41,7 @@
         <TextView
             android:id="@+id/formName"
             android:layout_width="match_parent"
+            tools:text="Test"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
@@ -62,6 +64,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
+                tools:text="Test"
                 android:textColor="@color/wa_white"/>
 
             <TextView
@@ -69,8 +72,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
+                tools:text="15MB"
                 android:textColor="@color/wa_white"/>
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/wa_white_20"
+            >
+        </View>
 
         <LinearLayout
             android:id="@+id/formPartsList"

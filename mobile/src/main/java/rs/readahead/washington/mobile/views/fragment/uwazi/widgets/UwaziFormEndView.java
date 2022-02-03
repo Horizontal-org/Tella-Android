@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -23,6 +24,7 @@ import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.FileUtil;
 
+@SuppressLint("ViewConstructor")
 public class UwaziFormEndView extends FrameLayout {
     LinearLayout partsListView;
     TextView titleView;
@@ -105,6 +107,7 @@ public class UwaziFormEndView extends FrameLayout {
             item.setUploadProgress(pct);
         }
     }
+
     public void clearPartsProgress(UwaziEntityInstance instance) {
         setPartsCleared(instance);
     }
@@ -113,7 +116,7 @@ public class UwaziFormEndView extends FrameLayout {
 
         SubmittingItem item = new SubmittingItem(getContext(), null, 0);
 
-        item.setTag(C.OPEN_ROSA_XML_PART_NAME);
+        item.setTag("UWAZI_RESPONSE");
 
         item.setPartName(R.string.collect_end_item_form_data);
         item.setPartSize(size);

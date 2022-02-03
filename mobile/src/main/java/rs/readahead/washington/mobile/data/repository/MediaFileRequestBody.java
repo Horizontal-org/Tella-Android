@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.data.repository;
 
-import android.content.Context;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -32,7 +31,7 @@ public class MediaFileRequestBody extends RequestBody {
         this(mediaFile, null);
     }
 
-    MediaFileRequestBody(VaultFile mediaFile, @Nullable IProgressListener progressListener) {
+   public MediaFileRequestBody(VaultFile mediaFile, @Nullable IProgressListener progressListener) {
         String filename = mediaFile.name;
         String mime = FileUtil.getMimeType(filename);
 
