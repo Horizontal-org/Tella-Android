@@ -298,6 +298,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_TEMPLATE, D.TEXT, true) + " , " +
                 cddl(D.C_TITLE, D.TEXT, true) + " , " +
                 cddl(D.C_TYPE, D.TEXT, true) + " , " +
+                cddl(D.C_FORM_PART_STATUS, D.INTEGER, true) + " DEFAULT 0 , " +
                 "FOREIGN KEY(" + sq(D.C_UWAZI_SERVER_ID) + ") REFERENCES " +
                 sq(D.T_UWAZI_SERVER) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE, " +
                 "UNIQUE(" + sq(D.C_ID) + ") ON CONFLICT REPLACE" +

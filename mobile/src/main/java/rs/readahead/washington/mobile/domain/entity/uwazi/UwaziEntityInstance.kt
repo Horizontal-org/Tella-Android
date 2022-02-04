@@ -12,7 +12,7 @@ data class UwaziEntityInstance(
     var metadata: JsonObject? = null,
     var status : UwaziEntityStatus = UwaziEntityStatus.UNKNOWN,
     var widgetMediaFiles: List<FormMediaFile> = emptyList(),
-    val formPartStatus : FormMediaFileStatus = FormMediaFileStatus.UNKNOWN,
+    var formPartStatus : FormMediaFileStatus = FormMediaFileStatus.UNKNOWN,
     var template: String = "",
     var title: String = "",
-    val type: String = "entity")
+    var type: String = "entity")

@@ -65,6 +65,8 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         arguments?.let {
             template = Gson().fromJson(it.getString(COLLECT_TEMPLATE), CollectTemplate::class.java)
             entityInstance.collectTemplate = template
+            entityInstance.title = template?.entityRow?.name.toString()
+            entityInstance.template = template?.entityRow?.name.toString()
             parseUwaziForm()
         }
     }

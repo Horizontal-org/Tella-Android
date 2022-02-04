@@ -3,11 +3,13 @@ package rs.readahead.washington.mobile.data.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import net.sqlcipher.database.SQLiteDatabase;
@@ -29,6 +31,7 @@ import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
+import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate;
 import rs.readahead.washington.mobile.domain.entity.uwazi.ListTemplateResult;
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance;
@@ -117,6 +120,46 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
     }
 
     @Override
+    public Single<List<UwaziEntityInstance>> listDraftInstances() {
+        return Single.fromCallable(this::getDraftUwaziEntityInstances)
+                .compose(applySchedulers());
+    }
+
+    @Override
+    public Single<List<UwaziEntityInstance>> listOutboxInstances() {
+        return Single.fromCallable(this::getOutboxUwaziEntityInstances)
+                .compose(applySchedulers());
+    }
+
+    @Override
+    public Single<List<UwaziEntityInstance>> listSubmittedInstances() {
+        return Single.fromCallable(this::getSubmittedUwaziEntityInstances)
+                .compose(applySchedulers());
+    }
+
+    private List<UwaziEntityInstance> getDraftUwaziEntityInstances() {
+        return getUwaziEntityInstances(new UwaziEntityStatus[]{
+                UwaziEntityStatus.UNKNOWN,
+                UwaziEntityStatus.DRAFT
+        });
+    }
+
+    private List<UwaziEntityInstance> getSubmittedUwaziEntityInstances() {
+        return getUwaziEntityInstances(new UwaziEntityStatus[]{
+                UwaziEntityStatus.SUBMITTED
+        });
+    }
+
+    private List<UwaziEntityInstance> getOutboxUwaziEntityInstances() {
+        return getUwaziEntityInstances(new UwaziEntityStatus[]{
+                UwaziEntityStatus.FINALIZED,
+                UwaziEntityStatus.SUBMISSION_ERROR,
+                UwaziEntityStatus.SUBMISSION_PENDING,
+                UwaziEntityStatus.SUBMISSION_PARTIAL_PARTS
+        });
+    }
+
+    @Override
     public Single<List<CollectTemplate>> listFavoriteTemplates() {
         return Single.fromCallable(() -> dataSource.getFavoriteCollectTemplates())
                 .compose(applySchedulers());
@@ -174,6 +217,14 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
     public Completable deleteTemplate(final long id) {
         return Completable.fromCallable((Callable<Void>) () -> {
             deleteCollectFormInstance(id);
+            return null;
+        }).compose(applyCompletableSchedulers());
+    }
+
+    @Override
+    public Completable deleteEntityInstance(final long id) {
+        return Completable.fromCallable((Callable<Void>) () -> {
+            deleteUwaziEntityInstance(id);
             return null;
         }).compose(applyCompletableSchedulers());
     }
@@ -568,6 +619,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
             values.put(D.C_TEMPLATE, instance.getTemplate());
             values.put(D.C_TITLE, instance.getTitle());
             values.put(D.C_TYPE, instance.getType());
+            values.put(D.C_FORM_PART_STATUS, instance.getFormPartStatus().ordinal());
             instance.setUpdated(updated);
 
             if (instance.getStatus() == UwaziEntityStatus.UNKNOWN) {
@@ -611,6 +663,91 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
         } finally {
             database.endTransaction();
         }
+
+        return instance;
+    }
+
+    private void deleteUwaziEntityInstance(long id) throws NotFountException {
+        int count = database.delete(D.T_UWAZI_ENTITY_INSTANCES, D.C_ID + " = ?", new String[]{Long.toString(id)});
+
+        if (count != 1) {
+            throw new NotFountException();
+        }
+    }
+
+
+    private List<UwaziEntityInstance> getUwaziEntityInstances(UwaziEntityStatus[] statuses) {
+        Gson gson = new Gson();
+        Cursor cursor = null;
+        List<UwaziEntityInstance> instances = new ArrayList<>();
+
+        List<String> s = new ArrayList<>(statuses.length);
+        for (UwaziEntityStatus status : statuses) {
+            s.add(Integer.toString(status.ordinal()));
+        }
+        String selection = "(" + TextUtils.join(", ", s) + ")";
+
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_UWAZI_ENTITY_INSTANCES +
+                            " JOIN " + D.T_UWAZI_SERVER + " ON " +
+                            cn(D.T_UWAZI_ENTITY_INSTANCES, D.C_UWAZI_SERVER_ID) + " = " + cn(D.T_UWAZI_SERVER, D.C_ID),
+                    new String[]{
+                            cn(D.T_UWAZI_ENTITY_INSTANCES, D.C_ID, D.A_UWAZI_ENTITY_INSTANCE_ID),
+                            D.C_UWAZI_SERVER_ID,
+                            D.C_STATUS,
+                            D.C_UPDATED,
+                            D.C_TEMPLATE_ENTITY,
+                            D.C_METADATA,
+                            D.C_TEMPLATE,
+                            D.C_TITLE,
+                            D.C_TYPE,
+                            D.C_FORM_PART_STATUS,
+                            cn(D.T_UWAZI_SERVER, D.C_NAME, D.A_SERVER_NAME),
+                            cn(D.T_UWAZI_SERVER, D.C_USERNAME, D.A_SERVER_USERNAME)},
+                    D.C_STATUS + " IN " + selection,
+                    null, null,
+                    cn(D.T_UWAZI_ENTITY_INSTANCES, D.C_ID) + " DESC",
+                    null
+            );
+            cursor = database.rawQuery(query, null);
+
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                // todo: this is bad, we need to make this not loading everything in loop
+                UwaziEntityInstance instance = cursorToUwaziEntityInstance(cursor);
+                CollectTemplate collectTemplate = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_ENTITY)), CollectTemplate.class);
+                instance.setCollectTemplate(collectTemplate);
+                JsonObject metadata = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_METADATA)), JsonObject.class);
+                instance.setMetadata(metadata);
+
+                instances.add(instance);
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return instances;
+    }
+
+    private UwaziEntityInstance cursorToUwaziEntityInstance(Cursor cursor) {
+        UwaziEntityInstance instance = new UwaziEntityInstance();
+        instance.setId(cursor.getLong(cursor.getColumnIndexOrThrow(D.A_UWAZI_ENTITY_INSTANCE_ID)));
+        /*instance.setServerId(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_UWAZI_SERVER_ID)));
+        instance.setServerName(cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_NAME)));
+        instance.setUsername(cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_USERNAME)));*/
+        int statusOrdinal = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_STATUS));
+        instance.setStatus(UwaziEntityStatus.values()[statusOrdinal]);
+        int formPartStatusOrdinal = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_FORM_PART_STATUS));
+        instance.setFormPartStatus(FormMediaFileStatus.values()[formPartStatusOrdinal]);
+        instance.setUpdated(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_UPDATED)));
+        instance.setTemplate(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE)));
+        instance.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TITLE)));
+        instance.setType(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TYPE)));
 
         return instance;
     }

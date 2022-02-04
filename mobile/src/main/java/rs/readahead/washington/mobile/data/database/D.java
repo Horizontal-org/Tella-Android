@@ -29,6 +29,8 @@ class D {
     static final String T_UWAZI_SERVER = "t_uwazi_server";
     static  final String T_UWAZI_BLANK_TEMPLATES = "t_uwazi_collect_blank_templates";
     static  final String T_UWAZI_ENTITY_INSTANCES = "t_uwazi_entity_instances";
+    static  final String A_UWAZI_ENTITY_INSTANCE_ID = "a_uwazi_entity_instance_id";
+
     /* DATABASE COLUMNS */
     static final String C_ID = "c_id";
 

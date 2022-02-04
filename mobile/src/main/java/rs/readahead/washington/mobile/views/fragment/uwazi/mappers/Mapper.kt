@@ -2,7 +2,9 @@ package rs.readahead.washington.mobile.views.fragment.uwazi.mappers
 
 import rs.readahead.washington.mobile.data.entity.uwazi.Language
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
+import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.views.adapters.uwazi.ViewLanguageItem
+import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.ViewEntityInstanceItem
 import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.ViewEntityTemplateItem
 import rs.readahead.washington.mobile.views.fragment.uwazi.download.adapter.ViewTemplateItem
 
@@ -37,3 +39,13 @@ fun Language.toViewLanguageItem(onLanguageClicked: () -> Unit) = ViewLanguageIte
     key = key,
     default = default,
     onLanguageClicked = onLanguageClicked)
+
+fun UwaziEntityInstance.toViewEntityInstanceItem(
+    onMoreClicked: () -> Unit
+) = ViewEntityInstanceItem(
+    id = id,
+    instanceName = title,
+    serverId = collectTemplate?.serverId,
+    serverName = collectTemplate?.serverName,
+    onMoreClicked = onMoreClicked
+)
