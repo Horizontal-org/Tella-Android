@@ -14,8 +14,10 @@
         android:id="@+id/dateText"
         android:textSize="18sp"
         android:textAlignment="center"
+        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
+        android:background="@drawable/rounded_light_purple_background"
         android:layout_margin="2dp"
         android:textColor="@color/wa_white_80"
         android:visibility="gone"/>

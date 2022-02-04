@@ -15,7 +15,9 @@ import java.util.LinkedHashMap;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.data.uwazi.UwaziConstants;
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziQuestionWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziWidgetFactory;
@@ -73,11 +75,18 @@ public class UwaziFormView extends LinearLayout {
                 inflater.inflate(R.layout.collect_form_delimiter, separator, true);
                 addView(separator, widgetLayout);
             }
-            Timber.d("+++++org.hzontal.tella datatype %s" , p.getDataType());
-            UwaziQuestionWidget qw = UwaziWidgetFactory.createWidgetFromPrompt(p, getContext(), readOnlyOverride);
-            qw.setId(VIEW_ID + id++);
-            widgets.add(qw);
-            addView(qw, widgetLayout);
+            if (p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_TEXT) ||
+                    p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_NUMERIC) ||
+                    p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_MEDIA) ||
+                    p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_IMAGE) ||
+                    p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_DATE) ||
+                    p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_GEOLOCATION)
+            ) {
+                UwaziQuestionWidget qw = UwaziWidgetFactory.createWidgetFromPrompt(p, getContext(), readOnlyOverride);
+                qw.setId(VIEW_ID + id++);
+                widgets.add(qw);
+                addView(qw, widgetLayout);
+            }
         }
     }
 
@@ -102,8 +111,8 @@ public class UwaziFormView extends LinearLayout {
         }
     }
 
-    public LinkedHashMap<String , IAnswerData> getAnswers() {
-        LinkedHashMap<String , IAnswerData> answers = new LinkedHashMap<>();
+    public LinkedHashMap<String, IAnswerData> getAnswers() {
+        LinkedHashMap<String, IAnswerData> answers = new LinkedHashMap<>();
 
         for (UwaziQuestionWidget q : widgets) {
             UwaziEntryPrompt p = q.getPrompt();

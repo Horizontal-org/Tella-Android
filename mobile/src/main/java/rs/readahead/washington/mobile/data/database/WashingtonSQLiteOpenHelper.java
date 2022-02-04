@@ -59,9 +59,10 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
         //DBV9
         db.execSQL(createTableUwaziServer());
-        db.execSQL(createTableCollectTemplateUwazi());
+        db.execSQL(createTableCollectEntityUwazi());
         db.execSQL(createTableCollectBlankTemplateUwazi());
         db.execSQL(createTableCollectFormInstanceVaultFile());
+        db.execSQL(createTableUwaziEntityInstanceVaultFile());
     }
 
     @Override
@@ -286,16 +287,32 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 ");";
     }
 
-    private String createTableCollectTemplateUwazi(){
-        return "CREATE TABLE " + sq(D.T_UWAZI_TEMPLATES) + " (" +
+    private String createTableCollectEntityUwazi(){
+        return "CREATE TABLE " + sq(D.T_UWAZI_ENTITY_INSTANCES) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_UWAZI_SERVER_ID, D.INTEGER, true) + " , " +
                 cddl(D.C_TEMPLATE_ENTITY, D.TEXT, true) + " , " +
+                cddl(D.C_METADATA, D.TEXT, true) + " , " +
                 cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0 , " +
                 cddl(D.C_UPDATED, D.INTEGER, true) + " DEFAULT 0 , " +
+                cddl(D.C_TEMPLATE, D.TEXT, true) + " , " +
+                cddl(D.C_TITLE, D.TEXT, true) + " , " +
+                cddl(D.C_TYPE, D.TEXT, true) + " , " +
                 "FOREIGN KEY(" + sq(D.C_UWAZI_SERVER_ID) + ") REFERENCES " +
                 sq(D.T_UWAZI_SERVER) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE, " +
                 "UNIQUE(" + sq(D.C_ID) + ") ON CONFLICT REPLACE" +
+                ");";
+    }
+
+    private String createTableUwaziEntityInstanceVaultFile() {
+        return "CREATE TABLE " + sq(D.T_UWAZI_ENTITY_INSTANCE_VAULT_FILE) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_UWAZI_ENTITY_INSTANCE_ID, D.INTEGER, true) + " , " +
+                cddl(D.C_VAULT_FILE_ID, D.TEXT, true) + " , " +
+                cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0," +
+                "FOREIGN KEY(" + sq(D.C_UWAZI_ENTITY_INSTANCE_ID) + ") REFERENCES " +
+                sq(D.T_UWAZI_ENTITY_INSTANCES) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE," +
+                "UNIQUE(" + sq(D.C_UWAZI_ENTITY_INSTANCE_ID) + ", " + sq(D.C_VAULT_FILE_ID) + ") ON CONFLICT IGNORE" +
                 ");";
     }
 

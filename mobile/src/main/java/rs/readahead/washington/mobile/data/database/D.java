@@ -28,7 +28,7 @@ class D {
     /* UWAZI DATABASE TABLE*/
     static final String T_UWAZI_SERVER = "t_uwazi_server";
     static  final String T_UWAZI_BLANK_TEMPLATES = "t_uwazi_collect_blank_templates";
-    static  final String T_UWAZI_TEMPLATES = "t_uwazi_collect_templates";
+    static  final String T_UWAZI_ENTITY_INSTANCES = "t_uwazi_entity_instances";
     /* DATABASE COLUMNS */
     static final String C_ID = "c_id";
 
@@ -75,6 +75,12 @@ class D {
     static final String C_SERVER_ID = "c_server_id";
     static final String C_MANUAL_UPLOAD = "c_manual_upload";
     static final String C_VAULT_FILE_ID = "c_vault_file_id";
+    static final String C_TEMPLATE = "c_template";
+    static final String C_TITLE = "c_title";
+    static final String C_TYPE = "c_type";
+    static final String T_UWAZI_ENTITY_INSTANCE_VAULT_FILE = "t_uwazi_entity_instance_vault_file";
+    static final String C_UWAZI_ENTITY_INSTANCE_ID = "c_uwazi_entity_instance_id";
+
 
     //Uwazi cloumns
     static  final String C_UWAZI_SERVER_ID= "c_uwazi_server_id";

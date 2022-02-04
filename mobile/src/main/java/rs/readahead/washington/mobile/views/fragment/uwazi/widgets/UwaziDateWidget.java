@@ -14,6 +14,7 @@ package rs.readahead.washington.mobile.views.fragment.uwazi.widgets;
  */
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -61,7 +62,7 @@ public class UwaziDateWidget extends UwaziQuestionWidget {
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-        clearButton = addButton(R.drawable.ic_delete_white_24px);
+        clearButton = addButton(R.drawable.ic_cancel_rounded);
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!formEntryPrompt.isReadOnly());
         clearButton.setVisibility(GONE);
@@ -130,7 +131,7 @@ public class UwaziDateWidget extends UwaziQuestionWidget {
     }
 
     private void createDatePickerDialog() {
-        datePickerDialog = new DatePickerDialog(getContext(), (view, year, monthOfYear, dayOfMonth) -> {
+        datePickerDialog = new DatePickerDialog(getContext(), AlertDialog.THEME_HOLO_LIGHT,(view, year, monthOfYear, dayOfMonth) -> {
             UwaziDateWidget.this.year = year;
             UwaziDateWidget.this.month = monthOfYear + 1;
             UwaziDateWidget.this.dayOfMonth = dayOfMonth;
