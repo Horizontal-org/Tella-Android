@@ -68,10 +68,6 @@ class UwaziSendViewModel : ViewModel() {
             }
     }
 
-    fun getSelectedVaultFiles(){
-
-    }
-
     fun submitEntity(
         server: UWaziUploadServer,
         sendEntityRequest: SendEntityRequest,

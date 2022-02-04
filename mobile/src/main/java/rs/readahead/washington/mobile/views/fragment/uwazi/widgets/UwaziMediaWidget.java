@@ -1,23 +1,33 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.widgets;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
 
+import io.reactivex.schedulers.Schedulers;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
+import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.odk.FormController;
+import rs.readahead.washington.mobile.util.C;
+import rs.readahead.washington.mobile.views.activity.QuestionAttachmentActivity;
+import rs.readahead.washington.mobile.views.base_ui.BaseActivity;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
+import rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment;
 
 
 @SuppressLint("ViewConstructor")
@@ -96,7 +106,8 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
 
     private void showAttachmentsFragment() {
         try {
-          /* Activity activity  = (Activity) getContext();
+
+          Activity activity  = (Activity) getContext();
             //FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
 
             VaultFile vaultFile = getFilename() != null ? MyApplication.rxVault
@@ -106,8 +117,8 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
 
             activity.startActivityForResult(new Intent(getContext(), QuestionAttachmentActivity.class)
                             .putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, vaultFile)
-                            .putExtra(QuestionAttachmentActivity.MEDIA_FILES_FILTER, IMediaFileRecordRepository.Filter.DOCUMENT),
-                    C.MEDIA_FILE_ID);*/
+                            .putExtra(QuestionAttachmentActivity.MEDIA_FILES_FILTER, IMediaFileRecordRepository.Filter.ALL),
+                    C.MEDIA_FILE_ID);
 
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);

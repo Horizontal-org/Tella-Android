@@ -85,7 +85,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         context.startActivity(intent);
     }
 
-
     @NonNull
     public static TellaBus bus() {
         return bus;
@@ -301,6 +300,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         getMainKeyHolder().clear();
         TellaKeysUI.getMainKeyHolder().clear();
     }
+
     public static void initKeys(MainKey mainKey){
         getMainKeyHolder().set(mainKey);
         TellaKeysUI.getMainKeyHolder().set(mainKey);

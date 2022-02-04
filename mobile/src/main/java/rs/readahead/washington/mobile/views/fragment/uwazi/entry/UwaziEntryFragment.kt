@@ -105,7 +105,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
     }
 
     private fun parseUwaziForm(){
-        var metadataArr = JsonArray()
+        val metadataArr = JsonArray()
         metadata.put("template", template?.entityRow?._id )
 
         val entryDoc = UwaziEntryPrompt("123456789", "123456789", "media", "Primary document", true, "Attach primary document")
@@ -122,8 +122,8 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         }
         metadata.put("metadata",metadataArr)
 
-        val arr : Array<UwaziEntryPrompt?> = arrayOfNulls<UwaziEntryPrompt>(entryPrompts.size)
-        for (i in 0 until arr.size) {
+        val arr : Array<UwaziEntryPrompt?> = arrayOfNulls(entryPrompts.size)
+        for (i in arr.indices) {
             arr[i] = entryPrompts[i]
         }
         uwaziFormView = UwaziFormView(requireContext(),arr)

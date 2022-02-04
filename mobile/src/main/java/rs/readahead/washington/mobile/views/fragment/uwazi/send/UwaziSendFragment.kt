@@ -61,8 +61,12 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
                 uwaziServer = it
             })
 
-            progress.observe(viewLifecycleOwner, {
-                binding.progressCircular.isVisible = it
+            progress.observe(viewLifecycleOwner, { isProgressing ->
+                if (isProgressing){
+                    entityInstance?.let { showFormSubmitLoading(instance = it) }
+                }else{
+                    endView.hideUploadProgress("UWAZI_RESPONSE")
+                }
             })
 
             attachments.observe(viewLifecycleOwner,{
@@ -111,8 +115,11 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
     }
 
     private fun onShowProgress(partName : String,total : Float){
-        endView.showUploadProgress(partName)
         endView.setUploadProgress(partName,total)
+    }
+
+    private fun showFormSubmitLoading(instance : UwaziEntityInstance) {
+        endView.clearPartsProgress(instance);
     }
 
     private fun showFormEndView(offline: Boolean) {
