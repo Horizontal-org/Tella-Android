@@ -122,7 +122,6 @@ public class UwaziService {
                     .response("Response")
                     .build();
 
-            okClientBuilder.addInterceptor(new SizeInterceptor());
 
             if (BuildConfig.DEBUG) {
                 okClientBuilder.addNetworkInterceptor(

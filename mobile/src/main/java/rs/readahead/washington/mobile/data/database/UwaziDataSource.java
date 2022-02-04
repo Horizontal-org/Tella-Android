@@ -15,6 +15,7 @@ import net.sqlcipher.database.SQLiteQueryBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Completable;
@@ -549,7 +550,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
     private UwaziEntityInstance saveEntityInstanceDB(UwaziEntityInstance instance) {
         ContentValues values = new ContentValues();
         long updated = Util.currentTimestamp();
-        values.put(D.C_UWAZI_SERVER_ID, instance.getCollectTemplate().getServerId());
+        values.put(D.C_UWAZI_SERVER_ID, Objects.requireNonNull(instance.getCollectTemplate()).getServerId());
         values.put(D.C_TEMPLATE_ENTITY, new GsonBuilder().create().toJson(instance.getCollectTemplate().getEntityRow()));
         values.put(D.C_STATUS, instance.getStatus().ordinal());
         values.put(D.C_UPDATED, updated);

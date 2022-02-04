@@ -14,7 +14,6 @@ import io.reactivex.BackpressureStrategy;
 import io.reactivex.Emitter;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
-import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -91,7 +90,7 @@ public class TUSClient {
 
                 final Request appendRequest = new Request.Builder()
                         .url(getUploadUrl(fileName))
-                        .put(new SkippableMediaFileRequestBody(context, vaultFile, skipBytes,
+                        .put(new SkippableMediaFileRequestBody(vaultFile, skipBytes,
                                 (current, total) -> uploadEmitter.emit(emitter, vaultFile, skipBytes + current, size)))
                         .build();
 

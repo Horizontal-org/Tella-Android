@@ -14,7 +14,6 @@ import io.reactivex.BackpressureStrategy;
 import io.reactivex.Emitter;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
-import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -23,7 +22,6 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import rs.readahead.washington.mobile.BuildConfig;
 import rs.readahead.washington.mobile.data.http.HttpStatus;
 import rs.readahead.washington.mobile.data.repository.SkippableMediaFileRequestBody;
-import rs.readahead.washington.mobile.data.upload.TUSClient;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
@@ -90,7 +88,7 @@ public class UwaziClient {
 
                 final Request appendRequest = new Request.Builder()
                         .url(getUploadUrl(fileName))
-                        .put(new SkippableMediaFileRequestBody(context, vaultFile, skipBytes,
+                        .put(new SkippableMediaFileRequestBody(vaultFile, skipBytes,
                                 (current, total) -> uploadEmitter.emit(emitter, vaultFile, skipBytes + current, size)))
                         .build();
 
