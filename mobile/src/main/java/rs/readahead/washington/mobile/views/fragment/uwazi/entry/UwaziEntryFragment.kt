@@ -20,6 +20,7 @@ import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.views.activity.QuestionAttachmentActivity
+import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.SEND_ENTITY
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
@@ -72,7 +73,6 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
 
             screenView = binding.screenFormView
         }
-
     }
 
     private fun initView() {
@@ -88,7 +88,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
     private fun initObservers() {
         with(viewModel) {
             template.observe(viewLifecycleOwner, {
-                val template = it
+                it
             })
 
             progress.observe(viewLifecycleOwner, {
@@ -111,16 +111,22 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
     }
 
     private fun sendEntity() {
-        var widgetMediaFiles: List<FormMediaFile> = emptyList()
-        metadata = JsonObject()
+        //TODO REFACTOR THIS INTO A SEPARATE PARSER
+        val widgetMediaFiles: List<FormMediaFile> = emptyList()
+
         for (answer in uwaziFormView.answers) {
             if (answer.value != null) {
-                metadata.addProperty(answer.key, answer.value.displayText)
+                metadata.addProperty(
+                    answer.key,
+                    Gson().toJson(listOf(UwaziValue(answer.value.displayText)))
+                )
             }
         }
-        entityInstance.metadata = metadata
-        entityInstance.widgetMediaFiles = widgetMediaFiles
-        //entityInstance.status = UwaziEntityStatus.FINALIZED
+
+            entityInstance.metadata = metadata
+            entityInstance.widgetMediaFiles = widgetMediaFiles
+            entityInstance.status = UwaziEntityStatus.FINALIZED
+            entityInstance.collectTemplate = template
 
         val gsonTemplate = Gson().toJson(entityInstance)
         bundle.putString(SEND_ENTITY, gsonTemplate)
@@ -129,17 +135,16 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
     }
 
     private fun parseUwaziForm() {
-        metadata = JsonObject()
-        // val entryDoc = UwaziEntryPrompt("123456789", "123456789", "media", "Primary document", true, "Attach primary document")
-        //entryPrompts.add(entryDoc)
+        //TODO REFACTOR THIS INTO A SEPARATE PARSER
 
+        metadata = JsonObject()
 
         for (property in template?.entityRow?.properties!!) {
             val entryPrompt = UwaziEntryPrompt(
-                property._id,
+                property.name,
                 property.id,
                 property.type,
-                property.name,
+                property.label,
                 property.required,
                 property.label
             )
@@ -148,7 +153,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         entityInstance.metadata = metadata
 
         val arr: Array<UwaziEntryPrompt?> = arrayOfNulls(entryPrompts.size)
-        for (i in 0 until arr.size) {
+        arr.indices.forEach { i ->
             arr[i] = entryPrompts[i]
         }
         uwaziFormView = UwaziFormView(requireContext(), arr)

@@ -75,18 +75,21 @@ public class UwaziFormView extends LinearLayout {
                 inflater.inflate(R.layout.collect_form_delimiter, separator, true);
                 addView(separator, widgetLayout);
             }
-            if (p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_TEXT) ||
+
+            UwaziQuestionWidget qw = UwaziWidgetFactory.createWidgetFromPrompt(p, getContext(), readOnlyOverride);
+            qw.setId(VIEW_ID + id++);
+            widgets.add(qw);
+            addView(qw, widgetLayout);
+           /* if (p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_TEXT) ||
                     p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_NUMERIC) ||
                     p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_MEDIA) ||
                     p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_IMAGE) ||
                     p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_DATE) ||
-                    p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_GEOLOCATION)
-            ) {
-                UwaziQuestionWidget qw = UwaziWidgetFactory.createWidgetFromPrompt(p, getContext(), readOnlyOverride);
-                qw.setId(VIEW_ID + id++);
-                widgets.add(qw);
-                addView(qw, widgetLayout);
-            }
+                 //   p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_GEOLOCATION))
+
+           // ) {*/
+
+            //}
         }
     }
 
