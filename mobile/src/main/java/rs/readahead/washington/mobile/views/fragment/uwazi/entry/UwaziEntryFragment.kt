@@ -13,20 +13,22 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.hzontal.tella_vault.VaultFile
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.data.uwazi.UwaziConstants
 import rs.readahead.washington.mobile.databinding.UwaziEntryFragmentBinding
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
+import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.views.activity.QuestionAttachmentActivity
-import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.SEND_ENTITY
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
 
 
 const val COLLECT_TEMPLATE = "collect_template"
+const val UWAZI_TITLE = "title"
 
 class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
     private val viewModel: UwaziEntryViewModel by viewModels()
@@ -38,6 +40,15 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
     private var screenView: ViewGroup? = null
     private var entryPrompts: ArrayList<UwaziEntryPrompt> = ArrayList()
     private lateinit var uwaziFormView: UwaziFormView
+
+    val UwaziTitlePrompt = UwaziEntryPrompt(
+        UWAZI_TITLE,
+        "10242048",
+        UwaziConstants.UWAZI_DATATYPE_TEXT,
+        "Title",
+        true,
+        "Enter the submission title"
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -144,6 +155,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
 
         metadata = JsonObject()
 
+        entryPrompts.add(UwaziTitlePrompt)
         for (property in template?.entityRow?.properties!!) {
             val entryPrompt = UwaziEntryPrompt(
                 property.name,
