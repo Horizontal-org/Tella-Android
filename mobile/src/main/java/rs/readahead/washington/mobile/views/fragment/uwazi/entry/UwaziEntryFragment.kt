@@ -53,7 +53,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         initView()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == C.MEDIA_FILE_ID && resultCode == Activity.RESULT_OK) {
             val vaultFile =
                 data!!.getSerializableExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY) as VaultFile
@@ -122,11 +122,16 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
                 )
             }
         }
+        for (answer in uwaziFormView.files) {
+            if (answer != null) {
+                widgetMediaFiles.toMutableList().add(answer)
+            }
+        }
 
-            entityInstance.metadata = metadata
-            entityInstance.widgetMediaFiles = widgetMediaFiles
-            entityInstance.status = UwaziEntityStatus.FINALIZED
-            entityInstance.collectTemplate = template
+        entityInstance.metadata = metadata
+        entityInstance.widgetMediaFiles = widgetMediaFiles
+        entityInstance.status = UwaziEntityStatus.FINALIZED
+        entityInstance.collectTemplate = template
 
         val gsonTemplate = Gson().toJson(entityInstance)
         bundle.putString(SEND_ENTITY, gsonTemplate)

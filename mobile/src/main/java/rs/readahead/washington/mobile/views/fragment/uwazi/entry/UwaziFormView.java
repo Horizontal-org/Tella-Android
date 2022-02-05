@@ -12,16 +12,17 @@ import org.javarosa.core.model.data.IAnswerData;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.data.uwazi.UwaziConstants;
+import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.odk.FormController;
+import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziFileBinaryWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziQuestionWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziWidgetFactory;
-import timber.log.Timber;
 
 
 @SuppressLint("ViewConstructor")
@@ -123,6 +124,16 @@ public class UwaziFormView extends LinearLayout {
         }
 
         return answers;
+    }
+
+    public List<FormMediaFile> getFiles(){
+        List<FormMediaFile> files = new ArrayList<>();
+         for (UwaziQuestionWidget widget : widgets){
+             if(widget instanceof UwaziFileBinaryWidget){
+                 files.add(((UwaziFileBinaryWidget) widget).getFile());
+             }
+         }
+        return files;
     }
 
     public String setBinaryData(@NonNull Object data) {

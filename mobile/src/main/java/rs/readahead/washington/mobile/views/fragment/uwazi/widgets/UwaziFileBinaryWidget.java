@@ -31,7 +31,7 @@ public abstract class UwaziFileBinaryWidget extends UwaziQuestionWidget {
         return TextUtils.isEmpty(getFilename()) ? null : new StringData(getFilename());
     }
 
-    protected FormMediaFile getFile() {
+    public FormMediaFile getFile() {
         return file;
     }
 
