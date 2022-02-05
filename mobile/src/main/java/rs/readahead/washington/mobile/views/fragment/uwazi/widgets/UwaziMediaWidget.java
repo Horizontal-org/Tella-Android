@@ -108,7 +108,8 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
         try {
 
           Activity activity  = (Activity) getContext();
-            //FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
+            //FormController.getActive().setIndexWai
+            waitingForAData = true;
 
             VaultFile vaultFile = getFilename() != null ? MyApplication.rxVault
                     .get(getFilename())
@@ -130,7 +131,7 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
         selectButton.setVisibility(GONE);
         clearButton.setVisibility(VISIBLE);
 
-        attachmentPreview.showPreview(getFilename());
+        attachmentPreview.showPreview(getFileId());
         attachmentPreview.setEnabled(true);
         attachmentPreview.setVisibility(VISIBLE);
         separator.setVisibility(VISIBLE);

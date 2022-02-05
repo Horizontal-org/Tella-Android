@@ -124,11 +124,13 @@ public class UwaziFormView extends LinearLayout {
 
     public String setBinaryData(@NonNull Object data) {
         for (UwaziQuestionWidget q : widgets) {
-            if (isWaitingForBinaryData(q)) {
+            if (q.waitingForAData) {
                 try {
                     return q.setBinaryData(data);
                 } catch (Exception e) {
                     Toast.makeText(getContext(), "Error attaching data", Toast.LENGTH_LONG).show();
+                } finally {
+                    q.waitingForAData = false;
                 }
             }
         }

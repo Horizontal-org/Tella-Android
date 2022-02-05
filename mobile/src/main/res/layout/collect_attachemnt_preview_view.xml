@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="90dp"
     android:layout_weight="1"
     android:orientation="horizontal"
     android:baselineAligned="false">
@@ -11,18 +12,26 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginBottom="5dp"
-        android:layout_weight="0.35"
+        android:layout_weight="0.25"
         android:padding="@dimen/gallery_strip_padding">
 
-        <ImageView
-            android:id="@+id/thumbView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:clickable="true"
-            android:focusable="true"
-            android:scaleType="centerCrop"
-            tools:ignore="ContentDescription" />
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            android:layout_margin="5dp"
+            android:elevation="10dp">
+
+            <ImageView
+                android:id="@+id/thumbView"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:focusable="true"
+                android:scaleType="centerCrop"
+                tools:ignore="ContentDescription" />
+        </androidx.cardview.widget.CardView>
 
         <View
             android:id="@+id/thumbGradient"
@@ -84,27 +93,26 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="0.65"
+        android:layout_weight="0.75"
         android:orientation="vertical">
 
         <TextView
+            android:layout_marginTop="16dp"
             android:id="@+id/fileName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginBottom="5dp"
             android:gravity="start|center_vertical"
-            android:textColor="@color/wa_gray" />
+            android:textStyle="bold"
+            android:textColor="@color/wa_white_80" />
 
         <TextView
             android:id="@+id/fileSize"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="4dp"
             android:layout_marginBottom="5dp"
             android:gravity="start|center_vertical"
-            android:textColor="@color/wa_gray" />
+            android:textColor="@color/wa_white_80" />
 
     </LinearLayout>
 

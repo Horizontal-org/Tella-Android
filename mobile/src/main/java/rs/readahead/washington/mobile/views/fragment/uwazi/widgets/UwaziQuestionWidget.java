@@ -53,6 +53,7 @@ public abstract class UwaziQuestionWidget extends RelativeLayout {
     private LinearLayout questionHeader;
     private TextView helpTextView;
     private TextView constraintValidationView;
+    public Boolean waitingForAData = false;
 
     public UwaziQuestionWidget(Context context, @NonNull UwaziEntryPrompt formEntryPrompt) {
         super(context);

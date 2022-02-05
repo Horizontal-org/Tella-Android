@@ -1,5 +1,7 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.entry
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,12 +11,15 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.hzontal.tella_vault.VaultFile
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.UwaziEntryFragmentBinding
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
+import rs.readahead.washington.mobile.util.C
+import rs.readahead.washington.mobile.views.activity.QuestionAttachmentActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.SEND_ENTITY
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
@@ -30,8 +35,8 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
     private var entityInstance: UwaziEntityInstance = UwaziEntityInstance()
     private val bundle by lazy { Bundle() }
     private var screenView: ViewGroup? = null
-    private var entryPrompts : ArrayList<UwaziEntryPrompt> = ArrayList()
-    private lateinit var uwaziFormView : UwaziFormView
+    private var entryPrompts: ArrayList<UwaziEntryPrompt> = ArrayList()
+    private lateinit var uwaziFormView: UwaziFormView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +52,14 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         initView()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
+        if (requestCode == C.MEDIA_FILE_ID && resultCode == Activity.RESULT_OK) {
+            val vaultFile =
+                data!!.getSerializableExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY) as VaultFile
+            putVaultFileInForm(vaultFile)
+        }
+    }
+
     override fun initView(view: View) {
         with(binding) {
             toolbar.backClickListener = { nav().popBackStack() }
@@ -59,6 +72,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
 
             screenView = binding.screenFormView
         }
+
     }
 
     private fun initView() {
@@ -97,10 +111,10 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
     }
 
     private fun sendEntity() {
-        var widgetMediaFiles : List<FormMediaFile> = emptyList()
+        var widgetMediaFiles: List<FormMediaFile> = emptyList()
         metadata = JsonObject()
-        for (answer in uwaziFormView.answers){
-            if(answer.value != null){
+        for (answer in uwaziFormView.answers) {
+            if (answer.value != null) {
                 metadata.addProperty(answer.key, answer.value.displayText)
             }
         }
@@ -114,23 +128,34 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
             .navigate(R.id.action_uwaziEntryScreen_to_uwaziSendScreen, bundle)
     }
 
-    private fun parseUwaziForm(){
+    private fun parseUwaziForm() {
         metadata = JsonObject()
-       // val entryDoc = UwaziEntryPrompt("123456789", "123456789", "media", "Primary document", true, "Attach primary document")
+        // val entryDoc = UwaziEntryPrompt("123456789", "123456789", "media", "Primary document", true, "Attach primary document")
         //entryPrompts.add(entryDoc)
 
 
-        for(property in template?.entityRow?.properties!!){
-            val entryPrompt = UwaziEntryPrompt(property._id, property.id, property.type, property.name, property.required, property.label)
+        for (property in template?.entityRow?.properties!!) {
+            val entryPrompt = UwaziEntryPrompt(
+                property._id,
+                property.id,
+                property.type,
+                property.name,
+                property.required,
+                property.label
+            )
             entryPrompts.add(entryPrompt);
         }
         entityInstance.metadata = metadata
 
-        val arr : Array<UwaziEntryPrompt?> = arrayOfNulls(entryPrompts.size)
+        val arr: Array<UwaziEntryPrompt?> = arrayOfNulls(entryPrompts.size)
         for (i in 0 until arr.size) {
             arr[i] = entryPrompts[i]
         }
-        uwaziFormView = UwaziFormView(requireContext(),arr)
+        uwaziFormView = UwaziFormView(requireContext(), arr)
         screenView?.addView(uwaziFormView)
+    }
+
+    private fun putVaultFileInForm(vaultFile: VaultFile?) {
+        val filename = vaultFile?.let { uwaziFormView.setBinaryData(it) }
     }
 }

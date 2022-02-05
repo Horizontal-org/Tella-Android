@@ -511,6 +511,7 @@
     <string name="Uwazi_Draft_Entities_Empty_Description">You have no draft entities.</string>
     <string name="Uwazi_Action_Save_Draft">Save draft</string>
     <string name="Uwazi_Subtitle_RemoveDraft">Are you sure you want to remove this draft?</string>
+    <string name="Uwazi_Form_MediaHeader">Attached file</string>
 
     <string-array name="Uwazi_Language_Array">
         <item>English</item>
