@@ -32,8 +32,11 @@ public class UwaziWidgetFactory {
                 break;
 
             case UwaziConstants.UWAZI_DATATYPE_MEDIA:
-            case UwaziConstants.UWAZI_DATATYPE_IMAGE:
                 questionWidget = new UwaziMediaWidget(context, fep);
+                break;
+
+            case UwaziConstants.UWAZI_DATATYPE_IMAGE:
+                questionWidget = new UwaziImageWidget(context, fep);
                 break;
 
             case UwaziConstants.UWAZI_DATATYPE_DATE:
