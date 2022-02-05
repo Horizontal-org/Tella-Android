@@ -1,18 +1,16 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.entry;
 
-import static rs.readahead.washington.mobile.data.uwazi.UwaziConstants.UWAZI_DATATYPE_TEXT;
-
 import rs.readahead.washington.mobile.data.entity.uwazi.DateOfIncident;
 
 public class UwaziEntryPrompt {
     private String _id;
-    private String formIndex;
-    private String type;
-    private String question;
+    private final String formIndex;
+    private final String type;
+    private final String question;
     private String answer;
-    private Boolean required;
-    private Boolean readonly = false;
-    private String helpText;
+    private final Boolean required;
+    private final Boolean readonly = false;
+    private final String helpText;
 
     public UwaziEntryPrompt(String formIndex, String type, String question, Boolean required, String helpText) {
         this.formIndex = formIndex;

@@ -128,10 +128,10 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
 
         for (property in template?.entityRow?.properties!!) {
             val entryPrompt = UwaziEntryPrompt(
-                property._id,
+                property.name,
                 property.id,
                 property.type,
-                property.name,
+                property.label,
                 property.required,
                 property.label
             )
