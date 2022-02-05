@@ -112,7 +112,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
 
     private fun sendEntity() {
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
-        val widgetMediaFiles: List<FormMediaFile> = emptyList()
+        val widgetMediaFiles =  mutableListOf<FormMediaFile>()
 
         for (answer in uwaziFormView.answers) {
             if (answer.value != null) {
@@ -124,7 +124,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         }
         for (answer in uwaziFormView.files) {
             if (answer != null) {
-                widgetMediaFiles.toMutableList().add(answer)
+                widgetMediaFiles.add(answer)
             }
         }
 
