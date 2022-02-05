@@ -612,7 +612,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
             }
 
             values.put(D.C_UWAZI_SERVER_ID, instance.getCollectTemplate().getServerId());
-            values.put(D.C_TEMPLATE_ENTITY, new GsonBuilder().create().toJson(instance.getCollectTemplate().getEntityRow()));
+            values.put(D.C_TEMPLATE_ENTITY, new GsonBuilder().create().toJson(instance.getCollectTemplate()));
             values.put(D.C_METADATA, new GsonBuilder().create().toJson(instance.getMetadata()));
             values.put(D.C_STATUS, instance.getStatus().ordinal());
             values.put(D.C_UPDATED, updated);

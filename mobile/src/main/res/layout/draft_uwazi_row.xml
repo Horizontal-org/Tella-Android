@@ -31,6 +31,7 @@
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:contentDescription="@null"
             android:gravity="center"
+            android:visibility="gone"
             android:src="@drawable/star_border_24dp"
             />
 
@@ -53,7 +54,7 @@
             style="@style/Tella_Main_White_Text.Meduim"
             android:layout_alignParentStart="true"
             android:layout_gravity="start"
-            android:layout_toStartOf="@id/icon"
+            android:layout_toStartOf="@id/popupMenu"
             android:ellipsize="end"
             android:gravity="start"
             android:lines="1"
@@ -71,7 +72,7 @@
             android:paddingTop="2dp"
             android:textAlignment="viewStart" />
 
-        <TextView
+       <!-- <TextView
             android:id="@+id/updated"
             style="@style/Tella_Main_White_Text.Small"
             android:layout_below="@id/organization"
@@ -81,7 +82,7 @@
             android:ellipsize="end"
             android:lines="1"
             android:paddingTop="2dp"
-            android:textAlignment="viewStart" />
+            android:textAlignment="viewStart" />-->
     </RelativeLayout>
 
     <!--<View
