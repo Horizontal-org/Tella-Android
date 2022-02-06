@@ -103,7 +103,10 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         with(viewModel) {
 
             progress.observe(viewLifecycleOwner, { status ->
-                if (status == UwaziEntityStatus.SUBMITTED) nav().popBackStack()
+                if (status == UwaziEntityStatus.SUBMITTED) {
+                    nav().popBackStack()
+                    progress.postValue(UwaziEntityStatus.UNKNOWN)
+                }
             })
 
             instance.observe(viewLifecycleOwner, {

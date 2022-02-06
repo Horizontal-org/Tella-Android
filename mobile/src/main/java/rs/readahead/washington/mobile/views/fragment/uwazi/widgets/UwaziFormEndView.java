@@ -22,7 +22,6 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance;
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus;
-import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.FileUtil;
 
 @SuppressLint("ViewConstructor")
@@ -54,7 +53,7 @@ public class UwaziFormEndView extends FrameLayout {
             return;
         }
 
-      //  titleView.setText(title);
+        //  titleView.setText(title);
 
         TextView formNameView = findViewById(R.id.formName);
 
@@ -62,7 +61,9 @@ public class UwaziFormEndView extends FrameLayout {
 
         int formElements = 1;
 
-        long formSize = instance.getTitle().getBytes(StandardCharsets.UTF_8).length;
+        long formSize = instance.getTitle().getBytes(StandardCharsets.UTF_8).length +
+                instance.getMetadata().toString().getBytes(StandardCharsets.UTF_8).length +
+                instance.getType().getBytes(StandardCharsets.UTF_8).length;
 
         partsListView = findViewById(R.id.formPartsList);
         partsListView.removeAllViews();
