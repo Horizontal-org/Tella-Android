@@ -30,6 +30,7 @@ const val COLLECT_TEMPLATE = "collect_template"
 const val UWAZI_TITLE = "title"
 
 class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
+
     private val viewModel: SharedUwaziSubmissionViewModel by lazy {
         ViewModelProvider(activity).get(SharedUwaziSubmissionViewModel::class.java)
     }
@@ -38,7 +39,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
     private var entityInstance: UwaziEntityInstance = UwaziEntityInstance()
     private val bundle by lazy { Bundle() }
     private var screenView: ViewGroup? = null
-    private var entryPrompts: ArrayList<UwaziEntryPrompt> = ArrayList()
+    private var entryPrompts =  mutableListOf<UwaziEntryPrompt>()
     private lateinit var uwaziFormView: UwaziFormView
 
     private val uwaziTitlePrompt = UwaziEntryPrompt(

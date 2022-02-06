@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.get
 import com.google.android.material.tabs.TabLayoutMediator
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentUwaziBinding
@@ -37,6 +38,16 @@ class UwaziFragment : BaseFragment() {
                 nav().navigate(R.id.action_uwaziScreen_to_uwaziDownloadScreen)
             }
         }
+
+        SharedLiveData.updateViewPagerPosition.observe(activity,{ position ->
+             when (position) {
+                TEMPLATES_LIST_PAGE_INDEX -> binding?.viewPager?.currentItem = TEMPLATES_LIST_PAGE_INDEX
+                DRAFT_LIST_PAGE_INDEX -> binding?.viewPager?.currentItem = DRAFT_LIST_PAGE_INDEX
+                OUTBOX_LIST_PAGE_INDEX -> binding?.viewPager?.currentItem = OUTBOX_LIST_PAGE_INDEX
+                SUBMITTED_LIST_PAGE_INDEX -> binding?.viewPager?.currentItem = SUBMITTED_LIST_PAGE_INDEX
+                else -> null
+            }
+        })
 
     }
 

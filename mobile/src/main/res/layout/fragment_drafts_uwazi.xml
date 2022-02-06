@@ -26,6 +26,7 @@
         app:textMessage="@string/Uwazi_Draft_Entities_Empty_Description"
         />
 
+
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progress_circular"
         android:layout_width="40dp"

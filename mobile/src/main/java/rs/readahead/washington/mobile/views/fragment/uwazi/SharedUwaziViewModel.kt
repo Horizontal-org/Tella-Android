@@ -33,7 +33,6 @@ class SharedUwaziViewModel : ViewModel() {
     val showInstanceSheetMore: LiveData<UwaziEntityInstance> get() = _showInstanceSheetMore
     private val _draftInstances = MutableLiveData<List<ViewEntityInstanceItem>>()
     val draftInstances: LiveData<List<ViewEntityInstanceItem>> get() = _draftInstances
-
     private val _submittedInstances = MutableLiveData<List<ViewEntityInstanceItem>>()
     val submittedInstances: LiveData<List<ViewEntityInstanceItem>> get() = _submittedInstances
 
@@ -99,7 +98,6 @@ class SharedUwaziViewModel : ViewModel() {
         )
     }
 
-
     fun listSubmitted() {
         disposables.add(keyDataSource.uwaziDataSource
             .subscribeOn(Schedulers.io())
@@ -136,7 +134,6 @@ class SharedUwaziViewModel : ViewModel() {
     private fun onInstanceMoreClicked(instance: UwaziEntityInstance) {
         _showInstanceSheetMore.postValue(instance)
     }
-
 
     private fun toggleFavorite(template: CollectTemplate) {
         disposables.add(keyDataSource.uwaziDataSource

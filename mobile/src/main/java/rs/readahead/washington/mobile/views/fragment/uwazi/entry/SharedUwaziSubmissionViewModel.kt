@@ -30,20 +30,17 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.send.MULTIPART_FORM_D
 class SharedUwaziSubmissionViewModel : ViewModel(){
     private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private val disposables = CompositeDisposable()
-    private val _instance = MutableLiveData<UwaziEntityInstance>()
+    private val _instance = SingleLiveEvent<UwaziEntityInstance>()
     val instance: LiveData<UwaziEntityInstance> get() = _instance
     private val _template = MutableLiveData<CollectTemplate>()
     val template: LiveData<CollectTemplate> get() = _template
     private val repository = UwaziRepository()
     val progress = MutableLiveData<UwaziEntityStatus>()
-    private val _entitySubmitted = MutableLiveData<Boolean>()
-    val entitySubmitted: LiveData<Boolean> get() = _entitySubmitted
     private val _server = MutableLiveData<UWaziUploadServer>()
     val server: LiveData<UWaziUploadServer> get() = _server
     var error = MutableLiveData<Throwable>()
     private val _attachments = MutableLiveData<List<FormMediaFile>>()
     val attachments: LiveData<List<FormMediaFile>> get() = _attachments
-
     //TODO THIS IS UGLY WILL REPLACE IT FLOWABLE RX LATER
     private val _progressCallBack = MutableLiveData<Pair<String, Float>>()
     val progressCallBack: LiveData<Pair<String, Float>> get() = _progressCallBack
@@ -68,8 +65,6 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
             })
     }
 
-
-
     fun getUwaziServerAndSaveEntity(serverID: Long, entity: UwaziEntityInstance) {
         keyDataSource.uwaziDataSource
             .subscribeOn(Schedulers.io())
@@ -93,7 +88,6 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
                 )
             }
     }
-
 
     fun submitEntity(server: UWaziUploadServer, entity: UwaziEntityInstance) {
         disposables.add(
@@ -170,7 +164,6 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
         }
         return listAttachments.toList()
     }
-
 
     override fun onCleared() {
         disposables.dispose()

@@ -14,11 +14,6 @@ class OutboxUwaziFragment : UwaziListFragment() {
         return Type.OUTBOX
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -27,7 +22,6 @@ class OutboxUwaziFragment : UwaziListFragment() {
         // Inflate the layout for this fragment
         return binding?.root
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
 import org.hzontal.shared_ui.utils.DialogUtils
@@ -15,7 +14,11 @@ import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
+import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.SharedUwaziSubmissionViewModel
+import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_PAGE_INDEX
+import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.OUTBOX_LIST_PAGE_INDEX
+import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziFormEndView
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
 
@@ -49,11 +52,13 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
             toolbar.backClickListener = { nav().popBackStack() }
 
             nextBtn.setOnClickListener {
-                if (entityInstance != null) submitEntity()
+                entityInstance?.let {
+                    submitEntity()
+                }
             }
 
             cancelBtn.setOnClickListener {
-
+                SharedLiveData.updateViewPagerPosition.postValue(DRAFT_LIST_PAGE_INDEX)
             }
         }
     }
@@ -70,18 +75,23 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
 
             progress.observe(viewLifecycleOwner,{ status ->
              when(status){
+
                  UwaziEntityStatus.SUBMITTED -> {
                      nav().popBackStack()
+                     SharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
                  }
+
                  UwaziEntityStatus.SUBMISSION_ERROR -> {
                      binding.cancelBtn.isVisible = true
                      DialogUtils.showBottomMessage(activity,getString(R.string.collect_toast_fail_sending_form),true)
+                     SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
                  }
+
                  UwaziEntityStatus.SUBMISSION_PENDING -> {
                      binding.cancelBtn.isVisible = true
+                     SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
                  }
              }
-
             })
         }
     }

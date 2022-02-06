@@ -41,11 +41,13 @@ class DraftsUwaziFragment : UwaziListFragment() {
             draftInstances.observe(viewLifecycleOwner, {
                 if (it.isEmpty()) {
                     binding?.textViewEmpty?.isVisible = true
+                    binding?.draftsRecyclerView?.isVisible = false
+                    uwaziDraftsAdapter.setEntityDrafts(emptyList())
                 } else {
                     binding?.textViewEmpty?.isVisible = false
+                    binding?.draftsRecyclerView?.isVisible = true
                     uwaziDraftsAdapter.setEntityDrafts(it)
                 }
-
             })
 
             progress.observe(viewLifecycleOwner, {
