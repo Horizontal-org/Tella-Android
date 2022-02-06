@@ -656,7 +656,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
                 values.put(D.C_VAULT_FILE_ID, mediaFile.id);
                 values.put(D.C_STATUS, mediaFile.status.ordinal());
 
-                database.insert(D.T_COLLECT_FORM_INSTANCE_VAULT_FILE, null, values);
+                database.insert(D.T_UWAZI_ENTITY_INSTANCE_VAULT_FILE, null, values);
             }
 
             database.setTransactionSuccessful();
