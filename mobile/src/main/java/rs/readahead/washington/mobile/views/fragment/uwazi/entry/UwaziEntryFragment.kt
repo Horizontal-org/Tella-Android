@@ -6,13 +6,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import com.google.gson.Gson
 import com.hzontal.tella_vault.VaultFile
-import org.json.JSONObject
+import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.uwazi.UwaziConstants
 import rs.readahead.washington.mobile.databinding.UwaziEntryFragmentBinding
@@ -36,7 +34,6 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         ViewModelProvider(activity).get(SharedUwaziSubmissionViewModel::class.java)
     }
     private lateinit var binding: UwaziEntryFragmentBinding
-    private var metadata = JSONObject()
     private var template: CollectTemplate? = null
     private var entityInstance: UwaziEntityInstance = UwaziEntityInstance()
     private val bundle by lazy { Bundle() }
@@ -111,7 +108,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
 
             instance.observe(viewLifecycleOwner, {
                 entityInstance = it
-                setUpdated(it.updated)
+                showSavedDialog()
             })
         }
     }
@@ -120,9 +117,6 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         return nav().popBackStack()
     }
 
-    private fun setUpdated(updatedTime: Long) {
-        // binding.updated.text = updatedTime.toString()
-    }
 
     private fun sendEntity() {
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
@@ -184,5 +178,13 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
 
     private fun putVaultFileInForm(vaultFile: VaultFile?) {
         val filename = vaultFile?.let { uwaziFormView.setBinaryData(it) }
+    }
+
+    private fun showSavedDialog() {
+        DialogUtils.showBottomMessage(
+            activity,
+            getString(R.string.Uwazi_EntryInstance_SavedInfo),
+            false
+        )
     }
 }

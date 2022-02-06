@@ -1,7 +1,5 @@
 package rs.readahead.washington.mobile.domain.entity.uwazi
 
-import com.google.gson.JsonObject
-import org.json.JSONObject
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 

@@ -512,6 +512,7 @@
     <string name="Uwazi_Action_Save_Draft">Save draft</string>
     <string name="Uwazi_Subtitle_RemoveDraft">Are you sure you want to remove this draft?</string>
     <string name="Uwazi_Form_MediaHeader">Attached file</string>
+    <string name="Uwazi_EntryInstance_SavedInfo">Entity is saved as draft.</string>
 
     <string-array name="Uwazi_Language_Array">
         <item>English</item>
