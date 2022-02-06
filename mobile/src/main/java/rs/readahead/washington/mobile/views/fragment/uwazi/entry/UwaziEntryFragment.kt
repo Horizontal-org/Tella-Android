@@ -146,7 +146,6 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         }
         entityInstance.metadata = hashmap
         entityInstance.widgetMediaFiles = widgetMediaFiles
-        entityInstance.status = UwaziEntityStatus.FINALIZED
         entityInstance.collectTemplate = template
         entityInstance.template = template?.entityRow?.name.toString()
     }
