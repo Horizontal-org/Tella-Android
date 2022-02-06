@@ -77,6 +77,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
             toolbar.backClickListener = { nav().popBackStack() }
             toolbar.onRightClickListener = {
                 entityInstance.status = UwaziEntityStatus.DRAFT
+                getAnswersFromForm()
                 entityInstance.let { viewModel.saveEntityInstance(it) }
             }
 
@@ -90,7 +91,6 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         arguments?.let {
             template = Gson().fromJson(it.getString(COLLECT_TEMPLATE), CollectTemplate::class.java)
             entityInstance.collectTemplate = template
-            entityInstance.title = template?.entityRow?.name.toString()
             entityInstance.template = template?.entityRow?.name.toString()
             parseUwaziForm()
         }
@@ -98,7 +98,6 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
 
     private fun initObservers() {
         with(viewModel) {
-
             progress.observe(viewLifecycleOwner, { status ->
                 if (status == UwaziEntityStatus.SUBMITTED) {
                     nav().popBackStack()
@@ -120,16 +119,22 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
 
     private fun sendEntity() {
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
+        getAnswersFromForm()
+        val gsonTemplate = Gson().toJson(entityInstance)
+        bundle.putString(SEND_ENTITY, gsonTemplate)
+        NavHostFragment.findNavController(this@UwaziEntryFragment)
+            .navigate(R.id.action_uwaziEntryScreen_to_uwaziSendScreen, bundle)
+    }
 
+    private fun getAnswersFromForm(){
         val hashmap = mutableMapOf<String, List<Any>>()
         val widgetMediaFiles = mutableListOf<FormMediaFile>()
         for (answer in uwaziFormView.answers) {
             if (answer.value != null) {
-                if (answer.key == "title") {
+                if (answer.key == UWAZI_TITLE) {
                     entityInstance.title = answer.value.displayText
                 } else {
                     hashmap[answer.key] = arrayListOf(UwaziValue(answer.value.displayText))
-
                 }
             }
         }
@@ -138,17 +143,30 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
                 widgetMediaFiles.add(answer)
             }
         }
-
         entityInstance.metadata = hashmap
         entityInstance.widgetMediaFiles = widgetMediaFiles
         entityInstance.status = UwaziEntityStatus.FINALIZED
         entityInstance.collectTemplate = template
         entityInstance.template = template?.entityRow?.name.toString()
+    }
 
-        val gsonTemplate = Gson().toJson(entityInstance)
-        bundle.putString(SEND_ENTITY, gsonTemplate)
-        NavHostFragment.findNavController(this@UwaziEntryFragment)
-            .navigate(R.id.action_uwaziEntryScreen_to_uwaziSendScreen, bundle)
+    private fun putAnswersToForm(instance: UwaziEntityInstance, formView: UwaziFormView){
+        val files = mutableMapOf<String, FormMediaFile>()
+        for (file in instance.widgetMediaFiles){
+            files.put(file.name, file)
+        }
+
+        formView.setBinaryData(UWAZI_TITLE, instance.title)
+
+        for (answer in instance.metadata) {
+            val uwaziValue: UwaziValue = answer.value[0] as UwaziValue
+            val stringVal = uwaziValue.value
+            if (files.containsKey(stringVal)) {
+                formView.setBinaryData(answer.key, files.get(stringVal) as VaultFile )
+            } else {
+                formView.setBinaryData(answer.key, stringVal)
+            }
+        }
     }
 
     private fun parseUwaziForm() {
@@ -174,6 +192,8 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         }
         uwaziFormView = UwaziFormView(requireContext(), arr)
         screenView?.addView(uwaziFormView)
+
+        putAnswersToForm(entityInstance,uwaziFormView)
     }
 
     private fun putVaultFileInForm(vaultFile: VaultFile?) {

@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TableLayout;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import org.javarosa.core.model.data.IAnswerData;
@@ -121,12 +122,17 @@ public class UwaziNumericWidget extends UwaziQuestionWidget {
         answer.cancelLongPress();
     }
 
+    public String setBinaryData(@NonNull Object data) {
+        answer.setText(data.toString());
+        return data.toString();
+    }
+
     private Long getLongAnswerValue() {
         if (formEntryPrompt.getAnswerText() != null) {
             String numeric = formEntryPrompt.getAnswerText();
             return Long.parseLong(numeric);
         } else {
-            return 0L;
+            return null;
         }
         /*IAnswerData dataHolder = formEntryPrompt.getAnswerValue();
         Long d = null;

@@ -157,7 +157,7 @@ public class UwaziFormView extends LinearLayout {
 
     public void setBinaryData(String formIndex, @NonNull Object data) {
         for (UwaziQuestionWidget q : widgets) {
-            if (q.getPrompt().getIndex().equals(formIndex)) {
+            if (q.getPrompt().getID().equals(formIndex)) {
                 try {
                     q.setBinaryData(data);
                 } catch (Exception e) {

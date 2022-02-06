@@ -10,6 +10,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TableLayout;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import org.javarosa.core.model.data.IAnswerData;
@@ -116,6 +117,11 @@ public class UwaziStringWidget extends UwaziQuestionWidget {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         return !event.isAltPressed() && super.onKeyDown(keyCode, event);
+    }
+
+    public String setBinaryData(@NonNull Object data) {
+        answer.setText(data.toString());
+        return data.toString();
     }
 }
 
