@@ -76,4 +76,12 @@ public class UwaziEntryPrompt {
             return new DateOfIncident(Integer.parseInt(answer));
         }
     }
+
+    public String getID() {
+        return _id;
+    }
+
+    public void setID(String _id) {
+        this._id = _id;
+    }
 }

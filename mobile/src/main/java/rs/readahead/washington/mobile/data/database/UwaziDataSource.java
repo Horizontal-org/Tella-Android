@@ -15,8 +15,11 @@ import com.google.gson.reflect.TypeToken;
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteQueryBuilder;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Completable;
@@ -718,7 +721,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
                 UwaziEntityInstance instance = cursorToUwaziEntityInstance(cursor);
                 CollectTemplate collectTemplate = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_ENTITY)), CollectTemplate.class);
                 instance.setCollectTemplate(collectTemplate);
-                JsonObject metadata = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_METADATA)), JsonObject.class);
+                Map<String,ArrayList<Object>> metadata = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_METADATA)), new TypeToken<Map<String,ArrayList<Object>>>() {}.getType());
                 instance.setMetadata(metadata);
 
                 instances.add(instance);

@@ -12,7 +12,7 @@ class ProgressListener(private val partName: String,private val progressCallBack
         val now = Util.currentTimestamp()
         if (progressCallBack != null && now - time > REFRESH_TIME_MS) {
             time = now
-            progressCallBack.postValue(Pair(partName,(current/total).toFloat()))
+            progressCallBack.postValue(Pair(partName,current.toFloat()/total.toFloat()))
         }
     }
 

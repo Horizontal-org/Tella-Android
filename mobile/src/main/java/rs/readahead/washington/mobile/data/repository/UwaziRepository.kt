@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.data.repository
 
-import com.hzontal.tella_vault.VaultFile
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -116,7 +115,7 @@ class UwaziRepository : IUwaziUserRepository {
             attachments = attachments,
             title = title,
             template = template,
-            metadata = null,
+            metadata = metadata,
             type = type,
             url = StringUtils.append(
                 '/',
@@ -131,6 +130,24 @@ class UwaziRepository : IUwaziUserRepository {
 
     }
 
+    override fun submitEntity(
+        server: UWaziUploadServer,
+        entity: RequestBody,
+        attachments: List<MultipartBody.Part?>
+    ): Single<UwaziEntityRow> {
+        return uwaziApi.submitEntity(
+            attachments = attachments,
+            entity = entity,
+            url = StringUtils.append(
+                '/',
+                server.url,
+                ParamsNetwork.URL_ENTITIES
+            ),
+            cookie = server.cookies,
+        )
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
 
 
 }

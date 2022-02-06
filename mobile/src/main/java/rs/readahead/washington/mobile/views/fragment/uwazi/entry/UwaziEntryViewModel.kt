@@ -26,30 +26,6 @@ class UwaziEntryViewModel : ViewModel(){
     private val _template = MutableLiveData<CollectTemplate>()
     val template: LiveData<CollectTemplate> get() = _template
 
-    fun getBlankTemplate(templateID : String) {
-        keyDataSource.uwaziDataSource
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .flatMap { dataSource: UwaziDataSource ->
-                dataSource.getBlankCollectTemplateById(templateID).toObservable()
-            }
-            ?.subscribe(
-                { template: CollectTemplate? ->
-                    if (template != null) {
-                        _template.postValue(template)
-                    }
-                },
-                { throwable: Throwable? ->
-                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                    error.postValue(throwable)
-                }
-            )?.let {
-                disposables.add(
-                    it
-                )
-            }
-    }
-
     fun saveEntityInstance(instance : UwaziEntityInstance) {
         disposables.add(keyDataSource.uwaziDataSource
             .subscribeOn(Schedulers.io())
@@ -70,9 +46,6 @@ class UwaziEntryViewModel : ViewModel(){
             })
     }
 
-    fun prepareUwaziEntityRequest(collectTemplate: CollectTemplate){
-
-    }
 
     override fun onCleared() {
         disposables.dispose()

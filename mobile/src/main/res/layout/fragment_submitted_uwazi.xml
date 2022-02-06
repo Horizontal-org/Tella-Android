@@ -7,6 +7,13 @@
     android:background="@color/wa_purple"
     tools:context=".views.fragment.uwazi.SubmittedUwaziFragment">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/submittedRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="60dp"
+        />
+
     <org.hzontal.shared_ui.textviews.CenterMessageTextView
         android:id="@+id/textView_empty_outbox"
         android:layout_width="match_parent"
@@ -17,6 +24,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:topImg="@drawable/ic_uwazi"
         app:textMessage="@string/Uwazi_Submitted_Entities_Empty_Description"
+        />
+
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress_circular"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:indeterminate="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        app:trackColor="@color/wa_white"
+        app:indicatorColor="@color/tigers_eye"
+        app:trackThickness="4dp"
+        android:visibility="gone"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

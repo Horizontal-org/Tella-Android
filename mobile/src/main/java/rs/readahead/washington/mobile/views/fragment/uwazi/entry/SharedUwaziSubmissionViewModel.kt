@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.fragment.uwazi.send
+package rs.readahead.washington.mobile.views.fragment.uwazi.entry
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,17 +20,20 @@ import rs.readahead.washington.mobile.data.repository.ProgressListener
 import rs.readahead.washington.mobile.data.repository.UwaziRepository
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
+import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
 import rs.readahead.washington.mobile.presentation.uwazi.SendEntityRequest
+import rs.readahead.washington.mobile.views.fragment.uwazi.send.MULTIPART_FORM_DATA
 
-const val MULTIPART_FORM_DATA = "text/plain"
-
-class UwaziSendViewModel : ViewModel() {
-
-    private val repository = UwaziRepository()
+class SharedUwaziSubmissionViewModel : ViewModel(){
     private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private val disposables = CompositeDisposable()
+    private val _instance = MutableLiveData<UwaziEntityInstance>()
+    val instance: LiveData<UwaziEntityInstance> get() = _instance
+    private val _template = MutableLiveData<CollectTemplate>()
+    val template: LiveData<CollectTemplate> get() = _template
+    private val repository = UwaziRepository()
     private val _progress = MutableLiveData<UwaziEntityStatus>()
     val progress: LiveData<UwaziEntityStatus> get() = _progress
     private val _entitySubmitted = MutableLiveData<Boolean>()
@@ -44,6 +47,28 @@ class UwaziSendViewModel : ViewModel() {
     //TODO THIS IS UGLY WILL REPLACE IT FLOWABLE RX LATER
     private val _progressCallBack = MutableLiveData<Pair<String, Float>>()
     val progressCallBack: LiveData<Pair<String, Float>> get() = _progressCallBack
+
+    fun saveEntityInstance(instance : UwaziEntityInstance) {
+        disposables.add(keyDataSource.uwaziDataSource
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { _progress.postValue(UwaziEntityStatus.DRAFT) }
+            .flatMap { dataSource: UwaziDataSource -> dataSource.saveEntityInstance(instance).toObservable() }
+            .doFinally { _progress.postValue(UwaziEntityStatus.DRAFT)   }
+            .subscribe ({ savedInstance ->
+                _instance.postValue(savedInstance)
+            }
+
+            ) { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(
+                    throwable
+                        ?: throw NullPointerException("Expression 'throwable' must not be null")
+                )
+                error.postValue(throwable)
+            })
+    }
+
+
 
     fun getUwaziServerAndSaveEntity(serverID: Long, entity: UwaziEntityInstance) {
         keyDataSource.uwaziDataSource
@@ -82,6 +107,7 @@ class UwaziSendViewModel : ViewModel() {
                 .doOnSubscribe { _progress.postValue(UwaziEntityStatus.FINALIZED) }
                 .doFinally { _progress.postValue(UwaziEntityStatus.SUBMISSION_PENDING) }
                 .flatMap {
+                    entity.status = UwaziEntityStatus.SUBMITTED
                     keyDataSource.uwaziDataSource.blockingFirst().saveEntityInstance(entity)
                 }
                 .subscribe({
@@ -145,14 +171,9 @@ class UwaziSendViewModel : ViewModel() {
         return listAttachments.toList()
     }
 
+
     override fun onCleared() {
         disposables.dispose()
         super.onCleared()
     }
-
-    fun dispose() {
-        disposables.dispose()
-    }
-
-
 }

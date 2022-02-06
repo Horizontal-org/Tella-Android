@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.data.uwazi.UwaziConstants;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziFileBinaryWidget;
@@ -77,20 +78,22 @@ public class UwaziFormView extends LinearLayout {
                 addView(separator, widgetLayout);
             }
 
-            UwaziQuestionWidget qw = UwaziWidgetFactory.createWidgetFromPrompt(p, getContext(), readOnlyOverride);
-            qw.setId(VIEW_ID + id++);
-            widgets.add(qw);
-            addView(qw, widgetLayout);
-           /* if (p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_TEXT) ||
+                   if (p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_TEXT) ||
                     p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_NUMERIC) ||
                     p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_MEDIA) ||
-                    p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_IMAGE) ||
-                    p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_DATE) ||
-                 //   p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_GEOLOCATION))
+                    p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_IMAGE)
+                           //||
+                  //  p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_DATE) ||
+                   // p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_GEOLOCATION)
+                   )
+                   {
+                       UwaziQuestionWidget qw = UwaziWidgetFactory.createWidgetFromPrompt(p, getContext(), readOnlyOverride);
+                       qw.setId(VIEW_ID + id++);
+                       widgets.add(qw);
+                       addView(qw, widgetLayout);
+                   }
 
-           // ) {*/
 
-            //}
         }
     }
 
@@ -120,7 +123,7 @@ public class UwaziFormView extends LinearLayout {
 
         for (UwaziQuestionWidget q : widgets) {
             UwaziEntryPrompt p = q.getPrompt();
-            answers.put(p.getIndex(), q.getAnswer());
+            answers.put(p.getID(), q.getAnswer());
         }
 
         return answers;

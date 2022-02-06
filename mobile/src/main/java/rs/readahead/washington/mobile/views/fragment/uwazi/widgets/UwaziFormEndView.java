@@ -14,6 +14,7 @@ import com.hzontal.utils.MediaFile;
 
 import org.hzontal.shared_ui.submission.SubmittingItem;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 import rs.readahead.washington.mobile.R;
@@ -60,8 +61,8 @@ public class UwaziFormEndView extends FrameLayout {
         formNameView.setText(Objects.requireNonNull(instance.getTitle()));
 
         int formElements = 1;
-       // FormUtils.getFormPayloadSize(instance);
-        long formSize = 0;
+
+        long formSize = instance.getTitle().getBytes(StandardCharsets.UTF_8).length;
 
         partsListView = findViewById(R.id.formPartsList);
         partsListView.removeAllViews();
@@ -169,7 +170,7 @@ public class UwaziFormEndView extends FrameLayout {
     }
 
     private void setPartsCleared(UwaziEntityInstance instance) {
-        SubmittingItem item = partsListView.findViewWithTag(C.OPEN_ROSA_XML_PART_NAME);
+        SubmittingItem item = partsListView.findViewWithTag("UWAZI_RESPONSE");
 
         if (instance.getStatus() == UwaziEntityStatus.SUBMITTED ||
                 instance.getStatus() == UwaziEntityStatus.SUBMISSION_PARTIAL_PARTS) {

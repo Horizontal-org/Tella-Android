@@ -5,7 +5,7 @@ import rs.readahead.washington.mobile.presentation.uwazi.SendEntityRequest
 
 object  MockUwaziData {
 
-    fun getEntityVictimRowMock() : SendEntityRequest {
+ /*   fun getEntityVictimRowMock() : SendEntityRequest {
         return SendEntityRequest(
             attachments = null,
             metadata = getVictimEntityMetaData(),
@@ -31,5 +31,5 @@ object  MockUwaziData {
             video = listOf(),
             visiting_dates = listOf()
         )
-    }
+    }*/
 }

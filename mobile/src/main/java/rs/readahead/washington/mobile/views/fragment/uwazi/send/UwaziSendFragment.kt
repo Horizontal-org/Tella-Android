@@ -6,25 +6,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
+import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.UwaziSendFragmentBinding
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
-import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
+import rs.readahead.washington.mobile.views.fragment.uwazi.entry.SharedUwaziSubmissionViewModel
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziFormEndView
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
 
 const val SEND_ENTITY = "send_entity"
 
 class UwaziSendFragment : BaseFragment(), OnNavBckListener {
-    private val viewModel: UwaziSendViewModel by viewModels()
+    private val viewModel: SharedUwaziSubmissionViewModel by lazy {
+        ViewModelProvider(activity).get(SharedUwaziSubmissionViewModel::class.java)
+    }
     private lateinit var binding: UwaziSendFragmentBinding
     private var entityInstance: UwaziEntityInstance? = null
     private var uwaziServer: UWaziUploadServer? = null
-    private var attachmentsList : List<FormMediaFile>? = null
     private lateinit var endView: UwaziFormEndView
 
     override fun onCreateView(
@@ -61,41 +64,32 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
                 uwaziServer = it
             })
 
-            progress.observe(viewLifecycleOwner, { isProgressing ->
-                if (isProgressing){
-                    entityInstance?.let { showFormSubmitLoading(instance = it) }
-                }else{
-                    endView.hideUploadProgress("UWAZI_RESPONSE")
-                }
-            })
-
-            attachments.observe(viewLifecycleOwner,{
-                attachmentsList = it
-                entityInstance?.widgetMediaFiles = it
-                entityInstance?.title = MockUwaziData.getEntityVictimRowMock().title
-                entityInstance?.template = MockUwaziData.getEntityVictimRowMock().template
-                uwaziServer = UWaziUploadServer().apply {
-                    id = 0
-                    name = "Tella Uwazi"
-                    url = "https://horizontal.uwazi.io/api/"
-                    username = "ahlem"
-                    password = "episode-siamese-coma"
-                    cookies = "connect.sid=s%3ABI_vPZYq9khYeNrPojdgwpsDbwFdCWb9.Oe15PBlcWVNqDkYEdDYPOl3OM7ZuC1Jx4Z9N7NqiYeY; Path=/; HttpOnly"
-                }
-                showFormEndView(false)
-            })
-
             progressCallBack.observe(viewLifecycleOwner,{
                 onShowProgress(it.first,it.second)
+            })
+
+            progress.observe(viewLifecycleOwner,{ status ->
+             when(status){
+                 UwaziEntityStatus.SUBMITTED -> {
+                     nav().popBackStack()
+                 }
+                 UwaziEntityStatus.SUBMISSION_ERROR -> {
+                     binding.cancelBtn.isVisible = true
+                     DialogUtils.showBottomMessage(activity,getString(R.string.collect_toast_fail_sending_form),true)
+                 }
+                 UwaziEntityStatus.SUBMISSION_PENDING -> {
+                     binding.cancelBtn.isVisible = true
+                 }
+             }
+
             })
         }
     }
 
     private fun initView() {
         arguments?.let {
-            entityInstance =
-                Gson().fromJson(it.getString(SEND_ENTITY), UwaziEntityInstance::class.java)
-            entityInstance?.collectTemplate?.let { it1 -> viewModel.getUwaziServer(it1.serverId) }
+            entityInstance = Gson().fromJson(it.getString(SEND_ENTITY), UwaziEntityInstance::class.java)
+            showFormEndView(false)
         }
     }
 
@@ -104,22 +98,23 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
     }
 
     private fun submitEntity() {
-        entityInstance?.let {
-            uwaziServer?.let { it1 ->
-                viewModel.submitEntity(
-                    server = it1,
-                    sendEntityRequest = MockUwaziData.getEntityVictimRowMock(),
-                    attachments = attachmentsList)
+        entityInstance?.let { entity ->
+            entity.collectTemplate?.serverId?.let { serverID ->
+                viewModel.getUwaziServerAndSaveEntity(
+                    serverID,
+                    entity
+                )
             }
         }
     }
 
     private fun onShowProgress(partName : String,total : Float){
+        endView.showUploadProgress(partName)
         endView.setUploadProgress(partName,total)
     }
 
     private fun showFormSubmitLoading(instance : UwaziEntityInstance) {
-        endView.clearPartsProgress(instance);
+        endView.clearPartsProgress(instance)
     }
 
     private fun showFormEndView(offline: Boolean) {

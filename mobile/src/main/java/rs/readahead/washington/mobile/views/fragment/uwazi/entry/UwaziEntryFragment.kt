@@ -8,10 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import com.google.gson.Gson
-import com.google.gson.JsonObject
 import com.hzontal.tella_vault.VaultFile
+import org.json.JSONObject
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.uwazi.UwaziConstants
 import rs.readahead.washington.mobile.databinding.UwaziEntryFragmentBinding
@@ -31,9 +32,11 @@ const val COLLECT_TEMPLATE = "collect_template"
 const val UWAZI_TITLE = "title"
 
 class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
-    private val viewModel: UwaziEntryViewModel by viewModels()
+    private val viewModel: SharedUwaziSubmissionViewModel by lazy {
+        ViewModelProvider(activity).get(SharedUwaziSubmissionViewModel::class.java)
+    }
     private lateinit var binding: UwaziEntryFragmentBinding
-    private var metadata = JsonObject()
+    private var metadata = JSONObject()
     private var template: CollectTemplate? = null
     private var entityInstance: UwaziEntityInstance = UwaziEntityInstance()
     private val bundle by lazy { Bundle() }
@@ -41,7 +44,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
     private var entryPrompts: ArrayList<UwaziEntryPrompt> = ArrayList()
     private lateinit var uwaziFormView: UwaziFormView
 
-    val UwaziTitlePrompt = UwaziEntryPrompt(
+    private val uwaziTitlePrompt = UwaziEntryPrompt(
         UWAZI_TITLE,
         "10242048",
         UwaziConstants.UWAZI_DATATYPE_TEXT,
@@ -98,12 +101,9 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
 
     private fun initObservers() {
         with(viewModel) {
-            template.observe(viewLifecycleOwner, {
-                it
-            })
 
-            progress.observe(viewLifecycleOwner, {
-                binding.progressCircular.isVisible = it
+            progress.observe(viewLifecycleOwner, { status ->
+                if (status == UwaziEntityStatus.SUBMITTED) nav().popBackStack()
             })
 
             instance.observe(viewLifecycleOwner, {
@@ -123,14 +123,17 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
 
     private fun sendEntity() {
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
-        val widgetMediaFiles =  mutableListOf<FormMediaFile>()
 
+        val hashmap = mutableMapOf<String, List<Any>>()
+        val widgetMediaFiles = mutableListOf<FormMediaFile>()
         for (answer in uwaziFormView.answers) {
             if (answer.value != null) {
-                metadata.addProperty(
-                    answer.key,
-                    Gson().toJson(listOf(UwaziValue(answer.value.displayText)))
-                )
+                if (answer.key == "title") {
+                    entityInstance.title = answer.value.displayText
+                } else {
+                    hashmap[answer.key] = arrayListOf(UwaziValue(answer.value.displayText))
+
+                }
             }
         }
         for (answer in uwaziFormView.files) {
@@ -139,10 +142,11 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
             }
         }
 
-        entityInstance.metadata = metadata
+        entityInstance.metadata = hashmap
         entityInstance.widgetMediaFiles = widgetMediaFiles
         entityInstance.status = UwaziEntityStatus.FINALIZED
         entityInstance.collectTemplate = template
+        entityInstance.template = template?.entityRow?.name.toString()
 
         val gsonTemplate = Gson().toJson(entityInstance)
         bundle.putString(SEND_ENTITY, gsonTemplate)
@@ -152,10 +156,9 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
 
     private fun parseUwaziForm() {
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
+        entryPrompts.clear()
 
-        metadata = JsonObject()
-
-        entryPrompts.add(UwaziTitlePrompt)
+        entryPrompts.add(uwaziTitlePrompt)
         for (property in template?.entityRow?.properties!!) {
             val entryPrompt = UwaziEntryPrompt(
                 property.name,
@@ -167,7 +170,6 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
             )
             entryPrompts.add(entryPrompt);
         }
-        entityInstance.metadata = metadata
 
         val arr: Array<UwaziEntryPrompt?> = arrayOfNulls(entryPrompts.size)
         arr.indices.forEach { i ->

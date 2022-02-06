@@ -34,6 +34,9 @@ class SharedUwaziViewModel : ViewModel() {
     private val _draftInstances = MutableLiveData<List<ViewEntityInstanceItem>>()
     val draftInstances: LiveData<List<ViewEntityInstanceItem>> get() = _draftInstances
 
+    private val _submittedInstances = MutableLiveData<List<ViewEntityInstanceItem>>()
+    val submittedInstances: LiveData<List<ViewEntityInstanceItem>> get() = _submittedInstances
+
     init {
         listTemplates()
     }
@@ -87,6 +90,36 @@ class SharedUwaziViewModel : ViewModel() {
                         }))
                     }
                     _draftInstances.postValue(resultList)
+                }
+            ) { throwable: Throwable? ->
+                error.postValue(
+                    throwable
+                )
+            }
+        )
+    }
+
+
+    fun listSubmitted() {
+        disposables.add(keyDataSource.uwaziDataSource
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { _progress.postValue(true) }
+            .flatMap { dataSource: UwaziDataSource ->
+                dataSource.listSubmittedInstances().toObservable()
+            }
+            .doFinally { _progress.postValue(false) }
+            .subscribe(
+                { drafts: List<UwaziEntityInstance> ->
+                    val resultList = mutableListOf<ViewEntityInstanceItem>()
+                    drafts.map {
+                        resultList.add(it.toViewEntityInstanceItem (onMoreClicked = {
+                            onInstanceMoreClicked(
+                                it
+                            )
+                        }))
+                    }
+                    _submittedInstances.postValue(resultList)
                 }
             ) { throwable: Throwable? ->
                 error.postValue(

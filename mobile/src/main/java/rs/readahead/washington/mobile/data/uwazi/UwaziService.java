@@ -128,8 +128,6 @@ public class UwaziService {
                         new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
                 .addInterceptor(logger);
                 // or BODY
-
-
             }
         }
 
