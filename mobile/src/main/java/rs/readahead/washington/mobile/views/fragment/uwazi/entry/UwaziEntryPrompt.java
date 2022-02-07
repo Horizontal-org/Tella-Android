@@ -1,7 +1,5 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.entry;
 
-import rs.readahead.washington.mobile.data.entity.uwazi.DateOfIncident;
-
 public class UwaziEntryPrompt {
     private String _id;
     private final String formIndex;
@@ -67,14 +65,6 @@ public class UwaziEntryPrompt {
 
     public String getIndex() {
         return formIndex;
-    }
-
-    public DateOfIncident getAnswerValue() {
-        if (answer == null) {
-            return new DateOfIncident(0);
-        } else {
-            return new DateOfIncident(Integer.parseInt(answer));
-        }
     }
 
     public String getID() {

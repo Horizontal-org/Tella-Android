@@ -23,11 +23,14 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.javarosa.core.model.data.DateData;
-import org.javarosa.core.model.data.IAnswerData;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
+import androidx.annotation.NonNull;
 
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.IntegerData;
+import org.joda.time.DateTime;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import rs.readahead.washington.mobile.R;
@@ -35,13 +38,13 @@ import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
 
-
 /**
  * Based on ODK DateWidget.
  */
 @SuppressLint("ViewConstructor")
 public class UwaziDateWidget extends UwaziQuestionWidget {
     private DatePickerDialog datePickerDialog;
+    private Long intMsValue = 0L;
 
     private Button dateButton;
     private TextView dateText;
@@ -69,22 +72,7 @@ public class UwaziDateWidget extends UwaziQuestionWidget {
         clearButton.setOnClickListener(v -> clearAnswer());
 
         addDateView(linearLayout);
-
-        if (formEntryPrompt.getAnswerValue() == null) {
-            clearAnswer();
-        } else {
-            //DateTime dt = new DateTime(((Date) formEntryPrompt.getAnswerValue().getValue()).getTime());
-
-            DateTime dt = new DateTime();
-
-            year = dt.getYear();
-            month = dt.getMonthOfYear();
-            dayOfMonth = dt.getDayOfMonth();
-
-            setWidgetDate();
-            datePickerDialog.updateDate(dt.getYear(), dt.getMonthOfYear() - 1, dt.getDayOfMonth());
-        }
-
+        clearAnswer();
         addAnswerView(linearLayout);
     }
 
@@ -106,14 +94,8 @@ public class UwaziDateWidget extends UwaziQuestionWidget {
             return null;
         }
 
-        LocalDateTime ldt = new LocalDateTime()
-                .withYear(year)
-                .withMonthOfYear(month)
-                .withDayOfMonth(dayOfMonth)
-                .withHourOfDay(0)
-                .withMinuteOfHour(0);
-
-        return new DateData(ldt.toDate());
+        long intVal = intMsValue / 1000L;
+        return new IntegerData(Integer.parseInt(Long.toString(intVal)));
     }
 
     @Override
@@ -121,22 +103,35 @@ public class UwaziDateWidget extends UwaziQuestionWidget {
         Util.hideKeyboard(context, this);
     }
 
-    private void setWidgetDate() {
+    private void setWidgetDate() throws ParseException {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        String dateInter = this.year + "/" + this.month + "/" + this.dayOfMonth;
+
+        Date date = sdf.parse(dateInter);
+
+        if (date != null) {
+            intMsValue = date.getTime();
+        }
         nullAnswer = false;
         dateButton.setVisibility(GONE);
         clearButton.setVisibility(VISIBLE);
         dateText.setVisibility(VISIBLE);
-        dateText.setText(getFormattedDate(getContext(), (Date) getAnswer().getValue()));
+        dateText.setText(getFormattedDate(getContext(), date));
+
         dateVisible = true;
     }
 
     private void createDatePickerDialog() {
-        datePickerDialog = new DatePickerDialog(getContext(), AlertDialog.THEME_HOLO_LIGHT,(view, year, monthOfYear, dayOfMonth) -> {
+        datePickerDialog = new DatePickerDialog(getContext(), AlertDialog.THEME_HOLO_LIGHT, (view, year, monthOfYear, dayOfMonth) -> {
             UwaziDateWidget.this.year = year;
             UwaziDateWidget.this.month = monthOfYear + 1;
             UwaziDateWidget.this.dayOfMonth = dayOfMonth;
 
-            setWidgetDate();
+            try {
+                setWidgetDate();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }, 1971, 1, 1);
     }
 
@@ -169,5 +164,21 @@ public class UwaziDateWidget extends UwaziQuestionWidget {
     private String getFormattedDate(Context context, Date date) {
         java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(context);
         return dateFormat.format(date);
+    }
+
+    public String setBinaryData(@NonNull Object data) {
+        int val = Integer.parseInt(data.toString());
+        intMsValue = val * 1000L;
+
+        Date date = new Date(intMsValue);
+
+        nullAnswer = false;
+        dateButton.setVisibility(GONE);
+        clearButton.setVisibility(VISIBLE);
+        dateText.setVisibility(VISIBLE);
+        dateText.setText(getFormattedDate(getContext(), date));
+        dateVisible = true;
+
+        return data.toString();
     }
 }
