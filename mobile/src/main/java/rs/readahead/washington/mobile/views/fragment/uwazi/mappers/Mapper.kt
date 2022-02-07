@@ -43,11 +43,13 @@ fun Language.toViewLanguageItem(onLanguageClicked: () -> Unit) = ViewLanguageIte
     onLanguageClicked = onLanguageClicked)
 
 fun UwaziEntityInstance.toViewEntityInstanceItem(
-    onMoreClicked: () -> Unit
+    onMoreClicked: () -> Unit,
+    onOpenClicked: () -> Unit
 ) = ViewEntityInstanceItem(
     id = id,
     instanceName = title,
     serverId = collectTemplate?.serverId,
     serverName = collectTemplate?.serverName,
-    onMoreClicked = onMoreClicked
+    onMoreClicked = onMoreClicked,
+    onOpenClicked = onOpenClicked
 )

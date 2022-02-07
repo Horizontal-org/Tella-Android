@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentDraftsUwaziBinding
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
@@ -53,6 +54,10 @@ class DraftsUwaziFragment : UwaziListFragment() {
             showInstanceSheetMore.observe(viewLifecycleOwner, {
                 showDraftsMenu(it)
             })
+
+            openEntityInstance.observe(viewLifecycleOwner,{
+                openDraft(it)
+            })
         }
     }
 
@@ -60,8 +65,8 @@ class DraftsUwaziFragment : UwaziListFragment() {
         BottomSheetUtils.showEditDeleteMenuSheet(
             requireActivity().supportFragmentManager,
             instance.title,
-            getString(R.string.Uwazi_Action_FillEntity),
-            getString(R.string.Uwazi_Action_RemoveTemplate),
+            getString(R.string.Uwazi_Action_EditDraft),
+            getString(R.string.Uwazi_Action_RemoveDraft),
             object : BottomSheetUtils.ActionSeleceted {
                 override fun accept(action: BottomSheetUtils.Action) {
                     if (action === BottomSheetUtils.Action.EDIT) {
@@ -69,6 +74,7 @@ class DraftsUwaziFragment : UwaziListFragment() {
                            bundle.putString(COLLECT_TEMPLATE, gsonTemplate)
                            NavHostFragment.findNavController(this@TemplatesUwaziFragment)
                                .navigate(R.id.action_uwaziScreen_to_uwaziEntryScreen, bundle)*/
+                        openDraft(instance)
                     }
                     if (action === BottomSheetUtils.Action.DELETE) {
                         viewModel.confirmDelete(instance)
@@ -92,6 +98,10 @@ class DraftsUwaziFragment : UwaziListFragment() {
             layoutManager = LinearLayoutManager(activity)
             adapter = uwaziDraftsAdapter
         }
+    }
+
+    private fun openDraft(entityInstance: UwaziEntityInstance){
+       DialogUtils.showBottomMessage(activity,"This functionality is not yet implemented",true)
     }
 
     override fun onDestroyView() {

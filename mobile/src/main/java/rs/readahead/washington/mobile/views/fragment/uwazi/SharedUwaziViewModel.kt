@@ -31,6 +31,8 @@ class SharedUwaziViewModel : ViewModel() {
     val showSheetMore: LiveData<CollectTemplate> get() = _showSheetMore
     private var _openEntity = SingleLiveEvent<CollectTemplate>()
     val openEntity: LiveData<CollectTemplate> get() = _openEntity
+    private var _openEntityInstance = SingleLiveEvent<UwaziEntityInstance>()
+    val openEntityInstance: LiveData<UwaziEntityInstance> get() = _openEntityInstance
     private var _showInstanceSheetMore = SingleLiveEvent<UwaziEntityInstance>()
     val showInstanceSheetMore: LiveData<UwaziEntityInstance> get() = _showInstanceSheetMore
     private val _draftInstances = MutableLiveData<List<ViewEntityInstanceItem>>()
@@ -86,11 +88,9 @@ class SharedUwaziViewModel : ViewModel() {
                 { drafts: List<UwaziEntityInstance> ->
                     val resultList = mutableListOf<ViewEntityInstanceItem>()
                     drafts.map {
-                        resultList.add(it.toViewEntityInstanceItem (onMoreClicked = {
-                            onInstanceMoreClicked(
-                                it
-                            )
-                        }))
+                        resultList.add(it.toViewEntityInstanceItem (onMoreClicked = { onInstanceMoreClicked(it) },
+                        onOpenClicked = {openEntityInstance(it)}
+                            ))
                     }
                     _draftInstances.postValue(resultList)
                 }
@@ -115,11 +115,8 @@ class SharedUwaziViewModel : ViewModel() {
                 { drafts: List<UwaziEntityInstance> ->
                     val resultList = mutableListOf<ViewEntityInstanceItem>()
                     drafts.map {
-                        resultList.add(it.toViewEntityInstanceItem (onMoreClicked = {
-                            onInstanceMoreClicked(
-                                it
-                            )
-                        }))
+                        resultList.add(it.toViewEntityInstanceItem (onMoreClicked = { onInstanceMoreClicked(it) },
+                            onOpenClicked = {openEntityInstance(it)}                            ))
                     }
                     _submittedInstances.postValue(resultList)
                 }
@@ -148,7 +145,9 @@ class SharedUwaziViewModel : ViewModel() {
                             onInstanceMoreClicked(
                                 it
                             )
-                        }))
+                        },
+                            onOpenClicked = {openEntityInstance(it)}
+                            ))
                     }
                     _submittedInstances.postValue(resultList)
                 }
@@ -223,6 +222,10 @@ class SharedUwaziViewModel : ViewModel() {
 
     private fun openEntity(template: CollectTemplate){
         _openEntity.postValue(template)
+    }
+
+    private fun openEntityInstance(entity: UwaziEntityInstance){
+        _openEntityInstance.postValue(entity)
     }
 
 }
