@@ -45,8 +45,10 @@
                 android:layout_height="?attr/actionBarSize"
                 android:textStyle="bold"
                 app:layout_collapseMode="pin"
-                app:title="@string/fragment_uwazi"
-                />
+                app:toolbarTitle="@string/fragment_uwazi"
+                >
+
+            </org.hzontal.shared_ui.appbar.ToolbarComponent>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

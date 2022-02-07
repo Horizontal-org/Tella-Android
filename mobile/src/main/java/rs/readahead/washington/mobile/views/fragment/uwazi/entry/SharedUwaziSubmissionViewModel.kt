@@ -98,9 +98,7 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
             )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { progress.postValue(UwaziEntityStatus.FINALIZED) }
-                .doOnError {  progress.postValue(UwaziEntityStatus.FINALIZED) }
-                .doFinally { progress.postValue(UwaziEntityStatus.SUBMISSION_ERROR) }
+                .doOnError {  progress.postValue(UwaziEntityStatus.SUBMISSION_ERROR) }
                 .flatMap {
                     entity.status = UwaziEntityStatus.SUBMITTED
                     keyDataSource.uwaziDataSource.blockingFirst().saveEntityInstance(entity)

@@ -22,7 +22,8 @@ fun CollectTemplate.toViewTemplateItem(onMoreClicked: () -> Unit, onDownloadClic
 
 fun CollectTemplate.toViewEntityTemplateItem(
     onFavoriteClicked: () -> Unit,
-    onMoreClicked: () -> Unit
+    onMoreClicked: () -> Unit,
+    onOpenEntityClicked: () -> Unit
 ) = ViewEntityTemplateItem(
     id = id,
     serverId = serverId,
@@ -30,7 +31,8 @@ fun CollectTemplate.toViewEntityTemplateItem(
     serverName = serverName,
     isFavorite = isFavorite,
     onMoreClicked = onMoreClicked,
-    onFavoriteClicked = onFavoriteClicked
+    onFavoriteClicked = onFavoriteClicked,
+    onOpenEntityClicked = onOpenEntityClicked
 )
 
 fun Language.toViewLanguageItem(onLanguageClicked: () -> Unit) = ViewLanguageItem(

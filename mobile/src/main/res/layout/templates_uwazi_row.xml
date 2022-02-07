@@ -43,7 +43,7 @@
             android:clickable="true"
             android:contentDescription="@null"
             android:focusable="true"
-            android:padding="8dp"
+            android:padding="10dp"
             android:src="@drawable/ic_more" />
 
         <TextView

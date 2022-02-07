@@ -60,6 +60,10 @@ class TemplatesUwaziFragment : UwaziListFragment() {
             showSheetMore.observe(viewLifecycleOwner,{
                 showDownloadedMenu(it)
             })
+
+            openEntity.observe(viewLifecycleOwner,{
+                openEntity(it)
+            })
         }
     }
 
@@ -84,9 +88,7 @@ class TemplatesUwaziFragment : UwaziListFragment() {
             object : ActionSeleceted {
                 override fun accept(action: BottomSheetUtils.Action) {
                     if (action === BottomSheetUtils.Action.EDIT) {
-                        val gsonTemplate = Gson().toJson(template)
-                        bundle.putString(COLLECT_TEMPLATE, gsonTemplate)
-                        NavHostFragment.findNavController(this@TemplatesUwaziFragment).navigate(R.id.action_uwaziScreen_to_uwaziEntryScreen, bundle)
+                        openEntity(template)
                     }
                     if (action === BottomSheetUtils.Action.DELETE) {
                         viewModel.confirmDelete(template)
@@ -106,5 +108,11 @@ class TemplatesUwaziFragment : UwaziListFragment() {
         binding = null
     }
 
+
+    private fun openEntity(template: CollectTemplate){
+        val gsonTemplate = Gson().toJson(template)
+        bundle.putString(COLLECT_TEMPLATE, gsonTemplate)
+        NavHostFragment.findNavController(this@TemplatesUwaziFragment).navigate(R.id.action_uwaziScreen_to_uwaziEntryScreen, bundle)
+    }
 
 }

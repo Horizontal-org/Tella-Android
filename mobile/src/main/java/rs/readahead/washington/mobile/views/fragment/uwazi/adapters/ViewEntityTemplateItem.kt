@@ -8,7 +8,9 @@ data class ViewEntityTemplateItem (
     val isFavorite : Boolean = false,
     val onFavoriteClicked: () -> Unit,
     val onMoreClicked: () -> Unit,
+    val onOpenEntityClicked : () -> Unit
 ) {
     fun onFavoriteClicked() = onFavoriteClicked.invoke()
     fun onMoreClicked() = onMoreClicked.invoke()
+    fun onOpenEntityClicked() = onOpenEntityClicked.invoke()
 }

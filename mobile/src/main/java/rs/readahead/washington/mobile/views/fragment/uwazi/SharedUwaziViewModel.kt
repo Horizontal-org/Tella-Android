@@ -29,6 +29,8 @@ class SharedUwaziViewModel : ViewModel() {
     private val disposables = CompositeDisposable()
     private var _showSheetMore = SingleLiveEvent<CollectTemplate>()
     val showSheetMore: LiveData<CollectTemplate> get() = _showSheetMore
+    private var _openEntity = SingleLiveEvent<CollectTemplate>()
+    val openEntity: LiveData<CollectTemplate> get() = _openEntity
     private var _showInstanceSheetMore = SingleLiveEvent<UwaziEntityInstance>()
     val showInstanceSheetMore: LiveData<UwaziEntityInstance> get() = _showInstanceSheetMore
     private val _draftInstances = MutableLiveData<List<ViewEntityInstanceItem>>()
@@ -57,7 +59,9 @@ class SharedUwaziViewModel : ViewModel() {
                             onMoreClicked(
                                 it
                             )
-                        }, onFavoriteClicked = { toggleFavorite(it) }))
+                        }, onFavoriteClicked = { toggleFavorite(it) },
+                           onOpenEntityClicked = {openEntity(it)}
+                            ))
                     }
                     _templates.postValue(resultList)
                 }
@@ -215,6 +219,10 @@ class SharedUwaziViewModel : ViewModel() {
                 error.postValue(throwable)
             }
         )
+    }
+
+    private fun openEntity(template: CollectTemplate){
+        _openEntity.postValue(template)
     }
 
 }

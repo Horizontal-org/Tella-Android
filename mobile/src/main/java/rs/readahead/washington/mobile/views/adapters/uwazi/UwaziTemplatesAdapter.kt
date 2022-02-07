@@ -37,7 +37,7 @@ class UwaziTemplatesAdapter : RecyclerView.Adapter<UwaziTemplatesAdapter.EntityV
             view.apply{
                 view.findViewById<TextView>(R.id.name).text = entityRow.templateName
                 view.findViewById<TextView>(R.id.organization).text = entityRow.serverName
-                setOnClickListener { entityRow.onMoreClicked() }
+                view.findViewById<ImageButton>(R.id.popupMenu).setOnClickListener { entityRow.onMoreClicked() }
                 view.findViewById<AppCompatImageView>(R.id.favorites_button).apply {
                     setImageDrawable(
                         if (entityRow.isFavorite) {
@@ -49,6 +49,7 @@ class UwaziTemplatesAdapter : RecyclerView.Adapter<UwaziTemplatesAdapter.EntityV
 
                     setOnClickListener { entityRow.onFavoriteClicked() }
                 }
+                setOnClickListener { entityRow.onOpenEntityClicked() }
             }
         }
     }
