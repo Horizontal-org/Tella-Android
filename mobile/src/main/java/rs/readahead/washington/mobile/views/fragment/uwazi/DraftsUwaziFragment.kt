@@ -50,10 +50,6 @@ class DraftsUwaziFragment : UwaziListFragment() {
                 }
             })
 
-            progress.observe(viewLifecycleOwner, {
-                binding?.progressCircular?.isVisible = it
-            })
-
             showInstanceSheetMore.observe(viewLifecycleOwner, {
                 showDraftsMenu(it)
             })

@@ -13,6 +13,7 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.data.database.UwaziDataSource
 import rs.readahead.washington.mobile.data.repository.MediaFileRequestBody
@@ -42,7 +43,7 @@ class UwaziSendViewModel : ViewModel() {
     val attachments: LiveData<List<FormMediaFile>> get() = _attachments
 
     //TODO THIS IS UGLY WILL REPLACE IT FLOWABLE RX LATER
-    private val _progressCallBack = MutableLiveData<Pair<String, Float>>()
+    private val _progressCallBack = SingleLiveEvent<Pair<String, Float>>()
     val progressCallBack: LiveData<Pair<String, Float>> get() = _progressCallBack
 
     fun getUwaziServerAndSaveEntity(serverID: Long, entity: UwaziEntityInstance) {
@@ -113,7 +114,7 @@ class UwaziSendViewModel : ViewModel() {
 
     private fun createListOfAttachments(
         attachments: List<VaultFile?>?,
-        progressCallBack: MutableLiveData<Pair<String, Float>>,
+        progressCallBack: SingleLiveEvent<Pair<String, Float>>,
     ): List<MultipartBody.Part?> {
 
         val listAttachments: MutableList<MultipartBody.Part?> = mutableListOf()

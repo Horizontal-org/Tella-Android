@@ -42,16 +42,16 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
     private val _attachments = MutableLiveData<List<FormMediaFile>>()
     val attachments: LiveData<List<FormMediaFile>> get() = _attachments
     //TODO THIS IS UGLY WILL REPLACE IT FLOWABLE RX LATER
-    private val _progressCallBack = MutableLiveData<Pair<String, Float>>()
+    private val _progressCallBack = SingleLiveEvent<Pair<String, Float>>()
     val progressCallBack: LiveData<Pair<String, Float>> get() = _progressCallBack
 
     fun saveEntityInstance(instance : UwaziEntityInstance) {
         disposables.add(keyDataSource.uwaziDataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe { progress.postValue(UwaziEntityStatus.DRAFT) }
+            .doOnSubscribe { progress.postValue(instance.status) }
             .flatMap { dataSource: UwaziDataSource -> dataSource.saveEntityInstance(instance).toObservable() }
-            .doFinally { progress.postValue(UwaziEntityStatus.DRAFT)   }
+            .doFinally { progress.postValue(instance.status)   }
             .subscribe ({ savedInstance ->
                 _instance.postValue(savedInstance)
             }
@@ -99,7 +99,8 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { progress.postValue(UwaziEntityStatus.FINALIZED) }
-                .doFinally { progress.postValue(UwaziEntityStatus.SUBMISSION_PENDING) }
+                .doOnError {  progress.postValue(UwaziEntityStatus.FINALIZED) }
+                .doFinally { progress.postValue(UwaziEntityStatus.SUBMISSION_ERROR) }
                 .flatMap {
                     entity.status = UwaziEntityStatus.SUBMITTED
                     keyDataSource.uwaziDataSource.blockingFirst().saveEntityInstance(entity)
@@ -133,7 +134,7 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
 
     private fun createListOfAttachments(
         attachments: List<VaultFile?>?,
-        progressCallBack: MutableLiveData<Pair<String, Float>>,
+        progressCallBack: SingleLiveEvent<Pair<String, Float>>,
     ): List<MultipartBody.Part?> {
 
         val listAttachments: MutableList<MultipartBody.Part?> = mutableListOf()

@@ -34,7 +34,8 @@ class UwaziDraftsAdapter : RecyclerView.Adapter<UwaziDraftsAdapter.EntityViewHol
             view.apply{
                 view.findViewById<TextView>(R.id.name).text = entityRow.instanceName
                 view.findViewById<TextView>(R.id.organization).text = entityRow.serverName
-                view.findViewById<ImageButton>(R.id.popupMenu).setOnClickListener { entityRow.onMoreClicked() }
+
+                setOnClickListener { entityRow.onMoreClicked() }
             }
         }
     }

@@ -41,14 +41,21 @@ class UwaziFragment : BaseFragment() {
 
         SharedLiveData.updateViewPagerPosition.observe(activity,{ position ->
              when (position) {
-                TEMPLATES_LIST_PAGE_INDEX -> binding?.viewPager?.currentItem = TEMPLATES_LIST_PAGE_INDEX
-                DRAFT_LIST_PAGE_INDEX -> binding?.viewPager?.currentItem = DRAFT_LIST_PAGE_INDEX
-                OUTBOX_LIST_PAGE_INDEX -> binding?.viewPager?.currentItem = OUTBOX_LIST_PAGE_INDEX
-                SUBMITTED_LIST_PAGE_INDEX -> binding?.viewPager?.currentItem = SUBMITTED_LIST_PAGE_INDEX
+                TEMPLATES_LIST_PAGE_INDEX -> setCurrentTab(TEMPLATES_LIST_PAGE_INDEX)
+                DRAFT_LIST_PAGE_INDEX -> setCurrentTab(DRAFT_LIST_PAGE_INDEX)
+                OUTBOX_LIST_PAGE_INDEX -> setCurrentTab(OUTBOX_LIST_PAGE_INDEX)
+                SUBMITTED_LIST_PAGE_INDEX -> setCurrentTab(SUBMITTED_LIST_PAGE_INDEX)
                 else -> null
             }
         })
 
+    }
+
+
+    private fun setCurrentTab(position: Int){
+        binding?.viewPager?.post {
+            binding?.viewPager?.setCurrentItem(position, true)
+        }
     }
 
     private fun getTabTitle(position: Int): String? {

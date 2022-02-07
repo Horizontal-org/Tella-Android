@@ -75,7 +75,6 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
 
             progress.observe(viewLifecycleOwner,{ status ->
              when(status){
-
                  UwaziEntityStatus.SUBMITTED -> {
                      nav().popBackStack()
                      SharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
@@ -84,6 +83,9 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
                  UwaziEntityStatus.SUBMISSION_ERROR -> {
                      binding.cancelBtn.isVisible = true
                      DialogUtils.showBottomMessage(activity,getString(R.string.collect_toast_fail_sending_form),true)
+                     entityInstance?.status = UwaziEntityStatus.SUBMISSION_ERROR
+                     entityInstance?.let { viewModel.saveEntityInstance(it) }
+                     nav().popBackStack()
                      SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
                  }
 

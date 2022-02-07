@@ -45,18 +45,16 @@ class TemplatesUwaziFragment : UwaziListFragment() {
 
     private fun initObservers(){
         with(viewModel){
+
             templates.observe(viewLifecycleOwner,{
                 if (it.isEmpty()){
-                    binding?.textViewEmpty?.isVisible = true
+                    binding?.textViewEmpty!!.isVisible = true
+                    binding!!.templatesRecyclerView.isVisible = false
                 }else{
-                    binding?.textViewEmpty?.isVisible = false
+                    binding!!.textViewEmpty.isVisible = false
+                    binding!!.templatesRecyclerView.isVisible = true
                     uwaziTemplatesAdapter.setEntityTemplates(it)
                 }
-
-            })
-
-            progress.observe(viewLifecycleOwner,{
-                binding?.progressCircular?.isVisible = it
             })
 
             showSheetMore.observe(viewLifecycleOwner,{

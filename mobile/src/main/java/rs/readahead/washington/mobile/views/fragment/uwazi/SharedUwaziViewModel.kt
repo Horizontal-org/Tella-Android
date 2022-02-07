@@ -127,6 +127,35 @@ class SharedUwaziViewModel : ViewModel() {
         )
     }
 
+    fun listOutBox() {
+        disposables.add(keyDataSource.uwaziDataSource
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { _progress.postValue(true) }
+            .flatMap { dataSource: UwaziDataSource ->
+                dataSource.listOutboxInstances().toObservable()
+            }
+            .doFinally { _progress.postValue(false) }
+            .subscribe(
+                { drafts: List<UwaziEntityInstance> ->
+                    val resultList = mutableListOf<ViewEntityInstanceItem>()
+                    drafts.map {
+                        resultList.add(it.toViewEntityInstanceItem (onMoreClicked = {
+                            onInstanceMoreClicked(
+                                it
+                            )
+                        }))
+                    }
+                    _submittedInstances.postValue(resultList)
+                }
+            ) { throwable: Throwable? ->
+                error.postValue(
+                    throwable
+                )
+            }
+        )
+    }
+
     private fun onMoreClicked(template: CollectTemplate) {
         _showSheetMore.postValue(template)
     }

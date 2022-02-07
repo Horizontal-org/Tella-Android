@@ -27,21 +27,5 @@
         />
 
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/progress_circular"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:indeterminate="true"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        app:trackColor="@color/wa_white"
-        app:indicatorColor="@color/tigers_eye"
-        app:trackThickness="4dp"
-        android:visibility="gone"
-        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

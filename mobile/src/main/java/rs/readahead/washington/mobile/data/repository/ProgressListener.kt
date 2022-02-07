@@ -1,10 +1,10 @@
 package rs.readahead.washington.mobile.data.repository
 
-import androidx.lifecycle.MutableLiveData
+import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.domain.entity.IProgressListener
 import rs.readahead.washington.mobile.util.Util
 
-class ProgressListener(private val partName: String,private val progressCallBack : MutableLiveData<Pair<String, Float>>?) : IProgressListener {
+class ProgressListener(private val partName: String,private val progressCallBack : SingleLiveEvent<Pair<String, Float>>?) : IProgressListener {
 
     private var time: Long = 0
 
