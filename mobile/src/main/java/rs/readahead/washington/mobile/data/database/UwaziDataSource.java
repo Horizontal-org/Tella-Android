@@ -9,13 +9,10 @@ import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteQueryBuilder;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +29,10 @@ import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.data.entity.uwazi.UwaziEntityRow;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
-import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate;
+import rs.readahead.washington.mobile.domain.entity.uwazi.EntityInstanceBundle;
 import rs.readahead.washington.mobile.domain.entity.uwazi.ListTemplateResult;
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance;
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus;
@@ -83,6 +80,12 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
 
     private CompletableTransformer applyCompletableSchedulers() {
         return schedulersCompletableTransformer;
+    }
+
+    @Override
+    public Single<EntityInstanceBundle> getBundle(final long id) {
+        return Single.fromCallable(() -> getEntityInstanceBundle(id))
+                .compose(applySchedulers());
     }
 
     @Override
@@ -626,7 +629,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
             instance.setUpdated(updated);
 
             if (instance.getStatus() == UwaziEntityStatus.UNKNOWN) {
-                statusOrdinal = CollectFormInstanceStatus.DRAFT.ordinal();
+                statusOrdinal =  UwaziEntityStatus.DRAFT.ordinal();
             } else {
                 statusOrdinal = instance.getStatus().ordinal();
             }
@@ -678,6 +681,87 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
         }
     }
 
+    private EntityInstanceBundle getEntityInstanceBundle(long id) {
+        Cursor cursor = null;
+        Gson gson = new Gson();
+        EntityInstanceBundle bundle = new EntityInstanceBundle();
+
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_UWAZI_ENTITY_INSTANCES,
+                    new String[]{
+                            cn(D.T_UWAZI_ENTITY_INSTANCES, D.C_ID, D.A_UWAZI_ENTITY_INSTANCE_ID),
+                            D.C_UWAZI_SERVER_ID,
+                            D.C_TEMPLATE_ENTITY,
+                            D.C_METADATA,
+                            D.C_STATUS,
+                            D.C_UPDATED,
+                            D.C_TEMPLATE,
+                            D.C_TITLE,
+                            D.C_TYPE,
+                            D.C_FORM_PART_STATUS},
+                    cn(D.T_UWAZI_ENTITY_INSTANCES, D.C_ID) + "= ?",
+                    null, null, null, null
+            );
+
+            cursor = database.rawQuery(query, new String[]{Long.toString(id)});
+
+            if (cursor.moveToFirst()) {
+                UwaziEntityInstance instance = cursorToUwaziEntityInstance(cursor);
+
+                CollectTemplate collectTemplate = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_ENTITY)), CollectTemplate.class);
+                instance.setCollectTemplate(collectTemplate);
+                Map<String,ArrayList<Object>> metadata = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_METADATA)), new TypeToken<Map<String,ArrayList<Object>>>() {}.getType());
+                instance.setMetadata(metadata);
+                bundle.setInstance(instance);
+
+                List<String> vaultFileIds = getEntityInstanceFileIds(instance.getId());
+                String[] iDs = new String[vaultFileIds.size()];
+                vaultFileIds.toArray(iDs);
+                for (String ide : vaultFileIds.toArray(iDs)){
+                }
+                bundle.setFileIds(iDs);
+
+                return bundle;
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return new EntityInstanceBundle();
+    }
+
+    private List<String> getEntityInstanceFileIds(long instanceId) {
+        List<String> ids = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_UWAZI_ENTITY_INSTANCE_VAULT_FILE,
+                    new String[]{
+                            D.C_VAULT_FILE_ID},
+                    D.C_UWAZI_ENTITY_INSTANCE_ID + "= ?",
+                    null, null, D.C_VAULT_FILE_ID + " DESC", null
+            );
+            cursor = database.rawQuery(query, new String[]{Long.toString(instanceId)});
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                String vaultFileId = cursor.getString(cursor.getColumnIndexOrThrow(D.C_VAULT_FILE_ID));
+                ids.add(vaultFileId);
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return ids;
+    }
 
     private List<UwaziEntityInstance> getUwaziEntityInstances(UwaziEntityStatus[] statuses) {
         Gson gson = new Gson();

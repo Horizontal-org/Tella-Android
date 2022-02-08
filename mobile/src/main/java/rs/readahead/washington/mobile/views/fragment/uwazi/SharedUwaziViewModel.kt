@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.hzontal.tella_vault.VaultFile
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -11,8 +12,12 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.data.database.UwaziDataSource
+import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
+import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
+import rs.readahead.washington.mobile.domain.entity.uwazi.EntityInstanceBundle
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
+import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
 import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.ViewEntityInstanceItem
 import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.ViewEntityTemplateItem
 import rs.readahead.washington.mobile.views.fragment.uwazi.mappers.toViewEntityInstanceItem
@@ -39,6 +44,8 @@ class SharedUwaziViewModel : ViewModel() {
     val draftInstances: LiveData<List<ViewEntityInstanceItem>> get() = _draftInstances
     private val _submittedInstances = MutableLiveData<List<ViewEntityInstanceItem>>()
     val submittedInstances: LiveData<List<ViewEntityInstanceItem>> get() = _submittedInstances
+    var onInstanceSuccess = SingleLiveEvent<UwaziEntityInstance>()
+    var onGetInstanceError = SingleLiveEvent<Throwable>()
 
     init {
         listTemplates()
@@ -226,6 +233,50 @@ class SharedUwaziViewModel : ViewModel() {
 
     private fun openEntityInstance(entity: UwaziEntityInstance){
         _openEntityInstance.postValue(entity)
+    }
+
+    fun getInstanceUwaziEntity(instanceId: Long) {
+        var uwaziEntityInstance: UwaziEntityInstance? = null
+        disposables.add(keyDataSource.uwaziDataSource
+            .flatMapSingle { dataSource: UwaziDataSource ->
+                dataSource.getBundle(
+                    instanceId
+                )
+            }
+            .flatMapSingle { bundle: EntityInstanceBundle ->
+                uwaziEntityInstance = bundle.instance
+                MyApplication.rxVault.get(bundle.fileIds)
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ vaultFiles: List<VaultFile> ->
+                val widgetMediaFiles = mutableListOf<FormMediaFile>()
+                for (file in vaultFiles) {
+                    widgetMediaFiles.add(FormMediaFile.fromMediaFile(file))
+                }
+                uwaziEntityInstance?.widgetMediaFiles = widgetMediaFiles
+                onInstanceSuccess.postValue(
+                    uwaziEntityInstance?.let { maybeCloneInstance(it) }
+                )
+            }) { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                onGetInstanceError.postValue(throwable)
+            }
+        )
+    }
+
+    private fun maybeCloneInstance(instance: UwaziEntityInstance): UwaziEntityInstance {
+        if (instance.status == UwaziEntityStatus.SUBMITTED) {
+            instance.clonedId = instance.id // we are clone of submitted form
+            instance.id = 0
+            instance.status = UwaziEntityStatus.UNKNOWN
+            instance.updated = 0
+            //instance.title = instance.title
+            for (mediaFile in instance.widgetMediaFiles) {
+                mediaFile.status = FormMediaFileStatus.UNKNOWN
+            }
+        }
+        return instance
     }
 
 }

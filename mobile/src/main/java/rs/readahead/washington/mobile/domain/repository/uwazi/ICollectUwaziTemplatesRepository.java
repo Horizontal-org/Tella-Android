@@ -5,6 +5,7 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate;
+import rs.readahead.washington.mobile.domain.entity.uwazi.EntityInstanceBundle;
 import rs.readahead.washington.mobile.domain.entity.uwazi.ListTemplateResult;
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance;
 
@@ -23,4 +24,5 @@ public interface ICollectUwaziTemplatesRepository {
      Single<List<UwaziEntityInstance>> listDraftInstances();
      Single<List<UwaziEntityInstance>> listOutboxInstances();
      Single<List<UwaziEntityInstance>> listSubmittedInstances();
+     Single<EntityInstanceBundle> getBundle(final long id);
 }

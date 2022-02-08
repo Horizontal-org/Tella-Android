@@ -6,18 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
-import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentDraftsUwaziBinding
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.UwaziDraftsAdapter
+import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UWAZI_INSTANCE
 
 class DraftsUwaziFragment : UwaziListFragment() {
     private val viewModel: SharedUwaziViewModel by viewModels()
     private val uwaziDraftsAdapter: UwaziDraftsAdapter by lazy { UwaziDraftsAdapter() }
     private var binding: FragmentDraftsUwaziBinding? = null
+    private val bundle by lazy { Bundle() }
 
     override fun getFormListType(): Type {
         return Type.DRAFT
@@ -58,6 +61,10 @@ class DraftsUwaziFragment : UwaziListFragment() {
             openEntityInstance.observe(viewLifecycleOwner,{
                 openDraft(it)
             })
+
+            onInstanceSuccess.observe(viewLifecycleOwner,{
+                editDraft(it)
+            })
         }
     }
 
@@ -70,10 +77,6 @@ class DraftsUwaziFragment : UwaziListFragment() {
             object : BottomSheetUtils.ActionSeleceted {
                 override fun accept(action: BottomSheetUtils.Action) {
                     if (action === BottomSheetUtils.Action.EDIT) {
-                        /*   val gsonTemplate = Gson().toJson(template)
-                           bundle.putString(COLLECT_TEMPLATE, gsonTemplate)
-                           NavHostFragment.findNavController(this@TemplatesUwaziFragment)
-                               .navigate(R.id.action_uwaziScreen_to_uwaziEntryScreen, bundle)*/
                         openDraft(instance)
                     }
                     if (action === BottomSheetUtils.Action.DELETE) {
@@ -101,7 +104,15 @@ class DraftsUwaziFragment : UwaziListFragment() {
     }
 
     private fun openDraft(entityInstance: UwaziEntityInstance){
-       DialogUtils.showBottomMessage(activity,"This functionality is not yet implemented",true)
+        viewModel.getInstanceUwaziEntity(entityInstance.id)
+        //DialogUtils.showBottomMessage(activity,"This functionality is not yet implemented",true)
+    }
+
+    private fun editDraft(entityInstance: UwaziEntityInstance){
+        val gsonTemplate = Gson().toJson(entityInstance)
+        bundle.putString(UWAZI_INSTANCE, gsonTemplate)
+        NavHostFragment.findNavController(this@DraftsUwaziFragment)
+            .navigate(R.id.action_uwaziScreen_to_uwaziEntryScreen, bundle)
     }
 
     override fun onDestroyView() {

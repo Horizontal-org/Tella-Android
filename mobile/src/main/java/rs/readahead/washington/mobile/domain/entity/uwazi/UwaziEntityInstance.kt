@@ -14,4 +14,6 @@ data class UwaziEntityInstance(
     var formPartStatus : FormMediaFileStatus = FormMediaFileStatus.UNKNOWN,
     var template: String = "",
     var title: String = "",
-    var type: String = "entity")
+    var type: String = "entity") {
+    var clonedId: Long = 0
+}
