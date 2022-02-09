@@ -8,8 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.javarosa.core.model.data.IAnswerData;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -17,12 +15,17 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.gson.Gson;
+
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.data.entity.mapper.EntityMapper;
 import rs.readahead.washington.mobile.data.entity.uwazi.answer.IUwaziAnswer;
+import rs.readahead.washington.mobile.data.entity.uwazi.answer.UwaziLocation;
 import rs.readahead.washington.mobile.data.uwazi.UwaziConstants;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziFileBinaryWidget;
+import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziGeoPointWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziQuestionWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziWidgetFactory;
 
@@ -79,19 +82,18 @@ public class UwaziFormView extends LinearLayout {
                 addView(separator, widgetLayout);
             }
 
-                   if (p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_TEXT) ||
+            if (p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_TEXT) ||
                     p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_NUMERIC) ||
                     p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_MEDIA) ||
                     p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_IMAGE) ||
-                    p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_DATE) //||
-                   // p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_GEOLOCATION)
-                   )
-                   {
-                       UwaziQuestionWidget qw = UwaziWidgetFactory.createWidgetFromPrompt(p, getContext(), readOnlyOverride);
-                       qw.setId(VIEW_ID + id++);
-                       widgets.add(qw);
-                       addView(qw, widgetLayout);
-                   }
+                    p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_DATE) ||
+                    p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_GEOLOCATION)
+            ) {
+                UwaziQuestionWidget qw = UwaziWidgetFactory.createWidgetFromPrompt(p, getContext(), readOnlyOverride);
+                qw.setId(VIEW_ID + id++);
+                widgets.add(qw);
+                addView(qw, widgetLayout);
+            }
 
 
         }
@@ -129,13 +131,13 @@ public class UwaziFormView extends LinearLayout {
         return answers;
     }
 
-    public List<FormMediaFile> getFiles(){
+    public List<FormMediaFile> getFiles() {
         List<FormMediaFile> files = new ArrayList<>();
-         for (UwaziQuestionWidget widget : widgets){
-             if(widget instanceof UwaziFileBinaryWidget){
-                 files.add(((UwaziFileBinaryWidget) widget).getFile());
-             }
-         }
+        for (UwaziQuestionWidget widget : widgets) {
+            if (widget instanceof UwaziFileBinaryWidget) {
+                files.add(((UwaziFileBinaryWidget) widget).getFile());
+            }
+        }
         return files;
     }
 
@@ -159,7 +161,13 @@ public class UwaziFormView extends LinearLayout {
         for (UwaziQuestionWidget q : widgets) {
             if (q.getPrompt().getID().equals(formIndex)) {
                 try {
-                    q.setBinaryData(data);
+                    if (q instanceof UwaziGeoPointWidget) {
+                        String sData = (String) data;
+                        Gson gson = new Gson();
+                        q.setBinaryData( EntityMapper.transformUwaziLocation(gson.fromJson(sData, UwaziLocation.class)));
+                    } else {
+                        q.setBinaryData(data);
+                    }
                 } catch (Exception e) {
                     Toast.makeText(getContext(), "Error attaching data", Toast.LENGTH_LONG).show();
                 }

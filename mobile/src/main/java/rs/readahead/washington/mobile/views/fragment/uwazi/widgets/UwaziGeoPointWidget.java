@@ -19,8 +19,6 @@ import androidx.annotation.Nullable;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.MyLocation;
 
-import org.javarosa.core.model.data.GeoPointData;
-import org.javarosa.core.model.data.IAnswerData;
 
 import java.util.Locale;
 
@@ -69,7 +67,8 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
         if (TextUtils.isEmpty(appearance)) {
             appearance = APPEARANCE_NONE;
         }*/
-        appearance = APPEARANCE_NONE;
+        //appearance = APPEARANCE_NONE;
+        appearance = APPEARANCE_PLACEMENT_MAP;
 
         locationString = formEntryPrompt.getAnswerText();
         locationGettingPresenter = new LocationGettingPresenter(this, true);
@@ -95,14 +94,8 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
 
         try {
             MyLocation myLocation = parseLocationString();
-
             return new UwaziLocation(myLocation.getLatitude(), myLocation.getLongitude(),"");
-            /*return new GeoPointData(new double[] {
-                    myLocation.getLatitude(),
-                    myLocation.getLongitude(),
-                    myLocation.getAltitude() != null ? myLocation.getAltitude() : 0d,
-                    myLocation.getAccuracy() != null ? myLocation.getAccuracy() : 0d
-            });*/
+
         } catch (Exception numberFormatException) {
             return null;
         }
@@ -222,7 +215,7 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
             }
 
             Activity activity = (Activity) getContext();
-            //FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
+            waitingForAData = true;
 
             MyLocation myLocation = locationString != null ? parseLocationString() : null;
 
@@ -250,13 +243,13 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
         longitude.setText(String.format(getContext().getString(R.string.collect_form_geopoint_meta_longitude),
                 LocationUtil.printCoordinate(myLocation.getLongitude(), false)));
 
-        altitude.setVisibility(VISIBLE);
+       /* altitude.setVisibility(VISIBLE);
         altitude.setText(String.format(getContext().getString(R.string.collect_form_geopoint_meta_altitude),
                 String.format(Locale.ROOT, "%.02f", myLocation.getAltitude())));
 
         accuracy.setVisibility(VISIBLE);
         accuracy.setText(String.format(getContext().getString(R.string.collect_form_geopoint_meta_accuracy),
-                myLocation.getAccuracy().toString()));
+                myLocation.getAccuracy().toString()));*/
     }
 
     private void hideLocation() {

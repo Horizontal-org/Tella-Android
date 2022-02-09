@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import com.google.gson.Gson
 import com.google.gson.internal.LinkedTreeMap
+import com.hzontal.tella_vault.MyLocation
 import com.hzontal.tella_vault.VaultFile
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
@@ -21,6 +22,7 @@ import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue
 import rs.readahead.washington.mobile.util.C
+import rs.readahead.washington.mobile.views.activity.LocationMapActivity
 import rs.readahead.washington.mobile.views.activity.QuestionAttachmentActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.SEND_ENTITY
@@ -71,6 +73,11 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
             val vaultFile =
                 data!!.getSerializableExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY) as VaultFile
             putVaultFileInForm(vaultFile)
+        }
+
+        if (requestCode == C.SELECTED_LOCATION && resultCode == Activity.RESULT_OK) {
+                val myLocation : MyLocation = data!!.getSerializableExtra(LocationMapActivity.SELECTED_LOCATION) as MyLocation
+            putLocationInForm(myLocation)
         }
     }
 
@@ -238,6 +245,11 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
 
     private fun putVaultFileInForm(vaultFile: VaultFile?) {
         val filename = vaultFile?.let { uwaziFormView.setBinaryData(it) }
+    }
+
+    private fun putLocationInForm(location: MyLocation){
+        uwaziFormView.setBinaryData(location)
+
     }
 
     private fun showSavedDialog() {
