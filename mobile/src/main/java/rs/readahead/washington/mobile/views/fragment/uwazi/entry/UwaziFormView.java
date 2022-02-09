@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.data.entity.uwazi.answer.IUwaziAnswer;
 import rs.readahead.washington.mobile.data.uwazi.UwaziConstants;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.odk.FormController;
@@ -117,8 +118,8 @@ public class UwaziFormView extends LinearLayout {
         }
     }
 
-    public LinkedHashMap<String, IAnswerData> getAnswers() {
-        LinkedHashMap<String, IAnswerData> answers = new LinkedHashMap<>();
+    public LinkedHashMap<String, IUwaziAnswer> getAnswers() {
+        LinkedHashMap<String, IUwaziAnswer> answers = new LinkedHashMap<>();
 
         for (UwaziQuestionWidget q : widgets) {
             UwaziEntryPrompt p = q.getPrompt();

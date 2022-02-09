@@ -5,10 +5,9 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
-
+import rs.readahead.washington.mobile.data.entity.uwazi.answer.UwaziString;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
+import rs.readahead.washington.mobile.data.entity.uwazi.answer.IUwaziAnswer;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
 
 
@@ -27,8 +26,8 @@ public abstract class UwaziFileBinaryWidget extends UwaziQuestionWidget {
     }
 
     @Override
-    public IAnswerData getAnswer() {
-        return TextUtils.isEmpty(getFilename()) ? null : new StringData(getFilename());
+    public IUwaziAnswer getAnswer() {
+        return TextUtils.isEmpty(getFilename()) ? null : new UwaziString(getFilename());
     }
 
     public FormMediaFile getFile() {

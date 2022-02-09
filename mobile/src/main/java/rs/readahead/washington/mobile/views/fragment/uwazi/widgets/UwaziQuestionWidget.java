@@ -22,7 +22,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.model.data.IAnswerData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +30,7 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.odk.exception.JavaRosaException;
 import rs.readahead.washington.mobile.util.StringUtils;
+import rs.readahead.washington.mobile.data.entity.uwazi.answer.IUwaziAnswer;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
 import timber.log.Timber;
 
@@ -160,7 +160,7 @@ public abstract class UwaziQuestionWidget extends RelativeLayout {
     }
 
     // Abstract methods
-    public abstract IAnswerData getAnswer();
+    public abstract IUwaziAnswer getAnswer();
 
     public abstract void clearAnswer();
 

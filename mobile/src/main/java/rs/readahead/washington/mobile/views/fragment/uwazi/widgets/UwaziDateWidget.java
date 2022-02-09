@@ -25,8 +25,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.IntegerData;
 import org.joda.time.DateTime;
 
 import java.text.ParseException;
@@ -34,6 +32,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.data.entity.uwazi.answer.IUwaziAnswer;
+import rs.readahead.washington.mobile.data.entity.uwazi.answer.UwaziInteger;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
@@ -87,15 +87,14 @@ public class UwaziDateWidget extends UwaziQuestionWidget {
     }
 
     @Override
-    public IAnswerData getAnswer() {
+    public IUwaziAnswer getAnswer() {
         clearFocus();
 
         if (nullAnswer) {
             return null;
         }
-
         long intVal = intMsValue / 1000L;
-        return new IntegerData(Integer.parseInt(Long.toString(intVal)));
+        return new UwaziInteger(Integer.parseInt(Long.toString(intVal)));
     }
 
     @Override

@@ -16,12 +16,11 @@ import android.widget.TableLayout;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.LongData;
-
 import java.util.Locale;
 
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.data.entity.uwazi.answer.IUwaziAnswer;
+import rs.readahead.washington.mobile.data.entity.uwazi.answer.UwaziLong;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
 
@@ -79,7 +78,7 @@ public class UwaziNumericWidget extends UwaziQuestionWidget {
     }
 
     @Override
-    public IAnswerData getAnswer() {
+    public IUwaziAnswer getAnswer() {
         clearFocus();
         String s = answer.getText().toString();
 
@@ -87,7 +86,7 @@ public class UwaziNumericWidget extends UwaziQuestionWidget {
             return null;
         } else {
             try {
-                return new LongData(Long.parseLong(s));
+                return new UwaziLong(Long.parseLong(s));
             } catch (Exception numberFormatException) {
                 return null;
             }

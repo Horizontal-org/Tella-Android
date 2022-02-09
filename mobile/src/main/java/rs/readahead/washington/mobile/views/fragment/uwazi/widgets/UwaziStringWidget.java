@@ -13,10 +13,9 @@ import android.widget.TableLayout;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
-
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.data.entity.uwazi.answer.IUwaziAnswer;
+import rs.readahead.washington.mobile.data.entity.uwazi.answer.UwaziString;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
 
@@ -86,14 +85,14 @@ public class UwaziStringWidget extends UwaziQuestionWidget {
     }
 
     @Override
-    public IAnswerData getAnswer() {
+    public IUwaziAnswer getAnswer() {
         clearFocus();
         String s = answer.getText().toString();
 
         if (TextUtils.isEmpty(s)) {
             return null;
         } else {
-            return new StringData(s);
+            return new UwaziString(s);
         }
     }
 

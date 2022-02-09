@@ -28,6 +28,8 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.GPSProviderRequiredEvent;
 import rs.readahead.washington.mobile.bus.event.LocationPermissionRequiredEvent;
+import rs.readahead.washington.mobile.data.entity.uwazi.answer.IUwaziAnswer;
+import rs.readahead.washington.mobile.data.entity.uwazi.answer.UwaziLocation;
 import rs.readahead.washington.mobile.mvp.contract.ILocationGettingPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.LocationGettingPresenter;
 import rs.readahead.washington.mobile.odk.FormController;
@@ -86,7 +88,7 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
     }
 
     @Override
-    public IAnswerData getAnswer() {
+    public IUwaziAnswer getAnswer() {
         if (TextUtils.isEmpty(locationString)) {
             return null;
         }
@@ -94,12 +96,13 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
         try {
             MyLocation myLocation = parseLocationString();
 
-            return new GeoPointData(new double[] {
+            return new UwaziLocation(myLocation.getLatitude(), myLocation.getLongitude(),"");
+            /*return new GeoPointData(new double[] {
                     myLocation.getLatitude(),
                     myLocation.getLongitude(),
                     myLocation.getAltitude() != null ? myLocation.getAltitude() : 0d,
                     myLocation.getAccuracy() != null ? myLocation.getAccuracy() : 0d
-            });
+            });*/
         } catch (Exception numberFormatException) {
             return null;
         }
