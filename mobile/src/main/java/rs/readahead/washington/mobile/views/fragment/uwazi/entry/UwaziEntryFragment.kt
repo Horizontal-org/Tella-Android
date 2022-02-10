@@ -93,7 +93,6 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
             toolbar.onRightClickListener = {
                 entityInstance.status = UwaziEntityStatus.DRAFT
                 if (!getAnswersFromForm()) {
-                    uwaziFormView.setValidationConstraintTitleText(getString(R.string.collect_form_error_response_mandatory))
                     uwaziFormView.setFocus(context)
                 } else {
                     entityInstance.let { viewModel.saveEntityInstance(it) }
@@ -153,7 +152,6 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
     private fun sendEntity() {
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
         if (!getAnswersFromForm()) {
-            uwaziFormView.setValidationConstraintTitleText(getString(R.string.collect_form_error_response_mandatory))
             uwaziFormView.setFocus(context)
         } else {
             val gsonTemplate = Gson().toJson(entityInstance)
@@ -168,12 +166,23 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         uwaziFormView.clearValidationConstraints()
         val hashmap = mutableMapOf<String, List<Any>>()
         val widgetMediaFiles = mutableListOf<FormMediaFile>()
-
         val answers = uwaziFormView.answers
-        if (answers[UWAZI_TITLE] == null) {
-            return false
-        }
+        var validationRequired = false
 
+        // check required fields
+        if (answers[UWAZI_TITLE] == null) {
+            uwaziFormView.setValidationConstraintText(UWAZI_TITLE, getString(R.string.collect_form_error_response_mandatory))
+            validationRequired = true
+        }
+        for (property in template?.entityRow?.properties!!){
+            if (property.required && (answers[property.name] == null)){
+                uwaziFormView.setValidationConstraintText(property.name, getString(R.string.collect_form_error_response_mandatory))
+                validationRequired = true
+            }
+        }
+        if (validationRequired) return false
+
+        // put answers to entity
         for (answer in answers) {
             if (answer.value != null) {
                 if (answer.key == UWAZI_TITLE) {
@@ -183,6 +192,8 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
                 }
             }
         }
+
+        //put files in entity
         for (answer in uwaziFormView.files) {
             if (answer != null) {
                 widgetMediaFiles.add(answer)

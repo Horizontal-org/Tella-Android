@@ -125,8 +125,6 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
             myLocation = new UwaziGeoData(label,latitude,longitue);
         }
 
-
-
         locationString = String.format(Locale.ROOT, "%s %s %s %s",
                 myLocation.getLat(),
                 myLocation.getLon(),

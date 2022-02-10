@@ -100,14 +100,9 @@ public class UwaziFormView extends LinearLayout {
         }
     }
 
-    public void setValidationConstraintTitleText(String text) {
-        UwaziQuestionWidget widget = widgets.get(0);
-        widget.setConstraintValidationText(text);
-    }
-
     public void setValidationConstraintText(String formIndex, String text) {
         for (UwaziQuestionWidget q : widgets) {
-            if (q.getPrompt().getIndex().equals(formIndex)) {
+            if (q.getPrompt().getID().equals(formIndex)) {
                 q.setConstraintValidationText(text);
                 break;
             }
@@ -196,25 +191,4 @@ public class UwaziFormView extends LinearLayout {
                 FormController.getActive().getIndexWaitingForData()
         );
     }
-
-   /* private String getGroupTitle(FormEntryCaption[] groups) {
-        StringBuilder s = new StringBuilder();
-        String t;
-        int i;
-
-        // list all groups in one string
-        for (FormEntryCaption g : groups) {
-            i = g.getMultiplicity() + 1;
-            t = g.getLongText();
-            if (t != null) {
-                s.append(t);
-                if (g.repeats() && i > 0) {
-                    s.append(" (").append(i).append(")");
-                }
-                s.append(" > ");
-            }
-        }
-
-        return s.length() > 0 ? s.substring(0, s.length() - 3) : s.toString();
-    }*/
 }
