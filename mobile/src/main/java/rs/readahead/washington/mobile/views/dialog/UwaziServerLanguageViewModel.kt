@@ -7,8 +7,11 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.data.ParamsNetwork.LOCALE_COOKIE
+import rs.readahead.washington.mobile.data.database.KeyDataSource
+import rs.readahead.washington.mobile.data.database.UwaziDataSource
 import rs.readahead.washington.mobile.data.entity.uwazi.Language
-import rs.readahead.washington.mobile.data.entity.uwazi.LanguageSettingsEntity
 import rs.readahead.washington.mobile.data.repository.UwaziRepository
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.views.adapters.uwazi.ViewLanguageItem
@@ -27,6 +30,7 @@ class UwaziServerLanguageViewModel : ViewModel() {
     val languageClicked: LiveData<Language> get() = _languageClicked
     private val _languageUpdated = MutableLiveData<Boolean>()
     val languageUpdated: LiveData<Boolean> get() = _languageUpdated
+    private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
 
 
     fun getServerLanguage(server: UWaziUploadServer) {
@@ -56,22 +60,22 @@ class UwaziServerLanguageViewModel : ViewModel() {
     }
 
     fun updateLanguageSettings(server: UWaziUploadServer,language: Language) {
-        disposables.add(
-            repository.updateDefaultLanguage(LanguageSettingsEntity(language.key),server)
+        disposables.add(keyDataSource.uwaziDataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { _progress.postValue(true) }
-            .doFinally { _progress.postValue(false) }
-            .subscribe({
-                _languageUpdated.postValue(true)
+            .flatMapSingle { dataSource: UwaziDataSource ->
+                server.localeCookie = LOCALE_COOKIE+language.key
+                dataSource.updateUwaziServer(server)
             }
+            .doFinally { _progress.postValue(false) }
+            .subscribe(
+                { _ -> _languageUpdated.postValue(true) }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(
-                    throwable
-                        ?: throw NullPointerException("Expression 'throwable' must not be null")
-                )
+                FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 error.postValue(throwable)
-            })
+            }
+        )
     }
 
 }

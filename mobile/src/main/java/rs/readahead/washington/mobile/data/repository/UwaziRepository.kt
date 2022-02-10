@@ -1,13 +1,14 @@
 package rs.readahead.washington.mobile.data.repository
 
-import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import rs.readahead.washington.mobile.data.ParamsNetwork
-import rs.readahead.washington.mobile.data.entity.uwazi.*
+import rs.readahead.washington.mobile.data.entity.uwazi.Language
+import rs.readahead.washington.mobile.data.entity.uwazi.LoginEntity
+import rs.readahead.washington.mobile.data.entity.uwazi.UwaziEntityRow
 import rs.readahead.washington.mobile.data.uwazi.UwaziService
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
@@ -40,13 +41,16 @@ class UwaziRepository : IUwaziUserRepository {
     }
 
     override fun getTemplates(server: UWaziUploadServer): Single<ListTemplateResult> {
+        val listCookies  = ArrayList<String>()
+        listCookies.add(server.connectCookie)
+        listCookies.add(server.localeCookie)
         return uwaziApi.getTemplates(
             url = StringUtils.append(
                 '/',
                 server.url,
                 ParamsNetwork.URL_TEMPLATES
             ),
-            cookie = server.cookies
+            cookies = listCookies
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -82,52 +86,11 @@ class UwaziRepository : IUwaziUserRepository {
                 server.url,
                 ParamsNetwork.URL_SETTINGS
             ),
-            cookie = server.cookies
+            cookies = arrayListOf(server.connectCookie,server.localeCookie)
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .map { result -> result.languages }
-    }
-
-    override fun updateDefaultLanguage(languageSettingsEntity: LanguageSettingsEntity,server: UWaziUploadServer): Single<SettingsResponse> {
-        return uwaziApi.updateDefaultLanguage(
-            languageSettingsEntity = languageSettingsEntity,
-            url = StringUtils.append(
-                '/',
-                server.url,
-                ParamsNetwork.URL_TRANSLATE_SETTINGS
-            ),
-            cookie = server.cookies
-        )
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-    }
-
-    override fun submitEntity(
-        server: UWaziUploadServer,
-        title: RequestBody,
-        template: RequestBody,
-        type: RequestBody,
-        metadata : RequestBody,
-        attachments :  List<MultipartBody.Part?>,
-        ): Flowable<UwaziEntityRow> {
-        return uwaziApi.submitEntity(
-            attachments = attachments,
-            title = title,
-            template = template,
-            metadata = metadata,
-            type = type,
-            url = StringUtils.append(
-                '/',
-                server.url,
-                ParamsNetwork.URL_ENTITIES
-            ),
-            cookie = server.cookies,
-        )
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .toFlowable()
-
     }
 
     override fun submitEntity(
@@ -143,7 +106,7 @@ class UwaziRepository : IUwaziUserRepository {
                 server.url,
                 ParamsNetwork.URL_ENTITIES
             ),
-            cookie = server.cookies,
+            cookies = arrayListOf(server.connectCookie,server.localeCookie),
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

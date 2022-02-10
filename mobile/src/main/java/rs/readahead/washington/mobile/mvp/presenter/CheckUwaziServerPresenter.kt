@@ -5,7 +5,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
-import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.data.repository.UwaziRepository
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
@@ -36,12 +35,12 @@ class CheckUwaziServerPresenter constructor(private var view: ICheckUwaziServerC
         disposables.add(uwaziRepository.login(server)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe {view?.showServerCheckLoading()}
+            .doOnSubscribe { view?.showServerCheckLoading() }
             .doFinally { view?.hideServerCheckLoading() }
             .subscribe({ result ->
                 if (result.isSuccess) {
                     server.isChecked = true
-                    server.cookies = result.cookies
+                    server.connectCookie = result.cookies
                     view?.onServerCheckSuccess(server)
                 } else {
                     view?.onServerCheckFailure(UploadProgressInfo.Status.UNAUTHORIZED)

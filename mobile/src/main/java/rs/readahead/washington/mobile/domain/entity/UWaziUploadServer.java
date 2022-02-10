@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public class UWaziUploadServer extends Server implements Serializable {
     public static final UWaziUploadServer NONE = new UWaziUploadServer();
-    private String cookies;
-
+    private String connectCookie;
+    private String localeCookie;
     public UWaziUploadServer() {
         this(0);
     }
@@ -34,11 +34,19 @@ public class UWaziUploadServer extends Server implements Serializable {
         return this.getId() == that.getId();
     }
 
-    public String getCookies() {
-        return cookies;
+    public String getConnectCookie() {
+        return connectCookie;
     }
 
-    public void setCookies(String cookies) {
-        this.cookies = cookies;
+    public void setConnectCookie(String connectCookie) {
+        this.connectCookie = connectCookie;
+    }
+
+    public String getLocaleCookie() {
+        return localeCookie;
+    }
+
+    public void setLocaleCookie(String localeCookie) {
+        this.localeCookie = localeCookie;
     }
 }

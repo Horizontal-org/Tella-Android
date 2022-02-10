@@ -115,7 +115,8 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_NAME, D.TEXT) + " , " +
                 cddl(D.C_URL, D.TEXT) + " , " +
-                cddl(D.C_COOKIES, D.TEXT) + " , " +
+                cddl(D.C_CONNECT_COOKIES, D.TEXT) + " , " +
+                cddl(D.C_LOCALE_COOKIES, D.TEXT) + " , " +
                 cddl(D.C_USERNAME, D.TEXT) + " , " +
                 cddl(D.C_PASSWORD, D.TEXT) +
                 ");";

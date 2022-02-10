@@ -249,7 +249,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
         try {
             cursor = database.query(
                     D.T_UWAZI_SERVER,
-                    new String[]{D.C_ID, D.C_NAME, D.C_URL, D.C_USERNAME, D.C_PASSWORD, D.C_COOKIES},
+                    new String[]{D.C_ID, D.C_NAME, D.C_URL, D.C_USERNAME, D.C_PASSWORD, D.C_CONNECT_COOKIES, D.C_LOCALE_COOKIES},
                     null,
                     null,
                     null, null,
@@ -278,7 +278,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
             final String query = SQLiteQueryBuilder.buildQueryString(
                     false,
                     D.T_UWAZI_SERVER,
-                    new String[]{D.C_ID, D.C_NAME, D.C_URL, D.C_USERNAME, D.C_PASSWORD, D.C_COOKIES},
+                    new String[]{D.C_ID, D.C_NAME, D.C_URL, D.C_USERNAME, D.C_PASSWORD, D.C_CONNECT_COOKIES, D.C_LOCALE_COOKIES},
                     D.C_ID + " = ?",
                     null, null, null, null
             );
@@ -306,7 +306,8 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
         server.setUrl(cursor.getString(cursor.getColumnIndexOrThrow(D.C_URL)));
         server.setUsername(cursor.getString(cursor.getColumnIndexOrThrow(D.C_USERNAME)));
         server.setPassword(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PASSWORD)));
-        server.setCookies(cursor.getString(cursor.getColumnIndexOrThrow(D.C_COOKIES)));
+        server.setConnectCookie(cursor.getString(cursor.getColumnIndexOrThrow(D.C_CONNECT_COOKIES)));
+        server.setLocaleCookie(cursor.getString(cursor.getColumnIndexOrThrow(D.C_LOCALE_COOKIES)));
 
         return server;
     }
@@ -317,8 +318,8 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
         values.put(D.C_URL, server.getUrl());
         values.put(D.C_USERNAME, server.getUsername());
         values.put(D.C_PASSWORD, server.getPassword());
-        values.put(D.C_COOKIES, server.getCookies());
-
+        values.put(D.C_LOCALE_COOKIES, server.getLocaleCookie());
+        values.put(D.C_CONNECT_COOKIES, server.getConnectCookie());
         server.setId(database.insert(D.T_UWAZI_SERVER, null, values));
 
         return server;
@@ -334,8 +335,8 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
         values.put(D.C_URL, server.getUrl());
         values.put(D.C_USERNAME, server.getUsername());
         values.put(D.C_PASSWORD, server.getPassword());
-        values.put(D.C_COOKIES, server.getCookies());
-
+        values.put(D.C_CONNECT_COOKIES, server.getConnectCookie());
+        values.put(D.C_LOCALE_COOKIES, server.getLocaleCookie());
         database.update(D.T_UWAZI_SERVER, values, D.C_ID + "= ?", new String[]{Long.toString(server.getId())});
 
         return server;

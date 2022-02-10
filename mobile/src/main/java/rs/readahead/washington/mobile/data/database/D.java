@@ -45,7 +45,9 @@ class D {
     static final String C_PASSWORD = "c_password";
     static final String C_VERSION = "c_version";
     static final String C_HASH = "c_hash";
-    static final String C_COOKIES = "c_cookies";
+    static final String C_CONNECT_COOKIES = "c_connect_cookies";
+    static final String C_LOCALE_COOKIES = "c_locale_cookies";
+
     //static final String C_DESCRIPTION_TEXT = "c_description_text";
     static final String C_DOWNLOAD_URL = "c_download_url";
     //static final String C_MANIFEST_URL = "c_manifest_url";
