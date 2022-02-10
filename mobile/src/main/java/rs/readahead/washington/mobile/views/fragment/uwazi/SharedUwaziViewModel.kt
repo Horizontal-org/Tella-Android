@@ -44,6 +44,8 @@ class SharedUwaziViewModel : ViewModel() {
     val draftInstances: LiveData<List<ViewEntityInstanceItem>> get() = _draftInstances
     private val _submittedInstances = MutableLiveData<List<ViewEntityInstanceItem>>()
     val submittedInstances: LiveData<List<ViewEntityInstanceItem>> get() = _submittedInstances
+    private var _instanceDeleteD = SingleLiveEvent<Boolean>()
+    val instanceDeleteD: LiveData<Boolean> get() = _instanceDeleteD
     var onInstanceSuccess = SingleLiveEvent<UwaziEntityInstance>()
     var onGetInstanceError = SingleLiveEvent<Throwable>()
 
@@ -219,7 +221,10 @@ class SharedUwaziViewModel : ViewModel() {
             }
             .doFinally { _progress.postValue(false) }
             .subscribe(
-                { listDrafts() }
+                {
+                    _instanceDeleteD.postValue(true)
+                    listDrafts()
+                }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 error.postValue(throwable)

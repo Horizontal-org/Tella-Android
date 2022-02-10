@@ -1,19 +1,20 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.databinding.FragmentDraftsUwaziBinding
 import rs.readahead.washington.mobile.databinding.FragmentSubmittedUwaziBinding
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.UwaziDraftsAdapter
+import rs.readahead.washington.mobile.views.fragment.uwazi.send.SEND_ENTITY
 
 class SubmittedUwaziFragment : UwaziListFragment() {
 
@@ -54,6 +55,10 @@ class SubmittedUwaziFragment : UwaziListFragment() {
             showInstanceSheetMore.observe(viewLifecycleOwner, {
                 showDraftsMenu(it)
             })
+
+            openEntityInstance.observe(viewLifecycleOwner, {
+                openEntityInstance(it)
+            })
         }
     }
 
@@ -61,12 +66,12 @@ class SubmittedUwaziFragment : UwaziListFragment() {
         BottomSheetUtils.showEditDeleteMenuSheet(
             requireActivity().supportFragmentManager,
             instance.title,
-            getString(R.string.Uwazi_Action_FillEntity),
-            getString(R.string.Uwazi_Action_RemoveTemplate),
+            getString(R.string.Uwazi_Action_ViewEntity),
+            getString(R.string.Uwazi_Action_DeleteEntity),
             object : BottomSheetUtils.ActionSeleceted {
                 override fun accept(action: BottomSheetUtils.Action) {
                     if (action === BottomSheetUtils.Action.EDIT) {
-
+                        openEntityInstance(instance)
                     }
                     if (action === BottomSheetUtils.Action.DELETE) {
                         viewModel.confirmDelete(instance)
@@ -90,6 +95,13 @@ class SubmittedUwaziFragment : UwaziListFragment() {
             layoutManager = LinearLayoutManager(activity)
             adapter = uwaziDraftsAdapter
         }
+    }
+
+    private fun openEntityInstance(entityInstance: UwaziEntityInstance) {
+        val bundle = Bundle()
+        bundle.putString(SEND_ENTITY, Gson().toJson(entityInstance))
+        NavHostFragment.findNavController(this)
+            .navigate(R.id.action_uwaziScreen_to_uwaziSubmittedPreview, bundle)
     }
 
     override fun onDestroyView() {

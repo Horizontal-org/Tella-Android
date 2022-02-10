@@ -20,6 +20,12 @@
             app:destination="@id/uwaziEntryScreen"
             >
         </action>
+
+        <action
+            android:id="@+id/action_uwaziScreen_to_uwaziSubmittedPreview"
+            app:destination="@id/uwaziSubmittedPreviewScreen"
+            >
+        </action>
     </fragment>
 
 
@@ -48,4 +54,12 @@
         android:label="Send"
         tools:layout="@layout/uwazi_send_fragment">
     </fragment>
+
+    <fragment
+        android:id="@+id/uwaziSubmittedPreviewScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.uwazi.SubmittedPreviewFragment"
+        android:label="Send"
+        tools:layout="@layout/fragment_sumbitted_preview">
+    </fragment>
+
 </navigation>

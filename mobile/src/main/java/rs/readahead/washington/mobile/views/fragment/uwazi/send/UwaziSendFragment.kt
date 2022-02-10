@@ -88,7 +88,6 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
                      nav().popBackStack()
                      SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
                  }
-
                  UwaziEntityStatus.SUBMISSION_PENDING -> {
                      binding.cancelBtn.isVisible = true
                      SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
@@ -123,10 +122,6 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
     private fun onShowProgress(partName : String,total : Float){
         endView.showUploadProgress(partName)
         endView.setUploadProgress(partName,total)
-    }
-
-    private fun showFormSubmitLoading(instance : UwaziEntityInstance) {
-        endView.clearPartsProgress(instance)
     }
 
     private fun showFormEndView(offline: Boolean) {
