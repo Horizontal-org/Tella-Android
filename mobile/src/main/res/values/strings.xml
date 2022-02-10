@@ -520,6 +520,9 @@
     <string name="Uwazi_Action_DeleteEntity">Delete entity</string>
     <string name="Uwazi_WidgetSubtitle_DateFrom">From</string>
     <string name="Uwazi_WidgetSubtitle_DateTo">To</string>
+    <string name="Uwazi_WidgetSubtitle_Label">Label</string>
+    <string name="Uwazi_WidgetSubtitle_URL">URL</string>
+    <string name="Uwazi_Info_NotValidURL">This is not a valid Url</string>
 
     <string-array name="Uwazi_Language_Array">
         <item>English</item>

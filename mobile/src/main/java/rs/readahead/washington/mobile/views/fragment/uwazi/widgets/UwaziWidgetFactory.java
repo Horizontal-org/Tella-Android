@@ -47,6 +47,10 @@ public class UwaziWidgetFactory {
                 questionWidget = new UwaziGeoPointWidget(context, fep);
                 break;
 
+            case UwaziConstants.UWAZI_DATATYPE_LINK:
+                questionWidget = new UwaziLinkWidget(context, fep, readOnlyOverride);
+                break;
+
             case UwaziConstants.UWAZI_DATATYPE_MARKDOWN:
                 questionWidget = new UwaziStringWidget(context, fep, readOnlyOverride, true);
                 break;
