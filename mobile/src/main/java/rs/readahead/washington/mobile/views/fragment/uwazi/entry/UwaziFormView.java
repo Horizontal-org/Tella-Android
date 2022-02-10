@@ -8,25 +8,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.google.gson.Gson;
-
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.data.entity.mapper.EntityMapper;
-import rs.readahead.washington.mobile.data.entity.uwazi.answer.IUwaziAnswer;
-import rs.readahead.washington.mobile.data.entity.uwazi.answer.UwaziLocation;
 import rs.readahead.washington.mobile.data.uwazi.UwaziConstants;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziFileBinaryWidget;
-import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziGeoPointWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziQuestionWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziWidgetFactory;
 
@@ -167,13 +161,7 @@ public class UwaziFormView extends LinearLayout {
         for (UwaziQuestionWidget q : widgets) {
             if (q.getPrompt().getID().equals(formIndex)) {
                 try {
-                    if (q instanceof UwaziGeoPointWidget) {
-                        String sData = (String) data;
-                        Gson gson = new Gson();
-                        q.setBinaryData( EntityMapper.transformUwaziLocation(gson.fromJson(sData, UwaziLocation.class)));
-                    } else {
-                        q.setBinaryData(data);
-                    }
+                    q.setBinaryData(data);
                 } catch (Exception e) {
                     Toast.makeText(getContext(), "Error attaching data", Toast.LENGTH_LONG).show();
                 }

@@ -17,8 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.gson.internal.LinkedTreeMap;
 import com.hzontal.tella_vault.MyLocation;
-
 
 import java.util.Locale;
 
@@ -26,11 +26,11 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.GPSProviderRequiredEvent;
 import rs.readahead.washington.mobile.bus.event.LocationPermissionRequiredEvent;
-import rs.readahead.washington.mobile.data.entity.uwazi.answer.IUwaziAnswer;
-import rs.readahead.washington.mobile.data.entity.uwazi.answer.UwaziLocation;
 import rs.readahead.washington.mobile.mvp.contract.ILocationGettingPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.LocationGettingPresenter;
 import rs.readahead.washington.mobile.odk.FormController;
+import rs.readahead.washington.mobile.presentation.uwazi.UwaziGeoData;
+import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.LocationUtil;
 import rs.readahead.washington.mobile.views.activity.LocationMapActivity;
@@ -87,14 +87,14 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
     }
 
     @Override
-    public IUwaziAnswer getAnswer() {
+    public UwaziValue getAnswer() {
         if (TextUtils.isEmpty(locationString)) {
             return null;
         }
 
         try {
             MyLocation myLocation = parseLocationString();
-            return new UwaziLocation(myLocation.getLatitude(), myLocation.getLongitude(),"");
+            return new UwaziValue(new UwaziGeoData("",myLocation.getLatitude(),myLocation.getLongitude()));
 
         } catch (Exception numberFormatException) {
             return null;
@@ -113,13 +113,25 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
 
     @Override
     public String setBinaryData(@NonNull Object data) {
-        MyLocation myLocation = (MyLocation) data;
+        UwaziGeoData myLocation=null;
+        if (data instanceof UwaziGeoData){
+            myLocation  = (UwaziGeoData) data;
+        }else {
+            LinkedTreeMap<String,Object> locationTreeMap = ((LinkedTreeMap<String,Object>) data);
+            String label = String.valueOf(locationTreeMap.get("label"));
+            Double longitue = (Double) locationTreeMap.get("lon");
+            Double latitude = (Double) locationTreeMap.get("lat");
+
+            myLocation = new UwaziGeoData(label,latitude,longitue);
+        }
+
+
 
         locationString = String.format(Locale.ROOT, "%s %s %s %s",
-                myLocation.getLatitude(),
-                myLocation.getLongitude(),
-                myLocation.getAltitude() != null ? myLocation.getAltitude() : "0",
-                myLocation.getAccuracy() != null ? myLocation.getAccuracy() : "0");
+                myLocation.getLat(),
+                myLocation.getLon(),
+                 "0",
+                 "0");
 
         showLocation();
 
@@ -148,7 +160,7 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
 
     @Override
     public void onLocationSuccess(Location location) {
-        setBinaryData(MyLocation.fromLocation(location));
+        setBinaryData(new UwaziGeoData("",location.getLatitude(),location.getLongitude()));
     }
 
     @Override

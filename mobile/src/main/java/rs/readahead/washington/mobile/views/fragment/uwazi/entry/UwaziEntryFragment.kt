@@ -24,6 +24,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
+import rs.readahead.washington.mobile.presentation.uwazi.UwaziGeoData
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.views.activity.LocationMapActivity
@@ -82,7 +83,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         if (requestCode == C.SELECTED_LOCATION && resultCode == Activity.RESULT_OK) {
             val myLocation: MyLocation =
                 data!!.getSerializableExtra(LocationMapActivity.SELECTED_LOCATION) as MyLocation
-            putLocationInForm(myLocation)
+            putLocationInForm(UwaziGeoData("",myLocation.latitude,myLocation.longitude))
         }
     }
 
@@ -203,12 +204,13 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
 
         formView.setBinaryData(UWAZI_TITLE, instance.title)
         for (answer in instance.metadata) {
-            val uwaziValue: LinkedTreeMap<String, Any> = answer.value[0] as LinkedTreeMap<String, Any>
-            val stringVal = uwaziValue["value"].toString()
+            val stringVal = (instance.metadata[answer.key]?.get(0) as LinkedTreeMap<String,Any>)["value"]
             if (files.containsKey(stringVal)) {
-                formView.setBinaryData(answer.key, files.get(stringVal) as VaultFile)
+                formView.setBinaryData(answer.key, files[stringVal] as VaultFile)
             } else {
-                formView.setBinaryData(answer.key, stringVal)
+                if (stringVal != null) {
+                    formView.setBinaryData(answer.key, stringVal)
+                }
             }
         }
     }
@@ -272,7 +274,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         vaultFile?.let { uwaziFormView.setBinaryData(it) }
     }
 
-    private fun putLocationInForm(location: MyLocation) {
+    private fun putLocationInForm(location: UwaziGeoData) {
         uwaziFormView.setBinaryData(location)
     }
 
@@ -284,7 +286,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         )
     }
 
-    fun hasGpsPermissions(context: Context): Boolean {
+    private fun hasGpsPermissions(context: Context): Boolean {
         if (ActivityCompat.checkSelfPermission(
                 context,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -294,7 +296,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         return false
     }
 
-    fun requestGpsPermissions(requestCode: Int) {
+    private fun requestGpsPermissions(requestCode: Int) {
         requestPermissions(
             arrayOf(
                 Manifest.permission.ACCESS_FINE_LOCATION
