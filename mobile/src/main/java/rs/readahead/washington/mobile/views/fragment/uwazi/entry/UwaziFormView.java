@@ -105,6 +105,11 @@ public class UwaziFormView extends LinearLayout {
         }
     }
 
+    public void setValidationConstraintTitleText(String text) {
+        UwaziQuestionWidget widget = widgets.get(0);
+        widget.setConstraintValidationText(text);
+    }
+
     public void setValidationConstraintText(String formIndex, String text) {
         for (UwaziQuestionWidget q : widgets) {
             if (q.getPrompt().getIndex().equals(formIndex)) {
