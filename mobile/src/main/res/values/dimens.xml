@@ -33,7 +33,7 @@
     <dimen name="gallery_preview_button">52dp</dimen>
     <dimen name="collect_widget_icon_padding">8dp</dimen>
     <dimen name="collect_form_padding_vertical">16dp</dimen>
-    <dimen name="collect_form_padding_horizontal">34dp</dimen>
+    <dimen name="collect_form_padding_horizontal">16dp</dimen>
 
     <dimen name="about_tella_icon_height">72sp</dimen>
     <dimen name="about_tella_icon_width">66sp</dimen>

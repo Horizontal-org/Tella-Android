@@ -39,6 +39,10 @@ public class UwaziWidgetFactory {
                 questionWidget = new UwaziDateWidget(context, fep);
                 break;
 
+            case UwaziConstants.UWAZI_DATATYPE_DATERANGE:
+                questionWidget = new UwaziDateRangeWidget(context, fep);
+                break;
+
             case UwaziConstants.UWAZI_DATATYPE_GEOLOCATION:
                 questionWidget = new UwaziGeoPointWidget(context, fep);
                 break;

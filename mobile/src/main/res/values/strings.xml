@@ -515,6 +515,11 @@
     <string name="Uwazi_EntryInstance_SavedInfo">Entity is saved as draft.</string>
     <string name="Uwazi_Action_EditDraft">Edit draft</string>
     <string name="Uwazi_Action_RemoveDraft">Remove draft</string>
+    <string name="Uwazi_Submitted_Entity_Header_Title">Submitted entity</string>
+    <string name="Uwazi_Action_ViewEntity">View entity</string>
+    <string name="Uwazi_Action_DeleteEntity">Delete entity</string>
+    <string name="Uwazi_WidgetSubtitle_DateFrom">From</string>
+    <string name="Uwazi_WidgetSubtitle_DateTo">To</string>
 
     <string-array name="Uwazi_Language_Array">
         <item>English</item>
