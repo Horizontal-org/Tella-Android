@@ -1,11 +1,15 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.entry
 
+import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import com.google.gson.Gson
@@ -42,7 +46,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
     private var entityInstance: UwaziEntityInstance = UwaziEntityInstance()
     private val bundle by lazy { Bundle() }
     private var screenView: ViewGroup? = null
-    private var entryPrompts =  mutableListOf<UwaziEntryPrompt>()
+    private var entryPrompts = mutableListOf<UwaziEntryPrompt>()
     private lateinit var uwaziFormView: UwaziFormView
 
     private val uwaziTitlePrompt = UwaziEntryPrompt(
@@ -76,7 +80,8 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         }
 
         if (requestCode == C.SELECTED_LOCATION && resultCode == Activity.RESULT_OK) {
-                val myLocation : MyLocation = data!!.getSerializableExtra(LocationMapActivity.SELECTED_LOCATION) as MyLocation
+            val myLocation: MyLocation =
+                data!!.getSerializableExtra(LocationMapActivity.SELECTED_LOCATION) as MyLocation
             putLocationInForm(myLocation)
         }
     }
@@ -86,13 +91,21 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
             toolbar.backClickListener = { nav().popBackStack() }
             toolbar.onRightClickListener = {
                 entityInstance.status = UwaziEntityStatus.DRAFT
-                getAnswersFromForm()
-                entityInstance.let { viewModel.saveEntityInstance(it) }
+                if (!getAnswersFromForm()) {
+                    uwaziFormView.setValidationConstraintTitleText(getString(R.string.collect_form_error_response_mandatory))
+                    uwaziFormView.setFocus(context)
+                } else {
+                    entityInstance.let { viewModel.saveEntityInstance(it) }
+                }
             }
 
             nextBtn.setOnClickListener { sendEntity() }
 
             screenView = binding.screenFormView
+        }
+
+        if (!hasGpsPermissions(requireContext())) {
+            requestGpsPermissions(C.GPS_PROVIDER)
         }
     }
 
@@ -138,18 +151,29 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
 
     private fun sendEntity() {
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
-        getAnswersFromForm()
-        val gsonTemplate = Gson().toJson(entityInstance)
-        bundle.putString(SEND_ENTITY, gsonTemplate)
-        NavHostFragment.findNavController(this@UwaziEntryFragment)
-            .navigate(R.id.action_uwaziEntryScreen_to_uwaziSendScreen, bundle)
+        if (!getAnswersFromForm()) {
+            uwaziFormView.setValidationConstraintTitleText(getString(R.string.collect_form_error_response_mandatory))
+            uwaziFormView.setFocus(context)
+        } else {
+            val gsonTemplate = Gson().toJson(entityInstance)
+            bundle.putString(SEND_ENTITY, gsonTemplate)
+            NavHostFragment.findNavController(this@UwaziEntryFragment)
+                .navigate(R.id.action_uwaziEntryScreen_to_uwaziSendScreen, bundle)
+        }
     }
 
-    private fun getAnswersFromForm(){
+    private fun getAnswersFromForm(): Boolean {
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
+        uwaziFormView.clearValidationConstraints()
         val hashmap = mutableMapOf<String, List<Any>>()
         val widgetMediaFiles = mutableListOf<FormMediaFile>()
-        for (answer in uwaziFormView.answers) {
+
+        val answers = uwaziFormView.answers
+        if (answers[UWAZI_TITLE] == null) {
+            return false
+        }
+
+        for (answer in answers) {
             if (answer.value != null) {
                 if (answer.key == UWAZI_TITLE) {
                     entityInstance.title = answer.value.value as String
@@ -167,9 +191,10 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         entityInstance.widgetMediaFiles = widgetMediaFiles
         entityInstance.collectTemplate = template
         entityInstance.template = template?.entityRow?.name.toString()
+        return true
     }
 
-    private fun putAnswersToForm(instance: UwaziEntityInstance, formView: UwaziFormView){
+    private fun putAnswersToForm(instance: UwaziEntityInstance, formView: UwaziFormView) {
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
         val files = mutableMapOf<String, FormMediaFile>()
         for (file in instance.widgetMediaFiles){
@@ -181,7 +206,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
             val uwaziValue: LinkedTreeMap<String, Any> = answer.value[0] as LinkedTreeMap<String, Any>
             val stringVal = uwaziValue["value"].toString()
             if (files.containsKey(stringVal)) {
-                formView.setBinaryData(answer.key, files.get(stringVal) as VaultFile )
+                formView.setBinaryData(answer.key, files.get(stringVal) as VaultFile)
             } else {
                 formView.setBinaryData(answer.key, stringVal)
             }
@@ -218,7 +243,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         fillAnswersToForm(entityInstance, uwaziFormView)
     }
 
-    private fun prepareFormView(){
+    private fun prepareFormView() {
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
         entryPrompts.clear()
 
@@ -247,9 +272,8 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         vaultFile?.let { uwaziFormView.setBinaryData(it) }
     }
 
-    private fun putLocationInForm(location: MyLocation){
+    private fun putLocationInForm(location: MyLocation) {
         uwaziFormView.setBinaryData(location)
-
     }
 
     private fun showSavedDialog() {
@@ -257,6 +281,24 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
             activity,
             getString(R.string.Uwazi_EntryInstance_SavedInfo),
             false
+        )
+    }
+
+    fun hasGpsPermissions(context: Context): Boolean {
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        )
+            return true
+        return false
+    }
+
+    fun requestGpsPermissions(requestCode: Int) {
+        requestPermissions(
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ), requestCode
         )
     }
 }
