@@ -21,6 +21,7 @@ import java.util.Locale;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.entity.uwazi.answer.IUwaziAnswer;
 import rs.readahead.washington.mobile.data.entity.uwazi.answer.UwaziLong;
+import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
 
@@ -78,7 +79,7 @@ public class UwaziNumericWidget extends UwaziQuestionWidget {
     }
 
     @Override
-    public IUwaziAnswer getAnswer() {
+    public UwaziValue getAnswer() {
         clearFocus();
         String s = answer.getText().toString();
 
@@ -86,7 +87,7 @@ public class UwaziNumericWidget extends UwaziQuestionWidget {
             return null;
         } else {
             try {
-                return new UwaziLong(Long.parseLong(s));
+                return new UwaziValue(Long.parseLong(s));
             } catch (Exception numberFormatException) {
                 return null;
             }

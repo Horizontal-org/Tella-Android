@@ -152,9 +152,9 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         for (answer in uwaziFormView.answers) {
             if (answer.value != null) {
                 if (answer.key == UWAZI_TITLE) {
-                    entityInstance.title = answer.value.displayText
+                    entityInstance.title = answer.value.value as String
                 } else {
-                    hashmap[answer.key] = arrayListOf(UwaziValue(answer.value.displayText))
+                    hashmap[answer.key] = arrayListOf(UwaziValue(answer.value.value))
                 }
             }
         }
@@ -173,13 +173,13 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
         val files = mutableMapOf<String, FormMediaFile>()
         for (file in instance.widgetMediaFiles){
-            files.put(file.name, file)
+            files[file.name] = file
         }
 
         formView.setBinaryData(UWAZI_TITLE, instance.title)
         for (answer in instance.metadata) {
             val uwaziValue: LinkedTreeMap<String, Any> = answer.value[0] as LinkedTreeMap<String, Any>
-            val stringVal = uwaziValue.get("value").toString()
+            val stringVal = uwaziValue["value"].toString()
             if (files.containsKey(stringVal)) {
                 formView.setBinaryData(answer.key, files.get(stringVal) as VaultFile )
             } else {
@@ -192,7 +192,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
         val files = mutableMapOf<String, FormMediaFile>()
         for (file in instance.widgetMediaFiles) {
-            files.put(file.name, file)
+            files[file.name] = file
         }
 
         formView.setBinaryData(UWAZI_TITLE, instance.title)
@@ -201,7 +201,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
             val uwaziValue: UwaziValue = answer.value[0] as UwaziValue
             val stringVal = uwaziValue.value
             if (files.containsKey(stringVal)) {
-                formView.setBinaryData(answer.key, files.get(stringVal) as VaultFile)
+                formView.setBinaryData(answer.key, files[stringVal] as VaultFile)
             } else {
                 formView.setBinaryData(answer.key, stringVal)
             }
@@ -232,7 +232,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
                 property.required,
                 property.label
             )
-            entryPrompts.add(entryPrompt);
+            entryPrompts.add(entryPrompt)
         }
 
         val arr: Array<UwaziEntryPrompt?> = arrayOfNulls(entryPrompts.size)
@@ -244,7 +244,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
     }
 
     private fun putVaultFileInForm(vaultFile: VaultFile?) {
-        val filename = vaultFile?.let { uwaziFormView.setBinaryData(it) }
+        vaultFile?.let { uwaziFormView.setBinaryData(it) }
     }
 
     private fun putLocationInForm(location: MyLocation){

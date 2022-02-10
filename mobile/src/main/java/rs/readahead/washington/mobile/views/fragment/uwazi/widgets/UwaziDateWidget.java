@@ -27,13 +27,13 @@ import androidx.annotation.NonNull;
 
 import org.joda.time.DateTime;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.data.entity.uwazi.answer.IUwaziAnswer;
-import rs.readahead.washington.mobile.data.entity.uwazi.answer.UwaziInteger;
+import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
@@ -87,14 +87,14 @@ public class UwaziDateWidget extends UwaziQuestionWidget {
     }
 
     @Override
-    public IUwaziAnswer getAnswer() {
+    public UwaziValue getAnswer() {
         clearFocus();
 
         if (nullAnswer) {
             return null;
         }
         long intVal = intMsValue / 1000L;
-        return new UwaziInteger(Integer.parseInt(Long.toString(intVal)));
+        return new UwaziValue(Integer.parseInt(Long.toString(intVal)));
     }
 
     @Override
@@ -166,7 +166,8 @@ public class UwaziDateWidget extends UwaziQuestionWidget {
     }
 
     public String setBinaryData(@NonNull Object data) {
-        int val = Integer.parseInt(data.toString());
+        BigDecimal bd = new BigDecimal(data.toString());
+        long val = bd.longValue();
         intMsValue = val * 1000L;
 
         Date date = new Date(intMsValue);

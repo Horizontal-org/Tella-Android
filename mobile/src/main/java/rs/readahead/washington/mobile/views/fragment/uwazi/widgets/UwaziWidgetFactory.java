@@ -23,10 +23,6 @@ public class UwaziWidgetFactory {
 
         switch (fep.getDataType()) {
 
-            case UwaziConstants.UWAZI_DATATYPE_TEXT:
-                questionWidget = new UwaziStringWidget(context, fep, readOnlyOverride);
-                break;
-
             case UwaziConstants.UWAZI_DATATYPE_NUMERIC:
                 questionWidget = new UwaziNumericWidget(context, fep, readOnlyOverride);
                 break;

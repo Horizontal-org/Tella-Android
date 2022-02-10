@@ -29,6 +29,7 @@ import java.util.List;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.odk.exception.JavaRosaException;
+import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.util.StringUtils;
 import rs.readahead.washington.mobile.data.entity.uwazi.answer.IUwaziAnswer;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
@@ -160,7 +161,7 @@ public abstract class UwaziQuestionWidget extends RelativeLayout {
     }
 
     // Abstract methods
-    public abstract IUwaziAnswer getAnswer();
+    public abstract UwaziValue getAnswer();
 
     public abstract void clearAnswer();
 

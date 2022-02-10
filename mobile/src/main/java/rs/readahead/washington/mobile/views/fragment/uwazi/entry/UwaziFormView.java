@@ -24,6 +24,7 @@ import rs.readahead.washington.mobile.data.entity.uwazi.answer.UwaziLocation;
 import rs.readahead.washington.mobile.data.uwazi.UwaziConstants;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.odk.FormController;
+import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziFileBinaryWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziGeoPointWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziQuestionWidget;
@@ -120,8 +121,8 @@ public class UwaziFormView extends LinearLayout {
         }
     }
 
-    public LinkedHashMap<String, IUwaziAnswer> getAnswers() {
-        LinkedHashMap<String, IUwaziAnswer> answers = new LinkedHashMap<>();
+    public LinkedHashMap<String, UwaziValue> getAnswers() {
+        LinkedHashMap<String, UwaziValue> answers = new LinkedHashMap<>();
 
         for (UwaziQuestionWidget q : widgets) {
             UwaziEntryPrompt p = q.getPrompt();
