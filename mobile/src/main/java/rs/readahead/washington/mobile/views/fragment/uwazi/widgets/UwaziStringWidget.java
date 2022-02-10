@@ -26,11 +26,13 @@ public class UwaziStringWidget extends UwaziQuestionWidget {
 
     protected boolean readOnly;
     protected EditText answer;
+    protected boolean isMarkdown;
 
     @SuppressLint("NewApi")
-    public UwaziStringWidget(Context context, UwaziEntryPrompt prompt, boolean readOnlyOverride) {
+    public UwaziStringWidget(Context context, UwaziEntryPrompt prompt, boolean readOnlyOverride, boolean isMarkdown) {
         super(context, prompt);
 
+        this.isMarkdown = isMarkdown;
         answer = new EditText(context);
         answer.setTextColor(getResources().getColor(R.color.wa_white_80));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

@@ -83,7 +83,9 @@ public class UwaziFormView extends LinearLayout {
                     p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_IMAGE) ||
                     p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_DATE) ||
                     p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_DATERANGE) ||
-                    p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_GEOLOCATION)
+                    p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_GEOLOCATION) ||
+                    p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_MARKDOWN)
+
             ) {
                 UwaziQuestionWidget qw = UwaziWidgetFactory.createWidgetFromPrompt(p, getContext(), readOnlyOverride);
                 qw.setId(VIEW_ID + id++);

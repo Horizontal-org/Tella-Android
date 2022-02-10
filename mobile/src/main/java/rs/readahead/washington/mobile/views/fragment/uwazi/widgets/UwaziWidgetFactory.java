@@ -47,8 +47,12 @@ public class UwaziWidgetFactory {
                 questionWidget = new UwaziGeoPointWidget(context, fep);
                 break;
 
+            case UwaziConstants.UWAZI_DATATYPE_MARKDOWN:
+                questionWidget = new UwaziStringWidget(context, fep, readOnlyOverride, true);
+                break;
+
             default:
-                questionWidget = new UwaziStringWidget(context, fep, readOnlyOverride);
+                questionWidget = new UwaziStringWidget(context, fep, readOnlyOverride, false);
                 break;
         }
 
