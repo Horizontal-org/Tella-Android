@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import com.google.android.material.tabs.TabLayoutMediator
 import rs.readahead.washington.mobile.R
@@ -30,9 +31,16 @@ class UwaziFragment : BaseFragment() {
                 adapter = viewPagerAdapter
             }
             // Set the text for each tab
-            TabLayoutMediator(tabs, viewPager) { tab, position ->
+          TabLayoutMediator(tabs, viewPager) { tab, position ->
                 tab.text = getTabTitle(position)
+
             }.attach()
+
+            tabs.setTabTextColors(
+                ContextCompat.getColor(activity, R.color.wa_white_44),
+                ContextCompat.getColor(activity, R.color.wa_white)
+                )
+
 
             fabButton.setOnClickListener {
                 nav().navigate(R.id.action_uwaziScreen_to_uwaziDownloadScreen)
