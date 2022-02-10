@@ -181,6 +181,11 @@
         <item name="android:background">@drawable/rounded_light_purple_background</item>
         <item name="android:textColor">@color/wa_gray</item>
         <item name="android:textAllCaps">false</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:drawablePadding">15dp</item>
+        <item name="android:drawableStart">@drawable/ic_calendar</item>
     </style>
 
     <style name="CollectHelpText">
