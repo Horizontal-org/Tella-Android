@@ -51,6 +51,10 @@ public class UwaziWidgetFactory {
                 questionWidget = new UwaziSelectOneWidget(context, fep);
                 break;
 
+            case UwaziConstants.UWAZI_DATATYPE_MULTISELECT:
+                questionWidget = new UwaziMultiSelectWidget(context, fep);
+                break;
+
             case UwaziConstants.UWAZI_DATATYPE_LINK:
                 questionWidget = new UwaziLinkWidget(context, fep);
                 break;

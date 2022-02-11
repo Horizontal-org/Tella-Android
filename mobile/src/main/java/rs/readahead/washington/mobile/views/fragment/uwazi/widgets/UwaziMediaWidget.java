@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -23,11 +22,9 @@ import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordReposito
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.views.activity.QuestionAttachmentActivity;
-import rs.readahead.washington.mobile.views.base_ui.BaseActivity;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
-import rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment;
 
 
 @SuppressLint("ViewConstructor")
@@ -108,7 +105,6 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
         try {
 
           Activity activity  = (Activity) getContext();
-            //FormController.getActive().setIndexWai
             waitingForAData = true;
 
             VaultFile vaultFile = getFilename() != null ? MyApplication.rxVault
