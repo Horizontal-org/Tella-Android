@@ -56,7 +56,7 @@ class SubmittedUwaziFragment : UwaziListFragment() {
                 showDraftsMenu(it)
             })
 
-            openEntityInstance.observe(viewLifecycleOwner, {
+            onInstanceSuccess.observe(viewLifecycleOwner,{
                 openEntityInstance(it)
             })
         }
@@ -71,7 +71,7 @@ class SubmittedUwaziFragment : UwaziListFragment() {
             object : BottomSheetUtils.ActionSeleceted {
                 override fun accept(action: BottomSheetUtils.Action) {
                     if (action === BottomSheetUtils.Action.EDIT) {
-                        openEntityInstance(instance)
+                        viewModel.getInstanceUwaziEntity(instance.id)
                     }
                     if (action === BottomSheetUtils.Action.DELETE) {
                         viewModel.confirmDelete(instance)
