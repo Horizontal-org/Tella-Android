@@ -9,7 +9,6 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.databinding.FragmentDraftsUwaziBinding
 import rs.readahead.washington.mobile.databinding.FragmentOutboxUwaziBinding
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.UwaziDraftsAdapter

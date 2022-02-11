@@ -112,7 +112,7 @@ class DownloadedTemplatesViewModel : ViewModel(){
             .flatMap { servers ->
                 val singles: MutableList<Single<ListTemplateResult>> = ArrayList()
                 for (server in servers) {
-                    singles.add(uwaziRepository.getTemplates(server))
+                    singles.add(uwaziRepository.getTemplatesResult(server))
                 }
                 Single.zip(
                     singles

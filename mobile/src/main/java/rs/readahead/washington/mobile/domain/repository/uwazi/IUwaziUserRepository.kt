@@ -4,21 +4,28 @@ import io.reactivex.Single
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import rs.readahead.washington.mobile.data.entity.uwazi.Language
+import rs.readahead.washington.mobile.data.entity.uwazi.LoginResult
 import rs.readahead.washington.mobile.data.entity.uwazi.UwaziEntityRow
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.ListTemplateResult
-import rs.readahead.washington.mobile.domain.entity.uwazi.LoginResult
+import rs.readahead.washington.mobile.domain.entity.uwazi.RowDictionary
+import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziRow
 
 interface IUwaziUserRepository {
 
-     fun login(server: UWaziUploadServer) : Single<LoginResult>
+    fun login(server: UWaziUploadServer): Single<LoginResult>
 
-     fun getTemplates(server: UWaziUploadServer) : Single<ListTemplateResult>
+    fun getTemplatesResult(server: UWaziUploadServer) :  Single<ListTemplateResult>
 
-     fun getSettings(server: UWaziUploadServer) : Single<List<Language>>
+    fun getTemplates(server: UWaziUploadServer): Single<List<UwaziRow>>
+
+    fun getSettings(server: UWaziUploadServer): Single<List<Language>>
+
+    fun getDictionary(server: UWaziUploadServer): Single<List<RowDictionary>>
 
     fun submitEntity(
         server: UWaziUploadServer,
         entity: RequestBody,
-        attachments : List<MultipartBody.Part?> ) : Single<UwaziEntityRow>
+        attachments: List<MultipartBody.Part?>
+    ): Single<UwaziEntityRow>
 }
