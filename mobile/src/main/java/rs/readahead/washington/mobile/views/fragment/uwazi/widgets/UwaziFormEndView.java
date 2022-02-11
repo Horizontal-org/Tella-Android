@@ -31,6 +31,8 @@ public class UwaziFormEndView extends FrameLayout {
     TextView subTitleView;
     String title;
     private UwaziEntityInstance instance;
+    private boolean previewUploaded;
+
 
     public UwaziFormEndView(Context context, @StringRes int titleResId) {
         super(context);
@@ -43,8 +45,9 @@ public class UwaziFormEndView extends FrameLayout {
         subTitleView = findViewById(R.id.subtitle);
     }
 
-    public void setInstance(@NonNull UwaziEntityInstance instance, boolean offline) {
+    public void setInstance(@NonNull UwaziEntityInstance instance, boolean offline, boolean previewUploaded) {
         this.instance = instance;
+        this.previewUploaded = previewUploaded;
         refreshInstance(offline);
     }
 
@@ -161,7 +164,7 @@ public class UwaziFormEndView extends FrameLayout {
 
         item.setPartIcon(typeResId);
 
-        if (mediaFile.status == FormMediaFileStatus.SUBMITTED) {
+        if (mediaFile.status == FormMediaFileStatus.SUBMITTED || previewUploaded) {
             item.setPartUploaded();
         } else {
             item.setPartPrepared(offline);

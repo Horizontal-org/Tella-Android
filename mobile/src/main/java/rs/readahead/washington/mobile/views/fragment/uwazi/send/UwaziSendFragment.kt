@@ -132,7 +132,7 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
         endView = UwaziFormEndView(activity,
             if (entityInstance!!.status == UwaziEntityStatus.SUBMITTED) R.string.collect_end_heading_confirmation_form_submitted else R.string.collect_end_action_submit
         )
-        endView.setInstance(entityInstance!!, offline)
+        endView.setInstance(entityInstance!!, offline, false)
         binding.endViewContainer.removeAllViews()
         binding.endViewContainer.addView(endView)
       //  updateFormSubmitButton(false)
