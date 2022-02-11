@@ -4,5 +4,5 @@ data class RowDictionary(
     val version: Int,
     val _id: String,
     val name: String,
-    val values: List<Value>
+    val values: List<SelectValue>
 )

@@ -83,7 +83,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         if (requestCode == C.SELECTED_LOCATION && resultCode == Activity.RESULT_OK) {
             val myLocation: MyLocation =
                 data!!.getSerializableExtra(LocationMapActivity.SELECTED_LOCATION) as MyLocation
-            putLocationInForm(UwaziGeoData("",myLocation.latitude,myLocation.longitude))
+            putLocationInForm(UwaziGeoData("", myLocation.latitude, myLocation.longitude))
         }
     }
 
@@ -171,12 +171,18 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
 
         // check required fields
         if (answers[UWAZI_TITLE] == null) {
-            uwaziFormView.setValidationConstraintText(UWAZI_TITLE, getString(R.string.collect_form_error_response_mandatory))
+            uwaziFormView.setValidationConstraintText(
+                UWAZI_TITLE,
+                getString(R.string.collect_form_error_response_mandatory)
+            )
             validationRequired = true
         }
-        for (property in template?.entityRow?.properties!!){
-            if (property.required && (answers[property.name] == null)){
-                uwaziFormView.setValidationConstraintText(property.name, getString(R.string.collect_form_error_response_mandatory))
+        for (property in template?.entityRow?.properties!!) {
+            if (property.required && (answers[property.name] == null)) {
+                uwaziFormView.setValidationConstraintText(
+                    property.name,
+                    getString(R.string.collect_form_error_response_mandatory)
+                )
                 validationRequired = true
             }
         }
@@ -209,13 +215,14 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
     private fun putAnswersToForm(instance: UwaziEntityInstance, formView: UwaziFormView) {
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
         val files = mutableMapOf<String, FormMediaFile>()
-        for (file in instance.widgetMediaFiles){
+        for (file in instance.widgetMediaFiles) {
             files[file.name] = file
         }
 
         formView.setBinaryData(UWAZI_TITLE, instance.title)
         for (answer in instance.metadata) {
-            val stringVal = (instance.metadata[answer.key]?.get(0) as LinkedTreeMap<String,Any>)["value"]
+            val stringVal =
+                (instance.metadata[answer.key]?.get(0) as LinkedTreeMap<String, Any>)["value"]
             if (files.containsKey(stringVal)) {
                 formView.setBinaryData(answer.key, files[stringVal] as VaultFile)
             } else {
@@ -270,6 +277,9 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
                 property.required,
                 property.label
             )
+            if (property.values != null) {
+                entryPrompt.selectValues = property.values
+            }
             entryPrompts.add(entryPrompt)
         }
 

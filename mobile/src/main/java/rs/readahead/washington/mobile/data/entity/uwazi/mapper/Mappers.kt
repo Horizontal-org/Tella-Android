@@ -55,7 +55,7 @@ fun RowDictionaryEntity.mapToDomainModel() = RowDictionary(
     name = name ?: "",
     values = values?.map { it.mapToDomainModel() } ?: emptyList())
 
-fun ValueEntity.mapToDomainModel() = Value(
+fun ValueEntity.mapToDomainModel() = SelectValue(
     _id = _id,
     id = id,
     label = label,
