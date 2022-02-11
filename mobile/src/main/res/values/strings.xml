@@ -523,6 +523,8 @@
     <string name="Uwazi_WidgetSubtitle_Label">Label</string>
     <string name="Uwazi_WidgetSubtitle_URL">URL</string>
     <string name="Uwazi_Info_NotValidURL">This is not a valid Url</string>
+    <string name="Uwazi_Subtitle_MarkdownSupported">markdown supported</string>
+    <string name="Uwazi_Answer_LinkInitialText">https://</string>
 
     <string-array name="Uwazi_Language_Array">
         <item>English</item>

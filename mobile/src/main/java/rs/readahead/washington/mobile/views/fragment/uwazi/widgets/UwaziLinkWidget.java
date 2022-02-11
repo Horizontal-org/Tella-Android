@@ -2,54 +2,76 @@ package rs.readahead.washington.mobile.views.fragment.uwazi.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
+import android.text.Selection;
 import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.URLUtil;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import com.google.gson.internal.LinkedTreeMap;
 
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.data.entity.uwazi.answer.IUwaziAnswer;
 import rs.readahead.washington.mobile.data.entity.uwazi.answer.UwaziLink;
+import rs.readahead.washington.mobile.data.entity.uwazi.answer.UwaziString;
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
-import timber.log.Timber;
 
 @SuppressLint("ViewConstructor")
 public class UwaziLinkWidget extends UwaziQuestionWidget {
-    private static final String ROWS = "rows";
 
     protected boolean readOnly;
     protected EditText label;
     protected EditText url;
 
     @SuppressLint("NewApi")
-    public UwaziLinkWidget(Context context, UwaziEntryPrompt prompt, boolean readOnlyOverride) {
+    public UwaziLinkWidget(Context context, UwaziEntryPrompt prompt) {
         super(context, prompt);
 
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
-/*
+
+        TextView labelText = new TextView(context);
+        labelText.setTextColor(getResources().getColor(R.color.wa_white_80));
+        labelText.setText(R.string.Uwazi_WidgetSubtitle_Label);
+
+        TextView urlText = new TextView(context);
+        urlText.setTextColor(getResources().getColor(R.color.wa_white_80));
+        urlText.setText(R.string.Uwazi_WidgetSubtitle_URL);
+
         label = new EditText(context);
         label.setTextColor(getResources().getColor(R.color.wa_white_80));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             label.setBackgroundTintList(context.getColorStateList(R.color.dialog_white_tint));
         }
         label.setId(QuestionWidget.newUniqueId());
-        readOnly = prompt.isReadOnly() || readOnlyOverride;
+
+        url = new EditText(context);
+        url.setTextColor(getResources().getColor(R.color.wa_white_80));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            url.setBackgroundTintList(context.getColorStateList(R.color.dialog_white_tint));
+        }
+        url.setId(QuestionWidget.newUniqueId());
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+
         params.setMargins(7, 5, 7, 5);
         label.setLayoutParams(params);
+        url.setLayoutParams(params);
 
         label.setHorizontallyScrolling(false);
         label.setSingleLine(false);
+        url.setHorizontallyScrolling(false);
+        url.setSingleLine(false);
 
         String s = prompt.getAnswerText();
         if (s != null) {
@@ -63,15 +85,26 @@ public class UwaziLinkWidget extends UwaziQuestionWidget {
             label.setTextColor(ContextCompat.getColor(context, R.color.light_gray));
             label.setFocusable(false);
             label.setVisibility(GONE);
-        }*/
+            url.setBackground(null);
+            url.setEnabled(false);
+            url.setTextColor(ContextCompat.getColor(context, R.color.light_gray));
+            url.setFocusable(false);
+            url.setVisibility(GONE);
+        }
 
-        addLinkView(linearLayout);
+        linearLayout.addView(labelText);
+        linearLayout.addView(label);
+        linearLayout.addView(urlText);
+        linearLayout.addView(url);
+        addAnswerView(linearLayout);
+
+        clearAnswer();
     }
 
     @Override
     public void clearAnswer() {
         label.setText(null);
-        url.setText(null);
+        url.setText(R.string.Uwazi_Answer_LinkInitialText);
     }
 
     @Override
@@ -80,9 +113,9 @@ public class UwaziLinkWidget extends UwaziQuestionWidget {
         String l = label.getText().toString();
         String u = url.getText().toString();
 
-        if (!URLUtil.isValidUrl(l)) {
+        /*if (!URLUtil.isValidUrl(u)) {
             this.setConstraintValidationText("This is not a valid Url");
-        }
+        }*/
 
         if (TextUtils.isEmpty(l) && TextUtils.isEmpty(u)) {
             return null;
@@ -112,22 +145,6 @@ public class UwaziLinkWidget extends UwaziQuestionWidget {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         return !event.isAltPressed() && super.onKeyDown(keyCode, event);
-    }
-
-    private void addLinkView(LinearLayout linearLayout) {
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        Timber.d("++++++++++++++++ inflater");
-
-        inflater.inflate(R.layout.uwazi_widget_link, linearLayout, true);
-
-        label = linearLayout.findViewById(R.id.label);
-        url = linearLayout.findViewById(R.id.url);
-
-        label.setId(QuestionWidget.newUniqueId());
-        url.setId(QuestionWidget.newUniqueId());
-
-        label.setSingleLine(true);
-        url.setSingleLine(true);
     }
 
     public String setBinaryData(@NonNull Object data) {

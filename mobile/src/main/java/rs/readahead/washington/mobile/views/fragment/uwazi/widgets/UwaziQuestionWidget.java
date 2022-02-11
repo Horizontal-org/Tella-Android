@@ -86,7 +86,8 @@ public abstract class UwaziQuestionWidget extends RelativeLayout {
         questionTitleView.setText(builder);
 
         helpTextView = findViewById(R.id.questionHelpText);
-      /*  if (!TextUtils.isEmpty(formEntryPrompt.getHelpText())) {
+        helpTextView.setVisibility(GONE);
+        /*if (!TextUtils.isEmpty(formEntryPrompt.getHelpText())) {
             helpTextView.setText(formEntryPrompt.getHelpText());
         } else {
             helpTextView.setVisibility(GONE);
@@ -97,6 +98,11 @@ public abstract class UwaziQuestionWidget extends RelativeLayout {
 
     public TextView getHelpTextView() {
         return helpTextView;
+    }
+
+    public void setHelpTextView(String text) {
+        helpTextView.setText(text);
+        helpTextView.setVisibility(VISIBLE);
     }
 
     public void setConstraintValidationText(@Nullable String text) {

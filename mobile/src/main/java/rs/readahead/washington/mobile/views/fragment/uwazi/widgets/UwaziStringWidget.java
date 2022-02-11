@@ -26,13 +26,11 @@ public class UwaziStringWidget extends UwaziQuestionWidget {
 
     protected boolean readOnly;
     protected EditText answer;
-    protected boolean isMarkdown;
 
     @SuppressLint("NewApi")
     public UwaziStringWidget(Context context, UwaziEntryPrompt prompt, boolean readOnlyOverride, boolean isMarkdown) {
         super(context, prompt);
 
-        this.isMarkdown = isMarkdown;
         answer = new EditText(context);
         answer.setTextColor(getResources().getColor(R.color.wa_white_80));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -42,6 +40,10 @@ public class UwaziStringWidget extends UwaziQuestionWidget {
         readOnly = prompt.isReadOnly() || readOnlyOverride;
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+
+        if (isMarkdown) {
+            setHelpTextView(getContext().getString(R.string.Uwazi_Subtitle_MarkdownSupported));
+        }
 
         // fix height, if rows attr is present
         /*String height = prompt.getQuestion().getAdditionalAttribute(null, ROWS);

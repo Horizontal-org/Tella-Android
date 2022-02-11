@@ -48,7 +48,7 @@ public class UwaziWidgetFactory {
                 break;
 
             case UwaziConstants.UWAZI_DATATYPE_LINK:
-                questionWidget = new UwaziLinkWidget(context, fep, readOnlyOverride);
+                questionWidget = new UwaziLinkWidget(context, fep);
                 break;
 
             case UwaziConstants.UWAZI_DATATYPE_MARKDOWN:

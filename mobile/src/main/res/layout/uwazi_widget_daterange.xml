@@ -12,8 +12,6 @@
         android:gravity="start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
         android:layout_margin="2dp"
         android:text="@string/Uwazi_WidgetSubtitle_DateFrom"
         android:textColor="@color/wa_white_80"/>
@@ -39,8 +37,6 @@
     <TextView
         android:id="@+id/textTo"
         android:layout_marginTop="6dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
         android:textSize="16sp"
         android:textAlignment="viewStart"
         android:gravity="start"
