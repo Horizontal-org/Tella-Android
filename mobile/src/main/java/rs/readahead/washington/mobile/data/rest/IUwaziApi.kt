@@ -30,6 +30,19 @@ interface IUwaziApi  {
         @Header(COOKIE) cookies : List<String>
     ) : Single<SettingsResponse>
 
+    @GET
+    fun getDictionary(
+        @Url url : String,
+        @Header(COOKIE) cookies : List<String>
+    ) : Single<DictionaryResponse>
+
+
+    @GET
+    fun getTranslations(
+        @Url url : String,
+        @Header(COOKIE) cookies : List<String>
+    ) : Single<DictionaryResponse>
+
 
     @Multipart
     @POST

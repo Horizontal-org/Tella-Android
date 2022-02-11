@@ -36,6 +36,7 @@ import rs.readahead.washington.mobile.domain.entity.uwazi.EntityInstanceBundle;
 import rs.readahead.washington.mobile.domain.entity.uwazi.ListTemplateResult;
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance;
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus;
+import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziRow;
 import rs.readahead.washington.mobile.domain.exception.NotFountException;
 import rs.readahead.washington.mobile.domain.repository.IUWAZIServersRepository;
 import rs.readahead.washington.mobile.domain.repository.uwazi.ICollectUwaziTemplatesRepository;
@@ -374,7 +375,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
             cursor = database.rawQuery(query, null);
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                UwaziEntityRow entity = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_ENTITY)), UwaziEntityRow.class);
+                UwaziRow entity = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_ENTITY)), UwaziRow.class);
                 long id = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID));
                 long serverId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_UWAZI_SERVER_ID));
                 boolean downloaded = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_DOWNLOADED)) == 1;
@@ -427,7 +428,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
             cursor = database.rawQuery(query, null);
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                UwaziEntityRow entity = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_ENTITY)), new TypeToken<UwaziEntityRow>() {
+                UwaziRow entity = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_ENTITY)), new TypeToken<UwaziRow>() {
                 }.getType());
 
                 // todo: implement cursorToCollectForm
@@ -487,7 +488,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
                 }
             } else {
                 values.put(D.C_UWAZI_SERVER_ID, template.getServerId());
-                values.put(D.C_VERSION, template.getEntityRow().get__v());
+                values.put(D.C_VERSION, template.getEntityRow().getVersion());
                 values.put(D.C_NAME, template.getEntityRow().getName());
 
                 long id = database.insert(D.T_UWAZI_BLANK_TEMPLATES, null, values);
@@ -560,7 +561,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
                 boolean updated = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_UPDATED)) == 1;
                 String serverName = cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_NAME));
                 String username = cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_USERNAME));
-                UwaziEntityRow entity = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_ENTITY)), new TypeToken<UwaziEntityRow>() {
+                UwaziRow entity = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_ENTITY)), new TypeToken<UwaziRow>() {
                 }.getType());
 
                 return new CollectTemplate(id, serverId, serverName, username, entity, downloaded, favorite, updated);
@@ -876,7 +877,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
             cursor = database.rawQuery(query, null);
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                UwaziEntityRow entity = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_ENTITY)), UwaziEntityRow.class);
+                UwaziRow entity = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_ENTITY)), UwaziRow.class);
                 long id = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID));
                 long serverId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_UWAZI_SERVER_ID));
                 boolean downloaded = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_DOWNLOADED)) == 1;
