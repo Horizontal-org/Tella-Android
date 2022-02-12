@@ -30,7 +30,10 @@ import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.views.activity.LocationMapActivity
 import rs.readahead.washington.mobile.views.activity.QuestionAttachmentActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
+import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.SEND_ENTITY
+import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.OUTBOX_LIST_PAGE_INDEX
+import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
 
 
@@ -130,20 +133,23 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
 
     private fun initObservers() {
         with(viewModel) {
-
             progress.observe(viewLifecycleOwner, { status ->
-                if (status == UwaziEntityStatus.SUBMITTED) {
-                    nav().popBackStack()
-                    progress.postValue(UwaziEntityStatus.UNKNOWN)
-                }else if (status == UwaziEntityStatus.DRAFT) {
+                when (status) {
+                    UwaziEntityStatus.SUBMISSION_PENDING, UwaziEntityStatus.SUBMISSION_ERROR -> {
+                        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
                         nav().popBackStack()
                         progress.postValue(UwaziEntityStatus.UNKNOWN)
                     }
-            })
-
-            instance.observe(viewLifecycleOwner, {
-                entityInstance = it
-                showSavedDialog()
+                    UwaziEntityStatus.SUBMITTED -> {
+                        SharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
+                        nav().popBackStack()
+                        progress.postValue(UwaziEntityStatus.UNKNOWN)
+                    }
+                    UwaziEntityStatus.DRAFT -> {
+                        showSavedDialog()
+                        progress.postValue(UwaziEntityStatus.UNKNOWN)
+                    }
+                }
             })
         }
     }

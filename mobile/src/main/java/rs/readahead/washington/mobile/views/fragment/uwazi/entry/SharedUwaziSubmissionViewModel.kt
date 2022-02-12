@@ -51,8 +51,8 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
             .observeOn(AndroidSchedulers.mainThread())
             .flatMap { dataSource: UwaziDataSource -> dataSource.saveEntityInstance(instance).toObservable() }
             .doFinally { progress.postValue(instance.status)   }
-            .subscribe ({ savedInstance ->
-               progress.postValue(instance.status)
+            .subscribe ({
+                progress.postValue(instance.status)
                // _instance.postValue(savedInstance)
             }
 
