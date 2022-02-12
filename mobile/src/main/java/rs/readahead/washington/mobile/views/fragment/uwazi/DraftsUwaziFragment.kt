@@ -65,6 +65,10 @@ class DraftsUwaziFragment : UwaziListFragment() {
             onInstanceSuccess.observe(viewLifecycleOwner,{
                 editDraft(it)
             })
+
+            instanceDeleteD.observe(viewLifecycleOwner,{
+                listDrafts()
+            })
         }
     }
 
@@ -105,7 +109,6 @@ class DraftsUwaziFragment : UwaziListFragment() {
 
     private fun openDraft(entityInstance: UwaziEntityInstance){
         viewModel.getInstanceUwaziEntity(entityInstance.id)
-        //DialogUtils.showBottomMessage(activity,"This functionality is not yet implemented",true)
     }
 
     private fun editDraft(entityInstance: UwaziEntityInstance){

@@ -225,7 +225,6 @@ class SharedUwaziViewModel : ViewModel() {
             .subscribe(
                 {
                     _instanceDeleteD.postValue(true)
-                    listDrafts()
                 }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)

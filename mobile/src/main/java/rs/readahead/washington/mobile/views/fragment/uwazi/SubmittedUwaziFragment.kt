@@ -61,6 +61,10 @@ class SubmittedUwaziFragment : UwaziListFragment() {
             onInstanceSuccess.observe(viewLifecycleOwner,{
                 openEntityInstance(it)
             })
+
+            instanceDeleteD.observe(viewLifecycleOwner,{
+                listSubmitted()
+            })
         }
     }
 

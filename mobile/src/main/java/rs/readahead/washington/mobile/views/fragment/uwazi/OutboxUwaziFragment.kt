@@ -56,6 +56,10 @@ class OutboxUwaziFragment : UwaziListFragment() {
                 }
             })
 
+            instanceDeleteD.observe(viewLifecycleOwner,{
+                listOutBox()
+            })
+
             showInstanceSheetMore.observe(viewLifecycleOwner, {
                 showDraftsMenu(it)
             })
