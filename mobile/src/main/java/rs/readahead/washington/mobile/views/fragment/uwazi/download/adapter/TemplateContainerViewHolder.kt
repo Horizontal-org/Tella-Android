@@ -9,7 +9,6 @@ import rs.readahead.washington.mobile.databinding.ItemUwaziCollectContainerBindi
 class TemplateContainerViewHolder internal constructor(private val binding: ItemUwaziCollectContainerBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun setTemplateContainer(item : List<ViewTemplateItem>){
-
             with(binding){
                 tvServerName.text = item[0].serverName
                 val templateListAdapter = TemplateListAdapter()

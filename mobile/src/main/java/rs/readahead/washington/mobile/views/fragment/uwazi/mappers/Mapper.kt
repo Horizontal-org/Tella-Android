@@ -49,7 +49,9 @@ fun UwaziEntityInstance.toViewEntityInstanceItem(
     id = id,
     instanceName = title,
     serverId = collectTemplate?.serverId,
-    serverName = collectTemplate?.serverName,
+    updated = updated,
+    status = status,
+    serverName = collectTemplate?.serverName ?: "",
     onMoreClicked = onMoreClicked,
     onOpenClicked = onOpenClicked
 )

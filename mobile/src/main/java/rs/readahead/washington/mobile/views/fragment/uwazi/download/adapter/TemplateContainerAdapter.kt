@@ -14,7 +14,6 @@ class TemplateContainerAdapter : RecyclerView.Adapter<TemplateContainerViewHolde
         notifyDataSetChanged()
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TemplateContainerViewHolder {
         return TemplateContainerViewHolder.from(parent)
     }

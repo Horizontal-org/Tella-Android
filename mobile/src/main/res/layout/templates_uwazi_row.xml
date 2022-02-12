@@ -48,7 +48,7 @@
 
         <TextView
             android:id="@+id/name"
-            style="@style/Tella_Main_White_Text.Meduim"
+            style="@style/Tella_Main_White_Text.MeduimbBold"
             android:layout_toEndOf="@id/favorites_button"
             android:layout_toStartOf="@id/popupMenu"
             android:layout_gravity="start"

@@ -50,7 +50,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="MissingConstraints"
-        android:src="@drawable/ic_plus_rounded"
+        android:src="@drawable/ic_save_alt_24px"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         />
 
