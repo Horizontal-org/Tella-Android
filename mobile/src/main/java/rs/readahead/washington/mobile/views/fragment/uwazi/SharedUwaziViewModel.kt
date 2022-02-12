@@ -44,6 +44,8 @@ class SharedUwaziViewModel : ViewModel() {
     val draftInstances: LiveData<List<ViewEntityInstanceItem>> get() = _draftInstances
     private val _submittedInstances = MutableLiveData<List<ViewEntityInstanceItem>>()
     val submittedInstances: LiveData<List<ViewEntityInstanceItem>> get() = _submittedInstances
+    private val _outboxInstances = MutableLiveData<List<ViewEntityInstanceItem>>()
+    val outboxInstances: LiveData<List<ViewEntityInstanceItem>> get() = _outboxInstances
     private var _instanceDeleteD = SingleLiveEvent<Boolean>()
     val instanceDeleteD: LiveData<Boolean> get() = _instanceDeleteD
     var onInstanceSuccess = SingleLiveEvent<UwaziEntityInstance>()
@@ -147,9 +149,9 @@ class SharedUwaziViewModel : ViewModel() {
             }
             .doFinally { _progress.postValue(false) }
             .subscribe(
-                { drafts: List<UwaziEntityInstance> ->
+                { outboxes: List<UwaziEntityInstance> ->
                     val resultList = mutableListOf<ViewEntityInstanceItem>()
-                    drafts.map {
+                    outboxes.map {
                         resultList.add(it.toViewEntityInstanceItem (onMoreClicked = {
                             onInstanceMoreClicked(
                                 it
@@ -158,7 +160,7 @@ class SharedUwaziViewModel : ViewModel() {
                             onOpenClicked = {openEntityInstance(it)}
                             ))
                     }
-                    _submittedInstances.postValue(resultList)
+                    _outboxInstances.postValue(resultList)
                 }
             ) { throwable: Throwable? ->
                 error.postValue(
