@@ -234,7 +234,13 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
 
         formView.setBinaryData(UWAZI_TITLE, instance.title)
         for (answer in instance.metadata) {
-            val stringVal = (instance.metadata[answer.key]?.get(0) as LinkedTreeMap<String, Any>)["value"]
+
+            val stringVal = if ((instance.metadata[answer.key] as ArrayList).size == 1){
+                (instance.metadata[answer.key]?.get(0) as LinkedTreeMap<String, Any>)["value"]
+            }else{
+                (instance.metadata[answer.key])
+            }
+
             if (files.containsKey(stringVal)) {
                 formView.setBinaryData(answer.key, files[stringVal] as VaultFile)
             } else {

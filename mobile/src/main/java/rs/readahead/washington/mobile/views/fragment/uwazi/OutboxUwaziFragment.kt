@@ -78,7 +78,7 @@ class OutboxUwaziFragment : UwaziListFragment() {
         BottomSheetUtils.showEditDeleteMenuSheet(
             requireActivity().supportFragmentManager,
             instance.title,
-            getString(R.string.Uwazi_Action_FillEntity),
+            getString(R.string.Uwazi_Action_EditDraft),
             getString(R.string.Uwazi_Action_RemoveTemplate),
             object : BottomSheetUtils.ActionSeleceted {
                 override fun accept(action: BottomSheetUtils.Action) {
