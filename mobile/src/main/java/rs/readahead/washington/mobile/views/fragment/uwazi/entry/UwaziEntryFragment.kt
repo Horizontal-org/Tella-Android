@@ -135,7 +135,10 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
                 if (status == UwaziEntityStatus.SUBMITTED) {
                     nav().popBackStack()
                     progress.postValue(UwaziEntityStatus.UNKNOWN)
-                }
+                }else if (status == UwaziEntityStatus.DRAFT) {
+                        nav().popBackStack()
+                        progress.postValue(UwaziEntityStatus.UNKNOWN)
+                    }
             })
 
             instance.observe(viewLifecycleOwner, {
@@ -192,9 +195,13 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         for (answer in answers) {
             if (answer.value != null) {
                 if (answer.key == UWAZI_TITLE) {
-                    entityInstance.title = answer.value.value as String
+                    entityInstance.title = (answer.value as  UwaziValue).value as String
                 } else {
-                    hashmap[answer.key] = arrayListOf(UwaziValue(answer.value.value))
+                    if (answer.value is List<*>){
+                        hashmap[answer.key] = (answer.value) as List<UwaziValue>
+                    }else{
+                        hashmap[answer.key] = arrayListOf(UwaziValue((answer.value as  UwaziValue).value ))
+                    }
                 }
             }
         }
@@ -221,8 +228,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
 
         formView.setBinaryData(UWAZI_TITLE, instance.title)
         for (answer in instance.metadata) {
-            val stringVal =
-                (instance.metadata[answer.key]?.get(0) as LinkedTreeMap<String, Any>)["value"]
+            val stringVal = (instance.metadata[answer.key]?.get(0) as LinkedTreeMap<String, Any>)["value"]
             if (files.containsKey(stringVal)) {
                 formView.setBinaryData(answer.key, files[stringVal] as VaultFile)
             } else {

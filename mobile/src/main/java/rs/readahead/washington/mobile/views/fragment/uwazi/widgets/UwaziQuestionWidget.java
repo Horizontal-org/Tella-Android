@@ -167,7 +167,7 @@ public abstract class UwaziQuestionWidget extends RelativeLayout {
     }
 
     // Abstract methods
-    public abstract UwaziValue getAnswer();
+    public abstract Object getAnswer();
 
     public abstract void clearAnswer();
 

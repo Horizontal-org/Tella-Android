@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
@@ -8,8 +9,12 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatCheckBox;
 
+import com.google.gson.internal.LinkedTreeMap;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -24,11 +29,11 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPromp
 /**
  * Based on ODK Collect SelectMultiWidget.
  */
+@SuppressLint("ViewConstructor")
 public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
     private boolean checkBoxInit = true; // todo: check the need for this..
-    private List<SelectValue> items;
-    private ArrayList<AppCompatCheckBox> checkBoxes;
-    private ArrayList<String> answers;
+    private final List<SelectValue> items;
+    private final ArrayList<AppCompatCheckBox> checkBoxes;
 
     @SuppressWarnings("unchecked")
     public UwaziMultiSelectWidget(Context context, UwaziEntryPrompt prompt) {
@@ -76,7 +81,7 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
     }
 
     @Override
-    public UwaziValue getAnswer() {
+    public List<UwaziValue> getAnswer() {
         List<String> vc = new ArrayList<>();
         List<UwaziValue> selection = new ArrayList<>();
 
@@ -90,11 +95,11 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
         if (vc.size() == 0) {
             return null;
         } else {
-            /*for (String answer : vc) {
+            for (String answer : vc) {
                UwaziValue uValue = new UwaziValue(answer);
                 selection.add(uValue);
-            }*/
-            return new UwaziValue(vc);
+            }
+           return selection;
         }
     }
 
@@ -130,13 +135,16 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
     }
 
     public String setBinaryData(@NonNull Object data) {
-        List<String> vList = Stream.of(data).map(Object::toString).collect(Collectors.toList());
-        ArrayList<String> answers = new ArrayList<>(vList);
+        ArrayList<String> resultList = new ArrayList<>();
 
+        for (Object o : (ArrayList) data) {
+            String value = Objects.requireNonNull(((LinkedTreeMap) o).get("value")).toString();
+                resultList.add(value);
+        }
 
         for (int i = 0; i < checkBoxes.size(); ++i) {
             AppCompatCheckBox box = checkBoxes.get(i);
-            if (answers.contains(items.get(i).getId())) {
+            if (resultList.contains(items.get(i).getId())) {
                 box.setChecked(true);
             }
         }
