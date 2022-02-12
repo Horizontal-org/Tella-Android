@@ -11,6 +11,7 @@ import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.UwaziSendFragmentBinding
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
+import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
@@ -58,7 +59,10 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
             }
 
             cancelBtn.setOnClickListener {
-                SharedLiveData.updateViewPagerPosition.postValue(DRAFT_LIST_PAGE_INDEX)
+                entityInstance?.let { entity ->
+                    entity.status = UwaziEntityStatus.SUBMISSION_PENDING
+                    viewModel.saveEntityInstance(entity)
+                }
             }
         }
     }

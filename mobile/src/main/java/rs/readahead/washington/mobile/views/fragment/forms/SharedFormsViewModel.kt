@@ -183,6 +183,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
         }
         return instance
     }
+
     fun toggleFavorite(collectForm: CollectForm?) {
         disposables.add(keyDataSource.dataSource
             .subscribeOn(Schedulers.io())

@@ -49,11 +49,11 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
         disposables.add(keyDataSource.uwaziDataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe { progress.postValue(instance.status) }
             .flatMap { dataSource: UwaziDataSource -> dataSource.saveEntityInstance(instance).toObservable() }
             .doFinally { progress.postValue(instance.status)   }
             .subscribe ({ savedInstance ->
-                _instance.postValue(savedInstance)
+               progress.postValue(instance.status)
+               // _instance.postValue(savedInstance)
             }
 
             ) { throwable: Throwable? ->

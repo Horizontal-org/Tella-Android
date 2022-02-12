@@ -14,6 +14,7 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentSubmittedUwaziBinding
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.UwaziDraftsAdapter
+import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.UwaziSubmittedAdapter
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.SEND_ENTITY
 
 class SubmittedUwaziFragment : UwaziListFragment() {
@@ -23,7 +24,7 @@ class SubmittedUwaziFragment : UwaziListFragment() {
     }
 
     private val viewModel: SharedUwaziViewModel by viewModels()
-    private val uwaziDraftsAdapter: UwaziDraftsAdapter by lazy { UwaziDraftsAdapter() }
+    private val adapterSubmitted: UwaziSubmittedAdapter by lazy { UwaziSubmittedAdapter() }
     private var binding: FragmentSubmittedUwaziBinding? = null
 
     override fun onCreateView(
@@ -42,12 +43,13 @@ class SubmittedUwaziFragment : UwaziListFragment() {
 
     private fun initObservers() {
         with(viewModel) {
+
             submittedInstances.observe(viewLifecycleOwner, {
                 if (it.isEmpty()) {
                     binding?.textViewEmptyOutbox?.isVisible = true
                 } else {
                     binding?.textViewEmptyOutbox?.isVisible = false
-                    uwaziDraftsAdapter.setEntityDrafts(it)
+                    adapterSubmitted.setEntities(it)
                 }
 
             })
@@ -93,7 +95,7 @@ class SubmittedUwaziFragment : UwaziListFragment() {
     private fun initView() {
         binding?.submittedRecyclerView?.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = uwaziDraftsAdapter
+            adapter = adapterSubmitted
         }
     }
 
