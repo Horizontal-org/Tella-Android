@@ -16,11 +16,10 @@ import android.widget.TableLayout;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
+import java.math.BigDecimal;
 import java.util.Locale;
 
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.data.entity.uwazi.answer.IUwaziAnswer;
-import rs.readahead.washington.mobile.data.entity.uwazi.answer.UwaziLong;
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
@@ -122,9 +121,12 @@ public class UwaziNumericWidget extends UwaziQuestionWidget {
         answer.cancelLongPress();
     }
 
+    @SuppressLint("SetTextI18n")
     public String setBinaryData(@NonNull Object data) {
-        answer.setText(data.toString());
-        return data.toString();
+        BigDecimal value = new BigDecimal(data.toString());
+        long lValue = value.longValue();
+        answer.setText(Long.toString(lValue));
+        return Long.toString(lValue);
     }
 
     private Long getLongAnswerValue() {
