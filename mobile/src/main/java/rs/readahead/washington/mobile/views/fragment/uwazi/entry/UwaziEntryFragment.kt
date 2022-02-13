@@ -95,7 +95,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
             toolbar.backClickListener = { nav().popBackStack() }
             toolbar.onRightClickListener = {
                 entityInstance.status = UwaziEntityStatus.DRAFT
-                if (!getAnswersFromForm()) {
+                if (!getAnswersFromForm(false)) {
                     uwaziFormView.setFocus(context)
                 } else {
                     entityInstance.let { viewModel.saveEntityInstance(it) }
@@ -129,6 +129,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
                 parseUwaziTemplate()
             }
         }
+        binding.toolbar.setStartTextTitle(template?.entityRow?.name.toString())
     }
 
     private fun initObservers() {
@@ -160,7 +161,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
 
     private fun sendEntity() {
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
-        if (!getAnswersFromForm()) {
+        if (!getAnswersFromForm(true)) {
             uwaziFormView.setFocus(context)
         } else {
             val gsonTemplate = Gson().toJson(entityInstance)
@@ -170,7 +171,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         }
     }
 
-    private fun getAnswersFromForm(): Boolean {
+    private fun getAnswersFromForm(isSend:Boolean): Boolean {
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
         uwaziFormView.clearValidationConstraints()
         val hashmap = mutableMapOf<String, List<Any>>()
@@ -186,13 +187,15 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
             )
             validationRequired = true
         }
-        for (property in template?.entityRow?.properties!!) {
-            if (property.required && (answers[property.name] == null)) {
-                uwaziFormView.setValidationConstraintText(
-                    property.name,
-                    getString(R.string.collect_form_error_response_mandatory)
-                )
-                validationRequired = true
+        if (isSend) {
+            for (property in template?.entityRow?.properties!!) {
+                if (property.required && (answers[property.name] == null)) {
+                    uwaziFormView.setValidationConstraintText(
+                        property.name,
+                        getString(R.string.collect_form_error_response_mandatory)
+                    )
+                    validationRequired = true
+                }
             }
         }
         if (validationRequired) return false
