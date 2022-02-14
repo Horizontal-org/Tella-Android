@@ -129,9 +129,7 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
             return
         }
 
-        endView = UwaziFormEndView(activity,
-            if (entityInstance!!.status == UwaziEntityStatus.SUBMITTED) R.string.collect_end_heading_confirmation_form_submitted else R.string.collect_end_action_submit
-        )
+        endView = UwaziFormEndView(activity, R.string.Uwazi_Send_Entity_Title)
         endView.setInstance(entityInstance!!, offline, false)
         binding.endViewContainer.removeAllViews()
         binding.endViewContainer.addView(endView)

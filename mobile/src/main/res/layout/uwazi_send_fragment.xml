@@ -7,17 +7,6 @@
     android:background="@color/wa_purple"
     tools:context=".views.fragment.uwazi.send.UwaziSendFragment">
 
-    <org.hzontal.shared_ui.appbar.ToolbarComponent
-        android:id="@+id/toolbar"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:arrowBackIcon="@drawable/ic_back_white"
-        app:startTitle="@string/Uwazi_Send_Header_Title"
-        />
-
     <androidx.core.widget.NestedScrollView
         android:id="@+id/endViewContainer"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -31,21 +20,16 @@
         android:scrollbars="vertical">
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/progress_circular"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:indeterminate="true"
+
+    <org.hzontal.shared_ui.appbar.ToolbarComponent
+        android:id="@+id/toolbar"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/separator"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        app:trackColor="@color/wa_white"
-        app:indicatorColor="@color/tigers_eye"
-        app:trackThickness="4dp"
-        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:arrowBackIcon="@drawable/ic_back_white"
+        app:startTitle="@string/Uwazi_Send_Header_Title"
         />
 
     <View
@@ -62,7 +46,7 @@
         android:layout_width="0dp"
         android:layout_height="54dp"
         android:id="@+id/cancel_btn"
-        android:text="@string/action_cancel"
+        android:text="@string/Uwazi_Submit_Later"
         android:background="@drawable/action_button_background"
         android:backgroundTint="@color/wa_white_20"
         app:layout_constraintStart_toStartOf="parent"

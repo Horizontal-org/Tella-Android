@@ -28,7 +28,7 @@ import rs.readahead.washington.mobile.util.FileUtil;
 public class UwaziFormEndView extends FrameLayout {
     LinearLayout partsListView;
     TextView titleView;
-    TextView subTitleView;
+    //TextView subTitleView;
     String title;
     private UwaziEntityInstance instance;
     private boolean previewUploaded;
@@ -42,7 +42,9 @@ public class UwaziFormEndView extends FrameLayout {
 
         titleView = findViewById(R.id.title);
 
-        subTitleView = findViewById(R.id.subtitle);
+        titleView.setText(title);
+
+        //subTitleView = findViewById(R.id.subtitle);
     }
 
     public void setInstance(@NonNull UwaziEntityInstance instance, boolean offline, boolean previewUploaded) {
@@ -78,16 +80,16 @@ public class UwaziFormEndView extends FrameLayout {
             formElements++;
         }
 
-        TextView formElementsView = findViewById(R.id.formElements);
+       // TextView formElementsView = findViewById(R.id.formElements);
         TextView formSizeView = findViewById(R.id.formSize);
 
-        formElementsView.setText(getResources().getQuantityString(R.plurals.collect_end_meta_number_of_elements, formElements, formElements));
+    //    formElementsView.setText(getResources().getQuantityString(R.plurals.collect_end_meta_number_of_elements, formElements, formElements));
         formSizeView.setText(FileUtil.getFileSizeString(formSize));
     }
 
     public void showUploadProgress(String partName) {
         titleView.setText(R.string.collect_end_heading_submitting);
-        subTitleView.setVisibility(GONE);
+      //  subTitleView.setVisibility(GONE);
 
         SubmittingItem item = findViewWithTag(partName);
         if (item != null) {
@@ -136,9 +138,9 @@ public class UwaziFormEndView extends FrameLayout {
         }
 
         if (offline || instance.getStatus() == UwaziEntityStatus.SUBMITTED) {
-            subTitleView.setVisibility(GONE);
+         //   subTitleView.setVisibility(GONE);
         } else {
-            subTitleView.setVisibility(VISIBLE);
+           // subTitleView.setVisibility(VISIBLE);
         }
 
         return item;
