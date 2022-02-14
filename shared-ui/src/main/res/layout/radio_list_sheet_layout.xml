@@ -67,6 +67,9 @@
         android:fontFamily="@font/open_sans"
         android:textSize="14sp"
         android:layout_marginEnd="30dp"
+        android:background="@drawable/clickable_text_background"
+        android:clickable="true"
+        android:focusable="true"
         />
 
     <TextView
@@ -84,6 +87,9 @@
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
         android:textSize="14sp"
+        android:background="@drawable/clickable_text_background"
+        android:clickable="true"
+        android:focusable="true"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

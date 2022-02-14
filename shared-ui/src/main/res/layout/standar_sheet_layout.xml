@@ -49,6 +49,9 @@
         android:layout_marginTop="40dp"
         style="@style/Tella_Main_White_Text.MeduimbBold"
         android:layout_marginEnd="30dp"
+        android:background="@drawable/clickable_text_background"
+        android:clickable="true"
+        android:focusable="true"
         />
 
     <TextView
@@ -63,6 +66,9 @@
         android:layout_marginTop="40dp"
         style="@style/Tella_Main_White_Text.MeduimbBold"
         android:textSize="14sp"
+        android:background="@drawable/clickable_text_background"
+        android:clickable="true"
+        android:focusable="true"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

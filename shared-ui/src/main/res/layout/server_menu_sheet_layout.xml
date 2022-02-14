@@ -53,6 +53,9 @@
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
         android:textSize="14sp"
+        android:background="@drawable/clickable_text_background"
+        android:clickable="true"
+        android:focusable="true"
         tools:text="button"
         app:drawableStartCompat="@drawable/ic_delete_outline_white_24" />
 
