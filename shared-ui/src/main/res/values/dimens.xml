@@ -9,4 +9,5 @@
     <dimen name="tooltip_icon_margin_top">8dp</dimen>
 
     <dimen name="main_navigation_bar_height">50dp</dimen>
+    <dimen name="text_button_padding_size">5dp</dimen>
 </resources>
