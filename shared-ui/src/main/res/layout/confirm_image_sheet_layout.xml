@@ -75,6 +75,9 @@
         tools:text="Confirm "
         android:layout_marginTop="40dp"
         android:padding="@dimen/text_button_padding_size"
+        android:background="@drawable/clickable_text_background"
+        android:clickable="true"
+        android:focusable="true"
         style="@style/Tella_Main_White_Text.MeduimbBold"
         android:textSize="14sp"
         />

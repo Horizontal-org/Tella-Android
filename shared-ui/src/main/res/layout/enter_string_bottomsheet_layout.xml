@@ -111,7 +111,10 @@
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
         android:textSize="14sp"
-        android:layout_marginStart="30dp"/>
+        android:layout_marginStart="30dp"
+        android:background="@drawable/clickable_text_background"
+        android:clickable="true"
+        android:focusable="true"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
