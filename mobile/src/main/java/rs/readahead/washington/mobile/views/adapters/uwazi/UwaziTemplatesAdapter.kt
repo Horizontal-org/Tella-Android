@@ -35,7 +35,7 @@ class UwaziTemplatesAdapter : RecyclerView.Adapter<UwaziTemplatesAdapter.EntityV
     inner class EntityViewHolder(val view : View) : RecyclerView.ViewHolder(view) {
         fun bind(entityRow: ViewEntityTemplateItem) {
             view.apply{
-                view.findViewById<TextView>(R.id.name).text = entityRow.templateName
+                view.findViewById<TextView>(R.id.name).text = entityRow.translatedTemplateName
                 view.findViewById<TextView>(R.id.organization).text = entityRow.serverName
                 view.findViewById<ImageButton>(R.id.popupMenu).setOnClickListener { entityRow.onMoreClicked() }
                 view.findViewById<AppCompatImageView>(R.id.favorites_button).apply {

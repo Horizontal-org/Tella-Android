@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.data.repository
 
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -14,10 +13,7 @@ import rs.readahead.washington.mobile.data.entity.uwazi.UwaziEntityRow
 import rs.readahead.washington.mobile.data.entity.uwazi.mapper.mapToDomainModel
 import rs.readahead.washington.mobile.data.uwazi.UwaziService
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
-import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
-import rs.readahead.washington.mobile.domain.entity.uwazi.ListTemplateResult
-import rs.readahead.washington.mobile.domain.entity.uwazi.RowDictionary
-import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziRow
+import rs.readahead.washington.mobile.domain.entity.uwazi.*
 import rs.readahead.washington.mobile.domain.repository.uwazi.IUwaziUserRepository
 import rs.readahead.washington.mobile.util.StringUtils
 
@@ -46,38 +42,66 @@ class UwaziRepository : IUwaziUserRepository {
     }
 
     override fun getTemplatesResult(server: UWaziUploadServer): Single<ListTemplateResult> {
-         return Single.zip(getTemplates(server),
-            getDictionary(server), { templates, dictionary ->
-                  templates.forEach {
-                      it.properties.forEach { property ->
-                          dictionary.forEach { dictionaryItem ->
-                              if (dictionaryItem._id == property.content) {
-                                  property.values = dictionaryItem.values
-                              }
-                          }
-                      }
-                  }
-                  val listTemplates = mutableListOf<CollectTemplate>()
-                  templates.forEach { entity ->
-                      val collectTemplate = CollectTemplate(
-                          serverId = server.id,
-                          entityRow = entity,
-                          serverName = server.name
-                      )
-                      listTemplates.add(collectTemplate)
-                  }
+        return Single.zip(getTemplates(server),
+            getDictionary(server), getTranslation(server), { templates, dictionary, translations ->
 
-                  val listTemplateResult = ListTemplateResult()
-                  listTemplateResult.templates = listTemplates
-                   listTemplateResult
-            }).onErrorResumeNext {  throwable: Throwable? ->
-             val listTemplateResult = ListTemplateResult()
-             val errorBundle = ErrorBundle(throwable)
-             errorBundle.serverId = server.id
-             errorBundle.serverName = server.name
-             listTemplateResult.errors = listOf(errorBundle)
-              Single.just(listTemplateResult)
-         }
+                templates.forEach {
+                    it.properties.forEach { property ->
+                        dictionary.forEach { dictionaryItem ->
+                            if (dictionaryItem._id == property.content) {
+                                property.values = dictionaryItem.values
+                            }
+                        }
+                    }
+                }
+
+
+                templates.forEach { template ->
+                    translations.filter { row -> row.locale == server.localeCookie }[0]
+                        .contexts.forEach { context ->
+                            if (context.id == template._id){
+                                template.properties.forEach { property ->
+                                    property.translatedLabel = context.values[property.label] ?: ""
+                                }
+                                template.commonProperties.forEach { property ->
+                                    property.translatedLabel = context.values[property.label] ?: ""
+                                }
+
+                                template.translatedName = context.values[template.name] ?: ""
+                            }else{
+                                template.properties.forEach { property ->
+                                    property.values?.forEach { selectValue ->
+                                        if (context.id == property.content){
+                                            selectValue.translatedLabel = context.values[selectValue.label]?:selectValue.label
+                                        }
+                                    }
+                                }
+                            }
+
+                    }
+                }
+
+                val listTemplates = mutableListOf<CollectTemplate>()
+                templates.forEach { entity ->
+                    val collectTemplate = CollectTemplate(
+                        serverId = server.id,
+                        entityRow = entity,
+                        serverName = server.name
+                    )
+                    listTemplates.add(collectTemplate)
+                }
+
+                val listTemplateResult = ListTemplateResult()
+                listTemplateResult.templates = listTemplates
+                listTemplateResult
+            }).onErrorResumeNext { throwable: Throwable? ->
+            val listTemplateResult = ListTemplateResult()
+            val errorBundle = ErrorBundle(throwable)
+            errorBundle.serverId = server.id
+            errorBundle.serverName = server.name
+            listTemplateResult.errors = listOf(errorBundle)
+            Single.just(listTemplateResult)
+        }
     }
 
     override fun getTemplates(server: UWaziUploadServer): Single<List<UwaziRow>> {
@@ -116,6 +140,19 @@ class UwaziRepository : IUwaziUserRepository {
                 '/',
                 server.url,
                 ParamsNetwork.URL_DICTIONARIES
+            ),
+            cookies = arrayListOf(server.connectCookie, server.localeCookie)
+        )
+            .subscribeOn(Schedulers.io())
+            .map { result -> result.mapToDomainModel() }
+    }
+
+    override fun getTranslation(server: UWaziUploadServer): Single<List<TranslationRow>> {
+        return uwaziApi.getTranslations(
+            url = StringUtils.append(
+                '/',
+                server.url,
+                ParamsNetwork.URL_TRANSLATION
             ),
             cookies = arrayListOf(server.connectCookie, server.localeCookie)
         )

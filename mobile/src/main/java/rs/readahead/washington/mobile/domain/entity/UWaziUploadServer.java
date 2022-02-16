@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class UWaziUploadServer extends Server implements Serializable {
     public static final UWaziUploadServer NONE = new UWaziUploadServer();
     private String connectCookie;
-    private String localeCookie;
+    private String localeCookie = "en";
     public UWaziUploadServer() {
         this(0);
     }

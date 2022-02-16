@@ -109,7 +109,7 @@ public class UwaziDateWidget extends UwaziQuestionWidget {
         Date date = sdf.parse(dateInter);
 
         if (date != null) {
-            intMsValue = date.getTime();u
+            intMsValue = date.getTime();
         }
         nullAnswer = false;
         dateButton.setVisibility(GONE);

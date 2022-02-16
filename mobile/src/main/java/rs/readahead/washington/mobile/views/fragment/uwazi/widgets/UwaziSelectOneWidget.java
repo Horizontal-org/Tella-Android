@@ -63,7 +63,7 @@ public class UwaziSelectOneWidget extends UwaziQuestionWidget implements
 
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
-                String choiceName = items.get(i).getLabel();
+                String choiceName = items.get(i).getTranslatedLabel();
                 CharSequence choiceDisplayName;
                 choiceDisplayName = StringUtils.markdownToSpanned(choiceName);
 

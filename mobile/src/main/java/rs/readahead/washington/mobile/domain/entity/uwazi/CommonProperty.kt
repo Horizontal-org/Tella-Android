@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.domain.entity.uwazi
 data class CommonProperty( val id: String,
                            val generatedId: Boolean,
                            val isCommonProperty: Boolean,
+                           var translatedLabel : String = "",
                            val label: String,
                            val localID: String,
                            val name: String,

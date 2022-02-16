@@ -41,7 +41,7 @@ interface IUwaziApi  {
     fun getTranslations(
         @Url url : String,
         @Header(COOKIE) cookies : List<String>
-    ) : Single<DictionaryResponse>
+    ) : Single<TranslationResponse>
 
 
     @Multipart

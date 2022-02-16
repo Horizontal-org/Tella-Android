@@ -4,23 +4,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import io.reactivex.CompletableSource
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
-import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.data.database.UwaziDataSource
 import rs.readahead.washington.mobile.data.repository.UwaziRepository
+import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.domain.entity.uwazi.ListTemplateResult
 import rs.readahead.washington.mobile.domain.exception.NoConnectivityException
 import rs.readahead.washington.mobile.views.fragment.uwazi.download.adapter.ViewTemplateItem
 import rs.readahead.washington.mobile.views.fragment.uwazi.mappers.toViewTemplateItem
 import java.util.ArrayList
-import java.util.concurrent.atomic.AtomicInteger
 
 class DownloadedTemplatesViewModel : ViewModel(){
 
@@ -160,6 +158,31 @@ class DownloadedTemplatesViewModel : ViewModel(){
         }
         )
     }
+
+    fun getTranslations(server: UWaziUploadServer) {
+        disposables.add(
+            uwaziRepository.getTranslation(
+                server = server)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError { _progress.postValue(false) }
+
+                .subscribe({
+                    print(it)
+                    _progress.postValue(false)
+                }
+                ) { throwable: Throwable? ->
+                    FirebaseCrashlytics.getInstance().recordException(
+                        throwable
+                            ?: throw NullPointerException("Expression 'throwable' must not be null")
+                    )
+                    error.postValue(throwable)
+                    _progress.postValue(false)
+                })
+    }
+
+
+
     private fun collectTemplateToViewTemplate(template : CollectTemplate) : ViewTemplateItem {
      return   template.toViewTemplateItem(onDownloadClicked = { onDownloadClicked(template) },
             onMoreClicked = {onMoreClicked(template)})

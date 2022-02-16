@@ -65,7 +65,7 @@ class UwaziServerLanguageViewModel : ViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { _progress.postValue(true) }
             .flatMapSingle { dataSource: UwaziDataSource ->
-                server.localeCookie = LOCALE_COOKIE+language.key
+                server.localeCookie = language.key
                 dataSource.updateUwaziServer(server)
             }
             .doFinally { _progress.postValue(false) }

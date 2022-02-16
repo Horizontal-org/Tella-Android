@@ -6,6 +6,7 @@ data class ViewTemplateItem(
     val isDownloaded: Boolean,
     val isUpdated: Boolean,
     val templateName: String,
+    val translatedTemplateName: String,
     val serverName: String? = "",
     val onMoreClicked: () -> Unit,
     val onDownloadClicked: () -> Unit,

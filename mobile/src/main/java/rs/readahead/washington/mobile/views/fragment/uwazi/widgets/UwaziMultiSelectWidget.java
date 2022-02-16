@@ -54,7 +54,7 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
                 AppCompatCheckBox c = (AppCompatCheckBox) inflater.inflate(R.layout.collect_checkbox_item, null);
                 c.setTag(i);
                 c.setId(QuestionWidget.newUniqueId());
-                c.setText(getChoiceDisplayName(items.get(i).getLabel()));
+                c.setText(getChoiceDisplayName(items.get(i).getTranslatedLabel()));
                 c.setMovementMethod(LinkMovementMethod.getInstance());
                 //c.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
                 c.setFocusable(!prompt.isReadOnly());

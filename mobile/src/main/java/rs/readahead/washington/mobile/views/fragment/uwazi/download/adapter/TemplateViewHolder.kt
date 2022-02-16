@@ -17,7 +17,12 @@ class TemplateViewHolder internal constructor(private val binding: ItemDownloadS
                 imgMore.isVisible = false
                 imgDownload.isVisible = true
             }
-            tvTemplateName.text = item.templateName
+            tvTemplateName.text = when {
+                item.translatedTemplateName.isEmpty() -> {
+                    item.templateName
+                }
+                else -> item.translatedTemplateName
+            }
             imgMore.setOnClickListener { item.onMoreClicked() }
             imgDownload.setOnClickListener { item.onDownloadClicked() }
             imgUpdated.isVisible = (item.isDownloaded && item.isUpdated)

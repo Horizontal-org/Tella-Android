@@ -294,9 +294,9 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
                 property.name,
                 property.id,
                 property.type,
-                property.label,
+                property.translatedLabel,
                 property.required,
-                property.label
+                property.translatedLabel
             )
             if (property.values != null) {
                 entryPrompt.selectValues = property.values

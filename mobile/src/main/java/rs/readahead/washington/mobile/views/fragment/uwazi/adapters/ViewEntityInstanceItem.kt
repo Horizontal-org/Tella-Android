@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.adapters
 
-import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
 
 data class ViewEntityInstanceItem (

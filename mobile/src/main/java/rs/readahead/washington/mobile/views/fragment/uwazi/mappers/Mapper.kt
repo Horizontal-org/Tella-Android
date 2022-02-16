@@ -15,6 +15,7 @@ fun CollectTemplate.toViewTemplateItem(onMoreClicked: () -> Unit, onDownloadClic
         serverId = serverId,
         isUpdated = isUpdated,
         templateName = entityRow.name,
+        translatedTemplateName = entityRow.translatedName,
         serverName = serverName,
         onDownloadClicked = onDownloadClicked,
         onMoreClicked = onMoreClicked
@@ -28,6 +29,7 @@ fun CollectTemplate.toViewEntityTemplateItem(
     id = id,
     serverId = serverId,
     templateName = entityRow.name,
+    translatedTemplateName =  entityRow.translatedName,
     serverName = serverName,
     isFavorite = isFavorite,
     onMoreClicked = onMoreClicked,
