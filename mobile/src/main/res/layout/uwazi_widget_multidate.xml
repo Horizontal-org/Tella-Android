@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/wa_purple"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/dates"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/addText"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="2dp"
+        android:background="@drawable/rounded_light_purple_background"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:text=""
+        android:textColor="@color/wa_white_80"
+        android:textSize="18sp" />
+</LinearLayout>
