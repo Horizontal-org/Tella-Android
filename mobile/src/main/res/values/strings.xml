@@ -525,6 +525,11 @@
     <string name="Uwazi_Info_NotValidURL">This is not a valid Url</string>
     <string name="Uwazi_Subtitle_MarkdownSupported">markdown supported</string>
     <string name="Uwazi_Answer_LinkInitialText">https://</string>
+    <string name="Uwazi_Entry_Validation_MandatoryFields">You must fill in the mandatory fields</string>
+    <string name="Uwazi_Entry_Validation_MandatoryTitle">You must fill in the title</string>
+    <string name="Uwazi_Submit_Later">Submit later</string>
+    <string name="Uwazi_Send_Entity_Title">End of entity</string>
+
 
     <string-array name="Uwazi_Language_Array">
         <item>English</item>

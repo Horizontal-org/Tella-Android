@@ -97,6 +97,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
                 entityInstance.status = UwaziEntityStatus.DRAFT
                 if (!getAnswersFromForm(false)) {
                     uwaziFormView.setFocus(context)
+                    showValidationMandatoryTitleDialog()
                 } else {
                     entityInstance.let { viewModel.saveEntityInstance(it) }
                 }
@@ -163,6 +164,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
         if (!getAnswersFromForm(true)) {
             uwaziFormView.setFocus(context)
+            showValidationMandatoryFieldsDialog()
         } else {
             val gsonTemplate = Gson().toJson(entityInstance)
             bundle.putString(SEND_ENTITY, gsonTemplate)
@@ -324,6 +326,22 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         DialogUtils.showBottomMessage(
             activity,
             getString(R.string.Uwazi_EntryInstance_SavedInfo),
+            false
+        )
+    }
+
+    private fun showValidationMandatoryFieldsDialog() {
+        DialogUtils.showBottomMessage(
+            activity,
+            getString(R.string.Uwazi_Entry_Validation_MandatoryFields),
+            false
+        )
+    }
+
+    private fun showValidationMandatoryTitleDialog() {
+        DialogUtils.showBottomMessage(
+            activity,
+            getString(R.string.Uwazi_Entry_Validation_MandatoryTitle),
             false
         )
     }
