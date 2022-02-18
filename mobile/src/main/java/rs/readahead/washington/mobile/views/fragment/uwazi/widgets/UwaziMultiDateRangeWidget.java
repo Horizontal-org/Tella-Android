@@ -62,8 +62,8 @@ public class UwaziMultiDateRangeWidget extends UwaziQuestionWidget {
     }
 
     @Override
-    public List<UwaziDateRange> getAnswer() {
-        List<UwaziDateRange> longRanges = new ArrayList<>();
+    public List<UwaziValue> getAnswer() {
+        List<UwaziValue> longRanges = new ArrayList<>();
         clearFocus();
 
         if (nullAnswer) {
@@ -80,7 +80,7 @@ public class UwaziMultiDateRangeWidget extends UwaziQuestionWidget {
                 long intVal = valueFrom / 1000L;
                 long intVal1 = valueTo / 1000L;
                 UwaziDateRange range = new UwaziDateRange(Integer.parseInt(Long.toString(intVal)), Integer.parseInt(Long.toString(intVal1)));
-                longRanges.add(range);
+                longRanges.add(new UwaziValue(range));
             }
         }
 
