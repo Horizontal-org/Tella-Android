@@ -13,13 +13,19 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.internal.LinkedTreeMap;
+
 import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
@@ -29,16 +35,10 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPromp
 
 @SuppressLint("ViewConstructor")
 public class UwaziMultiDateWidget extends UwaziQuestionWidget {
-    private HashMap<Integer, Long> dateValues = new HashMap<>();//
-    private Long intMsValue = 0L;
+    private final HashMap<Integer, Long> dateValues = new HashMap<>();
     private Integer counter = 1;
 
     private LinearLayout dateListLayout;
-
-    private int year;
-    private int month;
-    private int dayOfMonth;
-
     private boolean nullAnswer = false;
 
     public UwaziMultiDateWidget(Context context, UwaziEntryPrompt prompt) {
@@ -46,7 +46,6 @@ public class UwaziMultiDateWidget extends UwaziQuestionWidget {
 
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
-
 
         addDateView(linearLayout);
         clearAnswer();
@@ -56,19 +55,28 @@ public class UwaziMultiDateWidget extends UwaziQuestionWidget {
     @Override
     public void clearAnswer() {
         nullAnswer = true;
-
-
     }
 
     @Override
-    public UwaziValue getAnswer() {
+    public List<UwaziValue> getAnswer() {
         clearFocus();
+        List<UwaziValue> longDates = new ArrayList<>();
 
         if (nullAnswer) {
             return null;
         }
-        long intVal = intMsValue / 1000L;
-        return new UwaziValue(Integer.parseInt(Long.toString(intVal)));
+        for (Long dateLong : dateValues.values()) {
+            if (dateLong != null && dateLong > 0) {
+                long intVal = dateLong / 1000L;
+                longDates.add(new UwaziValue(Integer.parseInt(Long.toString(intVal))));
+            }
+        }
+
+        if (longDates.isEmpty()) {
+            return null;
+        } else {
+            return longDates;
+        }
     }
 
     @Override
@@ -76,14 +84,14 @@ public class UwaziMultiDateWidget extends UwaziQuestionWidget {
         Util.hideKeyboard(context, this);
     }
 
-    private void setWidgetDate(Integer key,TextView dateText, Button dateButton) throws ParseException {
+    private void setWidgetDate(Integer key, TextView dateText, Button dateButton, int year, int month, int dayOfMonth) throws ParseException {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-        String dateInter = this.year + "/" + this.month + "/" + this.dayOfMonth;
+        String dateInter = year + "/" + month + "/" + dayOfMonth;
 
         Date date = sdf.parse(dateInter);
 
         if (date != null) {
-            dateValues.put(key,date.getTime());
+            dateValues.put(key, date.getTime());
         }
         nullAnswer = false;
         dateButton.setVisibility(GONE);
@@ -91,20 +99,14 @@ public class UwaziMultiDateWidget extends UwaziQuestionWidget {
         dateText.setText(getFormattedDate(getContext(), date));
     }
 
-    private DatePickerDialog createDatePickerDialog(Integer key,TextView dateText, Button dateButton) {
-        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), AlertDialog.THEME_HOLO_LIGHT, (view, year, monthOfYear, dayOfMonth) -> {
-            this.year = year;
-            month = monthOfYear + 1;
-            dayOfMonth = dayOfMonth;
-
+    private DatePickerDialog createDatePickerDialog(Integer key, TextView dateText, Button dateButton) {
+        return new DatePickerDialog(getContext(), AlertDialog.THEME_HOLO_LIGHT, (view, year, monthOfYear, dayOfMonth) -> {
             try {
-                setWidgetDate(key, dateText,dateButton);
+                setWidgetDate(key, dateText, dateButton, year, monthOfYear + 1, dayOfMonth);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }, 1971, 1, 1);
-
-        return datePickerDialog;
     }
 
     private void addDateView(LinearLayout linearLayout) {
@@ -114,17 +116,17 @@ public class UwaziMultiDateWidget extends UwaziQuestionWidget {
 
         dateListLayout = view.findViewById(R.id.dates);
 
-        View one = getDateLayout(counter);
+        View one = getDateLayout(counter, null);
         dateListLayout.addView(one);
 
         Button addDateButton = linearLayout.findViewById(R.id.addText);
         addDateButton.setOnClickListener(v -> {
-            View newOne = getDateLayout(++counter);
+            View newOne = getDateLayout(++counter, null);
             dateListLayout.addView(newOne);
         });
     }
 
-    private View getDateLayout(Integer key){
+    private View getDateLayout(Integer key, Date date) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         @SuppressLint("InflateParams")
         LinearLayout item = (LinearLayout) inflater.inflate(R.layout.item_uwazi_date, null);
@@ -147,7 +149,18 @@ public class UwaziMultiDateWidget extends UwaziQuestionWidget {
 
         clearItem.setOnClickListener(v -> {
             dateListLayout.removeView(item);
+            dateValues.remove(key);
         });
+
+        if (date != null) {
+            try {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                setWidgetDate(key, dateText, dateButton, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DAY_OF_MONTH));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
 
         return item;
     }
@@ -158,18 +171,21 @@ public class UwaziMultiDateWidget extends UwaziQuestionWidget {
     }
 
     public String setBinaryData(@NonNull Object data) {
-        BigDecimal bd = new BigDecimal(data.toString());
-        long val = bd.longValue();
-        intMsValue = val * 1000L;
+        dateListLayout.removeAllViews();
+        dateValues.clear();
+        counter = 0;
 
-        Date date = new Date(intMsValue);
+        for (Object o : (ArrayList) data) {
+            String value = Objects.requireNonNull(((LinkedTreeMap) o).get("value")).toString();
+            BigDecimal bd = new BigDecimal(value);
+            long valong = bd.longValue() * 1000L;
+            dateValues.put(counter, valong);
+            Date date = new Date(valong);
+            dateListLayout.addView(getDateLayout(counter, date));
+            counter++;
+        }
 
         nullAnswer = false;
-       /* dateButton.setVisibility(GONE);
-        clearButton.setVisibility(VISIBLE);
-        dateText.setVisibility(VISIBLE);
-        dateText.setText(getFormattedDate(getContext(), date));
-        dateVisible = true;*/
 
         return data.toString();
     }
