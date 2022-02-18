@@ -173,7 +173,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         }
     }
 
-    private fun getAnswersFromForm(isSend:Boolean): Boolean {
+    private fun getAnswersFromForm(isSend: Boolean): Boolean {
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
         uwaziFormView.clearValidationConstraints()
         val hashmap = mutableMapOf<String, List<Any>>()
@@ -206,12 +206,13 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         for (answer in answers) {
             if (answer.value != null) {
                 if (answer.key == UWAZI_TITLE) {
-                    entityInstance.title = (answer.value as  UwaziValue).value as String
+                    entityInstance.title = (answer.value as UwaziValue).value as String
                 } else {
-                    if (answer.value is List<*>){
+                    if (answer.value is List<*>) {
                         hashmap[answer.key] = (answer.value) as List<UwaziValue>
-                    }else{
-                        hashmap[answer.key] = arrayListOf(UwaziValue((answer.value as  UwaziValue).value ))
+                    } else {
+                        hashmap[answer.key] =
+                            arrayListOf(UwaziValue((answer.value as UwaziValue).value))
                     }
                 }
             }
@@ -240,9 +241,9 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         formView.setBinaryData(UWAZI_TITLE, instance.title)
         for (answer in instance.metadata) {
 
-            val stringVal = if ((instance.metadata[answer.key] as ArrayList).size == 1){
+            val stringVal = if ((instance.metadata[answer.key] as ArrayList).size == 1) {
                 (instance.metadata[answer.key]?.get(0) as LinkedTreeMap<String, Any>)["value"]
-            }else{
+            } else {
                 (instance.metadata[answer.key])
             }
 
@@ -266,12 +267,16 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         formView.setBinaryData(UWAZI_TITLE, instance.title)
 
         for (answer in instance.metadata) {
-            val uwaziValue: UwaziValue = answer.value[0] as UwaziValue
-            val stringVal = uwaziValue.value
-            if (files.containsKey(stringVal)) {
-                formView.setBinaryData(answer.key, files[stringVal] as VaultFile)
+            if ((answer.value as List<*>).size > 1) {
+                formView.setBinaryData(answer.key, answer.value)
             } else {
-                formView.setBinaryData(answer.key, stringVal)
+                val uwaziValue: UwaziValue = answer.value[0] as UwaziValue
+                val stringVal = uwaziValue.value
+                if (files.containsKey(stringVal)) {
+                    formView.setBinaryData(answer.key, files[stringVal] as VaultFile)
+                } else {
+                    formView.setBinaryData(answer.key, stringVal)
+                }
             }
         }
     }

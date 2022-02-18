@@ -137,10 +137,15 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
     public String setBinaryData(@NonNull Object data) {
         ArrayList<String> resultList = new ArrayList<>();
 
-        for (Object o : (ArrayList) data) {
-            String value = Objects.requireNonNull(((LinkedTreeMap) o).get("value")).toString();
-                resultList.add(value);
-        }
+            for (Object o : (ArrayList) data) {
+                if (o instanceof UwaziValue){
+                    resultList.add((String) ((UwaziValue) o).getValue());
+                }else {
+                    String value = Objects.requireNonNull(((LinkedTreeMap) o).get("value")).toString();
+                    resultList.add(value);
+                }
+            }
+
 
         for (int i = 0; i < checkBoxes.size(); ++i) {
             AppCompatCheckBox box = checkBoxes.get(i);
