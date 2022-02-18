@@ -529,6 +529,7 @@
     <string name="Uwazi_Entry_Validation_MandatoryTitle">You must fill in the title</string>
     <string name="Uwazi_Submit_Later">Submit later</string>
     <string name="Uwazi_Send_Entity_Title">End of entity</string>
+    <string name="Uwazi_WidgetMultiDate_AddDate">Add another date</string>
 
 
     <string-array name="Uwazi_Language_Array">

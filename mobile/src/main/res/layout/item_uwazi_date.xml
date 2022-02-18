@@ -8,12 +8,12 @@
 
     <ImageButton
         android:id="@+id/clearWidgetButton"
-        android:drawable="@drawable/ic_cancel_rounded"
-        android:background="@color/wa_purple"
+        android:background="@drawable/ic_cancel_rounded"
         android:layout_gravity="end"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        android:visibility="visible"
         android:contentDescription="@string/action_cancel" />
 
     <Button
@@ -21,7 +21,8 @@
         style="@style/CollectFormWidgetButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="2dp"
+        android:text="@string/Uwazi_WidgetMultiDate_AddDate"
         android:layout_marginBottom="5dp" />
 
     <TextView

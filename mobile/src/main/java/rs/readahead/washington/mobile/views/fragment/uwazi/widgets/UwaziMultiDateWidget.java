@@ -13,48 +13,40 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import org.joda.time.DateTime;
+
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.util.Util;
-import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
 
 
 @SuppressLint("ViewConstructor")
 public class UwaziMultiDateWidget extends UwaziQuestionWidget {
-    private DatePickerDialog datePickerDialog;
+    private HashMap<Integer, Long> dateValues = new HashMap<>();//
     private Long intMsValue = 0L;
+    private Integer counter = 1;
 
     private LinearLayout dateListLayout;
-   // private Button dateButton;
-   // private TextView dateText;
-   // ImageButton clearButton;
 
     private int year;
     private int month;
     private int dayOfMonth;
 
     private boolean nullAnswer = false;
-    private boolean dateVisible = false;
 
     public UwaziMultiDateWidget(Context context, UwaziEntryPrompt prompt) {
         super(context, prompt);
 
-        createDatePickerDialog();
-
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-        /*clearButton = addButton(R.drawable.ic_cancel_rounded);
-        clearButton.setId(QuestionWidget.newUniqueId());
-        clearButton.setEnabled(!formEntryPrompt.isReadOnly());
-        clearButton.setVisibility(GONE);
-        clearButton.setOnClickListener(v -> clearAnswer());*/
 
         addDateView(linearLayout);
         clearAnswer();
@@ -64,11 +56,8 @@ public class UwaziMultiDateWidget extends UwaziQuestionWidget {
     @Override
     public void clearAnswer() {
         nullAnswer = true;
-        dateVisible = false;
-/*        dateButton.setVisibility(VISIBLE);
-        dateButton.setText(getResources().getString(R.string.collect_form_action_select_date)); // todo: say something smart here..
-        dateText.setVisibility(GONE);*/
-       // clearButton.setVisibility(GONE);
+
+
     }
 
     @Override
@@ -87,36 +76,35 @@ public class UwaziMultiDateWidget extends UwaziQuestionWidget {
         Util.hideKeyboard(context, this);
     }
 
-    private void setWidgetDate() throws ParseException {
+    private void setWidgetDate(Integer key,TextView dateText, Button dateButton) throws ParseException {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         String dateInter = this.year + "/" + this.month + "/" + this.dayOfMonth;
 
         Date date = sdf.parse(dateInter);
 
         if (date != null) {
-            intMsValue = date.getTime();
+            dateValues.put(key,date.getTime());
         }
         nullAnswer = false;
-        /*dateButton.setVisibility(GONE);
-        clearButton.setVisibility(VISIBLE);
+        dateButton.setVisibility(GONE);
         dateText.setVisibility(VISIBLE);
-        dateText.setText(getFormattedDate(getContext(), date));*/
-
-        dateVisible = true;
+        dateText.setText(getFormattedDate(getContext(), date));
     }
 
-    private void createDatePickerDialog() {
-        datePickerDialog = new DatePickerDialog(getContext(), AlertDialog.THEME_HOLO_LIGHT, (view, year, monthOfYear, dayOfMonth) -> {
+    private DatePickerDialog createDatePickerDialog(Integer key,TextView dateText, Button dateButton) {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), AlertDialog.THEME_HOLO_LIGHT, (view, year, monthOfYear, dayOfMonth) -> {
             this.year = year;
             month = monthOfYear + 1;
             dayOfMonth = dayOfMonth;
 
             try {
-                setWidgetDate();
+                setWidgetDate(key, dateText,dateButton);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }, 1971, 1, 1);
+
+        return datePickerDialog;
     }
 
     private void addDateView(LinearLayout linearLayout) {
@@ -126,40 +114,40 @@ public class UwaziMultiDateWidget extends UwaziQuestionWidget {
 
         dateListLayout = view.findViewById(R.id.dates);
 
-        View one = getDateLayout(1);
+        View one = getDateLayout(counter);
         dateListLayout.addView(one);
 
-        View two = getDateLayout(2);
-        dateListLayout.addView(two);
-
-       /* dateButton = linearLayout.findViewById(R.id.dateWidgetButton);
-        dateText = linearLayout.findViewById(R.id.dateText);
-
-        dateButton.setId(QuestionWidget.newUniqueId());
-        dateButton.setText(getResources().getString(R.string.collect_form_action_select_date));
-        dateButton.setEnabled(!formEntryPrompt.isReadOnly());
-
-        dateButton.setOnClickListener(v -> {
-            if (nullAnswer) {
-                DateTime dt = new DateTime();
-                datePickerDialog.updateDate(dt.getYear(), dt.getMonthOfYear() - 1, dt.getDayOfMonth());
-            }
-
-            if (dateVisible) {
-                clearAnswer();
-            } else {
-                datePickerDialog.show();
-            }
-        });*/
+        Button addDateButton = linearLayout.findViewById(R.id.addText);
+        addDateButton.setOnClickListener(v -> {
+            View newOne = getDateLayout(++counter);
+            dateListLayout.addView(newOne);
+        });
     }
 
     private View getDateLayout(Integer key){
         LayoutInflater inflater = LayoutInflater.from(getContext());
         @SuppressLint("InflateParams")
         LinearLayout item = (LinearLayout) inflater.inflate(R.layout.item_uwazi_date, null);
-        ImageButton clearItem = item.findViewById(R.id.clearWidgetButton);
-        Button dateButton = item.findViewById(R.id.dateWidgetButton);
         TextView dateText = item.findViewById(R.id.dateText);
+        item.setTag(key);
+        ImageButton clearItem = item.findViewById(R.id.clearWidgetButton);
+        int padding = getResources().getDimensionPixelSize(R.dimen.collect_widget_icon_padding);
+        clearItem.setPadding(padding, 0, padding, 0);
+        clearItem.setVisibility(View.VISIBLE);
+
+        Button dateButton = item.findViewById(R.id.dateWidgetButton);
+        dateButton.setText(getResources().getString(R.string.collect_form_action_select_date));
+        DatePickerDialog datePickerDialog = createDatePickerDialog(key, dateText, dateButton);
+
+        dateButton.setOnClickListener(v -> {
+            DateTime dt = new DateTime();
+            datePickerDialog.updateDate(dt.getYear(), dt.getMonthOfYear() - 1, dt.getDayOfMonth());
+            datePickerDialog.show();
+        });
+
+        clearItem.setOnClickListener(v -> {
+            dateListLayout.removeView(item);
+        });
 
         return item;
     }
@@ -180,8 +168,8 @@ public class UwaziMultiDateWidget extends UwaziQuestionWidget {
        /* dateButton.setVisibility(GONE);
         clearButton.setVisibility(VISIBLE);
         dateText.setVisibility(VISIBLE);
-        dateText.setText(getFormattedDate(getContext(), date));*/
-        dateVisible = true;
+        dateText.setText(getFormattedDate(getContext(), date));
+        dateVisible = true;*/
 
         return data.toString();
     }
