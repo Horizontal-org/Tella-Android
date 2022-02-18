@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:text="@string/Uwazi_WidgetMultiDate_AddDate"
+        android:text="@string/collect.form_action_select.date"
         android:layout_marginBottom="5dp" />
 
     <TextView

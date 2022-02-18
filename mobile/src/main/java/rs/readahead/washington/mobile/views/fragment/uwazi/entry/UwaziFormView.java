@@ -90,6 +90,7 @@ public class UwaziFormView extends LinearLayout {
                     || p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_SELECT)
                     || p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_MULTISELECT)
                     || p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_MULTIDATE)
+                    || p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_MULTIDATERANGE)
             ) {
                 UwaziQuestionWidget qw = UwaziWidgetFactory.createWidgetFromPrompt(p, getContext(), readOnlyOverride);
                 qw.setId(VIEW_ID + id++);
