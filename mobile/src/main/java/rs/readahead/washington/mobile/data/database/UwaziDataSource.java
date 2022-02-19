@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.data.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
@@ -29,8 +30,10 @@ import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.data.entity.uwazi.UwaziEntityRow;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
+import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
+import rs.readahead.washington.mobile.domain.entity.collect.ListFormResult;
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate;
 import rs.readahead.washington.mobile.domain.entity.uwazi.EntityInstanceBundle;
 import rs.readahead.washington.mobile.domain.entity.uwazi.ListTemplateResult;
@@ -175,7 +178,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
     @Override
     public Single<ListTemplateResult> updateBlankTemplates(ListTemplateResult listTemplateResult) {
         return Single.fromCallable(() -> {
-            dataSource.updateUBlankTemplates(listTemplateResult);
+            dataSource.updateUBlankTemplates(listTemplateResult,dataSource.getBlankCollectTemplates());
             listTemplateResult.setTemplates(dataSource.getBlankCollectTemplates());
             return listTemplateResult;
         }).compose(applySchedulers());
@@ -184,7 +187,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
     @Override
     public Single<ListTemplateResult> updateBlankTemplatesIfNeeded(ListTemplateResult listTemplateResult) {
         return Single.fromCallable(() -> {
-            dataSource.updateBlankTemplatesIfNeeded(listTemplateResult);
+            dataSource.updateUBlankTemplates(listTemplateResult,dataSource.getBlankCollectTemplates());
             listTemplateResult.setTemplates(dataSource.getBlankCollectTemplatesAndUpdate(listTemplateResult));
             return listTemplateResult;
         }).compose(applySchedulers());
@@ -464,68 +467,31 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
 
     }
 
-    private void updateUBlankTemplates(ListTemplateResult result) {
+    private void updateUBlankTemplates(ListTemplateResult result,List<CollectTemplate> oldList) {
 
         List<CollectTemplate> templates = result.getTemplates();
         List<IErrorBundle> errors = result.getErrors();
 
-        List<String> templatesIDs = new ArrayList<>(templates.size());
-        List<String> errorServerIDs = new ArrayList<>(errors.size());
-
         for (CollectTemplate template : templates) {
-
-            CollectTemplate current = getBlankTemplate("" + template.getId());
             ContentValues values = new ContentValues();
+            for (CollectTemplate oldTemplate : oldList){
+                if (oldTemplate.getEntityRow().get_id().equals(template.getEntityRow().get_id())){
+                    values.put(D.C_UWAZI_SERVER_ID, template.getServerId());
+                    values.put(D.C_TEMPLATE_ENTITY, new GsonBuilder().create().toJson(template.getEntityRow()));
+                    values.put(D.C_DOWNLOADED, true);
+                    values.put(D.C_UPDATED, true);
 
-            if (current != null) {
-
-                values.put(D.C_UPDATED, true);
-
-                int num = database.update(D.T_UWAZI_BLANK_TEMPLATES, values, D.C_ID + " = ?",
-                        new String[]{Long.toString(current.getId())});
-                if (num > 0) {
-                    template.setUpdated(true);
-                }
-            } else {
-                values.put(D.C_UWAZI_SERVER_ID, template.getServerId());
-                values.put(D.C_VERSION, template.getEntityRow().getVersion());
-                values.put(D.C_NAME, template.getEntityRow().getName());
-
-                long id = database.insert(D.T_UWAZI_BLANK_TEMPLATES, null, values);
-                if (id != -1) {
-                    template.setId(id);
+                    int num = database.update(D.T_UWAZI_BLANK_TEMPLATES, values, D.C_ID + " = ?",
+                            new String[]{Long.toString(oldTemplate.getId())});
+                    if (num > 0) {
+                        template.setUpdated(true);
+                    }
                 }
             }
         }
 
     }
 
-    private void updateUBlankTemplatesIfNeeded(ListTemplateResult result) {
-
-        List<CollectTemplate> templates = result.getTemplates();
-        List<IErrorBundle> errors = result.getErrors();
-
-        List<String> templatesIDs = new ArrayList<>(templates.size());
-        List<String> errorServerIDs = new ArrayList<>(errors.size());
-
-        for (CollectTemplate template : templates) {
-
-            CollectTemplate current = getBlankTemplate("" + template.getId());
-            ContentValues values = new ContentValues();
-
-            if (current != null) {
-
-                values.put(D.C_UPDATED, true);
-
-                int num = database.update(D.T_UWAZI_BLANK_TEMPLATES, values, D.C_ID + " = ?",
-                        new String[]{Long.toString(current.getId())});
-                if (num > 0) {
-                    template.setUpdated(true);
-                }
-            }
-        }
-
-    }
 
     @Nullable
     private CollectTemplate getBlankTemplate(String templateID) {
