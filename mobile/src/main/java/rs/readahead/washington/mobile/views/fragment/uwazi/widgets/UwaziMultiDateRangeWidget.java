@@ -105,10 +105,8 @@ public class UwaziMultiDateRangeWidget extends UwaziQuestionWidget {
         if (date != null) {
             if (isFrom) {
                 dateValuesFrom.put(key, date.getTime());
-                Timber.d("+++++ dateValuesFrom.put %s %s", key, date.getTime());
             } else {
                 dateValuesTo.put(key, date.getTime());
-                Timber.d("+++++ dateValuesTo.put %s %s", key, date.getTime());
             }
         }
         nullAnswer = false;

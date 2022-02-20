@@ -126,8 +126,11 @@ class SharedUwaziViewModel : ViewModel() {
                 { drafts: List<UwaziEntityInstance> ->
                     val resultList = mutableListOf<ViewEntityInstanceItem>()
                     drafts.map {
-                        resultList.add(it.toViewEntityInstanceItem (onMoreClicked = { onInstanceMoreClicked(it) },
-                            onOpenClicked = {openEntityInstance(it)}                            ))
+                        resultList.add(it.toViewEntityInstanceItem(
+                            onMoreClicked = { onInstanceMoreClicked(it) },
+                            onOpenClicked = { getInstanceUwaziEntity(it.id) }
+                            )
+                        )
                     }
                     _submittedInstances.postValue(resultList)
                 }
