@@ -4,12 +4,16 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hzontal.utils.MediaFile;
 
 import org.hzontal.shared_ui.submission.SubmittingItem;
@@ -22,6 +26,9 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance;
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus;
+import rs.readahead.washington.mobile.media.MediaFileHandler;
+import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
+import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.FileUtil;
 
 @SuppressLint("ViewConstructor")
@@ -32,6 +39,7 @@ public class UwaziFormEndView extends FrameLayout {
     String title;
     private UwaziEntityInstance instance;
     private boolean previewUploaded;
+    private final RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
 
 
     public UwaziFormEndView(Context context, @StringRes int titleResId) {
@@ -44,6 +52,9 @@ public class UwaziFormEndView extends FrameLayout {
 
         titleView.setText(title);
 
+        MediaFileHandler mediaFileHandler = new MediaFileHandler();
+        VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
+        glide = Glide.with(getContext()).using(glideLoader);
         //subTitleView = findViewById(R.id.subtitle);
     }
 
@@ -149,22 +160,22 @@ public class UwaziFormEndView extends FrameLayout {
     private View createFormMediaFileItemView(@NonNull FormMediaFile mediaFile, boolean offline) {
 
         SubmittingItem item = new SubmittingItem(getContext(), null, 0);
+        ImageView thumbView = item.findViewById(R.id.fileThumb);
         item.setTag(mediaFile.getPartName());
 
         item.setPartName(mediaFile.name);
         item.setPartSize(mediaFile.size);
 
-        int typeResId = R.drawable.ic_attach_file_white_24dp;
-
-        if (MediaFile.INSTANCE.isImageFileType(mediaFile.mimeType)) {
-            typeResId = R.drawable.ic_menu_camera;
-        } else if (MediaFile.INSTANCE.isVideoFileType(mediaFile.mimeType)) {
-            typeResId = R.drawable.ic_videocam;
+        if (MediaFile.INSTANCE.isImageFileType(mediaFile.mimeType) || (MediaFile.INSTANCE.isVideoFileType(mediaFile.mimeType))) {
+            glide.load(new VaultFileLoaderModel(mediaFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(thumbView);
         } else if (MediaFile.INSTANCE.isAudioFileType(mediaFile.mimeType)) {
-            typeResId = R.drawable.ic_mic_white_small;
+            item.setPartIcon(R.drawable.ic_headset_white_24dp);
+        } else {
+            item.setPartIcon(R.drawable.ic_attach_file_white_24dp);
         }
-
-        item.setPartIcon(typeResId);
 
         if (mediaFile.status == FormMediaFileStatus.SUBMITTED || previewUploaded) {
             item.setPartUploaded();

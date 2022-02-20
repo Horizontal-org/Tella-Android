@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.*
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -20,6 +21,7 @@ class SubmittingItem @JvmOverloads  constructor(
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
+    private lateinit var cardThumb: View
     private lateinit var partName: TextView
     private lateinit var partIcon: ImageView
     private lateinit var partSize: TextView
@@ -42,6 +44,7 @@ class SubmittingItem @JvmOverloads  constructor(
     }
 
     private fun initView() {
+        cardThumb =  findViewById(R.id.fileThumbCard)
         partName = findViewById(R.id.partName)
         partIcon = findViewById(R.id.partIcon)
         partSize = findViewById(R.id.partSize)
@@ -134,6 +137,8 @@ class SubmittingItem @JvmOverloads  constructor(
 
     fun setPartIcon(iconId: Int){
         partIcon.setImageResource(iconId)
+        partIcon.visibility = VISIBLE
+        cardThumb.visibility = GONE
     }
 
     private fun getUploadedFileSize(pct: Float, size: Long ) : String {
