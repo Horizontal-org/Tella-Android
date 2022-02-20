@@ -174,9 +174,13 @@ public class UwaziMultiDateWidget extends UwaziQuestionWidget {
         dateListLayout.removeAllViews();
         dateValues.clear();
         counter = 0;
-
+        String value = null;
         for (Object o : (ArrayList) data) {
-            String value = Objects.requireNonNull(((LinkedTreeMap) o).get("value")).toString();
+            if (o instanceof UwaziValue){
+                value = ((UwaziValue) o).getValue().toString();
+            }else {
+                value = Objects.requireNonNull(((LinkedTreeMap) o).get("value")).toString();
+            }
             BigDecimal bd = new BigDecimal(value);
             long valong = bd.longValue() * 1000L;
             dateValues.put(counter, valong);

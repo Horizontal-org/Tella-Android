@@ -208,13 +208,16 @@ public class UwaziMultiDateRangeWidget extends UwaziQuestionWidget {
         counter = 0;
 
         for (Object o : (ArrayList) data) {
+            UwaziValue value;
             UwaziDateRange dateRange;
-            if (o instanceof UwaziDateRange) {
-                dateRange = (UwaziDateRange) data;
+            if (o instanceof UwaziValue) {
+                value = (UwaziValue) o;
+                dateRange = (UwaziDateRange)  value.getValue();
             } else {
-                LinkedTreeMap<String, Object> locationTreeMap = ((LinkedTreeMap<String, Object>) data);
-                long from = new BigDecimal(locationTreeMap.get("from").toString()).longValueExact();
-                long to = new BigDecimal(locationTreeMap.get("to").toString()).longValueExact();
+                Double fromD = (Double) ((LinkedTreeMap) ((Map) o).get("value")).get("from");
+                Double toD = (Double) ((LinkedTreeMap) ((Map) o).get("value")).get("to");
+                long from = new BigDecimal(fromD).longValueExact();
+                long to = new BigDecimal(toD).longValueExact();
 
                 dateRange = new UwaziDateRange((int) from, (int) to);
             }
