@@ -21,6 +21,7 @@ import rs.readahead.washington.mobile.data.repository.ProgressListener
 import rs.readahead.washington.mobile.data.repository.UwaziRepository
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
+import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
@@ -101,6 +102,7 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
                 .doOnError {  progress.postValue(UwaziEntityStatus.SUBMISSION_ERROR) }
                 .flatMap {
                     entity.status = UwaziEntityStatus.SUBMITTED
+                    entity.formPartStatus = FormMediaFileStatus.SUBMITTED
                     keyDataSource.uwaziDataSource.blockingFirst().saveEntityInstance(entity)
                 }
                 .subscribe({
