@@ -531,6 +531,7 @@
     <string name="Uwazi_Send_Entity_Title">End of entity</string>
     <string name="Uwazi_WidgetMultiDate_AddDate">Add another date</string>
     <string name="Uwazi_WidgetMultiDate_AddDateRange">Add another date range</string>
+    <string name="Uwazi_WidgetDateRange_Constraint">The second date in the range must be after the first</string>
 
 
     <string-array name="Uwazi_Language_Array">

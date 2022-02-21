@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.widgets;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -15,6 +16,7 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.internal.LinkedTreeMap;
 
+import org.hzontal.shared_ui.utils.DialogUtils;
 import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
@@ -24,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,6 @@ import rs.readahead.washington.mobile.data.entity.uwazi.answer.UwaziDateRange;
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
-import timber.log.Timber;
 
 
 @SuppressLint("ViewConstructor")
@@ -102,13 +102,28 @@ public class UwaziMultiDateRangeWidget extends UwaziQuestionWidget {
 
         Date date = sdf.parse(dateInter);
 
-        if (date != null) {
-            if (isFrom) {
-                dateValuesFrom.put(key, date.getTime());
-            } else {
-                dateValuesTo.put(key, date.getTime());
+        if (isFrom) {
+            Long intMsValueTo = dateValuesTo.get(key);
+            if (date != null) {
+                if (intMsValueTo == null || intMsValueTo > date.getTime()) {
+                    dateValuesFrom.put(key, date.getTime());
+                } else {
+                    showDateConstraint();
+                    return;
+                }
+            }
+        } else {
+            if (date != null) {
+            Long intMsValueFrom = dateValuesFrom.get(key);
+                if (intMsValueFrom == null || intMsValueFrom < date.getTime()) {
+                    dateValuesTo.put(key, date.getTime());
+                } else {
+                    showDateConstraint();
+                    return;
+                }
             }
         }
+
         nullAnswer = false;
         dateButton.setVisibility(GONE);
         dateText.setVisibility(VISIBLE);
@@ -237,5 +252,9 @@ public class UwaziMultiDateRangeWidget extends UwaziQuestionWidget {
         nullAnswer = false;
 
         return data.toString();
+    }
+
+    void showDateConstraint() {
+        DialogUtils.showBottomMessage((Activity) getContext(), getContext().getString(R.string.Uwazi_WidgetDateRange_Constraint), true);
     }
 }

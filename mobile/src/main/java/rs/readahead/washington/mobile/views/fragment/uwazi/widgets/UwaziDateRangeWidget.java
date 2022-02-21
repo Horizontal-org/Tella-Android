@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.views.fragment.uwazi.widgets;
 
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -14,6 +15,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.google.gson.internal.LinkedTreeMap;
+
+import org.hzontal.shared_ui.utils.DialogUtils;
+import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -112,32 +116,34 @@ public class UwaziDateRangeWidget extends UwaziQuestionWidget {
 
         Date date = sdf.parse(dateInter);
 
-        if (date != null) {
+        if (date != null && (intMsValueTo == 0L || intMsValueTo > date.getTime())) {
             intMsValueFrom = date.getTime();
+            dateButtonFrom.setVisibility(GONE);
+            clearButton.setVisibility(VISIBLE);
+            dateTextFrom.setVisibility(VISIBLE);
+            dateTextFrom.setText(getFormattedDate(getContext(), date));
+            dateFromVisible = true;
+        } else {
+            showDateConstraint();
         }
-        dateButtonFrom.setVisibility(GONE);
-        clearButton.setVisibility(VISIBLE);
-        dateTextFrom.setVisibility(VISIBLE);
-        dateTextFrom.setText(getFormattedDate(getContext(), date));
-
-        dateFromVisible = true;
     }
 
-    private void setWidgetDate1() throws ParseException {
+    private void setWidgetDateTo() throws ParseException {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         String dateInter = this.yearTo + "/" + this.monthTo + "/" + this.dayOfMonthTo;
 
         Date date = sdf.parse(dateInter);
 
-        if (date != null) {
+        if (date != null && (intMsValueFrom == 0L || intMsValueFrom < date.getTime())) {
             intMsValueTo = date.getTime();
+            dateButtonTo.setVisibility(GONE);
+            clearButton.setVisibility(VISIBLE);
+            dateTextTo.setVisibility(VISIBLE);
+            dateTextTo.setText(getFormattedDate(getContext(), date));
+            dateToVisible = true;
+        } else {
+            showDateConstraint();
         }
-        dateButtonTo.setVisibility(GONE);
-        clearButton.setVisibility(VISIBLE);
-        dateTextTo.setVisibility(VISIBLE);
-        dateTextTo.setText(getFormattedDate(getContext(), date));
-
-        dateToVisible = true;
     }
 
 
@@ -162,7 +168,7 @@ public class UwaziDateRangeWidget extends UwaziQuestionWidget {
             this.dayOfMonthTo = dayOfMonth;
 
             try {
-                setWidgetDate1();
+                setWidgetDateTo();
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -189,10 +195,10 @@ public class UwaziDateRangeWidget extends UwaziQuestionWidget {
         dateButtonTo.setEnabled(!formEntryPrompt.isReadOnly());
 
         dateButtonFrom.setOnClickListener(v -> {
-            /*if (nullAnswer) {
+            if (intMsValueFrom == 0L) {
                 DateTime dt = new DateTime();
                 datePickerDialogFrom.updateDate(dt.getYear(), dt.getMonthOfYear() - 1, dt.getDayOfMonth());
-            }*/
+            }
 
             if (dateFromVisible) {
                 clearAnswer();
@@ -202,10 +208,10 @@ public class UwaziDateRangeWidget extends UwaziQuestionWidget {
         });
 
         dateButtonTo.setOnClickListener(v -> {
-           /* if (nullAnswer) {
+            if (intMsValueTo == 0L) {
                 DateTime dt = new DateTime();
                 datePickerDialogTo.updateDate(dt.getYear(), dt.getMonthOfYear() - 1, dt.getDayOfMonth());
-            }*/
+            }
 
             if (dateToVisible) {
                 clearAnswer();
@@ -255,5 +261,9 @@ public class UwaziDateRangeWidget extends UwaziQuestionWidget {
         dateToVisible = true;
 
         return data.toString();
+    }
+
+    void showDateConstraint() {
+        DialogUtils.showBottomMessage((Activity) getContext(), getContext().getString(R.string.Uwazi_WidgetDateRange_Constraint), true);
     }
 }
