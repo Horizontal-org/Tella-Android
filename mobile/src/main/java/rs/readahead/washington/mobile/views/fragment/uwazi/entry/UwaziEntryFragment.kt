@@ -130,7 +130,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
                 parseUwaziTemplate()
             }
         }
-        binding.toolbar.setStartTextTitle(template?.entityRow?.name.toString())
+        binding.toolbar.setStartTextTitle(template?.entityRow?.translatedName.toString())
     }
 
     private fun initObservers() {
