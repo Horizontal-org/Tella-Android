@@ -136,7 +136,9 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
 
     public String setBinaryData(@NonNull Object data) {
         ArrayList<String> resultList = new ArrayList<>();
-
+        if (data instanceof String ){
+            resultList.add(data.toString());
+        }else {
             for (Object o : (ArrayList) data) {
                 if (o instanceof UwaziValue){
                     resultList.add((String) ((UwaziValue) o).getValue());
@@ -145,6 +147,8 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
                     resultList.add(value);
                 }
             }
+        }
+
 
 
         for (int i = 0; i < checkBoxes.size(); ++i) {
