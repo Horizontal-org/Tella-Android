@@ -10,4 +10,20 @@
 
     <dimen name="main_navigation_bar_height">50dp</dimen>
     <dimen name="text_button_padding_size">5dp</dimen>
+    <dimen name="big_button_text_size">17.6sp</dimen>
+    <dimen name="big_button_text_letter_spacing">0.2</dimen>
+    <dimen name="big_button_text_letter_scaling">1.6</dimen>
+    <dimen name="details_text_size">20.8sp</dimen>
+    <dimen name="sheet_title_text_size">18sp</dimen>
+    <dimen name="sheet_subtitle_text_size">18.2sp</dimen>
+    <dimen name="detailed_button_detail_text_size">14.4sp</dimen>
+    <dimen name="detailed_btn_btn_label_desc_margin">8dp</dimen>
+    <dimen name="bottom_sheet_title_text_size">19.2sp</dimen>
+    <dimen name="bottom_sheet_subtitle_text_size">16.8sp</dimen>
+    <dimen name="onboard_advanced_complete_title_text_size">28sp</dimen>
+    <dimen name="onboard_advanced_complete_title_text_size_1">21sp</dimen>
+    <dimen name="vault_home_button_text_size">18sp</dimen>
+    <dimen name="app_bar_title_text_size">18sp</dimen>
+    <dimen name="information_button_bottom_text_size">15.6sp</dimen>
+    <dimen name="server_settings_advanced_toggle_text_size">12sp</dimen>
 </resources>

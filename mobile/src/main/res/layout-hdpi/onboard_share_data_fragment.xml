@@ -39,7 +39,7 @@
         android:padding="4dp"
         android:text="@string/onboard.title_share_data"
         android:textColor="@color/wa_white"
-        android:textSize="18sp"
+        android:textSize="@dimen/sheet_title_text_size"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,16 +52,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/guidelineCenter"
-        android:gravity="center_vertical"
-        android:paddingStart="12dp"
-        android:paddingEnd="0dp"
+        style="@style/OnboardingDescText"
         android:visibility="visible"
         android:textAlignment="center"
         android:text="@string/onboard.expl_share_data"
         android:layout_marginTop="16dp"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
-        android:textSize="14sp"
+        android:textSize="@dimen/sheet_subtitle_text_size"
         tools:ignore="RtlCompat" />
 
     <TextView
@@ -82,7 +80,7 @@
         android:text="@string/onboard.connect_btn_share_data"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
-        android:textSize="16sp"/>
+        style="@style/BigButtonsText"/>
 
     <TextView
         android:id="@+id/sheet_two_btn"
@@ -102,7 +100,7 @@
         android:text="@string/onboard.continue_btn_share_data"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
-        android:textSize="16sp"/>
+        style="@style/BigButtonsText"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

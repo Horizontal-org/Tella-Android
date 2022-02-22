@@ -44,7 +44,8 @@
         android:layout_marginBottom="8dp"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
-        android:textSize="32sp"/>
+        android:textSize="@dimen/onboard_advanced_complete_title_text_size_1"
+        android:letterSpacing="@dimen/big_button_text_letter_spacing"/>
 
     <TextView
         android:id="@+id/standard_sheet_content"

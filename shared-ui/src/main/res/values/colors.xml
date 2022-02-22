@@ -35,4 +35,5 @@
     <color name="colorPrimaryDark">@color/space_cadet</color>
     <color name="colorAccent">@color/green</color>
     <color name="colorPrimaryInverse">@color/tigers_eye</color>
+    <color name="translucent_black">#32000000</color>
 </resources>

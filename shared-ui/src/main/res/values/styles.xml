@@ -24,18 +24,35 @@
 
     <style name="SettingsTitleText">
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">16.8sp</item>
     </style>
 
     <style name="SwitchWithMessage">
         <item name="trackTint">@color/switch_track_color</item>
         <item name="thumbTint">@color/switch_thumb_color</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">16.8sp</item>
     </style>
 
     <style name="SettingsMessageText">
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">11sp</item>
+        <item name="android:textSize">14.3sp</item>
+    </style>
+
+    <style name="DetailsText">
+        <item name="android:textSize">@dimen/details_text_size</item>
+    </style>
+
+    <style name="BigButtonsText">
+        <item name="android:textSize">@dimen/big_button_text_size</item>
+        <item name="android:letterSpacing">@dimen/big_button_text_letter_spacing</item>
+    </style>
+
+    <style name="OnboardingDescText">
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingStart">21dp</item>
+        <item name="android:paddingEnd">21dp</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="RadioListButtonStyle">
@@ -66,8 +83,17 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="ToolbarComponentTextStyle">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">17.5sp</item>
+    </style>
+
     <style name="Tella_Main_White_Text.MeduimbBold" parent="Tella_Main_White_Text.Bold">
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="HomeButtonTextStyle" parent="Tella_Main_White_Text.Bold">
+        <item name="android:textSize">17.5sp</item>
     </style>
 
     <style name="Tella_Main_White_Text.SmallBold" parent="Tella_Main_White_Text.Bold">

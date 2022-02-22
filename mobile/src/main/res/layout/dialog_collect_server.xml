@@ -118,6 +118,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/wa_transparent"
                 android:text="@string/settings.server_add.server_dialog_advanced"
+                android:textSize="@dimen/server_settings_advanced_toggle_text_size"
                 android:textColor="@color/wa_white"
                 android:textAllCaps="false"
                 android:textAppearance="?android:attr/textAppearanceMedium"
@@ -172,6 +173,7 @@
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:textColor="@color/wa_white"
+                        android:textSize="16sp"
                         app:backgroundTint="@color/wa_white" />
                 </com.google.android.material.textfield.TextInputLayout>
 

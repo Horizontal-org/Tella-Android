@@ -56,7 +56,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/sheet_one_btn"
         android:gravity="center"
-        android:padding="@dimen/hide_tella_small_margin"
+        android:paddingTop="@dimen/hide_tella_small_margin"
+        android:paddingBottom="19dp"
+        android:paddingStart="@dimen/hide_tella_small_margin"
+        android:paddingEnd="@dimen/hide_tella_small_margin"
         android:text="@string/settings.servers_hide_tella_desc"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
@@ -116,7 +119,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:layout_marginTop="@dimen/hide_tella_big_margin"
+                android:layout_marginTop="@dimen/hide_tella_small_margin"
                 android:layout_marginBottom="@dimen/hide_tella_big_margin"
                 android:id="@+id/subtitle_btn_one"
                 android:layout_height="wrap_content"
@@ -125,7 +128,7 @@
                 android:text="@string/settings.servers_setup_change_name_icon_subtitle"
                 android:fontFamily="@font/open_sans"
                 android:textColor="@color/wa_white"
-                android:textSize="12sp"/>
+                android:textSize="@dimen/detailed_button_detail_text_size"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -183,7 +186,7 @@
 
             <TextView
                 android:id="@+id/subtitle_btn_two"
-                android:layout_marginTop="@dimen/hide_tella_big_margin"
+                android:layout_marginTop="@dimen/hide_tella_small_margin"
                 android:layout_marginBottom="@dimen/hide_tella_big_margin"
                 android:layout_height="wrap_content"
                 android:textAlignment="viewStart"
@@ -191,7 +194,7 @@
                 android:fontFamily="@font/open_sans"
                 android:text="@string/settings.servers_setup_hide_behind_calculator_subtitle"
                 android:textColor="@color/wa_white"
-                android:textSize="12sp"/>
+                android:textSize="@dimen/detailed_button_detail_text_size"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -209,9 +212,9 @@
         android:layout_marginTop="8dp"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
-        android:textSize="12sp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"/>
+        android:textSize="14sp"
+        android:paddingStart="26dp"
+        android:paddingEnd="26dp"/>
 
     <TextView
         style="@style/Unlock_White_Text_Back"

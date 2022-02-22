@@ -23,7 +23,7 @@
         style="@style/Tella_Main_White_Text.Bold"
         android:layout_marginTop="@dimen/lock_subtitle_desc_margin_top"
         android:text="@string/onboard_setup_lock"
-        android:textSize="18sp"
+        android:textSize="@dimen/sheet_title_text_size"
         app:layout_constraintBottom_toTopOf="@+id/lockPasswordBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

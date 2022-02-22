@@ -73,6 +73,7 @@
         android:layout_marginTop="17dp"
         android:layout_marginEnd="17dp"
         />
+
     <org.hzontal.shared_ui.buttons.HomeButton
         android:id="@+id/othersBtn"
         android:layout_width="0dp"
@@ -84,8 +85,5 @@
         app:rightImg="@drawable/ic_others"
         android:layout_marginTop="17dp"
         />
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -52,13 +52,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/open_sans"
-        android:gravity="center_vertical"
-        android:paddingStart="12dp"
-        android:paddingEnd="0dp"
+        style="@style/OnboardingDescText"
         android:text="@string/onboard.expl_hide_tella"
         android:textAlignment="center"
         android:textColor="@color/wa_white"
-        android:textSize="14sp"
+        android:textSize="@dimen/sheet_subtitle_text_size"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -78,7 +76,7 @@
         android:text="@string/settings.servers_hide_tella_title"
         android:textAllCaps="true"
         android:textColor="@color/wa_white"
-        android:textSize="16sp"
+        style="@style/BigButtonsText"
         android:textStyle="bold"
         app:backgroundTint="@color/wa_orange"
         app:layout_constraintEnd_toEndOf="parent"
@@ -106,13 +104,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/open_sans"
-            android:padding="4dp"
+            android:padding="2dp"
             android:gravity="center"
             android:text="@string/onboard.default_btn_title_hide_tella"
             android:textAllCaps="true"
             android:textColor="@color/wa_white"
             android:textSize="16sp"
             android:textStyle="bold"
+            style="@style/BigButtonsText"
             app:layout_constraintHorizontal_chainStyle="packed" />
 
         <TextView
@@ -120,10 +119,10 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/open_sans"
             android:gravity="center"
-            android:padding="4dp"
+            android:padding="2dp"
             android:text="@string/onboard.default_btn_subtitle_hide_tella"
             android:textColor="@color/wa_white"
-            android:textSize="12sp"
+            android:textSize="@dimen/detailed_button_detail_text_size"
             app:layout_constraintHorizontal_chainStyle="packed" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

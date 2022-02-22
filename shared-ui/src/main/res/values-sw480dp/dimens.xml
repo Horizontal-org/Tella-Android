@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="text_button_padding_size">5dp</dimen>
+    <dimen name="big_button_text_size">18.7sp</dimen>
+    <dimen name="big_button_text_letter_spacing">0.2</dimen>
+    <dimen name="big_button_text_letter_scaling">1.6</dimen>
+    <dimen name="details_text_size">22.1sp</dimen>
 </resources>

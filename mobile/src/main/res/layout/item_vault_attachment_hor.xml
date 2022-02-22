@@ -71,9 +71,10 @@
         app:layout_constraintStart_toEndOf="@id/attachmentImgContainer"
         app:layout_constraintTop_toBottomOf="@id/fileNameTextView"
         app:layout_constraintBottom_toBottomOf="parent"
-        style="@style/Tella_Main_White_Text.Small"
+        android:textSize="15.6sp"
         android:textColor="@color/wa_white_80"
         tools:text="14:30pm"
+        android:paddingTop="@dimen/hide_tella_small_margin"
         android:layout_marginStart="19dp"
         android:id="@+id/fileDateTextView"
         />

@@ -44,7 +44,8 @@
         android:layout_marginBottom="8dp"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
-        android:textSize="28sp"/>
+        android:textSize="@dimen/onboard_advanced_complete_title_text_size"
+        android:letterSpacing="@dimen/big_button_text_letter_spacing"/>
 
     <TextView
         android:id="@+id/standard_sheet_content"
@@ -53,14 +54,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guidelineCenter"
-        android:gravity="center"
+        style="@style/OnboardingDescText"
         android:textAlignment="center"
         android:visibility="visible"
         android:text="@string/onboard.expl_all_done"
         android:layout_marginBottom="16dp"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
-        android:textSize="16sp" />
+        android:textSize="@dimen/sheet_subtitle_text_size" />
 
     <TextView
         android:id="@+id/startBtn"
@@ -81,6 +82,6 @@
         android:text="@string/onboard.go_btn_all_done"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
-        android:textSize="16sp"/>
+        style="@style/BigButtonsText"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

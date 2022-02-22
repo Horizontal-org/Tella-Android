@@ -10,6 +10,7 @@ import rs.readahead.washington.mobile.R;
 public class PanelToggleButton extends AppCompatButton {
     private boolean open = false;
     private OnStateChangedListener listener;
+    private Context context;
 
     public interface OnStateChangedListener {
         void stateChanged(boolean open);
@@ -17,16 +18,19 @@ public class PanelToggleButton extends AppCompatButton {
 
     public PanelToggleButton(Context context) {
         super(context);
+        this.context = context;
         initialize();
     }
 
     public PanelToggleButton(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
         initialize();
     }
 
     public PanelToggleButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.context = context;
         initialize();
     }
 
@@ -70,6 +74,8 @@ public class PanelToggleButton extends AppCompatButton {
     }
 
     private void updateState() {
+        setTextSize(context.getResources().getDimension(R.dimen.server_settings_advanced_toggle_text_size)
+                / context.getResources().getDisplayMetrics().density);
         setCompoundDrawablesWithIntrinsicBounds(
                 0,
                 0,

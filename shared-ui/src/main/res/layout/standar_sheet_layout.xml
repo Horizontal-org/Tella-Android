@@ -19,7 +19,7 @@
         android:textStyle="bold"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
-        android:textSize="16sp"
+        android:textSize="@dimen/bottom_sheet_title_text_size"
         />
 
     <TextView
@@ -32,7 +32,7 @@
         android:layout_marginTop="10dp"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
-        android:textSize="14sp"
+        android:textSize="@dimen/bottom_sheet_subtitle_text_size"
         />
 
 

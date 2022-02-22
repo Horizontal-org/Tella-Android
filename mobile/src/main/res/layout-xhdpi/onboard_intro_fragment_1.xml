@@ -63,7 +63,7 @@
         android:layout_marginBottom="16dp"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
-        android:textSize="16sp" />
+        android:textSize="@dimen/details_text_size" />
 
     <TextView
         android:id="@+id/startBtn"
@@ -84,7 +84,7 @@
         android:text="@string/onboard.intro_get_started"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
-        android:textSize="16sp"/>
+        style="@style/BigButtonsText"/>
 
     <TextView
         android:id="@+id/sheet_two_btn"
