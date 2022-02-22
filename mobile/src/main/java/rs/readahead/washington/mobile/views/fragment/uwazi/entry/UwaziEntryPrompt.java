@@ -8,7 +8,7 @@ public class UwaziEntryPrompt {
     private String _id;
     private final String formIndex;
     private final String type;
-    private final String question;
+    private String question;
     private String answer;
     private final Boolean required;
     private final Boolean readonly = false;
@@ -68,6 +68,10 @@ public class UwaziEntryPrompt {
         else {
             return answer;
         }
+    }
+
+    public void setQuestion(String question){
+        this.question = question;
     }
 
     public int getControlType() {

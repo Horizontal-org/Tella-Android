@@ -295,7 +295,12 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
         entryPrompts.clear()
 
+        //TODO Handle this special common prop smarter
+        if (template?.entityRow?.commonProperties?.get(0)?.translatedLabel?.length!! > 0){
+            uwaziTitlePrompt.question = template?.entityRow?.commonProperties?.get(0)?.translatedLabel
+        }
         entryPrompts.add(uwaziTitlePrompt)
+
         for (property in template?.entityRow?.properties!!) {
             val entryPrompt = UwaziEntryPrompt(
                 property.name,
