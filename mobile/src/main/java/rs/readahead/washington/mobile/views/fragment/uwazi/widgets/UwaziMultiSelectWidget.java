@@ -12,11 +12,8 @@ import androidx.appcompat.widget.AppCompatCheckBox;
 import com.google.gson.internal.LinkedTreeMap;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.uwazi.SelectValue;
@@ -35,7 +32,6 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
     private final List<SelectValue> items;
     private final ArrayList<AppCompatCheckBox> checkBoxes;
 
-    @SuppressWarnings("unchecked")
     public UwaziMultiSelectWidget(Context context, UwaziEntryPrompt prompt) {
         super(context, prompt);
 
@@ -148,8 +144,6 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
                 }
             }
         }
-
-
 
         for (int i = 0; i < checkBoxes.size(); ++i) {
             AppCompatCheckBox box = checkBoxes.get(i);

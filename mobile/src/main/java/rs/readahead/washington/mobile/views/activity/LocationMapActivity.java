@@ -92,7 +92,7 @@ public class LocationMapActivity extends BaseLockActivity implements
 
         if (id == android.R.id.home) {
             myLocation = null;
-            setResultAndFinish();
+            setCancelAndFinish();
             return true;
         }
 
@@ -210,6 +210,11 @@ public class LocationMapActivity extends BaseLockActivity implements
 
     private void setResultAndFinish() {
         setResult(Activity.RESULT_OK, new Intent().putExtra(SELECTED_LOCATION, myLocation));
+        finish();
+    }
+
+    private void setCancelAndFinish() {
+        setResult(Activity.RESULT_CANCELED, new Intent().putExtra(SELECTED_LOCATION, myLocation));
         finish();
     }
 }
