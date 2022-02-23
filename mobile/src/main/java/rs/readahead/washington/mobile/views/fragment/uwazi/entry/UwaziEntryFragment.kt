@@ -40,6 +40,7 @@ import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBck
 const val COLLECT_TEMPLATE = "collect_template"
 const val UWAZI_INSTANCE = "uwazi_instance"
 const val UWAZI_TITLE = "title"
+const val UWAZI_SUPPORTING_FILES = "supporting_files"
 
 class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
     private val viewModel: SharedUwaziSubmissionViewModel by lazy {
@@ -60,6 +61,15 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         "Title",
         true,
         "Enter the submission title"
+    )
+
+    private val uwaziFilesPrompt = UwaziEntryPrompt(
+        UWAZI_SUPPORTING_FILES,
+        "10242049",
+        UwaziConstants.UWAZI_DATATYPE_MULTIFILES,
+        "Supporting files",
+        true,
+        ""
     )
 
     override fun onCreateView(
@@ -295,7 +305,9 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
         entryPrompts.clear()
 
-        //TODO Handle this special common prop smarter
+        //TODO Handle this special common props smarter
+        entryPrompts.add(uwaziFilesPrompt)
+
         if (template?.entityRow?.commonProperties?.get(0)?.translatedLabel?.length!! > 0){
             uwaziTitlePrompt.question = template?.entityRow?.commonProperties?.get(0)?.translatedLabel
         }

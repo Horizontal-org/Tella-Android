@@ -532,6 +532,10 @@
     <string name="Uwazi_WidgetMultiDate_AddDate">Add another date</string>
     <string name="Uwazi_WidgetMultiDate_AddDateRange">Add another date range</string>
     <string name="Uwazi_WidgetDateRange_Constraint">The second date in the range must be after the first</string>
+    <string name="Uwazi_MiltiFileWidget_AddMoreFiles">Add more files</string>
+    <string name="Uwazi_MiltiFileWidget_Show">Show Files</string>
+    <string name="Uwazi_MiltiFileWidget_Hide">Hide Files</string>
+    <string name="Uwazi_MiltiFileWidget_Help">Select as many files as you wish</string>
 
 
     <string-array name="Uwazi_Language_Array">

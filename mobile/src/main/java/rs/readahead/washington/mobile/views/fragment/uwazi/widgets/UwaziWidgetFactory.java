@@ -63,6 +63,10 @@ public class UwaziWidgetFactory {
                 questionWidget = new UwaziMultiSelectWidget(context, fep);
                 break;
 
+            case UwaziConstants.UWAZI_DATATYPE_MULTIFILES:
+                questionWidget = new UwaziMultiFileWidget(context, fep);
+                break;
+
             case UwaziConstants.UWAZI_DATATYPE_LINK:
                 questionWidget = new UwaziLinkWidget(context, fep);
                 break;

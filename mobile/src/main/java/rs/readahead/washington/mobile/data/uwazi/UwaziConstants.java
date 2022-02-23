@@ -57,6 +57,7 @@ public class UwaziConstants {
     public static final String UWAZI_DATATYPE_PREVIEW = "preview";
     public static final String UWAZI_DATATYPE_MEDIA = "media";
     public static final String UWAZI_DATATYPE_GEOLOCATION = "geolocation";
+    public static final String UWAZI_DATATYPE_MULTIFILES = "multifiles";
 
     /** constants for xform tags */
     public static final String XFTAG_UPLOAD = "upload";

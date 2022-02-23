@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/wa_purple"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/addText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/rounded_light_purple_background"
+        android:drawableStart="@drawable/ic_plus_outline_inverse"
+        android:drawablePadding="15dp"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="@string/Uwazi_MiltiFileWidget_AddMoreFiles"
+        android:textAllCaps="false"
+        android:textColor="@color/wa_white_80" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/numOfFiles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <rs.readahead.washington.mobile.views.custom.PanelToggleButton
+            android:id="@+id/toggle_button"
+            style="@style/Tella_Main_White_Text.Meduim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@color/wa_transparent"
+            android:text="@string/Uwazi_MiltiFileWidget_Show"
+            android:textAllCaps="false"
+            android:textColor="@color/tigers_eye" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/files"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+
+</LinearLayout>
