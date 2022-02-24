@@ -107,7 +107,7 @@ public class MediaFileHandler {
         Intent intent = new Intent();
         intent.setType(type);
 
-        if (extraMimeType != null && Build.VERSION.SDK_INT >= 19) {
+        if (extraMimeType != null) {
             intent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeType);
         }
 
@@ -121,9 +121,7 @@ public class MediaFileHandler {
             }
         }
 
-        if (Build.VERSION.SDK_INT >= 18) {
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        }
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
 
         intent.setAction(Intent.ACTION_GET_CONTENT);
 
