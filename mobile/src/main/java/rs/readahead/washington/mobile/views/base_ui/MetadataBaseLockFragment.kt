@@ -40,7 +40,7 @@ open class MetadataBaseLockFragment  : Fragment(){
         super.onViewCreated(view, savedInstanceState)
     }
     override fun onResume() {
-        activity.restrictActivity()
+        //activity.restrictActivity()
         super.onResume()
     }
 
