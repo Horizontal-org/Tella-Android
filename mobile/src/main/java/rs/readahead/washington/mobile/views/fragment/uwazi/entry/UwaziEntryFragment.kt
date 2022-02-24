@@ -31,6 +31,7 @@ import rs.readahead.washington.mobile.views.activity.LocationMapActivity
 import rs.readahead.washington.mobile.views.activity.QuestionAttachmentActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
+import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.SEND_ENTITY
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.OUTBOX_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
@@ -78,8 +79,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == C.MEDIA_FILE_ID && resultCode == Activity.RESULT_OK) {
-            val vaultFile =
-                data!!.getSerializableExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY) as VaultFile
+            val vaultFile = data?.getStringExtra(VAULT_FILE_KEY)  ?: ""
             putVaultFileInForm(vaultFile)
         }
 
@@ -324,7 +324,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         screenView?.addView(uwaziFormView)
     }
 
-    private fun putVaultFileInForm(vaultFile: VaultFile?) {
+    private fun putVaultFileInForm(vaultFile: String) {
         vaultFile?.let { uwaziFormView.setBinaryData(it) }
     }
 

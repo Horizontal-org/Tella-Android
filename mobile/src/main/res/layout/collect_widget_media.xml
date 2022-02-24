@@ -2,7 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:background="@color/wa_purple"
+    android:orientation="vertical"
+    android:id="@+id/root"
+    >
 
     <TextView
         android:id="@+id/line_separator"
@@ -12,7 +15,7 @@
         android:layout_marginStart="8dp"
         android:text="@string/Uwazi_Form_MediaHeader"
         android:textColor="@color/wa_white_80"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView
         android:gravity="start"

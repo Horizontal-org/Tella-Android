@@ -24,6 +24,7 @@ import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.views.activity.QuestionAttachmentActivity;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView;
+import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
 
 
@@ -112,9 +113,9 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
                     .subscribeOn(Schedulers.io())
                     .blockingGet() : null;
 
-            activity.startActivityForResult(new Intent(getContext(), QuestionAttachmentActivity.class)
+            activity.startActivityForResult(new Intent(getContext(), AttachmentsActivitySelector.class)
                             .putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, vaultFile)
-                            .putExtra(QuestionAttachmentActivity.MEDIA_FILES_FILTER, IMediaFileRecordRepository.Filter.ALL),
+                            .putExtra(QuestionAttachmentActivity.MEDIA_FILES_FILTER, IMediaFileRecordRepository.Filter.ALL.ordinal()),
                     C.MEDIA_FILE_ID);
 
         } catch (Exception e) {
