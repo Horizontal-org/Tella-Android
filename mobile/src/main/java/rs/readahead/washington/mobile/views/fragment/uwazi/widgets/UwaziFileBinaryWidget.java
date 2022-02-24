@@ -15,7 +15,7 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPromp
 public abstract class UwaziFileBinaryWidget extends UwaziQuestionWidget {
     private FormMediaFile file;
     private String filename;
-    /*private String fileId;*/
+    private String fileId;
 
     public UwaziFileBinaryWidget(Context context, @NonNull UwaziEntryPrompt formEntryPrompt) {
         super(context, formEntryPrompt);
@@ -59,8 +59,8 @@ public abstract class UwaziFileBinaryWidget extends UwaziQuestionWidget {
         return file.id;
     }
 
-    /*public void setFileId(String fileId) {
+    public void setFileId(String fileId) {
         this.fileId = fileId;
-    }*/
+    }
 }
 

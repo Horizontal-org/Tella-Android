@@ -1,5 +1,9 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.widgets;
 
+import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_FILES_FILTER;
+import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_FILE_KEY;
+import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_PICKER_SINGLE;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -8,34 +12,43 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatButton;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.tella_vault.filter.FilterType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
-import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.views.activity.CameraActivity;
-import rs.readahead.washington.mobile.views.activity.QuestionAttachmentActivity;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView;
+import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
 
 
 @SuppressLint("ViewConstructor")
 public class UwaziImageWidget extends UwaziFileBinaryWidget {
-    ImageButton selectButton;
+    AppCompatButton selectButton;
     ImageButton clearButton;
-    ImageButton captureButton;
+    TextView descriptionTextView;
+
+   // ImageButton captureButton;
    // ImageButton importButton;
-    View separator;
+  //  View separator;
 
     private CollectAttachmentPreviewView attachmentPreview;
 
@@ -65,13 +78,19 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
 
     @Override
     public String setBinaryData(@NonNull Object data) {
-        VaultFile vaultFile = (VaultFile) data;
-        FormMediaFile file = FormMediaFile.fromMediaFile(vaultFile);
-        setFilename(vaultFile.name);
-        setFile(file);
-        //setFileId(vaultFile.id);
-        showPreview();
-        return getFilename();
+
+        ArrayList<VaultFile> files = new Gson().fromJson((String) data, new TypeToken<List<VaultFile>>() {}.getType());
+
+        if (!files.isEmpty()){
+            FormMediaFile vaultFile = FormMediaFile.fromMediaFile(files.get(0));
+            setFilename(vaultFile.name);
+            setFile(vaultFile);
+            setFileId(vaultFile.id);
+            showPreview();
+            return getFilename();
+        }
+
+       return null;
     }
 
     @Override
@@ -83,24 +102,10 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
         View view = inflater.inflate(R.layout.collect_widget_media, linearLayout, true);
-
-        captureButton = addButton(R.drawable.ic_menu_camera);
-        captureButton.setAlpha(0.5f);
-        captureButton.setId(QuestionWidget.newUniqueId());
-        captureButton.setEnabled(!formEntryPrompt.isReadOnly());
-        captureButton.setOnClickListener(v -> showCameraActivity());
-
-        selectButton = addButton(R.drawable.ic_add_circle_white);
-        selectButton.setAlpha(0.5f);
-        selectButton.setId(QuestionWidget.newUniqueId());
+        selectButton = view.findViewById(R.id.addText);
+        selectButton.setText(getContext().getString(R.string.Uwazi_WidgetImage_Select_Text));
         selectButton.setEnabled(!formEntryPrompt.isReadOnly());
         selectButton.setOnClickListener(v -> showAttachmentsFragment());
-
-      /*  importButton = addButton(R.drawable.ic_smartphone_white_24dp);
-        importButton.setAlpha((float) .5);
-        importButton.setId(QuestionWidget.newUniqueId());
-        importButton.setEnabled(!formEntryPrompt.isReadOnly());
-        importButton.setOnClickListener(v -> importPhoto());*/
 
         clearButton = addButton(R.drawable.ic_cancel_rounded);
         clearButton.setId(QuestionWidget.newUniqueId());
@@ -108,7 +113,8 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
         clearButton.setOnClickListener(v -> clearAnswer());
 
         attachmentPreview = view.findViewById(R.id.attachedMedia);
-        separator = view.findViewById(R.id.line_separator);
+        descriptionTextView = view.findViewById(R.id.textview_media_description);
+        descriptionTextView.setText(getContext().getString(R.string.Uwazi_WidgetImage_Select_Description_Text));
 
         if (getFilename() != null) {
             showPreview();
@@ -121,15 +127,19 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
         try {
             Activity activity = (Activity) getContext();
             waitingForAData = true;
+            List<VaultFile> files = new ArrayList<>();
 
             VaultFile vaultFile = getFilename() != null ? MyApplication.rxVault
-                    .get(getFilename())
+                    .get(getFileId())
                     .subscribeOn(Schedulers.io())
                     .blockingGet() : null;
 
-            activity.startActivityForResult(new Intent(getContext(), QuestionAttachmentActivity.class)
-                            .putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, vaultFile)
-                            .putExtra(QuestionAttachmentActivity.MEDIA_FILES_FILTER, IMediaFileRecordRepository.Filter.PHOTO),
+            files.add(vaultFile);
+
+            activity.startActivityForResult(new Intent(getContext(), AttachmentsActivitySelector.class)
+                            .putExtra(VAULT_FILE_KEY, new Gson().toJson(files))
+                            .putExtra(VAULT_FILES_FILTER, FilterType.PHOTO)
+                            .putExtra(VAULT_PICKER_SINGLE,true),
                     C.MEDIA_FILE_ID);
 
         } catch (Exception e) {
@@ -153,33 +163,33 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
             FormController.getActive().setIndexWaitingForData(null);
         }
     }
-/*
+
     public void importPhoto() {
         Activity activity = (Activity) getContext();
         waitingForAData = true;
         MediaFileHandler.startSelectMediaActivity(activity, "image/*", null, C.IMPORT_IMAGE);
-    }*/
+    }
 
     private void showPreview() {
         selectButton.setVisibility(GONE);
-        captureButton.setVisibility(GONE);
+     //   captureButton.setVisibility(GONE);
        // importButton.setVisibility(GONE);
         clearButton.setVisibility(VISIBLE);
 
         attachmentPreview.showPreview(getFileId());
         attachmentPreview.setEnabled(true);
         attachmentPreview.setVisibility(VISIBLE);
-        separator.setVisibility(VISIBLE);
+     //   separator.setVisibility(VISIBLE);
     }
 
     private void hidePreview() {
         selectButton.setVisibility(VISIBLE);
-        captureButton.setVisibility(VISIBLE);
+//        captureButton.setVisibility(VISIBLE);
        // importButton.setVisibility(VISIBLE);
         clearButton.setVisibility(GONE);
 
         attachmentPreview.setEnabled(false);
         attachmentPreview.setVisibility(GONE);
-        separator.setVisibility(GONE);
+       // separator.setVisibility(GONE);
     }
 }

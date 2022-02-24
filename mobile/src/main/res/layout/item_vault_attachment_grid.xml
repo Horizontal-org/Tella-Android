@@ -57,6 +57,7 @@
         app:layout_constraintBottom_toBottomOf="@id/fileNameTextView"
         app:layout_constraintTop_toTopOf="@id/fileNameTextView"
         android:background="@drawable/ic_more"
+        android:visibility="gone"
         >
     </ImageView>
 
@@ -65,7 +66,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:button="@drawable/gallery_checkbox_selector"
-        android:visibility="visible"
+        android:visibility="gone"
         android:layout_margin="7dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"

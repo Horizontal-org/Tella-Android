@@ -58,10 +58,11 @@ class SubmittedPreviewFragment : BaseFragment(){
         binding = null
     }
     override fun initView(view: View) {
-        endView = UwaziFormEndView(activity,R.string.collect_end_heading_confirmation_form_submitted)
         arguments?.get(SEND_ENTITY)?.let { entity ->
             submittedInstance = Gson().fromJson(entity as String ,UwaziEntityInstance::class.java)
             submittedInstance?.let {
+                endView = UwaziFormEndView(activity,it.title)
+
                 endView.setInstance(it,true, true)
                 binding?.endViewContainer?.removeAllViews()
                 binding?.endViewContainer?.addView(endView)

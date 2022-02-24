@@ -166,8 +166,8 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
     }
 
     private void showMediaFileInfo() {
-        fileName.setText(String.format(getResources().getString(R.string.collect_form_attachment_meta_file_name), vaultFile.name));
-        fileSize.setText(String.format(getResources().getString(R.string.collect_form_meta_file_size), FileUtil.getFileSizeString(vaultFile.size)));
+        fileName.setText(vaultFile.name);
+        fileSize.setText(FileUtil.getFileSizeString(vaultFile.size));
     }
 
     private void showVideoViewerActivity() {

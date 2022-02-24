@@ -2,21 +2,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/wa_purple"
+    android:orientation="vertical"
+    android:id="@+id/root">
 
     <TextView
-        android:id="@+id/line_separator"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp"
-        android:text="@string/Uwazi_Form_MediaHeader"
-        android:textColor="@color/wa_white_80"
-        android:visibility="gone" />
+        android:id="@+id/textview_media_description"
+        style="@style/Tella_Main_White_Text.Small"
+        android:text="test"
+        />
+
+    <Button
+        android:id="@+id/addText"
+        tools:text="@string/Uwazi_WidgetMultiDate_AddDate"
+        style="@style/Tella2_Select_Button" />
 
     <rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView
         android:gravity="start"
         android:id="@+id/attachedMedia"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        />
 </LinearLayout>

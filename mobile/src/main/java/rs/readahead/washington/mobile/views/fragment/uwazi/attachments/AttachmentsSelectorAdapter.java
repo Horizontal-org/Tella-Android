@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments;
+package rs.readahead.washington.mobile.views.fragment.uwazi.attachments;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -28,46 +28,46 @@ import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.DateUtil;
+import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.ViewType;
+import timber.log.Timber;
 
-public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<AttachmentsRecycleViewAdapter.ViewHolder> {
+
+public class AttachmentsSelectorAdapter extends RecyclerView.Adapter<AttachmentsSelectorAdapter.ViewHolder> {
     private List<VaultFile> files = new ArrayList<>();
     private final VaultFileUrlLoader glideLoader;
-    private final IGalleryVaultHandler galleryMediaHandler;
+    private final ISelectorVaultHandler selectorVaultHandler;
     private final Set<VaultFile> selected;
     private boolean selectable;
-    private boolean isMoveMode;
     private final boolean singleSelection;
     private GridLayoutManager layoutManager;
 
 
-    public AttachmentsRecycleViewAdapter(Context context, IGalleryVaultHandler galleryMediaHandler,
+    public AttachmentsSelectorAdapter(Context context, ISelectorVaultHandler selectorVaultHandler,
                                          MediaFileHandler mediaFileHandler, GridLayoutManager layoutManager) {
-        this(context, galleryMediaHandler, mediaFileHandler, layoutManager, false, false, false);
+        this(context, selectorVaultHandler, mediaFileHandler, layoutManager, false, false);
     }
 
-    public AttachmentsRecycleViewAdapter(Context context, IGalleryVaultHandler galleryMediaHandler,
+    public AttachmentsSelectorAdapter(Context context, ISelectorVaultHandler selectorVaultHandler,
                                          MediaFileHandler mediaFileHandler, GridLayoutManager layoutManager,
                                          boolean selectable,
-                                         boolean singleSelection,
-                                         boolean isMoveMode) {
+                                         boolean singleSelection) {
         this.glideLoader = new VaultFileUrlLoader(context.getApplicationContext(), mediaFileHandler);
-        this.galleryMediaHandler = galleryMediaHandler;
+        this.selectorVaultHandler = selectorVaultHandler;
         this.selected = new LinkedHashSet<>();
         this.selectable = selectable;
         this.singleSelection = singleSelection;
         this.layoutManager = layoutManager;
-        this.isMoveMode = isMoveMode;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AttachmentsSelectorAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == ViewType.SMALL.ordinal()) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_vault_attachment_grid, parent, false);
-            return new GridViewHolder(v, this.selectable);
+            return new AttachmentsSelectorAdapter.GridViewHolder(v, this.selectable);
         } else {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_vault_attachment_hor, parent, false);
-            return new ListViewHolder(v, this.selectable);
+            return new AttachmentsSelectorAdapter.ListViewHolder(v, this.selectable);
         }
 
     }
@@ -82,14 +82,13 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final AttachmentsSelectorAdapter.ViewHolder holder, final int position) {
         final VaultFile vaultFile = files.get(position);
-
-        checkItemState(holder, vaultFile);
-        onMoreSelected(holder, vaultFile);
-        holder.maybeShowMetadataIcon(vaultFile);
         holder.showFileInfo(vaultFile);
-        holder.maybeEnableCheckBox(selectable);
+        holder.maybeEnableCheckBox(selectable,vaultFile.type);
+        if (vaultFile.type != VaultFile.Type.DIRECTORY){
+            checkItemState(holder, vaultFile);
+        }
 
         if (vaultFile.mimeType != null) {
             if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
@@ -118,11 +117,10 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
             }
         }
 
-        if (holder instanceof ListViewHolder) {
-            ((ListViewHolder) holder).setFileDateTextView(vaultFile);
+        if (holder instanceof AttachmentsSelectorAdapter.ListViewHolder) {
+            ((AttachmentsSelectorAdapter.ListViewHolder) holder).setFileDateTextView(vaultFile);
         }
         handleClickMode(holder,vaultFile);
-        setMoveModeView(holder);
     }
 
     @Override
@@ -138,7 +136,6 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
     public List<VaultFile> getSelectedMediaFiles() {
         List<VaultFile> selectedList = new ArrayList<>(selected.size());
         selectedList.addAll(selected);
-
         return selectedList;
     }
 
@@ -149,7 +146,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
 
     public void clearSelected() {
         selected.clear();
-        galleryMediaHandler.onSelectionNumChange(selected.size());
+        selectorVaultHandler.onSelectionNumChange(selected.size());
         notifyDataSetChanged();
     }
 
@@ -171,21 +168,21 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
         notifyItemChanged(files.indexOf(vaultFile));
     }
 
-    private void checkboxClickHandler(ViewHolder holder, VaultFile vaultFile) {
+    private void checkboxClickHandler(AttachmentsSelectorAdapter.ViewHolder holder, VaultFile vaultFile) {
         if (selected.contains(vaultFile)) {
             selected.remove(vaultFile);
-            galleryMediaHandler.onMediaDeselected(vaultFile);
+            selectorVaultHandler.onMediaDeselected(vaultFile);
         } else {
             if (singleSelection) {
                 removeAllSelections();
             }
 
             selected.add(vaultFile);
-            galleryMediaHandler.onMediaSelected(vaultFile);
+            selectorVaultHandler.onMediaSelected(vaultFile);
         }
 
-        checkItemState(holder, vaultFile);
-        galleryMediaHandler.onSelectionNumChange(selected.size());
+        if (vaultFile.type != VaultFile.Type.DIRECTORY) {checkItemState(holder, vaultFile);}
+        selectorVaultHandler.onSelectionNumChange(selected.size());
     }
 
     public void enableSelectMode(Boolean selectable) {
@@ -193,62 +190,47 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
         notifyDataSetChanged();
     }
 
-    public void enableMoveMode(Boolean isMoveMode){
-        this.isMoveMode = isMoveMode;
-        notifyDataSetChanged();
-    }
 
-    private void setMoveModeView(ViewHolder holder){
-        if (isMoveMode){
-            holder.more.setVisibility(View.GONE);
-            holder.checkBox.setVisibility(View.GONE);
-        }
-    }
-
-    public void handleClickMode(ViewHolder holder, VaultFile vaultFile){
-        if (isMoveMode){
-            if (vaultFile.type == VaultFile.Type.DIRECTORY){
-                holder.itemView.setOnClickListener(v -> galleryMediaHandler.playMedia(vaultFile));
-            }else {
-                holder.itemView.setOnClickListener(null);
-            }
-        }else {
+    public void handleClickMode(AttachmentsSelectorAdapter.ViewHolder holder, VaultFile vaultFile){
             if (selectable) {
-                holder.itemView.setOnClickListener(v -> checkboxClickHandler(holder, vaultFile));
-            } else {
-                holder.itemView.setOnClickListener(v -> galleryMediaHandler.playMedia(vaultFile));
+                if (vaultFile.type == VaultFile.Type.DIRECTORY){
+                    holder.itemView.setOnClickListener(v -> selectorVaultHandler.openFolder(vaultFile));
+                }else {
+                    holder.itemView.setOnClickListener(v -> checkboxClickHandler(holder, vaultFile));
+                }
             }
-        }
     }
 
     private void removeAllSelections() {
         for (VaultFile selection : selected) {
             deselectMediaFile(selection);
-            galleryMediaHandler.onMediaDeselected(selection);
+            selectorVaultHandler.onMediaDeselected(selection);
         }
     }
 
     public void selectAll(){
         for (VaultFile selection : files) {
             selectMediaFile(selection);
-            galleryMediaHandler.onMediaSelected(selection);
+            selectorVaultHandler.onMediaSelected(selection);
         }
     }
 
-    private void onMoreSelected(ViewHolder holder, VaultFile vaultFile) {
-        holder.more.setOnClickListener(v -> {
-            galleryMediaHandler.onMoreClicked(vaultFile);
-        });
-    }
-
-    private void checkItemState(ViewHolder holder, VaultFile vaultFile) {
-        boolean checked = selected.contains(vaultFile);
+    private void checkItemState(AttachmentsSelectorAdapter.ViewHolder holder, VaultFile vaultFile) {
+        boolean checked = checkSelection(vaultFile);
         // holder.selectionDimmer.setVisibility(checked ? View.VISIBLE : View.GONE);
         holder.itemView.setBackgroundColor(checked ? ContextCompat.getColor(holder.itemView.getContext(),R.color.wa_white_16) :
-                isMoveMode ? ContextCompat.getColor(holder.itemView.getContext(),R.color.wa_white_12)
-                    : ContextCompat.getColor(holder.itemView.getContext(),R.color.space_cadet)
-                );
-        holder.checkBox.setImageResource(checked ? R.drawable.ic_check_box_on : R.drawable.ic_check_box_off);
+                ContextCompat.getColor(holder.itemView.getContext(),R.color.space_cadet)
+        );
+        holder.checkBox.setImageResource(checked  ? R.drawable.ic_check_box_on : R.drawable.ic_check_box_off);
+    }
+
+    private Boolean checkSelection(VaultFile vaultFile){
+            for (VaultFile selectVault : selected){
+                if (vaultFile.id.equals(selectVault.id)){
+                    return true;
+                }
+        }
+        return false;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -258,8 +240,6 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
         ImageView checkBox;
         @BindView(R.id.fileNameTextView)
         TextView fileName;
-        @BindView(R.id.more)
-        ImageView more;
         @BindView(R.id.icAttachmentImg)
         ImageView icAttachmentImg;
 
@@ -283,10 +263,6 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
             mediaView.setVisibility(View.INVISIBLE);
         }
 
-        void maybeShowMetadataIcon(VaultFile vaultFile) {
-
-        }
-
         void showFolderInfo() {
             icAttachmentImg.setBackgroundResource(R.drawable.ic_folder_24px);
             mediaView.setVisibility(View.INVISIBLE);
@@ -296,21 +272,25 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
             fileName.setText(vaultFile.name);
         }
 
-        void maybeEnableCheckBox(boolean selectable) {
-            checkBox.setVisibility(selectable ? View.VISIBLE : View.GONE);
-            more.setVisibility(selectable ? View.GONE : View.VISIBLE);
-            checkBox.setEnabled(selectable);
+        void maybeEnableCheckBox(boolean selectable, VaultFile.Type type) {
+            if (type != VaultFile.Type.DIRECTORY){
+                checkBox.setVisibility(selectable ? View.VISIBLE : View.GONE);
+                checkBox.setEnabled(selectable);
+            }else {
+                checkBox.setVisibility(View.GONE);
+            }
+
         }
     }
 
-    static class GridViewHolder extends ViewHolder {
+    static class GridViewHolder extends AttachmentsSelectorAdapter.ViewHolder {
 
         public GridViewHolder(View itemView, boolean selectable) {
             super(itemView, selectable);
         }
     }
 
-    static class ListViewHolder extends ViewHolder {
+    static class ListViewHolder extends AttachmentsSelectorAdapter.ViewHolder {
         @BindView(R.id.fileDateTextView)
         TextView fileDateTextView;
 
@@ -324,3 +304,4 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
     }
 
 }
+
