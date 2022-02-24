@@ -397,4 +397,19 @@
         <item name="android:layout_height">@dimen/activity_vertical_tiny_margin</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
+
+    <style name="Tella2_Select_Button">
+        <item name="android:textColor">@color/wa_white_80</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:drawablePadding">15dp</item>
+        <item name="android:drawableStart">@drawable/ic_plus_outline_inverse</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:background">@drawable/rounded_light_purple_background</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:layout_marginBottom">5dp</item>
+    </style>
 </resources>

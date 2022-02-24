@@ -12,8 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatButton;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
@@ -40,11 +42,13 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPromp
 
 @SuppressLint("ViewConstructor")
 public class UwaziImageWidget extends UwaziFileBinaryWidget {
-    ImageButton selectButton;
+    AppCompatButton selectButton;
     ImageButton clearButton;
-    ImageButton captureButton;
+    TextView descriptionTextView;
+
+   // ImageButton captureButton;
    // ImageButton importButton;
-    View separator;
+  //  View separator;
 
     private CollectAttachmentPreviewView attachmentPreview;
 
@@ -98,24 +102,10 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
         View view = inflater.inflate(R.layout.collect_widget_media, linearLayout, true);
-
-        captureButton = addButton(R.drawable.ic_menu_camera);
-        captureButton.setAlpha(0.5f);
-        captureButton.setId(QuestionWidget.newUniqueId());
-        captureButton.setEnabled(!formEntryPrompt.isReadOnly());
-        captureButton.setOnClickListener(v -> showCameraActivity());
-
-        selectButton = addButton(R.drawable.ic_add_circle_white);
-        selectButton.setAlpha(0.5f);
-        selectButton.setId(QuestionWidget.newUniqueId());
+        selectButton = view.findViewById(R.id.addText);
+        selectButton.setText(getContext().getString(R.string.Uwazi_WidgetImage_Select_Text));
         selectButton.setEnabled(!formEntryPrompt.isReadOnly());
         selectButton.setOnClickListener(v -> showAttachmentsFragment());
-
-      /*  importButton = addButton(R.drawable.ic_smartphone_white_24dp);
-        importButton.setAlpha((float) .5);
-        importButton.setId(QuestionWidget.newUniqueId());
-        importButton.setEnabled(!formEntryPrompt.isReadOnly());
-        importButton.setOnClickListener(v -> importPhoto());*/
 
         clearButton = addButton(R.drawable.ic_cancel_rounded);
         clearButton.setId(QuestionWidget.newUniqueId());
@@ -123,7 +113,8 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
         clearButton.setOnClickListener(v -> clearAnswer());
 
         attachmentPreview = view.findViewById(R.id.attachedMedia);
-        separator = view.findViewById(R.id.line_separator);
+        descriptionTextView = view.findViewById(R.id.textview_media_description);
+        descriptionTextView.setText(getContext().getString(R.string.Uwazi_WidgetImage_Select_Description_Text));
 
         if (getFilename() != null) {
             showPreview();
@@ -181,24 +172,24 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
 
     private void showPreview() {
         selectButton.setVisibility(GONE);
-        captureButton.setVisibility(GONE);
+     //   captureButton.setVisibility(GONE);
        // importButton.setVisibility(GONE);
         clearButton.setVisibility(VISIBLE);
 
         attachmentPreview.showPreview(getFileId());
         attachmentPreview.setEnabled(true);
         attachmentPreview.setVisibility(VISIBLE);
-        separator.setVisibility(VISIBLE);
+     //   separator.setVisibility(VISIBLE);
     }
 
     private void hidePreview() {
         selectButton.setVisibility(VISIBLE);
-        captureButton.setVisibility(VISIBLE);
+//        captureButton.setVisibility(VISIBLE);
        // importButton.setVisibility(VISIBLE);
         clearButton.setVisibility(GONE);
 
         attachmentPreview.setEnabled(false);
         attachmentPreview.setVisibility(GONE);
-        separator.setVisibility(GONE);
+       // separator.setVisibility(GONE);
     }
 }

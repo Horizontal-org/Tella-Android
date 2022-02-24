@@ -303,7 +303,7 @@
     <string name="upload_dialog.title_select.server">Server selection</string>
     <string name="settings.docu_auto.upload.server.selection_dialog.expl">Which server would you like to upload the files to?</string>
     <string name="settings.serv_add.server.selection_dialog.title">What type of server?</string>
-    <string name="settings.serv_add.server.selection_dialog.description">If you are not sure, please ask your\n organization.</string>
+    <string name="settings.serv_add.server.selection_dialog.description" translatable="false">If you are not sure, please ask your\n organization.</string>
     <string name="settings.docu_add.server_dialog.select_odk">Open Data Kit (ODK)</string>
     <string name="settings.docu_add.server_dialog.select_tella_web">Tella WEB</string>
     <string name="settings.docu_add.server_dialog.select_tella_uwazi">Uwazi</string>
@@ -490,9 +490,8 @@
     <string name="settings.sec_confirm_exit_tella">Exit Tella</string>
     <string name="collect.outbox_tab.title">Outbox</string>
     <!-- Uwazi !-->
-
-    <string name="Donwload_Templates_Title_Description">These are the templates available on the Uwazi \ninstances you are connected to. You can \n <font fgcolor='#D6933B'>manage your Uwazi instances here.</font> </string>
-    <string name="uwazi.outbox_tab.title">Templates</string>
+    <string name="Donwload_Templates_Title_Description" translatable="false">These are the templates available on the Uwazi \ninstances you are connected to. You can \n <font fgcolor='#D6933B'>manage your Uwazi instances here.</font> </string>
+    <string name="uwazi.outbox_tab.title" translatable="false">Templates</string>
     <string name="Collect_RemoveForm_SheetTitle">Remove form?</string>
     <string name="fragment_uwazi">Uwazi</string>
     <string name="Uwazi_Dowload_Temapltes_Header_Title">Download templates</string>
@@ -532,8 +531,10 @@
     <string name="Uwazi_WidgetMultiDate_AddDate">Add another date</string>
     <string name="Uwazi_WidgetMultiDate_AddDateRange">Add another date range</string>
     <string name="Uwazi_WidgetDateRange_Constraint">The second date in the range must be after the first</string>
-
-
+    <string name="Uwazi_WidgetMedia_Select_Text">Select audio or video file</string>
+    <string name="Uwazi_WidgetMedia_Description_Text">Attach a video or audio file</string>
+    <string name="Uwazi_WidgetImage_Select_Text">Select image file</string>
+    <string name="Uwazi_WidgetImage_Select_Description_Text">Attach an image file</string>
     <string-array name="Uwazi_Language_Array">
         <item>English</item>
         <item>عربي</item>
