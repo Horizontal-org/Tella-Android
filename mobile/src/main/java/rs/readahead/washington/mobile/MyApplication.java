@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -41,6 +42,7 @@ import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.multidex.MultiDexApplication;
 
 import java.io.File;
+import java.util.List;
 
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
@@ -58,6 +60,7 @@ import rs.readahead.washington.mobile.util.TellaUpgrader;
 import rs.readahead.washington.mobile.util.jobs.TellaJobCreator;
 import rs.readahead.washington.mobile.views.activity.ExitActivity;
 import rs.readahead.washington.mobile.views.activity.MainActivity;
+import rs.readahead.washington.mobile.views.activity.SettingsActivity;
 import rs.readahead.washington.mobile.views.activity.onboarding.OnBoardingActivity;
 import timber.log.Timber;
 
@@ -78,11 +81,28 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
             intent = new Intent(context, OnBoardingActivity.class);
             Preferences.setUpgradeTella2(false);
         } else {
+            //check if there was an activity opened already so as not to interrupt the UX
+            if (isActivityRunning(MainActivity.class, context) || isActivityRunning(SettingsActivity.class, context))
+                return;
+
             intent = new Intent(context, MainActivity.class);
         }
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.addFlags(/*Intent.FLAG_ACTIVITY_CLEAR_TOP | */Intent.FLAG_ACTIVITY_SINGLE_TOP);
         maybeExcludeIntentFromRecents(intent);
         context.startActivity(intent);
+    }
+
+    private static Boolean isActivityRunning(Class activityClass, Context context)
+    {
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
+
+        for (ActivityManager.RunningTaskInfo task : tasks) {
+            if (activityClass.getCanonicalName().equalsIgnoreCase(task.baseActivity.getClassName()))
+                return true;
+        }
+
+        return false;
     }
 
 

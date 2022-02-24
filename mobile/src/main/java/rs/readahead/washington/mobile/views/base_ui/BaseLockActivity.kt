@@ -33,7 +33,7 @@ abstract class BaseLockActivity : BaseActivity() {
 
     private fun startKeySetup() {
         val intent = Intent(this, if (SecretsManager.isInitialized(this)) PatternUpgradeActivity::class.java else PatternSetActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        intent.addFlags(/*Intent.FLAG_ACTIVITY_CLEAR_TOP or */Intent.FLAG_ACTIVITY_SINGLE_TOP)
         this.startActivity(intent)
     }
 
@@ -57,9 +57,9 @@ abstract class BaseLockActivity : BaseActivity() {
                 Intent(this, PatternUnlockActivity::class.java)
             }
         }
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        intent.addFlags(/*Intent.FLAG_ACTIVITY_CLEAR_TOP or */Intent.FLAG_ACTIVITY_SINGLE_TOP)
         this.startActivity(intent)
-        finish()
+        //finish()
     }
 
     override fun onResume() {
