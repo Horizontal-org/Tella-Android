@@ -106,15 +106,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
         tools:text="Next"
-        android:textAllCaps="true"
+        style="@style/StandardSheetButtonTextStyle"
         android:layout_marginTop="40dp"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
-        android:textSize="14sp"
-        android:layout_marginStart="30dp"
-        android:background="@drawable/clickable_text_background"
-        android:clickable="true"
-        android:focusable="true"/>
+        android:layout_marginStart="30dp"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

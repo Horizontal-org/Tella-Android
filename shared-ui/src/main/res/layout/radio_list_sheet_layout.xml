@@ -59,17 +59,12 @@
         app:layout_constraintTop_toBottomOf="@id/radio_list"
         app:layout_constraintHorizontal_chainStyle="packed"
         tools:text="Cancel"
-        android:padding="@dimen/text_button_padding_size"
-        android:textAllCaps="true"
         android:layout_marginTop="40dp"
         android:textFontWeight="600"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
-        android:textSize="16.8sp"
+        style="@style/StandardSheetButtonTextStyle"
         android:layout_marginEnd="30dp"
-        android:background="@drawable/clickable_text_background"
-        android:clickable="true"
-        android:focusable="true"
         />
 
     <TextView
@@ -80,16 +75,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/radio_list"
         tools:text="Confirm"
-        android:padding="@dimen/text_button_padding_size"
-        android:textAllCaps="true"
+        style="@style/StandardSheetButtonTextStyle"
         android:layout_marginTop="40dp"
         android:textFontWeight="600"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
-        android:textSize="16.8sp"
-        android:background="@drawable/clickable_text_background"
-        android:clickable="true"
-        android:focusable="true"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

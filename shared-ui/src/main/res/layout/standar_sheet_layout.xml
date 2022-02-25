@@ -44,14 +44,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/standard_sheet_content"
         app:layout_constraintHorizontal_chainStyle="packed"
-        android:padding="@dimen/text_button_padding_size"
         tools:text="Cancel"
         android:layout_marginTop="40dp"
         style="@style/StandardSheetButtonTextStyle"
         android:layout_marginEnd="30dp"
-        android:background="@drawable/clickable_text_background"
-        android:clickable="true"
-        android:focusable="true"
         />
 
     <TextView
@@ -62,13 +58,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/standard_sheet_content"
         tools:text="Confirm "
-        android:padding="@dimen/text_button_padding_size"
         android:layout_marginTop="40dp"
         style="@style/StandardSheetButtonTextStyle"
-        android:textSize="14sp"
-        android:background="@drawable/clickable_text_background"
-        android:clickable="true"
-        android:focusable="true"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

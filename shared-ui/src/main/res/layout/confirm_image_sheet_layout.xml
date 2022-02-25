@@ -59,7 +59,6 @@
         app:layout_constraintTop_toBottomOf="@id/standard_sheet_content"
         app:layout_constraintHorizontal_chainStyle="packed"
         tools:text="Cancel"
-        android:padding="@dimen/text_button_padding_size"
         android:layout_marginTop="40dp"
         style="@style/StandardSheetButtonTextStyle"
         android:layout_marginEnd="30dp"
@@ -74,10 +73,7 @@
         app:layout_constraintTop_toBottomOf="@id/standard_sheet_content"
         tools:text="Confirm "
         android:layout_marginTop="40dp"
-        android:padding="@dimen/text_button_padding_size"
-        android:background="@drawable/clickable_text_background"
         style="@style/StandardSheetButtonTextStyle"
-        android:textSize="14sp"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
