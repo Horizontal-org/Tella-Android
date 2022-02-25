@@ -37,7 +37,7 @@
 
         <rs.readahead.washington.mobile.views.custom.PanelToggleButton
             android:id="@+id/toggle_button"
-            style="@style/Tella_Main_White_Text.Meduim"
+            style="@style/Tella_Main_White_Text.MeduimbBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

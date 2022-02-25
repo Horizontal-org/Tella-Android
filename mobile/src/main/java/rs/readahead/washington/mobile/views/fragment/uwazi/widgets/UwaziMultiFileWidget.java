@@ -25,6 +25,7 @@ import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -43,7 +44,7 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPromp
 
 
 @SuppressLint("ViewConstructor")
-public class UwaziMultiFileWidget  extends UwaziQuestionWidget {
+public class UwaziMultiFileWidget extends UwaziQuestionWidget {
     private final HashMap<String, FormMediaFile> formFiles = new HashMap<>();
 
     Context context;
@@ -52,26 +53,30 @@ public class UwaziMultiFileWidget  extends UwaziQuestionWidget {
     ViewGroup filesPanel;
     PanelToggleButton filesToggle;
     TextView numberOfFiles;
+    Boolean isPdf;
 
-    private CollectAttachmentPreviewView attachmentPreview;
-
-    public UwaziMultiFileWidget(Context context, @NonNull UwaziEntryPrompt formEntryPrompt) {
+    public UwaziMultiFileWidget(Context context, @NonNull UwaziEntryPrompt formEntryPrompt, boolean isPdf) {
         super(context, formEntryPrompt);
 
-       this.context = context;
-
+        this.context = context;
+        this.isPdf = isPdf;
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
         addImageWidgetViews(linearLayout);
         addAnswerView(linearLayout);
 
-        setHelpTextView(getContext().getString(R.string.Uwazi_MiltiFileWidget_Help));
+        setHelpTextView(formEntryPrompt.getHelpText());
+        clearAnswer();
     }
 
     @Override
     public Object getAnswer() {
-        return null;
+        if (formFiles.isEmpty()) {
+            return null;
+        } else {
+            return getFilenames();
+        }
     }
 
     @Override
@@ -79,6 +84,7 @@ public class UwaziMultiFileWidget  extends UwaziQuestionWidget {
         formFiles.clear();
         numberOfFiles.setVisibility(GONE);
         filesPanel.removeAllViews();
+        addFiles.setText(isPdf ? R.string.Uwazi_MiltiFileWidget_SelectPdfFiles : R.string.Uwazi_MiltiFileWidget_SelectFiles);
     }
 
     @Override
@@ -102,20 +108,15 @@ public class UwaziMultiFileWidget  extends UwaziQuestionWidget {
         numberOfFiles = view.findViewById(R.id.numOfFiles);
         addFiles = view.findViewById(R.id.addText);
         addFiles.setOnClickListener(v -> showAttachmentsFragment());
-
-        /*if (!formFiles.isEmpty()) {
-            showPreview();
-        } else {
-            hidePreview();
-        }*/
     }
 
     @Override
     public String setBinaryData(@NonNull Object data) {
         clearAnswer();
-        ArrayList<VaultFile> files = new Gson().fromJson((String) data, new TypeToken<List<VaultFile>>() {}.getType());
+        ArrayList<VaultFile> files = new Gson().fromJson((String) data, new TypeToken<List<VaultFile>>() {
+        }.getType());
 
-        if (!files.isEmpty()){
+        if (!files.isEmpty()) {
             for (VaultFile file : files) {
                 FormMediaFile formMediaFile = FormMediaFile.fromMediaFile(file);
                 formFiles.put(file.name, formMediaFile);
@@ -133,7 +134,7 @@ public class UwaziMultiFileWidget  extends UwaziQuestionWidget {
             Activity activity = (Activity) getContext();
             waitingForAData = true;
 
-           List<VaultFile> vaultFiles = getFilenames() != null ? MyApplication.rxVault
+            List<VaultFile> vaultFiles = getFilenames() != null ? MyApplication.rxVault
                     .get(getFileIds())
                     .subscribeOn(Schedulers.io())
                     .blockingGet() : null;
@@ -142,8 +143,8 @@ public class UwaziMultiFileWidget  extends UwaziQuestionWidget {
 
             activity.startActivityForResult(new Intent(getContext(), AttachmentsActivitySelector.class)
                             .putExtra(VAULT_FILE_KEY, new Gson().toJson(files))
-                            .putExtra(VAULT_FILES_FILTER, FilterType.ALL)
-                            .putExtra(VAULT_PICKER_SINGLE,false),
+                            .putExtra(VAULT_FILES_FILTER, isPdf ? FilterType.DOCUMENTS : FilterType.ALL)
+                            .putExtra(VAULT_PICKER_SINGLE, false),
                     C.MEDIA_FILE_ID);
 
         } catch (Exception e) {
@@ -168,7 +169,7 @@ public class UwaziMultiFileWidget  extends UwaziQuestionWidget {
     }
 
     private void maybeShowAdvancedPanel() {
-        if (filesToggle.isOpen()){
+        if (filesToggle.isOpen()) {
             filesPanel.setVisibility(View.VISIBLE);
             filesToggle.setText(R.string.Uwazi_MiltiFileWidget_Hide);
         } else {
@@ -180,7 +181,7 @@ public class UwaziMultiFileWidget  extends UwaziQuestionWidget {
     public String[] getFileIds() {
         String[] Ids = new String[formFiles.size()];
         int i = 0;
-        for (FormMediaFile file : formFiles.values()){
+        for (FormMediaFile file : formFiles.values()) {
             Ids[i++] = file.id;
         }
         return Ids;
@@ -194,14 +195,19 @@ public class UwaziMultiFileWidget  extends UwaziQuestionWidget {
         }
     }
 
-    private void showPreview(){
-        for (FormMediaFile file : formFiles.values()){
+    public Collection<FormMediaFile> getFiles() {
+        return formFiles.values();
+    }
+
+    private void showPreview() {
+        for (FormMediaFile file : formFiles.values()) {
             CollectAttachmentPreviewView previewView = new CollectAttachmentPreviewView(context, null, 0);
             filesPanel.addView(previewView);
             previewView.showPreview(file.id);
         }
         numberOfFiles.setText(context.getResources().getQuantityString(R.plurals.Uwazi_MiltiFileWidget_FilesAttached, formFiles.size(), formFiles.size()));
         numberOfFiles.setVisibility(VISIBLE);
+        addFiles.setText(R.string.Uwazi_MiltiFileWidget_AddMoreFiles);
         filesToggle.setOpen();
     }
 }

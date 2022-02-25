@@ -19,9 +19,8 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.uwazi.UwaziConstants;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.odk.FormController;
-import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziFileBinaryWidget;
-import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziMultiSelectWidget;
+import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziMultiFileWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziQuestionWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziWidgetFactory;
 
@@ -92,6 +91,7 @@ public class UwaziFormView extends LinearLayout {
                     || p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_MULTIDATE)
                     || p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_MULTIDATERANGE)
                     || p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_MULTIFILES)
+                    || p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_MULTIPDFFILES)
             ) {
                 UwaziQuestionWidget qw = UwaziWidgetFactory.createWidgetFromPrompt(p, getContext(), readOnlyOverride);
                 qw.setId(VIEW_ID + id++);
@@ -138,6 +138,9 @@ public class UwaziFormView extends LinearLayout {
         for (UwaziQuestionWidget widget : widgets) {
             if (widget instanceof UwaziFileBinaryWidget) {
                 files.add(((UwaziFileBinaryWidget) widget).getFile());
+            }
+            if (widget instanceof UwaziMultiFileWidget) {
+                files.addAll(((UwaziMultiFileWidget) widget).getFiles());
             }
         }
         return files;

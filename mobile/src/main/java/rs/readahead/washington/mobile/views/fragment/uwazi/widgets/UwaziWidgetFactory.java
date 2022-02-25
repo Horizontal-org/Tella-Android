@@ -64,7 +64,11 @@ public class UwaziWidgetFactory {
                 break;
 
             case UwaziConstants.UWAZI_DATATYPE_MULTIFILES:
-                questionWidget = new UwaziMultiFileWidget(context, fep);
+                questionWidget = new UwaziMultiFileWidget(context, fep, false);
+                break;
+
+            case UwaziConstants.UWAZI_DATATYPE_MULTIPDFFILES:
+                questionWidget = new UwaziMultiFileWidget(context, fep, true);
                 break;
 
             case UwaziConstants.UWAZI_DATATYPE_LINK:

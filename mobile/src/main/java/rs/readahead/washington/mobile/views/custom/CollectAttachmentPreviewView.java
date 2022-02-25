@@ -38,8 +38,8 @@ import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 public class CollectAttachmentPreviewView extends LinearLayout implements ICollectAttachmentMediaFilePresenterContract.IView {
     @BindView(R.id.thumbView)
     ImageView thumbView;
-    @BindView(R.id.thumbGradient)
-    View thumbGradient;
+    /*@BindView(R.id.thumbGradient)
+    View thumbGradient;*/
     @BindView(R.id.fileName)
     TextView fileName;
     @BindView(R.id.fileSize)
@@ -96,7 +96,7 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
         this.vaultFile = vaultFile;
 
         if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
-            thumbGradient.setVisibility(GONE);
+            //thumbGradient.setVisibility(GONE);
             thumbView.setId(QuestionWidget.newUniqueId());
             thumbView.setOnClickListener(v -> showVideoViewerActivity());
 
@@ -104,20 +104,20 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
             loadThumbnail();
             videoDuration.setText(Util.getShortVideoDuration((int) (vaultFile.duration / 1000)));
 
-            audioInfo.setVisibility(GONE);
-            videoInfo.setVisibility(VISIBLE);
+            //audioInfo.setVisibility(GONE);
+            //videoInfo.setVisibility(VISIBLE);
         } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
-            thumbGradient.setVisibility(VISIBLE);
+            //thumbGradient.setVisibility(VISIBLE);
             thumbView.setImageResource(R.drawable.ic_mic_gray);
             thumbView.setOnClickListener(v -> showAudioPlayActivity());
 
             showMediaFileInfo();
-            audioDuration.setText(Util.getShortVideoDuration((int) (vaultFile.duration / 1000)));
+            //audioDuration.setText(Util.getShortVideoDuration((int) (vaultFile.duration / 1000)));
 
-            audioInfo.setVisibility(VISIBLE);
-            videoInfo.setVisibility(GONE);
+            //audioInfo.setVisibility(VISIBLE);
+            //videoInfo.setVisibility(GONE);
         } else if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
-            thumbGradient.setVisibility(GONE);
+           // thumbGradient.setVisibility(GONE);
             thumbView.setId(QuestionWidget.newUniqueId());
             thumbView.setOnClickListener(v -> showPhotoViewerActivity());
 
@@ -127,7 +127,7 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
             audioInfo.setVisibility(GONE);
             videoInfo.setVisibility(GONE);
         } else if (MediaFile.INSTANCE.isTextFileType(vaultFile.mimeType)) {
-            thumbGradient.setVisibility(VISIBLE);
+            //thumbGradient.setVisibility(VISIBLE);
             thumbView.setImageResource(R.drawable.ic_reports);
             //thumbView.setOnClickListener(v -> showAudioPlayActivity());
 
@@ -151,7 +151,7 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
 
     @Override
     public void onGetMediaFileError(Throwable error) {
-        thumbGradient.setVisibility(VISIBLE);
+        //thumbGradient.setVisibility(VISIBLE);
         thumbView.setImageResource(R.drawable.ic_error);
         Toast.makeText(getContext(), getResources().getText(R.string.collect_form_toast_fail_load_attachment), Toast.LENGTH_LONG).show();
         audioInfo.setVisibility(GONE);

@@ -42,6 +42,7 @@ const val COLLECT_TEMPLATE = "collect_template"
 const val UWAZI_INSTANCE = "uwazi_instance"
 const val UWAZI_TITLE = "title"
 const val UWAZI_SUPPORTING_FILES = "supporting_files"
+const val UWAZI_PRIMARY_DOCUMENTS = "primary_documents"
 
 class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
     private val viewModel: SharedUwaziSubmissionViewModel by lazy {
@@ -69,8 +70,17 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         "10242049",
         UwaziConstants.UWAZI_DATATYPE_MULTIFILES,
         "Supporting files",
-        true,
-        ""
+        false,
+        "Select as many files as you wish"
+    )
+
+    private val uwaziPdfsPrompt = UwaziEntryPrompt(
+        UWAZI_PRIMARY_DOCUMENTS,
+        "10242050",
+        UwaziConstants.UWAZI_DATATYPE_MULTIPDFFILES,
+        "Primary documents",
+        false,
+        "Attach as many PDF files as you wish"
     )
 
     override fun onCreateView(
@@ -306,6 +316,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         entryPrompts.clear()
 
         //TODO Handle this special common props smarter
+        entryPrompts.add(uwaziPdfsPrompt)
         entryPrompts.add(uwaziFilesPrompt)
 
         if (template?.entityRow?.commonProperties?.get(0)?.translatedLabel?.length!! > 0){
