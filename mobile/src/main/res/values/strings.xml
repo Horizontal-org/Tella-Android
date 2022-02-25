@@ -599,5 +599,5 @@
         <item quantity="many">%d minutes ago</item>
         <item quantity="other">%d minutes ago</item>
     </plurals>
-    <string name="Util_ellapsedTime_Seconds">A seconds a ago</string>
+    <string name="Util_ellapsedTime_Seconds">A few seconds ago</string>
 </resources>
