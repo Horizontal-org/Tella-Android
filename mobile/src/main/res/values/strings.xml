@@ -541,6 +541,11 @@
     <string name="Uwazi_WidgetMedia_Description_Text">Attach a video or audio file</string>
     <string name="Uwazi_WidgetImage_Select_Text">Select image file</string>
     <string name="Uwazi_WidgetImage_Select_Description_Text">Attach an image file</string>
+    <string name="Uwazi_WidgetMedia_Take_Video">Take video from camera</string>
+    <string name="Uwazi_WidgetMedia_Select_From_Tella">Select from Tella files</string>
+    <string name="Uwazi_WidgetMedia_Select_From_Device">Select from your device</string>
+    <string name="Uwazi_Widget_Sheet_Description">Choose how you want to add files</string>
+
     <string-array name="Uwazi_Language_Array">
         <item>English</item>
         <item>عربي</item>

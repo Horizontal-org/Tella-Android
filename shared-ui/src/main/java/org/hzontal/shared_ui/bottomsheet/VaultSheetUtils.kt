@@ -33,10 +33,10 @@ object VaultSheetUtils {
         saveLabel: String,
         infoLabel: String,
         deleteLabel: String,
-        isDirectory : Boolean = false,
+        isDirectory: Boolean = false,
         isMultipleFiles: Boolean = false,
-        isUploadVisible : Boolean = false,
-        isMoveVisible : Boolean = false,
+        isUploadVisible: Boolean = false,
+        isMoveVisible: Boolean = false,
         action: IVaultActions
     ) {
         val vaultActionSheet = CustomBottomSheetFragment.with(fragmentManager)
@@ -49,12 +49,12 @@ object VaultSheetUtils {
                 with(holder) {
                     title.text = titleText
                     //Actions visibility
-                    if (isDirectory){
+                    if (isDirectory) {
                         seperator.visibility = View.GONE
                         actionShare.visibility = View.GONE
                         actionUpload.visibility = View.GONE
                     }
-                    if (isMultipleFiles){
+                    if (isMultipleFiles) {
                         actionRename.visibility = View.GONE
                         actionInfo.visibility = View.GONE
                     }
@@ -71,7 +71,7 @@ object VaultSheetUtils {
                         action.delete()
                     }
                     //Upload action
-                    if (!isUploadVisible){
+                    if (!isUploadVisible) {
                         actionUpload.visibility = View.GONE
                     }
                     actionUpload.text = uploadLabel
@@ -120,7 +120,7 @@ object VaultSheetUtils {
         lateinit var actionInfo: TextView
         lateinit var actionSave: TextView
         lateinit var title: TextView
-        lateinit var seperator : View
+        lateinit var seperator: View
 
         override fun bindView(view: View) {
             actionRename = view.findViewById(R.id.renameActionTV)
@@ -293,8 +293,8 @@ object VaultSheetUtils {
         importDeleteLabel: String,
         createFolderLabel: String,
         titleText: String,
-        toolTipText : String,
-        isImportVisible : Boolean,
+        toolTipText: String,
+        isImportVisible: Boolean,
         action: IVaultManageFiles
     ) {
         val vaultManageFilesSheet = CustomBottomSheetFragment.with(fragmentManager)
@@ -344,9 +344,14 @@ object VaultSheetUtils {
                     deleteVaultTooltip.setOnClickListener {
                         Tooltip.Builder(deleteVaultTooltip)
                             .setText(toolTipText)
-                            .setTextColor(getColor(deleteVaultTooltip.context,R.color.wa_black))
-                            .setBackgroundColor(getColor(deleteVaultTooltip.context,R.color.wa_white))
-                            .setGravity( Gravity.TOP)
+                            .setTextColor(getColor(deleteVaultTooltip.context, R.color.wa_black))
+                            .setBackgroundColor(
+                                getColor(
+                                    deleteVaultTooltip.context,
+                                    R.color.wa_white
+                                )
+                            )
+                            .setGravity(Gravity.TOP)
                             .setCornerRadius(12f)
                             .setPadding(24)
                             .setDismissOnClick(true)
@@ -367,7 +372,7 @@ object VaultSheetUtils {
         lateinit var importActionTV: TextView
         lateinit var createDeleteActionTV: TextView
         lateinit var createFolderActionTV: TextView
-        lateinit var deleteVaultTooltip : ImageView
+        lateinit var deleteVaultTooltip: ImageView
         lateinit var title: TextView
 
         override fun bindView(view: View) {
@@ -377,6 +382,85 @@ object VaultSheetUtils {
             createDeleteActionTV = view.findViewById(R.id.createDeleteActionTV)
             createFolderActionTV = view.findViewById(R.id.createFolderActionTV)
             deleteVaultTooltip = view.findViewById(R.id.delete_vault_tooltip)
+            title = view.findViewById(R.id.sheetTitleTv)
+        }
+    }
+
+    interface IVaultFilesSelector {
+        fun goToCamera()
+        fun goToRecorder()
+        fun importFromVault()
+        fun importFromDevice()
+    }
+
+    @JvmStatic
+    fun showVaultSelectFilesSheet(
+        fragmentManager: FragmentManager,
+        cameraLabel: String?,
+        recordLabel: String?,
+        importLabel: String,
+        importVaultLabel: String,
+        descriptionText: String,
+        titleText: String,
+        action: IVaultFilesSelector
+    ) {
+        val vaultManageFilesSheet = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.vault_sheet_actions_selector)
+            .screenTag("vaultManageFilesSheet")
+            .cancellable(true)
+        vaultManageFilesSheet.holder(VaultSelectFilesSheetHolder(), object :
+            CustomBottomSheetFragment.Binder<VaultSelectFilesSheetHolder> {
+            override fun onBind(holder: VaultSelectFilesSheetHolder) {
+                with(holder) {
+                    title.text = titleText
+                    descriptionTV.text = descriptionText
+                    //Go to camera action
+                    cameraActionTV.text = cameraLabel
+                    cameraActionTV.setOnClickListener {
+                        vaultManageFilesSheet.dismiss()
+                        action.goToCamera()
+                    }
+                    //Go to recorder action
+                    recordAudioActionTV.text = recordLabel
+                    recordAudioActionTV.setOnClickListener {
+                        vaultManageFilesSheet.dismiss()
+                        action.goToRecorder()
+                    }
+
+                    importActionTV.text = importLabel
+                    importActionTV.setOnClickListener {
+                        vaultManageFilesSheet.dismiss()
+                        action.importFromDevice()
+                    }
+
+
+                    importVaultActionTV.text = importVaultLabel
+                    importVaultActionTV.setOnClickListener {
+                        action.importFromVault()
+                    }
+
+                }
+
+            }
+        })
+        vaultManageFilesSheet.transparentBackground()
+        vaultManageFilesSheet.launch()
+    }
+
+    class VaultSelectFilesSheetHolder : CustomBottomSheetFragment.PageHolder() {
+        lateinit var cameraActionTV: TextView
+        lateinit var recordAudioActionTV: TextView
+        lateinit var importActionTV: TextView
+        lateinit var importVaultActionTV: TextView
+        lateinit var title: TextView
+        lateinit var descriptionTV: TextView
+
+        override fun bindView(view: View) {
+            cameraActionTV = view.findViewById(R.id.cameraActionTV)
+            recordAudioActionTV = view.findViewById(R.id.recordActionTV)
+            descriptionTV = view.findViewById(R.id.sheetTitleDescTv)
+            importActionTV = view.findViewById(R.id.selectDeviceFilesActionTV)
+            importVaultActionTV = view.findViewById(R.id.selectTellaFilesActionTV)
             title = view.findViewById(R.id.sheetTitleTv)
         }
     }
