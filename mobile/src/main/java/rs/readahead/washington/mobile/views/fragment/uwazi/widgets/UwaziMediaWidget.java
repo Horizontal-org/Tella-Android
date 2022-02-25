@@ -33,7 +33,6 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.views.activity.CameraActivity;
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity;
@@ -146,7 +145,6 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
 
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
-            FormController.getActive().setIndexWaitingForData(null);
         }
     }
 
@@ -168,20 +166,17 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
             );
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
-            FormController.getActive().setIndexWaitingForData(null);
         }
     }
 
     private void showAudioRecorderActivity() {
         try {
             ICollectEntryInterface activity = (ICollectEntryInterface) getContext();
-            FormController.getActive().setIndexWaitingForData(null);
 
             activity.openAudioRecorder();
 
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
-            FormController.getActive().setIndexWaitingForData(null);
         }
     }
 

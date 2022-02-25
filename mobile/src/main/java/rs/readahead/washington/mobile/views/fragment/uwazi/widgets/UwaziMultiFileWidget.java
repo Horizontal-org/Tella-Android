@@ -1,8 +1,14 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.widgets;
 
+import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_FILES_FILTER;
+import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_FILE_KEY;
+import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_PICKER_SINGLE;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +20,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.tella_vault.filter.FilterType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import io.reactivex.schedulers.Schedulers;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.odk.FormController;
@@ -25,11 +39,15 @@ import rs.readahead.washington.mobile.views.activity.CameraActivity;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView;
 import rs.readahead.washington.mobile.views.custom.PanelToggleButton;
+import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
 
-public class UwaziMultiFileWidget  extends UwaziQuestionWidget {
-    private final HashMap<String, FormMediaFile> files = new HashMap<>();
 
+@SuppressLint("ViewConstructor")
+public class UwaziMultiFileWidget  extends UwaziQuestionWidget {
+    private final HashMap<String, FormMediaFile> formFiles = new HashMap<>();
+
+    Context context;
     Button addFiles;
     ImageButton clearButton;
     ViewGroup filesPanel;
@@ -41,7 +59,7 @@ public class UwaziMultiFileWidget  extends UwaziQuestionWidget {
     public UwaziMultiFileWidget(Context context, @NonNull UwaziEntryPrompt formEntryPrompt) {
         super(context, formEntryPrompt);
 
-       // setFilename(formEntryPrompt.getAnswerText());
+       this.context = context;
 
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -59,7 +77,7 @@ public class UwaziMultiFileWidget  extends UwaziQuestionWidget {
 
     @Override
     public void clearAnswer() {
-        files.clear();
+        formFiles.clear();
         numberOfFiles.setVisibility(GONE);
         filesPanel.removeAllViews();
     }
@@ -74,41 +92,69 @@ public class UwaziMultiFileWidget  extends UwaziQuestionWidget {
 
         View view = inflater.inflate(R.layout.uwazi_widget_multifile, linearLayout, true);
 
-        /*captureButton = addButton(R.drawable.ic_menu_camera);
-        captureButton.setAlpha(0.5f);
-        captureButton.setId(QuestionWidget.newUniqueId());
-        captureButton.setEnabled(!formEntryPrompt.isReadOnly());
-        captureButton.setOnClickListener(v -> showCameraActivity());
-
-        selectButton = addButton(R.drawable.ic_add_circle_white);
-        selectButton.setAlpha(0.5f);
-        selectButton.setId(QuestionWidget.newUniqueId());
-        selectButton.setEnabled(!formEntryPrompt.isReadOnly());
-        selectButton.setOnClickListener(v -> showAttachmentsFragment());*/
-
-      /*  importButton = addButton(R.drawable.ic_smartphone_white_24dp);
-        importButton.setAlpha((float) .5);
-        importButton.setId(QuestionWidget.newUniqueId());
-        importButton.setEnabled(!formEntryPrompt.isReadOnly());
-        importButton.setOnClickListener(v -> importPhoto());*/
-
         clearButton = addButton(R.drawable.ic_cancel_rounded);
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!formEntryPrompt.isReadOnly());
         clearButton.setOnClickListener(v -> clearAnswer());
 
-        //attachmentPreview = view.findViewById(R.id.attachedMedia);
         filesPanel = view.findViewById(R.id.files);
         filesToggle = view.findViewById(R.id.toggle_button);
         filesToggle.setOnStateChangedListener(open -> maybeShowAdvancedPanel());
         numberOfFiles = view.findViewById(R.id.numOfFiles);
         addFiles = view.findViewById(R.id.addText);
-        //separator = view.findViewById(R.id.line_separator);
+        addFiles.setOnClickListener(v -> showAttachmentsFragment());
 
-        if (!files.isEmpty()) {
-           // showPreview();
+        /*if (!formFiles.isEmpty()) {
+            showPreview();
         } else {
-           // hidePreview();
+            hidePreview();
+        }*/
+    }
+
+    @Override
+    public String setBinaryData(@NonNull Object data) {
+        ArrayList<VaultFile> files = new Gson().fromJson((String) data, new TypeToken<List<VaultFile>>() {}.getType());
+
+        if (!files.isEmpty()){
+
+            for (VaultFile file : files) {
+                FormMediaFile formMediaFile = FormMediaFile.fromMediaFile(file);
+                formFiles.put(file.name, formMediaFile);
+            }
+            /*FormMediaFile vaultFile = FormMediaFile.fromMediaFile(files.get(0));
+            setFilename(vaultFile.name);
+            setFile(vaultFile);
+            setFileId(vaultFile.id);
+            showPreview();
+            return getFilename();*/
+            showPreview();
+            return getFilenames().toString();
+        }
+
+        return null;
+    }
+
+    private void showAttachmentsFragment() {
+        try {
+
+            Activity activity = (Activity) getContext();
+            waitingForAData = true;
+
+           List<VaultFile> vaultFiles = getFilenames() != null ? MyApplication.rxVault
+                    .get(getFileIds())
+                    .subscribeOn(Schedulers.io())
+                    .blockingGet() : null;
+
+            List<VaultFile> files = new ArrayList<>(vaultFiles);
+
+            activity.startActivityForResult(new Intent(getContext(), AttachmentsActivitySelector.class)
+                            .putExtra(VAULT_FILE_KEY, new Gson().toJson(files))
+                            .putExtra(VAULT_FILES_FILTER, FilterType.ALL)
+                            .putExtra(VAULT_PICKER_SINGLE,false),
+                    C.MEDIA_FILE_ID);
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
     }
 
@@ -138,4 +184,30 @@ public class UwaziMultiFileWidget  extends UwaziQuestionWidget {
         }
     }
 
+    public String[] getFileIds() {
+        String[] Ids = new String[formFiles.size()];
+        int i = 0;
+        for (FormMediaFile file : formFiles.values()){
+            Ids[i++] = file.id;
+        }
+        return Ids;
+    }
+
+    protected List<String> getFilenames() {
+        if (formFiles != null) {
+            return new ArrayList<>(formFiles.keySet());
+        } else {
+            return null;
+        }
+    }
+
+    private void showPreview(){
+        for (FormMediaFile file : formFiles.values()){
+            CollectAttachmentPreviewView previewView = new CollectAttachmentPreviewView(context, null, 0);
+            filesPanel.addView(previewView);
+            previewView.showPreview(file.id);
+        }
+        //numberOfFiles.setText();
+        maybeShowAdvancedPanel();
+    }
 }

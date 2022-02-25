@@ -31,7 +31,6 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.views.activity.CameraActivity;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
@@ -45,10 +44,6 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
     AppCompatButton selectButton;
     ImageButton clearButton;
     TextView descriptionTextView;
-
-   // ImageButton captureButton;
-   // ImageButton importButton;
-  //  View separator;
 
     private CollectAttachmentPreviewView attachmentPreview;
 
@@ -139,12 +134,11 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
             activity.startActivityForResult(new Intent(getContext(), AttachmentsActivitySelector.class)
                             .putExtra(VAULT_FILE_KEY, new Gson().toJson(files))
                             .putExtra(VAULT_FILES_FILTER, FilterType.PHOTO)
-                            .putExtra(VAULT_PICKER_SINGLE,true),
+                            .putExtra(VAULT_PICKER_SINGLE, true),
                     C.MEDIA_FILE_ID);
 
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
-            FormController.getActive().setIndexWaitingForData(null);
         }
     }
 
@@ -160,7 +154,6 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
             );
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
-            FormController.getActive().setIndexWaitingForData(null);
         }
     }
 
