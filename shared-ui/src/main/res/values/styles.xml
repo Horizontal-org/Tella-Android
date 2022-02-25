@@ -70,6 +70,11 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="StandardSheetButtonTextStyle" parent="Tella_Main_White_Text.Bold">
+        <item name="android:textSize">16.8sp</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
     <style name="Tella_Main_White_Text.SmallBold" parent="Tella_Main_White_Text.Bold">
         <item name="android:textSize">12sp</item>
     </style>
