@@ -17,34 +17,22 @@
         tools:text="5 items" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/uploadActionTV"
-        style="@style/Tella_Main_White_Text.Meduim"
+        style="@style/BottomSheetButtonListStyle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sheetTitleTv"
         android:layout_marginTop="25dp"
         android:drawablePadding="17dp"
-        android:padding="@dimen/text_button_padding_size"
-        android:background="@drawable/clickable_text_background"
-        android:clickable="true"
-        android:focusable="true"
         app:drawableStartCompat="@drawable/ic_upload_cloud"
         tools:text="button1" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/shareActionTV"
-        style="@style/Tella_Main_White_Text.Meduim"
+        style="@style/BottomSheetButtonListStyle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/uploadActionTV"
         android:layout_marginTop="20dp"
         android:drawablePadding="17dp"
-        android:padding="@dimen/text_button_padding_size"
-        android:background="@drawable/clickable_text_background"
-        android:clickable="true"
-        android:focusable="true"
         app:drawableStartCompat="@drawable/ic_share"
         tools:text="button2"/>
 
@@ -57,82 +45,52 @@
         android:background="@color/wa_white" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/moveActionTV"
-        style="@style/Tella_Main_White_Text.Meduim"
+        style="@style/BottomSheetButtonListStyle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/separator"
         android:layout_marginTop="17dp"
         android:drawablePadding="17dp"
-        android:padding="@dimen/text_button_padding_size"
-        android:background="@drawable/clickable_text_background"
-        android:clickable="true"
-        android:focusable="true"
         app:drawableStartCompat="@drawable/ic_move"
         tools:text="button3"/>
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/renameActionTV"
-        style="@style/Tella_Main_White_Text.Meduim"
+        style="@style/BottomSheetButtonListStyle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/moveActionTV"
         android:layout_marginTop="20dp"
         android:drawablePadding="17dp"
-        android:padding="@dimen/text_button_padding_size"
-        android:background="@drawable/clickable_text_background"
-        android:clickable="true"
-        android:focusable="true"
         app:drawableStartCompat="@drawable/ic_pen"
         tools:text="button4"/>
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/saveActionTV"
-        style="@style/Tella_Main_White_Text.Meduim"
+        style="@style/BottomSheetButtonListStyle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/renameActionTV"
         android:layout_marginTop="20dp"
         android:drawablePadding="17dp"
-        android:padding="@dimen/text_button_padding_size"
-        android:background="@drawable/clickable_text_background"
-        android:clickable="true"
-        android:focusable="true"
         app:drawableStartCompat="@drawable/ic_save_alt_24px"
         tools:text="button5"/>
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/infoActionTV"
-        style="@style/Tella_Main_White_Text.Meduim"
+        style="@style/BottomSheetButtonListStyle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/saveActionTV"
         android:layout_marginTop="20dp"
         android:drawablePadding="17dp"
-        android:padding="@dimen/text_button_padding_size"
-        android:background="@drawable/clickable_text_background"
-        android:clickable="true"
-        android:focusable="true"
         app:drawableStartCompat="@drawable/ic_info_24px"
         tools:text="button6"/>
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/deleteActionTV"
-        style="@style/Tella_Main_White_Text.Meduim"
+        style="@style/BottomSheetButtonListStyle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/infoActionTV"
         android:layout_marginTop="20dp"
         android:drawablePadding="17dp"
-        android:padding="@dimen/text_button_padding_size"
-        android:background="@drawable/clickable_text_background"
-        android:clickable="true"
-        android:focusable="true"
         app:drawableStartCompat="@drawable/ic_delete_purple_24px"
         tools:text="button7"/>
 

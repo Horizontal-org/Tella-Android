@@ -18,64 +18,48 @@
         />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/cameraActionTV"
-        style="@style/Tella_Main_White_Text.Meduim"
+        style="@style/BottomSheetButtonListStyle.2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sheetTitleTv"
         android:layout_marginTop="25dp"
         android:drawablePadding="17dp"
-        android:padding="@dimen/text_button_padding_size"
         android:drawableStart="@drawable/ic_camera_alt_24px"
         tools:text="Take photo/video"
-        android:gravity="start"
         />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/recordAudioActionTV"
-        style="@style/Tella_Main_White_Text.Meduim"
+        style="@style/BottomSheetButtonListStyle.2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cameraActionTV"
         android:layout_marginTop="20dp"
         android:drawablePadding="17dp"
-        android:padding="@dimen/text_button_padding_size"
         android:drawableStart="@drawable/keyboard_voice_24px_filled"
-        android:gravity="start"
         tools:text="Record audio"
         />
 
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/importActionTV"
-        style="@style/Tella_Main_White_Text.Meduim"
+        style="@style/BottomSheetButtonListStyle.2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/recordAudioActionTV"
         android:layout_marginTop="17dp"
         android:drawablePadding="17dp"
-        android:padding="@dimen/text_button_padding_size"
         android:drawableStart="@drawable/ic_upload_cloud"
-        android:gravity="start"
         tools:text="Import from device" />
 
     <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
         android:id="@+id/createDeleteActionTV"
-        style="@style/Tella_Main_White_Text.Meduim"
+        style="@style/BottomSheetButtonListStyle.3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/delete_vault_tooltip"
         app:layout_constraintTop_toBottomOf="@id/importActionTV"
         android:layout_marginTop="20dp"
         android:drawablePadding="15dp"
-        android:padding="@dimen/text_button_padding_size"
         app:drawableStartCompat="@drawable/ic_pen"
         android:drawableStart="@drawable/ic_upload_cloud"
-        android:gravity="start"
         tools:text="Import and delete original device"
         />
 
@@ -96,18 +80,14 @@
         android:textColor="@color/wa_white" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/createFolderActionTV"
-        style="@style/Tella_Main_White_Text.Meduim"
+        style="@style/BottomSheetButtonListStyle.2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/createDeleteActionTV"
         android:layout_marginTop="20dp"
         android:drawablePadding="17dp"
-        android:padding="@dimen/text_button_padding_size"
         app:drawableStartCompat="@drawable/ic_new_folder"
         android:drawableStart="@drawable/ic_new_folder"
-        android:gravity="start"
         tools:text="Create a new folder"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

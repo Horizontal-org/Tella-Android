@@ -65,6 +65,21 @@
     <style name="Tella_Main_White_Text.Meduim">
         <item name="android:textSize">14sp</item>
     </style>
+    
+    <style name="BottomSheetButtonListStyle" parent="Tella_Main_White_Text.Meduim">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/text_button_padding_size</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="BottomSheetButtonListStyle.2" parent="BottomSheetButtonListStyle">
+        <item name="android:gravity">start</item>
+    </style>
+
+    <style name="BottomSheetButtonListStyle.3" parent="BottomSheetButtonListStyle.2">
+        <item name="android:layout_width">0dp</item>
+    </style>
 
     <style name="Tella_Main_White_Text.MeduimbBold" parent="Tella_Main_White_Text.Bold">
         <item name="android:textSize">14sp</item>
