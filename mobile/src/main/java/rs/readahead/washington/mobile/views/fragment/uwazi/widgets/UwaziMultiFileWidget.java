@@ -8,7 +8,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -113,20 +112,14 @@ public class UwaziMultiFileWidget  extends UwaziQuestionWidget {
 
     @Override
     public String setBinaryData(@NonNull Object data) {
+        clearAnswer();
         ArrayList<VaultFile> files = new Gson().fromJson((String) data, new TypeToken<List<VaultFile>>() {}.getType());
 
         if (!files.isEmpty()){
-
             for (VaultFile file : files) {
                 FormMediaFile formMediaFile = FormMediaFile.fromMediaFile(file);
                 formFiles.put(file.name, formMediaFile);
             }
-            /*FormMediaFile vaultFile = FormMediaFile.fromMediaFile(files.get(0));
-            setFilename(vaultFile.name);
-            setFile(vaultFile);
-            setFileId(vaultFile.id);
-            showPreview();
-            return getFilename();*/
             showPreview();
             return getFilenames().toString();
         }
@@ -207,7 +200,8 @@ public class UwaziMultiFileWidget  extends UwaziQuestionWidget {
             filesPanel.addView(previewView);
             previewView.showPreview(file.id);
         }
-        //numberOfFiles.setText();
-        maybeShowAdvancedPanel();
+        numberOfFiles.setText(context.getResources().getQuantityString(R.plurals.Uwazi_MiltiFileWidget_FilesAttached, formFiles.size(), formFiles.size()));
+        numberOfFiles.setVisibility(VISIBLE);
+        filesToggle.setOpen();
     }
 }

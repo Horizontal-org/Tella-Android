@@ -535,8 +535,6 @@
     <string name="Uwazi_MiltiFileWidget_Show">Show Files</string>
     <string name="Uwazi_MiltiFileWidget_Hide">Hide Files</string>
     <string name="Uwazi_MiltiFileWidget_Help">Select as many files as you wish</string>
-
-
     <string name="Uwazi_WidgetMedia_Select_Text">Select audio or video file</string>
     <string name="Uwazi_WidgetMedia_Description_Text">Attach a video or audio file</string>
     <string name="Uwazi_WidgetImage_Select_Text">Select image file</string>
@@ -545,6 +543,10 @@
     <string name="Uwazi_WidgetMedia_Select_From_Tella">Select from Tella files</string>
     <string name="Uwazi_WidgetMedia_Select_From_Device">Select from your device</string>
     <string name="Uwazi_Widget_Sheet_Description">Choose how you want to add files</string>
+    <plurals name="Uwazi_MiltiFileWidget_FilesAttached">
+        <item quantity="one">File attached</item>
+        <item quantity="other">%1$d files attached</item>
+    </plurals>
 
     <string-array name="Uwazi_Language_Array">
         <item>English</item>
