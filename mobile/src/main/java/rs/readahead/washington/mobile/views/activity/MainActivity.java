@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.OrientationEventListener;
@@ -37,8 +38,10 @@ import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent;
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
 import rs.readahead.washington.mobile.mvp.contract.IHomeScreenPresenterContract;
+import rs.readahead.washington.mobile.mvp.contract.IMediaImportPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.HomeScreenPresenter;
+import rs.readahead.washington.mobile.mvp.presenter.MediaImportPresenter;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.views.fragment.uwazi.download.DownloadedTemplatesFragment;
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment;
@@ -48,6 +51,7 @@ import timber.log.Timber;
 @RuntimePermissions
 public class MainActivity extends MetadataActivity implements
         IHomeScreenPresenterContract.IView,
+        IMediaImportPresenterContract.IView,
         IMetadataAttachPresenterContract.IView {
     public static final String PHOTO_VIDEO_FILTER = "gallery_filter";
     @BindView(R.id.main_container)
@@ -56,6 +60,7 @@ public class MainActivity extends MetadataActivity implements
     private Handler handler;
     private EventCompositeDisposable disposables;
     private HomeScreenPresenter homeScreenPresenter;
+    private MediaImportPresenter mediaImportPresenter;
     private ProgressDialog progressDialog;
     private OrientationEventListener mOrientationEventListener;
     private BottomNavigationView btmNavMain;
@@ -73,6 +78,7 @@ public class MainActivity extends MetadataActivity implements
         setupNavigation();
         handler = new Handler();
         homeScreenPresenter = new HomeScreenPresenter(this);
+        mediaImportPresenter = new MediaImportPresenter(this);
         initSetup();
         // todo: check this..
         //SafetyNetCheck.setApiKey(getString(R.string.share_in_report));
@@ -134,9 +140,27 @@ public class MainActivity extends MetadataActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+
+        if (requestCode == C.IMPORT_VIDEO) {
+            Uri video = data.getData();
+            if (video != null) {
+                mediaImportPresenter.importVideo(video);
+            }
+           return;
+        }
+
+        if (requestCode == C.IMPORT_IMAGE) {
+            Uri image = data.getData();
+            if (image != null) {
+                mediaImportPresenter.importImage(image);
+            }
+            return;
+        }
+
         if (!isLocationSettingsRequestCode(requestCode) && resultCode != RESULT_OK) {
             return; // user canceled evidence acquiring
         }
+
         List<Fragment> fragments = Objects.requireNonNull(getSupportFragmentManager().getPrimaryNavigationFragment()).getChildFragmentManager().getFragments();
         for (Fragment fragment : fragments) {
             fragment.onActivityResult(requestCode, resultCode, data);
@@ -253,6 +277,26 @@ public class MainActivity extends MetadataActivity implements
     }
 
     @Override
+    public void onMediaFileImported(VaultFile vaultFile) {
+        onActivityResult(C.MEDIA_FILE_ID, RESULT_OK, new Intent().putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, vaultFile));
+    }
+
+    @Override
+    public void onImportError(Throwable error) {
+
+    }
+
+    @Override
+    public void onImportStarted() {
+
+    }
+
+    @Override
+    public void onImportEnded() {
+
+    }
+
+    @Override
     public Context getContext() {
         return this;
     }
@@ -293,6 +337,11 @@ public class MainActivity extends MetadataActivity implements
         if (homeScreenPresenter != null) {
             homeScreenPresenter.destroy();
             homeScreenPresenter = null;
+        }
+
+        if (mediaImportPresenter != null) {
+            mediaImportPresenter.destroy();
+            mediaImportPresenter = null;
         }
     }
 

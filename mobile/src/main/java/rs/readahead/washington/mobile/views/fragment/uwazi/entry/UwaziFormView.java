@@ -11,6 +11,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -23,6 +25,7 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziFileBina
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziMultiFileWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziQuestionWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziWidgetFactory;
+import timber.log.Timber;
 
 
 @SuppressLint("ViewConstructor")

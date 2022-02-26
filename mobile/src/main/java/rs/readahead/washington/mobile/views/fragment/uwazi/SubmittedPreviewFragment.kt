@@ -61,7 +61,7 @@ class SubmittedPreviewFragment : BaseFragment(){
         arguments?.get(SEND_ENTITY)?.let { entity ->
             submittedInstance = Gson().fromJson(entity as String ,UwaziEntityInstance::class.java)
             submittedInstance?.let {
-                endView = UwaziFormEndView(activity,it.title)
+                endView = UwaziFormEndView(activity,R.string.Uwazi_Submitted_Entity_Header_Title)
 
                 endView.setInstance(it,true, true)
                 binding?.endViewContainer?.removeAllViews()
