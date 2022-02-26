@@ -33,6 +33,7 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
+import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.views.activity.CameraActivity;
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity;
@@ -151,8 +152,10 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
     public void importMedia() {
         Activity activity = (Activity) getContext();
         waitingForAData = true;
-        MediaFileHandler.startSelectMediaActivity(activity, "audio/*|video/*",null, C.IMPORT_IMAGE);
+       // MediaFileHandler.startSelectMediaActivity(activity, "audio/*|video/*",null, C.IMPORT_VIDEO);
+        MediaFileHandler.startSelectMediaActivity(activity, "video/mp4", null, C.IMPORT_VIDEO);
     }
+
 
     private void showVideoActivity() {
         try {
