@@ -138,7 +138,6 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        Timber.d("+++++ MainActivity onActivityResult(int requestCode, int resultCode, Intent data)%s, %s, %s", resultCode, resultCode, data.toString());
         super.onActivityResult(requestCode, resultCode, data);
 
 
@@ -147,7 +146,15 @@ public class MainActivity extends MetadataActivity implements
             if (video != null) {
                 mediaImportPresenter.importVideo(video);
             }
-            //return;
+           return;
+        }
+
+        if (requestCode == C.IMPORT_IMAGE) {
+            Uri image = data.getData();
+            if (image != null) {
+                mediaImportPresenter.importImage(image);
+            }
+            return;
         }
 
         if (!isLocationSettingsRequestCode(requestCode) && resultCode != RESULT_OK) {

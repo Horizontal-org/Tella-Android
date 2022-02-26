@@ -421,10 +421,14 @@ object VaultSheetUtils {
                         action.goToCamera()
                     }
                     //Go to recorder action
-                    recordAudioActionTV.text = recordLabel
-                    recordAudioActionTV.setOnClickListener {
-                        vaultManageFilesSheet.dismiss()
-                        action.goToRecorder()
+                    if (recordLabel != null) {
+                        recordAudioActionTV.text = recordLabel
+                        recordAudioActionTV.setOnClickListener {
+                            vaultManageFilesSheet.dismiss()
+                            action.goToRecorder()
+                        }
+                    } else {
+                        recordAudioActionTV.visibility = View.GONE
                     }
 
                     importActionTV.text = importLabel

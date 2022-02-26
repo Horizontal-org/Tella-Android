@@ -23,6 +23,8 @@ import com.google.gson.reflect.TypeToken;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
 
+import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +35,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.views.activity.CameraActivity;
+import rs.readahead.washington.mobile.views.base_ui.BaseActivity;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView;
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector;
@@ -100,7 +103,7 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
         selectButton = view.findViewById(R.id.addText);
         selectButton.setText(getContext().getString(R.string.Uwazi_WidgetImage_Select_Text));
         selectButton.setEnabled(!formEntryPrompt.isReadOnly());
-        selectButton.setOnClickListener(v -> showAttachmentsFragment());
+        selectButton.setOnClickListener(v -> showSelectFilesSheet());
 
         clearButton = addButton(R.drawable.ic_cancel_rounded);
         clearButton.setId(QuestionWidget.newUniqueId());
@@ -161,6 +164,41 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
         Activity activity = (Activity) getContext();
         waitingForAData = true;
         MediaFileHandler.startSelectMediaActivity(activity, "image/*", null, C.IMPORT_IMAGE);
+    }
+
+    private void showSelectFilesSheet(){
+        VaultSheetUtils.showVaultSelectFilesSheet(
+                ((BaseActivity) getContext()).getSupportFragmentManager(),
+                getContext().getString(R.string.Uwazi_WidgetMedia_Take_Video),
+                null,
+                getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Device),
+                getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Tella),
+                getContext().getString(R.string.Uwazi_Widget_Sheet_Description),
+                getContext().getString(R.string.Uwazi_WidgetMedia_Select_Text),
+                new  VaultSheetUtils.IVaultFilesSelector() {
+
+                    @Override
+                    public void  importFromVault(){
+                        showAttachmentsFragment();
+                    }
+
+                    @Override
+                    public void goToRecorder() {
+                    }
+
+                    @Override
+                    public void goToCamera() {
+                        showCameraActivity();
+                    }
+
+                    @Override
+                    public void importFromDevice() {
+                        importPhoto();
+                    }
+
+                }
+
+        );
     }
 
     private void showPreview() {
