@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -60,6 +61,8 @@ public class VaultDataSource implements IVaultDatabase {
         if (vaultFile.created == 0) {
             vaultFile.created = System.currentTimeMillis();
         }
+
+        Log.e("VaultDataSource", vaultFile.toString());
 
         try {
             database.beginTransaction();
@@ -307,19 +310,21 @@ public class VaultDataSource implements IVaultDatabase {
             case PHOTO:
                 return cn(D.C_MIME_TYPE) + " LIKE '" + "image/%" + "'";
             case OTHERS:
-                return cn(D.C_MIME_TYPE) + " NOT LIKE '" + "audio/%" + "'"
-                        + cn(D.C_MIME_TYPE) + " NOT LIKE '" + "video/%" + "'"
-                        + cn(D.C_MIME_TYPE) + " NOT LIKE '" + "image/%" + "'"
+                return cn(D.C_MIME_TYPE) + " NOT LIKE '" + "audio/%" + "' AND "
+                        + cn(D.C_MIME_TYPE) + " NOT LIKE '" + "video/%" + "' AND "
+                        + cn(D.C_MIME_TYPE) + " NOT LIKE '" + "image/%" + "' AND "
                         + cn(D.C_MIME_TYPE) + " NOT LIKE '" + "text/%" + "'"
                         ;
             case DOCUMENTS:
                 return cn(D.C_MIME_TYPE) + " LIKE '" + "text/%" + "' OR " + cn(D.C_MIME_TYPE) + " IN " +
                         "(" + "'application/pdf'" + ","
                         + "'application/msword'" + ","
-                        + "'application/vnd.ms-excel'" + ""
-                        + "'application/mspowerpoint'" + ""
-                        + "'audio/flac'" + ""
-                        + "'application/zip'" + ""
+                        + "'application/vnd.ms-excel'" + ","
+                        + "'application/mspowerpoint'" + ","
+                        + "'audio/flac'" + ","
+                        + "'application/zip'" + ","
+                        + "'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'" + ","
+                        + "'application/octet-stream'" + ""
                         + ")";
             case ALL_WITHOUT_DIRECTORY:
                 return cn(D.C_TYPE) + " != '" + VaultFile.Type.DIRECTORY.getValue() + "'";
