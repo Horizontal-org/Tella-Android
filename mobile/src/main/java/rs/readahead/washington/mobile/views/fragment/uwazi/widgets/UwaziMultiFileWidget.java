@@ -25,6 +25,7 @@ import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +35,7 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.odk.FormController;
+import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.views.activity.CameraActivity;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
@@ -46,7 +48,6 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPromp
 @SuppressLint("ViewConstructor")
 public class UwaziMultiFileWidget extends UwaziQuestionWidget {
     private final HashMap<String, FormMediaFile> formFiles = new HashMap<>();
-
     Context context;
     Button addFiles;
     ImageButton clearButton;
@@ -71,11 +72,13 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
     }
 
     @Override
-    public Object getAnswer() {
+    public List<UwaziValue> getAnswer() {
         if (formFiles.isEmpty()) {
             return null;
         } else {
-            return getFilenames();
+            ArrayList<UwaziValue> resultList = new ArrayList<>();
+            resultList.add(new UwaziValue(getFileIds()));
+            return (resultList);
         }
     }
 
@@ -113,10 +116,23 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
     @Override
     public String setBinaryData(@NonNull Object data) {
         clearAnswer();
-        ArrayList<VaultFile> files = new Gson().fromJson((String) data, new TypeToken<List<VaultFile>>() {
-        }.getType());
-
-        if (!files.isEmpty()) {
+        List<VaultFile> files = null;
+        if (data instanceof ArrayList) {
+            List<String> result = ((List<String>) data);
+            if (!result.isEmpty()) {
+                String[] ids = Arrays.copyOf(
+                        result.toArray(), result.size(),
+                        String[].class);
+                files = MyApplication.rxVault
+                        .get(ids)
+                        .subscribeOn(Schedulers.io())
+                        .blockingGet();
+            }
+        } else {
+            files = new Gson().fromJson((String) data, new TypeToken<List<VaultFile>>() {
+            }.getType());
+        }
+        if (files != null && !files.isEmpty()) {
             for (VaultFile file : files) {
                 FormMediaFile formMediaFile = FormMediaFile.fromMediaFile(file);
                 formFiles.put(file.name, formMediaFile);
