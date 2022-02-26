@@ -28,7 +28,6 @@ import rs.readahead.washington.mobile.presentation.uwazi.UwaziGeoData
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.views.activity.LocationMapActivity
-import rs.readahead.washington.mobile.views.activity.QuestionAttachmentActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
@@ -48,13 +47,15 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
     private val viewModel: SharedUwaziSubmissionViewModel by lazy {
         ViewModelProvider(activity).get(SharedUwaziSubmissionViewModel::class.java)
     }
-    private lateinit var binding: UwaziEntryFragmentBinding
+    private var binding: UwaziEntryFragmentBinding? = null
     private var template: CollectTemplate? = null
     private var entityInstance: UwaziEntityInstance = UwaziEntityInstance()
     private val bundle by lazy { Bundle() }
     private var screenView: ViewGroup? = null
     private var entryPrompts = mutableListOf<UwaziEntryPrompt>()
     private lateinit var uwaziFormView: UwaziFormView
+    var hasInitializedRootView = false
+    private var rootView: View? = null
 
     private val uwaziTitlePrompt = UwaziEntryPrompt(
         UWAZI_TITLE,
@@ -83,18 +84,38 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         "Attach as many PDF files as you wish"
     )
 
+    private fun getPersistentView(inflater: LayoutInflater, container: ViewGroup?): View {
+        if (binding == null) {
+            // Inflate the layout for this fragment
+            binding = UwaziEntryFragmentBinding.inflate(inflater, container, false)
+        } else {
+            // Do not inflate the layout again.
+            // The returned View of onCreateView will be added into the fragment.
+            // However it is not allowed to be added twice even if the parent is same.
+            // So we must remove rootView from the existing parent view group
+            // (it will be added back).
+            (rootView?.parent as? ViewGroup)?.removeView(binding!!.root)
+        }
+
+        return binding!!.root
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = UwaziEntryFragmentBinding.inflate(inflater, container, false)
-        return binding.root
+        return getPersistentView(inflater, container)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initObservers()
-        initView()
+        if (!hasInitializedRootView) {
+            hasInitializedRootView = true
+            initView()
+        }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -112,7 +133,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
 
     override fun initView(view: View) {
         with(binding) {
-            toolbar.backClickListener = { nav().popBackStack() }
+            this!!.toolbar.backClickListener = { nav().popBackStack() }
             toolbar.onRightClickListener = {
                 entityInstance.status = UwaziEntityStatus.DRAFT
                 if (!getAnswersFromForm(false)) {
@@ -125,7 +146,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
 
             nextBtn.setOnClickListener { sendEntity() }
 
-            screenView = binding.screenFormView
+            screenView = screenFormView
         }
 
         if (!hasGpsPermissions(requireContext())) {
@@ -150,7 +171,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
                 parseUwaziTemplate()
             }
         }
-        binding.toolbar.setStartTextTitle(template?.entityRow?.translatedName.toString())
+        binding!!.toolbar.setStartTextTitle(template?.entityRow?.translatedName.toString())
     }
 
     private fun initObservers() {
@@ -229,10 +250,11 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
                     entityInstance.title = (answer.value as UwaziValue).value as String
                 } else {
                     if (answer.value is List<*>) {
+
                         hashmap[answer.key] = (answer.value) as List<UwaziValue>
+
                     } else {
-                        hashmap[answer.key] =
-                            arrayListOf(UwaziValue((answer.value as UwaziValue).value))
+                        hashmap[answer.key] = arrayListOf(UwaziValue((answer.value as UwaziValue).value))
                     }
                 }
             }
