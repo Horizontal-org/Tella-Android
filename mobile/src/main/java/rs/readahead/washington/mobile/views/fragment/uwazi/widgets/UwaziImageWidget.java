@@ -76,8 +76,7 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
 
     @Override
     public String setBinaryData(@NonNull Object data) {
-
-         if (data instanceof  FormMediaFile){
+        if (data instanceof  FormMediaFile){
              FormMediaFile formMediaFile = (FormMediaFile) data;
              setFilename(formMediaFile.name);
              setFile(formMediaFile);
@@ -85,8 +84,8 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
              showPreview();
              return getFilename();
          }
-        ArrayList<VaultFile> files = new Gson().fromJson((String) data, new TypeToken<List<VaultFile>>() {}.getType());
 
+        ArrayList<VaultFile> files = new Gson().fromJson((String) data, new TypeToken<List<VaultFile>>() {}.getType());
         if (!files.isEmpty()){
             FormMediaFile vaultFile = FormMediaFile.fromMediaFile(files.get(0));
             setFilename(vaultFile.name);

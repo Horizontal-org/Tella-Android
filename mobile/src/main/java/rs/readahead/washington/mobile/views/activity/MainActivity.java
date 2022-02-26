@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.views.activity;
 
+import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_FILE_KEY;
 import static rs.readahead.washington.mobile.views.fragment.vault.home.HomeVaultFragmentKt.VAULT_FILTER;
 
 import android.Manifest;
@@ -24,6 +25,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -45,6 +47,7 @@ import rs.readahead.washington.mobile.mvp.presenter.MediaImportPresenter;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.views.fragment.uwazi.download.DownloadedTemplatesFragment;
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment;
+import com.google.gson.Gson;
 import timber.log.Timber;
 
 
@@ -139,7 +142,6 @@ public class MainActivity extends MetadataActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
 
         if (requestCode == C.IMPORT_VIDEO) {
             Uri video = data.getData();
@@ -278,7 +280,9 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     public void onMediaFileImported(VaultFile vaultFile) {
-        onActivityResult(C.MEDIA_FILE_ID, RESULT_OK, new Intent().putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, vaultFile));
+        List<VaultFile> list = new ArrayList<>();
+        list.add(vaultFile);
+        onActivityResult(C.MEDIA_FILE_ID, RESULT_OK, new Intent().putExtra(VAULT_FILE_KEY,new Gson().toJson(list)));
     }
 
     @Override

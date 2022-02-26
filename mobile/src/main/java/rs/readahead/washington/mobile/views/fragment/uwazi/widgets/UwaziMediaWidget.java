@@ -113,7 +113,7 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
         selectButton = view.findViewById(R.id.addText);
         selectButton.setText(getContext().getString(R.string.Uwazi_WidgetMedia_Select_Text));
         selectButton.setEnabled(!formEntryPrompt.isReadOnly());
-        selectButton.setOnClickListener(v -> showAttachmentsFragment());
+        selectButton.setOnClickListener(v -> showSelectFilesSheet());
 
         clearButton = addButton(R.drawable.ic_cancel_rounded);
         clearButton.setId(QuestionWidget.newUniqueId());
