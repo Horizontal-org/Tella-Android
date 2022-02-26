@@ -78,6 +78,14 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
 
     @Override
     public String setBinaryData(@NonNull Object data) {
+        if (data instanceof  FormMediaFile){
+            FormMediaFile formMediaFile = (FormMediaFile) data;
+            setFilename(formMediaFile.name);
+            setFile(formMediaFile);
+            setFileId(formMediaFile.id);
+            showPreview();
+            return getFilename();
+        }
         ArrayList<VaultFile> files = new Gson().fromJson((String) data, new TypeToken<List<VaultFile>>() {}.getType());
 
         if (!files.isEmpty()){
@@ -105,7 +113,7 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
         selectButton = view.findViewById(R.id.addText);
         selectButton.setText(getContext().getString(R.string.Uwazi_WidgetMedia_Select_Text));
         selectButton.setEnabled(!formEntryPrompt.isReadOnly());
-        selectButton.setOnClickListener(v -> showSelectFilesSheet());
+        selectButton.setOnClickListener(v -> showAttachmentsFragment());
 
         clearButton = addButton(R.drawable.ic_cancel_rounded);
         clearButton.setId(QuestionWidget.newUniqueId());
