@@ -440,6 +440,7 @@ object VaultSheetUtils {
 
                     importVaultActionTV.text = importVaultLabel
                     importVaultActionTV.setOnClickListener {
+                        vaultManageFilesSheet.dismiss()
                         action.importFromVault()
                     }
 
