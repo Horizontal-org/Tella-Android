@@ -30,10 +30,10 @@ import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.mvp.contract.ILocationGettingPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.LocationGettingPresenter;
-import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
+import rs.readahead.washington.mobile.util.C;
 
 
-public class LocationMapActivity extends BaseLockActivity implements
+public class LocationMapActivity extends MetadataActivity implements
         OnMapReadyCallback, GoogleMap.OnMapLongClickListener, GoogleMap.OnCameraMoveStartedListener,
         ILocationGettingPresenterContract.IView {
     public static final String SELECTED_LOCATION = "sl";
@@ -160,10 +160,12 @@ public class LocationMapActivity extends BaseLockActivity implements
 
     @Override
     public void onNoLocationPermissions() {
+        setCancelAndFinish();
     }
 
     @Override
     public void onGPSProviderDisabled() {
+        showGpsDisabledDialog(C.GPS_PROVIDER, this::initMapLocationAndCamera);
     }
 
     @Override
@@ -209,8 +211,12 @@ public class LocationMapActivity extends BaseLockActivity implements
     }
 
     private void setResultAndFinish() {
-        setResult(Activity.RESULT_OK, new Intent().putExtra(SELECTED_LOCATION, myLocation));
-        finish();
+        if (myLocation == null) {
+            setCancelAndFinish();
+        } else {
+            setResult(Activity.RESULT_OK, new Intent().putExtra(SELECTED_LOCATION, myLocation));
+            finish();
+        }
     }
 
     private void setCancelAndFinish() {

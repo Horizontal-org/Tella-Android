@@ -63,6 +63,7 @@ import rs.readahead.washington.mobile.util.LocationUtil;
 import rs.readahead.washington.mobile.util.MetadataUtils;
 import rs.readahead.washington.mobile.util.TelephonyUtils;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 
 
 public abstract class MetadataActivity extends BaseLockActivity implements
@@ -368,6 +369,17 @@ public abstract class MetadataActivity extends BaseLockActivity implements
                     manageLocationSettings(requestCode, listener);
                     dialog.dismiss();
                 });
+    }
+
+    public void showGpsDisabledDialog(final int requestCode, final LocationSettingsCheckDoneListener listener) {
+        BottomSheetUtils.showConfirmSheet(
+                getSupportFragmentManager(),
+                getString(R.string.verification_prompt_dialog_title),
+                "",
+                getString(R.string.action_ok),
+                getString(R.string.action_cancel),
+                isConfirmed -> manageLocationSettings(requestCode, listener)
+        );
     }
 
     public SensorData getLightSensorData() {

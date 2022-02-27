@@ -219,10 +219,10 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
                 return;
             }
 
-            if (!locationGettingPresenter.isGPSProviderEnabled()) {
+            /*if (!locationGettingPresenter.isGPSProviderEnabled()) {
                 onGPSProviderDisabled();
                 return;
-            }
+            }*/
 
             Activity activity = (Activity) getContext();
             waitingForAData = true;
