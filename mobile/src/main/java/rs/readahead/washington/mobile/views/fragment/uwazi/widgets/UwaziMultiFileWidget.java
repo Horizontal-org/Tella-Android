@@ -154,15 +154,10 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
             Activity activity = (Activity) getContext();
             waitingForAData = true;
 
-            List<VaultFile> vaultFiles = getFilenames() != null ? MyApplication.rxVault
-                    .get(getFileIds())
-                    .subscribeOn(Schedulers.io())
-                    .blockingGet() : null;
-
-            List<VaultFile> files = new ArrayList<>(vaultFiles);
+            String[] ids = getFileIds() != null ? getFileIds() : null;
 
             activity.startActivityForResult(new Intent(getContext(), AttachmentsActivitySelector.class)
-                            .putExtra(VAULT_FILE_KEY, new Gson().toJson(files))
+                            .putExtra(VAULT_FILE_KEY, new Gson().toJson(ids))
                             .putExtra(VAULT_FILES_FILTER, isPdf ? FilterType.DOCUMENTS : FilterType.ALL)
                             .putExtra(VAULT_PICKER_SINGLE, false),
                     C.MEDIA_FILE_ID);

@@ -21,7 +21,6 @@ import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.views.activity.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity
-import rs.readahead.washington.mobile.views.activity.QuestionAttachmentActivity
 import rs.readahead.washington.mobile.views.activity.VideoViewerActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 
@@ -93,6 +92,13 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                     binding.emptyViewMsgContainer.visibility = View.GONE
                 }
                 attachmentsAdapter.setFiles(files)
+            })
+
+            selectVaultFiles.observe(this@AttachmentsActivitySelector,{ listFiles->
+                if (!listFiles.isNullOrEmpty()){
+                    attachmentsAdapter.selectedMediaFiles = listFiles
+                    updateAttachmentsToolbar(attachmentsAdapter.selectedMediaFiles.size)
+                }
             })
         }
     }
@@ -218,6 +224,8 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
     }
 
     private fun setResultAndFinish() {
+       val ids =  attachmentsAdapter.selectedMediaFiles.map { it.id }
+
         setResult(
             Activity.RESULT_OK,
             Intent().putExtra(VAULT_FILE_KEY, Gson().toJson(attachmentsAdapter.selectedMediaFiles.map { it.id }))
@@ -231,17 +239,13 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
             return
         }
          intent.getStringExtra(VAULT_FILE_KEY)?.let { files ->
-             val type = object : TypeToken<List<VaultFile>>() {}.type
-             val listFiles = Gson().fromJson(files, type) as List<VaultFile>? ?: emptyList()
-             val allEmpty: Boolean = listFiles.stream().allMatch { l -> l == null || l.toString().isEmpty() }
+             val type = object : TypeToken<Array<String>>() {}.type
+             val listFiles = Gson().fromJson(files, type) as Array<String>? ?: emptyArray()
 
-             if (!listFiles.isNullOrEmpty() && !allEmpty){
-                 attachmentsAdapter.selectedMediaFiles = listFiles
-                 updateAttachmentsToolbar(attachmentsAdapter.selectedMediaFiles.size)
+             if (!listFiles.isNullOrEmpty()){
+                 viewModel.getFiles(listFiles)
              }
-
          }
-
     }
 
     private fun handleBackStack() {
@@ -257,6 +261,13 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
             else -> {
                 finish()
             }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode != RESULT_OK) {
+            return;
         }
     }
 

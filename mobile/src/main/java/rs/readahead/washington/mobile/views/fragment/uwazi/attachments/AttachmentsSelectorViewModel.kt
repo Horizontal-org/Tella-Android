@@ -22,6 +22,10 @@ class AttachmentsSelectorViewModel : ViewModel() {
     val error : LiveData<Throwable> get() = _error
     private var _vaultFiles = MutableLiveData<List<VaultFile>>()
     val vaultFiles : LiveData<List<VaultFile>> get() = _vaultFiles
+
+    private var _selectVaultFiles = MutableLiveData<List<VaultFile>>()
+    val selectVaultFiles : LiveData<List<VaultFile>> get() = _selectVaultFiles
+
     private var _rootVaultFile = SingleLiveEvent<VaultFile>()
     val rootVaultFile : LiveData<VaultFile> get() = _rootVaultFile
 
@@ -61,6 +65,19 @@ class AttachmentsSelectorViewModel : ViewModel() {
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 _error.postValue(throwable)
             }?.dispose()
+    }
+
+
+    fun getFiles(ids : Array<String> ) {
+        MyApplication.rxVault.get(ids)
+            .subscribe(
+                { vaultFiles: List<VaultFile>? ->
+                    _selectVaultFiles.postValue(vaultFiles)
+                }
+            ) { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                _error.postValue(throwable)
+            }.dispose()
     }
 
 
