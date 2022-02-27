@@ -181,7 +181,7 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
                 getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Device),
                 getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Tella),
                 getContext().getString(R.string.Uwazi_Widget_Sheet_Description),
-                getContext().getString(R.string.Uwazi_WidgetMedia_Select_Photos_Text),
+                getContext().getString(R.string.Uwazi_WidgetImage_Select_Description_Text),
                 new  VaultSheetUtils.IVaultFilesSelector() {
 
                     @Override
