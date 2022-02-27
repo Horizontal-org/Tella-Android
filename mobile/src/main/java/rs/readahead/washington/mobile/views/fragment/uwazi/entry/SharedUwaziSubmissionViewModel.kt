@@ -28,6 +28,7 @@ import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
 import rs.readahead.washington.mobile.presentation.uwazi.SendEntityRequest
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.MULTIPART_FORM_DATA
 
+
 class SharedUwaziSubmissionViewModel : ViewModel(){
     private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private val disposables = CompositeDisposable()
@@ -35,6 +36,8 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
     val instance: LiveData<UwaziEntityInstance> get() = _instance
     private val _template = MutableLiveData<CollectTemplate>()
     val template: LiveData<CollectTemplate> get() = _template
+    private val _attachedFiles = MutableLiveData<List<VaultFile>>()
+    val attachedFiles: LiveData<List<VaultFile>> get() = _attachedFiles
     private val repository = UwaziRepository()
     val progress = MutableLiveData<UwaziEntityStatus>()
     private val _server = MutableLiveData<UWaziUploadServer>()
@@ -164,6 +167,24 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
         } catch (e: Exception) {
         }
         return listAttachments.toList()
+    }
+
+    fun getFiles(
+        Ids : Array<String>
+    ) {
+        disposables.add(MyApplication.rxVault.get(Ids)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { }
+            .doFinally { }
+            .subscribe(
+                { mediaFiles: List<VaultFile> ->
+                    _attachedFiles.postValue(mediaFiles)
+                }
+            ) { throwable: Throwable? ->
+                error.postValue(throwable)
+            }
+        )
     }
 
     override fun onCleared() {

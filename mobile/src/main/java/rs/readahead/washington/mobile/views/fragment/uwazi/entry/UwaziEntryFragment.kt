@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import com.google.gson.Gson
 import com.google.gson.internal.LinkedTreeMap
+import com.google.gson.reflect.TypeToken
 import com.hzontal.tella_vault.MyLocation
 import com.hzontal.tella_vault.VaultFile
 import org.hzontal.shared_ui.utils.DialogUtils
@@ -121,7 +122,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == C.MEDIA_FILE_ID && resultCode == Activity.RESULT_OK) {
             val vaultFile = data?.getStringExtra(VAULT_FILE_KEY)  ?: ""
-            putVaultFileInForm(vaultFile)
+            getUwaziFormFiles(vaultFile)
         }
 
         if (requestCode == C.SELECTED_LOCATION && resultCode == Activity.RESULT_OK) {
@@ -193,6 +194,10 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
                         progress.postValue(UwaziEntityStatus.UNKNOWN)
                     }
                 }
+            })
+
+            attachedFiles.observe(viewLifecycleOwner, {
+                putVaultFileInForm(Gson().toJson(it))
             })
         }
     }
@@ -369,8 +374,22 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         screenView?.addView(uwaziFormView)
     }
 
+    private fun getUwaziFormFiles(idList: String) {
+        val fileIds: Array<String> = emptyArray()
+
+        val files = Gson().fromJson<java.util.ArrayList<String>>(
+            idList as String?,
+            object : TypeToken<List<String?>?>() {}.type
+        )
+        for (s in files) {
+            fileIds.plus(s)
+        }
+
+        viewModel.getFiles(fileIds)
+    }
+
     private fun putVaultFileInForm(vaultFile: String) {
-        vaultFile?.let { uwaziFormView.setBinaryData(it) }
+        vaultFile.let { uwaziFormView.setBinaryData(it) }
     }
 
     private fun putLocationInForm(location: UwaziGeoData) {
