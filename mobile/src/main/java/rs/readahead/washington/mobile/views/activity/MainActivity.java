@@ -68,8 +68,6 @@ public class MainActivity extends MetadataActivity implements
     private OrientationEventListener mOrientationEventListener;
     private BottomNavigationView btmNavMain;
     private NavController navController;
-    private AppBarConfiguration appBarConfiguration;
-    private long numOfCollectServers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,13 +97,13 @@ public class MainActivity extends MetadataActivity implements
         disposables = MyApplication.bus().createCompositeDisposable();
         disposables.wire(LocaleChangedEvent.class, new EventObserver<LocaleChangedEvent>() {
             @Override
-            public void onNext(LocaleChangedEvent event) {
+            public void onNext(@NonNull LocaleChangedEvent event) {
                 recreate();
             }
         });
         disposables.wire(CamouflageAliasChangedEvent.class, new EventObserver<CamouflageAliasChangedEvent>() {
             @Override
-            public void onNext(CamouflageAliasChangedEvent event) {
+            public void onNext(@NonNull CamouflageAliasChangedEvent event) {
                 closeApp();
             }
         });
@@ -116,8 +114,7 @@ public class MainActivity extends MetadataActivity implements
         assert navHostFragment != null;
         navController = navHostFragment.getNavController();
         btmNavMain = findViewById(R.id.btm_nav_main);
-        appBarConfiguration =
-                new AppBarConfiguration.Builder(R.id.homeScreen, R.id.cameraScreen, R.id.reportsScreen, R.id.uwaziScreen, R.id.micScreen, R.id.formScreen).build();
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.homeScreen, R.id.cameraScreen, R.id.reportsScreen, R.id.uwaziScreen, R.id.micScreen, R.id.formScreen).build();
         NavigationUI.setupWithNavController(btmNavMain, navController);
         navController.addOnDestinationChangedListener((navController1, navDestination, bundle) -> {
             switch (navDestination.getId()) {
@@ -152,12 +149,15 @@ public class MainActivity extends MetadataActivity implements
         }
 
         if (requestCode == C.IMPORT_IMAGE) {
-            Uri image = data.getData();
-            if (image != null) {
-                mediaImportPresenter.importImage(image);
+            if (data != null){
+                Uri image = data.getData();
+                if (image != null) {
+                    mediaImportPresenter.importImage(image);
+                }
             }
             return;
         }
+
 
         if (!isLocationSettingsRequestCode(requestCode) && resultCode != RESULT_OK) {
             return; // user canceled evidence acquiring
@@ -317,7 +317,7 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     public void onCountCollectServersEnded(Long num) {
-        this.numOfCollectServers = num;
+        long numOfCollectServers = num;
         maybeShowFormsMenu(num);
         //homeScreenPresenter.countTUServers();
     }

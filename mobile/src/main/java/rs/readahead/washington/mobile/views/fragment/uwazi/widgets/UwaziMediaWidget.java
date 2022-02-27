@@ -47,7 +47,6 @@ import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface;
 public class UwaziMediaWidget extends UwaziFileBinaryWidget {
     AppCompatButton selectButton;
     ImageButton clearButton;
-    View separator;
     TextView descriptionTextView;
 
     private CollectAttachmentPreviewView attachmentPreview;
@@ -232,7 +231,6 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
         attachmentPreview.showPreview(getFileId());
         attachmentPreview.setEnabled(true);
         attachmentPreview.setVisibility(VISIBLE);
-        separator.setVisibility(VISIBLE);
     }
 
     private void hidePreview() {
