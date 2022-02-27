@@ -141,9 +141,11 @@ public class MainActivity extends MetadataActivity implements
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == C.IMPORT_VIDEO) {
+            if (data != null){
             Uri video = data.getData();
             if (video != null) {
                 mediaImportPresenter.importVideo(video);
+            }
             }
            return;
         }
