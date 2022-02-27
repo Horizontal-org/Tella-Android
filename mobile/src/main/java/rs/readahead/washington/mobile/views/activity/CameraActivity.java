@@ -1,5 +1,7 @@
 package rs.readahead.washington.mobile.views.activity;
 
+import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_FILE_KEY;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.gson.Gson;
 import com.hzontal.tella_vault.VaultFile;
 import com.otaliastudios.cameraview.CameraException;
 import com.otaliastudios.cameraview.CameraListener;
@@ -38,6 +41,7 @@ import com.otaliastudios.cameraview.size.SizeSelector;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -273,7 +277,9 @@ public class CameraActivity extends MetadataActivity implements
         Intent data = new Intent();
         if (intentMode == IntentMode.COLLECT) {
             capturedMediaFile.metadata = vaultFile.metadata;
-            data.putExtra(MEDIA_FILE_KEY, capturedMediaFile);
+            List<VaultFile> list = new ArrayList<>();
+            list.add(capturedMediaFile);
+            data.putExtra(VAULT_FILE_KEY, new Gson().toJson(list));
             setResult(RESULT_OK, data);
             finish();
         } else {
