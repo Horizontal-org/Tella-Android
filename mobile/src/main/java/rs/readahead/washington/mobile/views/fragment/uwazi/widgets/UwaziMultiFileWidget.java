@@ -117,9 +117,16 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
     public String setBinaryData(@NonNull Object data) {
         clearAnswer();
         List<VaultFile> files = null;
+        List<String> result = null;
         if (data instanceof ArrayList) {
-            List<String> result = ((List<String>) data);
-            if (!result.isEmpty()) {
+            result = ((List<String>) data);
+
+        } else {
+            result  = new Gson().fromJson((String) data, new TypeToken<List<String>>() {
+            }.getType());
+        }
+        if (result != null && !result.isEmpty()) {
+
                 String[] ids = Arrays.copyOf(
                         result.toArray(), result.size(),
                         String[].class);
@@ -127,18 +134,15 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
                         .get(ids)
                         .subscribeOn(Schedulers.io())
                         .blockingGet();
+            if(!files.isEmpty()){
+                for (VaultFile file : files) {
+                    FormMediaFile formMediaFile = FormMediaFile.fromMediaFile(file);
+                    formFiles.put(file.name, formMediaFile);
+                }
+                showPreview();
+                return getFilenames().toString();
             }
-        } else {
-            files = new Gson().fromJson((String) data, new TypeToken<List<VaultFile>>() {
-            }.getType());
-        }
-        if (files != null && !files.isEmpty()) {
-            for (VaultFile file : files) {
-                FormMediaFile formMediaFile = FormMediaFile.fromMediaFile(file);
-                formFiles.put(file.name, formMediaFile);
-            }
-            showPreview();
-            return getFilenames().toString();
+
         }
 
         return null;
