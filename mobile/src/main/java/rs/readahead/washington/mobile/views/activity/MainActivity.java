@@ -282,8 +282,8 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     public void onMediaFileImported(VaultFile vaultFile) {
-        List<VaultFile> list = new ArrayList<>();
-        list.add(vaultFile);
+        List<String> list = new ArrayList<>();
+        list.add(vaultFile.id);
         onActivityResult(C.MEDIA_FILE_ID, RESULT_OK, new Intent().putExtra(VAULT_FILE_KEY,new Gson().toJson(list)));
     }
 
