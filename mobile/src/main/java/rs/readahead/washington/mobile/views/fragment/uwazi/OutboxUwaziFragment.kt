@@ -16,6 +16,7 @@ import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.UwaziDraftsAdapter
 import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.UwaziSubmittedAdapter
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UWAZI_INSTANCE
+import rs.readahead.washington.mobile.views.fragment.uwazi.send.SEND_ENTITY
 
 class OutboxUwaziFragment : UwaziListFragment() {
 
@@ -107,9 +108,9 @@ class OutboxUwaziFragment : UwaziListFragment() {
 
     private fun editEntity(entityInstance: UwaziEntityInstance){
         val gsonTemplate = Gson().toJson(entityInstance)
-        bundle.putString(UWAZI_INSTANCE, gsonTemplate)
+        bundle.putString(SEND_ENTITY, gsonTemplate)
         NavHostFragment.findNavController(this)
-            .navigate(R.id.action_uwaziScreen_to_uwaziEntryScreen, bundle)
+            .navigate(R.id.action_uwaziEntryScreen_to_uwaziSendScreen, bundle)
     }
 
     override fun onResume() {

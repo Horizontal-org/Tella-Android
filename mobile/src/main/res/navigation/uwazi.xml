@@ -22,6 +22,12 @@
         </action>
 
         <action
+            android:id="@+id/action_uwaziEntryScreen_to_uwaziSendScreen"
+            app:destination="@id/uwaziSendScreen"
+            >
+        </action>
+
+        <action
             android:id="@+id/action_uwaziScreen_to_uwaziSubmittedPreview"
             app:destination="@id/uwaziSubmittedPreviewScreen"
             >
