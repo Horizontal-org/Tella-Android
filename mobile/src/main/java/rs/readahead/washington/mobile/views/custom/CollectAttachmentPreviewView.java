@@ -108,7 +108,8 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
             //videoInfo.setVisibility(VISIBLE);
         } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
             //thumbGradient.setVisibility(VISIBLE);
-            thumbView.setImageResource(R.drawable.ic_mic_gray);
+            thumbView.setImageResource(R.drawable.ic_baseline_headset_24);
+            thumbView.setScaleType(ImageView.ScaleType.CENTER);
             thumbView.setOnClickListener(v -> showAudioPlayActivity());
 
             showMediaFileInfo();
@@ -128,13 +129,14 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
             videoInfo.setVisibility(GONE);
         } else if (MediaFile.INSTANCE.isTextFileType(vaultFile.mimeType)) {
             //thumbGradient.setVisibility(VISIBLE);
-            thumbView.setImageResource(R.drawable.ic_reports);
+            thumbView.setImageResource(R.drawable.ic_baseline_assignment_24);
+            thumbView.setScaleType(ImageView.ScaleType.CENTER);
             //thumbView.setOnClickListener(v -> showAudioPlayActivity());
 
             showMediaFileInfo();
             audioDuration.setText(Util.getShortVideoDuration((int) (vaultFile.duration / 1000)));
 
-            audioInfo.setVisibility(VISIBLE);
+            audioInfo.setVisibility(GONE);
             videoInfo.setVisibility(GONE);
         }
     }
