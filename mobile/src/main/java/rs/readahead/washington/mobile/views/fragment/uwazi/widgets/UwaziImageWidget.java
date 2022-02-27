@@ -148,7 +148,6 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
             files.add(vaultFile);
 
             activity.startActivityForResult(new Intent(getContext(), AttachmentsActivitySelector.class)
-                            .putExtra(VAULT_FILE_KEY, new Gson().toJson(files))
                             .putExtra(VAULT_FILES_FILTER, FilterType.PHOTO)
                             .putExtra(VAULT_PICKER_SINGLE, true),
                     C.MEDIA_FILE_ID);
