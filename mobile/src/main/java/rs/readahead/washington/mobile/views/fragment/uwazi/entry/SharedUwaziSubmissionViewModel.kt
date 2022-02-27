@@ -169,24 +169,6 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
         return listAttachments.toList()
     }
 
-    fun getFiles(
-        Ids : Array<String>
-    ) {
-        disposables.add(MyApplication.rxVault.get(Ids)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe { }
-            .doFinally { }
-            .subscribe(
-                { mediaFiles: List<VaultFile> ->
-                    _attachedFiles.postValue(mediaFiles)
-                }
-            ) { throwable: Throwable? ->
-                error.postValue(throwable)
-            }
-        )
-    }
-
     override fun onCleared() {
         disposables.dispose()
         super.onCleared()

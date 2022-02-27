@@ -195,10 +195,6 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
                     }
                 }
             })
-
-            attachedFiles.observe(viewLifecycleOwner, {
-                putVaultFileInForm(Gson().toJson(it))
-            })
         }
     }
 

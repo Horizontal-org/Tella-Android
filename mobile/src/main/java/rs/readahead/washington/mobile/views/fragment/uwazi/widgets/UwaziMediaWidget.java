@@ -198,7 +198,7 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
         VaultSheetUtils.showVaultSelectFilesSheet(
                 ((BaseActivity) getContext()).getSupportFragmentManager(),
                 getContext().getString(R.string.Uwazi_WidgetMedia_Take_Video),
-                getContext().getString(R.string.Vault_RecordAudio_SheetAction),
+                null, //getContext().getString(R.string.Vault_RecordAudio_SheetAction),
                 getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Device),
                 getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Tella),
                 getContext().getString(R.string.Uwazi_Widget_Sheet_Description),
