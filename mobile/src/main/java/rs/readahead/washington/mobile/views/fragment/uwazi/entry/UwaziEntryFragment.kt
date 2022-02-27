@@ -122,7 +122,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == C.MEDIA_FILE_ID && resultCode == Activity.RESULT_OK) {
             val vaultFile = data?.getStringExtra(VAULT_FILE_KEY)  ?: ""
-            getUwaziFormFiles(vaultFile)
+            putVaultFileInForm(vaultFile)
         }
 
         if (requestCode == C.SELECTED_LOCATION && resultCode == Activity.RESULT_OK) {
@@ -372,20 +372,6 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         }
         uwaziFormView = UwaziFormView(requireContext(), arr)
         screenView?.addView(uwaziFormView)
-    }
-
-    private fun getUwaziFormFiles(idList: String) {
-        val fileIds: Array<String> = emptyArray()
-
-        val files = Gson().fromJson<java.util.ArrayList<String>>(
-            idList as String?,
-            object : TypeToken<List<String?>?>() {}.type
-        )
-        for (s in files) {
-            fileIds.plus(s)
-        }
-
-        viewModel.getFiles(fileIds)
     }
 
     private fun putVaultFileInForm(vaultFile: String) {

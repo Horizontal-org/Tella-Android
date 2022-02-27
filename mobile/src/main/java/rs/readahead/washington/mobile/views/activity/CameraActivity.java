@@ -277,8 +277,8 @@ public class CameraActivity extends MetadataActivity implements
         Intent data = new Intent();
         if (intentMode == IntentMode.COLLECT) {
             capturedMediaFile.metadata = vaultFile.metadata;
-            List<VaultFile> list = new ArrayList<>();
-            list.add(vaultFile);
+            List<String> list = new ArrayList<>();
+            list.add(vaultFile.id);
             data.putExtra(VAULT_FILE_KEY, new Gson().toJson(list));
             setResult(RESULT_OK, data);
             finish();

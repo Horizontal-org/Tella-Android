@@ -85,13 +85,18 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
             showPreview();
             return getFilename();
         }
-        ArrayList<VaultFile> files = new Gson().fromJson((String) data, new TypeToken<List<VaultFile>>() {}.getType());
+        ArrayList<String> files = new Gson().fromJson((String) data, new TypeToken<List<String>>() {
+        }.getType());
+        if (!files.isEmpty() && !files.get(0).isEmpty()) {
+            VaultFile vaultFile = MyApplication.rxVault
+                    .get(files.get(0))
+                    .subscribeOn(Schedulers.io())
+                    .blockingGet();
 
-        if (!files.isEmpty()){
-            FormMediaFile vaultFile = FormMediaFile.fromMediaFile(files.get(0));
-            setFilename(vaultFile.name);
-            setFile(vaultFile);
-            setFileId(vaultFile.id);
+            FormMediaFile file = FormMediaFile.fromMediaFile(vaultFile);
+            setFilename(file.name);
+            setFile(file);
+            setFileId(file.id);
             showPreview();
             return getFilename();
         }

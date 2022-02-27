@@ -76,26 +76,32 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
 
     @Override
     public String setBinaryData(@NonNull Object data) {
-        if (data instanceof  FormMediaFile){
-             FormMediaFile formMediaFile = (FormMediaFile) data;
-             setFilename(formMediaFile.name);
-             setFile(formMediaFile);
-             setFileId(formMediaFile.id);
-             showPreview();
-             return getFilename();
-         }
-
-        ArrayList<VaultFile> files = new Gson().fromJson((String) data, new TypeToken<List<VaultFile>>() {}.getType());
-        if (!files.isEmpty()){
-            FormMediaFile vaultFile = FormMediaFile.fromMediaFile(files.get(0));
-            setFilename(vaultFile.name);
-            setFile(vaultFile);
-            setFileId(vaultFile.id);
+        if (data instanceof FormMediaFile) {
+            FormMediaFile formMediaFile = (FormMediaFile) data;
+            setFilename(formMediaFile.name);
+            setFile(formMediaFile);
+            setFileId(formMediaFile.id);
             showPreview();
             return getFilename();
         }
 
-       return null;
+        ArrayList<String> files = new Gson().fromJson((String) data, new TypeToken<List<String>>() {
+        }.getType());
+        if (!files.isEmpty() && !files.get(0).isEmpty()) {
+            VaultFile vaultFile = MyApplication.rxVault
+                    .get(files.get(0))
+                    .subscribeOn(Schedulers.io())
+                    .blockingGet();
+
+            FormMediaFile file = FormMediaFile.fromMediaFile(vaultFile);
+            setFilename(file.name);
+            setFile(file);
+            setFileId(file.id);
+            showPreview();
+            return getFilename();
+        }
+
+        return null;
     }
 
     @Override
@@ -173,7 +179,7 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
         MediaFileHandler.startSelectMediaActivity(activity, "image/*", null, C.IMPORT_IMAGE);
     }
 
-    private void showSelectFilesSheet(){
+    private void showSelectFilesSheet() {
         VaultSheetUtils.showVaultSelectFilesSheet(
                 ((BaseActivity) getContext()).getSupportFragmentManager(),
                 getContext().getString(R.string.Uwazi_WidgetMedia_Take_Photo),
@@ -182,10 +188,10 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
                 getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Tella),
                 getContext().getString(R.string.Uwazi_Widget_Sheet_Description),
                 getContext().getString(R.string.Uwazi_WidgetImage_Select_Description_Text),
-                new  VaultSheetUtils.IVaultFilesSelector() {
+                new VaultSheetUtils.IVaultFilesSelector() {
 
                     @Override
-                    public void  importFromVault(){
+                    public void importFromVault() {
                         showAttachmentsFragment();
                     }
 
@@ -210,24 +216,24 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
 
     private void showPreview() {
         selectButton.setVisibility(GONE);
-     //   captureButton.setVisibility(GONE);
-       // importButton.setVisibility(GONE);
+        //   captureButton.setVisibility(GONE);
+        // importButton.setVisibility(GONE);
         clearButton.setVisibility(VISIBLE);
 
         attachmentPreview.showPreview(getFileId());
         attachmentPreview.setEnabled(true);
         attachmentPreview.setVisibility(VISIBLE);
-     //   separator.setVisibility(VISIBLE);
+        //   separator.setVisibility(VISIBLE);
     }
 
     private void hidePreview() {
         selectButton.setVisibility(VISIBLE);
 //        captureButton.setVisibility(VISIBLE);
-       // importButton.setVisibility(VISIBLE);
+        // importButton.setVisibility(VISIBLE);
         clearButton.setVisibility(GONE);
 
         attachmentPreview.setEnabled(false);
         attachmentPreview.setVisibility(GONE);
-       // separator.setVisibility(GONE);
+        // separator.setVisibility(GONE);
     }
 }
