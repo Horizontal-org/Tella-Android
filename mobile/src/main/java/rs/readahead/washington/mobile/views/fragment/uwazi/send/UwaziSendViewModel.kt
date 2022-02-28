@@ -23,6 +23,7 @@ import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
+import rs.readahead.washington.mobile.presentation.uwazi.Attachment
 import rs.readahead.washington.mobile.presentation.uwazi.SendEntityRequest
 
 const val MULTIPART_FORM_DATA = "text/plain"
@@ -75,7 +76,7 @@ class UwaziSendViewModel : ViewModel() {
         disposables.add(
             repository.submitEntity(
                 server = server,
-                entity = createRequestBody(Gson().toJson(entity.createEntityRequest())),
+                entity = createRequestBody(Gson().toJson(entity.createEntityRequest(entity.widgetMediaFiles))),
                 attachments = createListOfAttachments(entity.widgetMediaFiles, _progressCallBack)
             )
                 .subscribeOn(Schedulers.io())
@@ -98,13 +99,24 @@ class UwaziSendViewModel : ViewModel() {
                 })
     }
 
-    private fun UwaziEntityInstance.createEntityRequest() = SendEntityRequest(
-        attachments = emptyList(),
+    private fun UwaziEntityInstance.createEntityRequest(attachments: List<VaultFile>?) = SendEntityRequest(
+        attachments =  emptyList(),
         metadata = metadata,
         template = collectTemplate?.entityRow?._id ?: "",
         title = title,
         type = type
     )
+
+    private fun List<VaultFile?>.toUwziAttachments() =
+            map { vaultFile ->
+                vaultFile?.let {
+                }
+            }
+
+    private fun VaultFile.toAttachment(): Attachment {
+        return Attachment(entity = "NEW_ENTITY", filename = name, mimetype = mimeType, originalname = name, type = "attachment")
+    }
+
 
     private fun createRequestBody(s: String): RequestBody {
         return RequestBody.create(
