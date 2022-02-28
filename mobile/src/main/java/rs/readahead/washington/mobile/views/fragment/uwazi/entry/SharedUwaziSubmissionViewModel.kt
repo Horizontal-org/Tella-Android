@@ -25,6 +25,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
+import rs.readahead.washington.mobile.presentation.uwazi.Attachment
 import rs.readahead.washington.mobile.presentation.uwazi.SendEntityRequest
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.MULTIPART_FORM_DATA
 
@@ -97,7 +98,7 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
         disposables.add(
             repository.submitEntity(
                 server = server,
-                entity = createRequestBody(Gson().toJson(entity.createEntityRequest())),
+                entity = createRequestBody(Gson().toJson(entity.createEntityRequest(entity.widgetMediaFiles))),
                 attachments = createListOfAttachments(entity.widgetMediaFiles, _progressCallBack)
             )
                 .subscribeOn(Schedulers.io())
@@ -121,13 +122,23 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
                 })
     }
 
-    private fun UwaziEntityInstance.createEntityRequest() = SendEntityRequest(
+    private fun UwaziEntityInstance.createEntityRequest(attachments: List<VaultFile>?) = SendEntityRequest(
         attachments = emptyList(),
-        metadata = metadata,
+        metadata = removeAttachments(metadata.toMutableMap()),
         template = collectTemplate?.entityRow?._id ?: "",
         title = title,
         type = type
     )
+
+    private fun removeAttachments(metadata : MutableMap<String,List<Any>>) : Map<String,List<Any>>{
+        metadata.remove("supporting_files")
+        metadata.remove("primary_documents")
+
+        return metadata
+    }
+    private fun VaultFile.toAttachment(): Attachment {
+        return Attachment(entity = "NEW_ENTITY", filename = name, mimetype = mimeType, originalname = name, type = "attachment")
+    }
 
     private fun createRequestBody(s: String): RequestBody {
         return RequestBody.create(
