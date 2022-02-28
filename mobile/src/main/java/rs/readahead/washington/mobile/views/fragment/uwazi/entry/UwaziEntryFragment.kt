@@ -227,7 +227,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         if (answers[UWAZI_TITLE] == null) {
             uwaziFormView.setValidationConstraintText(
                 UWAZI_TITLE,
-                getString(R.string.collect_form_error_response_mandatory)
+                getString(R.string.Uwazi_Entity_Error_Response_Mandatory)
             )
             validationRequired = true
         }
@@ -236,7 +236,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
                 if (property.required && (answers[property.name] == null)) {
                     uwaziFormView.setValidationConstraintText(
                         property.name,
-                        getString(R.string.collect_form_error_response_mandatory)
+                        getString(R.string.Uwazi_Entity_Error_Response_Mandatory)
                     )
                     validationRequired = true
                 }
