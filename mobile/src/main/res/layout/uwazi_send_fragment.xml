@@ -29,7 +29,7 @@
         android:background="?attr/colorPrimary"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:arrowBackIcon="@drawable/ic_back_white"
-        app:startTitle="@string/Uwazi_Send_Header_Title"
+        app:startTitle="@string/Uwazi_Submitted_Entity_Header_Title"
         />
 
     <View

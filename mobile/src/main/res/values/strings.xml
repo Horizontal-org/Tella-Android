@@ -514,7 +514,7 @@
     <string name="Uwazi_EntryInstance_SavedInfo">Entity is saved as draft.</string>
     <string name="Uwazi_Action_EditDraft">Edit draft</string>
     <string name="Uwazi_Action_RemoveDraft">Remove draft</string>
-    <string name="Uwazi_Submitted_Entity_Header_Title">Submitted entity</string>
+    <string name="Uwazi_Submitted_Entity_Header_Title">Summary</string>
     <string name="Uwazi_Action_ViewEntity">View entity</string>
     <string name="Uwazi_Action_DeleteEntity">Delete entity</string>
     <string name="Uwazi_WidgetSubtitle_DateFrom">From</string>
@@ -545,6 +545,10 @@
     <string name="Uwazi_WidgetMedia_Select_From_Tella">Select from Tella files</string>
     <string name="Uwazi_WidgetMedia_Select_From_Device">Select from your device</string>
     <string name="Uwazi_Widget_Sheet_Description">Choose how you want to add files</string>
+    <string name="Uwazi_Entity_Error_Response_Mandatory">This field is mandatory.</string>
+    <string name="Uwazi_Server_Title">Server : </string>
+    <string name="Uwazi_Template_Title">Template : </string>
+
     <plurals name="Uwazi_MiltiFileWidget_FilesAttached">
         <item quantity="one">%1$d file attached</item>
         <item quantity="other">%1$d files attached</item>

@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
 import com.bumptech.glide.Glide;
@@ -55,7 +56,21 @@ public class UwaziFormEndView extends FrameLayout {
         MediaFileHandler mediaFileHandler = new MediaFileHandler();
         VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
         glide = Glide.with(getContext()).using(glideLoader);
-        //subTitleView = findViewById(R.id.subtitle);
+    }
+
+    public UwaziFormEndView(Context context,String title) {
+        super(context);
+        inflate(context, R.layout.uwazi_form_end_view, this);
+
+        this.title = title;
+
+        titleView = findViewById(R.id.title);
+
+        titleView.setText(title);
+
+        MediaFileHandler mediaFileHandler = new MediaFileHandler();
+        VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
+        glide = Glide.with(getContext()).using(glideLoader);
     }
 
     public void setInstance(@NonNull UwaziEntityInstance instance, boolean offline, boolean previewUploaded) {

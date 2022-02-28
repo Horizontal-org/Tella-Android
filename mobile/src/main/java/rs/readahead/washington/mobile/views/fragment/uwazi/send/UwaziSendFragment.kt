@@ -125,10 +125,14 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
             return
         }
 
-        endView = UwaziFormEndView(activity, R.string.Uwazi_Send_Entity_Title)
+        endView = UwaziFormEndView(activity, getFormattedFormTitle(entityInstance!!))
         endView.setInstance(entityInstance!!, offline, false)
         binding.endViewContainer.removeAllViews()
         binding.endViewContainer.addView(endView)
       //  updateFormSubmitButton(false)
+    }
+
+    private fun getFormattedFormTitle(entityInstance : UwaziEntityInstance) : String {
+        return getString(R.string.Uwazi_Server_Title) +" "+ entityInstance.collectTemplate?.serverName + "\n"+getString(R.string.Uwazi_Template_Title) +" "+ entityInstance.collectTemplate?.entityRow?.translatedName
     }
 }
