@@ -25,7 +25,7 @@ class UwaziTemplatesAdapter : RecyclerView.Adapter<UwaziTemplatesAdapter.EntityV
     inner class EntityViewHolder(val view : View) : RecyclerView.ViewHolder(view) {
         fun bind(entity: ViewEntityTemplateItem) {
             view.apply{
-                view.findViewById<TextView>(R.id.name).text = entity.templateName
+                view.findViewById<TextView>(R.id.name).text = entity.translatedTemplateName
                 view.findViewById<TextView>(R.id.organization).text = entity.serverName
 
             }

@@ -37,7 +37,7 @@ class UwaziSubmittedAdapter : RecyclerView.Adapter<UwaziSubmittedAdapter.EntityV
         fun bind(entityRow: ViewEntityInstanceItem) {
             view.apply {
                 submittedItem.setName(entityRow.instanceName)
-                submittedItem.setOrganization(entityRow.serverName)
+                submittedItem.setOrganization(entityRow.translatedTemplateName)
                 if (entityRow.status == UwaziEntityStatus.SUBMITTED) {
                     setDates(entityRow.updated)
                     setSubmittedIcon()

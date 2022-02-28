@@ -7,6 +7,7 @@ data class ViewEntityInstanceItem (
     val serverId: Long?,
     val instanceName: String,
     val serverName: String = "",
+    val translatedTemplateName : String,
     val updated : Long,
     val status : UwaziEntityStatus,
     val onMoreClicked: () -> Unit,
