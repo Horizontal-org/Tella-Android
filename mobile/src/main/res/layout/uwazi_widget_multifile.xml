@@ -23,6 +23,7 @@
         android:textColor="@color/wa_white_80" />
 
     <RelativeLayout
+        android:id="@+id/infoFilePanel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

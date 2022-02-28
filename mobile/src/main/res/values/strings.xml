@@ -546,7 +546,7 @@
     <string name="Uwazi_WidgetMedia_Select_From_Device">Select from your device</string>
     <string name="Uwazi_Widget_Sheet_Description">Choose how you want to add files</string>
     <plurals name="Uwazi_MiltiFileWidget_FilesAttached">
-        <item quantity="one">File attached</item>
+        <item quantity="one">%1$d file attached</item>
         <item quantity="other">%1$d files attached</item>
     </plurals>
     <string name="Uwazi_MiltiFileWidget_SelectFiles">Select files</string>
