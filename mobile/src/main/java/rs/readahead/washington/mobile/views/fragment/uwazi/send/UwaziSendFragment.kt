@@ -4,22 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.UwaziSendFragmentBinding
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
-import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.SharedUwaziSubmissionViewModel
-import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.OUTBOX_LIST_PAGE_INDEX
-import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziFormEndView
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
 

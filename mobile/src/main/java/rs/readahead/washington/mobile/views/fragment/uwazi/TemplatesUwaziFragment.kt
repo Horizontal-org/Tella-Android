@@ -47,7 +47,7 @@ class TemplatesUwaziFragment : UwaziListFragment() {
         with(viewModel){
 
             templates.observe(viewLifecycleOwner,{
-                if (it.isEmpty()){
+                if (it.size == 1){
                     binding?.textViewEmpty!!.isVisible = true
                     binding!!.templatesRecyclerView.isVisible = false
                 }else{

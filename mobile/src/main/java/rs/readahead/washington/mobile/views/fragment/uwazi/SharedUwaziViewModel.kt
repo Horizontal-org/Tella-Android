@@ -13,21 +13,18 @@ import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.data.database.UwaziDataSource
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
-import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.domain.entity.uwazi.EntityInstanceBundle
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
-import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
 import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.ViewEntityInstanceItem
-import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.ViewEntityTemplateItem
 import rs.readahead.washington.mobile.views.fragment.uwazi.mappers.toViewEntityInstanceItem
 import rs.readahead.washington.mobile.views.fragment.uwazi.mappers.toViewEntityTemplateItem
 
 class SharedUwaziViewModel : ViewModel() {
 
     var error = MutableLiveData<Throwable>()
-    private val _templates = MutableLiveData<List<ViewEntityTemplateItem>>()
-    val templates: LiveData<List<ViewEntityTemplateItem>> get() = _templates
+    private val _templates = MutableLiveData<List<Any>>()
+    val templates: LiveData<List<Any>> get() = _templates
     private val _progress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean> get() = _progress
     private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
@@ -66,7 +63,8 @@ class SharedUwaziViewModel : ViewModel() {
             .doFinally { _progress.postValue(false) }
             .subscribe(
                 { templates: List<CollectTemplate> ->
-                    val resultList = mutableListOf<ViewEntityTemplateItem>()
+                    val resultList = mutableListOf<Any>()
+                    resultList.add(0,"These are Uwazi templates you can fill out.")
                     templates.map {
                         resultList.add(it.toViewEntityTemplateItem(onMoreClicked = {
                             onMoreClicked(

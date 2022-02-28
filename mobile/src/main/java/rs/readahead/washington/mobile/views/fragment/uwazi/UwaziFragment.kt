@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.view.get
 import com.google.android.material.tabs.TabLayoutMediator
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentUwaziBinding

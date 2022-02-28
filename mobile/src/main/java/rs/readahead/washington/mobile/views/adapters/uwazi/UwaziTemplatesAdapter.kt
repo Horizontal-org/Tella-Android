@@ -12,24 +12,37 @@ import androidx.recyclerview.widget.RecyclerView
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.ViewEntityTemplateItem
 
-class UwaziTemplatesAdapter : RecyclerView.Adapter<UwaziTemplatesAdapter.EntityViewHolder>() {
+const val VIEW_TYPE_HEADER = 0
+const val VIEW_TYPE_LIST = 1
+class UwaziTemplatesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var templates: MutableList<ViewEntityTemplateItem> = ArrayList()
-
+    private var templates: MutableList<Any> = ArrayList()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setEntityTemplates(templates : List<ViewEntityTemplateItem>){
+    fun setEntityTemplates(templates : List<Any>){
         this.templates = templates.toMutableList()
         notifyDataSetChanged()
     }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EntityViewHolder {
-        return EntityViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return if (viewType == VIEW_TYPE_HEADER ) EntityMessageViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.templates_uwazi_row, parent, false))
+                .inflate(R.layout.templates_uwazi_message_row, parent, false))
+        else
+            EntityViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.templates_uwazi_row, parent, false))
     }
 
-    override fun onBindViewHolder(holder: EntityViewHolder, position: Int) {
-        holder.bind(entityRow = templates[position])
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder , position: Int) {
+        if (position == 0){
+            (holder as EntityMessageViewHolder ).bind(message = templates[position] as String)
+        }else{
+            (holder as EntityViewHolder ).bind(entityRow = templates[position] as ViewEntityTemplateItem)
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+      return if (position == 0) VIEW_TYPE_HEADER else VIEW_TYPE_LIST
     }
 
     inner class EntityViewHolder(val view : View) : RecyclerView.ViewHolder(view) {
@@ -50,6 +63,14 @@ class UwaziTemplatesAdapter : RecyclerView.Adapter<UwaziTemplatesAdapter.EntityV
                     setOnClickListener { entityRow.onFavoriteClicked() }
                 }
                 setOnClickListener { entityRow.onOpenEntityClicked() }
+            }
+        }
+    }
+
+    inner class EntityMessageViewHolder(val view : View) : RecyclerView.ViewHolder(view) {
+        fun bind(message: String) {
+            view.apply{
+                view.findViewById<TextView>(R.id.message_textView).text = message
             }
         }
     }

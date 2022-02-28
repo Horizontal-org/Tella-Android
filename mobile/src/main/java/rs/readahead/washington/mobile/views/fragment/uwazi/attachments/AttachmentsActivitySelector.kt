@@ -224,8 +224,6 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
     }
 
     private fun setResultAndFinish() {
-       val ids =  attachmentsAdapter.selectedMediaFiles.map { it.id }
-
         setResult(
             Activity.RESULT_OK,
             Intent().putExtra(VAULT_FILE_KEY, Gson().toJson(attachmentsAdapter.selectedMediaFiles.map { it.id }))
