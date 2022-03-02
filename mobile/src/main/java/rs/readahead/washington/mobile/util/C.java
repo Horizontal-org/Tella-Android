@@ -28,6 +28,7 @@ public class C {
     public static final int GPS_PROVIDER                = 10020;
     public static final int IMPORT_MULTIPLE_FILES       = 10021;
     public static final int RECORD_REQUEST_CODE         = 10022;
+    public static final int IMPORT_FILE                 = 10023;
 
     // "global" intent keys
     public static final String CAPTURED_MEDIA_FILE_ID = "cmfi";

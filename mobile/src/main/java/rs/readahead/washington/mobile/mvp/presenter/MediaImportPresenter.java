@@ -76,7 +76,7 @@ public class MediaImportPresenter implements IMediaImportPresenterContract.IPres
 
     @Override
     public void importFile(final Uri uri) {
-        disposables.add(Observable.fromCallable(() -> MediaFileHandler.importOthersUri(view.getContext(), uri,null))
+        disposables.add(Observable.fromCallable(() -> MediaFileHandler.importVaultFileUri(view.getContext(), uri,null))
                 .subscribeOn(Schedulers.computation())
                 .doOnSubscribe(disposable -> view.onImportStarted())
                 .observeOn(AndroidSchedulers.mainThread())

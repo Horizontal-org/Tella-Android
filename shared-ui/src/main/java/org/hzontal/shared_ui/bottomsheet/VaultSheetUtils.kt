@@ -415,10 +415,14 @@ object VaultSheetUtils {
                     title.text = titleText
                     descriptionTV.text = descriptionText
                     //Go to camera action
-                    cameraActionTV.text = cameraLabel
-                    cameraActionTV.setOnClickListener {
-                        vaultManageFilesSheet.dismiss()
-                        action.goToCamera()
+                    if (cameraLabel != null) {
+                        cameraActionTV.text = cameraLabel
+                        cameraActionTV.setOnClickListener {
+                            vaultManageFilesSheet.dismiss()
+                            action.goToCamera()
+                        }
+                    } else {
+                        cameraActionTV.visibility = View.GONE
                     }
                     //Go to recorder action
                     if (recordLabel != null) {

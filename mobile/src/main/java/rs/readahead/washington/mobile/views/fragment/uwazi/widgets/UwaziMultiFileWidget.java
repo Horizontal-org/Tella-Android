@@ -24,6 +24,8 @@ import com.google.gson.reflect.TypeToken;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
 
+import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -34,10 +36,12 @@ import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
+import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.views.activity.CameraActivity;
+import rs.readahead.washington.mobile.views.base_ui.BaseActivity;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView;
 import rs.readahead.washington.mobile.views.custom.PanelToggleButton;
@@ -115,19 +119,18 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
         filesToggle.setOnStateChangedListener(open -> maybeShowAdvancedPanel());
         numberOfFiles = view.findViewById(R.id.numOfFiles);
         addFiles = view.findViewById(R.id.addText);
-        addFiles.setOnClickListener(v -> showAttachmentsFragment());
+        addFiles.setOnClickListener(v -> showSelectFilesSheet()); //showAttachmentsFragment()
     }
 
     @Override
     public String setBinaryData(@NonNull Object data) {
-        clearAnswer();
-        List<VaultFile> files = null;
-        List<String> result = null;
+        List<VaultFile> files;
+        List<String> result;
         if (data instanceof ArrayList) {
             result = ((List<String>) data);
 
         } else {
-            result  = new Gson().fromJson((String) data, new TypeToken<List<String>>() {
+            result = new Gson().fromJson((String) data, new TypeToken<List<String>>() {
             }.getType());
         }
         if (result != null && !result.isEmpty()) {
@@ -139,15 +142,16 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
                     .get(ids)
                     .subscribeOn(Schedulers.io())
                     .blockingGet();
-            if(!files.isEmpty()){
+            if (!files.isEmpty()) {
                 for (VaultFile file : files) {
                     FormMediaFile formMediaFile = FormMediaFile.fromMediaFile(file);
-                    formFiles.put(file.name, formMediaFile);
+                    if (!formFiles.containsKey(file.name)) {
+                        formFiles.put(file.name, formMediaFile);
+                    }
                 }
                 showPreview();
                 return getFilenames().toString();
             }
-
         }
 
         return null;
@@ -179,12 +183,11 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
 
             activity.startActivityForResult(new Intent(getContext(), CameraActivity.class)
                             .putExtra(CameraActivity.INTENT_MODE, CameraActivity.IntentMode.COLLECT.name())
-                            .putExtra(CameraActivity.CAMERA_MODE, CameraActivity.CameraMode.PHOTO.name()),
+                    ,  //.putExtra(CameraActivity.CAMERA_MODE, CameraActivity.CameraMode.PHOTO.name())
                     C.MEDIA_FILE_ID
             );
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
-            FormController.getActive().setIndexWaitingForData(null);
         }
     }
 
@@ -215,17 +218,96 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
         }
     }
 
+    private void showSelectFilesSheet() {
+        if (isPdf){
+        VaultSheetUtils.showVaultSelectFilesSheet(
+                ((BaseActivity) getContext()).getSupportFragmentManager(),
+                null,
+                null,
+                getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Device),
+                getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Tella),
+                getContext().getString(R.string.Uwazi_MiltiFileWidget_ChooseHowToAddPdfFiles),
+                getContext().getString(R.string.Uwazi_MiltiFileWidget_SelectPdfFiles),
+                new VaultSheetUtils.IVaultFilesSelector() {
+
+                    @Override
+                    public void importFromVault() {
+                        showAttachmentsFragment();
+                    }
+
+                    @Override
+                    public void goToRecorder() {
+
+                    }
+
+                    @Override
+                    public void goToCamera() {
+                        showCameraActivity();
+                    }
+
+                    @Override
+                    public void importFromDevice() {
+                        importMedia();
+                    }
+                }
+        );
+        } else {
+            VaultSheetUtils.showVaultSelectFilesSheet(
+                    ((BaseActivity) getContext()).getSupportFragmentManager(),
+                    getContext().getString(R.string.Uwazi_WidgetMedia_Take_Video),
+                    null, //getContext().getString(R.string.Vault_RecordAudio_SheetAction),
+                    getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Device),
+                    getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Tella),
+                    getContext().getString(R.string.Uwazi_Widget_Sheet_Description),
+                    getContext().getString(R.string.Uwazi_WidgetMedia_Select_Text),
+                    new VaultSheetUtils.IVaultFilesSelector() {
+
+                        @Override
+                        public void importFromVault() {
+                            showAttachmentsFragment();
+                        }
+
+                        @Override
+                        public void goToRecorder() {
+
+                        }
+
+                        @Override
+                        public void goToCamera() {
+                            showCameraActivity();
+                        }
+
+                        @Override
+                        public void importFromDevice() {
+                            importMedia();
+                        }
+                    }
+            );
+        }
+    }
+
+    public void showAudioRecorderActivity() {
+
+    }
+
+    public void importMedia() {
+        Activity activity = (Activity) getContext();
+        waitingForAData = true;
+        MediaFileHandler.startSelectMediaActivity(activity, isPdf ? "application/pdf" : "*/*", null, C.IMPORT_FILE);
+    }
+
     public Collection<FormMediaFile> getFiles() {
         return formFiles.values();
     }
 
     private void showPreview() {
+        filesPanel.removeAllViews();
         infoFilePanel.setVisibility(VISIBLE);
         clearButton.setVisibility(VISIBLE);
         for (FormMediaFile file : formFiles.values()) {
             CollectAttachmentPreviewView previewView = new CollectAttachmentPreviewView(context, null, 0);
-            filesPanel.addView(previewView);
             previewView.showPreview(file.id);
+            filesPanel.addView(previewView);
         }
         numberOfFiles.setText(context.getResources().getQuantityString(R.plurals.Uwazi_MiltiFileWidget_FilesAttached, formFiles.size(), formFiles.size()));
         addFiles.setText(R.string.Uwazi_MiltiFileWidget_AddMoreFiles);

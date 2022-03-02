@@ -557,6 +557,7 @@
     <string name="Uwazi_MiltiFileWidget_SelectPdfFiles">Select PDF files</string>
     <string name="Uwazi_MiltiFileWidget_PrimaryDocuments">Primary documents</string>
     <string name="Uwazi_MiltiFileWidget_AttachMenyPdfFiles">Attach as many PDF files as you wish</string>
+    <string name="Uwazi_MiltiFileWidget_ChooseHowToAddPdfFiles">Choose how you want to add PDF files</string>
     <string name="Uwazi_MiltiFileWidget_SupportingFiles">Supporting files</string>
 
     <string-array name="Uwazi_Language_Array">

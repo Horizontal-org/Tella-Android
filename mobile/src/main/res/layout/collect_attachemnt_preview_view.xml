@@ -29,7 +29,7 @@
                 android:adjustViewBounds="true"
                 android:clickable="true"
                 android:focusable="true"
-                android:scaleType="centerCrop"
+                android:scaleType="centerInside"
                 android:background="@color/light_purple"
                 tools:ignore="ContentDescription" />
         </androidx.cardview.widget.CardView>

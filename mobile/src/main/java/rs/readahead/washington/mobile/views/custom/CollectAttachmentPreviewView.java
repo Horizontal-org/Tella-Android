@@ -99,6 +99,7 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
             //thumbGradient.setVisibility(GONE);
             thumbView.setId(QuestionWidget.newUniqueId());
             thumbView.setOnClickListener(v -> showVideoViewerActivity());
+            thumbView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
             showMediaFileInfo();
             loadThumbnail();
@@ -121,8 +122,8 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
            // thumbGradient.setVisibility(GONE);
             thumbView.setId(QuestionWidget.newUniqueId());
             thumbView.setOnClickListener(v -> showPhotoViewerActivity());
-
-            loadThumbnail();
+            thumbView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+           loadThumbnail();
            showMediaFileInfo();
 
             audioInfo.setVisibility(GONE);

@@ -160,6 +160,15 @@ public class MainActivity extends MetadataActivity implements
             return;
         }
 
+        if (requestCode == C.IMPORT_FILE) {
+            if (data != null){
+                Uri file = data.getData();
+                if (file != null) {
+                    mediaImportPresenter.importFile(file);
+                }
+            }
+            return;
+        }
 
         if (!isLocationSettingsRequestCode(requestCode) && resultCode != RESULT_OK) {
             return; // user canceled evidence acquiring
