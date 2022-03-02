@@ -23,4 +23,18 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/content_location_map" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_button"
+        app:backgroundTint="@color/dark_orange"
+        app:fabCustomSize="50dp"
+        app:layout_anchorGravity="center"
+        app:maxImageSize="30dp"
+        android:layout_marginBottom="30dp"
+        app:srcCompat="@drawable/ic_location_searching_white"
+        app:useCompatPadding="true"
+        tools:ignore="VectorDrawableCompat"
+        style="@style/Main_Floating_Action_Button_Style"
+        android:contentDescription="@string/verification.info_field_location" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

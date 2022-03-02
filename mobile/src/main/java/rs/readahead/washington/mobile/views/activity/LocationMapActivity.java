@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hzontal.tella_vault.MyLocation;
 
 import butterknife.BindView;
@@ -47,6 +48,8 @@ public class LocationMapActivity extends MetadataActivity implements
     ProgressBar progressBar;
     @BindView(R.id.info)
     TextView hint;
+    @BindView(R.id.fab_button)
+    FloatingActionButton faButton;
 
     @Nullable
     private MyLocation myLocation;
@@ -78,6 +81,15 @@ public class LocationMapActivity extends MetadataActivity implements
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        faButton.setOnClickListener(view -> {
+                    if (locationGettingPresenter.isGPSProviderEnabled()) {
+                        startGettingLocation();
+                    } else {
+                        manageLocationSettings(C.GPS_PROVIDER, this::startGettingLocation);
+                    }
+                }
+        );
     }
 
     @Override
@@ -165,7 +177,7 @@ public class LocationMapActivity extends MetadataActivity implements
 
     @Override
     public void onGPSProviderDisabled() {
-        showGpsDisabledDialog(C.GPS_PROVIDER, this::initMapLocationAndCamera);
+
     }
 
     @Override
@@ -207,6 +219,19 @@ public class LocationMapActivity extends MetadataActivity implements
 
         if (myLocation != null) {
             showMyLocation(myLocation);
+        }
+    }
+
+    private void startGettingLocation() {
+        locationGettingPresenter.startGettingLocation(!readOnly);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == C.GPS_PROVIDER && resultCode == RESULT_OK) {
+                startGettingLocation();
         }
     }
 
