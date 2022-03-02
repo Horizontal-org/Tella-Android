@@ -167,7 +167,7 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
 
             activity.startActivityForResult(new Intent(getContext(), AttachmentsActivitySelector.class)
                             .putExtra(VAULT_FILE_KEY, new Gson().toJson(ids))
-                            .putExtra(VAULT_FILES_FILTER, isPdf ? FilterType.DOCUMENTS : FilterType.ALL_WITHOUT_DIRECTORY)
+                            .putExtra(VAULT_FILES_FILTER, isPdf ? FilterType.PDF : FilterType.ALL_WITHOUT_DIRECTORY)
                             .putExtra(VAULT_PICKER_SINGLE, false),
                     C.MEDIA_FILE_ID);
 
@@ -254,12 +254,12 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
         } else {
             VaultSheetUtils.showVaultSelectFilesSheet(
                     ((BaseActivity) getContext()).getSupportFragmentManager(),
-                    getContext().getString(R.string.Uwazi_WidgetMedia_Take_Video),
+                    getContext().getString(R.string.Uwazi_WidgetMedia_Take_Photo),
                     null, //getContext().getString(R.string.Vault_RecordAudio_SheetAction),
                     getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Device),
                     getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Tella),
-                    getContext().getString(R.string.Uwazi_Widget_Sheet_Description),
-                    getContext().getString(R.string.Uwazi_WidgetMedia_Select_Text),
+                    getContext().getString(R.string.Uwazi_MiltiFileWidget_ChooseHowToAddFiles),
+                    getContext().getString(R.string.Uwazi_MiltiFileWidget_SelectFiles),
                     new VaultSheetUtils.IVaultFilesSelector() {
 
                         @Override

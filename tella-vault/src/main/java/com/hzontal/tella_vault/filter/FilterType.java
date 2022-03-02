@@ -9,5 +9,6 @@ public enum FilterType {
             DOCUMENTS,
             OTHERS,
             PHOTO_VIDEO,
-            AUDIO_VIDEO
+            AUDIO_VIDEO,
+            PDF
         }

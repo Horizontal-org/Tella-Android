@@ -302,6 +302,8 @@ public class VaultDataSource implements IVaultDatabase {
         switch (filter) {
             case AUDIO:
                 return cn(D.C_MIME_TYPE) + " LIKE '" + "audio/%" + "'";
+            case PDF:
+                return cn(D.C_MIME_TYPE) + " LIKE '" + "application/pdf" + "'";
             case VIDEO:
                 return cn(D.C_MIME_TYPE) + " LIKE '" + "video/%" + "'";
             case PHOTO:

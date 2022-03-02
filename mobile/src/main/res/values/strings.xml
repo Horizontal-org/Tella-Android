@@ -563,6 +563,7 @@
  Tap on an entity to continue working on it.</string>
     <string name="Uwazi_Outbox_Header_Text">These are entities currently being submitted.</string>
     <string name="Uwazi_Submitted_Header_Text">These are entities that you have submitted successfully.</string>
+    <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">Choose how you want to add files</string>
 
     <string-array name="Uwazi_Language_Array">
         <item>English</item>
