@@ -167,7 +167,7 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
 
             activity.startActivityForResult(new Intent(getContext(), AttachmentsActivitySelector.class)
                             .putExtra(VAULT_FILE_KEY, new Gson().toJson(ids))
-                            .putExtra(VAULT_FILES_FILTER, isPdf ? FilterType.DOCUMENTS : FilterType.ALL)
+                            .putExtra(VAULT_FILES_FILTER, isPdf ? FilterType.DOCUMENTS : FilterType.ALL_WITHOUT_DIRECTORY)
                             .putExtra(VAULT_PICKER_SINGLE, false),
                     C.MEDIA_FILE_ID);
 
