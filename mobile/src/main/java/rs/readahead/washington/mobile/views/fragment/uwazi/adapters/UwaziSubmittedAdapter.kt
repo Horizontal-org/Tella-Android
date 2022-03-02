@@ -2,42 +2,59 @@ package rs.readahead.washington.mobile.views.fragment.uwazi.adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import org.hzontal.shared_ui.submission.SubmittedItem
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.SubmittedCollectFormInstanceRowBinding
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
 import rs.readahead.washington.mobile.util.Util
 import rs.readahead.washington.mobile.util.ViewUtil
+import rs.readahead.washington.mobile.views.adapters.uwazi.VIEW_TYPE_HEADER
+import rs.readahead.washington.mobile.views.adapters.uwazi.VIEW_TYPE_LIST
 
-class UwaziSubmittedAdapter : RecyclerView.Adapter<UwaziSubmittedAdapter.EntityViewHolder>() {
+class UwaziSubmittedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var submitted: MutableList<ViewEntityInstanceItem> = ArrayList()
+    private var submitted: MutableList<Any> = ArrayList()
 
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setEntities(drafts: List<ViewEntityInstanceItem>) {
-        this.submitted = drafts.toMutableList()
+    fun setEntities(submitted: List<Any>) {
+        this.submitted = submitted.toMutableList()
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EntityViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = SubmittedCollectFormInstanceRowBinding.inflate(layoutInflater, parent, false)
-        return EntityViewHolder(binding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return if (viewType == VIEW_TYPE_HEADER) {
+            EntityMessageViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.templates_uwazi_message_row, parent, false)
+            )
+        } else {
+            EntityViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.submitted_collect_form_instance_row, parent, false)
+            )
+        }
     }
 
-    override fun onBindViewHolder(holder: EntityViewHolder, position: Int) {
-        holder.bind(entityRow = submitted[position])
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (position == 0) {
+            (holder as EntityMessageViewHolder).bind(message = submitted[position] as String)
+        } else {
+            (holder as EntityViewHolder).bind(entityRow = submitted[position] as ViewEntityInstanceItem)
+        }
     }
 
-    inner class EntityViewHolder(val view: SubmittedCollectFormInstanceRowBinding) :
-        RecyclerView.ViewHolder(view.root) {
+    inner class EntityViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+        private lateinit var submittedItem: SubmittedItem
 
         fun bind(entityRow: ViewEntityInstanceItem) {
-            view.apply {
-                submittedItem.setName(entityRow.instanceName)
-                submittedItem.setOrganization(entityRow.translatedTemplateName)
+            submittedItem = view.findViewById(R.id.submittedItem)
+            submittedItem.apply {
+                setName(entityRow.instanceName)
+                 setOrganization(entityRow.translatedTemplateName)
                 if (entityRow.status == UwaziEntityStatus.SUBMITTED) {
                     setDates(entityRow.updated)
                     setSubmittedIcon()
@@ -46,59 +63,63 @@ class UwaziSubmittedAdapter : RecyclerView.Adapter<UwaziSubmittedAdapter.EntityV
                 } else if (entityRow.status == UwaziEntityStatus.FINALIZED || entityRow.status == UwaziEntityStatus.SUBMISSION_PENDING || entityRow.status == UwaziEntityStatus.SUBMISSION_PARTIAL_PARTS) {
                     setPendingIcon()
                 }
-                submittedItem.setOnClickListener { entityRow.onOpenClicked() }
-                submittedItem.popClickListener = { entityRow.onMoreClicked() }
+                setOnClickListener { entityRow.onOpenClicked() }
+               popClickListener = { entityRow.onMoreClicked() }
 
             }
         }
 
         private fun setDates(timestamp: Long) {
-            view.submittedItem.setUpdated(
+            submittedItem.setUpdated(
                 Util.getElapsedTimeFromTimestamp(
                     timestamp,
-                    view.submittedItem.context
+                    submittedItem.context
                 )
             )
         }
 
         private fun setSubmittedIcon() {
             val drawable = ViewUtil.getTintedDrawable(
-                view.submittedItem.context,
+                submittedItem.context,
                 R.drawable.ic_check_circle,
                 R.color.wa_green
             )
             if (drawable != null) {
-                view.submittedItem.setIconDrawable(drawable)
+                submittedItem.setIconDrawable(drawable)
             }
         }
 
         private fun setSubmitErrorIcon() {
             val drawable =
                 ViewUtil.getTintedDrawable(
-                    view.submittedItem.context,
+                   submittedItem.context,
                     R.drawable.ic_error,
                     R.color.wa_red
                 )
 
             if (drawable != null) {
-                view.submittedItem.setIconDrawable(drawable)
+                submittedItem.setIconDrawable(drawable)
             }
         }
 
         private fun setPendingIcon() {
             val drawable = ViewUtil.getTintedDrawable(
-                view.submittedItem.context,
+                submittedItem.context,
                 R.drawable.ic_watch_later_black_24dp,
                 R.color.dark_orange
             )
             if (drawable != null) {
-                view.submittedItem.setIconDrawable(drawable)
+                submittedItem.setIconDrawable(drawable)
             }
         }
     }
 
 
     override fun getItemCount() = submitted.size
+
+    override fun getItemViewType(position: Int): Int {
+        return if (position == 0) VIEW_TYPE_HEADER else VIEW_TYPE_LIST
+    }
 
 
 }

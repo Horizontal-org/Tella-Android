@@ -35,7 +35,7 @@ class UwaziTemplatesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder , position: Int) {
         if (position == 0){
-            (holder as EntityMessageViewHolder ).bind(message = templates[position] as String)
+            (holder as EntityMessageViewHolder ).bind(message = templates[0] as String)
         }else{
             (holder as EntityViewHolder ).bind(entityRow = templates[position] as ViewEntityTemplateItem)
         }

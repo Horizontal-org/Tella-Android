@@ -51,6 +51,7 @@ class OutboxUwaziFragment : UwaziListFragment() {
                     binding?.outboxRecyclerView?.isVisible = false
                     outboxAdapter.setEntities(emptyList())
                 } else {
+                    (it as ArrayList).add(0,getString(R.string.Uwazi_Outbox_Header_Text))
                     binding?.textViewEmpty?.isVisible = false
                     binding?.outboxRecyclerView?.isVisible = true
                     outboxAdapter.setEntities(it)
@@ -123,11 +124,5 @@ class OutboxUwaziFragment : UwaziListFragment() {
             layoutManager = LinearLayoutManager(activity)
             adapter = outboxAdapter
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding?.outboxRecyclerView?.adapter = null
-        binding = null
     }
 }

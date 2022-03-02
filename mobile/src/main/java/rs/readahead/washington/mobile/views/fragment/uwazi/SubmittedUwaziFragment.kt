@@ -1,9 +1,7 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
@@ -13,31 +11,23 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentSubmittedUwaziBinding
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
-import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.UwaziDraftsAdapter
+import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.UwaziSubmittedAdapter
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.SEND_ENTITY
 
-class SubmittedUwaziFragment : UwaziListFragment() {
-
-    override fun getFormListType(): Type {
-        return Type.SUBMITTED
-    }
+class SubmittedUwaziFragment : BaseBindingFragment<FragmentSubmittedUwaziBinding>(
+    FragmentSubmittedUwaziBinding::inflate) {
 
     private val viewModel: SharedUwaziViewModel by viewModels()
     private val adapterSubmitted: UwaziSubmittedAdapter by lazy { UwaziSubmittedAdapter() }
-    private var binding: FragmentSubmittedUwaziBinding? = null
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentSubmittedUwaziBinding.inflate(inflater, container, false)
-        return binding?.root!!
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
+
+        if (!hasInitializedRootView) {
+            hasInitializedRootView = true
+            initView()
+        }
         initObservers()
     }
 
@@ -47,7 +37,9 @@ class SubmittedUwaziFragment : UwaziListFragment() {
             submittedInstances.observe(viewLifecycleOwner, {
                 if (it.isEmpty()) {
                     binding?.textViewEmptyOutbox?.isVisible = true
+                    binding?.submittedRecyclerView?.isVisible = false
                 } else {
+                    (it as ArrayList).add(0,getString(R.string.Uwazi_Submitted_Header_Text))
                     binding?.textViewEmptyOutbox?.isVisible = false
                     adapterSubmitted.setEntities(it)
                 }
@@ -114,9 +106,4 @@ class SubmittedUwaziFragment : UwaziListFragment() {
             .navigate(R.id.action_uwaziScreen_to_uwaziSubmittedPreview, bundle)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding?.submittedRecyclerView?.adapter = null
-        binding = null
-    }
 }

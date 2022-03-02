@@ -13,33 +13,27 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionSeleceted
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showEditDeleteMenuSheet
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.databinding.FragmentDraftsUwaziBinding
 import rs.readahead.washington.mobile.databinding.FragmentTemplatesUwaziBinding
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.views.adapters.uwazi.UwaziTemplatesAdapter
+import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.COLLECT_TEMPLATE
 
 
-class TemplatesUwaziFragment : UwaziListFragment() {
+class TemplatesUwaziFragment : BaseBindingFragment<FragmentTemplatesUwaziBinding>(
+    FragmentTemplatesUwaziBinding::inflate) {
     private val viewModel : SharedUwaziViewModel by viewModels()
     private val uwaziTemplatesAdapter : UwaziTemplatesAdapter by lazy { UwaziTemplatesAdapter() }
-    private  var binding: FragmentTemplatesUwaziBinding? = null
     private val bundle by lazy { Bundle() }
 
-    override fun getFormListType(): Type {
-        return Type.TEMPLATES
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentTemplatesUwaziBinding.inflate(inflater, container, false)
-        return binding?.root!!
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
+        if (!hasInitializedRootView) {
+            hasInitializedRootView = true
+            initView()
+        }
         initObservers()
     }
 
@@ -101,13 +95,6 @@ class TemplatesUwaziFragment : UwaziListFragment() {
             requireContext().getString(R.string.action_cancel)
         )
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding?.templatesRecyclerView?.adapter = null
-        binding = null
-    }
-
 
     private fun openEntity(template: CollectTemplate){
         val gsonTemplate = Gson().toJson(template)

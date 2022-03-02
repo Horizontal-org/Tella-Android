@@ -96,7 +96,7 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
     private fun initView() {
         arguments?.let {
             entityInstance = Gson().fromJson(it.getString(SEND_ENTITY), UwaziEntityInstance::class.java)
-            showFormEndView(false)
+            showFormEndView()
         }
     }
 
@@ -120,13 +120,13 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
         endView.setUploadProgress(partName,total)
     }
 
-    private fun showFormEndView(offline: Boolean) {
+    private fun showFormEndView() {
         if (entityInstance == null){
             return
         }
 
         endView = UwaziFormEndView(activity, getFormattedFormTitle(entityInstance!!))
-        endView.setInstance(entityInstance!!, offline, false)
+        endView.setInstance(entityInstance!!, false, false)
         binding.endViewContainer.removeAllViews()
         binding.endViewContainer.addView(endView)
       //  updateFormSubmitButton(false)

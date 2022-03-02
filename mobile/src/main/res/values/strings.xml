@@ -559,6 +559,10 @@
     <string name="Uwazi_MiltiFileWidget_AttachMenyPdfFiles">Attach as many PDF files as you wish</string>
     <string name="Uwazi_MiltiFileWidget_ChooseHowToAddPdfFiles">Choose how you want to add PDF files</string>
     <string name="Uwazi_MiltiFileWidget_SupportingFiles">Supporting files</string>
+    <string name="Uwazi_Drafts_Header_Text">These are entities you have not submitted.\n
+ Tap on an entity to continue working on it.</string>
+    <string name="Uwazi_Outbox_Header_Text">These are entities currently being submitted.</string>
+    <string name="Uwazi_Submitted_Header_Text">These are entities that you have submitted successfully.</string>
 
     <string-array name="Uwazi_Language_Array">
         <item>English</item>

@@ -29,6 +29,7 @@ import rs.readahead.washington.mobile.presentation.uwazi.UwaziGeoData
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.views.activity.LocationMapActivity
+import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
@@ -44,19 +45,17 @@ const val UWAZI_TITLE = "title"
 const val UWAZI_SUPPORTING_FILES = "supporting_files"
 const val UWAZI_PRIMARY_DOCUMENTS = "primary_documents"
 
-class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
+class UwaziEntryFragment : BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziEntryFragmentBinding::inflate), OnNavBckListener {
     private val viewModel: SharedUwaziSubmissionViewModel by lazy {
         ViewModelProvider(activity).get(SharedUwaziSubmissionViewModel::class.java)
     }
-    private var binding: UwaziEntryFragmentBinding? = null
+
     private var template: CollectTemplate? = null
     private var entityInstance: UwaziEntityInstance = UwaziEntityInstance()
     private val bundle by lazy { Bundle() }
     private var screenView: ViewGroup? = null
     private var entryPrompts = mutableListOf<UwaziEntryPrompt>()
     private lateinit var uwaziFormView: UwaziFormView
-    var hasInitializedRootView = false
-    private var rootView: View? = null
 
     private val uwaziTitlePrompt = UwaziEntryPrompt(
         UWAZI_TITLE,
@@ -85,29 +84,6 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         "Attach as many PDF files as you wish"
     )
 
-    private fun getPersistentView(inflater: LayoutInflater, container: ViewGroup?): View {
-        if (binding == null) {
-            // Inflate the layout for this fragment
-            binding = UwaziEntryFragmentBinding.inflate(inflater, container, false)
-        } else {
-            // Do not inflate the layout again.
-            // The returned View of onCreateView will be added into the fragment.
-            // However it is not allowed to be added twice even if the parent is same.
-            // So we must remove rootView from the existing parent view group
-            // (it will be added back).
-            (rootView?.parent as? ViewGroup)?.removeView(binding!!.root)
-        }
-
-        return binding!!.root
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return getPersistentView(inflater, container)
-
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -132,7 +108,7 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         }
     }
 
-    override fun initView(view: View) {
+     private fun initView() {
         with(binding) {
             this!!.toolbar.backClickListener = { nav().popBackStack() }
             toolbar.onRightClickListener = {
@@ -153,26 +129,24 @@ class UwaziEntryFragment : BaseFragment(), OnNavBckListener {
         if (!hasGpsPermissions(requireContext())) {
             requestGpsPermissions(C.GPS_PROVIDER)
         }
-    }
 
-    private fun initView() {
-        if (arguments?.getString(UWAZI_INSTANCE) != null) {
-            arguments?.getString(UWAZI_INSTANCE).let {
-                entityInstance = Gson().fromJson(it, UwaziEntityInstance::class.java)
-                template = entityInstance.collectTemplate
-                parseUwaziInstance()
-            }
-        }
+         if (arguments?.getString(UWAZI_INSTANCE) != null) {
+             arguments?.getString(UWAZI_INSTANCE).let {
+                 entityInstance = Gson().fromJson(it, UwaziEntityInstance::class.java)
+                 template = entityInstance.collectTemplate
+                 parseUwaziInstance()
+             }
+         }
 
-        if (arguments?.getString(COLLECT_TEMPLATE) != null) {
-            arguments?.getString(COLLECT_TEMPLATE).let {
-                template = Gson().fromJson(it, CollectTemplate::class.java)
-                entityInstance.collectTemplate = template
-                entityInstance.template = template?.entityRow?.name.toString()
-                parseUwaziTemplate()
-            }
-        }
-        binding!!.toolbar.setStartTextTitle(template?.entityRow?.translatedName.toString())
+         if (arguments?.getString(COLLECT_TEMPLATE) != null) {
+             arguments?.getString(COLLECT_TEMPLATE).let {
+                 template = Gson().fromJson(it, CollectTemplate::class.java)
+                 entityInstance.collectTemplate = template
+                 entityInstance.template = template?.entityRow?.name.toString()
+                 parseUwaziTemplate()
+             }
+         }
+         binding!!.toolbar.setStartTextTitle(template?.entityRow?.translatedName.toString())
     }
 
     private fun initObservers() {
