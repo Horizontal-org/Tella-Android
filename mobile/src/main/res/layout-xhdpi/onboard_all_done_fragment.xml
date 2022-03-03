@@ -62,8 +62,7 @@
         android:text="@string/onboard.expl_all_done"
         android:layout_marginBottom="16dp"
         android:textColor="@color/wa_white"
-        android:fontFamily="@font/open_sans"
-        android:textSize="@dimen/sheet_subtitle_text_size" />
+        android:fontFamily="@font/open_sans" />
 
     <TextView
         android:id="@+id/startBtn"

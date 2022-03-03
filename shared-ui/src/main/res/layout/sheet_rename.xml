@@ -30,8 +30,7 @@
         android:inputType="text"
         tools:text="Testtt"
         android:gravity="start"
-        android:textSize="14sp"
-        android:autofillHints="" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/standard_sheet_cancel_btn"

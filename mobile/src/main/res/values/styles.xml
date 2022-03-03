@@ -338,6 +338,7 @@
     </style>
     <style name="Tella_Main_White_Text.Bold">
         <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/sheet_title_text_size</item>
     </style>
 
     <style name="DialogDataCollectionTextEntryLayout" parent="Theme.AppCompat.Light.NoActionBar">

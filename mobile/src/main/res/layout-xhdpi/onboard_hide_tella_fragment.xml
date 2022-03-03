@@ -45,7 +45,7 @@
         android:layout_marginTop="@dimen/hide_tella_big_margin"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
-        android:textSize="18sp"
+        android:textSize="@dimen/sheet_title_text_size"
         tools:ignore="RtlSymmetry" />
 
     <TextView
@@ -63,7 +63,7 @@
         android:text="@string/settings.servers_hide_tella_desc"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
-        android:textSize="14sp"
+        android:textSize="@dimen/sheet_title_text_size"
         tools:ignore="RtlSymmetry" />
 
     <LinearLayout

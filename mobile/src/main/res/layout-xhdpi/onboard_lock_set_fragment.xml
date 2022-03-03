@@ -59,7 +59,7 @@
         android:paddingVertical="@dimen/hide_tella_small_margin"
         android:text="@string/onboard.expl_lock_finish"
         android:textColor="@color/wa_white"
-        android:textSize="@dimen/sheet_subtitle_text_size"
+        style="@style/OnboardingDescText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guidelineCenter"

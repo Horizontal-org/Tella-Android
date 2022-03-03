@@ -46,6 +46,11 @@
         <item name="android:textSize">@dimen/big_button_text_size</item>
         <item name="android:letterSpacing">@dimen/big_button_text_letter_spacing</item>
     </style>
+    
+    <style name="OnboardingTitleText">
+        <item name="android:textSize">@dimen/onboard_advanced_complete_title_text_size</item>
+        <item name="android:letterSpacing">@dimen/big_button_text_letter_spacing</item>
+    </style>
 
     <style name="OnboardingDescText">
         <item name="android:paddingTop">8dp</item>
@@ -53,6 +58,11 @@
         <item name="android:paddingStart">21dp</item>
         <item name="android:paddingEnd">21dp</item>
         <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/sheet_subtitle_text_size</item>
+    </style>
+    
+    <style name="DateTimeText">
+        <item name="android:textSize">15.6sp</item>
     </style>
 
     <style name="RadioListButtonStyle">
