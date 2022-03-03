@@ -62,8 +62,6 @@ public class VaultDataSource implements IVaultDatabase {
             vaultFile.created = System.currentTimeMillis();
         }
 
-        Log.e("VaultDataSource", vaultFile.toString());
-
         try {
             database.beginTransaction();
 
