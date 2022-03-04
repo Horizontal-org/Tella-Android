@@ -57,32 +57,34 @@ class UwaziEntryFragment : BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziE
     private var entryPrompts = mutableListOf<UwaziEntryPrompt>()
     private lateinit var uwaziFormView: UwaziFormView
 
-    private val uwaziTitlePrompt = UwaziEntryPrompt(
+    private val uwaziTitlePrompt by lazy { UwaziEntryPrompt(
         UWAZI_TITLE,
         "10242048",
         UwaziConstants.UWAZI_DATATYPE_TEXT,
         "Title",
         true,
         "Enter the submission title"
-    )
+    )}
 
-    private val uwaziFilesPrompt = UwaziEntryPrompt(
-        UWAZI_SUPPORTING_FILES,
-        "10242049",
-        UwaziConstants.UWAZI_DATATYPE_MULTIFILES,
-        getString(R.string.Uwazi_MiltiFileWidget_SupportingFiles),
-        false,
-        getString(R.string.Uwazi_MiltiFileWidget_Help)
-    )
+    private val uwaziFilesPrompt by lazy {
+        UwaziEntryPrompt(
+            UWAZI_SUPPORTING_FILES,
+            "10242049",
+            UwaziConstants.UWAZI_DATATYPE_MULTIFILES,
+            getString(R.string.Uwazi_MiltiFileWidget_SupportingFiles),
+            false,
+            getString(R.string.Uwazi_MiltiFileWidget_Help)
+        )
+    }
 
-    private val uwaziPdfsPrompt = UwaziEntryPrompt(
+    private val uwaziPdfsPrompt by lazy { UwaziEntryPrompt(
         UWAZI_PRIMARY_DOCUMENTS,
         "10242050",
         UwaziConstants.UWAZI_DATATYPE_MULTIPDFFILES,
         getString(R.string.Uwazi_MiltiFileWidget_PrimaryDocuments),
         false,
         getString(R.string.Uwazi_MiltiFileWidget_AttachMenyPdfFiles)
-    )
+    )}
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
