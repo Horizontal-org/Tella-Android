@@ -476,11 +476,6 @@ connecting to a server</string>
     <string name="settings.sec_confirm_camouflage_desc">To re-open Tella, look for the %s app icon among your apps.</string>
     <string name="settings.sec_confirm_calc_camouflage_desc">To re-open Tella, look for the Calculator app icon among your apps. Unlock Tella by entering your PIN in the Calculator followed by “=”. </string>
     <string name="settings.sec_confirm_exit_tella">Exit Tella</string>
-    <string name="Home_BottomNav_Home">Accueil</string>
-    <string name="Home_BottomNav_Rec">Dicta</string>
-    <string name="Home_BottomNav_Camera">Appareil photo</string>
-    <string name="Home_BottomNav_Forms">Formulaires</string>
-    <string name="Home_BottomNav_Reports">Rapports</string>
     <string name="ServerSettings_ServerName_ToolTip">Donnez un nom à votre serveur pour le reconnaître si vous ajoutez d\'autres serveurs par la suite. Il peut s\'agir du nom de l\'organisation, du nom du projet, etc.</string>
     <string name="Rec_Exit_SheetTitle">Sauvegarder l\'enregistrement ?</string>
     <string name="Rec_Exit_SheetText">Votre enregistrement n\'est pas sauvegardé. Voulez-vous le sauvegarder avant de quitter ?</string>

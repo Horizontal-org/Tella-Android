@@ -612,11 +612,6 @@
         <item quantity="other">%d minutes ago</item>
     </plurals>
     <string name="Util_ellapsedTime_Seconds">A few seconds ago</string>
-    <string name="Home_BottomNav_Home">Home</string>
-    <string name="Home_BottomNav_Rec">Rec</string>
-    <string name="Home_BottomNav_Camera">Camera</string>
-    <string name="Home_BottomNav_Forms">Forms</string>
-    <string name="Home_BottomNav_Reports">Reports</string>
     <string name="ServerSettings_ServerName_ToolTip">Give your server a name to recognize it if you add more servers later. It could be the organization’s name, the project’s name, etc.</string>
     <string name="Rec_Exit_SheetTitle">Save recording?</string>
     <string name="Rec_Exit_SheetText">Your recording is not saved. Would you like to save it before exiting?</string>
