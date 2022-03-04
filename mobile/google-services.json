@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "35869804962",
+    "firebase_url": "https://tella-a8c5e.firebaseio.com",
+    "project_id": "tella-a8c5e",
+    "storage_bucket": "tella-a8c5e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:35869804962:android:bace1379693bac37944afb",
+        "android_client_info": {
+          "package_name": "org.hzontal.tella"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "35869804962-31v8v4g60mkk3rsiqqkn7o7gil8irh9h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmFYWjpgKMin6lj5VsgdEmkWe1UqGfH5E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "35869804962-31v8v4g60mkk3rsiqqkn7o7gil8irh9h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

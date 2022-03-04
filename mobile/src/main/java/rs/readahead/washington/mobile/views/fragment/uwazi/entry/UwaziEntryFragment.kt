@@ -70,18 +70,18 @@ class UwaziEntryFragment : BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziE
         UWAZI_SUPPORTING_FILES,
         "10242049",
         UwaziConstants.UWAZI_DATATYPE_MULTIFILES,
-        "Supporting files",
+        getString(R.string.Uwazi_MiltiFileWidget_SupportingFiles),
         false,
-        "Select as many files as you wish"
+        getString(R.string.Uwazi_MiltiFileWidget_Help)
     )
 
     private val uwaziPdfsPrompt = UwaziEntryPrompt(
         UWAZI_PRIMARY_DOCUMENTS,
         "10242050",
         UwaziConstants.UWAZI_DATATYPE_MULTIPDFFILES,
-        "Primary documents",
+        getString(R.string.Uwazi_MiltiFileWidget_PrimaryDocuments),
         false,
-        "Attach as many PDF files as you wish"
+        getString(R.string.Uwazi_MiltiFileWidget_AttachMenyPdfFiles)
     )
 
 
