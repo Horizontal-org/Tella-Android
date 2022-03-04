@@ -53,14 +53,20 @@
         <item quantity="one">ítem</item>
         <item quantity="other">ítems</item>
     </plurals>
+    <string name="Vault_DeleteFile_SheetTitle" >¿Borrar archivo?</string>
+    <string name="Vault_deleteFile_SheetDesc" >El archivo seleccionado será borrado permanentemente de Tella.</string>
+    <string name="Vault_Items" >items</string>
+    <plurals name="Vault_Importing_SheetProgress">
+        <item quantity="one">%s archivo importado</item>
+        <item quantity="other">%s archivos importados</item>
+    </plurals>
+    <string name="Vault_Importing_SheetTitle">Importando y cifrando</string>
+    <string name="Rec_Exit_SheetTitle">¿Guardar grabación?</string>
+    <string name="Rec_Exit_SheetText">Tu grabación no se guardó. ¿Quieres guardarla antes de salir?</string>
     <string name="Vault_AudioRecordings_AppBar">Grabaciones de audio</string>
     <string name="Vault_Encryting_SheetText" formatted="false">%d% completado</string>
     <string name="Vault_Encrypting_Cancel_SheetTitle">¿Cancelar el cifrado y borrar el archivo?</string>
     <string name="Vault_Encrypting_Cancel_SheetText">Si cancelas, tu archivo se perderá</string>
     <string name="Vault_Encrypting_Cancel_SheetAction_Resume">REANUDAR CIFRADO</string>
     <string name="Vault_Encrypting_Cancel_SheetAction_Delete">BORRAR ARCHIVO</string>
-    <string name="Vault_CreateFolder_SheetAction">Crear</string>
-    <string name="Vault_DeleteFile_SheetTitle" >¿Borrar archivo?</string>
-    <string name="Vault_deleteFile_SheetDesc" >El archivo seleccionado será borrado permanentemente de Tella.</string>
-    <string name="Vault_Items" >items</string>
 </resources>

@@ -490,19 +490,6 @@ conectarse a un servidor</string>
     <string name="Vault_Move_AppBar">Mover \"%s\"</string>
     <string name="Vault_CreateFolder_SheetAction">Crear</string>
     <string name="ServerSettings_ServerName_ToolTip">Dale un nombre a tu servidor para reconocerlo si agregas más servidores más adelante. Podría ser el nombre de la organización, el nombre del proyecto, etc.</string>
-    <plurals name="Vault_Importing_SheetProgress">
-        <item quantity="one">%s archivo importado</item>
-        <item quantity="other">%s archivos importados</item>
-    </plurals>
-    <string name="Vault_Importing_SheetTitle">Importando y cifrando</string>
-    <string name="Rec_Exit_SheetTitle">¿Guardar grabación?</string>
-    <string name="Rec_Exit_SheetText">Tu grabación no se guardó. ¿Quieres guardarla antes de salir?</string>
-    <string name="Vault_AudioRecordings_AppBar">Grabaciones de audio</string>
-    <string name="Vault_Encryting_SheetText" formatted="false">%d% completado</string>
-    <string name="Vault_Encrypting_Cancel_SheetTitle">¿Cancelar el cifrado y borrar el archivo?</string>
-    <string name="Vault_Encrypting_Cancel_SheetText">Si cancelas, tu archivo se perderá</string>
-    <string name="Vault_Encrypting_Cancel_SheetAction_Resume">REANUDAR CIFRADO</string>
-    <string name="Vault_Encrypting_Cancel_SheetAction_Delete">BORRAR ARCHIVO</string>
     <string name="SettingSec_ChangeLock_WarningCalc_SheetTitle">¿Cambiar el método de bloqueo y eliminar el camuflaje?</string>
     <string name="SettingSec_ChangeLock_WarningCalc_SheetText">Tu camuflaje actual como Calculadora solamente es compatible con un bloqueo por PIN. Si cambias tu método de bloqueo, Tella ya no estará camuflado y será visible en la pantalla de inicio de tu teléfono.</string>
     <string name="SettingSec_ChangeLock_WarningCalc_SheetAction_Remove">REMOVER CAMUFLAJE</string>

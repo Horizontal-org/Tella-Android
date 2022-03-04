@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/homeScreen"
         android:name="rs.readahead.washington.mobile.views.fragment.vault.home.HomeVaultFragment"
-        android:label="Vault"
+        android:label="@string/Home_BottomNav_Home"
         tools:layout="@layout/fragment_vault">
         <action
             android:id="@+id/action_homeScreen_to_main_settings"
@@ -53,21 +53,21 @@
     <activity
         android:id="@+id/main_settings"
         android:name="rs.readahead.washington.mobile.views.activity.SettingsActivity"
-        android:label="Settings"
+        android:label="@string/settings_app.bar"
         tools:layout="@layout/activity_settings">
     </activity>
 
     <activity
         android:id="@+id/cameraScreen"
         android:name="rs.readahead.washington.mobile.views.activity.CameraActivity"
-        android:label="Camera"
+        android:label="@string/Home_BottomNav_Camera"
         tools:layout="@layout/activity_camera">
     </activity>
 
     <fragment
         android:id="@+id/micScreen"
         android:name="rs.readahead.washington.mobile.views.fragment.MicFragment"
-        android:label="Microphone"
+        android:label="@string/Home_BottomNav_Rec"
         tools:layout="@layout/fragment_mic">
     </fragment>
 </navigation>
