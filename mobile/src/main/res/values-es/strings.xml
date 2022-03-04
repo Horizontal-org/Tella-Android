@@ -558,4 +558,6 @@ conectarse a un servidor</string>
         <item quantity="other">Hace %d minutos</item>
     </plurals>
     <string name="Util_ellapsedTime_Seconds">Hace unos segundos</string>
+    <string name="Donwload_Templates_Title_Description">Estas son las plantillas disponibles en las instancias de Uwazi a las que está conectado.</string>
+    <string name="uwazi.outbox_tab.title">Plantillas</string>
 </resources>

@@ -490,8 +490,8 @@
     <string name="settings.sec_confirm_exit_tella">Exit Tella</string>
     <string name="collect.outbox_tab.title">Outbox</string>
     <!-- Uwazi !-->
-    <string name="Donwload_Templates_Title_Description" translatable="false">These are the templates available on the Uwazi \ninstances you are connected to. You can \n <font fgcolor='#D6933B'>manage your Uwazi instances here.</font> </string>
-    <string name="uwazi.outbox_tab.title" translatable="false">Templates</string>
+    <string name="Donwload_Templates_Title_Description">These are the templates available on the Uwazi \ninstances you are connected to. You can \n <font fgcolor='#D6933B'>manage your Uwazi instances here.</font> </string>
+    <string name="uwazi.outbox_tab.title">Templates</string>
     <string name="Collect_RemoveForm_SheetTitle">Remove form?</string>
     <string name="fragment_uwazi">Uwazi</string>
     <string name="Uwazi_Dowload_Temapltes_Header_Title">Download templates</string>

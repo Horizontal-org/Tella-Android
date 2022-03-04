@@ -600,4 +600,6 @@ connecting to a server</string>
         <item quantity="other">Il y a %d minutes</item>
     </plurals>
     <string name="Util_ellapsedTime_Seconds">Il y a quelques secondes</string>
+    <string name="Donwload_Templates_Title_Description">Voici les modèles disponibles sur les instances Uwazi auxquelles vous êtes connecté.</string>
+    <string name="uwazi.outbox_tab.title">Modèles</string>
 </resources>
