@@ -9,6 +9,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.data.database.UwaziDataSource
@@ -64,7 +65,7 @@ class SharedUwaziViewModel : ViewModel() {
             .subscribe(
                 { templates: List<CollectTemplate> ->
                     val resultList = mutableListOf<Any>()
-                    resultList.add(0,"These are Uwazi templates you can fill out.")
+                    resultList.add(0, R.string.Uwazi_Templates_HeaderMessage)
                     templates.map {
                         resultList.add(it.toViewEntityTemplateItem(onMoreClicked = {
                             onMoreClicked(

@@ -602,4 +602,6 @@ connecting to a server</string>
     <string name="Util_ellapsedTime_Seconds">Il y a quelques secondes</string>
     <string name="Donwload_Templates_Title_Description">Voici les modèles disponibles sur les instances Uwazi auxquelles vous êtes connecté.</string>
     <string name="uwazi.outbox_tab.title">Modèles</string>
+    <string name="Uwazi_Templates_HeaderMessage">These are Uwazi templates you can fill out.</string>
+
 </resources>

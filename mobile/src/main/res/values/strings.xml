@@ -619,4 +619,5 @@
     <string name="SettingSec_ChangeLock_WarningCalc_SheetText">Your current Calculator camouflage is only compatible with a PIN lock. If you change your lock method, Tella will no longer be camouflaged and will be visible on your phone’s homescreen.</string>
     <string name="SettingSec_ChangeLock_WarningCalc_SheetAction_Remove">REMOVE CAMOUFLAGE</string>
     <string name="SettingsCamo_EnterLock_Password">Enter your password to change your camouflage method</string>
+    <string name="Uwazi_Templates_HeaderMessage">These are Uwazi templates you can fill out.</string>
 </resources>
