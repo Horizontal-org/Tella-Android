@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
@@ -14,11 +13,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import com.google.gson.Gson
 import com.google.gson.internal.LinkedTreeMap
-import com.google.gson.reflect.TypeToken
 import com.hzontal.tella_vault.MyLocation
 import com.hzontal.tella_vault.VaultFile
 import org.hzontal.shared_ui.utils.DialogUtils
+import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.bus.EventObserver
+import rs.readahead.washington.mobile.bus.event.LocationPermissionRequiredEvent
+import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent
 import rs.readahead.washington.mobile.data.uwazi.UwaziConstants
 import rs.readahead.washington.mobile.databinding.UwaziEntryFragmentBinding
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
@@ -31,7 +33,6 @@ import rs.readahead.washington.mobile.presentation.uwazi.UwaziValueAttachment
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.views.activity.LocationMapActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
-import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.SEND_ENTITY
@@ -46,7 +47,9 @@ const val UWAZI_TITLE = "title"
 const val UWAZI_SUPPORTING_FILES = "supporting_files"
 const val UWAZI_PRIMARY_DOCUMENTS = "primary_documents"
 
-class UwaziEntryFragment : BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziEntryFragmentBinding::inflate), OnNavBckListener {
+class UwaziEntryFragment :
+    BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziEntryFragmentBinding::inflate),
+    OnNavBckListener {
     private val viewModel: SharedUwaziSubmissionViewModel by lazy {
         ViewModelProvider(activity).get(SharedUwaziSubmissionViewModel::class.java)
     }
@@ -58,14 +61,16 @@ class UwaziEntryFragment : BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziE
     private var entryPrompts = mutableListOf<UwaziEntryPrompt>()
     private lateinit var uwaziFormView: UwaziFormView
 
-    private val uwaziTitlePrompt by lazy { UwaziEntryPrompt(
-        UWAZI_TITLE,
-        "10242048",
-        UwaziConstants.UWAZI_DATATYPE_TEXT,
-        "Title",
-        true,
-        "Enter the submission title"
-    )}
+    private val uwaziTitlePrompt by lazy {
+        UwaziEntryPrompt(
+            UWAZI_TITLE,
+            "10242048",
+            UwaziConstants.UWAZI_DATATYPE_TEXT,
+            "Title",
+            true,
+            "Enter the submission title"
+        )
+    }
 
     private val uwaziFilesPrompt by lazy {
         UwaziEntryPrompt(
@@ -78,14 +83,18 @@ class UwaziEntryFragment : BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziE
         )
     }
 
-    private val uwaziPdfsPrompt by lazy { UwaziEntryPrompt(
-        UWAZI_PRIMARY_DOCUMENTS,
-        "10242050",
-        UwaziConstants.UWAZI_DATATYPE_MULTIPDFFILES,
-        getString(R.string.Uwazi_MiltiFileWidget_PrimaryDocuments),
-        false,
-        getString(R.string.Uwazi_MiltiFileWidget_AttachMenyPdfFiles)
-    )}
+    private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
+
+    private val uwaziPdfsPrompt by lazy {
+        UwaziEntryPrompt(
+            UWAZI_PRIMARY_DOCUMENTS,
+            "10242050",
+            UwaziConstants.UWAZI_DATATYPE_MULTIPDFFILES,
+            getString(R.string.Uwazi_MiltiFileWidget_PrimaryDocuments),
+            false,
+            getString(R.string.Uwazi_MiltiFileWidget_AttachMenyPdfFiles)
+        )
+    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -100,7 +109,7 @@ class UwaziEntryFragment : BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziE
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == C.MEDIA_FILE_ID && resultCode == Activity.RESULT_OK) {
-            val vaultFile = data?.getStringExtra(VAULT_FILE_KEY)  ?: ""
+            val vaultFile = data?.getStringExtra(VAULT_FILE_KEY) ?: ""
             putVaultFileInForm(vaultFile)
         }
 
@@ -111,7 +120,7 @@ class UwaziEntryFragment : BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziE
         }
     }
 
-     private fun initView() {
+    private fun initView() {
         with(binding) {
             this!!.toolbar.backClickListener = { nav().popBackStack() }
             toolbar.onRightClickListener = {
@@ -129,27 +138,26 @@ class UwaziEntryFragment : BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziE
             screenView = screenFormView
         }
 
-        if (!hasGpsPermissions(requireContext())) {
-            requestGpsPermissions(C.GPS_PROVIDER)
+        onGpsPermissionsListener()
+
+        if (arguments?.getString(UWAZI_INSTANCE) != null) {
+            arguments?.getString(UWAZI_INSTANCE).let {
+                entityInstance = Gson().fromJson(it, UwaziEntityInstance::class.java)
+                template = entityInstance.collectTemplate
+                parseUwaziInstance()
+            }
+
         }
 
-         if (arguments?.getString(UWAZI_INSTANCE) != null) {
-             arguments?.getString(UWAZI_INSTANCE).let {
-                 entityInstance = Gson().fromJson(it, UwaziEntityInstance::class.java)
-                 template = entityInstance.collectTemplate
-                 parseUwaziInstance()
-             }
-         }
-
-         if (arguments?.getString(COLLECT_TEMPLATE) != null) {
-             arguments?.getString(COLLECT_TEMPLATE).let {
-                 template = Gson().fromJson(it, CollectTemplate::class.java)
-                 entityInstance.collectTemplate = template
-                 entityInstance.template = template?.entityRow?.name.toString()
-                 parseUwaziTemplate()
-             }
-         }
-         binding!!.toolbar.setStartTextTitle(template?.entityRow?.translatedName.toString())
+        if (arguments?.getString(COLLECT_TEMPLATE) != null) {
+            arguments?.getString(COLLECT_TEMPLATE).let {
+                template = Gson().fromJson(it, CollectTemplate::class.java)
+                entityInstance.collectTemplate = template
+                entityInstance.template = template?.entityRow?.name.toString()
+                parseUwaziTemplate()
+            }
+        }
+        binding!!.toolbar.setStartTextTitle(template?.entityRow?.translatedName.toString())
     }
 
     private fun initObservers() {
@@ -233,10 +241,16 @@ class UwaziEntryFragment : BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziE
                             hashmap[answer.key] = (answer.value) as List<UwaziValue>
                         }
                         is UwaziValueAttachment -> {
-                            hashmap[answer.key] = arrayListOf(UwaziValueAttachment(value = (answer.value as UwaziValueAttachment).value, attachment = uwaziFormView.filesNames.indexOf((answer.value as UwaziValueAttachment).value) ))
+                            hashmap[answer.key] = arrayListOf(
+                                UwaziValueAttachment(
+                                    value = (answer.value as UwaziValueAttachment).value,
+                                    attachment = uwaziFormView.filesNames.indexOf((answer.value as UwaziValueAttachment).value)
+                                )
+                            )
                         }
                         else -> {
-                            hashmap[answer.key] = arrayListOf(UwaziValue((answer.value as UwaziValue).value))
+                            hashmap[answer.key] =
+                                arrayListOf(UwaziValue((answer.value as UwaziValue).value))
                         }
                     }
                 }
@@ -324,8 +338,9 @@ class UwaziEntryFragment : BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziE
         entryPrompts.add(uwaziPdfsPrompt)
         entryPrompts.add(uwaziFilesPrompt)
 
-        if (template?.entityRow?.commonProperties?.get(0)?.translatedLabel?.length!! > 0){
-            uwaziTitlePrompt.question = template?.entityRow?.commonProperties?.get(0)?.translatedLabel
+        if (template?.entityRow?.commonProperties?.get(0)?.translatedLabel?.length!! > 0) {
+            uwaziTitlePrompt.question =
+                template?.entityRow?.commonProperties?.get(0)?.translatedLabel
         }
         entryPrompts.add(uwaziTitlePrompt)
 
@@ -400,5 +415,17 @@ class UwaziEntryFragment : BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziE
                 Manifest.permission.ACCESS_FINE_LOCATION
             ), requestCode
         )
+    }
+
+    private fun onGpsPermissionsListener() {
+        disposables.wire(
+            LocationPermissionRequiredEvent::class.java,
+            object : EventObserver<LocationPermissionRequiredEvent?>() {
+                override fun onNext(event: LocationPermissionRequiredEvent) {
+                    if (!hasGpsPermissions(requireContext())) {
+                        requestGpsPermissions(C.GPS_PROVIDER)
+                    }
+                }
+            })
     }
 }
