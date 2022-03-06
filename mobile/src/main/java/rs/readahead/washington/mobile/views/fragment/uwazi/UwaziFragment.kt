@@ -1,32 +1,26 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.google.android.material.tabs.TabLayoutMediator
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentUwaziBinding
-import rs.readahead.washington.mobile.views.base_ui.BaseFragment
+import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.*
 
-class UwaziFragment : BaseFragment() {
+class UwaziFragment : BaseBindingFragment<FragmentUwaziBinding>(FragmentUwaziBinding::inflate) {
 
-    private  var binding: FragmentUwaziBinding? = null
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentUwaziBinding.inflate(inflater, container, false)
-        return binding?.root!!
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        initView()
     }
 
-    override fun initView(view: View) {
+    private fun initView() {
         val viewPagerAdapter  = ViewPagerAdapter(this)
         with(binding!!){
             viewPager.apply {
+                offscreenPageLimit = 4
+                isSaveEnabled = false
                 adapter = viewPagerAdapter
             }
             // Set the text for each tab
@@ -52,12 +46,10 @@ class UwaziFragment : BaseFragment() {
                 DRAFT_LIST_PAGE_INDEX -> setCurrentTab(DRAFT_LIST_PAGE_INDEX)
                 OUTBOX_LIST_PAGE_INDEX -> setCurrentTab(OUTBOX_LIST_PAGE_INDEX)
                 SUBMITTED_LIST_PAGE_INDEX -> setCurrentTab(SUBMITTED_LIST_PAGE_INDEX)
-                else -> null
             }
         })
 
     }
-
 
     private fun setCurrentTab(position: Int){
         binding?.viewPager?.post {
@@ -73,12 +65,6 @@ class UwaziFragment : BaseFragment() {
             SUBMITTED_LIST_PAGE_INDEX -> getString(R.string.collect_sent_tab_title)
             else -> null
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding?.viewPager?.adapter = null
-        binding = null
     }
 
 }

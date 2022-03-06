@@ -36,6 +36,7 @@ import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.SEND_ENTITY
+import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.OUTBOX_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
@@ -175,6 +176,8 @@ class UwaziEntryFragment :
                         progress.postValue(UwaziEntityStatus.UNKNOWN)
                     }
                     UwaziEntityStatus.DRAFT -> {
+                        SharedLiveData.updateViewPagerPosition.postValue(DRAFT_LIST_PAGE_INDEX)
+                        nav().popBackStack()
                         showSavedDialog()
                         progress.postValue(UwaziEntityStatus.UNKNOWN)
                     }
@@ -204,7 +207,6 @@ class UwaziEntryFragment :
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
         uwaziFormView.clearValidationConstraints()
         val hashmap = mutableMapOf<String, List<Any>>()
-        val hashmapRequest = mutableMapOf<String, List<Any>>()
         val widgetMediaFiles = mutableListOf<FormMediaFile>()
         val answers = uwaziFormView.answers
         var validationRequired = false
