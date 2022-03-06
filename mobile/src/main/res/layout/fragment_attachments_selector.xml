@@ -142,7 +142,7 @@
             android:layout_marginTop="40dp"
             android:gravity="center"
             android:textColor="@color/wa_white_88"
-            android:text="@string/Vault_Empty_Msg" />
+            android:text="@string/Vault_No_Files_Title" />
     </LinearLayout>
 
 
