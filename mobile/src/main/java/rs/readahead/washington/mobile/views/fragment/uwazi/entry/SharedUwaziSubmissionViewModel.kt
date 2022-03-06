@@ -25,10 +25,10 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
-import rs.readahead.washington.mobile.presentation.uwazi.Attachment
 import rs.readahead.washington.mobile.presentation.uwazi.SendEntityRequest
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.MULTIPART_FORM_DATA
-
+import timber.log.Timber
+import java.net.URLEncoder
 
 class SharedUwaziSubmissionViewModel : ViewModel(){
     private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
@@ -37,8 +37,6 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
     val instance: LiveData<UwaziEntityInstance> get() = _instance
     private val _template = MutableLiveData<CollectTemplate>()
     val template: LiveData<CollectTemplate> get() = _template
-    private val _attachedFiles = MutableLiveData<List<VaultFile>>()
-    val attachedFiles: LiveData<List<VaultFile>> get() = _attachedFiles
     private val repository = UwaziRepository()
     val progress = MutableLiveData<UwaziEntityStatus>()
     private val _server = MutableLiveData<UWaziUploadServer>()
@@ -98,7 +96,7 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
         disposables.add(
             repository.submitEntity(
                 server = server,
-                entity = createRequestBody(Gson().toJson(entity.createEntityRequest(entity.widgetMediaFiles))),
+                entity = createRequestBody(Gson().toJson(entity.createEntityRequest())),
                 attachments = createListOfAttachments(entity.widgetMediaFiles, _progressCallBack)
             )
                 .subscribeOn(Schedulers.io())
@@ -122,8 +120,7 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
                 })
     }
 
-    private fun UwaziEntityInstance.createEntityRequest(attachments: List<VaultFile>?) = SendEntityRequest(
-        attachments = emptyList(),
+    private fun UwaziEntityInstance.createEntityRequest() = SendEntityRequest(
         metadata = removeAttachments(metadata.toMutableMap()),
         template = collectTemplate?.entityRow?._id ?: "",
         title = title,
@@ -135,9 +132,6 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
         metadata.remove("primary_documents")
 
         return metadata
-    }
-    private fun VaultFile.toAttachment(): Attachment {
-        return Attachment(entity = "NEW_ENTITY", filename = name, mimetype = mimeType, originalname = name, type = "attachment")
     }
 
     private fun createRequestBody(s: String): RequestBody {
@@ -156,18 +150,18 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
         try {
             if (attachments != null) {
                 for (i in attachments.indices) {
-                    attachments[i]?.let {
+                    attachments[i]?.let { vaultFile->
 
                         val requestBody = MediaFileRequestBody(
-                            it,
-                            ProgressListener(it.id, progressCallBack)
+                            vaultFile,
+                            ProgressListener(vaultFile.id, progressCallBack)
                         )
                         fileToUpload =
-                            requestBody.let { it1 ->
+                            requestBody.let { file ->
                                 MultipartBody.Part.createFormData(
                                     "attachments",
-                                    it.name,
-                                    it1
+                                    URLEncoder.encode(vaultFile.name, "utf-8"),
+                                    file
                                 )
                             }
                         listAttachments.add(fileToUpload)
@@ -176,6 +170,7 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
             }
 
         } catch (e: Exception) {
+            Timber.d(e.message ?: "Error attaching files")
         }
         return listAttachments.toList()
     }

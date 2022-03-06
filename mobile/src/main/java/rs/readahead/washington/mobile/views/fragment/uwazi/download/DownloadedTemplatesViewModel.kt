@@ -159,30 +159,6 @@ class DownloadedTemplatesViewModel : ViewModel(){
         )
     }
 
-    fun getTranslations(server: UWaziUploadServer) {
-        disposables.add(
-            uwaziRepository.getTranslation(
-                server = server)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnError { _progress.postValue(false) }
-
-                .subscribe({
-                    print(it)
-                    _progress.postValue(false)
-                }
-                ) { throwable: Throwable? ->
-                    FirebaseCrashlytics.getInstance().recordException(
-                        throwable
-                            ?: throw NullPointerException("Expression 'throwable' must not be null")
-                    )
-                    error.postValue(throwable)
-                    _progress.postValue(false)
-                })
-    }
-
-
-
     private fun collectTemplateToViewTemplate(template : CollectTemplate) : ViewTemplateItem {
      return   template.toViewTemplateItem(onDownloadClicked = { onDownloadClicked(template) },
             onMoreClicked = {onMoreClicked(template)})

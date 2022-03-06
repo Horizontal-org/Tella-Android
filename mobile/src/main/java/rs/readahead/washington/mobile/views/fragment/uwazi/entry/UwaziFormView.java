@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -146,6 +147,20 @@ public class UwaziFormView extends LinearLayout {
             }
         }
         return files;
+    }
+
+    public List<String> getFilesNames() {
+        List<FormMediaFile> files =  getFiles();
+        List<String> fileNames = new ArrayList<>();
+        if (files!=null && !files.isEmpty()){
+            for (FormMediaFile file : files){
+                if (file != null){
+                    fileNames.add(file.name);
+                }
+            }
+        }
+
+        return fileNames;
     }
 
     public String setBinaryData(@NonNull Object data) {

@@ -100,7 +100,6 @@ class UwaziSendViewModel : ViewModel() {
     }
 
     private fun UwaziEntityInstance.createEntityRequest(attachments: List<VaultFile>?) = SendEntityRequest(
-        attachments =  emptyList(),
         metadata = metadata,
         template = collectTemplate?.entityRow?._id ?: "",
         title = title,

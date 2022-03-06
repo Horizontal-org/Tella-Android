@@ -27,6 +27,7 @@ import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziGeoData
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue
+import rs.readahead.washington.mobile.presentation.uwazi.UwaziValueAttachment
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.views.activity.LocationMapActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
@@ -195,6 +196,7 @@ class UwaziEntryFragment : BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziE
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
         uwaziFormView.clearValidationConstraints()
         val hashmap = mutableMapOf<String, List<Any>>()
+        val hashmapRequest = mutableMapOf<String, List<Any>>()
         val widgetMediaFiles = mutableListOf<FormMediaFile>()
         val answers = uwaziFormView.answers
         var validationRequired = false
@@ -226,12 +228,16 @@ class UwaziEntryFragment : BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziE
                 if (answer.key == UWAZI_TITLE) {
                     entityInstance.title = (answer.value as UwaziValue).value as String
                 } else {
-                    if (answer.value is List<*>) {
-
-                        hashmap[answer.key] = (answer.value) as List<UwaziValue>
-
-                    } else {
-                        hashmap[answer.key] = arrayListOf(UwaziValue((answer.value as UwaziValue).value))
+                    when (answer.value) {
+                        is List<*> -> {
+                            hashmap[answer.key] = (answer.value) as List<UwaziValue>
+                        }
+                        is UwaziValueAttachment -> {
+                            hashmap[answer.key] = arrayListOf(UwaziValueAttachment(value = (answer.value as UwaziValueAttachment).value, attachment = uwaziFormView.filesNames.indexOf((answer.value as UwaziValueAttachment).value) ))
+                        }
+                        else -> {
+                            hashmap[answer.key] = arrayListOf(UwaziValue((answer.value as UwaziValue).value))
+                        }
                     }
                 }
             }

@@ -32,8 +32,7 @@ public class MediaFileRequestBody extends RequestBody {
     }
 
    public MediaFileRequestBody(VaultFile mediaFile, @Nullable IProgressListener progressListener) {
-        String filename = mediaFile.name;
-        String mime = FileUtil.getMimeType(filename);
+        String mime = mediaFile.mimeType;
 
         if (TextUtils.isEmpty(mime)) {
             mime = "application/octet-stream";

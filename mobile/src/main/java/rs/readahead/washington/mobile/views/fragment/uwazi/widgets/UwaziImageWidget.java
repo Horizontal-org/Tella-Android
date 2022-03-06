@@ -215,24 +215,18 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
 
     private void showPreview() {
         selectButton.setVisibility(GONE);
-        //   captureButton.setVisibility(GONE);
-        // importButton.setVisibility(GONE);
         clearButton.setVisibility(VISIBLE);
 
         attachmentPreview.showPreview(getFileId());
         attachmentPreview.setEnabled(true);
         attachmentPreview.setVisibility(VISIBLE);
-        //   separator.setVisibility(VISIBLE);
     }
 
     private void hidePreview() {
         selectButton.setVisibility(VISIBLE);
-//        captureButton.setVisibility(VISIBLE);
-        // importButton.setVisibility(VISIBLE);
         clearButton.setVisibility(GONE);
 
         attachmentPreview.setEnabled(false);
         attachmentPreview.setVisibility(GONE);
-        // separator.setVisibility(GONE);
     }
 }
