@@ -291,7 +291,8 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
     }
 
     public void importMedia() {
-        Activity activity = (Activity) getContext();
+        BaseActivity activity = (BaseActivity) getContext();
+        activity.changeTemporaryTimeout();
         waitingForAData = true;
         MediaFileHandler.startSelectMediaActivity(activity, isPdf ? "application/pdf" : "*/*", null, C.IMPORT_FILE);
     }

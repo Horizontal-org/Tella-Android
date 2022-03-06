@@ -12,6 +12,7 @@
     <string name="Vault_PhotosAndVideos_Title" >Photos and Videos</string>
     <string name="Vault_FavoriteForms_Title" >Favorite forms</string>
     <string name="Vault_FavoriteTemplates_Title" >Favorite templates</string>
+    <string name="Vault_No_Files_Title" >You don’t have any files in Tella yet.</string>
     <string name="Vault_Empty_Msg" >You don’t have any files on your Tella yet. Click the “+” button below to import your first file, or go to the Camera or Microphone to create one. You can also create folders to keep your files organized.</string>
     <string name="Vault_Move_SheetDesc" >Move to another folder</string>
     <string name="Vault_Rename_SheetAction" >Rename</string>

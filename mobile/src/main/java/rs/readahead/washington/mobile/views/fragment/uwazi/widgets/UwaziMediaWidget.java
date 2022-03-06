@@ -161,12 +161,11 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
     }
 
     public void importMedia() {
-        Activity activity = (Activity) getContext();
+        BaseActivity activity = (BaseActivity) getContext();
         waitingForAData = true;
-
+        activity.changeTemporaryTimeout();
         MediaFileHandler.startSelectMediaActivity(activity,"video/*",null, C.IMPORT_VIDEO);
     }
-
 
     private void showVideoActivity() {
         try {

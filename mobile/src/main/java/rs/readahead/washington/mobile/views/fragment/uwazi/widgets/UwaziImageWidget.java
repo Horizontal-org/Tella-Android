@@ -173,7 +173,8 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
     }
 
     public void importPhoto() {
-        Activity activity = (Activity) getContext();
+        BaseActivity activity = (BaseActivity) getContext();
+        activity.changeTemporaryTimeout();
         waitingForAData = true;
         MediaFileHandler.startSelectMediaActivity(activity, "image/*", null, C.IMPORT_IMAGE);
     }
