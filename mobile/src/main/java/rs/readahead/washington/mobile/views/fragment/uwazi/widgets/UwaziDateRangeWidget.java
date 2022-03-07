@@ -112,9 +112,9 @@ public class UwaziDateRangeWidget extends UwaziQuestionWidget {
     }
 
     private void setWidgetDate() throws ParseException {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd/HH");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String dateInter = this.yearFrom + "/" + this.monthFrom + "/" + this.dayOfMonthFrom + "/" + 12;
+        String dateInter = this.yearFrom + "/" + this.monthFrom + "/" + this.dayOfMonthFrom;
 
         Date date = sdf.parse(dateInter);
 
@@ -131,9 +131,9 @@ public class UwaziDateRangeWidget extends UwaziQuestionWidget {
     }
 
     private void setWidgetDateTo() throws ParseException {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd/HH");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String dateInter = this.yearTo + "/" + this.monthTo + "/" + this.dayOfMonthTo + "/" + 12;
+        String dateInter = this.yearTo + "/" + this.monthTo + "/" + this.dayOfMonthTo;
 
         Date date = sdf.parse(dateInter);
 

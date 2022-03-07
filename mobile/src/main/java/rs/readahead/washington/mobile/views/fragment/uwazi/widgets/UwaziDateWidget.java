@@ -104,9 +104,9 @@ public class UwaziDateWidget extends UwaziQuestionWidget {
     }
 
     private void setWidgetDate() throws ParseException {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd/HH");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String dateInter = this.year + "/" + this.month + "/" + this.dayOfMonth+ "/" + 12;
+        String dateInter = this.year + "/" + this.month + "/" + this.dayOfMonth;
 
         Date date = sdf.parse(dateInter);
 
