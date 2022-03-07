@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="LockSelect_Action_Cancel">Annuler</string>
-    <string name="LockSelect_Action_Back">Back</string>
+    <string name="LockSelect_Action_Back">Retour</string>
     <string name="LockSelect_Action_Confirm">Poursuivre</string>
     <string name="LockPatternConfirm_Action_Confirm">Redessiner le schéma pour confirmer</string>
     <string name="LockSelect_Action_Continue">Poursuivre</string>

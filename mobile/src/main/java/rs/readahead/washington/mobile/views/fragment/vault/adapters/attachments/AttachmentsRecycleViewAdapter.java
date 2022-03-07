@@ -109,7 +109,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
                         .signature(messageDigest -> { })
                         .into(holder.mediaView);
 
-            } else if (MediaFile.INSTANCE.isTextFileType(vaultFile.mimeType)) {
+            } else {
                 holder.showDocumentInfo();
             }
         } else {

@@ -165,7 +165,7 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
 
             String[] ids = getFileIds() != null ? getFileIds() : null;
 
-            activity.startActivityForResult(new Intent(getContext(), AttachmentsActivitySelector.class)
+            activity.startActivityForResult(new Intent(activity, AttachmentsActivitySelector.class)
                             .putExtra(VAULT_FILE_KEY, new Gson().toJson(ids))
                             .putExtra(VAULT_FILES_FILTER, isPdf ? FilterType.PDF : FilterType.ALL_WITHOUT_DIRECTORY)
                             .putExtra(VAULT_PICKER_SINGLE, false),

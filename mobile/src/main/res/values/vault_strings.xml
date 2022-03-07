@@ -71,4 +71,5 @@
     <string name="Vault_Encrypting_Cancel_SheetAction_Resume">RESUME ENCRYPTION</string>
     <string name="Vault_Encrypting_Cancel_SheetAction_Delete">DELETE FILE</string>
     <string name="Vault_Move_AppBar">Move \"%s\"</string>
+    <string name="Vault_Filter_Name">Name</string>
 </resources>
