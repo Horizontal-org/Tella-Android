@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.entity.uwazi.answer.UwaziDateRange;
@@ -111,8 +112,9 @@ public class UwaziDateRangeWidget extends UwaziQuestionWidget {
     }
 
     private void setWidgetDate() throws ParseException {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-        String dateInter = this.yearFrom + "/" + this.monthFrom + "/" + this.dayOfMonthFrom;
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd/HH");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        String dateInter = this.yearFrom + "/" + this.monthFrom + "/" + this.dayOfMonthFrom + "/" + 12;
 
         Date date = sdf.parse(dateInter);
 
@@ -129,8 +131,9 @@ public class UwaziDateRangeWidget extends UwaziQuestionWidget {
     }
 
     private void setWidgetDateTo() throws ParseException {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-        String dateInter = this.yearTo + "/" + this.monthTo + "/" + this.dayOfMonthTo;
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd/HH");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        String dateInter = this.yearTo + "/" + this.monthTo + "/" + this.dayOfMonthTo + "/" + 12;
 
         Date date = sdf.parse(dateInter);
 

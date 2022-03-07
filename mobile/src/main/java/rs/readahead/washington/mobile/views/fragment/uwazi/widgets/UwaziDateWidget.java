@@ -31,6 +31,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
@@ -103,8 +104,9 @@ public class UwaziDateWidget extends UwaziQuestionWidget {
     }
 
     private void setWidgetDate() throws ParseException {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-        String dateInter = this.year + "/" + this.month + "/" + this.dayOfMonth;
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd/HH");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        String dateInter = this.year + "/" + this.month + "/" + this.dayOfMonth+ "/" + 12;
 
         Date date = sdf.parse(dateInter);
 

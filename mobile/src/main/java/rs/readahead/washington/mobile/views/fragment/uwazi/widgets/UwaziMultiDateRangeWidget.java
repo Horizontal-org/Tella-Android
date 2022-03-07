@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.entity.uwazi.answer.UwaziDateRange;
@@ -97,8 +98,9 @@ public class UwaziMultiDateRangeWidget extends UwaziQuestionWidget {
     }
 
     private void setWidgetDate(Integer key, TextView dateText, Button dateButton, int year, int month, int dayOfMonth, Boolean isFrom) throws ParseException {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-        String dateInter = year + "/" + month + "/" + dayOfMonth;
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd/HH");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        String dateInter = year + "/" + month + "/" + dayOfMonth+ "/" + 12;
 
         Date date = sdf.parse(dateInter);
 
