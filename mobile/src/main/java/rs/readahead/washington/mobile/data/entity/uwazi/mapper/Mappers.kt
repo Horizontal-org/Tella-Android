@@ -30,8 +30,8 @@ fun CommonPropertyEntity.mapToDomainModel() = CommonProperty(
 )
 
 fun PropertyEntity.mapToDomainModel() = Property(
-    _id = _id,
-    id = id,
+    _id = _id ?: "",
+    id = id ?: "",
     showInCard = showInCard,
     content = content?: "",
     label = label?:"",
@@ -56,7 +56,7 @@ fun RowDictionaryEntity.mapToDomainModel() = RowDictionary(
     values = values?.map { it.mapToDomainModel() } ?: emptyList())
 
 fun ValueEntity.mapToDomainModel() = SelectValue(
-    _id = _id,
-    id = id,
+    _id = _id?: "",
+    id = id?: "",
     label = label,
 )
