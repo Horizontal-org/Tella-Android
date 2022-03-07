@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Home_BottomNav_Home">الرئيسية</string>
+    <string name="Home_BottomNav_Rec">التسجيل</string>
+    <string name="Home_BottomNav_Camera">الكاميرا</string>
+    <string name="Home_BottomNav_Forms">النماذج</string>
+    <string name="Home_BottomNav_Reports">التقارير</string>
+    <string name="Home_BottomNav_Uwazi">Uwazi</string>
+</resources>

@@ -425,11 +425,6 @@
   <string name="settings.sec_confirm_camouflage_desc">لإعادة فتح Tella، ابحث عن أيقونة %s بين تطبيقاتك.</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">لإعادة فتح Tella، ابحث عن تطبيق الآلة الحاسبة بين التطبيقات الأخرى. ثم ألغِ تأمين Tella من خلال إدخال رمز التعريف الشخصي الخاص بك في الآلة الحاسبة متبوعًا بعلامة \"=\".</string>
   <string name="settings.sec_confirm_exit_tella">الخروج من Tella</string>
-  <string name="Home_BottomNav_Home">الرئيسية</string>
-  <string name="Home_BottomNav_Rec">التسجيل</string>
-  <string name="Home_BottomNav_Camera">الكاميرا</string>
-  <string name="Home_BottomNav_Forms">النماذج</string>
-  <string name="Home_BottomNav_Reports">التقارير</string>
   <string name="Vault_Move_AppBar">نقل \"%s\"</string>
   <string name="Vault_CreateFolder_SheetAction">إنشاء</string>
   <string name="ServerSettings_ServerName_ToolTip">أعط الخادم الخاص بك اسمًا للتعرف عليه في حال إضافة المزيد من الخوادم لاحقًا. يمكن أن يكون هذا الاسم اسم المنظمة أو اسم المشروع أو غيره من الأسماء.</string>
