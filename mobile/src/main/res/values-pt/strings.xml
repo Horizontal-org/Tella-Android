@@ -8,10 +8,7 @@
   <string name="verification_prompt_dialog_title">Habilitar o GPS?</string>
   <string name="collect_tab.title_blank">Em branco</string>
   <string name="action_cancel">Cancelar</string>
-  <string name="lock_set.pattern_expl">Para melhor proteger seus dados, crie seu padrão de bloqueio do aplicativo. Este padrão será usado para desbloquear o aplicativo e acessar seus dados. O padrão deve conter pelo menos 6 pontos.</string>
   <string name="settings_menu.item_contact">Fale conosco</string>
-  <string name="home_collect.button">Coletar</string>
-  <string name="onboard_collect_heading">Coletar</string>
   <string name="collect_dialog.text_download.progress">Baixando o formulário</string>
   <string name="collect_toast_download.completed">Transferência concluída</string>
   <string name="action_delete">Excluir</string>

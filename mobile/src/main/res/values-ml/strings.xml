@@ -15,14 +15,8 @@
   <string name="collect_tab.title_blank">ശൂന്യം</string>
   <!-- A button used throughout the app to cancel actions. -->
   <string name="action_cancel">റദ്ദാക്കുക </string>
-  <!-- This is an explanation available when first installing the app, on the very first screen. -->
-  <string name="lock_set.pattern_expl">നിങ്ങളുടെ ഡാറ്റ മികച്ച രീതിയിൽ പരിരക്ഷിക്കുന്നതിന്, ദയവായി നിങ്ങളുടെ ആപ്ലിക്കേഷൻ പൂട്ടിന്റെ മാതൃക സൃഷ്ടിക്കുക. ആപ്ലിക്കേഷൻ പൂട്ട് തുറക്കുന്നതിനും നിങ്ങളുടെ ഡാറ്റ ഉപയോഗിക്കുന്നതിനും ഈ മാതൃക ഉപയോഗിക്കപ്പെടും. ഈ മാതൃകയിൽ കുറഞ്ഞത് 6 ബിന്ധുക്കളെങ്കിലും ഉണ്ടായിരിക്കണം.</string>
   <!-- A menu item in the About & Help screen -->
   <string name="settings_menu.item_contact">ഞങ്ങളെ സമാപിക്കു </string>
-  <!-- The label on the homescreen button to access the data-collection feature. -->
-  <string name="home_collect.button">ശേഖരിക്കുക</string>
-  <!-- The heading of the Onboarding screen explaining the data collection feature -->
-  <string name="onboard_collect_heading">ശേഖരിക്കുക</string>
   <!-- The dialog informing the user that their form is being downloaded. -->
   <string name="collect_dialog.text_download.progress">ഫോം ഡൗൺലോഡുചെയ്യുന്നു</string>
   <!-- The dialog informing the user that their form was successfully downloaded. -->

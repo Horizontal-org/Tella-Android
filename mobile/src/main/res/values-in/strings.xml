@@ -8,10 +8,7 @@
   <string name="verification_prompt_dialog_title">Enable GPS?</string>
   <string name="collect_tab.title_blank">Laman kosong</string>
   <string name="action_cancel">Batal</string>
-  <string name="lock_set.pattern_expl">To best protect your data, please create your application lock pattern. This pattern will be used for unlocking the app and access your data. The pattern must contain at least 6 dots.</string>
   <string name="settings_menu.item_contact">Hubungi kami</string>
-  <string name="home_collect.button">Kumpulkan</string>
-  <string name="onboard_collect_heading">Kumpulkan</string>
   <string name="collect_dialog.text_download.progress">Downloading the form</string>
   <string name="collect_toast_download.completed">Download completed</string>
   <string name="action_delete">Hapus</string>

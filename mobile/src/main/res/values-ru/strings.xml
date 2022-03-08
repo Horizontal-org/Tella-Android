@@ -8,10 +8,7 @@
   <string name="verification_prompt_dialog_title">Внимание</string>
   <string name="collect_tab.title_blank">Пустая</string>
   <string name="action_cancel">Отменить</string>
-  <string name="lock_set.pattern_expl">Для обеспечения максимальной безопасности, пожалуйста, задайте графический ключ для защиты входа в приложение. Он будет использован для входа в приложение Tella при каждом запуске, чтобы никто кроме Вас не мог получить доступ к данным. Ключ должна соединять минимум 6 точек.</string>
   <string name="settings_menu.item_contact">Свяжитесь с нами</string>
-  <string name="home_collect.button">Collect</string>
-  <string name="onboard_collect_heading">Collect</string>
   <string name="collect_dialog.text_download.progress">Загрузка в процессе…</string>
   <string name="collect_toast_download.completed">Загрузка завершена</string>
   <string name="action_delete">Удалить</string>

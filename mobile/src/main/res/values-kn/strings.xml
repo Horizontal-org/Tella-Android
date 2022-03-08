@@ -15,14 +15,8 @@
   <string name="collect_tab.title_blank">ಖಾಲಿ</string>
   <!-- A button used throughout the app to cancel actions. -->
   <string name="action_cancel">ರದ್ದುಮಾಡಿ</string>
-  <!-- This is an explanation available when first installing the app, on the very first screen. -->
-  <string name="lock_set.pattern_expl">ನಿಮ್ಮ ಡೇಟಾ ಉತ್ತಮವಾಗಿ ರಕ್ಷಿಸಲು, ದಯವಿಟ್ಟು ನಿಮ್ಮ ಅಪ್ಲಿಕೇಶನ್ ಲಾಕ್ ಮಾದರಿಯನ್ನು ರಚಿಸಿ. ಅಪ್ಲಿಕೇಶನ್ ಅನ್ನು ಅನ್ಲಾಕ್ ಮಾಡಲು ಮತ್ತು ನಿಮ್ಮ ಡೇಟಾ ಪ್ರವೇಶಿಸಲು ಈ ಮಾದರಿಯನ್ನು ಬಳಸಲಾಗುತ್ತದೆ. ಮಾದರಿಯು ಕನಿಷ್ಠ 6 ಚುಕ್ಕೆಗಳನ್ನು ಹೊಂದಿರಬೇಕು.</string>
   <!-- A menu item in the About & Help screen -->
   <string name="settings_menu.item_contact">ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ</string>
-  <!-- The label on the homescreen button to access the data-collection feature. -->
-  <string name="home_collect.button">ಸಂಗ್ರಹಿಸಿ</string>
-  <!-- The heading of the Onboarding screen explaining the data collection feature -->
-  <string name="onboard_collect_heading">ಸಂಗ್ರಹಿಸಿ</string>
   <!-- The dialog informing the user that their form is being downloaded. -->
   <string name="collect_dialog.text_download.progress">ಫಾರ್ಮ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ</string>
   <!-- The dialog informing the user that their form was successfully downloaded. -->

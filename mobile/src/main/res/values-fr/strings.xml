@@ -416,9 +416,6 @@
     <string name="SettingSec_ChangeLock_WarningCalc_SheetAction_Remove">SUPPRIMER LE CAMOUFLAGE</string>
     <string name="SettingsCamo_EnterLock_Password">Entrez votre mot de passe pour changer votre méthode de camouflage</string>
     <string name="settings.gen_select_about">À propos et Aide</string>
-    <string name="lock_set.pattern_expl">Pour une protection maximale de vos données, veuillez créer un schéma de verrouillage de l’application. Ce schéma sera utilisé pour déverrouiller l’appli et pour accéder à vos données. Le schéma doit comporter au moins six points.</string>
-    <string name="home_collect.button">Collecte</string>
-    <string name="onboard_collect_heading">Collecte</string>
     <string name="upload_toast_fail.finding.metadata.to.upload">Erreur de localisation des renseignements de vérification du fichier. Veuillez réessayer</string>
     <string name="upload_toast.fail.finding.file.to.upload">Erreur de localisation du fichier à téléverser. Veuillez réessayer</string>
     <string name="gallery_app.bar">Galerie</string>

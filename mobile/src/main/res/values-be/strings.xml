@@ -11,7 +11,6 @@
   <string name="lock_set.pattern_expl">Для забеспячэння максімальнай бяспекі, калі ласка, задайце графічны ключ для абароны ўваходу ў дадатак. Ён будзе выкарыстаны для ўваходу ў дадатак Tella пры кожным запуску, каб ніхто акрамя Вас не мог атрымаць доступ да дадзеных. Ключ павінен мець мінімум 6 пунктаў.</string>
   <string name="settings_menu.item_contact">Звяжыцеся з намі</string>
   <string name="home_collect.button">Збор</string>
-  <string name="onboard_collect_heading">Збор</string>
   <string name="collect_dialog.text_download.progress">Загрузка ў працэсе …</string>
   <string name="collect_toast_download.completed">Загрузка завершана</string>
   <string name="action_delete">Выдаліць</string>

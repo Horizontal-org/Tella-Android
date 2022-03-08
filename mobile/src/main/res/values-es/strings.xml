@@ -425,9 +425,6 @@ conectarse a un servidor</string>
     <string name="SettingSec_ChangeLock_WarningCalc_SheetAction_Remove">REMOVER CAMUFLAJE</string>
     <string name="SettingsCamo_EnterLock_Password">Ingresa tu contraseña para cambiar tu método de camuflaje</string>
     <string name="settings.gen_select_about">Acerca de y Ayuda</string>
-    <string name="lock_set.pattern_expl">To best protect your data, please create your application lock pattern. This pattern will be used for unlocking the app and access your data. The pattern must contain at least 6 dots.</string>
-    <string name="home_collect.button">Recopilar</string>
-    <string name="onboard_collect_heading">Recopilar</string>
     <string name="upload_toast_fail.finding.metadata.to.upload">Hubo un error al ubicar la información de verificación del archivo. Inténtalo de nuevo</string>
     <string name="upload_toast.fail.finding.file.to.upload">Hubo un error al localizar el archivo a subir. Por favor, inténtalo de nuevo</string>
     <string name="gallery_app.bar">Gallery</string>

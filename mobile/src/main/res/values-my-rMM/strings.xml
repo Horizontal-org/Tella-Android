@@ -8,10 +8,7 @@
   <string name="verification_prompt_dialog_title">ဂျီပီအက်စ် ဖွင့်မလား</string>
   <string name="collect_tab.title_blank">ဗလာ</string>
   <string name="action_cancel">မလုပ်တော့ပါ</string>
-  <string name="lock_set.pattern_expl">သင်၏အချက်အလက်များကိုအကောင်းဆုံးကာကွယ်ရန် သင်၏လျှောက်လွှာပုံစံကိုဖန်တီးပါ။ ဤပုံစံသည်အက်ပ်ကိုသော့ဖွင့်ရန်နှင့်သင်၏ဒေတာကိုရယူရန်အတွက်အသုံးပြုလိမ့်မည်။ ပုံစံတွင်အနည်းဆုံးအစက် ၆ လုံးပါဝင်ရမည်။</string>
   <string name="settings_menu.item_contact">ဆက်သွယ်ရန်</string>
-  <string name="home_collect.button">စုဆောင်းသည်။</string>
-  <string name="onboard_collect_heading">စုဆောင်းသည်။</string>
   <string name="collect_dialog.text_download.progress">ပုံစံကို download လုပ်ပါ</string>
   <string name="collect_toast_download.completed">‌ဒေါင်းလုတ်ပြီးပါပြီး</string>
   <string name="action_delete">ဖျက်ရန်</string>
