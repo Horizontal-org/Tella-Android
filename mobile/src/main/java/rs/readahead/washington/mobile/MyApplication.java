@@ -9,6 +9,12 @@ import android.os.Build;
 import android.os.StrictMode;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.lifecycle.ProcessLifecycleOwner;
+import androidx.multidex.MultiDexApplication;
+
 import com.bumptech.glide.Glide;
 import com.evernote.android.job.JobManager;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -22,6 +28,7 @@ import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity;
 import com.hzontal.tella_vault.Vault;
 import com.hzontal.tella_vault.rx.RxVault;
 
+import org.cleaninsights.sdk.CleanInsights;
 import org.hzontal.tella.keys.MainKeyStore;
 import org.hzontal.tella.keys.TellaKeys;
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder;
@@ -33,12 +40,6 @@ import org.hzontal.tella.keys.key.MainKey;
 import org.hzontal.tella.keys.wrapper.AndroidKeyStoreWrapper;
 import org.hzontal.tella.keys.wrapper.PBEKeyWrapper;
 import org.hzontal.tella.keys.wrapper.UnencryptedKeyWrapper;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.lifecycle.ProcessLifecycleOwner;
-import androidx.multidex.MultiDexApplication;
 
 import java.io.File;
 
@@ -61,6 +62,8 @@ import rs.readahead.washington.mobile.views.activity.MainActivity;
 import rs.readahead.washington.mobile.views.activity.onboarding.OnBoardingActivity;
 import timber.log.Timber;
 
+import static rs.readahead.washington.mobile.util.ExtensionsKt.createCleanInsightsInstance;
+
 
 public class MyApplication extends MultiDexApplication implements IUnlockRegistryHolder, CredentialsCallback {
     private static TellaBus bus;
@@ -72,6 +75,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     public static Vault vault;
     public static RxVault rxVault;
     Vault.Config vaultConfig;
+    private static CleanInsights cleanInsights;
+
     public static void startMainActivity(@NonNull Context context) {
         Intent intent;
         if (Preferences.isFirstStart()) {
@@ -179,6 +184,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         vaultConfig = new Vault.Config();
         vaultConfig.root = new File(this.getFilesDir(), C.MEDIA_DIR);
 
+        //initCleanInsights();
     }
 
     private void configureCrashlytics() {
@@ -219,7 +225,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         // we need this to set one active unlocking method
         // in Tella1 this can be here and fixed, but in Tella2 we need to read saved active method
         // when starting the app and set it (that functionality is missing from active registry, with changing method support)
-       // unlockRegistry.setActiveMethod(getApplicationContext(), UnlockRegistry.Method.TELLA_PATTERN);
+        // unlockRegistry.setActiveMethod(getApplicationContext(), UnlockRegistry.Method.TELLA_PATTERN);
     }
 
     @Override
@@ -227,6 +233,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         super.onLowMemory();
         super.onLowMemory();
         Glide.get(this).clearMemory();
+        //persistCleanInsights();
     }
 
     @Override
@@ -250,11 +257,11 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         startMainActivity(context);
     }
 
-    private void upgradeTella2(Context context){
+    private void upgradeTella2(Context context) {
         try {
             byte[] key;
             if ((key = getMainKeyHolder().get().getKey().getEncoded()) != null) {
-                TellaUpgrader.upgradeV2(context,key);
+                TellaUpgrader.upgradeV2(context, key);
             }
         } catch (LifecycleMainKey.MainKeyUnavailableException e) {
             Timber.d(e);
@@ -301,8 +308,37 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         getMainKeyHolder().clear();
         TellaKeysUI.getMainKeyHolder().clear();
     }
-    public static void initKeys(MainKey mainKey){
+
+    public static void initKeys(MainKey mainKey) {
         getMainKeyHolder().set(mainKey);
         TellaKeysUI.getMainKeyHolder().set(mainKey);
+    }
+
+    public static CleanInsights getCleanInsights() { return cleanInsights; }
+
+    private void initCleanInsights() {
+        if (Preferences.hasAcceptedImprovements()) {
+            try {
+                cleanInsights = createCleanInsightsInstance(getApplicationContext(), "cleaninsights.json");
+            } catch (Exception e) {
+                Timber.e(e);
+            }
+        }
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        persistCleanInsights();
+    }
+
+    private void persistCleanInsights() {
+        if (Preferences.hasAcceptedImprovements() && cleanInsights != null) cleanInsights.persist();
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        persistCleanInsights();
     }
 }

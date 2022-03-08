@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.SeekBar
-import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -26,7 +25,6 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.data.entity.XFormEntity
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.util.LockTimeoutManager
@@ -35,8 +33,10 @@ import rs.readahead.washington.mobile.views.activity.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity
 import rs.readahead.washington.mobile.views.activity.VideoViewerActivity
+import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.custom.CountdownTextView
+import rs.readahead.washington.mobile.views.fragment.vault.adapters.ImproveClickOptions
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
 import timber.log.Timber
@@ -81,12 +81,35 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         fixAppBarShadow(view)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CleanInsightsActivity.CLEAN_INSIGHTS_REQUEST_CODE) {
+            removeImprovementSection()
+            val isOptedIn =
+                data?.extras?.getBoolean(CleanInsightsActivity.RESULT_FOR_ACTIVITY) ?: false
+            val shouldOpenLearnMore =
+                data?.extras?.getBoolean(CleanInsightsActivity.FROM_LEARN_MORE) ?: false
+            if (isOptedIn) showMessageForCleanInsightsApprove()
+            if (shouldOpenLearnMore) startCleanInsightActivity(true)
+        }
+    }
+
+    private fun showMessageForCleanInsightsApprove() {
+        Preferences.setIsAcceptedImprovements(true)
+        DialogUtils.showBottomMessage(
+            requireActivity(),
+            String.format(getString(R.string.clean_insights_signed_for_days)),
+            false
+        )
+    }
+
     private fun initData() {
         homeVaultPresenter = HomeVaultPresenter(this)
         vaultRecyclerView.apply {
             adapter = vaultAdapter
             layoutManager = LinearLayoutManager(activity)
         }
+        vaultAdapter.addImprovementSection()
         timerDuration = resources.getInteger(R.integer.panic_countdown_duration)
     }
 
@@ -155,22 +178,33 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             override fun onChanged() {
                 vaultRecyclerView.scrollToPosition(0)
             }
+
             override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
                 vaultRecyclerView.scrollToPosition(0)
             }
+
             override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
                 vaultRecyclerView.scrollToPosition(0)
             }
+
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
                 vaultRecyclerView.scrollToPosition(0)
             }
+
             override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
                 vaultRecyclerView.scrollToPosition(0)
             }
+
             override fun onItemRangeChanged(positionStart: Int, itemCount: Int, payload: Any?) {
                 vaultRecyclerView.scrollToPosition(0)
             }
         })
+    }
+
+    private fun startCleanInsightActivity(toOpenLeanMore: Boolean = false) {
+        val intent = Intent(context, CleanInsightsActivity::class.java)
+        intent.putExtra(CleanInsightsActivity.FROM_LEARN_MORE, toOpenLeanMore)
+        startActivityForResult(intent, CleanInsightsActivity.CLEAN_INSIGHTS_REQUEST_CODE)
     }
 
     private fun setUpToolbar() {
@@ -210,6 +244,22 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     override fun onFavoriteItemClickListener(form: CollectForm) {
 
+    }
+
+    override fun onImproveItemClickListener(improveClickOptions: ImproveClickOptions) {
+        when (improveClickOptions) {
+            ImproveClickOptions.CLOSE -> removeImprovementSection()
+            ImproveClickOptions.YES -> {
+                removeImprovementSection()
+                showMessageForCleanInsightsApprove()
+            }
+            ImproveClickOptions.LEARN_MORE -> startCleanInsightActivity()
+        }
+    }
+
+    private fun removeImprovementSection() {
+        Preferences.setShowVaultImprovementSection(false)
+        vaultAdapter.removeImprovementSection()
     }
 
     override fun allFilesClickListener() {
@@ -329,7 +379,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     override fun onGetFilesSuccess(files: List<VaultFile?>) {
         if (!files.isNullOrEmpty()) {
             vaultAdapter.addRecentFiles(files)
-        }else{
+        } else {
             vaultAdapter.removeRecentFiles()
         }
     }

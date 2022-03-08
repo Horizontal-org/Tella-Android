@@ -9,7 +9,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.SwitchCompat
-import androidx.core.content.ContextCompat
 import org.hzontal.shared_ui.R
 
 
@@ -28,6 +27,7 @@ class TellaSwitchWithMessage @JvmOverloads constructor(
 
     private lateinit var titleTextView: TextView
     private lateinit var messageTextView: TextView
+    private lateinit var learnMoreTextView: TextView
     lateinit var mSwitch: SwitchCompat
 
     private var mChecked = false
@@ -41,8 +41,9 @@ class TellaSwitchWithMessage @JvmOverloads constructor(
     private fun initView() {
         titleTextView = findViewById(R.id.titleTV)
         messageTextView = findViewById(R.id.explainTV)
+        learnMoreTextView = findViewById(R.id.learnMoreTV)
         mSwitch = findViewById(R.id.mSwitch)
-    //    background = ContextCompat.getDrawable(context, R.drawable.rounded_light_purple_background)
+        //    background = ContextCompat.getDrawable(context, R.drawable.rounded_light_purple_background)
     }
 
 
@@ -81,6 +82,14 @@ class TellaSwitchWithMessage @JvmOverloads constructor(
         if (text != -1) {
             textView.visibility = View.VISIBLE
             textView.text = context.getString(text)
+        }
+    }
+
+    fun setTextAndAction(textResource: Int, action: () -> Unit) {
+        with(learnMoreTextView) {
+            visibility = View.VISIBLE
+            text = context.getString(textResource)
+            setOnClickListener { action() }
         }
     }
 

@@ -4,12 +4,14 @@
     package="rs.readahead.washington.mobile">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28"/>
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
     <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
-    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS"
+    <uses-permission
+        android:name="android.permission.MANAGE_DOCUMENTS"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.ACCESS_ALL_DOWNLOADS"/>
+    <uses-permission android:name="android.permission.ACCESS_ALL_DOWNLOADS" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" /> -->
@@ -69,17 +71,20 @@
         <activity
             android:name=".views.activity.SplashActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:exported="true"
             android:icon="@mipmap/tella_icon_round"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity-alias
             android:name=".views.activity.AliasiCamera"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/icamera_round"
             android:label="@string/settings.camo_icamera"
             android:targetActivity=".views.activity.SplashActivity">
@@ -91,6 +96,7 @@
         <activity-alias
             android:name=".views.activity.AliasSelfieCam"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/selfiecamera_round"
             android:label="@string/settings.camo_selfie_cam"
             android:targetActivity=".views.activity.SplashActivity">
@@ -102,6 +108,7 @@
         <activity-alias
             android:name=".views.activity.AliasSnapCamera"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/snapcamera_round"
             android:label="@string/settings.camo_snap_camera"
             android:targetActivity=".views.activity.SplashActivity">
@@ -113,6 +120,7 @@
         <activity-alias
             android:name=".views.activity.AliasCalculate"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/calculate_round"
             android:label="@string/settings.camo_calculate"
             android:targetActivity=".views.activity.SplashActivity">
@@ -124,6 +132,7 @@
         <activity-alias
             android:name=".views.activity.AliasCalculatorPlus"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/calculatorplus_round"
             android:label="@string/settings.camo_calculator_plus"
             android:targetActivity=".views.activity.SplashActivity">
@@ -135,6 +144,7 @@
         <activity-alias
             android:name=".views.activity.AliasiCalculator"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/icalculator_round"
             android:label="@string/settings.camo_icalculator"
             android:targetActivity=".views.activity.SplashActivity">
@@ -146,6 +156,7 @@
         <activity-alias
             android:name=".views.activity.AliasWeather"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/weather_round"
             android:label="@string/settings.camo_weather"
             android:targetActivity=".views.activity.SplashActivity">
@@ -157,6 +168,7 @@
         <activity-alias
             android:name=".views.activity.AliasEasyWeather"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/easyweather_round"
             android:label="@string/settings.camo_easyweather"
             android:targetActivity=".views.activity.SplashActivity">
@@ -168,6 +180,7 @@
         <activity-alias
             android:name=".views.activity.AliasSunnyDay"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/sunnyday_round"
             android:label="@string/settings.camo_sunnyday"
             android:targetActivity=".views.activity.SplashActivity">
@@ -179,6 +192,7 @@
         <activity-alias
             android:name=".views.activity.AliasGameStation"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/gamestation_round"
             android:label="@string/settings.camo_gamestation"
             android:targetActivity=".views.activity.SplashActivity">
@@ -190,6 +204,7 @@
         <activity-alias
             android:name=".views.activity.AliasPlayNow"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/playnow_round"
             android:label="@string/settings.camo_playnow"
             android:targetActivity=".views.activity.SplashActivity">
@@ -201,6 +216,7 @@
         <activity-alias
             android:name=".views.activity.AliasJewelDash"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/jeweldash_round"
             android:label="@string/settings.camo_jeweldash"
             android:targetActivity=".views.activity.SplashActivity">
@@ -212,6 +228,7 @@
         <activity-alias
             android:name=".views.activity.AliasClock"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/clock_round"
             android:label="@string/settings.camo_clock"
             android:targetActivity=".views.activity.SplashActivity">
@@ -223,6 +240,7 @@
         <activity-alias
             android:name=".views.activity.AliasTime"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/time_round"
             android:label="@string/settings.camo_time"
             android:targetActivity=".views.activity.SplashActivity">
@@ -234,6 +252,7 @@
         <activity-alias
             android:name=".views.activity.AliasStopWatch"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/stopwatch_round"
             android:label="@string/settings.camo_stopwatch"
             android:targetActivity=".views.activity.SplashActivity">
@@ -245,6 +264,7 @@
         <activity-alias
             android:name=".views.activity.AliasCalculator"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/calculator_round"
             android:label="@string/settings.camo_calculator2"
             android:targetActivity=".views.activity.SplashActivity">
@@ -263,10 +283,12 @@
         <activity
             android:name=".views.activity.SettingsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
             android:label="@string/settings_app.bar"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -274,7 +296,7 @@
                     android:host="open.settings.activity"
                     android:scheme="tella_scheme" />
             </intent-filter>
-            <nav-graph android:value="@navigation/settings_navigation"/>
+            <nav-graph android:value="@navigation/settings_navigation" />
         </activity>
 
         <activity
@@ -300,10 +322,11 @@
         <activity
             android:name=".views.activity.CollectHelpActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:windowSoftInputMode="adjustPan"
+            android:exported="true"
             android:label="@string/collect.help_app.bar"
             android:parentActivityName=".views.activity.ServersSettingsActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="rs.readahead.washington.mobile.views.activity.ServersSettingsActivity" />
@@ -322,6 +345,7 @@
         <activity
             android:name=".views.activity.ServersSettingsActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:exported="true"
             android:label="@string/settings.servers.title_server.settings"
             android:parentActivityName=".views.activity.SettingsActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -401,6 +425,9 @@
         <activity
             android:name=".views.activity.onboarding.OnBoardingActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".views.activity.clean_insights.CleanInsightsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- <meta-data

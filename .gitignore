@@ -20,3 +20,5 @@ java_pid18084.hprof
 /mobile/src/debug/google-services.json
 /mobile/src/main/google-services.json
 /mobile/src/release/google-services.json
+
+mobile/google-services.json

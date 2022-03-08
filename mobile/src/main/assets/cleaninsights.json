@@ -1,0 +1,17 @@
+{
+    "server": "https://analytics.wearehorizontal.org/matomo.php",
+    "siteId": 2,
+    "timeout": 5,
+    "debug": true,
+    "campaigns": {
+        "test": {
+            "start": "2022-01-01T00:00:00Z",
+            "end": "2022-12-31T23:59:59Z",
+            "aggregationPeriodLength": 1,
+            "numberOfPeriods": 90,
+            "onlyRecordOnce": false,
+            "eventAggregationRule": "avg",
+            "strengthenAnonymity": false
+        }
+    }
+}
