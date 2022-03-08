@@ -479,8 +479,6 @@
   <string name="gallery_list.items_show.only.audio">تسجيلات الصوت</string>
   <string name="home_action.desc_quick.exit">الخروج</string>
   <string name="onboard.camo_heading">التمويه</string>
-  <string name="settings_dialog.action_save.server.no.internet">الحفظ على أي حال</string>
-  <string name="gallery_heading_selected_files">الملفات المحددة</string>
   <string name="settings.camo_camera4">الكاميرا</string>
   <string name="settings.camo_camera3">CameraPro</string>
   <string name="settings.camo_camera2">SuperCam</string>
@@ -489,10 +487,6 @@
   <string name="settings.camo_weather2">الطقس المحلي</string>
   <string name="settings.camo_calculator1">الحاسبة الميسرة</string>
   <string name="settings.camo_weather1">الطقس</string>
-  <string name="home_content.desc_background">غير متوفر</string>
-  <string name="settings.docu_app.bar">التوثيق</string>
-  <string name="settings.gen_select_documentation">التوثيق</string>
-  <string name="settings.gen_select_protection">الحماية</string>
   <string name="settings.docu_dialog.action_hide">إخفاء</string>
   <string name="settings.docu_auto.upload.server.selection_select">الخادم</string>
   <string name="upload_dialog.title_select.server">تحديد الخادم</string>
@@ -506,32 +500,6 @@
   <string name="settings.docu_auto.upload_action">تحميل تلقائي</string>
   <string name="settings.docu_auto.delete_action.expl">سوف تحذف Tella الملفات تلقائيًّا من جهازك بمجرد تحميلها على الخادم.</string>
   <string name="settings.docu_delete.upload.server_dialog.expl">لن تتمكن من تحميل ملفات على هذا الخادم بعد الآن.</string>
-  <plurals name="upload.main_meta_number.of.files">
-    <item quantity="zero">%d ملف</item>
-    <item quantity="one">%d ملف</item>
-    <item quantity="two">ملفان</item>
-    <item quantity="few">ملفات</item>
-    <item quantity="many">ملف</item>
-    <item quantity="other">ملف</item>
-  </plurals>
-  <plurals name="upload.main_meta_number.of.files.uploaded">
-    <item quantity="zero">%d ملف تم تحميله</item>
-    <item quantity="one">%d ملف تم تحميله</item>
-    <item quantity="two">ملفان تم تحميلهما</item>
-    <item quantity="few">ملفات تم تحميله</item>
-    <item quantity="many">ملف تم تحميله</item>
-    <item quantity="other">ملف تم تحميله</item>
-  </plurals>
-  <plurals name="upload.main_meta_minutes.left">
-    <item quantity="zero">%d منذ دقيقة</item>
-    <item quantity="one">%d منذ دقيقة</item>
-    <item quantity="two">منذ دقيقتين</item>
-    <item quantity="few">منذ دقائق</item>
-    <item quantity="many">منذ دقيقة</item>
-    <item quantity="other">منذ دقيقة</item>
-  </plurals>
-  <string name="intro_welcome">مرحبًا بكم في</string>
-  <string name="intro_start">البدء</string>
   <string name="settings.select_customization">تخصيص</string>
   <string name="collect.outbox_tab.title">علبة الصادر</string>
   <string name="Collect_RemoveForm_SheetTitle">حذف النموذج؟</string>

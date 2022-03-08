@@ -136,14 +136,12 @@
   <string name="home_action.desc_quick.exit">ထွက်ခွါမည်။</string>
   <string name="settings.prot_select_camouflage">ပုံဖျက်သည်</string>
   <string name="onboard.camo_heading">ပုံဖျက်သည်</string>
-  <string name="settings_dialog.action_save.server.no.internet">မည်သို့ပင်ဖြစ်စေသိမ်းမည်။</string>
   <string name="settings.docu_error_wrong.credentials">အသုံးပြုသူအမည်သို့မဟုတ်စကားဝှက်မမှန်ကန်ပါ။</string>
   <string name="settings.docu_error_domain.doesnt.exit">ဆာဗာ URL မမှန်ကန်ပါ</string>
   <string name="settings.docu_error_unknown.connection.error">ဆာဗာနှင့်ချိတ်ဆက်ရန်ကြိုးစားနေသည့်အမှားတစ်ခုရှိသည်။</string>
   <string name="settings.docu_error_no.internet">အင်တာနက်ချိတ်ဆက်ထားခြင်းမရှိသေးပါ။ အင်တာနက်ချိတ်ဆက်ပြီးလျှင်ထပ်မံကြိုးစားပါ။</string>
   <string name="settings.docu_dialog.action_try.again.connecting">ထပ်မံကြိုးစားပါ။</string>
   <string name="settings.about_select_tutorial">သင်ခန်းစာ</string>
-  <string name="gallery_heading_selected_files">ဖိုင်ရွေးချယ်ပါ။</string>
   <string name="settings.camo_expl">စိတ်တိုင်း ကျ အိုင်ကွန်နှင့် အမည်အား‌ရွေးချယ်အသုံးပြုခြင်းဖြင့် တဲလ်လာကို ဖွက်သိမ်းထားနိုင်ပါသည်။ သို့ရာတွင် တဲလ်လာ အိုင်ကွန် ကို အန်ဒရိုက်စက်တင် တွင် မြင်နိုင်ကြောင်းကို သတိပြုရန်လိုအပ်သည်။  </string>
   <string name="settings.camo_camera4">ကင်မရာ</string>
   <string name="settings.camo_camera3">ကင်မရာပရို</string>
@@ -212,7 +210,6 @@
   <string name="verification.info_subheading_device.metadata">စက်/ဖုန်း</string>
   <string name="verification.info_subheading_context.metadata">အခင်းအကျင်း</string>
   <string name="verification.info_field_metadata.not.available">မရရှိနိုင်ပါ</string>
-  <string name="home_content.desc_background">မရရှိနိုင်ပါ</string>
   <string name="verification.info_field_latitude">လပ်တီတွဒ်</string>
   <string name="verification.info_field_longitude">လောင်ဂျီတွဒ်</string>
   <string name="verification.info_field_altitude">အမြင့်</string>
@@ -228,9 +225,6 @@
   <plurals name="collect.end_meta_number.of.elements">
     <item quantity="other">%d ဖိုင်များ</item>
   </plurals>
-  <string name="settings.docu_app.bar">မှတ်တမ်းတင်ခြင်း</string>
-  <string name="settings.gen_select_documentation">မှတ်တမ်းတင်ခြင်း</string>
-  <string name="settings.gen_select_protection">အကာအကွယ်</string>
   <string name="action_learn.more">ပိုမိုသိရန်</string>
   <string name="settings.servers_add.server_dialog.title">ဆာဗာ‌အသစ်ပေါင်းရန်</string>
     <string name="settings.prot_select_delete.forms">အကြမ်းသိမ်းဆည်းထားသည့် ဖောင်ပုံစံများ ၊ ပို့လွှတ်ပြီး ‌ဖောင်ပုံစံများ ကို ဖျက်မှာဖြစ်ပါတယ်။</string>
@@ -333,9 +327,7 @@
   <string name="action_next">နောက်သို့</string>
   <string name="meter">%f မီတာ</string>
   <string name="meter_per_second">%f တစ်စက္ကန့်တစ်မီတာနှုန်း</string>
-  <string name="intro_welcome">Welcome to</string>
   <string name="tella">Tella</string>
-  <string name="intro_start">START</string>
   <string name="intro_document_protect"><![CDATA[Document & Protect]]></string>
   <string name="onboard_setup_text">How would you like to set up Tella?</string>
   <string name="onboard_full_setup">FULL SETUP</string>

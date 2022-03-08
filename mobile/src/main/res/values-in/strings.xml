@@ -138,14 +138,12 @@
   <string name="home_action.desc_quick.exit">Keluar</string>
   <string name="settings.prot_select_camouflage">Kamuflase</string>
   <string name="onboard.camo_heading">Kamuflase</string>
-  <string name="settings_dialog.action_save.server.no.internet">Tetap simpan</string>
   <string name="settings.docu_error_wrong.credentials">The username or password is incorrect.</string>
   <string name="settings.docu_error_domain.doesnt.exit">The server URL is incorrect.</string>
   <string name="settings.docu_error_unknown.connection.error">There was an error trying to connect to the server.</string>
   <string name="settings.docu_error_no.internet">You’re not connected to the internet. Try again when connected.</string>
   <string name="settings.docu_dialog.action_try.again.connecting">Try again</string>
   <string name="settings.about_select_tutorial">Tutorial</string>
-  <string name="gallery_heading_selected_files">Selected files</string>
   <string name="settings.camo_expl">Select a custom icon and name to better hide Tella on your device. Note that the Tella icon will remain visible from the Android settings.</string>
   <string name="settings.camo_camera4">Camera</string>
   <string name="settings.camo_camera3">CameraPro</string>
@@ -214,7 +212,6 @@
   <string name="verification.info_subheading_device.metadata">Device</string>
   <string name="verification.info_subheading_context.metadata">Konteks</string>
   <string name="verification.info_field_metadata.not.available">Not Available</string>
-  <string name="home_content.desc_background">Not Available</string>
   <string name="verification.info_field_latitude">Latitude:</string>
   <string name="verification.info_field_longitude">Longitude:</string>
   <string name="verification.info_field_altitude">Altitude:</string>
@@ -336,9 +333,7 @@
   <string name="action_next">Selanjutnya</string>
   <string name="meter">%f m</string>
   <string name="meter_per_second">%f m/s</string>
-  <string name="intro_welcome">Welcome to</string>
   <string name="tella">Tella</string>
-  <string name="intro_start">START</string>
   <string name="intro_document_protect"><![CDATA[Document & Protect]]></string>
   <string name="onboard_setup_text">How would you like to set up Tella?</string>
   <string name="onboard_full_setup">FULL SETUP</string>

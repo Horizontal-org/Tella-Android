@@ -244,8 +244,6 @@ A toast notification informing the user that their files were successfully delet
   <string name="settings.prot_select_camouflage">പ്രച്ഛന്നവേഷം</string>
   <!-- The heading of the Onboarding screen explanation the Camouflage feature -->
   <string name="onboard.camo_heading">പ്രച്ഛന്നവേഷം</string>
-  <!-- The action button to save the server settings even if there is no internet connection -->
-  <string name="settings_dialog.action_save.server.no.internet">എന്താണെങ്കിലും സൂക്ഷിക്കുക</string>
   <string name="settings.docu_error_wrong.credentials">ഉപയോക്തനാമം അല്ലെങ്കിൽ രഹസ്യവാക്ക് തെറ്റാണ്</string>
   <string name="settings.docu_error_domain.doesnt.exit">സെർവർ URL തെറ്റാണ്</string>
   <!-- An error message displayed when trying to connect to the server and an unknown error makes it impossible. -->
@@ -256,8 +254,6 @@ A toast notification informing the user that their files were successfully delet
   <string name="settings.docu_dialog.action_try.again.connecting">വീണ്ടും ശ്രമിക്കുക</string>
   <!-- The menu item in Settings > About & Help to access the tutorial. -->
   <string name="settings.about_select_tutorial">പരിശീലനപദ്ധതി</string>
-  <!-- The heading in the Gallery, to show all the files that are selected -->
-  <string name="gallery_heading_selected_files">തിരഞ്ഞെടുത്ത ഫയലുകൾ</string>
   <string name="settings.camo_expl">നിങ്ങളുടെ ഉപകരണത്തിൽ Tella (റ്റെല്ല)യെ മികച്ച രീതിയിൽ മറയ്‌ക്കാൻ ഒരു ഇഷ്‌ടാനുസൃത ഐക്കണും പേരും തിരഞ്ഞെടുക്കുക. ശ്രദ്ധിക്കുക ആന്‍ഡ്രോയിഡ് ക്രമീകരണങ്ങളിൽ Tella (റ്റെല്ല) ഐക്കൺ ദൃശ്യമാകും .</string>
   <!-- The name of a "fake" app to hide Tella as a camera app. -->
   <string name="settings.camo_camera4">ക്യാമറ</string>
@@ -380,8 +376,6 @@ A toast notification informing the user that their files were successfully delet
   <string name="verification.info_subheading_context.metadata">കോർട്ടെക്സ്റ് (മെറ്റാഡാറ്റ)</string>
   <!-- This is displayed when a piece of verification information isn't available. -->
   <string name="verification.info_field_metadata.not.available">ലഭ്യമല്ല</string>
-  <!-- The content description for the homepage background. It is never visible to the user. -->
-  <string name="home_content.desc_background">ലഭ്യമല്ല</string>
   <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
   <string name="verification.info_field_latitude">അക്ഷാംശം:</string>
   <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
@@ -411,12 +405,6 @@ A toast notification informing the user that their files were successfully delet
     <item quantity="one">%d ഫയൽ</item>
     <item quantity="other">%d ഫയലുകൾ</item>
   </plurals>
-  <!-- The screen title (in the app bar) where the user manages their settings on documentation. -->
-  <string name="settings.docu_app.bar">ഉപയോക്തൃ മാനുവൽ</string>
-  <!-- The button in Settings to access the documentation settings -->
-  <string name="settings.gen_select_documentation">ഉപയോക്തൃ മാനുവൽ</string>
-  <!-- The button in Settings to access the protection settings -->
-  <string name="settings.gen_select_protection">സംരക്ഷണം</string>
   <!-- A button to open a screen or webpage with more information -->
   <string name="action_learn.more">കൂടുതൽ അറിയാൻ </string>
   <!-- The button to add a connection to a server -->
@@ -633,9 +621,7 @@ This is one of the two options available. -->
   <string name="meter">%f മീറ്റര്‍‌</string>
   <!-- The value expressed in meters per second -->
   <string name="meter_per_second">%f മീറ്റർ പ്രതി സെക്കൻറ്</string>
-  <string name="intro_welcome">Welcome to</string>
   <string name="tella">Tella</string>
-  <string name="intro_start">START</string>
   <string name="intro_document_protect"><![CDATA[Document & Protect]]></string>
   <string name="onboard_setup_text">How would you like to set up Tella?</string>
   <string name="onboard_full_setup">FULL SETUP</string>

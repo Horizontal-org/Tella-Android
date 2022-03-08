@@ -138,14 +138,12 @@
   <string name="home_action.desc_quick.exit">Sair</string>
   <string name="settings.prot_select_camouflage">Camuflagem</string>
   <string name="onboard.camo_heading">Camuflagem</string>
-  <string name="settings_dialog.action_save.server.no.internet">Salvar de qualquer maneira</string>
   <string name="settings.docu_error_wrong.credentials">Credenciais incorretas, verifique nome de usuário e senha.</string>
   <string name="settings.docu_error_domain.doesnt.exit">Nenhum endereço associado ao nome do usuário</string>
   <string name="settings.docu_error_unknown.connection.error">Ocorreu um erro ao tentar se conectar ao servidor.</string>
   <string name="settings.docu_error_no.internet">Você não está conectado à internet. Tente novamente quando estiver conectado.</string>
   <string name="settings.docu_dialog.action_try.again.connecting">Tente novamente</string>
   <string name="settings.about_select_tutorial">Tutorial</string>
-  <string name="gallery_heading_selected_files">Arquivos selecionados</string>
   <string name="settings.camo_expl">Selecione um ícone e um nome personalizados para melhor ocultar o Tella no seu aparelho. Note que o ícone do Tella permanecerá visível no menu de configurações do Android.</string>
   <string name="settings.camo_camera4">Câmera</string>
   <string name="settings.camo_camera3">CameraPro</string>
@@ -214,7 +212,6 @@
   <string name="verification.info_subheading_device.metadata">Aparelho celular</string>
   <string name="verification.info_subheading_context.metadata">Contexto</string>
   <string name="verification.info_field_metadata.not.available">Não disponível</string>
-  <string name="home_content.desc_background">Não disponível</string>
   <string name="verification.info_field_latitude">Latitude</string>
   <string name="verification.info_field_longitude">Longitude</string>
   <string name="verification.info_field_altitude">Altitude</string>
@@ -231,9 +228,6 @@
     <item quantity="one">%d arquivo</item>
     <item quantity="other">%d arquivos</item>
   </plurals>
-  <string name="settings.docu_app.bar">Documentação</string>
-  <string name="settings.gen_select_documentation">Documentação</string>
-  <string name="settings.gen_select_protection">Proteção</string>
   <string name="action_learn.more">Saiba Mais</string>
   <string name="settings.servers_add.server_dialog.title">Adicionar servidor</string>
     <string name="settings.prot_select_delete.forms">Excluir os rascunhos e formulários enviados</string>
@@ -336,9 +330,7 @@
   <string name="action_next">Próximo</string>
   <string name="meter">%f m</string>
   <string name="meter_per_second">%f m/s</string>
-  <string name="intro_welcome">Welcome to</string>
   <string name="tella">Tella</string>
-  <string name="intro_start">START</string>
   <string name="intro_document_protect"><![CDATA[Document & Protect]]></string>
   <string name="onboard_setup_text">How would you like to set up Tella?</string>
   <string name="onboard_full_setup">FULL SETUP</string>

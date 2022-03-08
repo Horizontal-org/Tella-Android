@@ -450,8 +450,6 @@ conectarse a un servidor</string>
     <string name="gallery_list.items_show.only.audio">Grabaciones de audio</string>
     <string name="home_action.desc_quick.exit">Salir</string>
     <string name="onboard.camo_heading">Camuflaje</string>
-    <string name="settings_dialog.action_save.server.no.internet">Save anyway</string>
-    <string name="gallery_heading_selected_files">Selected files</string>
     <string name="settings.camo_camera4">Cámara</string>
     <string name="settings.camo_camera3">CameraPro</string>
     <string name="settings.camo_camera2">SuperCam</string>
@@ -460,10 +458,6 @@ conectarse a un servidor</string>
     <string name="settings.camo_weather2">Local weather</string>
     <string name="settings.camo_calculator1">Easy Math</string>
     <string name="settings.camo_weather1">Clima</string>
-    <string name="home_content.desc_background">No disponible</string>
-    <string name="settings.docu_app.bar">Documentation</string>
-    <string name="settings.gen_select_documentation">Documentation</string>
-    <string name="settings.gen_select_protection">Protection</string>
     <string name="settings.docu_dialog.action_hide">Hide</string>
     <string name="settings.docu_auto.upload.server.selection_select">Server</string>
     <string name="upload_dialog.title_select.server">Server selection</string>

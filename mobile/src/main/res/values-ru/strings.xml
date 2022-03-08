@@ -143,14 +143,12 @@
   <string name="home_action.desc_quick.exit">Выход</string>
   <string name="settings.prot_select_camouflage">Маскировка</string>
   <string name="onboard.camo_heading">Маскировка</string>
-  <string name="settings_dialog.action_save.server.no.internet">Сохранить в любом случае</string>
   <string name="settings.docu_error_wrong.credentials">Неправильные учетные данные, пожалуйста, проверьте имя пользователя и пароль</string>
   <string name="settings.docu_error_domain.doesnt.exit">URL-адрес сервера неверен.</string>
   <string name="settings.docu_error_unknown.connection.error">При попытке подключения к серверу произошла ошибка</string>
   <string name="settings.docu_error_no.internet">Tella не удалось подключиться к Интернету и подтвердить информацию о сервере</string>
   <string name="settings.docu_dialog.action_try.again.connecting">Попробуйте еще раз</string>
   <string name="settings.about_select_tutorial">Tutorial</string>
-  <string name="gallery_heading_selected_files">Выбранные файлы</string>
   <string name="settings.camo_expl">Выберите пользовательскую иконку и имя, чтобы лучше скрыть Tella на устройстве. Обратите внимание, что иконка Tella будет отображаться в меню настроек Android.</string>
   <string name="settings.camo_camera4">Камера</string>
   <string name="settings.camo_camera3">CameraPro</string>
@@ -219,7 +217,6 @@
   <string name="verification.info_subheading_device.metadata">Устройство</string>
   <string name="verification.info_subheading_context.metadata">Контекст</string>
   <string name="verification.info_field_metadata.not.available">Недоступно</string>
-  <string name="home_content.desc_background">Недоступно</string>
   <string name="verification.info_field_latitude">Широта</string>
   <string name="verification.info_field_longitude">Долгота</string>
   <string name="verification.info_field_altitude">Высота над уровнем моря</string>
@@ -238,9 +235,6 @@
     <item quantity="many">множество элементов</item>
     <item quantity="other">%d элементы</item>
   </plurals>
-  <string name="settings.docu_app.bar">Документации</string>
-  <string name="settings.gen_select_documentation">Документации</string>
-  <string name="settings.gen_select_protection">Защита</string>
   <string name="action_learn.more">Узнать больше</string>
   <string name="settings.servers_add.server_dialog.title">Добавить сервер</string>
     <string name="settings.prot_select_delete.forms">Удалить черновик и отправленные формы</string>
@@ -343,9 +337,7 @@
   <string name="action_next">Дальше</string>
   <string name="meter">%f m</string>
   <string name="meter_per_second">%f м / с</string>
-  <string name="intro_welcome">Welcome to</string>
   <string name="tella">Tella</string>
-  <string name="intro_start">START</string>
   <string name="intro_document_protect"><![CDATA[Document & Protect]]></string>
   <string name="onboard_setup_text">How would you like to set up Tella?</string>
   <string name="onboard_full_setup">FULL SETUP</string>

@@ -139,14 +139,12 @@
     <string name="settings.prot_select_camouflage">Camouflage</string>
     <string name="settings.prot_select_lock" translatable="false">Lock</string>
     <string name="onboard.camo_heading">Camouflage</string>
-    <string name="settings_dialog.action_save.server.no.internet">Save anyway</string>
     <string name="settings.docu_error_wrong.credentials">The username or password is incorrect.</string>
     <string name="settings.docu_error_domain.doesnt.exit">The server URL is incorrect.</string>
     <string name="settings.docu_error_unknown.connection.error">There was an error trying to connect to the server.</string>
     <string name="settings.docu_error_no.internet">You’re not connected to the internet. Try again when connected.</string>
     <string name="settings.docu_dialog.action_try.again.connecting">Try again</string>
     <string name="settings.about_select_tutorial">Tutorial</string>
-    <string name="gallery_heading_selected_files">Selected files</string>
     <string name="settings.camo_expl">Select a custom icon and name to better hide Tella on your device. Note that the Tella icon will remain visible from the Android settings.</string>
     <string name="settings.camo_camera4">Camera</string>
     <string name="settings.camo_camera3">CameraPro</string>
@@ -215,7 +213,6 @@
     <string name="verification.info_subheading_device.metadata">Device</string>
     <string name="verification.info_subheading_context.metadata">Context</string>
     <string name="verification.info_field_metadata.not.available">Not Available</string>
-    <string name="home_content.desc_background">Not Available</string>
     <string name="verification.info_field_latitude">Latitude:</string>
     <string name="verification.info_field_longitude">Longitude:</string>
     <string name="verification.info_field_altitude">Altitude:</string>
@@ -232,9 +229,6 @@
         <item quantity="one">%d file</item>
         <item quantity="other">%d files</item>
     </plurals>
-    <string name="settings.docu_app.bar">Documentation</string>
-    <string name="settings.gen_select_documentation">Documentation</string>
-    <string name="settings.gen_select_protection">Protection</string>
     <string name="action_learn.more">Learn more</string>
     <string name="settings.servers_add.server_dialog.title">Add server</string>
     <string name="settings.prot_select_delete.forms">Delete draft and submitted forms</string>
@@ -303,7 +297,7 @@
     <string name="upload_dialog.title_select.server">Server selection</string>
     <string name="settings.docu_auto.upload.server.selection_dialog.expl">Which server would you like to upload the files to?</string>
     <string name="settings.serv_add.server.selection_dialog.title">What type of server?</string>
-    <string name="settings.serv_add.server.selection_dialog.description" translatable="false">If you are not sure, please ask your\n organization.</string>
+    <string name="settings.serv_add.server.selection_dialog.description">If you are not sure, please ask your\n organization.</string>
     <string name="settings.docu_add.server_dialog.select_odk">Open Data Kit (ODK)</string>
     <string name="settings.docu_add.server_dialog.select_tella_web">Tella WEB</string>
     <string name="settings.docu_add.server_dialog.select_tella_uwazi">Uwazi</string>
@@ -330,18 +324,6 @@
     <string name="settings.docu_auto.delete_action.expl">Tella will automatically delete the files from your device as soon as they are uploaded to the server.</string>
     <string name="settings.docu_choose.auto.upload.server_dialog.expl">Which server would you like to auto-upload the files to?</string>
     <string name="settings.docu_delete.upload.server_dialog.expl">You will no longer be able to upload files to this server.</string>
-    <plurals name="upload.main_meta_number.of.files">
-        <item quantity="one">%d file</item>
-        <item quantity="other">%d files</item>
-    </plurals>
-    <plurals name="upload.main_meta_number.of.files.uploaded">
-        <item quantity="one">%d file uploaded</item>
-        <item quantity="other">%d files uploaded</item>
-    </plurals>
-    <plurals name="upload.main_meta_minutes.left">
-        <item quantity="one">%d minute left</item>
-        <item quantity="other">%d minutes left</item>
-    </plurals>
     <string name="settings.docu_error_must.select.auto.upload.server">You must select a server.</string>
     <string name="camera_tab.title_video">Video</string>
     <string name="camera_tab.title_photo">Photo</string>
@@ -350,9 +332,7 @@
     <string name="action_next">Next</string>
     <string name="meter">%f m</string>
     <string name="meter_per_second">%f m/s</string>
-    <string name="intro_welcome">Welcome to</string>
     <string name="tella">Tella</string>
-    <string name="intro_start">START</string>
     <string name="intro_document_protect"><![CDATA[Document & Protect]]></string>
     <string name="onboard_setup_text">How would you like to set up Tella?</string>
     <string name="onboard_full_setup">FULL SETUP</string>

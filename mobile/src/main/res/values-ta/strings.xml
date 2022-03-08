@@ -244,8 +244,6 @@ A toast notification informing the user that their files were successfully delet
   <string name="settings.prot_select_camouflage">உரு மறைப்பு</string>
   <!-- The heading of the Onboarding screen explanation the Camouflage feature -->
   <string name="onboard.camo_heading">உரு மறைப்பு</string>
-  <!-- The action button to save the server settings even if there is no internet connection -->
-  <string name="settings_dialog.action_save.server.no.internet">இருப்பினும் சேமி</string>
   <string name="settings.docu_error_wrong.credentials">பயனர்பெயர் அல்லது கடவுச்சொல் தவறானது</string>
   <string name="settings.docu_error_domain.doesnt.exit">சேவையக URL தவறானது.</string>
   <!-- An error message displayed when trying to connect to the server and an unknown error makes it impossible. -->
@@ -256,8 +254,6 @@ A toast notification informing the user that their files were successfully delet
   <string name="settings.docu_dialog.action_try.again.connecting">மீண்டும் முயற்சிக்கவும்</string>
   <!-- The link to Tutorial-->
   <string name="settings.about_select_tutorial">Tutorial</string>
-  <!-- The heading in the Gallery, to show all the files that are selected -->
-  <string name="gallery_heading_selected_files">தேர்ந்தெடுக்கப்பட்ட கோப்புகள்</string>
   <string name="settings.camo_expl">உங்கள் சாதனத்தில் டெல்லாவை சிறப்பாக மறைக்க தனிப்பயன் படவுரு மற்றும் பெயரைத் தேர்ந்தெடுக்கவும். ஆண்ட்ராய்டு அமைப்புகளிலிருந்து டெல்லாவின் உண்மையான படவுரு தெரியும் என்பதை நினைவில் கொள்க.</string>
   <!-- The name of a "fake" app to hide Tella as a camera app. -->
   <string name="settings.camo_camera4">கேமரா</string>
@@ -380,8 +376,6 @@ A toast notification informing the user that their files were successfully delet
   <string name="verification.info_subheading_context.metadata">சூழல்</string>
   <!-- This is displayed when a piece of verification information isn't available. -->
   <string name="verification.info_field_metadata.not.available">கிடைக்கப்பெறவில்லை</string>
-  <!-- The content description for the homepage background. It is never visible to the user. -->
-  <string name="home_content.desc_background">கிடைக்கப்பெறவில்லை</string>
   <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
   <string name="verification.info_field_latitude">அட்சரேகை:</string>
   <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
@@ -411,12 +405,6 @@ A toast notification informing the user that their files were successfully delet
     <item quantity="one">%dகோப்பு </item>
     <item quantity="other">%d கோப்புகள்</item>
   </plurals>
-  <!-- The screen title (in the app bar) where the user manages their settings on documentation. -->
-  <string name="settings.docu_app.bar">ஆவணமாக்கம்</string>
-  <!-- The button in Settings to access the documentation settings -->
-  <string name="settings.gen_select_documentation">ஆவணமாக்கம்</string>
-  <!-- The button in Settings to access the protection settings -->
-  <string name="settings.gen_select_protection">பாதுகாப்பு</string>
   <!-- A button to open a screen or webpage with more information -->
   <string name="action_learn.more">மேலும் அறிய</string>
   <!-- The button to add a connection to a server -->
@@ -634,9 +622,7 @@ This is one of the two options available. -->
   <string name="meter">%fமீட்டர்</string>
   <!-- The value expressed in meters per second -->
   <string name="meter_per_second">%f மீட்டர் / வினாடி</string>
-  <string name="intro_welcome">Welcome to</string>
   <string name="tella">Tella</string>
-  <string name="intro_start">START</string>
   <string name="intro_document_protect"><![CDATA[Document & Protect]]></string>
   <string name="onboard_setup_text">How would you like to set up Tella?</string>
   <string name="onboard_full_setup">FULL SETUP</string>

@@ -442,8 +442,6 @@
     <string name="gallery_list.items_show.only.audio">Enregistrements son</string>
     <string name="home_action.desc_quick.exit">Sortir</string>
     <string name="onboard.camo_heading">Camouflage</string>
-    <string name="settings_dialog.action_save.server.no.internet">Enregistrer quand même</string>
-    <string name="gallery_heading_selected_files">Fichiers sélectionnés</string>
     <string name="settings.camo_camera4">Appareil photo</string>
     <string name="settings.camo_camera3">PhotoPro</string>
     <string name="settings.camo_camera2">SuperPhoto</string>
@@ -452,10 +450,6 @@
     <string name="settings.camo_weather2">Météo locale</string>
     <string name="settings.camo_calculator1">Math facile</string>
     <string name="settings.camo_weather1">Weather</string>
-    <string name="home_content.desc_background">Non disponibles</string>
-    <string name="settings.docu_app.bar">Documentation</string>
-    <string name="settings.gen_select_documentation">Documentation</string>
-    <string name="settings.gen_select_protection">Protection</string>
     <string name="settings.docu_dialog.action_hide">Cacher</string>
     <string name="settings.docu_auto.upload.server.selection_select">Serveur</string>
     <string name="upload_dialog.title_select.server">Sélection du serveur</string>
@@ -469,24 +463,7 @@
     <string name="settings.docu_auto.upload_action">Téléversement automatique</string>
     <string name="settings.docu_auto.delete_action.expl">Tella supprimera automatiquement les fichiers de votre appareil dès qu’ils auront été téléversés vers le serveur.</string>
     <string name="settings.docu_delete.upload.server_dialog.expl">Vous ne pourrez plus téléverser de fichiers vers ce serveur.</string>
-    <plurals name="upload.main_meta_number.of.files">
-        <item quantity="one">%d fichier</item>
-        <item quantity="many">%d fichiers</item>
-        <item quantity="other">%d fichiers</item>
-    </plurals>
-    <plurals name="upload.main_meta_number.of.files.uploaded">
-        <item quantity="one">%d file uploaded</item>
-        <item quantity="many">%d files uploaded</item>
-        <item quantity="other">%d files uploaded</item>
-    </plurals>
-    <plurals name="upload.main_meta_minutes.left">
-        <item quantity="one">%d minute left</item>
-        <item quantity="many">%d minutes left</item>
-        <item quantity="other">%d minutes left</item>
-    </plurals>
     <string name="onboard.customization_title">Customization</string>
-    <string name="intro_welcome">Bienvenue dans </string>
-    <string name="intro_start">DÉMARRER</string>
     <string name="settings.select_customization">Customization</string>
     <string name="collect.outbox_tab.title">Boîte d\'envoi</string>
     <string name="Collect_RemoveForm_SheetTitle">Remove form?</string>
