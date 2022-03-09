@@ -74,7 +74,12 @@ class UwaziRepository : IUwaziUserRepository {
                                         if (context.id == property.content){
                                             selectValue.translatedLabel = context.values[selectValue.label]?:selectValue.label
                                         }
+                                        selectValue.values?.forEach { key, valye ->
+
+                                        }
                                     }
+
+                                    property.values
                                 }
                             }
 
