@@ -54,23 +54,22 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
             for (int i = 0; i < items.size(); i++) {
                 // no checkbox group so id by answer + offset
 
-              /*  if (items.get(i).getValues() != null) {
+                if (items.get(i).getValues() != null) {
                     // header item that hold nested checks
-                    for (NestedSelectValue selectValue : Objects.requireNonNull(items.get(i).getValues())){
-                        LinearLayout ceckboxGroup = getHeaderCheckBox(selectValue.getLabel(), i, inflater, prompt);
+                        LinearLayout ceckboxGroup = getHeaderCheckBox(items.get(i).getTranslatedLabel(), i, inflater, prompt);
                         ViewGroup checkPanel = (ViewGroup) ceckboxGroup.findViewById(R.id.checkBoxes);
                         // nested key
-                        for (NestedSelectValue nestedValue : Objects.requireNonNull(items.get(i).getValues()).get(selectValue.getId())){
+                        for (NestedSelectValue nestedValue : Objects.requireNonNull(items.get(i).getValues())){
                             // add nested checkbox
-                            checkPanel.addView(getNastedCheckBox(nestedValue.getLabel(), checkBoxCounter++,inflater,prompt));
+                            checkPanel.addView(getNastedCheckBox(nestedValue.getTranslatedLabel(), checkBoxCounter++,inflater,prompt));
                             checkIds.add(nestedValue.getId());
                         }
                         choicesLayout.addView(ceckboxGroup);
-                    }
+
                 } else {
                     choicesLayout.addView(getCheckBox(items.get(i).getTranslatedLabel(), checkBoxCounter++, inflater, prompt));
                     checkIds.add(items.get(i).getId());
-                }*/
+                }
             }
             addAnswerView(choicesLayout);
         }
