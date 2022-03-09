@@ -5,5 +5,5 @@ data class SelectValue(
     val id: String,
     val label: String,
     var translatedLabel: String = "",
-    val values : Map<String,List<NestedSelectValue>> ?= null
+    val values : List<NestedSelectValue>
 )

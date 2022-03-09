@@ -53,46 +53,15 @@ fun RowDictionaryEntity.mapToDomainModel() = RowDictionary(
     version = __v ?: 0,
     _id = _id ?: "",
     name = name ?: "",
-    values = mapToDomainModel(values)
+    values = values?.map { it.mapToDomainModel() } ?: emptyList()
 )
 
 fun ValueEntity.mapToDomainModel() = SelectValue(
     _id = _id?: "",
     id = id?: "",
-    label = label
-)
-
-fun ValueEntity.mapToDomainModel(valueEntities : List<ValueEntity>) = SelectValue(
-    _id = _id?: "",
-    id = id?: "",
     label = label,
-    values = mapNestedToDomainModel(valueEntities)
+    values = values?.map { it.mapToDomainModel() } ?: emptyList()
 )
-
-fun mapToDomainModel(values : List<ValueEntity>?) : List<SelectValue> {
-    if (values.isNullOrEmpty() ) return emptyList()
-
-    val resultList: List<SelectValue> = if (values[0].values.isNullOrEmpty()){
-        values.map {
-            it.mapToDomainModel()
-        }
-    } else {
-        arrayListOf(values[0].mapToDomainModel(values))
-    }
-    return resultList
-}
-
-
-fun mapNestedToDomainModel(values : List<ValueEntity>) :Map<String,List<NestedSelectValue>> {
-    val resultList = hashMapOf<String,List<NestedSelectValue>>()
-
-    values.forEach { valueEntity ->
-        resultList[valueEntity.label] = valueEntity.values?.map { it.mapToDomainModel() } ?: emptyList()
-    }
-
-    return resultList
-}
-
 
 fun NestedValueEntity.mapToDomainModel() = NestedSelectValue (
     id = id?: "",
