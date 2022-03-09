@@ -233,6 +233,7 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
             }
         });
 
+        checkboxesToggle.setOpen();
         checkboxesToggle.setOnStateChangedListener(open -> {
                     if (checkboxesToggle.isOpen()) {
                         checkboxesPanel.setVisibility(View.VISIBLE);
