@@ -59,7 +59,7 @@ class UwaziRepository : IUwaziUserRepository {
                 templates.forEach { template ->
                     translations.filter { row -> row.locale == server.localeCookie }[0]
                         .contexts.forEach { context ->
-                            if (context.id == template._id){
+                            if (context.id == template._id) {
                                 template.properties.forEach { property ->
                                     property.translatedLabel = context.values[property.label] ?: ""
                                 }
@@ -68,22 +68,19 @@ class UwaziRepository : IUwaziUserRepository {
                                 }
 
                                 template.translatedName = context.values[template.name] ?: ""
-                            }else{
+                            } else {
                                 template.properties.forEach { property ->
                                     property.values?.forEach { selectValue ->
-                                        if (context.id == property.content){
-                                            selectValue.translatedLabel = context.values[selectValue.label]?:selectValue.label
-                                        }
-                                        selectValue.values?.forEach { key, valye ->
-
+                                        if (context.id == property.content) {
+                                            selectValue.translatedLabel =
+                                                context.values[selectValue.label]
+                                                    ?: selectValue.label
                                         }
                                     }
-
-                                    property.values
                                 }
                             }
 
-                    }
+                        }
                 }
 
                 val listTemplates = mutableListOf<CollectTemplate>()
