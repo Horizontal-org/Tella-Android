@@ -76,6 +76,16 @@ class UwaziRepository : IUwaziUserRepository {
                                                 context.values[selectValue.label]
                                                     ?: selectValue.label
                                         }
+
+                                        selectValue.values.forEach { nestedSelectValue ->
+                                            if (context.id == property.content) {
+                                                nestedSelectValue.translatedLabel =
+                                                    context.values[nestedSelectValue.label]
+                                                        ?: nestedSelectValue.label
+                                            }
+
+                                        }
+
                                     }
                                 }
                             }
