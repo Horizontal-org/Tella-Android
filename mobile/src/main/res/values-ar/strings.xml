@@ -618,7 +618,7 @@
     <item quantity="other">منذ دقيقة</item>
   </plurals>
   <string name="Util_ellapsedTime_Seconds">منذ بضع لحظات</string>
-  <string name="Donwload_Templates_Title_Description">These are the templates available on the Uwazi \ninstances you are connected to. You can \n <font fgcolor='#D6933B'>manage your Uwazi instances here.</font> </string>
-  <string name="uwazi.outbox_tab.title">Templates</string>
-  <string name="Uwazi_Templates_HeaderMessage">These are Uwazi templates you can fill out.</string>
+  <string name="Donwload_Templates_Title_Description">هذه القوالب المتوفرة على نماذج Uwazi التي تتصل بها.</string>
+  <string name="uwazi.outbox_tab.title">القوالب</string>
+  <string name="Uwazi_Templates_HeaderMessage">هذه قوالب Uwazi التي يمكنك ملؤها.</string>
 </resources>
