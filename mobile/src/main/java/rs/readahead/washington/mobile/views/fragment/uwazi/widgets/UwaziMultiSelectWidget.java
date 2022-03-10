@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatCheckBox;
@@ -159,9 +160,10 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
     private View getCheckBox(String label, Integer i, LayoutInflater inflater, UwaziEntryPrompt prompt){
         @SuppressLint("InflateParams") View view = (View) inflater.inflate(R.layout.uwazi_checkbox_layout, null);
         AppCompatCheckBox c = (AppCompatCheckBox) view.findViewById(R.id.checkBox);
+        TextView labela = (TextView) view.findViewById(R.id.labeled);
         c.setTag(i);
         c.setId(QuestionWidget.newUniqueId());
-        c.setText(getChoiceDisplayName(label));
+        labela.setText(getChoiceDisplayName(label));
         c.setMovementMethod(LinkMovementMethod.getInstance());
         c.setFocusable(!prompt.isReadOnly());
         c.setEnabled(!prompt.isReadOnly());
@@ -185,9 +187,11 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
     private View getNastedCheckBox(String label, Integer i, LayoutInflater inflater, UwaziEntryPrompt prompt){
         @SuppressLint("InflateParams") View view = (View) inflater.inflate(R.layout.uwazi_nested_checkbox_layout, null);
         AppCompatCheckBox c = (AppCompatCheckBox) view.findViewById(R.id.checkBox);
+        TextView labela = (TextView) view.findViewById(R.id.labeled);
         c.setTag(i);
         c.setId(QuestionWidget.newUniqueId());
-        c.setText(getChoiceDisplayName(label));
+        //c.setText(getChoiceDisplayName(label));
+        labela.setText(getChoiceDisplayName(label));
         c.setMovementMethod(LinkMovementMethod.getInstance());
         c.setFocusable(!prompt.isReadOnly());
         c.setEnabled(!prompt.isReadOnly());
@@ -212,11 +216,12 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
         @SuppressLint("InflateParams") LinearLayout view = (LinearLayout) inflater.inflate(R.layout.uwazi_header_checkbox_layout, null);
         AppCompatCheckBox c = (AppCompatCheckBox) view.findViewById(R.id.checkBox);
         ViewGroup checkboxesPanel = (ViewGroup) view.findViewById(R.id.checkBoxes);
+        TextView labela = (TextView) view.findViewById(R.id.labeled);
         PanelToggleButton checkboxesToggle = (PanelToggleButton) view.findViewById(R.id.toggle_button);
 
         c.setTag(i);
         c.setId(QuestionWidget.newUniqueId());
-        c.setText(getChoiceDisplayName(label));
+        labela.setText(getChoiceDisplayName(label));
         c.setMovementMethod(LinkMovementMethod.getInstance());
         c.setFocusable(!prompt.isReadOnly());
         c.setEnabled(!prompt.isReadOnly());

@@ -23,6 +23,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:background="@drawable/rounded_light_purple_background">
 
             <androidx.appcompat.widget.AppCompatCheckBox
@@ -31,8 +32,19 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:background="@drawable/white_checkbox_background"
                 android:layout_marginBottom="8dp"
                 app:buttonTint="@color/wa_white" />
+
+            <TextView
+                android:id="@+id/labeled"
+                style="@style/Tella_Main_White_Text.Meduim"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp" />
 
         </LinearLayout>
 
