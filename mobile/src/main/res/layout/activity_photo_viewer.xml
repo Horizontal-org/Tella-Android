@@ -20,7 +20,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:arrowBackIcon="@drawable/ic_back_white"
+            app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
             />
 
     </com.google.android.material.appbar.AppBarLayout>

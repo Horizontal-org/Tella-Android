@@ -19,7 +19,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:arrowBackIcon="@drawable/ic_back_white" />
+            app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

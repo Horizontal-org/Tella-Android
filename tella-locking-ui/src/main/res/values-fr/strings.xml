@@ -23,25 +23,30 @@
     <string name="LockPinSet_Message_EnterPin">Enter your PIN</string>
     <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock Tella</string>
     <string name="LockPinSet_Message_Hint">Utilisez au moins 6 chiffres Évitez d\'utiliser des chiffres faciles à deviner, comme votre date de naissance.</string>
-    <string name="LockPinSet_Message_Confirm">Confirm your PIN</string>
-    <string name="LockPinConfirm_Message_Confirm">Please enter your PIN one more time, just to be sure.</string>
-    <string name="LockPinConfirm_Message_Error_TryAgain">Please try again. Your PINs do not match.</string>
-    <string name="LockPinConfirm_Message_Error_IncorrectPin">Incorrect PIN, please try again</string>
-    <string name="UnlockPassword_Message_EnterYourPassword">Enter your password</string>
-    <string name="LockPasswordSet_Message_Hint">Use at least 6 characters and avoid using passwords that can be guessed easily, such as “password.” The longer your password, the more secure it is.</string>
-    <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Please try again. Your passwords do not match.</string>
-    <string name="LockSuccess_Message_AllDone">You\'re all done!</string>
-    <string name="LockSuccess_Message_Hint">You can always change your lock option and further customize Tella in Settings.</string>
-    <string name="LockPasswordSet_Message_Error_IncorrectPassword">Incorrect password, please try again</string>
-    <string name="UnlockPassword_Message_EnterPassword">Enter your password tounlock Tella</string>
-    <string name="LockPasswordConfirm_Message_ConfirmPassword">Confirm your password</string>
-    <string name="LockPasswordConfirm_Message_EnterPasswordAgain">Please enter your password one more time, just to be sure.</string>
-    <string name="LockPasswordSet_Settings_EnterCurrentPassword">Enter your current password to change your lock</string>
-    <string name="LockPatternSet_Settings_DrawCurrentPattern">Draw your current pattern to change your lock</string>
-    <string name="LockPinSet_Settings_EnterCurrentPin">Enter your current PIN to change your lock</string>
-    <string name="LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage">Enter your current password to change your camouflage</string>
-    <string name="LockPatternSet_Settings_DrawCurrentPatternToChangeCamouflage">Draw your current pattern to change your camouflage</string>
-    <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">Enter your current PIN to change your camouflage</string>
-    <string name="Settings_Action_SetLock">Lock</string>
-    <string name="Settings_Message_LockChanged">Your lock has been changed!</string>
+    <string name="LockPinSet_Message_Confirm">Confirmez votre code PIN</string>
+    <string name="LockPinConfirm_Message_Confirm">Veuillez entrer votre code PIN une fois de plus, juste pour être sûr.</string>
+    <string name="LockPinConfirm_Message_Error_TryAgain">Veuillez réessayer. Vos codes PIN ne correspondent pas.</string>
+    <string name="LockPinConfirm_Message_Error_IncorrectPin">Le code PIN est incorrect, veuillez réessayer</string>
+    <string name="UnlockPassword_Message_EnterYourPassword">Entrez votre mot de passe</string>
+    <string name="LockPasswordSet_Message_Hint">Utilisez au moins 6 caractères et évitez
+ d\'utiliser des mots de passe qui peuvent être
+ facilement, comme \"mot de passe\". Plus votre mot de
+ votre mot de passe est plus long, plus il est sécurisé.</string>
+    <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Veuillez réessayer. Vos mots de passe ne correspondent pas.</string>
+    <string name="LockSuccess_Message_AllDone">Vous avez terminé !</string>
+    <string name="LockSuccess_Message_Hint">Vous pouvez toujours changer votre option de verrouillage
+ et personnaliser davantage Tella dans Paramètres.</string>
+    <string name="LockPasswordSet_Message_Error_IncorrectPassword">Mot de passe incorrect, veuillez réessayer</string>
+    <string name="UnlockPassword_Message_EnterPassword">Entrez votre mot de passe pour déverrouiller Tella</string>
+    <string name="LockPasswordConfirm_Message_ConfirmPassword">Confirmer votre mot de passe</string>
+    <string name="LockPasswordConfirm_Message_EnterPasswordAgain">Veuillez entrer votre mot de passe une fois de plus temps, juste pour être sûr.</string>
+    <string name="LockPasswordSet_Settings_EnterCurrentPassword">Entrez votre mot de passe actuel actuel pour changer votre verrou</string>
+    <string name="LockPatternSet_Settings_DrawCurrentPattern">Dessinez votre schéma actuel pour changer votre verrou</string>
+    <string name="LockPinSet_Settings_EnterCurrentPin">Entrez votre code PIN actuel pour change votre verrou</string>
+    <string name="LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage">Entrez votre mot de passe actuel pour changer votre camouflage</string>
+    <string name="LockPatternSet_Settings_DrawCurrentPatternToChangeCamouflage">Dessinez votre schéma actuel pour changer votre camouflage</string>
+    <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">Entrez votre code PIN actuel pour changer votre camouflage</string>
+    <string name="Settings_Action_SetLock">Verrou</string>
+    <string name="Settings_Message_LockChanged">Votre verrou a été changée !</string>
+    <string name="LockSuccess_Action_GoToTella">Aller à Tella</string>
 </resources>

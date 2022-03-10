@@ -68,4 +68,5 @@ Tella</string>
  لتغيير طريقة التمويه   </string>
     <string name="Settings_Action_SetLock">التأمين</string>
     <string name="Settings_Message_LockChanged">تم تغيير رمز التأمين الخاص بك!</string>
+    <string name="LockSuccess_Action_GoToTella">الذهاب إلى Tella</string>
 </resources>

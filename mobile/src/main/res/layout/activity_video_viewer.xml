@@ -27,7 +27,7 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:arrowBackIcon="@drawable/ic_back_white"
+        app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
         android:visibility="gone"
         android:background="@color/space_cadet"/>
 </FrameLayout>
