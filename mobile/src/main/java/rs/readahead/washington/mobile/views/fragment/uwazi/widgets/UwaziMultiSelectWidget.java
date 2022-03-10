@@ -54,7 +54,7 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
             for (int i = 0; i < items.size(); i++) {
                 // no checkbox group so id by answer + offset
 
-                if (items.get(i).getValues() != null) {
+                if (!items.get(i).getValues().isEmpty()) {
                     // header item that hold nested checks
                         LinearLayout ceckboxGroup = getHeaderCheckBox(items.get(i).getTranslatedLabel(), i, inflater, prompt);
                         ViewGroup checkPanel = (ViewGroup) ceckboxGroup.findViewById(R.id.checkBoxes);
@@ -175,7 +175,7 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
         // when clicked, check for readonly before toggling
         c.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (!checkBoxInit && formEntryPrompt.isReadOnly()) {
-                buttonView.setChecked(! isChecked);
+                buttonView.setChecked(!isChecked);
             }
         });
 
@@ -227,6 +227,7 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
 
         // when clicked, check for readonly before toggling
         c.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            checkNestedBoxes(i, isChecked);
             if (!checkBoxInit && formEntryPrompt.isReadOnly()) {
                 buttonView.setChecked(!isChecked);
             }
@@ -243,5 +244,19 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
         );
 
         return view;
+    }
+
+    private void checkNestedBoxes(Integer j, Boolean checked) {
+        ArrayList<String> idList = new ArrayList<>();
+        for (NestedSelectValue nestedValue : Objects.requireNonNull(items.get(j).getValues())){
+            idList.add(nestedValue.getId());
+        }
+
+        for (int i = 0; i < checkBoxes.size(); ++i) {
+            AppCompatCheckBox box = checkBoxes.get(i);
+            if (idList.contains(checkIds.get(i))) {
+                box.setChecked(checked);
+            }
+        }
     }
 }
