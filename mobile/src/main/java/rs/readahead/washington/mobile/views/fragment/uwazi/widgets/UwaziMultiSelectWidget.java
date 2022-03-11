@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat;
 import com.google.gson.internal.LinkedTreeMap;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,10 +37,20 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPromp
 @SuppressLint("ViewConstructor")
 public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
     private boolean checkBoxInit = true; // todo: check the need for this..
+    //List of all SelectValues
     private final List<SelectValue> items;
+    // List of all checkboxes which can be in result set (all without header checkboxes)
     private final ArrayList<AppCompatCheckBox> checkBoxes;
-    private final ArrayList<String> checkIds = new ArrayList<>();;
+    // counter of all checkboxes which can be in result set
     private int checkBoxCounter = 0;
+    // Map of header checkboxes
+    private final HashMap<Integer,AppCompatCheckBox> headerCheckBoxes = new HashMap<>();
+    // Map to connect header checkbox with checkboxes in his group
+    private final HashMap<Integer,List<Integer>> groupCheckBoxes = new HashMap<>();
+    // List of all Ids which can be in result set (Ids from all checkboxes without header checkboxes)
+    private final ArrayList<String> checkIds = new ArrayList<>();
+
+
     public UwaziMultiSelectWidget(Context context, UwaziEntryPrompt prompt) {
         super(context, prompt);
 
@@ -57,15 +68,19 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
 
                 if (!items.get(i).getValues().isEmpty()) {
                     // header item that hold nested checks
-                        LinearLayout ceckboxGroup = getHeaderCheckBox(items.get(i).getTranslatedLabel(), i, inflater, prompt);
-                        ViewGroup checkPanel = (ViewGroup) ceckboxGroup.findViewById(R.id.checkBoxes);
+                        LinearLayout checkboxGroup = getHeaderCheckBox(items.get(i).getTranslatedLabel(), i, inflater, prompt);
+                        ViewGroup checkPanel = checkboxGroup.findViewById(R.id.checkBoxes);
                         // nested key
+                        ArrayList<Integer> groupIds = new ArrayList<>();
                         for (NestedSelectValue nestedValue : Objects.requireNonNull(items.get(i).getValues())){
                             // add nested checkbox
-                            checkPanel.addView(getNastedCheckBox(nestedValue.getTranslatedLabel(), checkBoxCounter++,inflater,prompt));
+                            int counter = checkBoxCounter++;
+                            groupIds.add(counter);
+                            checkPanel.addView(getNastedCheckBox(nestedValue.getTranslatedLabel(), counter,inflater,prompt,i));
                             checkIds.add(nestedValue.getId());
                         }
-                        choicesLayout.addView(ceckboxGroup);
+                        groupCheckBoxes.put(i,groupIds); // connect nested checks with header check
+                        choicesLayout.addView(checkboxGroup);
 
                 } else {
                     choicesLayout.addView(getCheckBox(items.get(i).getTranslatedLabel(), checkBoxCounter++, inflater, prompt));
@@ -158,9 +173,9 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
     }
 
     private View getCheckBox(String label, Integer i, LayoutInflater inflater, UwaziEntryPrompt prompt){
-        @SuppressLint("InflateParams") View view = (View) inflater.inflate(R.layout.uwazi_checkbox_layout, null);
-        AppCompatCheckBox c = (AppCompatCheckBox) view.findViewById(R.id.checkBox);
-        TextView labela = (TextView) view.findViewById(R.id.labeled);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.uwazi_checkbox_layout, null);
+        AppCompatCheckBox c = view.findViewById(R.id.checkBox);
+        TextView labela = view.findViewById(R.id.labeled);
         c.setTag(i);
         c.setId(QuestionWidget.newUniqueId());
         labela.setText(getChoiceDisplayName(label));
@@ -184,13 +199,12 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
         return view;
     }
 
-    private View getNastedCheckBox(String label, Integer i, LayoutInflater inflater, UwaziEntryPrompt prompt){
-        @SuppressLint("InflateParams") View view = (View) inflater.inflate(R.layout.uwazi_nested_checkbox_layout, null);
-        AppCompatCheckBox c = (AppCompatCheckBox) view.findViewById(R.id.checkBox);
-        TextView labela = (TextView) view.findViewById(R.id.labeled);
+    private View getNastedCheckBox(String label, Integer i, LayoutInflater inflater, UwaziEntryPrompt prompt, Integer parentNum){
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.uwazi_nested_checkbox_layout, null);
+        AppCompatCheckBox c = view.findViewById(R.id.checkBox);
+        TextView labela = view.findViewById(R.id.labeled);
         c.setTag(i);
         c.setId(QuestionWidget.newUniqueId());
-        //c.setText(getChoiceDisplayName(label));
         labela.setText(getChoiceDisplayName(label));
         c.setMovementMethod(LinkMovementMethod.getInstance());
         c.setFocusable(!prompt.isReadOnly());
@@ -204,6 +218,7 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
 
         // when clicked, check for readonly before toggling
         c.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            checkParentBox(parentNum);
             if (!checkBoxInit && formEntryPrompt.isReadOnly()) {
                 buttonView.setChecked(! isChecked);
             }
@@ -214,10 +229,10 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
 
     private LinearLayout getHeaderCheckBox(String label, Integer i, LayoutInflater inflater, UwaziEntryPrompt prompt) {
         @SuppressLint("InflateParams") LinearLayout view = (LinearLayout) inflater.inflate(R.layout.uwazi_header_checkbox_layout, null);
-        AppCompatCheckBox c = (AppCompatCheckBox) view.findViewById(R.id.checkBox);
-        ViewGroup checkboxesPanel = (ViewGroup) view.findViewById(R.id.checkBoxes);
-        TextView labela = (TextView) view.findViewById(R.id.labeled);
-        PanelToggleButton checkboxesToggle = (PanelToggleButton) view.findViewById(R.id.toggle_button);
+        AppCompatCheckBox c = view.findViewById(R.id.checkBox);
+        ViewGroup checkboxesPanel = view.findViewById(R.id.checkBoxes);
+        TextView labela = view.findViewById(R.id.labeled);
+        PanelToggleButton checkboxesToggle = view.findViewById(R.id.toggle_button);
 
         c.setTag(i);
         c.setId(QuestionWidget.newUniqueId());
@@ -225,9 +240,9 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
         c.setMovementMethod(LinkMovementMethod.getInstance());
         c.setFocusable(!prompt.isReadOnly());
         c.setEnabled(!prompt.isReadOnly());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            c.setButtonTintList(ContextCompat.getColorStateList(getContext(), R.color.radio_buttons_color));
-        }
+
+        c.setButtonDrawable(R.drawable.orange_custom_check);
+        c.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.header_check_background));
         c.setTextColor(getResources().getColor(R.color.wa_white_88));
 
         // when clicked, check for readonly before toggling
@@ -237,6 +252,8 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
                 buttonView.setChecked(!isChecked);
             }
         });
+
+        headerCheckBoxes.put(i,c);
 
         checkboxesToggle.setOpen();
         checkboxesToggle.setOnStateChangedListener(open -> {
@@ -263,5 +280,38 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
                 box.setChecked(checked);
             }
         }
+    }
+
+    private void checkParentBox(Integer parentNum) {
+        List<Integer> checkList = groupCheckBoxes.get(parentNum);
+        AppCompatCheckBox header = headerCheckBoxes.get(parentNum);
+        if (checkList == null || header == null) return;
+
+        int checkedBoxes = 0;
+        for (Integer i : checkList) {
+            AppCompatCheckBox box = checkBoxes.get(i);
+            if (box.isChecked()) {
+                checkedBoxes++;
+            }
+        }
+
+        if (checkedBoxes == checkList.size()) {
+            setCheckBoxChecked(header, true);
+        } else if (checkedBoxes == 0) {
+            setCheckBoxChecked(header, false);
+        } else {
+            setCheckBoxIndeterminate(header);
+        }
+    }
+
+    private void setCheckBoxIndeterminate(AppCompatCheckBox checkBox){
+        checkBox.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.white_check_background));
+        checkBox.setButtonDrawable(R.drawable.indeterminate_check_box_24);
+    }
+
+    private void setCheckBoxChecked(AppCompatCheckBox checkBox, Boolean checked){
+        checkBox.setChecked(checked);
+        checkBox.setButtonDrawable(R.drawable.orange_custom_check);
+        checkBox.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.header_check_background));
     }
 }
