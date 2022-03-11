@@ -450,7 +450,6 @@
   <string name="SettingSec_ChangeLock_WarningCalc_SheetAction_Remove">قم بإزالة التموية</string>
   <string name="SettingsCamo_EnterLock_Password">ادخل كلمة السر الخاصة بك لتغيير طريقة التموية</string>
   <string name="settings.gen_select_about">عن التطبيق والمساعدة</string>
-  <string name="lock_set.pattern_expl">لتعزيز حماية بياناتك، يُرجى إنشاء نمط لقفل التطبيق. سوف يُستخدم هذا النمط لإلغاء تأمين التطبيق وحجب الوصول إلى بياناتك. يجب أن يتضمن النمط 6 نقاط على الأقل.</string>
   <string name="upload_toast_fail.finding.metadata.to.upload">حدث خطأ عند تحديد معلومات التحقق من الملف. يُرجى المحاولة مرة أخرى.</string>
   <string name="upload_toast.fail.finding.file.to.upload">حدث خطأ عند تحديد الملف المطلوب تحميله. يُرجى المحاولة مرةً أخرى.</string>
   <string name="gallery_app.bar">المعرض</string>

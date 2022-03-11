@@ -8,9 +8,7 @@
   <string name="verification_prompt_dialog_title">Увага</string>
   <string name="collect_tab.title_blank">Пустая</string>
   <string name="action_cancel">Адмяніць</string>
-  <string name="lock_set.pattern_expl">Для забеспячэння максімальнай бяспекі, калі ласка, задайце графічны ключ для абароны ўваходу ў дадатак. Ён будзе выкарыстаны для ўваходу ў дадатак Tella пры кожным запуску, каб ніхто акрамя Вас не мог атрымаць доступ да дадзеных. Ключ павінен мець мінімум 6 пунктаў.</string>
   <string name="settings_menu.item_contact">Звяжыцеся з намі</string>
-  <string name="home_collect.button">Збор</string>
   <string name="collect_dialog.text_download.progress">Загрузка ў працэсе …</string>
   <string name="collect_toast_download.completed">Загрузка завершана</string>
   <string name="action_delete">Выдаліць</string>
@@ -233,9 +231,6 @@
     <item quantity="many">Шмат</item>
     <item quantity="other">%d Іншыя</item>
   </plurals>
-  <string name="settings.docu_app.bar">Дакументацыя</string>
-  <string name="settings.gen_select_documentation">Дакументацыя</string>
-  <string name="settings.gen_select_protection">Абарона</string>
   <string name="action_learn.more">Даведайцеся больш</string>
   <string name="settings.servers_add.server_dialog.title">Дадаць сервер</string>
     <string name="settings.prot_select_delete.forms">Выдаліць праект (чарнавік) і дасланыя формы</string>

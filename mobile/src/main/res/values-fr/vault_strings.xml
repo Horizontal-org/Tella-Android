@@ -72,5 +72,5 @@
     <string name="Vault_deleteFile_SheetDesc" >Le fichier sélectionné sera définitivement supprimé de Tella.</string>
     <string name="Vault_Move_AppBar">Déplacez \"%s\"</string>
     <string name="Vault_CreateFolder_SheetAction">Créer</string>
-    <string name="Vault_Items" >items</string>
+    <string name="Vault_Items" >éléments</string>
 </resources>

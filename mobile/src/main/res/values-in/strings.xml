@@ -225,9 +225,6 @@
     <item quantity="one">%d file</item>
     <item quantity="other">%d files</item>
   </plurals>
-  <string name="settings.docu_app.bar">Dokumentasi</string>
-  <string name="settings.gen_select_documentation">Dokumentasi</string>
-  <string name="settings.gen_select_protection">Protection</string>
   <string name="action_learn.more">Pelajari Selengkapnya</string>
   <string name="settings.servers_add.server_dialog.title">Add server</string>
     <string name="settings.prot_select_delete.forms">Delete draft and submitted forms</string>
