@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/wa_purple"
+    app:behavior_hideable="true"
+  >
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.15" />
+
+
+    <ImageView
+        android:id="@+id/server_icon"
+        android:layout_width="120dp"
+        android:layout_height="100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guidelineTop"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_server"
+        android:textColor="@color/wa_white"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/standard_sheet_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/server_icon"
+        android:text="@string/Login_Type_Screen_Title"
+        android:layout_marginTop="24dp"
+        style="@style/Tella_Main_White_Text.MeduimbBold"
+        android:paddingHorizontal="@dimen/activity_horizontal_margin"
+        android:textSize="18sp"
+        android:textAlignment="center"
+     />
+
+    <org.hzontal.shared_ui.buttons.RoundButton
+        android:id="@+id/login_button"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        app:text="@string/Login_Text"
+        app:layout_constraintTop_toBottomOf="@+id/standard_sheet_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:check_state="false" />
+
+
+    <org.hzontal.shared_ui.buttons.RoundButton
+        android:id="@+id/public_button"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        app:text="@string/Public_Login_Text"
+        app:layout_constraintTop_toBottomOf="@+id/login_button"
+        android:layout_marginTop="24dp"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:check_state="false" />
+
+
+    <TextView
+        style="@style/Unlock_White_Text_Back"
+        android:id="@+id/back_btn"
+        android:text="@string/LockSelect_Action_Back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
+        style="@style/Unlock_White_Text_Back"
+        android:id="@+id/next_btn"
+        android:text="@string/action_next"
+        android:layout_marginEnd="34dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

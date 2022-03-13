@@ -21,7 +21,6 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.mappers.toViewTemplat
 import java.util.ArrayList
 
 class DownloadedTemplatesViewModel : ViewModel(){
-
     private val uwaziRepository by lazy { UwaziRepository() }
     var error = MutableLiveData<Throwable>()
     private val _progress = MutableLiveData<Boolean>()

@@ -8,20 +8,11 @@
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progress_circular"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:indeterminate="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        app:trackColor="@color/wa_white"
-        app:indicatorColor="@color/tigers_eye"
-        app:trackThickness="4dp"
-        android:visibility="gone"
-        />
+        style="@style/Tella_Progress_Circular" />
 
     <org.hzontal.shared_ui.appbar.ToolbarComponent
         android:id="@+id/toolbar"
@@ -30,8 +21,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
-        app:startTitle="@string/UWAZI_Language_Header_Title"
+        app:toolbarTitle="@string/UWAZI_Language_Header_Title"
         />
 
     <TextView
@@ -55,49 +45,21 @@
         tools:listitem="@layout/item_language_selector"
         />
 
-    <Button
-        android:id="@+id/cancel"
-        style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="12dp"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:background="@drawable/cancel_button_background"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:text="@string/action_cancel"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textColor="@color/wa_white"
-        android:textSize="17sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/next"
-        />
 
-    <Button
-        android:id="@+id/next"
-        style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:background="@drawable/action_button_background"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="12dp"
-        android:maxLines="1"
-        android:text="@string/action_ok"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textColor="@color/wa_white"
-        android:textSize="17sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <TextView
+        style="@style/Unlock_White_Text_Back"
+        android:id="@+id/back_btn"
+        android:text="@string/LockSelect_Action_Back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
+        style="@style/Unlock_White_Text_Back"
+        android:id="@+id/next_btn"
+        android:text="@string/action_next"
+        android:layout_marginEnd="34dp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="24dp"
-
-        />
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -177,12 +177,13 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     }
 
     override fun onUwaziServerDialogCreate(server: UWaziUploadServer?) {
-        presenter.create(server)
+        TODO("Not yet implemented")
     }
 
     override fun onUwaziServerDialogUpdate(server: UWaziUploadServer?) {
-       // presenter.create(server)
+        TODO("Not yet implemented")
     }
+
 
     override fun onDialogDismiss() {
 

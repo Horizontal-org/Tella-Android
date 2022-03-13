@@ -1,7 +1,11 @@
 package rs.readahead.washington.mobile.views.activity;
 
+import static rs.readahead.washington.mobile.views.dialog.UwaziServerDialogFragmentKt.OBJECT_KEY;
+import static rs.readahead.washington.mobile.views.dialog.uwazi.step1.EnterServerFragmentKt.IS_UPDATE_SERVER;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +18,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
+
+import com.google.gson.Gson;
 
 import org.hzontal.shared_ui.appbar.ToolbarComponent;
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
@@ -29,6 +35,10 @@ import butterknife.OnClick;
 import kotlin.Unit;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
+import rs.readahead.washington.mobile.bus.EventObserver;
+import rs.readahead.washington.mobile.bus.event.CreateUwaziServerEvent;
+import rs.readahead.washington.mobile.bus.event.UpdateUwaziServerEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.Server;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
@@ -47,8 +57,8 @@ import rs.readahead.washington.mobile.mvp.presenter.UwaziServersPresenter;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragment;
-import rs.readahead.washington.mobile.views.dialog.UwaziServerDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageDialogFragment;
+import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
 import timber.log.Timber;
 
 
@@ -59,7 +69,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         ICollectBlankFormListRefreshPresenterContract.IView,
         CollectServerDialogFragment.CollectServerDialogHandler,
         TellaUploadServerDialogFragment.TellaUploadServerDialogHandler,
-        UwaziServerDialogFragment.UwaziServerDialogHandler,
         UwaziServerLanguageDialogFragment.UwaziServerLanguageDialogHandler,
         IUWAZIServersPresenterContract.IView{
 
@@ -89,6 +98,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     private List<Server> servers;
     private List<TellaUploadServer> tuServers;
     private List<UWaziUploadServer> uwaziServers;
+    private EventCompositeDisposable disposables;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -125,6 +135,28 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         uwaziServersPresenter = new UwaziServersPresenter(this);
         uwaziServersPresenter.getUwaziServers();
         createRefreshPresenter();
+        initUwaziEvents();
+    }
+
+    private void initUwaziEvents(){
+        disposables = MyApplication.bus().createCompositeDisposable();
+        disposables.wire(CreateUwaziServerEvent.class, new EventObserver<CreateUwaziServerEvent>() {
+            @Override
+            public void onNext(@NonNull CreateUwaziServerEvent event) {
+                if (event.getServer() != null){
+                    uwaziServersPresenter.create(event.getServer());
+                }
+            }
+        });
+
+        disposables.wire(UpdateUwaziServerEvent.class, new EventObserver<UpdateUwaziServerEvent>() {
+            @Override
+            public void onNext(@NonNull UpdateUwaziServerEvent event) {
+                if (event.getServer() != null){
+                    uwaziServersPresenter.update(event.getServer());
+                }
+            }
+        });
     }
 
     @Override
@@ -208,7 +240,9 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     @Override
     public void onCreatedUwaziServer(UWaziUploadServer server) {
-        UwaziServerLanguageDialogFragment.newInstance(server,false).show(getSupportFragmentManager(),UwaziServerLanguageDialogFragment.Companion.getTAG());
+        servers.add(server);
+        listView.addView(getServerItem(server), servers.indexOf(server));
+        uwaziServers.add(server);
     }
 
     @Override
@@ -232,7 +266,12 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     @Override
     public void onUpdatedUwaziServer(UWaziUploadServer server) {
-        UwaziServerLanguageDialogFragment.newInstance(server,true).show(getSupportFragmentManager(),UwaziServerLanguageDialogFragment.Companion.getTAG());
+        int i = servers.indexOf(server);
+        if (i != -1) {
+            servers.set(i, server);
+            listView.removeViewAt(i);
+            listView.addView(getServerItem(server), i);
+        }
     }
 
     @Override
@@ -476,8 +515,15 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private void showUwaziServerDialog(@Nullable UWaziUploadServer server) {
-         UwaziServerDialogFragment.newInstance(server)
-                .show(getSupportFragmentManager(), UwaziServerDialogFragment.Companion.getTAG());
+        if (server == null){
+            startActivity(new Intent(this, UwaziConnectFlowActivity.class));
+        } else {
+            Intent intent = new Intent(this, UwaziConnectFlowActivity.class);
+            intent.putExtra(OBJECT_KEY, new Gson().toJson(server));
+            intent.putExtra(IS_UPDATE_SERVER,true);
+            startActivity(intent);
+        }
+
     }
     private void stopPresenting() {
         if (collectServersPresenter != null) {
@@ -704,7 +750,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         tellaUploadServersPresenter.update(server);
     }
 
-    @Override
+  /*  @Override
     public void onUwaziServerDialogCreate(@Nullable UWaziUploadServer server) {
         assert server != null;
         uwaziServersPresenter.create(server);
@@ -714,7 +760,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     public void onUwaziServerDialogUpdate(@Nullable UWaziUploadServer server) {
         assert server != null;
         uwaziServersPresenter.update(server);
-    }
+    }*/
 
     @Override
     public void onLoadUwaziServersError(@NonNull Throwable throwable) {

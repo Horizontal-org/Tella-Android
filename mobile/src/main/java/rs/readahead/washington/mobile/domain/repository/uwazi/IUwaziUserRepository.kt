@@ -5,10 +5,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import rs.readahead.washington.mobile.data.entity.uwazi.*
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
-import rs.readahead.washington.mobile.domain.entity.uwazi.ListTemplateResult
-import rs.readahead.washington.mobile.domain.entity.uwazi.RowDictionary
-import rs.readahead.washington.mobile.domain.entity.uwazi.TranslationRow
-import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziRow
+import rs.readahead.washington.mobile.domain.entity.uwazi.*
 
 interface IUwaziUserRepository {
 
@@ -18,7 +15,13 @@ interface IUwaziUserRepository {
 
     fun getTemplates(server: UWaziUploadServer): Single<List<UwaziRow>>
 
-    fun getSettings(server: UWaziUploadServer): Single<List<Language>>
+    fun getTemplates(url: String): Single<List<UwaziRow>>
+
+    fun getSettings(server: UWaziUploadServer): Single<List<LanguageEntity>>
+
+    fun getSettings(url: String): Single<Settings>
+
+    fun getFullSettings(server: UWaziUploadServer): Single<Settings>
 
     fun getDictionary(server: UWaziUploadServer): Single<List<RowDictionary>>
 

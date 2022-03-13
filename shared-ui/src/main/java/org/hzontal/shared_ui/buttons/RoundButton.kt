@@ -31,7 +31,6 @@ class RoundButton @JvmOverloads constructor(
     }
 
     private fun initView() {
-
         background = ContextCompat.getDrawable(context, R.drawable.bg_information_button)
     }
 

@@ -6,7 +6,7 @@ import io.reactivex.schedulers.Schedulers
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import rs.readahead.washington.mobile.data.ParamsNetwork
-import rs.readahead.washington.mobile.data.entity.uwazi.Language
+import rs.readahead.washington.mobile.data.entity.uwazi.LanguageEntity
 import rs.readahead.washington.mobile.data.entity.uwazi.LoginEntity
 import rs.readahead.washington.mobile.data.entity.uwazi.LoginResult
 import rs.readahead.washington.mobile.data.entity.uwazi.UwaziEntityRow
@@ -19,13 +19,11 @@ import rs.readahead.washington.mobile.util.StringUtils
 
 
 class UwaziRepository : IUwaziUserRepository {
-
     private val uwaziApi by lazy { UwaziService.newInstance().services }
-
 
     override fun login(server: UWaziUploadServer): Single<LoginResult> {
         return uwaziApi.login(
-            loginEntity = LoginEntity(server.username, server.password),
+            loginEntity = LoginEntity(server.username, server.password,server.token),
             url = StringUtils.append(
                 '/',
                 server.url,
@@ -35,8 +33,12 @@ class UwaziRepository : IUwaziUserRepository {
             .observeOn(AndroidSchedulers.mainThread())
             .map {
                 val cookieList: List<String> = it.headers().values("Set-Cookie")
-                val jsessionid: String = cookieList[0].split(";")[0]
-                LoginResult(it.isSuccessful, jsessionid)
+                var jsessionid = ""
+                if (!cookieList.isNullOrEmpty()){
+                     jsessionid = cookieList[0].split(";")[0]
+                }
+
+                LoginResult(it.isSuccessful, jsessionid,it.code())
             }
 
     }
@@ -132,7 +134,19 @@ class UwaziRepository : IUwaziUserRepository {
 
     }
 
-    override fun getSettings(server: UWaziUploadServer): Single<List<Language>> {
+    override fun getTemplates(url: String): Single<List<UwaziRow>> {
+        return uwaziApi.getTemplates(
+            url = StringUtils.append(
+                '/',
+                url,
+                ParamsNetwork.URL_TEMPLATES
+            ), cookies = emptyList()
+        )
+            .subscribeOn(Schedulers.io())
+            .map { result -> result.mapToDomainModel() }
+    }
+
+    override fun getSettings(server: UWaziUploadServer): Single<List<LanguageEntity>> {
         return uwaziApi.getSettings(
             url = StringUtils.append(
                 '/',
@@ -144,6 +158,34 @@ class UwaziRepository : IUwaziUserRepository {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .map { result -> result.languages }
+    }
+
+    override fun getSettings(url: String): Single<Settings> {
+        return uwaziApi.getSettings(
+            url = StringUtils.append(
+                '/',
+               url,
+                ParamsNetwork.URL_SETTINGS
+            ),
+            cookies = arrayListOf()
+        )
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .map { result -> result.mapToDomainModel() }
+    }
+
+    override fun getFullSettings(server: UWaziUploadServer): Single<Settings> {
+        return uwaziApi.getSettings(
+            url = StringUtils.append(
+                '/',
+                server.url,
+                ParamsNetwork.URL_SETTINGS
+            ),
+            cookies = arrayListOf(server.connectCookie, server.localeCookie)
+        )
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .map { result -> result.mapToDomainModel() }
     }
 
     override fun getDictionary(server: UWaziUploadServer): Single<List<RowDictionary>> {

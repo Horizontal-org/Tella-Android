@@ -64,10 +64,8 @@ public class OnBoardPresenter implements IOnBoardPresenterContract.IPresenter {
         disposables.add(keyDataSource.getUwaziDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposable -> view.showLoading())
                 .flatMapSingle((Function<UwaziDataSource, SingleSource<UWaziUploadServer>>)
                         dataSource -> dataSource.createUWAZIServer(server))
-                .doFinally(() -> view.hideLoading())
                 .subscribe(server1 -> view.onCreatedUwaziServer(server1),
                         throwable -> {
                             FirebaseCrashlytics.getInstance().recordException(throwable);

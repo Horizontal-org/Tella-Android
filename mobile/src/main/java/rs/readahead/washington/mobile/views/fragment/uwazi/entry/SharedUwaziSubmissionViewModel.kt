@@ -26,10 +26,10 @@ import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
 import rs.readahead.washington.mobile.presentation.uwazi.SendEntityRequest
-import rs.readahead.washington.mobile.views.fragment.uwazi.send.MULTIPART_FORM_DATA
 import timber.log.Timber
 import java.net.URLEncoder
 
+private const val MULTIPART_FORM_DATA = "text/plain"
 class SharedUwaziSubmissionViewModel : ViewModel(){
     private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private val disposables = CompositeDisposable()

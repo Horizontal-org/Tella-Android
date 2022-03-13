@@ -74,7 +74,7 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
 
-    fun addFragment(fragmentToHide: BaseFragment, fragment: BaseFragment, container: Int) {
+    fun addFragment(fragmentToHide: Fragment, fragment: Fragment, container: Int) {
         val className = fragment.javaClass.name
         supportFragmentManager
             .beginTransaction()
@@ -94,6 +94,27 @@ abstract class BaseActivity : AppCompatActivity() {
         val className = fragment.javaClass.name
         supportFragmentManager
             .beginTransaction()
+            .add(container, fragment, className)
+            .addToBackStack(null)
+            .commitAllowingStateLoss()
+    }
+
+    fun addFragmentWithAnimation(fragment: Fragment, container: Int) {
+        val className = fragment.javaClass.name
+        supportFragmentManager
+            .beginTransaction()
+            .setCustomAnimations(
+                R.anim.`in`,
+                R.anim.out,
+                R.anim.left_to_right,
+                R.anim.right_to_left
+            )
+            .setCustomAnimations(
+                R.anim.`in`,
+                R.anim.out,
+                R.anim.left_to_right,
+                R.anim.right_to_left
+            )
             .add(container, fragment, className)
             .addToBackStack(null)
             .commitAllowingStateLoss()

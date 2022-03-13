@@ -8,10 +8,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
-import rs.readahead.washington.mobile.data.ParamsNetwork.LOCALE_COOKIE
 import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.data.database.UwaziDataSource
-import rs.readahead.washington.mobile.data.entity.uwazi.Language
+import rs.readahead.washington.mobile.data.entity.uwazi.LanguageEntity
 import rs.readahead.washington.mobile.data.repository.UwaziRepository
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.views.adapters.uwazi.ViewLanguageItem
@@ -26,8 +25,8 @@ class UwaziServerLanguageViewModel : ViewModel() {
     private val _listLanguage = MutableLiveData<List<ViewLanguageItem>>()
     val listLanguage: LiveData<List<ViewLanguageItem>> get() = _listLanguage
     var error = MutableLiveData<Throwable>()
-    private val _languageClicked = MutableLiveData<Language>()
-    val languageClicked: LiveData<Language> get() = _languageClicked
+    private val _languageClicked = MutableLiveData<LanguageEntity>()
+    val languageClicked: LiveData<LanguageEntity> get() = _languageClicked
     private val _languageUpdated = MutableLiveData<Boolean>()
     val languageUpdated: LiveData<Boolean> get() = _languageUpdated
     private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
@@ -42,7 +41,7 @@ class UwaziServerLanguageViewModel : ViewModel() {
             .subscribe({
                 val list = mutableListOf<ViewLanguageItem>()
                 it.map { language ->
-                    list.add(language.toViewLanguageItem { onLanguageClicked(language) })
+                  //  list.add(language.toViewLanguageItem { onLanguageClicked(language) })
                 }
                 _listLanguage.postValue(list)
             }
@@ -55,11 +54,11 @@ class UwaziServerLanguageViewModel : ViewModel() {
             })
     }
 
-    private fun onLanguageClicked(language: Language){
+    private fun onLanguageClicked(language: LanguageEntity){
         _languageClicked.postValue(language)
     }
 
-    fun updateLanguageSettings(server: UWaziUploadServer,language: Language) {
+    fun updateLanguageSettings(server: UWaziUploadServer,language: LanguageEntity) {
         disposables.add(keyDataSource.uwaziDataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

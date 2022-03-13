@@ -1,11 +1,14 @@
 package rs.readahead.washington.mobile.domain.entity;
 
+import androidx.annotation.Nullable;
+
 import java.io.Serializable;
 
 public class UWaziUploadServer extends Server implements Serializable {
     public static final UWaziUploadServer NONE = new UWaziUploadServer();
     private String connectCookie;
     private String localeCookie = "en";
+    private String token = null;
     public UWaziUploadServer() {
         this(0);
     }
@@ -48,5 +51,14 @@ public class UWaziUploadServer extends Server implements Serializable {
 
     public void setLocaleCookie(String localeCookie) {
         this.localeCookie = localeCookie;
+    }
+
+    @Nullable
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

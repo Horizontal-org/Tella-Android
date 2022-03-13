@@ -20,8 +20,9 @@ interface IUwaziApi  {
     @POST
     fun login(
         @Body loginEntity: LoginEntity,
-        @Url url : String
-     ) : Single<Response<LoginResponse>>
+        @Url url : String,
+        @Header(X_REQUESTED_WITH) requested: String = "XMLHttpRequest"
+    ) : Single<Response<LoginResponse>>
 
 
     @GET

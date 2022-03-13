@@ -12,7 +12,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.data.entity.uwazi.Language
+import rs.readahead.washington.mobile.data.entity.uwazi.LanguageEntity
 import rs.readahead.washington.mobile.databinding.DialogUwaziServerLanguageBinding
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.views.adapters.uwazi.LanguageSelectorAdapter
@@ -24,7 +24,7 @@ class UwaziServerLanguageDialogFragment : AppCompatDialogFragment() {
     private lateinit var binding: DialogUwaziServerLanguageBinding
     private val viewModel: UwaziServerLanguageViewModel by viewModels()
     private var uwaziServer: UWaziUploadServer? = null
-    private var language: Language? = null
+    private var language: LanguageEntity? = null
     private var isUpdate: Boolean = false
 
     interface UwaziServerLanguageDialogHandler {
@@ -130,7 +130,7 @@ class UwaziServerLanguageDialogFragment : AppCompatDialogFragment() {
                 adapter = languageSelectorAdapter
             }
 
-            cancel.setOnClickListener {
+           /* cancel.setOnClickListener {
                 dismissDialog()
             }
 
@@ -143,7 +143,7 @@ class UwaziServerLanguageDialogFragment : AppCompatDialogFragment() {
                         )
                     }
                 }
-            }
+            }*/
         }
     }
 

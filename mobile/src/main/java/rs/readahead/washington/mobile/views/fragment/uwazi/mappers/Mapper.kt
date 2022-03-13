@@ -1,7 +1,8 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.mappers
 
-import rs.readahead.washington.mobile.data.entity.uwazi.Language
+import rs.readahead.washington.mobile.data.entity.uwazi.LanguageEntity
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
+import rs.readahead.washington.mobile.domain.entity.uwazi.Language
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.views.adapters.uwazi.ViewLanguageItem
 import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.ViewEntityInstanceItem
