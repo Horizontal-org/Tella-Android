@@ -7,7 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import com.google.gson.Gson
 import org.cleaninsights.sdk.CleanInsights
+import org.cleaninsights.sdk.CleanInsightsConfiguration
+import timber.log.Timber
+
 
 fun View.setMargins(
     leftMarginDp: Int? = null,
@@ -38,5 +42,14 @@ fun Window.changeStatusColor(context: Context, color: Int) {
     }
 }
 
-fun createCleanInsightsInstance(context : Context ,jsonFile : String) =
-    CleanInsights(context.assets.open(jsonFile).reader().readText(), context.filesDir)
+fun createCleanInsightsInstance(context: Context, jsonFile: String): CleanInsights? {
+    return try {
+        val jsonString = context.assets.open(jsonFile).reader().readText()
+        val configuration = Gson().fromJson(jsonString, CleanInsightsConfiguration::class.java)
+        CleanInsights(configuration, context.filesDir)
+    } catch (e: Exception) {
+        Timber.e("createCleanInsightsInstance Exception ${e.message}")
+        e.printStackTrace()
+        null
+    }
+}

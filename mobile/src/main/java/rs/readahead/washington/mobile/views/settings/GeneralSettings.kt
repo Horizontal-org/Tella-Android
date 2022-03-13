@@ -9,24 +9,21 @@ import android.widget.CompoundButton
 import android.widget.TextView
 import androidx.navigation.Navigation
 import org.cleaninsights.sdk.Consent
-import org.cleaninsights.sdk.FeatureConsent
 import org.hzontal.shared_ui.switches.TellaSwitchWithMessage
 import org.hzontal.shared_ui.utils.DialogUtils
-import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
+import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.LocaleManager
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
-import timber.log.Timber
 import java.util.*
 
 
 class GeneralSettings : BaseFragment() {
     var languageSetting: TextView? = null
     var shareDataSwitch: TellaSwitchWithMessage? = null
-    private var consent: Consent? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,16 +49,12 @@ class GeneralSettings : BaseFragment() {
 
         shareDataSwitch = view.findViewById(R.id.share_data_switch)
         shareDataSwitch?.let {
+            it.mSwitch.setChecked(Preferences.hasAcceptedImprovements())
             it.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
                 Preferences.setIsAcceptedImprovements(isChecked)
-                val featureConsent = consent as? FeatureConsent
-                featureConsent?.let {
-                    //TODO
-                    if (isChecked) MyApplication.getCleanInsights().grant(featureConsent.feature)
-                    else MyApplication.getCleanInsights().deny(featureConsent.feature)
-                }
+                CleanInsightUtils.grantCampaign(isChecked)
+                if (isChecked) showMessageForCleanInsightsApprove()
             }
-            it.mSwitch.setChecked(Preferences.hasAcceptedImprovements())
             it.setTextAndAction(R.string.action_learn_more) { startCleanInsightActivity() }
         }
 

@@ -54,6 +54,7 @@ import rs.readahead.washington.mobile.javarosa.JavaRosa;
 import rs.readahead.washington.mobile.javarosa.PropertyManager;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.util.C;
+import rs.readahead.washington.mobile.util.CleanInsightUtils;
 import rs.readahead.washington.mobile.util.LocaleManager;
 import rs.readahead.washington.mobile.util.TellaUpgrader;
 import rs.readahead.washington.mobile.util.jobs.TellaJobCreator;
@@ -76,6 +77,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     public static RxVault rxVault;
     Vault.Config vaultConfig;
     private static CleanInsights cleanInsights;
+    private final Long start = System.currentTimeMillis();
 
     public static void startMainActivity(@NonNull Context context) {
         Intent intent;
@@ -184,7 +186,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         vaultConfig = new Vault.Config();
         vaultConfig.root = new File(this.getFilesDir(), C.MEDIA_DIR);
 
-        //initCleanInsights();
+        initCleanInsights();
     }
 
     private void configureCrashlytics() {
@@ -233,7 +235,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         super.onLowMemory();
         super.onLowMemory();
         Glide.get(this).clearMemory();
-        //persistCleanInsights();
+        persistCleanInsights();
     }
 
     @Override
@@ -314,14 +316,16 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         TellaKeysUI.getMainKeyHolder().set(mainKey);
     }
 
-    public static CleanInsights getCleanInsights() { return cleanInsights; }
+    public static CleanInsights getCleanInsights() {
+        return cleanInsights;
+    }
 
     private void initCleanInsights() {
         if (Preferences.hasAcceptedImprovements()) {
             try {
                 cleanInsights = createCleanInsightsInstance(getApplicationContext(), "cleaninsights.json");
             } catch (Exception e) {
-                Timber.e(e);
+                e.printStackTrace();
             }
         }
     }
@@ -333,7 +337,10 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     }
 
     private void persistCleanInsights() {
-        if (Preferences.hasAcceptedImprovements() && cleanInsights != null) cleanInsights.persist();
+        if (Preferences.hasAcceptedImprovements() && cleanInsights != null) {
+            CleanInsightUtils.INSTANCE.measureTimeSpentEvent(start);
+            cleanInsights.persist();
+        }
     }
 
     @Override

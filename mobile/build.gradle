@@ -47,7 +47,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    buildToolsVersion = '28.0.3'
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
@@ -57,6 +57,7 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':tella-vault')
+    implementation project(':clean-insights')
     api project(':tella-locking-ui')
 
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
@@ -130,9 +131,6 @@ dependencies {
     implementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
 
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}"
-
-    implementation 'org.cleaninsights.sdk:clean-insights-sdk:2.6.0'
-
 
     testImplementation 'junit:junit:4.13'
 }

@@ -27,6 +27,7 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
+import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.views.activity.AudioPlayActivity
@@ -96,6 +97,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     private fun showMessageForCleanInsightsApprove() {
         Preferences.setIsAcceptedImprovements(true)
+        CleanInsightUtils.grantCampaign(true)
         DialogUtils.showBottomMessage(
             requireActivity(),
             String.format(getString(R.string.clean_insights_signed_for_days)),
@@ -111,6 +113,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         }
         vaultAdapter.addImprovementSection()
         timerDuration = resources.getInteger(R.integer.panic_countdown_duration)
+
+        CleanInsightUtils.measureEvent()
     }
 
     private fun initPermissions() {
