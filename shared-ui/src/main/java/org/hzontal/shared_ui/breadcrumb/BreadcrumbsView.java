@@ -1,5 +1,7 @@
 package org.hzontal.shared_ui.breadcrumb;
 
+import static org.hzontal.shared_ui.BuildConfig.LIBRARY_PACKAGE_NAME;
+
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
@@ -14,7 +16,6 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.hzontal.shared_ui.BuildConfig;
 import org.hzontal.shared_ui.R;
 import org.hzontal.shared_ui.breadcrumb.model.IBreadcrumbItem;
 
@@ -124,12 +125,7 @@ public class BreadcrumbsView extends FrameLayout {
 	public <E extends IBreadcrumbItem> void setItems(@NonNull List<E> items) {
 		mAdapter.setItems(items);
 		mAdapter.notifyDataSetChanged();
-		postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				performSafeSmoothScrollToPosition(mAdapter.getItemCount() - 1);
-			}
-		}, 500);
+		postDelayed(() -> performSafeSmoothScrollToPosition(mAdapter.getItemCount() - 1), 500);
 	}
 
 	private void performSafeSmoothScrollToPosition(int position) {

@@ -107,7 +107,7 @@ public class MediaFileHandler {
         Intent intent = new Intent();
         intent.setType(type);
 
-        if (extraMimeType != null && Build.VERSION.SDK_INT >= 19) {
+        if (extraMimeType != null) {
             intent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeType);
         }
 
@@ -121,9 +121,7 @@ public class MediaFileHandler {
             }
         }
 
-        if (Build.VERSION.SDK_INT >= 18) {
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        }
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
 
         intent.setAction(Intent.ACTION_GET_CONTENT);
 
@@ -681,6 +679,23 @@ public class MediaFileHandler {
             }
         }
         return resultList;
+    }
+
+    public static VaultFile importVaultFileUri(Context context, @Nullable Uri uri, String parentId) throws Exception {
+        VaultFile vaultFile = new VaultFile();
+        if (uri != null) {
+            String mimeType = getMimeType(uri, context.getContentResolver());
+            if (mimeType != null) {
+                if (MediaFile.INSTANCE.isImageFileType(mimeType)) {
+                    vaultFile = importPhotoUri(context, uri, parentId);
+                } else if (MediaFile.INSTANCE.isVideoFileType(mimeType)) {
+                    vaultFile = importVideoUri(context, uri, parentId);
+                } else {
+                    vaultFile = importOthersUri(context, uri, parentId);
+                }
+            }
+        }
+        return vaultFile;
     }
 
     private static List<VaultFile> getAllFiles(VaultFile vaultFile) {

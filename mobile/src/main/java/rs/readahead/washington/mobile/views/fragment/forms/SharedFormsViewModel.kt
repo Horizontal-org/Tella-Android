@@ -183,6 +183,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
         }
         return instance
     }
+
     fun toggleFavorite(collectForm: CollectForm?) {
         disposables.add(keyDataSource.dataSource
             .subscribeOn(Schedulers.io())
@@ -251,7 +252,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
             }
             .flatMap { servers: List<CollectServer> ->
                 if (servers.isEmpty()) {
-                   // return Single.just(ListFormResult()).toObservable()
+                     Single.just(ListFormResult()).toObservable()
                 }
                 if (!MyApplication.isConnectedToInternet(mApplication.baseContext)) {
                     throw NoConnectivityException()
@@ -278,7 +279,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
                     allResults
                 }.toObservable()
             }
-            .flatMap { listFormResult: ListFormResult? ->
+            .flatMap { listFormResult ->
                 keyDataSource.dataSource.flatMap { dataSource: DataSource ->
                     dataSource.updateBlankForms(
                         listFormResult

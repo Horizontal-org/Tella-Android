@@ -19,8 +19,8 @@ import rs.readahead.washington.mobile.mvp.contract.ICollectFormInstanceListPrese
 public class CollectFormInstanceListPresenter implements
         ICollectFormInstanceListPresenterContract.IPresenter {
     private ICollectFormInstanceListPresenterContract.IView view;
-    private CompositeDisposable disposables = new CompositeDisposable();
-    private AsyncSubject<DataSource> asyncDataSource = AsyncSubject.create();
+    private final CompositeDisposable disposables = new CompositeDisposable();
+    private final AsyncSubject<DataSource> asyncDataSource = AsyncSubject.create();
 
 
     public CollectFormInstanceListPresenter(ICollectFormInstanceListPresenterContract.IView view) {

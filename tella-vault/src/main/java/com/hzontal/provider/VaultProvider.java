@@ -1,5 +1,7 @@
 package com.hzontal.provider;
 
+import static com.hzontal.tella_vault.BuildConfig.LIBRARY_PACKAGE_NAME;
+
 import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;

@@ -16,6 +16,7 @@ import rs.readahead.washington.mobile.BuildConfig;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
+import rs.readahead.washington.mobile.data.database.UwaziDataSource;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.data.sharedpref.SharedPrefs;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
@@ -96,6 +97,22 @@ public class HomeScreenPresenter implements IHomeScreenPresenterContract.IPresen
                         throwable -> {
                             FirebaseCrashlytics.getInstance().recordException(throwable);
                             view.onCountCollectServersFailed(throwable);
+                        }
+                )
+        );
+    }
+
+    @Override
+    public void countUwaziServers() {
+        disposable.add(keyDataSource.getUwaziDataSource()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMapSingle((Function<UwaziDataSource, SingleSource<Long>>) UwaziDataSource::countUwaziServers)
+                .subscribe(
+                        num -> view.onCountUwaziServersEnded(num),
+                        throwable -> {
+                            FirebaseCrashlytics.getInstance().recordException(throwable);
+                            view.onCountUwaziServersFailed(throwable);
                         }
                 )
         );

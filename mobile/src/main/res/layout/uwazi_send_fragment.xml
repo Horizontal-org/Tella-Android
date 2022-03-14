@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/wa_purple"
+    tools:context=".views.fragment.uwazi.send.UwaziSendFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/endViewContainer"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:clipToPadding="false"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical">
+    </androidx.core.widget.NestedScrollView>
+
+
+    <org.hzontal.shared_ui.appbar.ToolbarComponent
+        android:id="@+id/toolbar"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
+        app:startTitle="@string/Uwazi_Submitted_Entity_Header_Title"
+        />
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/wa_white_20"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        style="@style/Unlock_White_Text_Back"
+        android:layout_width="0dp"
+        android:layout_height="54dp"
+        android:id="@+id/cancel_btn"
+        android:text="@string/Uwazi_Submit_Later"
+        android:background="@drawable/action_button_background"
+        android:backgroundTint="@color/wa_white_20"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/next_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="34dp"
+
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        style="@style/Unlock_White_Text_Back"
+        android:layout_width="0dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="5dp"
+        android:id="@+id/next_btn"
+        android:text="@string/collect.end_action_submit"
+        app:layout_goneMarginStart="34dp"
+        android:layout_marginEnd="34dp"
+        app:layout_constraintStart_toEndOf="@id/cancel_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/action_button_background"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

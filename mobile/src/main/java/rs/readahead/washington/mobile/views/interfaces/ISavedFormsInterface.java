@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.fragment.forms;
+package rs.readahead.washington.mobile.views.interfaces;
 
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 

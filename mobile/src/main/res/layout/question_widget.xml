@@ -36,7 +36,7 @@
             android:id="@+id/questionHelpText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/wa_white"
+            android:textColor="@color/wa_white_44"
             android:textSize="14sp" />
 
         <TextView

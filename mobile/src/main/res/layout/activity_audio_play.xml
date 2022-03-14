@@ -16,7 +16,7 @@
 
         <org.hzontal.shared_ui.appbar.ToolbarComponent
             android:id="@+id/toolbar"
-            app:arrowBackIcon="@drawable/ic_back_white"
+            app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"

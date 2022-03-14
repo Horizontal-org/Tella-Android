@@ -22,7 +22,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:arrowBackIcon="@drawable/ic_back_white" />
+            app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp" />
 
         <org.hzontal.shared_ui.breadcrumb.BreadcrumbsView
             android:id="@+id/breadcrumbs_view"
@@ -53,7 +53,7 @@
                 android:textSize="13sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Name"
+                android:text="@string/Vault_Filter_Name"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -120,19 +120,14 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="end|bottom"
-        android:layout_marginHorizontal="@dimen/tella_main_vertical"
-        android:layout_marginBottom="@dimen/tella_main_vertical"
-        android:background="@color/dark_orange"
         app:backgroundTint="@color/dark_orange"
         app:fabCustomSize="50dp"
         app:layout_anchorGravity="center"
         app:maxImageSize="30dp"
         app:srcCompat="@drawable/ic_plus"
         app:useCompatPadding="true"
-        tools:ignore="VectorDrawableCompat" />
+        tools:ignore="VectorDrawableCompat"
+        style="@style/Main_Floating_Action_Button_Style" />
 
     <LinearLayout
         android:id="@+id/emptyViewMsgContainer"

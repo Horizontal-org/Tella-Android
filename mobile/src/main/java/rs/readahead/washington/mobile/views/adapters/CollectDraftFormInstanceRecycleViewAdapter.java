@@ -18,7 +18,7 @@ import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.util.Util;
-import rs.readahead.washington.mobile.views.fragment.forms.ISavedFormsInterface;
+import rs.readahead.washington.mobile.views.interfaces.ISavedFormsInterface;
 
 
 public class CollectDraftFormInstanceRecycleViewAdapter extends RecyclerView.Adapter<CollectDraftFormInstanceRecycleViewAdapter.ViewHolder> {

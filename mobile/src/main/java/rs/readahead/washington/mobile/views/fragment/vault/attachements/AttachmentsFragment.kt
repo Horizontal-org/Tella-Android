@@ -59,6 +59,7 @@ import rs.readahead.washington.mobile.views.activity.*
 import rs.readahead.washington.mobile.views.activity.CameraActivity.VAULT_CURRENT_ROOT_PARENT
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.AttachmentsRecycleViewAdapter
+import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.IGalleryVaultHandler
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import rs.readahead.washington.mobile.views.fragment.vault.info.VAULT_FILE_INFO_TOOLBAR
 import timber.log.Timber
@@ -70,7 +71,7 @@ const val VAULT_FILE_ARG = "VaultFileArg"
 const val WRITE_REQUEST_CODE = 1002
 
 class AttachmentsFragment : BaseFragment(), View.OnClickListener,
-    rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.IGalleryVaultHandler,
+    IGalleryVaultHandler,
     IAttachmentsPresenter.IView,
     OnNavBckListener {
     private lateinit var attachmentsRecyclerView: RecyclerView

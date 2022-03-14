@@ -16,7 +16,8 @@ import rs.readahead.washington.mobile.R
 abstract class BaseFragment : Fragment() {
 
     protected lateinit var activity: BaseActivity
-
+    var hasInitializedRootView = false
+    private var rootView: View? = null
 
     override fun onAttach(context: Context) {
         Timber.d("***** ${this.javaClass.name} onAttach")

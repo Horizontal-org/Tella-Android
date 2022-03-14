@@ -521,11 +521,11 @@ public class VideoViewerActivity extends BaseLockActivity implements
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        toolbar.setStartTextTitle(vaultFile.name);
+        /*toolbar.setStartTextTitle(vaultFile.name);
         toolbar.getMenu().findItem(R.id.menu_item_more).setVisible(true);
         setupMetadataMenuItem(vaultFile.metadata != null);
         invalidateOptionsMenu();
-        isInfoShown = false;
+        isInfoShown = false;*/
         finish();
     }
 }

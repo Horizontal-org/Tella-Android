@@ -6,7 +6,6 @@ import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.VaultFile;
 
 
-//TO keep it or remove it ?
 public class FormMediaFile extends VaultFile {
     public FormMediaFileStatus status; // break away from getters/setters :)
     public boolean uploading;

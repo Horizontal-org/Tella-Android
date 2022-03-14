@@ -244,10 +244,10 @@ class SecuritySettings : BaseFragment() {
     }
 
     private fun setupQuickExitSwitch(quickExitSwitch: SwitchCompat, view: View) {
-        quickExitSwitch.setOnCheckedChangeListener({ buttonView: CompoundButton?, isChecked: Boolean ->
+        quickExitSwitch.setOnCheckedChangeListener { buttonView: CompoundButton?, isChecked: Boolean ->
             Preferences.setQuickExit(isChecked)
             setupQuickExitSettingsView(quickExitSwitch, view)
-        })
+        }
     }
 
     private fun setupQuickExitSettingsView(quickExitSwitch: SwitchCompat, view: View) {

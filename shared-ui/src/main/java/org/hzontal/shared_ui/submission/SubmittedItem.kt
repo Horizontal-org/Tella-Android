@@ -31,6 +31,7 @@ class SubmittedItem @JvmOverloads constructor(
     var nameRes: Int = -1
     var organizationRes: Int = -1
     var updatedRes: Int = -1
+    var popClickListener: (() -> Unit)? = null
 
     init {
         LayoutInflater.from(context)
@@ -45,6 +46,7 @@ class SubmittedItem @JvmOverloads constructor(
         updated = findViewById(R.id.updated)
         icon = findViewById(R.id.icon)
         popupMenu = findViewById(R.id.popupMenu)
+        popupMenu.setOnClickListener { popClickListener?.invoke() }
     }
 
     private fun extractAttributes(attrs: AttributeSet?, defStyleAttr: Int) {
@@ -76,8 +78,8 @@ class SubmittedItem @JvmOverloads constructor(
             name.isVisible = true
         }
         if (popupMenuRes != -1) {
-            popupMenu.setBackgroundResource(popupMenuRes)
-            popupMenu.isVisible = true
+           // popupMenu.setBackgroundResource(popupMenuRes)
+            //popupMenu.isVisible = true
         }
         if (updatedRes != -1) {
             updated.setBackgroundResource(updatedRes)
@@ -90,11 +92,11 @@ class SubmittedItem @JvmOverloads constructor(
     }
 
     fun setName(partName: String) {
-        name.setText(partName)
+        name.text = partName
     }
 
     fun setOrganization(organizationName: String) {
-        organization.setText(organizationName)
+        organization.text = organizationName
     }
 
     fun setIcon(iconId: Int) {
@@ -106,6 +108,7 @@ class SubmittedItem @JvmOverloads constructor(
     }
 
     fun setUpdated(updateTime: String) {
-        updated.setText(updateTime)
+        updated.isVisible = true
+        updated.text = updateTime
     }
 }

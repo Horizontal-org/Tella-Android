@@ -28,6 +28,7 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.util.CleanInsightUtils
+import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.views.activity.AudioPlayActivity
@@ -153,6 +154,14 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         }
     }
 
+    private fun maybeGetRecentTemplates() {
+        if (Preferences.isShowFavoriteTemplates()) {
+            homeVaultPresenter.getFavoriteCollectTemplates()
+        } else {
+            vaultAdapter.removeFavoriteTemplates()
+        }
+    }
+
     private fun initListeners() {
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
@@ -250,6 +259,11 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     }
 
+    override fun onFavoriteTemplateClickListener(template: CollectTemplate) {
+
+    }
+
+
     override fun onImproveItemClickListener(improveClickOptions: ImproveClickOptions) {
         when (improveClickOptions) {
             ImproveClickOptions.CLOSE -> removeImprovementSection()
@@ -315,6 +329,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         maybeGetFiles()
         maybeGetRecentForms()
         maybeHideFilesTitle()
+        maybeGetRecentTemplates()
     }
 
     private fun maybeClosePanic(): Boolean {
@@ -422,6 +437,18 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     override fun onGetFavoriteCollectFormsError(error: Throwable?) {
+        Timber.d(error)
+    }
+
+    override fun onGetFavoriteCollectTemplatesSuccess(files: List<CollectTemplate>?) {
+        if (!files.isNullOrEmpty()) {
+            vaultAdapter.addFavoriteTemplates(files)
+        } else {
+            vaultAdapter.removeFavoriteTemplates()
+        }
+    }
+
+    override fun onGetFavoriteCollectTemplateError(error: Throwable?) {
         Timber.d(error)
     }
 

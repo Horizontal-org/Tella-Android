@@ -92,7 +92,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         context.startActivity(intent);
     }
 
-
     @NonNull
     public static TellaBus bus() {
         return bus;

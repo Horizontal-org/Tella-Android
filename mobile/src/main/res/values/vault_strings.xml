@@ -11,6 +11,8 @@
     <string name="Vault_RecentFiles" >Recent files</string>
     <string name="Vault_PhotosAndVideos_Title" >Photos and Videos</string>
     <string name="Vault_FavoriteForms_Title" >Favorite forms</string>
+    <string name="Vault_FavoriteTemplates_Title" >Favorite templates</string>
+    <string name="Vault_No_Files_Title" >You don’t have any files in Tella yet.</string>
     <string name="Vault_Empty_Msg" >You don’t have any files on your Tella yet. Click the “+” button below to import your first file, or go to the Camera or Microphone to create one. You can also create folders to keep your files organized.</string>
     <string name="Vault_Move_SheetDesc" >Move to another folder</string>
     <string name="Vault_Rename_SheetAction" >Rename</string>
@@ -44,4 +46,30 @@
     <string name="Vault_ViewerOther_SheetDesc" >This file format cannot be opened inside Tella. Would you like to export the file to your device to open it through a different app? This may expose the content of the file. </string>
     <string name="Vault_Export_SheetAction" >Export</string>
     <string name="Vault_Items" >items</string>
+    <string name="Vault_Importing_SheetTitle">Importing and encrypting</string>
+    <plurals name="Vault_DeleteFile_SheetTitle">
+        <item quantity="one">Delete file?</item>
+        <item quantity="other">Delete files?</item>
+    </plurals>
+    <plurals name="Vault_deleteFile_SheetDesc">
+        <item quantity="one">The selected file will be permanently deleted from Tella.</item>
+        <item quantity="other">The selected files will be permanently deleted from Tella.</item>
+    </plurals>
+    <string name="Vault_CreateFolder_SheetTitle">Create a new folder</string>
+    <plurals name="Vault_Items">
+        <item quantity="one">item</item>
+        <item quantity="other">items</item>
+    </plurals>
+    <plurals name="Vault_Importing_SheetProgress">
+        <item quantity="one">%s file imported</item>
+        <item quantity="other">%s files imported</item>
+    </plurals>
+    <string name="Vault_AudioRecordings_AppBar">Audio recordings</string>
+    <string name="Vault_Encryting_SheetText" formatted="false">%d% complete</string>
+    <string name="Vault_Encrypting_Cancel_SheetTitle">Cancel encryption and delete file?</string>
+    <string name="Vault_Encrypting_Cancel_SheetText">If you cancel, your file will be lost</string>
+    <string name="Vault_Encrypting_Cancel_SheetAction_Resume">RESUME ENCRYPTION</string>
+    <string name="Vault_Encrypting_Cancel_SheetAction_Delete">DELETE FILE</string>
+    <string name="Vault_Move_AppBar">Move \"%s\"</string>
+    <string name="Vault_Filter_Name">Name</string>
 </resources>
