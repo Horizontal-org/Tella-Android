@@ -578,4 +578,14 @@
     <string name="uwazi.outbox_tab.title">Modèles</string>
     <string name="Uwazi_Templates_HeaderMessage">Voici les modèles Uwazi que vous pouvez remplir.</string>
 
+    <string name="Server_Url_Screen_Title">Entrez l\'URL du serveur</string>
+    <string name="Login_Type_Screen_Title">Identifiez-vous si vous avez un nom d\'utilisateur et un mot de passe, ou utilisez l\'accès public du serveur.</string>
+    <string name="Login_Text">S\'identifier</string>
+    <string name="Public_Login_Text">ACCÈS PUBLIC</string>
+    <string name="Two_Factor_Authentication_Description">Cette instance Uwazi nécessite une vérification en deux étapes. Entrez ici le code à 6 chiffres de votre application d\'authentification.</string>
+    <string name="Two_Factor_Authentication_Screen_Tile">Vérification en deux étapes</string>
+    <string name="Authentication_Code">Code de vérification</string>
+    <string name="Inavlid_Token_Msg_Error">Le code de vérification est invalide ou a expiré. Veuillez réessayer.</string>
+    <string name="Connected_Successfuly_Text">You have successfully connected to the server and will be able to share your data.</string>
+    <string name="Login_To_Access_Text">Log in to access the server</string>
 </resources>

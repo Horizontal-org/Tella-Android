@@ -553,4 +553,16 @@ conectarse a un servidor</string>
     <string name="uwazi.outbox_tab.title">Plantillas</string>
     <string name="Uwazi_Outbox_Header_Text">These are entities currently being submitted.</string>
     <string name="Uwazi_Templates_HeaderMessage">Estas son las plantillas de Uwazi que puedes rellenar.</string>
+
+    <string name="Server_Url_Screen_Title">Ingrese la URL del servidor</string>
+    <string name="Login_Type_Screen_Title">Identificase si tiene un nombre de usuario y una contraseña, o utilice el acceso público del servidor.</string>
+    <string name="Login_Text">Identificarse</string>
+    <string name="Public_Login_Text">ACCESO PÚBLICO</string>
+    <string name="Two_Factor_Authentication_Description">Esta instancia de Uwazi requiere verificación en dos pasos. Ingrese aquí el código de 6 dígitos de su aplicación de autenticación.</string>
+    <string name="Two_Factor_Authentication_Screen_Tile">Verificación en dos pasos</string>
+    <string name="Authentication_Code">Código de verificación</string>
+    <string name="Inavlid_Token_Msg_Error">El código de verificación es inválido o ha caducado. Por favor, inténtelo de nuevo.</string>
+    <string name="Connected_Successfuly_Text">You have successfully connected to the server and will be able to share your data.</string>
+    <string name="Login_To_Access_Text">Log in to access the server</string>
+
 </resources>

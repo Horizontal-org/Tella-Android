@@ -777,4 +777,14 @@ This is one of the two options available. -->
     <item quantity="other">A %1$d minutes ago</item>
   </plurals>
   <string name="Util_ellapsedTime_Seconds">A seconds a ago</string>
+  <string name="Server_Url_Screen_Title">Enter the server Url</string>
+  <string name="Login_Type_Screen_Title">Log in if you have a username and password, or access the server as a public instance.</string>
+  <string name="Login_Text">Log in</string>
+  <string name="Public_Login_Text">ACCESS AS PUBLIC INSTANCE</string>
+  <string name="Two_Factor_Authentication_Description">This Uwazi instance requires two-step verification. Enter here the 6-digit code from your authenticator app.</string>
+  <string name="Two_Factor_Authentication_Screen_Tile">Two-step verification</string>
+  <string name="Authentication_Code">Authentication code</string>
+  <string name="Inavlid_Token_Msg_Error">Invalid or expired token. Please try again.</string>
+  <string name="Connected_Successfuly_Text">You have successfully connected to the server and will be able to share your data.</string>
+  <string name="Login_To_Access_Text">Log in to access the server</string>
 </resources>
