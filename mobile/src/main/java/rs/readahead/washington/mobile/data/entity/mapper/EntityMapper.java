@@ -11,6 +11,7 @@ import rs.readahead.washington.mobile.data.entity.FeedbackEntity;
 import rs.readahead.washington.mobile.data.entity.FormMediaFileRegisterEntity;
 import rs.readahead.washington.mobile.data.entity.MediaFileEntity;
 import rs.readahead.washington.mobile.data.entity.MetadataEntity;
+import rs.readahead.washington.mobile.data.entity.uwazi.answer.UwaziLocation;
 import rs.readahead.washington.mobile.domain.entity.Feedback;
 
 
@@ -150,13 +151,25 @@ public class EntityMapper {
 
         if (mediaFiles != null) {
             entity.attachments = new ArrayList<>(mediaFiles.size());
-            for (VaultFile mediaFile: mediaFiles) {
+            for (VaultFile mediaFile : mediaFiles) {
                 entity.attachments.add(transform(mediaFile));
             }
         }
 
         return entity;
     }
+
+    public UwaziLocation transformMyLocation(MyLocation myLocation) {
+        return new UwaziLocation(myLocation.getLatitude(), myLocation.getLongitude(), "");
+    }
+
+    public static MyLocation transformUwaziLocation(UwaziLocation uLocation) {
+        MyLocation myLocation = new MyLocation();
+        myLocation.setLongitude(uLocation.getLon());
+        myLocation.setLatitude(uLocation.getLat());
+        return  myLocation;
+    }
+
 /*
     public List<TrainModule> transform(List<TrainModuleEntity> entities) {
         List<TrainModule> modules = new ArrayList<>(entities.size());

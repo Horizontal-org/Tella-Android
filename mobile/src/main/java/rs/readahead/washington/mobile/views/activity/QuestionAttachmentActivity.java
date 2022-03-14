@@ -15,11 +15,6 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.hzontal.tella_vault.VaultFile;
-import com.hzontal.utils.MediaFile;
-
-import java.util.List;
-
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;

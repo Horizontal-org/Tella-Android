@@ -178,7 +178,7 @@ object MediaFile {
     }
 
     fun isTextFileType(fileType: Int): Boolean {
-        return fileType in FILE_TYPE_TEXT..FILE_TYPE_PDF
+        return fileType in FILE_TYPE_TEXT..FILE_TYPE_ZIP
     }
 
     private fun getFileType(path: String?): MediaFileType? {

@@ -8,8 +8,12 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.fragment.app.FragmentManager
+import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import org.hzontal.shared_ui.R
+import org.hzontal.shared_ui.buttons.RoundButton
 import org.hzontal.shared_ui.utils.DialogUtils
+import java.util.concurrent.atomic.AtomicInteger
 
 object
 BottomSheetUtils {
@@ -161,32 +165,49 @@ BottomSheetUtils {
 
     class DualChoiceSheetHolder : CustomBottomSheetFragment.PageHolder() {
         lateinit var cancelButton: ImageView
-        lateinit var buttonOne: TextView
-        lateinit var buttonTwo: TextView
+        lateinit var buttonOne: RoundButton
+        lateinit var buttonTwo: RoundButton
+        lateinit var buttonThree: RoundButton
         lateinit var title: TextView
         lateinit var description: TextView
+        lateinit var nextButton: TextView
+        lateinit var backButton: TextView
+        lateinit var descriptionContent: TextView
+
 
         override fun bindView(view: View) {
             cancelButton = view.findViewById(R.id.standard_sheet_cancel_btn)
             buttonOne = view.findViewById(R.id.sheet_one_btn)
             buttonTwo = view.findViewById(R.id.sheet_two_btn)
+            buttonThree = view.findViewById(R.id.sheet_three_btn)
             title = view.findViewById(R.id.standard_sheet_title)
             description = view.findViewById(R.id.standard_sheet_content)
+            descriptionContent = view.findViewById(R.id.standard_sheet_content_description)
+            nextButton = view.findViewById(R.id.next_btn)
+            backButton = view.findViewById(R.id.back_btn)
         }
     }
 
     interface BinaryConsumer {
         fun accept(option: Boolean)
     }
-
+    interface IServerChoiceActions{
+        fun addODKServer()
+        fun addTellaWebServer()
+        fun addUwaziServer()
+    }
     @JvmStatic
     fun showBinaryTypeSheet(
         fragmentManager: FragmentManager,
         titleText: String?,
         descriptionText: String?,
+        descriptionContentText: String?,
+        backText: String?,
+        nextText: String?,
         buttonOneLabel: String? = null,
         buttonTwoLabel: String? = null,
-        consumer: BinaryConsumer? = null
+        buttonThreeLabel: String? = null,
+        consumer: IServerChoiceActions
     ) {
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
@@ -200,27 +221,57 @@ BottomSheetUtils {
                 with(holder) {
                     title.text = titleText
                     description.text = descriptionText
-                    buttonOneLabel?.let {
-                        buttonOne.text = it
-                    }
-                    buttonTwoLabel?.let {
-                        buttonTwo.text = it
-                    }
+                    backButton.text = backText
+                    nextButton.text = nextText
+                    descriptionContent.text = descriptionContentText
+                    buttonOne.setText(buttonOneLabel)
+                    buttonTwo.setText(buttonTwoLabel)
+                    buttonThree.setText(buttonThreeLabel)
 
                     buttonOne.setOnClickListener {
-                        consumer?.accept(true)
-                        customSheetFragment.dismiss()
+                        buttonOne.isChecked = true
+                        buttonTwo.isChecked = false
+                        buttonThree.isChecked = false
+
                     }
 
                     buttonTwo.setOnClickListener {
-                        consumer?.accept(false)
-                        customSheetFragment.dismiss()
+                        buttonOne.isChecked = false
+                        buttonTwo.isChecked = true
+                        buttonThree.isChecked = false
+                    }
+
+                    buttonThree.setOnClickListener {
+                        buttonOne.isChecked = false
+                        buttonTwo.isChecked = false
+                        buttonThree.isChecked = true
                     }
 
                     cancelButton.setOnClickListener {
                         customSheetFragment.dismiss()
                     }
+                    backButton.setOnClickListener {
+                        customSheetFragment.dismiss()
+                    }
+                    nextButton.setOnClickListener {
+                        when {
+                            buttonOne.isChecked -> {
+                                consumer.addODKServer()
+                                customSheetFragment.dismiss()
+                            }
+                            buttonTwo.isChecked -> {
+                                consumer.addTellaWebServer()
+                                customSheetFragment.dismiss()
+                            }
+                            else -> {
+                                consumer.addUwaziServer()
+                                customSheetFragment.dismiss()
+                            }
+                        }
+                    }
+
                 }
+
             }
         })
 
@@ -716,5 +767,107 @@ BottomSheetUtils {
     interface StringConsumer {
         fun accept(code: String)
     }
+
+    @JvmStatic
+    fun showDownloadStatus(
+        fragmentManager: FragmentManager,
+        titleText: String?,
+        completeText : String,
+        progressStatus : AtomicInteger,
+        cancelText : String,
+        onCancelClick: (() -> Unit)?
+    ){
+        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.layout_progess_sheet)
+            .cancellable(true)
+            .fullScreen()
+            .statusBarColor(R.color.space_cadet)
+        customSheetFragment.holder(DownloadStatustHolder(), object :
+            CustomBottomSheetFragment.Binder<DownloadStatustHolder> {
+            override fun onBind(holder: DownloadStatustHolder) {
+                with(holder) {
+                    title.text = titleText
+                    subtitle.text = "$progressStatus% $completeText"
+                    cancelTextView.text = cancelText
+                    circularProgress.progress = progressStatus.get()
+                    linearProgress.progress = progressStatus.get()
+                    if (progressStatus.get() == 100){
+                        customSheetFragment.dismiss()
+                    }
+                    cancelTextView.setOnClickListener {
+                        onCancelClick?.invoke()
+                        customSheetFragment.dismiss()
+                    }
+                }
+            }
+        })
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
+    }
+
+    class DownloadStatustHolder : CustomBottomSheetFragment.PageHolder() {
+        lateinit var title: TextView
+        lateinit var subtitle: TextView
+        lateinit var cancelTextView: TextView
+        lateinit var circularProgress : CircularProgressIndicator
+        lateinit var linearProgress : LinearProgressIndicator
+
+
+        override fun bindView(view: View) {
+            title = view.findViewById(R.id.standard_sheet_title)
+            subtitle = view.findViewById(R.id.tv_progress_indicator)
+            cancelTextView = view.findViewById(R.id.tv_cancel)
+            circularProgress = view.findViewById(R.id.progress_circular)
+            linearProgress = view.findViewById(R.id.progress_linear)
+        }
+    }
+
+
+    @JvmStatic
+    fun showConfirmDelete(
+        fragmentManager: FragmentManager,
+        titleText : String,
+        confirm : String,
+        onConfirmClick: (() -> Unit)?
+    ){
+        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.sheet_confirm_delete)
+            .cancellable(true)
+            .statusBarColor(R.color.space_cadet)
+        customSheetFragment.holder(ConfirmDeletetHolder(), object :
+            CustomBottomSheetFragment.Binder<ConfirmDeletetHolder> {
+            override fun onBind(holder: ConfirmDeletetHolder) {
+                with(holder) {
+                    title.text = titleText
+                    confirmTextView.text = confirm
+
+                    confirmTextView.setOnClickListener {
+                        onConfirmClick?.invoke()
+                        customSheetFragment.dismiss()
+                    }
+                }
+            }
+        })
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
+    }
+
+    class ConfirmDeletetHolder : CustomBottomSheetFragment.PageHolder() {
+        lateinit var title: TextView
+        lateinit var confirmTextView: TextView
+
+
+
+        override fun bindView(view: View) {
+            title = view.findViewById(R.id.standard_sheet_title)
+            confirmTextView = view.findViewById(R.id.sheet_cancel)
+        }
+    }
+
+
+
+
 
 }

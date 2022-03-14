@@ -18,9 +18,11 @@ import rs.readahead.washington.mobile.BuildConfig
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.database.KeyDataSource
+import rs.readahead.washington.mobile.data.database.UwaziDataSource
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.data.sharedpref.SharedPrefs
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
+import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.media.MediaFileHandler
 
 class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
@@ -141,6 +143,29 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
                 { forms: List<CollectForm>? ->
                     if (forms != null) {
                         view?.onGetFavoriteCollectFormsSuccess(
+                            forms
+                        )
+                    }
+                }
+            ) { throwable: Throwable? ->
+                view?.onGetFavoriteCollectFormsError(
+                    throwable
+                )
+            }
+        )
+    }
+
+    override fun getFavoriteCollectTemplates() {
+        disposables.add(keyDataSource.uwaziDataSource
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .flatMap { dataSource: UwaziDataSource ->
+                dataSource.listFavoriteTemplates().toObservable()
+            }
+            .subscribe(
+                { forms: List<CollectTemplate>? ->
+                    if (forms != null) {
+                        view?.onGetFavoriteCollectTemplatesSuccess(
                             forms
                         )
                     }

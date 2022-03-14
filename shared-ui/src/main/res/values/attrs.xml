@@ -14,7 +14,15 @@
         <attr name="rightImg" format="reference" />
     </declare-styleable>
 
+    <declare-styleable name="RoundButton">
+        <attr name="text" format="reference|string" />
+        <attr name="check_state" format="boolean"/>
+    </declare-styleable>
 
+    <declare-styleable name="CenterMessageTextView">
+        <attr name="textMessage" format="reference|string" />
+        <attr name="topImg" format="reference"/>
+    </declare-styleable>
 
     <declare-styleable name="TellaSwitchWithMessage">
         <attr name="titleText" format="reference|string" />
@@ -37,6 +45,7 @@
         <attr name="toolbarTitle" format="reference" />
         <attr name="titleIcon" format="reference" />
         <attr name="startTitle" format="reference|string" />
+        <attr name="bigStartTitle" format="reference|string" />
         <attr name="endTitle" format="reference|string" />
     </declare-styleable>
 

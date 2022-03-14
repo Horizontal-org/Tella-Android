@@ -14,7 +14,6 @@ import io.reactivex.BackpressureStrategy;
 import io.reactivex.Emitter;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
-import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -38,7 +37,7 @@ public class TUSClient {
     public TUSClient(Context context, String url, String username, String password) {
         this.context = context.getApplicationContext();
 
-        okHttpClient = buildOkHttpClient(username, password);
+        okHttpClient = buildOkHttpClient();
         baseUrl = URI.create(url);
     }
 
@@ -91,7 +90,7 @@ public class TUSClient {
 
                 final Request appendRequest = new Request.Builder()
                         .url(getUploadUrl(fileName))
-                        .put(new SkippableMediaFileRequestBody(context, vaultFile, skipBytes,
+                        .put(new SkippableMediaFileRequestBody(vaultFile, skipBytes,
                                 (current, total) -> uploadEmitter.emit(emitter, vaultFile, skipBytes + current, size)))
                         .build();
 
@@ -125,26 +124,14 @@ public class TUSClient {
     }
 
     @NonNull
-    private OkHttpClient buildOkHttpClient(String username, String password) {
+    private OkHttpClient buildOkHttpClient() {
         final OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
         if (BuildConfig.DEBUG) {
             builder.addNetworkInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS));
         }
 
-        final String credential = Credentials.basic(username, password);
 
-        builder.addNetworkInterceptor(chain -> {
-            Request newRequest = chain.request().newBuilder()
-                    .addHeader("authorization", credential)
-                    .build();
-
-            return chain.proceed(newRequest);
-        });
-
-        builder.authenticator((route, response) -> response.request().newBuilder()
-                .header("authorization", credential)
-                .build());
 
         return builder.build();
     }

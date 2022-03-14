@@ -57,8 +57,12 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         db.execSQL(alterTableMediaFileUploadsAddManual());
         db.execSQL(alterTableMediaFileUploadsAddServer());
 
-        //DBv9
+        //DBV9
+        db.execSQL(createTableUwaziServer());
+        db.execSQL(createTableCollectEntityUwazi());
+        db.execSQL(createTableCollectBlankTemplateUwazi());
         db.execSQL(createTableCollectFormInstanceVaultFile());
+        db.execSQL(createTableUwaziEntityInstanceVaultFile());
     }
 
     @Override
@@ -90,6 +94,9 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
             case 8:
                 db.execSQL(createTableCollectFormInstanceVaultFile());
+            case 9:
+                db.execSQL(createTableUwaziServer());
+                db.execSQL(createTableCollectBlankTemplateUwazi());
         }
     }
 
@@ -98,6 +105,18 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_NAME, D.TEXT) + " , " +
                 cddl(D.C_URL, D.TEXT) + " , " +
+                cddl(D.C_USERNAME, D.TEXT) + " , " +
+                cddl(D.C_PASSWORD, D.TEXT) +
+                ");";
+    }
+
+    private String createTableUwaziServer() {
+        return "CREATE TABLE " + sq(D.T_UWAZI_SERVER) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_NAME, D.TEXT) + " , " +
+                cddl(D.C_URL, D.TEXT) + " , " +
+                cddl(D.C_CONNECT_COOKIES, D.TEXT) + " , " +
+                cddl(D.C_LOCALE_COOKIES, D.TEXT) + " , " +
                 cddl(D.C_USERNAME, D.TEXT) + " , " +
                 cddl(D.C_PASSWORD, D.TEXT) +
                 ");";
@@ -243,7 +262,6 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_HASH, D.INTEGER, false);
     }
 
-
     private String createTableTellaUploadServer() {
         return "CREATE TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
@@ -252,6 +270,51 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_USERNAME, D.TEXT) + " , " +
                 cddl(D.C_PASSWORD, D.TEXT) + " , " +
                 cddl(D.C_CHECKED, D.INTEGER, true) + " DEFAULT 0" +
+                ");";
+    }
+
+    private String createTableCollectBlankTemplateUwazi(){
+        return "CREATE TABLE " + sq(D.T_UWAZI_BLANK_TEMPLATES) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_UWAZI_SERVER_ID, D.INTEGER, true) + " , " +
+                cddl(D.C_DOWNLOAD_URL, D.TEXT) + " , " +
+                cddl(D.C_TEMPLATE_ENTITY, D.TEXT, true) + " , " +
+                cddl(D.C_DOWNLOADED, D.INTEGER, true) + " DEFAULT 0 , " +
+                cddl(D.C_FAVORITE, D.INTEGER, true) + " DEFAULT 0 , " +
+                cddl(D.C_UPDATED, D.INTEGER, true) + " DEFAULT 0 , " +
+                "FOREIGN KEY(" + sq(D.C_UWAZI_SERVER_ID) + ") REFERENCES " +
+                sq(D.T_UWAZI_SERVER) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE, " +
+                "UNIQUE(" + sq(D.C_ID) + ") ON CONFLICT REPLACE" +
+                ");";
+    }
+
+    private String createTableCollectEntityUwazi(){
+        return "CREATE TABLE " + sq(D.T_UWAZI_ENTITY_INSTANCES) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_UWAZI_SERVER_ID, D.INTEGER, true) + " , " +
+                cddl(D.C_TEMPLATE_ENTITY, D.TEXT, true) + " , " +
+                cddl(D.C_METADATA, D.TEXT, true) + " , " +
+                cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0 , " +
+                cddl(D.C_UPDATED, D.INTEGER, true) + " DEFAULT 0 , " +
+                cddl(D.C_TEMPLATE, D.TEXT, true) + " , " +
+                cddl(D.C_TITLE, D.TEXT, true) + " , " +
+                cddl(D.C_TYPE, D.TEXT, true) + " , " +
+                cddl(D.C_FORM_PART_STATUS, D.INTEGER, true) + " DEFAULT 0 , " +
+                "FOREIGN KEY(" + sq(D.C_UWAZI_SERVER_ID) + ") REFERENCES " +
+                sq(D.T_UWAZI_SERVER) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE, " +
+                "UNIQUE(" + sq(D.C_ID) + ") ON CONFLICT REPLACE" +
+                ");";
+    }
+
+    private String createTableUwaziEntityInstanceVaultFile() {
+        return "CREATE TABLE " + sq(D.T_UWAZI_ENTITY_INSTANCE_VAULT_FILE) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_UWAZI_ENTITY_INSTANCE_ID, D.INTEGER, true) + " , " +
+                cddl(D.C_VAULT_FILE_ID, D.TEXT, true) + " , " +
+                cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0," +
+                "FOREIGN KEY(" + sq(D.C_UWAZI_ENTITY_INSTANCE_ID) + ") REFERENCES " +
+                sq(D.T_UWAZI_ENTITY_INSTANCES) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE," +
+                "UNIQUE(" + sq(D.C_UWAZI_ENTITY_INSTANCE_ID) + ", " + sq(D.C_VAULT_FILE_ID) + ") ON CONFLICT IGNORE" +
                 ");";
     }
 

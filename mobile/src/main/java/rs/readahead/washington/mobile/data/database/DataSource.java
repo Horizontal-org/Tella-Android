@@ -69,9 +69,9 @@ import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
 
 public class DataSource implements IServersRepository, ITellaUploadServersRepository, ITellaUploadsRepository, ICollectServersRepository, ICollectFormsRepository,
-        IMediaFileRecordRepository {
+        IMediaFileRecordRepository{
     private static DataSource dataSource;
-    private SQLiteDatabase database;
+    private final SQLiteDatabase database;
 
     final private SingleTransformer schedulersTransformer =
             observable -> observable.subscribeOn(Schedulers.io())
@@ -429,9 +429,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     @Override
     public Single<VaultFile> attachMetadata(final String mediaFileId, final Metadata metadata) {
         return Single.fromCallable(() -> attachMediaFileMetadataDb(mediaFileId, metadata))
+
                 .compose(applySchedulers());
     }
-
 
     private long countDBCollectServers() {
         return net.sqlcipher.DatabaseUtils.queryNumEntries(database, D.T_COLLECT_SERVER);
@@ -536,6 +536,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
         return TellaUploadServer.NONE;
     }
+
 
     @Nullable
     private CollectForm getBlankCollectForm(String formID) {
@@ -1786,7 +1787,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             database.update(D.T_COLLECT_BLANK_FORM, values,
                     D.C_FORM_ID + "= ? AND " + D.C_VERSION + " = ?",
                     new String[]{form.getForm().getFormID(), form.getForm().getVersion()});
-
             form.setDownloaded(true);
             form.setUpdated(false);
         } catch (IOException e) {
@@ -1995,6 +1995,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return server;
     }
 
+
     private void removeTUServerDB(long id) {
         database.delete(D.T_TELLA_UPLOAD_SERVER, D.C_ID + " = ?", new String[]{Long.toString(id)});
         deleteTable(D.T_MEDIA_FILE_UPLOAD);
@@ -2038,6 +2039,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         deleteTable(D.T_COLLECT_FORM_INSTANCE);
         deleteTable(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE);
         deleteTable(D.T_COLLECT_SERVER);
+        deleteTable(D.T_UWAZI_SERVER);
         deleteTable(D.T_TELLA_UPLOAD_SERVER);
         deleteTable(D.T_MEDIA_FILE_UPLOAD);
     }
@@ -2127,7 +2129,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return formMediaFile;
     }
 
-    //TODO CHECK UID INSIDE VAULT KEEP IT OR NOT ?
     private VaultFile cursorToMediaFile(Cursor cursor) {
         String path = cursor.getString(cursor.getColumnIndexOrThrow(D.C_PATH));
         String uid = cursor.getString(cursor.getColumnIndexOrThrow(D.C_UID));
@@ -2225,6 +2226,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
         return setting;
     }
+
+
+
 
     private static class Setting {
         Integer intValue;

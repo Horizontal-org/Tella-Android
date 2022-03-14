@@ -319,7 +319,7 @@ class CollectMainFragment : BaseFragment() {
             activity.showToast(errorMessage)
         })
 
-        model.onCreateFormController.observe(viewLifecycleOwner, Observer { form ->
+        model.onCreateFormController.observe(viewLifecycleOwner, { form ->
             form?.let {
                 if (Preferences.isAnonymousMode()) {
                     startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
@@ -332,7 +332,7 @@ class CollectMainFragment : BaseFragment() {
                 }
             }
         })
-        model.onToggleFavoriteSuccess.observe(viewLifecycleOwner, Observer {
+        model.onToggleFavoriteSuccess.observe(viewLifecycleOwner, {
             getBlankFormsListFragment().listBlankForms()
         })
 

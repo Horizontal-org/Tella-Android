@@ -15,14 +15,8 @@
   <string name="collect_tab.title_blank">ಖಾಲಿ</string>
   <!-- A button used throughout the app to cancel actions. -->
   <string name="action_cancel">ರದ್ದುಮಾಡಿ</string>
-  <!-- This is an explanation available when first installing the app, on the very first screen. -->
-  <string name="lock_set.pattern_expl">ನಿಮ್ಮ ಡೇಟಾ ಉತ್ತಮವಾಗಿ ರಕ್ಷಿಸಲು, ದಯವಿಟ್ಟು ನಿಮ್ಮ ಅಪ್ಲಿಕೇಶನ್ ಲಾಕ್ ಮಾದರಿಯನ್ನು ರಚಿಸಿ. ಅಪ್ಲಿಕೇಶನ್ ಅನ್ನು ಅನ್ಲಾಕ್ ಮಾಡಲು ಮತ್ತು ನಿಮ್ಮ ಡೇಟಾ ಪ್ರವೇಶಿಸಲು ಈ ಮಾದರಿಯನ್ನು ಬಳಸಲಾಗುತ್ತದೆ. ಮಾದರಿಯು ಕನಿಷ್ಠ 6 ಚುಕ್ಕೆಗಳನ್ನು ಹೊಂದಿರಬೇಕು.</string>
   <!-- A menu item in the About & Help screen -->
   <string name="settings_menu.item_contact">ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ</string>
-  <!-- The label on the homescreen button to access the data-collection feature. -->
-  <string name="home_collect.button">ಸಂಗ್ರಹಿಸಿ</string>
-  <!-- The heading of the Onboarding screen explaining the data collection feature -->
-  <string name="onboard_collect_heading">ಸಂಗ್ರಹಿಸಿ</string>
   <!-- The dialog informing the user that their form is being downloaded. -->
   <string name="collect_dialog.text_download.progress">ಫಾರ್ಮ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ</string>
   <!-- The dialog informing the user that their form was successfully downloaded. -->
@@ -244,8 +238,6 @@ A toast notification informing the user that their files were successfully delet
   <string name="settings.prot_select_camouflage">ಮರೆಮಾಚುವಿಕೆ</string>
   <!-- The heading of the Onboarding screen explanation the Camouflage feature -->
   <string name="onboard.camo_heading">ಮರೆಮಾಚುವಿಕೆ</string>
-  <!-- The action button to save the server settings even if there is no internet connection -->
-  <string name="settings_dialog.action_save.server.no.internet">ಹೇಗಾದರೂ ಉಳಿಸಿ</string>
   <string name="settings.docu_error_wrong.credentials">ಸದಸ್ಯನಾಮ ಮತ್ತು ಪಾಸ್‌ವರ್ಡ್ ತಪ್ಪಾಗಿದೆ.</string>
   <string name="settings.docu_error_domain.doesnt.exit">ಸರ್ವರ್ URL ತಪ್ಪಾಗಿದೆ</string>
   <!-- An error message displayed when trying to connect to the server and an unknown error makes it impossible. -->
@@ -256,8 +248,6 @@ A toast notification informing the user that their files were successfully delet
   <string name="settings.docu_dialog.action_try.again.connecting">ಮರಳಿ ಪ್ರಯತ್ನಿಸಿ</string>
   <!-- The link to Tutorial-->
   <string name="settings.about_select_tutorial">Tutorial</string>
-  <!-- The heading in the Gallery, to show all the files that are selected -->
-  <string name="gallery_heading_selected_files">ಆಯಿಕೆಮಡಿದ ಫೈಲ್‌ಗಳು</string>
   <string name="settings.camo_expl">ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿ Tellaಗೆ ಮರೆಮಾಡಲು ಆ ಕಸ್ಟಮ್ ಐಕಾನ್ ಮತ್ತು ಹೆಸರನ್ನು ಆಯ್ಕೆಮಾಡಿ. ಆಂಡ್ರಾಯ್ಡ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳಿಂದ Tella ಐಕಾನ್  ಕಾಣಬರುತ್ತದೆ ಎಂಬುದನ್ನು ಗಮನಿಸಿ.</string>
   <!-- The name of a "fake" app to hide Tella as a camera app. -->
   <string name="settings.camo_camera4">Camera</string>
@@ -380,8 +370,6 @@ A toast notification informing the user that their files were successfully delet
   <string name="verification.info_subheading_context.metadata">ಸಂದರ್ಭ</string>
   <!-- This is displayed when a piece of verification information isn't available. -->
   <string name="verification.info_field_metadata.not.available">ಲಭ್ಯವಿಲ್ಲ</string>
-  <!-- The content description for the homepage background. It is never visible to the user. -->
-  <string name="home_content.desc_background">ಲಭ್ಯವಿಲ್ಲ</string>
   <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
   <string name="verification.info_field_latitude">ಅಕ್ಷಾಂಶ:</string>
   <!-- In the list of verification information, this is the name of one of the pieces of information displayed. -->
@@ -411,12 +399,6 @@ A toast notification informing the user that their files were successfully delet
     <item quantity="one">%d ಫೈಲ್‌ಗಳು</item>
     <item quantity="other">%d ಫೈಲ್‌ಗಳು</item>
   </plurals>
-  <!-- The screen title (in the app bar) where the user manages their settings on documentation. -->
-  <string name="settings.docu_app.bar">ದಾಖಲೆ</string>
-  <!-- The button in Settings to access the documentation settings -->
-  <string name="settings.gen_select_documentation">ದಾಖಲೆ</string>
-  <!-- The button in Settings to access the protection settings -->
-  <string name="settings.gen_select_protection">ಸಂರಕ್ಷಣೆ</string>
   <!-- A button to open a screen or webpage with more information -->
   <string name="action_learn.more">ಹೆಚ್ಚು ಕಲಿಯಿರಿ</string>
   <!-- The button to add a connection to a server -->
@@ -553,8 +535,12 @@ This is one of the two options available. -->
   <string name="settings.docu_auto.upload.server.selection_dialog.expl">ಫೈಲ್‌ಗಳನ್ನು ಯಾವ ಸರ್ವರ್‌ಗೆ ಅಪ್‌ಲೋಡ್ ಮಾಡಲು ನೀವು ಬಯಸುತ್ತೀರಿ?</string>
   <!-- The title of the dialog where the user selects the type of server they want to connect to. -->
   <string name="settings.serv_add.server.selection_dialog.title">ಯಾವ ಬಗೆಯ ಸರ್ವರ್?</string>
-  <!-- When connecting to a server, users have to select which of the two kinds of servers they want to connect to. "Open Data Kit" is one of the two server types. -->
+  <!-- When connecting to a server, users have to select which of the two kinds of servers they want to connect to. "Open Data Kit" is one of the three server types. -->
   <string name="settings.docu_add.server_dialog.select_odk">ಒಪನ್ ಡೇಟಾ ಕಿಟ್ (ODK)</string>
+  <!-- When connecting to a server, users have to select which of the two kinds of servers they want to connect to. "TELLA WEB" is one of the three server types. -->
+  <string name="settings.docu_add.server_dialog.select_tella_web">Tella WEB</string>
+  <!-- When connecting to a server, users have to select which of the two kinds of servers they want to connect to. "UWAZI" is one of the three server types. -->
+  <string name="settings.docu_add.server_dialog.select_tella_uwazi">Uwazi</string>
   <!-- This is the explanation in the dialog where the users selects what server to connect to. -->
   <string name="settings.docu_add.server_dialog.expl">ನೀವು ಸಂಪರ್ಕಿಸಲು ಬಯಸುವ ಸರ್ವರ್ ಬಗೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ.</string>
   <!-- When connecting to a server, users have to select which of the two kinds of servers they want to connect to. "Direct Upload" is one of the two server types. -->
@@ -629,9 +615,7 @@ This is one of the two options available. -->
   <string name="meter">%f ಮಿ</string>
   <!-- The value expressed in meters per second -->
   <string name="meter_per_second">%f ಮಿ/ಸೆ</string>
-  <string name="intro_welcome">Welcome to</string>
   <string name="tella">Tella</string>
-  <string name="intro_start">START</string>
   <string name="intro_document_protect"><![CDATA[Document & Protect]]></string>
   <string name="onboard_setup_text">How would you like to set up Tella?</string>
   <string name="onboard_full_setup">FULL SETUP</string>
@@ -793,4 +777,14 @@ This is one of the two options available. -->
     <item quantity="other">A %1$d minutes ago</item>
   </plurals>
   <string name="Util_ellapsedTime_Seconds">A seconds a ago</string>
+  <string name="Server_Url_Screen_Title">Enter the server Url</string>
+  <string name="Login_Type_Screen_Title">Log in if you have a username and password, or access the server as a public instance.</string>
+  <string name="Login_Text">Log in</string>
+  <string name="Public_Login_Text">ACCESS AS PUBLIC INSTANCE</string>
+  <string name="Two_Factor_Authentication_Description">This Uwazi instance requires two-step verification. Enter here the 6-digit code from your authenticator app.</string>
+  <string name="Two_Factor_Authentication_Screen_Tile">Two-step verification</string>
+  <string name="Authentication_Code">Authentication code</string>
+  <string name="Inavlid_Token_Msg_Error">Invalid or expired token. Please try again.</string>
+  <string name="Connected_Successfuly_Text">You have successfully connected to the server and will be able to share your data.</string>
+  <string name="Login_To_Access_Text">Log in to access the server</string>
 </resources>

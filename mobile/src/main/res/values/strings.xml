@@ -8,10 +8,7 @@
     <string name="verification_prompt_dialog_title">Enable GPS?</string>
     <string name="collect_tab.title_blank">Blank</string>
     <string name="action_cancel">Cancel</string>
-    <string name="lock_set.pattern_expl">To best protect your data, please create your application lock pattern. This pattern will be used for unlocking the app and access your data. The pattern must contain at least 6 dots.</string>
     <string name="settings_menu.item_contact">Contact us</string>
-    <string name="home_collect.button">Collect</string>
-    <string name="onboard_collect_heading">Collect</string>
     <string name="collect_dialog.text_download.progress">Downloading the form</string>
     <string name="collect_toast_download.completed">Download completed</string>
     <string name="action_delete">Delete</string>
@@ -139,14 +136,12 @@
     <string name="settings.prot_select_camouflage">Camouflage</string>
     <string name="settings.prot_select_lock" translatable="false">Lock</string>
     <string name="onboard.camo_heading">Camouflage</string>
-    <string name="settings_dialog.action_save.server.no.internet">Save anyway</string>
     <string name="settings.docu_error_wrong.credentials">The username or password is incorrect.</string>
     <string name="settings.docu_error_domain.doesnt.exit">The server URL is incorrect.</string>
     <string name="settings.docu_error_unknown.connection.error">There was an error trying to connect to the server.</string>
     <string name="settings.docu_error_no.internet">You’re not connected to the internet. Try again when connected.</string>
     <string name="settings.docu_dialog.action_try.again.connecting">Try again</string>
     <string name="settings.about_select_tutorial">Tutorial</string>
-    <string name="gallery_heading_selected_files">Selected files</string>
     <string name="settings.camo_expl">Select a custom icon and name to better hide Tella on your device. Note that the Tella icon will remain visible from the Android settings.</string>
     <string name="settings.camo_camera4">Camera</string>
     <string name="settings.camo_camera3">CameraPro</string>
@@ -215,7 +210,6 @@
     <string name="verification.info_subheading_device.metadata">Device</string>
     <string name="verification.info_subheading_context.metadata">Context</string>
     <string name="verification.info_field_metadata.not.available">Not Available</string>
-    <string name="home_content.desc_background">Not Available</string>
     <string name="verification.info_field_latitude">Latitude:</string>
     <string name="verification.info_field_longitude">Longitude:</string>
     <string name="verification.info_field_altitude">Altitude:</string>
@@ -232,9 +226,6 @@
         <item quantity="one">%d file</item>
         <item quantity="other">%d files</item>
     </plurals>
-    <string name="settings.docu_app.bar">Documentation</string>
-    <string name="settings.gen_select_documentation">Documentation</string>
-    <string name="settings.gen_select_protection">Protection</string>
     <string name="action_learn.more">Learn more</string>
     <string name="settings.servers_add.server_dialog.title">Add server</string>
     <string name="settings.prot_select_delete.forms">Delete draft and submitted forms</string>
@@ -303,7 +294,10 @@
     <string name="upload_dialog.title_select.server">Server selection</string>
     <string name="settings.docu_auto.upload.server.selection_dialog.expl">Which server would you like to upload the files to?</string>
     <string name="settings.serv_add.server.selection_dialog.title">What type of server?</string>
+    <string name="settings.serv_add.server.selection_dialog.description">If you are not sure, please ask your\n organization.</string>
     <string name="settings.docu_add.server_dialog.select_odk">Open Data Kit (ODK)</string>
+    <string name="settings.docu_add.server_dialog.select_tella_web">Tella WEB</string>
+    <string name="settings.docu_add.server_dialog.select_tella_uwazi">Uwazi</string>
     <string name="settings.docu_add.server_dialog.expl">Select the type of server you want to connect to. If you are unsure, ask your organization.</string>
     <string name="settings.docu_add.server_dialog.select_tus">Direct Upload</string>
     <string name="settings.docu_connect.to.servers_enable_action">Connect to servers</string>
@@ -327,18 +321,6 @@
     <string name="settings.docu_auto.delete_action.expl">Tella will automatically delete the files from your device as soon as they are uploaded to the server.</string>
     <string name="settings.docu_choose.auto.upload.server_dialog.expl">Which server would you like to auto-upload the files to?</string>
     <string name="settings.docu_delete.upload.server_dialog.expl">You will no longer be able to upload files to this server.</string>
-    <plurals name="upload.main_meta_number.of.files">
-        <item quantity="one">%d file</item>
-        <item quantity="other">%d files</item>
-    </plurals>
-    <plurals name="upload.main_meta_number.of.files.uploaded">
-        <item quantity="one">%d file uploaded</item>
-        <item quantity="other">%d files uploaded</item>
-    </plurals>
-    <plurals name="upload.main_meta_minutes.left">
-        <item quantity="one">%d minute left</item>
-        <item quantity="other">%d minutes left</item>
-    </plurals>
     <string name="settings.docu_error_must.select.auto.upload.server">You must select a server.</string>
     <string name="camera_tab.title_video">Video</string>
     <string name="camera_tab.title_photo">Photo</string>
@@ -347,9 +329,7 @@
     <string name="action_next">Next</string>
     <string name="meter">%f m</string>
     <string name="meter_per_second">%f m/s</string>
-    <string name="intro_welcome">Welcome to</string>
     <string name="tella">Tella</string>
-    <string name="intro_start">START</string>
     <string name="intro_document_protect"><![CDATA[Document & Protect]]></string>
     <string name="onboard_setup_text">How would you like to set up Tella?</string>
     <string name="onboard_full_setup">FULL SETUP</string>
@@ -486,7 +466,105 @@
     <string name="settings.sec_confirm_calc_camouflage_desc">To re-open Tella, look for the Calculator app icon among your apps. Unlock Tella by entering your PIN in the Calculator followed by “=”. </string>
     <string name="settings.sec_confirm_exit_tella">Exit Tella</string>
     <string name="collect.outbox_tab.title">Outbox</string>
+    <!-- Uwazi !-->
+    <string name="Donwload_Templates_Title_Description">These are the templates available on the Uwazi \ninstances you are connected to. You can \n <font fgcolor='#D6933B'>manage your Uwazi instances here.</font> </string>
+    <string name="uwazi.outbox_tab.title">Templates</string>
     <string name="Collect_RemoveForm_SheetTitle">Remove form?</string>
+    <string name="fragment_uwazi">Uwazi</string>
+    <string name="Uwazi_Dowload_Temapltes_Header_Title">Download templates</string>
+    <string name="Uwazi_RemoveTemplate_SheetTitle">Remove from device</string>
+    <string name="Uwazi_Action_FillEntity">Create an entity</string>
+    <string name="Uwazi_Action_RemoveTemplate">Delete Template</string>
+    <string name="Uwazi_Subtitle_RemoveTemplate">Are you sure you want to remove this template? </string>
+    <string name="UWAZI_Language_Header_Title">Uwazi language</string>
+    <string name="Uwazi_Language_Screen_Description">This Uwazi collection is available in several languages. Please select in which language you would like to download templates. </string>
+    <string name="Uwazi_Send_Header_Title">End of entity</string>
+    <string name="Uwazi_General_Favorite_Template_Switch_Expl">Show shortcuts to your favorite templates on Tella’s homescreen.</string>
+    <string name="Uwazi_General_Favorite_Template_Switch_Title">Favorite templates</string>
+    <string name="Uwazi_Templates_Empty_Description">Your have no saved templates. Tap the “+” \nbutton to add a new template.</string>
+    <string name="Uwazi_Submitted_Entities_Empty_Description">You have no submitted entities.</string>
+    <string name="Uwazi_Outbox_Entities_Empty_Description">Your Outbox is currently empty. Entities\n that are ready to send will appear here.</string>
+    <string name="Uwazi_Draft_Entities_Empty_Description">You have no draft entities.</string>
+    <string name="Uwazi_Action_Save_Draft">Save draft</string>
+    <string name="Uwazi_Subtitle_RemoveDraft">Are you sure you want to remove this draft?</string>
+    <string name="Uwazi_Form_MediaHeader">Attached file</string>
+    <string name="Uwazi_EntryInstance_SavedInfo">Entity is saved as draft.</string>
+    <string name="Uwazi_Action_EditDraft">Edit draft</string>
+    <string name="Uwazi_Action_RemoveDraft">Remove draft</string>
+    <string name="Uwazi_Submitted_Entity_Header_Title">Summary</string>
+    <string name="Uwazi_Action_ViewEntity">View entity</string>
+    <string name="Uwazi_Action_DeleteEntity">Delete entity</string>
+    <string name="Uwazi_WidgetSubtitle_DateFrom">From</string>
+    <string name="Uwazi_WidgetSubtitle_DateTo">To</string>
+    <string name="Uwazi_WidgetSubtitle_Label">Label</string>
+    <string name="Uwazi_WidgetSubtitle_URL">URL</string>
+    <string name="Uwazi_Info_NotValidURL">This is not a valid Url</string>
+    <string name="Uwazi_Subtitle_MarkdownSupported">markdown supported</string>
+    <string name="Uwazi_Answer_LinkInitialText">https://</string>
+    <string name="Uwazi_Entry_Validation_MandatoryFields">You must fill in the mandatory fields</string>
+    <string name="Uwazi_Entry_Validation_MandatoryTitle">You must fill in the title</string>
+    <string name="Uwazi_Submit_Later">Submit later</string>
+    <string name="Uwazi_Send_Entity_Title">End of entity</string>
+    <string name="Uwazi_WidgetMultiDate_AddDate">Add another date</string>
+    <string name="Uwazi_WidgetMultiDate_AddDateRange">Add another date range</string>
+    <string name="Uwazi_WidgetDateRange_Constraint">The second date in the range must be after the first</string>
+    <string name="Uwazi_MiltiFileWidget_AddMoreFiles">Add more files</string>
+    <string name="Uwazi_MiltiFileWidget_Show">Show Files</string>
+    <string name="Uwazi_MiltiFileWidget_Hide">Hide Files</string>
+    <string name="Uwazi_MiltiFileWidget_Help">Select as many files as you wish</string>
+    <string name="Uwazi_WidgetMedia_Select_Text">Select audio or video file</string>
+    <string name="Uwazi_WidgetMedia_Select_Photos_Text">Select photos</string>
+    <string name="Uwazi_WidgetMedia_Description_Text">Attach a video or audio file</string>
+    <string name="Uwazi_WidgetImage_Select_Text">Select image file</string>
+    <string name="Uwazi_WidgetImage_Select_Description_Text">Attach an image file</string>
+    <string name="Uwazi_WidgetMedia_Take_Video">Take video from camera</string>
+    <string name="Uwazi_WidgetMedia_Take_Photo">Take photo from camera</string>
+    <string name="Uwazi_WidgetMedia_Select_From_Tella">Select from Tella files</string>
+    <string name="Uwazi_WidgetMedia_Select_From_Device">Select from your device</string>
+    <string name="Uwazi_Widget_Sheet_Description">Choose how you want to add files</string>
+    <string name="Uwazi_Entity_Error_Response_Mandatory">This field is mandatory.</string>
+    <string name="Uwazi_Server_Title">Server : </string>
+    <string name="Uwazi_Template_Title">Template : </string>
+
+    <string name="Server_Url_Screen_Title">Enter the server Url</string>
+    <string name="Login_Type_Screen_Title">Log in if you have a username and password, or access the server as a public instance.</string>
+    <string name="Login_Text">Log in</string>
+    <string name="Public_Login_Text">ACCESS AS PUBLIC INSTANCE</string>
+    <string name="Two_Factor_Authentication_Description">This Uwazi instance requires two-step verification. Enter here the 6-digit code from your authenticator app.</string>
+    <string name="Two_Factor_Authentication_Screen_Tile">Two-step verification</string>
+    <string name="Authentication_Code">Authentication code</string>
+    <string name="Inavlid_Token_Msg_Error">Invalid or expired token. Please try again.</string>
+    <string name="Connected_Successfuly_Text">You have successfully connected to the server and will be able to share your data.</string>
+    <string name="Login_To_Access_Text">Log in to access the server</string>
+    <plurals name="Uwazi_MiltiFileWidget_FilesAttached">
+        <item quantity="one">%1$d file attached</item>
+        <item quantity="other">%1$d files attached</item>
+    </plurals>
+    <string name="Uwazi_MiltiFileWidget_SelectFiles">Select files</string>
+    <string name="Uwazi_MiltiFileWidget_SelectPdfFiles">Select PDF files</string>
+    <string name="Uwazi_MiltiFileWidget_PrimaryDocuments">Primary documents</string>
+    <string name="Uwazi_MiltiFileWidget_AttachMenyPdfFiles">Attach as many PDF files as you wish</string>
+    <string name="Uwazi_MiltiFileWidget_ChooseHowToAddPdfFiles">Choose how you want to add PDF files</string>
+    <string name="Uwazi_MiltiFileWidget_SupportingFiles">Supporting files</string>
+    <string name="Uwazi_Drafts_Header_Text">These are entities you have not submitted.\n
+ Tap on an entity to continue working on it.</string>
+    <string name="Uwazi_Outbox_Header_Text">These are entities currently being submitted.</string>
+    <string name="Uwazi_Submitted_Header_Text">These are entities that you have submitted successfully.</string>
+    <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">Choose how you want to add files</string>
+
+    <string-array name="Uwazi_Language_Array">
+        <item>English</item>
+        <item>عربي</item>
+        <item>Français</item>
+    </string-array>
+
+    <string-array name="Uwazi_Language_Array_Translated">
+        <item>English</item>
+        <item>Arabic</item>
+        <item>French</item>
+    </string-array>
+
+
     <string name="Collect_Action_FillForm">Fill form</string>
     <string name="Collect_Subtitle_RemoveForm">Are you sure you want to remove "%1$s"? </string>
     <string name="Util_ellapsedTime_Year">More than a year ago</string>
@@ -520,5 +598,13 @@
         <item quantity="many">%d minutes ago</item>
         <item quantity="other">%d minutes ago</item>
     </plurals>
-    <string name="Util_ellapsedTime_Seconds">A seconds a ago</string>
+    <string name="Util_ellapsedTime_Seconds">A few seconds ago</string>
+    <string name="ServerSettings_ServerName_ToolTip">Give your server a name to recognize it if you add more servers later. It could be the organization’s name, the project’s name, etc.</string>
+    <string name="Rec_Exit_SheetTitle">Save recording?</string>
+    <string name="Rec_Exit_SheetText">Your recording is not saved. Would you like to save it before exiting?</string>
+    <string name="SettingSec_ChangeLock_WarningCalc_SheetTitle">Change lock method and remove camouflage?</string>
+    <string name="SettingSec_ChangeLock_WarningCalc_SheetText">Your current Calculator camouflage is only compatible with a PIN lock. If you change your lock method, Tella will no longer be camouflaged and will be visible on your phone’s homescreen.</string>
+    <string name="SettingSec_ChangeLock_WarningCalc_SheetAction_Remove">REMOVE CAMOUFLAGE</string>
+    <string name="SettingsCamo_EnterLock_Password">Enter your password to change your camouflage method</string>
+    <string name="Uwazi_Templates_HeaderMessage">These are Uwazi templates you can fill out.</string>
 </resources>

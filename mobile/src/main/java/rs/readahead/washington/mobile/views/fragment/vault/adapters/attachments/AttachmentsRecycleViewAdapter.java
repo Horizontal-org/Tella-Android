@@ -29,11 +29,6 @@ import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.DateUtil;
 
-enum ViewType {
-    SMALL,
-    DETAILED
-}
-
 public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<AttachmentsRecycleViewAdapter.ViewHolder> {
     private List<VaultFile> files = new ArrayList<>();
     private final VaultFileUrlLoader glideLoader;
@@ -114,7 +109,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
                         .signature(messageDigest -> { })
                         .into(holder.mediaView);
 
-            } else if (MediaFile.INSTANCE.isTextFileType(vaultFile.mimeType)) {
+            } else {
                 holder.showDocumentInfo();
             }
         } else {

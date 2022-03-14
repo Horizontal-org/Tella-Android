@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.*
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -20,6 +21,7 @@ class SubmittingItem @JvmOverloads  constructor(
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
+    private lateinit var cardThumb: View
     private lateinit var partName: TextView
     private lateinit var partIcon: ImageView
     private lateinit var partSize: TextView
@@ -42,13 +44,14 @@ class SubmittingItem @JvmOverloads  constructor(
     }
 
     private fun initView() {
+        cardThumb =  findViewById(R.id.fileThumbCard)
         partName = findViewById(R.id.partName)
         partIcon = findViewById(R.id.partIcon)
         partSize = findViewById(R.id.partSize)
         uploadProgress = findViewById(R.id.uploadProgress)
         partCheckIcon = findViewById(R.id.partCheckIcon)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            uploadProgress.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
+            uploadProgress.progressTintList = ColorStateList.valueOf(Color.GREEN);
         }
     }
 
@@ -108,7 +111,7 @@ class SubmittingItem @JvmOverloads  constructor(
     fun setPartUploaded() {
         uploadProgress.visibility = GONE
         partCheckIcon.visibility = VISIBLE
-        partSize.setText(getFileSizeString(filePartSize))
+        partSize.text = getFileSizeString(filePartSize)
     }
 
     fun setUploadProgress(pct: Float) {
@@ -116,7 +119,7 @@ class SubmittingItem @JvmOverloads  constructor(
             return
         }
         uploadProgress.progress = (uploadProgress.max * pct).toInt()
-        partSize.setText(getUploadedFileSize(pct, filePartSize))
+        partSize.text = getUploadedFileSize(pct, filePartSize)
     }
 
     fun setPartName(nameId: Int){
@@ -124,16 +127,18 @@ class SubmittingItem @JvmOverloads  constructor(
     }
 
     fun setPartName(name: String){
-        partName.setText(name)
+        partName.text = name
     }
 
     fun setPartSize(size: Long){
         filePartSize = size
-        partSize.setText(getUploadedFileSize(0.0f, size))
+        partSize.text = getUploadedFileSize(0.0f, size)
     }
 
     fun setPartIcon(iconId: Int){
         partIcon.setImageResource(iconId)
+        partIcon.visibility = VISIBLE
+        cardThumb.visibility = GONE
     }
 
     private fun getUploadedFileSize(pct: Float, size: Long ) : String {

@@ -22,7 +22,6 @@ public class CollectServersPresenter implements ICollectServersPresenterContract
     private ICollectServersPresenterContract.IView view;
     private CompositeDisposable disposables = new CompositeDisposable();
 
-
     //@Inject
     public CollectServersPresenter(ICollectServersPresenterContract.IView view) {
         keyDataSource = MyApplication.getKeyDataSource();

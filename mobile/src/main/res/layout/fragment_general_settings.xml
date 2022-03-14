@@ -130,9 +130,15 @@
                     android:id="@+id/favorite_forms_switch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     app:explainText="@string/settings.general_favorite_forms_switch_expl"
                     app:titleText="@string/settings.general_favorite_forms_switch_title" />
+
+                <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+                    android:id="@+id/favorite_templates_switch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:explainText="@string/Uwazi_General_Favorite_Template_Switch_Expl"
+                    app:titleText="@string/Uwazi_General_Favorite_Template_Switch_Title" />
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

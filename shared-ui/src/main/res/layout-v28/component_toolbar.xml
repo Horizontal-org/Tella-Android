@@ -43,6 +43,20 @@
         tools:text="Title test aaaaaaaaa" />
 
     <TextView
+        android:id="@+id/bigStartTitleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        style="@style/Tella_Main_White_Text.Meduim"
+        android:visibility="gone"
+        android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btn_back"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Title test aaaaaaaaa" />
+
+    <TextView
         android:id="@+id/endTitleTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.views.activity.onboarding
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -10,16 +11,26 @@ import androidx.core.view.get
 import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.IS_ONBOARD_LOCK_SET
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.IServerChoiceActions
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showBinaryTypeSheet
 import org.hzontal.shared_ui.utils.DialogUtils
+import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.bus.EventCompositeDisposable
+import rs.readahead.washington.mobile.bus.EventObserver
+import rs.readahead.washington.mobile.bus.event.CreateUwaziServerEvent
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer
+import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment.CollectServerDialogHandler
 import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragment
 import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragment.TellaUploadServerDialogHandler
+import rs.readahead.washington.mobile.views.dialog.uwazi.SharedLiveData.createServer
+import rs.readahead.washington.mobile.views.dialog.uwazi.SharedLiveData.updateServer
+import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity
 
 class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     IOnBoardPresenterContract.IView, CollectServerDialogHandler,
@@ -48,6 +59,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
                 ), R.id.rootOnboard
             )
         }
+        initUwaziEvents()
     }
 
     private fun setupIndicators(indicatorCount : Int) {
@@ -74,6 +86,16 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         }
     }
 
+    private fun initUwaziEvents() {
+        createServer.observe(this,
+            { server: UWaziUploadServer? ->
+                if (server != null) {
+                    presenter.create(server)
+                    addFragment(OnBoardHideOptionFragment(),R.id.rootOnboard)
+                }
+            })
+    }
+
     override fun setCurrentIndicator(index: Int) {
         val childCount = indicatorsContainer.childCount
         for (i in 0 until childCount) {
@@ -97,7 +119,29 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     }
 
     override fun showChooseServerTypeDialog() {
-        showCollectServerDialog()
+        showBinaryTypeSheet(this.supportFragmentManager,
+            getString(R.string.settings_servers_add_server_dialog_title),
+            getString(R.string.settings_serv_add_server_selection_dialog_title),
+            getString(R.string.settings_serv_add_server_selection_dialog_description),
+            getString(R.string.action_cancel),  //TODO CHECk THIS
+            getString(R.string.action_ok),  //TODO CHECk THIS
+            getString(R.string.settings_docu_add_server_dialog_select_odk),
+            getString(R.string.settings_docu_add_server_dialog_select_tella_web),
+            getString(R.string.settings_docu_add_server_dialog_select_tella_uwazi),
+            object : IServerChoiceActions {
+                override fun addUwaziServer() {
+                    showUwaziServerDialog()
+                }
+
+                override fun addTellaWebServer() {
+                    showTellaUploadServerDialog()
+                }
+
+                override fun addODKServer() {
+                    showCollectServerDialog()
+                }
+            }
+        )
        /* showDualChoiceTypeSheet(this.supportFragmentManager,
             getString(R.string.settings_servers_add_server_dialog_title),
             getString(R.string.settings_serv_add_server_selection_dialog_title),
@@ -112,6 +156,11 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
                     }
                 }
             })*/
+    }
+
+    private fun showUwaziServerDialog() {
+        startActivity(Intent(this, UwaziConnectFlowActivity::class.java))
+
     }
 
     override fun hideProgress() {
@@ -156,6 +205,10 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         addFragment(OnBoardConnectedFragment(),R.id.rootOnboard)
     }
 
+    override fun onCreatedUwaziServer(server: UWaziUploadServer?) {
+        addFragment(OnBoardHideOptionFragment(),R.id.rootOnboard)
+    }
+
     override fun onCollectServerDialogCreate(server: CollectServer?) {
         presenter.create(server)
     }
@@ -170,7 +223,10 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     override fun onTellaUploadServerDialogUpdate(server: TellaUploadServer?) {
     }
 
+
+
     override fun onDialogDismiss() {
+
     }
 
     private fun showCollectServerDialog() {
