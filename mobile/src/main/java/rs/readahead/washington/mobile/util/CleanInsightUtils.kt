@@ -6,20 +6,36 @@ import java.util.*
 
 object CleanInsightUtils {
 
+    enum class ServerType { SERVER_TELLA, SERVER_UWAZI, SERVER_COLLECT }
+
     private const val CAMPAIGN_ID = "test"
     private const val CATEGORY = "app-state"
+    private const val YES = "Yes"
+    private const val NO = "No"
     private val cleanInsights by lazy { MyApplication.getCleanInsights() }
 
     fun measureEvent() {
         if (Preferences.hasAcceptedImprovements()) return
         try {
             cleanInsights?.let {
-                val isCamouflageEnabled = !CamouflageManager.getInstance().isDefaultLauncherActivityAlias
+                val isCamouflageEnabled = if (!CamouflageManager.getInstance().isDefaultLauncherActivityAlias) YES else NO
+                val isQuickExit = if (Preferences.isQuickExit()) YES else NO
                 it.measureEvent(CATEGORY, "Opening the app", CAMPAIGN_ID)
-                it.measureEvent(CATEGORY, "Servers connected to Tella", CAMPAIGN_ID)
-                it.measureEvent(CATEGORY, "Quick delete", CAMPAIGN_ID, Preferences.isQuickExit().toString())
-                it.measureEvent(CATEGORY, "Camouflage enabled", CAMPAIGN_ID, isCamouflageEnabled.toString())
+                it.measureEvent(CATEGORY, "Quick delete", CAMPAIGN_ID, isQuickExit)
+                it.measureEvent(CATEGORY, "Camouflage enabled", CAMPAIGN_ID, isCamouflageEnabled)
                 it.measureEvent(CATEGORY, "Language", CAMPAIGN_ID, LocaleManager.getInstance().languageSetting)
+                it.persist()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun measureEvent(serverType: ServerType) {
+        if (Preferences.hasAcceptedImprovements()) return
+        try {
+            cleanInsights?.let {
+                it.measureEvent(CATEGORY, "Connected server", CAMPAIGN_ID, serverType.name)
                 it.persist()
             }
         } catch (e: Exception) {
