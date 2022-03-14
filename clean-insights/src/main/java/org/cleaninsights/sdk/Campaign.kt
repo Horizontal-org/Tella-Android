@@ -14,14 +14,13 @@ import java.util.*
 
 
 const val DATE_FORMAT = "yyyy-MM-dd HH:mm:ss"
-const val DAY_IN_SECONDS = 86400
 
 class Period(val start: Date, val end: Date)
 
 /**
  * @param start: The start of the campaign. (inclusive)
  * @param end: The end of the campaign. (inclusive)
- * @param aggregationPeriodLength: The length of the aggregation period in number of days.
+ * @param aggregationPeriodLength: The length of the aggregation period in number of seconds.
  *      At the end of a period, the aggregated data will be sent to the analytics server.
  * @param numberOfPeriods: The number of periods you want to measure in a row. Therefore the total
  *      length in days you measure one user is `aggregationPeriodLength * numberOfPeriods` beginning
@@ -51,10 +50,10 @@ data class Campaign(
             var periodEnd = getStartsDate()
 
             do {
-                periodEnd = Date(periodEnd.time + (aggregationPeriodLength* DAY_IN_SECONDS))
+                periodEnd = Date(periodEnd.time + (aggregationPeriodLength))
             } while (periodEnd <= now)
 
-            var periodStart = Date(periodEnd.time - (aggregationPeriodLength* DAY_IN_SECONDS))
+            var periodStart = Date(periodEnd.time - (aggregationPeriodLength))
 
             if (periodStart < getStartsDate()) periodStart = getStartsDate()
 
@@ -80,10 +79,10 @@ data class Campaign(
             var counter = 0
 
             while (counter < numberOfPeriods) {
-                periodEnd = Date(periodEnd.time + (aggregationPeriodLength* DAY_IN_SECONDS))
+                periodEnd = Date(periodEnd.time + (aggregationPeriodLength))
 
                 if (periodEnd > getEndsDate()) {
-                    periodEnd = Date(periodEnd.time - (aggregationPeriodLength * DAY_IN_SECONDS))
+                    periodEnd = Date(periodEnd.time - (aggregationPeriodLength))
                     break
                 }
 
