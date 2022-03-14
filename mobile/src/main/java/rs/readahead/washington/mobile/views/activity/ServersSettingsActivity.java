@@ -18,6 +18,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.lifecycle.Observer;
 
 import com.google.gson.Gson;
 
@@ -58,6 +59,7 @@ import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageDialogFragment;
+import rs.readahead.washington.mobile.views.dialog.uwazi.SharedLiveData;
 import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
 import timber.log.Timber;
 
@@ -139,22 +141,15 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private void initUwaziEvents(){
-        disposables = MyApplication.bus().createCompositeDisposable();
-        disposables.wire(CreateUwaziServerEvent.class, new EventObserver<CreateUwaziServerEvent>() {
-            @Override
-            public void onNext(@NonNull CreateUwaziServerEvent event) {
-                if (event.getServer() != null){
-                    uwaziServersPresenter.create(event.getServer());
-                }
+        SharedLiveData.INSTANCE.getCreateServer().observe(this, server -> {
+            if (server != null){
+                uwaziServersPresenter.create(server);
             }
         });
 
-        disposables.wire(UpdateUwaziServerEvent.class, new EventObserver<UpdateUwaziServerEvent>() {
-            @Override
-            public void onNext(@NonNull UpdateUwaziServerEvent event) {
-                if (event.getServer() != null){
-                    uwaziServersPresenter.update(event.getServer());
-                }
+        SharedLiveData.INSTANCE.getUpdateServer().observe(this, server -> {
+            if (server != null){
+                uwaziServersPresenter.update(server);
             }
         });
     }

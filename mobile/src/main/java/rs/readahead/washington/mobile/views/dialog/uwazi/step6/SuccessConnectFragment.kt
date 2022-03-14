@@ -16,6 +16,8 @@ import rs.readahead.washington.mobile.views.dialog.ID_KEY
 import rs.readahead.washington.mobile.views.dialog.IS_UPDATE_SERVER
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.TITLE_KEY
+import rs.readahead.washington.mobile.views.dialog.uwazi.SharedLiveData.createServer
+import rs.readahead.washington.mobile.views.dialog.uwazi.SharedLiveData.updateServer
 import rs.readahead.washington.mobile.views.dialog.uwazi.step2.LoginTypeFragment
 
 class SuccessConnectFragment : BaseFragment() {
@@ -66,9 +68,10 @@ class SuccessConnectFragment : BaseFragment() {
         with(binding) {
             nextBtn.setOnClickListener {
                 if (isUpdate){
-                    MyApplication.bus().post(UpdateUwaziServerEvent(server))
+                    updateServer.postValue(server)
+
                 }else {
-                    MyApplication.bus().post(CreateUwaziServerEvent(server))
+                    createServer.postValue(server)
                 }
                 activity.finish()
             }
