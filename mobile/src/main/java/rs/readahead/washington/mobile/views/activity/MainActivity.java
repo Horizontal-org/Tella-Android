@@ -45,6 +45,7 @@ import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContr
 import rs.readahead.washington.mobile.mvp.presenter.HomeScreenPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.MediaImportPresenter;
 import rs.readahead.washington.mobile.util.C;
+import rs.readahead.washington.mobile.util.CleanInsightUtils;
 import rs.readahead.washington.mobile.views.fragment.uwazi.download.DownloadedTemplatesFragment;
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment;
 import com.google.gson.Gson;
@@ -318,7 +319,7 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     public void onCountTUServersEnded(Long num) {
-
+        if (num>0) CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_TELLA);
     }
 
     @Override
@@ -330,6 +331,7 @@ public class MainActivity extends MetadataActivity implements
     public void onCountCollectServersEnded(Long num) {
         long numOfCollectServers = num;
         maybeShowFormsMenu(num);
+        if (num>0) CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_COLLECT);
         //homeScreenPresenter.countTUServers();
     }
 
@@ -341,6 +343,7 @@ public class MainActivity extends MetadataActivity implements
     @Override
     public void onCountUwaziServersEnded(Long num) {
         maybeShowUwaziMenu(num);
+        if (num>0)CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_UWAZI);
     }
 
     @Override

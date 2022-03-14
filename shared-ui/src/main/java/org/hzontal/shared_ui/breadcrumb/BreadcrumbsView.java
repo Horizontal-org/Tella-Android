@@ -22,6 +22,8 @@ import org.hzontal.shared_ui.breadcrumb.model.IBreadcrumbItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hzontal.shared_ui.BuildConfig.LIBRARY_PACKAGE_NAME;
+
 public class BreadcrumbsView extends FrameLayout {
 
 	/**

@@ -54,6 +54,8 @@ public class SharedPrefs {
     static final String SHOW_FAVORITE_TEMPLATES = "show_favorite_Templates";
     static final String SHOW_RECENT_FILES = "show_recent_files";
     static final String UPGRADE_TELLA_2 = "update_tella_2";
+    static final String SHOW_IMPROVEMENT_SECTION = "show_improvement_section";
+    static final String HAS_IMPROVEMENT_ACCEPTED = "has_improvement_accepted";
 
     private static SharedPrefs instance;
     private SharedPreferences pref;

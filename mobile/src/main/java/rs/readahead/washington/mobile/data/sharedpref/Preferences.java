@@ -313,6 +313,23 @@ public class Preferences {
         sharedPrefs.setLong(name, value);
     }
 
+    public static boolean isShowVaultImprovementSection() {
+        return getBoolean(SharedPrefs.SHOW_IMPROVEMENT_SECTION, true);
+    }
+
+    public static void setShowVaultImprovementSection(boolean value) {
+        setBoolean(SharedPrefs.SHOW_IMPROVEMENT_SECTION, value);
+    }
+
+    public static boolean hasAcceptedImprovements() {
+        return getBoolean(SharedPrefs.HAS_IMPROVEMENT_ACCEPTED, false);
+    }
+
+    public static void setIsAcceptedImprovements(boolean value) {
+        setBoolean(SharedPrefs.HAS_IMPROVEMENT_ACCEPTED, value);
+    }
+
+
     private Preferences() {
     }
 }

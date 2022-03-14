@@ -42,6 +42,8 @@ import javax.crypto.spec.SecretKeySpec;
 
 import timber.log.Timber;
 
+import static com.hzontal.tella_vault.BuildConfig.LIBRARY_PACKAGE_NAME;
+
 public class VaultProvider  extends FileProvider {
 
     public static final String AUTHORITY = LIBRARY_PACKAGE_NAME + "." + "VaultProvider";

@@ -20,10 +20,12 @@ const val ITEM_FAVORITES_TEMPLATES = 2
 const val ITEM_PANIC_BUTTON = 3
 const val ITEM_FILES_ACTIONS = 4
 const val ITEM_TITLE = 5
+const val ITEM_TEllA_IMPROVE = 6
 
 private const val ID_FILES_ACTIONS = "1"
 private const val ID_PANIC_MODE = "2"
 private const val ID_FILES_TITLE = "3"
+private const val ID_IMPROVEMENT = "4"
 
 
 class VaultAdapter(private val onClick: VaultClickListener) :
@@ -36,6 +38,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     private var favoriteTemplates = listOf<DataItem.FavoriteTemplates>()
     private var actions = listOf<DataItem.FileActions>()
     private var titles = listOf<DataItem.Titles>()
+    private var improveInsights = listOf<DataItem.ImproveAction>()
     private var items = listOf<DataItem>()
 
     init {
@@ -47,7 +50,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
         renderList()
     }
 
-    fun removeRecentFiles(){
+    fun removeRecentFiles() {
         adapterScope.launch {
             items = items - recentFiles
             withContext(Dispatchers.Main) {
@@ -55,7 +58,8 @@ class VaultAdapter(private val onClick: VaultClickListener) :
             }
         }
     }
-    fun removeFavoriteForms(){
+
+    fun removeFavoriteForms() {
         adapterScope.launch {
             items =  items - favoriteForms.toSet()
             withContext(Dispatchers.Main) {
@@ -82,13 +86,27 @@ class VaultAdapter(private val onClick: VaultClickListener) :
         }
     }
 
-   private fun addFileActions() {
+    private fun addFileActions() {
         actions = listOf(
             DataItem.FileActions(
                 ID_FILES_ACTIONS
             )
         )
         renderList()
+    }
+
+    fun addImprovementSection() {
+        if (Preferences.isShowVaultImprovementSection() && !Preferences.hasAcceptedImprovements()) {
+            improveInsights = listOf(DataItem.ImproveAction(ID_IMPROVEMENT))
+            renderList()
+        }
+    }
+
+    fun removeImprovementSection() {
+        adapterScope.launch {
+            items = items - improveInsights
+            withContext(Dispatchers.Main) { submitList(items) }
+        }
     }
 
     fun addFavoriteForms(forms: List<CollectForm>) {
@@ -108,7 +126,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
 
     private fun renderList() {
         adapterScope.launch {
-            items = favoriteForms + favoriteTemplates + recentFiles + titles + actions
+            items = improveInsights + favoriteForms + favoriteTemplates + recentFiles + titles + actions
             withContext(Dispatchers.Main) {
                 submitList(items)
             }
@@ -155,6 +173,9 @@ class VaultAdapter(private val onClick: VaultClickListener) :
             ITEM_TITLE -> {
                 TitleViewHolder.from(view)
             }
+            ITEM_TEllA_IMPROVE -> {
+                ImproveViewHolder.from(view)
+            }
             else -> throw ClassCastException("Unknown viewType $viewType")
         }
     }
@@ -181,6 +202,9 @@ class VaultAdapter(private val onClick: VaultClickListener) :
                 val titles = getItem(position) as DataItem.Titles
                 holder.bind(titles.idTitles, onClick)
             }
+            is ImproveViewHolder -> {
+                holder.bind(null, onClick)
+            }
         }
     }
 
@@ -191,6 +215,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
             is DataItem.FavoriteForms -> ITEM_FAVORITES_FORMS
             is DataItem.FavoriteTemplates -> ITEM_FAVORITES_TEMPLATES
             is DataItem.Titles -> ITEM_TITLE
+            is DataItem.ImproveAction -> ITEM_TEllA_IMPROVE
             else -> throw ClassCastException("Unknown position $position")
         }
     }

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/wa_purple">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineStart05"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineEnd95"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <ImageView
+        android:id="@+id/img_contribute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_insights_contribute"
+        app:layout_constraintBottom_toTopOf="@+id/tv_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:fontFamily="@font/open_sans"
+        android:gravity="center"
+        android:text="@string/clean_insights.contribute_title"
+        android:textColor="@color/wa_white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/btn_yes"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd95"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart05" />
+
+    <TextView
+        android:id="@+id/btn_yes"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@drawable/round_orange_button_selector"
+        android:fontFamily="@font/open_sans"
+        android:gravity="center"
+        android:text="@string/action_yes"
+        android:textAllCaps="true"
+        android:textColor="@color/wa_white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:backgroundTint="@color/wa_orange"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd95"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart05"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/btn_no"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/round_button_selector"
+        android:fontFamily="@font/open_sans"
+        android:gravity="center"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="@string/action_no"
+        android:textAllCaps="true"
+        android:textColor="@color/wa_white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd95"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart05"
+        app:layout_constraintTop_toBottomOf="@+id/btn_yes" />
+
+    <TextView
+        android:id="@+id/btn_learn_more"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/round_button_selector"
+        android:fontFamily="@font/open_sans"
+        android:gravity="center"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="@string/action_learn.more"
+        android:textAllCaps="true"
+        android:textColor="@color/wa_white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd95"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart05"
+        app:layout_constraintTop_toBottomOf="@+id/btn_no" />
+
+
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/open_sans"
+        android:gravity="center"
+        android:text="@string/clean_insights.contribute_description"
+        android:textColor="@color/wa_white"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd95"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart05"
+        app:layout_constraintTop_toBottomOf="@+id/btn_learn_more" />
+
+
+    <TextView
+        style="@style/Unlock_White_Text_Back"
+        android:id="@+id/back_btn"
+        android:text="@string/LockSelect_Action_Back"
+        android:layout_marginStart="0dp"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart05"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

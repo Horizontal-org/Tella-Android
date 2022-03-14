@@ -10,10 +10,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import com.google.gson.Gson
+import org.cleaninsights.sdk.CleanInsights
+import org.cleaninsights.sdk.CleanInsightsConfiguration
+import timber.log.Timber
 import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
 import androidx.core.view.WindowInsetsCompat
 import rs.readahead.washington.mobile.R
+
 
 fun View.setMargins(
     leftMarginDp: Int? = null,
@@ -36,11 +41,23 @@ fun Int.dpToPx(context: Context): Int {
     return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), metrics).toInt()
 }
 
-fun Window.changeStatusColor(context: Context,color: Int){
+fun Window.changeStatusColor(context: Context, color: Int) {
     if (Build.VERSION.SDK_INT >= 21) {
         addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         statusBarColor = context.resources.getColor(color)
+    }
+}
+
+fun createCleanInsightsInstance(context: Context, jsonFile: String): CleanInsights? {
+    return try {
+        val jsonString = context.assets.open(jsonFile).reader().readText()
+        val configuration = Gson().fromJson(jsonString, CleanInsightsConfiguration::class.java)
+        CleanInsights(configuration, context.filesDir)
+    } catch (e: Exception) {
+        Timber.e("createCleanInsightsInstance Exception ${e.message}")
+        e.printStackTrace()
+        null
     }
 }
 

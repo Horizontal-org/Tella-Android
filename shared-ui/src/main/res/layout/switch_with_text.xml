@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingTop="12dp"
-    android:paddingBottom="12dp"
     android:paddingStart="12dp"
+    android:paddingTop="12dp"
     android:paddingEnd="8dp"
+    android:paddingBottom="12dp"
     android:weightSum="1">
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -33,6 +33,17 @@
             android:layout_height="wrap_content"
             android:padding="2dp" />
 
+        <TextView
+            android:id="@+id/learnMoreTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:textColor="@color/wa_orange"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:text="Learn More" />
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.SwitchCompat
@@ -41,9 +52,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
-        android:layout_marginStart="4dp"
         android:layout_weight=".18" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

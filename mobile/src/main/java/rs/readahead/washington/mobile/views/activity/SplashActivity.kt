@@ -5,6 +5,7 @@ import android.os.Handler
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.util.CamouflageManager
+import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 
 private const val SPLASH_TIMEOUT_MS = 1000L
@@ -18,6 +19,7 @@ class SplashActivity : BaseActivity() {
         if (cm.isDefaultLauncherActivityAlias) setContentView(R.layout.splash_layout)
         handler = Handler()
         initView()
+        CleanInsightUtils.measureVisit()
     }
 
     private fun initView() {

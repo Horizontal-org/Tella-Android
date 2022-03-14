@@ -8,6 +8,7 @@ import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 interface VaultClickListener : FilesActionsListener {
     fun onRecentFilesItemClickListener(vaultFile: VaultFile)
     fun onFavoriteItemClickListener(form: CollectForm)
+    fun onImproveItemClickListener(improveClickOptions : ImproveClickOptions)
     fun onFavoriteTemplateClickListener(template: CollectTemplate)
 
 }
@@ -20,3 +21,5 @@ interface FilesActionsListener{
     fun othersClickListener()
     fun videoClickListener()
 }
+
+enum class ImproveClickOptions{ CLOSE , YES , LEARN_MORE}

@@ -26,4 +26,8 @@ sealed class DataItem {
     data class Titles(val idTitles: String) : DataItem() {
         override val id = idTitles
     }
+
+    data class ImproveAction(val idTitles: String) : DataItem() {
+        override val id = idTitles
+    }
 }
