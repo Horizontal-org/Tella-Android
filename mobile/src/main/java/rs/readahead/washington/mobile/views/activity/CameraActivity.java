@@ -275,6 +275,12 @@ public class CameraActivity extends MetadataActivity implements
 
     private void returnIntent(VaultFile vaultFile){
         Intent data = new Intent();
+        if (intentMode == IntentMode.ODK) {
+            capturedMediaFile.metadata = vaultFile.metadata;
+            data.putExtra(MEDIA_FILE_KEY, capturedMediaFile);
+            setResult(RESULT_OK, data);
+            finish();
+        } else
         if (intentMode == IntentMode.COLLECT) {
             capturedMediaFile.metadata = vaultFile.metadata;
             List<String> list = new ArrayList<>();
@@ -326,7 +332,7 @@ public class CameraActivity extends MetadataActivity implements
 
     @Override
     public void onLastMediaFileError(Throwable throwable) {
-        if (intentMode != IntentMode.COLLECT) {
+        if (intentMode != IntentMode.COLLECT || intentMode == IntentMode.ODK) {
             previewView.setVisibility(View.GONE);
         }
     }
@@ -616,7 +622,7 @@ public class CameraActivity extends MetadataActivity implements
     }
 
     private void setupImagePreview() {
-        if (intentMode == IntentMode.COLLECT) {
+        if (intentMode == IntentMode.COLLECT || intentMode == IntentMode.ODK) {
             previewView.setVisibility(View.GONE);
         }
     }
@@ -737,6 +743,7 @@ public class CameraActivity extends MetadataActivity implements
     public enum IntentMode {
         COLLECT,
         RETURN,
-        STAND
+        STAND,
+        ODK
     }
 }

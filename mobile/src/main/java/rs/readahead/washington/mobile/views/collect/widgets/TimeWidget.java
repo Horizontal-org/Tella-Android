@@ -14,6 +14,7 @@
 package rs.readahead.washington.mobile.views.collect.widgets;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.text.format.DateFormat;
@@ -60,7 +61,7 @@ public class TimeWidget extends QuestionWidget {
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-        clearButton = addButton(R.drawable.ic_delete_white_24px);
+        clearButton = addButton(R.drawable.ic_cancel_rounded);
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!formEntryPrompt.isReadOnly());
         clearButton.setVisibility(GONE);
@@ -122,7 +123,7 @@ public class TimeWidget extends QuestionWidget {
     }
 
     private void createTimePickerDialog() {
-        timePickerDialog = new TimePickerDialog(getContext(), (view, hourOfDay, minute) -> {
+        timePickerDialog = new TimePickerDialog(getContext(), AlertDialog.THEME_HOLO_LIGHT, (view, hourOfDay, minute) -> {
             TimeWidget.this.hour = hourOfDay;
             TimeWidget.this.minute = minute;
 

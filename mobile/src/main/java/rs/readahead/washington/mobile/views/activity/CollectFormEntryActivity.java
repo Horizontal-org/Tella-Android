@@ -260,7 +260,6 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Timber.d("+++++ CollectFormEntryActivity onActivityResult(int requestCode, int resultCode, Intent data) %s, %s, %s", requestCode, resultCode, data.toString());
         super.onActivityResult(requestCode, resultCode, data);
         if (!isLocationSettingsRequestCode(requestCode) && resultCode != RESULT_OK) {
             formParser.stopWaitingBinaryData(); // remove info about waiting index

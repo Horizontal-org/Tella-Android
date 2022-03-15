@@ -33,7 +33,7 @@ public class AudioWidget extends MediaFileBinaryWidget {
     ImageButton selectButton;
     ImageButton clearButton;
     ImageButton captureButton;
-    View separator;
+   // View separator;
 
     private CollectAttachmentPreviewView attachmentPreview;
 
@@ -92,13 +92,13 @@ public class AudioWidget extends MediaFileBinaryWidget {
         selectButton.setEnabled(!formEntryPrompt.isReadOnly());
         selectButton.setOnClickListener(v -> showAttachmentsActivity());
 
-        clearButton = addButton(R.drawable.ic_delete_white_24px);
+        clearButton = addButton(R.drawable.ic_cancel_rounded);
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!formEntryPrompt.isReadOnly());
         clearButton.setOnClickListener(v -> clearAnswer());
 
         attachmentPreview = view.findViewById(R.id.attachedMedia);
-        separator = view.findViewById(R.id.line_separator);
+        //separator = view.findViewById(R.id.line_separator);
 
         if (getFilename() != null) {
             showPreview();
@@ -149,10 +149,10 @@ public class AudioWidget extends MediaFileBinaryWidget {
         captureButton.setVisibility(GONE);
         clearButton.setVisibility(VISIBLE);
 
-        attachmentPreview.showPreview(getFilename());
+        attachmentPreview.showPreview(getFileId());
         attachmentPreview.setEnabled(true);
         attachmentPreview.setVisibility(VISIBLE);
-        separator.setVisibility(VISIBLE);
+       // separator.setVisibility(VISIBLE);
     }
 
     private void hidePreview() {
@@ -162,6 +162,6 @@ public class AudioWidget extends MediaFileBinaryWidget {
 
         attachmentPreview.setEnabled(false);
         attachmentPreview.setVisibility(GONE);
-        separator.setVisibility(GONE);
+       // separator.setVisibility(GONE);
     }
 }
