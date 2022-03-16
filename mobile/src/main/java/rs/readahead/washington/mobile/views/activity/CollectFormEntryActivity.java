@@ -797,7 +797,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
             return;
         }
 
-        alertDialog = new AlertDialog.Builder(this)
+        alertDialog = new AlertDialog.Builder(this,R.style.PurpleBackgroundLightLettersDialogTheme)
                 .setPositiveButton(R.string.collect_form_dialog_action_add_group, (dialog, which) -> formParser.executeRepeat())
                 .setNegativeButton(R.string.collect_form_dialog_action_dont_add_group, (dialog, which) -> formParser.cancelRepeat())
                 .setCancelable(false)
