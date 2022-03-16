@@ -45,9 +45,6 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.Attachmen
 public class VideoWidget extends MediaFileBinaryWidget {
     AppCompatButton selectButton;
     ImageButton clearButton;
-   /* ImageButton captureButton;
-    ImageButton importButton;
-    View separator;*/
 
     private CollectAttachmentPreviewView attachmentPreview;
 
@@ -94,30 +91,11 @@ public class VideoWidget extends MediaFileBinaryWidget {
 
         View view = inflater.inflate(R.layout.collect_widget_media, linearLayout, true);
 
-        /*captureButton = addButton(R.drawable.ic_videocam);
-        captureButton.setAlpha((float).5);
-        captureButton.setId(QuestionWidget.newUniqueId());
-        captureButton.setEnabled(!formEntryPrompt.isReadOnly());
-        captureButton.setOnClickListener(v -> showCameraActivity());*/
-
-
         selectButton = view.findViewById(R.id.addText);
         selectButton.setText(getContext().getString(R.string.Collect_MediaWidget_Attach_Video));
         selectButton.setId(QuestionWidget.newUniqueId());
         selectButton.setEnabled(!formEntryPrompt.isReadOnly());
         selectButton.setOnClickListener(v -> showSelectFilesSheet());
-
-       /* selectButton = addButton(R.drawable.ic_menu_gallery);
-        selectButton.setAlpha((float).5);
-        selectButton.setId(QuestionWidget.newUniqueId());
-        selectButton.setEnabled(!formEntryPrompt.isReadOnly());
-        selectButton.setOnClickListener(v -> showAttachmentsActivity());
-
-        importButton = addButton(R.drawable.ic_smartphone_white_24dp);
-        importButton.setAlpha((float).5);
-        importButton.setId(QuestionWidget.newUniqueId());
-        importButton.setEnabled(!formEntryPrompt.isReadOnly());
-        importButton.setOnClickListener(v -> importVideo());*/
 
         clearButton = addButton(R.drawable.ic_cancel_rounded);
         clearButton.setId(QuestionWidget.newUniqueId());
@@ -125,7 +103,6 @@ public class VideoWidget extends MediaFileBinaryWidget {
         clearButton.setOnClickListener(v -> clearAnswer());
 
         attachmentPreview = view.findViewById(R.id.attachedMedia);
-        //separator = view.findViewById(R.id.line_separator);
 
         if (getFilename() != null) {
             showPreview();
@@ -178,25 +155,19 @@ public class VideoWidget extends MediaFileBinaryWidget {
 
     private void showPreview() {
         selectButton.setVisibility(GONE);
-        /*captureButton.setVisibility(GONE);
-        importButton.setVisibility(GONE);*/
         clearButton.setVisibility(VISIBLE);
 
-        attachmentPreview.showPreview(getFileId());
+        attachmentPreview.showPreview(getFilename());
         attachmentPreview.setEnabled(true);
         attachmentPreview.setVisibility(VISIBLE);
-        //separator.setVisibility(VISIBLE);
     }
 
     private void hidePreview() {
         selectButton.setVisibility(VISIBLE);
-        /*captureButton.setVisibility(VISIBLE);
-        importButton.setVisibility(VISIBLE);*/
         clearButton.setVisibility(GONE);
 
         attachmentPreview.setEnabled(false);
         attachmentPreview.setVisibility(GONE);
-        //separator.setVisibility(GONE);
     }
 
     private void showSelectFilesSheet(){
