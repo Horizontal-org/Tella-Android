@@ -20,6 +20,7 @@ import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
 import org.javarosa.form.api.FormEntryPrompt;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +45,11 @@ import timber.log.Timber;
  */
 @SuppressLint("ViewConstructor")
 public class ImageWidget extends MediaFileBinaryWidget {
-    ImageButton selectButton;
+    AppCompatButton selectButton;
+    //ImageButton selectButton;
     ImageButton clearButton;
-    ImageButton captureButton;
-    ImageButton importButton;
+   // ImageButton captureButton;
+  //  ImageButton importButton;
     //View separator;
 
     private CollectAttachmentPreviewView attachmentPreview;
@@ -78,7 +80,6 @@ public class ImageWidget extends MediaFileBinaryWidget {
 
     @Override
     public String setBinaryData(@NonNull Object data) {
-        Timber.d("++++ setBinaryData");
         VaultFile vaultFile = (VaultFile) data;
         setFilename(vaultFile.id);
         setFileId(vaultFile.id);
@@ -96,23 +97,23 @@ public class ImageWidget extends MediaFileBinaryWidget {
 
         View view = inflater.inflate(R.layout.collect_widget_media, linearLayout, true);
 
-        captureButton = addButton(R.drawable.ic_menu_camera);
+      /* captureButton = addButton(R.drawable.ic_menu_camera);
         captureButton.setAlpha(0.5f);
         captureButton.setId(QuestionWidget.newUniqueId());
         captureButton.setEnabled(!formEntryPrompt.isReadOnly());
-        captureButton.setOnClickListener(v -> showCameraActivity());
+        captureButton.setOnClickListener(v -> showCameraActivity());*/
 
-        selectButton = addButton(R.drawable.ic_menu_gallery);
-        selectButton.setAlpha(0.5f);
+        selectButton = view.findViewById(R.id.addText);
+        selectButton.setText(getContext().getString(R.string.Collect_MediaWidget_Attach_Photo));
         selectButton.setId(QuestionWidget.newUniqueId());
         selectButton.setEnabled(!formEntryPrompt.isReadOnly());
-        selectButton.setOnClickListener(v -> showAttachmentsActivity());
+        selectButton.setOnClickListener(v -> showSelectFilesSheet());
 
-        importButton = addButton(R.drawable.ic_smartphone_white_24dp);
+       /* importButton = addButton(R.drawable.ic_smartphone_white_24dp);
         importButton.setAlpha((float).5);
         importButton.setId(QuestionWidget.newUniqueId());
         importButton.setEnabled(!formEntryPrompt.isReadOnly());
-        importButton.setOnClickListener(v -> importPhoto());
+        importButton.setOnClickListener(v -> importPhoto());*/
 
         clearButton = addButton(R.drawable.ic_cancel_rounded);
         clearButton.setId(QuestionWidget.newUniqueId());
@@ -156,7 +157,7 @@ public class ImageWidget extends MediaFileBinaryWidget {
             FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
 
             activity.startActivityForResult(new Intent(getContext(), CameraActivity.class)
-                            .putExtra(CameraActivity.INTENT_MODE, CameraActivity.IntentMode.COLLECT.name())
+                            .putExtra(CameraActivity.INTENT_MODE, CameraActivity.IntentMode.ODK.name())
                             .putExtra(CameraActivity.CAMERA_MODE, CameraActivity.CameraMode.PHOTO.name()),
                     C.MEDIA_FILE_ID
             );
@@ -174,8 +175,8 @@ public class ImageWidget extends MediaFileBinaryWidget {
 
     private void showPreview() {
         selectButton.setVisibility(GONE);
-        captureButton.setVisibility(GONE);
-        importButton.setVisibility(GONE);
+     /*   captureButton.setVisibility(GONE);
+        importButton.setVisibility(GONE);*/
         clearButton.setVisibility(VISIBLE);
 
         attachmentPreview.showPreview(getFileId());
@@ -186,8 +187,8 @@ public class ImageWidget extends MediaFileBinaryWidget {
 
     private void hidePreview() {
         selectButton.setVisibility(VISIBLE);
-        captureButton.setVisibility(VISIBLE);
-        importButton.setVisibility(VISIBLE);
+       /* captureButton.setVisibility(VISIBLE);
+        importButton.setVisibility(VISIBLE);*/
         clearButton.setVisibility(GONE);
 
         attachmentPreview.setEnabled(false);
@@ -208,7 +209,7 @@ public class ImageWidget extends MediaFileBinaryWidget {
 
                     @Override
                     public void importFromVault() {
-                        showAttachmentsFragment();
+                        showAttachmentsActivity();
                     }
 
                     @Override

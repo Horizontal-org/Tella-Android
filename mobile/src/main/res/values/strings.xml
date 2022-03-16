@@ -632,4 +632,9 @@
     <string name="clean_insights.improve_title">Help us improve Tella</string>
     <string name="clean_insights.improve_description">We’re doing a study to understand how you use Tella. You can opt-out anytime by going to Settings.\n\nWould you like to contribute?</string>
     <string name="clean_insights.signed_for_days">You have signed up to share your data for 14 days.</string>
+
+    <string name="Collect_WidgetVideo_Select_Text">Select video file</string>
+    <string name="Collect_MediaWidget_Attach_Photo">Attach photo</string>
+    <string name="Collect_MediaWidget_Attach_Video">Attach video</string>
+    <string name="Collect_MediaWidget_Attach_Audio_Recording">Attach audio recording</string>
 </resources>

@@ -1,5 +1,7 @@
 package rs.readahead.washington.mobile.views.activity;
 
+import static rs.readahead.washington.mobile.views.activity.CameraActivity.MEDIA_FILE_KEY;
+
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -268,7 +270,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
         switch (requestCode) {
             case C.MEDIA_FILE_ID:
-                VaultFile vaultFile = (VaultFile) data.getSerializableExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY);
+                VaultFile vaultFile = (VaultFile) data.getSerializableExtra(MEDIA_FILE_KEY);
                 putVaultFileInForm(vaultFile);
                 break;
 
