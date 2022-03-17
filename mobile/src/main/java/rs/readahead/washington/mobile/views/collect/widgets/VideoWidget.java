@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.views.collect.widgets;
 
+import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.RETURN_ODK;
 import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_FILES_FILTER;
 import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_PICKER_SINGLE;
 
@@ -111,26 +112,6 @@ public class VideoWidget extends MediaFileBinaryWidget {
         }
     }
 
-    private void showAttachmentsActivity() {
-        try {
-            Activity activity = (Activity) getContext();
-            FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
-
-            VaultFile vaultFile = getFilename() != null ? MyApplication.rxVault
-                    .get(getFilename())
-                    .subscribeOn(Schedulers.io())
-                    .blockingGet() : null;
-
-            activity.startActivityForResult(new Intent(getContext(), QuestionAttachmentActivity.class)
-                            .putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, vaultFile)
-                            .putExtra(QuestionAttachmentActivity.MEDIA_FILES_FILTER, IMediaFileRecordRepository.Filter.VIDEO),
-                    C.MEDIA_FILE_ID);
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
-            FormController.getActive().setIndexWaitingForData(null);
-        }
-    }
-
     private void showCameraActivity() {
         try {
             Activity activity = (Activity) getContext();
@@ -183,7 +164,7 @@ public class VideoWidget extends MediaFileBinaryWidget {
 
                     @Override
                     public void  importFromVault(){
-                        showAttachmentsActivity();
+                        showAttachmentsFragment();
                     }
 
                     @Override
@@ -207,7 +188,6 @@ public class VideoWidget extends MediaFileBinaryWidget {
 
     private void showAttachmentsFragment() {
         try {
-
             Activity activity = (Activity) getContext();
             FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
             List<VaultFile> files = new ArrayList<>();
@@ -220,8 +200,8 @@ public class VideoWidget extends MediaFileBinaryWidget {
             files.add(vaultFile);
 
             activity.startActivityForResult(new Intent(getContext(), AttachmentsActivitySelector.class)
-                            //    .putExtra(VAULT_FILE_KEY, new Gson().toJson(files))
-                            .putExtra(VAULT_FILES_FILTER, FilterType.AUDIO_VIDEO)
+                            .putExtra(RETURN_ODK, true)
+                            .putExtra(VAULT_FILES_FILTER, FilterType.VIDEO)
                             .putExtra(VAULT_PICKER_SINGLE,true),
                     C.MEDIA_FILE_ID);
 

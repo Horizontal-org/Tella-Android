@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.views.collect.widgets;
 
+import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.RETURN_ODK;
 import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_FILES_FILTER;
 import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_PICKER_SINGLE;
 
@@ -111,27 +112,6 @@ public class ImageWidget extends MediaFileBinaryWidget {
         }
     }
 
-    private void showAttachmentsActivity() {
-        try {
-            Activity activity = (Activity) getContext();
-            FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
-
-            VaultFile vaultFile = getFilename() != null ? MyApplication.rxVault
-                    .get(getFilename())
-                    .subscribeOn(Schedulers.io())
-                    .blockingGet() : null;
-
-            activity.startActivityForResult(new Intent(getContext(), QuestionAttachmentActivity.class)
-                            .putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, vaultFile)
-                            .putExtra(QuestionAttachmentActivity.MEDIA_FILES_FILTER, IMediaFileRecordRepository.Filter.PHOTO),
-                    C.MEDIA_FILE_ID
-            );
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
-            FormController.getActive().setIndexWaitingForData(null);
-        }
-    }
-
     private void showCameraActivity() {
         try {
             Activity activity = (Activity) getContext();
@@ -184,7 +164,7 @@ public class ImageWidget extends MediaFileBinaryWidget {
 
                     @Override
                     public void importFromVault() {
-                        showAttachmentsActivity();
+                        showAttachmentsFragment(); //showAttachmentsActivity();
                     }
 
                     @Override
@@ -220,6 +200,7 @@ public class ImageWidget extends MediaFileBinaryWidget {
             files.add(vaultFile);
 
             activity.startActivityForResult(new Intent(getContext(), AttachmentsActivitySelector.class)
+                            .putExtra(RETURN_ODK, true)
                             .putExtra(VAULT_FILES_FILTER, FilterType.PHOTO)
                             .putExtra(VAULT_PICKER_SINGLE, true),
                     C.MEDIA_FILE_ID);
