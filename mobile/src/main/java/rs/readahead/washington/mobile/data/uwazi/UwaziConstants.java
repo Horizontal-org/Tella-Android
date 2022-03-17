@@ -59,6 +59,7 @@ public class UwaziConstants {
     public static final String UWAZI_DATATYPE_GEOLOCATION = "geolocation";
     public static final String UWAZI_DATATYPE_MULTIFILES = "multifiles";
     public static final String UWAZI_DATATYPE_MULTIPDFFILES = "multipdffiles";
+    public static final String UWAZI_DATATYPE_GENERATEDID = "generatedid";
 
     /** constants for xform tags */
     public static final String XFTAG_UPLOAD = "upload";
