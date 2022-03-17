@@ -7,7 +7,8 @@ import rs.readahead.washington.mobile.domain.entity.uwazi.Settings
 
 fun SettingsResponse.mapToDomainModel() = Settings(
     serverName = site_name ?: "",
-    languages = languages?.map { it.mapToDomainModel() } ?: emptyList()
+    languages = languages?.map { it.mapToDomainModel() } ?: emptyList(),
+    allowedPublicTemplates = allowedPublicTemplates?.map { it } ?: emptyList()
 )
 
 fun LanguageEntity.mapToDomainModel() = Language(

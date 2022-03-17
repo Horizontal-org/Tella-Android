@@ -45,7 +45,7 @@ class UwaziRepository : IUwaziUserRepository {
 
     override fun getTemplatesResult(server: UWaziUploadServer): Single<ListTemplateResult> {
         return Single.zip(getTemplates(server),
-            getDictionary(server), getTranslation(server), { templates, dictionary, translations ->
+            getDictionary(server), getTranslation(server),getFullSettings(server), { templates, dictionary, translations,settings ->
 
                 templates.forEach {
                     it.properties.forEach { property ->
@@ -56,9 +56,24 @@ class UwaziRepository : IUwaziUserRepository {
                         }
                     }
                 }
+                var resultTemplates = mutableListOf<UwaziRow>()
+
+                if (server.username.isNullOrEmpty() || server.password.isNullOrEmpty()){
+                    if (!settings.allowedPublicTemplates.isNullOrEmpty()){
+                        templates.forEach { row ->
+                            settings.allowedPublicTemplates.forEach { id->
+                                if (row._id == id){
+                                    resultTemplates.add(row)
+                                }
+                            }
+                        }
+                    }
+                }else {
+                    resultTemplates = templates.toMutableList()
+                }
 
 
-                templates.forEach { template ->
+                resultTemplates.forEach { template ->
                     translations.filter { row -> row.locale == server.localeCookie }[0]
                         .contexts.forEach { context ->
                             if (context.id == template._id) {
@@ -96,7 +111,7 @@ class UwaziRepository : IUwaziUserRepository {
                 }
 
                 val listTemplates = mutableListOf<CollectTemplate>()
-                templates.forEach { entity ->
+                resultTemplates.forEach { entity ->
                     val collectTemplate = CollectTemplate(
                         serverId = server.id,
                         entityRow = entity,

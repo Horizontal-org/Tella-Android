@@ -1,7 +1,6 @@
 package com.hzontal.tella_vault;
 
 
-import com.hzontal.tella_vault.filter.Filter;
 import com.hzontal.tella_vault.filter.FilterType;
 import com.hzontal.tella_vault.filter.Limits;
 import com.hzontal.tella_vault.filter.Sort;
