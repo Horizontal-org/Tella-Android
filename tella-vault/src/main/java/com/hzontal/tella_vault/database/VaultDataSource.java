@@ -340,6 +340,6 @@ public class VaultDataSource implements IVaultDatabase {
     }
 
     private void deleteTable(String table) {
-        database.execSQL("DELETE FROM " + table);
+        database.delete(table,D.C_ID + " != '" + ROOT_UID + "'",null);
     }
 }
