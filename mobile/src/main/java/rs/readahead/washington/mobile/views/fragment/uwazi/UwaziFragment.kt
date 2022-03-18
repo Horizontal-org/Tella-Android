@@ -59,7 +59,7 @@ class UwaziFragment : BaseBindingFragment<FragmentUwaziBinding>(FragmentUwaziBin
 
     private fun getTabTitle(position: Int): String? {
         return when (position) {
-            TEMPLATES_LIST_PAGE_INDEX -> getString(R.string.uwazi_outbox_tab_title)
+            TEMPLATES_LIST_PAGE_INDEX -> getString(R.string.Uwazi_Templates_TabTitle)
             DRAFT_LIST_PAGE_INDEX -> getString(R.string.collect_draft_tab_title)
             OUTBOX_LIST_PAGE_INDEX -> getString(R.string.collect_outbox_tab_title)
             SUBMITTED_LIST_PAGE_INDEX -> getString(R.string.collect_sent_tab_title)

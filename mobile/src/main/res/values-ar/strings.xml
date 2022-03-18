@@ -609,7 +609,7 @@
   </plurals>
   <string name="Util_ellapsedTime_Seconds">منذ بضع لحظات</string>
   <string name="Donwload_Templates_Title_Description">هذه القوالب المتوفرة على نماذج Uwazi التي تتصل بها.</string>
-  <string name="uwazi.outbox_tab.title">القوالب</string>
+  <string name="Uwazi_Templates_TabTitle">القوالب</string>
   <string name="Uwazi_Templates_HeaderMessage">هذه قوالب Uwazi التي يمكنك ملؤها.</string>
   <string name="action_yes">yes</string>
   <string name="action_no">no</string>

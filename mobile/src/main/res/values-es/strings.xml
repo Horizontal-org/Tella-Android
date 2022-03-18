@@ -533,7 +533,7 @@ conectarse a un servidor</string>
     </plurals>
     <string name="Util_ellapsedTime_Seconds">Hace unos segundos</string>
     <string name="Donwload_Templates_Title_Description">Estas son las plantillas disponibles en las instancias de Uwazi a las que está conectado.</string>
-    <string name="uwazi.outbox_tab.title">Plantillas</string>
+    <string name="Uwazi_Templates_TabTitle">Plantillas</string>
     <string name="Uwazi_Outbox_Header_Text">These are entities currently being submitted.</string>
     <string name="Uwazi_Templates_HeaderMessage">Estas son las plantillas de Uwazi que puedes rellenar.</string>
 

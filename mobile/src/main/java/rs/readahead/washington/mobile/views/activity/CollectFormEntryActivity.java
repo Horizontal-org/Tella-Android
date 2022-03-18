@@ -1,5 +1,7 @@
 package rs.readahead.washington.mobile.views.activity;
 
+import static rs.readahead.washington.mobile.views.activity.CameraActivity.MEDIA_FILE_KEY;
+
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -260,7 +262,6 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Timber.d("+++++ CollectFormEntryActivity onActivityResult(int requestCode, int resultCode, Intent data) %s, %s, %s", requestCode, resultCode, data.toString());
         super.onActivityResult(requestCode, resultCode, data);
         if (!isLocationSettingsRequestCode(requestCode) && resultCode != RESULT_OK) {
             formParser.stopWaitingBinaryData(); // remove info about waiting index
@@ -269,7 +270,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
         switch (requestCode) {
             case C.MEDIA_FILE_ID:
-                VaultFile vaultFile = (VaultFile) data.getSerializableExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY);
+                VaultFile vaultFile = (VaultFile) data.getSerializableExtra(MEDIA_FILE_KEY);
                 putVaultFileInForm(vaultFile);
                 break;
 
@@ -796,7 +797,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
             return;
         }
 
-        alertDialog = new AlertDialog.Builder(this)
+        alertDialog = new AlertDialog.Builder(this,R.style.PurpleBackgroundLightLettersDialogTheme)
                 .setPositiveButton(R.string.collect_form_dialog_action_add_group, (dialog, which) -> formParser.executeRepeat())
                 .setNegativeButton(R.string.collect_form_dialog_action_dont_add_group, (dialog, which) -> formParser.cancelRepeat())
                 .setCancelable(false)
