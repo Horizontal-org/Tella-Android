@@ -3,7 +3,7 @@ package rs.readahead.washington.mobile.data.entity.uwazi
 data class SettingsResponse(
     val __v: Int,
     val _id: String,
-    val allowedPublicTemplates: List<Any>,
+    val allowedPublicTemplates: List<String>?,
     val analyticsTrackingId: String,
     val contactEmail: String,
     val dateFormat: String,
