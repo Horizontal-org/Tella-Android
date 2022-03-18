@@ -423,6 +423,10 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".views.fragment.uwazi.attachments.AttachmentsActivitySelector"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".views.activity.onboarding.OnBoardingActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />

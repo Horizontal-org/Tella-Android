@@ -23,14 +23,10 @@
     <string name="settings.docu_toast_fail.update.server">There was an error updating the server settings. Please try again</string>
     <string name="settings.docu_toast_fail.delete.server">There was an error deleting the server settings. Please try again</string>
     <string name="settings.about_list.item_faq">FAQ</string>
-    <string name="gallery_app.bar">Gallery</string>
-    <string name="home_gallery.button">Gallery</string>
-    <string name="onboarding_action_create.pattern">Create pattern</string>
     <string name="action_ok">OK</string>
     <string name="collect.form_toast_validation.error">This response is invalid</string>
     <string name="collect.form_error_response.mandatory">This response is mandatory.</string>
     <string name="homescreen_heading_quick.delete">Quick Delete\nmode activation</string>
-    <string name="permission_dialog.expl_mic">In order to record audio, Tella needs permission to access your microphone.</string>
     <string name="settings.about_list.item_privacy.policy">Privacy policy</string>
     <string name="recorder_toast_fail.recording">There was an error recording the audio. Please try again</string>
     <string name="recorder_content.desc_blinking.red.dot">Recording audio</string>
@@ -90,7 +86,6 @@
     <string name="collect.sent_dialog.expl_discard.unsent.form">Parts or all of the form wasn\'t sent. Are you sure you want to discard it?</string>
     <string name="action_discard">Discard</string>
     <string name="collect.end_action_submit">Submit</string>
-    <string name="gallery_toast_file.imported.from.device">The file was added to your gallery</string>
     <string name="gallery_toast_fail.exporting.to.device">There was an error exporting the files. Please try again</string>
     <string name="permission_dialog.expl_device.storage">In order to export files, Tella needs permission to write on the device\'s storage.</string>
     <plurals name="gallery_toast_files.deleted">
@@ -109,14 +104,12 @@
     <string name="gallery_dialog.expl_encrypting">Encrypting</string>
     <string name="gallery_save.to.device_dialog.progress.expl">Decrypting</string>
     <string name="gallery_toast_fail.import">There was an error opening the gallery to import the files. Please try again</string>
-    <string name="permission_dialog.expl_camera.mic">In order to capture photo, video, and audio files, Tella needs access to your camera and microphone.</string>
     <string name="gallery_toast_fail.saving.file">There was an error saving the file. Please try again</string>
     <string name="collect_toast_fail.attaching.file.to.form">There was an error attaching the file. Please try again</string>
     <string name="collect_toast_fail.fetch.form.from.server.unknown.error">There was an error downloading the form. Please try again</string>
     <string name="collect_toast_fail.fetch.form.from.server.display.error">There was an error downloading the form: %s</string>
     <string name="collect_toast_reason.fail.fetch.form.from.server">The form could not be found. It may have been deleted from your organization\'s server</string>
     <string name="gallery_heading_files.from.Tella.gallery">Tella Gallery</string>
-    <string name="permission_dialog.expl_camera">In order to take photos and videos, Tella needs permission to access your camera.</string>
     <string name="settings_select_general">General</string>
     <string name="collect.form_exit_dialog.expl">Your draft will be lost.</string>
     <string name="collect.form_exit_dialog.action_save.exit">SAVE AND EXIT</string>
@@ -124,17 +117,13 @@
     <string name="settings.docu_error_not.valid.URL">This is not a valid URL.</string>
     <string name="home_action.label_quick.delete">Delete</string>
     <string name="gallery_subheading_sort.by">Sort by</string>
-    <string name="gallery_subheading_show">Show</string>
     <string name="gallery_list.item_newest.to.oldest">Newest to oldest</string>
     <string name="gallery_list.item_oldest.to.newest">Oldest to newest</string>
-    <string name="gallery_list.item_show.all.files">All</string>
-    <string name="gallery_list.items_show.only.photos">Photos</string>
     <string name="gallery_list.items_show.only.videos">Videos</string>
     <string name="gallery_list.items_show.only.audio">Audio recordings</string>
     <string name="action_exit">Exit</string>
     <string name="home_action.desc_quick.exit">Exit</string>
     <string name="settings.prot_select_camouflage">Camouflage</string>
-    <string name="settings.prot_select_lock" translatable="false">Lock</string>
     <string name="onboard.camo_heading">Camouflage</string>
     <string name="settings.docu_error_wrong.credentials">The username or password is incorrect.</string>
     <string name="settings.docu_error_domain.doesnt.exit">The server URL is incorrect.</string>
@@ -242,7 +231,6 @@
     <string name="collect_toast_fail.loading.form.instance">There was an error loading the form. Please try again</string>
     <string name="collect_toast_fail.connection.too.weak">Your internet connection is too weak to send the form. Please try again</string>
     <string name="gallery_toast_file.encrypted">File encrypted</string>
-    <string name="settings.docu_dialog.action_hide">Hide</string>
     <string name="settings.docu_toast_disconnect.servers.delete">All forms and servers have been deleted</string>
     <string name="collect.help_expl_not.connected.to.server"><![CDATA[To receive forms and submit data, you must first connect to a server. Ask your organization for the server information and set up the server.]]></string>
     <string name="collect.help_expl_odk"><![CDATA[If you would like to create your own forms, <a href=\"https://hzontal.org/contact/\">contact us</a> or use <a href=\"https://opendatakit.org/help/help-for-hire/\">any service based on the Open Data Kit (ODK)</a>]]></string>
@@ -292,7 +280,6 @@
     <string name="verification.info_cell.towers.expl">The identifying numbers of all the cell towers the device is connected to.</string>
     <string name="verification.info_wifi.expl">The name of all Wi-Fi networks in the vicinity of the device.</string>
     <string name="collect.blank_banner_forms.updated">Some forms have been updated. Tap the update button next to the forms to get the latest version.</string>
-    <string name="settings.docu_auto.upload.server.selection_select">Server</string>
     <string name="upload_dialog.title_select.server">Server selection</string>
     <string name="settings.docu_auto.upload.server.selection_dialog.expl">Which server would you like to upload the files to?</string>
     <string name="settings.serv_add.server.selection_dialog.title">What type of server?</string>
@@ -302,10 +289,6 @@
     <string name="settings.docu_add.server_dialog.select_tella_uwazi">Uwazi</string>
     <string name="settings.docu_add.server_dialog.expl">Select the type of server you want to connect to. If you are unsure, ask your organization.</string>
     <string name="settings.docu_add.server_dialog.select_tus">Direct Upload</string>
-    <string name="settings.docu_connect.to.servers_enable_action">Connect to servers</string>
-    <string name="settings.docu_connect.to.servers_enable_action.expl">Manage your connection to servers to send data.</string>
-    <string name="settings.docu_disable.servers_dialog.title">Disconnect servers</string>
-    <string name="settings.docu_connect.to.servers_disable_dialog.expl">Would you like to delete your server connections altogether, or simply hide them? Hiding will keep server information in memory so that you can easily reconnect and submit data to the servers.</string>
     <string name="settings.docu_delete.auto.server_dialog.expl">If you delete this server, your files will no longer be auto-uploaded.</string>
     <string name="play.audio_action.expl_plus15s">+15s</string>
     <string name="play.audio_action.expl_minus15s">-15s</string>
@@ -480,7 +463,6 @@
     <string name="Uwazi_Subtitle_RemoveTemplate">Are you sure you want to remove this template? </string>
     <string name="UWAZI_Language_Header_Title">Uwazi language</string>
     <string name="Uwazi_Language_Screen_Description">This Uwazi collection is available in several languages. Please select in which language you would like to download templates. </string>
-    <string name="Uwazi_Send_Header_Title">End of entity</string>
     <string name="Uwazi_General_Favorite_Template_Switch_Expl">Show shortcuts to your favorite templates on Tella’s homescreen.</string>
     <string name="Uwazi_General_Favorite_Template_Switch_Title">Favorite templates</string>
     <string name="Uwazi_Templates_Empty_Description">Your have no saved templates. Tap the “+” \nbutton to add a new template.</string>
@@ -502,11 +484,9 @@
     <string name="Uwazi_WidgetSubtitle_URL">URL</string>
     <string name="Uwazi_Info_NotValidURL">This is not a valid Url</string>
     <string name="Uwazi_Subtitle_MarkdownSupported">markdown supported</string>
-    <string name="Uwazi_Answer_LinkInitialText">https://</string>
     <string name="Uwazi_Entry_Validation_MandatoryFields">You must fill in the mandatory fields</string>
     <string name="Uwazi_Entry_Validation_MandatoryTitle">You must fill in the title</string>
     <string name="Uwazi_Submit_Later">Submit later</string>
-    <string name="Uwazi_Send_Entity_Title">End of entity</string>
     <string name="Uwazi_WidgetMultiDate_AddDate">Add another date</string>
     <string name="Uwazi_WidgetMultiDate_AddDateRange">Add another date range</string>
     <string name="Uwazi_WidgetDateRange_Constraint">The second date in the range must be after the first</string>

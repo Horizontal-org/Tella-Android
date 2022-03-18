@@ -79,6 +79,10 @@ public class UwaziWidgetFactory {
                 questionWidget = new UwaziStringWidget(context, fep, readOnlyOverride, true);
                 break;
 
+            case UwaziConstants.UWAZI_DATATYPE_GENERATEDID:
+                questionWidget = new UwaziGeneratedIdWidget(context, fep, readOnlyOverride);
+                break;
+
             default:
                 questionWidget = new UwaziStringWidget(context, fep, readOnlyOverride, false);
                 break;
