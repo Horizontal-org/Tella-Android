@@ -23,14 +23,10 @@
   <string name="settings.docu_toast_fail.update.server">There was an error updating the server settings. Please try again</string>
   <string name="settings.docu_toast_fail.delete.server">There was an error deleting the server settings. Please try again</string>
   <string name="settings.about_list.item_faq">FAQ</string>
-  <string name="gallery_app.bar">Galeri</string>
-  <string name="home_gallery.button">Galeri</string>
-  <string name="onboarding_action_create.pattern">Buat pola</string>
   <string name="action_ok">OK</string>
   <string name="collect.form_toast_validation.error">Respons ini tidak valid</string>
   <string name="collect.form_error_response.mandatory">This response is mandatory.</string>
   <string name="homescreen_heading_quick.delete">Akfitkan moda Hapus Cepat</string>
-  <string name="permission_dialog.expl_mic">In order to record audio, Tella needs permission to access your microphone.</string>
   <string name="settings.about_list.item_privacy.policy">Kebijakan privasi</string>
   <string name="recorder_toast_fail.recording">There was an error recording the audio. Please try again</string>
   <string name="recorder_content.desc_blinking.red.dot">Recording audio</string>
@@ -90,7 +86,6 @@
   <string name="collect.sent_dialog.expl_discard.unsent.form">Parts or all of the form wasn\'t sent. Are you sure you want to discard it?</string>
   <string name="action_discard">Buang</string>
   <string name="collect.end_action_submit">Kirim</string>
-  <string name="gallery_toast_file.imported.from.device">The file was added to your gallery</string>
   <string name="gallery_toast_fail.exporting.to.device">There was an error exporting the files. Please try again</string>
   <string name="permission_dialog.expl_device.storage">Untuk mengekspor file, Tella butuh izin untuk memodifikasi penyimpanan gawai.</string>
   <plurals name="gallery_toast_files.deleted">
@@ -109,14 +104,12 @@
   <string name="gallery_dialog.expl_encrypting">Mengenkripsi</string>
   <string name="gallery_save.to.device_dialog.progress.expl">Membuka enkripsi</string>
   <string name="gallery_toast_fail.import">There was an error opening the gallery to import the files. Please try again</string>
-  <string name="permission_dialog.expl_camera.mic">Untuk merekam foto, video, dan audio, Tella butuh akses ke kamera dan mikrofon.</string>
   <string name="gallery_toast_fail.saving.file">There was an error saving the file. Please try again</string>
   <string name="collect_toast_fail.attaching.file.to.form">There was an error attaching the file. Please try again</string>
   <string name="collect_toast_fail.fetch.form.from.server.unknown.error">There was an error downloading the form. Please try again</string>
   <string name="collect_toast_fail.fetch.form.from.server.display.error">There was an error downloading the form: %s</string>
   <string name="collect_toast_reason.fail.fetch.form.from.server">The form could not be found. It may have been deleted from your organization\'s server</string>
   <string name="gallery_heading_files.from.Tella.gallery">Galeri Tella</string>
-  <string name="permission_dialog.expl_camera">In order to take photos and videos, Tella needs permission to access your camera.</string>
   <string name="settings_select_general">Umum</string>
   <string name="collect.form_exit_dialog.expl">Buram Anda akan hilang.</string>
   <string name="collect.form_exit_dialog.action_save.exit">SIMPAN DAN KELUAR</string>
@@ -124,7 +117,6 @@
   <string name="settings.docu_error_not.valid.URL">This is not a valid URL.</string>
   <string name="home_action.label_quick.delete">Hapus</string>
   <string name="gallery_subheading_sort.by">Urutkan berdasarkan</string>
-  <string name="gallery_subheading_show">Tampilkan</string>
   <string name="gallery_list.item_newest.to.oldest">Baru ke lama</string>
   <string name="gallery_list.item_oldest.to.newest">Lama ke baru</string>
   <string name="gallery_list.item_show.all.files">Semua</string>

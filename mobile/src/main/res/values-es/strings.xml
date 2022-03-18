@@ -427,22 +427,12 @@ conectarse a un servidor</string>
     <string name="settings.gen_select_about">Acerca de y Ayuda</string>
     <string name="upload_toast_fail.finding.metadata.to.upload">Hubo un error al ubicar la información de verificación del archivo. Inténtalo de nuevo</string>
     <string name="upload_toast.fail.finding.file.to.upload">Hubo un error al localizar el archivo a subir. Por favor, inténtalo de nuevo</string>
-    <string name="gallery_app.bar">Gallery</string>
-    <string name="home_gallery.button">Gallery</string>
-    <string name="onboarding_action_create.pattern">Create pattern</string>
-    <string name="permission_dialog.expl_mic">In order to record audio, Tella needs permission to access your microphone.</string>
     <string name="home_action.expl_camera">Tap anywhere to open the camera</string>
     <string name="settings.gen_select_language">Idioma</string>
-    <string name="gallery_toast_file.imported.from.device">The file was added to your gallery</string>
     <plurals name="gallery_toast_files.deleted">
         <item quantity="one">File deleted</item>
         <item quantity="other">%1$d files deleted</item>
     </plurals>
-    <string name="permission_dialog.expl_camera.mic">In order to capture photo, video, and audio files, Tella needs access to your camera and microphone.</string>
-    <string name="permission_dialog.expl_camera">In order to take photos and videos, Tella needs permission to access your camera.</string>
-    <string name="gallery_subheading_show">Show</string>
-    <string name="gallery_list.item_show.all.files">All</string>
-    <string name="gallery_list.items_show.only.photos">Photos</string>
     <string name="gallery_list.items_show.only.videos">Videos</string>
     <string name="gallery_list.items_show.only.audio">Grabaciones de audio</string>
     <string name="home_action.desc_quick.exit">Salir</string>
@@ -455,15 +445,9 @@ conectarse a un servidor</string>
     <string name="settings.camo_weather2">Local weather</string>
     <string name="settings.camo_calculator1">Easy Math</string>
     <string name="settings.camo_weather1">Clima</string>
-    <string name="settings.docu_dialog.action_hide">Hide</string>
-    <string name="settings.docu_auto.upload.server.selection_select">Server</string>
     <string name="upload_dialog.title_select.server">Server selection</string>
     <string name="settings.docu_add.server_dialog.select_tella_web">Tella Web</string>
     <string name="settings.docu_add.server_dialog.select_tella_uwazi">Uwazi</string>
-    <string name="settings.docu_connect.to.servers_enable_action">Connect to servers</string>
-    <string name="settings.docu_connect.to.servers_enable_action.expl">Manage your connection to servers to send data.</string>
-    <string name="settings.docu_disable.servers_dialog.title">Disconnect servers</string>
-    <string name="settings.docu_connect.to.servers_disable_dialog.expl">Would you like to delete your server connections altogether, or simply hide them? Hiding will keep server information in memory so that you can easily reconnect and submit data to the servers.</string>
     <string name="collect.outbox_tab.title">Bandeja de salida</string>
     <string name="fragment_uwazi">Uwazi</string>
     <string name="Uwazi_Dowload_Temapltes_Header_Title">Descargar plantillas</string>
@@ -494,7 +478,6 @@ conectarse a un servidor</string>
     <string name="Uwazi_WidgetSubtitle_URL">URL</string>
     <string name="Uwazi_Info_NotValidURL">Esta no es una URL válida</string>
     <string name="Uwazi_Subtitle_MarkdownSupported">Compatible con Markdown</string>
-    <string name="Uwazi_Answer_LinkInitialText">https://</string>
     <string name="Uwazi_Entry_Validation_MandatoryFields">Debes rellenar los campos obligatorios</string>
     <string name="Uwazi_Entry_Validation_MandatoryTitle">Debes rellenar el título</string>
     <string name="Uwazi_Submit_Later">Enviar más tarde</string>
