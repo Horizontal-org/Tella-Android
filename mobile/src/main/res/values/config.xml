@@ -29,4 +29,5 @@
     <string name="title_activity_location_map" translatable="false">Location</string>
     <string name="signature" translatable="false">Signature</string>
     <string name="inches" translatable="false">″</string>
+    <string name="Uwazi_Answer_LinkInitialText" translatable="false">https://</string>
 </resources>

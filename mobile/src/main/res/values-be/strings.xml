@@ -23,14 +23,10 @@
   <string name="settings.docu_toast_fail.update.server">Пры спробе аднавіць налады сервера адбылася памылка. Калі ласка, паспрабуйце яшчэ раз</string>
   <string name="settings.docu_toast_fail.delete.server">Пры спробе выдаліць налады сервера адбылася памылка. Калі ласка, паспрабуйце яшчэ раз</string>
   <string name="settings.about_list.item_faq">Частыя пытанні</string>
-  <string name="gallery_app.bar">Галерэя</string>
-  <string name="home_gallery.button">Галерэя</string>
-  <string name="onboarding_action_create.pattern">Стварыць графічны код</string>
   <string name="action_ok">OK</string>
   <string name="collect.form_toast_validation.error">Прабачце, гэты ўвод дадзеных не дзейнічае!</string>
   <string name="collect.form_error_response.mandatory">Прабачце, тут патрабуецца ўвесці дадзеныя!</string>
   <string name="homescreen_heading_quick.delete">Актывізацыя рэжыму Хуткага выдалення</string>
-  <string name="permission_dialog.expl_mic">Для запісу аўдыё-файлаў забяспечце доступ да мікрафону.</string>
   <string name="settings.about_list.item_privacy.policy">Палітыка прыватнасці</string>
   <string name="recorder_toast_fail.recording">Аўдыё не было запісана, калі ласка, паспрабуйце яшчэ раз</string>
   <string name="recorder_content.desc_blinking.red.dot">ЗАПІС АЎДЫЁ.</string>
@@ -90,7 +86,6 @@
   <string name="collect.sent_dialog.expl_discard.unsent.form">Адкладзеная адпраўка формы будзе адменена.</string>
   <string name="action_discard">Адмяніць</string>
   <string name="collect.end_action_submit">Адправіць</string>
-  <string name="gallery_toast_file.imported.from.device">Мультымедыя файлы дададзены ў галерэю</string>
   <string name="gallery_toast_fail.exporting.to.device">Пры экспарце мультымедыя файлаў адбылася памылка</string>
   <string name="permission_dialog.expl_device.storage">Для экспарту мультымедыя файлаў дадатку патрабуецца дазвол на доступ да знешняга сховішча</string>
   <plurals name="gallery_toast_files.deleted">
@@ -113,14 +108,12 @@
   <string name="gallery_dialog.expl_encrypting">Ідзе шыфраванне мультымедыя файлаў …</string>
   <string name="gallery_save.to.device_dialog.progress.expl">Ідзе расшыфроўка мультымедыя файлаў …</string>
   <string name="gallery_toast_fail.import">Памылка пры адкрыцці галерэі прылады для імпарту</string>
-  <string name="permission_dialog.expl_camera.mic">Для атрымання мультымедыя файлаў дадатку патрабуецца доступ да вашай камеры і аўдыё.</string>
   <string name="gallery_toast_fail.saving.file">Памылка пры запісе мультымедыйнага файла</string>
   <string name="collect_toast_fail.attaching.file.to.form">Памылка пры далучэнні мультымедыйнага файла</string>
   <string name="collect_toast_fail.fetch.form.from.server.unknown.error">Памылка пры атрыманні формаў для запаўнення</string>
   <string name="collect_toast_fail.fetch.form.from.server.display.error">Памылка пры атрыманні формаў для запаўнення: %s</string>
   <string name="collect_toast_reason.fail.fetch.form.from.server">Ня знойдзена</string>
   <string name="gallery_heading_files.from.Tella.gallery">Галерэя Tella</string>
-  <string name="permission_dialog.expl_camera">Для папярэдняга прагляду дадатку патрабуецца доступ да вашай камеры.</string>
   <string name="settings_select_general">Агульныя</string>
   <string name="collect.form_exit_dialog.expl">Ваш чарнавік будзе страчаны.</string>
   <string name="collect.form_exit_dialog.action_save.exit">Захаваць і выйсці</string>
@@ -128,11 +121,8 @@
   <string name="settings.docu_error_not.valid.URL">Поле не з\'яўляецца дапушчальным URL-адрасам</string>
   <string name="home_action.label_quick.delete">Выдаліць</string>
   <string name="gallery_subheading_sort.by">Сартаваць па</string>
-  <string name="gallery_subheading_show">Паказаць</string>
   <string name="gallery_list.item_newest.to.oldest">Ад новых да старых</string>
   <string name="gallery_list.item_oldest.to.newest">Ад старых да новых</string>
-  <string name="gallery_list.item_show.all.files">Усе</string>
-  <string name="gallery_list.items_show.only.photos">Фота</string>
   <string name="gallery_list.items_show.only.videos">Відэа</string>
   <string name="gallery_list.items_show.only.audio">Аўдыё</string>
   <string name="action_exit">Выхад</string>
@@ -245,7 +235,6 @@
   <string name="collect_toast_fail.loading.form.instance">Памылка загрузкі формы</string>
   <string name="collect_toast_fail.connection.too.weak">Інтэрнэт-сувязь занадта слабая</string>
   <string name="gallery_toast_file.encrypted">Файл зашыфраваны</string>
-  <string name="settings.docu_dialog.action_hide">Схаваць</string>
   <string name="settings.docu_toast_disconnect.servers.delete">Формы і серверы былі выдалены</string>
   <string name="collect.help_expl_not.connected.to.server"><![CDATA[Для атрымання формаў і адпраўкі дадзеных неабходна спачатку злучыцца з серверам. Спытайце ў сваёй арганізацыі інфармацыю аб серверы і наладзьце сервер.]]></string>
   <string name="collect.help_expl_odk"><![CDATA[Калі Вы хочаце стварыць свае ўласныя формы, <a href=\"https://hzontal.org/contact/\"> звяжыцеся з намі </a> або выкарыстоўвайце <a href=\"https://opendatakit.org/help/help-for-hire/\"> любую прыладу на аснове Open Data Kit (ODK) </a>]]></string>
@@ -295,7 +284,6 @@
   <string name="verification.info_cell.towers.expl">Ідэнтыфікацыйныя нумары ўсіх станцый, да якіх падключана прылада.</string>
   <string name="verification.info_wifi.expl">Назва ўсіх сетак Wi-Fi у непасрэднай блізкасці ад прылады.</string>
   <string name="collect.blank_banner_forms.updated">Некаторыя формы былі абноўлены. Націсніце кнопку абнаўлення, каб атрымаць апошнюю версію.</string>
-  <string name="settings.docu_auto.upload.server.selection_select">Імя сервера</string>
   <string name="upload_dialog.title_select.server">Імя сервера</string>
   <string name="settings.docu_auto.upload.server.selection_dialog.expl">На які сервер вы хацелі б загрузіць файлы?</string>
   <string name="settings.serv_add.server.selection_dialog.title">Які тып сервера?</string>
@@ -304,10 +292,6 @@
   <string name="settings.docu_add.server_dialog.select_tella_uwazi">Uwazi</string>
   <string name="settings.docu_add.server_dialog.expl">Выберыце тып сервера, да якога вы хочаце падключыцца. Калі вы не ўпэўненыя, запытайце арганізацыю, якая каардынуе забеспячэнне дакументамі.</string>
   <string name="settings.docu_add.server_dialog.select_tus">Прамая загрузка</string>
-  <string name="settings.docu_connect.to.servers_enable_action">Падключэнне да сервераў</string>
-  <string name="settings.docu_connect.to.servers_enable_action.expl">Кіруйце сваім злучэннем з серверамі для адпраўкі дадзеных.</string>
-  <string name="settings.docu_disable.servers_dialog.title">Адключыць сервер(ы)</string>
-  <string name="settings.docu_connect.to.servers_disable_dialog.expl">Ці хочаце вы выдаліць злучэнні з серверам альбо проста схаваць іх? Схаванне дазволіць захаваць інфармацыю пра сервер у памяці, каб можна было лёгка злучыць і перадаваць дадзеныя на сервер (ы).</string>
   <string name="settings.docu_delete.auto.server_dialog.expl">Калі вы выдаліце гэты сервер, вашы файлы больш не будуць загружацца аўтаматычна.</string>
   <string name="play.audio_action.expl_plus15s">+15s</string>
   <string name="play.audio_action.expl_minus15s">-15s</string>

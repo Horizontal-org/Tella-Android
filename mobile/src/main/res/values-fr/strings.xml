@@ -418,21 +418,13 @@
     <string name="settings.gen_select_about">À propos et Aide</string>
     <string name="upload_toast_fail.finding.metadata.to.upload">Erreur de localisation des renseignements de vérification du fichier. Veuillez réessayer</string>
     <string name="upload_toast.fail.finding.file.to.upload">Erreur de localisation du fichier à téléverser. Veuillez réessayer</string>
-    <string name="gallery_app.bar">Galerie</string>
-    <string name="home_gallery.button">Galerie</string>
-    <string name="onboarding_action_create.pattern">Créer un schéma</string>
-    <string name="permission_dialog.expl_mic">Afin d’enregistrer du son, Tella doit avoir l’autorisation d’accéder à votre microphone.</string>
     <string name="home_action.expl_camera">Toucher n’importe où pour ouvrir l’appareil photo</string>
     <string name="settings.gen_select_language">Langue</string>
-    <string name="gallery_toast_file.imported.from.device">Le fichier a été ajouté à la galerie</string>
     <plurals name="gallery_toast_files.deleted">
         <item quantity="one" tools:ignore="ImpliedQuantity">Fichier supprimé</item>
         <item quantity="many">%1$d fichiers supprimés</item>
         <item quantity="other">%1$d fichiers supprimés</item>
     </plurals>
-    <string name="permission_dialog.expl_camera.mic">Afin de capturer des fichiers photo, vidéo et son, Tella doit avoir accès à votre appareil photo et à votre microphone.</string>
-    <string name="permission_dialog.expl_camera">Pour capturer des photos et des vidéos, Tella doit avoir l’autorisation d’accéder à votre appareil photo.</string>
-    <string name="gallery_subheading_show">Afficher</string>
     <string name="gallery_list.item_show.all.files">Tout</string>
     <string name="gallery_list.items_show.only.photos">Photo</string>
     <string name="gallery_list.items_show.only.videos">Vidéos</string>
@@ -472,7 +464,6 @@
     <string name="Uwazi_Subtitle_RemoveTemplate">Êtes-vous sûr de vouloir supprimer ce modèle de votre appareil ? </string>
     <string name="UWAZI_Language_Header_Title">Sélection de la langue</string>
     <string name="Uwazi_Language_Screen_Description">Cette collection Uwazi est disponible en plusieurs langues. Veuillez sélectionner la langue dans laquelle vous souhaitez télécharger les modèles.</string>
-    <string name="Uwazi_Send_Header_Title">End of entity</string>
     <string name="Uwazi_General_Favorite_Template_Switch_Expl">Afficher des raccourcis vers vos modèles préférés sur l\'écran d\'accueil de Tella</string>
     <string name="Uwazi_General_Favorite_Template_Switch_Title">Modèles favoris</string>
     <string name="Uwazi_Templates_Empty_Description">Vous n\'avez aucun modèle enregistré sur votre appareil. Appuyez sur le \"+\" bouton pour télécharger des modèles.</string>
@@ -495,11 +486,9 @@
     <string name="Uwazi_WidgetSubtitle_URL">URL</string>
     <string name="Uwazi_Info_NotValidURL">Ceci n\'est pas une URL valide</string>
     <string name="Uwazi_Subtitle_MarkdownSupported">Markdown pris en charge</string>
-    <string name="Uwazi_Answer_LinkInitialText">https://</string>
     <string name="Uwazi_Entry_Validation_MandatoryFields">Vous devez remplir les champs obligatoires</string>
     <string name="Uwazi_Entry_Validation_MandatoryTitle">Vous devez remplir le titre</string>
     <string name="Uwazi_Submit_Later">Soumettre plus tard</string>
-    <string name="Uwazi_Send_Entity_Title">End of entity</string>
     <string name="Uwazi_WidgetMultiDate_AddDate">Ajouter une autre date</string>
     <string name="Uwazi_WidgetMultiDate_AddDateRange">Ajouter une autre plage de dates</string>
     <string name="Uwazi_WidgetDateRange_Constraint">La deuxième date de la plage doit être postérieure à la première</string>

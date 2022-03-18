@@ -452,13 +452,8 @@
   <string name="settings.gen_select_about">عن التطبيق والمساعدة</string>
   <string name="upload_toast_fail.finding.metadata.to.upload">حدث خطأ عند تحديد معلومات التحقق من الملف. يُرجى المحاولة مرة أخرى.</string>
   <string name="upload_toast.fail.finding.file.to.upload">حدث خطأ عند تحديد الملف المطلوب تحميله. يُرجى المحاولة مرةً أخرى.</string>
-  <string name="gallery_app.bar">المعرض</string>
-  <string name="home_gallery.button">المعرض</string>
-  <string name="onboarding_action_create.pattern">إنشاء نمط</string>
-  <string name="permission_dialog.expl_mic">لتسجيل صوت، يطلب Tella الإذن للوصول إلى مكبر الصوت.</string>
   <string name="home_action.expl_camera">اضغط في أي مكان لفتح الكاميرا</string>
   <string name="settings.gen_select_language">اللغة</string>
-  <string name="gallery_toast_file.imported.from.device">تم إضافة هذا الملف إلى معرضك</string>
   <plurals name="gallery_toast_files.deleted">
     <item quantity="zero">ملف محذوف</item>
     <item quantity="one">%1$d ملف محذوف</item>
@@ -467,11 +462,6 @@
     <item quantity="many">ملف محذوف</item>
     <item quantity="other">ملف محذوف</item>
   </plurals>
-  <string name="permission_dialog.expl_camera.mic">لالتقاط الصور أو تسجيل الفيديوهات، يطلب Tella الإذن للوصول إلى الكاميرا ومكبر الصوت.</string>
-  <string name="permission_dialog.expl_camera">لالتقاط صور أو تسجيل فيديو، يطلب Tella الإذن للوصول إلى الكاميرا.</string>
-  <string name="gallery_subheading_show">إظهار</string>
-  <string name="gallery_list.item_show.all.files">الجميع</string>
-  <string name="gallery_list.items_show.only.photos">ملفات الصور</string>
   <string name="gallery_list.items_show.only.videos">ملفات الفيديو</string>
   <string name="gallery_list.items_show.only.audio">تسجيلات الصوت</string>
   <string name="home_action.desc_quick.exit">الخروج</string>
@@ -484,15 +474,9 @@
   <string name="settings.camo_weather2">الطقس المحلي</string>
   <string name="settings.camo_calculator1">الحاسبة الميسرة</string>
   <string name="settings.camo_weather1">الطقس</string>
-  <string name="settings.docu_dialog.action_hide">إخفاء</string>
-  <string name="settings.docu_auto.upload.server.selection_select">الخادم</string>
   <string name="upload_dialog.title_select.server">تحديد الخادم</string>
   <string name="settings.docu_add.server_dialog.select_tella_web">Tella Web</string>
   <string name="settings.docu_add.server_dialog.select_tella_uwazi">Uwazi</string>
-  <string name="settings.docu_connect.to.servers_enable_action">الاتصال بالخوادم</string>
-  <string name="settings.docu_connect.to.servers_enable_action.expl">إدارة اتصالاتك بالخوادم لإرسال البيانات.</string>
-  <string name="settings.docu_disable.servers_dialog.title">فصل الاتصال بالخوادم</string>
-  <string name="settings.docu_connect.to.servers_disable_dialog.expl">هل تود حذف جميع اتصالاتك بالخادم معًا، أم هل تود إخفائها؟ سوف يعمل تفعيل خاصية الإخفاء على حفظ معلومات الخادم في الذاكرة حتى تتمكن من إعادة الاتصال بالخوادم وتقديم البيانات إليها بسهولة.</string>
   <string name="settings.docu_delete.auto.server_dialog.expl">إذا حذفت هذا الخادم، لن يتم تحميل ملفاتك تلقائيًّا.</string>
   <string name="settings.docu_auto.upload_action">تحميل تلقائي</string>
   <string name="settings.docu_auto.delete_action.expl">سوف تحذف Tella الملفات تلقائيًّا من جهازك بمجرد تحميلها على الخادم.</string>
@@ -508,7 +492,6 @@
   <string name="Uwazi_Subtitle_RemoveTemplate">هل أنت متأكد من رغبتك في حذف هذا القالب من جهازك؟</string>
   <string name="UWAZI_Language_Header_Title">تحديد اللغة</string>
   <string name="Uwazi_Language_Screen_Description">تتوفر مجموعة Uwazi بالعديد من اللغات. يُرجى اختيار اللغة التي تفضل تنزيل القوالب بها.</string>
-  <string name="Uwazi_Send_Header_Title">نهاية الكيان</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Expl">أظهر الاختصارات إلى قوالبك المفضلة على شاشة Tella الرئيسية</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Title">القوالب المفضلة</string>
   <string name="Uwazi_Templates_Empty_Description">لا توجد قوالب محفوظة على جهازك. اضغط على زر \"+\" لتنزيل القوالب.</string>
@@ -530,11 +513,9 @@
   <string name="Uwazi_WidgetSubtitle_URL">عنوان URL</string>
   <string name="Uwazi_Info_NotValidURL">عنوان URL غير مدعوم</string>
   <string name="Uwazi_Subtitle_MarkdownSupported">خاصية Markdown مدعومة</string>
-  <string name="Uwazi_Answer_LinkInitialText">https://</string>
   <string name="Uwazi_Entry_Validation_MandatoryFields">يجب ملء الحقول الإلزامية</string>
   <string name="Uwazi_Entry_Validation_MandatoryTitle">يجب تكملة العنوان</string>
   <string name="Uwazi_Submit_Later">قدم في وقت لاحق</string>
-  <string name="Uwazi_Send_Entity_Title">أضف كيانًا آخر</string>
   <string name="Uwazi_WidgetMultiDate_AddDate">أضف تاريخًا آخر</string>
   <string name="Uwazi_WidgetMultiDate_AddDateRange">أضف نطاق بيانات آخر</string>
   <string name="Uwazi_WidgetDateRange_Constraint">يجب أن يكون التاريخ الثاني في النطاق المحدد بعد التاريخ الأول</string>
