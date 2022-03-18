@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.util
 
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
+import timber.log.Timber
 import java.util.*
 
 object CleanInsightUtils {
@@ -15,7 +16,7 @@ object CleanInsightUtils {
     private val cleanInsights by lazy { MyApplication.getCleanInsights() }
 
     fun measureEvent() {
-        if (Preferences.hasAcceptedImprovements()) return
+        if (!Preferences.hasAcceptedImprovements()) return
         try {
             cleanInsights?.let {
                 val isCamouflageEnabled = if (!CamouflageManager.getInstance().isDefaultLauncherActivityAlias) YES else NO
@@ -23,8 +24,9 @@ object CleanInsightUtils {
                 it.measureEvent(CATEGORY, "Opening the app", CAMPAIGN_ID)
                 it.measureEvent(CATEGORY, "Quick delete", CAMPAIGN_ID, isQuickExit)
                 it.measureEvent(CATEGORY, "Camouflage enabled", CAMPAIGN_ID, isCamouflageEnabled)
-                it.measureEvent(CATEGORY, "Language", CAMPAIGN_ID, LocaleManager.getInstance().languageSetting)
+                it.measureEvent(CATEGORY, "Language", CAMPAIGN_ID, LocaleManager.getInstance().languageSetting ?: "EN")
                 it.persist()
+                Timber.e("measureEvent")
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -32,7 +34,7 @@ object CleanInsightUtils {
     }
 
     fun measureEvent(serverType: ServerType) {
-        if (Preferences.hasAcceptedImprovements()) return
+        if (!Preferences.hasAcceptedImprovements()) return
         try {
             cleanInsights?.let {
                 it.measureEvent(CATEGORY, "Connected server", CAMPAIGN_ID, serverType.name)
@@ -44,6 +46,7 @@ object CleanInsightUtils {
     }
 
     fun measureTimeSpentEvent(start: Long) {
+        if (!Preferences.hasAcceptedImprovements()) return
         try {
             cleanInsights?.let {
                 val timeSpend = (System.currentTimeMillis() - start) / 1000
@@ -56,10 +59,10 @@ object CleanInsightUtils {
     }
 
     fun measureVisit() {
-        if (Preferences.hasAcceptedImprovements()) return
+        if (!Preferences.hasAcceptedImprovements()) return
         try {
             cleanInsights?.let {
-                it.measureVisit(Collections.singletonList("Main"), "Opening the app")
+                it.measureVisit(Collections.singletonList("Main"), CAMPAIGN_ID)
                 it.persist()
             }
         } catch (e: Exception) {
