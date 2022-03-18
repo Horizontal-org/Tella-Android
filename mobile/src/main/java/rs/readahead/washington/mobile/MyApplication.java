@@ -336,10 +336,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     }
 
     private void persistCleanInsights() {
-        if (Preferences.hasAcceptedImprovements() && cleanInsights != null) {
-            CleanInsightUtils.INSTANCE.measureTimeSpentEvent(start);
-            cleanInsights.persist();
-        }
+        if (Preferences.hasAcceptedImprovements() && cleanInsights != null) CleanInsightUtils.INSTANCE.measureTimeSpentEvent(start);
     }
 
     @Override

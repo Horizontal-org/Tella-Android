@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import android.widget.TextView
 import androidx.navigation.Navigation
-import org.cleaninsights.sdk.Consent
 import org.hzontal.shared_ui.switches.TellaSwitchWithMessage
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
@@ -51,9 +50,13 @@ class GeneralSettings : BaseFragment() {
         shareDataSwitch?.let {
             it.mSwitch.setChecked(Preferences.hasAcceptedImprovements())
             it.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
-                Preferences.setIsAcceptedImprovements(isChecked)
-                CleanInsightUtils.grantCampaign(isChecked)
-                if (isChecked) showMessageForCleanInsightsApprove()
+                try {
+                    Preferences.setIsAcceptedImprovements(isChecked)
+                    CleanInsightUtils.grantCampaign(isChecked)
+                    if (isChecked) showMessageForCleanInsightsApprove()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
             it.setTextAndAction(R.string.action_learn_more) { startCleanInsightActivity() }
         }
