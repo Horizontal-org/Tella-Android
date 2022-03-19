@@ -91,13 +91,10 @@
                     android:id="@+id/share_data_switch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
                     app:explainText="@string/settings.gen_share_data_action.expl"
                     app:titleText="@string/settings.gen_share_data_action" />
 
-                <View
-                    style="@style/SettingsMainShadowLine"
-                    android:visibility="gone" />
+                <View style="@style/SettingsMainShadowLine" />
 
                 <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
                     android:id="@+id/crash_report_switch"

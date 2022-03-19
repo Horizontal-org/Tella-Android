@@ -7,6 +7,7 @@
  */
 package org.cleaninsights.sdk
 
+import android.util.Log
 import kotlinx.coroutines.*
 import org.cleaninsights.sdk.CleanInsights.Companion.moshi
 import java.io.File
@@ -110,6 +111,7 @@ open class DefaultStore(args: Map<String, Any> = HashMap(), debug: ((message: St
         mCoroutineScope.launch {
             try {
                 val bytes = data.toByteArray(Charset.defaultCharset())
+                Log.e("CLEAN INSIGHTS","bytes size ${bytes.size}")
 
                 @Suppress("BlockingMethodInNonBlockingContext")
                 val conn = server.openConnection() as HttpURLConnection
@@ -127,23 +129,19 @@ open class DefaultStore(args: Map<String, Any> = HashMap(), debug: ((message: St
                     conn.outputStream.flush()
                 }
 
-                conn.disconnect()
+                //conn.disconnect()
 
                 if (conn.responseCode != 200 && conn.responseCode != 204) {
-                    val body: String = try {
-                        conn.responseMessage
-                    } catch (e: Exception) {
-                        "n/a"
-                    }
-
-                    done(IOException(String.format("HTTP Error %s: %s", conn.responseCode, body)))
-
+                    Log.e("SERVER URL", "HTTP Error ${conn.responseMessage}")
+                    done(IOException(String.format("HTTP Error %s: %s", conn.responseCode, conn.responseMessage)))
                     return@launch
                 }
 
                 done(null)
             }
             catch (e: Exception) {
+                Log.e("SERVER URL Exception", "${e.message}")
+                e.printStackTrace()
                 done(e)
             }
         }

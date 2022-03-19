@@ -6,7 +6,7 @@
     "campaigns": {
         "test": {
             "start": "2022-03-14 00:00:00",
-            "end": "2022-03-16 23:59:59",
+            "end": "2022-03-24 23:59:59",
             "aggregationPeriodLength": 600,
             "numberOfPeriods": 432,
             "onlyRecordOnce": false,
