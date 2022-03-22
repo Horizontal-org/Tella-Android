@@ -20,22 +20,26 @@ import rs.readahead.washington.mobile.databinding.FragmentAttachmentsSelectorBin
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.views.activity.AudioPlayActivity
+import rs.readahead.washington.mobile.views.activity.CameraActivity
 import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity
 import rs.readahead.washington.mobile.views.activity.VideoViewerActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 
+const val RETURN_ODK = "rodk"
 const val VAULT_FILE_KEY = "vfk"
 const val VAULT_FILES_FILTER = "vff"
-const val VAULT_PICKER_SINGLE =  "vps"
+const val VAULT_PICKER_SINGLE = "vps"
+
 class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.OnClickListener {
 
     private lateinit var binding: FragmentAttachmentsSelectorBinding
     private lateinit var gridLayoutManager: GridLayoutManager
-    private  val viewModel: AttachmentsSelectorViewModel by viewModels()
+    private val viewModel: AttachmentsSelectorViewModel by viewModels()
     private var currentRootID: String? = null
     private var isMultiplePicker = false
+    private var isOdkSelect = false
     private var filterType = FilterType.ALL
-    private lateinit var attachmentsAdapter : AttachmentsSelectorAdapter
+    private lateinit var attachmentsAdapter: AttachmentsSelectorAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,42 +52,50 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
     }
 
     private fun initView() {
-       intent.extras?.apply {
-            get(VAULT_FILES_FILTER)?.let {filter ->  filterType = filter as FilterType }
-            getBoolean(VAULT_PICKER_SINGLE).let {isMultiple-> isMultiplePicker = isMultiple  }
-       }
+        intent.extras?.apply {
+            get(VAULT_FILES_FILTER)?.let { filter -> filterType = filter as FilterType }
+            getBoolean(VAULT_PICKER_SINGLE).let { isMultiple -> isMultiplePicker = isMultiple }
+            getBoolean(RETURN_ODK).let { isOdk -> isOdkSelect = isOdk }
+        }
         gridLayoutManager = GridLayoutManager(this@AttachmentsActivitySelector, 1)
 
-        attachmentsAdapter =  AttachmentsSelectorAdapter(
+        attachmentsAdapter = AttachmentsSelectorAdapter(
             this@AttachmentsActivitySelector, this,
-            MediaFileHandler(), gridLayoutManager,true,isMultiplePicker
+            MediaFileHandler(), gridLayoutManager, true, isMultiplePicker
         )
-        with(binding){
+        with(binding) {
 
-           attachmentsRecyclerView.apply {
-               adapter = attachmentsAdapter
-               layoutManager = gridLayoutManager
-           }
-           toolbar.backClickListener = {handleBackStack()}
-           gridCheck.setOnClickListener(this@AttachmentsActivitySelector)
-           listCheck.setOnClickListener(this@AttachmentsActivitySelector)
-           toolbar.onRightClickListener = {setResultAndFinish()}
+            attachmentsRecyclerView.apply {
+                adapter = attachmentsAdapter
+                layoutManager = gridLayoutManager
+            }
+            toolbar.backClickListener = { handleBackStack() }
+            gridCheck.setOnClickListener(this@AttachmentsActivitySelector)
+            listCheck.setOnClickListener(this@AttachmentsActivitySelector)
+            toolbar.onRightClickListener = { setResultAndFinish() }
 
-       }
+        }
         updateAttachmentsToolbar(attachmentsAdapter.selectedMediaFiles.size)
     }
 
-    private fun initObservers(){
-        with(viewModel){
-            rootVaultFile.observe(this@AttachmentsActivitySelector,{ vaultFile->
+    private fun initObservers() {
+        with(viewModel) {
+            rootVaultFile.observe(this@AttachmentsActivitySelector, { vaultFile ->
                 vaultFile?.let { root ->
                     currentRootID = root.id
-                    getFiles(root.id,filterType,null)
-                    binding.breadcrumbsView.addItem(BreadcrumbItem.createSimpleItem(Item("", vaultFile.id)))
+                    getFiles(root.id, filterType, null)
+                    binding.breadcrumbsView.addItem(
+                        BreadcrumbItem.createSimpleItem(
+                            Item(
+                                "",
+                                vaultFile.id
+                            )
+                        )
+                    )
                 }
             })
 
-            vaultFiles.observe(this@AttachmentsActivitySelector,{files->
+            vaultFiles.observe(this@AttachmentsActivitySelector, { files ->
                 if (files.isEmpty()) {
                     binding.attachmentsRecyclerView.visibility = View.GONE
                     binding.emptyViewMsgContainer.visibility = View.VISIBLE
@@ -94,8 +106,8 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                 attachmentsAdapter.setFiles(files)
             })
 
-            selectVaultFiles.observe(this@AttachmentsActivitySelector,{ listFiles->
-                if (!listFiles.isNullOrEmpty()){
+            selectVaultFiles.observe(this@AttachmentsActivitySelector, { listFiles ->
+                if (!listFiles.isNullOrEmpty()) {
                     attachmentsAdapter.selectedMediaFiles = listFiles
                     updateAttachmentsToolbar(attachmentsAdapter.selectedMediaFiles.size)
                 }
@@ -104,12 +116,14 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
     }
 
     override fun playMedia(vaultFile: VaultFile?) {
-        if (vaultFile == null) {return}
+        if (vaultFile == null) {
+            return
+        }
 
         when (vaultFile.type) {
             VaultFile.Type.DIRECTORY -> {
-                    attachmentsAdapter.clearSelected()
-                    openDirectory(vaultFile)
+                attachmentsAdapter.clearSelected()
+                openDirectory(vaultFile)
             }
             VaultFile.Type.FILE -> {
                 if (vaultFile.mimeType != null) {
@@ -148,12 +162,13 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
         }
     }
 
-    private fun updateAttachmentsToolbar(itemsSize : Int) {
+    private fun updateAttachmentsToolbar(itemsSize: Int) {
         if (itemsSize == 0) {
             binding.toolbar.setStartTextTitle(getString(R.string.Vault_Select_Title))
             binding.toolbar.setRightIcon(-1)
         } else {
-            binding.toolbar.setStartTextTitle(attachmentsAdapter.selectedMediaFiles.size.toString() + " "+getString(R.string.Vault_Items))
+            binding.toolbar.setStartTextTitle(
+                attachmentsAdapter.selectedMediaFiles.size.toString() + " " + getString( R.string.Vault_Items ) )
             binding.toolbar.setRightIcon(R.drawable.ic_check_white)
         }
     }
@@ -176,7 +191,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                 gridLayoutManager.spanCount = 4
                 attachmentsAdapter.setLayoutManager(gridLayoutManager)
                 attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
-                binding.attachmentsRecyclerView.setMargins(leftMarginDp = 13,rightMarginDp = 13)
+                binding.attachmentsRecyclerView.setMargins(leftMarginDp = 13, rightMarginDp = 13)
             }
             R.id.listCheck -> {
                 binding.gridCheck.toggleVisibility(true)
@@ -184,18 +199,18 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                 gridLayoutManager.spanCount = 1
                 attachmentsAdapter.setLayoutManager(gridLayoutManager)
                 attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
-                binding.attachmentsRecyclerView.setMargins(leftMarginDp = 0,rightMarginDp = 0)
+                binding.attachmentsRecyclerView.setMargins(leftMarginDp = 0, rightMarginDp = 0)
             }
         }
     }
 
 
     private fun openDirectory(vaultFile: VaultFile) {
-       if (currentRootID != vaultFile.id) {
+        if (currentRootID != vaultFile.id) {
             currentRootID = vaultFile.id
-           viewModel.getFiles(currentRootID, filterType, null)
+            viewModel.getFiles(currentRootID, filterType, null)
             binding.breadcrumbsView.visibility = View.VISIBLE
-           binding.breadcrumbsView.addItem(createItem(vaultFile))
+            binding.breadcrumbsView.addItem(createItem(vaultFile))
         }
     }
 
@@ -224,10 +239,23 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
     }
 
     private fun setResultAndFinish() {
-        setResult(
-            Activity.RESULT_OK,
-            Intent().putExtra(VAULT_FILE_KEY, Gson().toJson(attachmentsAdapter.selectedMediaFiles.map { it.id }))
-        )
+        if (isOdkSelect) {
+            setResult(
+                RESULT_OK,
+                Intent().putExtra(
+                    CameraActivity.MEDIA_FILE_KEY,
+                    attachmentsAdapter.selectedMediaFiles[0]
+                )
+            )
+        } else {
+            setResult(
+                Activity.RESULT_OK,
+                Intent().putExtra(
+                    VAULT_FILE_KEY,
+                    Gson().toJson(attachmentsAdapter.selectedMediaFiles.map { it.id })
+                )
+            )
+        }
         finish()
     }
 
@@ -236,14 +264,14 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
         if (!intent.hasExtra(VAULT_FILE_KEY)) {
             return
         }
-         intent.getStringExtra(VAULT_FILE_KEY)?.let { files ->
-             val type = object : TypeToken<Array<String>>() {}.type
-             val listFiles = Gson().fromJson(files, type) as Array<String>? ?: emptyArray()
+        intent.getStringExtra(VAULT_FILE_KEY)?.let { files ->
+            val type = object : TypeToken<Array<String>>() {}.type
+            val listFiles = Gson().fromJson(files, type) as Array<String>? ?: emptyArray()
 
-             if (!listFiles.isNullOrEmpty()){
-                 viewModel.getFiles(listFiles)
-             }
-         }
+            if (!listFiles.isNullOrEmpty()) {
+                viewModel.getFiles(listFiles)
+            }
+        }
     }
 
     private fun handleBackStack() {
@@ -253,8 +281,9 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                     binding.breadcrumbsView.visibility = View.GONE
                 }
                 binding.breadcrumbsView.removeLastItem()
-                currentRootID = binding.breadcrumbsView.getCurrentItem<BreadcrumbItem>().selectedItem.id
-                viewModel.getFiles(currentRootID,filterType,null)
+                currentRootID =
+                    binding.breadcrumbsView.getCurrentItem<BreadcrumbItem>().selectedItem.id
+                viewModel.getFiles(currentRootID, filterType, null)
             }
             else -> {
                 finish()

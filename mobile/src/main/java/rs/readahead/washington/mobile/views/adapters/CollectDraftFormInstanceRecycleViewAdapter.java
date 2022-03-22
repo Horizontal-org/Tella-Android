@@ -15,7 +15,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.bus.event.ShowFormInstanceEntryEvent;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.views.interfaces.ISavedFormsInterface;
@@ -41,6 +43,7 @@ public class CollectDraftFormInstanceRecycleViewAdapter extends RecyclerView.Ada
         final CollectFormInstance instance = instances.get(position);
         final Context context = holder.name.getContext();
 
+        holder.instanceRow.setOnClickListener(v -> MyApplication.bus().post(new ShowFormInstanceEntryEvent(instance.getId())));
         holder.name.setText(instance.getInstanceName());
         holder.organization.setText(instance.getServerName());
         holder.updated.setText(String.format(context.getString(R.string.collect_draft_meta_date_updated),

@@ -36,7 +36,7 @@ public class DialogsUtil {
 
     static void showMessageOKCancel(Context context, String message, DialogInterface.OnClickListener okListener) {
         AlertDialog.Builder builder =
-                new AlertDialog.Builder(context);
+                new AlertDialog.Builder(context, R.style.PurpleBackgroundLightLettersDialogTheme);
         builder.setMessage(message);
         builder.setPositiveButton(R.string.action_ok, okListener);
         builder.setNegativeButton(R.string.action_cancel, null);
@@ -46,7 +46,7 @@ public class DialogsUtil {
 
     public static AlertDialog showMessageOKCancelWithTitle(Context context, String message, String title, String positiveButton, String negativeButton,
                                                            DialogInterface.OnClickListener okListener, DialogInterface.OnClickListener cancelListener) {
-        return new AlertDialog.Builder(context)
+        return new AlertDialog.Builder(context, R.style.PurpleBackgroundLightLettersDialogTheme)
                 .setMessage(message)
                 .setTitle(title)
                 .setPositiveButton(positiveButton, okListener)
@@ -74,7 +74,7 @@ public class DialogsUtil {
             String negativeButton,
             DialogInterface.OnClickListener okListener,
             DialogInterface.OnClickListener cancelListener) {
-        return new AlertDialog.Builder(context)
+        return new AlertDialog.Builder(context, R.style.PurpleBackgroundLightLettersDialogTheme)
                 .setMessage(message)
                 .setPositiveButton(positiveButton, okListener)
                 .setNegativeButton(negativeButton, cancelListener)
@@ -83,7 +83,7 @@ public class DialogsUtil {
     }
 
     public static ProgressDialog showLightProgressDialog(Context context, String text) {
-        ProgressDialog dialog = new ProgressDialog(context, R.style.BrightBackgroundDarkLettersDialogTheme);
+        ProgressDialog dialog = new ProgressDialog(context, R.style.PurpleBackgroundLightLettersDialogTheme);
         dialog.setIndeterminate(true);
         dialog.setMessage(text);
         dialog.setCancelable(true);
@@ -92,7 +92,7 @@ public class DialogsUtil {
     }
 
     public static ProgressDialog showProgressDialog(Context context, String text) {
-        ProgressDialog dialog = new ProgressDialog(context);
+        ProgressDialog dialog = new ProgressDialog(context, R.style.PurpleBackgroundLightLettersDialogTheme);
         dialog.setIndeterminate(true);
         dialog.setMessage(text);
         dialog.setCancelable(true);
@@ -101,7 +101,7 @@ public class DialogsUtil {
     }
 
     public static AlertDialog showMetadataSwitchDialog(final Context context, final CameraPreviewAnonymousButton metadataCameraButton) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.BrightBackgroundDarkLettersDialogTheme);
         LayoutInflater inflater = LayoutInflater.from(context);
 
         @SuppressLint("InflateParams")
@@ -263,7 +263,7 @@ public class DialogsUtil {
             msgResId = R.string.collect_dialog_text_delete_draft_form;
         }
 
-        return new AlertDialog.Builder(context)
+        return new AlertDialog.Builder(context, R.style.PurpleBackgroundLightLettersDialogTheme)
                 .setMessage(msgResId)
                 .setPositiveButton(R.string.action_delete, listener)
                 .setNegativeButton(R.string.action_cancel, (dialog, which) -> {

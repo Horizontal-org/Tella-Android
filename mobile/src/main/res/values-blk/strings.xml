@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="settings.servers_remove.camouflage.method">ိုလာိဆုျ လာ နေဆါ်</string>
+  <string name="Vault_Encrypting_Cancel_SheetText">အေမာ ကု်ဆု်အို၀် ၀ု်ု်ဖိုင်မု် လင်မာ ခွိက် လုက်ဆိင်းဆါ်။</string>
+  <string name="Vault_Encrypting_Cancel_SheetAction_Delete">မါပြင်ထါင် ဖု်ဆါ်</string>
+  <string name="SettingSec_ChangeLock_WarningCalc_SheetTitle">ဆေ၀်လာအေဟှေ၀်ဆါ်။</string>
+  <string name="SettingSec_ChangeLock_WarningCalc_SheetText">စောမန်းသူအောင်</string>
+  <string name="SettingSec_ChangeLock_WarningCalc_SheetAction_Remove">ိုလာိဆုျ လာ နေဆါ်</string>
+  <string name="SettingsCamo_EnterLock_Password">ဖှေ်လင်းလာၕ  ဖဆာ်</string>
+</resources>

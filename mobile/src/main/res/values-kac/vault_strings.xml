@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="Vault_AllFiles_Title">Lamang nhtan (File) ni yawng</string>
+  <string name="Vault_Images_Title">Sumla ni</string>
+  <string name="Vault_Files_Title">Tella  lamang nhtan (file) ni</string>
+  <string name="Vault_Documents_Title">Matsing ningtig laika ni</string>
+  <string name="Vault_Audios_Title">Nsen</string>
+  <string name="Vault_Videos_Title">Sumla hkrung ni</string>
+  <string name="Vault_Others_Title">Kaga ni</string>
+  <string name="Vault_Select_Title">Lamang nhtan (file) ni hpe lata san u</string>
+  <string name="Vault_RecentFiles">Ndai laman na lamang nhtan (file) ni</string>
+  <string name="Vault_PhotosAndVideos_Title">Dat sumla ni hte sumla hkrung ni</string>
+  <string name="Vault_FavoriteForms_Title">Ra dik hkrang laika ni</string>
+  <string name="Vault_Empty_Msg">Ndai laika nhtan (folder) gaw gaman re. Lamang nhtan (file) langai, shing n rai, laika nhtan (folder) langai hpe shalat shapraw lu na matu, lawu na dai + hkalap (button) ahtawk u.</string>
+  <string name="Vault_Move_SheetDesc">Kaga laika nhtan (folder) de htawt sit u</string>
+  <string name="Vault_Rename_SheetAction">Mying bai shamying u</string>
+  <string name="Vault_Save_SheetAction">Matsing bang da u</string>
+  <string name="Vault_Delete_SheetAction">Shaprai hkau u</string>
+  <string name="Vault_Share_SheetAction">Garan u</string>
+  <string name="Vault_Upload_SheetAction">Lamang shagun jaw u</string>
+  <string name="Vault_File_SheetAction">Lamang nhtan (file) shiga lami lamang</string>
+  <string name="Vault_FileInfo">Lamang nhtan (file) shiga lami lamang</string>
+  <string name="Vault_FileSize">Hkrang shadang</string>
+  <string name="Vault_FileFormat">Hkrang kasi</string>
+  <string name="Vault_FileCreated">Shalat shapraw da sai</string>
+  <string name="Vault_FileResolution">Dan leng atsam</string>
+  <string name="Vault_FileLength">Aten ladaw</string>
+  <string name="Vault_FilePath">Lam mahkrun</string>
+  <string name="Vault_RenameFile_SheetTitle">Lamang nhtan (file) hpe mying bai shamying u</string>
+  <plurals name="Vault_DeleteFile_SheetTitle">
+    <item quantity="zero">Lamang nhtan (file) hpe shaprai kau na kun?</item>
+    <item quantity="one">Lamang nhtan (file) hpe shaprai kau na kun?</item>
+    <item quantity="two">Lamang nhtan (files) ni hpe shaprai kau na kun?</item>
+    <item quantity="few">Lamang nhtan (files) ni hpe shaprai kau na kun?</item>
+    <item quantity="many">Lamang nhtan (files) ni hpe shaprai kau na kun?</item>
+    <item quantity="other">Lamang nhtan (files) ni hpe shaprai kau na kun?</item>
+  </plurals>
+  <plurals name="Vault_deleteFile_SheetDesc">
+    <item quantity="zero">Lata san da ai lamang nhtan (file) hpe Tella kaw nna tut nawng shaprai kau na re.</item>
+    <item quantity="one">Lata san da ai lamang nhtan (file) hpe Tella kaw nna tut nawng shaprai kau na re.</item>
+    <item quantity="two">Lata san da ai lamang nhtan (files) ni hpe Tella kaw nna tut nawng shaprai kau na re.</item>
+    <item quantity="few">Lata san da ai lamang nhtan (files) ni hpe Tella kaw nna tut nawng shaprai kau na re.</item>
+    <item quantity="many">Lata san da ai lamang nhtan (files) ni hpe Tella kaw nna tut nawng shaprai kau na re.</item>
+    <item quantity="other">Lata san da ai lamang nhtan (files) ni hpe Tella kaw nna tut nawng shaprai kau na re.</item>
+  </plurals>
+  <string name="Vault_SortNameAsc_SheetAction">Mying A kaw nna Z du hkra</string>
+  <string name="Vault_SortNameDesc_SheetAction">Mying Z kaw nna A du hkra</string>
+  <string name="Vault_SortDateAsc_SheetAction">Ningnan dik htum kaw nna dingsa dik htum de</string>
+  <string name="Vault_SortDateDesc_SheetAction">Dingsa dik htum kaw nna ningnan dik htum de</string>
+  <string name="Vault_ManageFiles_SheetTitle">Lamang nhtan (file) ni hpe hparan lajang u</string>
+  <string name="Vault_DeleteFile_SheetDesc">Lamang nhtan (file) hpe Tella hta htawt la ngut ai hpang, madung lamang nhtan hpe na a jak kaw na shaprai kau na re. Ngam nga ai kanan hkrai sha Tella hta ngam taw ai kanan rai na re.</string>
+  <string name="Vault_TakePhotoVideo_SheetAction">Dat sumla/sumla hkrung dem u</string>
+  <string name="Vault_RecordAudio_SheetAction">Nsen rim u</string>
+  <string name="Vault_Import_SheetAction">Jak kaw na htawt la u</string>
+  <string name="Vault_ImportDelete_SheetAction">Madung lamang nhtan hpe htawt la nna, shaprai kau u</string>
+  <string name="Vault_CreateFolder_SheetTitle">Laika nhtan (folder) ningnan langai hpe shalat shapraw u</string>
+  <string name="Vault_MoveHere">Ndai kaw htawt sit u</string>
+  <string name="Vault_ViewerOther_SheetDesc">Ndai lamang nhtan (file) hkrang hpe Tella hta n mai hpaw ai. Kaga bungli lamang (app) langai hte dai hpe hpaw na matu, lamang nhtan hpe na a jak kata hta matsing bang da mayu ai kun? Ndai gaw lamang nhtan hte seng ai malawm ni hpe shabrawng kau ya mai nga ai.</string>
+  <string name="Vault_Export_SheetAction">Jak rai kata hta e matsing bang da u</string>
+  <plurals name="Vault_Items">
+    <item quantity="zero">Mahkyen lamang</item>
+    <item quantity="one">Mahkyen lamang</item>
+    <item quantity="two">Mahkyen lamang ni</item>
+    <item quantity="few">Mahkyen lamang ni</item>
+    <item quantity="many">Mahkyen lamang ni</item>
+    <item quantity="other">Mahkyen lamang ni</item>
+  </plurals>
+</resources>

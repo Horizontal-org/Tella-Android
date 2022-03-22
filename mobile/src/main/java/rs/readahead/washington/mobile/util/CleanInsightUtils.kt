@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.util
 
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
+import timber.log.Timber
 import java.util.*
 
 object CleanInsightUtils {
