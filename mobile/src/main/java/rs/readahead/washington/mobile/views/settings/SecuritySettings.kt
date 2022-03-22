@@ -106,9 +106,9 @@ class SecuritySettings : BaseFragment() {
 
         val silentCameraTellaSwitch =
             view.findViewById<TellaSwitchWithMessage>(R.id.camera_silent_switch)
-        silentCameraTellaSwitch.mSwitch.setChecked(!Preferences.isShutterMute())
+        silentCameraTellaSwitch.mSwitch.setChecked(Preferences.isShutterMute())
         silentCameraTellaSwitch.mSwitch.setOnCheckedChangeListener({ buttonView: CompoundButton?, isChecked: Boolean ->
-            Preferences.setShutterMute(!isChecked)
+            Preferences.setShutterMute(isChecked)
         })
 
         /*val bypassCensorshipTellaSwitch =
