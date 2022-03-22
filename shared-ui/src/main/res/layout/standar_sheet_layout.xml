@@ -10,36 +10,25 @@
 
     <TextView
         android:id="@+id/standard_sheet_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Test "
-        android:textFontWeight="700"
-        android:textStyle="bold"
-        android:textColor="@color/wa_white"
-        android:fontFamily="@font/open_sans"
+        style="@style/Tella_Main_White_Text.MeduimbBold"
         android:textSize="16sp"
         />
 
     <TextView
         android:id="@+id/standard_sheet_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/standard_sheet_title"
         tools:text="TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest "
         android:layout_marginTop="10dp"
-        android:textColor="@color/wa_white"
-        android:fontFamily="@font/open_sans"
-        android:textSize="14sp"
+        style="@style/Tella_Main_White_Text.Meduim"
         />
 
 
     <TextView
         android:id="@+id/standard_sheet_cancel_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         app:layout_constraintEnd_toStartOf="@id/standard_sheet_confirm_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/standard_sheet_content"
@@ -52,8 +41,6 @@
 
     <TextView
         android:id="@+id/standard_sheet_confirm_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/standard_sheet_content"
