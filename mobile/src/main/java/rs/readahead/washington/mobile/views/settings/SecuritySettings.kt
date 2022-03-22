@@ -111,12 +111,12 @@ class SecuritySettings : BaseFragment() {
             Preferences.setShutterMute(!isChecked)
         })
 
-        val bypassCensorshipTellaSwitch =
+        /*val bypassCensorshipTellaSwitch =
             view.findViewById<TellaSwitchWithMessage>(R.id.bypass_censorship_switch)
         bypassCensorshipTellaSwitch.mSwitch.setChecked(Preferences.isBypassCensorship())
         bypassCensorshipTellaSwitch.mSwitch.setOnCheckedChangeListener({ buttonView: CompoundButton?, isChecked: Boolean ->
             Preferences.setBypassCensorship(isChecked)
-        })
+        })*/
 
         val vaultTooltip = view.findViewById<ImageView>(R.id.delete_vault_tooltip)
         vaultTooltip.setOnClickListener({
