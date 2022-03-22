@@ -398,7 +398,7 @@
   <string name="Home_BottomNav_Forms">Formulaires</string>
   <string name="Home_BottomNav_Reports">Rapports</string>
   <string name="Vault_Move_AppBar">Déplacez \"%s\"</string>
-  <string name="Vault_CreateFolder_SheetAction">Créer</string>
+  <string name="Vault_CreateFolder_SheetAction">Créer un nouveau dossier</string>
   <string name="ServerSettings_ServerName_ToolTip">Donnez un nom à votre serveur pour le reconnaître si vous ajoutez d\'autres serveurs par la suite. Il peut s\'agir du nom de l\'organisation, du nom du projet, etc.</string>
   <plurals name="Vault_Importing_SheetProgress">
     <item quantity="one">%s fichier importé</item>
