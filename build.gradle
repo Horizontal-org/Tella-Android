@@ -6,8 +6,6 @@ buildscript {
     ext{
         kotlin_version = '1.6.0'
         retrofitVersion = '2.6.1'
-        hilt_android_version = '2.39.1'
-        hilt_version = '1.0.0-alpha03'
     }
     repositories {
         mavenCentral()
