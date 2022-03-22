@@ -2,7 +2,6 @@ package rs.readahead.washington.mobile.util
 
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
-import timber.log.Timber
 import java.util.*
 
 object CleanInsightUtils {
@@ -26,7 +25,6 @@ object CleanInsightUtils {
                 it.measureEvent(CATEGORY, "Camouflage enabled", CAMPAIGN_ID, isCamouflageEnabled)
                 it.measureEvent(CATEGORY, "Language", CAMPAIGN_ID, LocaleManager.getInstance().languageSetting ?: "EN")
                 it.persistAndSend()
-                Timber.e("measureEvent")
             }
         } catch (e: Exception) {
             e.printStackTrace()

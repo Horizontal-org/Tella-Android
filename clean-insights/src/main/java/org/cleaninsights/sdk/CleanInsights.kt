@@ -9,8 +9,6 @@ package org.cleaninsights.sdk
 
 import android.util.Log
 import com.google.gson.Gson
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.io.File
@@ -27,21 +25,8 @@ import kotlin.math.pow
 open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfiguration, private val store: Store) {
 
     companion object {
-        val moshi: Moshi by lazy {
-            Moshi.Builder()
-                .add(UrlAdapter())
-                .add(FeatureConsentsJsonAdapter())
-                .add(CampaignConsentsJsonAdapter())
-                .add(VisitListJsonAdapter())
-                .add(EventListJsonAdapter())
-                .add(InsightsJsonAdapter())
-                .add(DateAdapter())
-                .addLast(KotlinJsonAdapterFactory())
-                .build()
-        }
-
         private fun deserialize(jsonConfiguration: String): CleanInsightsConfiguration {
-            val conf = moshi.adapter(CleanInsightsConfiguration::class.java).fromJson(jsonConfiguration)
+            val conf = Gson().fromJson(jsonConfiguration, CleanInsightsConfiguration::class.java)
 
             if (conf != null) {
                 return conf
@@ -61,8 +46,6 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
         private set
 
     private var persistenceCounter = 0
-
-    private var sending = false
 
     private var failedSubmissionCount = 0
     private var lastFailedSubmission = Date(0)
@@ -146,8 +129,6 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
                 }
             }
         }
-
-        persistAndSend()
     }
 
     /**
@@ -162,31 +143,23 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
     @JvmOverloads
     fun measureEvent(category: String, action: String, campaignId: String, name: String? = null, value: Double? = null) {
         val campaign = getCampaignIfGood(campaignId, "$category/$action")
-
         if (campaign != null) {
             var event = getAndMeasure(store.events, campaignId, campaign) { it.category == category && it.action == action && it.name == name }
-
             if (event != null) {
                 campaign.apply(value, event)
-
                 debug("Gain event insight: %s", event)
             } else {
                 // Align first and last timestamps with campaign measurement period,
                 // in order not to accidentally leak more information than promised.
                 val period = campaign.currentMeasurementPeriod
-
                 if (period != null) {
                     event = Event(category, action, name, value, campaignId, period)
                     store.events.add(event)
-
-                    debug("Gain event insight: %s", event)
                 } else {
                     debug("campaign.currentMeasurementPeriod == null! This should not happen!")
                 }
             }
         }
-
-        persistAndSend()
     }
 
     val featureConsentSize: Int
@@ -217,17 +190,13 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
 
     fun grant(feature: Feature): FeatureConsent {
         val consent = store.consents.grant(feature)
-
         persistAndSend()
-
         return consent
     }
 
     fun deny(feature: Feature): FeatureConsent {
         val consent = store.consents.deny(feature)
-
         persistAndSend()
-
         return consent
     }
 
@@ -257,21 +226,15 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
 
     fun grant(campaignId: String): CampaignConsent? {
         val campaign = conf.campaigns[campaignId] ?: return null
-
         val consent = store.consents.grant(campaignId, campaign)
-
         persistAndSend()
-
         return consent
     }
 
     fun deny(campaignId: String): CampaignConsent? {
         if (conf.campaigns[campaignId] == null) return null
-
         val consent = store.consents.deny(campaignId)
-
         persistAndSend()
-
         return consent
     }
 
@@ -529,10 +492,6 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
     fun persistAndSend() {
         persist(true)
 
-        if (sending) return
-
-        sending = true
-
         if (failedSubmissionCount > 0) {
             // Calculate a delay for the next retry:
             // Minimum is 2 times the configured network timeout after the first failure,
@@ -541,21 +500,13 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
             val exp = Date(lastFailedSubmission.time + ((conf.timeout * 2.0.pow(failedSubmissionCount.toDouble())).toLong()))
             val tru = Date(lastFailedSubmission.time + (conf.maxRetryDelay.toLong()))
             val retryAllowedAt = if (exp.before(tru)) exp else tru
-
-            if (Date().before(retryAllowedAt)) {
-                sending = false
-
-                return
-            }
+            if (Date().before(retryAllowedAt)) return
         }
 
         val insights = Insights(conf, store)
         insights.events.addAll(store.events)
         insights.visits.addAll(store.visits)
-        if (insights.isEmpty) {
-            sending = false
-            return
-        }
+        if (insights.isEmpty) return
 
         val done = { e: Exception? ->
             if (e != null) {
@@ -569,33 +520,19 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
                 insights.clean(store)
                 persist(async = true, force = true)
             }
-            sending = false
         }
 
         val body: String
         try {
             val arrayEvents = ArrayList<EventJson>()
             val arrayVisits = ArrayList<VisitJson>()
-            insights.visits.forEach { arrayVisits.add(VisitJson(it.scenePath, it.campaignId, it.times, it.first.time.toInt(), it.last.time.toInt())) }
+            insights.visits.forEach { arrayVisits.add(VisitJson(it.scenePath, it.campaignId, it.times, it.first.time, it.last.time)) }
             insights.events.forEach {
-                arrayEvents.add(
-                    EventJson(
-                        it.category,
-                        it.action,
-                        it.name,
-                        it.value,
-                        it.campaignId,
-                        it.times,
-                        it.first.time.toInt(),
-                        it.last.time.toInt()
-                    )
-                )
+                arrayEvents.add(EventJson(it.category, it.action, it.name, it.value, it.campaignId, it.times, it.first.time, it.last.time))
             }
             val insightsJson = InsightsJson(insights.idsite, insights.lang, insights.ua, arrayVisits, arrayEvents)
             body = Gson().toJson(insightsJson)
-            val bodyNo = moshi.adapter(InsightsJson::class.java).toJson(insightsJson)
             Log.e("CLEAN INSIGHTS", "try body :: $body")
-            Log.e("CLEAN INSIGHTS", "try bodyNo :: $bodyNo")
         } catch (e: Exception) {
             done(e)
             return
@@ -604,17 +541,17 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
         store.send(body, conf.server, conf.timeout, done)
     }
 
-    data class InsightsJson(val idSite: Int, val lang: String?, val ua: String?, val visits: ArrayList<VisitJson>, val events: ArrayList<EventJson>)
-    data class VisitJson(val scenePath: List<String>, val campaignId: String, val times: Int = 1, val first: Int, val last: Int)
+    data class InsightsJson(val idsite: Int, val lang: String?, val ua: String?, val visits: ArrayList<VisitJson>, val events: ArrayList<EventJson>)
+    data class VisitJson(val scenePath: List<String>, val campaign_id: String, val times: Int = 1, val period_start: Long, val period_end: Long)
     data class EventJson(
         val category: String,
         val action: String,
         val name: String?,
         val value: Double?,
-        val campaignId: String,
+        val campaign_id: String,
         val times: Int = 1,
-        val first: Int,
-        val last: Int
+        val period_start: Long,
+        val period_end: Long
     )
 
     private fun getCampaignIfGood(campaignId: String, debugString: String): Campaign? {

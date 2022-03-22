@@ -1,12 +1,12 @@
 {
-    "server": "https://analytics.wearehorizontal.org/matomo.php",
+    "server": "https://analytics.wearehorizontal.org/ci/cleaninsights.php",
     "siteId": 2,
     "timeout": 5,
     "debug": true,
     "campaigns": {
         "test": {
-            "start": "2022-03-14 00:00:00",
-            "end": "2022-03-24 23:59:59",
+            "start": "2022-03-22 00:00:00",
+            "end": "2022-03-27 23:59:59",
             "aggregationPeriodLength": 600,
             "numberOfPeriods": 432,
             "onlyRecordOnce": false,

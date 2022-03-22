@@ -9,16 +9,9 @@
 
 package org.cleaninsights.sdk
 
-import com.squareup.moshi.Json
 import java.util.*
 
-enum class Feature {
-    @Json(name = "lang")
-    Lang,
-
-    @Json(name = "ua")
-    Ua
-}
+enum class Feature { Lang, Ua }
 
 open class Consent(val granted: Boolean, val start: Date = Date(), val end: Date = Date()) {
 

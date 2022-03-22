@@ -8,8 +8,8 @@
 package org.cleaninsights.sdk
 
 import android.util.Log
+import com.google.gson.Gson
 import kotlinx.coroutines.*
-import org.cleaninsights.sdk.CleanInsights.Companion.moshi
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -28,7 +28,7 @@ import java.nio.charset.Charset
  * @param debug
  *      Optional function to output debug messages.
  */
-open class DefaultStore(args: Map<String, Any> = HashMap(), debug: ((message: String) -> Unit) = fun(_){}) : Store(addStorageFile(args), debug) {
+open class DefaultStore(args: Map<String, Any> = HashMap(), debug: ((message: String) -> Unit) = fun(_) {}) : Store(addStorageFile(args), debug) {
 
     companion object {
         private const val storageFilename = "cleaninsights.json"
@@ -66,14 +66,11 @@ open class DefaultStore(args: Map<String, Any> = HashMap(), debug: ((message: St
 
     override fun load(args: Map<String, Any>): Store? {
         val storageFile = getStorageFile(args) ?: return null
-
         if (storageFile.canRead()) {
             val json = storageFile.readText()
-
             try {
-                return moshi.adapter(DefaultStore::class.java).fromJson(json)
-            }
-            catch (e: Exception) {
+                return Gson().fromJson(json , DefaultStore::class.java)
+            } catch (e: Exception) {
                 tryCast<(String?) -> Unit>(args["debug"]) {
                     this(e.localizedMessage)
                 }
@@ -86,13 +83,10 @@ open class DefaultStore(args: Map<String, Any> = HashMap(), debug: ((message: St
     override fun persist(async: Boolean, done: (e: Exception?) -> Unit) {
         val work = {
             try {
-                val json = moshi.adapter(DefaultStore::class.java).toJson(this)
-
+                val json = Gson().toJson(this)
                 storageFile?.writeText(json)
-
                 done(null)
-            }
-            catch (e: Exception) {
+            } catch (e: Exception) {
                 done(e)
             }
         }
@@ -101,8 +95,7 @@ open class DefaultStore(args: Map<String, Any> = HashMap(), debug: ((message: St
             mCoroutineScope.launch {
                 work()
             }
-        }
-        else {
+        } else {
             work()
         }
     }
@@ -111,7 +104,7 @@ open class DefaultStore(args: Map<String, Any> = HashMap(), debug: ((message: St
         mCoroutineScope.launch {
             try {
                 val bytes = data.toByteArray(Charset.defaultCharset())
-                Log.e("CLEAN INSIGHTS","bytes size ${bytes.size}")
+                Log.e("CLEAN INSIGHTS", "bytes size ${bytes.size} , URL $server")
 
                 @Suppress("BlockingMethodInNonBlockingContext")
                 val conn = server.openConnection() as HttpURLConnection
@@ -129,17 +122,14 @@ open class DefaultStore(args: Map<String, Any> = HashMap(), debug: ((message: St
                     conn.outputStream.flush()
                 }
 
-                //conn.disconnect()
-
+                Log.e("SERVER URL", "HTTP responseCode ${conn.responseCode}")
                 if (conn.responseCode != 200 && conn.responseCode != 204) {
-                    Log.e("SERVER URL", "HTTP Error ${conn.responseMessage}")
                     done(IOException(String.format("HTTP Error %s: %s", conn.responseCode, conn.responseMessage)))
                     return@launch
                 }
 
                 done(null)
-            }
-            catch (e: Exception) {
+            } catch (e: Exception) {
                 Log.e("SERVER URL Exception", "${e.message}")
                 e.printStackTrace()
                 done(e)
