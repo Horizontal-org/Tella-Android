@@ -2,7 +2,7 @@ package rs.readahead.washington.mobile.views.fragment.uwazi.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
+import android.graphics.PorterDuff;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.Selection;
@@ -36,9 +36,9 @@ public class UwaziNumericWidget extends UwaziQuestionWidget {
 
         answer = new EditText(context);
         answer.setTextColor(getResources().getColor(R.color.wa_white_80));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            answer.setBackgroundTintList(context.getColorStateList(R.color.dialog_white_tint));
-        }
+        answer.getBackground().setColorFilter(getResources().getColor(R.color.wa_white_80),
+                PorterDuff.Mode.SRC_ATOP);
+
         answer.setId(QuestionWidget.newUniqueId());
         readOnly = prompt.isReadOnly() || readOnlyOverride;
 

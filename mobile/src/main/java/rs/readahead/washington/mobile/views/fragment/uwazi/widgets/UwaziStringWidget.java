@@ -2,7 +2,7 @@ package rs.readahead.washington.mobile.views.fragment.uwazi.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
+import android.graphics.PorterDuff;
 import android.text.Selection;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -14,15 +14,12 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.data.entity.uwazi.answer.IUwaziAnswer;
-import rs.readahead.washington.mobile.data.entity.uwazi.answer.UwaziString;
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
 
 @SuppressLint("ViewConstructor")
 public class UwaziStringWidget extends UwaziQuestionWidget {
-    private static final String ROWS = "rows";
 
     protected boolean readOnly;
     protected EditText answer;
@@ -33,9 +30,9 @@ public class UwaziStringWidget extends UwaziQuestionWidget {
 
         answer = new EditText(context);
         answer.setTextColor(getResources().getColor(R.color.wa_white_80));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            answer.setBackgroundTintList(context.getColorStateList(R.color.dialog_white_tint));
-        }
+        answer.getBackground().setColorFilter(getResources().getColor(R.color.wa_white_80),
+                PorterDuff.Mode.SRC_ATOP);
+
         answer.setId(QuestionWidget.newUniqueId());
         readOnly = prompt.isReadOnly() || readOnlyOverride;
 
@@ -44,18 +41,6 @@ public class UwaziStringWidget extends UwaziQuestionWidget {
         if (isMarkdown) {
             setHelpTextView(getContext().getString(R.string.Uwazi_Subtitle_MarkdownSupported));
         }
-
-        // fix height, if rows attr is present
-        /*String height = prompt.getQuestion().getAdditionalAttribute(null, ROWS);
-        if (height != null && height.length() != 0) {
-            try {
-                int rows = Integer.valueOf(height);
-                answer.setMinLines(rows);
-                answer.setGravity(Gravity.TOP);
-            } catch (Exception e) {
-                Timber.e(e, this.getClass().getName());
-            }
-        }*/
 
         params.setMargins(7, 5, 7, 5);
         answer.setLayoutParams(params);

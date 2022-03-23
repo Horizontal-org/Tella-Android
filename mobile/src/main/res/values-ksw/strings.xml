@@ -421,7 +421,7 @@
   <string name="Home_BottomNav_Forms">လံာ်ကွီၣ်ဒိ</string>
   <string name="Home_BottomNav_Reports">ၢ်ပာ်ဖျါ</string>
   <string name="Vault_Move_AppBar">သုးကွံ၁်\"%s\"</string>
-  <string name="Vault_CreateFolder_SheetAction">တ့ထီၣ်</string>
+  <string name="Vault_CreateFolder_SheetAction">တ့ထီၣ်လံာ်ဒၢအသီတဖျၢၣ်</string>
   <string name="ServerSettings_ServerName_ToolTip">ယုာ်န့ၢ်နပှာ်ယဲၤသန့ထံးအမံၤ လၢကတိၢ်ဘၣ်အီၤဖဲနမ့ၢ်တီၣ်အါထီၣ်ပှာ်ယဲၤသန့ထံးဆူညါအဂီၢ်တက့ၢ်ႋ ကမ့ၢ်၀ဲဒၣ်တၢ်ကရၢကရိအမံၤ တၢ်တိာ်ကျဲၤအမံၤ အဂုအၤဂၤသ့န့ၣ်လီၤႋ</string>
   <plurals name="Vault_Importing_SheetProgress">
     <item quantity="zero">၀း</item>

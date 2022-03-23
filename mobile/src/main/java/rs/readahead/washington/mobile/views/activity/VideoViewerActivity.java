@@ -435,7 +435,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
                 getString(R.string.Vault_Share_SheetAction),
                 getString(R.string.Vault_Move_SheetDesc),
                 getString(R.string.Vault_Rename_SheetAction),
-                getString(R.string.Vault_Save_SheetAction),
+                getString(R.string.gallery_action_desc_save_to_device),
                 getString(R.string.Vault_File_SheetAction),
                 getString(R.string.Vault_Delete_SheetAction),
                 false,

@@ -2,7 +2,7 @@ package rs.readahead.washington.mobile.views.fragment.uwazi.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
+import android.graphics.PorterDuff;
 import android.text.Selection;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -19,9 +19,7 @@ import androidx.core.content.ContextCompat;
 import com.google.gson.internal.LinkedTreeMap;
 
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.data.entity.uwazi.answer.IUwaziAnswer;
 import rs.readahead.washington.mobile.data.entity.uwazi.answer.UwaziLink;
-import rs.readahead.washington.mobile.data.entity.uwazi.answer.UwaziString;
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
@@ -50,16 +48,14 @@ public class UwaziLinkWidget extends UwaziQuestionWidget {
 
         label = new EditText(context);
         label.setTextColor(getResources().getColor(R.color.wa_white_80));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            label.setBackgroundTintList(context.getColorStateList(R.color.dialog_white_tint));
-        }
+        label.getBackground().setColorFilter(getResources().getColor(R.color.wa_white_80),
+                PorterDuff.Mode.SRC_ATOP);
         label.setId(QuestionWidget.newUniqueId());
 
         url = new EditText(context);
         url.setTextColor(getResources().getColor(R.color.wa_white_80));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            url.setBackgroundTintList(context.getColorStateList(R.color.dialog_white_tint));
-        }
+        url.getBackground().setColorFilter(getResources().getColor(R.color.wa_white_80),
+                PorterDuff.Mode.SRC_ATOP);
         url.setId(QuestionWidget.newUniqueId());
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();

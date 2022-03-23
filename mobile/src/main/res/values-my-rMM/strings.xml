@@ -409,7 +409,7 @@
   <string name="Home_BottomNav_Forms">ပုံစံများ</string>
   <string name="Home_BottomNav_Reports">မှတ်တမ်းများ</string>
   <string name="Vault_Move_AppBar">%s \"ရွှေ့ပါ\"</string>
-  <string name="Vault_CreateFolder_SheetAction">ဖန်တီးမည်</string>
+  <string name="Vault_CreateFolder_SheetAction">ဖိုင်တွဲအသစ်တစ်ခု ဖန်တီးမည်</string>
   <string name="ServerSettings_ServerName_ToolTip">နောက်ထပ်ဆာဗာများ ထပ်ထည့်ပါက ၎င်းကိုမှတ်မိရန် သင့်ဆာဗာကို အမည်ပေးပါ။ ၎င်းသည် အဖွဲ့အစည်းအမည်၊ ပရောဂျက်အမည် စသည်ဖြင့် ဖြစ်နိုင်သည်။</string>
   <plurals name="Vault_Importing_SheetProgress">
     <item quantity="other">%s ဖိုင်များ ထည့်သွင်းပြီးပါပြီ</item>
