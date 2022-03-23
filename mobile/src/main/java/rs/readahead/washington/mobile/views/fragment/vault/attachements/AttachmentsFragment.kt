@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.views.fragment.vault.attachements
 
-import android.Manifest
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
@@ -10,7 +11,10 @@ import android.content.pm.PackageManager
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
+import android.os.Environment
+import android.provider.Settings
 import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -18,6 +22,7 @@ import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -876,33 +881,42 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     private fun hasStoragePermissions(context: Context): Boolean {
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_GRANTED && (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_GRANTED
-                    )
-        )
-            return true
-        return false
+        return if (SDK_INT >= Build.VERSION_CODES.R) {
+            Environment.isExternalStorageManager()
+        } else {
+            val result: Int =
+                ContextCompat.checkSelfPermission(context, READ_EXTERNAL_STORAGE)
+            val result1: Int =
+                ContextCompat.checkSelfPermission(context, WRITE_EXTERNAL_STORAGE)
+            result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED
+        }
     }
 
     private fun requestStoragePermissions() {
-        activity.changeTemporaryTimeout()
-        val permissions = arrayOf(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )
-        ActivityCompat.requestPermissions(
-            //1
-            activity,
-            //2
-            permissions,
-            //3
-            WRITE_REQUEST_CODE
-        )
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            try {
+                val intent: Intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                intent.addCategory("android.intent.category.DEFAULT")
+                intent.data = Uri.parse(
+                    String.format(
+                        "package:%s",
+                        activity.application.packageName)
+                )
+                startActivityForResult(intent, WRITE_REQUEST_CODE)
+            } catch (e: Exception) {
+                val intent = Intent()
+                intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+                startActivityForResult(intent, WRITE_REQUEST_CODE)
+            }
+        } else {
+            //below android 11
+            ActivityCompat.requestPermissions(
+                activity,
+                arrayOf(WRITE_EXTERNAL_STORAGE),
+                WRITE_REQUEST_CODE
+            )
+        }
+
     }
 
     private fun createItem(file: VaultFile): BreadcrumbItem {
