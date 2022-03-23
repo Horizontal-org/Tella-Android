@@ -30,14 +30,10 @@
         />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/cameraActionTV"
-        style="@style/Tella_Main_White_Text.Meduim"
+        style="@style/Tella2_BottomSheet_Text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sheetTitleDescTv"
-        android:layout_marginTop="25dp"
-        android:drawablePadding="17dp"
         android:drawableStart="@drawable/ic_camera_alt_24px"
         tools:text="Take video"
         android:gravity="center|start"
@@ -45,28 +41,20 @@
 
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/recordActionTV"
-        style="@style/Tella_Main_White_Text.Meduim"
+        style="@style/Tella2_BottomSheet_Text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cameraActionTV"
-        android:layout_marginTop="25dp"
-        android:drawablePadding="17dp"
         android:drawableStart="@drawable/keyboard_voice_24px_filled"
         tools:text="Take video"
         android:gravity="center|start"
         />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/selectTellaFilesActionTV"
-        style="@style/Tella_Main_White_Text.Meduim"
+        style="@style/Tella2_BottomSheet_Text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/recordActionTV"
-        android:layout_marginTop="25dp"
-        android:drawablePadding="17dp"
         android:drawableStart="@drawable/ic_menu_gallery"
         tools:text="Select from Tella files"
         android:gravity="center|start"
@@ -74,21 +62,14 @@
 
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/Tella2_BottomSheet_Text"
         android:id="@+id/selectDeviceFilesActionTV"
-        style="@style/Tella_Main_White_Text.Meduim"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/selectTellaFilesActionTV"
-        android:layout_marginTop="25dp"
-        android:drawablePadding="17dp"
         android:drawableStart="@drawable/ic_smartphone_white_24dp"
         tools:text="Select from Tella files"
         android:gravity="center|start"
         />
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

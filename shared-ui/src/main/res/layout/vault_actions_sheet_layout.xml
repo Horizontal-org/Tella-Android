@@ -18,25 +18,19 @@
         />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/uploadActionTV"
-        style="@style/Tella_Main_White_Text.Meduim"
+        style="@style/Tella2_BottomSheet_Text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sheetTitleTv"
         android:layout_marginTop="25dp"
-        android:drawablePadding="17dp"
         app:drawableStartCompat="@drawable/ic_upload_cloud" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/shareActionTV"
-        style="@style/Tella_Main_White_Text.Meduim"
+        style="@style/Tella2_BottomSheet_Text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/uploadActionTV"
         android:layout_marginTop="20dp"
-        android:drawablePadding="17dp"
         app:drawableStartCompat="@drawable/ic_share" />
 
 
@@ -50,60 +44,44 @@
         />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/moveActionTV"
-        style="@style/Tella_Main_White_Text.Meduim"
+        style="@style/Tella2_BottomSheet_Text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/separator"
         android:layout_marginTop="17dp"
-        android:drawablePadding="17dp"
         app:drawableStartCompat="@drawable/ic_move" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/renameActionTV"
-        style="@style/Tella_Main_White_Text.Meduim"
+        style="@style/Tella2_BottomSheet_Text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/moveActionTV"
         android:layout_marginTop="20dp"
-        android:drawablePadding="17dp"
         app:drawableStartCompat="@drawable/ic_pen" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/saveActionTV"
-        style="@style/Tella_Main_White_Text.Meduim"
+        style="@style/Tella2_BottomSheet_Text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/renameActionTV"
         android:layout_marginTop="20dp"
-        android:drawablePadding="17dp"
         app:drawableStartCompat="@drawable/ic_save_alt_24px" />
 
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/infoActionTV"
-        style="@style/Tella_Main_White_Text.Meduim"
+        style="@style/Tella2_BottomSheet_Text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/saveActionTV"
         android:layout_marginTop="20dp"
-        android:drawablePadding="17dp"
         app:drawableStartCompat="@drawable/ic_info_24px" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/Tella2_BottomSheet_Text"
         android:id="@+id/deleteActionTV"
-        style="@style/Tella_Main_White_Text.Meduim"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/infoActionTV"
         android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:drawablePadding="17dp"
         app:drawableStartCompat="@drawable/ic_delete_purple_24px" />
 
 
