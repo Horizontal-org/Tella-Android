@@ -236,7 +236,6 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
             );
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
-            FormController.getActive().setIndexWaitingForData(null);
         }
     }
 
@@ -252,14 +251,6 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
         longitude.setVisibility(VISIBLE);
         longitude.setText(String.format(getContext().getString(R.string.collect_form_geopoint_meta_longitude),
                 LocationUtil.printCoordinate(myLocation.getLongitude(), false)));
-
-       /* altitude.setVisibility(VISIBLE);
-        altitude.setText(String.format(getContext().getString(R.string.collect_form_geopoint_meta_altitude),
-                String.format(Locale.ROOT, "%.02f", myLocation.getAltitude())));
-
-        accuracy.setVisibility(VISIBLE);
-        accuracy.setText(String.format(getContext().getString(R.string.collect_form_geopoint_meta_accuracy),
-                myLocation.getAccuracy().toString()));*/
     }
 
     private void hideLocation() {
