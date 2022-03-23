@@ -63,7 +63,6 @@ import rs.readahead.washington.mobile.util.LocationUtil;
 import rs.readahead.washington.mobile.util.MetadataUtils;
 import rs.readahead.washington.mobile.util.TelephonyUtils;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 
 
 public abstract class MetadataActivity extends BaseLockActivity implements
@@ -461,7 +460,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements
         }
 
         // if location gathering is not possible skip it
-        if (!isLocationProviderEnabled()) {
+        if (!isLocationProviderEnabled() || isFineLocationPermissionDenied()) {
             metadataAttacher.attachMetadata(vaultFile, metadata);
             return;
         }
