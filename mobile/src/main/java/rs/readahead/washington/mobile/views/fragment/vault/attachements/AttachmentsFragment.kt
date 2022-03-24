@@ -654,6 +654,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     override fun onMediaExported(num: Int) {
+        DialogUtils.showBottomMessage(activity,resources.getQuantityString(R.plurals.gallery_toast_files_exported, num,num),false)
+
     }
 
     override fun onExportError(error: Throwable?) {
