@@ -423,7 +423,7 @@
   <string name="Home_BottomNav_Forms">النماذج</string>
   <string name="Home_BottomNav_Reports">التقارير</string>
   <string name="Vault_Move_AppBar">نقل \"%s\"</string>
-  <string name="Vault_CreateFolder_SheetAction">إنشاء</string>
+  <string name="Vault_CreateFolder_SheetAction">إنشاء مجلد جديد</string>
   <string name="ServerSettings_ServerName_ToolTip">أعط الخادم الخاص بك اسمًا للتعرف عليه في حال إضافة المزيد من الخوادم لاحقًا. يمكن أن يكون هذا الاسم اسم المنظمة أو اسم المشروع أو غير ذلك من الأسماء.</string>
   <plurals name="Vault_Importing_SheetProgress">
     <item quantity="zero">%s ملف مستورد</item>

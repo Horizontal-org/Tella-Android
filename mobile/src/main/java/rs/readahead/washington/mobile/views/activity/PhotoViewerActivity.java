@@ -249,10 +249,12 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if (menu.findItem(R.id.menu_item_more) != null){
+        if (menu.findItem(R.id.menu_item_more) != null) {
             menu.findItem(R.id.menu_item_more).setVisible(true);
         }
-        if (vaultFile.metadata != null) {menu.findItem(R.id.menu_item_metadata).setVisible(true);}
+        if (vaultFile.metadata != null && menu.findItem(R.id.menu_item_metadata) != null) {
+            menu.findItem(R.id.menu_item_metadata).setVisible(true);
+        }
         toolbar.setStartTextTitle(vaultFile.name);
         finish();
     }
@@ -345,7 +347,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                 getString(R.string.Vault_Share_SheetAction),
                 getString(R.string.Vault_Move_SheetDesc),
                 getString(R.string.Vault_Rename_SheetAction),
-                getString(R.string.Vault_Save_SheetAction),
+                getString(R.string.gallery_action_desc_save_to_device),
                 getString(R.string.Vault_File_SheetAction),
                 getString(R.string.Vault_Delete_SheetAction),
                 false,
