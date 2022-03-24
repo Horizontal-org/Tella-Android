@@ -125,7 +125,7 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
 
                     debug("Gain visit insight: %s", visit)
                 } else {
-                    debug("campaign.currentMeasurementPeriod == null! This should not happen!")
+                    debug("measureVisit campaign.currentMeasurementPeriod == null! This should not happen!")
                 }
             }
         }
@@ -156,7 +156,7 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
                     event = Event(category, action, name, value, campaignId, period)
                     store.events.add(event)
                 } else {
-                    debug("campaign.currentMeasurementPeriod == null! This should not happen!")
+                    debug("measureEvent campaign.currentMeasurementPeriod == null! This should not happen! $action")
                 }
             }
         }
@@ -532,12 +532,10 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
             }
             val insightsJson = InsightsJson(insights.idsite, insights.lang, insights.ua, arrayVisits, arrayEvents)
             body = Gson().toJson(insightsJson)
-            Log.e("CLEAN INSIGHTS", "try body :: $body")
         } catch (e: Exception) {
             done(e)
             return
         }
-        Log.e("CLEAN INSIGHTS", "SEND last")
         store.send(body, conf.server, conf.timeout, done)
     }
 
@@ -602,7 +600,7 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
         val period = campaign.currentMeasurementPeriod
 
         if (period == null) {
-            debug("campaign.currentMeasurementPeriod == null! This should not happen!")
+            debug("getAndMeasure campaign.currentMeasurementPeriod == null! This should not happen!")
             return null
         }
 

@@ -104,8 +104,6 @@ open class DefaultStore(args: Map<String, Any> = HashMap(), debug: ((message: St
         mCoroutineScope.launch {
             try {
                 val bytes = data.toByteArray(Charset.defaultCharset())
-                Log.e("CLEAN INSIGHTS", "bytes size ${bytes.size} , URL $server")
-
                 @Suppress("BlockingMethodInNonBlockingContext")
                 val conn = server.openConnection() as HttpURLConnection
                 conn.doOutput = true
@@ -130,7 +128,6 @@ open class DefaultStore(args: Map<String, Any> = HashMap(), debug: ((message: St
 
                 done(null)
             } catch (e: Exception) {
-                Log.e("SERVER URL Exception", "${e.message}")
                 e.printStackTrace()
                 done(e)
             }
