@@ -498,8 +498,8 @@
   <string name="clean_insights.contribute_description">You can opt out anytime by going to Settings.</string>
   <string name="clean_insights.aggregated_title">Your data is aggregated</string>
   <string name="clean_insights.aggregated_description">Your data will be aggregated weekly on your device before it is sent to us.</string>
-  <string name="clean_insights.days_title">14 days</string>
-  <string name="clean_insights.days_description">We will collect your data for 14 days, from 1 March until 14 March 2022.</string>
+  <string name="clean_insights.days_title">7 days</string>
+  <string name="clean_insights.days_description">We will collect your data for 7 days, from 24 March until 31 March 2022.</string>
   <string name="clean_insights.how_works_title">How it works</string>
   <string name="clean_insights.how_works_description">&#8226; We collect as little data as possible.\n&#8226; All data is anonymous and will not be linked to you.\n&#8226; We will never share your data with or sell it to anyone.</string>
   <string name="clean_insights.questions_title">Specific questions</string>
@@ -513,5 +513,14 @@
   <string name="clean_insights.will_not_description">&#8226;Access any of the files that you store in Tella or share with your organization\n&#8226;Link any of the data we collect to you or your device\n&#8226;Share your data with or sell it to anyone</string>
   <string name="clean_insights.improve_title">Help us improve Tella</string>
   <string name="clean_insights.improve_description">We’re doing a study to understand how you use Tella. You can opt-out anytime by going to Settings.\n\nWould you like to contribute?</string>
-  <string name="clean_insights.signed_for_days">You have signed up to share your data for 14 days.</string>
+  <string name="clean_insights.signed_for_days">You have signed up to share your data for 7 days.</string>
+  <string name="Collect_WidgetVideo_Select_Text">Select video file</string>
+  <string name="Collect_WidgetAudio_Select_Text">Select audio file</string>
+  <string name="Collect_MediaWidget_Attach_Photo">Attach photo</string>
+  <string name="Collect_MediaWidget_Attach_Video">Attach video</string>
+  <string name="Collect_MediaWidget_AttachAudioRecording">Attach audio recording</string>
+  <string name="Uwazi_Templates_TabTitle">Templates</string>
+  <string name="settings.gen_share_data_action">Share data to improve Tella</string>
+  <string name="settings.gen_share_data_action.expl">Join our study for 7 days to help us understand how you use Tella. Your data will never be shared with anyone besides the Tella team.Learn more</string>
+  <string name="settings.serv_add.server.selection_dialog.description">If you are not sure, please ask your\n organization.</string>
 </resources>

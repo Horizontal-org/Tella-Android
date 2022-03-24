@@ -1,6 +1,5 @@
 package org.cleaninsights.sdk
 
-import java.lang.Exception
 import java.net.URL
 
 interface DebugHandler {
