@@ -514,4 +514,13 @@
   <string name="clean_insights.improve_title">Help us improve Tella</string>
   <string name="clean_insights.improve_description">We’re doing a study to understand how you use Tella. You can opt-out anytime by going to Settings.\n\nWould you like to contribute?</string>
   <string name="clean_insights.signed_for_days">You have signed up to share your data for 7 days.</string>
+  <string name="Collect_WidgetVideo_Select_Text">Select video file</string>
+  <string name="Collect_WidgetAudio_Select_Text">Select audio file</string>
+  <string name="Collect_MediaWidget_Attach_Photo">Attach photo</string>
+  <string name="Collect_MediaWidget_Attach_Video">Attach video</string>
+  <string name="Collect_MediaWidget_AttachAudioRecording">Attach audio recording</string>
+  <string name="Uwazi_Templates_TabTitle">Templates</string>
+  <string name="settings.gen_share_data_action">Share data to improve Tella</string>
+  <string name="settings.gen_share_data_action.expl">Join our study for 7 days to help us understand how you use Tella. Your data will never be shared with anyone besides the Tella team.Learn more</string>
+  <string name="settings.serv_add.server.selection_dialog.description">If you are not sure, please ask your\n organization.</string>
 </resources>
