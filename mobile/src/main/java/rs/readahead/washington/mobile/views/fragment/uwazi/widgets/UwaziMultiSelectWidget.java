@@ -66,7 +66,7 @@ public class UwaziMultiSelectWidget extends UwaziQuestionWidget {
             for (int i = 0; i < items.size(); i++) {
                 // no checkbox group so id by answer + offset
 
-                if (!items.get(i).getValues().isEmpty()) {
+                if (items.get(i).getValues() != null && !items.get(i).getValues().isEmpty()) {
                     // header item that hold nested checks
                     LinearLayout checkboxGroup = getHeaderCheckBox(items.get(i).getTranslatedLabel(), i, inflater, prompt);
                     ViewGroup checkPanel = checkboxGroup.findViewById(R.id.checkBoxes);

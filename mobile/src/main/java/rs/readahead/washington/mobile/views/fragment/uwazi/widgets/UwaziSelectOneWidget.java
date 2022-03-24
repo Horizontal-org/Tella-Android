@@ -73,7 +73,7 @@ public class UwaziSelectOneWidget extends UwaziQuestionWidget implements
 
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
-                if (!items.get(i).getValues().isEmpty()) {
+                if (items.get(i).getValues() != null && !items.get(i).getValues().isEmpty()) {
                     LinearLayout checkboxGroup = getHeaderCheckBox(items.get(i).getTranslatedLabel(), inflater);
                     ViewGroup checkPanel = checkboxGroup.findViewById(R.id.checkBoxes);
                     for (NestedSelectValue nestedValue : Objects.requireNonNull(items.get(i).getValues())) {
