@@ -528,8 +528,18 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 }
 
                 override fun save() {
-                    this@AttachmentsFragment.vaultFile = vaultFile
-                    exportVaultFiles(isMultipleFiles, vaultFile)
+                    showConfirmSheet(
+                        activity.supportFragmentManager,
+                        getString(R.string.gallery_save_to_device_dialog_title),
+                        getString(R.string.gallery_save_to_device_dialog_expl),
+                        getString(R.string.action_save),
+                        getString(R.string.action_cancel),
+                        consumer = object : ActionConfirmed {
+                            override fun accept(isConfirmed: Boolean) {
+                                this@AttachmentsFragment.vaultFile = vaultFile
+                                exportVaultFiles(isMultipleFiles, vaultFile)
+                            }
+                        })
                 }
 
                 override fun info() {
