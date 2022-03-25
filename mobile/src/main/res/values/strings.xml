@@ -409,7 +409,7 @@ connecting to a server</string>
   <string name="onboard.expl_hide_tella_set">Your camouflage is set up! You can change it anytime in Settings.</string>
   <string name="onboard.hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you use a PIN lock.</string>
   <string name="onboard.calculator_button">Select calculator</string>
-  <string name="onboard.calculator_expl">Tella will be hidden behind a Calculator app. And you can use the calculator to do actual math! Unlock Tella by entering your PIN on the calculator.</string>
+  <string name="onboard.calculator_expl">Tella will be hidden behind a functional Calculator app. Unlock Tella by entering your PIN on the calculator followed by =</string>
   <string name="onboard.customization_title">Customization</string>
   <string name="onboard.customization_subtitle">Enter your customization code</string>
   <string name="onboard.customization_expl">Your organization may provide a code for you to set up Tella according to their settings.</string>

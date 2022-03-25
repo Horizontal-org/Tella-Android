@@ -7,7 +7,6 @@
     android:background="@color/wa_purple"
   >
 
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineBottom"
         android:layout_width="wrap_content"
@@ -34,7 +33,7 @@
         android:gravity="center"
         android:textAlignment="center"
         android:padding="@dimen/hide_tella_small_margin"
-        android:text="@string/onboard.expl_hide_tella_set"
+        android:text="@string/onboard.calculator_expl"
         android:textColor="@color/wa_white"
         android:layout_marginBottom="16dp"
         android:paddingHorizontal="21dp"
