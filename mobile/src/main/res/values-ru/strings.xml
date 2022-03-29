@@ -347,7 +347,7 @@
   <string name="onboard.intro_get_started">Get started</string>
   <string name="onboard.intro_organization_code">I have a code from my organization</string>
   <string name="onboard.title_camera">Camera</string>
-  <string name="onboard.expl_camera">Take photos and videos directly in Tella. These files are automatically encrypted and saved in Tella, and will not visible from your phone’s regular gallery.</string>
+  <string name="onboard.expl_camera">Take photos and videos directly in Tella. These files are automatically encrypted and saved in Tella, and will not be visible from your phone’s regular gallery.</string>
   <string name="onboard.title_recorder">Recorder</string>
   <string name="onboard.title_files">Encrypted files &amp; folders</string>
   <string name="onboard.title_lock_finish">Lock</string>
