@@ -71,7 +71,6 @@ import rs.readahead.washington.mobile.views.custom.CameraFlashButton;
 import rs.readahead.washington.mobile.views.custom.CameraGridButton;
 import rs.readahead.washington.mobile.views.custom.CameraResolutionButton;
 import rs.readahead.washington.mobile.views.custom.CameraSwitchButton;
-import timber.log.Timber;
 
 
 public class CameraActivity extends MetadataActivity implements
@@ -163,6 +162,7 @@ public class CameraActivity extends MetadataActivity implements
         setupCameraModeButton();
         setupImagePreview();
         setupShutterSound();
+        checkLocationSettings(C.START_CAMERA_CAPTURE, ()->{});
     }
 
     @Override

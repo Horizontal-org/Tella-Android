@@ -119,9 +119,10 @@ public class MainActivity extends MetadataActivity implements
         NavigationUI.setupWithNavController(btmNavMain, navController);
         navController.addOnDestinationChangedListener((navController1, navDestination, bundle) -> {
             switch (navDestination.getId()) {
+                case (R.id.micScreen):
+                    checkLocationSettings(C.START_AUDIO_RECORD, ()->{});
                 case (R.id.homeScreen):
                 case R.id.formScreen:
-                case R.id.micScreen:
                 case R.id.uwaziScreen:
                     showBottomNavigation();
                     break;
@@ -139,6 +140,7 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Timber.d("++++++ int requestCode %d, int resultCode %d", requestCode, resultCode);
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == C.IMPORT_VIDEO) {
