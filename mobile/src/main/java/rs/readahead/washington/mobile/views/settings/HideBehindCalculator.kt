@@ -33,6 +33,13 @@ class HideBehindCalculator: BaseFragment()  {
             activity.onBackPressed()
         }
 
+        view.findViewById<View>(R.id.calculatorView).setOnClickListener {
+        }
+
+        view.findViewById<View>(R.id.calculatorImg).setOnClickListener {
+            confirmHideBehindCalculator()
+        }
+
         view.findViewById<View>(R.id.calculatorBtn).setOnClickListener {
             confirmHideBehindCalculator()
         }

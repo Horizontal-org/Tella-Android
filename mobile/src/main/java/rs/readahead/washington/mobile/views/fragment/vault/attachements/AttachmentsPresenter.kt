@@ -165,14 +165,18 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
                     for (vaultFile in resultList) {
                         vaultFile?.let { MediaFileHandler.exportMediaFile(view?.getContext(), it) }
                     }
-                    vaultFiles.size
+                    resultList.size
                 }
                 .subscribeOn(Schedulers.computation())
                 .doOnSubscribe { view?.onExportStarted() }
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally { view?.onExportEnded() }
                 .subscribe(
-                    { num: Int? -> view?.onMediaExported(num!!) }
+                    { num: Int? ->
+                        if (num != null) {
+                            view?.onMediaExported(num)
+                        }
+                    }
                 ) { throwable: Throwable? ->
                     FirebaseCrashlytics.getInstance().recordException(throwable!!)
                     view?.onExportError(throwable)

@@ -23,7 +23,7 @@
   <string name="UnLockPattern_Message_IncorrectPattern">Please try again. Your patterns do not match.</string>
   <string name="LockPinSet_Message_EnterPin">Enter your PIN</string>
   <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock \nTella</string>
-  <string name="LockPinSet_Message_Hint">Use at least 6 digits and avoid using\n numbers that can be guessed easily,\n such as your birthday.</string>
+  <string name="LockPinSet_Message_Hint">Use at least 6 digits. Avoid using\n numbers that can be guessed easily,\n such as your birthday.</string>
   <string name="LockPinSet_Message_Confirm">Confirm your PIN</string>
   <string name="LockPinConfirm_Message_Confirm">Please enter your PIN one more time,\n just to be sure.</string>
   <string name="LockPinConfirm_Message_Error_TryAgain">Please try again. Your PINs do not match.</string>
