@@ -194,7 +194,8 @@ class UwaziEntryFragment :
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
         if (!getAnswersFromForm(true)) {
             uwaziFormView.setFocus(context)
-            showValidationMandatoryFieldsDialog()
+            //showValidationMandatoryFieldsDialog()
+            showValidationErrorsFieldsDialog()
         } else {
             val gsonTemplate = Gson().toJson(entityInstance)
             bundle.putString(SEND_ENTITY, gsonTemplate)
@@ -210,6 +211,7 @@ class UwaziEntryFragment :
         val widgetMediaFiles = mutableListOf<FormMediaFile>()
         val answers = uwaziFormView.answers
         var validationRequired = false
+        var validationError = false
 
         // check required fields
         if (answers[UWAZI_TITLE] == null) {
@@ -219,8 +221,15 @@ class UwaziEntryFragment :
             )
             validationRequired = true
         }
+
         if (isSend) {
             for (property in template?.entityRow?.properties!!) {
+                //check url validation errors
+                if (uwaziFormView.checkValidationConstraints()) {
+                    validationError = true
+                }
+
+                //check mandatory errors
                 if (property.required && (answers[property.name] == null)) {
                     uwaziFormView.setValidationConstraintText(
                         property.name,
@@ -230,7 +239,7 @@ class UwaziEntryFragment :
                 }
             }
         }
-        if (validationRequired) return false
+        if (validationRequired || validationError) return false
 
         // put answers to entity
         for (answer in answers) {
@@ -389,6 +398,14 @@ class UwaziEntryFragment :
         DialogUtils.showBottomMessage(
             activity,
             getString(R.string.Uwazi_Entry_Validation_MandatoryFields),
+            false
+        )
+    }
+
+    private fun showValidationErrorsFieldsDialog() {
+        DialogUtils.showBottomMessage(
+            activity,
+            getString(R.string.collect_form_toast_validation_generic_error),
             false
         )
     }
