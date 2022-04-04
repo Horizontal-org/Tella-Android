@@ -448,6 +448,17 @@ public class MediaFileHandler {
         }
     }
 
+    @SuppressWarnings("UnusedReturnValue")
+    public static VaultFile renameFile(@NonNull VaultFile vaultFile, String fileName) {
+        try {
+            return MyApplication.rxVault.rename(vaultFile.id, fileName)
+                    .subscribeOn(Schedulers.io())
+                    .blockingGet();
+        } catch (Throwable ignored) {
+            return vaultFile;
+        }
+    }
+
     @Nullable
     public static InputStream getStream(VaultFile vaultFile) {
         try {
