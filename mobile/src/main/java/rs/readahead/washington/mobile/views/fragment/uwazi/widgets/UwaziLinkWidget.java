@@ -108,8 +108,13 @@ public class UwaziLinkWidget extends UwaziQuestionWidget {
         clearFocus();
         String l = label.getText().toString();
         String u = url.getText().toString();
-        if ((!l.isEmpty() && !URLUtil.isValidUrl(u)) || (l.isEmpty() && !u.isEmpty())) {
+
+        if ((!l.isEmpty() && !(URLUtil.isValidUrl(u)))) {
             this.setConstraintValidationText(getContext().getString(R.string.Uwazi_Info_NotValidURL));
+        }
+
+        if (l.isEmpty() && !(isEmptyUrl(u))) {
+            this.setConstraintValidationText(getContext().getString(R.string.Uwazi_Info_UrlLabelEmpty));
         }
 
         if (TextUtils.isEmpty(l) && TextUtils.isEmpty(u)) {
@@ -118,6 +123,10 @@ public class UwaziLinkWidget extends UwaziQuestionWidget {
             UwaziLink link = new UwaziLink(l, u);
             return new UwaziValue(link);
         }
+    }
+
+    private boolean isEmptyUrl(String url) {
+        return url.equals(getContext().getString(R.string.Uwazi_Answer_LinkInitialText)) || url.isEmpty();
     }
 
     @Override
