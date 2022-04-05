@@ -21,11 +21,12 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.bus.event.ReSubmitFormInstanceEvent;
 import rs.readahead.washington.mobile.bus.event.ShowFormInstanceEntryEvent;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.mvp.contract.ICollectFormInstanceListPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CollectFormInstanceListPresenter;
-import rs.readahead.washington.mobile.views.adapters.CollectSubmittedFormInstanceRecycleViewAdapter;
+import rs.readahead.washington.mobile.views.adapters.CollectOutboxFormInstanceRecycleViewAdapter;
 import rs.readahead.washington.mobile.views.interfaces.ISavedFormsInterface;
 import timber.log.Timber;
 
@@ -39,7 +40,7 @@ public class OutboxFormListFragment extends FormListFragment implements
     TextView blankFormsInfo;
 
     private Unbinder unbinder;
-    private CollectSubmittedFormInstanceRecycleViewAdapter adapter;
+    private CollectOutboxFormInstanceRecycleViewAdapter adapter;
     private CollectFormInstanceListPresenter presenter;
     private SharedFormsViewModel model = null;
 
@@ -56,7 +57,7 @@ public class OutboxFormListFragment extends FormListFragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new CollectSubmittedFormInstanceRecycleViewAdapter(this);
+        adapter = new CollectOutboxFormInstanceRecycleViewAdapter(this);
     }
 
     @Nullable
@@ -156,6 +157,11 @@ public class OutboxFormListFragment extends FormListFragment implements
                 requireContext().getString(R.string.action_remove),
                 requireContext().getString(R.string.action_cancel)
         );
+    }
+
+    @Override
+    public void reSubmitForm(CollectFormInstance instance) {
+        MyApplication.bus().post(new ReSubmitFormInstanceEvent(instance));
     }
 
     public void deleteFormInstance(long instanceId) {
