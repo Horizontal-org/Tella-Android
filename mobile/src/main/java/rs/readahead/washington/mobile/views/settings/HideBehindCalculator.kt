@@ -37,7 +37,6 @@ class HideBehindCalculator: BaseFragment()  {
         }
 
         view.findViewById<View>(R.id.calculatorImg).setOnClickListener {
-            confirmHideBehindCalculator()
         }
 
         view.findViewById<View>(R.id.calculatorBtn).setOnClickListener {
