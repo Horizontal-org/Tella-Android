@@ -157,13 +157,13 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
             })
     }
 
-    override fun exportMediaFiles(vaultFiles: List<VaultFile?>) {
+    override fun exportMediaFiles(vaultFiles: List<VaultFile?>,path: String?) {
         disposables.add(
             Single
                 .fromCallable {
                     val resultList = walkAllFiles(vaultFiles)
                     for (vaultFile in resultList) {
-                        vaultFile?.let { MediaFileHandler.exportMediaFile(view?.getContext(), it) }
+                        vaultFile?.let { MediaFileHandler.exportMediaFile(view?.getContext(), it,path) }
                     }
                     resultList.size
                 }

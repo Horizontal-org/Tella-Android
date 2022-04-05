@@ -51,7 +51,7 @@ class IAttachmentsPresenter {
         fun deleteVaultFiles(vaultFiles: List<VaultFile?>?)
         fun moveFiles(parentId: String?,vaultFiles: List<VaultFile?>?)
         fun deleteVaultFile(vaultFile: VaultFile?)
-        fun exportMediaFiles(vaultFiles: List<VaultFile?>)
+        fun exportMediaFiles(vaultFiles: List<VaultFile?>,path: String?)
         fun createFolder(folderName : String, parent: String)
         fun getRootId()
         fun countTUServers()

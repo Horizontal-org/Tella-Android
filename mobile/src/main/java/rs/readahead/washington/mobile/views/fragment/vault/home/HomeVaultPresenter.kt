@@ -98,7 +98,7 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
                 .fromCallable {
                     val resultList = MediaFileHandler.walkAllFiles(vaultFiles)
                     for (vaultFile in resultList) {
-                        vaultFile?.let { MediaFileHandler.exportMediaFile(view?.getContext(), it) }
+                        //vaultFile?.let { MediaFileHandler.exportMediaFile(view?.getContext(), it) }
                     }
                     vaultFiles.size
                 }

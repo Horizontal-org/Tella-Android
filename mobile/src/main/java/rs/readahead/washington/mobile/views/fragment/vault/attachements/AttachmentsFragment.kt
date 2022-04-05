@@ -74,6 +74,8 @@ import kotlin.collections.ArrayList
 
 const val VAULT_FILE_ARG = "VaultFileArg"
 const val WRITE_REQUEST_CODE = 1002
+const val PICKER_FILE_REQUEST_CODE = 100
+
 
 class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     IGalleryVaultHandler,
@@ -157,7 +159,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             }
 
             R.id.action_upload -> {
-                exportVaultFiles(true, null)
+                vaultFile = null
+                performFileSearch(true,vaultFile)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -194,7 +197,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         toolbar = view.findViewById(R.id.toolbar)
         root = view.findViewById(R.id.root)
         appBar = view.findViewById(R.id.appbar)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             appBar.outlineProvider = null
         } else {
             appBar.bringToFront()
@@ -443,7 +446,10 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                                 activity.getString(R.string.Vault_ViewerOther_SheetDesc),
                                 activity.getString(R.string.Vault_Export_SheetAction),
                                 activity.getString(R.string.action_cancel),
-                                onConfirmClick = { exportVaultFiles(false, vaultFile) }
+                                onConfirmClick = {
+                                    this.vaultFile = vaultFile
+                                    performFileSearch(false, vaultFile)
+                                }
                             )
                         }
                     }
@@ -537,7 +543,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                         consumer = object : ActionConfirmed {
                             override fun accept(isConfirmed: Boolean) {
                                 this@AttachmentsFragment.vaultFile = vaultFile
-                                exportVaultFiles(isMultipleFiles, vaultFile)
+                                performFileSearch(isMultipleFiles, vaultFile)
                             }
                         })
                 }
@@ -728,13 +734,13 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         updateAttachmentsToolbar(false)
     }
 
-    private fun exportVaultFiles(isMultipleFiles: Boolean, vaultFile: VaultFile?) {
+    private fun exportVaultFiles(isMultipleFiles: Boolean, vaultFile: VaultFile?,path : String?) {
         if (hasStoragePermissions(activity)) {
-            if (isMultipleFiles) {
+           if (isMultipleFiles) {
                 val selected: List<VaultFile> = attachmentsAdapter.selectedMediaFiles
-                attachmentsPresenter.exportMediaFiles(selected)
+                attachmentsPresenter.exportMediaFiles(selected,path)
             } else {
-                vaultFile?.let { attachmentsPresenter.exportMediaFiles(arrayListOf(vaultFile)) }
+                vaultFile?.let { attachmentsPresenter.exportMediaFiles(arrayListOf(vaultFile),path) }
             }
         } else {
             requestStoragePermissions()
@@ -773,7 +779,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == WRITE_REQUEST_CODE) {
             context?.let {
-                exportVaultFiles(attachmentsAdapter.selectedMediaFiles.size == 0, vaultFile)
+                performFileSearch(attachmentsAdapter.selectedMediaFiles.size == 0, vaultFile)
             }
             LockTimeoutManager().lockTimeout = Preferences.getLockTimeout()
         }
@@ -886,7 +892,10 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 attachmentsPresenter.addNewVaultFiles()
             }
             WRITE_REQUEST_CODE -> {
-                exportVaultFiles(false, vaultFile)
+                performFileSearch(false, vaultFile)
+            }
+            PICKER_FILE_REQUEST_CODE -> {
+                exportVaultFiles(isMultipleFiles = attachmentsAdapter.selectedMediaFiles.size > 0, vaultFile,data?.dataString)
             }
 
         }
@@ -907,7 +916,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private fun requestStoragePermissions() {
         if (SDK_INT >= Build.VERSION_CODES.R) {
             try {
-                val intent: Intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
                 intent.addCategory("android.intent.category.DEFAULT")
                 intent.data = Uri.parse(
                     String.format(
@@ -1080,5 +1089,14 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             FilterType.PHOTO_VIDEO -> "image/*|video/*"
             else -> "image/*"
         }
+    }
+
+   private fun performFileSearch(isMultipleFiles: Boolean, vaultFile: VaultFile?) {
+       if (SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+           val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+           startActivityForResult(intent, PICKER_FILE_REQUEST_CODE)
+       }else{
+          exportVaultFiles(isMultipleFiles,vaultFile,null)
+       }
     }
 }
