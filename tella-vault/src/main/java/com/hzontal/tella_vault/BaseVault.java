@@ -242,7 +242,7 @@ public abstract class BaseVault {
 
     protected String getFileName(VaultFile vaultFile) {
         String ext = VaultFileBuilder.getExtensionFromMimeType(vaultFile.mimeType);
-        return vaultFile.id + (!TextUtils.isEmpty(ext) ? "." + ext : "");
+        return vaultFile.name + (!TextUtils.isEmpty(ext) ? "." + ext : "");
     }
 
     public static class Config { // todo: make this VaultConfig
