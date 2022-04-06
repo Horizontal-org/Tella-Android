@@ -19,7 +19,7 @@ public class IMediaFileViewerPresenterContract {
     }
 
     public interface IPresenter extends IBasePresenter {
-        void exportNewMediaFile(VaultFile vaultFile);
+        void exportNewMediaFile(VaultFile vaultFile,String path);
         void deleteMediaFiles(VaultFile vaultFile);
         void renameVaultFile(String id, String name);
 

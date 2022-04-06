@@ -118,7 +118,7 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
         disposables.add(Single
                 .fromCallable(() -> {
                     for (VaultFile mediaFile : vaultFiles) {
-                        MediaFileHandler.exportMediaFile(context, mediaFile);
+                        //MediaFileHandler.exportMediaFile(context, mediaFile);
                     }
 
                     return vaultFiles.size();

@@ -23,9 +23,9 @@ public class MediaFileViewerPresenter implements IMediaFileViewerPresenterContra
     }
 
     @Override
-    public void exportNewMediaFile(final VaultFile vaultFile) {
+    public void exportNewMediaFile(final VaultFile vaultFile,String path) {
         disposables.add(Completable.fromCallable((Callable<Void>) () -> {
-                    MediaFileHandler.exportMediaFile(view.getContext().getApplicationContext(), vaultFile);
+                    MediaFileHandler.exportMediaFile(view.getContext().getApplicationContext(), vaultFile,path);
                     return null;
                 })
                         .subscribeOn(Schedulers.computation())

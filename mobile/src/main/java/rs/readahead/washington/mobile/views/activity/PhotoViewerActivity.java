@@ -21,6 +21,7 @@ import com.bumptech.glide.request.target.Target;
 import com.hzontal.tella_vault.VaultFile;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
@@ -51,6 +52,7 @@ import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment;
 
 import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
+import static rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragmentKt.PICKER_FILE_REQUEST_CODE;
 
 import org.hzontal.shared_ui.appbar.ToolbarComponent;
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
@@ -186,7 +188,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void exportMediaFile() {
         if (vaultFile != null && presenter != null) {
-            presenter.exportNewMediaFile(vaultFile);
+            performFileSearch();
         }
     }
 
@@ -200,6 +202,15 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         if (!actionsDisabled) {
             showActions = true;
             invalidateOptionsMenu();
+        }
+    }
+
+    private void performFileSearch() {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            startActivityForResult(intent, PICKER_FILE_REQUEST_CODE);
+        }else{
+            presenter.exportNewMediaFile(vaultFile,null);
         }
     }
 
@@ -424,5 +435,13 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                     }
                 }
         );
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICKER_FILE_REQUEST_CODE){
+            presenter.exportNewMediaFile(vaultFile,data.getDataString());
+        }
+
     }
 }

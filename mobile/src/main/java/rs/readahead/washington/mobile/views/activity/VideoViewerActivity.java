@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.views.activity;
 
 import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
+import static rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragmentKt.PICKER_FILE_REQUEST_CODE;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -195,13 +196,22 @@ public class VideoViewerActivity extends BaseLockActivity implements
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void exportMediaFile() {
         if (vaultFile != null && presenter != null) {
-            presenter.exportNewMediaFile(vaultFile);
+            performFileSearch();
         }
     }
 
     @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void showWriteExternalStorageRationale(final PermissionRequest request) {
         alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_device_storage));
+    }
+
+    private void performFileSearch() {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            startActivityForResult(intent, PICKER_FILE_REQUEST_CODE);
+        }else{
+            presenter.exportNewMediaFile(vaultFile,null);
+        }
     }
 
 
@@ -527,5 +537,14 @@ public class VideoViewerActivity extends BaseLockActivity implements
         invalidateOptionsMenu();
         isInfoShown = false;*/
         finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICKER_FILE_REQUEST_CODE){
+            presenter.exportNewMediaFile(vaultFile,data.getDataString());
+        }
+
     }
 }
