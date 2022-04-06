@@ -12,5 +12,6 @@ object ParamsNetwork {
     const val URL_DICTIONARIES ="${URL_API}dictionaries"
     const val COOKIE = "Cookie"
     const val X_REQUESTED_WITH = "X-Requested-With"
+    const val BYPASS_CAPTCHA_HEADER = "Bypass-Captcha"
     const val LOCALE_COOKIE = "locale="
 }
