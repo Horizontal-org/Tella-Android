@@ -78,7 +78,13 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
             ?.subscribe(
                 { server: UWaziUploadServer? ->
                     if (server != null) {
-                        submitEntity(server, entity)
+                        if (server.password.isNullOrEmpty() or server.username.isNullOrEmpty()){
+                            submitWhiteListedEntity(server, entity)
+
+                        }else{
+                            submitEntity(server, entity)
+                        }
+
                     }
                 },
                 { throwable: Throwable? ->
@@ -95,6 +101,34 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
     fun submitEntity(server: UWaziUploadServer, entity: UwaziEntityInstance) {
         disposables.add(
             repository.submitEntity(
+                server = server,
+                entity = createRequestBody(Gson().toJson(entity.createEntityRequest())),
+                attachments = createListOfAttachments(entity.widgetMediaFiles, _progressCallBack)
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError {  progress.postValue(UwaziEntityStatus.SUBMISSION_ERROR) }
+                .flatMap {
+                    entity.status = UwaziEntityStatus.SUBMITTED
+                    entity.formPartStatus = FormMediaFileStatus.SUBMITTED
+                    keyDataSource.uwaziDataSource.blockingFirst().saveEntityInstance(entity)
+                }
+                .subscribe({
+                    progress.postValue(UwaziEntityStatus.SUBMITTED)
+                }
+                ) { throwable: Throwable? ->
+                    FirebaseCrashlytics.getInstance().recordException(
+                        throwable
+                            ?: throw NullPointerException("Expression 'throwable' must not be null")
+                    )
+                    error.postValue(throwable)
+                    progress.postValue(UwaziEntityStatus.SUBMISSION_ERROR)
+                })
+    }
+
+    private fun submitWhiteListedEntity(server: UWaziUploadServer, entity: UwaziEntityInstance) {
+        disposables.add(
+            repository.submitWhiteListedEntity(
                 server = server,
                 entity = createRequestBody(Gson().toJson(entity.createEntityRequest())),
                 attachments = createListOfAttachments(entity.widgetMediaFiles, _progressCallBack)
