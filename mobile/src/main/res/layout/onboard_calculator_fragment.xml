@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/calculatorView"
     android:background="@color/wa_purple"
   >
-
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineBottom"
@@ -16,6 +16,7 @@
         app:layout_constraintGuide_percent="0.95" />
 
     <ImageView
+        android:id="@+id/calculatorImg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/calculator_hide"
@@ -34,7 +35,7 @@
         android:gravity="center"
         android:textAlignment="center"
         android:padding="@dimen/hide_tella_small_margin"
-        android:text="@string/onboard.expl_hide_tella_set"
+        android:text="@string/onboard.calculator_expl"
         android:textColor="@color/wa_white"
         android:layout_marginBottom="16dp"
         android:paddingHorizontal="21dp"
@@ -76,12 +77,4 @@
         app:layout_constraintStart_toStartOf="parent"
        />
 
-    <TextView
-        android:id="@+id/next_btn"
-        android:visibility="gone"
-        android:text="@string/action_next"
-        style="@style/Unlock_White_Text_Back"
-        android:layout_marginEnd="34dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

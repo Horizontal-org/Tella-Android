@@ -11,10 +11,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -95,6 +94,7 @@ public class UwaziFormView extends LinearLayout {
                     || p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_MULTIDATERANGE)
                     || p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_MULTIFILES)
                     || p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_MULTIPDFFILES)
+                    || p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_GENERATEDID)
             ) {
                 UwaziQuestionWidget qw = UwaziWidgetFactory.createWidgetFromPrompt(p, getContext(), readOnlyOverride);
                 qw.setId(VIEW_ID + id++);
@@ -169,6 +169,7 @@ public class UwaziFormView extends LinearLayout {
                 try {
                     return q.setBinaryData(data);
                 } catch (Exception e) {
+                    FirebaseCrashlytics.getInstance().recordException(e);
                     Toast.makeText(getContext(), "Error attaching data", Toast.LENGTH_LONG).show();
                 } finally {
                     q.waitingForAData = false;

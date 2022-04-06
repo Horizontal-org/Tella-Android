@@ -178,7 +178,7 @@ public class SelectOneWidget extends QuestionWidget implements
     }
 
     private void addDeleteButton() {
-        deleteButton = addButton(R.drawable.ic_delete_white_24px);
+        deleteButton = addButton(R.drawable.ic_cancel_rounded);
         deleteButton.setOnClickListener(v -> clearAnswer());
         deleteButton.setVisibility(GONE);
     }

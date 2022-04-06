@@ -30,6 +30,7 @@
             android:layout_centerInParent="true"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:contentDescription="@null"
+            android:visibility="gone"
             android:gravity="center"
             android:src="@drawable/star_border_24dp"
             />

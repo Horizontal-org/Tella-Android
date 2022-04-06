@@ -185,7 +185,7 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
             }
         });
 
-        clearButton = addButton(R.drawable.ic_delete_white_24px);
+        clearButton = addButton(R.drawable.ic_cancel_rounded);
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!isReadonly());
         clearButton.setOnClickListener(v -> clearAnswer());

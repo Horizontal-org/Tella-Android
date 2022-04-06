@@ -163,7 +163,9 @@ public class MediaFileHandler {
         } else {
             path = Environment.getExternalStoragePublicDirectory(envDirType);
         }
-        File file = MyApplication.rxVault.getFile(vaultFile);
+        File file = new File(path,MyApplication.rxVault.getFile(vaultFile).getName());
+
+             //
 
         InputStream is = null;
         OutputStream os = null;
@@ -656,8 +658,8 @@ public class MediaFileHandler {
     }
 
     public static List<VaultFile> walkAllFiles(List<VaultFile> vaultFiles) {
-        List<VaultFile> resultList = new ArrayList<>(vaultFiles);
-        for (VaultFile vaultFile : resultList) {
+        List<VaultFile> resultList = new ArrayList<>();
+        for (VaultFile vaultFile : vaultFiles) {
             if (vaultFile.type == VaultFile.Type.DIRECTORY) {
                 resultList.addAll(getAllFiles(vaultFile));
             } else {

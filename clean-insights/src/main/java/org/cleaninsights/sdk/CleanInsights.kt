@@ -8,14 +8,11 @@
 package org.cleaninsights.sdk
 
 import android.util.Log
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.google.gson.Gson
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
-import java.lang.RuntimeException
-import java.time.Instant
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.pow
@@ -28,26 +25,12 @@ import kotlin.math.pow
 open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfiguration, private val store: Store) {
 
     companion object {
-        val moshi: Moshi by lazy {
-            Moshi.Builder()
-                .add(UrlAdapter())
-                .add(FeatureConsentsJsonAdapter())
-                .add(CampaignConsentsJsonAdapter())
-                .add(VisitListJsonAdapter())
-                .add(EventListJsonAdapter())
-                .add(InsightsJsonAdapter())
-                .add(DateAdapter())
-                .addLast(KotlinJsonAdapterFactory())
-                .build()
-        }
-
         private fun deserialize(jsonConfiguration: String): CleanInsightsConfiguration {
-            val conf = moshi.adapter(CleanInsightsConfiguration::class.java).fromJson(jsonConfiguration)
+            val conf = Gson().fromJson(jsonConfiguration, CleanInsightsConfiguration::class.java)
 
             if (conf != null) {
                 return conf
-            }
-            else {
+            } else {
                 throw IOException("Configuration file could not be read!")
             }
         }
@@ -64,8 +47,6 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
 
     private var persistenceCounter = 0
 
-    private var sending = false
-
     private var failedSubmissionCount = 0
     private var lastFailedSubmission = Date(0)
 
@@ -73,10 +54,12 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
      * @param cleanInsightsConfiguration: The Configuration provided as a `Configuration` object.
      * @param storageDir: The location where to read and persist accumulated data.
      */
-    constructor(cleanInsightsConfiguration: CleanInsightsConfiguration, storageDir: File):
-            this(cleanInsightsConfiguration, DefaultStore(
+    constructor(cleanInsightsConfiguration: CleanInsightsConfiguration, storageDir: File) :
+            this(
+                cleanInsightsConfiguration, DefaultStore(
                     hashMapOf("storageDir" to storageDir),
-                    fun(message: String) { debug(cleanInsightsConfiguration.debug, message) }))
+                    fun(message: String) { debug(cleanInsightsConfiguration.debug, message) })
+            )
 
     /**
      * @param jsonConfiguration: The Configuration provided as a JSON string
@@ -131,8 +114,7 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
 
             if (visit != null) {
                 debug("Gain visit insight: %s", visit)
-            }
-            else {
+            } else {
                 // Align first and last timestamps with campaign measurement period,
                 // in order not to accidentally leak more information than promised.
                 val period = campaign.currentMeasurementPeriod
@@ -142,14 +124,11 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
                     store.visits.add(visit)
 
                     debug("Gain visit insight: %s", visit)
-                }
-                else {
-                    debug("campaign.currentMeasurementPeriod == null! This should not happen!")
+                } else {
+                    debug("measureVisit campaign.currentMeasurementPeriod == null! This should not happen!")
                 }
             }
         }
-
-        persistAndSend()
     }
 
     /**
@@ -164,33 +143,23 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
     @JvmOverloads
     fun measureEvent(category: String, action: String, campaignId: String, name: String? = null, value: Double? = null) {
         val campaign = getCampaignIfGood(campaignId, "$category/$action")
-
         if (campaign != null) {
             var event = getAndMeasure(store.events, campaignId, campaign) { it.category == category && it.action == action && it.name == name }
-
             if (event != null) {
                 campaign.apply(value, event)
-
                 debug("Gain event insight: %s", event)
-            }
-            else {
+            } else {
                 // Align first and last timestamps with campaign measurement period,
                 // in order not to accidentally leak more information than promised.
                 val period = campaign.currentMeasurementPeriod
-
                 if (period != null) {
                     event = Event(category, action, name, value, campaignId, period)
                     store.events.add(event)
-
-                    debug("Gain event insight: %s", event)
-                }
-                else {
-                    debug("campaign.currentMeasurementPeriod == null! This should not happen!")
+                } else {
+                    debug("measureEvent campaign.currentMeasurementPeriod == null! This should not happen! $action")
                 }
             }
         }
-
-        persistAndSend()
     }
 
     val featureConsentSize: Int
@@ -204,8 +173,7 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
 
         return try {
             store.consents.consent(ArrayList(features.keys)[index])
-        }
-        catch (e: IndexOutOfBoundsException) {
+        } catch (e: IndexOutOfBoundsException) {
             null
         }
     }
@@ -215,25 +183,20 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
 
         return try {
             store.consents.consent(ArrayList(campaigns.keys)[index])
-        }
-        catch (e: IndexOutOfBoundsException) {
+        } catch (e: IndexOutOfBoundsException) {
             null
         }
     }
 
     fun grant(feature: Feature): FeatureConsent {
         val consent = store.consents.grant(feature)
-
         persistAndSend()
-
         return consent
     }
 
     fun deny(feature: Feature): FeatureConsent {
         val consent = store.consents.deny(feature)
-
         persistAndSend()
-
         return consent
     }
 
@@ -263,21 +226,15 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
 
     fun grant(campaignId: String): CampaignConsent? {
         val campaign = conf.campaigns[campaignId] ?: return null
-
         val consent = store.consents.grant(campaignId, campaign)
-
         persistAndSend()
-
         return consent
     }
 
     fun deny(campaignId: String): CampaignConsent? {
         if (conf.campaigns[campaignId] == null) return null
-
         val consent = store.consents.deny(campaignId)
-
         persistAndSend()
-
         return consent
     }
 
@@ -352,8 +309,10 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
     }
 
     @JvmOverloads
-    fun requestConsent(campaignId: String, consentRequestUi: ConsentRequestUi,
-                       completed: ConsentRequestUiComplete? = null) {
+    fun requestConsent(
+        campaignId: String, consentRequestUi: ConsentRequestUi,
+        completed: ConsentRequestUiComplete? = null
+    ) {
 
         val campaign = conf.campaigns[campaignId]
 
@@ -378,10 +337,12 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
         val consent = store.consents.campaigns[campaignId]
 
         if (consent != null) {
-            debug("Already asked for consent for campaign '%s'. It was %s.",
-                    campaignId,
-                    if (consent.granted) String.format("granted between %s and %s", consent.start, consent.end)
-                    else String.format("denied on %s", consent.start))
+            debug(
+                "Already asked for consent for campaign '%s'. It was %s.",
+                campaignId,
+                if (consent.granted) String.format("granted between %s and %s", consent.start, consent.end)
+                else String.format("denied on %s", consent.start)
+            )
             if (completed != null) completed(consent.granted)
             return
         }
@@ -389,8 +350,7 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
         val complete = { granted: Boolean ->
             if (granted) {
                 store.consents.grant(campaignId, campaign)
-            }
-            else {
+            } else {
                 store.consents.deny(campaignId)
             }
 
@@ -431,16 +391,20 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
     }
 
     @JvmOverloads
-    fun requestConsent(feature: Feature, consentRequestUi: ConsentRequestUi,
-                       completed: ConsentRequestUiComplete? = null) {
+    fun requestConsent(
+        feature: Feature, consentRequestUi: ConsentRequestUi,
+        completed: ConsentRequestUiComplete? = null
+    ) {
 
         val consent = store.consents.features[feature]
 
         if (consent != null) {
-            debug("Already asked for consent for feature '%s'. It was %s on %s.",
-                    feature.name,
-                    if (consent.granted) "granted" else "denied",
-                    consent.start)
+            debug(
+                "Already asked for consent for feature '%s'. It was %s on %s.",
+                feature.name,
+                if (consent.granted) "granted" else "denied",
+                consent.start
+            )
             if (completed != null) completed(consent.granted)
             return
         }
@@ -448,8 +412,7 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
         val complete = { granted: Boolean ->
             if (granted) {
                 store.consents.grant(feature)
-            }
-            else {
+            } else {
                 store.consents.deny(feature)
             }
 
@@ -512,8 +475,7 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
             store.persist(async) {
                 if (it != null) {
                     debug(it)
-                }
-                else {
+                } else {
                     persistenceCounter = 0
 
                     debug("Data persisted to storage.")
@@ -527,12 +489,8 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
      *
      * If sending was successful, remove sent data from store and persist again.
      */
-    private fun persistAndSend() {
+    fun persistAndSend() {
         persist(true)
-
-        if (sending) return
-
-        sending = true
 
         if (failedSubmissionCount > 0) {
             // Calculate a delay for the next retry:
@@ -542,55 +500,57 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
             val exp = Date(lastFailedSubmission.time + ((conf.timeout * 2.0.pow(failedSubmissionCount.toDouble())).toLong()))
             val tru = Date(lastFailedSubmission.time + (conf.maxRetryDelay.toLong()))
             val retryAllowedAt = if (exp.before(tru)) exp else tru
-
-            if (Date().before(retryAllowedAt)) {
-                sending = false
-
-                return
-            }
+            if (Date().before(retryAllowedAt)) return
         }
 
         val insights = Insights(conf, store)
-
-        if (insights.isEmpty) {
-            sending = false
-
-            return
-        }
+        insights.events.addAll(store.events)
+        insights.visits.addAll(store.visits)
+        if (insights.isEmpty) return
 
         val done = { e: Exception? ->
             if (e != null) {
                 lastFailedSubmission = Date()
-                failedSubmissionCount ++
-
+                failedSubmissionCount++
                 debug(e)
-            }
-            else {
+            } else {
                 lastFailedSubmission = Date(0)
                 failedSubmissionCount = 0
-
                 debug("Successfully offloaded data.")
-
                 insights.clean(store)
-
                 persist(async = true, force = true)
             }
-
-            sending = false
         }
 
         val body: String
-
         try {
-            body = moshi.adapter(Insights::class.java).toJson(insights)
-        }
-        catch (e: Exception) {
+            val arrayEvents = ArrayList<EventJson>()
+            val arrayVisits = ArrayList<VisitJson>()
+            insights.visits.forEach { arrayVisits.add(VisitJson(it.scenePath, it.campaignId, it.times, it.first.time, it.last.time)) }
+            insights.events.forEach {
+                arrayEvents.add(EventJson(it.category, it.action, it.name, it.value, it.campaignId, it.times, it.first.time, it.last.time))
+            }
+            val insightsJson = InsightsJson(insights.idsite, insights.lang, insights.ua, arrayVisits, arrayEvents)
+            body = Gson().toJson(insightsJson)
+        } catch (e: Exception) {
             done(e)
             return
         }
-
         store.send(body, conf.server, conf.timeout, done)
     }
+
+    data class InsightsJson(val idsite: Int, val lang: String?, val ua: String?, val visits: ArrayList<VisitJson>, val events: ArrayList<EventJson>)
+    data class VisitJson(val scenePath: List<String>, val campaign_id: String, val times: Int = 1, val period_start: Long, val period_end: Long)
+    data class EventJson(
+        val category: String,
+        val action: String,
+        val name: String?,
+        val value: Double?,
+        val campaign_id: String,
+        val times: Int = 1,
+        val period_start: Long,
+        val period_end: Long
+    )
 
     private fun getCampaignIfGood(campaignId: String, debugString: String): Campaign? {
         val campaign = conf.campaigns[campaignId]
@@ -612,11 +572,13 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
             return null
         }
 
-        if (!isCampaignCurrentlyGranted(campaignId)) {
-            debug("Measurement '%s' discarded, because campaign '%s' has no user consent yet, any more or we're outside the measurement period.",
-                    debugString, campaignId)
-            return null
-        }
+//        if (!isCampaignCurrentlyGranted(campaignId)) {
+//            debug(
+//                "Measurement '%s' discarded, because campaign '%s' has no user consent yet, any more or we're outside the measurement period.",
+//                debugString, campaignId
+//            )
+//            return null
+//        }
 
         return campaign
     }
@@ -634,11 +596,11 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
      * @param where: Additional condition for selection.
      * @return a `DataPoint` subclass out of the `haystack`, as long as it fits the `campaign`.
      */
-    private fun <T : DataPoint>getAndMeasure(haystack: List<T>, campaignId: String, campaign: Campaign, where: ((T) -> Boolean)): T? {
+    private fun <T : DataPoint> getAndMeasure(haystack: List<T>, campaignId: String, campaign: Campaign, where: ((T) -> Boolean)): T? {
         val period = campaign.currentMeasurementPeriod
 
         if (period == null) {
-            debug("campaign.currentMeasurementPeriod == null! This should not happen!")
+            debug("getAndMeasure campaign.currentMeasurementPeriod == null! This should not happen!")
             return null
         }
 
@@ -655,8 +617,7 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
             if (!campaign.onlyRecordOnce) dataPoint.times += 1
 
             return dataPoint
-        }
-        catch (e: NoSuchElementException) {
+        } catch (e: NoSuchElementException) {
             return null
         }
     }

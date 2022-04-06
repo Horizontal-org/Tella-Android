@@ -1,18 +1,22 @@
 package rs.readahead.washington.mobile.views.settings
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
 import androidx.navigation.Navigation
-import org.cleaninsights.sdk.Consent
 import org.hzontal.shared_ui.switches.TellaSwitchWithMessage
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
+import rs.readahead.washington.mobile.util.C.LOCATION_PERMISSION
 import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.LocaleManager
 import rs.readahead.washington.mobile.util.StringUtils
@@ -51,9 +55,13 @@ class GeneralSettings : BaseFragment() {
         shareDataSwitch?.let {
             it.mSwitch.setChecked(Preferences.hasAcceptedImprovements())
             it.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
-                Preferences.setIsAcceptedImprovements(isChecked)
-                CleanInsightUtils.grantCampaign(isChecked)
-                if (isChecked) showMessageForCleanInsightsApprove()
+                try {
+                    Preferences.setIsAcceptedImprovements(isChecked)
+                    CleanInsightUtils.grantCampaign(isChecked)
+                    if (isChecked) showMessageForCleanInsightsApprove()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
             it.setTextAndAction(R.string.action_learn_more) { startCleanInsightActivity() }
         }
@@ -66,7 +74,12 @@ class GeneralSettings : BaseFragment() {
 
         val verificationSwitch = view.findViewById<TellaSwitchWithMessage>(R.id.verification_switch)
         verificationSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
-            Preferences.setAnonymousMode(!isChecked)
+            run {
+                if (!context?.let { hasLocationPermission(it) }!!){
+                    requestLocationPermission(LOCATION_PERMISSION)
+                }
+                Preferences.setAnonymousMode(!isChecked)
+            }
         }
         verificationSwitch.mSwitch.isChecked = !Preferences.isAnonymousMode()
 
@@ -125,6 +138,24 @@ class GeneralSettings : BaseFragment() {
             requireActivity(),
             String.format(getString(R.string.clean_insights_signed_for_days)),
             false
+        )
+    }
+
+    fun hasLocationPermission(context: Context): Boolean {
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        )
+            return true
+        return false
+    }
+
+    fun requestLocationPermission(requestCode: Int) {
+        requestPermissions(
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ), requestCode
         )
     }
 }

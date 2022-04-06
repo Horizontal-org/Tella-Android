@@ -314,7 +314,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/quick_exit_options_layout"
                 app:titleText="@string/settings.sec_camera.mute_switch" />
 
-            <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+           <!-- <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
                 android:id="@+id/bypass_censorship_switch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -324,7 +324,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/camera_silent_switch"
-                app:titleText="@string/settings.sec_bypass_switch_title" />
+                app:titleText="@string/settings.sec_bypass_switch_title" /> -->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

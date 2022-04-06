@@ -1,56 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="LockSelect_Action_Cancel">റദ്ദാക്കുക </string>
-  <string name="LockSelect_Action_Confirm">സ്ഥിരീകരിക്കുക</string>
+  <string name="LockSelect_Action_Back">Back</string>
+  <string name="LockSelect_Action_Confirm">തുടരുക</string>
   <string name="LockPatternConfirm_Action_Confirm">സ്ഥിരീകരിക്കുന്നതിനായി പാറ്റേൺ/മാതൃക ഒന്നുകൂടി വരക്കുക</string>
   <string name="LockSelect_Action_Continue">തുടരുക</string>
   <string name="LockPatternSet_Draw_Pattern">ഒരു അൺലോക്ക് പാറ്റേൺ/മാതൃക വരയ്‌ക്കുക</string>
-  <string name="UnlockPattern_DrawToUnlock">അൺലോക്ക് ചെയ്യുവാനായി പാറ്റേൺ/മാതൃക  വരക്കുക</string>
-  <string name="LockPatternConfirm_Pattern_Confirmed">Tella (റ്റെല്ല) അൺലോക്കുചെയ്യാനുള്ള നിങ്ങളുടെ പാറ്റേൺ/മാതൃക ഇതായിരിക്കും</string>
   <string name="LockPatternSet_Pattern_Recorded">പാറ്റേൺ/മാതൃക റെക്കോർഡ്‌ചെയ്തു</string>
   <string name="UnlockPattern_PatternTooShort">കുറഞ്ഞത് %d ഡോട്ടുകളെങ്കിലും കണക്ട് ചെയ്യുക, ദയവായി വീണ്ടും വരയ്ക്കുക</string>
   <string name="LockPatternSet_RecordingPattern">പൂർത്തിയാകുമ്പോൾ വിരൽ മാറ്റുക</string>
   <string name="LockPatternSet_Action_Redraw">വീണ്ടും വരയ്ക്കുക</string>
   <string name="LockPatternConfirm_Message_WrongPattern">തെറ്റായ പാറ്റേൺ/മാതൃക, ദയവായി വീണ്ടും ശ്രമിക്കുക.</string>
-  <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
   <string name="LockPatternSet_Message_PatternStarted">പാറ്റേൺ/മാതൃക തുടങ്ങി</string>
-  <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
   <string name="LockPatternSet_Message_PatternCleared">പാറ്റേൺ/മാതൃക മായ്ച്ചു</string>
-  <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
   <string name="LockPatternSet_Message_CellAdded">കളം ചേർത്തു</string>
-  <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern. The screen reader will add the cell number that the user added. For example, if the user selects the bottom left cell, the screen reader will read "cell 7 added". -->
   <string name="LockPatternSet_Message_CellAddedVerbose"><xliff:g id="cell_index" example="3">%1$d</xliff:g> - ആം കളം ചേർത്തു</string>
-  <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
   <string name="LockPatternSet_Message_PatternDetected">പാറ്റേണ്‍/മാതൃക പൂർത്തിയായി </string>
-  <!-- Accessibility text used by the screen reader to describe the screen and user actions when creating or drawing the lock pattern.  -->
   <string name="UnLockPattern_PatternArea">പാറ്റേണ്‍ ഏരിയ (മാതൃക പ്രദേശം)</string>
-  <!-- The button to get access to more options. -->
-  <string name="LockSelect_Action_Back">Back</string>
-  <string name="UnLockPattern_Message_DrawPattern" translatable="false">Draw your pattern to \nunlock Tella</string>
+  <string name="UnLockPattern_Message_DrawPattern">Draw your pattern to 
+unlock Tella</string>
   <string name="UnLockPattern_Message_IncorrectPattern">Please try again. Your patterns do not match.</string>
   <string name="LockPinSet_Message_EnterPin">Enter your PIN</string>
-  <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock \nTella</string>
-  <string name="LockPinSet_Message_Hint">Use at least 6 digits and avoid using\n numbers that can be guessed easily,\n such as your birthday.</string>
+  <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock 
+Tella</string>
   <string name="LockPinSet_Message_Confirm">Confirm your PIN</string>
-  <string name="LockPinConfirm_Message_Confirm">Please enter your PIN one more time,\n just to be sure.</string>
+  <string name="LockPinConfirm_Message_Confirm">Please enter your PIN one more time,
+ just to be sure.</string>
   <string name="LockPinConfirm_Message_Error_TryAgain">Please try again. Your PINs do not match.</string>
-  <string name="LockPinConfirm_Message_Error_IncorrectPin">Incorrect PIN,\n please try again</string>
+  <string name="LockPinConfirm_Message_Error_IncorrectPin">Incorrect PIN,
+ please try again</string>
   <string name="UnlockPassword_Message_EnterYourPassword">Enter your password</string>
-  <string name="LockPasswordSet_Message_Hint">Use at least 6 characters and avoid\n using passwords that can be guessed\n easily, such as “password.” The longer\n your password, the more secure it is.</string>
+  <string name="LockPasswordSet_Message_Hint">Use at least 6 characters and avoid
+ using passwords that can be guessed
+ easily, such as “password.” The longer
+ your password, the more secure it is.</string>
   <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Please try again. Your passwords do not match.</string>
-  <string name="LockSuccess_Message_AllDone">You\'re all\ndone!</string>
-  <string name="LockSuccess_Message_Hint">You can always change your lock option\n and further customize Tella in Settings.</string>
-  <string name="LockSuccess_Action_GoToTella">Go to tella</string>
-  <string name="LockPasswordSet_Message_Error_IncorrectPassword">Incorrect password,\n please try again</string>
-  <string name="UnlockPassword_Message_EnterPassword">Enter your password to \nunlock Tella</string>
+  <string name="LockSuccess_Message_AllDone">You\'re all
+done!</string>
+  <string name="LockSuccess_Message_Hint">You can always change your lock option
+ and further customize Tella in Settings.</string>
+  <string name="LockPasswordSet_Message_Error_IncorrectPassword">Incorrect password,
+ please try again</string>
+  <string name="UnlockPassword_Message_EnterPassword">Enter your password to 
+unlock Tella</string>
   <string name="LockPasswordConfirm_Message_ConfirmPassword">Confirm your password</string>
-  <string name="LockPasswordConfirm_Message_EnterPasswordAgain">Please enter your password one more\n time, just to be sure.</string>
-  <string name="LockPasswordSet_Settings_EnterCurrentPassword">Enter your current\n password to change your\n lock</string>
-  <string name="LockPatternSet_Settings_DrawCurrentPattern">Draw your current\n pattern to change your\n lock</string>
-  <string name="LockPinSet_Settings_EnterCurrentPin">Enter your current PIN to\n change your lock   </string>
-  <string name="LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage">Enter your current\n password to change your\n camouflage</string>
-  <string name="LockPatternSet_Settings_DrawCurrentPatternToChangeCamouflage">Draw your current\n pattern to change your\n camouflage</string>
-  <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">Enter your current PIN to\n change your camouflage   </string>
+  <string name="LockPasswordSet_Settings_EnterCurrentPassword">Enter your current
+ password to change your
+ lock</string>
+  <string name="LockPatternSet_Settings_DrawCurrentPattern">Draw your current
+ pattern to change your
+ lock</string>
+  <string name="LockPinSet_Settings_EnterCurrentPin">Enter your current PIN to
+ change your lock   </string>
+  <string name="LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage">Enter your current
+ password to change your
+ camouflage</string>
+  <string name="LockPatternSet_Settings_DrawCurrentPatternToChangeCamouflage">Draw your current
+ pattern to change your
+ camouflage</string>
+  <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">Enter your current PIN to
+ change your camouflage   </string>
   <string name="Settings_Action_SetLock">Lock</string>
   <string name="Settings_Message_LockChanged">Your lock has been changed!</string>
 </resources>

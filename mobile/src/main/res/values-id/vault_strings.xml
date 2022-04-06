@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="Vault_Audios_Title">io</string>
+  <string name="Vault_Videos_Title">Videos</string>
+  <string name="Vault_RecentFiles">Recent files</string>
+  <string name="Vault_FavoriteForms_Title">Favorite forms</string>
+  <string name="Vault_Save_SheetAction">Simpan</string>
+  <string name="Vault_Delete_SheetAction">Hapus</string>
+  <string name="Vault_Share_SheetAction">Share </string>
+  <string name="Vault_Upload_SheetAction">Upload</string>
+  <string name="Vault_SortDateAsc_SheetAction">Baru ke lama</string>
+  <string name="Vault_SortDateDesc_SheetAction">Lama ke baru</string>
+  <string name="Vault_Export_SheetAction">Save to device</string>
+</resources>
