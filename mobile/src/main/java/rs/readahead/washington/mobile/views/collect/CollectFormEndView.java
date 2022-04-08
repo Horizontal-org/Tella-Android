@@ -2,17 +2,20 @@ package rs.readahead.washington.mobile.views.collect;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
-
 import com.hzontal.utils.MediaFile;
-
-import org.hzontal.shared_ui.submission.SubmittingItem;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
@@ -83,16 +86,16 @@ public class CollectFormEndView extends FrameLayout {
         titleView.setText(R.string.collect_end_heading_submitting);
         subTitleView.setVisibility(GONE);
 
-        SubmittingItem item = findViewWithTag(partName);
-        if (item != null) {
-            item.setPartUploading();
+        ViewGroup layout = findViewWithTag(partName);
+        if (layout != null) {
+            setPartUploading(layout);
         }
     }
 
     public void hideUploadProgress(String partName) {
-        SubmittingItem item = findViewWithTag(partName);
-        if (item != null) {
-            item.setPartUploaded();
+        ViewGroup layout = findViewWithTag(partName);
+        if (layout != null) {
+            setPartUploaded(layout);
         }
     }
 
@@ -101,31 +104,40 @@ public class CollectFormEndView extends FrameLayout {
             return;
         }
 
-        SubmittingItem item = findViewWithTag(partName);
-        if (item != null) {
-            item.setUploadProgress(pct);
+        ProgressBar bar = findProgressBar(partName);
+        if (bar != null) {
+            bar.setProgress((int) (bar.getMax() * pct));
         }
     }
+
     public void clearPartsProgress(CollectFormInstance instance) {
         setPartsCleared(instance);
     }
 
     private View createFormSubmissionPartItemView(@NonNull CollectFormInstance instance, long size, boolean offline) {
+        @SuppressLint("InflateParams")
+        LinearLayout layout = (LinearLayout) LayoutInflater.from(getContext())
+                .inflate(R.layout.form_parts_list_item, null);
 
-        SubmittingItem item = new SubmittingItem(getContext(), null, 0);
+        layout.setTag(C.OPEN_ROSA_XML_PART_NAME);
 
-        item.setTag(C.OPEN_ROSA_XML_PART_NAME);
+        TextView nameView = layout.findViewById(R.id.partName);
+        TextView sizeView = layout.findViewById(R.id.partSize);
+        ImageView iconView = layout.findViewById(R.id.partIcon);
+        CheckBox uploadCheck = layout.findViewById(R.id.partCheckBox);
 
-        item.setPartName(R.string.collect_end_item_form_data);
-        item.setPartSize(size);
-        item.setPartIcon(R.drawable.ic_assignment_white_24dp);
+        nameView.setText(R.string.collect_end_item_form_data);
+        sizeView.setText(FileUtil.getFileSizeString(size));
+        iconView.setImageResource(R.drawable.ic_assignment_white_24dp);
 
         if (instance.getFormPartStatus() == FormMediaFileStatus.SUBMITTED ||
                 instance.getStatus() == CollectFormInstanceStatus.SUBMITTED || // back compatibility down
                 instance.getStatus() == CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS) {
-            item.setPartUploaded();
+            setPartUploaded(layout);
         } else {
-            item.setPartPrepared(offline);
+            uploadCheck.setChecked(true);
+            uploadCheck.setEnabled(false);
+            setPartPrepared(layout, offline);
         }
 
         if (offline || instance.getStatus() == CollectFormInstanceStatus.SUBMITTED) {
@@ -134,16 +146,23 @@ public class CollectFormEndView extends FrameLayout {
             subTitleView.setVisibility(VISIBLE);
         }
 
-        return item;
+        return layout;
     }
 
     private View createFormMediaFileItemView(@NonNull FormMediaFile mediaFile, boolean offline) {
+        @SuppressLint("InflateParams")
+        LinearLayout layout = (LinearLayout) LayoutInflater.from(getContext())
+                .inflate(R.layout.form_parts_list_item, null);
 
-        SubmittingItem item = new SubmittingItem(getContext(), null, 0);
-        item.setTag(mediaFile.getPartName());
+        layout.setTag(mediaFile.getPartName());
 
-        item.setPartName(mediaFile.name);
-        item.setPartSize(mediaFile.size);
+        TextView nameView = layout.findViewById(R.id.partName);
+        TextView sizeView = layout.findViewById(R.id.partSize);
+        ImageView iconView = layout.findViewById(R.id.partIcon);
+        CheckBox uploadCheck = layout.findViewById(R.id.partCheckBox);
+
+        nameView.setText(mediaFile.name);
+        sizeView.setText(FileUtil.getFileSizeString(mediaFile.size));
 
         int typeResId = R.drawable.ic_attach_file_white_24dp;
 
@@ -155,35 +174,74 @@ public class CollectFormEndView extends FrameLayout {
             typeResId = R.drawable.ic_mic_white_small;
         }
 
-        item.setPartIcon(typeResId);
+        iconView.setImageResource(typeResId);
 
         if (mediaFile.status == FormMediaFileStatus.SUBMITTED) {
-            item.setPartUploaded();
+            setPartUploaded(layout);
         } else {
-            item.setPartPrepared(offline);
+            uploadCheck.setChecked(mediaFile.uploading);
+            uploadCheck.setEnabled(true);
+            uploadCheck.setOnCheckedChangeListener((buttonView, isChecked) ->
+                    mediaFile.uploading = isChecked);
+            setPartPrepared(layout, offline);
         }
 
-        return item;
+        return layout;
+    }
+
+    @Nullable
+    private ProgressBar findProgressBar(@NonNull String partName) {
+        View layout = findViewWithTag(partName);
+
+        if (layout == null) {
+            return null;
+        }
+
+        return layout.findViewById(R.id.uploadProgress);
     }
 
     private void setPartsCleared(CollectFormInstance instance) {
-        SubmittingItem item = partsListView.findViewWithTag(C.OPEN_ROSA_XML_PART_NAME);
+        ViewGroup layout = partsListView.findViewWithTag(C.OPEN_ROSA_XML_PART_NAME);
 
         if (instance.getStatus() == CollectFormInstanceStatus.SUBMITTED ||
                 instance.getStatus() == CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS) {
-            item.setPartUploaded();
+            setPartUploaded(layout);
         } else {
-            item.setPartCleared();
+            setPartCleared(layout);
         }
 
         for (FormMediaFile mediaFile : instance.getWidgetMediaFiles()) {
-            item = partsListView.findViewWithTag(mediaFile.getPartName());
+            layout = partsListView.findViewWithTag(mediaFile.getPartName());
 
             if (mediaFile.status == FormMediaFileStatus.SUBMITTED) {
-                item.setPartUploaded();
+                setPartUploaded(layout);
             } else {
-                item.setPartCleared();
+                setPartCleared(layout);
             }
         }
+    }
+
+    private void setPartCleared(@NonNull ViewGroup layout) {
+        layout.findViewById(R.id.uploadProgress).setVisibility(GONE);
+        layout.findViewById(R.id.partCheckBox).setVisibility(GONE);
+        layout.findViewById(R.id.partCheckIcon).setVisibility(GONE);
+    }
+
+    private void setPartPrepared(@NonNull ViewGroup layout, boolean offline) {
+        layout.findViewById(R.id.uploadProgress).setVisibility(GONE);
+        layout.findViewById(R.id.partCheckBox).setVisibility(offline ? GONE : VISIBLE);
+        layout.findViewById(R.id.partCheckIcon).setVisibility(GONE);
+    }
+
+    private void setPartUploading(@NonNull ViewGroup layout) {
+        layout.findViewById(R.id.uploadProgress).setVisibility(VISIBLE);
+        layout.findViewById(R.id.partCheckBox).setVisibility(GONE);
+        layout.findViewById(R.id.partCheckIcon).setVisibility(GONE);
+    }
+
+    private void setPartUploaded(@NonNull ViewGroup layout) {
+        layout.findViewById(R.id.uploadProgress).setVisibility(GONE);
+        layout.findViewById(R.id.partCheckBox).setVisibility(GONE);
+        layout.findViewById(R.id.partCheckIcon).setVisibility(VISIBLE);
     }
 }
