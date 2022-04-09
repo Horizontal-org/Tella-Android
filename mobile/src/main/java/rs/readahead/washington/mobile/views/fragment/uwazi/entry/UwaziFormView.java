@@ -110,6 +110,15 @@ public class UwaziFormView extends LinearLayout {
         }
     }
 
+    public boolean checkValidationConstraints() {
+        for (UwaziQuestionWidget q : widgets) {
+            if (q.checkValidationConstraint()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void setValidationConstraintText(String formIndex, String text) {
         for (UwaziQuestionWidget q : widgets) {
             if (q.getPrompt().getID().equals(formIndex)) {

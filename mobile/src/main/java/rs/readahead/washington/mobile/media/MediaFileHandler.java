@@ -140,22 +140,23 @@ public class MediaFileHandler {
         FileUtil.emptyDir(new File(context.getFilesDir(), C.TMP_DIR));
     }
 
-    public static void exportMediaFile(Context context, VaultFile vaultFile) throws IOException {
-        String envDirType;
-
-        if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
-            envDirType = Environment.DIRECTORY_PICTURES;
-        } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
-            envDirType = Environment.DIRECTORY_MOVIES;
-        } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
-            envDirType = Environment.DIRECTORY_MUSIC;
-        } else { // this should not happen anyway..
-            if (Build.VERSION.SDK_INT >= 19) {
-                envDirType = Environment.DIRECTORY_DOCUMENTS;
-            } else {
+    public static void exportMediaFile(Context context, VaultFile vaultFile,@Nullable String envDirType) throws IOException {
+        if (envDirType == null || envDirType.isEmpty()){
+            if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
                 envDirType = Environment.DIRECTORY_PICTURES;
+            } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
+                envDirType = Environment.DIRECTORY_MOVIES;
+            } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
+                envDirType = Environment.DIRECTORY_MUSIC;
+            } else { // this should not happen anyway..
+                if (Build.VERSION.SDK_INT >= 19) {
+                    envDirType = Environment.DIRECTORY_DOCUMENTS;
+                } else {
+                    envDirType = Environment.DIRECTORY_PICTURES;
+                }
             }
         }
+
 
         File path;
         if (Build.VERSION.SDK_INT >= 29) {
@@ -445,6 +446,17 @@ public class MediaFileHandler {
                     .blockingGet();
         } catch (Throwable ignored) {
             return false;
+        }
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    public static VaultFile renameFile(@NonNull VaultFile vaultFile, String fileName) {
+        try {
+            return MyApplication.rxVault.rename(vaultFile.id, fileName)
+                    .subscribeOn(Schedulers.io())
+                    .blockingGet();
+        } catch (Throwable ignored) {
+            return vaultFile;
         }
     }
 

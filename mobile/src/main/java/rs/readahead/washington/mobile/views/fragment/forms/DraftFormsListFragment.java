@@ -164,6 +164,10 @@ public class DraftFormsListFragment extends FormListFragment implements
         );
     }
 
+    @Override
+    public void reSubmitForm(CollectFormInstance instance) {
+    }
+
     public void deleteFormInstance(long instanceId) {
         model.deleteFormInstance(instanceId);
     }
