@@ -96,7 +96,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     }
 
     fun addImprovementSection() {
-        if (Preferences.isShowVaultImprovementSection() && !Preferences.hasAcceptedImprovements()) {
+        if ((Preferences.isShowVaultImprovementSection() && !Preferences.hasAcceptedImprovements()) || Preferences.isTimeToShowReminderImprovements()) {
             improveInsights = listOf(DataItem.ImproveAction(ID_IMPROVEMENT))
             renderList()
         }

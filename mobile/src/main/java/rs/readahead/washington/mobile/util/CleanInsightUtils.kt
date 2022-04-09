@@ -9,7 +9,7 @@ object CleanInsightUtils {
 
     enum class ServerType { SERVER_TELLA, SERVER_UWAZI, SERVER_COLLECT }
 
-    private const val CAMPAIGN_ID = "test"
+    const val CAMPAIGN_ID = "test"
     private const val CATEGORY = "app-state"
     private const val YES = "Yes"
     private const val NO = "No"
@@ -19,13 +19,14 @@ object CleanInsightUtils {
         if (!Preferences.hasAcceptedImprovements()) return
         try {
             cleanInsights?.let {
+
                 val isCamouflageEnabled = if (!CamouflageManager.getInstance().isDefaultLauncherActivityAlias) YES else NO
                 val isQuickExit = if (Preferences.isQuickExit()) YES else NO
                 it.measureEvent(CATEGORY, "Opening the app", CAMPAIGN_ID)
                 it.measureEvent(CATEGORY, "Quick delete", CAMPAIGN_ID, isQuickExit)
                 it.measureEvent(CATEGORY, "Camouflage enabled", CAMPAIGN_ID, isCamouflageEnabled)
                 it.measureEvent(CATEGORY, "Language", CAMPAIGN_ID, LocaleManager.getInstance().languageSetting ?: "EN")
-                it.persistAndSend()
+                it.persist()
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -37,7 +38,7 @@ object CleanInsightUtils {
         try {
             cleanInsights?.let {
                 it.measureEvent(CATEGORY, "Connected server", CAMPAIGN_ID, serverType.name)
-                it.persistAndSend()
+                it.persist()
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -50,7 +51,7 @@ object CleanInsightUtils {
             cleanInsights?.let {
                 val timeSpend = (System.currentTimeMillis() - start) / 1000
                 it.measureEvent(CATEGORY, "Time spent on the app", CAMPAIGN_ID, timeSpend.toString())
-                it.persistAndSend()
+                it.persist()
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -61,8 +62,9 @@ object CleanInsightUtils {
         if (!Preferences.hasAcceptedImprovements()) return
         try {
             cleanInsights?.let {
+                it.setCampaignId(CAMPAIGN_ID)
                 it.measureVisit(Collections.singletonList("Main"), CAMPAIGN_ID)
-                it.persistAndSend()
+                it.persist()
             }
         } catch (e: Exception) {
             e.printStackTrace()

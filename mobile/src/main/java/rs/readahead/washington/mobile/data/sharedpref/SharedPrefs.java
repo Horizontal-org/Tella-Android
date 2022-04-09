@@ -56,6 +56,7 @@ public class SharedPrefs {
     static final String UPGRADE_TELLA_2 = "update_tella_2";
     static final String SHOW_IMPROVEMENT_SECTION = "show_improvement_section";
     static final String HAS_IMPROVEMENT_ACCEPTED = "has_improvement_accepted";
+    static final String TIME_IMPROVEMENT_ACCEPTED = "time_improvement_accepted";
 
     private static SharedPrefs instance;
     private SharedPreferences pref;

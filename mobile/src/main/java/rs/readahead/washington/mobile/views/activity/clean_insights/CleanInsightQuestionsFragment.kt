@@ -11,11 +11,15 @@ import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 class CleanInsightQuestionsFragment : BaseFragment() {
 
     private lateinit var onNext: () -> Unit
+    private lateinit var onPrevious: () -> Unit
 
     companion object {
         @JvmStatic
-        fun newInstance(onNext: () -> Unit) =
-            CleanInsightQuestionsFragment().apply { this.onNext = onNext }
+        fun newInstance(onNext: () -> Unit, onPrevious: () -> Unit) =
+            CleanInsightQuestionsFragment().apply {
+                this.onNext = onNext
+                this.onPrevious = onPrevious
+            }
     }
 
     override fun onCreateView(
@@ -32,6 +36,7 @@ class CleanInsightQuestionsFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
+        view.findViewById<TextView>(R.id.back_btn).setOnClickListener { onPrevious() }
         view.findViewById<TextView>(R.id.next_btn).setOnClickListener { onNext() }
     }
 }

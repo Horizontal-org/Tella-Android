@@ -462,6 +462,13 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
         persist(async = false, force = true)
     }
 
+    private var campaignId: String = ""
+    fun setCampaignId(campaignId: String) {
+        this.campaignId = campaignId
+    }
+
+    fun getCampaignId() = campaignId
+
     /**
      * Persist accumulated data to the filesystem.
      *
@@ -536,7 +543,9 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
             done(e)
             return
         }
-        store.send(body, conf.server, conf.timeout, done)
+
+        val campaign = conf.campaigns[getCampaignId()] ?: return
+        if (Date() >= campaign.getEndsDate()) store.send(body, conf.server, conf.timeout, done)
     }
 
     data class InsightsJson(val idsite: Int, val lang: String?, val ua: String?, val visits: ArrayList<VisitJson>, val events: ArrayList<EventJson>)
@@ -571,14 +580,6 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
             debug("Measurement '%s' discarded, because campaign '%s' already ended.", debugString, campaignId)
             return null
         }
-
-//        if (!isCampaignCurrentlyGranted(campaignId)) {
-//            debug(
-//                "Measurement '%s' discarded, because campaign '%s' has no user consent yet, any more or we're outside the measurement period.",
-//                debugString, campaignId
-//            )
-//            return null
-//        }
 
         return campaign
     }
