@@ -658,4 +658,5 @@ button to add a new template.</string>
   <string name="settings.gen_share_data_action.expl">Join our study for 7 days to help us understand how you use Tella. Your data will never be shared with anyone besides the Tella team.Learn more</string>
   <string name="action_no">no</string>
   <string name="settings.serv_add.server.selection_dialog.description">If you are not sure, please ask your\n organization.</string>
+  <string name="Collect_EndSubtitleExpl_UncheckedItems">Uncheck attachments to send them later. You can complete the submission from your Outbox.</string>
 </resources>

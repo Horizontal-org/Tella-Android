@@ -65,7 +65,7 @@ public class FormSubmitActivity extends BaseLockActivity implements
         formReSubmitter = new FormReSubmitter(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
+       // toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();

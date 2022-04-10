@@ -5,6 +5,8 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.cardview.widget.CardView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,9 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hzontal.utils.MediaFile;
 
 import rs.readahead.washington.mobile.R;
@@ -23,6 +28,9 @@ import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceS
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.javarosa.FormUtils;
+import rs.readahead.washington.mobile.media.MediaFileHandler;
+import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
+import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.FileUtil;
 
@@ -35,16 +43,20 @@ public class CollectFormEndView extends FrameLayout {
     String title;
 
     private CollectFormInstance instance;
+    private final RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
 
     public CollectFormEndView(Context context, @StringRes int titleResId) {
         super(context);
         inflate(context, R.layout.collect_form_end_view, this);
-
         title = getResources().getString(titleResId);
 
         titleView = findViewById(R.id.title);
 
         subTitleView = findViewById(R.id.subtitle);
+
+        MediaFileHandler mediaFileHandler = new MediaFileHandler();
+        VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
+        glide = Glide.with(getContext()).using(glideLoader);
     }
 
     public void setInstance(@NonNull CollectFormInstance instance, boolean offline) {
@@ -125,10 +137,12 @@ public class CollectFormEndView extends FrameLayout {
         TextView sizeView = layout.findViewById(R.id.partSize);
         ImageView iconView = layout.findViewById(R.id.partIcon);
         CheckBox uploadCheck = layout.findViewById(R.id.partCheckBox);
+        CardView cardView = layout.findViewById(R.id.fileThumbCard);
 
         nameView.setText(R.string.collect_end_item_form_data);
         sizeView.setText(FileUtil.getFileSizeString(size));
         iconView.setImageResource(R.drawable.ic_assignment_white_24dp);
+        cardView.setVisibility(GONE);
 
         if (instance.getFormPartStatus() == FormMediaFileStatus.SUBMITTED ||
                 instance.getStatus() == CollectFormInstanceStatus.SUBMITTED || // back compatibility down
@@ -159,22 +173,26 @@ public class CollectFormEndView extends FrameLayout {
         TextView nameView = layout.findViewById(R.id.partName);
         TextView sizeView = layout.findViewById(R.id.partSize);
         ImageView iconView = layout.findViewById(R.id.partIcon);
+        ImageView thumbView = layout.findViewById(R.id.fileThumb);
         CheckBox uploadCheck = layout.findViewById(R.id.partCheckBox);
+        CardView cardView = layout.findViewById(R.id.fileThumbCard);
 
         nameView.setText(mediaFile.name);
         sizeView.setText(FileUtil.getFileSizeString(mediaFile.size));
 
-        int typeResId = R.drawable.ic_attach_file_white_24dp;
-
-        if (MediaFile.INSTANCE.isImageFileType(mediaFile.mimeType)) {
-            typeResId = R.drawable.ic_menu_camera;
-        } else if (MediaFile.INSTANCE.isVideoFileType(mediaFile.mimeType)) {
-            typeResId = R.drawable.ic_videocam;
+        if (MediaFile.INSTANCE.isImageFileType(mediaFile.mimeType) || (MediaFile.INSTANCE.isVideoFileType(mediaFile.mimeType))) {
+            glide.load(new VaultFileLoaderModel(mediaFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(thumbView);
+            iconView.setVisibility(GONE);
         } else if (MediaFile.INSTANCE.isAudioFileType(mediaFile.mimeType)) {
-            typeResId = R.drawable.ic_mic_white_small;
+            iconView.setImageResource(R.drawable.ic_headset_white_24dp);
+            cardView.setVisibility(GONE);
+        } else {
+            iconView.setImageResource(R.drawable.ic_attach_file_white_24dp);
+            cardView.setVisibility(GONE);
         }
-
-        iconView.setImageResource(typeResId);
 
         if (mediaFile.status == FormMediaFileStatus.SUBMITTED) {
             setPartUploaded(layout);

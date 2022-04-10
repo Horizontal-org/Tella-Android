@@ -159,7 +159,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
             }
         });
 
-        endView = new CollectFormEndView(this, R.string.collect_end_heading);
+        endView = new CollectFormEndView(this, R.string.Uwazi_Submitted_Entity_Header_Title);
 
         disposables = MyApplication.bus().createCompositeDisposable();
         disposables.wire(FormAttachmentsUpdatedEvent.class, new EventObserver<FormAttachmentsUpdatedEvent>() {
