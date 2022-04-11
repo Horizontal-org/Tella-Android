@@ -69,7 +69,7 @@ open class DefaultStore(args: Map<String, Any> = HashMap(), debug: ((message: St
         if (storageFile.canRead()) {
             val json = storageFile.readText()
             try {
-                return Gson().fromJson(json , DefaultStore::class.java)
+                return Gson().fromJson(json, DefaultStore::class.java)
             } catch (e: Exception) {
                 tryCast<(String?) -> Unit>(args["debug"]) {
                     this(e.localizedMessage)
@@ -90,13 +90,10 @@ open class DefaultStore(args: Map<String, Any> = HashMap(), debug: ((message: St
                 done(e)
             }
         }
-
-        if (async) {
-            mCoroutineScope.launch {
-                work()
-            }
-        } else {
-            work()
+        try {
+            if (async) mCoroutineScope.launch { work() } else work()
+        } catch (e: Exception) {
+            done(e)
         }
     }
 
@@ -104,6 +101,7 @@ open class DefaultStore(args: Map<String, Any> = HashMap(), debug: ((message: St
         mCoroutineScope.launch {
             try {
                 val bytes = data.toByteArray(Charset.defaultCharset())
+
                 @Suppress("BlockingMethodInNonBlockingContext")
                 val conn = server.openConnection() as HttpURLConnection
                 conn.doOutput = true

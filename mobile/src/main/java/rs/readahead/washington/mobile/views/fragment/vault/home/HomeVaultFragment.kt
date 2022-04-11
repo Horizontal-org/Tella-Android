@@ -27,14 +27,15 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
-import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
+import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.views.activity.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity
 import rs.readahead.washington.mobile.views.activity.VideoViewerActivity
+import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActions
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.custom.CountdownTextView
@@ -87,23 +88,17 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CleanInsightsActivity.CLEAN_INSIGHTS_REQUEST_CODE) {
             removeImprovementSection()
-            val isOptedIn =
-                data?.extras?.getBoolean(CleanInsightsActivity.RESULT_FOR_ACTIVITY) ?: false
-            val shouldOpenLearnMore =
-                data?.extras?.getBoolean(CleanInsightsActivity.FROM_LEARN_MORE) ?: false
-            if (isOptedIn) showMessageForCleanInsightsApprove()
-            if (shouldOpenLearnMore) startCleanInsightActivity(true)
+            val cleanInsightsActions = data?.extras?.getSerializable(CleanInsightsActivity.RESULT_FOR_ACTIVITY) as CleanInsightsActions
+            showMessageForCleanInsightsApprove(cleanInsightsActions)
         }
     }
 
-    private fun showMessageForCleanInsightsApprove() {
-        Preferences.setIsAcceptedImprovements(true)
-        CleanInsightUtils.grantCampaign(true)
-        DialogUtils.showBottomMessage(
-            requireActivity(),
-            String.format(getString(R.string.clean_insights_signed_for_days)),
-            false
-        )
+    private fun showMessageForCleanInsightsApprove(cleanInsightsActions: CleanInsightsActions) {
+        if (cleanInsightsActions == CleanInsightsActions.YES) {
+            Preferences.setIsAcceptedImprovements(true)
+            CleanInsightUtils.grantCampaign(true)
+            DialogUtils.showBottomMessage(requireActivity(), getString(R.string.clean_insights_signed_for_days), false)
+        }
     }
 
     private fun initData() {
@@ -214,9 +209,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         })
     }
 
-    private fun startCleanInsightActivity(toOpenLeanMore: Boolean = false) {
+    private fun startCleanInsightActivity() {
         val intent = Intent(context, CleanInsightsActivity::class.java)
-        intent.putExtra(CleanInsightsActivity.FROM_LEARN_MORE, toOpenLeanMore)
         startActivityForResult(intent, CleanInsightsActivity.CLEAN_INSIGHTS_REQUEST_CODE)
     }
 
@@ -269,9 +263,14 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             ImproveClickOptions.CLOSE -> removeImprovementSection()
             ImproveClickOptions.YES -> {
                 removeImprovementSection()
-                showMessageForCleanInsightsApprove()
+                showMessageForCleanInsightsApprove(CleanInsightsActions.YES)
             }
             ImproveClickOptions.LEARN_MORE -> startCleanInsightActivity()
+            ImproveClickOptions.SETTINGS -> {
+                removeImprovementSection()
+                Preferences.setIsAcceptedImprovements(true)
+                nav().navigate(R.id.main_settings)
+            }
         }
     }
 
