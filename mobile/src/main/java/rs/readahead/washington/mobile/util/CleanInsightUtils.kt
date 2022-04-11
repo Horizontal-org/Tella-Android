@@ -19,7 +19,6 @@ object CleanInsightUtils {
         if (!Preferences.hasAcceptedImprovements()) return
         try {
             cleanInsights?.let {
-
                 val isCamouflageEnabled = if (!CamouflageManager.getInstance().isDefaultLauncherActivityAlias) YES else NO
                 val isQuickExit = if (Preferences.isQuickExit()) YES else NO
                 it.measureEvent(CATEGORY, "Opening the app", CAMPAIGN_ID)

@@ -578,6 +578,7 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
 
         if (now > campaign.getEndsDate()) {
             debug("Measurement '%s' discarded, because campaign '%s' already ended.", debugString, campaignId)
+            persistAndSend()
             return null
         }
 
