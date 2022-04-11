@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.hzontal.tella_vault.MyLocation;
 import com.hzontal.tella_vault.VaultFile;
 
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -35,6 +36,7 @@ import androidx.fragment.app.Fragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import kotlin.Unit;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -495,14 +497,27 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         } else if (formParser.isFormChanged() && !formParser.isFormFinal()) {
             showFormChangedDialog();
         } else if (formParser.isFormFinal() && !stopped) {
-            alertDialog = DialogsUtil.showExitOnFinalDialog(this,
+            BottomSheetUtils.showStandardSheet(
+                    this.getSupportFragmentManager(),
+                    getString(R.string.Collect_DialogTitle_StopExit),
+                    getString(R.string.Collect_DialogExpl_ExitingStopSubmission),
+                    getString(R.string.Collect_DialogAction_KeepSubmitting),
+                    getString(R.string.Collect_DialogAction_StopAndExit),
+                    null, this::onDialogBackPressed);
+           /* alertDialog = DialogsUtil.showExitOnFinalDialog(this,
                     (dialog, which) -> onBackPressedWithoutCheck(),
                     (dialog, which) -> {
-                    });
+                    });*/
         } else {
             onBackPressedWithoutCheck();
         }
     }
+
+    private Unit onDialogBackPressed() {
+        onBackPressedWithoutCheck();
+        return Unit.INSTANCE;
+    }
+
 
     private void onBackPressedWithoutCheck() {
         if (draftAutoSaved) {

@@ -659,4 +659,8 @@ button to add a new template.</string>
   <string name="action_no">no</string>
   <string name="settings.serv_add.server.selection_dialog.description">If you are not sure, please ask your\n organization.</string>
   <string name="Collect_EndSubtitleExpl_UncheckedItems">Uncheck attachments to send them later. You can complete the submission from your Outbox.</string>
+  <string name="Collect_DialogExpl_ExitingStopSubmission">Exiting will stop the submission of your form. You will be able to resume the submission later from your Outbox.</string>
+  <string name="Collect_DialogTitle_StopExit">Stop and exit?</string>
+  <string name="Collect_DialogAction_KeepSubmitting">Keep submitting</string>
+  <string name="Collect_DialogAction_StopAndExit">Stop and exit</string>
 </resources>

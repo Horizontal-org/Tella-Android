@@ -13,13 +13,17 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
 
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import kotlin.Unit;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.CollectFormSubmissionErrorEvent;
 import rs.readahead.washington.mobile.bus.event.CollectFormSubmittedEvent;
+import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaPartResponse;
@@ -92,17 +96,24 @@ public class FormSubmitActivity extends BaseLockActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch (id) {
-            case android.R.id.home:
-                if (formReSubmitter != null && formReSubmitter.isReSubmitting()) {
-                    DialogsUtil.showExitWithSubmitDialog(this,
+        if (id == android.R.id.home) {
+            if (formReSubmitter != null && formReSubmitter.isReSubmitting()) {
+                BottomSheetUtils.showStandardSheet(
+                        this.getSupportFragmentManager(),
+                        getString(R.string.Collect_DialogTitle_StopExit),
+                        getString(R.string.Collect_DialogExpl_ExitingStopSubmission),
+                        getString(R.string.Collect_DialogAction_KeepSubmitting),
+                        getString(R.string.Collect_DialogAction_StopAndExit),
+                        null, this::onDialogBackPressed);
+
+                    /*DialogsUtil.showExitWithSubmitDialog(this,
                             (dialog, which) -> finish(),
                             (dialog, which) -> {
-                            });
-                } else {
-                    finish();
-                }
-                return true;
+                            });*/
+            } else {
+                finish();
+            }
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -111,14 +122,28 @@ public class FormSubmitActivity extends BaseLockActivity implements
     @Override
     public void onBackPressed() {
         if (formReSubmitter != null && formReSubmitter.isReSubmitting()) {
-            DialogsUtil.showExitWithSubmitDialog(this,
+            BottomSheetUtils.showStandardSheet(
+                    this.getSupportFragmentManager(),
+                    getString(R.string.Collect_DialogTitle_StopExit),
+                    getString(R.string.Collect_DialogExpl_ExitingStopSubmission),
+                    getString(R.string.Collect_DialogAction_KeepSubmitting),
+                    getString(R.string.Collect_DialogAction_StopAndExit),
+                    null, this::onDialogBackPressed);
+
+
+            /*DialogsUtil.showExitWithSubmitDialog(this,
                     (dialog, which) -> super.onBackPressed(),
                     (dialog, which) -> {
-                    });
+                    });*/
         } else {
             super.onBackPressed();
         }
         finish();
+    }
+
+    private Unit onDialogBackPressed() {
+        super.onBackPressed();
+        return Unit.INSTANCE;
     }
 
     @Override
