@@ -663,4 +663,5 @@ button to add a new template.</string>
   <string name="Collect_DialogTitle_StopExit">Stop and exit?</string>
   <string name="Collect_DialogAction_KeepSubmitting">Keep submitting</string>
   <string name="Collect_DialogAction_StopAndExit">Stop and exit</string>
+  <string name="Collect_DialogInfo_FormSubmissionStopped">Your form submission has been stopped. You can resume it from the Outbox.</string>
 </resources>

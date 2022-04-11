@@ -26,6 +26,7 @@ import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import butterknife.ButterKnife
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
+import org.hzontal.shared_ui.utils.DialogUtils
 import org.javarosa.core.model.FormDef
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnShowRationale
@@ -168,6 +169,7 @@ class CollectMainFragment : BaseFragment() {
                 override fun onNext(event: CollectFormSubmitStoppedEvent) {
                     getDraftFormsListFragment().listDraftForms()
                     getOutboxFormListFragment().listOutboxForms()
+                    showStoppedMessage()
                     setPagerToOutboxFragment()
                 }
             })
@@ -505,6 +507,14 @@ class CollectMainFragment : BaseFragment() {
 
     private fun startCollectHelp() {
         startActivity(Intent(activity, CollectHelpActivity::class.java))
+    }
+
+    private fun showStoppedMessage() {
+        DialogUtils.showBottomMessage(
+            activity,
+            getString(R.string.Collect_DialogInfo_FormSubmissionStopped),
+            true
+        )
     }
 
 }

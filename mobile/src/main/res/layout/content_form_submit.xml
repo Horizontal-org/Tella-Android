@@ -9,24 +9,51 @@
     tools:context="rs.readahead.washington.mobile.views.activity.FormSubmitActivity"
     tools:showIn="@layout/activity_form_submit">
 
-    <rs.readahead.washington.mobile.views.custom.FormSubmitButtonView
-        android:id="@+id/submit_button"
+    <LinearLayout
+        android:id="@+id/button_bottom_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:clickable="true"
-        android:focusable="true"
-        android:visibility="gone">
-    </rs.readahead.washington.mobile.views.custom.FormSubmitButtonView>
+        android:background="@color/wa_purple"
+        android:orientation="horizontal"
+        android:paddingTop="0.5dp">
 
-    <Button
-        android:id="@+id/cancel_button"
-        style="@style/WhiteButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="@string/action_stop"
-        android:visibility="gone"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/cancel_button"
+            style="@style/Unlock_White_Text_Back"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/action_button_background"
+            android:backgroundTint="@color/wa_white_20"
+            android:text="@string/Uwazi_Submit_Later" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/submit_button"
+            style="@style/Unlock_White_Text_Back"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/action_button_background"
+            android:text="@string/collect.end_action_submit" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/stop_button"
+            style="@style/Unlock_White_Text_Back"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/action_button_background"
+            android:backgroundTint="@color/wa_white_20"
+            android:visibility="gone"
+            android:text="@string/action_stop" />
+    </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/formDetailsContainer"
@@ -34,7 +61,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_above="@id/submit_button"
+        android:layout_above="@id/button_bottom_layout"
         android:clipToPadding="false"
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="vertical">

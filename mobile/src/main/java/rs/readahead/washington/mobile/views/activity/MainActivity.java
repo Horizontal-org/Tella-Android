@@ -140,7 +140,6 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Timber.d("++++++ int requestCode %d, int resultCode %d", requestCode, resultCode);
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == C.IMPORT_VIDEO) {
