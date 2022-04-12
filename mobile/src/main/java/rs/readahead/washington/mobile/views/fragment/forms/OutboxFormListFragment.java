@@ -138,15 +138,20 @@ public class OutboxFormListFragment extends FormListFragment implements
 
     @Override
     public void showFormsMenu(CollectFormInstance instance) {
-        BottomSheetUtils.showEditDeleteMenuSheet(
+        BottomSheetUtils.showThreeOptionMenuSheet(
                 requireActivity().getSupportFragmentManager(),
                 instance.getInstanceName(),
-                requireContext().getString(R.string.collect_sent_action_edit_to_resend),
+                requireContext().getString(R.string.action_view),
+                requireContext().getString(R.string.action_share),
                 requireContext().getString(R.string.action_delete),
                 action -> {
-                    if (action == BottomSheetUtils.Action.EDIT) {
-                        //MyApplication.bus().post(new ReSubmitFormInstanceEvent(instance));
-                        MyApplication.bus().post(new ShowFormInstanceEntryEvent(instance.getId()));
+                    if (action == BottomSheetUtils.Action.VIEW) {
+                        reSubmitForm(instance);
+                    }
+                    if (action == BottomSheetUtils.Action.SHARE) {
+                        /*if (formSubmitter != null) {
+                            formSubmitter.getCompactFormTextToShare();
+                        }*/
                     }
                     if (action == BottomSheetUtils.Action.DELETE) {
                         deleteFormInstance(instance.getId());
