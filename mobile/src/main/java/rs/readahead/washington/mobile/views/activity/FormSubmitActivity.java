@@ -133,9 +133,9 @@ public class FormSubmitActivity extends BaseLockActivity implements
                     this.getSupportFragmentManager(),
                     getString(R.string.Collect_DialogTitle_StopExit),
                     getString(R.string.Collect_DialogExpl_ExitingStopSubmission),
-                    getString(R.string.Collect_DialogAction_KeepSubmitting),
                     getString(R.string.Collect_DialogAction_StopAndExit),
-                    null, this::onDialogBackPressed);
+                    getString(R.string.Collect_DialogAction_KeepSubmitting),
+                    this::onDialogBackPressed, null);
         } else {
             super.onBackPressed();
         }
@@ -189,6 +189,7 @@ public class FormSubmitActivity extends BaseLockActivity implements
         if (formReSubmitter != null) {
             formReSubmitter.userStopReSubmission();
         }
+        MyApplication.bus().post(new CollectFormSubmitStoppedEvent());
     }
 
     @Override

@@ -96,6 +96,7 @@ public class CollectFormEndView extends FrameLayout {
 
     public void showUploadProgress(String partName) {
         titleView.setText(R.string.collect_end_heading_submitting);
+        titleView.setVisibility(GONE);
         subTitleView.setVisibility(GONE);
 
         ViewGroup layout = findViewWithTag(partName);
@@ -158,6 +159,7 @@ public class CollectFormEndView extends FrameLayout {
             subTitleView.setVisibility(GONE);
         } else {
             subTitleView.setVisibility(VISIBLE);
+            titleView.setVisibility(VISIBLE);
         }
 
         return layout;
