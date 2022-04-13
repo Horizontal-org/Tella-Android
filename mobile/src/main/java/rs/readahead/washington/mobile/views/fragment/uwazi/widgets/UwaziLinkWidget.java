@@ -109,7 +109,7 @@ public class UwaziLinkWidget extends UwaziQuestionWidget {
         String l = label.getText().toString();
         String u = url.getText().toString();
 
-        if ((!l.isEmpty() && !(URLUtil.isValidUrl(u)))) {
+        if ((!l.isEmpty() && !(isValidUrl(u)))) {
             this.setConstraintValidationText(getContext().getString(R.string.Uwazi_Info_NotValidURL));
         }
 
@@ -127,6 +127,10 @@ public class UwaziLinkWidget extends UwaziQuestionWidget {
 
     private boolean isEmptyUrl(String url) {
         return url.equals(getContext().getString(R.string.Uwazi_Answer_LinkInitialText)) || url.isEmpty();
+    }
+
+    private boolean isValidUrl(String url) {
+        return !(url.equals(getContext().getString(R.string.Uwazi_Answer_LinkInitialText))) && URLUtil.isValidUrl(url);
     }
 
     @Override
