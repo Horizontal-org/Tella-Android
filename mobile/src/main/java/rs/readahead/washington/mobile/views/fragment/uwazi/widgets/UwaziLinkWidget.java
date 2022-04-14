@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.text.Selection;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.URLUtil;
@@ -130,7 +131,7 @@ public class UwaziLinkWidget extends UwaziQuestionWidget {
     }
 
     private boolean isValidUrl(String url) {
-        return !(url.equals(getContext().getString(R.string.Uwazi_Answer_LinkInitialText))) && URLUtil.isValidUrl(url);
+        return !(url.equals(getContext().getString(R.string.Uwazi_Answer_LinkInitialText))) && Patterns.WEB_URL.matcher(url).matches();
     }
 
     @Override
