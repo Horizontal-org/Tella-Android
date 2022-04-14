@@ -142,7 +142,7 @@ public class OutboxFormListFragment extends FormListFragment implements
                 requireActivity().getSupportFragmentManager(),
                 instance.getInstanceName(),
                 requireContext().getString(R.string.action_view),
-                requireContext().getString(R.string.action_share),
+                null,//requireContext().getString(R.string.action_share)
                 requireContext().getString(R.string.action_delete),
                 action -> {
                     if (action == BottomSheetUtils.Action.VIEW) {

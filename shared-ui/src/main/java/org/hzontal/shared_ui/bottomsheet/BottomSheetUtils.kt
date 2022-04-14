@@ -191,11 +191,13 @@ BottomSheetUtils {
     interface BinaryConsumer {
         fun accept(option: Boolean)
     }
-    interface IServerChoiceActions{
+
+    interface IServerChoiceActions {
         fun addODKServer()
         fun addTellaWebServer()
         fun addUwaziServer()
     }
+
     @JvmStatic
     fun showBinaryTypeSheet(
         fragmentManager: FragmentManager,
@@ -786,11 +788,11 @@ BottomSheetUtils {
     fun showDownloadStatus(
         fragmentManager: FragmentManager,
         titleText: String?,
-        completeText : String,
-        progressStatus : AtomicInteger,
-        cancelText : String,
+        completeText: String,
+        progressStatus: AtomicInteger,
+        cancelText: String,
         onCancelClick: (() -> Unit)?
-    ){
+    ) {
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.layout_progess_sheet)
             .cancellable(true)
@@ -805,7 +807,7 @@ BottomSheetUtils {
                     cancelTextView.text = cancelText
                     circularProgress.progress = progressStatus.get()
                     linearProgress.progress = progressStatus.get()
-                    if (progressStatus.get() == 100){
+                    if (progressStatus.get() == 100) {
                         customSheetFragment.dismiss()
                     }
                     cancelTextView.setOnClickListener {
@@ -824,8 +826,8 @@ BottomSheetUtils {
         lateinit var title: TextView
         lateinit var subtitle: TextView
         lateinit var cancelTextView: TextView
-        lateinit var circularProgress : CircularProgressIndicator
-        lateinit var linearProgress : LinearProgressIndicator
+        lateinit var circularProgress: CircularProgressIndicator
+        lateinit var linearProgress: LinearProgressIndicator
 
 
         override fun bindView(view: View) {
@@ -841,10 +843,10 @@ BottomSheetUtils {
     @JvmStatic
     fun showConfirmDelete(
         fragmentManager: FragmentManager,
-        titleText : String,
-        confirm : String,
+        titleText: String,
+        confirm: String,
         onConfirmClick: (() -> Unit)?
-    ){
+    ) {
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.sheet_confirm_delete)
             .cancellable(true)
@@ -871,7 +873,6 @@ BottomSheetUtils {
     class ConfirmDeletetHolder : CustomBottomSheetFragment.PageHolder() {
         lateinit var title: TextView
         lateinit var confirmTextView: TextView
-
 
 
         override fun bindView(view: View) {
@@ -937,9 +938,13 @@ BottomSheetUtils {
                     actionViewLabel?.let {
                         actionView.text = it
                     }
-                    actionShareLabel?.let {
-                        actionShare.text = it
+
+                    if (actionShareLabel == null) {
+                        actionShare.visibility = View.GONE
+                    } else {
+                        actionShare.text = actionShareLabel
                     }
+
                     actionDeleteLabel?.let {
                         actionDelete.text = it
                     }
