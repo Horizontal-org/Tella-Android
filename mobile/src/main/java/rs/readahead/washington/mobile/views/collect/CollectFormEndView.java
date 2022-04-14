@@ -2,11 +2,15 @@ package rs.readahead.washington.mobile.views.collect;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.cardview.widget.CardView;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +25,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hzontal.utils.MediaFile;
+
+import java.util.HashMap;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
@@ -41,6 +47,11 @@ public class CollectFormEndView extends FrameLayout {
     TextView titleView;
     TextView subTitleView;
     String title;
+    TextView formSizeView;
+
+    HashMap<String, Long> fileSizes = new HashMap<>();
+    Long formSize;
+    Long submittedSize = 0L;
 
     private CollectFormInstance instance;
     private final RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
@@ -64,7 +75,9 @@ public class CollectFormEndView extends FrameLayout {
         refreshInstance(offline);
     }
 
+    @SuppressLint("SetTextI18n")
     public void refreshInstance(boolean offline) {
+        submittedSize = 0L;
         if (this.instance == null) {
             return;
         }
@@ -75,7 +88,8 @@ public class CollectFormEndView extends FrameLayout {
         formNameView.setText(instance.getFormName());
 
         int formElements = 1;
-        long formSize = FormUtils.getFormPayloadSize(instance);
+        formSize = FormUtils.getFormPayloadSize(instance);
+        fileSizes.put(C.OPEN_ROSA_XML_PART_NAME, FormUtils.getFormPayloadSize(instance));
 
         partsListView = findViewById(R.id.formPartsList);
         partsListView.removeAllViews();
@@ -83,15 +97,20 @@ public class CollectFormEndView extends FrameLayout {
         partsListView.addView(createFormSubmissionPartItemView(instance, formSize, offline));
         for (FormMediaFile mediaFile : instance.getWidgetMediaFiles()) {
             partsListView.addView(createFormMediaFileItemView(mediaFile, offline));
+            fileSizes.put(mediaFile.getPartName(), mediaFile.size);
             formSize += mediaFile.size;
             formElements++;
         }
 
         TextView formElementsView = findViewById(R.id.formElements);
-        TextView formSizeView = findViewById(R.id.formSize);
+        formSizeView = findViewById(R.id.formSize);
 
         formElementsView.setText(getResources().getQuantityString(R.plurals.collect_end_meta_number_of_elements, formElements, formElements));
-        formSizeView.setText(FileUtil.getFileSizeString(formSize));
+        if (submittedSize == 0L) {
+            formSizeView.setText(FileUtil.getFileSizeString(formSize));
+        } else {
+            formSizeView.setText(FileUtil.getFileSizeString(submittedSize) + " / " + FileUtil.getFileSizeString(formSize));
+        }
     }
 
     public void showUploadProgress(String partName) {
@@ -105,13 +124,22 @@ public class CollectFormEndView extends FrameLayout {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     public void hideUploadProgress(String partName) {
         ViewGroup layout = findViewWithTag(partName);
         if (layout != null) {
             setPartUploaded(layout);
+            TextView sizeView = layout.findViewById(R.id.partSize);
+            if (fileSizes.get(partName) != null) {
+                sizeView.setText(FileUtil.getFileSizeString(fileSizes.get(partName)));
+            }
         }
+
+        submittedSize += fileSizes.get(partName);
+        formSizeView.setText(FileUtil.getFileSizeString(submittedSize) + " / " + FileUtil.getFileSizeString(formSize));
     }
 
+    @SuppressLint("SetTextI18n")
     public void setUploadProgress(String partName, float pct) {
         if (pct < 0 || pct > 1) {
             return;
@@ -120,6 +148,11 @@ public class CollectFormEndView extends FrameLayout {
         ProgressBar bar = findProgressBar(partName);
         if (bar != null) {
             bar.setProgress((int) (bar.getMax() * pct));
+        }
+
+        TextView partSize = findPartSize(partName);
+        if (partSize != null) {
+            partSize.setText(getUploadedFileSize(pct, fileSizes.get(partName)));
         }
     }
 
@@ -148,6 +181,7 @@ public class CollectFormEndView extends FrameLayout {
         if (instance.getFormPartStatus() == FormMediaFileStatus.SUBMITTED ||
                 instance.getStatus() == CollectFormInstanceStatus.SUBMITTED || // back compatibility down
                 instance.getStatus() == CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS) {
+            submittedSize += FormUtils.getFormPayloadSize(instance);
             setPartUploaded(layout);
         } else {
             uploadCheck.setChecked(true);
@@ -161,7 +195,6 @@ public class CollectFormEndView extends FrameLayout {
             subTitleView.setVisibility(VISIBLE);
             titleView.setVisibility(VISIBLE);
         }
-
         return layout;
     }
 
@@ -178,6 +211,11 @@ public class CollectFormEndView extends FrameLayout {
         ImageView thumbView = layout.findViewById(R.id.fileThumb);
         CheckBox uploadCheck = layout.findViewById(R.id.partCheckBox);
         CardView cardView = layout.findViewById(R.id.fileThumbCard);
+        ProgressBar uploadProgress = layout.findViewById(R.id.uploadProgress);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            uploadProgress.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
+        }
 
         nameView.setText(mediaFile.name);
         sizeView.setText(FileUtil.getFileSizeString(mediaFile.size));
@@ -198,6 +236,7 @@ public class CollectFormEndView extends FrameLayout {
 
         if (mediaFile.status == FormMediaFileStatus.SUBMITTED) {
             setPartUploaded(layout);
+            submittedSize += mediaFile.size;
         } else {
             uploadCheck.setChecked(mediaFile.uploading);
             uploadCheck.setEnabled(true);
@@ -220,11 +259,25 @@ public class CollectFormEndView extends FrameLayout {
         return layout.findViewById(R.id.uploadProgress);
     }
 
+    @Nullable
+    private TextView findPartSize(@NonNull String partName) {
+        View layout = findViewWithTag(partName);
+
+        if (layout == null) {
+            return null;
+        }
+
+        return layout.findViewById(R.id.partSize);
+    }
+
+    @SuppressLint("SetTextI18n")
     private void setPartsCleared(CollectFormInstance instance) {
+        submittedSize = 0L;
         ViewGroup layout = partsListView.findViewWithTag(C.OPEN_ROSA_XML_PART_NAME);
 
         if (instance.getStatus() == CollectFormInstanceStatus.SUBMITTED ||
                 instance.getStatus() == CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS) {
+            submittedSize += fileSizes.get(C.OPEN_ROSA_XML_PART_NAME);
             setPartUploaded(layout);
         } else {
             setPartCleared(layout);
@@ -234,10 +287,16 @@ public class CollectFormEndView extends FrameLayout {
             layout = partsListView.findViewWithTag(mediaFile.getPartName());
 
             if (mediaFile.status == FormMediaFileStatus.SUBMITTED) {
+                submittedSize += fileSizes.get(mediaFile.getPartName());
                 setPartUploaded(layout);
             } else {
                 setPartCleared(layout);
             }
+        }
+        if (submittedSize == 0L) {
+            formSizeView.setText(FileUtil.getFileSizeString(formSize));
+        } else {
+            formSizeView.setText(FileUtil.getFileSizeString(submittedSize) + " / " + FileUtil.getFileSizeString(formSize));
         }
     }
 
@@ -264,4 +323,10 @@ public class CollectFormEndView extends FrameLayout {
         layout.findViewById(R.id.partCheckBox).setVisibility(GONE);
         layout.findViewById(R.id.partCheckIcon).setVisibility(VISIBLE);
     }
+
+    private String getUploadedFileSize(float pct, Long size) {
+        float uploadedSize = (pct * size);
+        return FileUtil.getFileSizeString((long) uploadedSize) + " / " + FileUtil.getFileSizeString(size);
+    }
+
 }
