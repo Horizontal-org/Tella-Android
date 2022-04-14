@@ -271,7 +271,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
     @Override
     public void onUnSuccessfulUnlock(String tag, Throwable throwable) {
-        FirebaseCrashlytics.getInstance().recordException(throwable);
+       // FirebaseCrashlytics.getInstance().recordException(throwable);
     }
 
     @Override
@@ -322,7 +322,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     private void initCleanInsights() {
         if (Preferences.hasAcceptedImprovements()) {
             try {
-                cleanInsights = createCleanInsightsInstance(getApplicationContext(), "cleaninsights.json");
+                cleanInsights = createCleanInsightsInstance(getApplicationContext(), Preferences.getTimeAcceptedImprovements());
             } catch (Exception e) {
                 e.printStackTrace();
             }

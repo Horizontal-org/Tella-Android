@@ -20,6 +20,7 @@ import rs.readahead.washington.mobile.util.C.LOCATION_PERMISSION
 import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.LocaleManager
 import rs.readahead.washington.mobile.util.StringUtils
+import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActions
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import java.util.*
@@ -58,7 +59,7 @@ class GeneralSettings : BaseFragment() {
                 try {
                     Preferences.setIsAcceptedImprovements(isChecked)
                     CleanInsightUtils.grantCampaign(isChecked)
-                    if (isChecked) showMessageForCleanInsightsApprove()
+                    if (isChecked) showMessageForCleanInsightsApprove(CleanInsightsActions.YES)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -75,7 +76,7 @@ class GeneralSettings : BaseFragment() {
         val verificationSwitch = view.findViewById<TellaSwitchWithMessage>(R.id.verification_switch)
         verificationSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
             run {
-                if (!context?.let { hasLocationPermission(it) }!!){
+                if (!context?.let { hasLocationPermission(it) }!!) {
                     requestLocationPermission(LOCATION_PERMISSION)
                 }
                 Preferences.setAnonymousMode(!isChecked)
@@ -113,32 +114,33 @@ class GeneralSettings : BaseFragment() {
         }
     }
 
-    private fun startCleanInsightActivity(toOpenLeanMore: Boolean = false) {
+    private fun startCleanInsightActivity() {
         val intent = Intent(context, CleanInsightsActivity::class.java)
-        intent.putExtra(CleanInsightsActivity.FROM_LEARN_MORE, toOpenLeanMore)
         startActivityForResult(intent, CleanInsightsActivity.CLEAN_INSIGHTS_REQUEST_CODE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CleanInsightsActivity.CLEAN_INSIGHTS_REQUEST_CODE) {
-            val isOptedIn =
-                data?.extras?.getBoolean(CleanInsightsActivity.RESULT_FOR_ACTIVITY) ?: false
-            val shouldOpenLearnMore =
-                data?.extras?.getBoolean(CleanInsightsActivity.FROM_LEARN_MORE) ?: false
-            if (isOptedIn) showMessageForCleanInsightsApprove()
-            if (shouldOpenLearnMore) startCleanInsightActivity(true)
+            val cleanInsightsActions = data?.extras?.getSerializable(CleanInsightsActivity.RESULT_FOR_ACTIVITY) as CleanInsightsActions
+            showMessageForCleanInsightsApprove(cleanInsightsActions)
         }
     }
 
-    private fun showMessageForCleanInsightsApprove() {
-        Preferences.setIsAcceptedImprovements(true)
-        shareDataSwitch?.mSwitch?.setChecked(true)
-        DialogUtils.showBottomMessage(
-            requireActivity(),
-            String.format(getString(R.string.clean_insights_signed_for_days)),
-            false
-        )
+    private fun showMessageForCleanInsightsApprove(cleanInsightsActions: CleanInsightsActions) {
+        when (cleanInsightsActions) {
+            CleanInsightsActions.YES -> {
+                Preferences.setIsAcceptedImprovements(true)
+                CleanInsightUtils.grantCampaign(true)
+                shareDataSwitch?.mSwitch?.isChecked = true
+                DialogUtils.showBottomMessage(requireActivity(),getString(R.string.clean_insights_signed_for_days), false)
+            }
+            CleanInsightsActions.NO -> {
+                Preferences.setIsAcceptedImprovements(false)
+                CleanInsightUtils.grantCampaign(false)
+                shareDataSwitch?.mSwitch?.isChecked = false
+            }
+        }
     }
 
     fun hasLocationPermission(context: Context): Boolean {
@@ -151,7 +153,7 @@ class GeneralSettings : BaseFragment() {
         return false
     }
 
-    fun requestLocationPermission(requestCode: Int) {
+    private fun requestLocationPermission(requestCode: Int) {
         requestPermissions(
             arrayOf(
                 Manifest.permission.ACCESS_FINE_LOCATION

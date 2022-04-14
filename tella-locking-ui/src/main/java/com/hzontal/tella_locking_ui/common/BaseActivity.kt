@@ -3,6 +3,7 @@ package com.hzontal.tella_locking_ui.common
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.hzontal.tella_locking_ui.*
 import com.hzontal.tella_locking_ui.ui.ConfirmCredentialsActivity
@@ -22,6 +23,10 @@ open class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.d("** %s: %s **", javaClass, "onCreate()")
         super.onCreate(savedInstanceState)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_SECURE,
+            WindowManager.LayoutParams.FLAG_SECURE
+        )
         overridePendingTransition(R.anim.`in`, R.anim.out)
     }
 

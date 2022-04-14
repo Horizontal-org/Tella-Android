@@ -3,6 +3,10 @@ package rs.readahead.washington.mobile.data.sharedpref;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.joda.time.DateTime;
+
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -327,8 +331,19 @@ public class Preferences {
 
     public static void setIsAcceptedImprovements(boolean value) {
         setBoolean(SharedPrefs.HAS_IMPROVEMENT_ACCEPTED, value);
+        setTimeAcceptedImprovements(new Date().getTime());
     }
 
+    private static void setTimeAcceptedImprovements(Long value) { setLong(SharedPrefs.TIME_IMPROVEMENT_ACCEPTED, value); }
+    public static Long getTimeAcceptedImprovements() {
+        return getLong(SharedPrefs.TIME_IMPROVEMENT_ACCEPTED, 0L);
+    }
+    public static boolean isTimeToShowReminderImprovements() {
+        if (getTimeAcceptedImprovements() == 0L || !hasAcceptedImprovements()) return false ;
+        Date currentDate = new Date();
+        Date acceptedDatePlusSixMonths = new DateTime(new Date(getTimeAcceptedImprovements())).plusMonths(6).toDate();
+        return currentDate.getTime() > acceptedDatePlusSixMonths.getTime() ;
+    }
 
     private Preferences() {
     }
