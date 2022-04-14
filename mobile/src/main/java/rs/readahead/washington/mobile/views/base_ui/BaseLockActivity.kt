@@ -6,10 +6,6 @@ import android.view.WindowManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ProcessLifecycleOwner
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.PeriodicWorkRequest
-import androidx.work.WorkInfo
-import androidx.work.WorkManager
 import com.hzontal.tella_locking_ui.ui.password.PasswordUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternSetActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity
@@ -20,9 +16,7 @@ import org.hzontal.tella.keys.config.IUnlockRegistryHolder
 import org.hzontal.tella.keys.config.UnlockRegistry
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
-import rs.readahead.washington.mobile.util.jobs.LifecycleWorker
 import rs.readahead.washington.mobile.views.activity.PatternUpgradeActivity
-import java.util.concurrent.TimeUnit
 
 const val START_FROM_PAUSED_ACTIVITY_FLAG = "START_FROM_PAUSED_ACTIVITY_FLAG"
 abstract class BaseLockActivity : BaseActivity(), LifecycleObserver {
