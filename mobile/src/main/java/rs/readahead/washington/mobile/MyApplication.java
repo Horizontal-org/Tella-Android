@@ -271,7 +271,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
     @Override
     public void onUnSuccessfulUnlock(String tag, Throwable throwable) {
-        FirebaseCrashlytics.getInstance().recordException(throwable);
+       // FirebaseCrashlytics.getInstance().recordException(throwable);
     }
 
     @Override
