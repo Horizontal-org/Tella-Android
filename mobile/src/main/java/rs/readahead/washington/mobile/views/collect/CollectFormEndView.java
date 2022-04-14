@@ -87,7 +87,7 @@ public class CollectFormEndView extends FrameLayout {
         TextView formNameView = findViewById(R.id.formName);
         formNameView.setText(instance.getFormName());
 
-        int formElements = 1;
+        //int formElements = 1;
         formSize = FormUtils.getFormPayloadSize(instance);
         fileSizes.put(C.OPEN_ROSA_XML_PART_NAME, FormUtils.getFormPayloadSize(instance));
 
@@ -99,13 +99,13 @@ public class CollectFormEndView extends FrameLayout {
             partsListView.addView(createFormMediaFileItemView(mediaFile, offline));
             fileSizes.put(mediaFile.getPartName(), mediaFile.size);
             formSize += mediaFile.size;
-            formElements++;
+            //formElements++;
         }
 
-        TextView formElementsView = findViewById(R.id.formElements);
+        //TextView formElementsView = findViewById(R.id.formElements);
         formSizeView = findViewById(R.id.formSize);
 
-        formElementsView.setText(getResources().getQuantityString(R.plurals.collect_end_meta_number_of_elements, formElements, formElements));
+        //formElementsView.setText(getResources().getQuantityString(R.plurals.collect_end_meta_number_of_elements, formElements, formElements));
         if (submittedSize == 0L) {
             formSizeView.setText(FileUtil.getFileSizeString(formSize));
         } else {
