@@ -142,8 +142,7 @@ public class CameraActivity extends MetadataActivity implements
         uploadPresenter = new TellaFileUploadSchedulePresenter(this);
         metadataAttacher = new MetadataAttacher(this);
         if (checkSelfPermission(Manifest.permission.CAMERA) !=
-                PackageManager.PERMISSION_GRANTED)
-        {
+                PackageManager.PERMISSION_GRANTED) {
             changeTemporaryTimeout();
         }
 
@@ -159,7 +158,7 @@ public class CameraActivity extends MetadataActivity implements
             intentMode = IntentMode.valueOf(getIntent().getStringExtra(INTENT_MODE));
         }
 
-        if (getIntent().hasExtra(VAULT_CURRENT_ROOT_PARENT)){
+        if (getIntent().hasExtra(VAULT_CURRENT_ROOT_PARENT)) {
             currentRootParent = getIntent().getStringExtra(VAULT_CURRENT_ROOT_PARENT);
         }
 
@@ -171,16 +170,13 @@ public class CameraActivity extends MetadataActivity implements
         setupCameraModeButton();
         setupImagePreview();
         setupShutterSound();
-        checkLocationSettings(C.START_CAMERA_CAPTURE, ()->{});
+        checkLocationSettings(C.START_CAMERA_CAPTURE, () -> {
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (isLocked()){
-            finish();
-            restrictActivity();
-        }
         mOrientationEventListener.enable();
 
         startLocationMetadataListening();
@@ -197,7 +193,6 @@ public class CameraActivity extends MetadataActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        restrictActivity();
     }
 
     @Override
@@ -286,15 +281,14 @@ public class CameraActivity extends MetadataActivity implements
         //scheduleFileUpload(capturedMediaFile);
     }
 
-    private void returnIntent(VaultFile vaultFile){
+    private void returnIntent(VaultFile vaultFile) {
         Intent data = new Intent();
         if (intentMode == IntentMode.ODK) {
             capturedMediaFile.metadata = vaultFile.metadata;
             data.putExtra(MEDIA_FILE_KEY, capturedMediaFile);
             setResult(RESULT_OK, data);
             finish();
-        } else
-        if (intentMode == IntentMode.COLLECT) {
+        } else if (intentMode == IntentMode.COLLECT) {
             capturedMediaFile.metadata = vaultFile.metadata;
             List<String> list = new ArrayList<>();
             list.add(vaultFile.id);
@@ -549,7 +543,7 @@ public class CameraActivity extends MetadataActivity implements
         cameraView.addCameraListener(new CameraListener() {
             @Override
             public void onPictureTaken(@NotNull PictureResult result) {
-                presenter.addJpegPhoto(result.getData() ,currentRootParent);
+                presenter.addJpegPhoto(result.getData(), currentRootParent);
             }
 
             @Override
