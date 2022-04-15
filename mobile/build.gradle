@@ -19,7 +19,7 @@ android {
         compileSdkVersion 31
         targetSdkVersion 31
         versionCode 106
-        versionName "2.0.3"
+        versionName "2.0.5"
         multiDexEnabled true
         // vectorDrawables.useSupportLibrary = true // don't care about apk size, care about crashes
     }
