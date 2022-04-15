@@ -2,9 +2,12 @@ package rs.readahead.washington.mobile.views.activity;
 
 import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_FILE_KEY;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -126,6 +129,7 @@ public class CameraActivity extends MetadataActivity implements
     private RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
     private String currentRootParent = null;
 
+    @SuppressLint("NewApi")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,7 +141,12 @@ public class CameraActivity extends MetadataActivity implements
         presenter = new CameraPresenter(this);
         uploadPresenter = new TellaFileUploadSchedulePresenter(this);
         metadataAttacher = new MetadataAttacher(this);
-        changeTemporaryTimeout();
+        if (checkSelfPermission(Manifest.permission.CAMERA) !=
+                PackageManager.PERMISSION_GRANTED)
+        {
+            changeTemporaryTimeout();
+        }
+
         mode = CameraMode.PHOTO;
 
         if (getIntent().hasExtra(CAMERA_MODE)) {
@@ -168,7 +177,10 @@ public class CameraActivity extends MetadataActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-
+        if (isLocked()){
+            finish();
+            restrictActivity();
+        }
         mOrientationEventListener.enable();
 
         startLocationMetadataListening();
@@ -185,6 +197,7 @@ public class CameraActivity extends MetadataActivity implements
     @Override
     protected void onStart() {
         super.onStart();
+        restrictActivity();
     }
 
     @Override
