@@ -178,8 +178,8 @@ class CollectMainFragment : BaseFragment() {
             object : EventObserver<CollectFormSubmissionErrorEvent?>() {
                 override fun onNext(event: CollectFormSubmissionErrorEvent) {
                     getDraftFormsListFragment().listDraftForms()
-                    getSubmittedFormsListFragment().listSubmittedForms()
-                    setPagerToSubmittedFragment()
+                    getOutboxFormListFragment().listOutboxForms()
+                    setPagerToOutboxFragment()
                 }
             })
         disposables.wire(
