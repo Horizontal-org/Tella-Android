@@ -656,4 +656,6 @@ button to add a new template.</string>
   <string name="settings.gen_share_data_action.expl">Help us understand how you use Tella. Your data will never be shared with anyone outside of the Tella team.</string>
   <string name="action_no">no</string>
   <string name="settings.serv_add.server.selection_dialog.description">If you are not sure, please ask your\n organization.</string>
+  <string name="SettingsCamo_Dialog_TimeoutTitle">Tella is shutting down …</string>
+  <string name="SettingsCamo_Dialog_TimeoutDesc">Please wait. You will return to your device\'s homescreen in a few seconds.</string>
 </resources>
