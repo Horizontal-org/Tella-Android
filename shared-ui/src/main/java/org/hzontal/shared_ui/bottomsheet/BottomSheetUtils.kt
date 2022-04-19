@@ -3,6 +3,7 @@ package org.hzontal.shared_ui.bottomsheet
 import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -425,8 +426,10 @@ BottomSheetUtils {
     }
 
     @JvmStatic
-    fun showConfirmSheetWithImage(
+    fun showConfirmSheetWithImageAndTimeout(
         fragmentManager: FragmentManager,
+        timeoutTitleText: String?,
+        timeoutTitleDesc: String?,
         titleText: String?,
         descriptionText: String?,
         actionButtonLabel: String? = null,
@@ -434,6 +437,30 @@ BottomSheetUtils {
         confirmDrawable: Drawable? = null,
         consumer: ActionConfirmed
     ) {
+
+        val customSheetFragment2 = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.confirm_image_sheet_layout)
+            .cancellable(false)
+        customSheetFragment2.holder(ConfirmImageSheetHolder(), object :
+            CustomBottomSheetFragment.Binder<ConfirmImageSheetHolder> {
+            override fun onBind(holder: ConfirmImageSheetHolder) {
+                with(holder) {
+                    title.text = timeoutTitleText
+                    description.text = timeoutTitleDesc
+                    confirmDrawable?.let {
+                        imageView.setImageDrawable(it)
+                    }
+                    actionButton.visibility = View.GONE
+                    cancelButton.visibility = View.GONE
+
+                    Handler().postDelayed({
+                        consumer.accept(isConfirmed = true)
+                        //customSheetFragment2.dismiss()
+                    }, 3000)
+
+                }
+            }
+        })
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.confirm_image_sheet_layout)
@@ -453,7 +480,9 @@ BottomSheetUtils {
                     }
 
                     actionButton.setOnClickListener {
-                        consumer.accept(isConfirmed = true)
+                        fragmentManager.beginTransaction()
+                            .add(customSheetFragment2, customSheetFragment2.tag)
+                            .commit()
                         customSheetFragment.dismiss()
                     }
 

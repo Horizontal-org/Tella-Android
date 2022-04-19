@@ -52,8 +52,10 @@ class OnBoardCalculatorFragment : BaseFragment() {
     }
 
     private fun confirmHideBehindCalculator() {
-        BottomSheetUtils.showConfirmSheetWithImage(
+        BottomSheetUtils.showConfirmSheetWithImageAndTimeout(
             activity.supportFragmentManager,
+            getString(R.string.SettingsCamo_Dialog_TimeoutTitle),
+            getString(R.string.SettingsCamo_Dialog_TimeoutDesc),
             getString(R.string.settings_sec_confirm_camouflage_title),
             getString(R.string.settings_sec_confirm_calc_camouflage_desc),
             getString(R.string.settings_sec_confirm_exit_tella),
