@@ -2,9 +2,12 @@ package rs.readahead.washington.mobile.views.activity;
 
 import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_FILE_KEY;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -126,6 +129,7 @@ public class CameraActivity extends MetadataActivity implements
     private RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
     private String currentRootParent = null;
 
+    @SuppressLint("NewApi")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,7 +141,11 @@ public class CameraActivity extends MetadataActivity implements
         presenter = new CameraPresenter(this);
         uploadPresenter = new TellaFileUploadSchedulePresenter(this);
         metadataAttacher = new MetadataAttacher(this);
-        changeTemporaryTimeout();
+        if (checkSelfPermission(Manifest.permission.CAMERA) !=
+                PackageManager.PERMISSION_GRANTED) {
+            changeTemporaryTimeout();
+        }
+
         mode = CameraMode.PHOTO;
 
         if (getIntent().hasExtra(CAMERA_MODE)) {
@@ -150,7 +158,7 @@ public class CameraActivity extends MetadataActivity implements
             intentMode = IntentMode.valueOf(getIntent().getStringExtra(INTENT_MODE));
         }
 
-        if (getIntent().hasExtra(VAULT_CURRENT_ROOT_PARENT)){
+        if (getIntent().hasExtra(VAULT_CURRENT_ROOT_PARENT)) {
             currentRootParent = getIntent().getStringExtra(VAULT_CURRENT_ROOT_PARENT);
         }
 
@@ -162,13 +170,13 @@ public class CameraActivity extends MetadataActivity implements
         setupCameraModeButton();
         setupImagePreview();
         setupShutterSound();
-        checkLocationSettings(C.START_CAMERA_CAPTURE, ()->{});
+        checkLocationSettings(C.START_CAMERA_CAPTURE, () -> {
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         mOrientationEventListener.enable();
 
         startLocationMetadataListening();
@@ -273,15 +281,14 @@ public class CameraActivity extends MetadataActivity implements
         //scheduleFileUpload(capturedMediaFile);
     }
 
-    private void returnIntent(VaultFile vaultFile){
+    private void returnIntent(VaultFile vaultFile) {
         Intent data = new Intent();
         if (intentMode == IntentMode.ODK) {
             capturedMediaFile.metadata = vaultFile.metadata;
             data.putExtra(MEDIA_FILE_KEY, capturedMediaFile);
             setResult(RESULT_OK, data);
             finish();
-        } else
-        if (intentMode == IntentMode.COLLECT) {
+        } else if (intentMode == IntentMode.COLLECT) {
             capturedMediaFile.metadata = vaultFile.metadata;
             List<String> list = new ArrayList<>();
             list.add(vaultFile.id);
@@ -536,7 +543,7 @@ public class CameraActivity extends MetadataActivity implements
         cameraView.addCameraListener(new CameraListener() {
             @Override
             public void onPictureTaken(@NotNull PictureResult result) {
-                presenter.addJpegPhoto(result.getData() ,currentRootParent);
+                presenter.addJpegPhoto(result.getData(), currentRootParent);
             }
 
             @Override
