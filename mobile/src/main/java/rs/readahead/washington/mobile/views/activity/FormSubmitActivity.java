@@ -203,7 +203,7 @@ public class FormSubmitActivity extends BaseLockActivity implements
     @Override
     public void formReSubmitNoConnectivity() {
         Toast.makeText(this, R.string.collect_end_toast_notification_form_not_sent_no_connection, Toast.LENGTH_LONG).show();
-        MyApplication.bus().post(new CollectFormSubmittedEvent());
+        MyApplication.bus().post(new CollectFormSubmissionErrorEvent());
         finish();
     }
 
