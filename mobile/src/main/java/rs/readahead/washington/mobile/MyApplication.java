@@ -1,12 +1,13 @@
 package rs.readahead.washington.mobile;
 
+import static rs.readahead.washington.mobile.util.ExtensionsKt.createCleanInsightsInstance;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.os.StrictMode;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -46,7 +47,6 @@ import java.io.File;
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
 import rs.readahead.washington.mobile.bus.TellaBus;
-import rs.readahead.washington.mobile.data.KeyRxVault;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.rest.BaseApi;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
@@ -64,22 +64,19 @@ import rs.readahead.washington.mobile.views.activity.MainActivity;
 import rs.readahead.washington.mobile.views.activity.onboarding.OnBoardingActivity;
 import timber.log.Timber;
 
-import static rs.readahead.washington.mobile.util.ExtensionsKt.createCleanInsightsInstance;
-
 
 public class MyApplication extends MultiDexApplication implements IUnlockRegistryHolder, CredentialsCallback {
+    public static Vault vault;
+    public static RxVault rxVault;
     private static TellaBus bus;
     private static LifecycleMainKey mainKeyHolder;
     @SuppressLint("StaticFieldLeak")
     private static MainKeyStore mainKeyStore;
     private static UnlockRegistry unlockRegistry;
     private static KeyDataSource keyDataSource;
-    public static Vault vault;
-    public static RxVault rxVault;
-    private static KeyRxVault keyRxVault;
-    Vault.Config vaultConfig;
     private static CleanInsights cleanInsights;
     private final Long start = System.currentTimeMillis();
+    Vault.Config vaultConfig;
 
     public static void startMainActivity(@NonNull Context context) {
         Intent intent;
@@ -126,6 +123,32 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         }
     }
 
+    public static LifecycleMainKey getMainKeyHolder() {
+        return mainKeyHolder;
+    }
+
+    public static KeyDataSource getKeyDataSource() {
+        return keyDataSource;
+    }
+
+    public static MainKeyStore getMainKeyStore() {
+        return mainKeyStore;
+    }
+
+    public static void resetKeys() {
+        getMainKeyHolder().clear();
+        TellaKeysUI.getMainKeyHolder().clear();
+    }
+
+    public static void initKeys(MainKey mainKey) {
+        getMainKeyHolder().set(mainKey);
+        TellaKeysUI.getMainKeyHolder().set(mainKey);
+    }
+
+    public static CleanInsights getCleanInsights() {
+        return cleanInsights;
+    }
+
     @Override
     protected void attachBaseContext(Context newBase) {
         SharedPrefs.getInstance().init(newBase);
@@ -143,7 +166,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         BaseApi.Builder apiBuilder = new BaseApi.Builder();
 
         if (BuildConfig.DEBUG) {
-          //  StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+            //  StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
             ///        .detectAll().penaltyLog()/*.penaltyDeath()*/.build()); // todo: catch those..
             Timber.plant(new Timber.DebugTree());
             apiBuilder.setLogLevelFull();
@@ -184,8 +207,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), Preferences.getLockTimeout());
         keyDataSource = new KeyDataSource(getApplicationContext());
         TellaKeysUI.initialize(mainKeyStore, mainKeyHolder, unlockRegistry, this);
-        keyRxVault = new KeyRxVault(getApplicationContext(), mainKeyHolder, vaultConfig);
-
         initCleanInsights();
     }
 
@@ -244,7 +265,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         mainKeyStore = TellaKeysUI.getMainKeyStore();
         unlockRegistry = TellaKeysUI.getUnlockRegistry();
         keyDataSource.initKeyDataSource();
-        keyRxVault.initKeyRxVault();
 
         try {
             vault = new Vault(this, mainKeyHolder, vaultConfig);
@@ -273,7 +293,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
     @Override
     public void onUnSuccessfulUnlock(String tag, Throwable throwable) {
-       // FirebaseCrashlytics.getInstance().recordException(throwable);
+        // FirebaseCrashlytics.getInstance().recordException(throwable);
     }
 
     @Override
@@ -295,33 +315,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         return unlockRegistry;
     }
 
-    public static LifecycleMainKey getMainKeyHolder() {
-        return mainKeyHolder;
-    }
-
-    public static KeyDataSource getKeyDataSource() {
-        return keyDataSource;
-    }
-
-    public static MainKeyStore getMainKeyStore() {
-        return mainKeyStore;
-    }
-
-    public static void resetKeys() {
-        getMainKeyHolder().clear();
-        TellaKeysUI.getMainKeyHolder().clear();
-    }
-
-    public static void initKeys(MainKey mainKey) {
-        getMainKeyHolder().set(mainKey);
-        TellaKeysUI.getMainKeyHolder().set(mainKey);
-    }
-    public static KeyRxVault getKeyRxVault() { return keyRxVault; }
-
-    public static CleanInsights getCleanInsights() {
-        return cleanInsights;
-    }
-
     private void initCleanInsights() {
         if (Preferences.hasAcceptedImprovements()) {
             try {
@@ -339,7 +332,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     }
 
     private void persistCleanInsights() {
-        if (Preferences.hasAcceptedImprovements() && cleanInsights != null) CleanInsightUtils.INSTANCE.measureTimeSpentEvent(start);
+        if (Preferences.hasAcceptedImprovements() && cleanInsights != null)
+            CleanInsightUtils.INSTANCE.measureTimeSpentEvent(start);
     }
 
     @Override
