@@ -1,25 +1,27 @@
 package rs.readahead.washington.mobile.views.adapters;
 
-        import android.graphics.drawable.Drawable;
-        import androidx.annotation.NonNull;
-        import androidx.recyclerview.widget.RecyclerView;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.ViewGroup;
+import android.graphics.drawable.Drawable;
 
-        import org.hzontal.shared_ui.submission.SubmittedItem;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
-        import java.util.Collections;
-        import java.util.List;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-        import butterknife.BindView;
-        import butterknife.ButterKnife;
-        import rs.readahead.washington.mobile.R;
-        import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
-        import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
-        import rs.readahead.washington.mobile.util.Util;
-        import rs.readahead.washington.mobile.util.ViewUtil;
-        import rs.readahead.washington.mobile.views.interfaces.ISavedFormsInterface;
+import org.hzontal.shared_ui.submission.SubmittedItem;
+
+import java.util.Collections;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
+import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
+import rs.readahead.washington.mobile.util.Util;
+import rs.readahead.washington.mobile.util.ViewUtil;
+import rs.readahead.washington.mobile.views.interfaces.ISavedFormsInterface;
 
 
 public class CollectOutboxFormInstanceRecycleViewAdapter extends RecyclerView.Adapter<CollectOutboxFormInstanceRecycleViewAdapter.ViewHolder> {
@@ -52,9 +54,10 @@ public class CollectOutboxFormInstanceRecycleViewAdapter extends RecyclerView.Ad
         } else if (status == CollectFormInstanceStatus.SUBMISSION_ERROR) {
             holder.setSubmitErrorIcon();
         } else if (status == CollectFormInstanceStatus.FINALIZED ||
-                status == CollectFormInstanceStatus.SUBMISSION_PENDING ||
-                status == CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS) {
+                status == CollectFormInstanceStatus.SUBMISSION_PENDING) {
             holder.setPendingIcon();
+        } else if (status == CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS) {
+            holder.setPartlySubmittedIcon();
         }
 
         holder.item.popupMenu.setOnClickListener(v -> savedFormsInterface.showFormsMenu(instance));
@@ -81,7 +84,7 @@ public class CollectOutboxFormInstanceRecycleViewAdapter extends RecyclerView.Ad
         }
 
         void setDates(long timestamp) {
-            item.setUpdated(Util.getElapsedTimeFromTimestamp(timestamp,item.getContext()));
+            item.setUpdated(Util.getElapsedTimeFromTimestamp(timestamp, item.getContext()));
         }
 
         private void setSubmittedIcon() {
@@ -100,6 +103,13 @@ public class CollectOutboxFormInstanceRecycleViewAdapter extends RecyclerView.Ad
 
         private void setPendingIcon() {
             Drawable drawable = ViewUtil.getTintedDrawable(item.getContext(), R.drawable.ic_watch_later_black_24dp, R.color.tigers_eye);
+            if (drawable != null) {
+                item.setIconDrawable(drawable);
+            }
+        }
+
+        private void setPartlySubmittedIcon() {
+            Drawable drawable = ViewUtil.getTintedDrawable(item.getContext(), R.drawable.ic_watch_later_black_24dp, R.color.wa_gray);
             if (drawable != null) {
                 item.setIconDrawable(drawable);
             }

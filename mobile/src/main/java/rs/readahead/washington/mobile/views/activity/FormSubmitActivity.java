@@ -1,24 +1,29 @@
 package rs.readahead.washington.mobile.views.activity;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
+
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import kotlin.Unit;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.CollectFormSubmissionErrorEvent;
+import rs.readahead.washington.mobile.bus.event.CollectFormSubmitStoppedEvent;
 import rs.readahead.washington.mobile.bus.event.CollectFormSubmittedEvent;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
@@ -28,10 +33,8 @@ import rs.readahead.washington.mobile.javarosa.FormUtils;
 import rs.readahead.washington.mobile.javarosa.IFormReSubmitterContract;
 import rs.readahead.washington.mobile.mvp.contract.IFormSubmitPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.FormSubmitPresenter;
-import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.collect.CollectFormEndView;
-import rs.readahead.washington.mobile.views.custom.FormSubmitButtonView;
 
 
 public class FormSubmitActivity extends BaseLockActivity implements
@@ -42,9 +45,11 @@ public class FormSubmitActivity extends BaseLockActivity implements
     @BindView(R.id.formDetailsContainer)
     NestedScrollView endViewContainer;
     @BindView(R.id.submit_button)
-    FormSubmitButtonView submitButton;
+    AppCompatButton submitButton;
     @BindView(R.id.cancel_button)
-    Button cancelButton;
+    AppCompatButton cancelButton;
+    @BindView(R.id.stop_button)
+    AppCompatButton stopButton;
 
     CollectFormEndView endView;
 
@@ -65,12 +70,18 @@ public class FormSubmitActivity extends BaseLockActivity implements
         formReSubmitter = new FormReSubmitter(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
+        // toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            findViewById(R.id.appbar).setOutlineProvider(null);
+        } else {
+            findViewById(R.id.appbar).bringToFront();
         }
 
         if (getIntent().hasExtra(FORM_INSTANCE_ID_KEY)) {
@@ -92,17 +103,24 @@ public class FormSubmitActivity extends BaseLockActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch (id) {
-            case android.R.id.home:
-                if (formReSubmitter != null && formReSubmitter.isReSubmitting()) {
-                    DialogsUtil.showExitWithSubmitDialog(this,
+        if (id == android.R.id.home) {
+            if (formReSubmitter != null && formReSubmitter.isReSubmitting()) {
+                BottomSheetUtils.showStandardSheet(
+                        this.getSupportFragmentManager(),
+                        getString(R.string.Collect_DialogTitle_StopExit),
+                        getString(R.string.Collect_DialogExpl_ExitingStopSubmission),
+                        getString(R.string.Collect_DialogAction_KeepSubmitting),
+                        getString(R.string.Collect_DialogAction_StopAndExit),
+                        null, this::onDialogBackPressed);
+
+                    /*DialogsUtil.showExitWithSubmitDialog(this,
                             (dialog, which) -> finish(),
                             (dialog, which) -> {
-                            });
-                } else {
-                    finish();
-                }
-                return true;
+                            });*/
+            } else {
+                finish();
+            }
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -111,14 +129,23 @@ public class FormSubmitActivity extends BaseLockActivity implements
     @Override
     public void onBackPressed() {
         if (formReSubmitter != null && formReSubmitter.isReSubmitting()) {
-            DialogsUtil.showExitWithSubmitDialog(this,
-                    (dialog, which) -> super.onBackPressed(),
-                    (dialog, which) -> {
-                    });
+            BottomSheetUtils.showStandardSheet(
+                    this.getSupportFragmentManager(),
+                    getString(R.string.Collect_DialogTitle_StopExit),
+                    getString(R.string.Collect_DialogExpl_ExitingStopSubmission),
+                    getString(R.string.Collect_DialogAction_StopAndExit),
+                    getString(R.string.Collect_DialogAction_KeepSubmitting),
+                    this::onDialogBackPressed, null);
         } else {
             super.onBackPressed();
         }
         finish();
+    }
+
+    private Unit onDialogBackPressed() {
+        MyApplication.bus().post(new CollectFormSubmitStoppedEvent());
+        super.onBackPressed();
+        return Unit.INSTANCE;
     }
 
     @Override
@@ -143,14 +170,26 @@ public class FormSubmitActivity extends BaseLockActivity implements
         if (formReSubmitter != null) {
             formReSubmitter.reSubmitFormInstanceGranular(instance);
             hideFormSubmitButton();
+            hideFormCancelButton();
+            showFormStopButton();
         }
     }
 
-    @OnClick(R.id.cancel_button)
+    @OnClick({R.id.cancel_button})
     public void onCancelClick(View view) {
+        onBackPressed();
+        /*if (formReSubmitter != null) {
+            formReSubmitter.userStopReSubmission();
+        }*/
+    }
+
+    @OnClick({R.id.stop_button})
+    public void onStopClick(View view) {
+        //onBackPressed();
         if (formReSubmitter != null) {
             formReSubmitter.userStopReSubmission();
         }
+        MyApplication.bus().post(new CollectFormSubmitStoppedEvent());
     }
 
     @Override
@@ -164,7 +203,7 @@ public class FormSubmitActivity extends BaseLockActivity implements
     @Override
     public void formReSubmitNoConnectivity() {
         Toast.makeText(this, R.string.collect_end_toast_notification_form_not_sent_no_connection, Toast.LENGTH_LONG).show();
-        MyApplication.bus().post(new CollectFormSubmittedEvent());
+        MyApplication.bus().post(new CollectFormSubmissionErrorEvent());
         finish();
     }
 
@@ -223,7 +262,8 @@ public class FormSubmitActivity extends BaseLockActivity implements
     public void submissionStoppedByUser() {
         showFormEndView(false);
         showFormSubmitButton();
-        hideFormCancelButton();
+        onBackPressed();
+        //hideFormCancelButton();
     }
 
     @Override
@@ -264,7 +304,7 @@ public class FormSubmitActivity extends BaseLockActivity implements
     private void updateFormSubmitButton(boolean offline) {
         if (instance.getStatus() != CollectFormInstanceStatus.SUBMITTED) {
             submitButton.setVisibility(View.VISIBLE);
-            submitButton.setOffline(offline);
+            //submitButton.setOffline(offline);
         }
     }
 
@@ -276,12 +316,18 @@ public class FormSubmitActivity extends BaseLockActivity implements
         cancelButton.setVisibility(View.GONE);
     }
 
+    private void showFormStopButton() {
+        stopButton.setVisibility(View.VISIBLE);
+    }
+
     private void hideFormSubmitButton() {
-        submitButton.setVisibility(View.GONE);
+        submitButton.setVisibility(View.INVISIBLE);
+        submitButton.setClickable(false);
     }
 
     private void showFormSubmitButton() {
         submitButton.setVisibility(View.VISIBLE);
+        submitButton.setClickable(true);
     }
 
     private void stopPresenter() {

@@ -16,44 +16,54 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/wa_button_gray"
-        android:paddingTop="0.5dp"
-        android:orientation="horizontal">
+        android:background="@color/wa_purple"
+        android:orientation="horizontal"
+        android:paddingTop="0.5dp">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/prevSection"
-            style="@style/YellowButton"
+            style="@style/Unlock_White_Text_Back"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="0.5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
             android:layout_weight="1"
-            android:text="@string/collect.form_action_previous.section"/>
+            android:background="@drawable/action_button_background"
+            android:text="@string/collect.form_action_previous.section" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/nextSection"
-            style="@style/YellowButton"
+            style="@style/Unlock_White_Text_Back"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
             android:layout_weight="1"
-            android:text="@string/collect.form_action_next.section"/>
+            android:background="@drawable/action_button_background"
+            android:text="@string/collect.form_action_next.section" />
 
-        <rs.readahead.washington.mobile.views.custom.FormSubmitButtonView
-            android:id="@+id/submit_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:focusable="true">
-        </rs.readahead.washington.mobile.views.custom.FormSubmitButtonView>
-
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/cancel_button"
-            style="@style/WhiteButton"
+            style="@style/Unlock_White_Text_Back"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="54dp"
             android:layout_weight="1"
-            android:text="@string/action_stop"
-            android:visibility="gone"/>
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/action_button_background"
+            android:backgroundTint="@color/wa_white_20"
+            android:text="@string/action_stop" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/submit_button"
+            style="@style/Unlock_White_Text_Back"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/action_button_background"
+            android:text="@string/collect.end_action_submit" />
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView

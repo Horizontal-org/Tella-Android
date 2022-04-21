@@ -8,18 +8,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.hzontal.tella_vault.MyLocation;
 import com.hzontal.tella_vault.VaultFile;
 
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -30,11 +31,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import kotlin.Unit;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -73,7 +76,6 @@ import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.views.collect.CollectFormEndView;
 import rs.readahead.washington.mobile.views.collect.CollectFormView;
-import rs.readahead.washington.mobile.views.custom.FormSubmitButtonView;
 import rs.readahead.washington.mobile.views.fragment.MicFragment;
 import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface;
 import timber.log.Timber;
@@ -89,13 +91,13 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     @BindView(R.id.screenFormView)
     ViewGroup screenFormView;
     @BindView(R.id.prevSection)
-    Button prevSectionButton;
+    AppCompatButton prevSectionButton;
     @BindView(R.id.nextSection)
-    Button nextSectionButton;
+    AppCompatButton nextSectionButton;
     @BindView(R.id.submit_button)
-    FormSubmitButtonView submitButton;
+    AppCompatButton submitButton;
     @BindView(R.id.cancel_button)
-    Button cancelButton;
+    AppCompatButton cancelButton;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.button_bottom_layout)
@@ -141,6 +143,12 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         initForm();
         startPresenter();
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            findViewById(R.id.appbar).setOutlineProvider(null);
+        } else {
+            findViewById(R.id.appbar).bringToFront();
+        }
+
         prevSectionButton.setOnClickListener(v -> showPrevScreen());
         nextSectionButton.setOnClickListener(v -> showNextScreen());
 
@@ -159,7 +167,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
             }
         });
 
-        endView = new CollectFormEndView(this, R.string.collect_end_heading);
+        endView = new CollectFormEndView(this, R.string.Uwazi_Submitted_Entity_Header_Title);
 
         disposables = MyApplication.bus().createCompositeDisposable();
         disposables.wire(FormAttachmentsUpdatedEvent.class, new EventObserver<FormAttachmentsUpdatedEvent>() {
@@ -495,14 +503,27 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         } else if (formParser.isFormChanged() && !formParser.isFormFinal()) {
             showFormChangedDialog();
         } else if (formParser.isFormFinal() && !stopped) {
-            alertDialog = DialogsUtil.showExitOnFinalDialog(this,
+            BottomSheetUtils.showStandardSheet(
+                    this.getSupportFragmentManager(),
+                    getString(R.string.Collect_DialogTitle_StopExit),
+                    getString(R.string.Collect_DialogExpl_ExitingStopSubmission),
+                    getString(R.string.Collect_DialogAction_KeepSubmitting),
+                    getString(R.string.Collect_DialogAction_StopAndExit),
+                    null, this::onDialogBackPressed);
+            /*alertDialog = DialogsUtil.showExitOnFinalDialog(this,
                     (dialog, which) -> onBackPressedWithoutCheck(),
                     (dialog, which) -> {
-                    });
+                    });*/
         } else {
             onBackPressedWithoutCheck();
         }
     }
+
+    private Unit onDialogBackPressed() {
+        onBackPressedWithoutCheck();
+        return Unit.INSTANCE;
+    }
+
 
     private void onBackPressedWithoutCheck() {
         if (draftAutoSaved) {
@@ -903,6 +924,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     // this bottom buttons on/off thing looks stupid :)
     private void setFirstSectionButtons() {
+        hideFormCancelButton();
         hideSubmitButtons();
         hidePrevSectionButton();
     }
@@ -922,7 +944,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     }
 
     private void setSubmitButtonText(boolean offline) {
-        submitButton.setOffline(offline);
+        //submitButton.setOffline(offline);
     }
 
     private void showFormEndButtons() {

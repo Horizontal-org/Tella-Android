@@ -192,11 +192,13 @@ BottomSheetUtils {
     interface BinaryConsumer {
         fun accept(option: Boolean)
     }
-    interface IServerChoiceActions{
+
+    interface IServerChoiceActions {
         fun addODKServer()
         fun addTellaWebServer()
         fun addUwaziServer()
     }
+
     @JvmStatic
     fun showBinaryTypeSheet(
         fragmentManager: FragmentManager,
@@ -574,7 +576,7 @@ BottomSheetUtils {
     }
 
     enum class Action {
-        EDIT, DELETE
+        EDIT, DELETE, SHARE, VIEW
     }
 
     class ServerMenuSheetHolder : CustomBottomSheetFragment.PageHolder() {
@@ -584,6 +586,20 @@ BottomSheetUtils {
 
         override fun bindView(view: View) {
             actionEdit = view.findViewById(R.id.action_edit)
+            actionDelete = view.findViewById(R.id.action_delete)
+            title = view.findViewById(R.id.standard_sheet_title)
+        }
+    }
+
+    class ThreeOptionsMenuSheetHolder : CustomBottomSheetFragment.PageHolder() {
+        lateinit var actionView: TextView
+        lateinit var actionShare: TextView
+        lateinit var actionDelete: TextView
+        lateinit var title: TextView
+
+        override fun bindView(view: View) {
+            actionView = view.findViewById(R.id.action_view)
+            actionShare = view.findViewById(R.id.action_share)
             actionDelete = view.findViewById(R.id.action_delete)
             title = view.findViewById(R.id.standard_sheet_title)
         }
@@ -801,11 +817,11 @@ BottomSheetUtils {
     fun showDownloadStatus(
         fragmentManager: FragmentManager,
         titleText: String?,
-        completeText : String,
-        progressStatus : AtomicInteger,
-        cancelText : String,
+        completeText: String,
+        progressStatus: AtomicInteger,
+        cancelText: String,
         onCancelClick: (() -> Unit)?
-    ){
+    ) {
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.layout_progess_sheet)
             .cancellable(true)
@@ -820,7 +836,7 @@ BottomSheetUtils {
                     cancelTextView.text = cancelText
                     circularProgress.progress = progressStatus.get()
                     linearProgress.progress = progressStatus.get()
-                    if (progressStatus.get() == 100){
+                    if (progressStatus.get() == 100) {
                         customSheetFragment.dismiss()
                     }
                     cancelTextView.setOnClickListener {
@@ -839,8 +855,8 @@ BottomSheetUtils {
         lateinit var title: TextView
         lateinit var subtitle: TextView
         lateinit var cancelTextView: TextView
-        lateinit var circularProgress : CircularProgressIndicator
-        lateinit var linearProgress : LinearProgressIndicator
+        lateinit var circularProgress: CircularProgressIndicator
+        lateinit var linearProgress: LinearProgressIndicator
 
 
         override fun bindView(view: View) {
@@ -856,10 +872,10 @@ BottomSheetUtils {
     @JvmStatic
     fun showConfirmDelete(
         fragmentManager: FragmentManager,
-        titleText : String,
-        confirm : String,
+        titleText: String,
+        confirm: String,
         onConfirmClick: (() -> Unit)?
-    ){
+    ) {
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.sheet_confirm_delete)
             .cancellable(true)
@@ -888,15 +904,103 @@ BottomSheetUtils {
         lateinit var confirmTextView: TextView
 
 
-
         override fun bindView(view: View) {
             title = view.findViewById(R.id.standard_sheet_title)
             confirmTextView = view.findViewById(R.id.sheet_cancel)
         }
     }
 
+    @JvmStatic
+    fun showThreeOptionMenuSheet(
+        fragmentManager: FragmentManager,
+        titleText: String?,
+        actionViewLabel: String? = null,
+        actionShareLabel: String? = null,
+        actionDeleteLabel: String? = null,
+        consumer: ActionSeleceted,
+        titleText2: String?,
+        descriptionText: String?,
+        actionButtonLabel: String? = null,
+        cancelButtonLabel: String? = null
+    ) {
 
+        val customSheetFragment2 = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.standar_sheet_layout)
+            .cancellable(true)
+        customSheetFragment2.holder(GenericSheetHolder(), object :
+            CustomBottomSheetFragment.Binder<GenericSheetHolder> {
+            override fun onBind(holder: GenericSheetHolder) {
+                with(holder) {
+                    title.text = titleText2
+                    description.text = descriptionText
+                    actionButtonLabel?.let {
+                        actionButton.text = it
+                    }
+                    cancelButtonLabel?.let {
+                        cancelButton.text = it
+                    }
 
+                    actionButton.setOnClickListener {
+                        consumer.accept(action = Action.DELETE)
+                        customSheetFragment2.dismiss()
+                    }
 
+                    cancelButton.setOnClickListener {
+                        customSheetFragment2.dismiss()
+                    }
+
+                    actionButton.visibility =
+                        if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+
+                }
+            }
+        })
+
+        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.three_options_sheet_layout)
+            .cancellable(true)
+        customSheetFragment.holder(ThreeOptionsMenuSheetHolder(), object :
+            CustomBottomSheetFragment.Binder<ThreeOptionsMenuSheetHolder> {
+            override fun onBind(holder: ThreeOptionsMenuSheetHolder) {
+                with(holder) {
+                    title.text = titleText
+                    actionViewLabel?.let {
+                        actionView.text = it
+                    }
+
+                    if (actionShareLabel == null) {
+                        actionShare.visibility = View.GONE
+                    } else {
+                        actionShare.text = actionShareLabel
+                    }
+
+                    actionDeleteLabel?.let {
+                        actionDelete.text = it
+                    }
+
+                    actionView.setOnClickListener {
+                        consumer.accept(action = Action.VIEW)
+                        customSheetFragment.dismiss()
+                    }
+
+                    actionShare.setOnClickListener {
+                        consumer.accept(action = Action.SHARE)
+                        customSheetFragment.dismiss()
+                    }
+
+                    actionDelete.setOnClickListener {
+                        //consumer.accept(action = Action.DELETE)
+                        fragmentManager.beginTransaction()
+                            .add(customSheetFragment2, customSheetFragment2.tag)
+                            .commit()
+                        customSheetFragment.dismiss()
+                    }
+                }
+            }
+        })
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
+    }
 
 }
