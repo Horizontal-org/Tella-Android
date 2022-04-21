@@ -14,12 +14,14 @@ import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Environment
+import android.provider.DocumentsContract
 import android.provider.Settings
 import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -160,7 +162,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
             R.id.action_upload -> {
                 vaultFile = null
-                performFileSearch(true,vaultFile)
+                performFileSearch(true, vaultFile)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -277,7 +279,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         gridLayoutManager.spanCount = 4
         attachmentsAdapter.setLayoutManager(gridLayoutManager)
         attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
-        attachmentsRecyclerView.setMargins(leftMarginDp = 13,rightMarginDp = 13)
+        attachmentsRecyclerView.setMargins(leftMarginDp = 13, rightMarginDp = 13)
     }
 
     override fun onClick(v: View?) {
@@ -291,7 +293,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 gridLayoutManager.spanCount = 1
                 attachmentsAdapter.setLayoutManager(gridLayoutManager)
                 attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
-                attachmentsRecyclerView.setMargins(leftMarginDp = 0,rightMarginDp = 0)
+                attachmentsRecyclerView.setMargins(leftMarginDp = 0, rightMarginDp = 0)
             }
             R.id.checkBoxList -> {
                 handleSelectMode()
@@ -325,12 +327,12 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                         override fun import() {
                             importAndDelete = false
                             activity.changeTemporaryTimeout()
-                            MediaFileHandler.startImportFiles(activity, true,getCurrentType())
+                            MediaFileHandler.startImportFiles(activity, true, getCurrentType())
                         }
 
                         override fun importAndDelete() {
                             importAndDelete = true
-                            MediaFileHandler.startImportFiles(activity, true,getCurrentType())
+                            MediaFileHandler.startImportFiles(activity, true, getCurrentType())
                         }
 
                         override fun createFolder() {
@@ -393,7 +395,11 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             if (itemsSize == 0) {
                 toolbar.setStartTextTitle(getString(R.string.Vault_Select_Title))
             } else {
-                toolbar.setStartTextTitle(attachmentsAdapter.selectedMediaFiles.size.toString() + " "+getString(R.string.Vault_Items))
+                toolbar.setStartTextTitle(
+                    attachmentsAdapter.selectedMediaFiles.size.toString() + " " + getString(
+                        R.string.Vault_Items
+                    )
+                )
             }
         } else {
             toolbar.setToolbarNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
@@ -660,7 +666,11 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     override fun onMediaExported(num: Int) {
-        DialogUtils.showBottomMessage(activity,resources.getQuantityString(R.plurals.gallery_toast_files_exported, num,num),false)
+        DialogUtils.showBottomMessage(
+            activity,
+            resources.getQuantityString(R.plurals.gallery_toast_files_exported, num, num),
+            false
+        )
 
     }
 
@@ -734,17 +744,18 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         updateAttachmentsToolbar(false)
     }
 
-    private fun exportVaultFiles(isMultipleFiles: Boolean, vaultFile: VaultFile?,path : String?) {
-        if (hasStoragePermissions(activity)) {
-           if (isMultipleFiles) {
+    private fun exportVaultFiles(isMultipleFiles: Boolean, vaultFile: VaultFile?, path: Uri?) {
+        if (isMultipleFiles) {
                 val selected: List<VaultFile> = attachmentsAdapter.selectedMediaFiles
-                attachmentsPresenter.exportMediaFiles(selected,path)
+                attachmentsPresenter.exportMediaFiles(selected, path)
             } else {
-                vaultFile?.let { attachmentsPresenter.exportMediaFiles(arrayListOf(vaultFile),path) }
+                vaultFile?.let {
+                    attachmentsPresenter.exportMediaFiles(
+                        arrayListOf(vaultFile),
+                        path
+                    )
+                }
             }
-        } else {
-            requestStoragePermissions()
-        }
     }
 
     private fun hideProgressDialog() {
@@ -862,6 +873,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 requestCode == C.START_AUDIO_RECORD
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (!isLocationSettingsRequestCode(requestCode) && resultCode != Activity.RESULT_OK) {
@@ -895,7 +907,18 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 performFileSearch(false, vaultFile)
             }
             PICKER_FILE_REQUEST_CODE -> {
-                exportVaultFiles(isMultipleFiles = attachmentsAdapter.selectedMediaFiles.size > 0, vaultFile,data?.dataString)
+                val treeUri = data?.data
+                treeUri?.apply {
+                    activity.contentResolver.takePersistableUriPermission(
+                        treeUri,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                    )
+
+                }
+                exportVaultFiles(
+                    isMultipleFiles = attachmentsAdapter.selectedMediaFiles.size > 0,
+                    vaultFile,
+                    treeUri)
             }
 
         }
@@ -921,7 +944,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 intent.data = Uri.parse(
                     String.format(
                         "package:%s",
-                        activity.application.packageName)
+                        activity.application.packageName
+                    )
                 )
                 startActivityForResult(intent, WRITE_REQUEST_CODE)
             } catch (e: Exception) {
@@ -1091,12 +1115,22 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         }
     }
 
-   private fun performFileSearch(isMultipleFiles: Boolean, vaultFile: VaultFile?) {
-       if (SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-           val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-           startActivityForResult(intent, PICKER_FILE_REQUEST_CODE)
-       }else{
-          exportVaultFiles(isMultipleFiles,vaultFile,null)
-       }
+    private fun performFileSearch(isMultipleFiles: Boolean, vaultFile: VaultFile?) {
+        if (hasStoragePermissions(activity)) {
+            if (SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+                intent.addFlags(
+                    Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or
+                            Intent.FLAG_GRANT_WRITE_URI_PERMISSION or
+                            Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+                startActivityForResult(intent, PICKER_FILE_REQUEST_CODE)
+            } else {
+                exportVaultFiles(isMultipleFiles, vaultFile, null)
+            }
+        } else {
+            requestStoragePermissions()
+        }
     }
+
 }

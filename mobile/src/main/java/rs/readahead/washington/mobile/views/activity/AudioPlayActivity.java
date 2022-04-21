@@ -618,7 +618,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICKER_FILE_REQUEST_CODE){
-            viewerPresenter.exportNewMediaFile(handlingVaultFile,data.getDataString());
+            viewerPresenter.exportNewMediaFile(handlingVaultFile,data.getData());
         }
 
     }

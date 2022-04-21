@@ -1,9 +1,10 @@
 package rs.readahead.washington.mobile.util;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.io.Closeable;
 import java.io.File;
@@ -17,6 +18,8 @@ import timber.log.Timber;
 
 
 public class FileUtil {
+    private static final String PRIMARY_VOLUME_NAME = "primary";
+
     public static boolean delete(final File file) {
         return Single.fromCallable(() -> {
             try {

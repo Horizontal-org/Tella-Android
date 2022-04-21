@@ -1,5 +1,7 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
+import android.net.Uri;
+
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
 
@@ -23,7 +25,7 @@ public class MediaFileViewerPresenter implements IMediaFileViewerPresenterContra
     }
 
     @Override
-    public void exportNewMediaFile(final VaultFile vaultFile,String path) {
+    public void exportNewMediaFile(final VaultFile vaultFile, Uri path) {
         disposables.add(Completable.fromCallable((Callable<Void>) () -> {
                     MediaFileHandler.exportMediaFile(view.getContext().getApplicationContext(), vaultFile,path);
                     return null;

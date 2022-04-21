@@ -1,12 +1,13 @@
 package rs.readahead.washington.mobile;
 
+import static rs.readahead.washington.mobile.util.ExtensionsKt.createCleanInsightsInstance;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.os.StrictMode;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -63,21 +64,19 @@ import rs.readahead.washington.mobile.views.activity.MainActivity;
 import rs.readahead.washington.mobile.views.activity.onboarding.OnBoardingActivity;
 import timber.log.Timber;
 
-import static rs.readahead.washington.mobile.util.ExtensionsKt.createCleanInsightsInstance;
-
 
 public class MyApplication extends MultiDexApplication implements IUnlockRegistryHolder, CredentialsCallback {
+    public static Vault vault;
+    public static RxVault rxVault;
     private static TellaBus bus;
     private static LifecycleMainKey mainKeyHolder;
     @SuppressLint("StaticFieldLeak")
     private static MainKeyStore mainKeyStore;
     private static UnlockRegistry unlockRegistry;
     private static KeyDataSource keyDataSource;
-    public static Vault vault;
-    public static RxVault rxVault;
-    Vault.Config vaultConfig;
     private static CleanInsights cleanInsights;
     private final Long start = System.currentTimeMillis();
+    Vault.Config vaultConfig;
 
     public static void startMainActivity(@NonNull Context context) {
         Intent intent;
@@ -124,6 +123,32 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         }
     }
 
+    public static LifecycleMainKey getMainKeyHolder() {
+        return mainKeyHolder;
+    }
+
+    public static KeyDataSource getKeyDataSource() {
+        return keyDataSource;
+    }
+
+    public static MainKeyStore getMainKeyStore() {
+        return mainKeyStore;
+    }
+
+    public static void resetKeys() {
+        getMainKeyHolder().clear();
+        TellaKeysUI.getMainKeyHolder().clear();
+    }
+
+    public static void initKeys(MainKey mainKey) {
+        getMainKeyHolder().set(mainKey);
+        TellaKeysUI.getMainKeyHolder().set(mainKey);
+    }
+
+    public static CleanInsights getCleanInsights() {
+        return cleanInsights;
+    }
+
     @Override
     protected void attachBaseContext(Context newBase) {
         SharedPrefs.getInstance().init(newBase);
@@ -141,8 +166,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         BaseApi.Builder apiBuilder = new BaseApi.Builder();
 
         if (BuildConfig.DEBUG) {
-            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                    .detectAll().penaltyLog()/*.penaltyDeath()*/.build()); // todo: catch those..
+            //  StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+            ///        .detectAll().penaltyLog()/*.penaltyDeath()*/.build()); // todo: catch those..
             Timber.plant(new Timber.DebugTree());
             apiBuilder.setLogLevelFull();
         }
@@ -172,7 +197,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         // Collect
         PropertyManager mgr = new PropertyManager();
         JavaRosa.initializeJavaRosa(mgr);
-
+        vaultConfig = new Vault.Config();
+        vaultConfig.root = new File(this.getFilesDir(), C.MEDIA_DIR);
         //Tella keys
         TellaKeys.initialize();
         initializeLockConfigRegistry();
@@ -181,10 +207,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), Preferences.getLockTimeout());
         keyDataSource = new KeyDataSource(getApplicationContext());
         TellaKeysUI.initialize(mainKeyStore, mainKeyHolder, unlockRegistry, this);
-
-        vaultConfig = new Vault.Config();
-        vaultConfig.root = new File(this.getFilesDir(), C.MEDIA_DIR);
-
         initCleanInsights();
     }
 
@@ -271,7 +293,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
     @Override
     public void onUnSuccessfulUnlock(String tag, Throwable throwable) {
-       // FirebaseCrashlytics.getInstance().recordException(throwable);
+        // FirebaseCrashlytics.getInstance().recordException(throwable);
     }
 
     @Override
@@ -293,32 +315,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         return unlockRegistry;
     }
 
-    public static LifecycleMainKey getMainKeyHolder() {
-        return mainKeyHolder;
-    }
-
-    public static KeyDataSource getKeyDataSource() {
-        return keyDataSource;
-    }
-
-    public static MainKeyStore getMainKeyStore() {
-        return mainKeyStore;
-    }
-
-    public static void resetKeys() {
-        getMainKeyHolder().clear();
-        TellaKeysUI.getMainKeyHolder().clear();
-    }
-
-    public static void initKeys(MainKey mainKey) {
-        getMainKeyHolder().set(mainKey);
-        TellaKeysUI.getMainKeyHolder().set(mainKey);
-    }
-
-    public static CleanInsights getCleanInsights() {
-        return cleanInsights;
-    }
-
     private void initCleanInsights() {
         if (Preferences.hasAcceptedImprovements()) {
             try {
@@ -336,7 +332,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     }
 
     private void persistCleanInsights() {
-        if (Preferences.hasAcceptedImprovements() && cleanInsights != null) CleanInsightUtils.INSTANCE.measureTimeSpentEvent(start);
+        if (Preferences.hasAcceptedImprovements() && cleanInsights != null)
+            CleanInsightUtils.INSTANCE.measureTimeSpentEvent(start);
     }
 
     @Override
