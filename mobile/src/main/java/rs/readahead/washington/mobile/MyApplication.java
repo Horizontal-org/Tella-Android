@@ -46,6 +46,7 @@ import java.io.File;
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
 import rs.readahead.washington.mobile.bus.TellaBus;
+import rs.readahead.washington.mobile.data.KeyRxVault;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.rest.BaseApi;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
@@ -75,6 +76,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     private static KeyDataSource keyDataSource;
     public static Vault vault;
     public static RxVault rxVault;
+    private static KeyRxVault keyRxVault;
     Vault.Config vaultConfig;
     private static CleanInsights cleanInsights;
     private final Long start = System.currentTimeMillis();
@@ -141,8 +143,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         BaseApi.Builder apiBuilder = new BaseApi.Builder();
 
         if (BuildConfig.DEBUG) {
-            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                    .detectAll().penaltyLog()/*.penaltyDeath()*/.build()); // todo: catch those..
+          //  StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+            ///        .detectAll().penaltyLog()/*.penaltyDeath()*/.build()); // todo: catch those..
             Timber.plant(new Timber.DebugTree());
             apiBuilder.setLogLevelFull();
         }
@@ -172,7 +174,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         // Collect
         PropertyManager mgr = new PropertyManager();
         JavaRosa.initializeJavaRosa(mgr);
-
+        vaultConfig = new Vault.Config();
+        vaultConfig.root = new File(this.getFilesDir(), C.MEDIA_DIR);
         //Tella keys
         TellaKeys.initialize();
         initializeLockConfigRegistry();
@@ -181,9 +184,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), Preferences.getLockTimeout());
         keyDataSource = new KeyDataSource(getApplicationContext());
         TellaKeysUI.initialize(mainKeyStore, mainKeyHolder, unlockRegistry, this);
-
-        vaultConfig = new Vault.Config();
-        vaultConfig.root = new File(this.getFilesDir(), C.MEDIA_DIR);
+        keyRxVault = new KeyRxVault(getApplicationContext(), mainKeyHolder, vaultConfig);
 
         initCleanInsights();
     }
@@ -243,6 +244,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         mainKeyStore = TellaKeysUI.getMainKeyStore();
         unlockRegistry = TellaKeysUI.getUnlockRegistry();
         keyDataSource.initKeyDataSource();
+        keyRxVault.initKeyRxVault();
 
         try {
             vault = new Vault(this, mainKeyHolder, vaultConfig);
@@ -314,6 +316,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         getMainKeyHolder().set(mainKey);
         TellaKeysUI.getMainKeyHolder().set(mainKey);
     }
+    public static KeyRxVault getKeyRxVault() { return keyRxVault; }
 
     public static CleanInsights getCleanInsights() {
         return cleanInsights;

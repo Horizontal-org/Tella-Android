@@ -543,7 +543,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICKER_FILE_REQUEST_CODE){
-            presenter.exportNewMediaFile(vaultFile,data.getDataString());
+            presenter.exportNewMediaFile(vaultFile,data.getData());
         }
 
     }

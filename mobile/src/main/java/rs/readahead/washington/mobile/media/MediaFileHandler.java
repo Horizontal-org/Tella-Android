@@ -140,51 +140,62 @@ public class MediaFileHandler {
         FileUtil.emptyDir(new File(context.getFilesDir(), C.TMP_DIR));
     }
 
-    public static void exportMediaFile(Context context, VaultFile vaultFile,@Nullable String envDirType) throws IOException {
-        if (envDirType == null || envDirType.isEmpty()){
-            if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
-                envDirType = Environment.DIRECTORY_PICTURES;
-            } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
-                envDirType = Environment.DIRECTORY_MOVIES;
-            } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
-                envDirType = Environment.DIRECTORY_MUSIC;
-            } else { // this should not happen anyway..
-                if (Build.VERSION.SDK_INT >= 19) {
-                    envDirType = Environment.DIRECTORY_DOCUMENTS;
-                } else {
-                    envDirType = Environment.DIRECTORY_PICTURES;
-                }
-            }
+    public static void exportMediaFile(Context context, VaultFile vaultFile, @Nullable Uri envDirUri) throws IOException {
+
+        String envDirType;
+        if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
+            envDirType = Environment.DIRECTORY_PICTURES;
+        } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
+            envDirType = Environment.DIRECTORY_MOVIES;
+        } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
+            envDirType = Environment.DIRECTORY_MUSIC;
+        } else { // this should not happen anyway..
+            envDirType = Environment.DIRECTORY_DOCUMENTS;
         }
-
-
-        File path;
-        if (Build.VERSION.SDK_INT >= 29) {
-            path = context.getExternalFilesDir(envDirType);
-        } else {
-            path = Environment.getExternalStoragePublicDirectory(envDirType);
-        }
-        File file = new File(path,MyApplication.rxVault.getFile(vaultFile).getName());
-
-             //
 
         InputStream is = null;
         OutputStream os = null;
 
+        File path = null;
+        if (envDirUri == null) {
+            if (Build.VERSION.SDK_INT >= 29) {
+                path = context.getExternalFilesDir(envDirType);
+            } else {
+                path = Environment.getExternalStoragePublicDirectory(envDirType);
+            }
+        } else {
+            DocumentFile documentFile = DocumentFile.fromTreeUri(context, envDirUri);
+            if (documentFile != null) {
+                DocumentFile newDocumentFile = documentFile.createFile(vaultFile.mimeType, vaultFile.name);
+                ContentResolver contentResolver = context.getContentResolver();
+                assert newDocumentFile != null;
+                os = contentResolver.openOutputStream(newDocumentFile.getUri());
+            }
+        }
+        File file = null;
+        if (path != null) {
+            file = new File(path.getAbsolutePath(), MyApplication.rxVault.getFile(vaultFile).getName());
+        }
+
         try {
             //noinspection ResultOfMethodCallIgnored
-            path.mkdirs();
+            if (path != null) {
+                if (!path.exists()) path.mkdirs();
+            }
 
             is = MyApplication.vault.getStream(vaultFile);
             if (is == null) {
                 throw new IOException();
             }
 
-            os = new FileOutputStream(file);
+            if (os == null) {
+                os = new FileOutputStream(file);
+            }
 
             IOUtils.copy(is, os);
-
-            MediaScannerConnection.scanFile(context, new String[]{file.toString()}, null, null);
+            if (file != null){
+                MediaScannerConnection.scanFile(context, new String[]{file.toString()}, null, null);
+            }
         } catch (VaultException e) {
             FirebaseCrashlytics.getInstance().recordException(e);
         } finally {
@@ -192,6 +203,7 @@ public class MediaFileHandler {
             FileUtil.close(os);
         }
     }
+
 
     public static VaultFile importPhotoUri(Context context, Uri uri, @Nullable String parentId) throws Exception {
         // Vault replacement methods
@@ -235,7 +247,7 @@ public class MediaFileHandler {
         RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault
                 .builder(input)
                 .setMimeType("image/jpeg")
-                .setName("Photo "+ DateUtil.getDate(System.currentTimeMillis()) + ".jpg")
+                .setName("Photo " + DateUtil.getDate(System.currentTimeMillis()) + ".jpg")
                 .setAnonymous(true)
                 .setType(VaultFile.Type.FILE)
                 .setId(uid)
@@ -267,7 +279,7 @@ public class MediaFileHandler {
         return MyApplication.rxVault
                 .builder(input)
                 .setMimeType("image/png")
-                .setName("Photo "+ DateUtil.getDate(System.currentTimeMillis()) + ".png")
+                .setName("Photo " + DateUtil.getDate(System.currentTimeMillis()) + ".png")
                 .setAnonymous(true)
                 .setType(VaultFile.Type.FILE)
                 .setThumb(getThumbByteArray(thumb))
@@ -358,12 +370,12 @@ public class MediaFileHandler {
             // thumbnail
             byte[] thumb = getThumbByteArray(retriever.getFrameAtTime());
 
-            RxVaultFileBuilder rxVaultFileBuilder =  MyApplication.rxVault
+            RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault
                     .builder(new FileInputStream(video))
                     .setAnonymous(false)
                     .setDuration(Long.parseLong(time))
                     .setType(VaultFile.Type.FILE)
-                    .setName("Video "+ DateUtil.getDate(System.currentTimeMillis()) + ".mp4")
+                    .setName("Video " + DateUtil.getDate(System.currentTimeMillis()) + ".mp4")
                     .setMimeType("video/mp4")
                     .setThumb(thumb);
 
@@ -623,7 +635,7 @@ public class MediaFileHandler {
                 .toObservable();
     }
 
-    public static void startImportFiles(Activity context, Boolean multipleFile,String type) {
+    public static void startImportFiles(Activity context, Boolean multipleFile, String type) {
         Intent intent = new Intent()
                 .setType(type)
                 .setAction(Intent.ACTION_GET_CONTENT)

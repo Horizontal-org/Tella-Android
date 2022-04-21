@@ -157,7 +157,7 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
             })
     }
 
-    override fun exportMediaFiles(vaultFiles: List<VaultFile?>,path: String?) {
+    override fun exportMediaFiles(vaultFiles: List<VaultFile?>,path: Uri?) {
         disposables.add(
             Single
                 .fromCallable {

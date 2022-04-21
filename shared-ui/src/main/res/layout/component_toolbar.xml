@@ -15,7 +15,8 @@
         app:layout_constraintTop_toTopOf="parent"
         android:visibility="gone"
         android:padding="11dp"
-        />
+        android:clickable="true"
+        android:focusable="true" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/left_img"
