@@ -118,6 +118,10 @@ public abstract class UwaziQuestionWidget extends RelativeLayout {
         }
     }
 
+    public boolean checkValidationConstraint() {
+        return constraintValidationView.getText().toString().length() > 0;
+    }
+
     public UwaziEntryPrompt getPrompt() {
         return formEntryPrompt;
     }

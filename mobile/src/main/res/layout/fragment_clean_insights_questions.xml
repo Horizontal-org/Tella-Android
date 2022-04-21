@@ -78,6 +78,13 @@
         app:layout_constraintStart_toStartOf="@id/guidelineStart05"
         app:layout_constraintTop_toBottomOf="@+id/tv_description" />
 
+    <TextView
+        style="@style/Unlock_White_Text_Back"
+        android:id="@+id/back_btn"
+        android:text="@string/LockSelect_Action_Back"
+        android:layout_marginStart="0dp"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart05"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <TextView
         style="@style/Unlock_White_Text_Back"

@@ -22,4 +22,4 @@ interface FilesActionsListener{
     fun videoClickListener()
 }
 
-enum class ImproveClickOptions{ CLOSE , YES , LEARN_MORE}
+enum class ImproveClickOptions{ CLOSE , YES , LEARN_MORE, SETTINGS}

@@ -6,6 +6,7 @@
 package com.hzontal.tella_locking_ui.patternlock;
 
 import android.os.Bundle;
+import android.view.WindowManager;
 
 import com.hzontal.tella_locking_ui.R;
 
@@ -29,7 +30,7 @@ public class ConfirmPatternActivity extends BasePatternActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         mMessageText.setText(R.string.UnlockPattern_DrawToUnlock);
         mPatternView.setInStealthMode(isStealthModeEnabled());
         mPatternView.setOnPatternListener(this);

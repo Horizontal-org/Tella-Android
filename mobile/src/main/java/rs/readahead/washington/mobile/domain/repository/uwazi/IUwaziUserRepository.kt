@@ -32,4 +32,10 @@ interface IUwaziUserRepository {
         entity: RequestBody,
         attachments: List<MultipartBody.Part?>
     ): Single<UwaziEntityRow>
+
+    fun submitWhiteListedEntity(
+        server: UWaziUploadServer,
+        entity: RequestBody,
+        attachments: List<MultipartBody.Part?>
+    ): Single<UwaziEntityRow>
 }

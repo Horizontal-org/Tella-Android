@@ -56,8 +56,10 @@ class OnBoardHideNameLogoFragment : BaseFragment() {
     }
 
     private fun confirmCamouflage(position: Int) {
-        BottomSheetUtils.showConfirmSheetWithImage(
+        BottomSheetUtils.showConfirmSheetWithImageAndTimeout(
             activity.supportFragmentManager,
+            getString(R.string.SettingsCamo_Dialog_TimeoutTitle),
+            getString(R.string.SettingsCamo_Dialog_TimeoutDesc),
             getString(R.string.settings_sec_confirm_camouflage_title),
             getString(R.string.settings_sec_confirm_camouflage_desc, getString(cm.options[position].stringResId)),
             getString(R.string.settings_sec_confirm_exit_tella),

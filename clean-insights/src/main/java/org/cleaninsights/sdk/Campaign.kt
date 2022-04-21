@@ -7,7 +7,6 @@
  */
 package org.cleaninsights.sdk
 
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -33,7 +32,7 @@ class Period(val start: Date, val end: Date)
  */
 @Suppress("MemberVisibilityCanBePrivate")
 data class Campaign(
-    val start: String, val end: String, val aggregationPeriodLength: Long,
+    val start: Long, val end: Long, val aggregationPeriodLength: Long,
     val numberOfPeriods: Int = 1, val onlyRecordOnce: Boolean = false,
     val eventAggregationRule: EventAggregationRule = EventAggregationRule.Sum,
     val strengthenAnonymity: Boolean = false
@@ -114,13 +113,7 @@ data class Campaign(
         }
     }
 
-    fun getStartsDate(): Date {
-        val sdf = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
-        return sdf.parse(start)!!
-    }
+    fun getStartsDate() = Date(start)
+    fun getEndsDate() = Date(end)
 
-    fun getEndsDate(): Date {
-        val sdf = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
-        return sdf.parse(end)!!
-    }
 }

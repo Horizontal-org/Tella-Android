@@ -45,6 +45,8 @@ import com.hzontal.tella_vault.VaultFile;
 import com.jakewharton.rxrelay2.PublishRelay;
 import com.jakewharton.rxrelay2.Relay;
 
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -353,21 +355,14 @@ public abstract class MetadataActivity extends BaseLockActivity implements
     }
 
     private void showGpsMetadataDialog(final int requestCode, final LocationSettingsCheckDoneListener listener) {
-        String message = getString(R.string.verification_prompt_dialog_expl);
-
-        locationAlertDialog = DialogsUtil.showMessageOKCancelWithTitle(this,
-                message,
+        BottomSheetUtils.showConfirmSheet(
+                getSupportFragmentManager(),
                 getString(R.string.verification_prompt_dialog_title),
-                getString(R.string.verification_prompt_action_ignore),
+                getString(R.string.verification_prompt_dialog_expl),
                 getString(R.string.verification_prompt_action_enable_GPS),
-                (dialog, which) -> {  //ignore
-                    dialog.dismiss();
-                    listener.onContinue();
-                },
-                (dialog, which) -> {  //turn on gps
-                    manageLocationSettings(requestCode, listener);
-                    dialog.dismiss();
-                });
+                getString(R.string.verification_prompt_action_ignore),
+                isConfirmed -> manageLocationSettings(requestCode, listener)
+        );
     }
 
     public SensorData getLightSensorData() {

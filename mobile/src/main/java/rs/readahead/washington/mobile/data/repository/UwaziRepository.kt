@@ -246,6 +246,26 @@ class UwaziRepository : IUwaziUserRepository {
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSuccess {  }
+    }
+
+    override fun submitWhiteListedEntity(
+        server: UWaziUploadServer,
+        entity: RequestBody,
+        attachments: List<MultipartBody.Part?>
+    ): Single<UwaziEntityRow> {
+        return uwaziApi.submitWhiteListedEntity(
+            attachments = attachments,
+            entity = entity,
+            url = StringUtils.append(
+                '/',
+                server.url,
+                ParamsNetwork.URL_WHITE_LISTED_ENTITIES
+            ),
+            cookies = arrayListOf(server.connectCookie, server.localeCookie),
+        )
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
 

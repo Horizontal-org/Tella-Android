@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.text.Selection;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.URLUtil;
@@ -109,9 +110,13 @@ public class UwaziLinkWidget extends UwaziQuestionWidget {
         String l = label.getText().toString();
         String u = url.getText().toString();
 
-        /*if (!URLUtil.isValidUrl(u)) {
-            this.setConstraintValidationText("This is not a valid Url");
-        }*/
+        if ((!l.isEmpty() && !(isValidUrl(u)))) {
+            this.setConstraintValidationText(getContext().getString(R.string.Uwazi_Info_NotValidURL));
+        }
+
+        if (l.isEmpty() && !(isEmptyUrl(u))) {
+            this.setConstraintValidationText(getContext().getString(R.string.Uwazi_Info_UrlLabelEmpty));
+        }
 
         if (TextUtils.isEmpty(l) && TextUtils.isEmpty(u)) {
             return null;
@@ -119,6 +124,14 @@ public class UwaziLinkWidget extends UwaziQuestionWidget {
             UwaziLink link = new UwaziLink(l, u);
             return new UwaziValue(link);
         }
+    }
+
+    private boolean isEmptyUrl(String url) {
+        return url.equals(getContext().getString(R.string.Uwazi_Answer_LinkInitialText)) || url.isEmpty();
+    }
+
+    private boolean isValidUrl(String url) {
+        return !(url.equals(getContext().getString(R.string.Uwazi_Answer_LinkInitialText))) && Patterns.WEB_URL.matcher(url).matches();
     }
 
     @Override
@@ -157,11 +170,7 @@ public class UwaziLinkWidget extends UwaziQuestionWidget {
 
         label.setText(link.getLabel());
         url.setText(link.getUrl());
-        if (!URLUtil.isValidUrl(link.getUrl())) {
-            this.setConstraintValidationText("This is not a valid Url");
-        }
 
         return data.toString();
     }
 }
-

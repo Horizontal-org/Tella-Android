@@ -210,7 +210,6 @@ class MicFragment : MetadataBaseLockFragment(),
     fun handleRecord() {
         notRecording = false
         if (presenter.isAudioRecorder) {   //first start or restart
-            updateRecordingName()
             disablePlay()
             handlingMediaFile = null
             cancelRecorder()
@@ -327,7 +326,7 @@ class MicFragment : MetadataBaseLockFragment(),
             disablePlay()
             enableRecord()
         } else {
-            handlingMediaFile = vaultFile
+            handlingMediaFile = MediaFileHandler.renameFile(vaultFile, recordingName.text.toString())
             handlingMediaFile!!.size = MediaFileHandler.getSize(vaultFile)
             disablePause()
             enablePlay()
@@ -336,6 +335,7 @@ class MicFragment : MetadataBaseLockFragment(),
             // returnData();
             onAddSuccess(vaultFile)
         }
+        updateRecordingName()
     }
 
     override fun onRecordingError() {

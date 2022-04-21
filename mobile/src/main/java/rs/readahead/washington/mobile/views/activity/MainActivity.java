@@ -28,6 +28,8 @@ import com.hzontal.tella_vault.filter.FilterType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -119,9 +121,10 @@ public class MainActivity extends MetadataActivity implements
         NavigationUI.setupWithNavController(btmNavMain, navController);
         navController.addOnDestinationChangedListener((navController1, navDestination, bundle) -> {
             switch (navDestination.getId()) {
+                case (R.id.micScreen):
+                    checkLocationSettings(C.START_AUDIO_RECORD, ()->{});
                 case (R.id.homeScreen):
                 case R.id.formScreen:
-                case R.id.micScreen:
                 case R.id.uwaziScreen:
                     showBottomNavigation();
                     break;

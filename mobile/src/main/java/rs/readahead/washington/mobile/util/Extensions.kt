@@ -10,14 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
-import com.google.gson.Gson
+import org.cleaninsights.sdk.Campaign
 import org.cleaninsights.sdk.CleanInsights
 import org.cleaninsights.sdk.CleanInsightsConfiguration
 import timber.log.Timber
-import androidx.annotation.ColorInt
-import androidx.annotation.RequiresApi
-import androidx.core.view.WindowInsetsCompat
-import rs.readahead.washington.mobile.R
+import java.net.URL
 
 
 fun View.setMargins(
@@ -49,11 +46,15 @@ fun Window.changeStatusColor(context: Context, color: Int) {
     }
 }
 
-fun createCleanInsightsInstance(context: Context, jsonFile: String): CleanInsights? {
+fun createCleanInsightsInstance(context: Context, startDate: Long): CleanInsights? {
     return try {
-        val jsonString = context.assets.open(jsonFile).reader().readText()
-        val configuration = Gson().fromJson(jsonString, CleanInsightsConfiguration::class.java)
-        CleanInsights(configuration, context.filesDir)
+        val endDate = startDate + (7 * 86400)
+        val cleanInsightsConfiguration = CleanInsightsConfiguration(
+            URL("https://analytics.wearehorizontal.org/ci/cleaninsights.php"),
+            3,
+            mapOf(CleanInsightUtils.CAMPAIGN_ID to Campaign(startDate, endDate, 1L))
+        )
+        CleanInsights(cleanInsightsConfiguration, context.filesDir)
     } catch (e: Exception) {
         Timber.e("createCleanInsightsInstance Exception ${e.message}")
         e.printStackTrace()
