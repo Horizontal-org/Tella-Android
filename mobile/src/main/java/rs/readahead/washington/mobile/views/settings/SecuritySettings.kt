@@ -73,7 +73,7 @@ class SecuritySettings : BaseFragment() {
 
         val deleteVault = view.findViewById<CheckBox>(R.id.delete_vault)
         deleteVault.isChecked = Preferences.isUninstallOnPanic()
-        deleteVault.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+        deleteVault.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
             deleteVault.isChecked = isChecked
             Preferences.setEraseForms(isChecked)
         }
@@ -106,10 +106,19 @@ class SecuritySettings : BaseFragment() {
 
         val silentCameraTellaSwitch =
             view.findViewById<TellaSwitchWithMessage>(R.id.camera_silent_switch)
-        silentCameraTellaSwitch.mSwitch.setChecked(Preferences.isShutterMute())
-        silentCameraTellaSwitch.mSwitch.setOnCheckedChangeListener({ buttonView: CompoundButton?, isChecked: Boolean ->
+        silentCameraTellaSwitch.mSwitch.isChecked = Preferences.isShutterMute()
+        silentCameraTellaSwitch.mSwitch.setOnCheckedChangeListener { buttonView: CompoundButton?, isChecked: Boolean ->
             Preferences.setShutterMute(isChecked)
-        })
+        }
+
+        val enableSecurityScreen = view.findViewById<TellaSwitchWithMessage>(R.id.security_screen_switch)
+        enableSecurityScreen.mSwitch.isChecked = Preferences.isSecurityScreenEnabled()
+        enableSecurityScreen.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+            enableSecurityScreen.isChecked = isChecked
+            Preferences.setSecurityScreenEnabled(isChecked)
+        }
+
+
 
         /*val bypassCensorshipTellaSwitch =
             view.findViewById<TellaSwitchWithMessage>(R.id.bypass_censorship_switch)
@@ -119,40 +128,40 @@ class SecuritySettings : BaseFragment() {
         })*/
 
         val vaultTooltip = view.findViewById<ImageView>(R.id.delete_vault_tooltip)
-        vaultTooltip.setOnClickListener({
+        vaultTooltip.setOnClickListener {
             showTooltip(
                 vaultTooltip,
                 resources.getString(R.string.settings_sec_delete_vault_tooltip),
                 Gravity.TOP
             )
-        })
+        }
 
         val formsTooltip = view.findViewById<ImageView>(R.id.delete_forms_tooltip)
-        formsTooltip.setOnClickListener({
+        formsTooltip.setOnClickListener {
             showTooltip(
                 formsTooltip,
                 resources.getString(R.string.settings_sec_delete_forms_tooltip),
                 Gravity.TOP
             )
-        })
+        }
 
         val serversTooltip = view.findViewById<ImageView>(R.id.delete_server_tooltip)
-        serversTooltip.setOnClickListener({
+        serversTooltip.setOnClickListener {
             showTooltip(
                 serversTooltip,
                 resources.getString(R.string.settings_sec_delete_servers_tooltip),
                 Gravity.TOP
             )
-        })
+        }
 
         val appTooltip = view.findViewById<ImageView>(R.id.delete_app_tooltip)
-        appTooltip.setOnClickListener({
+        appTooltip.setOnClickListener {
             showTooltip(
                 appTooltip,
                 resources.getString(R.string.settings_sec_delete_app_tooltip),
                 Gravity.TOP
             )
-        })
+        }
     }
 
     override fun onStart() {
@@ -171,7 +180,7 @@ class SecuritySettings : BaseFragment() {
                 requireActivity().supportFragmentManager,
                 requireContext(),
                 lockTimeoutManager.lockTimeout,
-                lockTimeoutManager.getOptionsList(),
+                lockTimeoutManager.optionsList,
                 getString(R.string.settings_select_lock_timeout),
                 getString(R.string.settings_sec_lock_timeout_desc),
                 getString(R.string.action_ok),
@@ -182,12 +191,12 @@ class SecuritySettings : BaseFragment() {
     }
 
     private fun onLockTimeoutChoosen(option: Long) {
-        lockTimeoutManager.setLockTimeout(option)
+        lockTimeoutManager.lockTimeout = option
         setUpLockTimeoutText()
     }
 
     private fun setUpLockTypeText() {
-        when ((activity.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(activity)) {
+        when ((activity.applicationContext as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(activity)) {
             UnlockRegistry.Method.TELLA_PIN -> lockSetting?.setText(getString(R.string.onboard_pin))
             UnlockRegistry.Method.TELLA_PASSWORD -> lockSetting?.setText(getString(R.string.onboard_password))
             UnlockRegistry.Method.TELLA_PATTERN -> lockSetting?.setText(getString(R.string.onboard_pattern))

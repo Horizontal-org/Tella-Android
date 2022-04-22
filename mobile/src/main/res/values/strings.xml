@@ -321,6 +321,8 @@ mode activation</string>
   <string name="settings.servers_disable_auto_upload_dialog.expl">Your files will no longer be automatically uploaded to the server.</string>
   <string name="settings.servers_disable_auto_delete_dialog.title">Disable auto-delete?</string>
   <string name="settings.servers_disable_auto_delete_dialog.expl">Your files will no longer be automatically deleted once the upload is complete.</string>
+  <string name="settings_sec_security_screen" translatable="false">Screen security</string>
+  <string name="settings_sec_security_screen_expl" translatable="false">Block screenshots and screen recordings inside Tella and screen preview in the list of recent apps</string>
   <string name="action_enable">Enable</string>
   <string name="action_disable">Disable</string>
   <string name="settings.servers_delete.server_dialog.title">Delete \"%1$s\" server?</string>

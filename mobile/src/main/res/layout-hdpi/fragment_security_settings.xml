@@ -315,6 +315,18 @@
                 app:layout_constraintTop_toBottomOf="@+id/quick_exit_options_layout"
                 app:titleText="@string/settings.sec_camera.mute_switch" />
 
+            <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+                android:id="@+id/security_screen_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:background="@drawable/rounded_light_purple_background"
+                app:explainText="@string/settings_sec_security_screen_expl"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/camera_silent_switch"
+                app:titleText="@string/settings_sec_security_screen" />
+
          <!--   <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
                 android:id="@+id/bypass_censorship_switch"
                 android:layout_width="match_parent"

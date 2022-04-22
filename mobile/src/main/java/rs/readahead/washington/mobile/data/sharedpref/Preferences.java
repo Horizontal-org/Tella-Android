@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 
 import org.joda.time.DateTime;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -48,6 +47,14 @@ public class Preferences {
 
     public static void setUninstallOnPanic(boolean value) {
         setBoolean(SharedPrefs.UNINSTALL_ON_PANIC, value);
+    }
+
+    public static boolean isSecurityScreenEnabled() {
+        return getBoolean(SharedPrefs.SET_SECURITY_SCREEN, true);
+    }
+
+    public static void setSecurityScreenEnabled(boolean value) {
+        setBoolean(SharedPrefs.SET_SECURITY_SCREEN, value);
     }
 
     public static boolean isFirstStart() {

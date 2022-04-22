@@ -1,11 +1,7 @@
 package rs.readahead.washington.mobile.views.base_ui
 
 import android.content.Intent
-import android.os.Bundle
 import android.view.WindowManager
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.ProcessLifecycleOwner
 import com.hzontal.tella_locking_ui.ui.password.PasswordUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternSetActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity
@@ -18,19 +14,9 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.views.activity.PatternUpgradeActivity
 
-const val START_FROM_PAUSED_ACTIVITY_FLAG = "START_FROM_PAUSED_ACTIVITY_FLAG"
-abstract class BaseLockActivity : BaseActivity(), LifecycleObserver {
+abstract class BaseLockActivity : BaseActivity() {
 
     private val holder by lazy { applicationContext as IUnlockRegistryHolder }
-
-    // Check if app is in background
-    private val isActivityBackground =
-        ProcessLifecycleOwner.get().lifecycle.currentState == Lifecycle.State.CREATED;
-
-    // Check if app is in foreground
-    private val isActivityForeground = ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(
-        Lifecycle.State.STARTED
-    );
 
     var isLocked = false
         private set
@@ -51,7 +37,6 @@ abstract class BaseLockActivity : BaseActivity(), LifecycleObserver {
             this,
             if (SecretsManager.isInitialized(this)) PatternUpgradeActivity::class.java else PatternSetActivity::class.java
         )
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
         this.startActivity(intent)
     }
 
@@ -80,14 +65,23 @@ abstract class BaseLockActivity : BaseActivity(), LifecycleObserver {
         finish()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onResume() {
         restrictActivity()
+        maybeEnableSecurityScreen()
         super.onResume()
+    }
+
+    private fun maybeEnableSecurityScreen() {
+        if (Preferences.isSecurityScreenEnabled()) {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE
+            )
+        } else {
+            window.clearFlags(
+                WindowManager.LayoutParams.FLAG_SECURE
+            )
+        }
     }
 
 }

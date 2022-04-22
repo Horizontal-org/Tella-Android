@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.util.LocaleManager
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 
@@ -73,7 +75,6 @@ abstract class BaseActivity : AppCompatActivity() {
             .commitAllowingStateLoss()
     }
 
-
     fun addFragment(fragmentToHide: Fragment, fragment: Fragment, container: Int) {
         val className = fragment.javaClass.name
         supportFragmentManager
@@ -118,5 +119,23 @@ abstract class BaseActivity : AppCompatActivity() {
             .add(container, fragment, className)
             .addToBackStack(null)
             .commitAllowingStateLoss()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        maybeEnableSecurityScreen()
+    }
+
+    private fun maybeEnableSecurityScreen() {
+        if (Preferences.isSecurityScreenEnabled()) {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE
+            )
+        } else {
+            window.clearFlags(
+                WindowManager.LayoutParams.FLAG_SECURE
+            )
+        }
     }
 }
