@@ -157,7 +157,7 @@ public class DraftFormsListFragment extends FormListFragment implements
                         deleteFormInstance(instance.getId());
                     }
                 },
-                requireContext().getString(R.string.Collect_RemoveForm_SheetTitle),
+                requireContext().getString(R.string.Collect_DeleteForm_SheetTitle),
                 String.format(requireContext().getResources().getString(R.string.Collect_Subtitle_RemoveForm), instance.getInstanceName()),
                 requireContext().getString(R.string.action_remove),
                 requireContext().getString(R.string.action_cancel)
