@@ -40,7 +40,7 @@
                 app:tabIndicatorHeight="2dp"
                 app:tabMaxWidth="0dp"
                 app:tabGravity="fill"
-                app:tabMode="fixed"
+                app:tabMode="scrollable"
                 app:tabSelectedTextColor="@color/wa_white"
                 app:tabTextColor="@color/bottom_nav_item_color"
                 app:layout_collapseMode="parallax"

@@ -34,7 +34,6 @@ class UwaziFragment : BaseBindingFragment<FragmentUwaziBinding>(FragmentUwaziBin
                 ContextCompat.getColor(activity, R.color.wa_white)
                 )
 
-
             fabButton.setOnClickListener {
                 nav().navigate(R.id.action_uwaziScreen_to_uwaziDownloadScreen)
             }

@@ -8,8 +8,7 @@
     android:background="@color/wa_purple"
     android:fitsSystemWindows="true"
     android:keepScreenOn="true"
-    android:textDirection="locale"
-    tools:context=".views.fragment.MicFragment">
+    android:textDirection="locale">
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
