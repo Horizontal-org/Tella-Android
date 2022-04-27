@@ -151,7 +151,7 @@ public class SubmittedFormsListFragment extends FormListFragment implements
                         deleteFormInstance(instance.getId());
                     }
                 },
-                requireContext().getString(R.string.Collect_RemoveForm_SheetTitle),
+                requireContext().getString(R.string.Collect_DeleteForm_SheetTitle),
                 requireContext().getString(R.string.collect_dialog_text_delete_sent_form),
                 requireContext().getString(R.string.action_remove),
                 requireContext().getString(R.string.action_cancel)

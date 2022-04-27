@@ -668,4 +668,5 @@ button to add a new template.</string>
   <string name="SettingsCamo_Dialog_TimeoutTitle">Tella is shutting down …</string>
   <string name="SettingsCamo_Dialog_TimeoutDesc">Please wait. You will return to your device\'s homescreen in a few seconds.</string>
   <string name="SettingsCamo_Dialog_RemovingCamouflage">Removing camouflage …</string>
+  <string name="Collect_DeleteForm_SheetTitle">Delete form?</string>
 </resources>
