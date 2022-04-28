@@ -37,11 +37,12 @@
 
         <TextView
             android:id="@+id/formName"
-            style="@style/Tella_Main_White_Text.MeduimbBold"
+            style="@style/Tella_Main_White_TextLargeBold"
             android:layout_width="match_parent"
-            tools:text="Test Test TestTestTestTestTestTestTestTestTestTestTestTest"
+            tools:text="Test Test"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="6dp"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:textColor="@color/wa_white"
             android:ellipsize="end"/>
