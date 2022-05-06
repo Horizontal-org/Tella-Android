@@ -228,21 +228,21 @@ public class FormSubmitActivity extends BaseLockActivity implements
     @Override
     public void formPartResubmitStart(CollectFormInstance instance, String partName) {
         if (endView != null) {
-            endView.showUploadProgress(partName);
+            runOnUiThread(() -> endView.showUploadProgress(partName));
         }
     }
 
     @Override
     public void formPartUploadProgress(String partName, float pct) {
         if (endView != null) {
-            endView.setUploadProgress(partName, pct);
+            runOnUiThread(() -> endView.setUploadProgress(partName, pct));
         }
     }
 
     @Override
     public void formPartResubmitSuccess(CollectFormInstance instance, OpenRosaPartResponse response) {
         if (endView != null) {
-            endView.hideUploadProgress(response.getPartName());
+            runOnUiThread(() -> endView.hideUploadProgress(response.getPartName()));
         }
     }
 
