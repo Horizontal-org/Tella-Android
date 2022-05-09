@@ -159,7 +159,7 @@ public class DraftFormsListFragment extends FormListFragment implements
                 },
                 requireContext().getString(R.string.Collect_DeleteForm_SheetTitle),
                 String.format(requireContext().getResources().getString(R.string.Collect_Subtitle_RemoveForm), instance.getInstanceName()),
-                requireContext().getString(R.string.action_remove),
+                requireContext().getString(R.string.action_delete),
                 requireContext().getString(R.string.action_cancel)
         );
     }
