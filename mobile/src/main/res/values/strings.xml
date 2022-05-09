@@ -669,4 +669,7 @@ button to add a new template.</string>
   <string name="SettingsCamo_Dialog_TimeoutDesc">Please wait. You will return to your device\'s homescreen in a few seconds.</string>
   <string name="SettingsCamo_Dialog_RemovingCamouflage">Removing camouflage …</string>
   <string name="Collect_DeleteForm_SheetTitle">Delete form?</string>
+  <string name="Collect_DeleteDraftForm_SheetTitle">Delete draft?</string>
+  <string name="Collect_DeleteDraftForm_SheetExpl">Are you sure you want to delete this draft?</string>
+  <string name="Collect_DeleteForm_SheetExpl">Are you sure you want to delete this form?</string>
 </resources>
