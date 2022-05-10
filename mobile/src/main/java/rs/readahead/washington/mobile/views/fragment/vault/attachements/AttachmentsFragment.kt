@@ -312,6 +312,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                     getString(R.string.Vault_ManageFiles_SheetTitle),
                     getString(R.string.Vault_DeleteFile_SheetDesc),
                     filterType != FilterType.OTHERS,
+                    filterType == FilterType.ALL,
                     action = object : VaultSheetUtils.IVaultManageFiles {
                         override fun goToCamera() {
                             val intent = Intent(activity, CameraActivity::class.java)
