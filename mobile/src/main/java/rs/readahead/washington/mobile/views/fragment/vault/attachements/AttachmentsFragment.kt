@@ -1034,7 +1034,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             )
             moveContainer.visibility = View.VISIBLE
             checkBoxList.visibility = View.GONE
-            detailsFab.setMargins(17, 0, 17, 70)
+            detailsFab.visibility = View.GONE
             with(attachmentsRecyclerView) {
                 setMargins(17, 0, 17, 37)
                 updatePadding(right = 2, left = 2)
@@ -1057,7 +1057,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             )
             moveContainer.visibility = View.GONE
             checkBoxList.visibility = View.VISIBLE
-            detailsFab.setMargins(17, 0, 17, 17)
+            detailsFab.visibility = View.VISIBLE
             with(attachmentsRecyclerView) {
                 setMargins(0, 0, 0, 17)
                 updatePadding(right = 0, left = 0)
