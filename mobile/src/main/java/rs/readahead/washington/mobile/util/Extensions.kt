@@ -56,7 +56,7 @@ fun createCleanInsightsInstance(context: Context): CleanInsights? {
         val cleanInsightsConfiguration = CleanInsightsConfiguration(
             URL("https://analytics.wearehorizontal.org/ci/cleaninsights.php"),
             3,
-            mapOf(CleanInsightUtils.CAMPAIGN_ID to Campaign(startDate, endDate, 1L))
+            mapOf(CleanInsightUtils.CAMPAIGN_ID to Campaign(startDate, endDate, 3600000))
         )
         CleanInsights(cleanInsightsConfiguration, context , context.filesDir)
     } catch (e: Exception) {
