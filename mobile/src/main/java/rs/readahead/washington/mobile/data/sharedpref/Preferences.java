@@ -331,7 +331,7 @@ public class Preferences {
 
     public static void setIsAcceptedImprovements(boolean value) {
         setBoolean(SharedPrefs.HAS_IMPROVEMENT_ACCEPTED, value);
-        setTimeAcceptedImprovements(new Date().getTime());
+        if (value) setTimeAcceptedImprovements(new Date().getTime());
     }
 
     private static void setTimeAcceptedImprovements(Long value) { setLong(SharedPrefs.TIME_IMPROVEMENT_ACCEPTED, value); }

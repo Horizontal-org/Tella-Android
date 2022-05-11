@@ -9,7 +9,7 @@ object CleanInsightUtils {
 
     enum class ServerType { SERVER_TELLA, SERVER_UWAZI, SERVER_COLLECT }
 
-    const val CAMPAIGN_ID = "test"
+    const val CAMPAIGN_ID = "test_update"
     private const val CATEGORY = "app-state"
     private const val YES = "Yes"
     private const val NO = "No"
@@ -25,7 +25,7 @@ object CleanInsightUtils {
                 it.measureEvent(CATEGORY, "Quick delete", CAMPAIGN_ID, isQuickExit)
                 it.measureEvent(CATEGORY, "Camouflage enabled", CAMPAIGN_ID, isCamouflageEnabled)
                 it.measureEvent(CATEGORY, "Language", CAMPAIGN_ID, LocaleManager.getInstance().languageSetting ?: "EN")
-                it.persist()
+                it.persistAndSend()
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -37,7 +37,7 @@ object CleanInsightUtils {
         try {
             cleanInsights?.let {
                 it.measureEvent(CATEGORY, "Connected server", CAMPAIGN_ID, serverType.name)
-                it.persist()
+                it.persistAndSend()
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -50,7 +50,7 @@ object CleanInsightUtils {
             cleanInsights?.let {
                 val timeSpend = (System.currentTimeMillis() - start) / 1000
                 it.measureEvent(CATEGORY, "Time spent on the app", CAMPAIGN_ID, timeSpend.toString())
-                it.persist()
+                it.persistAndSend()
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -63,7 +63,7 @@ object CleanInsightUtils {
             cleanInsights?.let {
                 it.setCampaignId(CAMPAIGN_ID)
                 it.measureVisit(Collections.singletonList("Main"), CAMPAIGN_ID)
-                it.persist()
+                it.persistAndSend()
             }
         } catch (e: Exception) {
             e.printStackTrace()

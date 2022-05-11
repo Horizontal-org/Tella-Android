@@ -7,6 +7,7 @@
  */
 package org.cleaninsights.sdk
 
+import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
 import kotlinx.coroutines.MainScope
@@ -22,7 +23,7 @@ import kotlin.math.pow
  * @param store: Your implementation of a `Store`.
  */
 @Suppress("unused", "MemberVisibilityCanBePrivate")
-open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfiguration, private val store: Store) {
+open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfiguration, private val store: Store, private val context: Context? = null) {
 
     companion object {
         private fun deserialize(jsonConfiguration: String): CleanInsightsConfiguration {
@@ -36,9 +37,8 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
         }
 
         private fun debug(toggle: Boolean, format: String, vararg args: Any?) {
-            if (!toggle) return
-
-            Log.d("CleanInsightsSDK", String.format(Locale.US, format, *args))
+            //if (!toggle) return
+            Log.e("CleanInsightsSDK", String.format(Locale.US, format, *args))
         }
     }
 
@@ -54,34 +54,11 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
      * @param cleanInsightsConfiguration: The Configuration provided as a `Configuration` object.
      * @param storageDir: The location where to read and persist accumulated data.
      */
-    constructor(cleanInsightsConfiguration: CleanInsightsConfiguration, storageDir: File) :
-            this(
-                cleanInsightsConfiguration, DefaultStore(
-                    hashMapOf("storageDir" to storageDir),
-                    fun(message: String) { debug(cleanInsightsConfiguration.debug, message) })
-            )
-
-    /**
-     * @param jsonConfiguration: The Configuration provided as a JSON string
-     *      which can be deserialized to a `Configuration` object.
-     * @param store: Your implementation of a `Store`.
-     */
-    constructor(jsonConfiguration: String, store: Store) : this(deserialize(jsonConfiguration), store)
-
-    /**
-     * @param jsonConfiguration: The Configuration provided as a JSON string
-     *      which can be deserialized to a `Configuration` object.
-     * @param storageDir: The location where to read and persist accumulated data.
-     */
-    constructor(jsonConfiguration: String, storageDir: File) : this(deserialize(jsonConfiguration), storageDir)
-
-
-    /**
-     * @param jsonConfigurationFile: The Configuration provided as a URL to a JSON file
-     *      which can be deserialized to a `Configuration` object.
-     * @param storageDir: The location where to read and persist accumulated data.
-     */
-    constructor(jsonConfigurationFile: File, storageDir: File) : this(jsonConfigurationFile.readText(), storageDir)
+    constructor(cleanInsightsConfiguration: CleanInsightsConfiguration, context: Context, storageDir: File) : this(
+        cleanInsightsConfiguration,
+        DefaultStore(hashMapOf("storageDir" to storageDir), fun(message: String) { debug(cleanInsightsConfiguration.debug, message) }),
+        context
+    )
 
     init {
         if (!conf.check { debug("%s", it) }) {
@@ -311,7 +288,7 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
     @JvmOverloads
     fun requestConsent(
         campaignId: String, consentRequestUi: ConsentRequestUi,
-        completed: ConsentRequestUiComplete? = null
+        completed: ConsentRequestUiComplete? = null,
     ) {
 
         val campaign = conf.campaigns[campaignId]
@@ -393,7 +370,7 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
     @JvmOverloads
     fun requestConsent(
         feature: Feature, consentRequestUi: ConsentRequestUi,
-        completed: ConsentRequestUiComplete? = null
+        completed: ConsentRequestUiComplete? = null,
     ) {
 
         val consent = store.consents.features[feature]
@@ -498,29 +475,28 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
      */
     fun persistAndSend() {
         persist(true)
-
         if (failedSubmissionCount > 0) {
-            // Calculate a delay for the next retry:
-            // Minimum is 2 times the configured network timeout after the first failure,
-            // exponentially increasing with number of retries.
-            // Maximum is every conf.maxRetryDelay interval.
+            // Calculate a delay for the next retry: Minimum is 2 times the configured network timeout after the first failure,
+            // exponentially increasing with number of retries. Maximum is every conf.maxRetryDelay interval.
             val exp = Date(lastFailedSubmission.time + ((conf.timeout * 2.0.pow(failedSubmissionCount.toDouble())).toLong()))
             val tru = Date(lastFailedSubmission.time + (conf.maxRetryDelay.toLong()))
             val retryAllowedAt = if (exp.before(tru)) exp else tru
             if (Date().before(retryAllowedAt)) return
         }
-
+        val campaign = conf.campaigns[getCampaignId()] ?: return
+        debug("Date :: ${Date()}  :: getEndsDate ::${campaign.getEndsDate()} :: isDataSaved :: ${isDataSaved()}")
+        if (Date().before(campaign.getEndsDate()) || isDataSaved()) return
         val insights = Insights(conf, store)
-        insights.events.addAll(store.events)
-        insights.visits.addAll(store.visits)
+        debug("insights isEmpty :: ${insights.isEmpty}")
         if (insights.isEmpty) return
-
         val done = { e: Exception? ->
             if (e != null) {
+                saveDataToPrefs(false)
                 lastFailedSubmission = Date()
                 failedSubmissionCount++
                 debug(e)
             } else {
+                saveDataToPrefs(true)
                 lastFailedSubmission = Date(0)
                 failedSubmissionCount = 0
                 debug("Successfully offloaded data.")
@@ -528,7 +504,6 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
                 persist(async = true, force = true)
             }
         }
-
         val body: String
         try {
             val arrayEvents = ArrayList<EventJson>()
@@ -539,14 +514,18 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
             }
             val insightsJson = InsightsJson(insights.idsite, insights.lang, insights.ua, arrayVisits, arrayEvents)
             body = Gson().toJson(insightsJson)
+            debug("Successfully offloaded data. body $body")
         } catch (e: Exception) {
             done(e)
             return
         }
 
-        val campaign = conf.campaigns[getCampaignId()] ?: return
-        if (Date() >= campaign.getEndsDate()) store.send(body, conf.server, conf.timeout, done)
+        if (Date().after(campaign.getEndsDate()) && !isDataSaved()) store.send(body, conf.server, conf.timeout, done)
     }
+
+    private fun getSharedPrefs() = context?.getSharedPreferences("CLEAN_INSIGHTS", Context.MODE_PRIVATE)
+    private fun saveDataToPrefs(isSaved: Boolean) = getSharedPrefs()?.edit()?.putBoolean("saved", isSaved)?.apply()
+    private fun isDataSaved() = getSharedPrefs()?.getBoolean("saved", false) ?: false
 
     data class InsightsJson(val idsite: Int, val lang: String?, val ua: String?, val visits: ArrayList<VisitJson>, val events: ArrayList<EventJson>)
     data class VisitJson(val scenePath: List<String>, val campaign_id: String, val times: Int = 1, val period_start: Long, val period_end: Long)
@@ -558,30 +537,21 @@ open class CleanInsights(val cleanInsightsConfiguration: CleanInsightsConfigurat
         val campaign_id: String,
         val times: Int = 1,
         val period_start: Long,
-        val period_end: Long
+        val period_end: Long,
     )
 
     private fun getCampaignIfGood(campaignId: String, debugString: String): Campaign? {
         val campaign = conf.campaigns[campaignId]
-
         if (campaign == null) {
             debug("Measurement '%s' discarded, because campaign '%s' is missing in configuration.", debugString, campaignId)
             return null
         }
 
         val now = Date()
-
         if (now < campaign.getStartsDate()) {
             debug("Measurement '%s' discarded, because campaign '%s' didn't start, yet.", debugString, campaignId)
             return null
         }
-
-        if (now > campaign.getEndsDate()) {
-            debug("Measurement '%s' discarded, because campaign '%s' already ended.", debugString, campaignId)
-            persistAndSend()
-            return null
-        }
-
         return campaign
     }
 

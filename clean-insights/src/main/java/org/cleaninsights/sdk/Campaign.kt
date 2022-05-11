@@ -9,9 +9,6 @@ package org.cleaninsights.sdk
 
 import java.util.*
 
-
-const val DATE_FORMAT = "yyyy-MM-dd HH:mm:ss"
-
 class Period(val start: Date, val end: Date)
 
 /**
@@ -35,7 +32,7 @@ data class Campaign(
     val start: Long, val end: Long, val aggregationPeriodLength: Long,
     val numberOfPeriods: Int = 1, val onlyRecordOnce: Boolean = false,
     val eventAggregationRule: EventAggregationRule = EventAggregationRule.Sum,
-    val strengthenAnonymity: Boolean = false
+    val strengthenAnonymity: Boolean = false,
 ) {
 
     val currentMeasurementPeriod: Period?
@@ -59,7 +56,7 @@ data class Campaign(
             now = Date()
 
             if (periodStart > now || periodEnd < now) {
-                return null
+                return Period(Date(), Date())
             }
 
             return Period(periodStart, periodEnd)
@@ -87,7 +84,7 @@ data class Campaign(
             }
 
             if (periodStart == periodEnd) {
-                return null
+                return Period(Date(), Date())
             }
 
             return Period(periodStart, periodEnd)

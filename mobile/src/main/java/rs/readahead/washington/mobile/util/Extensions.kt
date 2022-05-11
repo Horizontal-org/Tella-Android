@@ -13,6 +13,7 @@ import android.view.WindowManager
 import org.cleaninsights.sdk.Campaign
 import org.cleaninsights.sdk.CleanInsights
 import org.cleaninsights.sdk.CleanInsightsConfiguration
+import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import timber.log.Timber
 import java.net.URL
 
@@ -21,7 +22,7 @@ fun View.setMargins(
     leftMarginDp: Int? = null,
     topMarginDp: Int? = null,
     rightMarginDp: Int? = null,
-    bottomMarginDp: Int? = null
+    bottomMarginDp: Int? = null,
 ) {
     if (layoutParams is ViewGroup.MarginLayoutParams) {
         val params = layoutParams as ViewGroup.MarginLayoutParams
@@ -46,15 +47,18 @@ fun Window.changeStatusColor(context: Context, color: Int) {
     }
 }
 
-fun createCleanInsightsInstance(context: Context, startDate: Long): CleanInsights? {
+fun createCleanInsightsInstance(context: Context): CleanInsights? {
     return try {
-        val endDate = startDate + (7 * 86400)
+        val startDate = Preferences.getTimeAcceptedImprovements()
+        val endDate = startDate + 60000
+        //val endDate = startDate + 3600000
+        //val endDate = startDate + (7 * 86400000)
         val cleanInsightsConfiguration = CleanInsightsConfiguration(
             URL("https://analytics.wearehorizontal.org/ci/cleaninsights.php"),
             3,
             mapOf(CleanInsightUtils.CAMPAIGN_ID to Campaign(startDate, endDate, 1L))
         )
-        CleanInsights(cleanInsightsConfiguration, context.filesDir)
+        CleanInsights(cleanInsightsConfiguration, context , context.filesDir)
     } catch (e: Exception) {
         Timber.e("createCleanInsightsInstance Exception ${e.message}")
         e.printStackTrace()

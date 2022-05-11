@@ -27,13 +27,10 @@ import java.util.*
 
 
 class GeneralSettings : BaseFragment() {
-    var languageSetting: TextView? = null
-    var shareDataSwitch: TellaSwitchWithMessage? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    private var languageSetting: TextView? = null
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_general_settings, container, false)
         initView(view)
         return view
@@ -43,38 +40,36 @@ class GeneralSettings : BaseFragment() {
         (activity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_select_general)
         (activity as OnFragmentSelected?)?.setToolbarHomeIcon(R.drawable.ic_arrow_back_white_24dp)
 
-
         view.findViewById<View>(R.id.language_settings_button).setOnClickListener {
-            Navigation.findNavController(view)
-                .navigate(R.id.action_general_settings_to_language_settings)
+            Navigation.findNavController(view).navigate(R.id.action_general_settings_to_language_settings)
         }
 
         languageSetting = view.findViewById(R.id.language_setting)
         setLanguageSetting()
+    }
 
-        shareDataSwitch = view.findViewById(R.id.share_data_switch)
-        shareDataSwitch?.let {
-            it.mSwitch.setChecked(Preferences.hasAcceptedImprovements())
-            it.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
-                try {
-                    Preferences.setIsAcceptedImprovements(isChecked)
-                    CleanInsightUtils.grantCampaign(isChecked)
-                    if (isChecked) showMessageForCleanInsightsApprove(CleanInsightsActions.YES)
-                } catch (e: Exception) {
-                    e.printStackTrace()
+    override fun onResume() {
+        super.onResume()
+
+        view?.findViewById<TellaSwitchWithMessage>(R.id.share_data_switch)?.let {
+            it.mSwitch.isChecked = Preferences.hasAcceptedImprovements()
+            it.mSwitch.setOnCheckedChangeListener { compoundButton: CompoundButton, isChecked: Boolean ->
+                if (compoundButton.isPressed) {
+                    it.mSwitch.isChecked = isChecked
+                    showMessageForCleanInsightsApprove(if (isChecked) CleanInsightsActions.YES else CleanInsightsActions.NO)
                 }
             }
             it.setTextAndAction(R.string.action_learn_more) { startCleanInsightActivity() }
         }
 
-        val crashReportsSwitch = view.findViewById<TellaSwitchWithMessage>(R.id.crash_report_switch)
-        crashReportsSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+        val crashReportsSwitch = view?.findViewById<TellaSwitchWithMessage>(R.id.crash_report_switch)
+        crashReportsSwitch?.mSwitch?.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
             Preferences.setSubmittingCrashReports(isChecked)
         }
-        crashReportsSwitch.mSwitch.isChecked = Preferences.isSubmittingCrashReports()
+        crashReportsSwitch?.mSwitch?.isChecked = Preferences.isSubmittingCrashReports()
 
-        val verificationSwitch = view.findViewById<TellaSwitchWithMessage>(R.id.verification_switch)
-        verificationSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+        val verificationSwitch = view?.findViewById<TellaSwitchWithMessage>(R.id.verification_switch)
+        verificationSwitch?.mSwitch?.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
             run {
                 if (!context?.let { hasLocationPermission(it) }!!) {
                     requestLocationPermission(LOCATION_PERMISSION)
@@ -82,25 +77,25 @@ class GeneralSettings : BaseFragment() {
                 Preferences.setAnonymousMode(!isChecked)
             }
         }
-        verificationSwitch.mSwitch.isChecked = !Preferences.isAnonymousMode()
+        verificationSwitch?.mSwitch?.isChecked = !Preferences.isAnonymousMode()
 
-        val favoriteFormsSwitch = view.findViewById<TellaSwitchWithMessage>(R.id.favorite_forms_switch)
-        favoriteFormsSwitch.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+        val favoriteFormsSwitch = view?.findViewById<TellaSwitchWithMessage>(R.id.favorite_forms_switch)
+        favoriteFormsSwitch?.mSwitch?.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
             Preferences.setShowFavoriteForms(isChecked)
         }
-        favoriteFormsSwitch.mSwitch.isChecked = Preferences.isShowFavoriteForms()
+        favoriteFormsSwitch?.mSwitch?.isChecked = Preferences.isShowFavoriteForms()
 
-        val favoriteTemplatesSwitch = view.findViewById<TellaSwitchWithMessage>(R.id.favorite_templates_switch)
-        favoriteTemplatesSwitch.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+        val favoriteTemplatesSwitch = view?.findViewById<TellaSwitchWithMessage>(R.id.favorite_templates_switch)
+        favoriteTemplatesSwitch?.mSwitch?.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
             Preferences.setShowFavoriteTemplates(isChecked)
         }
-        favoriteTemplatesSwitch.mSwitch.isChecked = Preferences.isShowFavoriteTemplates()
+        favoriteTemplatesSwitch?.mSwitch?.isChecked = Preferences.isShowFavoriteTemplates()
 
-        val recentFilesSwitch = view.findViewById<TellaSwitchWithMessage>(R.id.recent_files_switch)
-        recentFilesSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+        val recentFilesSwitch = view?.findViewById<TellaSwitchWithMessage>(R.id.recent_files_switch)
+        recentFilesSwitch?.mSwitch?.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
             Preferences.setShowRecentFiles(isChecked)
         }
-        recentFilesSwitch.mSwitch.isChecked = Preferences.isShowRecentFiles()
+        recentFilesSwitch?.mSwitch?.isChecked = Preferences.isShowRecentFiles()
     }
 
 
@@ -132,32 +127,21 @@ class GeneralSettings : BaseFragment() {
             CleanInsightsActions.YES -> {
                 Preferences.setIsAcceptedImprovements(true)
                 CleanInsightUtils.grantCampaign(true)
-                shareDataSwitch?.mSwitch?.isChecked = true
-                DialogUtils.showBottomMessage(requireActivity(),getString(R.string.clean_insights_signed_for_days), false)
+                DialogUtils.showBottomMessage(requireActivity(), getString(R.string.clean_insights_signed_for_days), false)
             }
             CleanInsightsActions.NO -> {
                 Preferences.setIsAcceptedImprovements(false)
                 CleanInsightUtils.grantCampaign(false)
-                shareDataSwitch?.mSwitch?.isChecked = false
             }
         }
     }
 
     fun hasLocationPermission(context: Context): Boolean {
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        )
-            return true
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) return true
         return false
     }
 
     private fun requestLocationPermission(requestCode: Int) {
-        requestPermissions(
-            arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ), requestCode
-        )
+        requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), requestCode)
     }
 }

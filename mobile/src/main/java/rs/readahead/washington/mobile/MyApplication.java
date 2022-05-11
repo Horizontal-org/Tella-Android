@@ -322,7 +322,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     private void initCleanInsights() {
         if (Preferences.hasAcceptedImprovements()) {
             try {
-                cleanInsights = createCleanInsightsInstance(getApplicationContext(), Preferences.getTimeAcceptedImprovements());
+                cleanInsights = createCleanInsightsInstance(getApplicationContext());
             } catch (Exception e) {
                 e.printStackTrace();
             }
