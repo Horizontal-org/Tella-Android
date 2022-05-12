@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hzontal.tella_vault.MyLocation;
@@ -91,9 +92,9 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     @BindView(R.id.screenFormView)
     ViewGroup screenFormView;
     @BindView(R.id.prevSection)
-    AppCompatButton prevSectionButton;
+    TextView prevSectionButton;
     @BindView(R.id.nextSection)
-    AppCompatButton nextSectionButton;
+    TextView nextSectionButton;
     @BindView(R.id.submit_button)
     AppCompatButton submitButton;
     @BindView(R.id.cancel_button)

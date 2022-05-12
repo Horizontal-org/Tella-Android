@@ -20,26 +20,28 @@
         android:orientation="horizontal"
         android:paddingTop="0.5dp">
 
-        <androidx.appcompat.widget.AppCompatButton
+        <TextView
             android:id="@+id/prevSection"
             style="@style/Unlock_White_Text_Back"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:textAlignment="textStart"
+            android:layout_marginStart="34dp"
             android:layout_marginEnd="5dp"
+            android:gravity="start"
             android:layout_weight="1"
-            android:background="@drawable/action_button_background"
             android:text="@string/collect.form_action_previous.section" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <TextView
             android:id="@+id/nextSection"
             style="@style/Unlock_White_Text_Back"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="end"
+            android:textAlignment="textEnd"
             android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
+            android:layout_marginEnd="34dp"
             android:layout_weight="1"
-            android:background="@drawable/action_button_background"
             android:text="@string/collect.form_action_next.section" />
 
         <androidx.appcompat.widget.AppCompatButton
