@@ -13,12 +13,14 @@ import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent
 import rs.readahead.washington.mobile.util.CamouflageManager
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 
-class HideBehindCalculator: BaseFragment()  {
+class HideBehindCalculator : BaseFragment() {
 
     private val cm = CamouflageManager.getInstance()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.onboard_calculator_fragment, container, false)
 
         initView(view)
@@ -53,7 +55,7 @@ class HideBehindCalculator: BaseFragment()  {
             getString(R.string.settings_sec_confirm_calc_camouflage_desc),
             getString(R.string.settings_sec_confirm_exit_tella),
             getString(R.string.action_cancel),
-            ContextCompat.getDrawable(activity,cm.calculatorOption.drawableResId),
+            ContextCompat.getDrawable(activity, cm.calculatorOption.drawableResId),
             consumer = object : BottomSheetUtils.ActionConfirmed {
                 override fun accept(isConfirmed: Boolean) {
                     hideTellaBehindCalculator()
@@ -62,7 +64,7 @@ class HideBehindCalculator: BaseFragment()  {
         )
     }
 
-    private fun hideTellaBehindCalculator(){
+    private fun hideTellaBehindCalculator() {
         if (cm.setLauncherActivityAlias(requireContext(), CALCULATOR_ALIAS)) {
             MyApplication.bus()
                 .post(CamouflageAliasChangedEvent())

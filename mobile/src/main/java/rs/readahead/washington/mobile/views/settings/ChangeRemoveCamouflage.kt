@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent
@@ -58,7 +59,7 @@ class ChangeRemoveCamouflage : BaseFragment() {
         }
 
         view.findViewById<View>(R.id.remove_camouflage).setOnClickListener {
-            removeCamouflage()
+            showRemovingCamouflage()
         }
     }
 
@@ -66,6 +67,20 @@ class ChangeRemoveCamouflage : BaseFragment() {
         if (cm.setDefaultLauncherActivityAlias(requireContext())) {
             MyApplication.bus().post(CamouflageAliasChangedEvent())
         }
+    }
+
+    private fun showRemovingCamouflage() {
+        BottomSheetUtils.showWarningSheetWithImageAndTimeout(
+            activity.supportFragmentManager,
+            getString(R.string.SettingsCamo_Dialog_RemovingCamouflage),
+            getString(R.string.SettingsCamo_Dialog_TimeoutDesc),
+            getCamoImage(),
+            consumer = object : BottomSheetUtils.ActionConfirmed {
+                override fun accept(isConfirmed: Boolean) {
+                    removeCamouflage()
+                }
+            }
+        )
     }
 
     private fun getCamoImage(): Drawable? {

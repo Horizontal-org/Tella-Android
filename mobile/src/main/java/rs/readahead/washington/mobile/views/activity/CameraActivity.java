@@ -20,6 +20,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -129,7 +130,7 @@ public class CameraActivity extends MetadataActivity implements
     private RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
     private String currentRootParent = null;
 
-    @SuppressLint("NewApi")
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,7 +142,7 @@ public class CameraActivity extends MetadataActivity implements
         presenter = new CameraPresenter(this);
         uploadPresenter = new TellaFileUploadSchedulePresenter(this);
         metadataAttacher = new MetadataAttacher(this);
-        if (checkSelfPermission(Manifest.permission.CAMERA) !=
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) !=
                 PackageManager.PERMISSION_GRANTED) {
             changeTemporaryTimeout();
         }

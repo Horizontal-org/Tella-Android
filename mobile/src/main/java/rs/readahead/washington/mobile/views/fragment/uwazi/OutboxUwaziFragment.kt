@@ -104,7 +104,6 @@ class OutboxUwaziFragment : UwaziListFragment() {
 
     private fun openEntity(entityInstance: UwaziEntityInstance){
         viewModel.getInstanceUwaziEntity(entityInstance.id)
-        //DialogUtils.showBottomMessage(activity,"This functionality is not yet implemented",true)
     }
 
     private fun editEntity(entityInstance: UwaziEntityInstance){

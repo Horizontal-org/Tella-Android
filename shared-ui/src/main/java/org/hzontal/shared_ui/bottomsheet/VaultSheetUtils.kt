@@ -295,6 +295,7 @@ object VaultSheetUtils {
         titleText: String,
         toolTipText: String,
         isImportVisible: Boolean,
+        isCreateFolderVisible : Boolean,
         action: IVaultManageFiles
     ) {
         val vaultManageFilesSheet = CustomBottomSheetFragment.with(fragmentManager)
@@ -335,10 +336,14 @@ object VaultSheetUtils {
                         action.importAndDelete()
                     }
                     //Move action
-                    createFolderActionTV.text = createFolderLabel
-                    createFolderActionTV.setOnClickListener {
-                        vaultManageFilesSheet.dismiss()
-                        action.createFolder()
+                    createFolderActionTV.isVisible = isCreateFolderVisible
+                    if (isCreateFolderVisible) {
+                        createFolderActionTV.visibility = View.VISIBLE
+                        createFolderActionTV.text = createFolderLabel
+                        createFolderActionTV.setOnClickListener {
+                            vaultManageFilesSheet.dismiss()
+                            action.createFolder()
+                        }
                     }
                     //delete action
                     deleteVaultTooltip.setOnClickListener {

@@ -512,6 +512,44 @@ BottomSheetUtils {
     }
 
     @JvmStatic
+    fun showWarningSheetWithImageAndTimeout(
+        fragmentManager: FragmentManager,
+        timeoutTitleText: String?,
+        timeoutTitleDesc: String?,
+        confirmDrawable: Drawable? = null,
+        consumer: ActionConfirmed
+    ) {
+
+        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.confirm_image_sheet_layout)
+            .cancellable(false)
+        customSheetFragment.holder(ConfirmImageSheetHolder(), object :
+            CustomBottomSheetFragment.Binder<ConfirmImageSheetHolder> {
+            override fun onBind(holder: ConfirmImageSheetHolder) {
+                with(holder) {
+                    title.text = timeoutTitleText
+                    description.text = timeoutTitleDesc
+                    confirmDrawable?.let {
+                        imageView.setImageDrawable(it)
+                    }
+                    actionButton.visibility = View.GONE
+                    cancelButton.visibility = View.GONE
+
+                    Handler().postDelayed({
+                        consumer.accept(isConfirmed = true)
+                    }, 3000)
+
+                }
+            }
+        })
+
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
+    }
+
+
+    @JvmStatic
     fun showChooseAutoUploadServerSheet(
         fragmentManager: FragmentManager,
         titleText: String?,
@@ -749,7 +787,6 @@ BottomSheetUtils {
         renameFileSheet.launch()
     }
 
-
     class EnterCodeSheetHolder : CustomBottomSheetFragment.PageHolder() {
         lateinit var title: TextView
         lateinit var subtitle: TextView
@@ -867,7 +904,6 @@ BottomSheetUtils {
             linearProgress = view.findViewById(R.id.progress_linear)
         }
     }
-
 
     @JvmStatic
     fun showConfirmDelete(
@@ -1002,5 +1038,4 @@ BottomSheetUtils {
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
     }
-
 }

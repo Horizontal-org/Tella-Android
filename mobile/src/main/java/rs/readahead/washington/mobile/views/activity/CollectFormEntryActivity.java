@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -31,12 +30,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import kotlin.Unit;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
@@ -78,6 +73,7 @@ import rs.readahead.washington.mobile.views.collect.CollectFormEndView;
 import rs.readahead.washington.mobile.views.collect.CollectFormView;
 import rs.readahead.washington.mobile.views.fragment.MicFragment;
 import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface;
+import rs.readahead.washington.mobile.databinding.ActivityCollectFormEntryBinding;
 import timber.log.Timber;
 
 
@@ -88,25 +84,8 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         IFormParserContract.IView,
         IFormSaverContract.IView,
         IFormSubmitterContract.IView {
-    @BindView(R.id.screenFormView)
-    ViewGroup screenFormView;
-    @BindView(R.id.prevSection)
-    AppCompatButton prevSectionButton;
-    @BindView(R.id.nextSection)
-    AppCompatButton nextSectionButton;
-    @BindView(R.id.submit_button)
-    AppCompatButton submitButton;
-    @BindView(R.id.cancel_button)
-    AppCompatButton cancelButton;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.button_bottom_layout)
-    ViewGroup buttonBottomLayout;
-    @BindView(R.id.entry_layout)
-    ViewGroup entryLayout;
 
     private Drawable upNavigationIcon;
-
     private View currentScreenView;
     //private int sectionIndex;
     private String formTitle;
@@ -122,37 +101,38 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     private boolean deleteEnabled = false;
     private boolean draftAutoSaved = false;
     private MicFragment micFragment = null;
+    private ActivityCollectFormEntryBinding binding;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_collect_form_entry);
-        ButterKnife.bind(this);
+        binding = ActivityCollectFormEntryBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         currentScreenView = null;
         //sectionIndex = 0;
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        upNavigationIcon = toolbar.getNavigationIcon();
+        upNavigationIcon = binding.toolbar.getNavigationIcon();
         setToolbarIcon();
         initForm();
         startPresenter();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            findViewById(R.id.appbar).setOutlineProvider(null);
+            binding.appbar.setOutlineProvider(null);
         } else {
-            findViewById(R.id.appbar).bringToFront();
+            binding.appbar.bringToFront();
         }
 
-        prevSectionButton.setOnClickListener(v -> showPrevScreen());
-        nextSectionButton.setOnClickListener(v -> showNextScreen());
+        binding.prevSection.setOnClickListener(v -> showPrevScreen());
+        binding.nextSection.setOnClickListener(v -> showNextScreen());
 
-        submitButton.setOnClickListener(v -> {
+        binding.submitButton.setOnClickListener(v -> {
             if (formSubmitter != null) {
                 formSubmitter.submitActiveFormInstance(formTitle + " " + Util.getDateTimeString());
                 hideToolbarIcon();
@@ -161,7 +141,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
             }
         });
 
-        cancelButton.setOnClickListener(v -> {
+        binding.cancelButton.setOnClickListener(v -> {
             if (userStopPresenterSubmission()) {
                 hideFormCancelButton();
             }
@@ -376,17 +356,17 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     }
 
     private void setToolbarIcon() {
-        toolbar.setEnabled(true);
+        binding.toolbar.setEnabled(true);
 
         if (formParser != null && formParser.isFormEnd() && !formParser.isFormFinal()) {
-            toolbar.setNavigationIcon(upNavigationIcon);
+            binding.toolbar.setNavigationIcon(upNavigationIcon);
         } else {
-            toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
+            binding.toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
         }
     }
 
     private void hideToolbarIcon() {
-        toolbar.setEnabled(false);
+        binding.toolbar.setEnabled(false);
     }
 
     private void clearedFormIndex(FormIndex formIndex) {
@@ -462,6 +442,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         destroyPresenter();
 
         super.onDestroy();
+        binding = null;
     }
 
     /*
@@ -674,7 +655,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     public void formPartSubmitStart(CollectFormInstance instance, String partName) {
         endView.showUploadProgress(partName);
         invalidateOptionsMenu();
-        toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
+        binding.toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
     }
 
     @Override
@@ -842,10 +823,10 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     private void showScreenView(View view) {
         if (currentScreenView != null) {
-            screenFormView.removeView(currentScreenView);
+            binding.screenFormView.removeView(currentScreenView);
         }
         currentScreenView = view;
-        screenFormView.addView(currentScreenView);
+        binding.screenFormView.addView(currentScreenView);
     }
 
     private void showFormView(CollectFormView view) {
@@ -930,7 +911,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     }
 
     private void setSectionButtons() {
-        buttonBottomLayout.setVisibility(View.VISIBLE);
+        binding.buttonBottomLayout.setVisibility(View.VISIBLE);
 
         showNextSectionButton();
 
@@ -939,8 +920,8 @@ public class CollectFormEntryActivity extends MetadataActivity implements
             return;
         }
 
-        prevSectionButton.setEnabled(true);
-        prevSectionButton.setVisibility(View.VISIBLE);
+        binding.prevSection.setEnabled(true);
+        binding.prevSection.setVisibility(View.VISIBLE);
     }
 
     private void setSubmitButtonText(boolean offline) {
@@ -949,39 +930,39 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     private void showFormEndButtons() {
         setSubmitButtonText(Preferences.isOfflineMode());
-        submitButton.setEnabled(true);
-        submitButton.setVisibility(View.VISIBLE);
+        binding.submitButton.setEnabled(true);
+        binding.submitButton.setVisibility(View.VISIBLE);
     }
 
     private void hidePrevSectionButton() {
-        prevSectionButton.setEnabled(false);
-        prevSectionButton.setVisibility(View.GONE);
+        binding.prevSection.setEnabled(false);
+        binding.prevSection.setVisibility(View.GONE);
     }
 
     private void hideSectionButtons() {
         hidePrevSectionButton();
-        nextSectionButton.setEnabled(false);
-        nextSectionButton.setVisibility(View.GONE);
+        binding.nextSection.setEnabled(false);
+        binding.nextSection.setVisibility(View.GONE);
     }
 
     private void hideSubmitButtons() {
-        submitButton.setEnabled(false);
-        submitButton.setVisibility(View.GONE);
+        binding.submitButton.setEnabled(false);
+        binding.submitButton.setVisibility(View.GONE);
     }
 
     private void showNextSectionButton() {
-        nextSectionButton.setEnabled(true);
-        nextSectionButton.setVisibility(View.VISIBLE);
+        binding.nextSection.setEnabled(true);
+        binding.nextSection.setVisibility(View.VISIBLE);
     }
 
     private void showFormCancelButton() {
-        cancelButton.setEnabled(true);
-        cancelButton.setVisibility(View.VISIBLE);
+        binding.cancelButton.setEnabled(true);
+        binding.cancelButton.setVisibility(View.VISIBLE);
     }
 
     private void hideFormCancelButton() {
-        cancelButton.setEnabled(false);
-        cancelButton.setVisibility(View.GONE);
+        binding.cancelButton.setEnabled(false);
+        binding.cancelButton.setVisibility(View.GONE);
     }
 
     private void showFormChangedDialog() {
@@ -1054,7 +1035,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     @Override
     public void openAudioRecorder() {
-        entryLayout.setVisibility(View.GONE);
+        binding.entryLayout.setVisibility(View.GONE);
         micFragment = MicFragment.newInstance(true);
         addFragment(micFragment,R.id.rootCollectEntry);
     }
@@ -1062,7 +1043,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     @Override
     public void returnFileToForm(VaultFile file) {
 
-        entryLayout.setVisibility(View.VISIBLE);
+        binding.entryLayout.setVisibility(View.VISIBLE);
 
         putVaultFileInForm(file);
 
@@ -1073,7 +1054,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     @Override
     public void stopWaitingForData() {
-        entryLayout.setVisibility(View.VISIBLE);
+        binding.entryLayout.setVisibility(View.VISIBLE);
         formParser.stopWaitingBinaryData();
         saveCurrentScreen(false);
     }

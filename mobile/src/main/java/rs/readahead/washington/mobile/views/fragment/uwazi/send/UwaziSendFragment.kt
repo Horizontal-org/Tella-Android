@@ -56,8 +56,12 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
 
             cancelBtn.setOnClickListener {
                 entityInstance?.let { entity ->
-                    entity.status = UwaziEntityStatus.SUBMISSION_PENDING
-                    viewModel.saveEntityInstance(entity)
+                    if (entity.status != UwaziEntityStatus.SUBMISSION_PENDING) {
+                        entity.status = UwaziEntityStatus.SUBMISSION_PENDING
+                        viewModel.saveEntityInstance(entity)
+                    } else {
+                        nav().popBackStack()
+                    }
                 }
             }
         }
