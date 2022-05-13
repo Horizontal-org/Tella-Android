@@ -336,9 +336,8 @@ object VaultSheetUtils {
                         action.importAndDelete()
                     }
                     //Move action
-                    if (!isCreateFolderVisible) {
-                        createFolderActionTV.visibility = View.GONE
-                    } else {
+                    createFolderActionTV.isVisible = isCreateFolderVisible
+                    if (isCreateFolderVisible) {
                         createFolderActionTV.visibility = View.VISIBLE
                         createFolderActionTV.text = createFolderLabel
                         createFolderActionTV.setOnClickListener {
