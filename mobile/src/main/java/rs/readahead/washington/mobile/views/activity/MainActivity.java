@@ -49,6 +49,7 @@ import rs.readahead.washington.mobile.mvp.presenter.MediaImportPresenter;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.CleanInsightUtils;
 import rs.readahead.washington.mobile.views.fragment.uwazi.download.DownloadedTemplatesFragment;
+import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryFragment;
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment;
 import com.google.gson.Gson;
 import timber.log.Timber;
@@ -206,8 +207,14 @@ public class MainActivity extends MetadataActivity implements
                 ((AttachmentsFragment) fragment).onBackPressed();
                 return true;
             }
+
             if (fragment instanceof DownloadedTemplatesFragment) {
                 ((DownloadedTemplatesFragment) fragment).onBackPressed();
+                return true;
+            }
+
+            if (fragment instanceof UwaziEntryFragment) {
+                ((UwaziEntryFragment) fragment).onBackPressed();
                 return true;
             }
         }
