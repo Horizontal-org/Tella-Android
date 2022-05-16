@@ -14,11 +14,11 @@ import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.SEND_ENTITY
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziFormEndView
 
-class SubmittedPreviewFragment : BaseFragment(){
+class SubmittedPreviewFragment : BaseFragment() {
     private val viewModel: SharedUwaziViewModel by viewModels()
     private var binding: FragmentSumbittedPreviewBinding? = null
     private lateinit var endView: UwaziFormEndView
-    private var submittedInstance : UwaziEntityInstance? = null
+    private var submittedInstance: UwaziEntityInstance? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,18 +36,20 @@ class SubmittedPreviewFragment : BaseFragment(){
 
     private fun initObservers() {
         with(viewModel) {
-            instanceDeleteD.observe(viewLifecycleOwner,{ deleted->
+            instanceDeleteD.observe(viewLifecycleOwner, { deleted ->
                 if (deleted) nav().popBackStack()
             })
         }
     }
 
-    private fun showDeleteBottomSheet(entityInstance: UwaziEntityInstance){
-        BottomSheetUtils.showConfirmDelete(activity.supportFragmentManager,
+    private fun showDeleteBottomSheet(entityInstance: UwaziEntityInstance) {
+        BottomSheetUtils.showConfirmDelete(
+            activity.supportFragmentManager,
             entityInstance.title,
             getString(R.string.Uwazi_RemoveTemplate_SheetTitle)
         ) { viewModel.confirmDelete(entityInstance) }
     }
+
     override fun onResume() {
         super.onResume()
         viewModel.listSubmitted()
@@ -57,19 +59,25 @@ class SubmittedPreviewFragment : BaseFragment(){
         super.onDestroyView()
         binding = null
     }
+
     override fun initView(view: View) {
         arguments?.get(SEND_ENTITY)?.let { entity ->
-            submittedInstance = Gson().fromJson(entity as String ,UwaziEntityInstance::class.java)
+            submittedInstance = Gson().fromJson(entity as String, UwaziEntityInstance::class.java)
             submittedInstance?.let {
-                endView = UwaziFormEndView(activity,R.string.Uwazi_Submitted_Entity_Header_Title)
+                endView = UwaziFormEndView(activity, getFormattedFormTitle(submittedInstance!!))
 
-                endView.setInstance(it,true, true)
+                endView.setInstance(it, true, true)
                 binding?.endViewContainer?.removeAllViews()
                 binding?.endViewContainer?.addView(endView)
             }
 
         }
-        binding?.toolbar?.onRightClickListener = { submittedInstance?.let { showDeleteBottomSheet(it) } }
-        binding?.toolbar?.backClickListener = {nav().popBackStack()}
+        binding?.toolbar?.onRightClickListener =
+            { submittedInstance?.let { showDeleteBottomSheet(it) } }
+        binding?.toolbar?.backClickListener = { nav().popBackStack() }
+    }
+
+    private fun getFormattedFormTitle(entityInstance : UwaziEntityInstance) : String {
+        return getString(R.string.Uwazi_Server_Title) +" "+ entityInstance.collectTemplate?.serverName + "\n"+getString(R.string.Uwazi_Template_Title) +" "+ entityInstance.collectTemplate?.entityRow?.translatedName
     }
 }
