@@ -20,7 +20,6 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.EventObserver
 import rs.readahead.washington.mobile.bus.event.LocationPermissionRequiredEvent
-import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent
 import rs.readahead.washington.mobile.data.uwazi.UwaziConstants
 import rs.readahead.washington.mobile.databinding.UwaziEntryFragmentBinding
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
@@ -39,7 +38,6 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.send.SEND_ENTITY
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.OUTBOX_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
-import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
 
 
 const val COLLECT_TEMPLATE = "collect_template"
@@ -49,8 +47,7 @@ const val UWAZI_SUPPORTING_FILES = "supporting_files"
 const val UWAZI_PRIMARY_DOCUMENTS = "primary_documents"
 
 class UwaziEntryFragment :
-    BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziEntryFragmentBinding::inflate),
-    OnNavBckListener {
+    BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziEntryFragmentBinding::inflate){
     private val viewModel: SharedUwaziSubmissionViewModel by lazy {
         ViewModelProvider(activity).get(SharedUwaziSubmissionViewModel::class.java)
     }
@@ -184,10 +181,6 @@ class UwaziEntryFragment :
                 }
             })
         }
-    }
-
-    override fun onBackPressed(): Boolean {
-        return nav().popBackStack()
     }
 
     private fun sendEntity() {

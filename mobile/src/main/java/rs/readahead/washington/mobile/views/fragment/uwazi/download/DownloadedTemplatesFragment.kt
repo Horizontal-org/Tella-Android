@@ -13,9 +13,8 @@ import rs.readahead.washington.mobile.databinding.FragmentDownloadedTemplatesBin
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.download.adapter.TemplateContainerAdapter
-import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
 
-class DownloadedTemplatesFragment : BaseFragment(), OnNavBckListener {
+class DownloadedTemplatesFragment : BaseFragment() {
 
     private val viewModel : DownloadedTemplatesViewModel by viewModels()
 
@@ -74,10 +73,4 @@ class DownloadedTemplatesFragment : BaseFragment(), OnNavBckListener {
 
         }
     }
-
-    override fun onBackPressed(): Boolean {
-        return  nav().popBackStack()
-     }
-
-
 }
