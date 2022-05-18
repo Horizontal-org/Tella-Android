@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.views.settings
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +8,6 @@ import android.widget.TextView
 import rs.readahead.washington.mobile.BuildConfig
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.util.Util
-import rs.readahead.washington.mobile.views.activity.onboarding.OnBoardingActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 
 

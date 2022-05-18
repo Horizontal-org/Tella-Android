@@ -309,11 +309,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".views.activity.AboutHelpActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:label="@string/settings.about_app.bar"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".views.activity.CollectMainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:label="@string/collect_app.bar"
