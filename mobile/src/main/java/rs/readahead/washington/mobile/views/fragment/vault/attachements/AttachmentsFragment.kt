@@ -390,7 +390,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         activity.invalidateOptionsMenu()
 
         if (isItemsChecked) {
-            toolbar.setToolbarNavigationIcon(R.drawable.ic_close_white_24dp)
             val itemsSize = attachmentsAdapter.selectedMediaFiles.size
             toolbar.setToolbarNavigationIcon(R.drawable.ic_close_white_24dp)
             if (itemsSize == 0) {
@@ -405,9 +404,9 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         } else {
             toolbar.setToolbarNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
             setToolbarLabel()
-
             attachmentsAdapter.clearSelected()
             enableMoveTheme(false)
+
         }
     }
 
@@ -708,6 +707,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     override fun onRenameFileSuccess() {
         attachmentsPresenter.addNewVaultFiles()
+        enableMoveTheme(false)
     }
 
     override fun onRenameFileError(error: Throwable?) {
