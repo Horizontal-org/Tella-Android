@@ -15,6 +15,7 @@ import com.google.gson.Gson
 import com.google.gson.internal.LinkedTreeMap
 import com.hzontal.tella_vault.MyLocation
 import com.hzontal.tella_vault.VaultFile
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
@@ -38,6 +39,8 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.send.SEND_ENTITY
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.OUTBOX_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
+import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
+import timber.log.Timber
 
 
 const val COLLECT_TEMPLATE = "collect_template"
@@ -47,7 +50,8 @@ const val UWAZI_SUPPORTING_FILES = "supporting_files"
 const val UWAZI_PRIMARY_DOCUMENTS = "primary_documents"
 
 class UwaziEntryFragment :
-    BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziEntryFragmentBinding::inflate){
+    BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziEntryFragmentBinding::inflate),
+    OnNavBckListener {
     private val viewModel: SharedUwaziSubmissionViewModel by lazy {
         ViewModelProvider(activity).get(SharedUwaziSubmissionViewModel::class.java)
     }
@@ -58,6 +62,7 @@ class UwaziEntryFragment :
     private var screenView: ViewGroup? = null
     private var entryPrompts = mutableListOf<UwaziEntryPrompt>()
     private lateinit var uwaziFormView: UwaziFormView
+    private var hashCode: Int? = null
 
     private val uwaziTitlePrompt by lazy {
         UwaziEntryPrompt(
@@ -123,7 +128,7 @@ class UwaziEntryFragment :
             this!!.toolbar.backClickListener = { nav().popBackStack() }
             toolbar.onRightClickListener = {
                 entityInstance.status = UwaziEntityStatus.DRAFT
-                if (!getAnswersFromForm(false)) {
+                if (!getAnswersFromForm(false, false)) {
                     uwaziFormView.setFocus(context)
                     showValidationMandatoryTitleDialog()
                 } else {
@@ -142,6 +147,8 @@ class UwaziEntryFragment :
             arguments?.getString(UWAZI_INSTANCE).let {
                 entityInstance = Gson().fromJson(it, UwaziEntityInstance::class.java)
                 template = entityInstance.collectTemplate
+                hashCode = entityInstance.hashCode()
+                Timber.d("++++ hashcode %s", hashCode)
                 parseUwaziInstance()
             }
 
@@ -185,7 +192,7 @@ class UwaziEntryFragment :
 
     private fun sendEntity() {
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
-        if (!getAnswersFromForm(true)) {
+        if (!getAnswersFromForm(true, false)) {
             uwaziFormView.setFocus(context)
             //showValidationMandatoryFieldsDialog()
             showValidationErrorsFieldsDialog()
@@ -197,7 +204,7 @@ class UwaziEntryFragment :
         }
     }
 
-    private fun getAnswersFromForm(isSend: Boolean): Boolean {
+    private fun getAnswersFromForm(isSend: Boolean, isBackPressed: Boolean): Boolean {
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
         uwaziFormView.clearValidationConstraints()
         val hashmap = mutableMapOf<String, List<Any>>()
@@ -208,10 +215,12 @@ class UwaziEntryFragment :
 
         // check required fields
         if (answers[UWAZI_TITLE] == null) {
-            uwaziFormView.setValidationConstraintText(
-                UWAZI_TITLE,
-                getString(R.string.Uwazi_Entity_Error_Response_Mandatory)
-            )
+            if (!isBackPressed) {
+                uwaziFormView.setValidationConstraintText(
+                    UWAZI_TITLE,
+                    getString(R.string.Uwazi_Entity_Error_Response_Mandatory)
+                )
+            }
             validationRequired = true
         }
 
@@ -440,5 +449,27 @@ class UwaziEntryFragment :
                     }
                 }
             })
+    }
+
+    override fun onBackPressed(): Boolean {
+        if (getAnswersFromForm(false, true)) {
+            BottomSheetUtils.showStandardSheet(
+                activity.supportFragmentManager,
+                activity.getString(R.string.collect_form_exit_unsaved_dialog_title),
+                activity.getString(R.string.collect_form_exit_dialog_expl),
+                activity.getString(R.string.collect_form_exit_dialog_action_save_exit),
+                activity.getString(R.string.collect_form_exit_dialog_action_exit_anyway),
+                onConfirmClick = {
+                    entityInstance.status = UwaziEntityStatus.DRAFT
+                    entityInstance.let { viewModel.saveEntityInstance(it) }
+                },
+                onCancelClick = {
+                    nav().popBackStack()
+                }
+            )
+        } else {
+            nav().popBackStack()
+        }
+        return true
     }
 }

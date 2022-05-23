@@ -212,10 +212,14 @@ public class MainActivity extends MetadataActivity implements
             }
 
             if (fragment instanceof DownloadedTemplatesFragment ||
-                    fragment instanceof UwaziEntryFragment ||
                     fragment instanceof SubmittedPreviewFragment ||
                     fragment instanceof UwaziSendFragment) {
                 navController.popBackStack();
+                return true;
+            }
+
+            if (fragment instanceof UwaziEntryFragment) {
+                ((UwaziEntryFragment) fragment).onBackPressed();
                 return true;
             }
         }
