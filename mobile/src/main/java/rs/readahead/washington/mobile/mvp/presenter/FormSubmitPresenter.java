@@ -15,6 +15,7 @@ import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
+import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.mvp.contract.IFormSubmitPresenterContract;
 
 
@@ -44,7 +45,11 @@ public class FormSubmitPresenter implements IFormSubmitPresenterContract.IPresen
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(vaultFiles -> {
                     for (VaultFile file : vaultFiles) {
-                        collectFormInstance.setWidgetMediaFile(file.name, FormMediaFile.fromMediaFile(file));
+                        FormMediaFile formFile = FormMediaFile.fromMediaFile(file);
+                        if (collectFormInstance.getWidgetMediaFilesMap().get(file.id) != null) {
+                            formFile.status = FormMediaFileStatus.values()[collectFormInstance.getWidgetMediaFilesMap().get(file.id)];
+                        }
+                        collectFormInstance.setWidgetMediaFile(file.name, formFile);
                     }
                     view.onGetFormInstanceSuccess(collectFormInstance);
                 }, throwable -> {
