@@ -25,11 +25,9 @@ public class FormSubmitPresenter implements IFormSubmitPresenterContract.IPresen
     private final KeyDataSource keyDataSource;
     private CollectFormInstance collectFormInstance;
 
-
     public FormSubmitPresenter(IFormSubmitPresenterContract.IView view) {
         this.view = view;
         this.keyDataSource = MyApplication.getKeyDataSource();
-
     }
 
     @Override
@@ -44,13 +42,7 @@ public class FormSubmitPresenter implements IFormSubmitPresenterContract.IPresen
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(vaultFiles -> {
-                    for (VaultFile file : vaultFiles) {
-                        FormMediaFile formFile = FormMediaFile.fromMediaFile(file);
-                        if (collectFormInstance.getWidgetMediaFilesMap().get(file.id) != null) {
-                            formFile.status = FormMediaFileStatus.values()[collectFormInstance.getWidgetMediaFilesMap().get(file.id)];
-                        }
-                        collectFormInstance.setWidgetMediaFile(file.name, formFile);
-                    }
+                    collectFormInstance.setCollectInstanceAttachments(vaultFiles);
                     view.onGetFormInstanceSuccess(collectFormInstance);
                 }, throwable -> {
                     FirebaseCrashlytics.getInstance().recordException(throwable);
