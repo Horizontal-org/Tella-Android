@@ -430,4 +430,9 @@
         <item name="indicatorColor">@color/tigers_eye</item>
         <item name="trackThickness">4dp</item>
     </style>
+
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/open_sans</item>
+    </style>
 </resources>

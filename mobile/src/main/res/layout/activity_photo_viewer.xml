@@ -14,13 +14,18 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <org.hzontal.shared_ui.appbar.ToolbarComponent
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
+            app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+            app:titleTextAppearance="@style/Toolbar.TitleText"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
+            app:titleMarginStart="0dp"
             />
 
     </com.google.android.material.appbar.AppBarLayout>
