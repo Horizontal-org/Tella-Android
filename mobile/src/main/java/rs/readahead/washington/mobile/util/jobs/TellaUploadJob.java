@@ -113,7 +113,7 @@ public class TellaUploadJob extends Job {
 
             if (fileUploadBundle.isIncludeMetdata()) {
                 try {
-                    vaultFiles.add(MediaFileHandler.maybeCreateMetadataMediaFile(getContext(), fileUploadBundle.getMediaFile()));
+                    vaultFiles.add(MediaFileHandler.maybeCreateMetadataMediaFile(fileUploadBundle.getMediaFile()));
                 } catch (Exception e) {
                     Timber.d(e);
                 }
