@@ -14,7 +14,6 @@ import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Environment
-import android.provider.DocumentsContract
 import android.provider.Settings
 import android.view.*
 import android.widget.ImageView
@@ -45,7 +44,9 @@ import kotlinx.coroutines.withContext
 import org.hzontal.shared_ui.appbar.ToolbarComponent
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.RadioOptionConsumer
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showRadioListOptionsSheet
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils
 import org.hzontal.shared_ui.breadcrumb.BreadcrumbsView
 import org.hzontal.shared_ui.breadcrumb.DefaultBreadcrumbsCallback
@@ -70,8 +71,6 @@ import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import rs.readahead.washington.mobile.views.fragment.vault.info.VAULT_FILE_INFO_TOOLBAR
 import timber.log.Timber
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 const val VAULT_FILE_ARG = "VaultFileArg"
@@ -145,7 +144,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 true
             }
             R.id.action_share -> {
-                startShareActivity(false)
+                shareVaultFiles()
                 return true
             }
 
@@ -351,11 +350,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                                         root
                                     )
                                 }
-
                             }
-
                         }
-
                     }
                 )
             }
@@ -426,7 +422,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                     updateAttachmentsToolbar(false)
                     openDirectory(vaultFile)
                 }
-
             }
             VaultFile.Type.FILE -> {
                 if (vaultFile.mimeType != null) {
@@ -462,9 +457,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                     }
                 }
             }
-            else -> {
-
-            }
+            else -> { }
         }
     }
 
@@ -512,7 +505,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 }
 
                 override fun share() {
-                    MediaFileHandler.startShareActivity(activity, vaultFile, false)
+                    shareVaultFile(vaultFile)
+                    //MediaFileHandler.startShareActivity(activity, vaultFile, false)
                 }
 
                 override fun move() {
@@ -578,15 +572,11 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                                 } else {
                                     attachmentsPresenter.deleteVaultFile(vaultFile)
                                 }
-
                             }
                         }
                     )
-
                 }
-
             }
-
         )
     }
 
@@ -863,9 +853,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                     sort.direction = Sort.Direction.ASC
                     attachmentsPresenter.addNewVaultFiles()
                 }
-
             }
-
         )
     }
 
@@ -914,14 +902,12 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                         treeUri,
                         Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                     )
-
                 }
                 exportVaultFiles(
                     isMultipleFiles = attachmentsAdapter.selectedMediaFiles.size > 0,
                     vaultFile,
                     treeUri)
             }
-
         }
     }
 
@@ -962,7 +948,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 WRITE_REQUEST_CODE
             )
         }
-
     }
 
     private fun createItem(file: VaultFile): BreadcrumbItem {
@@ -1131,6 +1116,75 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             }
         } else {
             requestStoragePermissions()
+        }
+    }
+
+    private fun showShareWithMetadataDialog() {
+        val options = LinkedHashMap<Int, Int>()
+        options[1] = R.string.verification_share_select_media_and_verification
+        options[0] = R.string.verification_share_select_only_media
+        showRadioListOptionsSheet(
+            activity.supportFragmentManager,
+            requireContext(),
+            options,
+            getString(R.string.verification_share_dialog_title),
+            getString(R.string.verification_share_dialog_expl),
+            getString(R.string.action_ok),
+            getString(R.string.action_cancel),
+            object : RadioOptionConsumer {
+                override fun accept(option: Int) {
+                    startShareActivity(option > 0)
+                }
+            }
+        )
+    }
+
+    private fun showShareFileWithMetadataDialog(vaultFile: VaultFile) {
+        val options = LinkedHashMap<Int, Int>()
+        options[1] = R.string.verification_share_select_media_and_verification
+        options[0] = R.string.verification_share_select_only_media
+        showRadioListOptionsSheet(
+            activity.supportFragmentManager,
+            requireContext(),
+            options,
+            getString(R.string.verification_share_dialog_title),
+            getString(R.string.verification_share_dialog_expl),
+            getString(R.string.action_ok),
+            getString(R.string.action_cancel),
+            object : RadioOptionConsumer {
+                override fun accept(option: Int) {
+                    MediaFileHandler.startShareActivity(activity, vaultFile, option > 0)
+                }
+            }
+        )
+    }
+
+    private fun shareVaultFiles() {
+        val selected: List<VaultFile> = attachmentsAdapter.selectedMediaFiles
+        if (selected.isNullOrEmpty()) return
+
+        var hasMetadata = false
+
+        for (file in selected){
+            if (file.metadata != null) hasMetadata = true
+        }
+
+        if (hasMetadata) {
+            showShareWithMetadataDialog()
+        } else {
+            startShareActivity(false)
+        }
+    }
+
+    private fun shareVaultFile(vaultFile: VaultFile?) {
+        if (vaultFile == null) {
+            return
+        }
+
+        if (vaultFile.metadata != null) {
+            showShareFileWithMetadataDialog(vaultFile)
+        } else {
+            MediaFileHandler.startShareActivity(activity, vaultFile, false)
         }
     }
 

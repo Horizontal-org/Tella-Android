@@ -17,7 +17,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
 
 import com.hzontal.tella_vault.VaultFile;
 
@@ -49,7 +48,6 @@ import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.util.ThreadUtil;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
-import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment;
 import timber.log.Timber;
 
@@ -63,8 +61,7 @@ import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
 @RuntimePermissions
 public class AudioPlayActivity extends BaseLockActivity implements
         IAudioPlayPresenterContract.IView,
-        IMediaFileViewerPresenterContract.IView,
-        ShareDialogFragment.IShareDialogFragmentHandler {
+        IMediaFileViewerPresenterContract.IView {
     public static final String PLAY_MEDIA_FILE = "pmf";
     public static final String PLAY_MEDIA_FILE_ID_KEY = "pmfik";
     public static final String NO_ACTIONS = "na";
@@ -174,7 +171,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
             toolbar.inflateMenu(R.menu.video_view_menu);
 
             if (handlingVaultFile != null && handlingVaultFile.metadata != null) {
-                MenuItem item =  toolbar.getMenu().findItem(R.id.menu_item_metadata);
+                MenuItem item = toolbar.getMenu().findItem(R.id.menu_item_metadata);
                 item.setVisible(true);
             }
         }
@@ -222,11 +219,11 @@ public class AudioPlayActivity extends BaseLockActivity implements
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if (isInfoShown){
+        if (isInfoShown) {
             toolbar.getMenu().findItem(R.id.menu_item_more).setVisible(true);
             toolbar.getMenu().findItem(R.id.menu_item_metadata).setVisible(true);
             toolbar.setStartTextTitle(handlingVaultFile.name);
-        }else {
+        } else {
             stopPlayer();
             finish();
         }
@@ -262,11 +259,8 @@ public class AudioPlayActivity extends BaseLockActivity implements
             viewerPresenter = null;
         }
 
-        dismissShareDialog();
-
         super.onDestroy();
     }
-
 
 
     @SuppressLint("NeedOnRequestPermissionsResult")
@@ -295,8 +289,8 @@ public class AudioPlayActivity extends BaseLockActivity implements
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
             startActivityForResult(intent, PICKER_FILE_REQUEST_CODE);
-        }else{
-            viewerPresenter.exportNewMediaFile(handlingVaultFile,null);
+        } else {
+            viewerPresenter.exportNewMediaFile(handlingVaultFile, null);
         }
     }
 
@@ -369,18 +363,6 @@ public class AudioPlayActivity extends BaseLockActivity implements
         return this;
     }
 
-    @Override
-    public void sharingMediaMetadataSelected() {
-        dismissShareDialog();
-        startShareActivity(true);
-    }
-
-    @Override
-    public void sharingMediaOnlySelected() {
-        dismissShareDialog();
-        startShareActivity(false);
-    }
-
     private void shareMediaFile() {
         if (handlingVaultFile == null) {
             return;
@@ -399,13 +381,6 @@ public class AudioPlayActivity extends BaseLockActivity implements
         }
 
         MediaFileHandler.startShareActivity(this, handlingVaultFile, includeMetadata);
-    }
-
-    private void dismissShareDialog() {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(ShareDialogFragment.TAG);
-        if (fragment instanceof ShareDialogFragment) {
-            ((ShareDialogFragment) fragment).dismiss();
-        }
     }
 
     private void showExportDialog() {
@@ -527,7 +502,8 @@ public class AudioPlayActivity extends BaseLockActivity implements
     private void enableScreenTimeout() {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
-    private void showVaultActionsDialog(VaultFile vaultFile){
+
+    private void showVaultActionsDialog(VaultFile vaultFile) {
         VaultSheetUtils.showVaultActionsSheet(getSupportFragmentManager(),
                 vaultFile.name,
                 getString(R.string.Vault_Upload_SheetAction),
@@ -567,7 +543,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
                                 AudioPlayActivity.this,
                                 vaultFile.name,
                                 (name) -> {
-                                    viewerPresenter.renameVaultFile(vaultFile.id,name);
+                                    viewerPresenter.renameVaultFile(vaultFile.id, name);
                                     return Unit.INSTANCE;
                                 }
                         );
@@ -582,7 +558,8 @@ public class AudioPlayActivity extends BaseLockActivity implements
                                 getString(R.string.action_save),
                                 getString(R.string.action_cancel),
                                 isConfirmed -> {
-                                    AudioPlayActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(AudioPlayActivity.this);                          }
+                                    AudioPlayActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(AudioPlayActivity.this);
+                                }
                         );
                     }
 
@@ -592,7 +569,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
                         toolbar.getMenu().findItem(R.id.menu_item_more).setVisible(false);
                         toolbar.getMenu().findItem(R.id.menu_item_metadata).setVisible(false);
                         invalidateOptionsMenu();
-                        addFragment(new VaultInfoFragment().newInstance(vaultFile,false),R.id.root);
+                        addFragment(new VaultInfoFragment().newInstance(vaultFile, false), R.id.root);
                         isInfoShown = true;
                     }
 
@@ -617,8 +594,8 @@ public class AudioPlayActivity extends BaseLockActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICKER_FILE_REQUEST_CODE){
-            viewerPresenter.exportNewMediaFile(handlingVaultFile,data.getData());
+        if (requestCode == PICKER_FILE_REQUEST_CODE) {
+            viewerPresenter.exportNewMediaFile(handlingVaultFile, data.getData());
         }
     }
 

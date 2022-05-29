@@ -10,11 +10,9 @@ import com.hzontal.tella_vault.VaultFile
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.mvp.contract.IMediaFileViewerPresenterContract
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
-import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment
 
 class WebViewerActivity : BaseLockActivity(),
-    IMediaFileViewerPresenterContract.IView,
-    ShareDialogFragment.IShareDialogFragmentHandler {
+    IMediaFileViewerPresenterContract.IView {
 
     private lateinit var webView: WebView
     private var vaultFile: VaultFile? = null
@@ -91,14 +89,6 @@ class WebViewerActivity : BaseLockActivity(),
     }
 
     override fun getContext(): Context {
-        TODO("Not yet implemented")
-    }
-
-    override fun sharingMediaMetadataSelected() {
-        TODO("Not yet implemented")
-    }
-
-    override fun sharingMediaOnlySelected() {
         TODO("Not yet implemented")
     }
 }

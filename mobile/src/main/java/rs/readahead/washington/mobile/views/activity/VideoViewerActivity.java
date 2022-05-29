@@ -16,7 +16,6 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -60,14 +59,12 @@ import rs.readahead.washington.mobile.mvp.presenter.MediaFileViewerPresenter;
 import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
-import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment;
 
 @RuntimePermissions
 public class VideoViewerActivity extends BaseLockActivity implements
         PlaybackControlView.VisibilityListener,
-        IMediaFileViewerPresenterContract.IView,
-        ShareDialogFragment.IShareDialogFragmentHandler {
+        IMediaFileViewerPresenterContract.IView {
     public static final String VIEW_VIDEO = "vv";
     public static final String NO_ACTIONS = "na";
 
@@ -121,7 +118,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
         super.finish();
         overridePendingTransition(R.anim.slide_in_end, R.anim.slide_out_start);
     }
-    
+
     @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -175,8 +172,6 @@ public class VideoViewerActivity extends BaseLockActivity implements
             presenter.destroy();
         }
 
-        dismissShareDialog();
-
         super.onDestroy();
     }
 
@@ -210,8 +205,8 @@ public class VideoViewerActivity extends BaseLockActivity implements
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
             startActivityForResult(intent, PICKER_FILE_REQUEST_CODE);
-        }else{
-            presenter.exportNewMediaFile(vaultFile,null);
+        } else {
+            presenter.exportNewMediaFile(vaultFile, null);
         }
     }
 
@@ -281,18 +276,6 @@ public class VideoViewerActivity extends BaseLockActivity implements
         return super.dispatchKeyEvent(event) || simpleExoPlayerView.dispatchMediaKeyEvent(event);
     }
 
-    @Override
-    public void sharingMediaMetadataSelected() {
-        dismissShareDialog();
-        startShareActivity(true);
-    }
-
-    @Override
-    public void sharingMediaOnlySelected() {
-        dismissShareDialog();
-        startShareActivity(false);
-    }
-
     private void shareMediaFile() {
         if (vaultFile == null) {
             return;
@@ -311,13 +294,6 @@ public class VideoViewerActivity extends BaseLockActivity implements
         }
 
         MediaFileHandler.startShareActivity(this, vaultFile, includeMetadata);
-    }
-
-    private void dismissShareDialog() {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(ShareDialogFragment.TAG);
-        if (fragment instanceof ShareDialogFragment) {
-            ((ShareDialogFragment) fragment).dismiss();
-        }
     }
 
     private void initializePlayer() {
@@ -543,8 +519,8 @@ public class VideoViewerActivity extends BaseLockActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICKER_FILE_REQUEST_CODE){
-            presenter.exportNewMediaFile(vaultFile,data.getData());
+        if (requestCode == PICKER_FILE_REQUEST_CODE) {
+            presenter.exportNewMediaFile(vaultFile, data.getData());
         }
     }
 

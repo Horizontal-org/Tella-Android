@@ -21,7 +21,6 @@ import com.hzontal.tella_vault.VaultFile;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,7 +42,6 @@ import rs.readahead.washington.mobile.mvp.presenter.MediaFileViewerPresenter;
 import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
-import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment;
 
 import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
@@ -59,8 +57,7 @@ import java.util.LinkedHashMap;
 
 @RuntimePermissions
 public class PhotoViewerActivity extends BaseLockActivity implements
-        IMediaFileViewerPresenterContract.IView,
-        ShareDialogFragment.IShareDialogFragmentHandler {
+        IMediaFileViewerPresenterContract.IView {
     public static final String VIEW_PHOTO = "vp";
     public static final String NO_ACTIONS = "na";
 
@@ -162,8 +159,6 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         if (alertDialog != null && alertDialog.isShowing()) {
             alertDialog.dismiss();
         }
-
-        dismissShareDialog();
 
         super.onDestroy();
     }
@@ -272,18 +267,6 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         return this;
     }
 
-    @Override
-    public void sharingMediaMetadataSelected() {
-        dismissShareDialog();
-        startShareActivity(true);
-    }
-
-    @Override
-    public void sharingMediaOnlySelected() {
-        dismissShareDialog();
-        startShareActivity(false);
-    }
-
     private void shareMediaFile() {
         if (vaultFile == null) {
             return;
@@ -302,13 +285,6 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         }
 
         MediaFileHandler.startShareActivity(this, vaultFile, includeMetadata);
-    }
-
-    private void dismissShareDialog() {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(ShareDialogFragment.TAG);
-        if (fragment instanceof ShareDialogFragment) {
-            ((ShareDialogFragment) fragment).dismiss();
-        }
     }
 
     private void showGalleryImage(VaultFile vaultFile) {
