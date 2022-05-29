@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
 
 import com.hzontal.tella_vault.VaultFile;
 
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -38,7 +39,6 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
 import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent;
-import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.media.AudioPlayer;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IAudioPlayPresenterContract;
@@ -387,7 +387,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
         }
 
         if (handlingVaultFile.metadata != null) {
-            ShareDialogFragment.newInstance().show(getSupportFragmentManager(), ShareDialogFragment.TAG);
+            showShareWithMetadataDialog();
         } else {
             startShareActivity(false);
         }
@@ -549,7 +549,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
 
                     @Override
                     public void share() {
-                        startShareActivity(false);
+                        shareMediaFile();
                     }
 
                     @Override
@@ -620,7 +620,22 @@ public class AudioPlayActivity extends BaseLockActivity implements
         if (requestCode == PICKER_FILE_REQUEST_CODE){
             viewerPresenter.exportNewMediaFile(handlingVaultFile,data.getData());
         }
-
     }
 
+    private void showShareWithMetadataDialog() {
+        LinkedHashMap<Integer, Integer> options = new LinkedHashMap<>();
+        options.put(1, R.string.verification_share_select_media_and_verification);
+        options.put(0, R.string.verification_share_select_only_media);
+
+        BottomSheetUtils.showRadioListOptionsSheet(
+                getSupportFragmentManager(),
+                getContext(),
+                options,
+                getString(R.string.verification_share_dialog_title),
+                getString(R.string.verification_share_dialog_expl),
+                getString(R.string.action_ok),
+                getString(R.string.action_cancel),
+                option -> startShareActivity(option > 0)
+        );
+    }
 }

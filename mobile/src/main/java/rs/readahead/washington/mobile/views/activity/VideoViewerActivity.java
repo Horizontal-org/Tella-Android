@@ -38,6 +38,8 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
 import org.hzontal.shared_ui.utils.DialogUtils;
 
+import java.util.LinkedHashMap;
+
 import butterknife.ButterKnife;
 import kotlin.Unit;
 import permissions.dispatcher.NeedsPermission;
@@ -50,7 +52,6 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
 import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent;
-import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.exo.ExoEventListener;
 import rs.readahead.washington.mobile.media.exo.MediaFileDataSourceFactory;
@@ -298,7 +299,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
         }
 
         if (vaultFile.metadata != null) {
-            ShareDialogFragment.newInstance().show(getSupportFragmentManager(), ShareDialogFragment.TAG);
+            showShareWithMetadataDialog();
         } else {
             startShareActivity(false);
         }
@@ -460,7 +461,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
 
                     @Override
                     public void share() {
-                        startShareActivity(false);
+                        shareMediaFile();
                     }
 
                     @Override
@@ -545,6 +546,22 @@ public class VideoViewerActivity extends BaseLockActivity implements
         if (requestCode == PICKER_FILE_REQUEST_CODE){
             presenter.exportNewMediaFile(vaultFile,data.getData());
         }
+    }
 
+    private void showShareWithMetadataDialog() {
+        LinkedHashMap<Integer, Integer> options = new LinkedHashMap<>();
+        options.put(1, R.string.verification_share_select_media_and_verification);
+        options.put(0, R.string.verification_share_select_only_media);
+
+        BottomSheetUtils.showRadioListOptionsSheet(
+                getSupportFragmentManager(),
+                getContext(),
+                options,
+                getString(R.string.verification_share_dialog_title),
+                getString(R.string.verification_share_dialog_expl),
+                getString(R.string.action_ok),
+                getString(R.string.action_cancel),
+                option -> startShareActivity(option > 0)
+        );
     }
 }

@@ -1,12 +1,10 @@
 package rs.readahead.washington.mobile.views.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.InflateException;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,10 +20,9 @@ import com.hzontal.tella_vault.VaultFile;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import kotlin.Unit;
@@ -39,13 +36,11 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
 import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent;
-import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.mvp.contract.IMediaFileViewerPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.MediaFileViewerPresenter;
 import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
-import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
@@ -58,6 +53,8 @@ import org.hzontal.shared_ui.appbar.ToolbarComponent;
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
 import org.hzontal.shared_ui.utils.DialogUtils;
+
+import java.util.LinkedHashMap;
 
 
 @RuntimePermissions
@@ -197,7 +194,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_device_storage));
     }
 
-    private void openMedia(){
+    private void openMedia() {
         showGalleryImage(vaultFile);
         if (!actionsDisabled) {
             showActions = true;
@@ -209,8 +206,8 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
             startActivityForResult(intent, PICKER_FILE_REQUEST_CODE);
-        }else{
-            presenter.exportNewMediaFile(vaultFile,null);
+        } else {
+            presenter.exportNewMediaFile(vaultFile, null);
         }
     }
 
@@ -242,7 +239,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     @Override
     public void onMediaFileDeletionError(Throwable throwable) {
-        DialogUtils.showBottomMessage(this,getString(R.string.gallery_toast_fail_deleting_files),true);
+        DialogUtils.showBottomMessage(this, getString(R.string.gallery_toast_fail_deleting_files), true);
     }
 
     @Override
@@ -254,7 +251,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     @Override
     public void onMediaFileRenameError(Throwable throwable) {
         //TODO CHECK ERROR MSG WHEN RENAME
-        DialogUtils.showBottomMessage(this,getString(R.string.gallery_toast_fail_deleting_files),true);
+        DialogUtils.showBottomMessage(this, getString(R.string.gallery_toast_fail_deleting_files), true);
     }
 
     @Override
@@ -293,7 +290,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         }
 
         if (vaultFile.metadata != null) {
-            ShareDialogFragment.newInstance().show(getSupportFragmentManager(), ShareDialogFragment.TAG);
+            showShareWithMetadataDialog();
         } else {
             startShareActivity(false);
         }
@@ -351,7 +348,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         }
     }
 
-    private void showVaultActionsDialog(VaultFile vaultFile){
+    private void showVaultActionsDialog(VaultFile vaultFile) {
         VaultSheetUtils.showVaultActionsSheet(getSupportFragmentManager(),
                 vaultFile.name,
                 getString(R.string.Vault_Upload_SheetAction),
@@ -373,7 +370,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
                     @Override
                     public void share() {
-                        startShareActivity(false);
+                        shareMediaFile();
                     }
 
                     @Override
@@ -391,10 +388,10 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                                 PhotoViewerActivity.this,
                                 vaultFile.name,
                                 (name) -> {
-                                    presenter.renameVaultFile(vaultFile.id,name);
+                                    presenter.renameVaultFile(vaultFile.id, name);
                                     return Unit.INSTANCE;
                                 }
-                                );
+                        );
                     }
 
                     @Override
@@ -406,7 +403,8 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                                 getString(R.string.action_save),
                                 getString(R.string.action_cancel),
                                 isConfirmed -> {
-                                    PhotoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(PhotoViewerActivity.this);                          }
+                                    PhotoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(PhotoViewerActivity.this);
+                                }
                         );
                     }
 
@@ -416,7 +414,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                         menu.findItem(R.id.menu_item_more).setVisible(false);
                         menu.findItem(R.id.menu_item_metadata).setVisible(false);
                         invalidateOptionsMenu();
-                        addFragment(new VaultInfoFragment().newInstance(vaultFile,false),R.id.photo_viewer_container);
+                        addFragment(new VaultInfoFragment().newInstance(vaultFile, false), R.id.photo_viewer_container);
                     }
 
                     @Override
@@ -436,12 +434,29 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                 }
         );
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICKER_FILE_REQUEST_CODE){
-            presenter.exportNewMediaFile(vaultFile,data.getData());
+        if (requestCode == PICKER_FILE_REQUEST_CODE) {
+            presenter.exportNewMediaFile(vaultFile, data.getData());
         }
+    }
 
+    private void showShareWithMetadataDialog() {
+        LinkedHashMap<Integer, Integer> options = new LinkedHashMap<>();
+        options.put(1, R.string.verification_share_select_media_and_verification);
+        options.put(0, R.string.verification_share_select_only_media);
+
+        BottomSheetUtils.showRadioListOptionsSheet(
+                getSupportFragmentManager(),
+                getContext(),
+                options,
+                getString(R.string.verification_share_dialog_title),
+                getString(R.string.verification_share_dialog_expl),
+                getString(R.string.action_ok),
+                getString(R.string.action_cancel),
+                option -> startShareActivity(option > 0)
+        );
     }
 }
