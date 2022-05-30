@@ -18,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -30,12 +29,6 @@ import com.hzontal.tella_vault.VaultFile;
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
 import org.hzontal.shared_ui.utils.DialogUtils;
-
-import java.util.Objects;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,14 +51,6 @@ import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment;
-
-import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
-import static rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragmentKt.PICKER_FILE_REQUEST_CODE;
-
-import org.hzontal.shared_ui.appbar.ToolbarComponent;
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
-import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
-import org.hzontal.shared_ui.utils.DialogUtils;
 
 import java.util.LinkedHashMap;
 
