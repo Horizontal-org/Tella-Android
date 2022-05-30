@@ -1,5 +1,8 @@
 package rs.readahead.washington.mobile.views.activity;
 
+import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
+import static rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragmentKt.PICKER_FILE_REQUEST_CODE;
+
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -11,12 +14,24 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.hzontal.tella_vault.VaultFile;
+
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
+import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
+import org.hzontal.shared_ui.utils.DialogUtils;
+
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -72,7 +87,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     private boolean showActions = false;
     private boolean actionsDisabled = false;
     private AlertDialog alertDialog;
-    private ToolbarComponent toolbar;
+    private Toolbar toolbar;
     private Menu menu;
 
     @Override
@@ -82,7 +97,6 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         setContentView(R.layout.activity_photo_viewer);
         overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
         ButterKnife.bind(this);
-
         setTitle(null);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -102,11 +116,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                 this.vaultFile = vaultFile;
             }
         }
-        toolbar.setStartTextTitle(vaultFile.name);
-        toolbar.setBackClickListener(() -> {
-            onBackPressed();
-            return Unit.INSTANCE;
-        });
+        setTitle(vaultFile.name);
 
         if (getIntent().hasExtra(NO_ACTIONS)) {
             actionsDisabled = true;
@@ -131,6 +141,11 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
 
         if (id == R.id.menu_item_more) {
             showVaultActionsDialog(vaultFile);
@@ -239,7 +254,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     @Override
     public void onMediaFileRename(VaultFile vaultFile) {
-        toolbar.setStartTextTitle(vaultFile.name);
+        toolbar.setTitle(vaultFile.name);
         MyApplication.bus().post(new VaultFileRenameEvent());
     }
 
@@ -258,7 +273,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         if (vaultFile.metadata != null && menu.findItem(R.id.menu_item_metadata) != null) {
             menu.findItem(R.id.menu_item_metadata).setVisible(true);
         }
-        toolbar.setStartTextTitle(vaultFile.name);
+        toolbar.setTitle(vaultFile.name);
         finish();
     }
 
@@ -386,7 +401,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
                     @Override
                     public void info() {
-                        toolbar.setStartTextTitle(getString(R.string.Vault_FileInfo));
+                        toolbar.setTitle(getString(R.string.Vault_FileInfo));
                         menu.findItem(R.id.menu_item_more).setVisible(false);
                         menu.findItem(R.id.menu_item_metadata).setVisible(false);
                         invalidateOptionsMenu();

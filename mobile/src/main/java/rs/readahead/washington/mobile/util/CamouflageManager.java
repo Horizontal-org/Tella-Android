@@ -36,9 +36,9 @@ public class CamouflageManager {
         options.add(new CamouflageOption(getOptionAlias("iCamera"), R.drawable.icamera_foreground, R.string.settings_camo_icamera));
         options.add(new CamouflageOption(getOptionAlias("SelfieCam"), R.drawable.selfiecamera_foreground, R.string.settings_camo_selfie_cam));
         options.add(new CamouflageOption(getOptionAlias("SnapCamera"), R.drawable.snapcamera_foreground, R.string.settings_camo_snap_camera));
-        options.add(new CamouflageOption(getOptionAlias("Calculate"), R.drawable.calculate_foreground, R.string.settings_camo_calculate));
-        options.add(new CamouflageOption(getOptionAlias("CalculatorPlus"), R.drawable.calculatorplus_foreground, R.string.settings_camo_calculator_plus));
-        options.add(new CamouflageOption(getOptionAlias("iCalculator"), R.drawable.icalculator_foreground, R.string.settings_camo_icalculator));
+       // options.add(new CamouflageOption(getOptionAlias("Calculate"), R.drawable.calculate_foreground, R.string.settings_camo_calculate));
+       // options.add(new CamouflageOption(getOptionAlias("CalculatorPlus"), R.drawable.calculatorplus_foreground, R.string.settings_camo_calculator_plus));
+      //  options.add(new CamouflageOption(getOptionAlias("iCalculator"), R.drawable.icalculator_foreground, R.string.settings_camo_icalculator));
         options.add(new CamouflageOption(getOptionAlias("Weather"), R.drawable.weather_foreground, R.string.settings_camo_weather));
         options.add(new CamouflageOption(getOptionAlias("EasyWeather"), R.drawable.easyweather_foreground, R.string.settings_camo_easyweather));
         options.add(new CamouflageOption(getOptionAlias("SunnyDay"), R.drawable.sunnyday_foreground, R.string.settings_camo_sunnyday));

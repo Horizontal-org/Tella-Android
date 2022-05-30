@@ -77,6 +77,11 @@ const val VAULT_FILE_ARG = "VaultFileArg"
 const val WRITE_REQUEST_CODE = 1002
 const val PICKER_FILE_REQUEST_CODE = 100
 
+enum class SelectMode(val index : Int){
+    SELECT_ALL(0),
+    ONE_SELECTION(1),
+    DESELECT_ALL(2)
+}
 
 class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     IGalleryVaultHandler,
@@ -117,6 +122,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private var uriToDelete: Uri? = null
     private val bundle by lazy { Bundle() }
     private var selectAll = false
+    private var selectMode = SelectMode.DESELECT_ALL
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -147,8 +153,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 shareVaultFiles()
                 return true
             }
-
-            R.id.action_check -> {
+          /*  R.id.action_check -> {
                 selectAll = !selectAll
                 if (selectAll) {
                     attachmentsAdapter.selectAll()
@@ -157,7 +162,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 }
                 updateAttachmentsToolbar(true)
                 return true
-            }
+            }*/
 
             R.id.action_upload -> {
                 vaultFile = null
@@ -373,12 +378,52 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     private fun handleSelectMode() {
-        isListCheckOn = !isListCheckOn
+        changeSelectMode()
+
         attachmentsAdapter.enableSelectMode(isListCheckOn)
         updateAttachmentsToolbar(isListCheckOn)
-        if (!isListCheckOn) {
-            attachmentsAdapter.clearSelected()
-            enableMoveTheme(false)
+
+        when (selectMode) {
+            SelectMode.DESELECT_ALL -> {
+                attachmentsAdapter.clearSelected()
+                enableMoveTheme(false)
+                checkBoxList.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        activity,
+                        R.drawable.ic_check
+                    )
+                )
+            }
+            SelectMode.ONE_SELECTION -> {
+                checkBoxList.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        activity,
+                        R.drawable.ic_check_box_off
+                    )
+                )
+            }
+            SelectMode.SELECT_ALL -> {
+                attachmentsAdapter.selectAll()
+            }
+        }
+    }
+
+    private fun changeSelectMode() {
+        when (selectMode) {
+            SelectMode.DESELECT_ALL -> {
+                isListCheckOn = true
+                selectMode = SelectMode.ONE_SELECTION
+
+            }
+            SelectMode.ONE_SELECTION -> {
+                isListCheckOn = true
+                selectMode = SelectMode.SELECT_ALL
+
+            }
+            SelectMode.SELECT_ALL -> {
+                isListCheckOn = false
+                selectMode = SelectMode.DESELECT_ALL
+            }
         }
     }
 
@@ -386,7 +431,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         activity.invalidateOptionsMenu()
 
         if (isItemsChecked) {
-            toolbar.setToolbarNavigationIcon(R.drawable.ic_close_white_24dp)
             val itemsSize = attachmentsAdapter.selectedMediaFiles.size
             toolbar.setToolbarNavigationIcon(R.drawable.ic_close_white_24dp)
             if (itemsSize == 0) {
@@ -401,9 +445,9 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         } else {
             toolbar.setToolbarNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
             setToolbarLabel()
-
             attachmentsAdapter.clearSelected()
             enableMoveTheme(false)
+
         }
     }
 
@@ -698,6 +742,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     override fun onRenameFileSuccess() {
         attachmentsPresenter.addNewVaultFiles()
+        enableMoveTheme(false)
     }
 
     override fun onRenameFileError(error: Throwable?) {
@@ -979,11 +1024,12 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private fun handleBackStack() {
         when {
             attachmentsAdapter.selectedMediaFiles.size == 0 && isListCheckOn -> {
+                selectMode = SelectMode.SELECT_ALL
                 handleSelectMode()
             }
             attachmentsAdapter.selectedMediaFiles.size > 0 -> {
-                attachmentsAdapter.clearSelected()
-                updateAttachmentsToolbar(false)
+                selectMode = SelectMode.SELECT_ALL
+                handleSelectMode()
             }
             breadcrumbView.items.size > 1 -> {
                 if (breadcrumbView.items.size == 2) {

@@ -27,11 +27,4 @@
         app:showAsAction="always"
         />
 
-    <item
-        android:id="@+id/action_check"
-        android:icon="@drawable/ic_check"
-        android:title="@string/settings_select_general"
-        android:orderInCategory="1"
-        app:showAsAction="always"
-        />
 </menu>
