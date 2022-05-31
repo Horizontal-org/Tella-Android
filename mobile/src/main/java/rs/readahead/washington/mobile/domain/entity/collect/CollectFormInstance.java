@@ -166,8 +166,8 @@ public class CollectFormInstance implements Serializable {
     public void setCollectInstanceAttachments(List<VaultFile> vaultFiles) {
         for (VaultFile file : vaultFiles) {
             FormMediaFile formFile = FormMediaFile.fromMediaFile(file);
-            if (this.getWidgetMediaFilesMap().get(file.id) != null) {
-                formFile.status = FormMediaFileStatus.values()[this.getWidgetMediaFilesMap().get(file.id)];
+            if (getWidgetMediaFilesMap().get(file.id) != null && getWidgetMediaFilesMap().containsKey(file.id)) {
+                formFile.status = FormMediaFileStatus.values()[getWidgetMediaFilesMap().get(file.id)];
             }
             this.setWidgetMediaFile(file.name, formFile);
         }
