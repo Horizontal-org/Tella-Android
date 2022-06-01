@@ -403,6 +403,12 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 )
             }
             SelectMode.SELECT_ALL -> {
+                checkBoxList.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        activity,
+                        R.drawable.ic_check_box_on
+                    )
+                )
                 attachmentsAdapter.selectAll()
             }
         }
@@ -519,11 +525,25 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     override fun onMediaSelected(vaultFile: VaultFile) {
-        updateAttachmentsToolbar(!attachmentsAdapter.selectedMediaFiles.isNullOrEmpty())
+        handleSelectionModeWhenMediSelected()
     }
 
     override fun onMediaDeselected(vaultFile: VaultFile) {
-        updateAttachmentsToolbar(!attachmentsAdapter.selectedMediaFiles.isNullOrEmpty())
+        handleSelectionModeWhenMediSelected()
+    }
+
+    private fun handleSelectionModeWhenMediSelected() {
+        updateAttachmentsToolbar(true)
+        if (attachmentsAdapter.selectedMediaFiles.isNullOrEmpty() && selectMode == SelectMode.SELECT_ALL) {
+            selectMode = SelectMode.DESELECT_ALL
+            handleSelectMode()
+        } else if (attachmentsAdapter.selectedMediaFiles.size == attachmentsAdapter.itemCount && selectMode != SelectMode.SELECT_ALL) {
+            selectMode = SelectMode.ONE_SELECTION
+            handleSelectMode()
+        } else if (attachmentsAdapter.selectedMediaFiles.size < attachmentsAdapter.itemCount && selectMode == SelectMode.SELECT_ALL) {
+            selectMode = SelectMode.DESELECT_ALL
+            handleSelectMode()
+        }
     }
 
     override fun onMoreClicked(vaultFile: VaultFile) {
