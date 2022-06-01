@@ -371,8 +371,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             R.id.cancelMove -> {
                 isMoveModeEnabled = false
                 enableMoveTheme(enable = false)
-                attachmentsAdapter.clearSelected()
-                updateAttachmentsToolbar(false)
+                selectMode = SelectMode.SELECT_ALL
+                handleSelectMode()
             }
         }
     }
@@ -453,7 +453,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             setToolbarLabel()
             attachmentsAdapter.clearSelected()
             enableMoveTheme(false)
-
         }
     }
 
@@ -701,8 +700,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     override fun onMediaFilesDeleted(num: Int) {
         attachmentsPresenter.addNewVaultFiles()
-        isListCheckOn = !isListCheckOn
-        updateAttachmentsToolbar(false)
+        selectMode = SelectMode.SELECT_ALL
+        handleSelectMode()
     }
 
     override fun onMediaFilesDeletionError(throwable: Throwable?) {
@@ -710,6 +709,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     override fun onMediaFileDeleted() {
         attachmentsPresenter.addNewVaultFiles()
+        selectMode = SelectMode.SELECT_ALL
+        handleSelectMode()
     }
 
     override fun onMediaFileDeletionError(throwable: Throwable?) {
@@ -791,13 +792,15 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         attachmentsPresenter.addNewVaultFiles()
         enableMoveTheme(false)
         currentMove = null
-        updateAttachmentsToolbar(false)
+        selectMode = SelectMode.SELECT_ALL
+        handleSelectMode()
     }
 
     override fun onMoveFilesError(error: Throwable?) {
         enableMoveTheme(false)
         currentMove = null
-        updateAttachmentsToolbar(false)
+        selectMode = SelectMode.SELECT_ALL
+        handleSelectMode()
     }
 
     private fun exportVaultFiles(isMultipleFiles: Boolean, vaultFile: VaultFile?, path: Uri?) {
