@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 
 import com.hzontal.tella_vault.VaultFile;
 
@@ -95,7 +96,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
     private ProgressDialog progressDialog;
 
     private boolean paused = true;
-    private ToolbarComponent toolbar;
+    private Toolbar toolbar;
     private boolean isInfoShown = false;
 
 
@@ -109,10 +110,6 @@ public class AudioPlayActivity extends BaseLockActivity implements
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setBackClickListener(() -> {
-            onBackPressed();
-            return Unit.INSTANCE;
-        });
         viewerPresenter = new MediaFileViewerPresenter(this);
         enablePlay();
 
@@ -183,6 +180,11 @@ public class AudioPlayActivity extends BaseLockActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+
         if (id == R.id.menu_item_more) {
             showVaultActionsDialog(handlingVaultFile);
             return true;
@@ -222,7 +224,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
         if (isInfoShown) {
             toolbar.getMenu().findItem(R.id.menu_item_more).setVisible(true);
             toolbar.getMenu().findItem(R.id.menu_item_metadata).setVisible(true);
-            toolbar.setStartTextTitle(handlingVaultFile.name);
+            toolbar.setTitle(handlingVaultFile.name);
         } else {
             stopPlayer();
             finish();
@@ -302,7 +304,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
     @Override
     public void onMediaFileSuccess(VaultFile vaultFile) {
         handlingVaultFile = vaultFile;
-        toolbar.setStartTextTitle(vaultFile.name);
+        toolbar.setTitle(vaultFile.name);
         //handlePlay();
 
         if (!actionsDisabled) {
@@ -349,7 +351,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
 
     @Override
     public void onMediaFileRename(VaultFile vaultFile) {
-        toolbar.setStartTextTitle(vaultFile.name);
+        toolbar.setTitle(vaultFile.name);
         MyApplication.bus().post(new VaultFileRenameEvent());
     }
 
@@ -557,15 +559,13 @@ public class AudioPlayActivity extends BaseLockActivity implements
                                 getString(R.string.gallery_save_to_device_dialog_expl),
                                 getString(R.string.action_save),
                                 getString(R.string.action_cancel),
-                                isConfirmed -> {
-                                    AudioPlayActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(AudioPlayActivity.this);
-                                }
+                                isConfirmed -> AudioPlayActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(AudioPlayActivity.this)
                         );
                     }
 
                     @Override
                     public void info() {
-                        toolbar.setStartTextTitle(getString(R.string.Vault_FileInfo));
+                        toolbar.setTitle(getString(R.string.Vault_FileInfo));
                         toolbar.getMenu().findItem(R.id.menu_item_more).setVisible(false);
                         toolbar.getMenu().findItem(R.id.menu_item_metadata).setVisible(false);
                         invalidateOptionsMenu();
