@@ -48,7 +48,7 @@ public class CamouflageManager {
         options.add(new CamouflageOption(getOptionAlias("Clock"), R.drawable.clock_foreground, R.string.settings_camo_clock));
         options.add(new CamouflageOption(getOptionAlias("Time"), R.drawable.time_foreground, R.string.settings_camo_time));
         options.add(new CamouflageOption(getOptionAlias("StopWatch"), R.drawable.stopwatch_foreground, R.string.settings_camo_stopwatch));
-        options.add(new CamouflageOption(defaultAlias, R.drawable.tella_black, R.string.app_name));
+        //options.add(new CamouflageOption(defaultAlias, R.drawable.tella_black, R.string.app_name));
         //options.add(new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calculator, R.string.settings_camo_calculator2));
     }
 

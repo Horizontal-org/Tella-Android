@@ -32,7 +32,7 @@ import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.hzontal.tella_vault.VaultFile;
 
-import org.hzontal.shared_ui.appbar.ToolbarComponent;
+import androidx.appcompat.widget.Toolbar;
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
 import org.hzontal.shared_ui.utils.DialogUtils;
@@ -82,7 +82,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
     private long resumePosition;
 
     private VaultFile vaultFile;
-    private ToolbarComponent toolbar;
+    private Toolbar toolbar;
     private boolean actionsDisabled = false;
     private MediaFileViewerPresenter presenter;
     private AlertDialog alertDialog;
@@ -245,7 +245,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
     @Override
     public void onMediaFileRename(VaultFile vaultFile) {
         if (vaultFile != null) {
-            toolbar.setStartTextTitle(vaultFile.name);
+            toolbar.setTitle(vaultFile.name);
             this.vaultFile = vaultFile;
         }
         MyApplication.bus().post(new VaultFileRenameEvent());
@@ -316,7 +316,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
                 VaultFile vaultFile = (VaultFile) getIntent().getExtras().get(VIEW_VIDEO);
                 if (vaultFile != null) {
                     this.vaultFile = vaultFile;
-                    toolbar.setStartTextTitle(vaultFile.name);
+                    toolbar.setTitle(vaultFile.name);
                     setupMetadataMenuItem(vaultFile.metadata != null);
                 }
             }
@@ -365,10 +365,8 @@ public class VideoViewerActivity extends BaseLockActivity implements
 
     private void setupToolbar() {
         toolbar = findViewById(R.id.player_toolbar);
-        toolbar.setBackClickListener(() -> {
-            onBackPressed();
-            return Unit.INSTANCE;
-        });
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         if (!actionsDisabled) {
             toolbar.inflateMenu(R.menu.video_view_menu);
@@ -404,6 +402,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
         }
 
         MenuItem mdMenuItem = toolbar.getMenu().findItem(R.id.menu_item_metadata);
+
 
         if (visible) {
             mdMenuItem.setVisible(true).setOnMenuItemClickListener(item -> {
@@ -479,7 +478,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
                     public void info() {
                         isInfoShown = true;
                         onVisibilityChange(View.VISIBLE);
-                        toolbar.setStartTextTitle(getString(R.string.Vault_FileInfo));
+                        toolbar.setTitle(getString(R.string.Vault_FileInfo));
                         toolbar.getMenu().findItem(R.id.menu_item_more).setVisible(false);
                         toolbar.getMenu().findItem(R.id.menu_item_metadata).setVisible(false);
                         invalidateOptionsMenu();
