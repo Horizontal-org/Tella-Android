@@ -129,6 +129,19 @@
         tools:ignore="VectorDrawableCompat"
         style="@style/Main_Floating_Action_Button_Style" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_move_button"
+        app:backgroundTint="@color/prussian_blue"
+        app:fabCustomSize="50dp"
+        app:layout_anchorGravity="center"
+        app:maxImageSize="30dp"
+        app:srcCompat="@drawable/ic_plus"
+        android:layout_marginBottom="55dp"
+        tools:ignore="VectorDrawableCompat"
+        android:visibility="gone"
+        style="@style/Main_Floating_Action_Button_Style" />
+
+
     <LinearLayout
         android:id="@+id/emptyViewMsgContainer"
         android:layout_width="wrap_content"

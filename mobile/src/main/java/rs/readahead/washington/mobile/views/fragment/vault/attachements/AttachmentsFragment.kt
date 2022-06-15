@@ -97,6 +97,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private val attachmentsPresenter by lazy { AttachmentsPresenter(this) }
     private lateinit var gridLayoutManager: GridLayoutManager
     private lateinit var detailsFab: FloatingActionButton
+    private lateinit var moveFab: FloatingActionButton
     private lateinit var toolbar: ToolbarComponent
     private lateinit var listCheck: ImageView
     private lateinit var gridCheck: ImageView
@@ -214,6 +215,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             layoutManager = gridLayoutManager
         }
         detailsFab = view.findViewById(R.id.fab_button)
+        moveFab = view.findViewById(R.id.fab_move_button)
         checkBoxList = view.findViewById(R.id.checkBoxList)
         // enableMoveTheme()
         initListeners()
@@ -229,6 +231,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         checkBoxList.setOnClickListener(this)
         filterNameTv.setOnClickListener(this)
         moveHere.setOnClickListener(null)
+        moveFab.setOnClickListener(this)
         cancelMove.setOnClickListener(this)
     }
 
@@ -338,6 +341,52 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                         override fun importAndDelete() {
                             importAndDelete = true
                             MediaFileHandler.startImportFiles(activity, true, getCurrentType())
+                        }
+
+                        override fun createFolder() {
+                            VaultSheetUtils.showVaultRenameSheet(
+                                activity.supportFragmentManager,
+                                getString(R.string.Vault_CreateFolder_SheetAction),
+                                getString(R.string.action_cancel),
+                                getString(R.string.action_ok),
+                                requireActivity(),
+                                null
+                            ) {
+                                currentRootID?.let { root ->
+                                    attachmentsPresenter.createFolder(
+                                        it,
+                                        root
+                                    )
+                                }
+                            }
+                        }
+                    }
+                )
+            }
+
+            R.id.fab_move_button -> {
+                VaultSheetUtils.showVaultManageFilesSheet(
+                    activity.supportFragmentManager,
+                    null,
+                    null,
+                    getString(R.string.Vault_Import_SheetAction),
+                    getString(R.string.Vault_ImportDelete_SheetAction),
+                    getString(R.string.Vault_CreateFolder_SheetAction),
+                    getString(R.string.Vault_ManageFiles_SheetTitle),
+                    getString(R.string.Vault_DeleteFile_SheetDesc),
+                    false,
+                    true,
+                    action = object : VaultSheetUtils.IVaultManageFiles {
+                        override fun goToCamera() {
+                        }
+
+                        override fun goToRecorder() {
+                        }
+
+                        override fun import() {
+                        }
+
+                        override fun importAndDelete() {
                         }
 
                         override fun createFolder() {
@@ -1090,6 +1139,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             moveContainer.visibility = View.VISIBLE
             checkBoxList.visibility = View.GONE
             detailsFab.visibility = View.GONE
+            moveFab.visibility = View.VISIBLE
             with(attachmentsRecyclerView) {
                 setMargins(17, 0, 17, 37)
                 updatePadding(right = 2, left = 2)
@@ -1113,6 +1163,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             moveContainer.visibility = View.GONE
             checkBoxList.visibility = View.VISIBLE
             detailsFab.visibility = View.VISIBLE
+            moveFab.visibility = View.GONE
             with(attachmentsRecyclerView) {
                 setMargins(0, 0, 0, 17)
                 updatePadding(right = 0, left = 0)

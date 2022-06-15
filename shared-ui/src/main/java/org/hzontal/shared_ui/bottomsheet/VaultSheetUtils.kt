@@ -295,7 +295,7 @@ object VaultSheetUtils {
         titleText: String,
         toolTipText: String,
         isImportVisible: Boolean,
-        isCreateFolderVisible : Boolean,
+        isCreateFolderVisible: Boolean,
         action: IVaultManageFiles
     ) {
         val vaultManageFilesSheet = CustomBottomSheetFragment.with(fragmentManager)
@@ -320,6 +320,8 @@ object VaultSheetUtils {
                         vaultManageFilesSheet.dismiss()
                         action.goToRecorder()
                     }
+                    cameraActionTV.isVisible = cameraLabel != null
+                    recordAudioActionTV.isVisible = recordLabel != null
                     //Import action
                     importActionTV.isVisible = isImportVisible
                     importActionTV.text = importLabel
