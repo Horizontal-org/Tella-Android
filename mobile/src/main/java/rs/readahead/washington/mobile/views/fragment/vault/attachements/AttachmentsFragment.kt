@@ -363,51 +363,22 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                     }
                 )
             }
-
             R.id.fab_move_button -> {
-                VaultSheetUtils.showVaultManageFilesSheet(
+                VaultSheetUtils.showVaultBlueRenameSheet(
                     activity.supportFragmentManager,
-                    null,
-                    null,
-                    getString(R.string.Vault_Import_SheetAction),
-                    getString(R.string.Vault_ImportDelete_SheetAction),
                     getString(R.string.Vault_CreateFolder_SheetAction),
-                    getString(R.string.Vault_ManageFiles_SheetTitle),
-                    getString(R.string.Vault_DeleteFile_SheetDesc),
-                    false,
-                    true,
-                    action = object : VaultSheetUtils.IVaultManageFiles {
-                        override fun goToCamera() {
-                        }
-
-                        override fun goToRecorder() {
-                        }
-
-                        override fun import() {
-                        }
-
-                        override fun importAndDelete() {
-                        }
-
-                        override fun createFolder() {
-                            VaultSheetUtils.showVaultRenameSheet(
-                                activity.supportFragmentManager,
-                                getString(R.string.Vault_CreateFolder_SheetAction),
-                                getString(R.string.action_cancel),
-                                getString(R.string.action_ok),
-                                requireActivity(),
-                                null
-                            ) {
-                                currentRootID?.let { root ->
-                                    attachmentsPresenter.createFolder(
-                                        it,
-                                        root
-                                    )
-                                }
-                            }
-                        }
+                    getString(R.string.action_cancel),
+                    getString(R.string.action_ok),
+                    requireActivity(),
+                    null
+                ) {
+                    currentRootID?.let { root ->
+                        attachmentsPresenter.createFolder(
+                            it,
+                            root
+                        )
                     }
-                )
+                }
             }
             R.id.moveHere -> {
                 if (attachmentsAdapter.selectedMediaFiles.size > 0) {
