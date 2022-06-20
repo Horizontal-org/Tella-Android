@@ -62,7 +62,7 @@ class UwaziEntryFragment :
     private var screenView: ViewGroup? = null
     private var entryPrompts = mutableListOf<UwaziEntryPrompt>()
     private lateinit var uwaziFormView: UwaziFormView
-    private var hashCode: Int? = null
+    private var hashCode: Int? = null //used to check is the answers has changed
 
     private val uwaziTitlePrompt by lazy {
         UwaziEntryPrompt(
@@ -128,7 +128,7 @@ class UwaziEntryFragment :
             this!!.toolbar.backClickListener = { nav().popBackStack() }
             toolbar.onRightClickListener = {
                 entityInstance.status = UwaziEntityStatus.DRAFT
-                if (!getAnswersFromForm(false, false)) {
+                if (!getAnswersFromForm(false)) {
                     uwaziFormView.setFocus(context)
                     showValidationMandatoryTitleDialog()
                 } else {
@@ -147,9 +147,8 @@ class UwaziEntryFragment :
             arguments?.getString(UWAZI_INSTANCE).let {
                 entityInstance = Gson().fromJson(it, UwaziEntityInstance::class.java)
                 template = entityInstance.collectTemplate
-                hashCode = entityInstance.hashCode()
-                Timber.d("++++ hashcode %s", hashCode)
                 parseUwaziInstance()
+                hashCode = uwaziFormView.answers.hashCode()
             }
 
         }
@@ -160,6 +159,7 @@ class UwaziEntryFragment :
                 entityInstance.collectTemplate = template
                 entityInstance.template = template?.entityRow?.name.toString()
                 parseUwaziTemplate()
+                hashCode = uwaziFormView.answers.hashCode()
             }
         }
         binding!!.toolbar.setStartTextTitle(template?.entityRow?.translatedName.toString())
@@ -192,7 +192,7 @@ class UwaziEntryFragment :
 
     private fun sendEntity() {
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
-        if (!getAnswersFromForm(true, false)) {
+        if (!getAnswersFromForm(true)) {
             uwaziFormView.setFocus(context)
             //showValidationMandatoryFieldsDialog()
             showValidationErrorsFieldsDialog()
@@ -204,7 +204,7 @@ class UwaziEntryFragment :
         }
     }
 
-    private fun getAnswersFromForm(isSend: Boolean, isBackPressed: Boolean): Boolean {
+    private fun getAnswersFromForm(isSend: Boolean): Boolean {
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
         uwaziFormView.clearValidationConstraints()
         val hashmap = mutableMapOf<String, List<Any>>()
@@ -215,12 +215,10 @@ class UwaziEntryFragment :
 
         // check required fields
         if (answers[UWAZI_TITLE] == null) {
-            if (!isBackPressed) {
                 uwaziFormView.setValidationConstraintText(
                     UWAZI_TITLE,
                     getString(R.string.Uwazi_Entity_Error_Response_Mandatory)
                 )
-            }
             validationRequired = true
         }
 
@@ -452,10 +450,11 @@ class UwaziEntryFragment :
     }
 
     override fun onBackPressed(): Boolean {
-        if (getAnswersFromForm(false, true)) {
+        // The save draft dialog should be shown if the form could be saved and if the answers have changed
+        if (getAnswersFromForm(false) && hashCode != uwaziFormView.answers.hashCode()) {
             BottomSheetUtils.showStandardSheet(
                 activity.supportFragmentManager,
-                activity.getString(R.string.collect_form_exit_unsaved_dialog_title),
+                activity.getString(R.string.Uwazi_Dialog_Draft_Title),
                 activity.getString(R.string.collect_form_exit_dialog_expl),
                 activity.getString(R.string.collect_form_exit_dialog_action_save_exit),
                 activity.getString(R.string.collect_form_exit_dialog_action_exit_anyway),
