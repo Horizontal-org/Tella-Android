@@ -258,6 +258,14 @@ public class Preferences {
         setLong(SharedPrefs.LOCK_TIMEOUT, value);
     }
 
+    public static boolean isTempTimeout() {
+        return getBoolean(SharedPrefs.TEMP_TIMEOUT, false);
+    }
+
+    public static void setTempTimeout(boolean value) {
+        setBoolean(SharedPrefs.TEMP_TIMEOUT, value);
+    }
+
     public static void setAutoUpload(boolean value) {
         setBoolean(SharedPrefs.AUTO_UPLOAD, value);
     }
