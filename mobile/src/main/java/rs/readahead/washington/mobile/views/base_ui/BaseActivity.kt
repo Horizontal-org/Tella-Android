@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
-import rs.readahead.washington.mobile.data.sharedpref.Preferences.getLockTimeout
 import rs.readahead.washington.mobile.util.LocaleManager
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 
@@ -142,9 +141,9 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    private fun maybeRestoreTimeout() {
+    fun maybeRestoreTimeout() {
         if (Preferences.isTempTimeout()) {
-            MyApplication.getMainKeyHolder().timeout  = LockTimeoutManager.getLockTimeout()
+            MyApplication.getMainKeyHolder().timeout  = LockTimeoutManager.IMMEDIATE_SHUTDOWN
             Preferences.setTempTimeout(false)
         }
     }

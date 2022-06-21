@@ -77,7 +77,7 @@ const val VAULT_FILE_ARG = "VaultFileArg"
 const val WRITE_REQUEST_CODE = 1002
 const val PICKER_FILE_REQUEST_CODE = 100
 
-enum class SelectMode(val index : Int){
+enum class SelectMode(val index: Int) {
     SELECT_ALL(0),
     ONE_SELECTION(1),
     DESELECT_ALL(2)
@@ -154,16 +154,16 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 shareVaultFiles()
                 return true
             }
-          /*  R.id.action_check -> {
-                selectAll = !selectAll
-                if (selectAll) {
-                    attachmentsAdapter.selectAll()
-                } else {
-                    attachmentsAdapter.clearSelected()
-                }
-                updateAttachmentsToolbar(true)
-                return true
-            }*/
+            /*  R.id.action_check -> {
+                  selectAll = !selectAll
+                  if (selectAll) {
+                      attachmentsAdapter.selectAll()
+                  } else {
+                      attachmentsAdapter.clearSelected()
+                  }
+                  updateAttachmentsToolbar(true)
+                  return true
+              }*/
 
             R.id.action_upload -> {
                 vaultFile = null
@@ -526,7 +526,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                     }
                 }
             }
-            else -> { }
+            else -> {}
         }
     }
 
@@ -626,6 +626,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                         getString(R.string.action_cancel),
                         consumer = object : ActionConfirmed {
                             override fun accept(isConfirmed: Boolean) {
+                                activity.changeTemporaryTimeout()
                                 this@AttachmentsFragment.vaultFile = vaultFile
                                 performFileSearch(isMultipleFiles, vaultFile)
                             }
@@ -751,6 +752,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     override fun onExportError(error: Throwable?) {
+        activity.maybeRestoreTimeout()
     }
 
     override fun onExportStarted() {
@@ -762,6 +764,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     override fun onExportEnded() {
+        activity.maybeRestoreTimeout()
         hideProgressDialog()
         detailsFab.show()
     }
@@ -825,16 +828,16 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     private fun exportVaultFiles(isMultipleFiles: Boolean, vaultFile: VaultFile?, path: Uri?) {
         if (isMultipleFiles) {
-                val selected: List<VaultFile> = attachmentsAdapter.selectedMediaFiles
-                attachmentsPresenter.exportMediaFiles(selected, path)
-            } else {
-                vaultFile?.let {
-                    attachmentsPresenter.exportMediaFiles(
-                        arrayListOf(vaultFile),
-                        path
-                    )
-                }
+            val selected: List<VaultFile> = attachmentsAdapter.selectedMediaFiles
+            attachmentsPresenter.exportMediaFiles(selected, path)
+        } else {
+            vaultFile?.let {
+                attachmentsPresenter.exportMediaFiles(
+                    arrayListOf(vaultFile),
+                    path
+                )
             }
+        }
     }
 
     private fun hideProgressDialog() {
@@ -994,7 +997,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 exportVaultFiles(
                     isMultipleFiles = attachmentsAdapter.selectedMediaFiles.size > 0,
                     vaultFile,
-                    treeUri)
+                    treeUri
+                )
             }
         }
     }
@@ -1012,6 +1016,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     private fun requestStoragePermissions() {
+        activity.changeTemporaryTimeout()
         if (SDK_INT >= Build.VERSION_CODES.R) {
             try {
                 val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
@@ -1256,7 +1261,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
         var hasMetadata = false
 
-        for (file in selected){
+        for (file in selected) {
             if (file.metadata != null) hasMetadata = true
         }
 
