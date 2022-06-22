@@ -374,6 +374,7 @@ class CollectMainFragment : BaseFragment() {
 
     @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
     fun showFineLocationRationale(request: PermissionRequest) {
+        activity.changeTemporaryTimeout()
         alertDialog = PermissionUtil.showRationale(
             activity,
             request,
