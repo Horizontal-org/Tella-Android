@@ -142,10 +142,6 @@ public class CameraActivity extends MetadataActivity implements
         presenter = new CameraPresenter(this);
         uploadPresenter = new TellaFileUploadSchedulePresenter(this);
         metadataAttacher = new MetadataAttacher(this);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) !=
-                PackageManager.PERMISSION_GRANTED) {
-            changeTemporaryTimeout();
-        }
 
         mode = CameraMode.PHOTO;
 
@@ -189,6 +185,11 @@ public class CameraActivity extends MetadataActivity implements
         setCameraZoom();
 
         presenter.getLastMediaFile();
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) !=
+                PackageManager.PERMISSION_GRANTED) {
+            changeTemporaryTimeout();
+        }
     }
 
     @Override
