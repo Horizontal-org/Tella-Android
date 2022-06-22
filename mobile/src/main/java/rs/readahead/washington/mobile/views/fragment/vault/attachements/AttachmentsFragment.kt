@@ -340,6 +340,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
                         override fun importAndDelete() {
                             importAndDelete = true
+                            activity.changeTemporaryTimeout()
                             MediaFileHandler.startImportFiles(activity, true, getCurrentType())
                         }
 

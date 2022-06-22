@@ -179,6 +179,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void exportMediaFile() {
+        changeTemporaryTimeout();
         if (vaultFile != null && presenter != null) {
             performFileSearch();
         }
