@@ -191,7 +191,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void exportMediaFile() {
-        changeTemporaryTimeout();
+        maybeChangeTemporaryTimeout();
         if (vaultFile != null && presenter != null) {
             performFileSearch();
         }
@@ -199,7 +199,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
 
     @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void showWriteExternalStorageRationale(final PermissionRequest request) {
-        changeTemporaryTimeout();
+        maybeChangeTemporaryTimeout();
         alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_device_storage));
     }
 

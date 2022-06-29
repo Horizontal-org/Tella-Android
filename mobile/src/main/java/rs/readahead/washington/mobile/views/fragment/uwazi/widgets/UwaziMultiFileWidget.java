@@ -37,7 +37,6 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.views.activity.CameraActivity;
@@ -292,7 +291,7 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
 
     public void importMedia() {
         BaseActivity activity = (BaseActivity) getContext();
-        activity.changeTemporaryTimeout();
+        activity.maybeChangeTemporaryTimeout();
         waitingForAData = true;
         MediaFileHandler.startSelectMediaActivity(activity, isPdf ? "application/pdf" : "*/*", null, C.IMPORT_FILE);
     }

@@ -21,7 +21,7 @@ public class LifecycleMainKey implements LifecycleObserver {
     private CurrentState state;
     private long timeout;
 
-    private ScheduledExecutorService executor;
+    private final ScheduledExecutorService executor;
     private ScheduledFuture<?> scheduledFuture;
 
     public LifecycleMainKey(Lifecycle lifecycle, long timeout) {

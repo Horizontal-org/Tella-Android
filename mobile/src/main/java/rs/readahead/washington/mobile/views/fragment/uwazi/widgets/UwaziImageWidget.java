@@ -1,7 +1,6 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.widgets;
 
 import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_FILES_FILTER;
-import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_FILE_KEY;
 import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_PICKER_SINGLE;
 
 import android.annotation.SuppressLint;
@@ -174,7 +173,7 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
 
     public void importPhoto() {
         BaseActivity activity = (BaseActivity) getContext();
-        activity.changeTemporaryTimeout();
+        activity.maybeChangeTemporaryTimeout();
         waitingForAData = true;
         MediaFileHandler.startSelectMediaActivity(activity, "image/*", null, C.IMPORT_IMAGE);
     }

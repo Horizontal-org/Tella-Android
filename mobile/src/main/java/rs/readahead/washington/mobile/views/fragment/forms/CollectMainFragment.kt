@@ -283,7 +283,7 @@ class CollectMainFragment : BaseFragment() {
     }
 
     private fun requestLocationPermissions() {
-        activity.changeTemporaryTimeout()
+        activity.maybeChangeTemporaryTimeout()
         val permissions = arrayOf(
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION
@@ -374,7 +374,7 @@ class CollectMainFragment : BaseFragment() {
 
     @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
     fun showFineLocationRationale(request: PermissionRequest) {
-        activity.changeTemporaryTimeout()
+        activity.maybeChangeTemporaryTimeout()
         alertDialog = PermissionUtil.showRationale(
             activity,
             request,

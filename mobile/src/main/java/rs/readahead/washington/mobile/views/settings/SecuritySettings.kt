@@ -22,9 +22,9 @@ import org.hzontal.tella.keys.config.IUnlockRegistryHolder
 import org.hzontal.tella.keys.config.UnlockRegistry
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
+import rs.readahead.washington.mobile.util.CamouflageManager
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
-import rs.readahead.washington.mobile.util.CamouflageManager
 import timber.log.Timber
 
 
@@ -111,14 +111,13 @@ class SecuritySettings : BaseFragment() {
             Preferences.setShutterMute(isChecked)
         }
 
-        val enableSecurityScreen = view.findViewById<TellaSwitchWithMessage>(R.id.security_screen_switch)
+        val enableSecurityScreen =
+            view.findViewById<TellaSwitchWithMessage>(R.id.security_screen_switch)
         enableSecurityScreen.mSwitch.isChecked = Preferences.isSecurityScreenEnabled()
         enableSecurityScreen.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
             enableSecurityScreen.isChecked = isChecked
             Preferences.setSecurityScreenEnabled(isChecked)
         }
-
-
 
         /*val bypassCensorshipTellaSwitch =
             view.findViewById<TellaSwitchWithMessage>(R.id.bypass_censorship_switch)
@@ -196,7 +195,9 @@ class SecuritySettings : BaseFragment() {
     }
 
     private fun setUpLockTypeText() {
-        when ((activity.applicationContext as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(activity)) {
+        when ((activity.applicationContext as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(
+            activity
+        )) {
             UnlockRegistry.Method.TELLA_PIN -> lockSetting?.setText(getString(R.string.onboard_pin))
             UnlockRegistry.Method.TELLA_PASSWORD -> lockSetting?.setText(getString(R.string.onboard_password))
             UnlockRegistry.Method.TELLA_PATTERN -> lockSetting?.setText(getString(R.string.onboard_pattern))
@@ -211,7 +212,9 @@ class SecuritySettings : BaseFragment() {
     }
 
     private fun checkCamouflageAndLockSetting() {
-        if ((activity.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(activity) == UnlockRegistry.Method.TELLA_PIN
+        if ((activity.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(
+                activity
+            ) == UnlockRegistry.Method.TELLA_PIN
             && Preferences.getAppAlias().equals(cm.calculatorOption.alias)
         ) {
             showConfirmSheet(
@@ -234,7 +237,9 @@ class SecuritySettings : BaseFragment() {
 
     fun goToUnlockingActivity(returnCall: ReturnActivity) {
         var intent: Intent? = null
-        when ((activity.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(activity)) {
+        when ((activity.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(
+            activity
+        )) {
             UnlockRegistry.Method.TELLA_PIN -> intent =
                 Intent(activity, PinUnlockActivity::class.java)
             UnlockRegistry.Method.TELLA_PASSWORD -> intent =

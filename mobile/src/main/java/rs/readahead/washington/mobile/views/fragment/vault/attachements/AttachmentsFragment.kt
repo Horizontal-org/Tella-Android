@@ -334,13 +334,13 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
                         override fun import() {
                             importAndDelete = false
-                            activity.changeTemporaryTimeout()
+                            activity.maybeChangeTemporaryTimeout()
                             MediaFileHandler.startImportFiles(activity, true, getCurrentType())
                         }
 
                         override fun importAndDelete() {
                             importAndDelete = true
-                            activity.changeTemporaryTimeout()
+                            activity.maybeChangeTemporaryTimeout()
                             MediaFileHandler.startImportFiles(activity, true, getCurrentType())
                         }
 
@@ -627,7 +627,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                         getString(R.string.action_cancel),
                         consumer = object : ActionConfirmed {
                             override fun accept(isConfirmed: Boolean) {
-                                activity.changeTemporaryTimeout()
+                                activity.maybeChangeTemporaryTimeout()
                                 this@AttachmentsFragment.vaultFile = vaultFile
                                 performFileSearch(isMultipleFiles, vaultFile)
                             }
@@ -753,7 +753,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     override fun onExportError(error: Throwable?) {
-        activity.maybeRestoreTimeout()
     }
 
     override fun onExportStarted() {
@@ -765,7 +764,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     override fun onExportEnded() {
-        activity.maybeRestoreTimeout()
         hideProgressDialog()
         detailsFab.show()
     }
@@ -1017,7 +1015,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     private fun requestStoragePermissions() {
-        activity.changeTemporaryTimeout()
+        activity.maybeChangeTemporaryTimeout()
         if (SDK_INT >= Build.VERSION_CODES.R) {
             try {
                 val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)

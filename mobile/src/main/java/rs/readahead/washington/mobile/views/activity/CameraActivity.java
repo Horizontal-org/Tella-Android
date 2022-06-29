@@ -3,7 +3,6 @@ package rs.readahead.washington.mobile.views.activity;
 import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_FILE_KEY;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -188,7 +187,7 @@ public class CameraActivity extends MetadataActivity implements
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) !=
                 PackageManager.PERMISSION_GRANTED) {
-            changeTemporaryTimeout();
+            maybeChangeTemporaryTimeout();
         }
     }
 

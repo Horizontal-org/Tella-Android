@@ -55,7 +55,6 @@ import timber.log.Timber;
 import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
 import static rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragmentKt.PICKER_FILE_REQUEST_CODE;
 
-import org.hzontal.shared_ui.appbar.ToolbarComponent;
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
 
@@ -282,7 +281,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void exportMediaFile() {
-        changeTemporaryTimeout();
+        maybeChangeTemporaryTimeout();
         if (handlingVaultFile != null && viewerPresenter != null) {
             performFileSearch();
         }
@@ -299,7 +298,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
 
     @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void showWriteExternalStorageRationale(final PermissionRequest request) {
-        changeTemporaryTimeout();
+        maybeChangeTemporaryTimeout();
         alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_device_storage));
     }
 

@@ -12,6 +12,7 @@ import org.hzontal.tella.keys.config.IUnlockRegistryHolder
 import org.hzontal.tella.keys.config.UnlockRegistry
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
+import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.views.activity.PatternUpgradeActivity
 
 abstract class BaseLockActivity : BaseActivity() {
@@ -71,6 +72,13 @@ abstract class BaseLockActivity : BaseActivity() {
         super.onResume()
     }
 
+    private fun maybeRestoreTimeout() {
+        if (Preferences.isTempTimeout()) {
+            MyApplication.getMainKeyHolder().timeout  = LockTimeoutManager.IMMEDIATE_SHUTDOWN
+            Preferences.setTempTimeout(false)
+        }
+    }
+
     private fun maybeEnableSecurityScreen() {
         if (Preferences.isSecurityScreenEnabled()) {
             window.setFlags(
@@ -82,6 +90,11 @@ abstract class BaseLockActivity : BaseActivity() {
                 WindowManager.LayoutParams.FLAG_SECURE
             )
         }
+    }
+
+    override fun onStop() {
+        maybeRestoreTimeout()
+        super.onStop()
     }
 
 }

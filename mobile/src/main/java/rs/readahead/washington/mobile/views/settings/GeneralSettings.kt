@@ -143,7 +143,8 @@ class GeneralSettings : BaseFragment() {
         }
     }
 
-    fun hasLocationPermission(context: Context): Boolean {
+   private fun hasLocationPermission(context: Context): Boolean {
+       activity.maybeChangeTemporaryTimeout()
         if (ActivityCompat.checkSelfPermission(
                 context,
                 Manifest.permission.ACCESS_FINE_LOCATION

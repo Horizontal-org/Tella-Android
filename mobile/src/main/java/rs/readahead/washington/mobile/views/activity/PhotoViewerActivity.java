@@ -179,7 +179,6 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void exportMediaFile() {
-        changeTemporaryTimeout();
         if (vaultFile != null && presenter != null) {
             performFileSearch();
         }
@@ -187,7 +186,6 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void showWriteExternalStorageRationale(final PermissionRequest request) {
-        changeTemporaryTimeout();
         alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_device_storage));
     }
 
@@ -201,6 +199,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     private void performFileSearch() {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            maybeChangeTemporaryTimeout();
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
             startActivityForResult(intent, PICKER_FILE_REQUEST_CODE);
         } else {
@@ -381,6 +380,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                                 getString(R.string.action_save),
                                 getString(R.string.action_cancel),
                                 isConfirmed -> {
+                                    maybeChangeTemporaryTimeout();
                                     PhotoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(PhotoViewerActivity.this);
                                 }
                         );
@@ -417,6 +417,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICKER_FILE_REQUEST_CODE) {
+            assert data != null;
             presenter.exportNewMediaFile(vaultFile, data.getData());
         }
     }

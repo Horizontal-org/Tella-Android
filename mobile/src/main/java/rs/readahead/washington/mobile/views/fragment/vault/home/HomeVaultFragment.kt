@@ -465,7 +465,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     private fun updateOrRequestPermissions() {
-        activity.changeTemporaryTimeout()
+        activity.maybeChangeTemporaryTimeout()
 
         val hasWritePermission = ContextCompat.checkSelfPermission(
             activity,
