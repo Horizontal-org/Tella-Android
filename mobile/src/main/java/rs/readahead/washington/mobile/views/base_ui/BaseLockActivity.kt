@@ -92,9 +92,8 @@ abstract class BaseLockActivity : BaseActivity() {
         }
     }
 
-    override fun onStop() {
+    override fun onDestroy() {
         maybeRestoreTimeout()
-        super.onStop()
+        super.onDestroy()
     }
-
 }
