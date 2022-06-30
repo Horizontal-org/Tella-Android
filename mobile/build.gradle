@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 ext {
     supportLibVersion = "28.0.3"
@@ -28,7 +29,9 @@ android {
         // resolutionStrategy.force "com.android.support:exifinterface:${supportLibVersion}"
         // resolutionStrategy.force "com.android.support:animated-vector-drawble:${supportLibVersion}"
         // resolutionStrategy.force "com.android.support:support-v13:${supportLibVersion}"
+
     }
+
 
     buildTypes {
         debug {
@@ -60,13 +63,14 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.navigation:navigation-ui:2.4.2'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':tella-vault')
     implementation project(':clean-insights')
     api project(':tella-locking-ui')
-
+   implementation 'androidx.annotation:annotation:1.4.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
     // implementation 'com.madgag.spongycastle:pg:1.54.0.0'// needed for above
@@ -74,8 +78,8 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:26.1.0')
     implementation 'com.google.firebase:firebase-crashlytics'
 
-    api 'androidx.navigation:navigation-fragment-ktx:2.3.5'
-    api 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    api 'androidx.navigation:navigation-fragment-ktx:2.4.2'
+    api 'androidx.navigation:navigation-ui-ktx:2.4.2'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -98,9 +102,9 @@ dependencies {
         exclude module: "support-v13"
     }
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.navigation:navigation-runtime:2.3.0'
-    implementation 'androidx.navigation:navigation-fragment:2.3.5'
-    implementation 'androidx.databinding:databinding-runtime:7.0.4'
+    implementation 'androidx.navigation:navigation-runtime:2.4.2'
+    implementation 'androidx.navigation:navigation-fragment:2.4.2'
+    implementation 'androidx.databinding:databinding-runtime:7.2.1'
     annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:${permissionDispatcherVersion}"
 
     implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'

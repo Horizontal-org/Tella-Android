@@ -7,14 +7,19 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.hardware.SensorManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.OrientationEventListener;
 import android.view.View;
+import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -83,6 +88,7 @@ public class MainActivity extends MetadataActivity implements
 
         //  setupToolbar();
         setupNavigation();
+
         handler = new Handler();
         homeScreenPresenter = new HomeScreenPresenter(this);
         mediaImportPresenter = new MediaImportPresenter(this);
