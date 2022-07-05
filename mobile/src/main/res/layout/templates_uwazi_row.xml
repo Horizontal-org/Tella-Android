@@ -21,10 +21,10 @@
         <!--android:background="@drawable/button_pressed"-->
         <ImageView
             android:id="@+id/favorites_button"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_centerVertical="true"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/small_text_margin"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@null"
