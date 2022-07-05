@@ -12,6 +12,7 @@ import rs.readahead.washington.mobile.views.settings.HideTella
 class OnBoardHideOptionFragment: BaseFragment() {
 
     private lateinit var hideBtn: TextView
+    private lateinit var backBtn: TextView
     private lateinit var defaultBtn: View
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +47,11 @@ class OnBoardHideOptionFragment: BaseFragment() {
                 OnBoardAdvancedComplete(),
                 R.id.rootOnboard
             )
+        }
+
+        backBtn = view.findViewById(R.id.back_btn)
+        backBtn.setOnClickListener {
+            back()
         }
     }
 }

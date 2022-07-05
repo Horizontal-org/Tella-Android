@@ -11,6 +11,7 @@ import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 class OnBoardConnectedFragment : BaseFragment() {
 
     private lateinit var nextBtn: TextView
+    private lateinit var backBtn: TextView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,6 +36,11 @@ class OnBoardConnectedFragment : BaseFragment() {
                 OnBoardHideOptionFragment(),
                 R.id.rootOnboard
             )
+        }
+
+        backBtn = view.findViewById(R.id.back_btn)
+        backBtn.setOnClickListener {
+            back()
         }
     }
 }

@@ -12,6 +12,7 @@ class OnBoardShareDataFragment : BaseFragment() {
 
     private lateinit var connectBtn: TextView
     private lateinit var continueBtn: TextView
+    private lateinit var backBtn: TextView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,6 +43,11 @@ class OnBoardShareDataFragment : BaseFragment() {
                 OnBoardHideOptionFragment(),
                 R.id.rootOnboard
             )
+        }
+
+        backBtn = view.findViewById(R.id.back_btn)
+        backBtn.setOnClickListener {
+            back()
         }
     }
 }

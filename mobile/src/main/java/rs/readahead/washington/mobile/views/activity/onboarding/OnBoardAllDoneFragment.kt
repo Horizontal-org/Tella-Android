@@ -13,6 +13,8 @@ class OnBoardAllDoneFragment : BaseFragment() {
 
     private lateinit var startBtn: TextView
     private lateinit var advancedBtn: TextView
+    private lateinit var backBtn: TextView
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,5 +46,12 @@ class OnBoardAllDoneFragment : BaseFragment() {
                 R.id.rootOnboard
             )
         }
+
+        backBtn = view.findViewById(R.id.back_btn)
+        backBtn.setOnClickListener {
+            back()
+        }
+
     }
+
 }
