@@ -47,7 +47,6 @@ class OnBoardShareDataFragment : BaseFragment() {
 
         backBtn = view.findViewById(R.id.back_btn)
         backBtn.setOnClickListener {
-            back()
-        }
+back()        }
     }
 }
