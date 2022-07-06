@@ -14,11 +14,7 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.IServerChoiceActions
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showBinaryTypeSheet
 import org.hzontal.shared_ui.utils.DialogUtils
-import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.bus.EventCompositeDisposable
-import rs.readahead.washington.mobile.bus.EventObserver
-import rs.readahead.washington.mobile.bus.event.CreateUwaziServerEvent
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
@@ -29,7 +25,6 @@ import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment.C
 import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragment
 import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragment.TellaUploadServerDialogHandler
 import rs.readahead.washington.mobile.views.dialog.uwazi.SharedLiveData.createServer
-import rs.readahead.washington.mobile.views.dialog.uwazi.SharedLiveData.updateServer
 import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity
 
 class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
@@ -43,7 +38,10 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        overridePendingTransition(com.hzontal.tella_locking_ui.R.anim.`in`, com.hzontal.tella_locking_ui.R.anim.out)
+        overridePendingTransition(
+            com.hzontal.tella_locking_ui.R.anim.`in`,
+            com.hzontal.tella_locking_ui.R.anim.out
+        )
 
         setContentView(R.layout.activity_onboarding)
 
@@ -60,6 +58,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
             )
         }
         initUwaziEvents()
+
     }
 
     private fun setupIndicators(indicatorCount : Int) {
@@ -87,13 +86,14 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     }
 
     private fun initUwaziEvents() {
-        createServer.observe(this,
-            { server: UWaziUploadServer? ->
-                if (server != null) {
-                    presenter.create(server)
-                    addFragment(OnBoardHideOptionFragment(),R.id.rootOnboard)
-                }
-            })
+        createServer.observe(
+            this
+        ) { server: UWaziUploadServer? ->
+            if (server != null) {
+                presenter.create(server)
+                addFragment(OnBoardHideOptionFragment(), R.id.rootOnboard)
+            }
+        }
     }
 
     override fun setCurrentIndicator(index: Int) {

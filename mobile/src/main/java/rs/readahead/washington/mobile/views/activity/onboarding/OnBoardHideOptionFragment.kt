@@ -7,9 +7,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
-import rs.readahead.washington.mobile.views.settings.HideTella
 
-class OnBoardHideOptionFragment: BaseFragment() {
+class OnBoardHideOptionFragment : BaseFragment() {
 
     private lateinit var hideBtn: TextView
     private lateinit var backBtn: TextView
@@ -51,7 +50,7 @@ class OnBoardHideOptionFragment: BaseFragment() {
 
         backBtn = view.findViewById(R.id.back_btn)
         backBtn.setOnClickListener {
-            back()
+            activity.onBackPressed()
         }
     }
 }

@@ -49,7 +49,7 @@ class OnBoardAllDoneFragment : BaseFragment() {
 
         backBtn = view.findViewById(R.id.back_btn)
         backBtn.setOnClickListener {
-            back()
+            activity.onBackPressed()
         }
 
     }
