@@ -4,19 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.databinding.OnboardLockSetFragmentBinding
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 
 class OnBoardLockSetFragment : BaseFragment() {
 
-    private lateinit var nextBtn: TextView
+    private lateinit var binding: OnboardLockSetFragmentBinding
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.onboard_lock_set_fragment, container, false)
+        binding = OnboardLockSetFragmentBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -28,13 +29,15 @@ class OnBoardLockSetFragment : BaseFragment() {
     override fun initView(view: View) {
         (activity as OnBoardActivityInterface).setCurrentIndicator(3)
 
-        nextBtn = view.findViewById(R.id.next_btn)
-        nextBtn.setOnClickListener {
-            activity.addFragment(
-                this,
-                OnBoardAllDoneFragment(),
-                R.id.rootOnboard
-            )
+        with(binding) {
+            nextBtn.setOnClickListener {
+                activity.addFragment(
+                    this@OnBoardLockSetFragment,
+                    OnBoardAllDoneFragment(),
+                    R.id.rootOnboard
+                )
+            }
+            backBtn.visibility = View.GONE
         }
     }
 }
