@@ -37,7 +37,8 @@ class OnBoardLockSetFragment : BaseFragment() {
                     R.id.rootOnboard
                 )
             }
-            backBtn.visibility = View.GONE
+
+            backBtn.hide()
         }
     }
 }
