@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.schedulers.Schedulers;
+import kotlin.Unit;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
@@ -173,9 +174,11 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
 
     public void importPhoto() {
         BaseActivity activity = (BaseActivity) getContext();
-       // activity.maybeChangeTemporaryTimeout();
-        waitingForAData = true;
-        MediaFileHandler.startSelectMediaActivity(activity, "image/*", null, C.IMPORT_IMAGE);
+        activity.maybeChangeTemporaryTimeout(() -> {
+            waitingForAData = true;
+            MediaFileHandler.startSelectMediaActivity(activity, "image/*", null, C.IMPORT_IMAGE);
+            return Unit.INSTANCE;
+        });
     }
 
     private void showSelectFilesSheet() {

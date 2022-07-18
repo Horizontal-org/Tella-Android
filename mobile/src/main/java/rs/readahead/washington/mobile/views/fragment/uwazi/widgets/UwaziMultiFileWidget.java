@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.schedulers.Schedulers;
+import kotlin.Unit;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
@@ -218,38 +219,38 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
     }
 
     private void showSelectFilesSheet() {
-        if (isPdf){
-        VaultSheetUtils.showVaultSelectFilesSheet(
-                ((BaseActivity) getContext()).getSupportFragmentManager(),
-                null,
-                null,
-                getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Device),
-                getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Tella),
-                getContext().getString(R.string.Uwazi_MiltiFileWidget_ChooseHowToAddPdfFiles),
-                getContext().getString(R.string.Uwazi_MiltiFileWidget_SelectPdfFiles),
-                new VaultSheetUtils.IVaultFilesSelector() {
+        if (isPdf) {
+            VaultSheetUtils.showVaultSelectFilesSheet(
+                    ((BaseActivity) getContext()).getSupportFragmentManager(),
+                    null,
+                    null,
+                    getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Device),
+                    getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Tella),
+                    getContext().getString(R.string.Uwazi_MiltiFileWidget_ChooseHowToAddPdfFiles),
+                    getContext().getString(R.string.Uwazi_MiltiFileWidget_SelectPdfFiles),
+                    new VaultSheetUtils.IVaultFilesSelector() {
 
-                    @Override
-                    public void importFromVault() {
-                        showAttachmentsFragment();
+                        @Override
+                        public void importFromVault() {
+                            showAttachmentsFragment();
+                        }
+
+                        @Override
+                        public void goToRecorder() {
+
+                        }
+
+                        @Override
+                        public void goToCamera() {
+                            showCameraActivity();
+                        }
+
+                        @Override
+                        public void importFromDevice() {
+                            importMedia();
+                        }
                     }
-
-                    @Override
-                    public void goToRecorder() {
-
-                    }
-
-                    @Override
-                    public void goToCamera() {
-                        showCameraActivity();
-                    }
-
-                    @Override
-                    public void importFromDevice() {
-                        importMedia();
-                    }
-                }
-        );
+            );
         } else {
             VaultSheetUtils.showVaultSelectFilesSheet(
                     ((BaseActivity) getContext()).getSupportFragmentManager(),
@@ -291,9 +292,11 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
 
     public void importMedia() {
         BaseActivity activity = (BaseActivity) getContext();
-       // activity.maybeChangeTemporaryTimeout();
-        waitingForAData = true;
-        MediaFileHandler.startSelectMediaActivity(activity, isPdf ? "application/pdf" : "*/*", null, C.IMPORT_FILE);
+        activity.maybeChangeTemporaryTimeout(() -> {
+            waitingForAData = true;
+            MediaFileHandler.startSelectMediaActivity(activity, isPdf ? "application/pdf" : "*/*", null, C.IMPORT_FILE);
+            return Unit.INSTANCE;
+        });
     }
 
     public Collection<FormMediaFile> getFiles() {
