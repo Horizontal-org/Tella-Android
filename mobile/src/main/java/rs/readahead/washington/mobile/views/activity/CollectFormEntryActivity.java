@@ -966,8 +966,14 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     }
 
     private void showFormChangedDialog() {
-        String message = getString(R.string.collect_form_exit_dialog_expl);
-
+        BottomSheetUtils.showStandardSheet(
+                this.getSupportFragmentManager(),
+                getString(R.string.collect_form_exit_unsaved_dialog_title),
+                getString(R.string.collect_form_exit_dialog_expl),
+                getString(R.string.collect_form_exit_dialog_action_save_exit),
+                getString(R.string.collect_form_exit_dialog_action_exit_anyway),
+                this::onSavePressed, this::onExitPressed);
+/*
         alertDialog = DialogsUtil.showMessageOKCancelWithTitle(this,
                 message,
                 getString(R.string.collect_form_exit_unsaved_dialog_title),
@@ -984,7 +990,22 @@ public class CollectFormEntryActivity extends MetadataActivity implements
                 (dialog, which) -> {
                     dialog.dismiss();
                     onBackPressedWithoutCheck();
-                });
+                });*/
+    }
+
+    private Unit onExitPressed() {
+        onBackPressedWithoutCheck();
+        return Unit.INSTANCE;
+    }
+
+    private Unit onSavePressed() {
+        if (formSaver != null) {
+            formSaver.saveActiveFormInstanceOnExit();
+            onBackPressedWithoutCheck();
+        } else {
+            onBackPressedWithoutCheck();
+        }
+        return Unit.INSTANCE;
     }
 
     private boolean isPresenterSubmitting() {

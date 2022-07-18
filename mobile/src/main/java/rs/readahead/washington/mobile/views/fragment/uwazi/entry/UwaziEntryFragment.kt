@@ -15,12 +15,12 @@ import com.google.gson.Gson
 import com.google.gson.internal.LinkedTreeMap
 import com.hzontal.tella_vault.MyLocation
 import com.hzontal.tella_vault.VaultFile
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.EventObserver
 import rs.readahead.washington.mobile.bus.event.LocationPermissionRequiredEvent
-import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent
 import rs.readahead.washington.mobile.data.uwazi.UwaziConstants
 import rs.readahead.washington.mobile.databinding.UwaziEntryFragmentBinding
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
@@ -40,6 +40,7 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.OUTBOX_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
+import timber.log.Timber
 
 
 const val COLLECT_TEMPLATE = "collect_template"
@@ -61,6 +62,7 @@ class UwaziEntryFragment :
     private var screenView: ViewGroup? = null
     private var entryPrompts = mutableListOf<UwaziEntryPrompt>()
     private lateinit var uwaziFormView: UwaziFormView
+    private var hashCode: Int? = null //used to check is the answers has changed
 
     private val uwaziTitlePrompt by lazy {
         UwaziEntryPrompt(
@@ -146,6 +148,7 @@ class UwaziEntryFragment :
                 entityInstance = Gson().fromJson(it, UwaziEntityInstance::class.java)
                 template = entityInstance.collectTemplate
                 parseUwaziInstance()
+                hashCode = uwaziFormView.answers.hashCode()
             }
 
         }
@@ -156,6 +159,7 @@ class UwaziEntryFragment :
                 entityInstance.collectTemplate = template
                 entityInstance.template = template?.entityRow?.name.toString()
                 parseUwaziTemplate()
+                hashCode = uwaziFormView.answers.hashCode()
             }
         }
         binding!!.toolbar.setStartTextTitle(template?.entityRow?.translatedName.toString())
@@ -186,10 +190,6 @@ class UwaziEntryFragment :
         }
     }
 
-    override fun onBackPressed(): Boolean {
-        return nav().popBackStack()
-    }
-
     private fun sendEntity() {
         //TODO REFACTOR THIS INTO A SEPARATE PARSER
         if (!getAnswersFromForm(true)) {
@@ -215,10 +215,10 @@ class UwaziEntryFragment :
 
         // check required fields
         if (answers[UWAZI_TITLE] == null) {
-            uwaziFormView.setValidationConstraintText(
-                UWAZI_TITLE,
-                getString(R.string.Uwazi_Entity_Error_Response_Mandatory)
-            )
+                uwaziFormView.setValidationConstraintText(
+                    UWAZI_TITLE,
+                    getString(R.string.Uwazi_Entity_Error_Response_Mandatory)
+                )
             validationRequired = true
         }
 
@@ -447,5 +447,28 @@ class UwaziEntryFragment :
                     }
                 }
             })
+    }
+
+    override fun onBackPressed(): Boolean {
+        // The save draft dialog should be shown if the form could be saved and if the answers have changed
+        if (getAnswersFromForm(false) && hashCode != uwaziFormView.answers.hashCode()) {
+            BottomSheetUtils.showStandardSheet(
+                activity.supportFragmentManager,
+                activity.getString(R.string.Uwazi_Dialog_Draft_Title),
+                activity.getString(R.string.collect_form_exit_dialog_expl),
+                activity.getString(R.string.collect_form_exit_dialog_action_save_exit),
+                activity.getString(R.string.collect_form_exit_dialog_action_exit_anyway),
+                onConfirmClick = {
+                    entityInstance.status = UwaziEntityStatus.DRAFT
+                    entityInstance.let { viewModel.saveEntityInstance(it) }
+                },
+                onCancelClick = {
+                    nav().popBackStack()
+                }
+            )
+        } else {
+            nav().popBackStack()
+        }
+        return true
     }
 }

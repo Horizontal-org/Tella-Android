@@ -64,6 +64,7 @@ abstract class BaseActivity : AppCompatActivity() {
     fun changeTemporaryTimeout(){
         if (LockTimeoutManager().lockTimeout == LockTimeoutManager.IMMEDIATE_SHUTDOWN) {
             MyApplication.getMainKeyHolder().timeout  = LockTimeoutManager.ONE_MINUTES_SHUTDOWN
+            Preferences.setTempTimeout(true)
         }
     }
 
@@ -124,6 +125,7 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         maybeEnableSecurityScreen()
+        maybeRestoreTimeout()
     }
 
     private fun maybeEnableSecurityScreen() {
@@ -136,6 +138,13 @@ abstract class BaseActivity : AppCompatActivity() {
             window.clearFlags(
                 WindowManager.LayoutParams.FLAG_SECURE
             )
+        }
+    }
+
+    fun maybeRestoreTimeout() {
+        if (Preferences.isTempTimeout()) {
+            MyApplication.getMainKeyHolder().timeout  = LockTimeoutManager.IMMEDIATE_SHUTDOWN
+            Preferences.setTempTimeout(false)
         }
     }
 }

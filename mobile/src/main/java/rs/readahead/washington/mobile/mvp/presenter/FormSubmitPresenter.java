@@ -15,6 +15,7 @@ import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
+import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.mvp.contract.IFormSubmitPresenterContract;
 
 
@@ -24,11 +25,9 @@ public class FormSubmitPresenter implements IFormSubmitPresenterContract.IPresen
     private final KeyDataSource keyDataSource;
     private CollectFormInstance collectFormInstance;
 
-
     public FormSubmitPresenter(IFormSubmitPresenterContract.IView view) {
         this.view = view;
         this.keyDataSource = MyApplication.getKeyDataSource();
-
     }
 
     @Override
@@ -43,9 +42,7 @@ public class FormSubmitPresenter implements IFormSubmitPresenterContract.IPresen
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(vaultFiles -> {
-                    for (VaultFile file : vaultFiles) {
-                        collectFormInstance.setWidgetMediaFile(file.name, FormMediaFile.fromMediaFile(file));
-                    }
+                    collectFormInstance.setCollectInstanceAttachments(vaultFiles);
                     view.onGetFormInstanceSuccess(collectFormInstance);
                 }, throwable -> {
                     FirebaseCrashlytics.getInstance().recordException(throwable);

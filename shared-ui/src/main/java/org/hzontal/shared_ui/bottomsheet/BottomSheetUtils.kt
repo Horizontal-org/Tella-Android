@@ -164,6 +164,70 @@ BottomSheetUtils {
         }
     }
 
+    interface RadioOptionConsumer {
+        fun accept(option: Int)
+    }
+
+    @JvmStatic
+    fun showRadioListOptionsSheet(
+        fragmentManager: FragmentManager,
+        context: Context,
+        radioList: LinkedHashMap<Int, Int>,
+        titleText: String?,
+        descriptionText: String?,
+        actionButtonLabel: String? = null,
+        cancelButtonLabel: String? = null,
+        consumer: RadioOptionConsumer
+    ) {
+
+        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.radio_list_sheet_layout)
+            .cancellable(true)
+        customSheetFragment.holder(RadioListSheetHolder(), object :
+            CustomBottomSheetFragment.Binder<RadioListSheetHolder> {
+            override fun onBind(holder: RadioListSheetHolder) {
+                with(holder) {
+                    title.text = titleText
+                    description.text = descriptionText
+                    actionButtonLabel?.let {
+                        actionButton.text = it
+                    }
+                    cancelButtonLabel?.let {
+                        cancelButton.text = it
+                    }
+
+                    actionButton.setOnClickListener {
+                        val radioButton: AppCompatRadioButton =
+                            radioGroup.findViewById(radioGroup.checkedRadioButtonId)
+                        val option = radioButton.tag as Int
+                        consumer.accept(option)
+                        customSheetFragment.dismiss()
+                    }
+
+                    cancelButton.setOnClickListener {
+                        customSheetFragment.dismiss()
+                    }
+
+                    for (option in radioList) {
+                        val inflater = LayoutInflater.from(context)
+                        val button =
+                            inflater.inflate(R.layout.radio_list_item_layout, null) as RadioButton
+                        button.tag = option.key
+                        button.setText(option.value)
+                        radioGroup.addView(button)
+                    }
+
+                    actionButton.visibility =
+                        if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+
+                }
+            }
+        })
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
+    }
+
     class DualChoiceSheetHolder : CustomBottomSheetFragment.PageHolder() {
         lateinit var cancelButton: ImageView
         lateinit var buttonOne: RoundButton

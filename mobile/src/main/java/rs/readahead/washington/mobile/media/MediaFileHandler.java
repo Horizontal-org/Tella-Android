@@ -261,7 +261,6 @@ public class MediaFileHandler {
                     .build(parent)
                     .subscribeOn(Schedulers.io());
         }
-
     }
 
     public static VaultFile savePngImage(@NonNull byte[] pngImage) {
@@ -491,9 +490,9 @@ public class MediaFileHandler {
     @Nullable
     private static Uri getMetadataUri(Context context, VaultFile vaultFile) {
         try {
-            VaultFile mmf = maybeCreateMetadataMediaFile(context, vaultFile);
+            VaultFile mmf = maybeCreateMetadataMediaFile(vaultFile);
             return FileProvider.getUriForFile(context, EncryptedFileProvider.AUTHORITY,
-                    getFile(vaultFile));
+                    getFile(mmf));
         } catch (Exception e) {
             Timber.d(e);
             return null;
@@ -501,19 +500,20 @@ public class MediaFileHandler {
     }
 
     //TODO CHECJ CSV FILE
-    public static VaultFile maybeCreateMetadataMediaFile(Context context, VaultFile vaultFile) throws Exception {
-        VaultFile mmf = new VaultFile();
-        File file = getFile(vaultFile);
+    public static VaultFile maybeCreateMetadataMediaFile(VaultFile vaultFile) throws Exception {
+        RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault.builder()
+                .setName(vaultFile.name + ".csv")
+                .setMimeType("text/csv");
 
-        if (file.createNewFile()) {
-            OutputStream os = getMetadataOutputStream(vaultFile);
+        VaultFile mmf = rxVaultFileBuilder.
+                build()
+                .blockingGet();
 
-            if (os == null) throw new NullPointerException();
+        OutputStream os = getMetadataOutputStream(mmf);
 
-            createMetadataFile(os, vaultFile);
-        }
+        if (os == null) throw new NullPointerException();
 
-        mmf.size = getSize(file);
+        createMetadataFile(os, vaultFile);
 
         return mmf;
     }

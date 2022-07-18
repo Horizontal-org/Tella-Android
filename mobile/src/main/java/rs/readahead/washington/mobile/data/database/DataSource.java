@@ -28,6 +28,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -1311,7 +1312,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 instance.setFormDef(deserializeFormDef(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF))));
                // instance.setFormDef(getCollectFormDef(instance.getFormID(),instance.getVersion()));
 
-                List<String> vaultFileIds = getFormInstanceMediaFilesIdsFromDb(instance.getId());
+                HashMap<String, Integer> vaultFileIds = getFormInstanceMediaFilesIdsFromDb(instance.getId());
                 instance.setWidgetMediaFilesIds(vaultFileIds);
 
                 return instance;
@@ -1446,9 +1447,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return instances;
     }
 
-    private List<String> getFormInstanceMediaFilesIdsFromDb(long instanceId) {
+    private HashMap<String, Integer> getFormInstanceMediaFilesIdsFromDb(long instanceId) {
 
-        List<String> ids = new ArrayList<>();
+        HashMap<String, Integer> ids = new HashMap<>();
         Cursor cursor = null;
 
         try {
@@ -1457,7 +1458,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     false,
                     D.T_COLLECT_FORM_INSTANCE_VAULT_FILE,
                     new String[]{
-                            D.C_VAULT_FILE_ID},
+                            D.C_VAULT_FILE_ID, D.C_STATUS},
                     D.C_COLLECT_FORM_INSTANCE_ID + "= ?",
                     null, null, D.C_VAULT_FILE_ID + " DESC", null
             );
@@ -1466,7 +1467,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 String vaultFileId = cursor.getString(cursor.getColumnIndexOrThrow(D.C_VAULT_FILE_ID));
-                ids.add(vaultFileId);
+                Integer fileStatus = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_STATUS));
+                ids.put(vaultFileId, fileStatus);
             }
         } catch (Exception e) {
             Timber.d(e, getClass().getName());
@@ -1477,47 +1479,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }
 
         return ids;
-    }
-
-    private List<FormMediaFile> getFormInstanceMediaFilesFromDb(long instanceId) {
-        List<FormMediaFile> mediaFiles = new ArrayList<>();
-        Cursor cursor = null;
-
-        try {
-            final String query = SQLiteQueryBuilder.buildQueryString(
-                    false,
-                    D.T_MEDIA_FILE + " JOIN " + D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE + " ON " +
-                            cn(D.T_MEDIA_FILE, D.C_ID) + " = " + cn(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE, D.C_MEDIA_FILE_ID),
-                    new String[]{
-                            cn(D.T_MEDIA_FILE, D.C_ID, D.A_MEDIA_FILE_ID),
-                            D.C_PATH,
-                            D.C_UID,
-                            D.C_FILE_NAME,
-                            D.C_METADATA,
-                            D.C_CREATED,
-                            D.C_DURATION,
-                            D.C_ANONYMOUS,
-                            D.C_SIZE,
-                            D.C_HASH,
-                            cn(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE, D.C_STATUS, D.A_FORM_MEDIA_FILE_STATUS)},
-                    cn(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE, D.C_COLLECT_FORM_INSTANCE_ID) + "= ?",
-                    null, null, null, null
-            );
-
-            cursor = database.rawQuery(query, new String[]{Long.toString(instanceId)});
-
-            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                mediaFiles.add(cursorToFormMediaFile(cursor));
-            }
-        } catch (Exception e) {
-            Timber.d(e, getClass().getName());
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return mediaFiles;
     }
 
     @Nullable

@@ -1,17 +1,23 @@
 package rs.readahead.washington.mobile.views.activity;
 
+import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
+import static rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragmentKt.PICKER_FILE_REQUEST_CODE;
+
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.InflateException;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -20,12 +26,10 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.hzontal.tella_vault.VaultFile;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
+import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
+import org.hzontal.shared_ui.utils.DialogUtils;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import kotlin.Unit;
@@ -39,31 +43,21 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
 import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent;
-import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.mvp.contract.IMediaFileViewerPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.MediaFileViewerPresenter;
 import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
-import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
-import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment;
 
-import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
-import static rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragmentKt.PICKER_FILE_REQUEST_CODE;
-
-import org.hzontal.shared_ui.appbar.ToolbarComponent;
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
-import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
-import org.hzontal.shared_ui.utils.DialogUtils;
+import java.util.LinkedHashMap;
 
 
 @RuntimePermissions
 public class PhotoViewerActivity extends BaseLockActivity implements
-        IMediaFileViewerPresenterContract.IView,
-        ShareDialogFragment.IShareDialogFragmentHandler {
+        IMediaFileViewerPresenterContract.IView {
     public static final String VIEW_PHOTO = "vp";
     public static final String NO_ACTIONS = "na";
 
@@ -78,7 +72,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     private boolean showActions = false;
     private boolean actionsDisabled = false;
     private AlertDialog alertDialog;
-    private ToolbarComponent toolbar;
+    private Toolbar toolbar;
     private Menu menu;
 
     @Override
@@ -88,7 +82,6 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         setContentView(R.layout.activity_photo_viewer);
         overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
         ButterKnife.bind(this);
-
         setTitle(null);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -108,11 +101,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                 this.vaultFile = vaultFile;
             }
         }
-        toolbar.setStartTextTitle(vaultFile.name);
-        toolbar.setBackClickListener(() -> {
-            onBackPressed();
-            return Unit.INSTANCE;
-        });
+        setTitle(vaultFile.name);
 
         if (getIntent().hasExtra(NO_ACTIONS)) {
             actionsDisabled = true;
@@ -137,6 +126,11 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
 
         if (id == R.id.menu_item_more) {
             showVaultActionsDialog(vaultFile);
@@ -166,8 +160,6 @@ public class PhotoViewerActivity extends BaseLockActivity implements
             alertDialog.dismiss();
         }
 
-        dismissShareDialog();
-
         super.onDestroy();
     }
 
@@ -187,6 +179,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void exportMediaFile() {
+        changeTemporaryTimeout();
         if (vaultFile != null && presenter != null) {
             performFileSearch();
         }
@@ -194,10 +187,11 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void showWriteExternalStorageRationale(final PermissionRequest request) {
+        changeTemporaryTimeout();
         alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_device_storage));
     }
 
-    private void openMedia(){
+    private void openMedia() {
         showGalleryImage(vaultFile);
         if (!actionsDisabled) {
             showActions = true;
@@ -209,8 +203,8 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
             startActivityForResult(intent, PICKER_FILE_REQUEST_CODE);
-        }else{
-            presenter.exportNewMediaFile(vaultFile,null);
+        } else {
+            presenter.exportNewMediaFile(vaultFile, null);
         }
     }
 
@@ -242,19 +236,19 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     @Override
     public void onMediaFileDeletionError(Throwable throwable) {
-        DialogUtils.showBottomMessage(this,getString(R.string.gallery_toast_fail_deleting_files),true);
+        DialogUtils.showBottomMessage(this, getString(R.string.gallery_toast_fail_deleting_files), true);
     }
 
     @Override
     public void onMediaFileRename(VaultFile vaultFile) {
-        toolbar.setStartTextTitle(vaultFile.name);
+        toolbar.setTitle(vaultFile.name);
         MyApplication.bus().post(new VaultFileRenameEvent());
     }
 
     @Override
     public void onMediaFileRenameError(Throwable throwable) {
         //TODO CHECK ERROR MSG WHEN RENAME
-        DialogUtils.showBottomMessage(this,getString(R.string.gallery_toast_fail_deleting_files),true);
+        DialogUtils.showBottomMessage(this, getString(R.string.gallery_toast_fail_deleting_files), true);
     }
 
     @Override
@@ -266,7 +260,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         if (vaultFile.metadata != null && menu.findItem(R.id.menu_item_metadata) != null) {
             menu.findItem(R.id.menu_item_metadata).setVisible(true);
         }
-        toolbar.setStartTextTitle(vaultFile.name);
+        toolbar.setTitle(vaultFile.name);
         finish();
     }
 
@@ -275,25 +269,13 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         return this;
     }
 
-    @Override
-    public void sharingMediaMetadataSelected() {
-        dismissShareDialog();
-        startShareActivity(true);
-    }
-
-    @Override
-    public void sharingMediaOnlySelected() {
-        dismissShareDialog();
-        startShareActivity(false);
-    }
-
     private void shareMediaFile() {
         if (vaultFile == null) {
             return;
         }
 
         if (vaultFile.metadata != null) {
-            ShareDialogFragment.newInstance().show(getSupportFragmentManager(), ShareDialogFragment.TAG);
+            showShareWithMetadataDialog();
         } else {
             startShareActivity(false);
         }
@@ -305,13 +287,6 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         }
 
         MediaFileHandler.startShareActivity(this, vaultFile, includeMetadata);
-    }
-
-    private void dismissShareDialog() {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(ShareDialogFragment.TAG);
-        if (fragment instanceof ShareDialogFragment) {
-            ((ShareDialogFragment) fragment).dismiss();
-        }
     }
 
     private void showGalleryImage(VaultFile vaultFile) {
@@ -351,7 +326,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         }
     }
 
-    private void showVaultActionsDialog(VaultFile vaultFile){
+    private void showVaultActionsDialog(VaultFile vaultFile) {
         VaultSheetUtils.showVaultActionsSheet(getSupportFragmentManager(),
                 vaultFile.name,
                 getString(R.string.Vault_Upload_SheetAction),
@@ -373,7 +348,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
                     @Override
                     public void share() {
-                        startShareActivity(false);
+                        shareMediaFile();
                     }
 
                     @Override
@@ -391,10 +366,10 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                                 PhotoViewerActivity.this,
                                 vaultFile.name,
                                 (name) -> {
-                                    presenter.renameVaultFile(vaultFile.id,name);
+                                    presenter.renameVaultFile(vaultFile.id, name);
                                     return Unit.INSTANCE;
                                 }
-                                );
+                        );
                     }
 
                     @Override
@@ -406,17 +381,18 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                                 getString(R.string.action_save),
                                 getString(R.string.action_cancel),
                                 isConfirmed -> {
-                                    PhotoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(PhotoViewerActivity.this);                          }
+                                    PhotoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(PhotoViewerActivity.this);
+                                }
                         );
                     }
 
                     @Override
                     public void info() {
-                        toolbar.setStartTextTitle(getString(R.string.Vault_FileInfo));
+                        toolbar.setTitle(getString(R.string.Vault_FileInfo));
                         menu.findItem(R.id.menu_item_more).setVisible(false);
                         menu.findItem(R.id.menu_item_metadata).setVisible(false);
                         invalidateOptionsMenu();
-                        addFragment(new VaultInfoFragment().newInstance(vaultFile,false),R.id.photo_viewer_container);
+                        addFragment(new VaultInfoFragment().newInstance(vaultFile, false), R.id.photo_viewer_container);
                     }
 
                     @Override
@@ -436,12 +412,29 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                 }
         );
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICKER_FILE_REQUEST_CODE){
-            presenter.exportNewMediaFile(vaultFile,data.getData());
+        if (requestCode == PICKER_FILE_REQUEST_CODE) {
+            presenter.exportNewMediaFile(vaultFile, data.getData());
         }
+    }
 
+    private void showShareWithMetadataDialog() {
+        LinkedHashMap<Integer, Integer> options = new LinkedHashMap<>();
+        options.put(1, R.string.verification_share_select_media_and_verification);
+        options.put(0, R.string.verification_share_select_only_media);
+
+        BottomSheetUtils.showRadioListOptionsSheet(
+                getSupportFragmentManager(),
+                getContext(),
+                options,
+                getString(R.string.verification_share_dialog_title),
+                getString(R.string.verification_share_dialog_expl),
+                getString(R.string.action_ok),
+                getString(R.string.action_cancel),
+                option -> startShareActivity(option > 0)
+        );
     }
 }

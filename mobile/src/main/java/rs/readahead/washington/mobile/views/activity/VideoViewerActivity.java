@@ -16,7 +16,6 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -33,10 +32,12 @@ import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.hzontal.tella_vault.VaultFile;
 
-import org.hzontal.shared_ui.appbar.ToolbarComponent;
+import androidx.appcompat.widget.Toolbar;
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
 import org.hzontal.shared_ui.utils.DialogUtils;
+
+import java.util.LinkedHashMap;
 
 import butterknife.ButterKnife;
 import kotlin.Unit;
@@ -50,7 +51,6 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
 import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent;
-import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.exo.ExoEventListener;
 import rs.readahead.washington.mobile.media.exo.MediaFileDataSourceFactory;
@@ -59,14 +59,12 @@ import rs.readahead.washington.mobile.mvp.presenter.MediaFileViewerPresenter;
 import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
-import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment;
 
 @RuntimePermissions
 public class VideoViewerActivity extends BaseLockActivity implements
         PlaybackControlView.VisibilityListener,
-        IMediaFileViewerPresenterContract.IView,
-        ShareDialogFragment.IShareDialogFragmentHandler {
+        IMediaFileViewerPresenterContract.IView {
     public static final String VIEW_VIDEO = "vv";
     public static final String NO_ACTIONS = "na";
 
@@ -84,7 +82,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
     private long resumePosition;
 
     private VaultFile vaultFile;
-    private ToolbarComponent toolbar;
+    private Toolbar toolbar;
     private boolean actionsDisabled = false;
     private MediaFileViewerPresenter presenter;
     private AlertDialog alertDialog;
@@ -120,7 +118,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
         super.finish();
         overridePendingTransition(R.anim.slide_in_end, R.anim.slide_out_start);
     }
-    
+
     @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -174,8 +172,6 @@ public class VideoViewerActivity extends BaseLockActivity implements
             presenter.destroy();
         }
 
-        dismissShareDialog();
-
         super.onDestroy();
     }
 
@@ -195,6 +191,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void exportMediaFile() {
+        changeTemporaryTimeout();
         if (vaultFile != null && presenter != null) {
             performFileSearch();
         }
@@ -202,6 +199,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
 
     @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void showWriteExternalStorageRationale(final PermissionRequest request) {
+        changeTemporaryTimeout();
         alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_device_storage));
     }
 
@@ -209,8 +207,8 @@ public class VideoViewerActivity extends BaseLockActivity implements
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
             startActivityForResult(intent, PICKER_FILE_REQUEST_CODE);
-        }else{
-            presenter.exportNewMediaFile(vaultFile,null);
+        } else {
+            presenter.exportNewMediaFile(vaultFile, null);
         }
     }
 
@@ -249,7 +247,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
     @Override
     public void onMediaFileRename(VaultFile vaultFile) {
         if (vaultFile != null) {
-            toolbar.setStartTextTitle(vaultFile.name);
+            toolbar.setTitle(vaultFile.name);
             this.vaultFile = vaultFile;
         }
         MyApplication.bus().post(new VaultFileRenameEvent());
@@ -280,25 +278,13 @@ public class VideoViewerActivity extends BaseLockActivity implements
         return super.dispatchKeyEvent(event) || simpleExoPlayerView.dispatchMediaKeyEvent(event);
     }
 
-    @Override
-    public void sharingMediaMetadataSelected() {
-        dismissShareDialog();
-        startShareActivity(true);
-    }
-
-    @Override
-    public void sharingMediaOnlySelected() {
-        dismissShareDialog();
-        startShareActivity(false);
-    }
-
     private void shareMediaFile() {
         if (vaultFile == null) {
             return;
         }
 
         if (vaultFile.metadata != null) {
-            ShareDialogFragment.newInstance().show(getSupportFragmentManager(), ShareDialogFragment.TAG);
+            showShareWithMetadataDialog();
         } else {
             startShareActivity(false);
         }
@@ -310,13 +296,6 @@ public class VideoViewerActivity extends BaseLockActivity implements
         }
 
         MediaFileHandler.startShareActivity(this, vaultFile, includeMetadata);
-    }
-
-    private void dismissShareDialog() {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(ShareDialogFragment.TAG);
-        if (fragment instanceof ShareDialogFragment) {
-            ((ShareDialogFragment) fragment).dismiss();
-        }
     }
 
     private void initializePlayer() {
@@ -339,7 +318,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
                 VaultFile vaultFile = (VaultFile) getIntent().getExtras().get(VIEW_VIDEO);
                 if (vaultFile != null) {
                     this.vaultFile = vaultFile;
-                    toolbar.setStartTextTitle(vaultFile.name);
+                    toolbar.setTitle(vaultFile.name);
                     setupMetadataMenuItem(vaultFile.metadata != null);
                 }
             }
@@ -388,10 +367,8 @@ public class VideoViewerActivity extends BaseLockActivity implements
 
     private void setupToolbar() {
         toolbar = findViewById(R.id.player_toolbar);
-        toolbar.setBackClickListener(() -> {
-            onBackPressed();
-            return Unit.INSTANCE;
-        });
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         if (!actionsDisabled) {
             toolbar.inflateMenu(R.menu.video_view_menu);
@@ -428,6 +405,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
 
         MenuItem mdMenuItem = toolbar.getMenu().findItem(R.id.menu_item_metadata);
 
+
         if (visible) {
             mdMenuItem.setVisible(true).setOnMenuItemClickListener(item -> {
                 showMetadata();
@@ -460,7 +438,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
 
                     @Override
                     public void share() {
-                        startShareActivity(false);
+                        shareMediaFile();
                     }
 
                     @Override
@@ -502,7 +480,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
                     public void info() {
                         isInfoShown = true;
                         onVisibilityChange(View.VISIBLE);
-                        toolbar.setStartTextTitle(getString(R.string.Vault_FileInfo));
+                        toolbar.setTitle(getString(R.string.Vault_FileInfo));
                         toolbar.getMenu().findItem(R.id.menu_item_more).setVisible(false);
                         toolbar.getMenu().findItem(R.id.menu_item_metadata).setVisible(false);
                         invalidateOptionsMenu();
@@ -542,9 +520,25 @@ public class VideoViewerActivity extends BaseLockActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICKER_FILE_REQUEST_CODE){
-            presenter.exportNewMediaFile(vaultFile,data.getData());
+        if (requestCode == PICKER_FILE_REQUEST_CODE) {
+            presenter.exportNewMediaFile(vaultFile, data.getData());
         }
+    }
 
+    private void showShareWithMetadataDialog() {
+        LinkedHashMap<Integer, Integer> options = new LinkedHashMap<>();
+        options.put(1, R.string.verification_share_select_media_and_verification);
+        options.put(0, R.string.verification_share_select_only_media);
+
+        BottomSheetUtils.showRadioListOptionsSheet(
+                getSupportFragmentManager(),
+                getContext(),
+                options,
+                getString(R.string.verification_share_dialog_title),
+                getString(R.string.verification_share_dialog_expl),
+                getString(R.string.action_ok),
+                getString(R.string.action_cancel),
+                option -> startShareActivity(option > 0)
+        );
     }
 }

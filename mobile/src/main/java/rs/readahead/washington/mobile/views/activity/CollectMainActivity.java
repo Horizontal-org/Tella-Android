@@ -372,6 +372,7 @@ public class CollectMainActivity extends BaseLockActivity implements
 
     @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
     void showFineLocationRationale(final PermissionRequest request) {
+        changeTemporaryTimeout();
         alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_GPS));
     }
 

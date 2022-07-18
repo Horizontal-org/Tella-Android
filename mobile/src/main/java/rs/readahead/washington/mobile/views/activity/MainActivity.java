@@ -28,8 +28,6 @@ import com.hzontal.tella_vault.filter.FilterType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,10 +46,14 @@ import rs.readahead.washington.mobile.mvp.presenter.HomeScreenPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.MediaImportPresenter;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.CleanInsightUtils;
+import rs.readahead.washington.mobile.views.fragment.uwazi.SubmittedPreviewFragment;
 import rs.readahead.washington.mobile.views.fragment.uwazi.download.DownloadedTemplatesFragment;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryFragment;
+import rs.readahead.washington.mobile.views.fragment.uwazi.send.UwaziSendFragment;
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment;
+
 import com.google.gson.Gson;
+
 import timber.log.Timber;
 
 
@@ -123,7 +125,8 @@ public class MainActivity extends MetadataActivity implements
         navController.addOnDestinationChangedListener((navController1, navDestination, bundle) -> {
             switch (navDestination.getId()) {
                 case (R.id.micScreen):
-                    checkLocationSettings(C.START_AUDIO_RECORD, ()->{});
+                    checkLocationSettings(C.START_AUDIO_RECORD, () -> {
+                    });
                 case (R.id.homeScreen):
                 case R.id.formScreen:
                 case R.id.uwaziScreen:
@@ -146,17 +149,17 @@ public class MainActivity extends MetadataActivity implements
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == C.IMPORT_VIDEO) {
-            if (data != null){
-            Uri video = data.getData();
-            if (video != null) {
-                mediaImportPresenter.importVideo(video);
+            if (data != null) {
+                Uri video = data.getData();
+                if (video != null) {
+                    mediaImportPresenter.importVideo(video);
+                }
             }
-            }
-           return;
+            return;
         }
 
         if (requestCode == C.IMPORT_IMAGE) {
-            if (data != null){
+            if (data != null) {
                 Uri image = data.getData();
                 if (image != null) {
                     mediaImportPresenter.importImage(image);
@@ -166,7 +169,7 @@ public class MainActivity extends MetadataActivity implements
         }
 
         if (requestCode == C.IMPORT_FILE) {
-            if (data != null){
+            if (data != null) {
                 Uri file = data.getData();
                 if (file != null) {
                     mediaImportPresenter.importFile(file);
@@ -208,8 +211,10 @@ public class MainActivity extends MetadataActivity implements
                 return true;
             }
 
-            if (fragment instanceof DownloadedTemplatesFragment) {
-                ((DownloadedTemplatesFragment) fragment).onBackPressed();
+            if (fragment instanceof DownloadedTemplatesFragment ||
+                    fragment instanceof SubmittedPreviewFragment ||
+                    fragment instanceof UwaziSendFragment) {
+                navController.popBackStack();
                 return true;
             }
 
@@ -304,7 +309,7 @@ public class MainActivity extends MetadataActivity implements
     public void onMediaFileImported(VaultFile vaultFile) {
         List<String> list = new ArrayList<>();
         list.add(vaultFile.id);
-        onActivityResult(C.MEDIA_FILE_ID, RESULT_OK, new Intent().putExtra(VAULT_FILE_KEY,new Gson().toJson(list)));
+        onActivityResult(C.MEDIA_FILE_ID, RESULT_OK, new Intent().putExtra(VAULT_FILE_KEY, new Gson().toJson(list)));
     }
 
     @Override
@@ -329,7 +334,8 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     public void onCountTUServersEnded(Long num) {
-        if (num>0) CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_TELLA);
+        if (num > 0)
+            CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_TELLA);
     }
 
     @Override
@@ -339,9 +345,9 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     public void onCountCollectServersEnded(Long num) {
-        long numOfCollectServers = num;
         maybeShowFormsMenu(num);
-        if (num>0) CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_COLLECT);
+        if (num > 0)
+            CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_COLLECT);
         //homeScreenPresenter.countTUServers();
     }
 
@@ -353,7 +359,8 @@ public class MainActivity extends MetadataActivity implements
     @Override
     public void onCountUwaziServersEnded(Long num) {
         maybeShowUwaziMenu(num);
-        if (num>0)CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_UWAZI);
+        if (num > 0)
+            CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_UWAZI);
     }
 
     @Override
@@ -402,16 +409,18 @@ public class MainActivity extends MetadataActivity implements
     public void selectNavMic() {
         btmNavMain.getMenu().findItem(R.id.mic).setChecked(true);
     }
+
     public void selectNavForm() {
         btmNavMain.getMenu().findItem(R.id.form).setChecked(true);
     }
 
-    private void maybeShowFormsMenu(Long num){
-        btmNavMain.getMenu().findItem(R.id.form).setVisible(num>0);
+    private void maybeShowFormsMenu(Long num) {
+        btmNavMain.getMenu().findItem(R.id.form).setVisible(num > 0);
         invalidateOptionsMenu();
     }
-    private void maybeShowUwaziMenu(Long num){
-        btmNavMain.getMenu().findItem(R.id.uwazi).setVisible(num>0);
+
+    private void maybeShowUwaziMenu(Long num) {
+        btmNavMain.getMenu().findItem(R.id.uwazi).setVisible(num > 0);
         invalidateOptionsMenu();
     }
 }

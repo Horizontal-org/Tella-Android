@@ -389,6 +389,15 @@
         <item name="android:background">@color/dark_orange</item>
     </style>
 
+    <style name="Move_Floating_Action_Button_Style">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_gravity">end|bottom</item>
+        <item name="android:layout_marginEnd">@dimen/move_fab_horizontal_margin</item>
+        <item name="android:layout_marginBottom">@dimen/move_fab_bottom_margin</item>
+        <item name="android:background">@color/dark_orange</item>
+    </style>
+
     <!-- styles for Forms section -->
     <style name="Tella2_Forms_Activity" parent="@style/AppTheme.NoActionBar">
         <item name="android:background">@color/dark_purple</item>
@@ -429,5 +438,10 @@
         <item name="trackColor">@color/wa_white</item>
         <item name="indicatorColor">@color/tigers_eye</item>
         <item name="trackThickness">4dp</item>
+    </style>
+
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/open_sans</item>
     </style>
 </resources>

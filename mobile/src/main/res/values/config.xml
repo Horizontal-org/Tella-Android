@@ -4,7 +4,7 @@
     <!-- todo: make this version enabled -->
     <!-- todo: make this version enabled -->
     <string name="config_faq_url" translatable="false">https://tella-app.org/faq/</string>
-    <string name="config_contact_url" translatable="false">https://tella-app.org/contact/</string>
+    <string name="config_contact_url" translatable="false">mailto:contact@tella-app.org</string>
     <string name="config_privacy_url" translatable="false">https://tella-app.org/privacy/</string>
     <string-array name="ra_lang_codes" translatable="false">
         <item>ar</item>

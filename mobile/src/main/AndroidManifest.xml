@@ -29,6 +29,14 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
 
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+    </queries>
+
     <application
         android:name=".MyApplication"
         android:allowBackup="false"
@@ -307,11 +315,6 @@
             android:name=".views.activity.PatternUpgradeActivity"
             android:label="@string/title_activity_security"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".views.activity.AboutHelpActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:label="@string/settings.about_app.bar"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.CollectMainActivity"

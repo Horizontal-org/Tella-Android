@@ -136,6 +136,52 @@ object VaultSheetUtils {
     }
 
     @JvmStatic
+    fun showVaultBlueRenameSheet(
+        fragmentManager: FragmentManager,
+        titleText: String?,
+        cancelLabel: String,
+        confirmLabel: String,
+        context: Activity,
+        fileName: String?,
+        onConfirmClick: ((String) -> Unit)? = null
+    ) {
+        val vaultActionSheet = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.blue_sheet_rename)
+            .screenTag("VaultRenameSheet")
+            .cancellable(true)
+        vaultActionSheet.holder(VaultRenameSheetHolder(), object :
+            CustomBottomSheetFragment.Binder<VaultRenameSheetHolder> {
+            override fun onBind(holder: VaultRenameSheetHolder) {
+                with(holder) {
+                    title.text = titleText
+                    renameEditText.setText(fileName)
+                    //Cancel action
+                    actionCancel.text = cancelLabel
+                    actionCancel.setOnClickListener { vaultActionSheet.dismiss() }
+
+                    //Rename action
+                    actionRename.text = confirmLabel
+                    actionRename.setOnClickListener {
+                        if (!renameEditText.text.isNullOrEmpty()) {
+                            vaultActionSheet.dismiss()
+                            onConfirmClick?.invoke(renameEditText.text.toString())
+                        } else {
+                            DialogUtils.showBottomMessage(
+                                context,
+                                "Please fill in the new name",
+                                true
+                            )
+                        }
+
+                    }
+                }
+            }
+        })
+        vaultActionSheet.transparentBackground()
+        vaultActionSheet.launch()
+    }
+
+    @JvmStatic
     fun showVaultRenameSheet(
         fragmentManager: FragmentManager,
         titleText: String?,
@@ -295,7 +341,7 @@ object VaultSheetUtils {
         titleText: String,
         toolTipText: String,
         isImportVisible: Boolean,
-        isCreateFolderVisible : Boolean,
+        isCreateFolderVisible: Boolean,
         action: IVaultManageFiles
     ) {
         val vaultManageFilesSheet = CustomBottomSheetFragment.with(fragmentManager)
@@ -320,6 +366,8 @@ object VaultSheetUtils {
                         vaultManageFilesSheet.dismiss()
                         action.goToRecorder()
                     }
+                    cameraActionTV.isVisible = cameraLabel != null
+                    recordAudioActionTV.isVisible = recordLabel != null
                     //Import action
                     importActionTV.isVisible = isImportVisible
                     importActionTV.text = importLabel
