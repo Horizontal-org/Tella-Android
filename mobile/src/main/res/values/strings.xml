@@ -675,5 +675,4 @@ button to add a new template.</string>
   <string name="Uwazi_Dialog_Draft_Title">Exit entity?</string>
   <string name="Timeout_Warning_Title" translatable="false">Warnings</string>
   <string name="Timeout_Warning_Description" translatable="false">To perform this action, Tella will remain unlocked for 3 minutes.</string>
-  <string name="Uwazi_Dialog_Draft_Title">Exit entity?</string>
 </resources>
