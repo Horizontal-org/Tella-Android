@@ -16,6 +16,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+
 import com.hzontal.tella_vault.MyLocation;
 import com.hzontal.tella_vault.VaultFile;
 
@@ -25,12 +31,6 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
 
 import kotlin.Unit;
 import permissions.dispatcher.NeedsPermission;
@@ -53,6 +53,7 @@ import rs.readahead.washington.mobile.bus.event.GPSProviderRequiredEvent;
 import rs.readahead.washington.mobile.bus.event.LocationPermissionRequiredEvent;
 import rs.readahead.washington.mobile.bus.event.MediaFileBinaryWidgetCleared;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
+import rs.readahead.washington.mobile.databinding.ActivityCollectFormEntryBinding;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaPartResponse;
@@ -73,7 +74,6 @@ import rs.readahead.washington.mobile.views.collect.CollectFormEndView;
 import rs.readahead.washington.mobile.views.collect.CollectFormView;
 import rs.readahead.washington.mobile.views.fragment.MicFragment;
 import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface;
-import rs.readahead.washington.mobile.databinding.ActivityCollectFormEntryBinding;
 import timber.log.Timber;
 
 
@@ -332,8 +332,10 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
     void showFineLocationRationale(final PermissionRequest request) {
-        changeTemporaryTimeout();
-        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_GPS));
+        maybeChangeTemporaryTimeout(() -> {
+            alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_GPS));
+            return Unit.INSTANCE;
+        });
     }
 
     @OnPermissionDenied(Manifest.permission.ACCESS_FINE_LOCATION)

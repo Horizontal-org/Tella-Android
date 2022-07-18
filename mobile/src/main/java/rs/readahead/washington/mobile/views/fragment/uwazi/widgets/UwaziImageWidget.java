@@ -1,7 +1,6 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.widgets;
 
 import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_FILES_FILTER;
-import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_FILE_KEY;
 import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_PICKER_SINGLE;
 
 import android.annotation.SuppressLint;
@@ -29,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.schedulers.Schedulers;
+import kotlin.Unit;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
@@ -174,9 +174,11 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
 
     public void importPhoto() {
         BaseActivity activity = (BaseActivity) getContext();
-        activity.changeTemporaryTimeout();
-        waitingForAData = true;
-        MediaFileHandler.startSelectMediaActivity(activity, "image/*", null, C.IMPORT_IMAGE);
+        activity.maybeChangeTemporaryTimeout(() -> {
+            waitingForAData = true;
+            MediaFileHandler.startSelectMediaActivity(activity, "image/*", null, C.IMPORT_IMAGE);
+            return Unit.INSTANCE;
+        });
     }
 
     private void showSelectFilesSheet() {

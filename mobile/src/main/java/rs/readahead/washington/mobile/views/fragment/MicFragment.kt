@@ -116,8 +116,9 @@ class MicFragment : MetadataBaseLockFragment(),
                 if (hastRecordingPermissions(requireContext())) {
                     handleRecord()
                 } else {
-                    activity.changeTemporaryTimeout()
-                    requestRecordingPermissions(RECORD_REQUEST_CODE)
+                    activity.maybeChangeTemporaryTimeout {
+                        requestRecordingPermissions(RECORD_REQUEST_CODE)
+                    }
                 }
             } else {
                 handleStop()
@@ -326,7 +327,8 @@ class MicFragment : MetadataBaseLockFragment(),
             disablePlay()
             enableRecord()
         } else {
-            handlingMediaFile = MediaFileHandler.renameFile(vaultFile, recordingName.text.toString())
+            handlingMediaFile =
+                MediaFileHandler.renameFile(vaultFile, recordingName.text.toString())
             handlingMediaFile!!.size = MediaFileHandler.getSize(vaultFile)
             disablePause()
             enablePlay()

@@ -88,7 +88,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CleanInsightsActivity.CLEAN_INSIGHTS_REQUEST_CODE) {
             removeImprovementSection()
-            val cleanInsightsActions = data?.extras?.getSerializable(CleanInsightsActivity.RESULT_FOR_ACTIVITY) as CleanInsightsActions
+            val cleanInsightsActions =
+                data?.extras?.getSerializable(CleanInsightsActivity.RESULT_FOR_ACTIVITY) as CleanInsightsActions
             showMessageForCleanInsightsApprove(cleanInsightsActions)
         }
     }
@@ -97,7 +98,11 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         if (cleanInsightsActions == CleanInsightsActions.YES) {
             Preferences.setIsAcceptedImprovements(true)
             CleanInsightUtils.grantCampaign(true)
-            DialogUtils.showBottomMessage(requireActivity(), getString(R.string.clean_insights_signed_for_days), false)
+            DialogUtils.showBottomMessage(
+                requireActivity(),
+                getString(R.string.clean_insights_signed_for_days),
+                false
+            )
         }
     }
 
@@ -466,22 +471,22 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     private fun updateOrRequestPermissions() {
-        activity.changeTemporaryTimeout()
+        activity.maybeChangeTemporaryTimeout {
+            val hasWritePermission = ContextCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+            val minSdk29 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
 
-        val hasWritePermission = ContextCompat.checkSelfPermission(
-            activity,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-        val minSdk29 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+            writePermissionGranted = hasWritePermission || minSdk29
 
-        writePermissionGranted = hasWritePermission || minSdk29
+            val permissionsToRequest = mutableListOf<String>()
+            if (!writePermissionGranted) {
+                permissionsToRequest.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
-        val permissionsToRequest = mutableListOf<String>()
-        if (!writePermissionGranted) {
-            permissionsToRequest.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-
-            if (permissionsToRequest.isNotEmpty()) {
-                permissionsLauncher.launch(permissionsToRequest.toTypedArray())
+                if (permissionsToRequest.isNotEmpty()) {
+                    permissionsLauncher.launch(permissionsToRequest.toTypedArray())
+                }
             }
         }
     }

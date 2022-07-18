@@ -143,15 +143,19 @@ class GeneralSettings : BaseFragment() {
         }
     }
 
-    fun hasLocationPermission(context: Context): Boolean {
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        )
-            return true
-        return false
-    }
+   private fun hasLocationPermission(context: Context): Boolean {
+       var isLocationEnabled = false
+       activity.maybeChangeTemporaryTimeout{
+           if (ActivityCompat.checkSelfPermission(
+                   context,
+                   Manifest.permission.ACCESS_FINE_LOCATION
+               ) == PackageManager.PERMISSION_GRANTED
+           )
+               isLocationEnabled = true
+           isLocationEnabled = false
+       }
+       return isLocationEnabled
+   }
 
     private fun requestLocationPermission(requestCode: Int) {
         requestPermissions(

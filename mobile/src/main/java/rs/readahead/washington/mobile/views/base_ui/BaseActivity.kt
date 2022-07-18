@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
@@ -61,10 +62,11 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun changeTemporaryTimeout(){
-        if (LockTimeoutManager().lockTimeout == LockTimeoutManager.IMMEDIATE_SHUTDOWN) {
-            MyApplication.getMainKeyHolder().timeout  = LockTimeoutManager.ONE_MINUTES_SHUTDOWN
-            Preferences.setTempTimeout(true)
+    fun maybeChangeTemporaryTimeout(confirm: () -> Unit) {
+        if (LockTimeoutManager().lockTimeout == LockTimeoutManager.IMMEDIATE_SHUTDOWN || LockTimeoutManager().lockTimeout == LockTimeoutManager.ONE_MINUTES_SHUTDOWN) {
+            showTimeOutChangeDialog(confirm)
+        } else {
+            confirm.invoke()
         }
     }
 
@@ -125,7 +127,6 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         maybeEnableSecurityScreen()
-        maybeRestoreTimeout()
     }
 
     private fun maybeEnableSecurityScreen() {
@@ -141,10 +142,20 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun maybeRestoreTimeout() {
-        if (Preferences.isTempTimeout()) {
-            MyApplication.getMainKeyHolder().timeout  = LockTimeoutManager.IMMEDIATE_SHUTDOWN
-            Preferences.setTempTimeout(false)
-        }
+    private fun showTimeOutChangeDialog(confirm: () -> Unit) {
+        BottomSheetUtils.showStandardSheet(
+            fragmentManager = supportFragmentManager,
+            getString(R.string.Timeout_Warning_Title),
+            getString(R.string.Timeout_Warning_Description),
+            getString(R.string.action_continue),
+            getString(R.string.action_cancel),
+            onConfirmClick = {
+                MyApplication.getMainKeyHolder().timeout =
+                    LockTimeoutManager.THREE_MINUTES_SHUTDOWN
+                Preferences.setTempTimeout(true)
+                confirm.invoke()
+            },
+            onCancelClick = null
+        )
     }
 }

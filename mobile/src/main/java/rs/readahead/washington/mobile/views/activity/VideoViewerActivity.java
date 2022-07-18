@@ -16,6 +16,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -32,7 +33,6 @@ import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.hzontal.tella_vault.VaultFile;
 
-import androidx.appcompat.widget.Toolbar;
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
 import org.hzontal.shared_ui.utils.DialogUtils;
@@ -191,16 +191,21 @@ public class VideoViewerActivity extends BaseLockActivity implements
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void exportMediaFile() {
-        changeTemporaryTimeout();
-        if (vaultFile != null && presenter != null) {
-            performFileSearch();
-        }
+        maybeChangeTemporaryTimeout(() -> {
+            if (vaultFile != null && presenter != null) {
+                performFileSearch();
+            }
+            return Unit.INSTANCE;
+        });
+
     }
 
     @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void showWriteExternalStorageRationale(final PermissionRequest request) {
-        changeTemporaryTimeout();
-        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_device_storage));
+        maybeChangeTemporaryTimeout(() -> {
+            alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_device_storage));
+            return Unit.INSTANCE;
+        });
     }
 
     private void performFileSearch() {

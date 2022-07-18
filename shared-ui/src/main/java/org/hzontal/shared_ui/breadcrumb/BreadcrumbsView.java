@@ -235,21 +235,22 @@ public class BreadcrumbsView extends FrameLayout {
 	public void onRestoreInstanceState(Parcelable state) {
 		if (state instanceof Bundle) {
             Bundle bundle = (Bundle) state;
-            super.onRestoreInstanceState(bundle.getParcelable(KEY_SUPER_STATES));
-            setItems(bundle.getParcelableArrayList(KEY_BREADCRUMBS));
-            return;
+            try {
+				super.onRestoreInstanceState(bundle.getParcelable(KEY_SUPER_STATES));
+				setItems(bundle.getParcelableArrayList(KEY_BREADCRUMBS));
+				return;
+			} catch (RuntimeException exception){
+				super.onRestoreInstanceState(BaseSavedState.EMPTY_STATE);
+			}
 		}
 		super.onRestoreInstanceState(BaseSavedState.EMPTY_STATE);
 	}
 
 	private void postScroll(final int index, final int delay) {
-		mRecyclerView.postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				int max = mAdapter.getItemCount() - 1;
-				int i = index == -1 ? max : Math.max(index, max);
-				performSafeSmoothScrollToPosition(i);
-			}
+		mRecyclerView.postDelayed(() -> {
+			int max = mAdapter.getItemCount() - 1;
+			int i = index == -1 ? max : Math.max(index, max);
+			performSafeSmoothScrollToPosition(i);
 		}, delay);
 	}
 
