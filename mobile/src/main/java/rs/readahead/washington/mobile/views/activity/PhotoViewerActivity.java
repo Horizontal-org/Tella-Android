@@ -179,16 +179,20 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void exportMediaFile() {
-        changeTemporaryTimeout();
-        if (vaultFile != null && presenter != null) {
-            performFileSearch();
-        }
+        maybeChangeTemporaryTimeout(() -> {
+            if (vaultFile != null && presenter != null) {
+                performFileSearch();
+            }
+            return Unit.INSTANCE;
+        });
     }
 
     @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void showWriteExternalStorageRationale(final PermissionRequest request) {
-        changeTemporaryTimeout();
-        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_device_storage));
+        maybeChangeTemporaryTimeout(() -> {
+            alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_device_storage));
+            return Unit.INSTANCE;
+        });
     }
 
     private void openMedia() {

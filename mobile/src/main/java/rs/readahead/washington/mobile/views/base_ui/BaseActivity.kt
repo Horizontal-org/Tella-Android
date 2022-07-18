@@ -127,7 +127,6 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         maybeEnableSecurityScreen()
-        maybeRestoreTimeout()
     }
 
     private fun maybeEnableSecurityScreen() {
