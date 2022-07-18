@@ -26,6 +26,7 @@ import org.javarosa.core.model.FormDef;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import kotlin.Unit;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -372,8 +373,10 @@ public class CollectMainActivity extends BaseLockActivity implements
 
     @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
     void showFineLocationRationale(final PermissionRequest request) {
-        //maybeChangeTemporaryTimeout();
-        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_GPS));
+        maybeChangeTemporaryTimeout(() -> {
+            alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_GPS));
+            return Unit.INSTANCE;
+        });
     }
 
     @OnPermissionDenied(Manifest.permission.ACCESS_FINE_LOCATION)

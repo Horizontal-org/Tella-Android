@@ -52,6 +52,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import kotlin.Unit;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.CaptureEvent;
@@ -187,7 +188,7 @@ public class CameraActivity extends MetadataActivity implements
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) !=
                 PackageManager.PERMISSION_GRANTED) {
-           // maybeChangeTemporaryTimeout();
+            maybeChangeTemporaryTimeout(() -> Unit.INSTANCE);
         }
     }
 
