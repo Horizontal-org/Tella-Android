@@ -1,5 +1,8 @@
 package rs.readahead.washington.mobile.views.activity;
 
+import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
+import static rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragmentKt.PICKER_FILE_REQUEST_CODE;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -20,6 +23,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
 import com.hzontal.tella_vault.VaultFile;
+
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
+import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
 
 import java.util.LinkedHashMap;
 import java.util.Locale;
@@ -51,12 +57,6 @@ import rs.readahead.washington.mobile.util.ThreadUtil;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment;
 import timber.log.Timber;
-
-import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
-import static rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragmentKt.PICKER_FILE_REQUEST_CODE;
-
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
-import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
 
 @RuntimePermissions
 public class AudioPlayActivity extends BaseLockActivity implements
@@ -281,10 +281,13 @@ public class AudioPlayActivity extends BaseLockActivity implements
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void exportMediaFile() {
-        maybeChangeTemporaryTimeout();
-        if (handlingVaultFile != null && viewerPresenter != null) {
-            performFileSearch();
-        }
+        maybeChangeTemporaryTimeout(() -> {
+            if (handlingVaultFile != null && viewerPresenter != null) {
+                performFileSearch();
+            }
+            return Unit.INSTANCE;
+        });
+
     }
 
     private void performFileSearch() {
@@ -298,8 +301,10 @@ public class AudioPlayActivity extends BaseLockActivity implements
 
     @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void showWriteExternalStorageRationale(final PermissionRequest request) {
-        maybeChangeTemporaryTimeout();
-        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_device_storage));
+        maybeChangeTemporaryTimeout(() -> {
+            alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_device_storage));
+            return Unit.INSTANCE;
+        });
     }
 
     @Override

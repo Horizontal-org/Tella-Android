@@ -30,6 +30,8 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
 import org.hzontal.shared_ui.utils.DialogUtils;
 
+import java.util.LinkedHashMap;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import kotlin.Unit;
@@ -51,8 +53,6 @@ import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment;
-
-import java.util.LinkedHashMap;
 
 
 @RuntimePermissions
@@ -199,9 +199,12 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     private void performFileSearch() {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            maybeChangeTemporaryTimeout();
-            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-            startActivityForResult(intent, PICKER_FILE_REQUEST_CODE);
+            maybeChangeTemporaryTimeout(() -> {
+                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+                startActivityForResult(intent, PICKER_FILE_REQUEST_CODE);
+                return Unit.INSTANCE;
+            });
+
         } else {
             presenter.exportNewMediaFile(vaultFile, null);
         }
@@ -380,8 +383,10 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                                 getString(R.string.action_save),
                                 getString(R.string.action_cancel),
                                 isConfirmed -> {
-                                    maybeChangeTemporaryTimeout();
-                                    PhotoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(PhotoViewerActivity.this);
+                                    maybeChangeTemporaryTimeout(() -> {
+                                        PhotoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(PhotoViewerActivity.this);
+                                        return Unit.INSTANCE;
+                                    });
                                 }
                         );
                     }

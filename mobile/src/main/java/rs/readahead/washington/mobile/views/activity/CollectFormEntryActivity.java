@@ -332,7 +332,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
     void showFineLocationRationale(final PermissionRequest request) {
-        maybeChangeTemporaryTimeout();
+      //  maybeChangeTemporaryTimeout();
         alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_GPS));
     }
 

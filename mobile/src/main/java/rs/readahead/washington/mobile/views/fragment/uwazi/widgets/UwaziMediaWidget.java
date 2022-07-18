@@ -162,7 +162,7 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
     public void importMedia() {
         BaseActivity activity = (BaseActivity) getContext();
         waitingForAData = true;
-        activity.maybeChangeTemporaryTimeout();
+      // activity.maybeChangeTemporaryTimeout();
         MediaFileHandler.startSelectMediaActivity(activity,"video/*",null, C.IMPORT_VIDEO);
     }
 

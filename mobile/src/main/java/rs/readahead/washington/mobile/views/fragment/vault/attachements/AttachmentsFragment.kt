@@ -334,14 +334,17 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
                         override fun import() {
                             importAndDelete = false
-                            activity.maybeChangeTemporaryTimeout()
-                            MediaFileHandler.startImportFiles(activity, true, getCurrentType())
+                            activity.maybeChangeTemporaryTimeout {
+                                MediaFileHandler.startImportFiles(activity, true, getCurrentType())
+                            }
+
                         }
 
                         override fun importAndDelete() {
                             importAndDelete = true
-                            activity.maybeChangeTemporaryTimeout()
-                            MediaFileHandler.startImportFiles(activity, true, getCurrentType())
+                            activity.maybeChangeTemporaryTimeout {
+                                MediaFileHandler.startImportFiles(activity, true, getCurrentType())
+                            }
                         }
 
                         override fun createFolder() {
@@ -627,9 +630,10 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                         getString(R.string.action_cancel),
                         consumer = object : ActionConfirmed {
                             override fun accept(isConfirmed: Boolean) {
-                                activity.maybeChangeTemporaryTimeout()
-                                this@AttachmentsFragment.vaultFile = vaultFile
-                                performFileSearch(isMultipleFiles, vaultFile)
+                                activity.maybeChangeTemporaryTimeout {
+                                    this@AttachmentsFragment.vaultFile = vaultFile
+                                    performFileSearch(isMultipleFiles, vaultFile)
+                                }
                             }
                         })
                 }
@@ -1015,30 +1019,31 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     private fun requestStoragePermissions() {
-        activity.maybeChangeTemporaryTimeout()
-        if (SDK_INT >= Build.VERSION_CODES.R) {
-            try {
-                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-                intent.addCategory("android.intent.category.DEFAULT")
-                intent.data = Uri.parse(
-                    String.format(
-                        "package:%s",
-                        activity.application.packageName
+        activity.maybeChangeTemporaryTimeout {
+            if (SDK_INT >= Build.VERSION_CODES.R) {
+                try {
+                    val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                    intent.addCategory("android.intent.category.DEFAULT")
+                    intent.data = Uri.parse(
+                        String.format(
+                            "package:%s",
+                            activity.application.packageName
+                        )
                     )
+                    startActivityForResult(intent, WRITE_REQUEST_CODE)
+                } catch (e: Exception) {
+                    val intent = Intent()
+                    intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+                    startActivityForResult(intent, WRITE_REQUEST_CODE)
+                }
+            } else {
+                //below android 11
+                ActivityCompat.requestPermissions(
+                    activity,
+                    arrayOf(WRITE_EXTERNAL_STORAGE),
+                    WRITE_REQUEST_CODE
                 )
-                startActivityForResult(intent, WRITE_REQUEST_CODE)
-            } catch (e: Exception) {
-                val intent = Intent()
-                intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
-                startActivityForResult(intent, WRITE_REQUEST_CODE)
             }
-        } else {
-            //below android 11
-            ActivityCompat.requestPermissions(
-                activity,
-                arrayOf(WRITE_EXTERNAL_STORAGE),
-                WRITE_REQUEST_CODE
-            )
         }
     }
 

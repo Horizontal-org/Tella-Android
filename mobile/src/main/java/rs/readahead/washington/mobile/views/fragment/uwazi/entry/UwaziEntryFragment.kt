@@ -441,8 +441,9 @@ class UwaziEntryFragment :
             object : EventObserver<LocationPermissionRequiredEvent?>() {
                 override fun onNext(event: LocationPermissionRequiredEvent) {
                     if (!hasGpsPermissions(requireContext())) {
-                        activity.maybeChangeTemporaryTimeout()
-                        requestGpsPermissions(C.GPS_PROVIDER)
+                        activity.maybeChangeTemporaryTimeout{
+                            requestGpsPermissions(C.GPS_PROVIDER)
+                        }
                     }
                 }
             })
