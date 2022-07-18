@@ -757,6 +757,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     override fun onExportError(error: Throwable?) {
+        activity.maybeRestoreTimeout()
     }
 
     override fun onExportStarted() {
@@ -768,6 +769,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     override fun onExportEnded() {
+        activity.maybeRestoreTimeout()
         hideProgressDialog()
         detailsFab.show()
     }

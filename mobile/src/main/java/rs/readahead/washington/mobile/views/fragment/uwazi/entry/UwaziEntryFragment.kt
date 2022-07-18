@@ -40,6 +40,7 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.OUTBOX_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
+import timber.log.Timber
 
 
 const val COLLECT_TEMPLATE = "collect_template"

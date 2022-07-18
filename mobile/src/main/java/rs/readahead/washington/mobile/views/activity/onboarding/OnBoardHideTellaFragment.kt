@@ -10,6 +10,8 @@ import android.widget.TextView
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder
 import org.hzontal.tella.keys.config.UnlockRegistry
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.util.hide
+import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 
 class OnBoardHideTellaFragment : BaseFragment() {
@@ -50,14 +52,14 @@ class OnBoardHideTellaFragment : BaseFragment() {
         val hideNotPossible = view.findViewById<TextView>(R.id.hide_behind_calc_not_possible)
 
         if ((activity.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(activity) != UnlockRegistry.Method.TELLA_PIN) {
-            hideNotPossible.visibility = View.VISIBLE
+            hideNotPossible.show()
             /*hideNotPossible.setOnClickListener {
                 activity.addFragment(SecuritySettings(), R.id.my_nav_host_fragment)
             }*/
             btnTwoLabel.setAlpha(0.38f)
             btnTwo.setClickable(false)
         } else {
-            hideNotPossible.visibility = View.GONE
+            hideNotPossible.hide()
             btnTwoLabel.setAlpha(1f)
             btnTwo.setClickable(true)
             btnTwo.setOnClickListener {

@@ -1987,12 +1987,18 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         deleteTable(D.T_COLLECT_SERVER);
         deleteTable(D.T_TELLA_UPLOAD_SERVER);
         deleteTable(D.T_MEDIA_FILE_UPLOAD);
+        deleteTable(D.T_UWAZI_BLANK_TEMPLATES);
+        deleteTable(D.T_UWAZI_ENTITY_INSTANCES);
+        deleteTable(D.T_UWAZI_ENTITY_INSTANCE_VAULT_FILE);
+        deleteTable(D.T_UWAZI_SERVER);
     }
 
     public void deleteForms() {
         //deleteTable(D.T_COLLECT_BLANK_FORM); // only draft and sent forms are to be deleted
         deleteTable(D.T_COLLECT_FORM_INSTANCE);
         deleteTable(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE);
+        deleteTable(D.T_UWAZI_ENTITY_INSTANCES);
+        deleteTable(D.T_UWAZI_ENTITY_INSTANCE_VAULT_FILE);
     }
 
     private void deleteAllServersDB() {
