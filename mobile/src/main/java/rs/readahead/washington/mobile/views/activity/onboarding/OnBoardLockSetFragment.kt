@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.OnboardLockSetFragmentBinding
+import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 
 class OnBoardLockSetFragment : BaseFragment() {

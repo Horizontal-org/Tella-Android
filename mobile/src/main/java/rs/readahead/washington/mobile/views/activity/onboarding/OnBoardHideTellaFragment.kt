@@ -10,6 +10,8 @@ import android.widget.TextView
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder
 import org.hzontal.tella.keys.config.UnlockRegistry
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.util.hide
+import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 
 class OnBoardHideTellaFragment : BaseFragment() {

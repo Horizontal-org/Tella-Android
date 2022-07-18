@@ -78,13 +78,5 @@ abstract class BaseFragment : Fragment() {
         nav().navigateUp()
     }
 
-    open fun View.hide() {
-        visibility = View.GONE
-    }
-
-    open fun View.show() {
-        visibility = View.VISIBLE
-    }
-
     abstract fun initView(view: View)
 }
