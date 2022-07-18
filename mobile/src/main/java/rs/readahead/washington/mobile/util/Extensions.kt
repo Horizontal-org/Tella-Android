@@ -82,3 +82,11 @@ fun Activity.getActivityRoot(): View {
 fun dip(value: Int): Int {
     return (value * Resources.getSystem().displayMetrics.density).toInt()
 }
+
+fun View.hide() {
+    visibility = View.GONE
+}
+
+fun View.show() {
+    visibility = View.VISIBLE
+}
