@@ -179,7 +179,6 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void exportMediaFile() {
-        maybeChangeTemporaryTimeout();
         if (vaultFile != null && presenter != null) {
             performFileSearch();
         }
@@ -201,12 +200,8 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     private void performFileSearch() {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            maybeChangeTemporaryTimeout(() -> {
-                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-                startActivityForResult(intent, PICKER_FILE_REQUEST_CODE);
-                return Unit.INSTANCE;
-            });
-
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            startActivityForResult(intent, PICKER_FILE_REQUEST_CODE);
         } else {
             presenter.exportNewMediaFile(vaultFile, null);
         }
