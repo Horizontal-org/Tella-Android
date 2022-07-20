@@ -281,7 +281,6 @@ public class AudioPlayActivity extends BaseLockActivity implements
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void exportMediaFile() {
-        maybeChangeTemporaryTimeout();
         if (handlingVaultFile != null && viewerPresenter != null) {
             performFileSearch();
         }

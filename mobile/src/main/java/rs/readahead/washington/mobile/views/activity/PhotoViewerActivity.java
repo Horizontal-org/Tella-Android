@@ -347,7 +347,10 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
                     @Override
                     public void share() {
-                        shareMediaFile();
+                        maybeChangeTemporaryTimeout(() -> {
+                            shareMediaFile();
+                            return Unit.INSTANCE;
+                        });
                     }
 
                     @Override
