@@ -116,9 +116,8 @@ class MicFragment : MetadataBaseLockFragment(),
                 if (hastRecordingPermissions(requireContext())) {
                     handleRecord()
                 } else {
-                    activity.maybeChangeTemporaryTimeout {
-                        requestRecordingPermissions(RECORD_REQUEST_CODE)
-                    }
+                    activity.maybeChangeTemporaryTimeout()
+                    requestRecordingPermissions(RECORD_REQUEST_CODE)
                 }
             } else {
                 handleStop()

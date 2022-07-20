@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -179,20 +180,15 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void exportMediaFile() {
-        maybeChangeTemporaryTimeout(() -> {
-            if (vaultFile != null && presenter != null) {
-                performFileSearch();
-            }
-            return Unit.INSTANCE;
-        });
+        if (vaultFile != null && presenter != null) {
+            performFileSearch();
+        }
     }
 
     @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void showWriteExternalStorageRationale(final PermissionRequest request) {
-        maybeChangeTemporaryTimeout(() -> {
-            alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_device_storage));
-            return Unit.INSTANCE;
-        });
+        maybeChangeTemporaryTimeout();
+        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_device_storage));
     }
 
     private void openMedia() {
@@ -205,12 +201,8 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     private void performFileSearch() {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            maybeChangeTemporaryTimeout(() -> {
-                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-                startActivityForResult(intent, PICKER_FILE_REQUEST_CODE);
-                return Unit.INSTANCE;
-            });
-
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            startActivityForResult(intent, PICKER_FILE_REQUEST_CODE);
         } else {
             presenter.exportNewMediaFile(vaultFile, null);
         }
@@ -356,7 +348,10 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
                     @Override
                     public void share() {
-                        shareMediaFile();
+                        maybeChangeTemporaryTimeout(() -> {
+                            shareMediaFile();
+                            return Unit.INSTANCE;
+                        });
                     }
 
                     @Override
@@ -437,16 +432,18 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         LinkedHashMap<Integer, Integer> options = new LinkedHashMap<>();
         options.put(1, R.string.verification_share_select_media_and_verification);
         options.put(0, R.string.verification_share_select_only_media);
+        new Handler().post(() -> {
+            BottomSheetUtils.showRadioListOptionsSheet(
+                    getSupportFragmentManager(),
+                    getContext(),
+                    options,
+                    getString(R.string.verification_share_dialog_title),
+                    getString(R.string.verification_share_dialog_expl),
+                    getString(R.string.action_ok),
+                    getString(R.string.action_cancel),
+                    option -> startShareActivity(option > 0)
+            );
+        });
 
-        BottomSheetUtils.showRadioListOptionsSheet(
-                getSupportFragmentManager(),
-                getContext(),
-                options,
-                getString(R.string.verification_share_dialog_title),
-                getString(R.string.verification_share_dialog_expl),
-                getString(R.string.action_ok),
-                getString(R.string.action_cancel),
-                option -> startShareActivity(option > 0)
-        );
     }
 }

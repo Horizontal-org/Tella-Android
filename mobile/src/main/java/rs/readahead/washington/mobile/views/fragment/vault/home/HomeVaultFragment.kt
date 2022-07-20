@@ -471,22 +471,21 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     private fun updateOrRequestPermissions() {
-        activity.maybeChangeTemporaryTimeout {
-            val hasWritePermission = ContextCompat.checkSelfPermission(
-                activity,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_GRANTED
-            val minSdk29 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+        activity.maybeChangeTemporaryTimeout()
+        val hasWritePermission = ContextCompat.checkSelfPermission(
+            activity,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+        val minSdk29 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
 
-            writePermissionGranted = hasWritePermission || minSdk29
+        writePermissionGranted = hasWritePermission || minSdk29
 
-            val permissionsToRequest = mutableListOf<String>()
-            if (!writePermissionGranted) {
-                permissionsToRequest.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        val permissionsToRequest = mutableListOf<String>()
+        if (!writePermissionGranted) {
+            permissionsToRequest.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
-                if (permissionsToRequest.isNotEmpty()) {
-                    permissionsLauncher.launch(permissionsToRequest.toTypedArray())
-                }
+            if (permissionsToRequest.isNotEmpty()) {
+                permissionsLauncher.launch(permissionsToRequest.toTypedArray())
             }
         }
     }

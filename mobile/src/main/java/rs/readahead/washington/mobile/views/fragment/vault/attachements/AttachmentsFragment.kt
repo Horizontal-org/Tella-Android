@@ -592,8 +592,10 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 }
 
                 override fun share() {
-                    shareVaultFile(vaultFile)
-                    //MediaFileHandler.startShareActivity(activity, vaultFile, false)
+                    activity.maybeChangeTemporaryTimeout{
+                        shareVaultFile(vaultFile)
+                        //MediaFileHandler.startShareActivity(activity, vaultFile, false)
+                    }
                 }
 
                 override fun move() {
@@ -1019,7 +1021,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     private fun requestStoragePermissions() {
-        activity.maybeChangeTemporaryTimeout {
+        activity.maybeChangeTemporaryTimeout()
             if (SDK_INT >= Build.VERSION_CODES.R) {
                 try {
                     val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
@@ -1044,7 +1046,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                     WRITE_REQUEST_CODE
                 )
             }
-        }
+
     }
 
     private fun createItem(file: VaultFile): BreadcrumbItem {

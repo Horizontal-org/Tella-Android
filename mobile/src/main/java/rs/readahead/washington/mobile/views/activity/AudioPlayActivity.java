@@ -281,12 +281,9 @@ public class AudioPlayActivity extends BaseLockActivity implements
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void exportMediaFile() {
-        maybeChangeTemporaryTimeout(() -> {
-            if (handlingVaultFile != null && viewerPresenter != null) {
-                performFileSearch();
-            }
-            return Unit.INSTANCE;
-        });
+        if (handlingVaultFile != null && viewerPresenter != null) {
+            performFileSearch();
+        }
 
     }
 
@@ -301,10 +298,8 @@ public class AudioPlayActivity extends BaseLockActivity implements
 
     @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void showWriteExternalStorageRationale(final PermissionRequest request) {
-        maybeChangeTemporaryTimeout(() -> {
-            alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_device_storage));
-            return Unit.INSTANCE;
-        });
+        maybeChangeTemporaryTimeout();
+        alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_device_storage));
     }
 
     @Override
@@ -533,7 +528,10 @@ public class AudioPlayActivity extends BaseLockActivity implements
 
                     @Override
                     public void share() {
-                        shareMediaFile();
+                        maybeChangeTemporaryTimeout(() -> {
+                            shareMediaFile();
+                            return Unit.INSTANCE;
+                        });
                     }
 
                     @Override

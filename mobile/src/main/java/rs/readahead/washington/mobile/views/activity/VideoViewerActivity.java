@@ -191,12 +191,9 @@ public class VideoViewerActivity extends BaseLockActivity implements
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void exportMediaFile() {
-        maybeChangeTemporaryTimeout(() -> {
-            if (vaultFile != null && presenter != null) {
-                performFileSearch();
-            }
-            return Unit.INSTANCE;
-        });
+        if (vaultFile != null && presenter != null) {
+            performFileSearch();
+        }
 
     }
 
@@ -443,7 +440,10 @@ public class VideoViewerActivity extends BaseLockActivity implements
 
                     @Override
                     public void share() {
-                        shareMediaFile();
+                        maybeChangeTemporaryTimeout(() -> {
+                            shareMediaFile();
+                            return Unit.INSTANCE;
+                        });
                     }
 
                     @Override
@@ -476,7 +476,10 @@ public class VideoViewerActivity extends BaseLockActivity implements
                                 getString(R.string.action_save),
                                 getString(R.string.action_cancel),
                                 isConfirmed -> {
-                                    VideoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(VideoViewerActivity.this);
+                                    maybeChangeTemporaryTimeout(() -> {
+                                        VideoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(VideoViewerActivity.this);
+                                        return Unit.INSTANCE;
+                                    });
                                 }
                         );
                     }

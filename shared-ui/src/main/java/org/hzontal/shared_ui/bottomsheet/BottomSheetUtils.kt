@@ -183,6 +183,8 @@ BottomSheetUtils {
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.radio_list_sheet_layout)
             .cancellable(true)
+            .screenTag("RadioListOptionsSheet")
+
         customSheetFragment.holder(RadioListSheetHolder(), object :
             CustomBottomSheetFragment.Binder<RadioListSheetHolder> {
             override fun onBind(holder: RadioListSheetHolder) {

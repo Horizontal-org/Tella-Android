@@ -70,6 +70,15 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
+    fun maybeChangeTemporaryTimeout() {
+        if (LockTimeoutManager().lockTimeout == LockTimeoutManager.IMMEDIATE_SHUTDOWN || LockTimeoutManager().lockTimeout == LockTimeoutManager.ONE_MINUTES_SHUTDOWN) {
+            MyApplication.getMainKeyHolder().timeout =
+                LockTimeoutManager.THREE_MINUTES_SHUTDOWN
+            Preferences.setTempTimeout(true)
+        }
+    }
+
+
     fun replaceFragmentNoAddToBackStack(fragment: Fragment, cont: Int) {
         val className = fragment.javaClass.name
         supportFragmentManager
