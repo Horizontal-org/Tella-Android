@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -431,16 +432,18 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         LinkedHashMap<Integer, Integer> options = new LinkedHashMap<>();
         options.put(1, R.string.verification_share_select_media_and_verification);
         options.put(0, R.string.verification_share_select_only_media);
+        new Handler().post(() -> {
+            BottomSheetUtils.showRadioListOptionsSheet(
+                    getSupportFragmentManager(),
+                    getContext(),
+                    options,
+                    getString(R.string.verification_share_dialog_title),
+                    getString(R.string.verification_share_dialog_expl),
+                    getString(R.string.action_ok),
+                    getString(R.string.action_cancel),
+                    option -> startShareActivity(option > 0)
+            );
+        });
 
-        BottomSheetUtils.showRadioListOptionsSheet(
-                getSupportFragmentManager(),
-                getContext(),
-                options,
-                getString(R.string.verification_share_dialog_title),
-                getString(R.string.verification_share_dialog_expl),
-                getString(R.string.action_ok),
-                getString(R.string.action_cancel),
-                option -> startShareActivity(option > 0)
-        );
     }
 }
