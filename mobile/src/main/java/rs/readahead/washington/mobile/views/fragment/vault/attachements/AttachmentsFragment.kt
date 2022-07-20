@@ -592,8 +592,10 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 }
 
                 override fun share() {
-                    shareVaultFile(vaultFile)
-                    //MediaFileHandler.startShareActivity(activity, vaultFile, false)
+                    activity.maybeChangeTemporaryTimeout{
+                        shareVaultFile(vaultFile)
+                        //MediaFileHandler.startShareActivity(activity, vaultFile, false)
+                    }
                 }
 
                 override fun move() {
