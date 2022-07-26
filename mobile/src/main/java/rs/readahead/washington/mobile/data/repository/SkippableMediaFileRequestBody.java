@@ -9,13 +9,13 @@ import androidx.annotation.Nullable;
 
 import com.hzontal.tella_vault.VaultFile;
 
-import okhttp3.internal.http.UnrepeatableRequestBody;
+//import okhttp3.internal.http.UnrepeatableRequestBody;
 import rs.readahead.washington.mobile.domain.entity.IProgressListener;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import timber.log.Timber;
 
 
-public class SkippableMediaFileRequestBody extends MediaFileRequestBody implements UnrepeatableRequestBody {
+public class SkippableMediaFileRequestBody extends MediaFileRequestBody {
     private static final int CHUNK_SIZE = 128 * 1024;
     private byte[] buffer = new byte[CHUNK_SIZE];
 
