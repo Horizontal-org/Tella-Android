@@ -46,7 +46,7 @@ public class EncryptedFileProvider extends FileProvider {
     private static final SecureRandom secureRandom = new SecureRandom();
     private static final String transformation2 = "AES/CTR/NoPadding";
     private static final int HASH_BYTE_SIZE = 128;
-    private static final int PBKDF2_ITERATIONS = 1000;
+    private static final int PBKDF2_ITERATIONS = 100000;
 
     public static InputStream getDecryptedLimitedInputStream(byte[] key, InputStream in, File file) throws IOException {
         try {
