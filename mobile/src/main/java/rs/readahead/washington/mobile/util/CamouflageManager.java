@@ -22,6 +22,7 @@ public class CamouflageManager {
     public static final int defaultAliasPosition = 15;
 
     public final CamouflageOption calculatorOption = new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calculator_foreground, R.string.settings_camo_calculator2);
+    final CamouflageOption defaultOption = new CamouflageOption(defaultAlias, R.drawable.tella_black, R.string.app_name);
 
     public synchronized static CamouflageManager getInstance() {
         if (instance == null) {
@@ -62,6 +63,7 @@ public class CamouflageManager {
         String packageName = context.getApplicationContext().getPackageName();
 
         List<CamouflageOption> fullOptions = new ArrayList<>(options);
+        fullOptions.add(defaultOption);
         fullOptions.add(calculatorOption);
 
         for (CamouflageOption option : fullOptions) {
