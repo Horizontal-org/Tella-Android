@@ -124,8 +124,8 @@ class UwaziEntryFragment :
     }
 
     private fun initView() {
-        with(binding) {
-            this!!.toolbar.backClickListener = { onBackPressed() }
+        binding?.apply {
+            toolbar.backClickListener = { onBackPressed() }
             toolbar.onRightClickListener = {
                 entityInstance.status = UwaziEntityStatus.DRAFT
                 if (!getAnswersFromForm(false)) {
