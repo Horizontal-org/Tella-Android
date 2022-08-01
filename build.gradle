@@ -5,7 +5,7 @@ ext {
 buildscript {
     ext{
         kotlin_version = '1.6.0'
-        retrofitVersion = '2.6.1'
+        retrofitVersion = '2.9.0'
     }
     repositories {
         mavenCentral()
