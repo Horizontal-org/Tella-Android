@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/textview_media_description"
         style="@style/Tella_Main_White_Text.Small"
-        android:text="test"
+        android:text=""
         />
 
     <Button
