@@ -410,7 +410,9 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         closeAlertDialog();
 
         if (isPresenterSubmitting()) {
-            stopPresenterSubmission();
+            if (formSubmitter != null) {
+                formSubmitter.stopSubmission();
+            }
             refreshFormEndView(false);
             hideFormCancelButton();
             showFormEndButtons();
