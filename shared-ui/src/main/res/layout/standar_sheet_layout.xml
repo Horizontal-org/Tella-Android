@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/drag_anchor_drawable"
     app:behavior_hideable="true"
-    android:padding="21dp">
+    android:padding="24dp">
 
     <TextView
         android:id="@+id/standard_sheet_title"
