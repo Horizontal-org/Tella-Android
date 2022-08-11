@@ -29,8 +29,9 @@
 
             <ImageView
                 android:id="@+id/favorites_button"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_marginTop="@dimen/small_text_margin"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_marginEnd="@dimen/small_text_margin"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@null"
