@@ -17,11 +17,11 @@ import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
-import org.hzontal.shared_ui.switches.TellaSwitchWithMessage
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder
 import org.hzontal.tella.keys.config.UnlockRegistry
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
+import rs.readahead.washington.mobile.databinding.FragmentSecuritySettingsBinding
 import rs.readahead.washington.mobile.util.CamouflageManager
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
@@ -29,94 +29,109 @@ import timber.log.Timber
 
 
 class SecuritySettings : BaseFragment() {
-    var lockSetting: TextView? = null
-    var lockTimeoutSetting: TextView? = null
 
     private val lockTimeoutManager = LockTimeoutManager()
     private val cm = CamouflageManager.getInstance()
+    private var binding: FragmentSecuritySettingsBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_security_settings, container, false)
+        binding = FragmentSecuritySettingsBinding.inflate(inflater, container, false)
+        return binding?.root!!
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initView(view)
-
-        return view
     }
 
     override fun initView(view: View) {
         (activity as OnFragmentSelected?)?.showAppbar()
         (activity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_sec_app_bar)
 
-        lockSetting = view.findViewById(R.id.lock_setting)
-        lockTimeoutSetting = view.findViewById(R.id.lock_timeout_setting)
-
         setUpLockTimeoutText()
 
-        val camouflageSettingButton =
-            view.findViewById<RelativeLayout>(R.id.camouflage_settings_button)
-        camouflageSettingButton.setOnClickListener { goToUnlockingActivity(ReturnActivity.CAMOUFLAGE) }
+        val camouflageSettingButton = binding?.camouflageSettingsButton
+        if (camouflageSettingButton != null) {
+            camouflageSettingButton.setOnClickListener { goToUnlockingActivity(ReturnActivity.CAMOUFLAGE) }
+        }
 
-        val currentCamouflageSetting = view.findViewById<TextView>(R.id.camouflage_setting)
+        val currentCamouflageSetting = binding?.camouflageSetting
         if (cm.getLauncherName(requireContext()) != null) {
-            currentCamouflageSetting.setText(cm.getLauncherName(requireContext()));
+            if (currentCamouflageSetting != null) {
+                currentCamouflageSetting.setText(cm.getLauncherName(requireContext()))
+            };
         }
 
-        val lockSettingButton = view.findViewById<RelativeLayout>(R.id.lock_settings_button)
-        lockSettingButton.setOnClickListener { checkCamouflageAndLockSetting() }
-
-        val lockTimeoutSettingButton =
-            view.findViewById<RelativeLayout>(R.id.lock_timeout_settings_button)
-        lockTimeoutSettingButton.setOnClickListener { showLockTimeoutSettingDialog() }
-
-        val deleteVault = view.findViewById<CheckBox>(R.id.delete_vault)
-        deleteVault.isChecked = Preferences.isUninstallOnPanic()
-        deleteVault.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-            deleteVault.isChecked = isChecked
-            Preferences.setEraseForms(isChecked)
+        val lockSettingButton = binding?.lockSettingsButton
+        if (lockSettingButton != null) {
+            lockSettingButton.setOnClickListener { checkCamouflageAndLockSetting() }
         }
 
-        val deleteForms = view.findViewById<CheckBox>(R.id.delete_forms)
-        deleteForms.isChecked = Preferences.isEraseForms()
-        deleteForms.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
-            deleteForms.isChecked = isChecked
-            Preferences.setEraseForms(isChecked)
+        val lockTimeoutSettingButton = binding?.lockTimeoutSettingsButton
+        if (lockTimeoutSettingButton != null) {
+            lockTimeoutSettingButton.setOnClickListener { showLockTimeoutSettingDialog() }
         }
 
-        val deleteServerSettings = view.findViewById<CheckBox>(R.id.delete_server_settings)
-        deleteServerSettings.isChecked = Preferences.isDeleteServerSettingsActive()
-        deleteServerSettings.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
-            deleteServerSettings.isChecked = isChecked
-            Preferences.setDeleteServerSettingsActive(isChecked)
+        val deleteVault = binding?.deleteVault
+        if (deleteVault != null) {
+            deleteVault.isChecked = Preferences.isUninstallOnPanic()
+            deleteVault.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+                deleteVault.isChecked = isChecked
+                Preferences.setEraseForms(isChecked)
+            }
         }
 
-        val deleteTella = view.findViewById<CheckBox>(R.id.delete_tella)
-        deleteTella.isChecked = Preferences.isUninstallOnPanic()
-        deleteTella.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
-            deleteTella.isChecked = isChecked
-            Preferences.setUninstallOnPanic(isChecked)
+        val deleteForms = binding?.deleteForms
+        if (deleteForms != null) {
+            deleteForms.isChecked = Preferences.isEraseForms()
+            deleteForms.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+                deleteForms.isChecked = isChecked
+                Preferences.setEraseForms(isChecked)
+            }
         }
 
-        val quickExitTellaSwitch =
-            view.findViewById<TellaSwitchWithMessage>(R.id.quick_delete_switch)
-        setupQuickExitSwitch(quickExitTellaSwitch.mSwitch, view)
-        setupQuickExitSettingsView(quickExitTellaSwitch.mSwitch, view)
-
-        val silentCameraTellaSwitch =
-            view.findViewById<TellaSwitchWithMessage>(R.id.camera_silent_switch)
-        silentCameraTellaSwitch.mSwitch.isChecked = Preferences.isShutterMute()
-        silentCameraTellaSwitch.mSwitch.setOnCheckedChangeListener { buttonView: CompoundButton?, isChecked: Boolean ->
-            Preferences.setShutterMute(isChecked)
+        val deleteServerSettings = binding?.deleteServerSettings
+        if (deleteServerSettings != null) {
+            deleteServerSettings.isChecked = Preferences.isDeleteServerSettingsActive()
+            deleteServerSettings.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+                deleteServerSettings.isChecked = isChecked
+                Preferences.setDeleteServerSettingsActive(isChecked)
+            }
         }
 
-        val enableSecurityScreen =
-            view.findViewById<TellaSwitchWithMessage>(R.id.security_screen_switch)
-        enableSecurityScreen.mSwitch.isChecked = Preferences.isSecurityScreenEnabled()
-        enableSecurityScreen.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-            enableSecurityScreen.isChecked = isChecked
-            Preferences.setSecurityScreenEnabled(isChecked)
+        val deleteTella = binding?.deleteTella
+        if (deleteTella != null) {
+            deleteTella.isChecked = Preferences.isUninstallOnPanic()
+            deleteTella.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+                deleteTella.isChecked = isChecked
+                Preferences.setUninstallOnPanic(isChecked)
+            }
+        }
+
+        val quickExitTellaSwitch = binding?.quickDeleteSwitch
+        if (quickExitTellaSwitch != null) {
+            setupQuickExitSwitch(quickExitTellaSwitch.mSwitch, view)
+            setupQuickExitSettingsView(quickExitTellaSwitch.mSwitch, view)
+        }
+
+        val silentCameraTellaSwitch = binding?.cameraSilentSwitch
+        if (silentCameraTellaSwitch != null) {
+            silentCameraTellaSwitch.mSwitch.isChecked = Preferences.isShutterMute()
+            silentCameraTellaSwitch.mSwitch.setOnCheckedChangeListener { buttonView: CompoundButton?, isChecked: Boolean ->
+                Preferences.setShutterMute(isChecked)
+            }
+        }
+
+        val enableSecurityScreen = binding?.securityScreenSwitch
+        if (enableSecurityScreen != null) {
+            enableSecurityScreen.mSwitch.isChecked = Preferences.isSecurityScreenEnabled()
+            enableSecurityScreen.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+                enableSecurityScreen.isChecked = isChecked
+                Preferences.setSecurityScreenEnabled(isChecked)
+            }
         }
 
         /*val bypassCensorshipTellaSwitch =
@@ -126,37 +141,33 @@ class SecuritySettings : BaseFragment() {
             Preferences.setBypassCensorship(isChecked)
         })*/
 
-        val vaultTooltip = view.findViewById<ImageView>(R.id.delete_vault_tooltip)
-        vaultTooltip.setOnClickListener {
+        binding?.deleteVaultTooltip?.setOnClickListener {
             showTooltip(
-                vaultTooltip,
+                binding?.deleteVaultTooltip!!,
                 resources.getString(R.string.settings_sec_delete_vault_tooltip),
                 Gravity.TOP
             )
         }
 
-        val formsTooltip = view.findViewById<ImageView>(R.id.delete_forms_tooltip)
-        formsTooltip.setOnClickListener {
+        binding?.deleteFormsTooltip?.setOnClickListener {
             showTooltip(
-                formsTooltip,
+                binding?.deleteFormsTooltip!!,
                 resources.getString(R.string.settings_sec_delete_forms_tooltip),
                 Gravity.TOP
             )
         }
 
-        val serversTooltip = view.findViewById<ImageView>(R.id.delete_server_tooltip)
-        serversTooltip.setOnClickListener {
+        binding?.deleteServerTooltip?.setOnClickListener {
             showTooltip(
-                serversTooltip,
+                binding?.deleteServerTooltip!!,
                 resources.getString(R.string.settings_sec_delete_servers_tooltip),
                 Gravity.TOP
             )
         }
 
-        val appTooltip = view.findViewById<ImageView>(R.id.delete_app_tooltip)
-        appTooltip.setOnClickListener {
+        binding?.deleteAppTooltip?.setOnClickListener {
             showTooltip(
-                appTooltip,
+                binding?.deleteAppTooltip!!,
                 resources.getString(R.string.settings_sec_delete_app_tooltip),
                 Gravity.TOP
             )
@@ -198,9 +209,9 @@ class SecuritySettings : BaseFragment() {
         when ((activity.applicationContext as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(
             activity
         )) {
-            UnlockRegistry.Method.TELLA_PIN -> lockSetting?.setText(getString(R.string.onboard_pin))
-            UnlockRegistry.Method.TELLA_PASSWORD -> lockSetting?.setText(getString(R.string.onboard_password))
-            UnlockRegistry.Method.TELLA_PATTERN -> lockSetting?.setText(getString(R.string.onboard_pattern))
+            UnlockRegistry.Method.TELLA_PIN -> binding?.lockSetting?.setText(getString(R.string.onboard_pin))
+            UnlockRegistry.Method.TELLA_PASSWORD -> binding?.lockSetting?.setText(getString(R.string.onboard_password))
+            UnlockRegistry.Method.TELLA_PATTERN -> binding?.lockSetting?.setText(getString(R.string.onboard_pattern))
             else -> {
                 Timber.e("Unlock method not recognized")
             }
@@ -208,7 +219,7 @@ class SecuritySettings : BaseFragment() {
     }
 
     private fun setUpLockTimeoutText() {
-        lockTimeoutSetting?.setText(lockTimeoutManager.selectedStringRes)
+        binding?.lockTimeoutSetting?.setText(lockTimeoutManager.selectedStringRes)
     }
 
     private fun checkCamouflageAndLockSetting() {
@@ -265,17 +276,17 @@ class SecuritySettings : BaseFragment() {
     }
 
     private fun setupQuickExitSettingsView(quickExitSwitch: SwitchCompat, view: View) {
-        val quickExitSettings = view.findViewById<View>(R.id.quick_exit_settings_layout)
+        if (binding?.quickExitSettingsLayout == null) return
         if (Preferences.isQuickExit()) {
             quickExitSwitch.setChecked(true)
-            quickExitSettings.setVisibility(View.VISIBLE)
+            binding?.quickExitSettingsLayout!!.setVisibility(View.VISIBLE)
             /*if (numOfCollectServers == 0L) {
                 deleteFormsView.setVisibility(View.GONE)
                 deleteSettingsView.setVisibility(View.GONE)
             }*/
         } else {
             quickExitSwitch.setChecked(false)
-            quickExitSettings.setVisibility(View.GONE)
+            binding?.quickExitSettingsLayout!!.setVisibility(View.GONE)
         }
     }
 }
