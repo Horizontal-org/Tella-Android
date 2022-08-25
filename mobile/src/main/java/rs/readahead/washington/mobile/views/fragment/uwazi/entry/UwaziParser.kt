@@ -18,6 +18,7 @@ class UwaziParser(private val context: Context?) {
     private var template: CollectTemplate? = null
     private var entityInstance: UwaziEntityInstance = UwaziEntityInstance()
     private var entryPrompts = mutableListOf<UwaziEntryPrompt>()
+    var hashCode: Int? = null //used to check is the answers has changed
 
     private val uwaziTitlePrompt by lazy {
         UwaziEntryPrompt(
@@ -97,6 +98,8 @@ class UwaziParser(private val context: Context?) {
                 }
             }
         }
+
+        hashCode = formView.answers.hashCode()
     }
 
     fun putAnswersToForm(formView: UwaziFormView) {
@@ -122,6 +125,7 @@ class UwaziParser(private val context: Context?) {
                 }
             }
         }
+        hashCode = formView.answers.hashCode()
     }
 
     fun getAnswersFromForm(

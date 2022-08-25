@@ -31,7 +31,6 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.OUTBOX_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
-import timber.log.Timber
 
 
 const val COLLECT_TEMPLATE = "collect_template"
@@ -52,7 +51,6 @@ class UwaziEntryFragment :
     private val bundle by lazy { Bundle() }
     private var screenView: ViewGroup? = null
     private lateinit var uwaziFormView: UwaziFormView
-    private var hashCode: Int? = null //used to check is the answers has changed
 
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
 
@@ -159,16 +157,12 @@ class UwaziEntryFragment :
         uwaziFormView = uwaziParser.parseInstance(instance)
         screenView?.addView(uwaziFormView)
         uwaziParser.putAnswersToForm(uwaziFormView)
-        hashCode = uwaziFormView.answers.hashCode()
-        Timber.d("+++++ hashcode je %s", hashCode)
     }
 
     private fun parseUwaziTemplate(template: String) {
         uwaziFormView = uwaziParser.parseTemplate(template)
         screenView?.addView(uwaziFormView)
         uwaziParser.fillAnswersToForm(uwaziFormView)
-        hashCode = uwaziFormView.answers.hashCode()
-        Timber.d("+++++ hashcode je %s", hashCode)
     }
 
     private fun putVaultFileInForm(vaultFile: String) {
@@ -245,9 +239,8 @@ class UwaziEntryFragment :
 
     override fun onBackPressed(): Boolean {
         // The save draft dialog should be shown if the form could be saved and if the answers have changed
-        Timber.d("++++ nashcode na onBackPressed() %s", uwaziFormView.answers.hashCode())
         if (uwaziParser.getAnswersFromForm(false, uwaziFormView)
-            && hashCode != uwaziFormView.answers.hashCode()
+            && uwaziParser.hashCode != uwaziFormView.answers.hashCode()
         ) {
             BottomSheetUtils.showStandardSheet(
                 activity.supportFragmentManager,
