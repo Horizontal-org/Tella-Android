@@ -484,4 +484,8 @@
   <string name="settings.gen_share_data_action.expl">Help us understand how you use Tella. Your data will never be shared with anyone outside of the Tella team.</string>
   <string name="action_no">no</string>
   <string name="settings.serv_add.server.selection_dialog.description">If you are not sure, please ask your\n organization.</string>
+  <string name="Timeout_Warning_Title">Warnings</string>
+  <string name="Timeout_Warning_Description">To perform this action, Tella will remain unlocked for 3 minutes.</string>
+  <string name="settings_sec_security_screen">Screen security</string>
+  <string name="settings_sec_security_screen_expl">Block screenshots and screen recordings inside Tella and screen preview in the list of recent apps</string>
 </resources>

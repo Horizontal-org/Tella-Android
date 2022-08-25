@@ -657,4 +657,8 @@ button to add a new template.</string>
   <string name="Vault_DeleteFile_SheetTitle">Excluir o arquivo?</string>
   <string name="Vault_deleteFile_SheetDesc">O arquivo selecionado será excluído permanentemente do Tella</string>
   <string name="settings.serv_add.server.selection_dialog.description">If you are not sure, please ask your\n organization.</string>
+  <string name="Timeout_Warning_Title">Warnings</string>
+  <string name="Timeout_Warning_Description">To perform this action, Tella will remain unlocked for 3 minutes.</string>
+  <string name="settings_sec_security_screen">Screen security</string>
+  <string name="settings_sec_security_screen_expl">Block screenshots and screen recordings inside Tella and screen preview in the list of recent apps</string>
 </resources>
