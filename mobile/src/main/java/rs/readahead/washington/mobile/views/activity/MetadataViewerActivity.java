@@ -176,7 +176,7 @@ public class MetadataViewerActivity extends BaseLockActivity {
         if (metadata.getMyLocation() != null) {
             metadataList.addView(createMetadataItem(getLocationString(metadata.getMyLocation()), getResources().getString(R.string.verification_info_field_location)));
             metadataList.addView(createMetadataItem(metadata.getMyLocation().getProvider(), getResources().getString(R.string.verification_info_field_location_provider)));
-            metadataList.addView(createMetadataItem(getString(R.string.meter_per_second, metadata.getMyLocation().getSpeed()),
+            metadataList.addView(createMetadataItem(getString(R.string.Verification_Label_MeterPerSecond, metadata.getMyLocation().getSpeed()),
                     getResources().getString(R.string.verification_info_field_location_speed)));
         } else {
             metadataList.addView(createMetadataItem(getString(R.string.verification_info_field_metadata_not_available), getResources().getString(R.string.verification_info_field_location)));
@@ -195,8 +195,8 @@ public class MetadataViewerActivity extends BaseLockActivity {
     private String getLocationString(MyLocation myLocation) {
         return getString(R.string.verification_info_field_latitude) + myLocation.getLatitude() + '\n' +
                 getString(R.string.verification_info_field_longitude) + myLocation.getLongitude() + '\n' +
-                getString(R.string.verification_info_field_altitude) + getString(R.string.meter, myLocation.getAltitude()) + '\n' +
-                getString(R.string.verification_info_field_accuracy) + getString(R.string.meter, myLocation.getAccuracy()) + '\n' +
+                getString(R.string.verification_info_field_altitude) + getString(R.string.Verification_Label_meter, myLocation.getAltitude()) + '\n' +
+                getString(R.string.verification_info_field_accuracy) + getString(R.string.Verification_Label_meter, myLocation.getAccuracy()) + '\n' +
                 getString(R.string.verification_info_field_location_time) + Util.getDateTimeString(myLocation.getTimestamp(), "dd-MM-yyyy HH:mm:ss Z");
     }
 

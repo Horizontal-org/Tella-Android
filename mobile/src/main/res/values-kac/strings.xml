@@ -287,8 +287,8 @@
   <string name="action_upload">Lamang shagun jaw u</string>
   <string name="collect.blank_action.desc_more.options">Kaga lata la na lam ni</string>
   <string name="action_next">Hpang na langai</string>
-  <string name="meter">Shadawn jitna mita mi %f</string>
-  <string name="meter_per_second">Hkying sekkan mi hta Shadawn jitna mita mi %f</string>
+  <string name="Verification_Label_meter">Shadawn jitna mita mi %f</string>
+  <string name="Verification_Label_MeterPerSecond">Hkying sekkan mi hta Shadawn jitna mita mi %f</string>
   <string name="tella">Tella</string>
   <string name="intro_document_protect"><![CDATA[Matsing ningting ai lam hte Makawp maga ai lam galaw u]]></string>
   <string name="onboard_setup_lock">Nang hku nna Tella hpe gara hku sumsaw la da mayu ai rai?</string>

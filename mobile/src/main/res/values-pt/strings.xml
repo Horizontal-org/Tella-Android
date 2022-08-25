@@ -282,8 +282,8 @@ ativação do modo</string>
   <string name="action_upload">Carregar</string>
   <string name="collect.blank_action.desc_more.options">Mais opções</string>
   <string name="action_next">Continuar</string>
-  <string name="meter">%f m</string>
-  <string name="meter_per_second">%f m/s</string>
+  <string name="Verification_Label_meter">%f m</string>
+  <string name="Verification_Label_MeterPerSecond">%f m/s</string>
   <string name="tella">Tella</string>
   <string name="intro_document_protect"><![CDATA[Document & Protect]]></string>
   <string name="onboard_setup_text">How would you like to set up Tella?</string>

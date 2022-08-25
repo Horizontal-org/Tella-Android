@@ -260,8 +260,8 @@
   <string name="action_upload">பதிவேற்று</string>
   <string name="collect.blank_action.desc_more.options">கூடுதல் விருப்பங்கள்</string>
   <string name="action_next">தொடர்</string>
-  <string name="meter">%fமீட்டர்</string>
-  <string name="meter_per_second">%f மீட்டர் / வினாடி</string>
+  <string name="Verification_Label_meter">%fமீட்டர்</string>
+  <string name="Verification_Label_MeterPerSecond">%f மீட்டர் / வினாடி</string>
   <string name="tella">Tella</string>
   <string name="intro_document_protect"><![CDATA[Document & Protect]]></string>
   <string name="onboard_setup_lock">How would you like to lock Tella?</string>

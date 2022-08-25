@@ -275,8 +275,8 @@
   <string name="action_upload">Téléverser</string>
   <string name="collect.blank_action.desc_more.options">Plus d’options</string>
   <string name="action_next">Poursuivre</string>
-  <string name="meter">%f m</string>
-  <string name="meter_per_second">%f m/s</string>
+  <string name="Verification_Label_meter">%f m</string>
+  <string name="Verification_Label_MeterPerSecond">%f m/s</string>
   <string name="tella">Tella</string>
   <string name="intro_document_protect"><![CDATA[Documenter et protéger]]></string>
   <string name="onboard_setup_lock">Comment souhaitez-vous verrouiller Tella ?</string>
