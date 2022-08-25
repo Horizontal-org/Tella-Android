@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
-import com.google.gson.Gson
 import com.hzontal.tella_vault.MyLocation
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
@@ -20,8 +19,6 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.EventObserver
 import rs.readahead.washington.mobile.bus.event.LocationPermissionRequiredEvent
 import rs.readahead.washington.mobile.databinding.UwaziEntryFragmentBinding
-import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
-import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziGeoData
 import rs.readahead.washington.mobile.util.C
@@ -34,6 +31,7 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.OUTBOX_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
+import timber.log.Timber
 
 
 const val COLLECT_TEMPLATE = "collect_template"
@@ -45,13 +43,12 @@ const val UWAZI_PRIMARY_DOCUMENTS = "primary_documents"
 class UwaziEntryFragment :
     BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziEntryFragmentBinding::inflate),
     OnNavBckListener {
+
     private val viewModel: SharedUwaziSubmissionViewModel by lazy {
         ViewModelProvider(activity).get(SharedUwaziSubmissionViewModel::class.java)
     }
     private val uwaziParser: UwaziParser by lazy { UwaziParser(context) }
 
-    private var template: CollectTemplate? = null
-    private var entityInstance: UwaziEntityInstance = UwaziEntityInstance()
     private val bundle by lazy { Bundle() }
     private var screenView: ViewGroup? = null
     private lateinit var uwaziFormView: UwaziFormView
@@ -85,23 +82,16 @@ class UwaziEntryFragment :
         binding?.apply {
             toolbar.backClickListener = { onBackPressed() }
             toolbar.onRightClickListener = {
-                entityInstance.status = UwaziEntityStatus.DRAFT
-                if (!uwaziParser.getAnswersFromForm(
-                        false,
-                        uwaziFormView,
-                        template,
-                        entityInstance
-                    )
-                ) {
+                uwaziParser.setInstanceStatus(UwaziEntityStatus.DRAFT)
+                if (!uwaziParser.getAnswersFromForm(false, uwaziFormView)) {
                     uwaziFormView.setFocus(context)
                     showValidationMandatoryTitleDialog()
                 } else {
-                    entityInstance.let { viewModel.saveEntityInstance(it) }
+                    uwaziParser.getInstance().let { viewModel.saveEntityInstance(it) }
                 }
             }
 
             nextBtn.setOnClickListener { sendEntity() }
-
             screenView = screenFormView
         }
 
@@ -109,25 +99,23 @@ class UwaziEntryFragment :
 
         if (arguments?.getString(UWAZI_INSTANCE) != null) {
             arguments?.getString(UWAZI_INSTANCE).let {
-                entityInstance = Gson().fromJson(it, UwaziEntityInstance::class.java)
-                template = entityInstance.collectTemplate
-                parseUwaziInstance()
-                hashCode = uwaziFormView.answers.hashCode()
+                if (it != null) {
+                    parseUwaziInstance(it)
+                }
             }
 
         }
 
         if (arguments?.getString(COLLECT_TEMPLATE) != null) {
             arguments?.getString(COLLECT_TEMPLATE).let {
-                template = Gson().fromJson(it, CollectTemplate::class.java)
-                entityInstance.collectTemplate = template
-                entityInstance.template = template?.entityRow?.name.toString()
-                parseUwaziTemplate()
-                hashCode = uwaziFormView.answers.hashCode()
+                if (it != null) {
+                    parseUwaziTemplate(it)
+                }
             }
         }
-        binding!!.toolbar.setStartTextTitle(template?.entityRow?.translatedName.toString())
+        binding!!.toolbar.setStartTextTitle(uwaziParser.getTemplate()?.entityRow?.translatedName.toString())
     }
+
 
     private fun initObservers() {
         with(viewModel) {
@@ -156,28 +144,31 @@ class UwaziEntryFragment :
     }
 
     private fun sendEntity() {
-        if (!uwaziParser.getAnswersFromForm(true, uwaziFormView, template, entityInstance)) {
+        if (!uwaziParser.getAnswersFromForm(true, uwaziFormView)) {
             uwaziFormView.setFocus(context)
             //showValidationMandatoryFieldsDialog()
             showValidationErrorsFieldsDialog()
         } else {
-            val gsonTemplate = Gson().toJson(entityInstance)
-            bundle.putString(SEND_ENTITY, gsonTemplate)
+            bundle.putString(SEND_ENTITY, uwaziParser.getGsonTemplate())
             NavHostFragment.findNavController(this@UwaziEntryFragment)
                 .navigate(R.id.action_uwaziEntryScreen_to_uwaziSendScreen, bundle)
         }
     }
 
-    private fun parseUwaziInstance() {
-        uwaziFormView = uwaziParser.prepareFormView(template)
+    private fun parseUwaziInstance(instance: String) {
+        uwaziFormView = uwaziParser.parseInstance(instance)
         screenView?.addView(uwaziFormView)
-        uwaziParser.putAnswersToForm(entityInstance, uwaziFormView)
+        uwaziParser.putAnswersToForm(uwaziFormView)
+        hashCode = uwaziFormView.answers.hashCode()
+        Timber.d("+++++ hashcode je %s", hashCode)
     }
 
-    private fun parseUwaziTemplate() {
-        uwaziFormView = uwaziParser.prepareFormView(template)
+    private fun parseUwaziTemplate(template: String) {
+        uwaziFormView = uwaziParser.parseTemplate(template)
         screenView?.addView(uwaziFormView)
-        uwaziParser.fillAnswersToForm(entityInstance, uwaziFormView)
+        uwaziParser.fillAnswersToForm(uwaziFormView)
+        hashCode = uwaziFormView.answers.hashCode()
+        Timber.d("+++++ hashcode je %s", hashCode)
     }
 
     private fun putVaultFileInForm(vaultFile: String) {
@@ -254,7 +245,8 @@ class UwaziEntryFragment :
 
     override fun onBackPressed(): Boolean {
         // The save draft dialog should be shown if the form could be saved and if the answers have changed
-        if (uwaziParser.getAnswersFromForm(false, uwaziFormView, template, entityInstance)
+        Timber.d("++++ nashcode na onBackPressed() %s", uwaziFormView.answers.hashCode())
+        if (uwaziParser.getAnswersFromForm(false, uwaziFormView)
             && hashCode != uwaziFormView.answers.hashCode()
         ) {
             BottomSheetUtils.showStandardSheet(
@@ -264,8 +256,8 @@ class UwaziEntryFragment :
                 activity.getString(R.string.collect_form_exit_dialog_action_save_exit),
                 activity.getString(R.string.collect_form_exit_dialog_action_exit_anyway),
                 onConfirmClick = {
-                    entityInstance.status = UwaziEntityStatus.DRAFT
-                    entityInstance.let { viewModel.saveEntityInstance(it) }
+                    uwaziParser.setInstanceStatus(UwaziEntityStatus.DRAFT)
+                    uwaziParser.getInstance().let { viewModel.saveEntityInstance(it) }
                 },
                 onCancelClick = {
                     nav().popBackStack()
