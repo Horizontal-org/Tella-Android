@@ -14,7 +14,7 @@ class IAttachmentsPresenter {
         fun onGetFilesSuccess(files: List<VaultFile?>)
         fun onGetFilesError(error: Throwable?)
         fun onMediaImported(vaultFile: List<VaultFile?>)
-        fun onMediaImportedWithDelete(vaultFile: List<VaultFile?>,uris: List<Uri?>)
+        fun onMediaImportedWithDelete(vaultFile: List<VaultFile?>, uris: List<Uri?>)
         fun onImportError(error: Throwable?)
         fun onImportStarted()
         fun onImportEnded()
@@ -44,17 +44,16 @@ class IAttachmentsPresenter {
     }
 
     interface IPresenter : IBasePresenter {
-        fun getFiles(parent: String?,filterType: FilterType?, sort: Sort?)
-        fun importVaultFiles(uris: List<Uri?>,parentId : String?,deleteOriginal : Boolean)
+        fun getFiles(parent: String?, filterType: FilterType?, sort: Sort?)
+        fun importVaultFiles(uris: List<Uri?>, parentId: String?, deleteOriginal: Boolean)
         fun addNewVaultFiles()
-        fun renameVaultFile(id : String, name : String)
+        fun renameVaultFile(id: String, name: String)
         fun deleteVaultFiles(vaultFiles: List<VaultFile?>?)
-        fun moveFiles(parentId: String?,vaultFiles: List<VaultFile?>?)
+        fun moveFiles(parentId: String?, vaultFiles: List<VaultFile?>?)
         fun deleteVaultFile(vaultFile: VaultFile?)
-        fun exportMediaFiles(vaultFiles: List<VaultFile?>,path: Uri?)
-        fun createFolder(folderName : String, parent: String)
+        fun exportMediaFiles(withMetadata: Boolean, vaultFiles: List<VaultFile?>, path: Uri?)
+        fun createFolder(folderName: String, parent: String)
         fun getRootId()
         fun countTUServers()
-
     }
 }
