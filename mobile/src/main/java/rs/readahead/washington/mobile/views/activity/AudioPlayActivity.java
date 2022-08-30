@@ -8,8 +8,10 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -292,7 +294,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
             startActivityForResult(intent, PICKER_FILE_REQUEST_CODE);
         } else {
-            viewerPresenter.exportNewMediaFile(handlingVaultFile, null);
+            exportWithMetadataCheck(null);
         }
     }
 
@@ -599,7 +601,8 @@ public class AudioPlayActivity extends BaseLockActivity implements
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICKER_FILE_REQUEST_CODE) {
-            viewerPresenter.exportNewMediaFile(handlingVaultFile, data.getData());
+            assert data != null;
+            exportWithMetadataCheck(data.getData());
         }
     }
 
@@ -618,5 +621,31 @@ public class AudioPlayActivity extends BaseLockActivity implements
                 getString(R.string.action_cancel),
                 option -> startShareActivity(option > 0)
         );
+    }
+
+    private void exportWithMetadataCheck(Uri path) {
+        if (handlingVaultFile.metadata != null) {
+            showExportWithMetadataDialog(path);
+        } else {
+            viewerPresenter.exportNewMediaFile(false, handlingVaultFile, path);
+        }
+    }
+
+    private void showExportWithMetadataDialog(Uri path) {
+        LinkedHashMap<Integer, Integer> options = new LinkedHashMap<>();
+        options.put(1, R.string.verification_share_select_media_and_verification);
+        options.put(0, R.string.verification_share_select_only_media);
+        new Handler().post(() -> {
+            BottomSheetUtils.showRadioListOptionsSheet(
+                    getSupportFragmentManager(),
+                    getContext(),
+                    options,
+                    getString(R.string.verification_share_dialog_title),
+                    getString(R.string.verification_share_dialog_expl),
+                    getString(R.string.action_ok),
+                    getString(R.string.action_cancel),
+                    option -> viewerPresenter.exportNewMediaFile(option > 0, handlingVaultFile, path)
+            );
+        });
     }
 }
