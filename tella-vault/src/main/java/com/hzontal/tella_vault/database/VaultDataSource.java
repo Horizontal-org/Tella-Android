@@ -101,7 +101,7 @@ public class VaultDataSource implements IVaultDatabase {
             limit = String.valueOf(limits.limit);
         }
         where = getFilterQuery(filterType, (parent != null ? parent.id : ROOT_UID));
-        Timber.d("where%s", where);
+        Timber.d("where %s", where);
         try {
             // todo: add support for filter directly in query
             final String query = SQLiteQueryBuilder.buildQueryString(
