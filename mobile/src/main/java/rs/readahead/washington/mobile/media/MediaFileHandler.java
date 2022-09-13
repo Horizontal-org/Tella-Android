@@ -681,9 +681,6 @@ public class MediaFileHandler {
         for (VaultFile vaultFile : vaultFiles) {
             if (vaultFile.type == VaultFile.Type.DIRECTORY) {
                 resultList.addAll(fileWalker.walkWithDirectories(vaultFile));
-                resultList.add(vaultFile);
-            } else {
-                resultList.add(vaultFile);
             }
         }
         return resultList;
