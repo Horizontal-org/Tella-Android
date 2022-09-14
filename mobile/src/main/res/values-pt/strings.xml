@@ -282,8 +282,8 @@ ativação do modo</string>
   <string name="action_upload">Carregar</string>
   <string name="collect.blank_action.desc_more.options">Mais opções</string>
   <string name="action_next">Continuar</string>
-  <string name="meter">%f m</string>
-  <string name="meter_per_second">%f m/s</string>
+  <string name="Verification_Label_meter">%f m</string>
+  <string name="Verification_Label_MeterPerSecond">%f m/s</string>
   <string name="tella">Tella</string>
   <string name="intro_document_protect"><![CDATA[Document & Protect]]></string>
   <string name="onboard_setup_text">How would you like to set up Tella?</string>
@@ -657,4 +657,8 @@ button to add a new template.</string>
   <string name="Vault_DeleteFile_SheetTitle">Excluir o arquivo?</string>
   <string name="Vault_deleteFile_SheetDesc">O arquivo selecionado será excluído permanentemente do Tella</string>
   <string name="settings.serv_add.server.selection_dialog.description">If you are not sure, please ask your\n organization.</string>
+  <string name="Timeout_Warning_Title">Warnings</string>
+  <string name="Timeout_Warning_Description">To perform this action, Tella will remain unlocked for 3 minutes.</string>
+  <string name="settings_sec_security_screen">Screen security</string>
+  <string name="settings_sec_security_screen_expl">Block screenshots and screen recordings inside Tella and screen preview in the list of recent apps</string>
 </resources>

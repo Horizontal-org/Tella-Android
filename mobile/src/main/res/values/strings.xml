@@ -282,8 +282,8 @@ mode activation</string>
   <string name="action_upload">Upload</string>
   <string name="collect.blank_action.desc_more.options">More options</string>
   <string name="action_next">Next</string>
-  <string name="meter">%f m</string>
-  <string name="meter_per_second">%f m/s</string>
+  <string name="Verification_Label_meter">%f m</string>
+  <string name="Verification_Label_MeterPerSecond">%f m/s</string>
   <string name="tella">Tella</string>
   <string name="intro_document_protect"><![CDATA[Document & Protect]]></string>
   <string name="onboard_setup_text">How would you like to set up Tella?</string>
@@ -321,8 +321,8 @@ mode activation</string>
   <string name="settings.servers_disable_auto_upload_dialog.expl">Your files will no longer be automatically uploaded to the server.</string>
   <string name="settings.servers_disable_auto_delete_dialog.title">Disable auto-delete?</string>
   <string name="settings.servers_disable_auto_delete_dialog.expl">Your files will no longer be automatically deleted once the upload is complete.</string>
-  <string name="settings_sec_security_screen" translatable="false">Screen security</string>
-  <string name="settings_sec_security_screen_expl" translatable="false">Block screenshots and screen recordings inside Tella and screen preview in the list of recent apps</string>
+  <string name="settings_sec_security_screen">Screen security</string>
+  <string name="settings_sec_security_screen_expl">Block screenshots and screen recordings inside Tella and screen preview in the list of recent apps</string>
   <string name="action_enable">Enable</string>
   <string name="action_disable">Disable</string>
   <string name="settings.servers_delete.server_dialog.title">Delete \"%1$s\" server?</string>
@@ -470,7 +470,6 @@ connecting to a server</string>
   <string name="gallery_list.items_show.only.videos">Videos</string>
   <string name="gallery_list.items_show.only.audio">Audio recordings</string>
   <string name="home_action.desc_quick.exit">Exit</string>
-  <string name="settings.prot_select_lock" translatable="false">Lock</string>
   <string name="onboard.camo_heading">Camouflage</string>
   <string name="settings.camo_camera4">Camera</string>
   <string name="settings.camo_camera3">CameraPro</string>
@@ -673,6 +672,6 @@ button to add a new template.</string>
   <string name="Collect_DeleteDraftForm_SheetExpl">Are you sure you want to delete this draft?</string>
   <string name="Collect_DeleteForm_SheetExpl">Are you sure you want to delete this form?</string>
   <string name="Uwazi_Dialog_Draft_Title">Exit entity?</string>
-  <string name="Timeout_Warning_Title" translatable="false">Warnings</string>
-  <string name="Timeout_Warning_Description" translatable="false">To perform this action, Tella will remain unlocked for 3 minutes.</string>
+  <string name="Timeout_Warning_Title">Warnings</string>
+  <string name="Timeout_Warning_Description">To perform this action, Tella will remain unlocked for 3 minutes.</string>
 </resources>

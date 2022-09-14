@@ -593,8 +593,11 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
                 override fun share() {
                     activity.maybeChangeTemporaryTimeout{
-                        shareVaultFile(vaultFile)
-                        //MediaFileHandler.startShareActivity(activity, vaultFile, false)
+                        if (attachmentsAdapter.selectedMediaFiles.size > 0) {
+                            shareVaultFiles()
+                        }else {
+                            shareVaultFile(vaultFile)
+                        }
                     }
                 }
 

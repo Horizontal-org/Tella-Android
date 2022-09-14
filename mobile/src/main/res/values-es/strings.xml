@@ -279,8 +279,8 @@
   <string name="action_upload">Subir</string>
   <string name="collect.blank_action.desc_more.options">Más opciones</string>
   <string name="action_next">Siguiente</string>
-  <string name="meter">%f m</string>
-  <string name="meter_per_second">%f m/s</string>
+  <string name="Verification_Label_meter">%f m</string>
+  <string name="Verification_Label_MeterPerSecond">%f m/s</string>
   <string name="tella">Tella</string>
   <string name="intro_document_protect"><![CDATA[Documentar y Proteger]]></string>
   <string name="onboard_setup_lock">¿Cómo te gustaría bloquear Tella?</string>
@@ -579,4 +579,8 @@ conectarse a un servidor</string>
   <string name="settings.gen_share_data_action.expl">Help us understand how you use Tella. Your data will never be shared with anyone outside of the Tella team.</string>
   <string name="action_no">no</string>
   <string name="settings.serv_add.server.selection_dialog.description">If you are not sure, please ask your\n organization.</string>
+  <string name="Timeout_Warning_Title">Warnings</string>
+  <string name="Timeout_Warning_Description">To perform this action, Tella will remain unlocked for 3 minutes.</string>
+  <string name="settings_sec_security_screen">Screen security</string>
+  <string name="settings_sec_security_screen_expl">Block screenshots and screen recordings inside Tella and screen preview in the list of recent apps</string>
 </resources>

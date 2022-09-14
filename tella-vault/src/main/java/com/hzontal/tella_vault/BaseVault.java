@@ -79,6 +79,20 @@ public abstract class BaseVault {
         }
     }
 
+
+    protected InputStream baseGetStream(String vaultFileId) throws VaultException {
+        try {
+            File file = getFile(vaultFileId);
+            FileInputStream fis = new FileInputStream(file);
+            byte[] key = mainKeyHolder.get().getKey().getEncoded();
+
+            return CipherStreamUtils.getDecryptedLimitedInputStream(key, fis, file);
+
+        } catch (IOException | LifecycleMainKey.MainKeyUnavailableException e) {
+            throw new VaultException(e);
+        }
+    }
+
     /**
      * Returns a stream of VaultFile's data. For directories empty OutputStream will be returned.
      *
@@ -91,6 +105,26 @@ public abstract class BaseVault {
             FileOutputStream fos = new FileOutputStream(file);
             byte[] key = mainKeyHolder.get().getKey().getEncoded();
 
+            return new VaultOutputStream(vaultFile, CipherStreamUtils.getEncryptedOutputStream(key, fos, file.getName()),
+                    MessageDigest.getInstance("SHA-256"));
+        } catch (IOException | LifecycleMainKey.MainKeyUnavailableException | NoSuchAlgorithmException e) {
+            throw new VaultException(e);
+        }
+    }
+
+
+    /**
+     * Returns a stream of VaultFile's id. For directories empty OutputStream will be returned.
+     *
+     * @param vaultFileId id to read.
+     * @return Stream of data.
+     */
+    protected VaultOutputStream baseOutStream(String vaultFileId) throws VaultException {
+        try {
+            File file = getWritableFile(vaultFileId);
+            FileOutputStream fos = new FileOutputStream(file);
+            byte[] key = mainKeyHolder.get().getKey().getEncoded();
+            VaultFile vaultFile = baseGet(vaultFileId);
             return new VaultOutputStream(vaultFile, CipherStreamUtils.getEncryptedOutputStream(key, fos, file.getName()),
                     MessageDigest.getInstance("SHA-256"));
         } catch (IOException | LifecycleMainKey.MainKeyUnavailableException | NoSuchAlgorithmException e) {
@@ -232,8 +266,19 @@ public abstract class BaseVault {
         return file;
     }
 
+    public File getFile(String vaultFileId) {
+        File file = new File(this.config.root, vaultFileId);
+        //noinspection ResultOfMethodCallIgnored
+        file.setReadOnly();
+        return file;
+    }
+
     protected File getWritableFile(VaultFile vaultFile) {
         return new File(this.config.root, getFileName(vaultFile));
+    }
+
+    protected File getWritableFile(String vaultFileId) {
+        return new File(this.config.root, vaultFileId);
     }
 
     protected boolean mkdirs(File path) {
