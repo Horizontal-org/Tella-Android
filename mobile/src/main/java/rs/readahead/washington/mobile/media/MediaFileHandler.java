@@ -17,7 +17,6 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
@@ -50,7 +49,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.security.DigestOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -355,7 +353,6 @@ public class MediaFileHandler {
     public static VaultFile saveMp4Video(File video, String parent) throws IOException {
         FileInputStream vis = null;
         InputStream is = null;
-        DigestOutputStream os = null;
 
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
 
@@ -395,7 +392,6 @@ public class MediaFileHandler {
         } finally {
             FileUtil.close(vis);
             FileUtil.close(is);
-            FileUtil.close(os);
             FileUtil.delete(video);
             try {
                 retriever.release();
@@ -564,9 +560,14 @@ public class MediaFileHandler {
         Uri mediaFileUri = getEncryptedUri(context, vaultFile);
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_STREAM, mediaFileUri);
         shareIntent.setType(vaultFile.mimeType);
-        context.startActivity(Intent.createChooser(shareIntent, context.getText(R.string.action_share)));
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        Intent chooser = Intent.createChooser(shareIntent, context.getText(R.string.action_share));
+        chooser.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, mediaFileUri);
+
+        context.startActivity(chooser);
     }
 
     public static void startShareActivity(Context context, List<VaultFile> mediaFiles, boolean includeMetadata) {
@@ -584,11 +585,15 @@ public class MediaFileHandler {
         }
 
         Intent shareIntent = new Intent();
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
         shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
         shareIntent.setType("*/*");
 
-        context.startActivity(Intent.createChooser(shareIntent, context.getText(R.string.action_share)));
+        Intent chooser = Intent.createChooser(shareIntent, context.getText(R.string.action_share));
+        chooser.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+
+        context.startActivity(chooser);
     }
 
     private static String getMetadataFilename(VaultFile vaultFile) {
@@ -658,29 +663,6 @@ public class MediaFileHandler {
         );
     }
 
-    public static Uri getUriFromDisplayName(Context context, Uri uri) {
-
-        String[] projection;
-        projection = new String[]{MediaStore.Files.FileColumns._ID};
-        String displayName = getOriginalFileName(context, uri);
-
-        // TODO This will break if we have no matching item in the MediaStore.
-        Cursor cursor = context.getContentResolver().query(uri, projection,
-                MediaStore.Files.FileColumns.DISPLAY_NAME + " LIKE ?", new String[]{displayName}, null);
-        assert cursor != null;
-        cursor.moveToFirst();
-
-        if (cursor.getCount() > 0) {
-            int columnIndex = cursor.getColumnIndex(projection[0]);
-            long fileId = cursor.getLong(columnIndex);
-
-            cursor.close();
-            return Uri.parse(uri.toString() + "/" + fileId);
-        } else {
-            return null;
-        }
-    }
-
     public static List<VaultFile> walkAllFiles(List<VaultFile> vaultFiles) {
         List<VaultFile> resultList = new ArrayList<>();
         for (VaultFile vaultFile : vaultFiles) {
@@ -699,9 +681,6 @@ public class MediaFileHandler {
         for (VaultFile vaultFile : vaultFiles) {
             if (vaultFile.type == VaultFile.Type.DIRECTORY) {
                 resultList.addAll(fileWalker.walkWithDirectories(vaultFile));
-                resultList.add(vaultFile);
-            } else {
-                resultList.add(vaultFile);
             }
         }
         return resultList;

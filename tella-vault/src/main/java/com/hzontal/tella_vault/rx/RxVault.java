@@ -57,8 +57,17 @@ public class RxVault extends BaseVault {
         return baseGetStream(vaultFile);
     }
 
+    public InputStream getStream(String vaultFileId) throws VaultException {
+        return baseGetStream(vaultFileId);
+    }
+
     public VaultOutputStream getOutStream(VaultFile vaultFile) throws VaultException {
         return baseOutStream(vaultFile);
+    }
+
+
+    public VaultOutputStream getOutStream(String vaultFileId) throws VaultException {
+        return baseOutStream(vaultFileId);
     }
 
     public Single<VaultFile> getRoot() {
