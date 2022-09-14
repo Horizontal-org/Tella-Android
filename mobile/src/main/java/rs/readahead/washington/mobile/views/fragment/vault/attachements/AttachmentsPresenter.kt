@@ -157,13 +157,22 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
             })
     }
 
-    override fun exportMediaFiles(vaultFiles: List<VaultFile?>,path: Uri?) {
+    override fun exportMediaFiles(withMetadata: Boolean, vaultFiles: List<VaultFile?>, path: Uri?) {
         disposables.add(
             Single
                 .fromCallable {
                     val resultList = walkAllFiles(vaultFiles)
                     for (vaultFile in resultList) {
-                        vaultFile?.let { MediaFileHandler.exportMediaFile(view?.getContext(), it,path) }
+                        vaultFile?.let {
+                            MediaFileHandler.exportMediaFile(view?.getContext(), it, path)
+                            if (withMetadata && vaultFile.metadata != null) {
+                                MediaFileHandler.exportMediaFile(
+                                    view?.getContext(),
+                                    MediaFileHandler.maybeCreateMetadataMediaFile(it),
+                                    path
+                                )
+                            }
+                        }
                     }
                     resultList.size
                 }

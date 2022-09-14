@@ -25,11 +25,14 @@ public class MediaFileViewerPresenter implements IMediaFileViewerPresenterContra
     }
 
     @Override
-    public void exportNewMediaFile(final VaultFile vaultFile, Uri path) {
+    public void exportNewMediaFile(Boolean withMetadata, final VaultFile vaultFile, Uri path) {
         disposables.add(Completable.fromCallable((Callable<Void>) () -> {
-                    MediaFileHandler.exportMediaFile(view.getContext().getApplicationContext(), vaultFile,path);
-                    return null;
-                })
+                            MediaFileHandler.exportMediaFile(view.getContext().getApplicationContext(), vaultFile, path);
+                            if (withMetadata && vaultFile.metadata != null) {
+                                MediaFileHandler.exportMediaFile(view.getContext().getApplicationContext(), MediaFileHandler.maybeCreateMetadataMediaFile(vaultFile), path);
+                            }
+                            return null;
+                        })
                         .subscribeOn(Schedulers.computation())
                         .doOnSubscribe(disposable -> view.onExportStarted())
                         .observeOn(AndroidSchedulers.mainThread())
