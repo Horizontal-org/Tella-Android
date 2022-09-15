@@ -93,6 +93,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
 
     private boolean showActions = false;
     private boolean actionsDisabled = false;
+    private boolean withMetadata = false;
     private AlertDialog alertDialog;
     private ProgressDialog progressDialog;
 
@@ -284,9 +285,16 @@ public class AudioPlayActivity extends BaseLockActivity implements
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void exportMediaFile() {
         if (handlingVaultFile != null && viewerPresenter != null) {
-            performFileSearch();
+            if (handlingVaultFile.metadata != null) {
+                showExportWithMetadataDialog();
+            } else {
+                withMetadata = false;
+                maybeChangeTemporaryTimeout(() -> {
+                    performFileSearch();
+                    return Unit.INSTANCE;
+                });
+            }
         }
-
     }
 
     private void performFileSearch() {
@@ -294,7 +302,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
             startActivityForResult(intent, PICKER_FILE_REQUEST_CODE);
         } else {
-            exportWithMetadataCheck(null);
+            viewerPresenter.exportNewMediaFile(withMetadata, handlingVaultFile, null);
         }
     }
 
@@ -602,7 +610,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICKER_FILE_REQUEST_CODE) {
             assert data != null;
-            exportWithMetadataCheck(data.getData());
+            viewerPresenter.exportNewMediaFile(withMetadata, handlingVaultFile, data.getData());
         }
     }
 
@@ -623,15 +631,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
         );
     }
 
-    private void exportWithMetadataCheck(Uri path) {
-        if (handlingVaultFile.metadata != null) {
-            showExportWithMetadataDialog(path);
-        } else {
-            viewerPresenter.exportNewMediaFile(false, handlingVaultFile, path);
-        }
-    }
-
-    private void showExportWithMetadataDialog(Uri path) {
+    private void showExportWithMetadataDialog() {
         LinkedHashMap<Integer, Integer> options = new LinkedHashMap<>();
         options.put(1, R.string.verification_share_select_media_and_verification);
         options.put(0, R.string.verification_share_select_only_media);
@@ -644,7 +644,13 @@ public class AudioPlayActivity extends BaseLockActivity implements
                     getString(R.string.verification_share_dialog_expl),
                     getString(R.string.action_ok),
                     getString(R.string.action_cancel),
-                    option -> viewerPresenter.exportNewMediaFile(option > 0, handlingVaultFile, path)
+                    option -> {
+                        withMetadata = option > 0;
+                        maybeChangeTemporaryTimeout(() -> {
+                            performFileSearch();
+                            return Unit.INSTANCE;
+                        });
+                    }
             );
         });
     }

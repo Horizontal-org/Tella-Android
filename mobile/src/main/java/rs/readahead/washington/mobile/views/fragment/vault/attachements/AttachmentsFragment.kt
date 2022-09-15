@@ -123,6 +123,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private var uriToDelete: Uri? = null
     private val bundle by lazy { Bundle() }
     private var selectAll = false
+    private var withMetadata = false
     private var selectMode = SelectMode.DESELECT_ALL
 
     override fun onCreateView(
@@ -594,10 +595,10 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 }
 
                 override fun share() {
-                    activity.maybeChangeTemporaryTimeout{
+                    activity.maybeChangeTemporaryTimeout {
                         if (attachmentsAdapter.selectedMediaFiles.size > 0) {
                             shareVaultFiles()
-                        }else {
+                        } else {
                             shareVaultFile(vaultFile)
                         }
                     }
@@ -637,10 +638,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                         getString(R.string.action_cancel),
                         consumer = object : ActionConfirmed {
                             override fun accept(isConfirmed: Boolean) {
-                                activity.maybeChangeTemporaryTimeout {
-                                    this@AttachmentsFragment.vaultFile = vaultFile
-                                    performFileSearch(isMultipleFiles, vaultFile)
-                                }
+                                this@AttachmentsFragment.vaultFile = vaultFile
+                                exportVaultFilesWithMetadataCheck(vaultFile)
                             }
                         })
                 }
@@ -837,7 +836,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     private fun exportVaultFiles(
-        withMetadata: Boolean,
         isMultipleFiles: Boolean,
         vaultFile: VaultFile?,
         path: Uri?
@@ -1010,7 +1008,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                         Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                     )
                 }
-                exportVaultFilesWithMetadataCheck(
+                exportVaultFiles(
                     isMultipleFiles = attachmentsAdapter.selectedMediaFiles.size > 0,
                     vaultFile,
                     treeUri
@@ -1033,30 +1031,30 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     private fun requestStoragePermissions() {
         activity.maybeChangeTemporaryTimeout()
-            if (SDK_INT >= Build.VERSION_CODES.R) {
-                try {
-                    val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-                    intent.addCategory("android.intent.category.DEFAULT")
-                    intent.data = Uri.parse(
-                        String.format(
-                            "package:%s",
-                            activity.application.packageName
-                        )
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            try {
+                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                intent.addCategory("android.intent.category.DEFAULT")
+                intent.data = Uri.parse(
+                    String.format(
+                        "package:%s",
+                        activity.application.packageName
                     )
-                    startActivityForResult(intent, WRITE_REQUEST_CODE)
-                } catch (e: Exception) {
-                    val intent = Intent()
-                    intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
-                    startActivityForResult(intent, WRITE_REQUEST_CODE)
-                }
-            } else {
-                //below android 11
-                ActivityCompat.requestPermissions(
-                    activity,
-                    arrayOf(WRITE_EXTERNAL_STORAGE),
-                    WRITE_REQUEST_CODE
                 )
+                startActivityForResult(intent, WRITE_REQUEST_CODE)
+            } catch (e: Exception) {
+                val intent = Intent()
+                intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+                startActivityForResult(intent, WRITE_REQUEST_CODE)
             }
+        } else {
+            //below android 11
+            ActivityCompat.requestPermissions(
+                activity,
+                arrayOf(WRITE_EXTERNAL_STORAGE),
+                WRITE_REQUEST_CODE
+            )
+        }
 
     }
 
@@ -1225,7 +1223,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 )
                 startActivityForResult(intent, PICKER_FILE_REQUEST_CODE)
             } else {
-                exportVaultFilesWithMetadataCheck(isMultipleFiles, vaultFile, null)
+                exportVaultFiles(isMultipleFiles, vaultFile, null)
             }
         } else {
             requestStoragePermissions()
@@ -1233,34 +1231,38 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     private fun exportVaultFilesWithMetadataCheck(
-        isMultipleFiles: Boolean,
-        vaultFile: VaultFile?,
-        path: Uri?
+        vaultFile: VaultFile?
     ) {
+        var isMultipleFiles = false
         val selected: List<VaultFile> = attachmentsAdapter.selectedMediaFiles
-        if (selected.isEmpty()) return
 
-        var hasMetadata = false
+        if (selected.size > 1) isMultipleFiles = true
+
+        withMetadata = false
 
         for (file in selected) {
-            if (file.metadata != null) hasMetadata = true
+            if (file.metadata != null) withMetadata = true
         }
 
-        if (hasMetadata) {
+        if (vaultFile != null && vaultFile.metadata != null) {
+            withMetadata = true
+        }
+
+        if (withMetadata) {
             showExportWithMetadataDialog(
                 isMultipleFiles,
-                vaultFile,
-                path
+                vaultFile
             )
         } else {
-            exportVaultFiles(false, isMultipleFiles, vaultFile, path)
+            activity.maybeChangeTemporaryTimeout {
+                performFileSearch(isMultipleFiles, vaultFile)
+            }
         }
     }
 
     private fun showExportWithMetadataDialog(
         isMultipleFiles: Boolean,
-        vaultFile: VaultFile?,
-        path: Uri?
+        vaultFile: VaultFile?
     ) {
         val options = LinkedHashMap<Int, Int>()
         options[1] = R.string.verification_share_select_media_and_verification
@@ -1275,7 +1277,10 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             getString(R.string.action_cancel),
             object : RadioOptionConsumer {
                 override fun accept(option: Int) {
-                    exportVaultFiles(option > 0, isMultipleFiles, vaultFile, path)
+                    withMetadata = option > 0
+                    activity.maybeChangeTemporaryTimeout {
+                        performFileSearch(isMultipleFiles, vaultFile)
+                    }
                 }
             }
         )

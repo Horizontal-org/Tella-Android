@@ -80,6 +80,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
 
     private boolean needRetrySource;
     private boolean shouldAutoPlay;
+    private boolean withMetadata = false;
     private int resumeWindow;
     private long resumePosition;
 
@@ -194,9 +195,16 @@ public class VideoViewerActivity extends BaseLockActivity implements
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void exportMediaFile() {
         if (vaultFile != null && presenter != null) {
-            performFileSearch();
+            if (vaultFile.metadata != null) {
+                showExportWithMetadataDialog();
+            } else {
+                withMetadata = false;
+                maybeChangeTemporaryTimeout(() -> {
+                    performFileSearch();
+                    return Unit.INSTANCE;
+                });
+            }
         }
-
     }
 
     @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -212,10 +220,9 @@ public class VideoViewerActivity extends BaseLockActivity implements
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
             startActivityForResult(intent, PICKER_FILE_REQUEST_CODE);
         } else {
-            exportWithMetadataCheck(null);
+            presenter.exportNewMediaFile(withMetadata, vaultFile, null);
         }
     }
-
 
     @Override
     public void onMediaExported() {
@@ -478,10 +485,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
                                 getString(R.string.action_save),
                                 getString(R.string.action_cancel),
                                 isConfirmed -> {
-                                    maybeChangeTemporaryTimeout(() -> {
-                                        VideoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(VideoViewerActivity.this);
-                                        return Unit.INSTANCE;
-                                    });
+                                    VideoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(VideoViewerActivity.this);
                                 }
                         );
                     }
@@ -532,7 +536,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICKER_FILE_REQUEST_CODE) {
             assert data != null;
-            exportWithMetadataCheck(data.getData());
+            presenter.exportNewMediaFile(withMetadata, vaultFile, data.getData());
         }
     }
 
@@ -553,15 +557,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
         );
     }
 
-    private void exportWithMetadataCheck(Uri path) {
-        if (vaultFile.metadata != null) {
-            showExportWithMetadataDialog(path);
-        } else {
-            presenter.exportNewMediaFile(false, vaultFile, path);
-        }
-    }
-
-    private void showExportWithMetadataDialog(Uri path) {
+    private void showExportWithMetadataDialog() {
         LinkedHashMap<Integer, Integer> options = new LinkedHashMap<>();
         options.put(1, R.string.verification_share_select_media_and_verification);
         options.put(0, R.string.verification_share_select_only_media);
@@ -574,7 +570,13 @@ public class VideoViewerActivity extends BaseLockActivity implements
                     getString(R.string.verification_share_dialog_expl),
                     getString(R.string.action_ok),
                     getString(R.string.action_cancel),
-                    option -> presenter.exportNewMediaFile(option > 0, vaultFile, path)
+                    option -> {
+                        withMetadata = option > 0;
+                        maybeChangeTemporaryTimeout(() -> {
+                            performFileSearch();
+                            return Unit.INSTANCE;
+                        });
+                    }
             );
         });
     }
