@@ -16,15 +16,14 @@ import android.location.LocationManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AlertDialog;
-
-import android.provider.Settings;
-import android.view.View;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -56,6 +55,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.subjects.BehaviorSubject;
+import kotlin.Unit;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
@@ -70,27 +70,21 @@ import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 public abstract class MetadataActivity extends BaseLockActivity implements
         SensorEventListener {
     private static final long LOCATION_REQUEST_INTERVAL = 5000; // aggressive
-
+    private final static SensorData lightSensorData = new SensorData();
+    private final static SensorData ambientTemperatureSensorData = new SensorData();
+    private final static BehaviorSubject<MyLocation> locationSubject = BehaviorSubject.create();
+    private static Location currentBestLocation;
+    private final BehaviorSubject<List<String>> wifiSubject = BehaviorSubject.create();
     private SensorManager mSensorManager;
     private Sensor mLight;
     private Sensor mAmbientTemperature;
-
     private FusedLocationProviderClient fusedLocationProviderClient;
     private LocationCallback locationCallback;
     private WifiManager wifiManager;
     private BroadcastReceiver wifiScanResultReceiver;
-
-    private static Location currentBestLocation;
-
     private boolean locationListenerRegistered = false;
     private boolean wifiReceiverRegistered = false;
-
     private boolean sensorListenerRegistered = false;
-    private final static SensorData lightSensorData = new SensorData();
-    private final static SensorData ambientTemperatureSensorData = new SensorData();
-
-    private final BehaviorSubject<List<String>> wifiSubject = BehaviorSubject.create();
-    private final static BehaviorSubject<MyLocation> locationSubject = BehaviorSubject.create();
     private LocationManager locationManager;
 
     private AlertDialog metadataAlertDialog;
@@ -98,6 +92,14 @@ public abstract class MetadataActivity extends BaseLockActivity implements
     private Relay<MetadataHolder> metadataCancelRelay;
     private CompositeDisposable disposables;
 
+    private static void acceptBetterLocation(Location location) {
+        if (!LocationUtil.isBetterLocation(location, currentBestLocation)) {
+            return;
+        }
+
+        currentBestLocation = location;
+        locationSubject.onNext(MyLocation.fromLocation(location));
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -311,10 +313,6 @@ public abstract class MetadataActivity extends BaseLockActivity implements
         return locationRequest;
     }
 
-    interface LocationSettingsCheckDoneListener {
-        void onContinue();
-    }
-
     protected void checkLocationSettings(final int requestCode, final LocationSettingsCheckDoneListener listener) {
         if (isFineLocationPermissionDenied()) {
             listener.onContinue();
@@ -355,14 +353,17 @@ public abstract class MetadataActivity extends BaseLockActivity implements
     }
 
     private void showGpsMetadataDialog(final int requestCode, final LocationSettingsCheckDoneListener listener) {
-        BottomSheetUtils.showConfirmSheet(
-                getSupportFragmentManager(),
-                getString(R.string.verification_prompt_dialog_title),
-                getString(R.string.verification_prompt_dialog_expl),
-                getString(R.string.verification_prompt_action_enable_GPS),
-                getString(R.string.verification_prompt_action_ignore),
-                isConfirmed -> manageLocationSettings(requestCode, listener)
-        );
+        maybeChangeTemporaryTimeout(() -> {
+            BottomSheetUtils.showConfirmSheet(
+                    getSupportFragmentManager(),
+                    getString(R.string.verification_prompt_dialog_title),
+                    getString(R.string.verification_prompt_dialog_expl),
+                    getString(R.string.verification_prompt_action_enable_GPS),
+                    getString(R.string.verification_prompt_action_ignore),
+                    isConfirmed -> manageLocationSettings(requestCode, listener)
+            );
+            return Unit.INSTANCE;
+        });
     }
 
     public SensorData getLightSensorData() {
@@ -397,23 +398,6 @@ public abstract class MetadataActivity extends BaseLockActivity implements
                 .filter(mh -> (!mh.getWifis().isEmpty() || !mh.getLocation().isEmpty()))
                 .take((5 * 60 * 1000) / LOCATION_REQUEST_INTERVAL) // approx max 5 min of trying limit
                 .takeUntil(mh -> !mh.getWifis().isEmpty() && !mh.getLocation().isEmpty());
-    }
-
-    private static class MetadataLocationCallback extends LocationCallback {
-        @Override
-        public void onLocationResult(LocationResult locationResult) {
-            Location location = locationResult.getLastLocation();
-            acceptBetterLocation(location);
-        }
-    }
-
-    private static void acceptBetterLocation(Location location) {
-        if (!LocationUtil.isBetterLocation(location, currentBestLocation)) {
-            return;
-        }
-
-        currentBestLocation = location;
-        locationSubject.onNext(MyLocation.fromLocation(location));
     }
 
     // UI stuff
@@ -539,6 +523,18 @@ public abstract class MetadataActivity extends BaseLockActivity implements
         }
     }
 
+    interface LocationSettingsCheckDoneListener {
+        void onContinue();
+    }
+
+    private static class MetadataLocationCallback extends LocationCallback {
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            Location location = locationResult.getLastLocation();
+            acceptBetterLocation(location);
+        }
+    }
+
     // Helper Classes
     static class MetadataHolder {
         private final MyLocation location;
@@ -548,6 +544,10 @@ public abstract class MetadataActivity extends BaseLockActivity implements
         MetadataHolder(MyLocation location, List<String> wifis) {
             this.location = location;
             setWifis(wifis);
+        }
+
+        static MetadataHolder createEmpty() {
+            return new MetadataHolder(MyLocation.createEmpty(), Collections.emptyList());
         }
 
         MyLocation getLocation() {
@@ -566,10 +566,6 @@ public abstract class MetadataActivity extends BaseLockActivity implements
                     this.wifis.add(wifi);
                 }
             }
-        }
-
-        static MetadataHolder createEmpty() {
-            return new MetadataHolder(MyLocation.createEmpty(), Collections.emptyList());
         }
     }
 }
