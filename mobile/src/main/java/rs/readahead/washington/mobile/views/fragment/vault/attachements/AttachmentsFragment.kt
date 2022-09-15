@@ -151,7 +151,9 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 true
             }
             R.id.action_share -> {
-                shareVaultFiles()
+                activity.maybeChangeTemporaryTimeout{
+                        shareVaultFiles()
+                }
                 return true
             }
             /*  R.id.action_check -> {
