@@ -31,6 +31,7 @@ abstract class BaseActivity : AppCompatActivity() {
         if (!isManualOrientation && !resources.getBoolean(R.bool.isTablet)) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
+        maybeRestoreExitTimeOut()
         initLoading()
     }
 
@@ -78,6 +79,12 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
+    fun maybeRestoreExitTimeOut() {
+        if (Preferences.isExitTimeout()) {
+            MyApplication.getMainKeyHolder().timeout = Preferences.getLockTimeout()
+            Preferences.setTempTimeout(false)
+        }
+    }
 
     fun replaceFragmentNoAddToBackStack(fragment: Fragment, cont: Int) {
         val className = fragment.javaClass.name

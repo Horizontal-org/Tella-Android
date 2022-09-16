@@ -59,6 +59,7 @@ public class SharedPrefs {
     static final String HAS_IMPROVEMENT_ACCEPTED = "has_improvement_accepted";
     static final String TIME_IMPROVEMENT_ACCEPTED = "time_improvement_accepted";
     static final String TEMP_TIMEOUT = "temp_timeout";
+    static final String EXIT_TIMEOUT = "exit_timeout";
 
     private static SharedPrefs instance;
     private SharedPreferences pref;

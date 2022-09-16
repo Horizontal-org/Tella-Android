@@ -187,6 +187,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         toolbar.onRightClickListener = {
             MyApplication.exit(activity)
             MyApplication.getMainKeyHolder().timeout = LockTimeoutManager.IMMEDIATE_SHUTDOWN
+            Preferences.setExitTimeout(true)
         }
         vaultAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onChanged() {
