@@ -266,6 +266,14 @@ public class Preferences {
         setBoolean(SharedPrefs.TEMP_TIMEOUT, value);
     }
 
+    public static boolean isExitTimeout() {
+        return getBoolean(SharedPrefs.EXIT_TIMEOUT, false);
+    }
+
+    public static void setExitTimeout(boolean value) {
+        setBoolean(SharedPrefs.EXIT_TIMEOUT, value);
+    }
+
     public static void setAutoUpload(boolean value) {
         setBoolean(SharedPrefs.AUTO_UPLOAD, value);
     }
