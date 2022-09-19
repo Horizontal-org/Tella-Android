@@ -8,5 +8,5 @@
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:textStyle="bold"
         android:textAllCaps="true"
-        android:textColor="?android:attr/textColorPrimary"/>
+        android:textColor="?android:attr/textColorPrimaryInverse"/>
 </merge>

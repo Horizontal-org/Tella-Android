@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="Home_BottomNav_Home">Accueil</string>
+    <string name="Home_BottomNav_Rec">Dicta</string>
+    <string name="Home_BottomNav_Camera">Appareil photo</string>
+    <string name="Home_BottomNav_Forms">Formulaires</string>
+    <string name="Home_BottomNav_Reports">Rapports</string>
+    <string name="Home_BottomNav_Uwazi">Uwazi</string>
+</resources>

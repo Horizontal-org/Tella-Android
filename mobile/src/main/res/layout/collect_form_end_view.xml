@@ -4,75 +4,71 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:textDirection="locale"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/wa_purple"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:textAllCaps="true"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="?android:attr/textColorPrimary"
-        android:textStyle="bold"/>
-
-    <TextView
-        android:id="@+id/subtitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:visibility="gone"
-        android:text="@string/collect.end_subheading.expl_unchecked.items"
-        android:textColor="@color/wa_gray"/>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/shadow_border"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/formName"
+            android:id="@+id/title"
+            style="@style/Tella_Main_White_Text.Meduim"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:gravity="start"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            tools:text="Submit your entity now or tap “SUBMIT LATER” to save it to your Outbox and send it later."
+            />
+
+        <TextView
+            android:id="@+id/subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:visibility="gone"
+            android:text="@string/Collect_EndSubtitleExpl_UncheckedItems"
+            android:textColor="@color/wa_white"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/wa_white_20"
+            >
+        </View>
+
+        <TextView
+            android:id="@+id/formName"
+            style="@style/Tella_Main_White_Text.MeduimbBold"
+            android:layout_width="match_parent"
+            tools:text="Test Test TestTestTestTestTestTestTestTestTestTestTestTest"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:textColor="@color/wa_white"
             android:ellipsize="end"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/formSize"
+            style="@style/Tella_Main_White_Text.Small"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:weightSum="1"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/formElements"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"/>
-
-            <TextView
-                android:id="@+id/formSize"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"/>
-        </LinearLayout>
+            android:layout_gravity="start"
+            tools:text="15MB"
+            android:textColor="@color/wa_white"/>
 
         <LinearLayout
             android:id="@+id/formPartsList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"/>
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/activity_vertical_margin" />
 
     </LinearLayout>
 </LinearLayout>

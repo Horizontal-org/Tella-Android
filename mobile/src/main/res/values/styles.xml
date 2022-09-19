@@ -29,6 +29,16 @@
         <item name="android:fontFamily">@font/open_sans</item>
     </style>
 
+    <style name="AppTheme.DarkNoActionBar.Blue" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/prussian_blue</item>
+        <item name="colorPrimaryDark">@color/prussian_blue</item>
+        <item name="colorAccent">@color/prussian_blue</item>
+        <item name="patternViewStyle">@style/PatternView</item>
+        <item name="android:textColorPrimaryInverse">@color/colorPrimaryInverse</item>
+        <item name="android:textColorSecondary">@color/colorPrimaryInverse</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+    </style>
+
     <style name="PhotoViewerTheme.NoActionBar" parent="AppTheme.NoActionBar">
         <!-- <item name="colorAccent">@color/wa_white</item> -->
     </style>
@@ -69,8 +79,8 @@
 
     <style name="SettingsMainShadowLine">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1dp</item>
-        <item name="android:background">#80CCCCCC</item>
+        <item name="android:layout_height">0.5dp</item>
+        <item name="android:background">#47426F</item>
     </style>
 
     <style name="CameraModeText">
@@ -87,33 +97,6 @@
         <item name="android:layout_marginTop">5dp</item>
     </style>
 
-    <style name="TrustedPersonListLine">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">0.5dp</item>
-        <item name="android:background">@color/wa_gray</item>
-    </style>
-
-    <style name="ButtonTextSmall">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/wa_black</item>
-        <item name="android:gravity">center</item>
-        <item name="android:layout_margin">1dp</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:shadowColor">@color/wa_black</item>
-        <item name="android:shadowDx">1</item>
-        <item name="android:shadowDy">1</item>
-        <item name="android:shadowRadius">2</item>
-    </style>
-
-    <style name="ImageViewSelector">
-        <item name="android:layout_width">28dp</item>
-        <item name="android:layout_height">28dp</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:background">?selectableItemBackgroundBorderless</item>
-        <item name="android:clickable">true</item>
-    </style>
-
     <style name="VerticalLinearLayout">
         <item name="android:orientation">vertical</item>
         <item name="android:layout_width">match_parent</item>
@@ -126,12 +109,6 @@
         <item name="android:background">@drawable/button_pressed_transparent</item>
     </style>
 
-    <style name="ClickableVerticalShadowLinerLayout" parent="VerticalLinearLayout">
-        <item name="android:clickable">true</item>
-        <item name="android:background">@drawable/shadow_border</item>
-        <item name="android:padding">10dp</item>
-    </style>
-
     <style name="SettingsTitleClickableHorizontalLinerLayout">
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
@@ -141,92 +118,10 @@
         <item name="android:paddingStart">32dp</item>
     </style>
 
-    <style name="SettingsClickableHorizontalLinerLayout">
-        <item name="android:clickable">true</item>
-        <item name="android:focusable">true</item>
-        <item name="android:background">@drawable/button_pressed_transparent</item>
-        <item name="android:orientation">horizontal</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingStart">16dp</item>
-    </style>
-
-    <style name="SettingsClickableHorizontalShadowLinearLayout">
-        <item name="android:clickable">true</item>
-        <item name="android:focusable">true</item>
-        <item name="android:background">@drawable/shadow_border</item>
-        <item name="android:orientation">horizontal</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">6dp</item>
-        <item name="android:layout_marginEnd">6dp</item>
-        <item name="android:paddingTop">6dp</item>
-        <item name="android:paddingStart">20dp</item>
-        <item name="android:paddingEnd">2dp</item>
-    </style>
-
-    <style name="SettingsClickableVerticalShadowLinerLayout">
-        <item name="android:clickable">true</item>
-        <item name="android:focusable">true</item>
-        <item name="android:background">@drawable/shadow_border</item>
-        <item name="android:orientation">vertical</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">6dp</item>
-        <item name="android:layout_marginEnd">6dp</item>
-        <item name="android:paddingTop">6dp</item>
-        <item name="android:paddingStart">20dp</item>
-        <item name="android:paddingEnd">2dp</item>
-    </style>
-
-    <style name="SettingsClickableVerticalShadowDocumentationLinerLayout">
-        <item name="android:clickable">true</item>
-        <item name="android:focusable">true</item>
-        <item name="android:background">@drawable/shadow_border</item>
-        <item name="android:orientation">vertical</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">6dp</item>
-        <item name="android:layout_marginEnd">6dp</item>
-        <item name="android:paddingTop">6dp</item>
-    </style>
-
     <style name="SettingsImageViewStyle">
         <item name="android:layout_width">24dp</item>
         <item name="android:layout_height">24dp</item>
         <item name="android:alpha">.6</item>
-    </style>
-
-    <style name="SettingsTitleImageViewStyle">
-        <item name="android:layout_width">28dp</item>
-        <item name="android:layout_height">28dp</item>
-        <item name="android:alpha">.6</item>
-    </style>
-
-    <style name="CamouflageSettingsOptionImage" parent="@style/CamouflageSettingsOption">
-        <item name="android:layout_width">30dp</item>
-        <item name="android:layout_height">30dp</item>
-        <item name="android:layout_weight">.1</item>
-    </style>
-
-    <style name="CamouflageSettingsOptionSelection" parent="@style/CamouflageSettingsOption">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:orientation">vertical</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_weight">.9</item>
-        <item name="android:padding">10dp</item>
-    </style>
-
-    <style name="CamouflageSettingsOption">
-        <item name="android:clickable">false</item>
-        <item name="android:focusable">false</item>
-        <item name="android:layout_gravity">center_vertical</item>
-    </style>
-
-    <style name="CamouflageSettingsText">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingStart">8dp</item>
     </style>
 
     <style name="CameraTopImageStyle">
@@ -235,48 +130,11 @@
         <item name="android:layout_centerVertical">true</item>
     </style>
 
-    <style name="CamouflageSettingsTextBlack" parent="@style/CamouflageSettingsText">
-        <item name="android:textColor">@color/wa_black</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="CamouflageSettingsTextGray" parent="@style/CamouflageSettingsText">
-        <item name="android:textColor">@color/wa_gray</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
     <style name="SettingsTextViewSwitch" parent="@style/SettingsTextView">
         <item name="android:textSize">16sp</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:gravity">center_vertical</item>
         <item name="colorControlActivated">@color/wa_red_light</item>
-    </style>
-
-    <style name="SettingsTextViewCheck" parent="@style/SettingsTextView">
-        <item name="android:textSize">16sp</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="colorControlActivated">@color/wa_dark_gray</item>
-    </style>
-
-    <style name="SettingsTextViewTitle" parent="@style/SettingsTextView">
-        <item name="android:textSize">16sp</item>
-        <item name="android:paddingStart">24dp</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:textColor">@color/wa_black</item>
-    </style>
-
-    <style name="SettingsTextViewTitleNormal" parent="@style/SettingsTextView">
-        <item name="android:textSize">16sp</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:textColor">@color/wa_black</item>
-    </style>
-
-    <style name="SettingsTextViewTitleBlack" parent="@style/SettingsTextViewTitleNormal">
-        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="SettingsTextViewBlack" parent="@style/SettingsTextView">
@@ -288,18 +146,6 @@
     <style name="SettingsTextViewGray" parent="@style/SettingsTextView">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/wa_dialog_gray</item>
-    </style>
-
-    <style name="SettingsTextViewLink" parent="@style/SettingsTextView">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/purple_link</item>
-    </style>
-
-    <style name="SettingsTitleTextViewGray" parent="@style/SettingsTextView">
-        <item name="android:gravity">center_vertical|end</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/wa_gray</item>
     </style>
 
     <style name="SettingsTextView">
@@ -318,41 +164,9 @@
         <item name="android:textColor">@color/wa_dialog_gray</item>
     </style>
 
-    <style name="UploadInfoTextViewGray" parent="@style/LineTextView">
-        <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/wa_gray</item>
-    </style>
-
     <style name="LineTextView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-    </style>
-
-    <style name="TextViewBlack">
-        <item name="android:textSize">16sp</item>
-        <item name="android:paddingRight">15dp</item>
-        <item name="android:paddingLeft">15dp</item>
-        <!--<item name="android:textStyle">bold</item>-->
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/wa_black</item>
-        <item name="colorControlActivated">@color/wa_green</item>
-    </style>
-
-    <style name="AboutTextSeparator">
-        <item name="android:background">@color/wa_gray</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">0.5dp</item>
-    </style>
-
-    <style name="AboutText">
-        <item name="android:clickable">true</item>
-        <item name="android:background">?selectableItemBackground</item>
-        <item name="android:padding">16dp</item>
-        <item name="android:gravity">center</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/wa_dialog_gray</item>
     </style>
 
     <style name="SettingsTextViewAbout" parent="@style/SettingsTextView">
@@ -363,20 +177,15 @@
         <item name="android:textColor">@color/wa_black</item>
     </style>
 
-    <style name="CollectBlankFormListButton" parent="@style/Widget.AppCompat.Button.Borderless">
-        <!--<item name="style">?android:attr/borderlessButtonStyle</item>-->
-        <item name="android:background">@drawable/dark_outlined_button</item>
-        <item name="android:textColor">@color/wa_gray</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:layout_width">100sp</item>
-        <item name="android:layout_height">32sp</item>
-    </style>
-
     <style name="CollectFormWidgetButton" parent="@style/Widget.AppCompat.Button.Borderless">
-        <item name="android:background">@drawable/dark_outlined_button</item>
-        <item name="android:textColor">@color/wa_gray</item>
-        <item name="android:textAllCaps">true</item>
+        <item name="android:background">@drawable/rounded_light_purple_background</item>
+        <item name="android:textColor">@color/wa_white_80</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:drawablePadding">15dp</item>
+        <item name="android:drawableStart">@drawable/ic_calendar</item>
     </style>
 
     <style name="CollectHelpText">
@@ -418,22 +227,6 @@
     </style>
 
 
-    <style name="MainDividerLine">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">0.2dp</item>
-        <item name="android:background">@color/wa_dark_gray</item>
-    </style>
-
-    <style name="RecipientTitle">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:layout_marginTop">@dimen/activity_vertical_margin</item>
-        <item name="android:textColor">@color/wa_black</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
     <style name="YellowButtonText">
         <item name="android:textAllCaps">true</item>
         <item name="android:textStyle">bold</item>
@@ -442,10 +235,6 @@
     <style name="YellowButton" parent="YellowButtonText">
         <item name="android:background">@drawable/button_pressed_yellow</item>
         <item name="android:padding">18sp</item>
-    </style>
-
-    <style name="BottomYellowButton" parent="YellowButton">
-        <item name="android:padding">20dp</item>
     </style>
 
     <style name="WhiteButton" parent="YellowButtonText">
@@ -462,50 +251,6 @@
         <item name="android:paddingStart">16dp</item>
         <item name="android:paddingEnd">16dp</item>
         <item name="android:background">@drawable/zoom_seek_bar_background</item>
-    </style>
-
-    <style name="NavigationTab">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">center</item>
-    </style>
-
-    <style name="NavigationTabText" parent="NavigationTab">
-        <item name="android:paddingTop">1dp</item>
-        <item name="android:textAlignment">center</item>
-        <item name="android:ellipsize">end</item>
-        <item name="android:maxLines">2</item>
-        <item name="android:textSize">@dimen/navigation_tab_bar_text_size</item>
-        <item name="android:textColor">@color/wa_white</item>
-    </style>
-
-    <style name="NavigationTabImage" parent="NavigationTab">
-        <item name="android:gravity">center</item>
-    </style>
-
-    <style name="NavigationElement">
-        <item name="android:clickable">true</item>
-        <item name="android:focusable">true</item>
-        <item name="android:padding">@dimen/navigation_tab_bar_padding</item>
-        <item name="android:gravity">center</item>
-    </style>
-
-    <style name="NavigationRowElement" parent="NavigationElement">
-        <item name="android:layout_height">@dimen/navigation_row_height</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_weight">1</item>
-    </style>
-
-    <style name="NavigationTableElement" parent="NavigationElement">
-        <item name="android:layout_height">@dimen/navigation_table_cell_height</item>
-        <item name="android:layout_width">@dimen/navigation_table_cell_height</item>
-    </style>
-
-    <style name="PanicActiveText">
-        <item name="android:textAllCaps">true</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/wa_white</item>
     </style>
 
     <style name="PanicArrowStyle">
@@ -525,11 +270,6 @@
         <item name="android:textAlignment">center</item>
         <item name="android:paddingTop">16dp</item>
         <item name="android:paddingBottom">16dp</item>
-    </style>
-
-    <style name="TextValidationError">
-        <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/wa_design_textinput_error_color</item>
     </style>
 
     <style name="TextMapHint">
@@ -571,34 +311,6 @@
         <item name="android:background">@color/wa_gray</item>
     </style>
 
-    <style name="DialogFragmentBottomButtonLayout">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:clickable">true</item>
-        <item name="android:focusable">true</item>
-        <item name="android:background">?attr/selectableItemBackground</item>
-        <item name="android:orientation">horizontal</item>
-        <item name="android:paddingTop">@dimen/activity_vertical_margin</item>
-        <item name="android:paddingBottom">@dimen/activity_vertical_margin</item>
-        <item name="android:paddingStart">@dimen/activity_horizontal_margin</item>
-        <item name="android:paddingEnd">@dimen/activity_horizontal_margin</item>
-    </style>
-
-    <style name="DialogFragmentBottomButtonImage">
-        <item name="android:layout_width">28dp</item>
-        <item name="android:layout_height">28dp</item>
-        <item name="android:alpha">.6</item>
-    </style>
-
-    <style name="DialogFragmentBottomButtonText">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:textColor">@color/wa_black</item>
-        <item name="android:paddingStart">@dimen/activity_vertical_margin</item>
-    </style>
-
     <style name="MetadataGatheringDialogImage">
         <item name="android:layout_width">36dp</item>
         <item name="android:layout_height">36dp</item>
@@ -611,6 +323,12 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="PurpleBackgroundLightLettersDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:background">@color/wa_purple</item>
+        <item name="android:textColor">@color/wa_white_80</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="DialogRadioButtonStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -620,5 +338,110 @@
         <item name="android:paddingStart">16dp</item>
         <item name="android:paddingEnd">2dp</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Tella_Main_White_Text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:textColor">@color/wa_white</item>
+        <item name="android:textSize">40sp</item>
+    </style>
+    <style name="Tella_Main_White_Text.Bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="DialogDataCollectionTextEntryLayout" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColorHint">@color/wa_white</item>
+    </style>
+
+    <style name="CollectDialogAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/slide_in_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_down</item>
+    </style>
+
+    <style name="CamouflageOptionStyle">
+        <item name="android:textSize">19sp</item>
+        <item name="android:textColor">@color/wa_white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+    </style>
+
+    <style name="MetadataLine">
+        <item name="android:layout_width">240dp</item>
+        <item name="android:layout_height">0.1dp</item>
+        <item name="android:padding">0.1dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@color/wa_white</item>
+    </style>
+
+    <style name="Main_Floating_Action_Button_Style">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_gravity">end|bottom</item>
+        <item name="android:layout_marginHorizontal">@dimen/tella_main_vertical</item>
+        <item name="android:layout_marginBottom">@dimen/tella_main_vertical</item>
+        <item name="android:background">@color/dark_orange</item>
+    </style>
+
+    <style name="Move_Floating_Action_Button_Style">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_gravity">end|bottom</item>
+        <item name="android:layout_marginEnd">@dimen/move_fab_horizontal_margin</item>
+        <item name="android:layout_marginBottom">@dimen/move_fab_bottom_margin</item>
+        <item name="android:background">@color/dark_orange</item>
+    </style>
+
+    <!-- styles for Forms section -->
+    <style name="Tella2_Forms_Activity" parent="@style/AppTheme.NoActionBar">
+        <item name="android:background">@color/dark_purple</item>
+    </style>
+
+    <style name="Tella2_Forms_Fragment">
+        <item name="android:background">@color/dark_purple</item>
+    </style>
+
+    <style name="Tella2_Widgets_Delimiter">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/activity_vertical_tiny_margin</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="Tella2_Select_Button">
+        <item name="android:textColor">@color/wa_white_80</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:drawablePadding">15dp</item>
+        <item name="android:drawableStart">@drawable/ic_plus_outline_inverse</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:background">@drawable/rounded_light_purple_background</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:layout_marginBottom">5dp</item>
+    </style>
+
+    <style name="Tella_Progress_Circular">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:indeterminate">true</item>
+        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:visibility">gone</item>
+        <item name="trackColor">@color/wa_white</item>
+        <item name="indicatorColor">@color/tigers_eye</item>
+        <item name="trackThickness">4dp</item>
+    </style>
+
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/open_sans</item>
     </style>
 </resources>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="wa_dialog_gray">#636161</color>
+    <color name="wa_red">#C9040D</color>
+    <color name="wa_green">#23a923</color>
+    <color name="wa_black">#000000</color>
+    <color name="space_cadet">#2C275A</color>
+    <color name="wa_white">#FFFF</color>
+    <color name="wa_white_40">#66FFFFFF</color>
+    <color name="tigers_eye">#D6933B</color>
+    <color name="wa_white_32">#52FFFFFF</color>
+    <color name="wa_orange">#D6933B</color>
+    <color name="wa_red_error">#CE1515</color>
+    <color name="wa_white_8">#14FFFFFF</color>
+    <color name="wa_white_10">#1AFFFFFF</color>
+    <color name="wa_white_12">#1FFFFFFF</color>
+    <color name="wa_white_16">#03FFFFFF</color>
+    <color name="wa_white_15">#26FFFFFF</color>
+    <color name="wa_white_80">#CCFFFFFF</color>
+    <color name="wa_white_88">#E0FFFFFF</color>
+    <color name="wa_white_90">#E6FFFFFF</color>
+    <color name="wa_white_64">#A3FFFFFF</color>
+    <color name="wa_white_20">#33FFFFFF</color>
+    <color name="wa_white_92">#EBFFFFFF</color>
+    <color name="wa_grey">#E8E8EC</color>
+    <color name="green">#59AE3C</color>
+    <color name="light_green">#B2CFA8</color>
+    <color name="light_purple">#3D3867</color>
+    <color name="gray">#A8ADAF</color>
+    <color name="light_gray">#DCDCDC</color>
+    <color name="prussian_blue">#2c6c97</color>
+    <color name="dark_purple">#2C275A</color>
+    <color name="light_red">#FC4444</color>
+    <color name="transparent">@android:color/transparent</color>
+
+    <color name="colorPrimary">@color/space_cadet</color>
+    <color name="colorPrimaryDark">@color/space_cadet</color>
+    <color name="colorAccent">@color/green</color>
+    <color name="colorPrimaryInverse">@color/tigers_eye</color>
+</resources>

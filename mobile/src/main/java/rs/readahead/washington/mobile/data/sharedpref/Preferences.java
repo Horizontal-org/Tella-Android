@@ -3,6 +3,9 @@ package rs.readahead.washington.mobile.data.sharedpref;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.joda.time.DateTime;
+
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -30,12 +33,12 @@ public class Preferences {
         setBoolean(SharedPrefs.ANONYMOUS_MODE, value);
     }
 
-    public static boolean isDomainFronting() {
-        return getBoolean(SharedPrefs.DOMAIN_FRONTING, false);
+    public static boolean isBypassCensorship() {
+        return getBoolean(SharedPrefs.BYPASS_CENSORSHIP, false);
     }
 
-    public static void setDomainFronting(boolean value) {
-        setBoolean(SharedPrefs.DOMAIN_FRONTING, value);
+    public static void setBypassCensorship(boolean value) {
+        setBoolean(SharedPrefs.BYPASS_CENSORSHIP, value);
     }
 
     public static boolean isUninstallOnPanic() {
@@ -44,6 +47,14 @@ public class Preferences {
 
     public static void setUninstallOnPanic(boolean value) {
         setBoolean(SharedPrefs.UNINSTALL_ON_PANIC, value);
+    }
+
+    public static boolean isSecurityScreenEnabled() {
+        return getBoolean(SharedPrefs.SET_SECURITY_SCREEN, true);
+    }
+
+    public static void setSecurityScreenEnabled(boolean value) {
+        setBoolean(SharedPrefs.SET_SECURITY_SCREEN, value);
     }
 
     public static boolean isFirstStart() {
@@ -68,6 +79,12 @@ public class Preferences {
 
     public static void setCollectServersLayout(boolean value) {
         setBoolean(SharedPrefs.COLLECT_OPTION, value);
+    }
+
+    public static boolean isShutterMute() { return getBoolean(SharedPrefs.MUTE_CAMERA_SHUTTER, false); }
+
+    public static void setShutterMute(boolean value) {
+        setBoolean(SharedPrefs.MUTE_CAMERA_SHUTTER, value);
     }
 
     public static boolean isDeleteServerSettingsActive() {
@@ -126,6 +143,38 @@ public class Preferences {
 
     public static void setSubmittingCrashReports(boolean value) {
         setBoolean(SharedPrefs.SUBMIT_CRASH_REPORTS, value);
+    }
+
+    public static boolean isShowFavoriteForms() {
+        return getBoolean(SharedPrefs.SHOW_FAVORITE_FORMS, false);
+    }
+
+    public static void setShowFavoriteForms(boolean value) {
+        setBoolean(SharedPrefs.SHOW_FAVORITE_FORMS, value);
+    }
+
+    public static boolean isShowFavoriteTemplates() {
+        return getBoolean(SharedPrefs.SHOW_FAVORITE_TEMPLATES, false);
+    }
+
+    public static void setShowFavoriteTemplates(boolean value) {
+        setBoolean(SharedPrefs.SHOW_FAVORITE_TEMPLATES, value);
+    }
+
+    public static boolean isShowRecentFiles() {
+        return getBoolean(SharedPrefs.SHOW_RECENT_FILES, false);
+    }
+
+    public static void setShowRecentFiles(boolean value) {
+        setBoolean(SharedPrefs.SHOW_RECENT_FILES, value);
+    }
+
+    public static boolean isUpgradeTella2() {
+        return getBoolean(SharedPrefs.UPGRADE_TELLA_2, true);
+    }
+
+    public static void setUpgradeTella2(boolean value) {
+        setBoolean(SharedPrefs.UPGRADE_TELLA_2, value);
     }
 
     public static boolean isCameraPreviewEnabled() {
@@ -200,6 +249,31 @@ public class Preferences {
         return getBoolean(SharedPrefs.AUTO_UPLOAD_PAUSED, false);
     }
 
+    @Nullable
+    public static long getLockTimeout() {
+        return getLong(SharedPrefs.LOCK_TIMEOUT, 0);
+    }
+
+    public static void setLockTimeout(@Nullable long value) {
+        setLong(SharedPrefs.LOCK_TIMEOUT, value);
+    }
+
+    public static boolean isTempTimeout() {
+        return getBoolean(SharedPrefs.TEMP_TIMEOUT, false);
+    }
+
+    public static void setTempTimeout(boolean value) {
+        setBoolean(SharedPrefs.TEMP_TIMEOUT, value);
+    }
+
+    public static boolean isExitTimeout() {
+        return getBoolean(SharedPrefs.EXIT_TIMEOUT, false);
+    }
+
+    public static void setExitTimeout(boolean value) {
+        setBoolean(SharedPrefs.EXIT_TIMEOUT, value);
+    }
+
     public static void setAutoUpload(boolean value) {
         setBoolean(SharedPrefs.AUTO_UPLOAD, value);
     }
@@ -264,6 +338,34 @@ public class Preferences {
 
     private static void setLong(@NonNull String name, long value) {
         sharedPrefs.setLong(name, value);
+    }
+
+    public static boolean isShowVaultImprovementSection() {
+        return getBoolean(SharedPrefs.SHOW_IMPROVEMENT_SECTION, true);
+    }
+
+    public static void setShowVaultImprovementSection(boolean value) {
+        setBoolean(SharedPrefs.SHOW_IMPROVEMENT_SECTION, value);
+    }
+
+    public static boolean hasAcceptedImprovements() {
+        return getBoolean(SharedPrefs.HAS_IMPROVEMENT_ACCEPTED, false);
+    }
+
+    public static void setIsAcceptedImprovements(boolean value) {
+        setBoolean(SharedPrefs.HAS_IMPROVEMENT_ACCEPTED, value);
+        setTimeAcceptedImprovements(new Date().getTime());
+    }
+
+    private static void setTimeAcceptedImprovements(Long value) { setLong(SharedPrefs.TIME_IMPROVEMENT_ACCEPTED, value); }
+    public static Long getTimeAcceptedImprovements() {
+        return getLong(SharedPrefs.TIME_IMPROVEMENT_ACCEPTED, 0L);
+    }
+    public static boolean isTimeToShowReminderImprovements() {
+        if (getTimeAcceptedImprovements() == 0L || !hasAcceptedImprovements()) return false ;
+        Date currentDate = new Date();
+        Date acceptedDatePlusSixMonths = new DateTime(new Date(getTimeAcceptedImprovements())).plusMonths(6).toDate();
+        return currentDate.getTime() > acceptedDatePlusSixMonths.getTime() ;
     }
 
     private Preferences() {

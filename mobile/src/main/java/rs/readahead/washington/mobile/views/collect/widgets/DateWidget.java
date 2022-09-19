@@ -14,6 +14,7 @@
 package rs.readahead.washington.mobile.views.collect.widgets;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -60,7 +61,7 @@ public class DateWidget extends QuestionWidget {
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-        clearButton = addButton(R.drawable.ic_delete_grey_24px);
+        clearButton = addButton(R.drawable.ic_cancel_rounded);
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!formEntryPrompt.isReadOnly());
         clearButton.setVisibility(GONE);
@@ -127,7 +128,7 @@ public class DateWidget extends QuestionWidget {
     }
 
     private void createDatePickerDialog() {
-        datePickerDialog = new DatePickerDialog(getContext(), (view, year, monthOfYear, dayOfMonth) -> {
+        datePickerDialog = new DatePickerDialog(getContext(), AlertDialog.THEME_HOLO_LIGHT, (view, year, monthOfYear, dayOfMonth) -> {
             DateWidget.this.year = year;
             DateWidget.this.month = monthOfYear + 1;
             DateWidget.this.dayOfMonth = dayOfMonth;

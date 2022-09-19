@@ -10,7 +10,8 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.util.ViewUtil;
 
 
-public class CameraCaptureButton extends AppCompatImageButton implements View.OnTouchListener{
+public class
+CameraCaptureButton extends AppCompatImageButton implements View.OnTouchListener{
     public CameraCaptureButton(Context context) {
         this(context, null);
     }

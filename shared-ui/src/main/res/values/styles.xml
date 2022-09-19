@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="DialogBottomPopUpText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingRight">15dp</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="AppBottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
+    </style>
+
+    <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/drag_anchor_drawable</item>
+        <item name="android:windowSoftInputMode">adjustResize|stateVisible</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
+
+    <style name="SettingsTitleText">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="SwitchWithMessage">
+        <item name="trackTint">@color/switch_track_color</item>
+        <item name="thumbTint">@color/switch_thumb_color</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="SettingsMessageText">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
+    <style name="RadioListButtonStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/wa_white</item>
+        <item name="android:paddingTop">20dp</item>
+        <item name="android:paddingBottom">20dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">2dp</item>
+    </style>
+
+    <style name="Tella_Main_White_Text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:textColor">@color/wa_white</item>
+        <item name="android:textSize">40sp</item>
+    </style>
+
+    <style name="Tella_Main_White_Text.Bold">
+        <item name="android:textStyle">bold</item>
+        <item name="lineHeight">19dp</item>
+        <item name="android:textFontWeight">700</item>
+    </style>
+
+    <style name="Tella_Main_White_Text.Meduim">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Tella_Main_White_TextLargeBold" parent="Tella_Main_White_Text.Bold">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Tella_Main_White_Text.MeduimbBold" parent="Tella_Main_White_Text.Bold">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Tella_Main_White_Text.SmallBold" parent="Tella_Main_White_Text.Bold">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="Tella_Main_White_Text.Small" parent="Tella_Main_White_Text">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="AppTheme.DarkNoActionBar" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimaryInverse">@color/colorPrimaryInverse</item>
+        <item name="android:textColorSecondary">@color/colorPrimaryInverse</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+    </style>
+
+
+    <style name="Style_EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">24dp</item>
+        <item name="android:layout_marginEnd">24dp</item>
+        <item name="android:layout_marginTop">40dp</item>
+        <item name="android:background">@drawable/bg_edittext</item>
+        <item name="android:letterSpacing">0.2</item>
+        <item name="android:cursorVisible">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/wa_white</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="BreadcrumbsView">
+        <item name="crumbsTextColor">?android:attr/textColorSecondary</item>
+        <item name="crumbsSelectedTextColor">?android:attr/textColorPrimary</item>
+        <item name="crumbsTextSize">18sp</item>
+        <item name="crumbsPadding">16dp</item>
+    </style>
+
+    <style name="Tella2_BottomSheet_Text">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:drawablePadding">16dp</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:lineHeight">21dp</item>
+        <item name="android:textColor">@color/wa_white</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+</resources>

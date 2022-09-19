@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_purple">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:background="@drawable/rounded_light_purple_background"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/general_settings_button"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:text="@string/settings_select_general"
+            android:textAllCaps="false"
+            android:textColor="@color/wa_white"
+            app:drawableStartCompat="@drawable/ic_settings_white" />
+
+        <View style="@style/SettingsMainShadowLine" />
+
+        <TextView
+            android:id="@+id/security_settings_button"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:text="@string/settings.select_security"
+            android:textAllCaps="false"
+            android:textColor="@color/wa_white"
+            app:drawableStartCompat="@drawable/ic_secret_icon" />
+
+        <View style="@style/SettingsMainShadowLine" />
+
+        <TextView
+            android:id="@+id/servers_settings_button"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
+            android:drawablePadding="14dp"
+            android:gravity="center_vertical"
+            android:text="@string/settings.servers.title_server.settings"
+            android:textAllCaps="false"
+            android:textColor="@color/wa_white"
+            app:drawableStartCompat="@drawable/ic_servers_icon" />
+
+        <View style="@style/SettingsMainShadowLine" />
+
+        <TextView
+            android:id="@+id/about_n_help_settings_button"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:text="@string/settings.about_app.bar"
+            android:textAllCaps="false"
+            android:textColor="@color/wa_white"
+            app:drawableStartCompat="@drawable/ic_help_outline_white_24" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

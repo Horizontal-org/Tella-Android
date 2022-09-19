@@ -1,13 +1,13 @@
 package rs.readahead.washington.mobile.views.adapters;
 
 import android.content.Context;
+
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.util.Collections;
@@ -17,15 +17,21 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.bus.event.DeleteFormInstanceEvent;
 import rs.readahead.washington.mobile.bus.event.ShowFormInstanceEntryEvent;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.util.Util;
+import rs.readahead.washington.mobile.views.interfaces.ISavedFormsInterface;
 
 
 public class CollectDraftFormInstanceRecycleViewAdapter extends RecyclerView.Adapter<CollectDraftFormInstanceRecycleViewAdapter.ViewHolder> {
     private List<CollectFormInstance> instances = Collections.emptyList();
+    private final ISavedFormsInterface draftFormsInterface;
 
+    public CollectDraftFormInstanceRecycleViewAdapter(ISavedFormsInterface draftFormsInterface) {
+        this.draftFormsInterface = draftFormsInterface;
+    }
+
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.draft_collect_form_instance_row, parent, false);
@@ -35,35 +41,14 @@ public class CollectDraftFormInstanceRecycleViewAdapter extends RecyclerView.Ada
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final CollectFormInstance instance = instances.get(position);
-
         final Context context = holder.name.getContext();
 
+        holder.instanceRow.setOnClickListener(v -> MyApplication.bus().post(new ShowFormInstanceEntryEvent(instance.getId())));
         holder.name.setText(instance.getInstanceName());
         holder.organization.setText(instance.getServerName());
         holder.updated.setText(String.format(context.getString(R.string.collect_draft_meta_date_updated),
                 Util.getDateTimeString(instance.getUpdated())));
-        holder.instanceRow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MyApplication.bus().post(new ShowFormInstanceEntryEvent(instance.getId()));
-            }
-        });
-        holder.popupMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(context, v);
-
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        MyApplication.bus().post(new DeleteFormInstanceEvent(instance.getId(), instance.getStatus()));
-                        return true;
-                    }
-                });
-                popup.inflate(R.menu.draft_forms_list_item_menu);
-                popup.show();
-            }
-        });
+        holder.popupMenu.setOnClickListener(v -> draftFormsInterface.showFormsMenu(instance));
     }
 
     @Override

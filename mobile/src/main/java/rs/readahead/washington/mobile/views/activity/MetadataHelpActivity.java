@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.views.activity;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
@@ -14,9 +15,10 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 
 
-public class MetadataHelpActivity extends CacheWordSubscriberBaseActivity {
+public class MetadataHelpActivity extends BaseLockActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.metadata_help_list)
@@ -27,6 +29,7 @@ public class MetadataHelpActivity extends CacheWordSubscriberBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_metadata_help);
+        overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
 
         ButterKnife.bind(this);
 
@@ -36,6 +39,12 @@ public class MetadataHelpActivity extends CacheWordSubscriberBaseActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(R.string.verification_help_info_app_bar);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            findViewById(R.id.appbar).setOutlineProvider(null);
+        } else {
+            findViewById(R.id.appbar).bringToFront();
         }
 
         showMetadataHelp();
@@ -51,6 +60,17 @@ public class MetadataHelpActivity extends CacheWordSubscriberBaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_end, R.anim.slide_out_start);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
     private View createMetadataTitle(@StringRes int titleResId) {
@@ -79,12 +99,21 @@ public class MetadataHelpActivity extends CacheWordSubscriberBaseActivity {
         return layout;
     }
 
+    private LinearLayout createMetadataLine() {
+        @SuppressLint("InflateParams")
+        LinearLayout layout = (LinearLayout) LayoutInflater.from(this)
+                .inflate(R.layout.metadata_line, null);
+
+        return layout;
+    }
+
     private void showMetadataHelp() {
 
         metadataList.addView(createMetadataTitle(R.string.verification_info_subheading_file_metadata));
         metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_file_path_expl), getResources().getString(R.string.verification_info_field_file_path)));
         metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_hash_expl), getResources().getString(R.string.verification_info_field_hash)));
         metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_date_time_modified_expl), getResources().getString(R.string.verification_info_field_file_modified)));
+        metadataList.addView(createMetadataLine());
 
         metadataList.addView(createMetadataTitle(R.string.verification_info_subheading_device_metadata));
         metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_manufacturer_expl), getResources().getString(R.string.verification_info_field_manufacturer)));
@@ -98,6 +127,7 @@ public class MetadataHelpActivity extends CacheWordSubscriberBaseActivity {
         metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_wifi_mac_expl), getResources().getString(R.string.verification_info_field_wifi_mac)));
         metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_ipv4_expl), getResources().getString(R.string.verification_info_field_ipv4)));
         metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_ipv6_expl), getResources().getString(R.string.verification_info_field_ipv6)));
+        metadataList.addView(createMetadataLine());
 
         metadataList.addView(createMetadataTitle(R.string.verification_info_subheading_context_metadata));
         metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_location_expl), getResources().getString(R.string.verification_info_field_location)));

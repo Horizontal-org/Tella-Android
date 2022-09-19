@@ -2,10 +2,8 @@ package rs.readahead.washington.mobile.views.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,23 +12,28 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+
+import com.hzontal.tella_vault.Metadata;
+import com.hzontal.tella_vault.MyLocation;
+import com.hzontal.tella_vault.VaultFile;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
-import rs.readahead.washington.mobile.domain.entity.Metadata;
-import rs.readahead.washington.mobile.domain.entity.MyLocation;
 import rs.readahead.washington.mobile.util.StringUtils;
 import rs.readahead.washington.mobile.util.Util;
+import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 
 
-public class MetadataViewerActivity extends CacheWordSubscriberBaseActivity {
+public class MetadataViewerActivity extends BaseLockActivity {
     public static final String VIEW_METADATA = "vm";
 
     @BindView(R.id.metadata_list)
     LinearLayout metadataList;
 
-    private MediaFile mediaFile;
+    private VaultFile vaultFile;
     private Metadata metadata;
 
 
@@ -39,6 +42,7 @@ public class MetadataViewerActivity extends CacheWordSubscriberBaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_metadata_viewer);
+        overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
         ButterKnife.bind(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -49,16 +53,33 @@ public class MetadataViewerActivity extends CacheWordSubscriberBaseActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            findViewById(R.id.appbar).setOutlineProvider(null);
+        } else {
+            findViewById(R.id.appbar).bringToFront();
+        }
+
         if (getIntent().hasExtra(VIEW_METADATA)) {
-            MediaFile mediaFile = (MediaFile) getIntent().getExtras().get(VIEW_METADATA);
-            if (mediaFile != null) {
-                this.mediaFile = mediaFile;
+            VaultFile vaultFile = (VaultFile) getIntent().getExtras().get(VIEW_METADATA);
+            if (vaultFile != null) {
+                this.vaultFile = vaultFile;
             }
         }
 
-        metadata = mediaFile.getMetadata();
+        metadata = vaultFile.metadata;
 
         showMetadata();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_end, R.anim.slide_out_start);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
     @Override
@@ -93,6 +114,14 @@ public class MetadataViewerActivity extends CacheWordSubscriberBaseActivity {
         return textView;
     }
 
+    private LinearLayout createMetadataLine() {
+        @SuppressLint("InflateParams")
+        LinearLayout layout = (LinearLayout) LayoutInflater.from(this)
+                .inflate(R.layout.metadata_line, null);
+
+        return layout;
+    }
+
     private View createMetadataItem(CharSequence value, String name) {
         @SuppressLint("InflateParams")
         LinearLayout layout = (LinearLayout) LayoutInflater.from(this)
@@ -112,19 +141,20 @@ public class MetadataViewerActivity extends CacheWordSubscriberBaseActivity {
     }
 
     private void showMetadata() {
-        if (mediaFile == null || metadata == null) {
+        if (vaultFile == null || metadata == null) {
             return;
         }
 
         metadataList.addView(createMetadataTitle(R.string.verification_info_subheading_file_metadata));
         metadataList.addView(createMetadataItem(metadata.getFileName() != null ?
-                metadata.getFileName() : mediaFile.getFileName(), getResources().getString(R.string.verification_info_field_filename)));
-        metadataList.addView(createMetadataItem(mediaFile.getPath(), getResources().getString(R.string.verification_info_field_file_path)));
+                metadata.getFileName() : vaultFile.name, getResources().getString(R.string.verification_info_field_filename)));
+        metadataList.addView(createMetadataItem(vaultFile.path, getResources().getString(R.string.verification_info_field_file_path)));
 
-        metadataList.addView(createMetadataItem(mediaFile.getHash() != null ?
-                mediaFile.getHash() : metadata.getFileHashSHA256(), getResources().getString(R.string.verification_info_field_hash)));
+        metadataList.addView(createMetadataItem(vaultFile.hash != null ?
+                vaultFile.hash : metadata.getFileHashSHA256(), getResources().getString(R.string.verification_info_field_hash)));
         metadataList.addView(createMetadataItem(
-                Util.getDateTimeString(mediaFile.getCreated(), "dd-MM-yyyy HH:mm:ss Z"), getResources().getString(R.string.verification_info_field_file_modified)));
+                Util.getDateTimeString(vaultFile.created, "dd-MM-yyyy HH:mm:ss Z"), getResources().getString(R.string.verification_info_field_file_modified)));
+        metadataList.addView(createMetadataLine());
 
         metadataList.addView(createMetadataTitle(R.string.verification_info_subheading_device_metadata));
         metadataList.addView(createMetadataItem(metadata.getManufacturer(), getResources().getString(R.string.verification_info_field_manufacturer)));
@@ -139,20 +169,23 @@ public class MetadataViewerActivity extends CacheWordSubscriberBaseActivity {
         metadataList.addView(createMetadataItem(metadata.getWifiMac(), getResources().getString(R.string.verification_info_field_wifi_mac)));
         metadataList.addView(createMetadataItem(metadata.getIPv4(), getResources().getString(R.string.verification_info_field_ipv4)));
         metadataList.addView(createMetadataItem(metadata.getIPv6(), getResources().getString(R.string.verification_info_field_ipv6)));
+        metadataList.addView(createMetadataLine());
 
         metadataList.addView(createMetadataTitle(R.string.verification_info_subheading_context_metadata));
 
         if (metadata.getMyLocation() != null) {
             metadataList.addView(createMetadataItem(getLocationString(metadata.getMyLocation()), getResources().getString(R.string.verification_info_field_location)));
             metadataList.addView(createMetadataItem(metadata.getMyLocation().getProvider(), getResources().getString(R.string.verification_info_field_location_provider)));
-            metadataList.addView(createMetadataItem(getString(R.string.meter_per_second, metadata.getMyLocation().getSpeed()),
+            metadataList.addView(createMetadataItem(getString(R.string.Verification_Label_MeterPerSecond, metadata.getMyLocation().getSpeed()),
                     getResources().getString(R.string.verification_info_field_location_speed)));
         } else {
             metadataList.addView(createMetadataItem(getString(R.string.verification_info_field_metadata_not_available), getResources().getString(R.string.verification_info_field_location)));
         }
 
-        String cells = StringUtils.join(", ", metadata.getCells());
-        metadataList.addView(createMetadataItem(cells, getResources().getString(R.string.verification_info_field_cell_towers)));
+        if (metadata.getCells() != null) {
+            String cells = StringUtils.join(", ", metadata.getCells());
+            metadataList.addView(createMetadataItem(cells, getResources().getString(R.string.verification_info_field_cell_towers)));
+        }
 
         metadataList.addView(createMetadataItem(
                 metadata.getWifis() != null ? TextUtils.join(", ", metadata.getWifis()) : getString(R.string.verification_info_field_metadata_not_available),
@@ -162,8 +195,8 @@ public class MetadataViewerActivity extends CacheWordSubscriberBaseActivity {
     private String getLocationString(MyLocation myLocation) {
         return getString(R.string.verification_info_field_latitude) + myLocation.getLatitude() + '\n' +
                 getString(R.string.verification_info_field_longitude) + myLocation.getLongitude() + '\n' +
-                getString(R.string.verification_info_field_altitude) + getString(R.string.meter, myLocation.getAltitude()) + '\n' +
-                getString(R.string.verification_info_field_accuracy) + getString(R.string.meter, myLocation.getAccuracy()) + '\n' +
+                getString(R.string.verification_info_field_altitude) + getString(R.string.Verification_Label_meter, myLocation.getAltitude()) + '\n' +
+                getString(R.string.verification_info_field_accuracy) + getString(R.string.Verification_Label_meter, myLocation.getAccuracy()) + '\n' +
                 getString(R.string.verification_info_field_location_time) + Util.getDateTimeString(myLocation.getTimestamp(), "dd-MM-yyyy HH:mm:ss Z");
     }
 

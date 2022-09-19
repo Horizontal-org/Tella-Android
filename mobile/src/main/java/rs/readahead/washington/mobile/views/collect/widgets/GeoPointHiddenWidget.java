@@ -8,13 +8,14 @@ import androidx.annotation.Nullable;
 
 import android.text.TextUtils;
 
+import com.hzontal.tella_vault.MyLocation;
+
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 
 import java.util.Locale;
 
-import rs.readahead.washington.mobile.domain.entity.MyLocation;
 
 
 /**

@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.MyLocation;
 
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
@@ -27,7 +28,6 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.GPSProviderRequiredEvent;
 import rs.readahead.washington.mobile.bus.event.LocationPermissionRequiredEvent;
-import rs.readahead.washington.mobile.domain.entity.MyLocation;
 import rs.readahead.washington.mobile.mvp.contract.ILocationGettingPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.LocationGettingPresenter;
 import rs.readahead.washington.mobile.odk.FormController;
@@ -168,7 +168,7 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
 
         View view = inflater.inflate(R.layout.collect_widget_geo_point, linearLayout, true);
 
-        selectButton = addButton(R.drawable.gps_fixed_icon_gray);
+        selectButton = addButton(R.drawable.gps_fixed_icon_white);
         selectButton.setId(QuestionWidget.newUniqueId());
         selectButton.setEnabled(!isReadonly());
         selectButton.setOnClickListener(v -> {
@@ -185,7 +185,7 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
             }
         });
 
-        clearButton = addButton(R.drawable.ic_delete_grey_24px);
+        clearButton = addButton(R.drawable.ic_cancel_rounded);
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!isReadonly());
         clearButton.setOnClickListener(v -> clearAnswer());
@@ -288,7 +288,7 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
         if (APPEARANCE_NONE.equalsIgnoreCase(appearance)) {
             selectButton.setImageDrawable(locationGathering ?
                     getResources().getDrawable(R.drawable.ic_stop_red) :
-                    getResources().getDrawable(R.drawable.gps_fixed_icon_gray));
+                    getResources().getDrawable(R.drawable.gps_fixed_icon_white));
         }
     }
 

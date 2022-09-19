@@ -23,16 +23,18 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.hzontal.tella_vault.MyLocation;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.domain.entity.MyLocation;
 import rs.readahead.washington.mobile.mvp.contract.ILocationGettingPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.LocationGettingPresenter;
+import rs.readahead.washington.mobile.util.C;
 
 
-public class LocationMapActivity extends CacheWordSubscriberBaseActivity implements
+public class LocationMapActivity extends MetadataActivity implements
         OnMapReadyCallback, GoogleMap.OnMapLongClickListener, GoogleMap.OnCameraMoveStartedListener,
         ILocationGettingPresenterContract.IView {
     public static final String SELECTED_LOCATION = "sl";
@@ -46,6 +48,8 @@ public class LocationMapActivity extends CacheWordSubscriberBaseActivity impleme
     ProgressBar progressBar;
     @BindView(R.id.info)
     TextView hint;
+    @BindView(R.id.fab_button)
+    FloatingActionButton faButton;
 
     @Nullable
     private MyLocation myLocation;
@@ -77,6 +81,15 @@ public class LocationMapActivity extends CacheWordSubscriberBaseActivity impleme
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        faButton.setOnClickListener(view -> {
+                    if (locationGettingPresenter.isGPSProviderEnabled()) {
+                        startGettingLocation();
+                    } else {
+                        manageLocationSettings(C.GPS_PROVIDER, this::startGettingLocation);
+                    }
+                }
+        );
     }
 
     @Override
@@ -91,7 +104,7 @@ public class LocationMapActivity extends CacheWordSubscriberBaseActivity impleme
 
         if (id == android.R.id.home) {
             myLocation = null;
-            setResultAndFinish();
+            setCancelAndFinish();
             return true;
         }
 
@@ -159,10 +172,12 @@ public class LocationMapActivity extends CacheWordSubscriberBaseActivity impleme
 
     @Override
     public void onNoLocationPermissions() {
+        setCancelAndFinish();
     }
 
     @Override
     public void onGPSProviderDisabled() {
+
     }
 
     @Override
@@ -207,8 +222,30 @@ public class LocationMapActivity extends CacheWordSubscriberBaseActivity impleme
         }
     }
 
+    private void startGettingLocation() {
+        locationGettingPresenter.startGettingLocation(!readOnly);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == C.GPS_PROVIDER && resultCode == RESULT_OK) {
+                startGettingLocation();
+        }
+    }
+
     private void setResultAndFinish() {
-        setResult(Activity.RESULT_OK, new Intent().putExtra(SELECTED_LOCATION, myLocation));
+        if (myLocation == null) {
+            setCancelAndFinish();
+        } else {
+            setResult(Activity.RESULT_OK, new Intent().putExtra(SELECTED_LOCATION, myLocation));
+            finish();
+        }
+    }
+
+    private void setCancelAndFinish() {
+        setResult(Activity.RESULT_CANCELED, new Intent().putExtra(SELECTED_LOCATION, myLocation));
         finish();
     }
 }

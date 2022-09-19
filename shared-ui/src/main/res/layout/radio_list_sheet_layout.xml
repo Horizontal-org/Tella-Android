@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/drag_anchor_drawable"
+    app:behavior_hideable="true"
+    android:padding="21dp">
+
+    <TextView
+        android:id="@+id/standard_sheet_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Test "
+        android:textSize="16sp"
+        style="@style/Tella_Main_White_Text.MeduimbBold"
+        />
+
+    <TextView
+        android:id="@+id/standard_sheet_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/standard_sheet_title"
+        tools:text="TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest "
+        android:layout_marginTop="10dp"
+        style="@style/Tella_Main_White_Text.Meduim"
+        />
+
+    <RadioGroup
+        android:id="@+id/radio_list"
+        style="@style/Tella2_BottomSheet_Text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/standard_sheet_content"
+        />
+
+
+    <TextView
+        android:id="@+id/standard_sheet_cancel_btn"
+        app:layout_constraintEnd_toStartOf="@id/standard_sheet_confirm_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/radio_list"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        tools:text="Cancel"
+        android:textAllCaps="true"
+        style="@style/Tella_Main_White_Text.MeduimbBold"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="40dp"
+        />
+
+    <TextView
+        android:id="@+id/standard_sheet_confirm_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/radio_list"
+        tools:text="Confirm"
+        style="@style/Tella_Main_White_Text.MeduimbBold"
+        android:textAllCaps="true"
+        android:layout_marginTop="40dp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

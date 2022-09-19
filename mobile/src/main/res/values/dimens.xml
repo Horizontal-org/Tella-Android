@@ -1,40 +1,49 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="home_collapsed_height">190dp</dimen>
-    <dimen name="nav_header_vertical_spacing">16dp</dimen>
-    <dimen name="nav_header_height">180dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_tiny_margin">4dp</dimen>
+    <dimen name="activity_horizontal_small_margin">8dp</dimen>
     <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_horizontal_large_margin">24dp</dimen>
+    <dimen name="activity_horizontal_larger_margin">32dp</dimen>
+
+    <dimen name="activity_vertical_tiny_margin">4dp</dimen>
+    <dimen name="activity_vertical_small_margin">8dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="activity_vertical_large_margin">24dp</dimen>
+    <dimen name="activity_vertical_larger_margin">32dp</dimen>
+
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="small_text_margin">8dp</dimen>
     <dimen name="fab_clear_padding">88dp</dimen> <!-- bottom padding for lists with fab -->
-    <dimen name="z_bottom_sheet">4dp</dimen>
     <dimen name="gallery_checkbox_margin">8dp</dimen>
     <dimen name="gallery_strip_height">16dp</dimen>
     <dimen name="gallery_checkbox_extender">10dp</dimen>
     <dimen name="gallery_card_padding">1dp</dimen>
     <dimen name="gallery_strip_padding">3dp</dimen>
-    <dimen name="intro_header_text_size">28sp</dimen>
-    <dimen name="intro_title_text_size">20sp</dimen>
     <dimen name="intro_text_size">14sp</dimen>
     <dimen name="intro_link_text_size">16sp</dimen>
     <dimen name="gallery_video_duration_text_size">12sp</dimen>
-    <dimen name="navigation_tab_bar_text_size">13sp</dimen>
     <dimen name="navigation_tab_bar_padding">2dp</dimen>
-    <dimen name="camera_overlay_buttom_margin">270dp</dimen>
-    <dimen name="navigation_tab_margin_bottom">120dp</dimen>
-    <dimen name="navigation_row_height">80dp</dimen>
-    <dimen name="navigation_table">240dp</dimen>
-    <dimen name="navigation_table_cell_height">120dp</dimen>
-    <dimen name="navigation_panic_height">50dp</dimen>
+    <dimen name="navigation_panic_height">52dp</dimen>
     <dimen name="settings_title_height">70dp</dimen>
-    <dimen name="settings_title_height_short">65dp</dimen>
     <dimen name="activity_about_margin">@dimen/activity_vertical_margin</dimen>
     <dimen name="camera_mode_links_margin">4dp</dimen>
     <dimen name="camera_capture_button">58dp</dimen>
     <dimen name="gallery_preview_button">52dp</dimen>
     <dimen name="collect_widget_icon_padding">8dp</dimen>
     <dimen name="collect_form_padding_vertical">16dp</dimen>
-    <dimen name="collect_form_padding_horizontal">34dp</dimen>
+    <dimen name="collect_form_padding_horizontal">16dp</dimen>
+    <dimen name="move_fab_bottom_margin">60dp</dimen>
+    <dimen name="move_fab_horizontal_margin">28dp</dimen>
+
+    <dimen name="about_tella_icon_height">72sp</dimen>
+    <dimen name="about_tella_icon_width">66sp</dimen>
+    <dimen name="lock_password_button_margin_top">35dp</dimen>
+    <dimen name="lock_subtitle_desc_margin_top">17dp</dimen>
+
+    <!-- elevation for Plant Detail toolbar - used to convert to pixels when hiding/showing -->
+    <dimen name="tella_main_vertical">17dp</dimen>
+
+    <dimen name="onboardingIndicator">8dp</dimen>
 </resources>

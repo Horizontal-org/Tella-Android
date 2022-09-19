@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/space_cadet"
+    android:paddingStart="17dp"
+    android:paddingEnd="17dp"
+    android:layout_marginTop="17dp"
+    >
+
+    <TextView
+        style="@style/Tella_Main_White_Text.Meduim"
+        android:textColor="@color/wa_white_90"
+        android:letterSpacing="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/Vault_Files_Title" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

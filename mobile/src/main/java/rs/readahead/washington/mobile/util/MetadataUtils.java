@@ -94,23 +94,31 @@ public class MetadataUtils {
             return type;
         }
 
-        switch (tm.getNetworkType()) {
-            case TelephonyManager.NETWORK_TYPE_CDMA:
-                type = "Mobile Data CDMA";
-                break;
-            case TelephonyManager.NETWORK_TYPE_LTE:
-                type = "Mobile Data LTE";
-                break;
-            case TelephonyManager.NETWORK_TYPE_HSDPA:
-                type = "Mobile Data 3G";
-                break;
-            case TelephonyManager.NETWORK_TYPE_HSPAP:
-                type = "Mobile Data 4G";
-                break;
-            case TelephonyManager.NETWORK_TYPE_GPRS:
-                break;
-            case TelephonyManager.NETWORK_TYPE_EDGE:
-                break;
+        try {
+            switch (tm.getNetworkType()) {
+                case TelephonyManager.NETWORK_TYPE_CDMA:
+                    type = "Mobile Data CDMA";
+                    break;
+                case TelephonyManager.NETWORK_TYPE_LTE:
+                    type = "Mobile Data LTE";
+                    break;
+                case TelephonyManager.NETWORK_TYPE_HSDPA:
+                    type = "Mobile Data 3G";
+                    break;
+                case TelephonyManager.NETWORK_TYPE_HSPAP:
+                    type = "Mobile Data 4G";
+                    break;
+                case TelephonyManager.NETWORK_TYPE_GPRS:
+                    type = "Mobile Data GPRS";
+                    break;
+                case TelephonyManager.NETWORK_TYPE_EDGE:
+                    type = "Mobile Data EDGE";
+                    break;
+                default:
+                    type = "Other Mobile Data type";
+                    break;
+            }
+        } catch (Exception ignored) {
         }
 
         return type;

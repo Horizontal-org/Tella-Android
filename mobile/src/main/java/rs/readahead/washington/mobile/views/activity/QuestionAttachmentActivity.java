@@ -7,12 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +14,16 @@ import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.utils.MediaFile;
 
 import java.util.List;
 
@@ -31,10 +35,7 @@ import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.RuntimePermissions;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
-import rs.readahead.washington.mobile.media.MediaFileBundle;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IQuestionAttachmentPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.QuestionAttachmentPresenter;
@@ -54,8 +55,6 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
         IGalleryMediaHandler {
     public static final String MEDIA_FILE_KEY = "mfk";
     public static final String MEDIA_FILES_FILTER = "mff";
-    private int selectedNum;
-
     @BindView(R.id.galleryRecyclerView)
     GalleryRecyclerView recyclerView;
     @BindView(R.id.progressBar)
@@ -64,7 +63,7 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
     Toolbar toolbar;
     @BindView(R.id.attachments_blank_list_info)
     TextView blankGalleryInfo;
-
+    private int selectedNum;
     private QuestionAttachmentPresenter presenter;
 
     private GalleryRecycleViewAdapter galleryAdapter;
@@ -93,10 +92,8 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
         setupToolbar();
         setupFab();
 
-        CacheWordDataSource cacheWordDataSource = new CacheWordDataSource(this);
-
         galleryAdapter = new GalleryRecycleViewAdapter(this, this,
-                new MediaFileHandler(cacheWordDataSource),
+                new MediaFileHandler(),
                 R.layout.card_gallery_attachment_media_file,
                 true, true);
         RecyclerView.LayoutManager galleryLayoutManager = new GridLayoutManager(this, 3);
@@ -191,34 +188,34 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
 
     @NeedsPermission({Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO})
     public void startCameraCaptureActivity() {
-        Intent intent = new Intent(this, CameraActivity.class);
-        intent.putExtra(CameraActivity.CAMERA_MODE, CameraActivity.CameraMode.PHOTO.name());
-        startActivityForResult(intent, C.CAMERA_CAPTURE);
+//        Intent intent = new Intent(this, CameraActivity.class);
+//        intent.putExtra(CameraActivity.CAMERA_MODE, CameraActivity.CameraMode.PHOTO.name());
+//        startActivityForResult(intent, C.CAMERA_CAPTURE);
     }
 
     @Override
-    public void playMedia(MediaFile mediaFile) {
-        if (mediaFile.getType() == MediaFile.Type.IMAGE) {
+    public void playMedia(VaultFile vaultFile) {
+        if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
             Intent intent = new Intent(this, PhotoViewerActivity.class);
-            intent.putExtra(PhotoViewerActivity.VIEW_PHOTO, mediaFile);
+            intent.putExtra(PhotoViewerActivity.VIEW_PHOTO, vaultFile);
             intent.putExtra(PhotoViewerActivity.NO_ACTIONS, true);
             startActivity(intent);
-        } else if (mediaFile.getType() == MediaFile.Type.AUDIO) {
+        } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
             Intent intent = new Intent(this, AudioPlayActivity.class);
-            intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, mediaFile.getId());
+            intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, vaultFile.id);
             intent.putExtra(AudioPlayActivity.NO_ACTIONS, true);
             startActivity(intent);
-        } else if (mediaFile.getType() == MediaFile.Type.VIDEO) {
+        } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
             Intent intent = new Intent(this, VideoViewerActivity.class);
-            intent.putExtra(VideoViewerActivity.VIEW_VIDEO, mediaFile);
+            intent.putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile);
             intent.putExtra(VideoViewerActivity.NO_ACTIONS, true);
             startActivity(intent);
         }
     }
 
     @Override
-    public void onRemoveAttachment(MediaFile mediaFile) {
-        galleryAdapter.deselectMediaFile(mediaFile);
+    public void onRemoveAttachment(VaultFile vaultFile) {
+        galleryAdapter.deselectMediaFile(vaultFile);
     }
 
     @Override
@@ -245,12 +242,12 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
 
             case C.CAMERA_CAPTURE:
             case C.RECORDED_AUDIO:
-                if (data == null) break;
-
-                long mediaFileId = data.getLongExtra(C.CAPTURED_MEDIA_FILE_ID, 0);
-                if (mediaFileId == 0) break;
-
-                presenter.addRegisteredMediaFile(mediaFileId);
+//                if (data == null) break;
+//
+//                long mediaFileId = data.getLongExtra(C.CAPTURED_MEDIA_FILE_ID, 0);
+//                if (mediaFileId == 0) break;
+//
+//                presenter.addRegisteredMediaFile(mediaFileId);
 
                 break;
         }
@@ -267,12 +264,12 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onMediaSelected(MediaFile mediaFile) {
-        presenter.setAttachment(mediaFile);
+    public void onMediaSelected(VaultFile vaultFile) {
+        presenter.setAttachment(vaultFile);
     }
 
     @Override
-    public void onMediaDeselected(MediaFile mediaFile) {
+    public void onMediaDeselected(VaultFile vaultFile) {
         presenter.setAttachment(null); // should be only one
     }
 
@@ -285,17 +282,18 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onGetFilesSuccess(List<MediaFile> files) {
+    public void onGetFilesSuccess(List<VaultFile> files) {
         blankGalleryInfo.setVisibility(files.isEmpty() ? View.VISIBLE : View.GONE);
         galleryAdapter.setFiles(files);
     }
 
     @Override
     public void onGetFilesError(Throwable error) {
+        Timber.d(error);
     }
 
     @Override
-    public void onMediaFileAdded(MediaFile mediaFile) {
+    public void onMediaFileAdded(VaultFile vaultFile) {
         presenter.getFiles(filter, sort);
     }
 
@@ -306,8 +304,8 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onMediaFileImported(MediaFileBundle mediaFileBundle) {
-        presenter.addNewMediaFile(mediaFileBundle);
+    public void onMediaFileImported(VaultFile vaultFile) {
+        presenter.addNewMediaFile(vaultFile);
     }
 
     @Override
@@ -341,11 +339,11 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
             return;
         }
 
-        MediaFile mediaFile = (MediaFile) getIntent().getSerializableExtra(MEDIA_FILE_KEY);
+        VaultFile vaultFile = (VaultFile) getIntent().getSerializableExtra(MEDIA_FILE_KEY);
 
-        if (!MediaFile.NONE.equals(mediaFile)) {
-            presenter.setAttachment(mediaFile);
-            galleryAdapter.selectMediaFile(mediaFile);
+        if (vaultFile != null ) {
+            presenter.setAttachment(vaultFile);
+            galleryAdapter.selectMediaFile(vaultFile);
             onSelectionNumChange(1);
         }
     }

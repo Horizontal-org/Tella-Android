@@ -3,12 +3,13 @@ package rs.readahead.washington.mobile.javarosa;
 import android.content.Context;
 import android.text.TextUtils;
 
+import androidx.annotation.Nullable;
+
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.Nullable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Single;
@@ -18,10 +19,9 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.data.database.DataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.repository.OpenRosaRepository;
-import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.IProgressListener;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
@@ -43,14 +43,14 @@ public class FormSubmitter implements IFormSubmitterContract.IFormSubmitter {
     private CompositeDisposable disposables = new CompositeDisposable();
     private IOpenRosaRepository openRosaRepository;
     private Context context;
-    private CacheWordDataSource cacheWordDataSource;
+    private KeyDataSource keyDataSource;
 
 
     public FormSubmitter(IFormSubmitterContract.IView view) {
         this.view = view;
         this.context = view.getContext().getApplicationContext();
         this.openRosaRepository = new OpenRosaRepository();
-        this.cacheWordDataSource = new CacheWordDataSource(context);
+        this.keyDataSource = MyApplication.getKeyDataSource();
     }
 
     @Override
@@ -70,7 +70,7 @@ public class FormSubmitter implements IFormSubmitterContract.IFormSubmitter {
         final boolean offlineMode = Preferences.isOfflineMode();
         final CollectFormInstanceStatus prevStatus = instance.getStatus();
 
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> view.showFormSubmitLoading(instance))
@@ -113,10 +113,10 @@ public class FormSubmitter implements IFormSubmitterContract.IFormSubmitter {
 
     @Override
     public void submitFormInstanceGranular(final CollectFormInstance instance) {
-        final boolean offlineMode = Preferences.isOfflineMode();
+        final boolean offlineMode = false;
         final CollectFormInstanceStatus startStatus = instance.getStatus();
 
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable ->
@@ -146,9 +146,7 @@ public class FormSubmitter implements IFormSubmitterContract.IFormSubmitter {
                 .subscribe(
                         response -> view.formPartSubmitSuccess(instance, response),
                         throwable -> {
-                            if (throwable instanceof OfflineModeException) {
-                                view.formSubmitOfflineMode();
-                            } else if (throwable instanceof NoConnectivityException) {
+                            if (throwable instanceof NoConnectivityException) {
                                 // PendingFormSendJob.scheduleJob();
                                 view.formSubmitNoConnectivity();
                             } else {
@@ -175,7 +173,7 @@ public class FormSubmitter implements IFormSubmitterContract.IFormSubmitter {
             instance.setInstanceName(name);
         }
 
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapSingle((Function<DataSource, SingleSource<CollectFormInstance>>) dataSource
@@ -204,7 +202,6 @@ public class FormSubmitter implements IFormSubmitterContract.IFormSubmitter {
 
     @Override
     public void destroy() {
-        cacheWordDataSource.dispose();
         disposables.dispose();
         view = null;
     }
@@ -263,7 +260,7 @@ public class FormSubmitter implements IFormSubmitterContract.IFormSubmitter {
     }
 
     private <T> Observable<T> rxSaveFormInstance(final CollectFormInstance instance, final T value, @Nullable final Throwable throwable) {
-        return cacheWordDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<T>>) dataSource ->
+        return keyDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<T>>) dataSource ->
                 dataSource.saveInstance(instance)
                         .toObservable()
                         .flatMap((Function<CollectFormInstance, ObservableSource<T>>) instance1 ->

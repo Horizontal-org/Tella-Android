@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright (c) 2015 Zhang Hai <Dreaming.in.Code.ZH@Gmail.com>
+  ~ All Rights Reserved.
+  -->
+
+<resources>
+
+    <declare-styleable name="PatternView">
+        <!-- Defines the row count of the pattern. -->
+        <attr name="pl_rowCount" format="integer" />
+        <!-- Defines the column count of the pattern. -->
+        <attr name="pl_columnCount" format="integer" />
+        <!-- Defines the aspect to use when drawing PatternView. -->
+        <attr name="pl_aspect">
+            <!-- Square; the default value. -->
+            <enum name="square" value="0" />
+            <enum name="lock_width" value="1" />
+            <enum name="lock_height" value="2" />
+        </attr>
+        <!-- Defines the regular pattern color. -->
+        <attr name="pl_regularColor" format="color|reference" />
+        <!-- Defines the error color. -->
+        <attr name="pl_errorColor" format="color|reference" />
+        <!-- Defines the success color. -->
+        <attr name="pl_successColor" format="color|reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="PatternLockTheme">
+        <!-- Default PatternView style. -->
+        <attr name="patternViewStyle" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="PinLockView">
+        <attr name="pinLength" format="integer" />
+        <attr name="keypadTextColor" format="color" />
+        <attr name="keypadOffTextColor" format="color" />
+        <attr name="keypadTextSize" format="dimension" />
+        <attr name="keypadButtonSize" format="dimension" />
+        <attr name="keypadVerticalSpacing" format="dimension" />
+        <attr name="keypadHorizontalSpacing" format="dimension" />
+        <attr name="keypadButtonBackgroundDrawable" format="integer" />
+        <attr name="keypadDeleteButtonDrawable" format="integer" />
+        <attr name="keypadDeleteButtonSize" format="dimension" />
+        <attr name="keypadShowDeleteButton" format="boolean" />
+        <attr name="keypadDeleteButtonPressedColor" format="color" />
+
+        <attr name="dotEmptyBackground" format="reference" />
+        <attr name="dotFilledBackground" format="reference" />
+        <attr name="dotDiameter" format="dimension" />
+        <attr name="dotSpacing" format="dimension" />
+        <attr name="indicatorType" format="enum">
+            <enum name="fixed" value="0" />
+            <enum name="fill" value="1" />
+            <enum name="fillWithAnimation" value="2" />
+        </attr>
+
+    </declare-styleable>
+</resources>

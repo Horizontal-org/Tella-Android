@@ -1,67 +1,52 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.VaultFile;
 
 import java.io.File;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
-import rs.readahead.washington.mobile.data.database.DataSource;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
-import rs.readahead.washington.mobile.media.MediaFileBundle;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.ICameraPresenterContract;
 
 
 public class CameraPresenter implements ICameraPresenterContract.IPresenter {
     private ICameraPresenterContract.IView view;
-    private CompositeDisposable disposables = new CompositeDisposable();
-    private CacheWordDataSource cacheWordDataSource;
-    private MediaFileHandler mediaFileHandler;
+    private final CompositeDisposable disposables = new CompositeDisposable();
     private int currentRotation = 0;
 
 
     public CameraPresenter(ICameraPresenterContract.IView view) {
         this.view = view;
-        this.cacheWordDataSource = new CacheWordDataSource(view.getContext());
-        this.mediaFileHandler = new MediaFileHandler(cacheWordDataSource);
     }
 
     @Override
-    public void addJpegPhoto(final byte[] jpeg) {
-        disposables.add(Observable.fromCallable(() -> MediaFileHandler.saveJpegPhoto(view.getContext(), jpeg))
-                        .flatMap((Function<MediaFileBundle, ObservableSource<MediaFileBundle>>) bundle ->
-                                mediaFileHandler.registerMediaFileBundle(bundle))
-                        .subscribeOn(Schedulers.io())
-                        .doOnSubscribe(disposable -> view.onAddingStart())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doFinally(() -> view.onAddingEnd())
-                        .subscribe(bundle -> view.onAddSuccess(bundle), throwable -> {
-                            FirebaseCrashlytics.getInstance().recordException(throwable);
-                            view.onAddError(throwable);
-                        })
+    public void addJpegPhoto(final byte[] jpeg, String parent) {
+        disposables.add(Observable.fromCallable(() -> MediaFileHandler.saveJpegPhoto(jpeg,parent))
+                .doOnSubscribe(disposable -> view.onAddingStart())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> view.onAddingEnd())
+                .subscribe(bundle -> view.onAddSuccess(bundle.blockingGet()), throwable -> {
+                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    view.onAddError(throwable);
+                })
         );
     }
 
     @Override
-    public void addMp4Video(final File file) {
-        disposables.add(Observable.fromCallable(() -> MediaFileHandler.saveMp4Video(view.getContext(), file))
-                        .flatMap((Function<MediaFileBundle, ObservableSource<MediaFileBundle>>) bundle ->
-                                mediaFileHandler.registerMediaFileBundle(bundle))
-                        .subscribeOn(Schedulers.io())
-                        .doOnSubscribe(disposable -> view.onAddingStart())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doFinally(() -> view.onAddingEnd())
-                        .subscribe(bundle -> view.onAddSuccess(bundle), throwable -> {
-                            FirebaseCrashlytics.getInstance().recordException(throwable);
-                            view.onAddError(throwable);
-                        })
+    public void addMp4Video(final File file, String parent) {
+        disposables.add(Observable.fromCallable(() -> MediaFileHandler.saveMp4Video(file, parent))
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> view.onAddingStart())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> view.onAddingEnd())
+                .subscribe(vaultFile -> view.onAddSuccess(vaultFile), throwable -> {
+                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    view.onAddError(throwable);
+                })
         );
     }
 
@@ -94,21 +79,19 @@ public class CameraPresenter implements ICameraPresenterContract.IPresenter {
 
     @Override
     public void getLastMediaFile() {
-        disposables.add(cacheWordDataSource.getDataSource()
-                        .flatMapSingle((Function<DataSource, SingleSource<MediaFile>>) DataSource::getLastMediaFile)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                mediaFile -> view.onLastMediaFileSuccess(mediaFile),
-                                throwable -> view.onLastMediaFileError(throwable)
-                        )
+        disposables.add(MediaFileHandler.getLastVaultFileFromDb()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        mediaFile -> view.onLastMediaFileSuccess(mediaFile.get(0)),
+                        throwable -> view.onLastMediaFileError(throwable)
+                )
         );
     }
 
     @Override
     public void destroy() {
         disposables.dispose();
-        cacheWordDataSource.dispose();
         view = null;
     }
 }

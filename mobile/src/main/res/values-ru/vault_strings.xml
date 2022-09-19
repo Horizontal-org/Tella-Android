@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="Vault_Audios_Title">Аудио</string>
+  <string name="Vault_Videos_Title">Видео</string>
+  <string name="Vault_RecentFiles">Recent files</string>
+  <string name="Vault_FavoriteForms_Title">Favorite forms</string>
+  <string name="Vault_Save_SheetAction">Сохранить</string>
+  <string name="Vault_Delete_SheetAction">Удалить</string>
+  <string name="Vault_Share_SheetAction">Поделиться</string>
+  <string name="Vault_Upload_SheetAction">Загрузить</string>
+  <string name="Vault_SortDateAsc_SheetAction">От новейшего к старейшему</string>
+  <string name="Vault_SortDateDesc_SheetAction">От старейшего к новейшему</string>
+  <string name="Vault_Export_SheetAction">Сохранить на устройстве</string>
+</resources>

@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.media;
 
-import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaCodec;
@@ -8,83 +7,84 @@ import android.media.MediaCodecInfo;
 import android.media.MediaFormat;
 import android.media.MediaRecorder;
 
+import androidx.annotation.Nullable;
+
+import com.hzontal.tella_vault.BaseVault;
+import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.tella_vault.rx.RxVaultFileBuilder;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.security.DigestOutputStream;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
-import androidx.annotation.Nullable;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
-import rs.readahead.washington.mobile.util.StringUtils;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
 
 
 @SuppressWarnings("MethodOnlyUsedFromInnerClass")
 public class AudioRecorder {
-    private Executor executor;
-    private Context context;
-
+    private static final long REFRESH_TIME_MS = 500;
+    private static final String ENCODER_TYPE = "audio/mp4a-latm";
+    private static final long kTimeoutUs = 10000;
+    private static final int SAMPLE_RATE = 44100;
+    private static final int CHANNELS = 1;
+    private static final int BIT_RATE = 32000;
+    private final Executor executor;
+    @Nullable
+    private final AudioRecordInterface caller;
     private boolean recording;
     private boolean cancelled;
     private boolean paused;
     private long startTime;
     private long pausedTime = 0L;
     private long duration = 0L;
-
-    @Nullable
-    private AudioRecordInterface caller;
-    private static final long REFRESH_TIME_MS = 500;
     private long callTime;
 
-    private static final String ENCODER_TYPE = "audio/mp4a-latm";
-    private static final long kTimeoutUs = 10000;
-    private static final int SAMPLE_RATE = 44100;
-    private static final int CHANNELS = 1;
-    private static final int BIT_RATE = 32000;
-
-    public interface AudioRecordInterface {
-        void onDurationUpdate(long duration);
-    }
-
-
-    public AudioRecorder(Context context, @Nullable AudioRecordInterface caller) {
-        this.context = context.getApplicationContext();
+    public AudioRecorder(@Nullable AudioRecordInterface caller) {
         this.caller = caller;
         this.executor = Executors.newFixedThreadPool(1);
         recording = true;
         cancelled = false;
     }
 
-    public Observable<MediaFile> startRecording() {
+    public Observable<VaultFile> startRecording(String filemane, @Nullable String parent) {
         return Observable.fromCallable(() -> {
-            MediaFile mediaFile = MediaFile.newAac();
+            VaultFile vaultFile;
+            RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault.builder()
+                    .setName(filemane)
+                    .setMimeType("audio/aac");
+            if (parent == null) {
+                vaultFile = rxVaultFileBuilder.
+                        build()
+                        .blockingGet();
+            } else {
+                vaultFile = rxVaultFileBuilder.
+                        build(parent)
+                        .blockingGet();
+            }
 
-            DigestOutputStream outputStream = MediaFileHandler.getOutputStream(context, mediaFile);
+            BaseVault.VaultOutputStream outputStream = MyApplication.rxVault.getOutStream(vaultFile);
 
             if (outputStream == null) {
-                return MediaFile.NONE;
+                return null;
             }
 
             startTime = Util.currentTimestamp();
+
             encode(outputStream); // heigh-ho, heigh-ho..
 
             if (isCancelled()) {
-                MediaFileHandler.deleteFile(context, mediaFile);
-                return MediaFile.NONE;
+                MediaFileHandler.deleteFile(vaultFile);
+                return null;
             }
 
-            mediaFile.setSize(MediaFileHandler.getSize(context, mediaFile));
-            mediaFile.setHash(StringUtils.hexString(outputStream.getMessageDigest().digest()));
-            mediaFile.setDuration(duration);
-
-            return mediaFile;
+            return outputStream.complete(duration);
         }).subscribeOn(Schedulers.from(executor)).observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -281,5 +281,9 @@ public class AudioRecorder {
                 MediaCodec.CONFIGURE_FLAG_ENCODE);
 
         return mediaCodec;
+    }
+
+    public interface AudioRecordInterface {
+        void onDurationUpdate(long duration);
     }
 }

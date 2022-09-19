@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="calc_key_size">60dp</dimen>
+    <dimen name="calc_key_wide">140dp</dimen>
+    <dimen name="calc_text_size">26sp</dimen>
+
+    <dimen name="hide_tella_big_margin">8dp</dimen>
+    <dimen name="hide_tella_small_margin">4dp</dimen>
+
+    <dimen name="hide_tella_big_button_height">148dp</dimen>
+    <dimen name="hide_tella_small_button_height">148dp</dimen>
+
+    <item name="pattern_height_percent" type="dimen" format="float">.5</item>
+</resources>

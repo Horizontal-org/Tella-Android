@@ -4,18 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
-
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
-
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.Menu;
@@ -24,10 +12,21 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
+
 import org.javarosa.core.model.FormDef;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import kotlin.Unit;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -44,7 +43,6 @@ import rs.readahead.washington.mobile.bus.event.CollectFormSavedEvent;
 import rs.readahead.washington.mobile.bus.event.CollectFormSubmissionErrorEvent;
 import rs.readahead.washington.mobile.bus.event.CollectFormSubmitStoppedEvent;
 import rs.readahead.washington.mobile.bus.event.CollectFormSubmittedEvent;
-import rs.readahead.washington.mobile.bus.event.DeleteFormInstanceEvent;
 import rs.readahead.washington.mobile.bus.event.ReSubmitFormInstanceEvent;
 import rs.readahead.washington.mobile.bus.event.ShowBlankFormEntryEvent;
 import rs.readahead.washington.mobile.bus.event.ShowFormInstanceEntryEvent;
@@ -63,26 +61,19 @@ import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.util.StringUtils;
 import rs.readahead.washington.mobile.views.adapters.ViewPagerAdapter;
-import rs.readahead.washington.mobile.views.fragment.BlankFormsListFragment;
-import rs.readahead.washington.mobile.views.fragment.DraftFormsListFragment;
-import rs.readahead.washington.mobile.views.fragment.FormListFragment;
-import rs.readahead.washington.mobile.views.fragment.SubmittedFormsListFragment;
+import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
+import rs.readahead.washington.mobile.views.fragment.forms.BlankFormsListFragment;
+import rs.readahead.washington.mobile.views.fragment.forms.DraftFormsListFragment;
+import rs.readahead.washington.mobile.views.fragment.forms.FormListFragment;
+import rs.readahead.washington.mobile.views.fragment.forms.SubmittedFormsListFragment;
 import timber.log.Timber;
 
 
 @RuntimePermissions
-public class CollectMainActivity extends CacheWordSubscriberBaseActivity implements
+public class CollectMainActivity extends BaseLockActivity implements
         ICollectMainPresenterContract.IView,
         ICollectCreateFormControllerContract.IView {
-    private EventCompositeDisposable disposables;
-    private CollectMainPresenter presenter;
-    private CollectCreateFormControllerPresenter formControllerPresenter;
-    private AlertDialog alertDialog;
-    private ViewPager mViewPager;
-    private ViewPagerAdapter adapter;
-    private long numOfCollectServers = 0;
     int blankFragmentPosition;
-
     @BindView(R.id.fab)
     FloatingActionButton fab;
     @BindView(R.id.tabs)
@@ -93,6 +84,13 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
     View noServersView;
     @BindView(R.id.blank_forms_text)
     TextView blankFormsText;
+    private EventCompositeDisposable disposables;
+    private CollectMainPresenter presenter;
+    private CollectCreateFormControllerPresenter formControllerPresenter;
+    private AlertDialog alertDialog;
+    private ViewPager mViewPager;
+    private ViewPagerAdapter adapter;
+    private long numOfCollectServers = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -154,7 +152,7 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
         disposables.wire(ShowBlankFormEntryEvent.class, new EventObserver<ShowBlankFormEntryEvent>() {
             @Override
             public void onNext(ShowBlankFormEntryEvent event) {
-                showFormEntry(event.getForm());
+                // showFormEntry(event.getForm());
             }
         });
         disposables.wire(ToggleBlankFormPinnedEvent.class, new EventObserver<ToggleBlankFormPinnedEvent>() {
@@ -205,12 +203,12 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
                 onFormInstanceDeleteSuccess();
             }
         });
-        disposables.wire(DeleteFormInstanceEvent.class, new EventObserver<DeleteFormInstanceEvent>() {
+        /*disposables.wire(DeleteFormInstanceEvent.class, new EventObserver<DeleteFormInstanceEvent>() {
             @Override
             public void onNext(DeleteFormInstanceEvent event) {
                 showDeleteInstanceDialog(event.getInstanceId(), event.getStatus());
             }
-        });
+        });*/
         disposables.wire(CancelPendingFormInstanceEvent.class, new EventObserver<CancelPendingFormInstanceEvent>() {
             @Override
             public void onNext(CancelPendingFormInstanceEvent event) {
@@ -375,6 +373,7 @@ public class CollectMainActivity extends CacheWordSubscriberBaseActivity impleme
 
     @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
     void showFineLocationRationale(final PermissionRequest request) {
+        maybeChangeTemporaryTimeout();
         alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_GPS));
     }
 

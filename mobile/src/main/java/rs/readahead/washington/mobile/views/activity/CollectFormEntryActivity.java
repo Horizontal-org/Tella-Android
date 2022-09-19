@@ -1,35 +1,38 @@
 package rs.readahead.washington.mobile.views.activity;
 
+import static rs.readahead.washington.mobile.views.activity.CameraActivity.MEDIA_FILE_KEY;
+
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.Toast;
+import com.hzontal.tella_vault.MyLocation;
+import com.hzontal.tella_vault.VaultFile;
 
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import kotlin.Unit;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -50,8 +53,7 @@ import rs.readahead.washington.mobile.bus.event.GPSProviderRequiredEvent;
 import rs.readahead.washington.mobile.bus.event.LocationPermissionRequiredEvent;
 import rs.readahead.washington.mobile.bus.event.MediaFileBinaryWidgetCleared;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
-import rs.readahead.washington.mobile.domain.entity.MyLocation;
+import rs.readahead.washington.mobile.databinding.ActivityCollectFormEntryBinding;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaPartResponse;
@@ -62,7 +64,6 @@ import rs.readahead.washington.mobile.javarosa.FormUtils;
 import rs.readahead.washington.mobile.javarosa.IFormParserContract;
 import rs.readahead.washington.mobile.javarosa.IFormSaverContract;
 import rs.readahead.washington.mobile.javarosa.IFormSubmitterContract;
-import rs.readahead.washington.mobile.media.MediaFileBundle;
 import rs.readahead.washington.mobile.mvp.contract.IQuestionAttachmentPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.QuestionAttachmentPresenter;
 import rs.readahead.washington.mobile.util.C;
@@ -71,33 +72,20 @@ import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.views.collect.CollectFormEndView;
 import rs.readahead.washington.mobile.views.collect.CollectFormView;
-import rs.readahead.washington.mobile.views.custom.FormSubmitButtonView;
+import rs.readahead.washington.mobile.views.fragment.MicFragment;
+import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface;
 import timber.log.Timber;
 
 
 @RuntimePermissions
 public class CollectFormEntryActivity extends MetadataActivity implements
+        ICollectEntryInterface,
         IQuestionAttachmentPresenterContract.IView,
         IFormParserContract.IView,
         IFormSaverContract.IView,
         IFormSubmitterContract.IView {
-    @BindView(R.id.screenFormView)
-    ViewGroup screenFormView;
-    @BindView(R.id.prevSection)
-    Button prevSectionButton;
-    @BindView(R.id.nextSection)
-    Button nextSectionButton;
-    @BindView(R.id.submit_button)
-    FormSubmitButtonView submitButton;
-    @BindView(R.id.cancel_button)
-    Button cancelButton;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.button_bottom_layout)
-    ViewGroup buttonBottomLayout;
 
     private Drawable upNavigationIcon;
-
     private View currentScreenView;
     //private int sectionIndex;
     private String formTitle;
@@ -112,31 +100,39 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     private ProgressDialog progressDialog;
     private boolean deleteEnabled = false;
     private boolean draftAutoSaved = false;
+    private MicFragment micFragment = null;
+    private ActivityCollectFormEntryBinding binding;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_collect_form_entry);
-        ButterKnife.bind(this);
+        binding = ActivityCollectFormEntryBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         currentScreenView = null;
         //sectionIndex = 0;
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        upNavigationIcon = toolbar.getNavigationIcon();
+        upNavigationIcon = binding.toolbar.getNavigationIcon();
         setToolbarIcon();
-
+        initForm();
         startPresenter();
 
-        prevSectionButton.setOnClickListener(v -> showPrevScreen());
-        nextSectionButton.setOnClickListener(v -> showNextScreen());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            binding.appbar.setOutlineProvider(null);
+        } else {
+            binding.appbar.bringToFront();
+        }
 
-        submitButton.setOnClickListener(v -> {
+        binding.prevSection.setOnClickListener(v -> showPrevScreen());
+        binding.nextSection.setOnClickListener(v -> showNextScreen());
+
+        binding.submitButton.setOnClickListener(v -> {
             if (formSubmitter != null) {
                 formSubmitter.submitActiveFormInstance(formTitle + " " + Util.getDateTimeString());
                 hideToolbarIcon();
@@ -145,36 +141,36 @@ public class CollectFormEntryActivity extends MetadataActivity implements
             }
         });
 
-        cancelButton.setOnClickListener(v -> {
+        binding.cancelButton.setOnClickListener(v -> {
             if (userStopPresenterSubmission()) {
                 hideFormCancelButton();
             }
         });
 
-        endView = new CollectFormEndView(this, R.string.collect_end_heading);
+        endView = new CollectFormEndView(this, R.string.Uwazi_Submitted_Entity_Header_Title);
 
         disposables = MyApplication.bus().createCompositeDisposable();
         disposables.wire(FormAttachmentsUpdatedEvent.class, new EventObserver<FormAttachmentsUpdatedEvent>() {
             @Override
-            public void onNext(FormAttachmentsUpdatedEvent event) {
+            public void onNext(@NonNull FormAttachmentsUpdatedEvent event) {
                 formAttachmentsChanged();
             }
         });
         disposables.wire(LocationPermissionRequiredEvent.class, new EventObserver<LocationPermissionRequiredEvent>() {
             @Override
-            public void onNext(LocationPermissionRequiredEvent event) {
+            public void onNext(@NonNull LocationPermissionRequiredEvent event) {
                 CollectFormEntryActivityPermissionsDispatcher.startPermissionProcessWithPermissionCheck(CollectFormEntryActivity.this);
             }
         });
         disposables.wire(GPSProviderRequiredEvent.class, new EventObserver<GPSProviderRequiredEvent>() {
             @Override
-            public void onNext(GPSProviderRequiredEvent event) {
+            public void onNext(@NonNull GPSProviderRequiredEvent event) {
                 CollectFormEntryActivityPermissionsDispatcher.startPermissionProcessWithPermissionCheck(CollectFormEntryActivity.this);
             }
         });
         disposables.wire(MediaFileBinaryWidgetCleared.class, new EventObserver<MediaFileBinaryWidgetCleared>() {
             @Override
-            public void onNext(MediaFileBinaryWidgetCleared event) {
+            public void onNext(@NonNull MediaFileBinaryWidgetCleared event) {
                 if (formParser != null) {
                     formParser.removeWidgetMediaFile(event.filename);
                 }
@@ -200,18 +196,15 @@ public class CollectFormEntryActivity extends MetadataActivity implements
             menuItem.setVisible(false);
         }
 
-        boolean offline = Preferences.isOfflineMode();
         boolean forLater = formParser != null && (formParser.isFormFinal() || formParser.isFormEnd());
-
-        setOfflineMenuIcon(menu.findItem(R.id.offlineMenuItem), offline);
 
         menuItem = menu.findItem(R.id.saveFormMenuItem);
         menuItem.setVisible(!forLater);
         menuItem.setEnabled(!forLater);
 
         menuItem = menu.findItem(R.id.saveForLaterMenuItem);
-        menuItem.setVisible(forLater && !offline);
-        menuItem.setEnabled(forLater && !offline);
+        menuItem.setVisible(forLater);
+        menuItem.setEnabled(forLater);
 
         return true;
     }
@@ -245,17 +238,14 @@ public class CollectFormEntryActivity extends MetadataActivity implements
             return true;
         }
 
-        if (id == R.id.offlineMenuItem) {
-            alertDialog = DialogsUtil.showOfflineSwitchDialog(this, offline -> {
-                setOfflineMenuIcon(item, offline);
-                setSubmitButtonText(offline);
-                refreshFormEndView(offline);
-                invalidateOptionsMenu();
-            });
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initForm(){
+        formSaver = new FormSaver(this);
+        formSubmitter = new FormSubmitter(this);
+        formParser = new FormParser(this);
+        formParser.parseForm();
     }
 
     @Override
@@ -268,28 +258,8 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
         switch (requestCode) {
             case C.MEDIA_FILE_ID:
-                MediaFile mediaFile = (MediaFile) data.getSerializableExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY);
-
-                if (currentScreenView instanceof CollectFormView) {
-                    CollectFormView cfv = (CollectFormView) currentScreenView;
-
-                    if (mediaFile != null) {
-                        String filename = cfv.setBinaryData(mediaFile);
-
-                        if (filename != null) {
-                            formParser.setWidgetMediaFile(filename, mediaFile);
-                            formParser.setTellaMetadataFields(cfv, mediaFile.getMetadata());
-                        } else {
-                            Timber.e("Binary data not set on waiting widget");
-                        }
-                    } else {
-                        formParser.removeWidgetMediaFile(cfv.clearBinaryData());
-                        formParser.clearTellaMetadataFields(cfv);
-                    }
-                }
-
-                formParser.stopWaitingBinaryData();
-                saveCurrentScreen(false);
+                VaultFile vaultFile = (VaultFile) data.getSerializableExtra(MEDIA_FILE_KEY);
+                putVaultFileInForm(vaultFile);
                 break;
 
             case C.SELECTED_LOCATION:
@@ -325,6 +295,29 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         }
     }
 
+    private void putVaultFileInForm(VaultFile vaultFile){
+        if (currentScreenView instanceof CollectFormView) {
+            CollectFormView cfv = (CollectFormView) currentScreenView;
+
+            if (vaultFile != null) {
+                String filename = cfv.setBinaryData(vaultFile);
+
+                if (filename != null) {
+                    formParser.setWidgetMediaFile(filename, vaultFile);
+                    formParser.setTellaMetadataFields(cfv, vaultFile.metadata);
+                } else {
+                    Timber.e("Binary data not set on waiting widget");
+                }
+            } else {
+                formParser.removeWidgetMediaFile(cfv.clearBinaryData());
+                formParser.clearTellaMetadataFields(cfv);
+            }
+        }
+
+        formParser.stopWaitingBinaryData();
+        saveCurrentScreen(false);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -339,6 +332,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
     void showFineLocationRationale(final PermissionRequest request) {
+        maybeChangeTemporaryTimeout();
         alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_GPS));
     }
 
@@ -361,22 +355,18 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         return submitting;
     }
 
-    private void setOfflineMenuIcon(MenuItem menuItem, boolean offline) {
-        menuItem.setIcon(offline ? R.drawable.ic_cloud_off_white_24dp : R.drawable.ic_cloud_queue_white_24dp);
-    }
-
     private void setToolbarIcon() {
-        toolbar.setEnabled(true);
+        binding.toolbar.setEnabled(true);
 
         if (formParser != null && formParser.isFormEnd() && !formParser.isFormFinal()) {
-            toolbar.setNavigationIcon(upNavigationIcon);
+            binding.toolbar.setNavigationIcon(upNavigationIcon);
         } else {
-            toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
+            binding.toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
         }
     }
 
     private void hideToolbarIcon() {
-        toolbar.setEnabled(false);
+        binding.toolbar.setEnabled(false);
     }
 
     private void clearedFormIndex(FormIndex formIndex) {
@@ -420,8 +410,10 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         closeAlertDialog();
 
         if (isPresenterSubmitting()) {
-            stopPresenterSubmission();
-            refreshFormEndView(Preferences.isOfflineMode());
+            if (formSubmitter != null) {
+                formSubmitter.stopSubmission();
+            }
+            refreshFormEndView(false);
             hideFormCancelButton();
             showFormEndButtons();
             invalidateOptionsMenu();
@@ -452,8 +444,10 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         destroyPresenter();
 
         super.onDestroy();
+        binding = null;
     }
 
+    /*
     @Override
     public void onCacheWordOpened() {
         super.onCacheWordOpened();
@@ -461,7 +455,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         formSubmitter = new FormSubmitter(this);
         formParser = new FormParser(this);
         formParser.parseForm();
-    }
+    }*/
 
     @Override
     public void onBackPressed() {
@@ -492,14 +486,27 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         } else if (formParser.isFormChanged() && !formParser.isFormFinal()) {
             showFormChangedDialog();
         } else if (formParser.isFormFinal() && !stopped) {
-            alertDialog = DialogsUtil.showExitOnFinalDialog(this,
+            BottomSheetUtils.showStandardSheet(
+                    this.getSupportFragmentManager(),
+                    getString(R.string.Collect_DialogTitle_StopExit),
+                    getString(R.string.Collect_DialogExpl_ExitingStopSubmission),
+                    getString(R.string.Collect_DialogAction_KeepSubmitting),
+                    getString(R.string.Collect_DialogAction_StopAndExit),
+                    null, this::onDialogBackPressed);
+            /*alertDialog = DialogsUtil.showExitOnFinalDialog(this,
                     (dialog, which) -> onBackPressedWithoutCheck(),
                     (dialog, which) -> {
-                    });
+                    });*/
         } else {
             onBackPressedWithoutCheck();
         }
     }
+
+    private Unit onDialogBackPressed() {
+        onBackPressedWithoutCheck();
+        return Unit.INSTANCE;
+    }
+
 
     private void onBackPressedWithoutCheck() {
         if (draftAutoSaved) {
@@ -640,13 +647,6 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     }
 
     @Override
-    public void formSubmitOfflineMode() {
-        Toast.makeText(getApplicationContext(), R.string.collect_end_toast_saved_for_later, Toast.LENGTH_LONG).show();
-        MyApplication.bus().post(new CollectFormSubmittedEvent());
-        finish();
-    }
-
-    @Override
     public void formSubmitNoConnectivity() {
         Toast.makeText(getApplicationContext(), R.string.collect_end_toast_notification_form_not_sent_no_connection, Toast.LENGTH_LONG).show();
         MyApplication.bus().post(new CollectFormSubmittedEvent());
@@ -657,7 +657,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     public void formPartSubmitStart(CollectFormInstance instance, String partName) {
         endView.showUploadProgress(partName);
         invalidateOptionsMenu();
-        toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
+        binding.toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
     }
 
     @Override
@@ -686,7 +686,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     @Override
     public void submissionStoppedByUser() {
         MyApplication.bus().post(new CollectFormSubmitStoppedEvent());
-        refreshFormEndView(Preferences.isOfflineMode());
+        refreshFormEndView(false);
         hideFormCancelButton();
         showFormEndButtons();
     }
@@ -736,7 +736,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onGetFilesSuccess(List<MediaFile> files) {
+    public void onGetFilesSuccess(List<VaultFile> files) {
 
     }
 
@@ -746,8 +746,8 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onMediaFileAdded(MediaFile mediaFile) {
-        onActivityResult(C.MEDIA_FILE_ID, RESULT_OK, new Intent().putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, mediaFile));
+    public void onMediaFileAdded(VaultFile vaultFile) {
+        onActivityResult(C.MEDIA_FILE_ID, RESULT_OK, new Intent().putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, vaultFile));
     }
 
     @Override
@@ -757,9 +757,8 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onMediaFileImported(MediaFileBundle mediaFileBundle) {
-        presenter.setAttachment(mediaFileBundle.getMediaFile());
-        presenter.addNewMediaFile(mediaFileBundle);
+    public void onMediaFileImported(VaultFile vaultFile) {
+        onMediaFileAdded(vaultFile);
     }
 
     @Override
@@ -802,7 +801,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
             return;
         }
 
-        alertDialog = new AlertDialog.Builder(this)
+        alertDialog = new AlertDialog.Builder(this,R.style.PurpleBackgroundLightLettersDialogTheme)
                 .setPositiveButton(R.string.collect_form_dialog_action_add_group, (dialog, which) -> formParser.executeRepeat())
                 .setNegativeButton(R.string.collect_form_dialog_action_dont_add_group, (dialog, which) -> formParser.cancelRepeat())
                 .setCancelable(false)
@@ -826,10 +825,10 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     private void showScreenView(View view) {
         if (currentScreenView != null) {
-            screenFormView.removeView(currentScreenView);
+            binding.screenFormView.removeView(currentScreenView);
         }
         currentScreenView = view;
-        screenFormView.addView(currentScreenView);
+        binding.screenFormView.addView(currentScreenView);
     }
 
     private void showFormView(CollectFormView view) {
@@ -841,7 +840,7 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     private void showFormEndView(CollectFormInstance instance) {
         hideKeyboard();
         showFormEndButtons();
-        endView.setInstance(instance, Preferences.isOfflineMode());
+        endView.setInstance(instance, false);
         showScreenView(endView);
     }
 
@@ -908,12 +907,13 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     // this bottom buttons on/off thing looks stupid :)
     private void setFirstSectionButtons() {
+        hideFormCancelButton();
         hideSubmitButtons();
         hidePrevSectionButton();
     }
 
     private void setSectionButtons() {
-        buttonBottomLayout.setVisibility(View.VISIBLE);
+        binding.buttonBottomLayout.setVisibility(View.VISIBLE);
 
         showNextSectionButton();
 
@@ -922,54 +922,60 @@ public class CollectFormEntryActivity extends MetadataActivity implements
             return;
         }
 
-        prevSectionButton.setEnabled(true);
-        prevSectionButton.setVisibility(View.VISIBLE);
+        binding.prevSection.setEnabled(true);
+        binding.prevSection.setVisibility(View.VISIBLE);
     }
 
     private void setSubmitButtonText(boolean offline) {
-        submitButton.setOffline(offline);
+        //submitButton.setOffline(offline);
     }
 
     private void showFormEndButtons() {
         setSubmitButtonText(Preferences.isOfflineMode());
-        submitButton.setEnabled(true);
-        submitButton.setVisibility(View.VISIBLE);
+        binding.submitButton.setEnabled(true);
+        binding.submitButton.setVisibility(View.VISIBLE);
     }
 
     private void hidePrevSectionButton() {
-        prevSectionButton.setEnabled(false);
-        prevSectionButton.setVisibility(View.GONE);
+        binding.prevSection.setEnabled(false);
+        binding.prevSection.setVisibility(View.GONE);
     }
 
     private void hideSectionButtons() {
         hidePrevSectionButton();
-        nextSectionButton.setEnabled(false);
-        nextSectionButton.setVisibility(View.GONE);
+        binding.nextSection.setEnabled(false);
+        binding.nextSection.setVisibility(View.GONE);
     }
 
     private void hideSubmitButtons() {
-        submitButton.setEnabled(false);
-        submitButton.setVisibility(View.GONE);
+        binding.submitButton.setEnabled(false);
+        binding.submitButton.setVisibility(View.GONE);
     }
 
     private void showNextSectionButton() {
-        nextSectionButton.setEnabled(true);
-        nextSectionButton.setVisibility(View.VISIBLE);
+        binding.nextSection.setEnabled(true);
+        binding.nextSection.setVisibility(View.VISIBLE);
     }
 
     private void showFormCancelButton() {
-        cancelButton.setEnabled(true);
-        cancelButton.setVisibility(View.VISIBLE);
+        binding.cancelButton.setEnabled(true);
+        binding.cancelButton.setVisibility(View.VISIBLE);
     }
 
     private void hideFormCancelButton() {
-        cancelButton.setEnabled(false);
-        cancelButton.setVisibility(View.GONE);
+        binding.cancelButton.setEnabled(false);
+        binding.cancelButton.setVisibility(View.GONE);
     }
 
     private void showFormChangedDialog() {
-        String message = getString(R.string.collect_form_exit_dialog_expl);
-
+        BottomSheetUtils.showStandardSheet(
+                this.getSupportFragmentManager(),
+                getString(R.string.collect_form_exit_unsaved_dialog_title),
+                getString(R.string.collect_form_exit_dialog_expl),
+                getString(R.string.collect_form_exit_dialog_action_save_exit),
+                getString(R.string.collect_form_exit_dialog_action_exit_anyway),
+                this::onSavePressed, this::onExitPressed);
+/*
         alertDialog = DialogsUtil.showMessageOKCancelWithTitle(this,
                 message,
                 getString(R.string.collect_form_exit_unsaved_dialog_title),
@@ -986,7 +992,22 @@ public class CollectFormEntryActivity extends MetadataActivity implements
                 (dialog, which) -> {
                     dialog.dismiss();
                     onBackPressedWithoutCheck();
-                });
+                });*/
+    }
+
+    private Unit onExitPressed() {
+        onBackPressedWithoutCheck();
+        return Unit.INSTANCE;
+    }
+
+    private Unit onSavePressed() {
+        if (formSaver != null) {
+            formSaver.saveActiveFormInstanceOnExit();
+            onBackPressedWithoutCheck();
+        } else {
+            onBackPressedWithoutCheck();
+        }
+        return Unit.INSTANCE;
     }
 
     private boolean isPresenterSubmitting() {
@@ -1033,5 +1054,31 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     private void enableScreenTimeout() {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    @Override
+    public void openAudioRecorder() {
+        binding.entryLayout.setVisibility(View.GONE);
+        micFragment = MicFragment.newInstance(true);
+        addFragment(micFragment,R.id.rootCollectEntry);
+    }
+
+    @Override
+    public void returnFileToForm(VaultFile file) {
+
+        binding.entryLayout.setVisibility(View.VISIBLE);
+
+        putVaultFileInForm(file);
+
+        if (micFragment != null) {
+            getSupportFragmentManager().beginTransaction().remove((Fragment) micFragment).commit();
+        }
+    }
+
+    @Override
+    public void stopWaitingForData() {
+        binding.entryLayout.setVisibility(View.VISIBLE);
+        formParser.stopWaitingBinaryData();
+        saveCurrentScreen(false);
     }
 }

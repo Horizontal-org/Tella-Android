@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/space_cadet">
+
+
+    <ImageView
+        android:id="@+id/setupImgV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/lock_bg"
+        app:layout_constraintBottom_toTopOf="@+id/setupMainLockTv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/setupMainLockTv"
+        style="@style/Unlock_White_Text_Bold"
+        android:text="@string/Settings_Action_SetLock"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/setupMsgLockTv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setupImgV" />
+
+    <TextView
+        android:id="@+id/setupMsgLockTv"
+        style="@style/Unlock_White_Text_Bold"
+        android:text="@string/Settings_Message_LockChanged"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/successImgV"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setupMainLockTv" />
+
+    <ImageView
+        android:id="@+id/successImgV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/checked_circle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setupMsgLockTv" />
+</androidx.constraintlayout.widget.ConstraintLayout>

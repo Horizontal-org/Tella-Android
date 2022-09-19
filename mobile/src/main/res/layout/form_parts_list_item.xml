@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-
-    <View
-        style="@style/SettingsMainShadowLine"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,14 +14,38 @@
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        tools:ignore="UselessParent">
 
         <ImageView
             android:id="@+id/partIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:background="@drawable/light_rounded_background_48"
+            android:scaleType="center"
+            tools:ignore="ContentDescription" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/fileThumbCard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            android:layout_margin="1dp"
+            android:elevation="10dp">
+
+        <ImageView
+            android:id="@+id/fileThumb"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:adjustViewBounds="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="centerCrop"
             android:layout_gravity="center"
+            android:background="@drawable/light_rounded_background_48"
             tools:ignore="ContentDescription" />
+        </androidx.cardview.widget.CardView>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -38,6 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="start"
+                android:textColor="@color/wa_white"
                 android:layout_marginBottom="2dp"
                 android:singleLine="true" />
 
@@ -52,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="start"
                     android:singleLine="true"
-                    android:textColor="@color/wa_gray"
+                    android:textColor="@color/wa_white"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"/>
 
                 <ProgressBar
@@ -76,17 +99,20 @@
 
             <CheckBox
                 android:id="@+id/partCheckBox"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:buttonTint="@color/radio_buttons_color"
+                android:background="@drawable/white_collect_check_background"
+                android:visibility="gone" />
+            <!--android:background="@drawable/checkbox_background"-->
 
             <ImageView
                 android:id="@+id/partCheckIcon"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_check_circle_green"
                 android:contentDescription="@null"
-                android:visibility="gone"/>
+                android:src="@drawable/ic_check_circle_green"
+                android:visibility="gone" />
         </FrameLayout>
 
     </LinearLayout>

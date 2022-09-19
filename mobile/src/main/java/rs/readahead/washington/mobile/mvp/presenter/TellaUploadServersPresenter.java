@@ -9,27 +9,28 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.openrosa.OpenRosaService;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.mvp.contract.ITellaUploadServersPresenterContract;
 
 
 public class TellaUploadServersPresenter implements ITellaUploadServersPresenterContract.IPresenter {
-    private CacheWordDataSource cacheWordDataSource;
+    private KeyDataSource keyDataSource;
     private ITellaUploadServersPresenterContract.IView view;
     private CompositeDisposable disposables = new CompositeDisposable();
 
 
     //@Inject
     public TellaUploadServersPresenter(ITellaUploadServersPresenterContract.IView view) {
-        cacheWordDataSource = new CacheWordDataSource(view.getContext().getApplicationContext());
+        keyDataSource = MyApplication.getKeyDataSource();
         this.view = view;
     }
 
     public void getTUServers() {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> view.showLoading())
@@ -45,7 +46,7 @@ public class TellaUploadServersPresenter implements ITellaUploadServersPresenter
     }
 
     public void create(final TellaUploadServer server) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> view.showLoading())
@@ -61,7 +62,7 @@ public class TellaUploadServersPresenter implements ITellaUploadServersPresenter
     }
 
     public void update(final TellaUploadServer server) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> view.showLoading())
@@ -80,7 +81,7 @@ public class TellaUploadServersPresenter implements ITellaUploadServersPresenter
     }
 
     public void remove(final TellaUploadServer server) {
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> view.showLoading())
@@ -100,7 +101,6 @@ public class TellaUploadServersPresenter implements ITellaUploadServersPresenter
     @Override
     public void destroy() {
         disposables.dispose();
-        cacheWordDataSource.dispose();
         view = null;
     }
 }

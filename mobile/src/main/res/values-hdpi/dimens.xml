@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="reports_tab_text_size">11sp</dimen>
-    <dimen name="intro_header_text_size">22sp</dimen>
-    <dimen name="intro_title_text_size">20sp</dimen>
     <dimen name="intro_text_size">14sp</dimen>
     <dimen name="intro_link_text_size">16sp</dimen>
+
+    <dimen name="about_tella_icon_height">65sp</dimen>
+    <dimen name="about_tella_icon_width">60sp</dimen>
+    <dimen name="lock_password_button_margin_top">16dp</dimen>
+    <dimen name="lock_subtitle_desc_margin_top">10dp</dimen>
 </resources>

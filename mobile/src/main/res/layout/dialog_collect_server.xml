@@ -1,42 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:animateLayoutChanges="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ScrollView
         android:id="@+id/server_input"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:isScrollContainer="true"
+        android:fillViewport="true">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingLeft="?dialogPreferredPadding"
-            android:paddingRight="?dialogPreferredPadding"
-            android:paddingTop="?dialogPreferredPadding"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:textDirection="locale">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineBottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.85" />
+
+            <LinearLayout
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/dark_purple"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
+
+                <ImageView
+                    android:id="@+id/back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="2dp"
+                    android:src="@drawable/ic_close_white_24dp"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="12dp"
+                    android:fontFamily="@font/open_sans"
+                    android:gravity="center_vertical"
+                    android:text="@string/settings.docu_dialog.title_server.settings"
+                    android:textColor="@color/wa_white"
+                    android:textSize="21sp" />
+            </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/name_layout"
+                style="@style/DialogDataCollectionTextEntryLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/wa_white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
                 <EditText
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:autofillHints=""
                     android:hint="@string/settings.docu_field_server.name"
                     android:imeOptions="actionNext"
                     android:inputType="textCapSentences"
-                    android:maxLines="1" />
+                    android:maxLines="1"
+                    android:textColor="@color/wa_white"
+                    app:backgroundTint="@color/wa_white" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/url_layout"
+                style="@style/DialogDataCollectionTextEntryLayout"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/wa_white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/name_layout">
 
                 <EditText
                     android:id="@+id/url"
@@ -44,54 +101,136 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/settings.docu_field_server.url"
                     android:imeOptions="actionNext"
+                    android:importantForAutofill="no"
                     android:inputType="textUri"
                     android:maxLines="1"
                     android:text="@string/ra_server_prefix"
-                    android:textDirection="ltr" />
+                    android:textColor="@color/wa_white"
+                    android:textDirection="ltr"
+                    app:backgroundTint="@color/wa_white" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/username_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <rs.readahead.washington.mobile.views.custom.PanelToggleButton
+                android:id="@+id/toggle_button"
+                style="?android:attr/borderlessButtonStyle"
 
-                <EditText
-                    android:id="@+id/username"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/settings.docu_field_username"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/password_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:passwordToggleEnabled="true">
-
-                <EditText
-                    android:id="@+id/password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/settings.docu_add.server_field_password"
-                    android:imeOptions="actionDone"
-                    android:inputType="textPassword"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:id="@+id/internet_error"
-                style="@style/TextValidationError"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/settings.docu_error_no.internet"
-                android:visibility="gone"
-                android:focusable="true"
-                android:focusableInTouchMode="true"/>
+                android:background="@color/wa_transparent"
+                android:text="@string/settings.server_add.server_dialog_advanced"
+                android:textColor="@color/wa_white"
+                android:textAllCaps="false"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/url_layout" />
 
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/advanced_panel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toggle_button">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/username_layout"
+                    style="@style/DialogDataCollectionTextEntryLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColorHint="@color/wa_white">
+
+                    <EditText
+                        android:id="@+id/username"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/settings.docu_field_username"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:textColor="@color/wa_white"
+                        app:backgroundTint="@color/wa_white"
+                        android:autofillHints="true" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/password_layout"
+                    style="@style/DialogDataCollectionTextEntryLayout"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColorHint="@color/wa_white"
+                    app:passwordToggleEnabled="true"
+                    app:passwordToggleTint="@color/dark_orange">
+
+                    <EditText
+                        android:id="@+id/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/settings.docu_add.server_field_password"
+                        android:imeOptions="actionDone"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:textColor="@color/wa_white"
+                        app:backgroundTint="@color/wa_white" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:id="@+id/buttons_layout"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_gravity="end|bottom"
+                android:layout_marginBottom="24dp"
+                android:gravity="end|bottom"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/guidelineBottom"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <Button
+                    android:id="@+id/cancel"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:background="@drawable/cancel_button_background"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
+                    android:text="@string/action_cancel"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/wa_white"
+                    android:textSize="17sp" />
+
+                <Button
+                    android:id="@+id/next"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@drawable/action_button_background"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:maxLines="1"
+                    android:text="@string/action_save"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/wa_white"
+                    android:textSize="17sp" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
     <ProgressBar

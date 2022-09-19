@@ -1,15 +1,13 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-import java.util.List;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.rx.RxVault;
 
-import io.reactivex.SingleSource;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
-import rs.readahead.washington.mobile.data.database.DataSource;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.domain.exception.NotFountException;
 import rs.readahead.washington.mobile.mvp.contract.IAudioPlayPresenterContract;
 
@@ -17,35 +15,42 @@ import rs.readahead.washington.mobile.mvp.contract.IAudioPlayPresenterContract;
 public class AudioPlayPresenter implements
         IAudioPlayPresenterContract.IPresenter {
     private IAudioPlayPresenterContract.IView view;
-    private CacheWordDataSource cacheWordDataSource;
+    private RxVault rxVault;
     private CompositeDisposable disposables = new CompositeDisposable();
 
 
     public AudioPlayPresenter(IAudioPlayPresenterContract.IView view) {
         this.view = view;
-        this.cacheWordDataSource = new CacheWordDataSource(view.getContext());
+        this.rxVault = MyApplication.rxVault;
     }
 
     @Override
-    public void getMediaFile(final long id) {
-        disposables.add(cacheWordDataSource.getDataSource()
+    public void getMediaFile(final String id) {
+
+        disposables.add(Single
+                .fromCallable(() -> MyApplication.rxVault.get(id))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMapSingle((Function<DataSource, SingleSource<List<MediaFile>>>) dataSource -> dataSource.getMediaFiles(new long[]{id}))
-                .subscribe(mediaFiles -> {
-                    if (mediaFiles.size() != 1) {
-                        view.onMediaFileError(new NotFountException());
-                    } else {
-                        view.onMediaFileSuccess(mediaFiles.get(0));
-                    }
-                }, throwable -> view.onMediaFileError(throwable))
-        );
+                .subscribe(vaultFile ->
+                        {
+                            if (vaultFile == null) {
+                                view.onMediaFileError(new NotFountException());
+                            } else {
+                                view.onMediaFileSuccess(vaultFile.blockingGet());
+                            }
+                        },
+
+                        throwable -> {
+                            FirebaseCrashlytics.getInstance().recordException(throwable);
+                            view.onMediaFileError(throwable);
+                        }));
     }
 
     @Override
     public void destroy() {
-        cacheWordDataSource.dispose();
         disposables.dispose();
         view = null;
     }
+
+
 }

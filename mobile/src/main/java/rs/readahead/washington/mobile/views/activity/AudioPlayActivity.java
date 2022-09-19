@@ -1,17 +1,17 @@
 package rs.readahead.washington.mobile.views.activity;
 
+import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
+import static rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragmentKt.PICKER_FILE_REQUEST_CODE;
+
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
-
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,12 +19,24 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+
+import com.hzontal.tella_vault.VaultFile;
+
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
+import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
+
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import kotlin.Unit;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -34,7 +46,7 @@ import permissions.dispatcher.RuntimePermissions;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent;
 import rs.readahead.washington.mobile.media.AudioPlayer;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IAudioPlayPresenterContract;
@@ -44,16 +56,14 @@ import rs.readahead.washington.mobile.mvp.presenter.MediaFileViewerPresenter;
 import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.util.ThreadUtil;
-import rs.readahead.washington.mobile.views.fragment.ShareDialogFragment;
+import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
+import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment;
 import timber.log.Timber;
 
-import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
-
 @RuntimePermissions
-public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implements
+public class AudioPlayActivity extends BaseLockActivity implements
         IAudioPlayPresenterContract.IView,
-        IMediaFileViewerPresenterContract.IView,
-        ShareDialogFragment.IShareDialogFragmentHandler {
+        IMediaFileViewerPresenterContract.IView {
     public static final String PLAY_MEDIA_FILE = "pmf";
     public static final String PLAY_MEDIA_FILE_ID_KEY = "pmfik";
     public static final String NO_ACTIONS = "na";
@@ -75,7 +85,7 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
     View rewind;
 
     private AudioPlayPresenter presenter;
-    private MediaFile handlingMediaFile;
+    private VaultFile handlingVaultFile;
     private AudioPlayer audioPlayer;
     private AudioPlayer.Listener audioPlayerListener;
 
@@ -83,10 +93,13 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
 
     private boolean showActions = false;
     private boolean actionsDisabled = false;
+    private boolean withMetadata = false;
     private AlertDialog alertDialog;
     private ProgressDialog progressDialog;
 
     private boolean paused = true;
+    private Toolbar toolbar;
+    private boolean isInfoShown = false;
 
 
     @Override
@@ -94,16 +107,11 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_audio_play);
+        overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
         ButterKnife.bind(this);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-
         viewerPresenter = new MediaFileViewerPresenter(this);
         enablePlay();
 
@@ -137,13 +145,13 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
         };
 
         if (getIntent().hasExtra(PLAY_MEDIA_FILE)) {
-            MediaFile mediaFile = (MediaFile) getIntent().getSerializableExtra(PLAY_MEDIA_FILE);
-            if (mediaFile != null) {
-                ThreadUtil.runOnMain(() -> onMediaFileSuccess(mediaFile));
+            VaultFile vaultFile = (VaultFile) getIntent().getSerializableExtra(PLAY_MEDIA_FILE);
+            if (vaultFile != null) {
+                ThreadUtil.runOnMain(() -> onMediaFileSuccess(vaultFile));
             }
         } else if (getIntent().hasExtra(PLAY_MEDIA_FILE_ID_KEY)) {
-            long id = getIntent().getLongExtra(PLAY_MEDIA_FILE_ID_KEY, 0);
-            if (id != 0) {
+            String id = getIntent().getStringExtra(PLAY_MEDIA_FILE_ID_KEY);
+            if (id != null) {
                 presenter = new AudioPlayPresenter(this);
                 presenter.getMediaFile(id);
             }
@@ -151,12 +159,18 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
     }
 
     @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_end, R.anim.slide_out_start);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!actionsDisabled && showActions) {
-            getMenuInflater().inflate(R.menu.audio_view_menu, menu);
+            toolbar.inflateMenu(R.menu.video_view_menu);
 
-            if (handlingMediaFile != null && handlingMediaFile.getMetadata() != null) {
-                MenuItem item = menu.findItem(R.id.menu_item_metadata);
+            if (handlingVaultFile != null && handlingVaultFile.metadata != null) {
+                MenuItem item = toolbar.getMenu().findItem(R.id.menu_item_metadata);
                 item.setVisible(true);
             }
         }
@@ -173,18 +187,8 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
             return true;
         }
 
-        if (id == R.id.menu_item_share) {
-            shareMediaFile();
-            return true;
-        }
-
-        if (id == R.id.menu_item_export) {
-            showExportDialog();
-            return true;
-        }
-
-        if (id == R.id.menu_item_delete) {
-            showDeleteMediaDialog();
+        if (id == R.id.menu_item_more) {
+            showVaultActionsDialog(handlingVaultFile);
             return true;
         }
 
@@ -219,8 +223,14 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        stopPlayer();
-        finish();
+        if (isInfoShown) {
+            toolbar.getMenu().findItem(R.id.menu_item_more).setVisible(true);
+            toolbar.getMenu().findItem(R.id.menu_item_metadata).setVisible(true);
+            toolbar.setTitle(handlingVaultFile.name);
+        } else {
+            stopPlayer();
+            finish();
+        }
     }
 
     @Override
@@ -253,11 +263,11 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
             viewerPresenter = null;
         }
 
-        dismissShareDialog();
-
         super.onDestroy();
     }
 
+
+    @SuppressLint("NeedOnRequestPermissionsResult")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -274,19 +284,38 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void exportMediaFile() {
-        if (handlingMediaFile != null && viewerPresenter != null) {
-            viewerPresenter.exportNewMediaFile(handlingMediaFile);
+        if (handlingVaultFile != null && viewerPresenter != null) {
+            if (handlingVaultFile.metadata != null) {
+                showExportWithMetadataDialog();
+            } else {
+                withMetadata = false;
+                maybeChangeTemporaryTimeout(() -> {
+                    performFileSearch();
+                    return Unit.INSTANCE;
+                });
+            }
+        }
+    }
+
+    private void performFileSearch() {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            startActivityForResult(intent, PICKER_FILE_REQUEST_CODE);
+        } else {
+            viewerPresenter.exportNewMediaFile(withMetadata, handlingVaultFile, null);
         }
     }
 
     @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void showWriteExternalStorageRationale(final PermissionRequest request) {
+        maybeChangeTemporaryTimeout();
         alertDialog = PermissionUtil.showRationale(this, request, getString(R.string.permission_dialog_expl_device_storage));
     }
 
     @Override
-    public void onMediaFileSuccess(MediaFile mediaFile) {
-        handlingMediaFile = mediaFile;
+    public void onMediaFileSuccess(VaultFile vaultFile) {
+        handlingVaultFile = vaultFile;
+        toolbar.setTitle(vaultFile.name);
         //handlePlay();
 
         if (!actionsDisabled) {
@@ -332,47 +361,39 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
     }
 
     @Override
+    public void onMediaFileRename(VaultFile vaultFile) {
+        toolbar.setTitle(vaultFile.name);
+        MyApplication.bus().post(new VaultFileRenameEvent());
+    }
+
+    @Override
+    public void onMediaFileRenameError(Throwable throwable) {
+
+    }
+
+    @Override
     public Context getContext() {
         return this;
     }
 
-    @Override
-    public void sharingMediaMetadataSelected() {
-        dismissShareDialog();
-        startShareActivity(true);
-    }
-
-    @Override
-    public void sharingMediaOnlySelected() {
-        dismissShareDialog();
-        startShareActivity(false);
-    }
-
     private void shareMediaFile() {
-        if (handlingMediaFile == null) {
+        if (handlingVaultFile == null) {
             return;
         }
 
-        if (handlingMediaFile.getMetadata() != null) {
-            ShareDialogFragment.newInstance().show(getSupportFragmentManager(), ShareDialogFragment.TAG);
+        if (handlingVaultFile.metadata != null) {
+            showShareWithMetadataDialog();
         } else {
             startShareActivity(false);
         }
     }
 
     private void startShareActivity(boolean includeMetadata) {
-        if (handlingMediaFile == null) {
+        if (handlingVaultFile == null) {
             return;
         }
 
-        MediaFileHandler.startShareActivity(this, handlingMediaFile, includeMetadata);
-    }
-
-    private void dismissShareDialog() {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(ShareDialogFragment.TAG);
-        if (fragment instanceof ShareDialogFragment) {
-            ((ShareDialogFragment) fragment).dismiss();
-        }
+        MediaFileHandler.startShareActivity(this, handlingVaultFile, includeMetadata);
     }
 
     private void showExportDialog() {
@@ -385,8 +406,8 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
                 .setTitle(R.string.gallery_delete_files_dialog_title)
                 .setMessage(R.string.gallery_delete_files_dialog_expl)
                 .setPositiveButton(R.string.action_delete, (dialog, which) -> {
-                    if (viewerPresenter != null && handlingMediaFile != null) {
-                        viewerPresenter.deleteMediaFiles(handlingMediaFile);
+                    if (viewerPresenter != null && handlingVaultFile != null) {
+                        viewerPresenter.deleteMediaFiles(handlingVaultFile);
                     }
                 })
                 .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
@@ -396,11 +417,11 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
     }
 
     /*private void handleStop() {
-        stopPlayer();
+        stopPlayer();xr
     }*/
 
     private void handlePlay() {
-        if (handlingMediaFile == null) {
+        if (handlingVaultFile == null) {
             return;
         }
 
@@ -408,7 +429,7 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
             audioPlayer.resume();
         } else {
             audioPlayer = new AudioPlayer(this, audioPlayerListener);
-            audioPlayer.play(handlingMediaFile);
+            audioPlayer.play(handlingVaultFile);
         }
 
         paused = false;
@@ -417,7 +438,7 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
     }
 
     private void handlePause() {
-        if (handlingMediaFile == null) {
+        if (handlingVaultFile == null) {
             return;
         }
 
@@ -435,13 +456,13 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
     }
 
     private void disablePlay() {
-        mPlay.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_pause_black_24dp));
+        mPlay.setImageDrawable(getContext().getResources().getDrawable(R.drawable.big_white_pause_24p));
         enableButton(forward, mFwd);
         enableButton(rewind, mRwd);
     }
 
     private void enablePlay() {
-        mPlay.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+        mPlay.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
         disableButton(forward, mFwd);
         disableButton(rewind, mRwd);
     }
@@ -474,7 +495,7 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
 
     private void showMetadata() {
         Intent viewMetadata = new Intent(this, MetadataViewerActivity.class);
-        viewMetadata.putExtra(VIEW_METADATA, handlingMediaFile);
+        viewMetadata.putExtra(VIEW_METADATA, handlingVaultFile);
         startActivity(viewMetadata);
     }
 
@@ -493,5 +514,144 @@ public class AudioPlayActivity extends CacheWordSubscriberBaseActivity implement
 
     private void enableScreenTimeout() {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    private void showVaultActionsDialog(VaultFile vaultFile) {
+        VaultSheetUtils.showVaultActionsSheet(getSupportFragmentManager(),
+                vaultFile.name,
+                getString(R.string.Vault_Upload_SheetAction),
+                getString(R.string.Vault_Share_SheetAction),
+                getString(R.string.Vault_Move_SheetDesc),
+                getString(R.string.Vault_Rename_SheetAction),
+                getString(R.string.gallery_action_desc_save_to_device),
+                getString(R.string.Vault_File_SheetAction),
+                getString(R.string.Vault_Delete_SheetAction),
+                false,
+                false,
+                false,
+                false,
+                new VaultSheetUtils.IVaultActions() {
+                    @Override
+                    public void upload() {
+
+                    }
+
+                    @Override
+                    public void share() {
+                        maybeChangeTemporaryTimeout(() -> {
+                            shareMediaFile();
+                            return Unit.INSTANCE;
+                        });
+                    }
+
+                    @Override
+                    public void move() {
+
+                    }
+
+                    @Override
+                    public void rename() {
+                        VaultSheetUtils.showVaultRenameSheet(
+                                getSupportFragmentManager(),
+                                getString(R.string.Vault_RenameFile_SheetTitle),
+                                getString(R.string.action_cancel),
+                                getString(R.string.action_ok),
+                                AudioPlayActivity.this,
+                                vaultFile.name,
+                                (name) -> {
+                                    viewerPresenter.renameVaultFile(vaultFile.id, name);
+                                    return Unit.INSTANCE;
+                                }
+                        );
+                    }
+
+                    @Override
+                    public void save() {
+                        BottomSheetUtils.showConfirmSheet(
+                                getSupportFragmentManager(),
+                                getString(R.string.gallery_save_to_device_dialog_title),
+                                getString(R.string.gallery_save_to_device_dialog_expl),
+                                getString(R.string.action_save),
+                                getString(R.string.action_cancel),
+                                isConfirmed -> AudioPlayActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(AudioPlayActivity.this)
+                        );
+                    }
+
+                    @Override
+                    public void info() {
+                        toolbar.setTitle(getString(R.string.Vault_FileInfo));
+                        toolbar.getMenu().findItem(R.id.menu_item_more).setVisible(false);
+                        toolbar.getMenu().findItem(R.id.menu_item_metadata).setVisible(false);
+                        invalidateOptionsMenu();
+                        addFragment(new VaultInfoFragment().newInstance(vaultFile, false), R.id.root);
+                        isInfoShown = true;
+                    }
+
+                    @Override
+                    public void delete() {
+                        BottomSheetUtils.showConfirmSheet(
+                                getSupportFragmentManager(),
+                                getString(R.string.Vault_DeleteFile_SheetTitle),
+                                getString(R.string.Vault_deleteFile_SheetDesc),
+                                getString(R.string.action_delete),
+                                getString(R.string.action_cancel),
+                                isConfirmed -> {
+                                    viewerPresenter.deleteMediaFiles(vaultFile);
+                                }
+                        );
+
+                    }
+                }
+        );
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICKER_FILE_REQUEST_CODE) {
+            assert data != null;
+            viewerPresenter.exportNewMediaFile(withMetadata, handlingVaultFile, data.getData());
+        }
+    }
+
+    private void showShareWithMetadataDialog() {
+        LinkedHashMap<Integer, Integer> options = new LinkedHashMap<>();
+        options.put(1, R.string.verification_share_select_media_and_verification);
+        options.put(0, R.string.verification_share_select_only_media);
+
+        BottomSheetUtils.showRadioListOptionsSheet(
+                getSupportFragmentManager(),
+                getContext(),
+                options,
+                getString(R.string.verification_share_dialog_title),
+                getString(R.string.verification_share_dialog_expl),
+                getString(R.string.action_ok),
+                getString(R.string.action_cancel),
+                option -> startShareActivity(option > 0)
+        );
+    }
+
+    private void showExportWithMetadataDialog() {
+        LinkedHashMap<Integer, Integer> options = new LinkedHashMap<>();
+        options.put(1, R.string.verification_share_select_media_and_verification);
+        options.put(0, R.string.verification_share_select_only_media);
+        new Handler().post(() -> {
+            BottomSheetUtils.showRadioListOptionsSheet(
+                    getSupportFragmentManager(),
+                    getContext(),
+                    options,
+                    getString(R.string.verification_share_dialog_title),
+                    getString(R.string.verification_share_dialog_expl),
+                    getString(R.string.action_ok),
+                    getString(R.string.action_cancel),
+                    option -> {
+                        withMetadata = option > 0;
+                        maybeChangeTemporaryTimeout(() -> {
+                            performFileSearch();
+                            return Unit.INSTANCE;
+                        });
+                    }
+            );
+        });
     }
 }

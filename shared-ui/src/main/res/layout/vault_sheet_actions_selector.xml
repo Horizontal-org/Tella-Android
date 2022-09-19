@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="24dp"
+    android:background="@drawable/drag_anchor_drawable"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sheetTitleTv"
+        style="@style/Tella_Main_White_Text.MeduimbBold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Select audio or video files"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sheetTitleDescTv"
+        style="@style/Tella_Main_White_Text.Meduim"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sheetTitleTv"
+        tools:text="Choose how you want to add files"
+        android:layout_marginTop="10dp"
+        />
+
+    <TextView
+        android:id="@+id/cameraActionTV"
+        style="@style/Tella2_BottomSheet_Text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sheetTitleDescTv"
+        android:drawableStart="@drawable/ic_camera_alt_24px"
+        tools:text="Take video"
+        android:gravity="center|start"
+        />
+
+
+    <TextView
+        android:id="@+id/recordActionTV"
+        style="@style/Tella2_BottomSheet_Text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cameraActionTV"
+        android:drawableStart="@drawable/keyboard_voice_24px_filled"
+        tools:text="Take video"
+        android:gravity="center|start"
+        />
+
+    <TextView
+        android:id="@+id/selectTellaFilesActionTV"
+        style="@style/Tella2_BottomSheet_Text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recordActionTV"
+        android:drawableStart="@drawable/ic_menu_gallery"
+        tools:text="Select from Tella files"
+        android:gravity="center|start"
+        />
+
+
+    <TextView
+        style="@style/Tella2_BottomSheet_Text"
+        android:id="@+id/selectDeviceFilesActionTV"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/selectTellaFilesActionTV"
+        android:drawableStart="@drawable/ic_smartphone_white_24dp"
+        tools:text="Select from Tella files"
+        android:gravity="center|start"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

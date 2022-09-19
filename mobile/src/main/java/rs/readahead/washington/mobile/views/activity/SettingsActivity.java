@@ -1,46 +1,72 @@
 package rs.readahead.washington.mobile.views.activity;
 
-import android.content.Intent;
+import static com.hzontal.tella_locking_ui.ConstantsKt.IS_CAMOUFLAGE;
+
+import android.os.Build;
 import android.os.Bundle;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import androidx.fragment.app.Fragment;
+
+import org.jetbrains.annotations.NotNull;
+
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
+import rs.readahead.washington.mobile.databinding.ActivitySettingsBinding;
+import rs.readahead.washington.mobile.util.CamouflageManager;
+import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
+import rs.readahead.washington.mobile.views.settings.ChangeRemoveCamouflage;
+import rs.readahead.washington.mobile.views.settings.HideTella;
+import rs.readahead.washington.mobile.views.settings.MainSettings;
+import rs.readahead.washington.mobile.views.settings.OnFragmentSelected;
+import rs.readahead.washington.mobile.views.settings.SecuritySettings;
 
 
-public class SettingsActivity extends CacheWordSubscriberBaseActivity {
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
+public class SettingsActivity extends BaseLockActivity implements OnFragmentSelected {
+    private ActivitySettingsBinding binding;
     private EventCompositeDisposable disposables;
-
+    private final CamouflageManager cm = CamouflageManager.getInstance();
+    protected boolean isCamouflage = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
-        ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
+        binding = ActivitySettingsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.settings_app_bar);
+        setSupportActionBar(binding.toolbar);
+
+        binding.toolbar.setStartTextTitle(getResources().getString(R.string.settings_app_bar));
+        setSupportActionBar(binding.toolbar);
+
+        binding.toolbar.setBackClickListener(() -> {
+            onBackPressed();
+            return null;
+        });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            findViewById(R.id.appbar).setOutlineProvider(null);
+        } else {
+            findViewById(R.id.appbar).bringToFront();
+        }
+
+        if (getIntent().hasExtra(IS_CAMOUFLAGE)) {
+            addFragment(new MainSettings(),R.id.my_nav_host_fragment);
+            addFragment(new SecuritySettings(),R.id.my_nav_host_fragment);
+            if (cm.isDefaultLauncherActivityAlias()) {
+                addFragment(new HideTella(),R.id.my_nav_host_fragment);
+            } else {
+                addFragment(new ChangeRemoveCamouflage(),R.id.my_nav_host_fragment);
+            }
         }
 
         disposables = MyApplication.bus().createCompositeDisposable();
         disposables.wire(LocaleChangedEvent.class, new EventObserver<LocaleChangedEvent>() {
             @Override
-            public void onNext(LocaleChangedEvent event) {
+            public void onNext(@NotNull LocaleChangedEvent event) {
                 recreate();
             }
         });
@@ -56,32 +82,42 @@ public class SettingsActivity extends CacheWordSubscriberBaseActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    public void setToolbarLabel(int labelRes) {
+        binding.toolbar.setStartTextTitle(getString(labelRes));
     }
 
-    @OnClick({R.id.security_settings_layout, R.id.collect_settings, R.id.general_settings, R.id.about_n_help_layout})
-    public void startActivity(View view) {
-        switch (view.getId()) {
-            case R.id.general_settings:
-                startActivity(new Intent(this, GeneralSettingsActivity.class));
-                break;
-            case R.id.security_settings_layout:
-                startActivity(new Intent(this, ProtectionSettingsActivity.class));
-                break;
-            case R.id.collect_settings:
-                startActivity(new Intent(this, DocumentationSettingsActivity.class));
-                break;
-            case R.id.about_n_help_layout:
-                startActivity(new Intent(this, AboutHelpActivity.class));
-                break;
+    @Override
+    public void hideAppbar() {
+        binding.toolbar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showAppbar() {
+        binding.toolbar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void setToolbarHomeIcon(int iconRes) {
+        binding.toolbar.setToolbarNavigationIcon(iconRes);
+    }
+
+    @Override
+    public boolean isCamouflage() {
+        return isCamouflage;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.my_nav_host_fragment);
+
+        if (f instanceof MainSettings) {
+            showAppbar();
+            setToolbarLabel(R.string.settings_app_bar);
+        } else if (f instanceof SecuritySettings) {
+            showAppbar();
+            setToolbarLabel(R.string.settings_sec_app_bar);
         }
     }
 }

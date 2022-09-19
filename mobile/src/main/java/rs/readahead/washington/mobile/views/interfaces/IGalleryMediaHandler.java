@@ -1,11 +1,12 @@
 package rs.readahead.washington.mobile.views.interfaces;
 
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import com.hzontal.tella_vault.VaultFile;
+
 
 
 public interface IGalleryMediaHandler {
-    void playMedia(MediaFile mediaFile);
+    void playMedia(VaultFile mediaFile);
     void onSelectionNumChange(int num);
-    void onMediaSelected(MediaFile mediaFile);
-    void onMediaDeselected(MediaFile mediaFile);
+    void onMediaSelected(VaultFile mediaFile);
+    void onMediaDeselected(VaultFile mediaFile);
 }

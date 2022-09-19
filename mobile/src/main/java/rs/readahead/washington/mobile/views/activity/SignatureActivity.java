@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.VaultFile;
 import com.simplify.ink.InkView;
 
 import java.io.ByteArrayOutputStream;
@@ -19,13 +20,13 @@ import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
 import rs.readahead.washington.mobile.mvp.contract.ISignaturePresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.SignaturePresenter;
 import rs.readahead.washington.mobile.util.DialogsUtil;
+import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 
 
-public class SignatureActivity extends CacheWordSubscriberBaseActivity implements
+public class SignatureActivity extends BaseLockActivity implements
         ISignaturePresenterContract.IView {
 
     public static final String MEDIA_FILE_KEY = "mfk";
@@ -122,8 +123,8 @@ public class SignatureActivity extends CacheWordSubscriberBaseActivity implement
     }
 
     @Override
-    public void onAddSuccess(MediaFile mediafile) {
-        setResult(Activity.RESULT_OK, new Intent().putExtra(MEDIA_FILE_KEY, mediafile));
+    public void onAddSuccess(VaultFile vaultFile) {
+        setResult(Activity.RESULT_OK, new Intent().putExtra(MEDIA_FILE_KEY, vaultFile));
         finish();
     }
 

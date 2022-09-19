@@ -1,36 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="wa_red">#C9040D</color>
     <color name="wa_red_light">#df4a32</color>
     <color name="wa_black">#000000</color>
     <color name="wa_white">#FFFFFF</color>
     <color name="wa_gray">#98999B</color>
     <color name="wa_light_gray">#F2F2F2</color>
     <color name="wa_button_gray">#bcbcbc</color>
-    <color name="wa_dialog_gray">#636161</color>
     <color name="wa_dark_gray">#525252</color>
     <color name="wa_darker_gray">#1C1C1C</color>
-    <color name="wa_green">#23a923</color>
     <color name="wa_yellow">#feb900</color>
     <color name="wa_shortcut_background">#88000000</color>
-    <color name="wa_player_background">#33000000</color>
-    <color name="wa_card_media_background">@color/wa_gray</color>
-    <color name="wa_gallery_info_background">#BB000000</color>
-    <color name="wa_camera_capture_background">#80525252</color>
-    <color name="wa_home_screen_gradient_start">#FF000000</color>
-    <color name="wa_home_screen_gradient_end">#00000000</color>
     <color name="wa_gallery_gradient_start">#BB000000</color>
     <color name="wa_gallery_gradient_end">#00000000</color>
-    <color name="wa_design_textinput_error_color">#FFDD2C00</color>
     <color name="wa_transparent">@android:color/transparent</color>
     <color name="wa_map_fragment_background">#ECE9E0</color>
-    <color name="background_shadow">#00CCCCCC</color>
-    <color name="purple_link">#763568</color>
     <color name="light_yellow">#ffe600</color>
+    <color name="dark_purple">#2C275A</color>
+    <color name="dark_orange">#D6933B</color>
+    <color name="wa_purple">#2C275A</color>
+    <color name="wa_orange">#D6933B</color>
+    <color name="delimiter">#47426F</color>
+    <color name="onboardingIndicatorInactive">#DCDCDC</color>
+    <color name="onboardingIndicatorActive">#D6933B</color>
 
-    <color name="colorPrimary">@color/wa_black</color>
-    <color name="colorPrimaryDark">@color/wa_dark_gray</color>
-    <color name="colorAccent">@color/wa_black</color>
+    <color name="colorPrimary">@color/space_cadet</color>
+    <color name="colorPrimaryDark">@color/space_cadet</color>
+    <color name="colorAccent">@color/wa_white_80</color>
     <color name="colorPrimaryInverse">@color/wa_white</color>
 
     <!-- Collect -->

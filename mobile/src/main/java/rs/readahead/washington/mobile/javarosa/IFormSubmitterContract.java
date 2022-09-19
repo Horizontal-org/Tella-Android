@@ -12,7 +12,6 @@ public interface IFormSubmitterContract {
     interface IView {
         void formSubmitError(Throwable error);
         void formPartSubmitError(Throwable error);
-        void formSubmitOfflineMode();
         void formSubmitNoConnectivity();
         //void formSubmitSuccess(CollectFormInstance instance, OpenRosaResponse response);
         void formPartSubmitStart(CollectFormInstance instance, String partName);

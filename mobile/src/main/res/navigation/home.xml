@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home"
+    app:startDestination="@+id/homeScreen">
+    <fragment
+        android:id="@+id/homeScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.vault.home.HomeVaultFragment"
+        android:label="@string/Home_BottomNav_Home"
+        tools:layout="@layout/fragment_vault">
+        <action
+            android:id="@+id/action_homeScreen_to_main_settings"
+            app:destination="@id/main_settings"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"/>
+        <action
+            android:id="@+id/action_homeScreen_to_attachments_screen"
+            app:destination="@id/attachments_screen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"/>
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/attachments_screen"
+        android:name="rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment"
+        tools:layout="@layout/fragment_vault_attachments">
+        <action
+            android:id="@+id/action_attachments_screen_to_info_screen"
+            app:destination="@id/info_screen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out">
+        </action>
+        <action
+            android:id="@+id/action_attachments_screen_to_camera"
+            app:destination="@id/cameraScreen">
+        </action>
+        <action
+            android:id="@+id/action_attachments_screen_to_micScreen"
+            app:destination="@id/micScreen" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/info_screen"
+        android:name="rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment"
+        android:label="@string/Vault_FileInfo"
+        tools:layout="@layout/fragment_vault_attachments">
+    </fragment>
+
+    <activity
+        android:id="@+id/main_settings"
+        android:name="rs.readahead.washington.mobile.views.activity.SettingsActivity"
+        android:label="@string/settings_app.bar"
+        tools:layout="@layout/activity_settings">
+    </activity>
+
+    <activity
+        android:id="@+id/cameraScreen"
+        android:name="rs.readahead.washington.mobile.views.activity.CameraActivity"
+        android:label="@string/Home_BottomNav_Camera"
+        tools:layout="@layout/activity_camera">
+    </activity>
+
+    <fragment
+        android:id="@+id/micScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.MicFragment"
+        android:label="@string/Home_BottomNav_Rec"
+        tools:layout="@layout/fragment_mic">
+    </fragment>
+</navigation>

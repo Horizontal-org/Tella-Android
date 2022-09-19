@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="Vault_AllFiles_Title">Tous les fichiers</string>
+  <string name="Vault_Images_Title">Images</string>
+  <string name="Vault_Files_Title">Fichiers Tella</string>
+  <string name="Vault_Documents_Title">Documents</string>
+  <string name="Vault_Audios_Title">Audio</string>
+  <string name="Vault_Videos_Title">Vidéos</string>
+  <string name="Vault_Others_Title">Autres</string>
+  <string name="Vault_Select_Title">Sélectionnez des fichiers</string>
+  <string name="Vault_RecentFiles">Fichiers récents</string>
+  <string name="Vault_PhotosAndVideos_Title">Photos et vidéos</string>
+  <string name="Vault_FavoriteForms_Title">Formulaires favoris</string>
+  <string name="Vault_Empty_Msg">Ce dossier est vide! Cliquez sur le bouton + ci-dessous pour importer un fichier ou créer un dossier.</string>
+  <string name="Vault_Move_SheetDesc">Déplacer vers un autre dossier</string>
+  <string name="Vault_Rename_SheetAction">Renommer</string>
+  <string name="Vault_Save_SheetAction">Sauvegarder</string>
+  <string name="Vault_Delete_SheetAction">Supprimer</string>
+  <string name="Vault_Share_SheetAction">Partager</string>
+  <string name="Vault_Upload_SheetAction">Mettre en ligne</string>
+  <string name="Vault_File_SheetAction">Informations sur le fichier</string>
+  <string name="Vault_FileInfo">Infos sur le fichier</string>
+  <string name="Vault_FileSize">Taille</string>
+  <string name="Vault_FileFormat">Format</string>
+  <string name="Vault_FileCreated">Créé</string>
+  <string name="Vault_FileResolution">Résolution</string>
+  <string name="Vault_FileLength">Durée</string>
+  <string name="Vault_FilePath">Chemin du fichier</string>
+  <string name="Vault_RenameFile_SheetTitle">Renommer le fichier</string>
+  <plurals name="Vault_DeleteFile_SheetTitle">
+    <item quantity="one">Supprimer le fichier?</item>
+    <item quantity="other">Supprimer les fichiers?</item>
+  </plurals>
+  <plurals name="Vault_deleteFile_SheetDesc">
+    <item quantity="one">Le fichier sélectionné sera définitivement supprimé de Tella.</item>
+    <item quantity="other">Les fichiers sélectionnés seront définitivement supprimés de Tella.</item>
+  </plurals>
+  <string name="Vault_SortNameAsc_SheetAction">Nom A &gt; Z</string>
+  <string name="Vault_SortNameDesc_SheetAction">Nom Z &gt; A</string>
+  <string name="Vault_SortDateAsc_SheetAction">Du plus récent au plus ancien</string>
+  <string name="Vault_SortDateDesc_SheetAction">Du plus ancien au plus récent</string>
+  <string name="Vault_ManageFiles_SheetTitle">Gérer les fichiers</string>
+  <string name="Vault_DeleteFile_SheetDesc">Après avoir importé le fichier dans Tella, le fichier d\'origine sera supprimé de votre appareil. Le seul exemplaire restant sera celui dans Tella.</string>
+  <string name="Vault_TakePhotoVideo_SheetAction">Prendre une photo/vidéo</string>
+  <string name="Vault_RecordAudio_SheetAction">Enregistrer de l’audio</string>
+  <string name="Vault_Import_SheetAction">Importer depuis l\'appareil</string>
+  <string name="Vault_ImportDelete_SheetAction">Importer et supprimer le fichier d\'origine</string>
+  <string name="Vault_CreateFolder_SheetTitle">Créer un nouveau dossier</string>
+  <string name="Vault_MoveHere">Déplacer ici</string>
+  <string name="Vault_ViewerOther_SheetDesc">Ce format de fichier ne peut pas être ouvert dans Tella. Voulez-vous enregistrer le fichier sur votre appareil pour l\'ouvrir dans une autre application ? Cela peut exposer le contenu du fichier. </string>
+  <string name="Vault_Export_SheetAction">Sauvegarder sur le dispositif</string>
+  <plurals name="Vault_Items">
+    <item quantity="one">élément</item>
+    <item quantity="other">éléments</item>
+  </plurals>
+  <string name="Vault_No_Files_Title">Vous n\'avez pas encore de fichiers dans Tella.</string>
+</resources>

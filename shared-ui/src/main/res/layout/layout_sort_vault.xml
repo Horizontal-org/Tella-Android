@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/drag_anchor_drawable"
+    app:behavior_hideable="true"
+    android:padding="21dp">
+
+    <TextView
+        android:id="@+id/standard_sheet_title"
+        style="@style/Tella2_BottomSheet_Text"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Test "
+        android:textSize="16sp"
+        />
+
+
+    <RadioGroup
+        android:id="@+id/radio_list"
+        style="@style/Tella2_BottomSheet_Text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/standard_sheet_title"
+        android:drawableStart ="@drawable/ic_edit_white_24"
+        >
+        <RadioButton
+            android:id="@+id/radioBtnNameAZ"
+            android:layout_height="wrap_content"
+            style="@style/RadioListButtonStyle"
+            app:buttonTint="@color/wa_white"
+            tools:text="Name A > Z"
+            />
+        <RadioButton
+            android:id="@+id/radioBtnNameZA"
+            android:layout_height="wrap_content"
+            style="@style/RadioListButtonStyle"
+            app:buttonTint="@color/wa_white"
+            tools:text="Name Z > A"
+            />
+        <RadioButton
+            android:id="@+id/radioBtnASC"
+            android:layout_height="wrap_content"
+            style="@style/RadioListButtonStyle"
+            app:buttonTint="@color/wa_white"
+            tools:text="Name Z > A"
+            />
+        <RadioButton
+            android:id="@+id/radioBtnDESC"
+            android:layout_height="wrap_content"
+            style="@style/RadioListButtonStyle"
+            app:buttonTint="@color/wa_white"
+            tools:text="Name Z > A"
+            />
+    </RadioGroup>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

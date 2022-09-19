@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint_improve_tella"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/light_space_cadet"
+    android:paddingStart="16dp"
+    android:paddingBottom="16dp"
+    tools:ignore="RtlSymmetry">
+
+    <ImageView
+        android:id="@+id/img_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:src="@drawable/ic_close_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/img_improve"
+        android:layout_width="40dp"
+        android:layout_height="55dp"
+        android:src="@drawable/ic_insights_contribute"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/tv_help_improve"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/open_sans"
+        android:text="@string/clean_insights.improve_title"
+        android:textColor="@color/wa_white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/img_close"
+        app:layout_constraintStart_toEndOf="@+id/img_improve"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_help_improve_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/open_sans"
+        android:text="@string/clean_insights.improve_description"
+        android:textColor="@color/wa_white"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/img_close"
+        app:layout_constraintStart_toEndOf="@+id/img_improve"
+        app:layout_constraintTop_toBottomOf="@+id/tv_help_improve" />
+
+    <TextView
+        android:id="@+id/tv_yes_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/open_sans"
+        android:text="@string/action_yes_in"
+        android:textAllCaps="true"
+        android:textColor="@color/wa_white"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/img_improve"
+        app:layout_constraintTop_toBottomOf="@+id/tv_help_improve_description" />
+
+    <TextView
+        android:id="@+id/tv_learn_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/open_sans"
+        android:text="@string/action_learn.more"
+        android:textAllCaps="true"
+        android:textColor="@color/wa_white"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/tv_yes_in"
+        app:layout_constraintTop_toBottomOf="@+id/tv_help_improve_description" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

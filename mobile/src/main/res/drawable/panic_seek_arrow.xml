@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android" android:alpha="0.5">
-    <item android:drawable="@drawable/rounded_gray_background"/>
-    <item android:drawable="@drawable/ic_chevron_right_gray_24dp" />
-</layer-list>

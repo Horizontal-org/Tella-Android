@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="Vault_RecentFiles">Recent files</string>
+  <string name="Vault_FavoriteForms_Title">Favorite forms</string>
+  <string name="Vault_Save_SheetAction">ಉಳಿಸು</string>
+  <string name="Vault_Delete_SheetAction">ಅಳಿಸು</string>
+  <string name="Vault_Share_SheetAction">ಹಂಚು</string>
+  <string name="Vault_Upload_SheetAction">ಅಪ್‌ಲೋಡ್</string>
+  <string name="Vault_SortDateAsc_SheetAction">ಹೊಸದರಿಂದ ಹಳೆಯದರ ತನಕ</string>
+  <string name="Vault_SortDateDesc_SheetAction">ಹಳೆಯದಿಂದ ಹೊಸದರ ತನಕ</string>
+  <string name="Vault_Export_SheetAction">ಸಾಧನದಲ್ಲಿ ಉಳಿಸಿರಿ</string>
+</resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="Vault_Videos_Title">வீடியோக்கள்</string>
+  <string name="Vault_RecentFiles">Recent files</string>
+  <string name="Vault_FavoriteForms_Title">Favorite forms</string>
+  <string name="Vault_Save_SheetAction">சேமி</string>
+  <string name="Vault_Delete_SheetAction">நீக்கு</string>
+  <string name="Vault_Share_SheetAction">பகிர்</string>
+  <string name="Vault_Upload_SheetAction">பதிவேற்று</string>
+  <string name="Vault_SortDateAsc_SheetAction">மிகப் புதியது முதல் மிகப் பழையது வரை</string>
+  <string name="Vault_SortDateDesc_SheetAction">மிகப் பழையது முதல் மிகப் புதியது வரை</string>
+  <string name="Vault_Export_SheetAction">சாதனத்தில் சேமி</string>
+</resources>

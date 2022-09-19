@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/drag_anchor_drawable"
+    app:behavior_hideable="true"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/standard_sheet_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Test "
+        style="@style/Tella_Main_White_Text.MeduimbBold"
+        android:textSize="16sp"
+        />
+
+    <TextView
+        android:id="@+id/standard_sheet_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/standard_sheet_title"
+        tools:text="TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest "
+        android:layout_marginTop="10dp"
+        style="@style/Tella_Main_White_Text.Meduim"
+        />
+
+
+    <TextView
+        android:id="@+id/standard_sheet_cancel_btn"
+        app:layout_constraintEnd_toStartOf="@id/standard_sheet_confirm_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/standard_sheet_content"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        tools:text="Cancel"
+        android:layout_marginTop="40dp"
+        style="@style/Tella_Main_White_Text.MeduimbBold"
+        android:layout_marginEnd="30dp"
+        />
+
+    <TextView
+        android:id="@+id/standard_sheet_confirm_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/standard_sheet_content"
+        tools:text="Confirm "
+        android:layout_marginTop="40dp"
+        style="@style/Tella_Main_White_Text.MeduimbBold"
+        android:textSize="14sp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

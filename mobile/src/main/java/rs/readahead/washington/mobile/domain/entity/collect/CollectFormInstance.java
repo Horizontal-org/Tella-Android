@@ -1,5 +1,7 @@
 package rs.readahead.washington.mobile.domain.entity.collect;
 
+import com.hzontal.tella_vault.VaultFile;
+
 import org.javarosa.core.model.FormDef;
 
 import java.io.Serializable;
@@ -23,9 +25,10 @@ public class CollectFormInstance implements Serializable {
     private String formName;
     private String instanceName;
     private FormDef formDef;
-    private Map<String, FormMediaFile> widgetMediaFiles = new HashMap<>();
+    private final Map<String, FormMediaFile> widgetMediaFiles = new HashMap<>();
     private long clonedId; // id of submitted instance we are clone of
     private FormMediaFileStatus formPartStatus = FormMediaFileStatus.UNKNOWN;
+    private HashMap<String, Integer> widgetMediaFileIds;
 
 
     public long getId() {
@@ -128,6 +131,18 @@ public class CollectFormInstance implements Serializable {
         return new ArrayList<>(widgetMediaFiles.values());
     }
 
+    public String[] getWidgetMediaFilesIds() {
+        return widgetMediaFileIds.keySet().toArray(new String[0]);
+    }
+
+    public HashMap<String, Integer> getWidgetMediaFilesMap() {
+        return widgetMediaFileIds;
+    }
+
+    public void setWidgetMediaFilesIds(HashMap<String, Integer> ids) {
+        this.widgetMediaFileIds = ids;
+    }
+
     public void setWidgetMediaFile(String name, FormMediaFile mediaFile) {
         widgetMediaFiles.put(name, mediaFile);
     }
@@ -146,5 +161,15 @@ public class CollectFormInstance implements Serializable {
 
     public void setFormPartStatus(FormMediaFileStatus formPartStatus) {
         this.formPartStatus = formPartStatus;
+    }
+
+    public void setCollectInstanceAttachments(List<VaultFile> vaultFiles) {
+        for (VaultFile file : vaultFiles) {
+            FormMediaFile formFile = FormMediaFile.fromMediaFile(file);
+            if (getWidgetMediaFilesMap().get(file.id) != null && getWidgetMediaFilesMap().containsKey(file.id)) {
+                formFile.status = FormMediaFileStatus.values()[getWidgetMediaFilesMap().get(file.id)];
+            }
+            this.setWidgetMediaFile(file.name, formFile);
+        }
     }
 }

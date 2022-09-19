@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootPattern"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/space_cadet"
+    android:divider="?dividerHorizontal"
+    android:orientation="vertical"
+    android:showDividers="middle">
+
+    <ImageView
+        android:id="@+id/backBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/icon_left"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:paddingTop="40dp"
+        android:visibility="gone"
+        />
+
+    <ImageView
+        android:id="@+id/pl_patternImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/tella_logo_dark_bg"
+        app:layout_constraintBottom_toTopOf="@+id/pl_message_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/pl_message_text"
+        style="@style/Unlock_White_Text"
+        android:layout_marginTop="20dp"
+        android:text="@string/UnLockPattern_Message_DrawPattern"
+        app:layout_constraintBottom_toTopOf="@+id/pl_pattern"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pl_patternImg" />
+
+    <com.hzontal.tella_locking_ui.patternlock.PatternView
+        android:id="@+id/pl_pattern"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/pl_left_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="@dimen/pattern_height_percent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pl_message_text"
+        app:pl_aspect="square"
+        app:pl_errorColor="@color/wa_red_error"
+        app:pl_regularColor="@color/wa_white"
+        app:pl_successColor="@color/tigers_eye" />
+
+
+    <TextView
+        android:id="@+id/pl_left_button"
+        style="@style/Unlock_White_Text"
+        android:layout_marginStart="34dp"
+        android:layout_marginBottom="13dp"
+        android:text="@string/LockSelect_Action_Cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/pl_right_button"
+        style="@style/Unlock_White_Text"
+        android:layout_marginEnd="34dp"
+        android:layout_marginBottom="13dp"
+        android:text="@string/LockSelect_Action_Continue"
+        android:textColor="@color/wa_white_40"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

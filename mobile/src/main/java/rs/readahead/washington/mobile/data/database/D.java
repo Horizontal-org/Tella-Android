@@ -13,7 +13,7 @@ class D {
     static final String DATABASE_NAME = "tella.db";
     // 1=start,2=form media file status,3=updated flag in xforms
     // 4=xml form part status,5=media file hash,6=tella upload server,7=file uploads table
-    static final int DATABASE_VERSION = 8;
+    static final int DATABASE_VERSION = 9;
 
     /* DATABASE TABLES */
     static final String T_COLLECT_SERVER = "t_collect_server";
@@ -24,6 +24,12 @@ class D {
     static final String T_SETTINGS = "t_settings";
     static final String T_TELLA_UPLOAD_SERVER = "t_tella_upload_server";
     static final String T_MEDIA_FILE_UPLOAD = "t_media_file_upload";
+    static final String T_COLLECT_FORM_INSTANCE_VAULT_FILE = "t_collect_xform_instance_vault_file";
+    /* UWAZI DATABASE TABLE*/
+    static final String T_UWAZI_SERVER = "t_uwazi_server";
+    static  final String T_UWAZI_BLANK_TEMPLATES = "t_uwazi_collect_blank_templates";
+    static  final String T_UWAZI_ENTITY_INSTANCES = "t_uwazi_entity_instances";
+    static  final String A_UWAZI_ENTITY_INSTANCE_ID = "a_uwazi_entity_instance_id";
 
     /* DATABASE COLUMNS */
     static final String C_ID = "c_id";
@@ -39,6 +45,9 @@ class D {
     static final String C_PASSWORD = "c_password";
     static final String C_VERSION = "c_version";
     static final String C_HASH = "c_hash";
+    static final String C_CONNECT_COOKIES = "c_connect_cookies";
+    static final String C_LOCALE_COOKIES = "c_locale_cookies";
+
     //static final String C_DESCRIPTION_TEXT = "c_description_text";
     static final String C_DOWNLOAD_URL = "c_download_url";
     //static final String C_MANIFEST_URL = "c_manifest_url";
@@ -69,9 +78,19 @@ class D {
     static final String C_INCLUDE_METADATA = "c_include_metadata";
     static final String C_SERVER_ID = "c_server_id";
     static final String C_MANUAL_UPLOAD = "c_manual_upload";
+    static final String C_VAULT_FILE_ID = "c_vault_file_id";
+    static final String C_TEMPLATE = "c_template";
+    static final String C_TITLE = "c_title";
+    static final String C_TYPE = "c_type";
+    static final String T_UWAZI_ENTITY_INSTANCE_VAULT_FILE = "t_uwazi_entity_instance_vault_file";
+    static final String C_UWAZI_ENTITY_INSTANCE_ID = "c_uwazi_entity_instance_id";
 
 
+    //Uwazi cloumns
+    static  final String C_UWAZI_SERVER_ID= "c_uwazi_server_id";
+    static  final String C_TEMPLATE_ENTITY= "c_template_entity";
     static final String A_SERVER_NAME = "a_server_name";
+
     static final String A_COLLECT_BLANK_FORM_ID = "a_collect_blank_xform_id";
     static final String A_COLLECT_FORM_INSTANCE_ID = "a_collect_form_instance_id";
     static final String A_MEDIA_FILE_ID = "a_media_file_id";

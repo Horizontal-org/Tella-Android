@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="dropdown_offset_y_fix_value">4.5dp</dimen>
+    <dimen name="dropdown_start_padding_increase">12dp</dimen> <!-- 24dp (arrow size) -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+
+    <dimen name="tooltip_icon_margin_start">4dp</dimen>
+    <dimen name="tooltip_icon_size">16dp</dimen>
+    <dimen name="tooltip_icon_margin_top">8dp</dimen>
+
+    <dimen name="main_navigation_bar_height">50dp</dimen>
+</resources>

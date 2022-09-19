@@ -1,9 +1,14 @@
 package rs.readahead.washington.mobile.views.activity;
 
+import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_FILE_KEY;
+
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.OrientationEventListener;
 import android.view.View;
@@ -11,10 +16,17 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.gson.Gson;
+import com.hzontal.tella_vault.VaultFile;
 import com.otaliastudios.cameraview.CameraException;
 import com.otaliastudios.cameraview.CameraListener;
 import com.otaliastudios.cameraview.CameraOptions;
@@ -32,33 +44,27 @@ import com.otaliastudios.cameraview.size.SizeSelector;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
+import rs.readahead.washington.mobile.bus.event.CaptureEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
-import rs.readahead.washington.mobile.domain.entity.Metadata;
-import rs.readahead.washington.mobile.domain.entity.RawFile;
-import rs.readahead.washington.mobile.domain.entity.TempMediaFile;
-import rs.readahead.washington.mobile.media.MediaFileBundle;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.media.MediaFileUrlLoader;
+import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.mvp.contract.ICameraPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CameraPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.MetadataAttacher;
 import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulePresenter;
-import rs.readahead.washington.mobile.presentation.entity.MediaFileLoaderModel;
+import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.VideoResolutionManager;
@@ -74,10 +80,12 @@ public class CameraActivity extends MetadataActivity implements
         ICameraPresenterContract.IView,
         ITellaFileUploadSchedulePresenterContract.IView,
         IMetadataAttachPresenterContract.IView {
+    public static final String MEDIA_FILE_KEY = "mfk";
+    public static final String VAULT_CURRENT_ROOT_PARENT = "vcrf";
+    private final static int CLICK_DELAY = 1200;
+    private final static int CLICK_MODE_DELAY = 2000;
     public static String CAMERA_MODE = "cm";
     public static String INTENT_MODE = "im";
-    public static final String MEDIA_FILE_KEY = "mfk";
-
     @BindView(R.id.camera)
     CameraView cameraView;
     @BindView(R.id.gridButton)
@@ -104,7 +112,6 @@ public class CameraActivity extends MetadataActivity implements
     TextView videoModeText;
     @BindView(R.id.resolutionButton)
     CameraResolutionButton resolutionButton;
-
     private CameraPresenter presenter;
     private TellaFileUploadSchedulePresenter uploadPresenter;
     private MetadataAttacher metadataAttacher;
@@ -115,26 +122,12 @@ public class CameraActivity extends MetadataActivity implements
     private ProgressDialog progressDialog;
     private OrientationEventListener mOrientationEventListener;
     private int zoomLevel = 0;
-    private MediaFile capturedMediaFile;
+    private VaultFile capturedMediaFile;
     private AlertDialog videoQualityDialog;
     private VideoResolutionManager videoResolutionManager;
-
-    public enum CameraMode {
-        PHOTO,
-        VIDEO
-    }
-
-    public enum IntentMode {
-        COLLECT,
-        RETURN,
-        STAND
-    }
-
-    private final static int CLICK_DELAY = 1200;
-    private final static int CLICK_MODE_DELAY = 2000;
     private long lastClickTime = System.currentTimeMillis();
-
-    private RequestManager.ImageModelRequest<MediaFileLoaderModel> glide;
+    private RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
+    private String currentRootParent = null;
 
 
     @Override
@@ -142,6 +135,7 @@ public class CameraActivity extends MetadataActivity implements
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_camera);
+        overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out);
         ButterKnife.bind(this);
 
         presenter = new CameraPresenter(this);
@@ -149,6 +143,7 @@ public class CameraActivity extends MetadataActivity implements
         metadataAttacher = new MetadataAttacher(this);
 
         mode = CameraMode.PHOTO;
+
         if (getIntent().hasExtra(CAMERA_MODE)) {
             mode = CameraMode.valueOf(getIntent().getStringExtra(CAMERA_MODE));
             modeLocked = true;
@@ -159,20 +154,25 @@ public class CameraActivity extends MetadataActivity implements
             intentMode = IntentMode.valueOf(getIntent().getStringExtra(INTENT_MODE));
         }
 
-        CacheWordDataSource cacheWordDataSource = new CacheWordDataSource(getContext());
-        MediaFileHandler mediaFileHandler = new MediaFileHandler(cacheWordDataSource);
-        MediaFileUrlLoader glideLoader = new MediaFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
+        if (getIntent().hasExtra(VAULT_CURRENT_ROOT_PARENT)) {
+            currentRootParent = getIntent().getStringExtra(VAULT_CURRENT_ROOT_PARENT);
+        }
+
+        MediaFileHandler mediaFileHandler = new MediaFileHandler();
+        VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
         glide = Glide.with(getContext()).using(glideLoader);
 
         setupCameraView();
         setupCameraModeButton();
         setupImagePreview();
+        setupShutterSound();
+        checkLocationSettings(C.START_CAMERA_CAPTURE, () -> {
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         mOrientationEventListener.enable();
 
         startLocationMetadataListening();
@@ -184,6 +184,13 @@ public class CameraActivity extends MetadataActivity implements
         setCameraZoom();
 
         presenter.getLastMediaFile();
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) !=
+                PackageManager.PERMISSION_GRANTED) {
+            maybeChangeTemporaryTimeout();
+        }
+
+
     }
 
     @Override
@@ -224,11 +231,22 @@ public class CameraActivity extends MetadataActivity implements
     public void onBackPressed() {
         if (maybeStopVideoRecording()) return;
         super.onBackPressed();
+        finish();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_up);
     }
 
     @Override
     public void onAddingStart() {
         progressDialog = DialogsUtil.showLightProgressDialog(this, getString(R.string.gallery_dialog_expl_encrypting));
+        if (Preferences.isShutterMute()) {
+            AudioManager mgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false);
+        }
     }
 
     @Override
@@ -238,12 +256,20 @@ public class CameraActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onAddSuccess(MediaFileBundle bundle) {
-        capturedMediaFile = bundle.getMediaFile();
+    public void onAddSuccess(VaultFile bundle) {
+        capturedMediaFile = bundle;
         if (intentMode != IntentMode.COLLECT) {
-            Glide.with(this).load(bundle.getMediaFileThumbnailData().getData()).into(previewView);
+            previewView.setVisibility(View.VISIBLE);
+            Glide.with(this).load(bundle.thumb).into(previewView);
         }
-        attachMediaFileMetadata(capturedMediaFile, metadataAttacher);
+
+        if (!Preferences.isAnonymousMode()) {
+            attachMediaFileMetadata(capturedMediaFile, metadataAttacher);
+        } else {
+            returnIntent(bundle);
+        }
+
+        MyApplication.bus().post(new CaptureEvent());
     }
 
     @Override
@@ -252,17 +278,30 @@ public class CameraActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onMetadataAttached(long mediaFileId, @Nullable Metadata metadata) {
-        Intent data = new Intent();
-        if (intentMode == IntentMode.COLLECT) {
-            capturedMediaFile.setMetadata(metadata);
-            data.putExtra(MEDIA_FILE_KEY, capturedMediaFile);
-        } else {
-            data.putExtra(C.CAPTURED_MEDIA_FILE_ID, mediaFileId);
-        }
-        setResult(RESULT_OK, data);
+    public void onMetadataAttached(VaultFile vaultFile) {
+        returnIntent(vaultFile);
 
-        scheduleFileUpload(capturedMediaFile);
+        //scheduleFileUpload(capturedMediaFile);
+    }
+
+    private void returnIntent(VaultFile vaultFile) {
+        Intent data = new Intent();
+        if (intentMode == IntentMode.ODK) {
+            capturedMediaFile.metadata = vaultFile.metadata;
+            data.putExtra(MEDIA_FILE_KEY, capturedMediaFile);
+            setResult(RESULT_OK, data);
+            finish();
+        } else if (intentMode == IntentMode.COLLECT) {
+            capturedMediaFile.metadata = vaultFile.metadata;
+            List<String> list = new ArrayList<>();
+            list.add(vaultFile.id);
+            data.putExtra(VAULT_FILE_KEY, new Gson().toJson(list));
+            setResult(RESULT_OK, data);
+            finish();
+        } else {
+            data.putExtra(C.CAPTURED_MEDIA_FILE_ID, vaultFile.metadata);
+            setResult(RESULT_OK, data);
+        }
     }
 
     @Override
@@ -291,9 +330,10 @@ public class CameraActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onLastMediaFileSuccess(MediaFile mediaFile) {
+    public void onLastMediaFileSuccess(VaultFile vaultFile) {
         if (intentMode != IntentMode.COLLECT) {
-            glide.load(new MediaFileLoaderModel(mediaFile, MediaFileLoaderModel.LoadType.THUMBNAIL))
+            previewView.setVisibility(View.VISIBLE);
+            glide.load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(previewView);
@@ -302,8 +342,8 @@ public class CameraActivity extends MetadataActivity implements
 
     @Override
     public void onLastMediaFileError(Throwable throwable) {
-        if (intentMode != IntentMode.COLLECT) {
-            previewView.setImageResource(R.drawable.white);
+        if (intentMode != IntentMode.COLLECT || intentMode == IntentMode.ODK) {
+            previewView.setVisibility(View.GONE);
         }
     }
 
@@ -325,7 +365,7 @@ public class CameraActivity extends MetadataActivity implements
     }
 
     @Override
-    public void onGetMediaFilesSuccess(List<RawFile> mediaFiles) {
+    public void onGetMediaFilesSuccess(List<VaultFile> mediaFiles) {
 
     }
 
@@ -336,12 +376,17 @@ public class CameraActivity extends MetadataActivity implements
 
     @OnClick(R.id.captureButton)
     void onCaptureClicked() {
+        if (Preferences.isShutterMute()) {
+            AudioManager mgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true);
+        }
         if (cameraView.getMode() == Mode.PICTURE) {
             cameraView.takePicture();
         } else {
             gridButton.setVisibility(videoRecording ? View.VISIBLE : View.GONE);
             switchButton.setVisibility(videoRecording ? View.VISIBLE : View.GONE);
             resolutionButton.setVisibility(videoRecording ? View.VISIBLE : View.GONE);
+
             if (videoRecording) {
                 if (System.currentTimeMillis() - lastClickTime >= CLICK_DELAY) {
                     cameraView.stopVideo();
@@ -353,9 +398,7 @@ public class CameraActivity extends MetadataActivity implements
             } else {
                 setVideoQuality();
                 lastClickTime = System.currentTimeMillis();
-                TempMediaFile tmp = TempMediaFile.newMp4();
-                File file = MediaFileHandler.getTempFile(this, tmp);
-                cameraView.takeVideo(file);
+                cameraView.takeVideo(MediaFileHandler.getTempFile());
                 captureButton.displayStopVideo();
                 durationView.start();
                 videoRecording = true;
@@ -441,7 +484,10 @@ public class CameraActivity extends MetadataActivity implements
 
     @OnClick(R.id.preview_image)
     void onPreviewClicked() {
-        startActivity(new Intent(this, GalleryActivity.class));
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(MainActivity.PHOTO_VIDEO_FILTER, "filter");
+        startActivity(intent);
+        finish();
     }
 
     private void resetZoom() {
@@ -480,7 +526,7 @@ public class CameraActivity extends MetadataActivity implements
     private void showConfirmVideoView(final File video) {
         captureButton.displayVideoButton();
         durationView.stop();
-        presenter.addMp4Video(video);
+        presenter.addMp4Video(video, currentRootParent);
     }
 
     private void setupCameraView() {
@@ -500,7 +546,7 @@ public class CameraActivity extends MetadataActivity implements
         cameraView.addCameraListener(new CameraListener() {
             @Override
             public void onPictureTaken(@NotNull PictureResult result) {
-                presenter.addJpegPhoto(result.getData());
+                presenter.addJpegPhoto(result.getData(), currentRootParent);
             }
 
             @Override
@@ -586,7 +632,7 @@ public class CameraActivity extends MetadataActivity implements
     }
 
     private void setupImagePreview() {
-        if (intentMode == IntentMode.COLLECT) {
+        if (intentMode == IntentMode.COLLECT || intentMode == IntentMode.ODK) {
             previewView.setVisibility(View.GONE);
         }
     }
@@ -686,12 +732,28 @@ public class CameraActivity extends MetadataActivity implements
         }
     }
 
-    private void scheduleFileUpload(MediaFile mediaFile) {
+    private void scheduleFileUpload(VaultFile vaultFile) {
         if (Preferences.isAutoUploadEnabled()) {
-            List<MediaFile> upload = Collections.singletonList(mediaFile);
+            List<VaultFile> upload = Collections.singletonList(vaultFile);
             uploadPresenter.scheduleUploadMediaFiles(upload);
         } else {
             onMediaFilesUploadScheduled();
         }
+    }
+
+    private void setupShutterSound() {
+        cameraView.setPlaySounds(!Preferences.isShutterMute());
+    }
+
+    public enum CameraMode {
+        PHOTO,
+        VIDEO
+    }
+
+    public enum IntentMode {
+        COLLECT,
+        RETURN,
+        STAND,
+        ODK
     }
 }

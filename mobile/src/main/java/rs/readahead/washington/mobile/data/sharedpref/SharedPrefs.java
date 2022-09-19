@@ -29,7 +29,7 @@ public class SharedPrefs {
     //private static final String AUTO_SAVE_DRAFT_FORM = "auto_save_draft_form";
     private static final String LANGUAGE = "language";
     static final String SECRET_MODE_ENABLED = "secret_password_enabled";
-    static final String DOMAIN_FRONTING = "df";
+    static final String BYPASS_CENSORSHIP = "bypass_censorship";
     static final String ANONYMOUS_MODE = "anonymous_mode";
     static final String UNINSTALL_ON_PANIC = "uninstall_on_panic";
     static final String APP_FIRST_START = "app_first_start";
@@ -48,6 +48,18 @@ public class SharedPrefs {
     static final String AUTO_DELETE = "auto_delete";
     static final String METADATA_AUTO_UPLOAD = "metadata_auto_upload";
     static final String AUTO_UPLOAD_PAUSED = "auto_upload_paused";
+    static final String LOCK_TIMEOUT = "lock_timeout";
+    static final String MUTE_CAMERA_SHUTTER = "mute_camera_shutter";
+    static final String SET_SECURITY_SCREEN = "set_security_screen";
+    static final String SHOW_FAVORITE_FORMS = "show_favorite_forms";
+    static final String SHOW_FAVORITE_TEMPLATES = "show_favorite_Templates";
+    static final String SHOW_RECENT_FILES = "show_recent_files";
+    static final String UPGRADE_TELLA_2 = "update_tella_2";
+    static final String SHOW_IMPROVEMENT_SECTION = "show_improvement_section";
+    static final String HAS_IMPROVEMENT_ACCEPTED = "has_improvement_accepted";
+    static final String TIME_IMPROVEMENT_ACCEPTED = "time_improvement_accepted";
+    static final String TEMP_TIMEOUT = "temp_timeout";
+    static final String EXIT_TIMEOUT = "exit_timeout";
 
     private static SharedPrefs instance;
     private SharedPreferences pref;

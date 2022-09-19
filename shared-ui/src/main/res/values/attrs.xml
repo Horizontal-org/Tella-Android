@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="InformationButton">
+        <attr name="topText" format="reference|string" />
+        <attr name="topTextCenter" format="reference|string" />
+        <attr name="bottomTextCenter" format="reference|string" />
+        <attr name="bottomText" format="reference|string" />
+        <attr name="startImg" format="reference" />
+        <attr name="state_checked" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="HomeButton">
+        <attr name="mainTitleText" format="reference" />
+        <attr name="rightImg" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="RoundButton">
+        <attr name="text" format="reference|string" />
+        <attr name="check_state" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="CenterMessageTextView">
+        <attr name="textMessage" format="reference|string" />
+        <attr name="topImg" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="TellaSwitchWithMessage">
+        <attr name="titleText" format="reference|string" />
+        <attr name="explainText" format="reference|string" />
+        <attr name="is_checked" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="CollapsableAppBar">
+        <attr name="titleRes" format="reference|string" />
+        <attr name="barHeightRes" format="reference" />
+        <attr name="contentScrimRes" format="reference"/>
+        <attr name="backgroundRes" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="ToolbarComponent">
+        <attr name="leftIcon" format="reference" />
+        <attr name="editIcon" format="reference" />
+        <attr name="arrowBackIcon" format="reference" />
+        <attr name="rightIcon" format="reference" />
+        <attr name="toolbarTitle" format="reference" />
+        <attr name="titleIcon" format="reference" />
+        <attr name="startTitle" format="reference|string" />
+        <attr name="bigStartTitle" format="reference|string" />
+        <attr name="endTitle" format="reference|string" />
+    </declare-styleable>
+
+    <declare-styleable name="SubmittingItem">
+        <attr name="partNameRes" format="reference" />
+        <attr name="partIconRes" format="reference" />
+        <attr name="partSizeRes" format="reference" />
+        <attr name="partCheckIconRes" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="SubmittedItem">
+        <attr name="iconRes" format="reference" />
+        <attr name="popupMenuRes" format="reference" />
+        <attr name="nameRes" format="reference" />
+        <attr name="organizationRes" format="reference" />
+        <attr name="updatedRes" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="BreadcrumbsView">
+        <attr name="popupTheme"/>
+        <attr name="crumbsTextColor" format="color"/>
+        <attr name="crumbsSelectedTextColor" format="color"/>
+        <attr name="crumbsTextSize" format="dimension"/>
+        <attr name="crumbsPadding" format="dimension"/>
+        <attr name="homeIcon" format="reference"/>
+    </declare-styleable>
+</resources>

@@ -16,11 +16,14 @@ package rs.readahead.washington.mobile.views.collect.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.method.LinkMovementMethod;
+import android.view.LayoutInflater;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+
+import androidx.appcompat.widget.AppCompatRadioButton;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
@@ -58,6 +61,7 @@ public class SelectOneWidget extends QuestionWidget implements
         // Layout holds the vertical list of buttons
         LinearLayout buttonLayout = new LinearLayout(context);
         addDeleteButton();
+        LayoutInflater inflater = LayoutInflater.from(getContext());
 
         String s = null;
         if (prompt.getAnswerValue() != null) {
@@ -73,13 +77,16 @@ public class SelectOneWidget extends QuestionWidget implements
                 } else {
                     choiceDisplayName = "";
                 }
-                RadioButton r = new RadioButton(getContext());
+
+                AppCompatRadioButton r = (AppCompatRadioButton) inflater.inflate(R.layout.collect_radiobutton_item, null);
+
                 r.setText(choiceDisplayName);
                 r.setMovementMethod(LinkMovementMethod.getInstance());
                 r.setTag(i);
                 r.setId(QuestionWidget.newUniqueId());
                 r.setEnabled(!prompt.isReadOnly());
                 r.setFocusable(!prompt.isReadOnly());
+                r.setTextColor(getResources().getColor(R.color.wa_white));
 
                 buttons.add(r);
 
@@ -171,7 +178,7 @@ public class SelectOneWidget extends QuestionWidget implements
     }
 
     private void addDeleteButton() {
-        deleteButton = addButton(R.drawable.ic_delete_grey_24px);
+        deleteButton = addButton(R.drawable.ic_cancel_rounded);
         deleteButton.setOnClickListener(v -> clearAnswer());
         deleteButton.setVisibility(GONE);
     }

@@ -16,10 +16,9 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
-import rs.readahead.washington.mobile.data.database.CacheWordDataSource;
 import rs.readahead.washington.mobile.data.database.DataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.repository.OpenRosaRepository;
-import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.IProgressListener;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
@@ -36,7 +35,7 @@ import rs.readahead.washington.mobile.util.Util;
 
 public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitter {
     private IFormReSubmitterContract.IView view;
-    private CacheWordDataSource cacheWordDataSource;
+    private KeyDataSource keyDataSource;
     private CompositeDisposable disposables = new CompositeDisposable();
     private IOpenRosaRepository openRosaRepository;
     private Context context;
@@ -46,23 +45,21 @@ public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitte
         this.view = view;
         this.context = view.getContext().getApplicationContext();
         this.openRosaRepository = new OpenRosaRepository();
-        this.cacheWordDataSource = new CacheWordDataSource(context);
+        this.keyDataSource = MyApplication.getKeyDataSource();
     }
 
     @Override
     public void reSubmitFormInstanceGranular(final CollectFormInstance instance) {
-        final boolean offlineMode = Preferences.isOfflineMode();
         final CollectFormInstanceStatus startStatus = instance.getStatus();
 
-        disposables.add(cacheWordDataSource.getDataSource()
+        disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable ->
                         view.showReFormSubmitLoading(instance))
                 .flatMapSingle((Function<DataSource, SingleSource<CollectServer>>) dataSource
                         -> setFormDef(dataSource, instance))
-                .flatMapSingle((Function<CollectServer, SingleSource<NegotiatedCollectServer>>) server
-                        -> negotiateServer(server, offlineMode))
+                .flatMapSingle((Function<CollectServer, SingleSource<NegotiatedCollectServer>>) this::negotiateServer)
                 .flatMap((Function<NegotiatedCollectServer, ObservableSource<List<GranularResubmissionBundle>>>) negotiatedCollectServer ->
                         createPartBundles(instance, negotiatedCollectServer))
                 .flatMap(Observable::fromIterable)
@@ -84,9 +81,7 @@ public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitte
                 .subscribe(
                         response -> view.formPartResubmitSuccess(instance, response),
                         throwable -> {
-                            if (throwable instanceof OfflineModeException) {
-                                view.formResubmitOfflineMode();
-                            } else if (throwable instanceof NoConnectivityException) {
+                            if (throwable instanceof NoConnectivityException) {
                                 // PendingFormSendJob.scheduleJob();
                                 view.formReSubmitNoConnectivity();
                             } else {
@@ -117,7 +112,6 @@ public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitte
 
     @Override
     public void destroy() {
-        cacheWordDataSource.dispose();
         disposables.dispose();
         view = null;
     }
@@ -130,11 +124,8 @@ public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitte
                 });
     }
 
-    private Single<NegotiatedCollectServer> negotiateServer(CollectServer server, boolean offlineMode)
-            throws OfflineModeException, NoConnectivityException {
-        if (offlineMode) {
-            throw new OfflineModeException();
-        }
+    private Single<NegotiatedCollectServer> negotiateServer(CollectServer server)
+            throws NoConnectivityException {
 
         if (!MyApplication.isConnectedToInternet(view.getContext())) {
             throw new NoConnectivityException();
@@ -145,7 +136,7 @@ public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitte
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
     private <T> ObservableSource<T> rxSaveSuccessInstance(final CollectFormInstance instance, final T value) {
-        return cacheWordDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<T>>) dataSource ->
+        return keyDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<T>>) dataSource ->
                 dataSource.saveInstance(instance)
                         .toObservable()
                         .flatMap((Function<CollectFormInstance, ObservableSource<T>>) instance1 -> Observable.just(value)));
@@ -153,7 +144,7 @@ public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitte
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
     private <T> ObservableSource<T> rxSaveErrorInstance(final CollectFormInstance instance, final Throwable throwable) {
-        return cacheWordDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<T>>) dataSource ->
+        return keyDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<T>>) dataSource ->
                 dataSource.saveInstance(instance)
                         .toObservable()
                         .flatMap((Function<CollectFormInstance, ObservableSource<T>>) instance1 -> Observable.error(throwable)));
@@ -164,7 +155,7 @@ public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitte
 
         if (startStatus == CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS) {
             status = startStatus;
-        } else if (throwable instanceof OfflineModeException || throwable instanceof NoConnectivityException) {
+        } else if (throwable instanceof NoConnectivityException) {
             status = CollectFormInstanceStatus.SUBMISSION_PENDING;
         } else {
             status = CollectFormInstanceStatus.SUBMISSION_ERROR;
@@ -210,16 +201,13 @@ public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitte
             bundles.add(new GranularResubmissionBundle(server));
         }
 
-        for (FormMediaFile attachment: instance.getWidgetMediaFiles()) {
+        for (FormMediaFile attachment : instance.getWidgetMediaFiles()) {
             if (attachment.uploading && attachment.status != FormMediaFileStatus.SUBMITTED) {
                 bundles.add(new GranularResubmissionBundle(server, attachment));
             }
         }
 
         return Observable.just(bundles);
-    }
-
-    private static class OfflineModeException extends Exception {
     }
 
     private static class GranularResubmissionBundle {

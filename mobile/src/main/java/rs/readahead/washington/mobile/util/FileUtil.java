@@ -1,9 +1,10 @@
 package rs.readahead.washington.mobile.util;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.io.Closeable;
 import java.io.File;
@@ -12,11 +13,13 @@ import java.text.DecimalFormat;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
+import rs.readahead.washington.mobile.domain.entity.OldMediaFile;
 import timber.log.Timber;
 
 
 public class FileUtil {
+    private static final String PRIMARY_VOLUME_NAME = "primary";
+
     public static boolean delete(final File file) {
         return Single.fromCallable(() -> {
             try {
@@ -49,7 +52,6 @@ public class FileUtil {
         if (TextUtils.isEmpty(mimeType)) {
             return null;
         }
-
         //noinspection LoopStatementThatDoesntLoop
         for (String token : mimeType.split("/")) {
             return token.toLowerCase();
@@ -65,7 +67,7 @@ public class FileUtil {
         );
     }
 
-    public static MediaFile.Type getMediaFileType(@NonNull String filename) {
+  /*  public static MediaFile.Type getMediaFileType(@NonNull String filename) {
         String mimeType = getMimeType(filename);
         String primaryType = getPrimaryMime(mimeType);
 
@@ -82,7 +84,7 @@ public class FileUtil {
         }
 
         return MediaFile.Type.UNKNOWN;
-    }
+    }*/
 
     public static boolean mkdirs(File path) {
         return path.exists() || path.mkdirs();
@@ -139,5 +141,24 @@ public class FileUtil {
                 }
             }
         }
+    }
+
+    public static OldMediaFile.Type getOldMediaFileType(@NonNull String filename) {
+        String mimeType = getMimeType(filename);
+        String primaryType = getPrimaryMime(mimeType);
+
+        if ("image".equals(primaryType)) {
+            return OldMediaFile.Type.IMAGE;
+        }
+
+        if ("audio".equals(primaryType)) {
+            return OldMediaFile.Type.AUDIO;
+        }
+
+        if ("video".equals(primaryType)) {
+            return OldMediaFile.Type.VIDEO;
+        }
+
+        return OldMediaFile.Type.UNKNOWN;
     }
 }

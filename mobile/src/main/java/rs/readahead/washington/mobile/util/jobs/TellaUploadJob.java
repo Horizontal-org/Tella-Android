@@ -4,7 +4,9 @@ import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.hzontal.tella_vault.VaultFile;
 
+import org.hzontal.tella.keys.key.LifecycleMainKey;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -13,15 +15,13 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import io.reactivex.Flowable;
+import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.data.upload.TUSClient;
 import rs.readahead.washington.mobile.domain.entity.FileUploadBundle;
-import rs.readahead.washington.mobile.domain.entity.KeyBundle;
-import rs.readahead.washington.mobile.domain.entity.MediaFile;
-import rs.readahead.washington.mobile.domain.entity.RawFile;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.domain.exception.NoConnectivityException;
@@ -35,9 +35,25 @@ public class TellaUploadJob extends Job {
     static final String TAG = "TellaUploadJob";
     private static boolean running = false;
     private Job.Result exitResult = null;
-    private HashMap<Long, MediaFile> fileMap = new HashMap<>();
+    private final HashMap<String, VaultFile> fileMap = new HashMap<>();
     private DataSource dataSource;
     private TellaUploadServer server;
+
+    public static void scheduleJob() {
+        new JobRequest.Builder(TellaUploadJob.TAG)
+                .setExecutionWindow(1_000L, 10_000L) // start between 1-10sec from now
+                .setBackoffCriteria(10_000L, JobRequest.BackoffPolicy.LINEAR)
+                .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
+                .setRequirementsEnforced(true)
+                //.setPersisted(true) // android.Manifest.permission.RECEIVE_BOOT_COMPLETED
+                .setUpdateCurrent(true) // also, jobs will sync them self while running
+                .build()
+                .schedule();
+    }
+
+    public static void cancelJob() {
+        JobManager.instance().cancelAllForTag(TellaUploadJob.TAG);
+    }
 
     @NonNull
     @Override
@@ -46,19 +62,20 @@ public class TellaUploadJob extends Job {
             return Result.SUCCESS;
         }
 
-        if (Preferences.isAutoUploadPaused() || Preferences.isOfflineMode()) {
+        if (Preferences.isAutoUploadPaused()) {
             return exit(Result.RESCHEDULE);
         }
 
-        KeyBundle keyBundle = MyApplication.getKeyBundle();
-        if (keyBundle == null) { // CacheWord is unavailable
+        byte[] key;
+        try {
+            if ((key = MyApplication.getMainKeyHolder().get().getKey().getEncoded()) == null) {
+                return exit(Result.RESCHEDULE);
+            }
+        } catch (LifecycleMainKey.MainKeyUnavailableException e) {
+            Timber.d(e);
             return exit(Result.RESCHEDULE);
         }
 
-        byte[] key = keyBundle.getKey();
-        if (key == null) { // key disappeared
-            return exit(Result.RESCHEDULE);
-        }
 
         dataSource = DataSource.getInstance(getContext(), key);
         List<FileUploadBundle> fileUploadBundles = dataSource.getFileUploadBundles(UploadStatus.SCHEDULED).blockingGet();
@@ -81,22 +98,22 @@ public class TellaUploadJob extends Job {
             return exit(Result.FAILURE);
         }
 
-        List<RawFile> rawFiles = new ArrayList<>();
+        List<VaultFile> vaultFiles = new ArrayList<>();
         for (FileUploadBundle fileUploadBundle : fileUploadBundles) {
 
             if (fileUploadBundle.getServerId() != server.getId()) {
                 continue;
             } else {
-                rawFiles.add(fileUploadBundle.getMediaFile());
+                vaultFiles.add(fileUploadBundle.getMediaFile());
             }
 
             if (!fileUploadBundle.isManualUpload()) {
-                fileMap.put(fileUploadBundle.getMediaFile().getId(), fileUploadBundle.getMediaFile());
+                fileMap.put(fileUploadBundle.getMediaFile().id, fileUploadBundle.getMediaFile());
             }
 
             if (fileUploadBundle.isIncludeMetdata()) {
                 try {
-                    rawFiles.add(MediaFileHandler.maybeCreateMetadataMediaFile(getContext(), fileUploadBundle.getMediaFile()));
+                    vaultFiles.add(MediaFileHandler.maybeCreateMetadataMediaFile(fileUploadBundle.getMediaFile()));
                 } catch (Exception e) {
                     Timber.d(e);
                 }
@@ -105,7 +122,7 @@ public class TellaUploadJob extends Job {
 
         final TUSClient tusClient = new TUSClient(getContext(), server.getUrl(), server.getUsername(), server.getPassword());
 
-        Flowable.fromIterable(rawFiles)
+        Flowable.fromIterable(vaultFiles)
                 .flatMap(tusClient::upload)
                 .blockingSubscribe(this::updateProgress, throwable -> {
                     if (throwable instanceof NoConnectivityException) {
@@ -142,22 +159,6 @@ public class TellaUploadJob extends Job {
         }
     }
 
-    public static void scheduleJob() {
-        new JobRequest.Builder(TellaUploadJob.TAG)
-                .setExecutionWindow(1_000L, 10_000L) // start between 1-10sec from now
-                .setBackoffCriteria(10_000L, JobRequest.BackoffPolicy.LINEAR)
-                .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
-                .setRequirementsEnforced(true)
-                //.setPersisted(true) // android.Manifest.permission.RECEIVE_BOOT_COMPLETED
-                .setUpdateCurrent(true) // also, jobs will sync them self while running
-                .build()
-                .schedule();
-    }
-
-    public static void cancelJob() {
-        JobManager.instance().cancelAllForTag(TellaUploadJob.TAG);
-    }
-
     private void updateProgress(UploadProgressInfo progressInfo) {
         switch (progressInfo.status) {
             case STARTED:
@@ -184,11 +185,13 @@ public class TellaUploadJob extends Job {
         postProgressEvent(progressInfo);
     }
 
-    private void deleteMediaFile(long id) {
-        MediaFile deleted = dataSource.deleteMediaFile(fileMap.get(id), m ->
-                MediaFileHandler.deleteMediaFile(getContext(), m)).blockingGet();
-
-        Timber.d("Deleted file %s", deleted.getFileName());
+    private void deleteMediaFile(String id) {
+        if (MyApplication.rxVault.get(id)
+                .flatMap(vaultFile -> MyApplication.rxVault.delete(vaultFile))
+                .subscribeOn(Schedulers.io())
+                .blockingGet()) {
+            Timber.d("Deleted file %s", id);
+        }
     }
 
     private void postProgressEvent(UploadProgressInfo progress) {
