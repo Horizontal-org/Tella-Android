@@ -44,6 +44,7 @@ import org.hzontal.tella.keys.wrapper.UnencryptedKeyWrapper;
 
 import java.io.File;
 
+import dagger.hilt.android.HiltAndroidApp;
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
 import rs.readahead.washington.mobile.bus.TellaBus;
@@ -64,7 +65,7 @@ import rs.readahead.washington.mobile.views.activity.MainActivity;
 import rs.readahead.washington.mobile.views.activity.onboarding.OnBoardingActivity;
 import timber.log.Timber;
 
-
+@HiltAndroidApp
 public class MyApplication extends MultiDexApplication implements IUnlockRegistryHolder, CredentialsCallback {
     public static Vault vault;
     public static RxVault rxVault;

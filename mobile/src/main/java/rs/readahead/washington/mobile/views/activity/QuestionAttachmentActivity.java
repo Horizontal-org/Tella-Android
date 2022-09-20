@@ -172,11 +172,11 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
     private void setupFab() {
     }
 
-    @Override
+ /*   @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        QuestionAttachmentActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
-    }
+       // QuestionAttachmentActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }*/
 
     @OnPermissionDenied({Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO})
     void onCameraAndAudioPermissionDenied() {

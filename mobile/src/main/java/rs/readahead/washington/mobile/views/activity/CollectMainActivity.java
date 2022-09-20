@@ -281,7 +281,7 @@ public class CollectMainActivity extends BaseLockActivity implements
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        CollectMainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+        //CollectMainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
     @Override
@@ -305,7 +305,7 @@ public class CollectMainActivity extends BaseLockActivity implements
         if (Preferences.isAnonymousMode()) {
             startCollectFormEntryActivity(); // no need to check for permissions, as location won't be turned on
         } else {
-            CollectMainActivityPermissionsDispatcher.startCollectFormEntryActivityWithPermissionCheck(this);
+            //CollectMainActivityPermissionsDispatcher.startCollectFormEntryActivityWithPermissionCheck(this);
         }
     }
 

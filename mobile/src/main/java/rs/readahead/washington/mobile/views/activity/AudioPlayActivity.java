@@ -267,12 +267,12 @@ public class AudioPlayActivity extends BaseLockActivity implements
     }
 
 
-    @SuppressLint("NeedOnRequestPermissionsResult")
+    /*@SuppressLint("NeedOnRequestPermissionsResult")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         AudioPlayActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
-    }
+    }*/
 
     @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void onWriteExternalStoragePermissionDenied() {
@@ -397,8 +397,8 @@ public class AudioPlayActivity extends BaseLockActivity implements
     }
 
     private void showExportDialog() {
-        alertDialog = DialogsUtil.showExportMediaDialog(this, (dialog, which) ->
-                AudioPlayActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(AudioPlayActivity.this));
+      /*  alertDialog = DialogsUtil.showExportMediaDialog(this, (dialog, which) ->
+                AudioPlayActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(AudioPlayActivity.this));*/
     }
 
     private void showDeleteMediaDialog() {
@@ -573,7 +573,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
                                 getString(R.string.gallery_save_to_device_dialog_expl),
                                 getString(R.string.action_save),
                                 getString(R.string.action_cancel),
-                                isConfirmed -> AudioPlayActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(AudioPlayActivity.this)
+                                isConfirmed -> {/*AudioPlayActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(AudioPlayActivity.this)*/}
                         );
                     }
 

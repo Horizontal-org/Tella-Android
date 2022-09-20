@@ -1,7 +1,11 @@
-apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
-apply plugin: 'kotlin-android'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+    id 'com.google.firebase.crashlytics'
+    id 'com.google.gms.google-services'
+}
 
 ext {
     supportLibVersion = "28.0.3"
@@ -9,6 +13,8 @@ ext {
     googlePlayServicesVersion = "17.0.0"
     leakCanaryVersion = '2.4'
     butterknifeVersion = '10.1.0'
+    hilt_android_version = '1.0.0'
+    hilt_version = '1.0.0'
 }
 
 android {
@@ -133,6 +139,10 @@ dependencies {
         exclude module: "exifinterface"
         exclude module: "animated-vector-drawble"
     }
+
+    //Hilt
+    implementation "com.google.dagger:hilt-android:2.39.1"
+    kapt "com.google.dagger:hilt-compiler:2.38.1"
 
     implementation 'com.github.apl-devs:appintro:v4.2.3'
     implementation 'com.simplify:ink:1.0.2'

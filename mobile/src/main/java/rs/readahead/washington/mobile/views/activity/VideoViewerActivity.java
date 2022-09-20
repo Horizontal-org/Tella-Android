@@ -181,7 +181,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        VideoViewerActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+        //VideoViewerActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
     @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -277,8 +277,8 @@ public class VideoViewerActivity extends BaseLockActivity implements
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
     private void showExportDialog() {
-        alertDialog = DialogsUtil.showExportMediaDialog(this, (dialog, which) ->
-                VideoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(VideoViewerActivity.this));
+       /*alertDialog = DialogsUtil.showExportMediaDialog(this, (dialog, which) ->{}*/
+                //VideoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(VideoViewerActivity.this));
     }
 
     @Override
@@ -485,7 +485,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
                                 getString(R.string.action_save),
                                 getString(R.string.action_cancel),
                                 isConfirmed -> {
-                                    VideoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(VideoViewerActivity.this);
+                                    //VideoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(VideoViewerActivity.this);
                                 }
                         );
                     }
