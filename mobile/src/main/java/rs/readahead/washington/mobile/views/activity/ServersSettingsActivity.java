@@ -18,7 +18,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.lifecycle.Observer;
 
 import com.google.gson.Gson;
 
@@ -37,12 +36,9 @@ import kotlin.Unit;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
-import rs.readahead.washington.mobile.bus.EventObserver;
-import rs.readahead.washington.mobile.bus.event.CreateUwaziServerEvent;
-import rs.readahead.washington.mobile.bus.event.UpdateUwaziServerEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.Server;
-import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
 import rs.readahead.washington.mobile.mvp.contract.ICollectBlankFormListRefreshPresenterContract;
@@ -98,7 +94,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     private TellaUploadServersPresenter tellaUploadServersPresenter;
     private CollectBlankFormListRefreshPresenter refreshPresenter;
     private List<Server> servers;
-    private List<TellaUploadServer> tuServers;
+    private List<TellaReportServer> tuServers;
     private List<UWaziUploadServer> uwaziServers;
     private EventCompositeDisposable disposables;
 
@@ -190,12 +186,12 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     @Override
-    public void onTUServersLoaded(List<TellaUploadServer> tellaUploadServers) {
+    public void onTUServersLoaded(List<TellaReportServer> tellaReportServers) {
         listView.removeAllViews();
-        this.servers.addAll(tellaUploadServers);
+        this.servers.addAll(tellaReportServers);
         createServerViews(servers);
 
-        tuServers = tellaUploadServers;
+        tuServers = tellaReportServers;
         if (tuServers.size() > 0) {
             autoUploadSwitchView.setVisibility(View.VISIBLE);
             setupAutoUploadSwitch();
@@ -211,7 +207,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     @Override
-    public void onCreatedTUServer(TellaUploadServer server) {
+    public void onCreatedTUServer(TellaReportServer server) {
         servers.add(server);
         listView.addView(getServerItem(server), servers.indexOf(server));
 
@@ -275,7 +271,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     @Override
-    public void onRemovedTUServer(TellaUploadServer server) {
+    public void onRemovedTUServer(TellaReportServer server) {
         servers.remove(server);
         listView.removeAllViews();
 
@@ -299,7 +295,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     @Override
-    public void onUpdatedTUServer(TellaUploadServer server) {
+    public void onUpdatedTUServer(TellaReportServer server) {
         int i = servers.indexOf(server);
         if (i != -1) {
             servers.set(i, server);
@@ -426,10 +422,10 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         );
     }
 
-    private void showChooseAutoUploadServerDialog(List<TellaUploadServer>  tellaUploadServers) {
+    private void showChooseAutoUploadServerDialog(List<TellaReportServer> tellaReportServers) {
 
         LinkedHashMap options = new LinkedHashMap<Long,String>();
-        for (Server server : tellaUploadServers) {
+        for (Server server : tellaReportServers) {
             options.put(server.getId(), server.getName());
         }
 
@@ -460,7 +456,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         showCollectServerDialog(server);
     }
 
-    private void editTUServer(TellaUploadServer server) {
+    private void editTUServer(TellaReportServer server) {
         showTellaUploadServerDialog(server);
     }
 
@@ -504,7 +500,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 .show(getSupportFragmentManager(), CollectServerDialogFragment.TAG);
     }
 
-    private void showTellaUploadServerDialog(@Nullable TellaUploadServer server) {
+    private void showTellaUploadServerDialog(@Nullable TellaReportServer server) {
         TellaUploadServerDialogFragment.newInstance(server)
                 .show(getSupportFragmentManager(), TellaUploadServerDialogFragment.TAG);
     }
@@ -625,7 +621,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 editUwaziServer((UWaziUploadServer) server);
                 break;
             default:
-                editTUServer((TellaUploadServer) server);
+                editTUServer((TellaReportServer) server);
                 break;
         }
     }
@@ -639,7 +635,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 uwaziServersPresenter.remove((UWaziUploadServer) server);
                 break;
             default:
-                tellaUploadServersPresenter.remove((TellaUploadServer) server);
+                tellaUploadServersPresenter.remove((TellaReportServer) server);
                 break;
         }
     }
@@ -736,12 +732,12 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     @Override
-    public void onTellaUploadServerDialogCreate(TellaUploadServer server) {
+    public void onTellaUploadServerDialogCreate(TellaReportServer server) {
         tellaUploadServersPresenter.create(server);
     }
 
     @Override
-    public void onTellaUploadServerDialogUpdate(TellaUploadServer server) {
+    public void onTellaUploadServerDialogUpdate(TellaReportServer server) {
         tellaUploadServersPresenter.update(server);
     }
 

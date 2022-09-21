@@ -34,7 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.mvp.contract.ICheckTUSServerContract;
 import rs.readahead.washington.mobile.mvp.presenter.CheckTUSServerPresenter;
@@ -87,13 +87,13 @@ public class TellaUploadServerDialogFragment extends AppCompatDialogFragment imp
     private boolean securityProviderUpgradeAttempted = false;
 
     public interface TellaUploadServerDialogHandler {
-        void onTellaUploadServerDialogCreate(TellaUploadServer server);
-        void onTellaUploadServerDialogUpdate(TellaUploadServer server);
+        void onTellaUploadServerDialogCreate(TellaReportServer server);
+        void onTellaUploadServerDialogUpdate(TellaReportServer server);
         void onDialogDismiss();
     }
 
 
-    public static TellaUploadServerDialogFragment newInstance(@Nullable TellaUploadServer server) {
+    public static TellaUploadServerDialogFragment newInstance(@Nullable TellaReportServer server) {
         TellaUploadServerDialogFragment frag = new TellaUploadServerDialogFragment();
 
         Bundle args = new Bundle();
@@ -133,7 +133,7 @@ public class TellaUploadServerDialogFragment extends AppCompatDialogFragment imp
         next.setOnClickListener(v -> {
             validate();
             if (validated) {
-                checkServer(copyFields(new TellaUploadServer(serverId)), false);
+                checkServer(copyFields(new TellaReportServer(serverId)), false);
             }
         });
 
@@ -198,7 +198,7 @@ public class TellaUploadServerDialogFragment extends AppCompatDialogFragment imp
     }
 
     @Override
-    public void onServerCheckSuccess(TellaUploadServer server) {
+    public void onServerCheckSuccess(TellaReportServer server) {
         save(server);
     }
 
@@ -291,7 +291,7 @@ public class TellaUploadServerDialogFragment extends AppCompatDialogFragment imp
         }
     }
 
-    private void checkServer(@NonNull TellaUploadServer server,  boolean connectionRequired) {
+    private void checkServer(@NonNull TellaReportServer server, boolean connectionRequired) {
         // lets go with sync solution as this will not influence UX too much here
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1 &&
                 !securityProviderUpgradeAttempted && getContext() != null) {
@@ -313,7 +313,7 @@ public class TellaUploadServerDialogFragment extends AppCompatDialogFragment imp
     }
 
     @NonNull
-    private TellaUploadServer copyFields(@NonNull TellaUploadServer server) {
+    private TellaReportServer copyFields(@NonNull TellaReportServer server) {
         server.setName(name.getText().toString());
         server.setUrl(url.getText().toString().trim());
         server.setUsername(username.getText().toString().trim());
@@ -322,7 +322,7 @@ public class TellaUploadServerDialogFragment extends AppCompatDialogFragment imp
         return server;
     }
 
-    private void save(TellaUploadServer server) {
+    private void save(TellaReportServer server) {
         dismiss();
 
         TellaUploadServerDialogHandler activity = (TellaUploadServerDialogHandler) getActivity();

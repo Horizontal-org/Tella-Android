@@ -47,7 +47,7 @@ import rs.readahead.washington.mobile.domain.entity.FileUploadBundle;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.OldMediaFile;
-import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
@@ -122,7 +122,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
-    public Single<List<TellaUploadServer>> listTellaUploadServers() {
+    public Single<List<TellaReportServer>> listTellaUploadServers() {
         return Single.fromCallable(() -> dataSource.getTUServers())
                 .compose(applySchedulers());
     }
@@ -134,13 +134,13 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
-    public Single<TellaUploadServer> createTellaUploadServer(final TellaUploadServer server) {
+    public Single<TellaReportServer> createTellaUploadServer(final TellaReportServer server) {
         return Single.fromCallable(() -> dataSource.createTUServer(server))
                 .compose(applySchedulers());
     }
 
     @Override
-    public Single<TellaUploadServer> updateTellaUploadServer(TellaUploadServer server) {
+    public Single<TellaReportServer> updateTellaUploadServer(TellaReportServer server) {
         return Single.fromCallable(() -> dataSource.updateTUServer(server))
                 .compose(applySchedulers());
     }
@@ -158,7 +158,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
-    public Single<TellaUploadServer> getTellaUploadServer(final long id) {
+    public Single<TellaReportServer> getTellaUploadServer(final long id) {
         return Single.fromCallable(() -> getTUServer(id))
                 .compose(applySchedulers());
     }
@@ -442,9 +442,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return net.sqlcipher.DatabaseUtils.queryNumEntries(database, D.T_TELLA_UPLOAD_SERVER);
     }
 
-    private List<TellaUploadServer> getTUServers() {
+    private List<TellaReportServer> getTUServers() {
         Cursor cursor = null;
-        List<TellaUploadServer> servers = new ArrayList<>();
+        List<TellaReportServer> servers = new ArrayList<>();
 
         try {
             cursor = database.query(
@@ -457,7 +457,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     null);
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                TellaUploadServer tuServer = cursorToTellaUploadServer(cursor);
+                TellaReportServer tuServer = cursorToTellaUploadServer(cursor);
                 servers.add(tuServer);
             }
         } catch (Exception e) {
@@ -520,7 +520,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Nullable
-    private TellaUploadServer getTUServer(long id) {
+    private TellaReportServer getTUServer(long id) {
         try (Cursor cursor = database.query(
                 D.T_TELLA_UPLOAD_SERVER,
                 new String[]{D.C_ID, D.C_NAME, D.C_URL, D.C_USERNAME, D.C_PASSWORD, D.C_CHECKED},
@@ -535,7 +535,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             Timber.d(e, getClass().getName());
         }
 
-        return TellaUploadServer.NONE;
+        return TellaReportServer.NONE;
     }
 
 
@@ -798,7 +798,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return server;
     }
 
-    private TellaUploadServer createTUServer(final TellaUploadServer server) {
+    private TellaReportServer createTUServer(final TellaReportServer server) {
         ContentValues values = new ContentValues();
         values.put(D.C_NAME, server.getName());
         values.put(D.C_URL, server.getUrl());
@@ -1943,7 +1943,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return server;
     }
 
-    private TellaUploadServer updateTUServer(final TellaUploadServer server) {
+    private TellaReportServer updateTUServer(final TellaReportServer server) {
         ContentValues values = new ContentValues();
         values.put(D.C_NAME, server.getName());
         values.put(D.C_URL, server.getUrl());
@@ -2027,8 +2027,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return collectServer;
     }
 
-    private TellaUploadServer cursorToTellaUploadServer(Cursor cursor) {
-        TellaUploadServer server = new TellaUploadServer();
+    private TellaReportServer cursorToTellaUploadServer(Cursor cursor) {
+        TellaReportServer server = new TellaReportServer();
         server.setId(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID)));
         server.setName(cursor.getString(cursor.getColumnIndexOrThrow(D.C_NAME)));
         server.setUrl(cursor.getString(cursor.getColumnIndexOrThrow(D.C_URL)));

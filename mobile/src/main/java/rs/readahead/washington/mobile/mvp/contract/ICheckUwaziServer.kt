@@ -1,7 +1,7 @@
 package rs.readahead.washington.mobile.mvp.contract
 
 import android.content.Context
-import rs.readahead.washington.mobile.domain.entity.TellaUploadServer
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 
 class ICheckUwaziServer {
@@ -17,6 +17,6 @@ class ICheckUwaziServer {
     }
 
     interface IPresenter : IBasePresenter {
-        fun checkServer(server: TellaUploadServer?, connectionRequired: Boolean)
+        fun checkServer(server: TellaReportServer?, connectionRequired: Boolean)
     }
 }
