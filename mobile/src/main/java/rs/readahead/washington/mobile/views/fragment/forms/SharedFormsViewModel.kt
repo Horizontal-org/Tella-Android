@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
-import io.reactivex.Single
+import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -53,7 +53,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
 
     private var keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private val disposables = CompositeDisposable()
-    private var odkRepository: IOpenRosaRepository = OpenRosaRepository()
+    var odkRepository: IOpenRosaRepository = OpenRosaRepository()
     private val asyncDataSource = AsyncSubject.create<DataSource>()
 
 

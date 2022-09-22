@@ -28,6 +28,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.data.repository.OpenRosaRepository;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
@@ -35,6 +36,9 @@ import rs.readahead.washington.mobile.domain.entity.collect.ListFormResult;
 import rs.readahead.washington.mobile.javarosa.FormUtils;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.DialogsUtil;
+import rs.readahead.washington.mobile.util.TellaUpgrader;
+import rs.readahead.washington.mobile.views.activity.MainActivity;
+import rs.readahead.washington.mobile.views.fragment.vault.home.HomeVaultFragment;
 import timber.log.Timber;
 
 
@@ -126,8 +130,7 @@ public class BlankFormsListFragment extends FormListFragment {
                     silentFormUpdates = false;
                 }
                 hideAlertDialog();
-            }
-            else {
+            } else {
                 if (alertDialog != null) return;
                 if (getActivity() != null) {
                     model.getShowFab().postValue(false);
@@ -144,7 +147,7 @@ public class BlankFormsListFragment extends FormListFragment {
                 showBlankFormDownloadingDialog(R.string.collect_dialog_text_download_progress);
             } else {
                 hideAlertDialog();
-                DialogUtils.showBottomMessage(getActivity(),getString(R.string.collect_toast_download_completed), false);
+                DialogUtils.showBottomMessage(getActivity(), getString(R.string.collect_toast_download_completed), false);
             }
         });
 
@@ -201,6 +204,10 @@ public class BlankFormsListFragment extends FormListFragment {
             silentFormUpdates = true;
             refreshBlankForms();
         }
+
+        if (!Preferences.isJavarosa3Upgraded()) {
+            showJavarosa2UpgradeSheet();
+        }
     }
 
     private void updateFormLists(ListFormResult listFormResult) {
@@ -233,13 +240,13 @@ public class BlankFormsListFragment extends FormListFragment {
     }
 
     public void listBlankForms() {
-        if (model != null){
+        if (model != null) {
             model.listBlankForms();
         }
     }
 
     public void refreshBlankForms() {
-        if (model != null){
+        if (model != null) {
             model.refreshBlankForms();
         }
     }
@@ -380,6 +387,43 @@ public class BlankFormsListFragment extends FormListFragment {
         } else {
             banner.setVisibility(View.GONE);
         }
+    }
+
+    private void showJavarosa2UpgradeSheet() {
+        BottomSheetUtils.showConfirmSheet(
+                requireActivity().getSupportFragmentManager(),
+                null,
+                getString(R.string.Javarosa_Upgrade_Warning_Description),
+                getString(R.string.action_continue),
+                getString(R.string.action_cancel),
+                isConfirmed -> {
+                    if (isConfirmed) {
+                        if (MyApplication.isConnectedToInternet(getContext())) {
+                            upgradeJavarosa2();
+                        } else {
+                            Toast.makeText(getContext(), getString(R.string.InternetRequired_Toast), Toast.LENGTH_LONG).show();
+                            goHome();
+                        }
+                    } else {
+                        goHome();
+                    }
+                });
+    }
+
+    private void upgradeJavarosa2() {
+        try {
+            Toast.makeText(getContext(), getString(R.string.Javarosa_Upgrade_Toast), Toast.LENGTH_LONG).show();
+            TellaUpgrader.upgradeJavarosa2(MyApplication.getKeyDataSource(), (OpenRosaRepository) model.getOdkRepository());
+        } catch (Throwable t) {
+            Timber.d(t);
+        } finally {
+            Preferences.setJavarosa3Upgraded(true);
+        }
+    }
+
+    private void goHome(){
+        ((MainActivity)getActivity()).addFragment(this, new HomeVaultFragment(),R.id.fragment_nav_host);
+        ((MainActivity)getActivity()).selectHome();
     }
 
 }
