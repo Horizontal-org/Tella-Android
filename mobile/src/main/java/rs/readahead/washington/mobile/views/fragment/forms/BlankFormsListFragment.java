@@ -179,6 +179,11 @@ public class BlankFormsListFragment extends FormListFragment {
 
         model.getOnFormDefError().observe(getViewLifecycleOwner(), this::onFormDefError);
 
+        model.getOnFormCacheCleared().observe(getViewLifecycleOwner(), cleared -> {
+            listBlankForms();
+            model.getShowFab().postValue(true);
+        });
+
         model.getOnBlankFormsListResult().observe(getViewLifecycleOwner(), this::onBlankFormsListResult);
 
         model.getOnNoConnectionAvailable().observe(getViewLifecycleOwner(), available -> {
@@ -187,7 +192,6 @@ public class BlankFormsListFragment extends FormListFragment {
             }
         });
     }
-
 
     public void onUpdateBlankFormDefSuccess(CollectForm collectForm, FormDef formDef) {
         noUpdatedForms -= 1;
@@ -408,9 +412,7 @@ public class BlankFormsListFragment extends FormListFragment {
     private void upgradeJavarosa2() {
         try {
             Toast.makeText(getContext(), getString(R.string.Javarosa_Upgrade_Toast), Toast.LENGTH_LONG).show();
-            if (TellaUpgrader.upgradeJavarosa(MyApplication.getKeyDataSource())){
-                model.getShowFab().postValue(true);
-            }
+            model.deleteCachedForms();
         } catch (Throwable t) {
             Timber.d(t);
         }

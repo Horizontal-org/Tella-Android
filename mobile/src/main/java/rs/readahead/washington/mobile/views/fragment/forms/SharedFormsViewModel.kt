@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
-import io.reactivex.*
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -25,7 +25,6 @@ import rs.readahead.washington.mobile.domain.entity.collect.*
 import rs.readahead.washington.mobile.domain.exception.NoConnectivityException
 import rs.readahead.washington.mobile.domain.repository.IOpenRosaRepository
 import rs.readahead.washington.mobile.odk.FormController
-import java.util.*
 
 class SharedFormsViewModel(private val mApplication: Application) : AndroidViewModel(mApplication) {
 
@@ -46,6 +45,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
     var onFormInstanceDeleteSuccess = SingleLiveEvent<Boolean?>()
     var onCountCollectServersEnded = MutableLiveData<Long>()
     var onUserCancel = SingleLiveEvent<Boolean>()
+    var onFormCacheCleared = SingleLiveEvent<Boolean>()
     var showFab = MutableLiveData<Boolean>()
     var onFormInstanceListSuccess = MutableLiveData<List<CollectFormInstance>>()
     var onDraftFormInstanceListSuccess = MutableLiveData<List<CollectFormInstance>>()
@@ -133,7 +133,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
             )?.let {
                 disposables.add(
                     it
-            )
+                )
             }
     }
 
@@ -229,7 +229,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
             .flatMapSingle { obj: DataSource -> obj.countCollectServers() }
             .subscribe(
                 { num: Long ->
-                   onCountCollectServersEnded.postValue(
+                    onCountCollectServersEnded.postValue(
                         num
                     )
                 }
@@ -250,7 +250,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
             }
             .flatMap { servers: List<CollectServer> ->
                 if (servers.isEmpty()) {
-                     Single.just(ListFormResult()).toObservable()
+                    Single.just(ListFormResult()).toObservable()
                 }
                 if (!MyApplication.isConnectedToInternet(mApplication.baseContext)) {
                     throw NoConnectivityException()
@@ -297,7 +297,10 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
                 if (throwable is NoConnectivityException) {
                     onNoConnectionAvailable.postValue(true)
                 } else {
-                    FirebaseCrashlytics.getInstance().recordException(throwable ?: throw NullPointerException("Expression 'throwable' must not be null"))
+                    FirebaseCrashlytics.getInstance().recordException(
+                        throwable
+                            ?: throw NullPointerException("Expression 'throwable' must not be null")
+                    )
                     onError.postValue(throwable)
                 }
             }
@@ -337,7 +340,10 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
             .subscribe(
                 { onBlankFormDefRemoved.postValue(true) }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable ?: throw NullPointerException("Expression 'throwable' must not be null"))
+                FirebaseCrashlytics.getInstance().recordException(
+                    throwable
+                        ?: throw NullPointerException("Expression 'throwable' must not be null")
+                )
                 onError.postValue(throwable)
             }
         )
@@ -373,7 +379,10 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
                     )
                 }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable ?: throw NullPointerException("Expression 'throwable' must not be null"))
+                FirebaseCrashlytics.getInstance().recordException(
+                    throwable
+                        ?: throw NullPointerException("Expression 'throwable' must not be null")
+                )
                 onFormDefError.postValue(throwable)
             }
         )
@@ -404,9 +413,11 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
             .doFinally { onUpdateBlankFormDefStart.postValue(false) }
             .subscribe(
                 { formDef: FormDef? ->
-                    onUpdateBlankFormDefSuccess.postValue(Pair(
-                        form,
-                        formDef)
+                    onUpdateBlankFormDefSuccess.postValue(
+                        Pair(
+                            form,
+                            formDef
+                        )
                     )
                 }
             ) { throwable: Throwable? ->
@@ -426,7 +437,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
                     onDraftFormInstanceListSuccess.postValue(forms)
                 },
                 { throwable: Throwable? ->
-                   onFormInstanceListError.postValue(
+                    onFormInstanceListError.postValue(
                         throwable
                     )
                 }
@@ -446,7 +457,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
                     )
                 },
                 { throwable: Throwable? ->
-                   onFormInstanceListError.postValue(
+                    onFormInstanceListError.postValue(
                         throwable
                     )
                 }
@@ -457,5 +468,25 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
     fun userCancel() {
         disposables.clear()
         onUserCancel.postValue(true)
+    }
+
+    fun deleteCachedForms() {
+        disposables.add(keyDataSource.dataSource
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .flatMapCompletable { dataSource: DataSource ->
+                dataSource.removeCachedForms()
+            }
+            .subscribe(
+                { onFormCacheCleared.postValue(true) }
+            ) { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(
+                    throwable
+                        ?: throw NullPointerException("Expression 'throwable' must not be null")
+                )
+                onError.postValue(throwable)
+            }
+
+        )
     }
 }

@@ -70,14 +70,4 @@ public class TellaUpgrader {
 
         return vaultFile;
     }
-
-    public static boolean upgradeJavarosa(KeyDataSource keyDataSource) {
-        return deleteCachedForms(keyDataSource).blockingGet() != null;
-    }
-
-    private static Completable deleteCachedForms(KeyDataSource keyDataSource) {
-        return keyDataSource.getDataSource()
-                .subscribeOn(Schedulers.io())
-                .flatMapCompletable(DataSource::removeCachedForms);
-    }
 }
