@@ -429,6 +429,7 @@ public class MainActivity extends MetadataActivity implements
 
     public void selectHome() {
         btmNavMain.getMenu().findItem(R.id.home).setChecked(true);
+        navController.navigate(R.id.home);
     }
 }
 

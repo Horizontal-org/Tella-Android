@@ -419,8 +419,8 @@ public class BlankFormsListFragment extends FormListFragment {
     }
 
     private void goHome(){
-        ((MainActivity)getActivity()).addFragment(this, new HomeVaultFragment(),R.id.fragment_nav_host);
-        ((MainActivity)getActivity()).selectHome();
+        if (getActivity() == null) return;
+        ((MainActivity)requireActivity()).selectHome();
     }
 
 }
