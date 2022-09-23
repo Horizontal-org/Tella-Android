@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.views.activity;
 
-import static rs.readahead.washington.mobile.views.dialog.UwaziServerDialogFragmentKt.OBJECT_KEY;
+import static rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageViewModelKt.OBJECT_KEY;
 import static rs.readahead.washington.mobile.views.dialog.uwazi.step1.EnterServerFragmentKt.IS_UPDATE_SERVER;
 
 import android.annotation.SuppressLint;

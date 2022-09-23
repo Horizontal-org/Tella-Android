@@ -6,7 +6,8 @@ import rs.readahead.washington.mobile.domain.entity.reports.ReportsLoginResult
 import rs.readahead.washington.mobile.domain.entity.reports.User
 
 fun ReportsLoginResponse.mapToDomainModel() =
-    ReportsLoginResult(accessToken = access_token ?: "", user = user?.mapToDomainModel())
+    user?.mapToDomainModel()
+        ?.let { ReportsLoginResult(accessToken = access_token ?: "", user = it) }
 
 fun UserResponse.mapToDomainModel() =
     User(id = id ?: "", note = note ?: "", role = role ?: "", username = username ?: "")
