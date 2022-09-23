@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.util;
 import static com.hzontal.tella_vault.database.VaultDataSource.ROOT_UID;
 
 import android.content.Context;
+
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.database.VaultDataSource;
 import com.hzontal.utils.MediaFile;
@@ -70,34 +71,13 @@ public class TellaUpgrader {
         return vaultFile;
     }
 
-    public static Completable upgradeJavarosa2(KeyDataSource keyDataSource, OpenRosaRepository odkRepository) {
-        return keyDataSource.getDataSource()
-                .subscribeOn(Schedulers.io())
-                .flatMapSingle(DataSource::listDownloadedCollectForms)
-                .flatMapIterable(forms -> forms)
-                .flatMap(form -> updateBlankFormDef(form, keyDataSource, odkRepository))
-                .toList()
-                .flatMapCompletable(defs -> deleteDrafts(keyDataSource));
+    public static boolean upgradeJavarosa(KeyDataSource keyDataSource) {
+        return deleteCachedForms(keyDataSource).blockingGet() != null;
     }
 
-    public static Observable<FormDef> updateBlankFormDef(final CollectForm form, KeyDataSource keyDataSource, OpenRosaRepository odkRepository) {
+    private static Completable deleteCachedForms(KeyDataSource keyDataSource) {
         return keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMap((Function<DataSource, ObservableSource<CollectServer>>) dataSource ->
-                        dataSource.getCollectServer(form.getServerId()).toObservable()
-                ).flatMap((Function<CollectServer, ObservableSource<FormDef>>) server ->
-                        odkRepository.getFormDef(server, form).toObservable()
-                ).flatMap((Function<FormDef, ObservableSource<FormDef>>) formDef ->
-                        keyDataSource.getDataSource().flatMap((Function<DataSource, ObservableSource<FormDef>>) dataSource ->
-                                dataSource.updateBlankCollectFormDef(form, formDef).toObservable()
-                        )
-                );
-    }
-
-    private static Completable deleteDrafts(KeyDataSource keyDataSource) {
-        return keyDataSource.getDataSource()
-                .subscribeOn(Schedulers.io())
-                .flatMapCompletable(DataSource::removeDraftCollectForms);
+                .flatMapCompletable(DataSource::removeCachedForms);
     }
 }

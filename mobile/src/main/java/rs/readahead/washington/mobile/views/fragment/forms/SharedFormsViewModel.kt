@@ -53,7 +53,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
 
     private var keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private val disposables = CompositeDisposable()
-    var odkRepository: IOpenRosaRepository = OpenRosaRepository()
+    private var odkRepository: IOpenRosaRepository = OpenRosaRepository()
     private val asyncDataSource = AsyncSubject.create<DataSource>()
 
 

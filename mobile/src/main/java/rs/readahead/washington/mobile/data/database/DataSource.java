@@ -171,18 +171,11 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }).compose(applyCompletableSchedulers());
     }
 
-    public Completable removeDraftCollectForms() {
-        return Completable.fromCallable((Callable<Void>) () -> {
-            dataSource.removeDraftCollectInstances(new CollectFormInstanceStatus[]{
-                    CollectFormInstanceStatus.UNKNOWN,
-                    CollectFormInstanceStatus.DRAFT,
-                    CollectFormInstanceStatus.FINALIZED,
-                    CollectFormInstanceStatus.SUBMISSION_ERROR,
-                    CollectFormInstanceStatus.SUBMISSION_PENDING,
-                    CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS
-            });
-            return null;
-        }).compose(applyCompletableSchedulers());
+    public Completable removeCachedForms() {
+        return Completable.fromCallable(() -> {
+            dataSource.removeCachedFormInstances();
+            return true;
+        });
     }
 
     @Override
@@ -260,11 +253,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
     public Single<CollectForm> getBlankCollectFormById(final String formID) {
         return Single.fromCallable(() -> dataSource.getBlankCollectForm(formID))
-                .compose(applySchedulers());
-    }
-
-    public Single<List<CollectForm>> listDownloadedCollectForms() {
-        return Single.fromCallable(() -> dataSource.getDownloadedCollectForms())
                 .compose(applySchedulers());
     }
 
@@ -713,67 +701,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 OdkForm form = cursorToOdkForm(cursor);
 
                 // todo: implement cursorToCollectForm
-                long id = cursor.getLong(cursor.getColumnIndexOrThrow(D.A_COLLECT_BLANK_FORM_ID));
-                long serverId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_COLLECT_SERVER_ID));
-                boolean downloaded = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_DOWNLOADED)) == 1;
-                boolean favorite = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_FAVORITE)) == 1;
-                boolean updated = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_UPDATED)) == 1;
-                String serverName = cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_NAME));
-                String username = cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_USERNAME));
-
-                CollectForm collectForm = new CollectForm(serverId, form);
-                collectForm.setId(id);
-                collectForm.setServerName(serverName);
-                collectForm.setUsername(username);
-                collectForm.setDownloaded(downloaded);
-                collectForm.setFavorite(favorite);
-                collectForm.setUpdated(updated);
-
-                forms.add(collectForm);
-            }
-        } catch (Exception e) {
-            Timber.d(e, getClass().getName());
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return forms;
-    }
-
-    private List<CollectForm> getDownloadedCollectForms(){
-        Cursor cursor = null;
-        List<CollectForm> forms = new ArrayList<>();
-
-        try {
-            final String query = SQLiteQueryBuilder.buildQueryString(
-                    false,
-                    D.T_COLLECT_BLANK_FORM + " JOIN " + D.T_COLLECT_SERVER + " ON " +
-                            D.T_COLLECT_BLANK_FORM + "." + D.C_COLLECT_SERVER_ID + " = " + D.T_COLLECT_SERVER + "." + D.C_ID,
-                    new String[]{
-                            cn(D.T_COLLECT_BLANK_FORM, D.C_ID, D.A_COLLECT_BLANK_FORM_ID),
-                            D.C_COLLECT_SERVER_ID,
-                            D.C_FORM_ID,
-                            D.T_COLLECT_BLANK_FORM + "." + D.C_NAME,
-                            D.C_VERSION,
-                            D.C_HASH,
-                            D.C_DOWNLOADED,
-                            D.C_UPDATED,
-                            D.C_FAVORITE,
-                            D.C_DOWNLOAD_URL,
-                            cn(D.T_COLLECT_SERVER, D.C_NAME, D.A_SERVER_NAME),
-                            cn(D.T_COLLECT_SERVER, D.C_USERNAME, D.A_SERVER_USERNAME)},
-                    D.C_DOWNLOADED +" =1 " , null, null,
-                    cn(D.T_COLLECT_BLANK_FORM, D.C_FAVORITE) + " DESC, " + cn(D.T_COLLECT_BLANK_FORM, D.C_ID) + " DESC",
-                    null
-            );
-            cursor = database.rawQuery(query, null);
-
-            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-
-                OdkForm form = cursorToOdkForm(cursor);
-
                 long id = cursor.getLong(cursor.getColumnIndexOrThrow(D.A_COLLECT_BLANK_FORM_ID));
                 long serverId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_COLLECT_SERVER_ID));
                 boolean downloaded = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_DOWNLOADED)) == 1;
@@ -2072,19 +1999,14 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }
     }
 
-    public void removeDraftCollectInstances(CollectFormInstanceStatus[] statuses) {
+    public void removeCachedFormInstances() {
         try {
-
-            List<String> s = new ArrayList<>(statuses.length);
-            for (CollectFormInstanceStatus status : statuses) {
-                s.add(Integer.toString(status.ordinal()));
-            }
-            String selection = "(" + TextUtils.join(", ", s) + ")";
-
             database.beginTransaction();
 
-            database.delete(D.T_COLLECT_FORM_INSTANCE, D.C_STATUS + " IN ", new String[]{selection});
-            database.delete(D.T_COLLECT_FORM_INSTANCE_VAULT_FILE, null, null);
+            deleteTable(D.T_COLLECT_BLANK_FORM);
+            deleteTable(D.T_COLLECT_FORM_INSTANCE);
+            deleteTable(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE);
+            Preferences.setJavarosa3Upgraded(true);
 
             database.setTransactionSuccessful();
         } finally {

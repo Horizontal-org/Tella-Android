@@ -28,7 +28,6 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.data.repository.OpenRosaRepository;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
@@ -94,7 +93,12 @@ public class BlankFormsListFragment extends FormListFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        listBlankForms();
+       if (!Preferences.isJavarosa3Upgraded()) {
+            model.getShowFab().postValue(false);
+            showJavarosa2UpgradeSheet();
+        } else {
+            listBlankForms();
+       }
     }
 
     @Override
@@ -203,10 +207,6 @@ public class BlankFormsListFragment extends FormListFragment {
         if (getContext() != null && MyApplication.isConnectedToInternet(getContext()) && checkIfDayHasPassed()) {
             silentFormUpdates = true;
             refreshBlankForms();
-        }
-
-        if (!Preferences.isJavarosa3Upgraded()) {
-            showJavarosa2UpgradeSheet();
         }
     }
 
@@ -398,12 +398,7 @@ public class BlankFormsListFragment extends FormListFragment {
                 getString(R.string.action_cancel),
                 isConfirmed -> {
                     if (isConfirmed) {
-                        if (MyApplication.isConnectedToInternet(getContext())) {
                             upgradeJavarosa2();
-                        } else {
-                            Toast.makeText(getContext(), getString(R.string.InternetRequired_Toast), Toast.LENGTH_LONG).show();
-                            goHome();
-                        }
                     } else {
                         goHome();
                     }
@@ -413,11 +408,11 @@ public class BlankFormsListFragment extends FormListFragment {
     private void upgradeJavarosa2() {
         try {
             Toast.makeText(getContext(), getString(R.string.Javarosa_Upgrade_Toast), Toast.LENGTH_LONG).show();
-            TellaUpgrader.upgradeJavarosa2(MyApplication.getKeyDataSource(), (OpenRosaRepository) model.getOdkRepository());
+            if (TellaUpgrader.upgradeJavarosa(MyApplication.getKeyDataSource())){
+                model.getShowFab().postValue(true);
+            }
         } catch (Throwable t) {
             Timber.d(t);
-        } finally {
-            Preferences.setJavarosa3Upgraded(true);
         }
     }
 
