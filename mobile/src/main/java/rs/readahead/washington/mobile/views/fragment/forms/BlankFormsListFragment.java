@@ -180,7 +180,7 @@ public class BlankFormsListFragment extends FormListFragment {
         model.getOnFormDefError().observe(getViewLifecycleOwner(), this::onFormDefError);
 
         model.getOnFormCacheCleared().observe(getViewLifecycleOwner(), cleared -> {
-            listBlankForms();
+            refreshBlankForms();
             model.getShowFab().postValue(true);
         });
 
