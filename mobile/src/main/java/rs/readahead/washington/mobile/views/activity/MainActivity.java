@@ -349,7 +349,7 @@ public class MainActivity extends MetadataActivity implements
         if (num > 0) {
             CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_COLLECT);
         } else {
-            Preferences.setJavarosa3Upgraded(false);
+            Preferences.setJavarosa3Upgraded(true);
         }
         //homeScreenPresenter.countTUServers();
     }
