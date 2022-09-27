@@ -1,27 +1,26 @@
-package rs.readahead.washington.mobile.views.dialog.uwazi
+package rs.readahead.washington.mobile.views.dialog.reports
 
 import android.os.Bundle
 import com.google.gson.Gson
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 import rs.readahead.washington.mobile.views.dialog.IS_UPDATE_SERVER
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
-import rs.readahead.washington.mobile.views.dialog.uwazi.step1.EnterServerFragment
+import rs.readahead.washington.mobile.views.dialog.reports.url.EnterUploadServerFragment
 
-class UwaziConnectFlowActivity : BaseLockActivity() {
+class ReportsConnectFlowActivity : BaseLockActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_uwazi_connect_flow)
         if (!intent.getBooleanExtra(IS_UPDATE_SERVER, false)) {
-            addFragment(EnterServerFragment(), R.id.container)
+            addFragment(EnterUploadServerFragment(), R.id.container)
         } else {
             intent.getStringExtra(OBJECT_KEY)?.let {
-                val server = Gson().fromJson(it, UWaziUploadServer::class.java)
-                addFragment(EnterServerFragment.newInstance(server, true), R.id.container)
+                val server = Gson().fromJson(it, TellaReportServer::class.java)
+                addFragment(EnterUploadServerFragment.newInstance(server, true), R.id.container)
             }
-
         }
     }
 
