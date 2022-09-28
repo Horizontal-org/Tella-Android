@@ -7,7 +7,6 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -41,7 +40,6 @@ import org.hzontal.shared_ui.utils.DialogUtils;
 
 import java.util.LinkedHashMap;
 
-import butterknife.ButterKnife;
 import kotlin.Unit;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
@@ -62,6 +60,7 @@ import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment;
+import rs.readahead.washington.mobile.databinding.ActivityVideoViewerBinding;
 
 @RuntimePermissions
 public class VideoViewerActivity extends BaseLockActivity implements
@@ -91,14 +90,16 @@ public class VideoViewerActivity extends BaseLockActivity implements
     private AlertDialog alertDialog;
     private ProgressDialog progressDialog;
     private boolean isInfoShown = false;
+    private ActivityVideoViewerBinding binding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_video_viewer);
+        binding = ActivityVideoViewerBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
         overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
-        ButterKnife.bind(this);
 
         if (getIntent().hasExtra(NO_ACTIONS)) {
             actionsDisabled = true;
@@ -109,7 +110,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
         shouldAutoPlay = true;
         clearResumePosition();
 
-        simpleExoPlayerView = findViewById(R.id.player_view);
+        simpleExoPlayerView = binding.playerView;
         simpleExoPlayerView.setControllerVisibilityListener(this);
         simpleExoPlayerView.requestFocus();
 
@@ -377,7 +378,7 @@ public class VideoViewerActivity extends BaseLockActivity implements
     }
 
     private void setupToolbar() {
-        toolbar = findViewById(R.id.player_toolbar);
+        toolbar = binding.playerToolbar;
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
 

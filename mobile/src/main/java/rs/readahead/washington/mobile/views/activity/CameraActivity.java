@@ -49,9 +49,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.CaptureEvent;
@@ -74,6 +71,7 @@ import rs.readahead.washington.mobile.views.custom.CameraFlashButton;
 import rs.readahead.washington.mobile.views.custom.CameraGridButton;
 import rs.readahead.washington.mobile.views.custom.CameraResolutionButton;
 import rs.readahead.washington.mobile.views.custom.CameraSwitchButton;
+import rs.readahead.washington.mobile.databinding.ActivityCameraBinding;
 
 
 public class CameraActivity extends MetadataActivity implements
@@ -86,32 +84,20 @@ public class CameraActivity extends MetadataActivity implements
     private final static int CLICK_MODE_DELAY = 2000;
     public static String CAMERA_MODE = "cm";
     public static String INTENT_MODE = "im";
-    @BindView(R.id.camera)
     CameraView cameraView;
-    @BindView(R.id.gridButton)
     CameraGridButton gridButton;
-    @BindView(R.id.switchButton)
     CameraSwitchButton switchButton;
-    @BindView(R.id.flashButton)
     CameraFlashButton flashButton;
-    @BindView(R.id.captureButton)
     CameraCaptureButton captureButton;
-    @BindView(R.id.durationView)
     CameraDurationTextView durationView;
-    @BindView(R.id.camera_zoom)
     SeekBar mSeekBar;
-    @BindView(R.id.video_line)
     View videoLine;
-    @BindView(R.id.photo_line)
     View photoLine;
-    @BindView(R.id.preview_image)
     ImageView previewView;
-    @BindView(R.id.photo_text)
     TextView photoModeText;
-    @BindView(R.id.video_text)
     TextView videoModeText;
-    @BindView(R.id.resolutionButton)
     CameraResolutionButton resolutionButton;
+
     private CameraPresenter presenter;
     private TellaFileUploadSchedulePresenter uploadPresenter;
     private MetadataAttacher metadataAttacher;
@@ -128,15 +114,18 @@ public class CameraActivity extends MetadataActivity implements
     private long lastClickTime = System.currentTimeMillis();
     private RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
     private String currentRootParent = null;
-
+    private ActivityCameraBinding binding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_camera);
+        binding = ActivityCameraBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setViews();
+        initListeners();
+
         overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out);
-        ButterKnife.bind(this);
 
         presenter = new CameraPresenter(this);
         uploadPresenter = new TellaFileUploadSchedulePresenter(this);
@@ -309,8 +298,18 @@ public class CameraActivity extends MetadataActivity implements
         onAddError(throwable);
     }
 
-    @OnClick(R.id.close)
-    void closeCamera() {
+    private void initListeners() {
+        binding.close.setOnClickListener((view) -> closeCamera());
+        captureButton.setOnClickListener((view) -> onCaptureClicked());
+        binding.photoMode.setOnClickListener((view) -> onPhotoClicked());
+        binding.videoMode.setOnClickListener((view) -> onVideoClicked());
+        gridButton.setOnClickListener((view) -> onGridClicked());
+        switchButton.setOnClickListener((view) -> onSwitchClicked());
+        resolutionButton.setOnClickListener((view) -> chooseVideoResolution());
+        previewView.setOnClickListener((view) -> onPreviewClicked());
+    }
+
+    private void closeCamera() {
         onBackPressed();
     }
 
@@ -374,7 +373,6 @@ public class CameraActivity extends MetadataActivity implements
 
     }
 
-    @OnClick(R.id.captureButton)
     void onCaptureClicked() {
         if (Preferences.isShutterMute()) {
             AudioManager mgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -409,7 +407,6 @@ public class CameraActivity extends MetadataActivity implements
         }
     }
 
-    @OnClick(R.id.photo_mode)
     void onPhotoClicked() {
         if (modeLocked) {
             return;
@@ -436,7 +433,6 @@ public class CameraActivity extends MetadataActivity implements
         lastClickTime = System.currentTimeMillis();
     }
 
-    @OnClick(R.id.video_mode)
     void onVideoClicked() {
         if (modeLocked) {
             return;
@@ -460,7 +456,6 @@ public class CameraActivity extends MetadataActivity implements
         lastClickTime = System.currentTimeMillis();
     }
 
-    @OnClick(R.id.gridButton)
     void onGridClicked() {
         if (cameraView.getGrid() == Grid.DRAW_3X3) {
             cameraView.setGrid(Grid.OFF);
@@ -471,7 +466,6 @@ public class CameraActivity extends MetadataActivity implements
         }
     }
 
-    @OnClick(R.id.switchButton)
     void onSwitchClicked() {
         if (cameraView.getFacing() == Facing.BACK) {
             cameraView.setFacing(Facing.FRONT);
@@ -482,7 +476,6 @@ public class CameraActivity extends MetadataActivity implements
         }
     }
 
-    @OnClick(R.id.preview_image)
     void onPreviewClicked() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(MainActivity.PHOTO_VIDEO_FILTER, "filter");
@@ -496,7 +489,6 @@ public class CameraActivity extends MetadataActivity implements
         setCameraZoom();
     }
 
-    @OnClick(R.id.resolutionButton)
     public void chooseVideoResolution() {
         if (videoResolutionManager != null) {
             videoQualityDialog = DialogsUtil.showVideoResolutionDialog(this, this::setVideoSize, videoResolutionManager);
@@ -755,5 +747,21 @@ public class CameraActivity extends MetadataActivity implements
         RETURN,
         STAND,
         ODK
+    }
+
+    private void setViews() {
+        cameraView = binding.camera;
+        gridButton = binding.gridButton;
+        switchButton = binding.switchButton;
+        flashButton = binding.flashButton;
+        captureButton = binding.captureButton;
+        durationView = binding.durationView;
+        mSeekBar = binding.cameraZoom;
+        videoLine = binding.videoLine;
+        photoLine = binding.photoLine;
+        previewView = binding.previewImage;
+        photoModeText = binding.photoText;
+        videoModeText = binding.videoText;
+        resolutionButton = binding.resolutionButton;
     }
 }
