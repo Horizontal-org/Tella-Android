@@ -24,7 +24,7 @@ android {
         minSdkVersion 19
         compileSdkVersion 31
         targetSdkVersion 32
-        versionCode 131
+        versionCode 132
         versionName "2.0.12"
         multiDexEnabled true
         // vectorDrawables.useSupportLibrary = true // don't care about apk size, care about crashes
@@ -100,9 +100,12 @@ dependencies {
     }
     implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
 
-    implementation("org.permissionsdispatcher:permissionsdispatcher:${permissionDispatcherVersion}") {
+    apply plugin: 'kotlin-kapt'
+    implementation("com.github.permissions-dispatcher:permissionsdispatcher:${permissionDispatcherVersion}") {
         exclude module: "support-v13"
     }
+    kapt "com.github.permissions-dispatcher:permissionsdispatcher-processor:${permissionDispatcherVersion}"
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.navigation:navigation-runtime:2.5.1'
     implementation 'androidx.navigation:navigation-fragment:2.5.1'
