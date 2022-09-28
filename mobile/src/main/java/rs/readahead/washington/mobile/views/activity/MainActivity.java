@@ -39,6 +39,7 @@ import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent;
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
+import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.mvp.contract.IHomeScreenPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMediaImportPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
@@ -120,7 +121,6 @@ public class MainActivity extends MetadataActivity implements
         assert navHostFragment != null;
         navController = navHostFragment.getNavController();
         btmNavMain = findViewById(R.id.btm_nav_main);
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.homeScreen, R.id.cameraScreen, R.id.reportsScreen, R.id.uwaziScreen, R.id.micScreen, R.id.formScreen).build();
         NavigationUI.setupWithNavController(btmNavMain, navController);
         navController.addOnDestinationChangedListener((navController1, navDestination, bundle) -> {
             switch (navDestination.getId()) {
@@ -346,8 +346,11 @@ public class MainActivity extends MetadataActivity implements
     @Override
     public void onCountCollectServersEnded(Long num) {
         maybeShowFormsMenu(num);
-        if (num > 0)
+        if (num > 0) {
             CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_COLLECT);
+        } else {
+            Preferences.setJavarosa3Upgraded(true);
+        }
         //homeScreenPresenter.countTUServers();
     }
 
@@ -422,6 +425,11 @@ public class MainActivity extends MetadataActivity implements
     private void maybeShowUwaziMenu(Long num) {
         btmNavMain.getMenu().findItem(R.id.uwazi).setVisible(num > 0);
         invalidateOptionsMenu();
+    }
+
+    public void selectHome() {
+        btmNavMain.getMenu().findItem(R.id.home).setChecked(true);
+        navController.navigate(R.id.home);
     }
 }
 

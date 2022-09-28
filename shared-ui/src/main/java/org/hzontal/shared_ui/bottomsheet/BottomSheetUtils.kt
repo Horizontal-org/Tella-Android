@@ -463,6 +463,7 @@ BottomSheetUtils {
                     }
 
                     cancelButton.setOnClickListener {
+                        consumer.accept(isConfirmed = false)
                         customSheetFragment.dismiss()
                     }
 

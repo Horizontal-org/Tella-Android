@@ -3,18 +3,31 @@ package rs.readahead.washington.mobile.util;
 import static com.hzontal.tella_vault.database.VaultDataSource.ROOT_UID;
 
 import android.content.Context;
+
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.database.VaultDataSource;
 import com.hzontal.utils.MediaFile;
+
+import org.javarosa.core.model.FormDef;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import io.reactivex.Completable;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.data.database.DataSource;
+import rs.readahead.washington.mobile.data.database.KeyDataSource;
+import rs.readahead.washington.mobile.data.repository.OpenRosaRepository;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.OldMediaFile;
+import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectInstanceVaultFile;
+import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
 
 
 public class TellaUpgrader {
@@ -57,5 +70,4 @@ public class TellaUpgrader {
 
         return vaultFile;
     }
-
 }
