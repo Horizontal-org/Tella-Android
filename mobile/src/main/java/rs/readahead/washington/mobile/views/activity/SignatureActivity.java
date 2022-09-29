@@ -17,9 +17,8 @@ import java.io.ByteArrayOutputStream;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.databinding.ActivitySignatureBinding;
 import rs.readahead.washington.mobile.mvp.contract.ISignaturePresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.SignaturePresenter;
 import rs.readahead.washington.mobile.util.DialogsUtil;
@@ -31,13 +30,13 @@ public class SignatureActivity extends BaseLockActivity implements
 
     public static final String MEDIA_FILE_KEY = "mfk";
 
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.ink)
     InkView ink;
 
     private ProgressDialog progressDialog;
     private SignaturePresenter presenter;
+
+    private ActivitySignatureBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +44,9 @@ public class SignatureActivity extends BaseLockActivity implements
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_signature);
-        ButterKnife.bind(this);
+        binding = ActivitySignatureBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setViews();
 
         presenter = new SignaturePresenter(this);
 
@@ -156,5 +156,10 @@ public class SignatureActivity extends BaseLockActivity implements
             progressDialog.dismiss();
             progressDialog = null;
         }
+    }
+
+    private void setViews() {
+        toolbar = binding.toolbar;
+        ink = binding.ink;
     }
 }

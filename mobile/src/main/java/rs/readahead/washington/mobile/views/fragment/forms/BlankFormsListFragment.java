@@ -23,46 +23,36 @@ import org.javarosa.core.model.FormDef;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
+import rs.readahead.washington.mobile.databinding.FragmentBlankFormsListBinding;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.ListFormResult;
 import rs.readahead.washington.mobile.javarosa.FormUtils;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.DialogsUtil;
-import rs.readahead.washington.mobile.util.TellaUpgrader;
 import rs.readahead.washington.mobile.views.activity.MainActivity;
-import rs.readahead.washington.mobile.views.fragment.vault.home.HomeVaultFragment;
 import timber.log.Timber;
 
 
 public class BlankFormsListFragment extends FormListFragment {
-    @BindView(R.id.blankFormView)
     View blankFormView;
-    @BindView(R.id.blankForms)
     LinearLayout availableFormsListView;
-    @BindView(R.id.downloadedForms)
     LinearLayout downloadedFormsListView;
-    @BindView(R.id.avaivable_forms_title)
     TextView availableFormsTitle;
-    @BindView(R.id.downloaded_forms_title)
     TextView downloadedFormsTitle;
-    @BindView(R.id.blank_forms_info)
     TextView blankFormsInfo;
-    @BindView(R.id.banner)
     TextView banner;
     SharedFormsViewModel model = null;
-    private Unbinder unbinder;
+
     private List<CollectForm> availableForms;
     private List<CollectForm> downloadedForms;
     private AlertDialog alertDialog;
     private int noUpdatedForms = 0;
     private boolean silentFormUpdates = false;
+    private FragmentBlankFormsListBinding itemBinding;
 
     public static BlankFormsListFragment newInstance() {
         return new BlankFormsListFragment();
@@ -83,8 +73,10 @@ public class BlankFormsListFragment extends FormListFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_blank_forms_list, container, false);
-        unbinder = ButterKnife.bind(this, rootView);
+        itemBinding = FragmentBlankFormsListBinding.inflate(LayoutInflater.from(requireContext()), container, false);
+        View rootView = itemBinding.getRoot();
+        setViews();
+
         model = new ViewModelProvider(this).get(SharedFormsViewModel.class);
         initObservers();
         return rootView;
@@ -93,12 +85,12 @@ public class BlankFormsListFragment extends FormListFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-       if (!Preferences.isJavarosa3Upgraded()) {
+        if (!Preferences.isJavarosa3Upgraded()) {
             model.getShowFab().postValue(false);
             showJavarosa2UpgradeSheet();
         } else {
             listBlankForms();
-       }
+        }
     }
 
     @Override
@@ -115,7 +107,6 @@ public class BlankFormsListFragment extends FormListFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
     }
 
     private void showBlankFormDownloadingDialog(int progressText) {
@@ -402,7 +393,7 @@ public class BlankFormsListFragment extends FormListFragment {
                 getString(R.string.action_cancel),
                 isConfirmed -> {
                     if (isConfirmed) {
-                            upgradeJavarosa2();
+                        upgradeJavarosa2();
                     } else {
                         goHome();
                     }
@@ -418,9 +409,18 @@ public class BlankFormsListFragment extends FormListFragment {
         }
     }
 
-    private void goHome(){
+    private void goHome() {
         if (getActivity() == null) return;
-        ((MainActivity)requireActivity()).selectHome();
+        ((MainActivity) requireActivity()).selectHome();
     }
 
+    private void setViews() {
+        blankFormView = itemBinding.blankFormView;
+        availableFormsListView = itemBinding.blankForms;
+        downloadedFormsListView = itemBinding.downloadedForms;
+        availableFormsTitle = itemBinding.avaivableFormsTitle;
+        downloadedFormsTitle = itemBinding.downloadedFormsTitle;
+        blankFormsInfo = itemBinding.blankFormsInfo;
+        banner = itemBinding.banner;
+    }
 }

@@ -5,10 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,9 +28,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hzontal.tella_vault.MyLocation;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.databinding.ActivityLocationMapBinding;
 import rs.readahead.washington.mobile.mvp.contract.ILocationGettingPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.LocationGettingPresenter;
 import rs.readahead.washington.mobile.util.C;
@@ -42,13 +43,9 @@ public class LocationMapActivity extends MetadataActivity implements
 
     private GoogleMap mMap;
 
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.progressBar)
     ProgressBar progressBar;
-    @BindView(R.id.info)
     TextView hint;
-    @BindView(R.id.fab_button)
     FloatingActionButton faButton;
 
     @Nullable
@@ -57,14 +54,16 @@ public class LocationMapActivity extends MetadataActivity implements
     private boolean virginMap = true;
     private LocationGettingPresenter locationGettingPresenter;
     private boolean readOnly;
+    private ActivityLocationMapBinding binding;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_location_map);
-        ButterKnife.bind(this);
+        binding = ActivityLocationMapBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setViews();
 
         myLocation = (MyLocation) getIntent().getSerializableExtra(SELECTED_LOCATION);
         readOnly = getIntent().getBooleanExtra(CURRENT_LOCATION_ONLY, true);
@@ -231,7 +230,7 @@ public class LocationMapActivity extends MetadataActivity implements
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == C.GPS_PROVIDER && resultCode == RESULT_OK) {
-                startGettingLocation();
+            startGettingLocation();
         }
     }
 
@@ -247,5 +246,12 @@ public class LocationMapActivity extends MetadataActivity implements
     private void setCancelAndFinish() {
         setResult(Activity.RESULT_CANCELED, new Intent().putExtra(SELECTED_LOCATION, myLocation));
         finish();
+    }
+
+    private void setViews() {
+        toolbar = binding.toolbar;
+        progressBar = binding.progressBar;
+        hint = binding.info;
+        faButton = binding.fabButton;
     }
 }

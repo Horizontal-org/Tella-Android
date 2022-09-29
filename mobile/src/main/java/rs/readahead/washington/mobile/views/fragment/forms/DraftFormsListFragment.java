@@ -17,12 +17,10 @@ import org.hzontal.shared_ui.utils.DialogUtils;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.ShowFormInstanceEntryEvent;
+import rs.readahead.washington.mobile.databinding.FragmentDraftFormsListBinding;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.mvp.contract.ICollectFormInstanceListPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CollectFormInstanceListPresenter;
@@ -33,14 +31,12 @@ import timber.log.Timber;
 
 public class DraftFormsListFragment extends FormListFragment implements
         ICollectFormInstanceListPresenterContract.IView, ISavedFormsInterface {
-    @BindView(R.id.draftFormInstances)
     RecyclerView recyclerView;
-    @BindView(R.id.blank_draft_forms_info)
     TextView blankFormsInfo;
     private SharedFormsViewModel model = null;
-    private Unbinder unbinder;
     private CollectDraftFormInstanceRecycleViewAdapter adapter;
     private CollectFormInstanceListPresenter presenter;
+    private FragmentDraftFormsListBinding itemBinding;
 
     public static DraftFormsListFragment newInstance() {
         return new DraftFormsListFragment();
@@ -60,8 +56,10 @@ public class DraftFormsListFragment extends FormListFragment implements
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_draft_forms_list, container, false);
-        unbinder = ButterKnife.bind(this, rootView);
+        itemBinding = FragmentDraftFormsListBinding.inflate(LayoutInflater.from(requireContext()), container, false);
+        View rootView = itemBinding.getRoot();
+        recyclerView = itemBinding.draftFormInstances;
+        blankFormsInfo = itemBinding.blankDraftFormsInfo;
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -79,15 +77,15 @@ public class DraftFormsListFragment extends FormListFragment implements
         listDraftForms();
     }
 
-    private void initObservers(){
-        model.getOnDraftFormInstanceListSuccess().observe(getViewLifecycleOwner(),this::onDraftFormInstanceListSuccess);
-        model.getOnFormInstanceListError().observe(getViewLifecycleOwner(),this::onFormInstanceListError);
-        model.getOnFormInstanceDeleteSuccess().observe(getViewLifecycleOwner(),this::onFormInstanceDeleted);
+    private void initObservers() {
+        model.getOnDraftFormInstanceListSuccess().observe(getViewLifecycleOwner(), this::onDraftFormInstanceListSuccess);
+        model.getOnFormInstanceListError().observe(getViewLifecycleOwner(), this::onFormInstanceListError);
+        model.getOnFormInstanceDeleteSuccess().observe(getViewLifecycleOwner(), this::onFormInstanceDeleted);
     }
 
     private void onFormInstanceDeleted(Boolean success) {
         if (success) {
-            DialogUtils.showBottomMessage(getActivity(),getString(R.string.collect_toast_form_deleted), false);
+            DialogUtils.showBottomMessage(getActivity(), getString(R.string.collect_toast_form_deleted), false);
             this.listDraftForms();
         }
     }
@@ -95,7 +93,6 @@ public class DraftFormsListFragment extends FormListFragment implements
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
     }
 
     @Override

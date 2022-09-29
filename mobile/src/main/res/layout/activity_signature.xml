@@ -22,6 +22,27 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_signature" />
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:padding="@dimen/gallery_card_padding"
+        android:windowSoftInputMode="adjustPan"
+        android:animateLayoutChanges="true">
+
+        <com.simplify.ink.InkView
+            android:id="@+id/ink"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+    </RelativeLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

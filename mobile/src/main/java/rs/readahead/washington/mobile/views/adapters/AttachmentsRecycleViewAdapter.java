@@ -49,7 +49,6 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         itemBinding = CardAttachmentMediaFileBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewHolder(itemBinding, type);
-
     }
 
     @Override

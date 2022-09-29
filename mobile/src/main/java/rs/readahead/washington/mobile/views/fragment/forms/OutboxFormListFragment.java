@@ -1,11 +1,13 @@
 package rs.readahead.washington.mobile.views.fragment.forms;
 
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +18,10 @@ import org.hzontal.shared_ui.utils.DialogUtils;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.ReSubmitFormInstanceEvent;
-import rs.readahead.washington.mobile.bus.event.ShowFormInstanceEntryEvent;
+import rs.readahead.washington.mobile.databinding.FragmentOutboxFormListBinding;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.mvp.contract.ICollectFormInstanceListPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CollectFormInstanceListPresenter;
@@ -33,16 +32,13 @@ import timber.log.Timber;
 
 public class OutboxFormListFragment extends FormListFragment implements
         ICollectFormInstanceListPresenterContract.IView, ISavedFormsInterface {
-
-    @BindView(R.id.submittFormInstances)
     RecyclerView recyclerView;
-    @BindView(R.id.blank_submitted_forms_info)
     TextView blankFormsInfo;
 
-    private Unbinder unbinder;
     private CollectOutboxFormInstanceRecycleViewAdapter adapter;
     private CollectFormInstanceListPresenter presenter;
     private SharedFormsViewModel model = null;
+    private FragmentOutboxFormListBinding itemBinding;
 
 
     public static OutboxFormListFragment newInstance() {
@@ -63,8 +59,11 @@ public class OutboxFormListFragment extends FormListFragment implements
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_outbox_form_list, container, false);
-        unbinder = ButterKnife.bind(this, rootView);
+        itemBinding = FragmentOutboxFormListBinding.inflate(LayoutInflater.from(requireContext()), container, false);
+        View rootView = itemBinding.getRoot();
+
+        recyclerView = itemBinding.submittFormInstances;
+        blankFormsInfo = itemBinding.blankSubmittedFormsInfo;
 
         model = new ViewModelProvider(this).get(SharedFormsViewModel.class);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -76,13 +75,13 @@ public class OutboxFormListFragment extends FormListFragment implements
         return rootView;
     }
 
-    private void initObservers(){
-        model.getOnFormInstanceDeleteSuccess().observe(getViewLifecycleOwner(),this::onFormInstanceDeleted);
+    private void initObservers() {
+        model.getOnFormInstanceDeleteSuccess().observe(getViewLifecycleOwner(), this::onFormInstanceDeleted);
     }
 
     private void onFormInstanceDeleted(Boolean success) {
         if (success) {
-            DialogUtils.showBottomMessage(getActivity(),getString(R.string.collect_toast_form_deleted), false);
+            DialogUtils.showBottomMessage(getActivity(), getString(R.string.collect_toast_form_deleted), false);
             this.listOutboxForms();
         }
     }
@@ -103,7 +102,6 @@ public class OutboxFormListFragment extends FormListFragment implements
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
     }
 
     @Override
