@@ -18,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -29,8 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 import rs.readahead.washington.mobile.MyApplication;
@@ -64,8 +61,7 @@ public class MainActivity extends MetadataActivity implements
         IMediaImportPresenterContract.IView,
         IMetadataAttachPresenterContract.IView {
     public static final String PHOTO_VIDEO_FILTER = "gallery_filter";
-    @BindView(R.id.main_container)
-    View root;
+
     private boolean mExit = false;
     private Handler handler;
     private EventCompositeDisposable disposables;
@@ -80,7 +76,6 @@ public class MainActivity extends MetadataActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-        ButterKnife.bind(this);
 
         //  setupToolbar();
         setupNavigation();

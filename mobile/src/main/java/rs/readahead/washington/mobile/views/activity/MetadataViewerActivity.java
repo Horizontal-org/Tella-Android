@@ -19,9 +19,10 @@ import androidx.appcompat.widget.Toolbar;
 import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.MyLocation;
 import com.hzontal.tella_vault.VaultFile;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
 import rs.readahead.washington.mobile.R;
+
+import rs.readahead.washington.mobile.databinding.ActivityMetadataViewerBinding;
 import rs.readahead.washington.mobile.util.StringUtils;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
@@ -30,7 +31,6 @@ import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 public class MetadataViewerActivity extends BaseLockActivity {
     public static final String VIEW_METADATA = "vm";
 
-    @BindView(R.id.metadata_list)
     LinearLayout metadataList;
 
     private VaultFile vaultFile;
@@ -41,11 +41,13 @@ public class MetadataViewerActivity extends BaseLockActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_metadata_viewer);
-        overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
-        ButterKnife.bind(this);
+        ActivityMetadataViewerBinding binding = ActivityMetadataViewerBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
+
+        metadataList = binding.metadataList;
+        Toolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
@@ -54,9 +56,9 @@ public class MetadataViewerActivity extends BaseLockActivity {
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            findViewById(R.id.appbar).setOutlineProvider(null);
+            binding.appbar.setOutlineProvider(null);
         } else {
-            findViewById(R.id.appbar).bringToFront();
+            binding.appbar.bringToFront();
         }
 
         if (getIntent().hasExtra(VIEW_METADATA)) {

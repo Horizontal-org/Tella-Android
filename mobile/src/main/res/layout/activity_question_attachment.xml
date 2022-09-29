@@ -18,9 +18,73 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
-
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_question_attachment" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:padding="@dimen/gallery_card_padding"
+        android:textDirection="locale"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RelativeLayout
+            android:id="@+id/galleryToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin">
+
+            <TextView
+                style="@style/AttachmentsToolbarTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/gallery_heading_files.from.Tella.gallery"
+                tools:ignore="RelativeOverlap" />
+
+            <ImageButton
+                android:id="@+id/popupMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="?selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_sort_dark_gray_24dp"
+                tools:ignore="ContentDescription" />
+        </RelativeLayout>
+
+        <rs.readahead.washington.mobile.views.custom.GalleryRecyclerView
+            android:id="@+id/galleryRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/galleryToolbar"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/fab_clear_padding"
+            android:scrollbarStyle="outsideOverlay"
+            android:scrollbars="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/attachments_blank_list_info"
+            style="@style/ExplanatoryEmptyMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/galleryToolbar"
+            android:text="@string/gallery_expl_empty"
+            android:visibility="gone" />
+    </RelativeLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
