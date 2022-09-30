@@ -24,9 +24,6 @@ import com.google.android.material.tabs.TabLayout;
 
 import org.javarosa.core.model.FormDef;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import kotlin.Unit;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -48,6 +45,7 @@ import rs.readahead.washington.mobile.bus.event.ShowBlankFormEntryEvent;
 import rs.readahead.washington.mobile.bus.event.ShowFormInstanceEntryEvent;
 import rs.readahead.washington.mobile.bus.event.ToggleBlankFormPinnedEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
+import rs.readahead.washington.mobile.databinding.ActivityCollectMainBinding;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
@@ -74,15 +72,10 @@ public class CollectMainActivity extends BaseLockActivity implements
         ICollectMainPresenterContract.IView,
         ICollectCreateFormControllerContract.IView {
     int blankFragmentPosition;
-    @BindView(R.id.fab)
     FloatingActionButton fab;
-    @BindView(R.id.tabs)
     TabLayout tabLayout;
-    @BindView(R.id.container)
     View formsViewPager;
-    @BindView(R.id.blank_forms_layout)
     View noServersView;
-    @BindView(R.id.blank_forms_text)
     TextView blankFormsText;
     private EventCompositeDisposable disposables;
     private CollectMainPresenter presenter;
@@ -91,13 +84,15 @@ public class CollectMainActivity extends BaseLockActivity implements
     private ViewPager mViewPager;
     private ViewPagerAdapter adapter;
     private long numOfCollectServers = 0;
+    private ActivityCollectMainBinding binding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_collect_main);
-        ButterKnife.bind(this);
+        binding = ActivityCollectMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setViews();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -525,5 +520,13 @@ public class CollectMainActivity extends BaseLockActivity implements
         if (fab != null) {
             fab.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void setViews() {
+        fab = binding.fab;
+        tabLayout = binding.tabs;
+        formsViewPager = binding.container;
+        noServersView = binding.blankFormsLayout;
+        blankFormsText = binding.blankFormsText;
     }
 }

@@ -10,21 +10,16 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.widget.NestedScrollView;
 
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import kotlin.Unit;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.CollectFormSubmissionErrorEvent;
 import rs.readahead.washington.mobile.bus.event.CollectFormSubmitStoppedEvent;
 import rs.readahead.washington.mobile.bus.event.CollectFormSubmittedEvent;
+import rs.readahead.washington.mobile.databinding.ActivityFormSubmitBinding;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaPartResponse;
@@ -42,36 +37,27 @@ public class FormSubmitActivity extends BaseLockActivity implements
         IFormSubmitPresenterContract.IView {
     public static final String FORM_INSTANCE_ID_KEY = "fid";
 
-    @BindView(R.id.formDetailsContainer)
-    NestedScrollView endViewContainer;
-    @BindView(R.id.submit_button)
-    AppCompatButton submitButton;
-    @BindView(R.id.cancel_button)
-    AppCompatButton cancelButton;
-    @BindView(R.id.stop_button)
-    AppCompatButton stopButton;
-
     CollectFormEndView endView;
 
     private FormSubmitPresenter presenter;
     private FormReSubmitter formReSubmitter;
 
     private CollectFormInstance instance;
+    private ActivityFormSubmitBinding binding;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_form_submit);
 
-        ButterKnife.bind(this);
+        binding = ActivityFormSubmitBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        initListeners();
 
         formReSubmitter = new FormReSubmitter(this);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        // toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbar);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -165,7 +151,12 @@ public class FormSubmitActivity extends BaseLockActivity implements
         super.onDestroy();
     }
 
-    @OnClick(R.id.submit_button)
+    private void initListeners(){
+        binding.submitButton.setOnClickListener(this::onSubmitClick);
+        binding.cancelButton.setOnClickListener(this::onCancelClick);
+        binding.stopButton.setOnClickListener(this::onStopClick);
+    }
+
     public void onSubmitClick(View view) {
         if (formReSubmitter != null) {
             formReSubmitter.reSubmitFormInstanceGranular(instance);
@@ -175,7 +166,6 @@ public class FormSubmitActivity extends BaseLockActivity implements
         }
     }
 
-    @OnClick({R.id.cancel_button})
     public void onCancelClick(View view) {
         onBackPressed();
         /*if (formReSubmitter != null) {
@@ -183,7 +173,6 @@ public class FormSubmitActivity extends BaseLockActivity implements
         }*/
     }
 
-    @OnClick({R.id.stop_button})
     public void onStopClick(View view) {
         //onBackPressed();
         if (formReSubmitter != null) {
@@ -287,8 +276,8 @@ public class FormSubmitActivity extends BaseLockActivity implements
         endView = new CollectFormEndView(this,
                 instance.getStatus() == CollectFormInstanceStatus.SUBMITTED ? R.string.collect_end_heading_confirmation_form_submitted : R.string.collect_end_action_submit);
         endView.setInstance(this.instance, offline);
-        endViewContainer.removeAllViews();
-        endViewContainer.addView(endView);
+        binding.formDetailsContainer.removeAllViews();
+        binding.formDetailsContainer.addView(endView);
 
         updateFormSubmitButton(false);
     }
@@ -303,31 +292,31 @@ public class FormSubmitActivity extends BaseLockActivity implements
 
     private void updateFormSubmitButton(boolean offline) {
         if (instance.getStatus() != CollectFormInstanceStatus.SUBMITTED) {
-            submitButton.setVisibility(View.VISIBLE);
+            binding.submitButton.setVisibility(View.VISIBLE);
             //submitButton.setOffline(offline);
         }
     }
 
     private void showFormCancelButton() {
-        cancelButton.setVisibility(View.VISIBLE);
+        binding.cancelButton.setVisibility(View.VISIBLE);
     }
 
     private void hideFormCancelButton() {
-        cancelButton.setVisibility(View.GONE);
+        binding.cancelButton.setVisibility(View.GONE);
     }
 
     private void showFormStopButton() {
-        stopButton.setVisibility(View.VISIBLE);
+        binding.stopButton.setVisibility(View.VISIBLE);
     }
 
     private void hideFormSubmitButton() {
-        submitButton.setVisibility(View.INVISIBLE);
-        submitButton.setClickable(false);
+        binding.submitButton.setVisibility(View.INVISIBLE);
+        binding.submitButton.setClickable(false);
     }
 
     private void showFormSubmitButton() {
-        submitButton.setVisibility(View.VISIBLE);
-        submitButton.setClickable(true);
+        binding.submitButton.setVisibility(View.VISIBLE);
+        binding.submitButton.setClickable(true);
     }
 
     private void stopPresenter() {
