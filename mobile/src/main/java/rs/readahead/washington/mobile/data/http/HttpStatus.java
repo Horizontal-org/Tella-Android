@@ -22,10 +22,10 @@ package rs.readahead.washington.mobile.data.http;
  * <p>
  * Http Status Codes
  * </p>
+ *
  * @see <a href="http://www.iana.org/assignments/http-status-codes/">IANA HTTP Status Code Registry</a>
  */
-public class HttpStatus
-{
+public class HttpStatus {
     public final static int CONTINUE_100 = 100;
     public final static int SWITCHING_PROTOCOLS_101 = 101;
     public final static int PROCESSING_102 = 102;
@@ -98,19 +98,114 @@ public class HttpStatus
 
     public static final int MAX_CODE = 511;
 
-    private static final Code[] codeMap = new Code[MAX_CODE+1];
+    private static final Code[] codeMap = new Code[MAX_CODE + 1];
 
-    static
-    {
-        for (Code code : Code.values())
-        {
+    static {
+        for (Code code : Code.values()) {
             codeMap[code._code] = code;
         }
     }
 
+    /**
+     * Get the HttpStatusCode for a specific code
+     *
+     * @param code the code to lookup.
+     * @return the {@link HttpStatus} if found, or null if not found.
+     */
+    public static Code getCode(int code) {
+        if (code <= MAX_CODE) {
+            return codeMap[code];
+        }
+        return null;
+    }
 
-    public enum Code
-    {
+    /**
+     * Get the status message for a specific code.
+     *
+     * @param code the code to look up
+     * @return the specific message, or the code number itself if code
+     * does not match known list.
+     */
+    public static String getMessage(int code) {
+        Code codeEnum = getCode(code);
+        if (codeEnum != null) {
+            return codeEnum.getMessage();
+        } else {
+            return Integer.toString(code);
+        }
+    }
+
+    /**
+     * Simple test against an code to determine if it falls into the
+     * <code>Informational</code> message category as defined in the <a
+     * href="http://tools.ietf.org/html/rfc1945">RFC 1945 - HTTP/1.0</a>, and <a
+     * href="http://tools.ietf.org/html/rfc7231">RFC 7231 - HTTP/1.1</a>.
+     *
+     * @param code the code to test.
+     * @return true if within range of codes that belongs to
+     * <code>Informational</code> messages.
+     */
+    public static boolean isInformational(int code) {
+        return ((100 <= code) && (code <= 199));
+    }
+
+    /**
+     * Simple test against an code to determine if it falls into the
+     * <code>Success</code> message category as defined in the <a
+     * href="http://tools.ietf.org/html/rfc1945">RFC 1945 - HTTP/1.0</a>, and <a
+     * href="http://tools.ietf.org/html/rfc7231">RFC 7231 - HTTP/1.1</a>.
+     *
+     * @param code the code to test.
+     * @return true if within range of codes that belongs to
+     * <code>Success</code> messages.
+     */
+    public static boolean isSuccess(int code) {
+        return ((200 <= code) && (code <= 299));
+    }
+
+    /**
+     * Simple test against an code to determine if it falls into the
+     * <code>Redirection</code> message category as defined in the <a
+     * href="http://tools.ietf.org/html/rfc1945">RFC 1945 - HTTP/1.0</a>, and <a
+     * href="http://tools.ietf.org/html/rfc7231">RFC 7231 - HTTP/1.1</a>.
+     *
+     * @param code the code to test.
+     * @return true if within range of codes that belongs to
+     * <code>Redirection</code> messages.
+     */
+    public static boolean isRedirection(int code) {
+        return ((300 <= code) && (code <= 399));
+    }
+
+    /**
+     * Simple test against an code to determine if it falls into the
+     * <code>Client Error</code> message category as defined in the <a
+     * href="http://tools.ietf.org/html/rfc1945">RFC 1945 - HTTP/1.0</a>, and <a
+     * href="http://tools.ietf.org/html/rfc7231">RFC 7231 - HTTP/1.1</a>.
+     *
+     * @param code the code to test.
+     * @return true if within range of codes that belongs to
+     * <code>Client Error</code> messages.
+     */
+    public static boolean isClientError(int code) {
+        return ((400 <= code) && (code <= 499));
+    }
+
+    /**
+     * Simple test against an code to determine if it falls into the
+     * <code>Server Error</code> message category as defined in the <a
+     * href="http://tools.ietf.org/html/rfc1945">RFC 1945 - HTTP/1.0</a>, and <a
+     * href="http://tools.ietf.org/html/rfc7231">RFC 7231 - HTTP/1.1</a>.
+     *
+     * @param code the code to test.
+     * @return true if within range of codes that belongs to
+     * <code>Server Error</code> messages.
+     */
+    public static boolean isServerError(int code) {
+        return ((500 <= code) && (code <= 599));
+    }
+
+    public enum Code {
         CONTINUE(CONTINUE_100, "Continue"),
         SWITCHING_PROTOCOLS(SWITCHING_PROTOCOLS_101, "Switching Protocols"),
         PROCESSING(PROCESSING_102, "Processing"),
@@ -181,32 +276,27 @@ public class HttpStatus
         private final int _code;
         private final String _message;
 
-        private Code(int code, String message)
-        {
+        private Code(int code, String message) {
             this._code = code;
-            _message=message;
+            _message = message;
         }
 
-        public int getCode()
-        {
+        public int getCode() {
             return _code;
         }
 
-        public String getMessage()
-        {
+        public String getMessage() {
             return _message;
         }
 
 
-        public boolean equals(int code)
-        {
+        public boolean equals(int code) {
             return (this._code == code);
         }
 
         @Override
-        public String toString()
-        {
-            return String.format("[%03d %s]",this._code,this.getMessage());
+        public String toString() {
+            return String.format("[%03d %s]", this._code, this.getMessage());
         }
 
         /**
@@ -217,10 +307,9 @@ public class HttpStatus
          * HTTP/1.1</a>.
          *
          * @return true if within range of codes that belongs to
-         *         <code>Informational</code> messages.
+         * <code>Informational</code> messages.
          */
-        public boolean isInformational()
-        {
+        public boolean isInformational() {
             return HttpStatus.isInformational(this._code);
         }
 
@@ -232,10 +321,9 @@ public class HttpStatus
          * HTTP/1.1</a>.
          *
          * @return true if within range of codes that belongs to
-         *         <code>Success</code> messages.
+         * <code>Success</code> messages.
          */
-        public boolean isSuccess()
-        {
+        public boolean isSuccess() {
             return HttpStatus.isSuccess(this._code);
         }
 
@@ -247,10 +335,9 @@ public class HttpStatus
          * HTTP/1.1</a>.
          *
          * @return true if within range of codes that belongs to
-         *         <code>Redirection</code> messages.
+         * <code>Redirection</code> messages.
          */
-        public boolean isRedirection()
-        {
+        public boolean isRedirection() {
             return HttpStatus.isRedirection(this._code);
         }
 
@@ -262,10 +349,9 @@ public class HttpStatus
          * HTTP/1.1</a>.
          *
          * @return true if within range of codes that belongs to
-         *         <code>Client Error</code> messages.
+         * <code>Client Error</code> messages.
          */
-        public boolean isClientError()
-        {
+        public boolean isClientError() {
             return HttpStatus.isClientError(this._code);
         }
 
@@ -277,129 +363,10 @@ public class HttpStatus
          * HTTP/1.1</a>.
          *
          * @return true if within range of codes that belongs to
-         *         <code>Server Error</code> messages.
+         * <code>Server Error</code> messages.
          */
-        public boolean isServerError()
-        {
+        public boolean isServerError() {
             return HttpStatus.isServerError(this._code);
         }
-    }
-
-
-    /**
-     * Get the HttpStatusCode for a specific code
-     *
-     * @param code
-     *            the code to lookup.
-     * @return the {@link HttpStatus} if found, or null if not found.
-     */
-    public static Code getCode(int code)
-    {
-        if (code <= MAX_CODE)
-        {
-            return codeMap[code];
-        }
-        return null;
-    }
-
-    /**
-     * Get the status message for a specific code.
-     *
-     * @param code
-     *            the code to look up
-     * @return the specific message, or the code number itself if code
-     *         does not match known list.
-     */
-    public static String getMessage(int code)
-    {
-        Code codeEnum = getCode(code);
-        if (codeEnum != null)
-        {
-            return codeEnum.getMessage();
-        }
-        else
-        {
-            return Integer.toString(code);
-        }
-    }
-
-    /**
-     * Simple test against an code to determine if it falls into the
-     * <code>Informational</code> message category as defined in the <a
-     * href="http://tools.ietf.org/html/rfc1945">RFC 1945 - HTTP/1.0</a>, and <a
-     * href="http://tools.ietf.org/html/rfc7231">RFC 7231 - HTTP/1.1</a>.
-     *
-     * @param code
-     *            the code to test.
-     * @return true if within range of codes that belongs to
-     *         <code>Informational</code> messages.
-     */
-    public static boolean isInformational(int code)
-    {
-        return ((100 <= code) && (code <= 199));
-    }
-
-    /**
-     * Simple test against an code to determine if it falls into the
-     * <code>Success</code> message category as defined in the <a
-     * href="http://tools.ietf.org/html/rfc1945">RFC 1945 - HTTP/1.0</a>, and <a
-     * href="http://tools.ietf.org/html/rfc7231">RFC 7231 - HTTP/1.1</a>.
-     *
-     * @param code
-     *            the code to test.
-     * @return true if within range of codes that belongs to
-     *         <code>Success</code> messages.
-     */
-    public static boolean isSuccess(int code)
-    {
-        return ((200 <= code) && (code <= 299));
-    }
-
-    /**
-     * Simple test against an code to determine if it falls into the
-     * <code>Redirection</code> message category as defined in the <a
-     * href="http://tools.ietf.org/html/rfc1945">RFC 1945 - HTTP/1.0</a>, and <a
-     * href="http://tools.ietf.org/html/rfc7231">RFC 7231 - HTTP/1.1</a>.
-     *
-     * @param code
-     *            the code to test.
-     * @return true if within range of codes that belongs to
-     *         <code>Redirection</code> messages.
-     */
-    public static boolean isRedirection(int code)
-    {
-        return ((300 <= code) && (code <= 399));
-    }
-
-    /**
-     * Simple test against an code to determine if it falls into the
-     * <code>Client Error</code> message category as defined in the <a
-     * href="http://tools.ietf.org/html/rfc1945">RFC 1945 - HTTP/1.0</a>, and <a
-     * href="http://tools.ietf.org/html/rfc7231">RFC 7231 - HTTP/1.1</a>.
-     *
-     * @param code
-     *            the code to test.
-     * @return true if within range of codes that belongs to
-     *         <code>Client Error</code> messages.
-     */
-    public static boolean isClientError(int code)
-    {
-        return ((400 <= code) && (code <= 499));
-    }
-
-    /**
-     * Simple test against an code to determine if it falls into the
-     * <code>Server Error</code> message category as defined in the <a
-     * href="http://tools.ietf.org/html/rfc1945">RFC 1945 - HTTP/1.0</a>, and <a
-     * href="http://tools.ietf.org/html/rfc7231">RFC 7231 - HTTP/1.1</a>.
-     *
-     * @param code
-     *            the code to test.
-     * @return true if within range of codes that belongs to
-     *         <code>Server Error</code> messages.
-     */
-    public static boolean isServerError(int code)
-    {
-        return ((500 <= code) && (code <= 599));
     }
 }

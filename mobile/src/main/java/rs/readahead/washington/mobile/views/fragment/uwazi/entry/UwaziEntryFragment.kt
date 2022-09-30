@@ -44,7 +44,7 @@ class UwaziEntryFragment :
     OnNavBckListener {
 
     private val viewModel: SharedUwaziSubmissionViewModel by lazy {
-        ViewModelProvider(activity).get(SharedUwaziSubmissionViewModel::class.java)
+        ViewModelProvider(baseActivity).get(SharedUwaziSubmissionViewModel::class.java)
     }
     private val uwaziParser: UwaziParser by lazy { UwaziParser(context) }
 
@@ -175,7 +175,7 @@ class UwaziEntryFragment :
 
     private fun showSavedDialog() {
         DialogUtils.showBottomMessage(
-            activity,
+            baseActivity,
             getString(R.string.Uwazi_EntryInstance_SavedInfo),
             false
         )
@@ -183,7 +183,7 @@ class UwaziEntryFragment :
 
     private fun showValidationMandatoryFieldsDialog() {
         DialogUtils.showBottomMessage(
-            activity,
+            baseActivity,
             getString(R.string.Uwazi_Entry_Validation_MandatoryFields),
             false
         )
@@ -191,7 +191,7 @@ class UwaziEntryFragment :
 
     private fun showValidationErrorsFieldsDialog() {
         DialogUtils.showBottomMessage(
-            activity,
+            baseActivity,
             getString(R.string.collect_form_toast_validation_generic_error),
             false
         )
@@ -199,7 +199,7 @@ class UwaziEntryFragment :
 
     private fun showValidationMandatoryTitleDialog() {
         DialogUtils.showBottomMessage(
-            activity,
+            baseActivity,
             getString(R.string.Uwazi_Entry_Validation_MandatoryTitle),
             false
         )
@@ -229,7 +229,7 @@ class UwaziEntryFragment :
             object : EventObserver<LocationPermissionRequiredEvent?>() {
                 override fun onNext(event: LocationPermissionRequiredEvent) {
                     if (!hasGpsPermissions(requireContext())) {
-                        activity.maybeChangeTemporaryTimeout {
+                        baseActivity.maybeChangeTemporaryTimeout {
                             requestGpsPermissions(C.GPS_PROVIDER)
                         }
                     }
@@ -243,11 +243,11 @@ class UwaziEntryFragment :
             && uwaziParser.hashCode != uwaziFormView.answers.hashCode()
         ) {
             BottomSheetUtils.showStandardSheet(
-                activity.supportFragmentManager,
-                activity.getString(R.string.Uwazi_Dialog_Draft_Title),
-                activity.getString(R.string.collect_form_exit_dialog_expl),
-                activity.getString(R.string.collect_form_exit_dialog_action_save_exit),
-                activity.getString(R.string.collect_form_exit_dialog_action_exit_anyway),
+                baseActivity.supportFragmentManager,
+                baseActivity.getString(R.string.Uwazi_Dialog_Draft_Title),
+                baseActivity.getString(R.string.collect_form_exit_dialog_expl),
+                baseActivity.getString(R.string.collect_form_exit_dialog_action_save_exit),
+                baseActivity.getString(R.string.collect_form_exit_dialog_action_exit_anyway),
                 onConfirmClick = {
                     uwaziParser.setInstanceStatus(UwaziEntityStatus.DRAFT)
                     uwaziParser.getInstance().let { viewModel.saveEntityInstance(it) }

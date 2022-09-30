@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import dagger.hilt.android.AndroidEntryPoint;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 import rs.readahead.washington.mobile.MyApplication;
@@ -54,7 +56,7 @@ import com.google.gson.Gson;
 
 import timber.log.Timber;
 
-
+@AndroidEntryPoint
 @RuntimePermissions
 public class MainActivity extends MetadataActivity implements
         IHomeScreenPresenterContract.IView,
@@ -116,6 +118,7 @@ public class MainActivity extends MetadataActivity implements
         assert navHostFragment != null;
         navController = navHostFragment.getNavController();
         btmNavMain = findViewById(R.id.btm_nav_main);
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.homeScreen, R.id.cameraScreen, R.id.reportsScreen, R.id.uwaziScreen, R.id.micScreen, R.id.formScreen).build();
         NavigationUI.setupWithNavController(btmNavMain, navController);
         navController.addOnDestinationChangedListener((navController1, navDestination, bundle) -> {
             switch (navDestination.getId()) {

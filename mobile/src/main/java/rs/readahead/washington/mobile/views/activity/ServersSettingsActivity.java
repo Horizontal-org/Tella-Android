@@ -1,7 +1,7 @@
 package rs.readahead.washington.mobile.views.activity;
 
+import static rs.readahead.washington.mobile.views.dialog.ConstantsKt.IS_UPDATE_SERVER;
 import static rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageViewModelKt.OBJECT_KEY;
-import static rs.readahead.washington.mobile.views.dialog.uwazi.step1.EnterServerFragmentKt.IS_UPDATE_SERVER;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import dagger.hilt.android.AndroidEntryPoint;
 import kotlin.Unit;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
@@ -54,7 +55,7 @@ import rs.readahead.washington.mobile.views.dialog.uwazi.SharedLiveData;
 import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
 import timber.log.Timber;
 
-
+@AndroidEntryPoint
 public class ServersSettingsActivity extends BaseLockActivity implements
         IServersPresenterContract.IView,
         ICollectServersPresenterContract.IView,

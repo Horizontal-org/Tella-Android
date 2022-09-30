@@ -9,7 +9,8 @@ import rs.readahead.washington.mobile.data.entity.reports.ReportsLoginResponse
 
 interface ReportsApiService {
     companion object {
-        const val BASE_URL = ""
+        //DUMMY URL
+        const val BASE_URL = "https://www.hzontal.org/"
     }
 
     @POST

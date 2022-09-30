@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.data.reports.repository
 
-import dagger.hilt.android.scopes.ViewModelScoped
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -14,7 +13,6 @@ import rs.readahead.washington.mobile.domain.repository.reports.ReportsRepositor
 import rs.readahead.washington.mobile.util.StringUtils
 import javax.inject.Inject
 
-@ViewModelScoped
 class ReportsRepositoryImp @Inject constructor(private val apiService: ReportsApiService) :
     ReportsRepository {
 

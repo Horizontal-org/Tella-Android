@@ -94,7 +94,7 @@ class SubmittedUwaziFragment : BaseBindingFragment<FragmentSubmittedUwaziBinding
 
     private fun initView() {
         binding?.submittedRecyclerView?.apply {
-            layoutManager = LinearLayoutManager(activity)
+            layoutManager = LinearLayoutManager(baseActivity)
             adapter = adapterSubmitted
         }
     }

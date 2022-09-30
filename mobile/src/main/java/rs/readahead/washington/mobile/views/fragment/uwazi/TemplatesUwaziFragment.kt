@@ -1,9 +1,7 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
@@ -13,7 +11,6 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionSeleceted
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showEditDeleteMenuSheet
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.databinding.FragmentDraftsUwaziBinding
 import rs.readahead.washington.mobile.databinding.FragmentTemplatesUwaziBinding
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.views.adapters.uwazi.UwaziTemplatesAdapter
@@ -63,7 +60,7 @@ class TemplatesUwaziFragment : BaseBindingFragment<FragmentTemplatesUwaziBinding
 
     private fun initView(){
         binding?.templatesRecyclerView?.apply {
-            layoutManager = LinearLayoutManager(activity)
+            layoutManager = LinearLayoutManager(baseActivity)
             adapter = uwaziTemplatesAdapter
         }
     }

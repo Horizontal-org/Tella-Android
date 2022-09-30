@@ -93,7 +93,7 @@ class DraftsUwaziFragment : BaseBindingFragment<FragmentDraftsUwaziBinding>(Frag
 
     private fun initView() {
         binding?.draftsRecyclerView?.apply {
-            layoutManager = LinearLayoutManager(activity)
+            layoutManager = LinearLayoutManager(baseActivity)
             adapter = uwaziDraftsAdapter
         }
     }
