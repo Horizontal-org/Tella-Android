@@ -577,8 +577,9 @@ button to add a new template.</string>
     <string name="Uwazi_Drafts_Header_Text">These are entities you have not submitted.
 
  Tap on an entity to continue working on it.</string>
-    <string name="Uwazi_Submitted_Header_Text">These are entities that you have submitted successfully.</string>
     <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">Choose how you want to add files</string>
+    <string name="Uwazi_Outbox_Header_Text">These are entities currently being submitted.</string>
+    <string name="Uwazi_Submitted_Header_Text">These are entities that you have submitted successfully.</string>
     <string-array name="Uwazi_Language_Array">
         <item>English</item>
         <item>عربي</item>
@@ -673,6 +674,8 @@ button to add a new template.</string>
     <string name="Uwazi_Dialog_Draft_Title">Exit entity?</string>
     <string name="Timeout_Warning_Title">Warnings</string>
     <string name="Timeout_Warning_Description">To perform this action, Tella will remain unlocked for 3 minutes.</string>
+    <string name="Javarosa_Upgrade_Warning_Description">Javarosa library has been upgraded and it is not possible to work on old forms. In order to continue, we have to remove all the local forms.</string>
+    <string name="Javarosa_Upgrade_Toast">We are about to flush the cached form definitions.</string>
     <!-- Reports -->
     <string name="Settings_Reports_Choose_Credentials" translatable="false">Do you have a username and password?</string>
     <string name="Server_Connect_Icon" translatable="false">server connect image</string>
@@ -682,112 +685,4 @@ button to add a new template.</string>
     <string name="Settings_Reports_Advanced_Success_Description">Advanced settings complete</string>
     <string name="Settings_Reports_Go_To_Reports">GO TO REPORTS</string>
     <string name="Settings_reports_Go_To_Advanced_Settings">Advanced settings</string>
-  <string name="Uwazi_Outbox_Header_Text">These are entities currently being submitted.</string>
-  <string name="Uwazi_Submitted_Header_Text">These are entities that you have submitted successfully.</string>
-  <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">Choose how you want to add files</string>
-  <string-array name="Uwazi_Language_Array">
-    <item>English</item>
-    <item>عربي</item>
-    <item>Français</item>
-  </string-array>
-  <string-array name="Uwazi_Language_Array_Translated">
-    <item>English</item>
-    <item>Arabic</item>
-    <item>French</item>
-  </string-array>
-  <string name="Collect_Action_FillForm">Fill form</string>
-  <string name="Collect_Subtitle_RemoveForm">Are you sure you want to remove \"%1$s\"? </string>
-  <string name="Util_ellapsedTime_Year">More than a year ago</string>
-  <plurals name="Util_ellapsedTime_Months">
-    <item quantity="one">A month ago</item>
-    <item quantity="other">%d months ago</item>
-  </plurals>
-  <plurals name="Util_ellapsedTime_Weeks">
-    <item quantity="one">A week ago</item>
-    <item quantity="other">%d weeks ago</item>
-  </plurals>
-  <plurals name="Util_ellapsedTime_Days">
-    <item quantity="one">One day ago</item>
-    <item quantity="other">%d days ago</item>
-  </plurals>
-  <plurals name="Util_ellapsedTime_Hours">
-    <item quantity="one">An hour ago</item>
-    <item quantity="other">%d hours ago</item>
-  </plurals>
-  <plurals name="Util_ellapsedTime_Minutes">
-    <item quantity="one">A minute ago</item>
-    <item quantity="other">%d minutes ago</item>
-  </plurals>
-  <string name="Util_ellapsedTime_Seconds">A few seconds ago</string>
-  <string name="Donwload_Templates_Title_Description">These are the templates available on the Uwazi instances you are connected to.</string>
-  <string name="Uwazi_Templates_HeaderMessage">These are Uwazi templates you can fill out.</string>
-  <string name="Vault_Filter_Name">Name</string>
-  <string name="Server_Url_Screen_Title">Enter the server URL</string>
-  <string name="Login_Type_Screen_Title">Log in if you have a username and password, or use the server\'s public access.</string>
-  <string name="Login_Text">Log in</string>
-  <string name="Public_Login_Text">Public access</string>
-  <string name="Two_Factor_Authentication_Description">This Uwazi instance requires two-step verification. Enter here the 6-digit code from your authenticator app.</string>
-  <string name="Two_Factor_Authentication_Screen_Tile">Two-step verification</string>
-  <string name="Authentication_Code">Verification code</string>
-  <string name="Inavlid_Token_Msg_Error">The verification code is Invalid or expired. Please try again.</string>
-  <string name="Connected_Successfuly_Text">You have successfully connected to the server and will be able to share your data.</string>
-  <string name="Login_To_Access_Text">Log in to access the server</string>
-  <string name="action_yes">yes</string>
-  <string name="action_yes_in">YES, I’M IN!</string>
-  <string name="clean_insights.reminder_title">You are sharing data</string>
-  <string name="clean_insights.reminder_description">Reminder: You are currently sharing your data to improve Tella. Stop sharing anytime by going to Settings.</string>
-  <string name="clean_insights.contribute_more_info1">For more information on how we collect data,</string>
-  <string name="clean_insights.contribute_more_info2">visit this page.</string>
-  <string name="clean_insights.contribute_title">Would you like to contribute?</string>
-  <string name="clean_insights.contribute_description">You can opt out anytime by going to Settings.</string>
-  <string name="clean_insights.how_works_title">How it works</string>
-  <string name="clean_insights.how_works_description">• We collect as little data as possible.\n• Your data is aggregated weekly on your device before it is sent to us.\n• All data is anonymous and can never be linked to you.</string>
-  <string name="clean_insights.questions_title">Specific questions</string>
-  <string name="clean_insights.questions_description">Each study collects data about specific questions. Here’s a sample:</string>
-  <string name="clean_insights.questions_examples">🔓  Opened Tella 4 times a week\n💾  32 files stored in Tella\n📖  Spanish language selected\n⚡  1 server connected\n😎  Calculator camouflage enabled</string>
-  <string name="clean_insights.share_data_title">Share your data to improve Tella</string>
-  <string name="clean_insights.share_data_description">By joining this study, you would help us understand which features are important to you and how you use the app.</string>
-  <string name="clean_insights.will_not_title">We will not</string>
-  <string name="clean_insights.will_not_description">• We will not access any of the files that you store in Tella or share with your organization.\n• We will never share your data or sell it to anyone</string>
-  <string name="clean_insights.improve_title">Help us improve Tella</string>
-  <string name="clean_insights.improve_description">We’re doing a study to understand how you use Tella. You can opt-out anytime by going to Settings.\n\nWould you like to contribute?</string>
-  <string name="clean_insights.signed_for_days">You have signed up to share your data.</string>
-  <string name="Collect_WidgetVideo_Select_Text">Select video file</string>
-  <string name="Collect_WidgetAudio_Select_Text">Select audio file</string>
-  <string name="Collect_MediaWidget_Attach_Photo">Attach photo</string>
-  <string name="Collect_MediaWidget_Attach_Video">Attach video</string>
-  <string name="Collect_MediaWidget_AttachAudioRecording">Attach audio recording</string>
-  <string name="Uwazi_Templates_TabTitle">Templates</string>
-  <string name="settings.gen_share_data_action">Share data to improve Tella</string>
-  <string name="settings.gen_share_data_action.expl">Help us understand how you use Tella. Your data will never be shared with anyone outside of the Tella team.</string>
-  <string name="action_no">no</string>
-  <string name="settings.serv_add.server.selection_dialog.description">If you are not sure, please ask your\n organization.</string>
-  <string name="Collect_EndSubtitleExpl_UncheckedItems">Uncheck attachments to send them later. You can complete the submission from your Outbox.</string>
-  <string name="Collect_DialogExpl_ExitingStopSubmission">Exiting will stop the submission of your form. You will be able to resume the submission later from your Outbox.</string>
-  <string name="Collect_DialogTitle_StopExit">Stop and exit?</string>
-  <string name="Collect_DialogAction_KeepSubmitting">Keep submitting</string>
-  <string name="Collect_DialogAction_StopAndExit">Stop and exit</string>
-  <string name="Collect_DialogInfo_FormSubmissionStopped">Your form submission has been stopped. You can resume it from the Outbox.</string>
-  <string name="action_view">View</string>
-  <string name="SettingsCamo_Dialog_TimeoutTitle">Tella is shutting down …</string>
-  <string name="SettingsCamo_Dialog_TimeoutDesc">Please wait. You will return to your device\'s homescreen in a few seconds.</string>
-  <string name="SettingsCamo_Dialog_RemovingCamouflage">Removing camouflage …</string>
-  <string name="Collect_DeleteForm_SheetTitle">Delete form?</string>
-  <string name="Collect_DeleteDraftForm_SheetTitle">Delete draft?</string>
-  <string name="Collect_DeleteDraftForm_SheetExpl">Are you sure you want to delete this draft?</string>
-  <string name="Collect_DeleteForm_SheetExpl">Are you sure you want to delete this form?</string>
-  <string name="Uwazi_Dialog_Draft_Title">Exit entity?</string>
-  <string name="Timeout_Warning_Title">Warnings</string>
-  <string name="Timeout_Warning_Description">To perform this action, Tella will remain unlocked for 3 minutes.</string>
-  <string name="Javarosa_Upgrade_Warning_Description">Javarosa library has been upgraded and it is not possible to work on old forms. In order to continue, we have to remove all the local forms.</string>
-  <string name="Javarosa_Upgrade_Toast">We are about to flush the cached form definitions.</string>
-  <!-- Reports -->
-  <string name="Settings_Reports_Choose_Credentials" translatable="false">Do you have a username and password?</string>
-  <string name="Server_Connect_Icon" translatable="false">server connect image</string>
-  <string name="Login_To_Access_Project_Text">Log in to access the project</string>
-  <string name="Settings_Reports_Connected_To_Project">Connected to project</string>
-  <string name="Settings_Reports_Advanced_Success_Title">Advanced settings complete</string>
-  <string name="Settings_Reports_Advanced_Success_Description">Advanced settings complete</string>
-  <string name="Settings_Reports_Go_To_Reports">GO TO REPORTS</string>
-  <string name="Settings_reports_Go_To_Advanced_Settings">Advanced settings</string>
 </resources>

@@ -59,7 +59,7 @@ class CollectMainFragment :
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
     private var alertDialog: AlertDialog? = null
     private var mViewPager: ViewPager? = null
-    private val adapter by lazy { ViewPagerAdapter(activity.supportFragmentManager) }
+    private val adapter by lazy { ViewPagerAdapter(baseActivity.supportFragmentManager) }
     private var numOfCollectServers: Long = 0
     private val model: SharedFormsViewModel by activityViewModels()
 
@@ -77,9 +77,9 @@ class CollectMainFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity.setSupportActionBar(binding?.toolbar)
+        baseActivity.setSupportActionBar(binding?.toolbar)
 
-        val actionBar: ActionBar? = activity.supportActionBar
+        val actionBar: ActionBar? = baseActivity.supportActionBar
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false)
             actionBar.setTitle(R.string.settings_servers_add_server_forms)
@@ -107,7 +107,7 @@ class CollectMainFragment :
                     getBlankFormsListFragment().refreshBlankForms()
                 }
             } else {
-                activity.showToast(getString(R.string.collect_blank_toast_not_connected))
+                baseActivity.showToast(getString(R.string.collect_blank_toast_not_connected))
             }
         }
 
@@ -221,7 +221,7 @@ class CollectMainFragment :
 
     override fun onResume() {
         super.onResume()
-        (activity as MainActivity).selectNavForm()
+        (baseActivity as MainActivity).selectNavForm()
         countServers()
     }
 
@@ -266,14 +266,14 @@ class CollectMainFragment :
     }
 
     private fun requestLocationPermissions() {
-        activity.maybeChangeTemporaryTimeout()
+        baseActivity.maybeChangeTemporaryTimeout()
         val permissions = arrayOf(
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION
         )
         ActivityCompat.requestPermissions(
             //1
-            activity,
+            baseActivity,
             //2
             permissions,
             //3
@@ -296,13 +296,13 @@ class CollectMainFragment :
         })
 
         model.onFormDefError.observe(viewLifecycleOwner, Observer { error ->
-            val errorMessage = FormUtils.getFormDefErrorMessage(activity, error)
-            activity.showToast(errorMessage)
+            val errorMessage = FormUtils.getFormDefErrorMessage(baseActivity, error)
+            baseActivity.showToast(errorMessage)
         })
 
         model.onFormDefError.observe(viewLifecycleOwner, Observer { error ->
-            val errorMessage = FormUtils.getFormDefErrorMessage(activity, error)
-            activity.showToast(errorMessage)
+            val errorMessage = FormUtils.getFormDefErrorMessage(baseActivity, error)
+            baseActivity.showToast(errorMessage)
         })
 
         model.onCreateFormController.observe(viewLifecycleOwner, { form ->
@@ -310,7 +310,7 @@ class CollectMainFragment :
                 if (Preferences.isAnonymousMode()) {
                     startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
                 } else {
-                    if (!hasLocationPermissions(activity)) {
+                    if (!hasLocationPermissions(baseActivity)) {
                         requestLocationPermissions()
                     } else {
                         startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
@@ -357,9 +357,9 @@ class CollectMainFragment :
 
     @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
     fun showFineLocationRationale(request: PermissionRequest) {
-        activity.maybeChangeTemporaryTimeout()
+        baseActivity.maybeChangeTemporaryTimeout()
         alertDialog = PermissionUtil.showRationale(
-            activity,
+            baseActivity,
             request,
             getString(R.string.permission_dialog_expl_GPS)
         )
@@ -388,7 +388,7 @@ class CollectMainFragment :
     }*/
 
     private fun showCancelPendingFormDialog(instanceId: Long) {
-        alertDialog = AlertDialog.Builder(activity)
+        alertDialog = AlertDialog.Builder(baseActivity)
             .setMessage(R.string.collect_sent_dialog_expl_discard_unsent_form)
             .setPositiveButton(R.string.action_discard) { _, _ ->
                 model.deleteFormInstance(
@@ -402,7 +402,7 @@ class CollectMainFragment :
 
     private fun reSubmitFormInstance(instance: CollectFormInstance) {
         startActivity(
-            Intent(activity, FormSubmitActivity::class.java)
+            Intent(baseActivity, FormSubmitActivity::class.java)
                 .putExtra(FormSubmitActivity.FORM_INSTANCE_ID_KEY, instance.id)
         )
     }
@@ -490,12 +490,12 @@ class CollectMainFragment :
     }
 
     private fun startCollectHelp() {
-        startActivity(Intent(activity, CollectHelpActivity::class.java))
+        startActivity(Intent(baseActivity, CollectHelpActivity::class.java))
     }
 
     private fun showStoppedMessage() {
         DialogUtils.showBottomMessage(
-            activity,
+            baseActivity,
             getString(R.string.Collect_DialogInfo_FormSubmissionStopped),
             true
         )
