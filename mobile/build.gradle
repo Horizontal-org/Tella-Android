@@ -13,7 +13,7 @@ ext {
     googlePlayServicesVersion = "17.0.0"
     leakCanaryVersion = '2.4'
     butterknifeVersion = '10.1.0'
-    hilt_android_version = '1.0.0'
+    hilt_android_version = "2.39.1"
     hilt_version = '1.0.0'
 }
 
@@ -139,9 +139,15 @@ dependencies {
         exclude module: "animated-vector-drawble"
     }
 
-    //Hilt
-    implementation "com.google.dagger:hilt-android:2.39.1"
-    kapt "com.google.dagger:hilt-compiler:2.38.1"
+    //hilt
+    implementation "com.google.dagger:hilt-android:2.38.1"
+    kapt "com.google.dagger:hilt-android-compiler:2.37"
+    //hilt-view-model
+    implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03'
+    kapt 'androidx.hilt:hilt-compiler:1.0.0'
+
+    //lifecycle
+    implementation "androidx.fragment:fragment-ktx:1.4.0"
 
     //test
     // Mock and testing utilities

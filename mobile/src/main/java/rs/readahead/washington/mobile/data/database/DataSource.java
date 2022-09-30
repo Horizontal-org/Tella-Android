@@ -47,7 +47,6 @@ import rs.readahead.washington.mobile.domain.entity.FileUploadBundle;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.OldMediaFile;
-import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
@@ -57,6 +56,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.ListFormResult;
 import rs.readahead.washington.mobile.domain.entity.collect.OdkForm;
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
 import rs.readahead.washington.mobile.domain.exception.NotFountException;
 import rs.readahead.washington.mobile.domain.repository.ICollectFormsRepository;
 import rs.readahead.washington.mobile.domain.repository.ICollectServersRepository;
@@ -805,6 +805,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         values.put(D.C_USERNAME, server.getUsername());
         values.put(D.C_PASSWORD, server.getPassword());
         values.put(D.C_CHECKED, server.isChecked() ? 1 : 0);
+        values.put(D.C_ACCESS_TOKEN, server.getAccessToken());
+        values.put(D.C_ACTIVATED_METADATA, server.isActivatedMetadata() ? 1 : 0);
+        values.put(D.C_BACKGROUND_UPLOAD, server.isActivatedMetadata() ? 1 : 0);
 
         server.setId(database.insert(D.T_TELLA_UPLOAD_SERVER, null, values));
 

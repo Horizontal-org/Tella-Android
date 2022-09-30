@@ -4,18 +4,24 @@ import rs.readahead.washington.mobile.domain.entity.Server
 import rs.readahead.washington.mobile.domain.entity.ServerType
 import java.io.Serializable
 
-class TellaReportServer @JvmOverloads constructor(id: Long = 0) : Server(), Serializable {
-    override fun equals(obj: Any?): Boolean {
-        if (obj == null) {
+class TellaReportServer @JvmOverloads constructor(
+    id: Long = 0,
+    var accessToken: String = "",
+    var isActivatedMetadata: Boolean = false,
+    var isActivatedBackgroundUpload: Boolean = false
+) :
+    Server(), Serializable {
+    override fun equals(other: Any?): Boolean {
+        if (other == null) {
             return false
         }
-        if (this === obj) {
+        if (this === other) {
             return true
         }
-        if (obj !is TellaReportServer) {
+        if (other !is TellaReportServer) {
             return false
         }
-        return id == obj.id
+        return id == other.id
     }
 
     override fun hashCode(): Int {

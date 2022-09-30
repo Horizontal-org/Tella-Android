@@ -17,8 +17,6 @@ import rs.readahead.washington.mobile.databinding.DialogUwaziServerLanguageBindi
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.views.adapters.uwazi.LanguageSelectorAdapter
 
-const val IS_UPDATE_SERVER = "is_update_server"
-
 class UwaziServerLanguageDialogFragment : AppCompatDialogFragment() {
     private val languageSelectorAdapter by lazy { LanguageSelectorAdapter() }
     private lateinit var binding: DialogUwaziServerLanguageBinding

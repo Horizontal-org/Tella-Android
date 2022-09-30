@@ -2,13 +2,15 @@ package rs.readahead.washington.mobile.views.dialog.reports
 
 import android.os.Bundle
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 import rs.readahead.washington.mobile.views.dialog.IS_UPDATE_SERVER
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
-import rs.readahead.washington.mobile.views.dialog.reports.url.EnterUploadServerFragment
+import rs.readahead.washington.mobile.views.dialog.reports.step1.EnterUploadServerFragment
 
+@AndroidEntryPoint
 class ReportsConnectFlowActivity : BaseLockActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,7 +21,10 @@ class ReportsConnectFlowActivity : BaseLockActivity() {
         } else {
             intent.getStringExtra(OBJECT_KEY)?.let {
                 val server = Gson().fromJson(it, TellaReportServer::class.java)
-                addFragment(EnterUploadServerFragment.newInstance(server, true), R.id.container)
+                addFragment(
+                    EnterUploadServerFragment.newInstance(server, true),
+                    R.id.container
+                )
             }
         }
     }

@@ -10,8 +10,6 @@ import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.data.database.KeyDataSource
-import rs.readahead.washington.mobile.data.database.UwaziDataSource
-import rs.readahead.washington.mobile.data.entity.uwazi.LanguageEntity
 import rs.readahead.washington.mobile.data.repository.UwaziRepository
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.Language
@@ -111,25 +109,6 @@ class UwaziConnectFlowViewModel : ViewModel() {
 
     private fun onLanguageClicked(language: Language) {
         _languageClicked.postValue(language)
-    }
-
-    fun updateLanguageSettings(server: UWaziUploadServer, language: LanguageEntity) {
-        disposables.add(keyDataSource.uwaziDataSource
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe { _progress.postValue(true) }
-            .flatMapSingle { dataSource: UwaziDataSource ->
-                server.localeCookie = language.key
-                dataSource.updateUwaziServer(server)
-            }
-            .doFinally { _progress.postValue(false) }
-            .subscribe(
-                { _ -> _languageUpdated.postValue(true) }
-            ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                error.postValue(throwable)
-            }
-        )
     }
 
 }

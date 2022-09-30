@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/reports_settings">
+
+    <fragment
+        android:id="@+id/enterUrlScreen"
+        android:name="rs.readahead.washington.mobile.views.dialog.reports.step1.EnterUploadServerFragment"
+        tools:layout="@layout/fragment_enter_server">
+
+        <action
+            android:id="@+id/action_server_url_to_username_password"
+            app:destination="@id/chooseCredentialsScreen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/slide_in_end"
+            app:popExitAnim="@anim/slide_out_start" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/chooseCredentialsScreen"
+        android:name="rs.readahead.washington.mobile.views.dialog.reports.step2.ChooseUserNamePasswordFragment"
+        tools:layout="@layout/fragment_choose_username_password">
+        <action
+            android:id="@+id/action_choose_credentials_to_enter_login"
+            app:destination="@id/loginToReportsScreen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/slide_in_end"
+            app:popExitAnim="@anim/slide_out_start" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginToReportsScreen"
+        android:name="rs.readahead.washington.mobile.views.dialog.reports.step3.LoginReportsFragment"
+        tools:layout="@layout/fragment_login_reports_screen">
+
+    </fragment>
+
+</navigation>

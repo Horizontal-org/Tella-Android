@@ -31,6 +31,7 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.hilt.android.AndroidEntryPoint;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 import rs.readahead.washington.mobile.MyApplication;
@@ -56,7 +57,7 @@ import com.google.gson.Gson;
 
 import timber.log.Timber;
 
-
+@AndroidEntryPoint
 @RuntimePermissions
 public class MainActivity extends MetadataActivity implements
         IHomeScreenPresenterContract.IView,

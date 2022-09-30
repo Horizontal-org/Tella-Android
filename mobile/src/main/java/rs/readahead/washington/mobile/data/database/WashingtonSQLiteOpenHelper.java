@@ -13,6 +13,22 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         super(context, D.DATABASE_NAME, null, D.DATABASE_VERSION);
     }
 
+    private static String objQuote(String str) {
+        return OBJ_QUOTE + str + OBJ_QUOTE;
+    }
+
+    private static String sq(String unQuotedText) {
+        return " " + objQuote(unQuotedText) + " ";
+    }
+
+    private static String cddl(String columnName, String columnType) {
+        return objQuote(columnName) + " " + columnType;
+    }
+
+    private static String cddl(String columnName, String columnType, boolean notNull) {
+        return objQuote(columnName) + " " + columnType + (notNull ? " NOT NULL" : "");
+    }
+
     @Override
     public void onOpen(SQLiteDatabase db) {
         super.onOpen(db);
@@ -97,6 +113,8 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
             case 9:
                 db.execSQL(createTableUwaziServer());
                 db.execSQL(createTableCollectBlankTemplateUwazi());
+            case 10:
+                db.execSQL(alterTableTellaUploadServer());
         }
     }
 
@@ -232,6 +250,13 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_SERVER_ID, D.INTEGER, true) + " DEFAULT 0";
     }
 
+    private String alterTableTellaUploadServer() {
+        return "ALTER TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " ADD COLUMN " +
+                cddl(D.C_ACCESS_TOKEN, D.TEXT) + " , " +
+                cddl(D.C_ACTIVATED_METADATA, D.INTEGER, true) + " DEFAULT 0 , " +
+                cddl(D.C_BACKGROUND_UPLOAD, D.INTEGER, true) + " DEFAULT 0";
+    }
+
     private String alterTableMediaFileUploadsAddMetadata() {
         return "ALTER TABLE " + sq(D.T_MEDIA_FILE_UPLOAD) + " ADD COLUMN " +
                 cddl(D.C_INCLUDE_METADATA, D.INTEGER, true) + " DEFAULT 0";
@@ -269,11 +294,10 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_URL, D.TEXT) + " , " +
                 cddl(D.C_USERNAME, D.TEXT) + " , " +
                 cddl(D.C_PASSWORD, D.TEXT) + " , " +
-                cddl(D.C_CHECKED, D.INTEGER, true) + " DEFAULT 0" +
-                ");";
+                cddl(D.C_CHECKED, D.INTEGER, true) + " DEFAULT 0" + ");";
     }
 
-    private String createTableCollectBlankTemplateUwazi(){
+    private String createTableCollectBlankTemplateUwazi() {
         return "CREATE TABLE " + sq(D.T_UWAZI_BLANK_TEMPLATES) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_UWAZI_SERVER_ID, D.INTEGER, true) + " , " +
@@ -288,7 +312,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 ");";
     }
 
-    private String createTableCollectEntityUwazi(){
+    private String createTableCollectEntityUwazi() {
         return "CREATE TABLE " + sq(D.T_UWAZI_ENTITY_INSTANCES) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_UWAZI_SERVER_ID, D.INTEGER, true) + " , " +
@@ -316,21 +340,5 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 sq(D.T_UWAZI_ENTITY_INSTANCES) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE," +
                 "UNIQUE(" + sq(D.C_UWAZI_ENTITY_INSTANCE_ID) + ", " + sq(D.C_VAULT_FILE_ID) + ") ON CONFLICT IGNORE" +
                 ");";
-    }
-
-    private static String objQuote(String str) {
-        return OBJ_QUOTE + str + OBJ_QUOTE;
-    }
-
-    private static String sq(String unQuotedText) {
-        return " " + objQuote(unQuotedText) + " ";
-    }
-
-    private static String cddl(String columnName, String columnType) {
-        return objQuote(columnName) + " " + columnType;
-    }
-
-    private static String cddl(String columnName, String columnType, boolean notNull) {
-        return objQuote(columnName) + " " + columnType + (notNull ? " NOT NULL" : "");
     }
 }
