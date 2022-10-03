@@ -60,7 +60,7 @@ public class CollectHelpActivity extends BaseLockActivity {
 
     private void setViews() {
         toolbar = binding.toolbar;
-        mCollectServerTextView = binding.serversHelp;
-        mODKTextView = binding.odkHelp;
+        mCollectServerTextView = binding.content.serversHelp;
+        mODKTextView = binding.content.odkHelp;
     }
 }

@@ -642,13 +642,13 @@ public class AudioPlayActivity extends BaseLockActivity implements
     }
 
     private void setViews() {
-        mPlay = binding.playAudio;
-        mRwd = binding.rwdButton;
-        mFwd = binding.rwdButton;
-        mTimer = binding.audioTime;
-        mDuration = binding.duration;
-        forward = binding.fwdButton;
-        rewind = binding.rwdButton;
+        mPlay = binding.content.playAudio;
+        mRwd = binding.content.rwdButton;
+        mFwd = binding.content.rwdButton;
+        mTimer = binding.content.audioTime;
+        mDuration = binding.content.duration;
+        forward = binding.content.fwdButton;
+        rewind = binding.content.rwdButton;
         toolbar = binding.toolbar;
     }
 }
