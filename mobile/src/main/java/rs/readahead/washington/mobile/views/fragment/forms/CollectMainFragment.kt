@@ -9,22 +9,16 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Html
 import android.text.method.LinkMovementMethod
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import org.hzontal.shared_ui.utils.DialogUtils
 import org.javarosa.core.model.FormDef
@@ -48,13 +42,11 @@ import rs.readahead.washington.mobile.views.activity.FormSubmitActivity
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.adapters.ViewPagerAdapter
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
-import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import timber.log.Timber
 
 const val LOCATION_REQUEST_CODE = 1003
 
-class CollectMainFragment :
-    BaseBindingFragment<FragmentCollectMainBinding>(FragmentCollectMainBinding::inflate) {
+class CollectMainFragment : BaseBindingFragment<FragmentCollectMainBinding>(FragmentCollectMainBinding::inflate) {
     private var blankFragmentPosition = 0
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
     private var alertDialog: AlertDialog? = null
@@ -440,28 +432,28 @@ class CollectMainFragment :
             SubmittedFormsListFragment.newInstance(),
             getString(R.string.collect_sent_tab_title)
         )
-        blankFragmentPosition = getFragmentPosition(FormListFragment.Type.BLANK)
+        blankFragmentPosition = getFragmentPosition(FormListInterfce.Type.BLANK)
     }
 
     private fun getDraftFormsListFragment(): DraftFormsListFragment {
-        return getFormListFragment(FormListFragment.Type.DRAFT)
+        return getFormListFragment(FormListInterfce.Type.DRAFT)
     }
 
     private fun getBlankFormsListFragment(): BlankFormsListFragment {
-        return getFormListFragment(FormListFragment.Type.BLANK)
+        return getFormListFragment(FormListInterfce.Type.BLANK)
     }
 
     private fun getSubmittedFormsListFragment(): SubmittedFormsListFragment {
-        return getFormListFragment(FormListFragment.Type.SUBMITTED)
+        return getFormListFragment(FormListInterfce.Type.SUBMITTED)
     }
 
     private fun getOutboxFormListFragment(): OutboxFormListFragment {
-        return getFormListFragment(FormListFragment.Type.OUTBOX)
+        return getFormListFragment(FormListInterfce.Type.OUTBOX)
     }
 
-    private fun <T> getFormListFragment(type: FormListFragment.Type): T {
+    private fun <T> getFormListFragment(type: FormListInterfce.Type): T {
         for (i in 0 until adapter.count) {
-            val fragment = adapter.getItem(i) as FormListFragment
+            val fragment = adapter.getItem(i) as FormListInterfce
             if (fragment.formListType == type) {
                 return fragment as T
             }
@@ -469,9 +461,9 @@ class CollectMainFragment :
         throw IllegalArgumentException()
     }
 
-    private fun getFragmentPosition(type: FormListFragment.Type): Int {
+    private fun getFragmentPosition(type: FormListInterfce.Type): Int {
         for (i in 0 until adapter.count) {
-            val fragment = adapter.getItem(i) as FormListFragment
+            val fragment = adapter.getItem(i) as FormListInterfce
             if (fragment.formListType == type) {
                 return i
             }
@@ -480,12 +472,12 @@ class CollectMainFragment :
     }
 
     private fun setPagerToSubmittedFragment() {
-        mViewPager?.currentItem = getFragmentPosition(FormListFragment.Type.SUBMITTED)
+        mViewPager?.currentItem = getFragmentPosition(FormListInterfce.Type.SUBMITTED)
         binding?.fab?.visibility = View.GONE
     }
 
     private fun setPagerToOutboxFragment() {
-        mViewPager?.currentItem = getFragmentPosition(FormListFragment.Type.OUTBOX)
+        mViewPager?.currentItem = getFragmentPosition(FormListInterfce.Type.OUTBOX)
         binding?.fab?.visibility = View.GONE
     }
 
