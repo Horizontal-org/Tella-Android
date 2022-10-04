@@ -32,7 +32,7 @@ public class MetadataHelpActivity extends BaseLockActivity {
         ActivityMetadataHelpBinding binding = ActivityMetadataHelpBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        metadataList = binding.metadataHelpList;
+        metadataList = binding.content.metadataHelpList;
         toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
 

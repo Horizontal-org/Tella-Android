@@ -21,70 +21,8 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/wa_purple"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <LinearLayout
-            android:id="@+id/button_bottom_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@color/wa_purple"
-            android:orientation="horizontal"
-            android:paddingTop="0.5dp">
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/cancel_button"
-                style="@style/Unlock_White_Text_Back"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:background="@drawable/action_button_background"
-                android:backgroundTint="@color/wa_white_20"
-                android:text="@string/Uwazi_Submit_Later" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/submit_button"
-                style="@style/Unlock_White_Text_Back"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/action_button_background"
-                android:text="@string/collect.end_action_submit" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/stop_button"
-                style="@style/Unlock_White_Text_Back"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:background="@drawable/action_button_background"
-                android:backgroundTint="@color/wa_white_20"
-                android:visibility="gone"
-                android:text="@string/action_stop" />
-        </LinearLayout>
-
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/formDetailsContainer"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_above="@id/button_bottom_layout"
-            android:clipToPadding="false"
-            android:scrollbarStyle="outsideOverlay"
-            android:scrollbars="vertical">
-        </androidx.core.widget.NestedScrollView>
-
-    </RelativeLayout>
+    <include
+        android:id="@+id/content"
+        layout="@layout/content_form_submit" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

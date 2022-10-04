@@ -75,7 +75,7 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
         setContentView(binding.getRoot());
         setViews();
 
-        binding.popupMenu.setOnClickListener(this::showPopupSort);
+        binding.content.popupMenu.setOnClickListener(this::showPopupSort);
 
         toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
 
@@ -395,9 +395,9 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
     }
 
     private void setViews() {
-        recyclerView = binding.galleryRecyclerView;
-        progressBar = binding.progressBar;
+        recyclerView = binding.content.galleryRecyclerView;
+        progressBar = binding.content.progressBar;
         toolbar = binding.toolbar;
-        blankGalleryInfo = binding.attachmentsBlankListInfo;
+        blankGalleryInfo = binding.content.attachmentsBlankListInfo;
     }
 }

@@ -160,6 +160,6 @@ public class SignatureActivity extends BaseLockActivity implements
 
     private void setViews() {
         toolbar = binding.toolbar;
-        ink = binding.ink;
+        ink = binding.content.ink;
     }
 }

@@ -222,12 +222,12 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     @Override
     public void onExportStarted() {
-        binding.progressBar.setVisibility(View.VISIBLE);
+        binding.content.progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onExportEnded() {
-        binding.progressBar.setVisibility(View.GONE);
+        binding.content.progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -299,20 +299,20 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                     @Override
                     public boolean onException(Exception e, VaultFileLoaderModel model,
                                                Target<GlideDrawable> target, boolean isFirstResource) {
-                        binding.progressBar.setVisibility(View.GONE);
+                        binding.content.progressBar.setVisibility(View.GONE);
                         return false;
                     }
 
                     @Override
                     public boolean onResourceReady(GlideDrawable resource, VaultFileLoaderModel model,
                                                    Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        binding.progressBar.setVisibility(View.GONE);
+                        binding.content.progressBar.setVisibility(View.GONE);
                         return false;
                     }
                 })
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
-                .into(binding.photoImageView);
+                .into(binding.content.photoImageView);
     }
 
     private void showMetadata() {

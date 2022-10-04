@@ -46,7 +46,7 @@ public class MetadataViewerActivity extends BaseLockActivity {
 
         overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
 
-        metadataList = binding.metadataList;
+        metadataList = binding.content.metadataList;
         Toolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
 

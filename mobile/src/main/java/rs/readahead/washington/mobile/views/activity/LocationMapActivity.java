@@ -250,8 +250,8 @@ public class LocationMapActivity extends MetadataActivity implements
 
     private void setViews() {
         toolbar = binding.toolbar;
-        progressBar = binding.progressBar;
-        hint = binding.info;
+        progressBar = binding.content.progressBar;
+        hint = binding.content.info;
         faButton = binding.fabButton;
     }
 }

@@ -152,9 +152,9 @@ public class FormSubmitActivity extends BaseLockActivity implements
     }
 
     private void initListeners(){
-        binding.submitButton.setOnClickListener(this::onSubmitClick);
-        binding.cancelButton.setOnClickListener(this::onCancelClick);
-        binding.stopButton.setOnClickListener(this::onStopClick);
+        binding.content.submitButton.setOnClickListener(this::onSubmitClick);
+        binding.content.cancelButton.setOnClickListener(this::onCancelClick);
+        binding.content.stopButton.setOnClickListener(this::onStopClick);
     }
 
     public void onSubmitClick(View view) {
@@ -276,8 +276,8 @@ public class FormSubmitActivity extends BaseLockActivity implements
         endView = new CollectFormEndView(this,
                 instance.getStatus() == CollectFormInstanceStatus.SUBMITTED ? R.string.collect_end_heading_confirmation_form_submitted : R.string.collect_end_action_submit);
         endView.setInstance(this.instance, offline);
-        binding.formDetailsContainer.removeAllViews();
-        binding.formDetailsContainer.addView(endView);
+        binding.content.formDetailsContainer.removeAllViews();
+        binding.content.formDetailsContainer.addView(endView);
 
         updateFormSubmitButton(false);
     }
@@ -292,31 +292,31 @@ public class FormSubmitActivity extends BaseLockActivity implements
 
     private void updateFormSubmitButton(boolean offline) {
         if (instance.getStatus() != CollectFormInstanceStatus.SUBMITTED) {
-            binding.submitButton.setVisibility(View.VISIBLE);
+            binding.content.submitButton.setVisibility(View.VISIBLE);
             //submitButton.setOffline(offline);
         }
     }
 
     private void showFormCancelButton() {
-        binding.cancelButton.setVisibility(View.VISIBLE);
+        binding.content.cancelButton.setVisibility(View.VISIBLE);
     }
 
     private void hideFormCancelButton() {
-        binding.cancelButton.setVisibility(View.GONE);
+        binding.content.cancelButton.setVisibility(View.GONE);
     }
 
     private void showFormStopButton() {
-        binding.stopButton.setVisibility(View.VISIBLE);
+        binding.content.stopButton.setVisibility(View.VISIBLE);
     }
 
     private void hideFormSubmitButton() {
-        binding.submitButton.setVisibility(View.INVISIBLE);
-        binding.submitButton.setClickable(false);
+        binding.content.submitButton.setVisibility(View.INVISIBLE);
+        binding.content.submitButton.setClickable(false);
     }
 
     private void showFormSubmitButton() {
-        binding.submitButton.setVisibility(View.VISIBLE);
-        binding.submitButton.setClickable(true);
+        binding.content.submitButton.setVisibility(View.VISIBLE);
+        binding.content.submitButton.setClickable(true);
     }
 
     private void stopPresenter() {
