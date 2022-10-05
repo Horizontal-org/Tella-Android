@@ -98,7 +98,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
 
         binding = ActivityAudioPlayBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setViews();
+        initView();
         initListeners();
 
         overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
@@ -641,7 +641,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
         });
     }
 
-    private void setViews() {
+    private void initView() {
         mPlay = binding.content.playAudio;
         mRwd = binding.content.rwdButton;
         mFwd = binding.content.rwdButton;

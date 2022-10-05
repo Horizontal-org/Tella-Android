@@ -108,7 +108,7 @@ public class CollectServerDialogFragment extends AppCompatDialogFragment impleme
         binding = DialogCollectServerBinding.inflate(LayoutInflater.from(context), container, false);
         final View dialogView;
             dialogView = binding.getRoot();
-        setViews();
+        initView();
 
         presenter = new CheckOdkServerPresenter(this);
 
@@ -365,7 +365,7 @@ public class CollectServerDialogFragment extends AppCompatDialogFragment impleme
         advancedPanel.setVisibility(advancedToggle.isOpen() ? View.VISIBLE : View.GONE);
     }
 
-    private void setViews() {
+    private void initView() {
         nameLayout = binding.nameLayout;
         name = binding.name;
         urlLayout = binding.urlLayout;

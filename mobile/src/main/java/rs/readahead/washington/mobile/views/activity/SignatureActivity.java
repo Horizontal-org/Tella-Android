@@ -17,6 +17,7 @@ import java.io.ByteArrayOutputStream;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.databinding.ActivitySignatureBinding;
 import rs.readahead.washington.mobile.mvp.contract.ISignaturePresenterContract;
@@ -46,7 +47,7 @@ public class SignatureActivity extends BaseLockActivity implements
 
         binding = ActivitySignatureBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setViews();
+        initView();
 
         presenter = new SignaturePresenter(this);
 
@@ -158,7 +159,7 @@ public class SignatureActivity extends BaseLockActivity implements
         }
     }
 
-    private void setViews() {
+    private void initView() {
         toolbar = binding.toolbar;
         ink = binding.content.ink;
     }

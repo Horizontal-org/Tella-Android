@@ -46,7 +46,8 @@ import timber.log.Timber
 
 const val LOCATION_REQUEST_CODE = 1003
 
-class CollectMainFragment : BaseBindingFragment<FragmentCollectMainBinding>(FragmentCollectMainBinding::inflate) {
+class CollectMainFragment :
+    BaseBindingFragment<FragmentCollectMainBinding>(FragmentCollectMainBinding::inflate) {
     private var blankFragmentPosition = 0
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
     private var alertDialog: AlertDialog? = null

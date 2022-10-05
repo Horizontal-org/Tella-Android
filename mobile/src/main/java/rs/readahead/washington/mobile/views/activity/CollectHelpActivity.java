@@ -27,7 +27,7 @@ public class CollectHelpActivity extends BaseLockActivity {
 
         binding = ActivityCollectHelpBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setViews();
+        initView();
 
         setSupportActionBar(toolbar);
 
@@ -58,7 +58,7 @@ public class CollectHelpActivity extends BaseLockActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setViews() {
+    private void initView() {
         toolbar = binding.toolbar;
         mCollectServerTextView = binding.content.serversHelp;
         mODKTextView = binding.content.odkHelp;

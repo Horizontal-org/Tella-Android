@@ -151,7 +151,7 @@ public class FormSubmitActivity extends BaseLockActivity implements
         super.onDestroy();
     }
 
-    private void initListeners(){
+    private void initListeners() {
         binding.content.submitButton.setOnClickListener(this::onSubmitClick);
         binding.content.cancelButton.setOnClickListener(this::onCancelClick);
         binding.content.stopButton.setOnClickListener(this::onStopClick);

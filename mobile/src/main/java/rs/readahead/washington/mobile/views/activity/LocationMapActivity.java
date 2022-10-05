@@ -63,7 +63,7 @@ public class LocationMapActivity extends MetadataActivity implements
 
         binding = ActivityLocationMapBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setViews();
+        initView();
 
         myLocation = (MyLocation) getIntent().getSerializableExtra(SELECTED_LOCATION);
         readOnly = getIntent().getBooleanExtra(CURRENT_LOCATION_ONLY, true);
@@ -248,7 +248,7 @@ public class LocationMapActivity extends MetadataActivity implements
         finish();
     }
 
-    private void setViews() {
+    private void initView() {
         toolbar = binding.toolbar;
         progressBar = binding.content.progressBar;
         hint = binding.content.info;

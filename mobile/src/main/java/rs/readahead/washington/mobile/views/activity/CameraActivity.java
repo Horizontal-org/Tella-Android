@@ -74,10 +74,7 @@ import rs.readahead.washington.mobile.views.custom.CameraSwitchButton;
 import rs.readahead.washington.mobile.databinding.ActivityCameraBinding;
 
 
-public class CameraActivity extends MetadataActivity implements
-        ICameraPresenterContract.IView,
-        ITellaFileUploadSchedulePresenterContract.IView,
-        IMetadataAttachPresenterContract.IView {
+public class CameraActivity extends MetadataActivity implements ICameraPresenterContract.IView, ITellaFileUploadSchedulePresenterContract.IView, IMetadataAttachPresenterContract.IView {
     public static final String MEDIA_FILE_KEY = "mfk";
     public static final String VAULT_CURRENT_ROOT_PARENT = "vcrf";
     private final static int CLICK_DELAY = 1200;
@@ -122,7 +119,7 @@ public class CameraActivity extends MetadataActivity implements
 
         binding = ActivityCameraBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setViews();
+        initView();
         initListeners();
 
         overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out);
@@ -174,8 +171,7 @@ public class CameraActivity extends MetadataActivity implements
 
         presenter.getLastMediaFile();
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) !=
-                PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             maybeChangeTemporaryTimeout();
         }
 
@@ -332,10 +328,7 @@ public class CameraActivity extends MetadataActivity implements
     public void onLastMediaFileSuccess(VaultFile vaultFile) {
         if (intentMode != IntentMode.COLLECT) {
             previewView.setVisibility(View.VISIBLE);
-            glide.load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(previewView);
+            glide.load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(previewView);
         }
     }
 
@@ -673,8 +666,7 @@ public class CameraActivity extends MetadataActivity implements
     }
 
     private void setOrientationListener() {
-        mOrientationEventListener = new OrientationEventListener(
-                this, SensorManager.SENSOR_DELAY_NORMAL) {
+        mOrientationEventListener = new OrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL) {
 
             @Override
             public void onOrientationChanged(int orientation) {
@@ -738,18 +730,14 @@ public class CameraActivity extends MetadataActivity implements
     }
 
     public enum CameraMode {
-        PHOTO,
-        VIDEO
+        PHOTO, VIDEO
     }
 
     public enum IntentMode {
-        COLLECT,
-        RETURN,
-        STAND,
-        ODK
+        COLLECT, RETURN, STAND, ODK
     }
 
-    private void setViews() {
+    private void initView() {
         cameraView = binding.camera;
         gridButton = binding.gridButton;
         switchButton = binding.switchButton;

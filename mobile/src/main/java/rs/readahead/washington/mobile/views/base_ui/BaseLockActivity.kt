@@ -74,7 +74,7 @@ abstract class BaseLockActivity : BaseActivity() {
 
     private fun maybeRestoreTimeout() {
         if (Preferences.isTempTimeout()) {
-            MyApplication.getMainKeyHolder().timeout  = LockTimeoutManager.IMMEDIATE_SHUTDOWN
+            MyApplication.getMainKeyHolder().timeout = LockTimeoutManager.IMMEDIATE_SHUTDOWN
             Preferences.setTempTimeout(false)
         }
     }

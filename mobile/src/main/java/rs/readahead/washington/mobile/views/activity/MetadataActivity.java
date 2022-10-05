@@ -391,10 +391,10 @@ public abstract class MetadataActivity extends BaseLockActivity implements
      */
     public Observable<MetadataHolder> observeMetadata() {
         return Observable.combineLatest(
-                observeLocationData().startWith(MyLocation.createEmpty()),
-                observeWifiData().startWith(Collections.<String>emptyList()),
-                MetadataHolder::new
-        )
+                        observeLocationData().startWith(MyLocation.createEmpty()),
+                        observeWifiData().startWith(Collections.<String>emptyList()),
+                        MetadataHolder::new
+                )
                 .filter(mh -> (!mh.getWifis().isEmpty() || !mh.getLocation().isEmpty()))
                 .take((5 * 60 * 1000) / LOCATION_REQUEST_INTERVAL) // approx max 5 min of trying limit
                 .takeUntil(mh -> !mh.getWifis().isEmpty() && !mh.getLocation().isEmpty());

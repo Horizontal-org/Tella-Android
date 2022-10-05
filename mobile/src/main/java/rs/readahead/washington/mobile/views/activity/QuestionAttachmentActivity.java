@@ -73,7 +73,7 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
 
         binding = ActivityQuestionAttachmentBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setViews();
+        initView();
 
         binding.content.popupMenu.setOnClickListener(this::showPopupSort);
 
@@ -394,7 +394,7 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
         finish();
     }
 
-    private void setViews() {
+    private void initView() {
         recyclerView = binding.content.galleryRecyclerView;
         progressBar = binding.content.progressBar;
         toolbar = binding.toolbar;

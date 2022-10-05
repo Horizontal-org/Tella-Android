@@ -61,7 +61,7 @@ class BlankFormsListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setViews()
+        initView()
         model = ViewModelProvider(this).get(
             SharedFormsViewModel::class.java
         )
@@ -467,7 +467,7 @@ class BlankFormsListFragment :
         (requireActivity() as MainActivity).selectHome()
     }
 
-    private fun setViews() {
+    private fun initView() {
         blankFormView = binding!!.blankFormView
         availableFormsListView = binding!!.blankForms
         downloadedFormsListView = binding!!.downloadedForms
