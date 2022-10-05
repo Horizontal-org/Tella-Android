@@ -75,47 +75,34 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
         this.vaultFile = vaultFile;
 
         if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
-            //thumbGradient.setVisibility(GONE);
             binding.thumbView.setId(QuestionWidget.newUniqueId());
             binding.thumbView.setOnClickListener(v -> showVideoViewerActivity());
             binding.thumbView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
             showMediaFileInfo();
             loadThumbnail();
-          //  videoDuration.setText(Util.getShortVideoDuration((int) (vaultFile.duration / 1000)));
 
-            //audioInfo.setVisibility(GONE);
-            //videoInfo.setVisibility(VISIBLE);
         } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
-            //thumbGradient.setVisibility(VISIBLE);
             binding.thumbView.setImageResource(R.drawable.ic_baseline_headset_24);
             binding.thumbView.setScaleType(ImageView.ScaleType.CENTER);
             binding.thumbView.setOnClickListener(v -> showAudioPlayActivity());
 
             showMediaFileInfo();
-            //audioDuration.setText(Util.getShortVideoDuration((int) (vaultFile.duration / 1000)));
 
-            //audioInfo.setVisibility(VISIBLE);
-            //videoInfo.setVisibility(GONE);
         } else if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
-           // thumbGradient.setVisibility(GONE);
             binding.thumbView.setId(QuestionWidget.newUniqueId());
             binding.thumbView.setOnClickListener(v -> showPhotoViewerActivity());
             binding.thumbView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-           loadThumbnail();
-           showMediaFileInfo();
+            loadThumbnail();
+            showMediaFileInfo();
 
             binding.audioInfo.setVisibility(GONE);
             binding.videoInfo.setVisibility(GONE);
         } else if (MediaFile.INSTANCE.isTextFileType(vaultFile.mimeType)) {
-            //thumbGradient.setVisibility(VISIBLE);
             binding.thumbView.setImageResource(R.drawable.ic_baseline_assignment_24);
             binding.thumbView.setScaleType(ImageView.ScaleType.CENTER);
-            //thumbView.setOnClickListener(v -> showAudioPlayActivity());
 
-             showMediaFileInfo();
-            //audioDuration.setText(Util.getShortVideoDuration((int) (vaultFile.duration / 1000)));
-
+            showMediaFileInfo();
             binding.audioInfo.setVisibility(GONE);
             binding.videoInfo.setVisibility(GONE);
         }

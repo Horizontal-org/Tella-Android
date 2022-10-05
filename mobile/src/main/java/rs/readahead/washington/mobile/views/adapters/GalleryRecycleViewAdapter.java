@@ -37,7 +37,6 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
     private int cardLayoutId;
     private boolean selectable;
     private boolean singleSelection;
-    private CardGalleryAttachmentMediaFileBinding itemBinding;
 
 
     public GalleryRecycleViewAdapter(Context context, IGalleryMediaHandler galleryMediaHandler,
@@ -60,8 +59,7 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        itemBinding = CardGalleryAttachmentMediaFileBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        //View v = LayoutInflater.from(parent.getContext()).inflate(cardLayoutId, parent,false);
+        CardGalleryAttachmentMediaFileBinding itemBinding = CardGalleryAttachmentMediaFileBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewHolder(itemBinding, this.selectable);
     }
 

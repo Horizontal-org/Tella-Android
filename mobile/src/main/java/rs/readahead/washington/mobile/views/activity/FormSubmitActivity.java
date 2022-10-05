@@ -20,6 +20,7 @@ import rs.readahead.washington.mobile.bus.event.CollectFormSubmissionErrorEvent;
 import rs.readahead.washington.mobile.bus.event.CollectFormSubmitStoppedEvent;
 import rs.readahead.washington.mobile.bus.event.CollectFormSubmittedEvent;
 import rs.readahead.washington.mobile.databinding.ActivityFormSubmitBinding;
+import rs.readahead.washington.mobile.databinding.ContentFormSubmitBinding;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaPartResponse;
@@ -44,6 +45,7 @@ public class FormSubmitActivity extends BaseLockActivity implements
 
     private CollectFormInstance instance;
     private ActivityFormSubmitBinding binding;
+    private ContentFormSubmitBinding content;
 
 
     @Override
@@ -53,6 +55,7 @@ public class FormSubmitActivity extends BaseLockActivity implements
 
         binding = ActivityFormSubmitBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        content = binding.content;
         initListeners();
 
         formReSubmitter = new FormReSubmitter(this);
@@ -152,9 +155,9 @@ public class FormSubmitActivity extends BaseLockActivity implements
     }
 
     private void initListeners() {
-        binding.content.submitButton.setOnClickListener(this::onSubmitClick);
-        binding.content.cancelButton.setOnClickListener(this::onCancelClick);
-        binding.content.stopButton.setOnClickListener(this::onStopClick);
+        content.submitButton.setOnClickListener(this::onSubmitClick);
+        content.cancelButton.setOnClickListener(this::onCancelClick);
+        content.stopButton.setOnClickListener(this::onStopClick);
     }
 
     public void onSubmitClick(View view) {
@@ -276,8 +279,8 @@ public class FormSubmitActivity extends BaseLockActivity implements
         endView = new CollectFormEndView(this,
                 instance.getStatus() == CollectFormInstanceStatus.SUBMITTED ? R.string.collect_end_heading_confirmation_form_submitted : R.string.collect_end_action_submit);
         endView.setInstance(this.instance, offline);
-        binding.content.formDetailsContainer.removeAllViews();
-        binding.content.formDetailsContainer.addView(endView);
+        content.formDetailsContainer.removeAllViews();
+        content.formDetailsContainer.addView(endView);
 
         updateFormSubmitButton(false);
     }
@@ -292,31 +295,31 @@ public class FormSubmitActivity extends BaseLockActivity implements
 
     private void updateFormSubmitButton(boolean offline) {
         if (instance.getStatus() != CollectFormInstanceStatus.SUBMITTED) {
-            binding.content.submitButton.setVisibility(View.VISIBLE);
+            content.submitButton.setVisibility(View.VISIBLE);
             //submitButton.setOffline(offline);
         }
     }
 
     private void showFormCancelButton() {
-        binding.content.cancelButton.setVisibility(View.VISIBLE);
+        content.cancelButton.setVisibility(View.VISIBLE);
     }
 
     private void hideFormCancelButton() {
-        binding.content.cancelButton.setVisibility(View.GONE);
+        content.cancelButton.setVisibility(View.GONE);
     }
 
     private void showFormStopButton() {
-        binding.content.stopButton.setVisibility(View.VISIBLE);
+        content.stopButton.setVisibility(View.VISIBLE);
     }
 
     private void hideFormSubmitButton() {
-        binding.content.submitButton.setVisibility(View.INVISIBLE);
-        binding.content.submitButton.setClickable(false);
+        content.submitButton.setVisibility(View.INVISIBLE);
+        content.submitButton.setClickable(false);
     }
 
     private void showFormSubmitButton() {
-        binding.content.submitButton.setVisibility(View.VISIBLE);
-        binding.content.submitButton.setClickable(true);
+        content.submitButton.setVisibility(View.VISIBLE);
+        content.submitButton.setClickable(true);
     }
 
     private void stopPresenter() {
