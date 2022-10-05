@@ -2,7 +2,6 @@ package rs.readahead.washington.mobile.views.fragment.forms
 
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,11 +24,13 @@ class OutboxFormListFragment : BaseBindingFragment<FragmentOutboxFormListBinding
     FragmentOutboxFormListBinding::inflate
 ),
     FormListInterfce, ICollectFormInstanceListPresenterContract.IView, ISavedFormsInterface {
-    var recyclerView: RecyclerView? = null
-    var blankFormsInfo: TextView? = null
+    private val model: SharedFormsViewModel by lazy {
+        ViewModelProvider(baseActivity).get(SharedFormsViewModel::class.java)
+    }
+
     private var adapter: CollectOutboxFormInstanceRecycleViewAdapter? = null
     private var presenter: CollectFormInstanceListPresenter? = null
-    private var model: SharedFormsViewModel? = null
+
     override fun getFormListType(): FormListInterfce.Type {
         return FormListInterfce.Type.OUTBOX
     }
@@ -41,24 +42,15 @@ class OutboxFormListFragment : BaseBindingFragment<FragmentOutboxFormListBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        recyclerView = binding!!.submittFormInstances
-        blankFormsInfo = binding!!.blankSubmittedFormsInfo
-        model = ViewModelProvider(this).get(
-            SharedFormsViewModel::class.java
-        )
-        val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
-        recyclerView!!.layoutManager = mLayoutManager
-        recyclerView!!.adapter = adapter
+        initView()
         createPresenter()
-
         initObservers()
         listOutboxForms()
     }
 
 
     private fun initObservers() {
-        model!!.onFormInstanceDeleteSuccess.observe(
+        model.onFormInstanceDeleteSuccess.observe(
             viewLifecycleOwner,
             { success: Boolean? ->
                 onFormInstanceDeleted(
@@ -84,7 +76,7 @@ class OutboxFormListFragment : BaseBindingFragment<FragmentOutboxFormListBinding
     }
 
     override fun onFormInstanceListSuccess(instances: List<CollectFormInstance?>) {
-        blankFormsInfo!!.visibility = if (instances.isEmpty()) View.VISIBLE else View.GONE
+        binding!!.blankSubmittedFormsInfo.visibility = if (instances.isEmpty()) View.VISIBLE else View.GONE
         adapter!!.setInstances(instances)
     }
 
@@ -145,12 +137,18 @@ class OutboxFormListFragment : BaseBindingFragment<FragmentOutboxFormListBinding
     }
 
     fun deleteFormInstance(instanceId: Long) {
-        model!!.deleteFormInstance(instanceId)
+        model.deleteFormInstance(instanceId)
     }
 
     companion object {
         fun newInstance(): OutboxFormListFragment {
             return OutboxFormListFragment()
         }
+    }
+
+    fun initView(){
+        val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
+        binding?.submittFormInstances?.layoutManager = mLayoutManager
+        binding?.submittFormInstances?.adapter = adapter
     }
 }

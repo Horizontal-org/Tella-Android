@@ -25,11 +25,12 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
     FragmentSubmittedFormsListBinding::inflate
 ),
     FormListInterfce, ICollectFormInstanceListPresenterContract.IView, ISavedFormsInterface {
-    var recyclerView: RecyclerView? = null
-    var blankFormsInfo: TextView? = null
+    private val model: SharedFormsViewModel by lazy {
+        ViewModelProvider(baseActivity).get(SharedFormsViewModel::class.java)
+    }
+
     private var adapter: CollectSubmittedFormInstanceRecycleViewAdapter? = null
     private var presenter: CollectFormInstanceListPresenter? = null
-    private var model: SharedFormsViewModel? = null
     override fun getFormListType(): FormListInterfce.Type {
         return FormListInterfce.Type.SUBMITTED
     }
@@ -41,23 +42,14 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        recyclerView = binding!!.submittFormInstances
-        blankFormsInfo = binding!!.blankSubmittedFormsInfo
-        model = ViewModelProvider(this).get(
-            SharedFormsViewModel::class.java
-        )
-        val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
-        recyclerView!!.layoutManager = mLayoutManager
-        recyclerView!!.adapter = adapter
+        initView()
         createPresenter()
-
         initObservers()
         listSubmittedForms()
     }
 
     private fun initObservers() {
-        model!!.onFormInstanceDeleteSuccess.observe(
+        model.onFormInstanceDeleteSuccess.observe(
             viewLifecycleOwner,
             { success: Boolean? ->
                 onFormInstanceDeleted(
@@ -83,7 +75,7 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
     }
 
     override fun onFormInstanceListSuccess(instances: List<CollectFormInstance?>) {
-        blankFormsInfo!!.visibility = if (instances.isEmpty()) View.VISIBLE else View.GONE
+        binding?.blankSubmittedFormsInfo?.visibility = if (instances.isEmpty()) View.VISIBLE else View.GONE
         adapter!!.setInstances(instances)
     }
 
@@ -136,12 +128,18 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
 
     override fun reSubmitForm(instance: CollectFormInstance?) {}
     fun deleteFormInstance(instanceId: Long) {
-        model!!.deleteFormInstance(instanceId)
+        model.deleteFormInstance(instanceId)
     }
 
     companion object {
         fun newInstance(): SubmittedFormsListFragment {
             return SubmittedFormsListFragment()
         }
+    }
+
+    fun initView(){
+        val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
+        binding?.submittFormInstances?.layoutManager = mLayoutManager
+        binding?.submittFormInstances?.adapter = adapter
     }
 }

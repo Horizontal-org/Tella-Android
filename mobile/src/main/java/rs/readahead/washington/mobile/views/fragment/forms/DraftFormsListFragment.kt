@@ -2,8 +2,6 @@ package rs.readahead.washington.mobile.views.fragment.forms
 
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,9 +24,11 @@ class DraftFormsListFragment : BaseBindingFragment<FragmentDraftFormsListBinding
     FragmentDraftFormsListBinding::inflate
 ),
     FormListInterfce, ICollectFormInstanceListPresenterContract.IView, ISavedFormsInterface {
-    var recyclerView: RecyclerView? = null
-    var blankFormsInfo: TextView? = null
-    private var model: SharedFormsViewModel? = null
+
+    private val model: SharedFormsViewModel by lazy {
+        ViewModelProvider(baseActivity).get(SharedFormsViewModel::class.java)
+    }
+
     private var adapter: CollectDraftFormInstanceRecycleViewAdapter? = null
     private var presenter: CollectFormInstanceListPresenter? = null
     override fun getFormListType(): FormListInterfce.Type {
@@ -42,37 +42,30 @@ class DraftFormsListFragment : BaseBindingFragment<FragmentDraftFormsListBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView = binding!!.draftFormInstances
-        blankFormsInfo = binding!!.blankDraftFormsInfo
-        val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
-        recyclerView!!.layoutManager = mLayoutManager
-        recyclerView!!.adapter = adapter
-        model = ViewModelProvider(this).get(
-            SharedFormsViewModel::class.java
-        )
+        initView()
         createPresenter()
         initObservers()
         listDraftForms()
     }
 
     private fun initObservers() {
-        model!!.onDraftFormInstanceListSuccess.observe(
+        model.onDraftFormInstanceListSuccess.observe(
             viewLifecycleOwner
         ) { instances: List<CollectFormInstance> ->
             onDraftFormInstanceListSuccess(
                 instances
             )
         }
-        model!!.onFormInstanceListError.observe(
+        model.onFormInstanceListError.observe(
             viewLifecycleOwner
         ) { error: Throwable? ->
             onFormInstanceListError(
                 error
             )
         }
-        model!!.onFormInstanceDeleteSuccess.observe(
+        model.onFormInstanceDeleteSuccess.observe(
             viewLifecycleOwner,
-            Observer { success: Boolean? ->
+            { success: Boolean? ->
                 onFormInstanceDeleted(
                     success!!
                 )
@@ -96,12 +89,12 @@ class DraftFormsListFragment : BaseBindingFragment<FragmentDraftFormsListBinding
     }
 
     private fun onDraftFormInstanceListSuccess(instances: List<CollectFormInstance>) {
-        blankFormsInfo!!.visibility = if (instances.isEmpty()) View.VISIBLE else View.GONE
+        binding?.blankDraftFormsInfo!!.visibility = if (instances.isEmpty()) View.VISIBLE else View.GONE
         adapter!!.setInstances(instances)
     }
 
     override fun onFormInstanceListSuccess(instances: List<CollectFormInstance?>) {
-        blankFormsInfo!!.visibility = if (instances.isEmpty()) View.VISIBLE else View.GONE
+        binding?.blankDraftFormsInfo!!.visibility = if (instances.isEmpty()) View.VISIBLE else View.GONE
         adapter!!.setInstances(instances)
     }
 
@@ -156,12 +149,18 @@ class DraftFormsListFragment : BaseBindingFragment<FragmentDraftFormsListBinding
 
     override fun reSubmitForm(instance: CollectFormInstance?) {}
     fun deleteFormInstance(instanceId: Long) {
-        model!!.deleteFormInstance(instanceId)
+        model.deleteFormInstance(instanceId)
     }
 
     companion object {
         fun newInstance(): DraftFormsListFragment {
             return DraftFormsListFragment()
         }
+    }
+
+    fun initView(){
+        val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
+        binding?.draftFormInstances?.layoutManager = mLayoutManager
+        binding?.draftFormInstances?.adapter = adapter
     }
 }

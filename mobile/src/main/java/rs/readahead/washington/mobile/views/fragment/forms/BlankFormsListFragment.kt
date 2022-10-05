@@ -35,14 +35,11 @@ import java.util.ArrayList
 class BlankFormsListFragment :
     BaseBindingFragment<FragmentBlankFormsListBinding>(FragmentBlankFormsListBinding::inflate),
     FormListInterfce {
-    var blankFormView: View? = null
-    var availableFormsListView: LinearLayout? = null
-    var downloadedFormsListView: LinearLayout? = null
-    var availableFormsTitle: TextView? = null
-    var downloadedFormsTitle: TextView? = null
-    var blankFormsInfo: TextView? = null
-    var banner: TextView? = null
-    var model: SharedFormsViewModel? = null
+
+    private val model: SharedFormsViewModel by lazy {
+        ViewModelProvider(baseActivity).get(SharedFormsViewModel::class.java)
+    }
+
     private var availableForms: MutableList<CollectForm>? = null
     private var downloadedForms: MutableList<CollectForm>? = null
     private var alertDialog: AlertDialog? = null
@@ -60,23 +57,14 @@ class BlankFormsListFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        initView()
-        model = ViewModelProvider(this).get(
-            SharedFormsViewModel::class.java
-        )
         initObservers()
 
         if (!Preferences.isJavarosa3Upgraded()) {
-            model!!.showFab.postValue(false)
+            model.showFab.postValue(false)
             showJavarosa2UpgradeSheet()
         } else {
             listBlankForms()
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
     }
 
     override fun onDestroy() {
@@ -84,23 +72,19 @@ class BlankFormsListFragment :
         super.onDestroy()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
-
     private fun showBlankFormDownloadingDialog(progressText: Int) {
         if (alertDialog != null) return
         if (activity != null) {
-            model!!.showFab.postValue(false)
+            model.showFab.postValue(false)
         }
         alertDialog = DialogsUtil.showFormUpdatingDialog(
             context,
-            { _: DialogInterface?, which: Int -> model!!.userCancel() }, progressText
+            { _: DialogInterface?, which: Int -> model.userCancel() }, progressText
         )
     }
 
     private fun initObservers() {
-        model!!.showBlankFormRefreshLoading.observe(
+        model.showBlankFormRefreshLoading.observe(
             viewLifecycleOwner
         ) { show: Boolean? ->
             if (!show!!) {
@@ -114,19 +98,19 @@ class BlankFormsListFragment :
             } else {
                 if (alertDialog != null) return@observe
                 if (activity != null) {
-                    model!!.showFab.postValue(false)
+                    model.showFab.postValue(false)
                 }
                 if (!silentFormUpdates) {
                     alertDialog = DialogsUtil.showCollectRefreshProgressDialog(
                         context
-                    ) { dialog: DialogInterface?, which: Int -> model!!.userCancel() }
+                    ) { dialog: DialogInterface?, which: Int -> model.userCancel() }
                 }
             }
         }
-        model!!.onDownloadBlankFormDefSuccess.observe(
+        model.onDownloadBlankFormDefSuccess.observe(
             viewLifecycleOwner,
             { form: CollectForm? -> updateForm(form!!) })
-        model!!.onDownloadBlankFormDefStart.observe(
+        model.onDownloadBlankFormDefStart.observe(
             viewLifecycleOwner,
             { show: Boolean? ->
                 if (show == true) {
@@ -140,7 +124,7 @@ class BlankFormsListFragment :
                     )
                 }
             })
-        model!!.onUpdateBlankFormDefStart.observe(
+        model.onUpdateBlankFormDefStart.observe(
             viewLifecycleOwner
         ) { show: Boolean ->
             if (show) {
@@ -154,10 +138,10 @@ class BlankFormsListFragment :
                 ).show()
             }
         }
-        model!!.onBlankFormDefRemoved.observe(
+        model.onBlankFormDefRemoved.observe(
             viewLifecycleOwner,
-            Observer { it: Boolean? -> updateFormViews() })
-        model!!.onUpdateBlankFormDefSuccess.observe(
+            { updateFormViews() })
+        model.onUpdateBlankFormDefSuccess.observe(
             viewLifecycleOwner
         ) { (first, second): Pair<CollectForm?, FormDef?> ->
             onUpdateBlankFormDefSuccess(
@@ -165,7 +149,7 @@ class BlankFormsListFragment :
                 second
             )
         }
-        model!!.onUserCancel.observe(viewLifecycleOwner) { cancel: Boolean? ->
+        model.onUserCancel.observe(viewLifecycleOwner) { cancel: Boolean? ->
             hideAlertDialog()
             Toast.makeText(
                 activity,
@@ -173,25 +157,25 @@ class BlankFormsListFragment :
                 Toast.LENGTH_SHORT
             ).show()
         }
-        model!!.onFormDefError.observe(
+        model.onFormDefError.observe(
             viewLifecycleOwner
         ) { error: Throwable? ->
             onFormDefError(
                 error!!
             )
         }
-        model!!.onFormCacheCleared.observe(viewLifecycleOwner) { cleared: Boolean? ->
+        model.onFormCacheCleared.observe(viewLifecycleOwner) { cleared: Boolean? ->
             refreshBlankForms()
-            model!!.showFab.postValue(true)
+            model.showFab.postValue(true)
         }
-        model!!.onBlankFormsListResult.observe(
+        model.onBlankFormsListResult.observe(
             viewLifecycleOwner
         ) { listFormResult: ListFormResult? ->
             onBlankFormsListResult(
                 listFormResult!!
             )
         }
-        model!!.onNoConnectionAvailable.observe(
+        model.onNoConnectionAvailable.observe(
             viewLifecycleOwner
         ) { available: Boolean? ->
             if (!silentFormUpdates) {
@@ -227,10 +211,10 @@ class BlankFormsListFragment :
 
     private fun updateFormLists(listFormResult: ListFormResult) {
         noUpdatedForms = 0
-        blankFormView!!.visibility = View.VISIBLE
+        binding?.blankFormView?.visibility = View.VISIBLE
         downloadedForms!!.clear()
         availableForms!!.clear()
-        blankFormsInfo!!.visibility =
+        binding?.blankFormsInfo?.visibility =
             if (listFormResult.forms.isEmpty()) View.VISIBLE else View.GONE
         for (form in listFormResult.forms) {
             if (form.isDownloaded) {
@@ -264,15 +248,11 @@ class BlankFormsListFragment :
     }
 
     fun listBlankForms() {
-        if (model != null) {
-            model!!.listBlankForms()
-        }
+        model.listBlankForms()
     }
 
     fun refreshBlankForms() {
-        if (model != null) {
-            model!!.refreshBlankForms()
-        }
+        model.refreshBlankForms()
     }
 
     private fun updateForm(form: CollectForm) {
@@ -282,21 +262,21 @@ class BlankFormsListFragment :
     }
 
     private fun setViewsVisibility() {
-        downloadedFormsTitle!!.visibility =
+        binding?.downloadedFormsTitle?.visibility =
             if (downloadedForms!!.size > 0) View.VISIBLE else View.GONE
-        downloadedFormsListView!!.visibility =
+        binding?.downloadedForms?.visibility =
             if (downloadedForms!!.size > 0) View.VISIBLE else View.GONE
-        availableFormsTitle!!.visibility =
+        binding?.avaivableFormsTitle?.visibility =
             if (availableForms!!.size > 0) View.VISIBLE else View.GONE
-        availableFormsListView!!.visibility =
+        binding?.blankForms?.visibility =
             if (availableForms!!.size > 0) View.VISIBLE else View.GONE
     }
 
     private fun updateFormViews() {
-        downloadedFormsListView!!.removeAllViews()
-        availableFormsListView!!.removeAllViews()
-        createCollectFormViews(availableForms!!, availableFormsListView!!)
-        createCollectFormViews(downloadedForms!!, downloadedFormsListView!!)
+        binding?.downloadedForms?.removeAllViews()
+        binding?.blankForms?.removeAllViews()
+        createCollectFormViews(availableForms!!, binding!!.blankForms)
+        createCollectFormViews(downloadedForms!!, binding!!.downloadedForms)
         setViewsVisibility()
     }
 
@@ -306,7 +286,7 @@ class BlankFormsListFragment :
             alertDialog = null
         }
         if (activity != null) {
-            model!!.showFab.postValue(true)
+            model.showFab.postValue(true)
         }
     }
 
@@ -340,12 +320,12 @@ class BlankFormsListFragment :
                     )
                 }
                 rowLayout.setOnClickListener { view: View? ->
-                    model!!.getBlankFormDef(
+                    model.getBlankFormDef(
                         collectForm
                     )
                 }
                 pinnedIcon.setOnClickListener { view: View? ->
-                    model!!.toggleFavorite(collectForm)
+                    model.toggleFavorite(collectForm)
                     updateFormViews()
                 }
                 if (collectForm.isUpdated) {
@@ -353,7 +333,7 @@ class BlankFormsListFragment :
                     updateButton.visibility = View.VISIBLE
                     updateButton.setOnClickListener { view: View? ->
                         if (MyApplication.isConnectedToInternet(requireContext())) {
-                            model!!.updateBlankFormDef(collectForm)
+                            model.updateBlankFormDef(collectForm)
                         } else {
                             // todo: (djm) handle this in presenter
                             Toast.makeText(
@@ -373,7 +353,7 @@ class BlankFormsListFragment :
                     getString(R.string.collect_blank_action_download_form)
                 dlOpenButton.setOnClickListener { view: View? ->
                     if (MyApplication.isConnectedToInternet(requireContext())) {
-                        model!!.downloadBlankFormDef(collectForm)
+                        model.downloadBlankFormDef(collectForm)
                     } else {
                         // todo: (djm) handle this in presenter
                         Toast.makeText(
@@ -402,11 +382,11 @@ class BlankFormsListFragment :
             object : ActionSeleceted {
                 override fun accept(action: BottomSheetUtils.Action) {
                     if (action === BottomSheetUtils.Action.EDIT) {
-                        model!!.getBlankFormDef(collectForm)
+                        model.getBlankFormDef(collectForm)
                     }
                     if (action === BottomSheetUtils.Action.DELETE) {
                         downloadedForms!!.remove(collectForm)
-                        model!!.removeBlankFormDef(collectForm)
+                        model.removeBlankFormDef(collectForm)
                         updateFormViews()
                     }
                 }
@@ -428,9 +408,9 @@ class BlankFormsListFragment :
 
     private fun showBanner() {
         if (noUpdatedForms > 0) {
-            banner!!.visibility = View.VISIBLE
+            binding?.banner?.visibility = View.VISIBLE
         } else {
-            banner!!.visibility = View.GONE
+            binding?.banner?.visibility = View.GONE
         }
     }
 
@@ -456,7 +436,7 @@ class BlankFormsListFragment :
         try {
             Toast.makeText(context, getString(R.string.Javarosa_Upgrade_Toast), Toast.LENGTH_LONG)
                 .show()
-            model!!.deleteCachedForms()
+            model.deleteCachedForms()
         } catch (t: Throwable) {
             Timber.d(t)
         }
@@ -465,16 +445,6 @@ class BlankFormsListFragment :
     private fun goHome() {
         if (activity == null) return
         (requireActivity() as MainActivity).selectHome()
-    }
-
-    private fun initView() {
-        blankFormView = binding!!.blankFormView
-        availableFormsListView = binding!!.blankForms
-        downloadedFormsListView = binding!!.downloadedForms
-        availableFormsTitle = binding!!.avaivableFormsTitle
-        downloadedFormsTitle = binding!!.downloadedFormsTitle
-        blankFormsInfo = binding!!.blankFormsInfo
-        banner = binding!!.banner
     }
 
     companion object {
