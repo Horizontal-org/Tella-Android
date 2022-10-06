@@ -14,8 +14,6 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.event.ShowFormInstanceEntryEvent
 import rs.readahead.washington.mobile.databinding.FragmentSubmittedFormsListBinding
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance
-import rs.readahead.washington.mobile.mvp.contract.ICollectFormInstanceListPresenterContract
-import rs.readahead.washington.mobile.mvp.presenter.CollectFormInstanceListPresenter
 import rs.readahead.washington.mobile.views.adapters.CollectSubmittedFormInstanceRecycleViewAdapter
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.interfaces.ISavedFormsInterface
@@ -24,13 +22,12 @@ import timber.log.Timber
 class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsListBinding>(
     FragmentSubmittedFormsListBinding::inflate
 ),
-    FormListInterfce, ICollectFormInstanceListPresenterContract.IView, ISavedFormsInterface {
+    FormListInterfce, ISavedFormsInterface {
     private val model: SharedFormsViewModel by lazy {
         ViewModelProvider(baseActivity).get(SharedFormsViewModel::class.java)
     }
 
     private var adapter: CollectSubmittedFormInstanceRecycleViewAdapter? = null
-    private var presenter: CollectFormInstanceListPresenter? = null
     override fun getFormListType(): FormListInterfce.Type {
         return FormListInterfce.Type.SUBMITTED
     }
@@ -43,7 +40,6 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        createPresenter()
         initObservers()
         listSubmittedForms()
     }
@@ -56,6 +52,22 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
                     success!!
                 )
             })
+
+        model.onSubmittedFormInstanceListSuccess.observe(
+            viewLifecycleOwner
+        ) { instances: List<CollectFormInstance> ->
+            onFormInstanceListSuccess(
+                instances
+            )
+        }
+
+        model.onFormInstanceListError.observe(
+            viewLifecycleOwner
+        ) { error: Throwable? ->
+            onFormInstanceListError(
+                error
+            )
+        }
     }
 
     private fun onFormInstanceDeleted(success: Boolean) {
@@ -69,37 +81,17 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
         }
     }
 
-    override fun onDestroy() {
-        destroyPresenter()
-        super.onDestroy()
-    }
-
-    override fun onFormInstanceListSuccess(instances: List<CollectFormInstance?>) {
+    private fun onFormInstanceListSuccess(instances: List<CollectFormInstance?>) {
         binding?.blankSubmittedFormsInfo?.visibility = if (instances.isEmpty()) View.VISIBLE else View.GONE
         adapter!!.setInstances(instances)
     }
 
-    override fun onFormInstanceListError(error: Throwable?) {
+    private fun onFormInstanceListError(error: Throwable?) {
         Timber.d(error, javaClass.name)
     }
 
     fun listSubmittedForms() {
-        if (presenter != null) {
-            presenter!!.listSubmitFormInstances()
-        }
-    }
-
-    private fun createPresenter() {
-        if (presenter == null) {
-            presenter = CollectFormInstanceListPresenter(this)
-        }
-    }
-
-    private fun destroyPresenter() {
-        if (presenter != null) {
-            presenter!!.destroy()
-            presenter = null
-        }
+        model.listSubmitFormInstances()
     }
 
     override fun showFormsMenu(instance: CollectFormInstance) {

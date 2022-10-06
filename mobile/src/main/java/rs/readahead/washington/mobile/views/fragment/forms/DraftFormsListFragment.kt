@@ -13,8 +13,6 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.event.ShowFormInstanceEntryEvent
 import rs.readahead.washington.mobile.databinding.FragmentDraftFormsListBinding
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance
-import rs.readahead.washington.mobile.mvp.contract.ICollectFormInstanceListPresenterContract
-import rs.readahead.washington.mobile.mvp.presenter.CollectFormInstanceListPresenter
 import rs.readahead.washington.mobile.views.adapters.CollectDraftFormInstanceRecycleViewAdapter
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.interfaces.ISavedFormsInterface
@@ -23,14 +21,13 @@ import timber.log.Timber
 class DraftFormsListFragment : BaseBindingFragment<FragmentDraftFormsListBinding>(
     FragmentDraftFormsListBinding::inflate
 ),
-    FormListInterfce, ICollectFormInstanceListPresenterContract.IView, ISavedFormsInterface {
+    FormListInterfce, ISavedFormsInterface {
 
     private val model: SharedFormsViewModel by lazy {
         ViewModelProvider(baseActivity).get(SharedFormsViewModel::class.java)
     }
 
     private var adapter: CollectDraftFormInstanceRecycleViewAdapter? = null
-    private var presenter: CollectFormInstanceListPresenter? = null
     override fun getFormListType(): FormListInterfce.Type {
         return FormListInterfce.Type.DRAFT
     }
@@ -43,7 +40,6 @@ class DraftFormsListFragment : BaseBindingFragment<FragmentDraftFormsListBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        createPresenter()
         initObservers()
         listDraftForms()
     }
@@ -83,45 +79,18 @@ class DraftFormsListFragment : BaseBindingFragment<FragmentDraftFormsListBinding
         }
     }
 
-    override fun onDestroy() {
-        destroyPresenter()
-        super.onDestroy()
-    }
 
     private fun onDraftFormInstanceListSuccess(instances: List<CollectFormInstance>) {
         binding?.blankDraftFormsInfo!!.visibility = if (instances.isEmpty()) View.VISIBLE else View.GONE
         adapter!!.setInstances(instances)
     }
 
-    override fun onFormInstanceListSuccess(instances: List<CollectFormInstance?>) {
-        binding?.blankDraftFormsInfo!!.visibility = if (instances.isEmpty()) View.VISIBLE else View.GONE
-        adapter!!.setInstances(instances)
-    }
-
-    override fun onFormInstanceListError(error: Throwable?) {
+    private fun onFormInstanceListError(error: Throwable?) {
         Timber.d(error, javaClass.name)
     }
 
     fun listDraftForms() {
-        /*if (model != null) {
-            model.listDraftFormInstances();
-        }*/
-        if (presenter != null) {
-            presenter!!.listDraftFormInstances()
-        }
-    }
-
-    private fun createPresenter() {
-        if (presenter == null) {
-            presenter = CollectFormInstanceListPresenter(this)
-        }
-    }
-
-    private fun destroyPresenter() {
-        if (presenter != null) {
-            presenter!!.destroy()
-            presenter = null
-        }
+        model.listDraftFormInstances()
     }
 
     override fun showFormsMenu(instance: CollectFormInstance) {

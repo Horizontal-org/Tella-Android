@@ -47,7 +47,8 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
     var onUserCancel = SingleLiveEvent<Boolean>()
     var onFormCacheCleared = SingleLiveEvent<Boolean>()
     var showFab = MutableLiveData<Boolean>()
-    var onFormInstanceListSuccess = MutableLiveData<List<CollectFormInstance>>()
+    var onSubmittedFormInstanceListSuccess = MutableLiveData<List<CollectFormInstance>>()
+    var onOutboxFormInstanceListSuccess = MutableLiveData<List<CollectFormInstance>>()
     var onDraftFormInstanceListSuccess = MutableLiveData<List<CollectFormInstance>>()
     var onFormInstanceListError = SingleLiveEvent<Throwable>()
 
@@ -423,7 +424,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
     }
 
     fun listDraftFormInstances() {
-        disposables.add(asyncDataSource
+        disposables.add(keyDataSource.dataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .flatMapSingle { obj: DataSource -> obj.listDraftForms() }
@@ -441,13 +442,33 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
     }
 
     fun listSubmitFormInstances() {
-        disposables.add(asyncDataSource
+        disposables.add(keyDataSource.dataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .flatMapSingle { obj: DataSource -> obj.listSentForms() }
             .subscribe(
                 { forms: List<CollectFormInstance> ->
-                    onFormInstanceListSuccess.postValue(
+                    onSubmittedFormInstanceListSuccess.postValue(
+                        forms
+                    )
+                },
+                { throwable: Throwable? ->
+                    onFormInstanceListError.postValue(
+                        throwable
+                    )
+                }
+            )
+        )
+    }
+
+    fun listOutboxFormInstances() {
+        disposables.add(keyDataSource.dataSource
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .flatMapSingle { obj: DataSource -> obj.listPendingForms() }
+            .subscribe(
+                { forms: List<CollectFormInstance> ->
+                    onOutboxFormInstanceListSuccess.postValue(
                         forms
                     )
                 },
