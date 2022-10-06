@@ -1,32 +1,35 @@
-package rs.readahead.washington.mobile.views.dialog.reports.step4
+package rs.readahead.washington.mobile.views.dialog.reports.step5
 
 import android.os.Bundle
 import android.view.View
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.databinding.FragmentSuccessfulLoginBinding
+import rs.readahead.washington.mobile.databinding.FragmentReportServerAdvancedSettingsBinding
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.ID_KEY
 import rs.readahead.washington.mobile.views.dialog.IS_UPDATE_SERVER
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
-import rs.readahead.washington.mobile.views.dialog.reports.step5.ServerAdvancedSettingsFragment
+import rs.readahead.washington.mobile.views.dialog.reports.step6.SuccessfulSetServerFragment
 
-class SuccessfulLoginFragment : BaseBindingFragment<FragmentSuccessfulLoginBinding>(
-    FragmentSuccessfulLoginBinding::inflate
-) {
+@AndroidEntryPoint
+class ServerAdvancedSettingsFragment :
+    BaseBindingFragment<FragmentReportServerAdvancedSettingsBinding>(
+        FragmentReportServerAdvancedSettingsBinding::inflate
+    ) {
     private var isUpdate = false
     private lateinit var server: TellaReportServer
 
     companion object {
-        val TAG: String = SuccessfulLoginFragment::class.java.simpleName
+        val TAG: String = ServerAdvancedSettingsFragment::class.java.simpleName
 
         @JvmStatic
         fun newInstance(
             server: TellaReportServer,
             isUpdate: Boolean
-        ): SuccessfulLoginFragment {
-            val frag = SuccessfulLoginFragment()
+        ): ServerAdvancedSettingsFragment {
+            val frag = ServerAdvancedSettingsFragment()
             val args = Bundle()
             args.putSerializable(ID_KEY, server.id)
             args.putString(OBJECT_KEY, Gson().toJson(server))
@@ -43,6 +46,7 @@ class SuccessfulLoginFragment : BaseBindingFragment<FragmentSuccessfulLoginBindi
     }
 
     private fun initView() {
+
         if (arguments == null) return
 
         arguments?.getString(OBJECT_KEY)?.let {
@@ -54,16 +58,24 @@ class SuccessfulLoginFragment : BaseBindingFragment<FragmentSuccessfulLoginBindi
     }
 
     private fun initListeners() {
-        binding?.goToAdvancedSettingsBtn?.setOnClickListener {
-            binding?.goToAdvancedSettingsBtn?.isChecked = true
-            binding?.goToReportsBtn?.isChecked = false
-            baseActivity.addFragment(ServerAdvancedSettingsFragment.newInstance(server,isUpdate), R.id.container)
+        binding?.backBtn?.setOnClickListener {
+            baseActivity.onBackPressed()
+        }
+        binding?.nextBtn?.setOnClickListener {
+            baseActivity.addFragment(
+                SuccessfulSetServerFragment.newInstance(server, isUpdate),
+                R.id.container
+            )
         }
 
-        binding?.goToReportsBtn?.setOnClickListener {
-            binding?.goToAdvancedSettingsBtn?.isChecked = false
-            binding?.goToReportsBtn?.isChecked = true
+        binding?.backgroundUploadSwitch?.mSwitch?.setOnCheckedChangeListener { _, isChecked: Boolean ->
+            server.isActivatedBackgroundUpload = isChecked
         }
+
+        binding?.shareVerificationSwitch?.mSwitch?.setOnCheckedChangeListener { _, isChecked: Boolean ->
+            server.isActivatedMetadata = isChecked
+        }
+
     }
 
 }

@@ -33,4 +33,12 @@
         android:title="@string/Home_BottomNav_Uwazi"
         android:visible="false"
         />
+
+   <!-- <item
+        android:id="@+id/reports"
+        android:icon="@drawable/ic_uwazi"
+        android:contentDescription="reports"
+        android:title="@string/Home_BottomNav_Uwazi"
+        android:visible="false"
+        /> -->
 </menu>

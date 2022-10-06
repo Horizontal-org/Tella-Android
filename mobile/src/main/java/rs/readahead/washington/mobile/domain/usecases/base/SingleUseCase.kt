@@ -1,9 +1,8 @@
-package com.android.artgallery.domain.usecase.base
+package rs.readahead.washington.mobile.domain.usecases.base
 
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import rs.readahead.washington.mobile.domain.usecases.base.UseCase
 
 /**
  * This abstract class is shared among several closely related UseCase classes

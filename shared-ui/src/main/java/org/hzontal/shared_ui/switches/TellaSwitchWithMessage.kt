@@ -24,7 +24,6 @@ class TellaSwitchWithMessage @JvmOverloads constructor(
     @StringRes
     private var explainText: Int = -1
 
-
     private lateinit var titleTextView: TextView
     private lateinit var messageTextView: TextView
     private lateinit var learnMoreTextView: TextView

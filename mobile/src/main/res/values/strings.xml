@@ -679,10 +679,16 @@ button to add a new template.</string>
     <!-- Reports -->
     <string name="Settings_Reports_Choose_Credentials" translatable="false">Do you have a username and password?</string>
     <string name="Server_Connect_Icon" translatable="false">server connect image</string>
-    <string name="Login_To_Access_Project_Text">Log in to access the project</string>
-    <string name="Settings_Reports_Connected_To_Project">Connected to project</string>
-    <string name="Settings_Reports_Advanced_Success_Title">Advanced settings complete</string>
-    <string name="Settings_Reports_Advanced_Success_Description">Advanced settings complete</string>
-    <string name="Settings_Reports_Go_To_Reports">GO TO REPORTS</string>
-    <string name="Settings_reports_Go_To_Advanced_Settings">Advanced settings</string>
+    <string name="Login_To_Access_Project_Text" translatable="false">Log in to access the project</string>
+    <string name="Settings_Reports_Connected_To_Project" translatable="false" >Connected to project</string>
+    <string name="Settings_Reports_Advanced_Success_Title" translatable="false">Advanced settings complete</string>
+    <string name="Settings_Reports_Advanced_Success_Description" translatable="false">Advanced settings complete</string>
+    <string name="Settings_Reports_Go_To_Reports" translatable="false">GO TO REPORTS</string>
+    <string name="Settings_reports_Go_To_Advanced_Settings" translatable="false">Advanced settings</string>
+    <string name="Setting_Reports_Share_Information_Title" translatable="false">Share verification information</string>
+    <string name="Setting_Reports_Share_Information_Description" translatable="false">Include information about your device and location when sending reports, to make your files verifiable. </string>
+    <string name="Setting_Reports_Background_Upload" translatable="false">Background upload</string>
+    <string name="Setting_Reports_Background_Upload_Description" translatable="false">Continue uploading reports while doing other tasks or if you exit Tella.\nWARNING: If enabled, Tella will remain unlocked until all reports are fully uploaded.</string>
+    <string name="Setting_Reports_Settings_Completed" translatable="false">Advanced settings complete</string>
+    <string name="Setting_Reports_Settings_Completed_Description" translatable="false">You can always change your Reports preferences in the Tella Settings.</string>
 </resources>

@@ -332,8 +332,10 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     public void onCountTUServersEnded(Long num) {
-        if (num > 0)
+        if (num > 0) {
             CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_TELLA);
+            maybeShowTUserver(num);
+        }
     }
 
     @Override
@@ -428,6 +430,11 @@ public class MainActivity extends MetadataActivity implements
     public void selectHome() {
         btmNavMain.getMenu().findItem(R.id.home).setChecked(true);
         navController.navigate(R.id.home);
+    }
+
+    private void maybeShowTUserver(Long num){
+        //btmNavMain.getMenu().findItem(R.id.reports).setVisible(num > 0);
+      //  invalidateOptionsMenu();
     }
 }
 

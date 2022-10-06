@@ -36,7 +36,6 @@ class LoginReportsFragment :
         fun newInstance(server: TellaReportServer, isUpdate: Boolean): LoginReportsFragment {
             val frag = LoginReportsFragment()
             val args = Bundle()
-            args.putInt(TITLE_KEY, R.string.settings_docu_dialog_title_server_settings)
             args.putSerializable(ID_KEY, server.id)
             args.putString(OBJECT_KEY, Gson().toJson(server))
             args.putBoolean(IS_UPDATE_SERVER, isUpdate)
@@ -73,7 +72,8 @@ class LoginReportsFragment :
     private fun initObservers() {
 
         viewModel.error.observe(baseActivity, {
-
+            binding?.passwordLayout?.error =
+                getString(R.string.settings_docu_error_wrong_credentials)
         })
 
         viewModel.authenticationSuccess.observe(baseActivity, { isSuccess ->
