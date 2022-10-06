@@ -335,8 +335,10 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     public void onCountTUServersEnded(Long num) {
-        if (num > 0)
+        if (num > 0) {
             CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_TELLA);
+            maybeShowTUserver(num);
+        }
     }
 
     @Override
@@ -423,6 +425,11 @@ public class MainActivity extends MetadataActivity implements
     private void maybeShowUwaziMenu(Long num) {
         btmNavMain.getMenu().findItem(R.id.uwazi).setVisible(num > 0);
         invalidateOptionsMenu();
+    }
+
+    private void maybeShowTUserver(Long num){
+        //btmNavMain.getMenu().findItem(R.id.reports).setVisible(num > 0);
+      //  invalidateOptionsMenu();
     }
 }
 

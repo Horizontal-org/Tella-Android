@@ -1,10 +1,10 @@
 package rs.readahead.washington.mobile.domain.usecases.server
 
-import com.android.artgallery.domain.usecase.base.SingleUseCase
 import io.reactivex.Single
 import rs.readahead.washington.mobile.domain.entity.reports.ReportsLoginResult
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.repository.reports.ReportsRepository
+import rs.readahead.washington.mobile.domain.usecases.base.SingleUseCase
 import javax.inject.Inject
 
 class CheckReportsServerUseCase @Inject constructor(private val reportsRepository: ReportsRepository) :
@@ -16,8 +16,6 @@ class CheckReportsServerUseCase @Inject constructor(private val reportsRepositor
     }
 
     override fun buildUseCaseSingle(): Single<ReportsLoginResult> {
-       return reportsRepository.login(server)
+        return reportsRepository.login(server)
     }
-
-
 }
