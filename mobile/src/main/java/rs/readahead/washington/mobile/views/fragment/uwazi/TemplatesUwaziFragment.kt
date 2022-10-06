@@ -19,9 +19,10 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.entry.COLLECT_TEMPLAT
 
 
 class TemplatesUwaziFragment : BaseBindingFragment<FragmentTemplatesUwaziBinding>(
-    FragmentTemplatesUwaziBinding::inflate) {
-    private val viewModel : SharedUwaziViewModel by viewModels()
-    private val uwaziTemplatesAdapter : UwaziTemplatesAdapter by lazy { UwaziTemplatesAdapter() }
+    FragmentTemplatesUwaziBinding::inflate
+) {
+    private val viewModel: SharedUwaziViewModel by viewModels()
+    private val uwaziTemplatesAdapter: UwaziTemplatesAdapter by lazy { UwaziTemplatesAdapter() }
     private val bundle by lazy { Bundle() }
 
 
@@ -34,31 +35,31 @@ class TemplatesUwaziFragment : BaseBindingFragment<FragmentTemplatesUwaziBinding
         initObservers()
     }
 
-    private fun initObservers(){
-        with(viewModel){
+    private fun initObservers() {
+        with(viewModel) {
 
-            templates.observe(viewLifecycleOwner,{
-                if (it.size == 1){
+            templates.observe(viewLifecycleOwner, {
+                if (it.size == 1) {
                     binding?.textViewEmpty!!.isVisible = true
                     binding!!.templatesRecyclerView.isVisible = false
-                }else{
+                } else {
                     binding!!.textViewEmpty.isVisible = false
                     binding!!.templatesRecyclerView.isVisible = true
                     uwaziTemplatesAdapter.setEntityTemplates(it)
                 }
             })
 
-            showSheetMore.observe(viewLifecycleOwner,{
+            showSheetMore.observe(viewLifecycleOwner, {
                 showDownloadedMenu(it)
             })
 
-            openEntity.observe(viewLifecycleOwner,{
+            openEntity.observe(viewLifecycleOwner, {
                 openEntity(it)
             })
         }
     }
 
-    private fun initView(){
+    private fun initView() {
         binding?.templatesRecyclerView?.apply {
             layoutManager = LinearLayoutManager(baseActivity)
             adapter = uwaziTemplatesAdapter
@@ -86,17 +87,18 @@ class TemplatesUwaziFragment : BaseBindingFragment<FragmentTemplatesUwaziBinding
                     }
                 }
             },
-            getString(R.string.action_delete) + " \""+ template.entityRow.name+ "\"?",
+            getString(R.string.action_delete) + " \"" + template.entityRow.name + "\"?",
             requireContext().resources.getString(R.string.Uwazi_Subtitle_RemoveTemplate),
             requireContext().getString(R.string.action_remove),
             requireContext().getString(R.string.action_cancel)
         )
     }
 
-    private fun openEntity(template: CollectTemplate){
+    private fun openEntity(template: CollectTemplate) {
         val gsonTemplate = Gson().toJson(template)
         bundle.putString(COLLECT_TEMPLATE, gsonTemplate)
-        NavHostFragment.findNavController(this@TemplatesUwaziFragment).navigate(R.id.action_uwaziScreen_to_uwaziEntryScreen, bundle)
+        NavHostFragment.findNavController(this@TemplatesUwaziFragment)
+            .navigate(R.id.action_uwaziScreen_to_uwaziEntryScreen, bundle)
     }
 
 }

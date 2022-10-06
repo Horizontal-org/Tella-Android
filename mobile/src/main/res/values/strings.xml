@@ -577,9 +577,9 @@ button to add a new template.</string>
     <string name="Uwazi_Drafts_Header_Text">These are entities you have not submitted.
 
  Tap on an entity to continue working on it.</string>
+    <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">Choose how you want to add files</string>
     <string name="Uwazi_Outbox_Header_Text">These are entities currently being submitted.</string>
     <string name="Uwazi_Submitted_Header_Text">These are entities that you have submitted successfully.</string>
-    <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">Choose how you want to add files</string>
     <string-array name="Uwazi_Language_Array">
         <item>English</item>
         <item>عربي</item>
@@ -674,6 +674,8 @@ button to add a new template.</string>
     <string name="Uwazi_Dialog_Draft_Title">Exit entity?</string>
     <string name="Timeout_Warning_Title">Warnings</string>
     <string name="Timeout_Warning_Description">To perform this action, Tella will remain unlocked for 3 minutes.</string>
+    <string name="Javarosa_Upgrade_Warning_Description">Javarosa library has been upgraded and it is not possible to work on old forms. In order to continue, we have to remove all the local forms.</string>
+    <string name="Javarosa_Upgrade_Toast">We are about to flush the cached form definitions.</string>
     <!-- Reports -->
     <string name="Settings_Reports_Choose_Credentials" translatable="false">Do you have a username and password?</string>
     <string name="Server_Connect_Icon" translatable="false">server connect image</string>

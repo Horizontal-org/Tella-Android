@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.views.adapters;
 
 import static rs.readahead.washington.mobile.util.CamouflageManager.defaultAliasPosition;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +13,7 @@ import android.widget.TextView;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.databinding.CardCamouflageIconBinding;
 import rs.readahead.washington.mobile.presentation.entity.CamouflageOption;
 
 
@@ -26,10 +25,11 @@ public class CamouflageRecycleViewAdapter extends RecyclerView.Adapter<Camouflag
     public CamouflageRecycleViewAdapter() {
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_camouflage_icon, parent,false);
-        return new ViewHolder(v);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        rs.readahead.washington.mobile.databinding.CardCamouflageIconBinding itemBinding = CardCamouflageIconBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new ViewHolder(itemBinding);
     }
 
     @Override
@@ -74,16 +74,17 @@ public class CamouflageRecycleViewAdapter extends RecyclerView.Adapter<Camouflag
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.root)
+        CardCamouflageIconBinding binding;
         View rootView;
-        @BindView(R.id.icon)
         ImageView iconView;
-        @BindView(R.id.name)
         TextView nameView;
 
-        public ViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        public ViewHolder(CardCamouflageIconBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            rootView = binding.getRoot();
+            iconView = binding.icon;
+            nameView = binding.name;
         }
     }
 }

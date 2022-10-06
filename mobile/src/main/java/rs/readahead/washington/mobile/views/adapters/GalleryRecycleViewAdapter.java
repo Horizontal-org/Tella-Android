@@ -9,8 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -22,9 +20,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.databinding.CardGalleryAttachmentMediaFileBinding;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
@@ -62,8 +59,8 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(cardLayoutId, parent,false);
-        return new ViewHolder(v, this.selectable);
+        CardGalleryAttachmentMediaFileBinding itemBinding = CardGalleryAttachmentMediaFileBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new ViewHolder(itemBinding, this.selectable);
     }
 
     @Override
@@ -77,30 +74,30 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
 
         if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
             holder.showImageInfo();
-            Glide.with(holder.mediaView.getContext())
+            Glide.with(holder.binding.mediaView.getContext())
                     .using(glideLoader)
                     .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
-                    .into(holder.mediaView);
+                    .into(holder.binding.mediaView);
         } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
             holder.showAudioInfo(vaultFile);
             Drawable drawable = VectorDrawableCompat.create(holder.itemView.getContext().getResources(),
                     R.drawable.ic_mic_gray, null);
-            holder.mediaView.setImageDrawable(drawable);
+            holder.binding.mediaView.setImageDrawable(drawable);
         } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
             holder.showVideoInfo(vaultFile);
-            Glide.with(holder.mediaView.getContext())
+            Glide.with(holder.binding.mediaView.getContext())
                     .using(glideLoader)
                     .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
-                    .into(holder.mediaView);
+                    .into(holder.binding.mediaView);
         }
 
-        holder.mediaView.setOnClickListener(v -> galleryMediaHandler.playMedia(vaultFile));
+        holder.binding.mediaView.setOnClickListener(v -> galleryMediaHandler.playMedia(vaultFile));
 
-        holder.checkBox.setOnClickListener(v -> checkboxClickHandler(holder, vaultFile));
+        holder.binding.checkBox.setOnClickListener(v -> checkboxClickHandler(holder, vaultFile));
     }
 
     @Override
@@ -170,8 +167,8 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
 
     private void checkItemState(ViewHolder holder, VaultFile mediaFile) {
         boolean checked = selected.contains(mediaFile);
-        holder.selectionDimmer.setVisibility(checked ? View.VISIBLE : View.GONE);
-        holder.checkBox.setImageResource(checked ? R.drawable.ic_check_box_on : R.drawable.ic_check_box_off);
+        holder.binding.selectionDimmer.setVisibility(checked ? View.VISIBLE : View.GONE);
+        holder.binding.checkBox.setImageResource(checked ? R.drawable.ic_check_box_on : R.drawable.ic_check_box_off);
     }
 
     public void setSelectedMediaFiles(@NonNull List<VaultFile> selectedMediaFiles) {
@@ -180,57 +177,39 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.mediaView)
-        ImageView mediaView;
-        @BindView(R.id.checkBox)
-        ImageView checkBox;
-        @BindView(R.id.videoInfo)
-        ViewGroup videoInfo;
-        @BindView(R.id.videoDuration)
-        TextView videoDuration;
-        @BindView(R.id.audioInfo)
-        ViewGroup audioInfo;
-        @BindView(R.id.audioDuration)
-        TextView audioDuration;
-        @BindView(R.id.selectionDimmer)
-        View selectionDimmer;
-        @BindView(R.id.checkboxOuter)
-        View checkboxOuter;
-        @BindView(R.id.metadata_icon)
-        ImageView metadataIcon;
+        CardGalleryAttachmentMediaFileBinding binding;
 
-
-        public ViewHolder(View itemView, boolean selectable) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        public ViewHolder(CardGalleryAttachmentMediaFileBinding binding, boolean selectable) {
+            super(binding.getRoot());
+            this.binding = binding;
             maybeEnableCheckBox(selectable);
         }
 
         void showVideoInfo(VaultFile vaultFile) {
-            audioInfo.setVisibility(View.GONE);
-            videoInfo.setVisibility(View.VISIBLE);
+            binding.audioInfo.setVisibility(View.GONE);
+            binding.videoInfo.setVisibility(View.VISIBLE);
             if (vaultFile.duration > 0) {
-                videoDuration.setText(getDuration(vaultFile));
-                videoDuration.setVisibility(View.VISIBLE);
+                binding.videoDuration.setText(getDuration(vaultFile));
+                binding.videoDuration.setVisibility(View.VISIBLE);
             } else {
-                videoDuration.setVisibility(View.INVISIBLE);
+                binding.videoDuration.setVisibility(View.INVISIBLE);
             }
         }
 
         void showAudioInfo(VaultFile vaultFile) {
-            videoInfo.setVisibility(View.GONE);
-            audioInfo.setVisibility(View.VISIBLE);
+            binding.videoInfo.setVisibility(View.GONE);
+            binding.audioInfo.setVisibility(View.VISIBLE);
             if (vaultFile.duration > 0) {
-                audioDuration.setText(getDuration(vaultFile));
-                audioDuration.setVisibility(View.VISIBLE);
+                binding.audioDuration.setText(getDuration(vaultFile));
+                binding.audioDuration.setVisibility(View.VISIBLE);
             } else {
-                audioDuration.setVisibility(View.INVISIBLE);
+                binding.audioDuration.setVisibility(View.INVISIBLE);
             }
         }
 
         void showImageInfo() {
-            videoInfo.setVisibility(View.GONE);
-            audioInfo.setVisibility(View.GONE);
+            binding.videoInfo.setVisibility(View.GONE);
+            binding.audioInfo.setVisibility(View.GONE);
         }
 
         private String getDuration(VaultFile vaultFile) {
@@ -239,14 +218,14 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
 
         void maybeShowMetadataIcon(VaultFile vaultFile) {
             if (vaultFile.metadata != null) {
-                metadataIcon.setVisibility(View.VISIBLE);
+                binding.metadataIcon.setVisibility(View.VISIBLE);
             } else {
-                metadataIcon.setVisibility(View.GONE);
+                binding.metadataIcon.setVisibility(View.GONE);
             }
         }
 
         void maybeEnableCheckBox(boolean selectable) {
-            checkBox.setEnabled(selectable);
+            binding.checkBox.setEnabled(selectable);
         }
     }
 }

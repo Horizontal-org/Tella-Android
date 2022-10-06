@@ -171,6 +171,13 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }).compose(applyCompletableSchedulers());
     }
 
+    public Completable removeCachedForms() {
+        return Completable.fromCallable(() -> {
+            dataSource.removeCachedFormInstances();
+            return true;
+        });
+    }
+
     @Override
     public Completable removeTUServer(final long id) {
         return Completable.fromCallable((Callable<Void>) () -> {
@@ -599,7 +606,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return null;
     }
 
-    private List<CollectForm> getBlankCollectForms() {
+    public List<CollectForm> getBlankCollectForms() {
         Cursor cursor = null;
         List<CollectForm> forms = new ArrayList<>();
 
@@ -1760,6 +1767,23 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return formDef;
     }
 
+    private void updateCollectFormDefinition(CollectForm form, FormDef formDef) {
+        try {
+            ContentValues values = new ContentValues();
+            values.put(D.C_FORM_DEF, serializeFormDef(formDef));
+            values.put(D.C_UPDATED, 0);
+            values.put(D.C_DOWNLOADED, 1);
+
+            database.update(D.T_COLLECT_BLANK_FORM, values,
+                    D.C_FORM_ID + "= ? AND " + D.C_VERSION + " = ?",
+                    new String[]{form.getForm().getFormID(), form.getForm().getVersion()});
+            form.setDownloaded(true);
+            form.setUpdated(false);
+        } catch (IOException e) {
+            Timber.d(e, getClass().getName());
+        }
+    }
+
     private List<CollectFormInstance> getDraftCollectFormInstances() {
         return getCollectFormInstances(new CollectFormInstanceStatus[]{
                 CollectFormInstanceStatus.UNKNOWN,
@@ -1971,6 +1995,21 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             database.delete(D.T_COLLECT_FORM_INSTANCE, D.C_COLLECT_SERVER_ID + " = ?", new String[]{Long.toString(id)});
             database.delete(D.T_COLLECT_SERVER, D.C_ID + " = ?", new String[]{Long.toString(id)});
+
+            database.setTransactionSuccessful();
+        } finally {
+            database.endTransaction();
+        }
+    }
+
+    public void removeCachedFormInstances() {
+        try {
+            database.beginTransaction();
+
+            deleteTable(D.T_COLLECT_BLANK_FORM);
+            deleteTable(D.T_COLLECT_FORM_INSTANCE);
+            deleteTable(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE);
+            Preferences.setJavarosa3Upgraded(true);
 
             database.setTransactionSuccessful();
         } finally {

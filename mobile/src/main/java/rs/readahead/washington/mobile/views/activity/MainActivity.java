@@ -29,8 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import dagger.hilt.android.AndroidEntryPoint;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
@@ -40,6 +38,7 @@ import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent;
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
+import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.mvp.contract.IHomeScreenPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMediaImportPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
@@ -64,8 +63,7 @@ public class MainActivity extends MetadataActivity implements
         IMediaImportPresenterContract.IView,
         IMetadataAttachPresenterContract.IView {
     public static final String PHOTO_VIDEO_FILTER = "gallery_filter";
-    @BindView(R.id.main_container)
-    View root;
+
     private boolean mExit = false;
     private Handler handler;
     private EventCompositeDisposable disposables;
@@ -80,7 +78,6 @@ public class MainActivity extends MetadataActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-        ButterKnife.bind(this);
 
         //  setupToolbar();
         setupNavigation();
@@ -349,8 +346,11 @@ public class MainActivity extends MetadataActivity implements
     @Override
     public void onCountCollectServersEnded(Long num) {
         maybeShowFormsMenu(num);
-        if (num > 0)
+        if (num > 0) {
             CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_COLLECT);
+        } else {
+            Preferences.setJavarosa3Upgraded(true);
+        }
         //homeScreenPresenter.countTUServers();
     }
 
@@ -425,6 +425,11 @@ public class MainActivity extends MetadataActivity implements
     private void maybeShowUwaziMenu(Long num) {
         btmNavMain.getMenu().findItem(R.id.uwazi).setVisible(num > 0);
         invalidateOptionsMenu();
+    }
+
+    public void selectHome() {
+        btmNavMain.getMenu().findItem(R.id.home).setChecked(true);
+        navController.navigate(R.id.home);
     }
 
     private void maybeShowTUserver(Long num){

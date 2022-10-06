@@ -94,7 +94,6 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     private FormSubmitter formSubmitter;
     private EventCompositeDisposable disposables;
     private QuestionAttachmentPresenter presenter; // todo: use separate presenter just for importing, extract from this one
-
     private CollectFormEndView endView;
     private AlertDialog alertDialog;
     private ProgressDialog progressDialog;

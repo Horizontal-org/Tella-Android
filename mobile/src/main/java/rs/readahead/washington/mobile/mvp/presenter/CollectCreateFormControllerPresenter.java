@@ -72,14 +72,7 @@ public class CollectCreateFormControllerPresenter implements
         formDef.initialize(true, new InstanceInitializationFactory());
 
         // Remove previous forms
-        //ReferenceManager.__().clearSession();
-        ReferenceManager._().clearSession();
-
-        // This should get moved to the Application Class
-        /*if (ReferenceManager._().getFactories().length == 0) {
-            // this is /sdcard/odk
-            ReferenceManager._().addReferenceFactory(new FileReferenceFactory(Collect.ODK_ROOT));
-        }*/
+        ReferenceManager.__().clearSession();
 
         fc.initFormChangeTracking(); // set clear form to track changes
 

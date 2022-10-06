@@ -274,6 +274,14 @@ public class Preferences {
         setBoolean(SharedPrefs.EXIT_TIMEOUT, value);
     }
 
+    public static boolean isJavarosa3Upgraded() {
+        return getBoolean(SharedPrefs.JAVAROSA_3_UPGRADE, false);
+    }
+
+    public static void setJavarosa3Upgraded(boolean value) {
+        setBoolean(SharedPrefs.JAVAROSA_3_UPGRADE, value);
+    }
+
     public static void setAutoUpload(boolean value) {
         setBoolean(SharedPrefs.AUTO_UPLOAD, value);
     }

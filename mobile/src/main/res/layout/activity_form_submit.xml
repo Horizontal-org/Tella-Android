@@ -21,6 +21,8 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_form_submit" />
+    <include
+        android:id="@+id/content"
+        layout="@layout/content_form_submit" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

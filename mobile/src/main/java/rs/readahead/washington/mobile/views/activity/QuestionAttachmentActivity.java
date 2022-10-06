@@ -16,7 +16,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -27,14 +26,12 @@ import com.hzontal.utils.MediaFile;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.RuntimePermissions;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.databinding.ActivityQuestionAttachmentBinding;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IQuestionAttachmentPresenterContract;
@@ -55,13 +52,9 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
         IGalleryMediaHandler {
     public static final String MEDIA_FILE_KEY = "mfk";
     public static final String MEDIA_FILES_FILTER = "mff";
-    @BindView(R.id.galleryRecyclerView)
     GalleryRecyclerView recyclerView;
-    @BindView(R.id.progressBar)
     ProgressBar progressBar;
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.attachments_blank_list_info)
     TextView blankGalleryInfo;
     private int selectedNum;
     private QuestionAttachmentPresenter presenter;
@@ -71,14 +64,18 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
     private ProgressDialog progressDialog;
     private IMediaFileRecordRepository.Filter filter;
     private IMediaFileRecordRepository.Sort sort = IMediaFileRecordRepository.Sort.NEWEST;
+    private ActivityQuestionAttachmentBinding binding;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_question_attachment);
-        ButterKnife.bind(this);
+        binding = ActivityQuestionAttachmentBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        initView();
+
+        binding.content.popupMenu.setOnClickListener(this::showPopupSort);
 
         toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
 
@@ -138,7 +135,6 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
         super.onDestroy();
     }
 
-    @OnClick(R.id.popupMenu)
     public void showPopupSort(View view) {
         Context wrapper = new ContextThemeWrapper(this, R.style.GalerySortTextColor);
         final PopupMenu popup = new PopupMenu(wrapper, view);
@@ -396,5 +392,12 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
     private void setResultAndFinish() {
         setResult(Activity.RESULT_OK, new Intent().putExtra(MEDIA_FILE_KEY, presenter.getAttachment()));
         finish();
+    }
+
+    private void initView() {
+        recyclerView = binding.content.galleryRecyclerView;
+        progressBar = binding.content.progressBar;
+        toolbar = binding.toolbar;
+        blankGalleryInfo = binding.content.attachmentsBlankListInfo;
     }
 }

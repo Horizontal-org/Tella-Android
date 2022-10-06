@@ -60,6 +60,7 @@ public class SharedPrefs {
     static final String TIME_IMPROVEMENT_ACCEPTED = "time_improvement_accepted";
     static final String TEMP_TIMEOUT = "temp_timeout";
     static final String EXIT_TIMEOUT = "exit_timeout";
+    static final String JAVAROSA_3_UPGRADE = "javarosa_3_upgrade";
 
     private static SharedPrefs instance;
     private SharedPreferences pref;
