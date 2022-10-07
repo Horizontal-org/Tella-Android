@@ -499,6 +499,7 @@ public class MediaFileHandler {
     public static VaultFile maybeCreateMetadataMediaFile(VaultFile vaultFile) throws Exception {
         RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault.builder()
                 .setName(vaultFile.name + ".csv")
+                .setId(vaultFile.id)
                 .setMimeType("text/csv");
 
         VaultFile mmf = rxVaultFileBuilder.
