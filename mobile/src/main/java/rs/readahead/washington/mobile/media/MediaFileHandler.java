@@ -495,16 +495,18 @@ public class MediaFileHandler {
                 .setId(vaultFile.id)
                 .setMimeType("text/csv");
 
-        VaultFile mmf = rxVaultFileBuilder.
-                build()
-                .blockingGet();
+            VaultFile mmf = rxVaultFileBuilder.
+                    build()
+                    .blockingGet();
+        try {
+            OutputStream os = getMetadataOutputStream(mmf);
 
-        OutputStream os = getMetadataOutputStream(mmf);
+            if (os == null) throw new NullPointerException();
 
-        if (os == null) throw new NullPointerException();
-
-        createMetadataFile(os, vaultFile);
-
+            createMetadataFile(os, vaultFile);
+        } catch (Exception e){
+            Timber.d(e);
+        }
         return mmf;
     }
 
