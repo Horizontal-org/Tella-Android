@@ -479,7 +479,7 @@ public class MediaFileHandler {
     @Nullable
     private static Uri getMetadataUri(Context context, VaultFile vaultFile) {
         try {
-            VaultFile mmf = maybeCreateMetadataMediaFile(vaultFile);
+            VaultFile mmf = createMetadataMediaFile(vaultFile);
             return FileProvider.getUriForFile(context, EncryptedFileProvider.AUTHORITY,
                     getFile(mmf));
         } catch (Exception e) {
@@ -507,6 +507,24 @@ public class MediaFileHandler {
         } catch (Exception e){
             Timber.d(e);
         }
+        return mmf;
+    }
+
+    public static VaultFile createMetadataMediaFile(VaultFile vaultFile) {
+        RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault.builder()
+                .setName(vaultFile.name + ".csv")
+                .setMimeType("text/csv");
+
+        VaultFile mmf = rxVaultFileBuilder.
+                build()
+                .blockingGet();
+
+            OutputStream os = getMetadataOutputStream(mmf);
+
+            if (os == null) throw new NullPointerException();
+
+            createMetadataFile(os, vaultFile);
+
         return mmf;
     }
 
