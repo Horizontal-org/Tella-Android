@@ -79,6 +79,11 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         db.execSQL(createTableCollectBlankTemplateUwazi());
         db.execSQL(createTableCollectFormInstanceVaultFile());
         db.execSQL(createTableUwaziEntityInstanceVaultFile());
+
+        //BBV10
+        db.execSQL(alterTableTellaUploadServerAddAccessToken());
+        db.execSQL(alterTableTellaUploadServerAddMetatData());
+        db.execSQL(alterTableTellaUploadServerAddBackgourndUpload());
     }
 
     @Override
@@ -110,11 +115,15 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
             case 8:
                 db.execSQL(createTableCollectFormInstanceVaultFile());
+
             case 9:
                 db.execSQL(createTableUwaziServer());
                 db.execSQL(createTableCollectBlankTemplateUwazi());
+
             case 10:
-                db.execSQL(alterTableTellaUploadServer());
+                db.execSQL(alterTableTellaUploadServerAddAccessToken());
+                db.execSQL(alterTableTellaUploadServerAddMetatData());
+                db.execSQL(alterTableTellaUploadServerAddBackgourndUpload());
         }
     }
 
@@ -250,10 +259,18 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_SERVER_ID, D.INTEGER, true) + " DEFAULT 0";
     }
 
-    private String alterTableTellaUploadServer() {
+    private String alterTableTellaUploadServerAddAccessToken() {
         return "ALTER TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " ADD COLUMN " +
-                cddl(D.C_ACCESS_TOKEN, D.TEXT) + " , " +
-                cddl(D.C_ACTIVATED_METADATA, D.INTEGER, true) + " DEFAULT 0 , " +
+                cddl(D.C_ACCESS_TOKEN, D.TEXT);
+    }
+
+    private String alterTableTellaUploadServerAddMetatData() {
+        return "ALTER TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " ADD COLUMN " +
+                cddl(D.C_ACTIVATED_METADATA, D.INTEGER, true) + " DEFAULT 0";
+    }
+
+    private String alterTableTellaUploadServerAddBackgourndUpload() {
+        return "ALTER TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " ADD COLUMN " +
                 cddl(D.C_BACKGROUND_UPLOAD, D.INTEGER, true) + " DEFAULT 0";
     }
 

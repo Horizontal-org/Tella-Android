@@ -191,7 +191,7 @@ public class MediaFileHandler {
             }
 
             IOUtils.copy(is, os);
-            if (file != null){
+            if (file != null) {
                 MediaScannerConnection.scanFile(context, new String[]{file.toString()}, null, null);
             }
         } catch (VaultException e) {
@@ -496,7 +496,7 @@ public class MediaFileHandler {
     }
 
     //TODO CHECJ CSV FILE
-    public static VaultFile maybeCreateMetadataMediaFile(VaultFile vaultFile) throws Exception {
+    public static VaultFile maybeCreateMetadataMediaFile(VaultFile vaultFile) {
         RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault.builder()
                 .setName(vaultFile.name + ".csv")
                 .setMimeType("text/csv");

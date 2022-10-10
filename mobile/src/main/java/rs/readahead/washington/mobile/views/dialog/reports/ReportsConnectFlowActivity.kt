@@ -8,10 +8,16 @@ import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 import rs.readahead.washington.mobile.views.dialog.IS_UPDATE_SERVER
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
+import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowActivity.*
 import rs.readahead.washington.mobile.views.dialog.reports.step1.EnterUploadServerFragment
 
+interface TellaUploadServerDialogHandler {
+    fun onTellaUploadServerDialogCreate(server: TellaReportServer?)
+    fun onTellaUploadServerDialogUpdate(server: TellaReportServer?)
+}
+
 @AndroidEntryPoint
-class ReportsConnectFlowActivity : BaseLockActivity() {
+class ReportsConnectFlowActivity : BaseLockActivity() , TellaUploadServerDialogHandler {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +33,13 @@ class ReportsConnectFlowActivity : BaseLockActivity() {
                 )
             }
         }
+    }
+
+    override fun onTellaUploadServerDialogCreate(server: TellaReportServer?) {
+    }
+
+    override fun onTellaUploadServerDialogUpdate(server: TellaReportServer?) {
+
     }
 
 }

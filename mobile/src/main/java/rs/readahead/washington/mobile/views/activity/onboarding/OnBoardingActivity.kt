@@ -24,7 +24,7 @@ import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment.CollectServerDialogHandler
 import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragment
 import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragment.TellaUploadServerDialogHandler
-import rs.readahead.washington.mobile.views.dialog.uwazi.SharedLiveData.createServer
+import rs.readahead.washington.mobile.views.dialog.SharedLiveData.createServer
 import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity
 
 class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,

@@ -456,7 +456,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         try {
             cursor = database.query(
                     D.T_TELLA_UPLOAD_SERVER,
-                    new String[]{D.C_ID, D.C_NAME, D.C_URL, D.C_USERNAME, D.C_PASSWORD, D.C_CHECKED},
+                    new String[]{D.C_ID, D.C_NAME, D.C_URL, D.C_USERNAME, D.C_PASSWORD, D.C_CHECKED, D.C_ACCESS_TOKEN, D.C_ACTIVATED_METADATA, D.C_BACKGROUND_UPLOAD},
                     null,
                     null,
                     null, null,

@@ -49,7 +49,7 @@ class D {
     static final String C_LOCALE_COOKIES = "c_locale_cookies";
     static final String C_ACCESS_TOKEN = "c_access_token";
     static final String C_ACTIVATED_METADATA = "c_activated_metadata";
-    static final String C_BACKGROUND_UPLOAD = "c_activated_metadata";
+    static final String C_BACKGROUND_UPLOAD = "c_background_upload";
 
     //static final String C_DESCRIPTION_TEXT = "c_description_text";
     static final String C_DOWNLOAD_URL = "c_download_url";

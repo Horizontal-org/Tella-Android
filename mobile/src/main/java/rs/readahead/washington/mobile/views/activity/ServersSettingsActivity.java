@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.views.activity;
 
 import static rs.readahead.washington.mobile.views.dialog.ConstantsKt.IS_UPDATE_SERVER;
 import static rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageViewModelKt.OBJECT_KEY;
+import static rs.readahead.washington.mobile.views.dialog.SharedLiveData.*;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -48,10 +49,8 @@ import rs.readahead.washington.mobile.mvp.presenter.TellaUploadServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.UwaziServersPresenter;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment;
-import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowActivity;
-import rs.readahead.washington.mobile.views.dialog.uwazi.SharedLiveData;
 import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
 import timber.log.Timber;
 
@@ -62,7 +61,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         ITellaUploadServersPresenterContract.IView,
         ICollectBlankFormListRefreshPresenterContract.IView,
         CollectServerDialogFragment.CollectServerDialogHandler,
-        TellaUploadServerDialogFragment.TellaUploadServerDialogHandler,
         UwaziServerLanguageDialogFragment.UwaziServerLanguageDialogHandler,
         IUWAZIServersPresenterContract.IView {
 
@@ -113,19 +111,34 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
         createRefreshPresenter();
         initUwaziEvents();
+        initReportsEvents();
         initListeners();
     }
 
     private void initUwaziEvents() {
-        SharedLiveData.INSTANCE.getCreateServer().observe(this, server -> {
+        INSTANCE.getCreateServer().observe(this, server -> {
             if (server != null) {
                 uwaziServersPresenter.create(server);
             }
         });
 
-        SharedLiveData.INSTANCE.getUpdateServer().observe(this, server -> {
+        INSTANCE.getUpdateServer().observe(this, server -> {
             if (server != null) {
                 uwaziServersPresenter.update(server);
+            }
+        });
+    }
+
+    private void initReportsEvents() {
+        INSTANCE.getCreateReportsServer().observe(this, server -> {
+            if (server != null) {
+                tellaUploadServersPresenter.create(server);
+            }
+        });
+
+        INSTANCE.getUpdateReportsServer().observe(this, server -> {
+            if (server != null) {
+                tellaUploadServersPresenter.update(server);
             }
         });
     }
@@ -139,13 +152,9 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private void initListeners() {
-        binding.addServer.setOnClickListener((view) -> {
-            showChooseServerTypeDialog();
-        });
+        binding.addServer.setOnClickListener((view) -> showChooseServerTypeDialog());
 
-        binding.selectedUploadServerLayout.setOnClickListener((view) -> {
-            showChooseAutoUploadServerDialog(tuServers);
-        });
+        binding.selectedUploadServerLayout.setOnClickListener((view) -> showChooseAutoUploadServerDialog(tuServers));
     }
 
     @Override
@@ -173,7 +182,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
         tuServers = tellaReportServers;
         if (tuServers.size() > 0) {
-            //   binding.autoUploadSwitchView.setVisibility(View.VISIBLE);
+             binding.autoUploadSwitchView.setVisibility(View.VISIBLE);
             setupAutoUploadSwitch();
             setupAutoUploadView();
         } else {
@@ -197,7 +206,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             setupAutoUploadSwitch();
         }
 
-        if (tuServers.size() > 1) {
+        if (tuServers.size()== 1) {
             binding.selectedUploadServerLayout.setVisibility(View.VISIBLE);
         }
 
@@ -702,15 +711,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         }
     }
 
-    @Override
-    public void onTellaUploadServerDialogCreate(TellaReportServer server) {
-        tellaUploadServersPresenter.create(server);
-    }
-
-    @Override
-    public void onTellaUploadServerDialogUpdate(TellaReportServer server) {
-        tellaUploadServersPresenter.update(server);
-    }
 
   /*  @Override
     public void onUwaziServerDialogCreate(@Nullable UWaziUploadServer server) {

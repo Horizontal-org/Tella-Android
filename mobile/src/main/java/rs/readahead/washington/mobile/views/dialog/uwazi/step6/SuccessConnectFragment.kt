@@ -13,8 +13,8 @@ import rs.readahead.washington.mobile.views.dialog.ID_KEY
 import rs.readahead.washington.mobile.views.dialog.IS_UPDATE_SERVER
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.TITLE_KEY
-import rs.readahead.washington.mobile.views.dialog.uwazi.SharedLiveData.createServer
-import rs.readahead.washington.mobile.views.dialog.uwazi.SharedLiveData.updateServer
+import rs.readahead.washington.mobile.views.dialog.SharedLiveData.createServer
+import rs.readahead.washington.mobile.views.dialog.SharedLiveData.updateServer
 
 class SuccessConnectFragment : BaseFragment() {
     private lateinit var binding: FragmentSuccessConnectFlowBinding

@@ -9,7 +9,7 @@ import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.ID_KEY
 import rs.readahead.washington.mobile.views.dialog.IS_UPDATE_SERVER
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
-import rs.readahead.washington.mobile.views.dialog.reports.step5.ServerAdvancedSettingsFragment
+import rs.readahead.washington.mobile.views.dialog.SharedLiveData
 
 class SuccessfulSetServerFragment :
     BaseBindingFragment<FragmentSuccessfulSetServerBinding>(
@@ -18,20 +18,16 @@ class SuccessfulSetServerFragment :
     private var isUpdate = false
     private lateinit var server: TellaReportServer
 
-    interface TellaUploadServerDialogHandler {
-        fun onTellaUploadServerDialogCreate(server: TellaReportServer?)
-        fun onTellaUploadServerDialogUpdate(server: TellaReportServer?)
-    }
 
     companion object {
-        val TAG: String = ServerAdvancedSettingsFragment::class.java.simpleName
+        val TAG: String = SuccessfulSetServerFragment::class.java.simpleName
 
         @JvmStatic
         fun newInstance(
             server: TellaReportServer,
             isUpdate: Boolean
-        ): ServerAdvancedSettingsFragment {
-            val frag = ServerAdvancedSettingsFragment()
+        ): SuccessfulSetServerFragment {
+            val frag = SuccessfulSetServerFragment()
             val args = Bundle()
             args.putSerializable(ID_KEY, server.id)
             args.putString(OBJECT_KEY, Gson().toJson(server))
@@ -67,11 +63,10 @@ class SuccessfulSetServerFragment :
     }
 
     private fun save(server: TellaReportServer) {
-        val activity = activity as TellaUploadServerDialogHandler? ?: return
         if (server.id == 0L) {
-            activity.onTellaUploadServerDialogCreate(server)
+            SharedLiveData.createReportsServer.postValue(server)
         } else {
-            activity.onTellaUploadServerDialogUpdate(server)
+            SharedLiveData.updateReportsServer.postValue(server)
         }
         baseActivity.finish()
     }

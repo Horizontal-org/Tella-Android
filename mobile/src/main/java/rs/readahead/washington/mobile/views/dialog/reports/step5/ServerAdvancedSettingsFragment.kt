@@ -55,6 +55,10 @@ class ServerAdvancedSettingsFragment :
         arguments?.getBoolean(IS_UPDATE_SERVER)?.let {
             isUpdate = it
         }
+
+        binding?.backgroundUploadSwitch?.mSwitch?.isChecked = server.isActivatedBackgroundUpload
+        binding?.shareVerificationSwitch?.mSwitch?.isChecked = server.isActivatedMetadata
+
     }
 
     private fun initListeners() {

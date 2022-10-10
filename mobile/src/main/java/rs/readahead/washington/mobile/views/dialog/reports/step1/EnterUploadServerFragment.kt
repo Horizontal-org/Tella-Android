@@ -21,8 +21,7 @@ import rs.readahead.washington.mobile.views.dialog.reports.step3.LoginReportsFra
 @AndroidEntryPoint
 class EnterUploadServerFragment :
     BaseBindingFragment<FragmentEnterServerBinding>(FragmentEnterServerBinding::inflate) {
-    private val server by lazy { TellaReportServer() }
-    private var serverReports: TellaReportServer? = null
+    private lateinit var serverReports: TellaReportServer
     private var isUpdate = false
 
     companion object {
@@ -60,11 +59,11 @@ class EnterUploadServerFragment :
                         true
                     )
                 } else {
-                    if (validateUrl(url, urlLayout, baseActivity, server)) {
+                    if (validateUrl(url, urlLayout, baseActivity, serverReports)) {
                         KeyboardUtil.hideKeyboard(activity)
                         baseActivity.addFragment(
                             LoginReportsFragment.newInstance(
-                                server,
+                                serverReports,
                                 isUpdate
                             ), R.id.container
                         )
@@ -75,9 +74,6 @@ class EnterUploadServerFragment :
     }
 
     private fun initView() {
-        if (serverReports != null) {
-            binding?.url?.setText(serverReports!!.url)
-        }
         if (arguments == null) return
 
         arguments?.getString(OBJECT_KEY)?.let {
@@ -85,6 +81,10 @@ class EnterUploadServerFragment :
         }
         arguments?.getBoolean(IS_UPDATE_SERVER)?.let {
             isUpdate = it
+        }
+
+        if (!serverReports.url.isNullOrEmpty()) {
+            binding?.url?.setText(serverReports.url)
         }
     }
 
