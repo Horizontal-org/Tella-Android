@@ -479,7 +479,7 @@ public class MediaFileHandler {
     @Nullable
     private static Uri getMetadataUri(Context context, VaultFile vaultFile) {
         try {
-            VaultFile mmf = createMetadataMediaFile(vaultFile);
+            VaultFile mmf = maybeCreateMetadataMediaFile(vaultFile);
             return FileProvider.getUriForFile(context, EncryptedFileProvider.AUTHORITY,
                     getFile(mmf));
         } catch (Exception e) {
@@ -490,43 +490,23 @@ public class MediaFileHandler {
 
     //TODO CHECJ CSV FILE
     public static VaultFile maybeCreateMetadataMediaFile(VaultFile vaultFile) {
-        RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault.builder()
-                .setName(vaultFile.name + ".csv")
-                .setId(vaultFile.id)
-                .setMimeType("text/csv");
+        VaultFile mmf = new VaultFile();
+        mmf.name = vaultFile.name + ".csv";
+        mmf.id = vaultFile.id;
+        mmf.mimeType = "text/csv";
 
-            VaultFile mmf = rxVaultFileBuilder.
-                    build()
-                    .blockingGet();
         try {
             OutputStream os = getMetadataOutputStream(mmf);
 
             if (os == null) throw new NullPointerException();
 
             createMetadataFile(os, vaultFile);
-        } catch (Exception e){
+        } catch (Exception e) {
             Timber.d(e);
         }
         return mmf;
     }
 
-    public static VaultFile createMetadataMediaFile(VaultFile vaultFile) {
-        RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault.builder()
-                .setName(vaultFile.name + ".csv")
-                .setMimeType("text/csv");
-
-        VaultFile mmf = rxVaultFileBuilder.
-                build()
-                .blockingGet();
-
-            OutputStream os = getMetadataOutputStream(mmf);
-
-            if (os == null) throw new NullPointerException();
-
-            createMetadataFile(os, vaultFile);
-
-        return mmf;
-    }
 
     public static File getTempFile() {
         if (tmpPath == null) {
