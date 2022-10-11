@@ -50,6 +50,8 @@ interface IUwaziApi  {
     @POST
     fun submitEntity(
         @Part attachments : List<MultipartBody.Part?>,
+        @Part documents : List<MultipartBody.Part?>,
+        @Part("attachments_originalname") attachmentsOriginalName : List<String>,
         @Part("entity") entity: RequestBody,
         @Url url: String,
         @Header(COOKIE) cookies : List<String>,
@@ -60,6 +62,7 @@ interface IUwaziApi  {
     @POST
     fun submitWhiteListedEntity(
         @Part attachments : List<MultipartBody.Part?>,
+        @Part documents : List<MultipartBody.Part?>,
         @Part("entity") entity: RequestBody,
         @Url url: String,
         @Header(COOKIE) cookies : List<String>,

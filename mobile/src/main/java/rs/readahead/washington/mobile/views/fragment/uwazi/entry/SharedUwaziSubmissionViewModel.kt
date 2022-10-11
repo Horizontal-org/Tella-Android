@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.Gson
+import com.google.gson.internal.LinkedTreeMap
 import com.hzontal.tella_vault.VaultFile
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -30,7 +31,8 @@ import timber.log.Timber
 import java.net.URLEncoder
 
 private const val MULTIPART_FORM_DATA = "text/plain"
-class SharedUwaziSubmissionViewModel : ViewModel(){
+
+class SharedUwaziSubmissionViewModel : ViewModel() {
     private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private val disposables = CompositeDisposable()
     private val _instance = SingleLiveEvent<UwaziEntityInstance>()
@@ -44,19 +46,22 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
     var error = MutableLiveData<Throwable>()
     private val _attachments = MutableLiveData<List<FormMediaFile>>()
     val attachments: LiveData<List<FormMediaFile>> get() = _attachments
+
     //TODO THIS IS UGLY WILL REPLACE IT FLOWABLE RX LATER
     private val _progressCallBack = SingleLiveEvent<Pair<String, Float>>()
     val progressCallBack: LiveData<Pair<String, Float>> get() = _progressCallBack
 
-    fun saveEntityInstance(instance : UwaziEntityInstance) {
+    fun saveEntityInstance(instance: UwaziEntityInstance) {
         disposables.add(keyDataSource.uwaziDataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .flatMap { dataSource: UwaziDataSource -> dataSource.saveEntityInstance(instance).toObservable() }
-            .doFinally { progress.postValue(instance.status)   }
-            .subscribe ({
+            .flatMap { dataSource: UwaziDataSource ->
+                dataSource.saveEntityInstance(instance).toObservable()
+            }
+            .doFinally { progress.postValue(instance.status) }
+            .subscribe({
                 progress.postValue(instance.status)
-               // _instance.postValue(savedInstance)
+                // _instance.postValue(savedInstance)
             }
 
             ) { throwable: Throwable? ->
@@ -78,10 +83,9 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
             ?.subscribe(
                 { server: UWaziUploadServer? ->
                     if (server != null) {
-                        if (server.password.isNullOrEmpty() or server.username.isNullOrEmpty()){
+                        if (server.password.isNullOrEmpty() or server.username.isNullOrEmpty()) {
                             submitWhiteListedEntity(server, entity)
-
-                        }else{
+                        } else {
                             submitEntity(server, entity)
                         }
 
@@ -98,16 +102,25 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
             }
     }
 
-    fun submitEntity(server: UWaziUploadServer, entity: UwaziEntityInstance) {
+    private fun submitEntity(server: UWaziUploadServer, entity: UwaziEntityInstance) {
         disposables.add(
             repository.submitEntity(
                 server = server,
                 entity = createRequestBody(Gson().toJson(entity.createEntityRequest())),
-                attachments = createListOfAttachments(entity.widgetMediaFiles, _progressCallBack)
+                attachments = createListOfAttachments(
+                    removeDocumentsList(entity),
+                    _progressCallBack
+                ),
+                attachmentsOriginalName = createListOfAttachmentsOriginalName(
+                    removeDocumentsList(
+                        entity
+                    )
+                ),
+                documents = createListOfDocuments(getDocumentsList(entity), _progressCallBack)
             )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnError {  progress.postValue(UwaziEntityStatus.SUBMISSION_ERROR) }
+                .doOnError { progress.postValue(UwaziEntityStatus.SUBMISSION_ERROR) }
                 .flatMap {
                     entity.status = UwaziEntityStatus.SUBMITTED
                     entity.formPartStatus = FormMediaFileStatus.SUBMITTED
@@ -131,11 +144,15 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
             repository.submitWhiteListedEntity(
                 server = server,
                 entity = createRequestBody(Gson().toJson(entity.createEntityRequest())),
-                attachments = createListOfAttachments(entity.widgetMediaFiles, _progressCallBack)
+                attachments = createListOfAttachments(
+                    removeDocumentsList(entity),
+                    _progressCallBack
+                ),
+                documents = createListOfDocuments(getDocumentsList(entity), _progressCallBack)
             )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnError {  progress.postValue(UwaziEntityStatus.SUBMISSION_ERROR) }
+                .doOnError { progress.postValue(UwaziEntityStatus.SUBMISSION_ERROR) }
                 .flatMap {
                     entity.status = UwaziEntityStatus.SUBMITTED
                     entity.formPartStatus = FormMediaFileStatus.SUBMITTED
@@ -161,10 +178,9 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
         type = type
     )
 
-    private fun removeAttachments(metadata : MutableMap<String,List<Any>>) : Map<String,List<Any>>{
+    private fun removeAttachments(metadata: MutableMap<String, List<Any>>): Map<String, List<Any>> {
         metadata.remove("supporting_files")
         metadata.remove("primary_documents")
-
         return metadata
     }
 
@@ -172,6 +188,65 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
         return RequestBody.create(
             MediaType.parse(MULTIPART_FORM_DATA), s
         )
+    }
+
+    private fun getDocumentsList(uwaziEntityInstance: UwaziEntityInstance): List<VaultFile?> {
+        val newAttachments = mutableListOf<VaultFile>()
+        ((uwaziEntityInstance.metadata["primary_documents"]?.get(0) as LinkedTreeMap<*, *>).get("value") as ArrayList<String>).forEach { fileId ->
+            uwaziEntityInstance.widgetMediaFiles.forEach { vaultFile ->
+                if (vaultFile.id?.equals(fileId) == true) {
+                    newAttachments.add(vaultFile)
+                }
+            }
+        }
+        return newAttachments
+    }
+
+    private fun removeDocumentsList(uwaziEntityInstance: UwaziEntityInstance): List<VaultFile?> {
+        val newAttachments = arrayListOf<VaultFile>()
+        newAttachments.addAll(uwaziEntityInstance.widgetMediaFiles)
+        ((uwaziEntityInstance.metadata["primary_documents"]?.get(0) as LinkedTreeMap<*, *>).get("value") as ArrayList<String>).forEach { fileName ->
+            uwaziEntityInstance.widgetMediaFiles.forEach { vaultFile ->
+                if (vaultFile.id?.equals(fileName) == true) {
+                    newAttachments.remove(vaultFile)
+                }
+            }
+        }
+        return newAttachments
+    }
+
+    private fun createListOfDocuments(
+        attachments: List<VaultFile?>?,
+        progressCallBack: SingleLiveEvent<Pair<String, Float>>,
+    ): List<MultipartBody.Part?> {
+        val listAttachments: MutableList<MultipartBody.Part?> = mutableListOf()
+        var fileToUpload: MultipartBody.Part?
+        try {
+            if (attachments != null) {
+                for (i in attachments.indices) {
+                    attachments[i]?.let { vaultFile ->
+
+                        val requestBody = MediaFileRequestBody(
+                            vaultFile,
+                            ProgressListener(vaultFile.id, progressCallBack)
+                        )
+                        fileToUpload =
+                            requestBody.let { file ->
+                                MultipartBody.Part.createFormData(
+                                    "documents[$i]",
+                                    URLEncoder.encode(vaultFile.name, "utf-8"),
+                                    file
+                                )
+                            }
+                        listAttachments.add(fileToUpload)
+                    }
+                }
+            }
+
+        } catch (e: Exception) {
+            Timber.d(e.message ?: "Error attaching files")
+        }
+        return listAttachments.toList()
     }
 
     private fun createListOfAttachments(
@@ -184,7 +259,7 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
         try {
             if (attachments != null) {
                 for (i in attachments.indices) {
-                    attachments[i]?.let { vaultFile->
+                    attachments[i]?.let { vaultFile ->
 
                         val requestBody = MediaFileRequestBody(
                             vaultFile,
@@ -193,7 +268,7 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
                         fileToUpload =
                             requestBody.let { file ->
                                 MultipartBody.Part.createFormData(
-                                    "attachments",
+                                    "attachments[$i]",
                                     URLEncoder.encode(vaultFile.name, "utf-8"),
                                     file
                                 )
@@ -203,6 +278,24 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
                 }
             }
 
+        } catch (e: Exception) {
+            Timber.d(e.message ?: "Error attaching files")
+        }
+        return listAttachments.toList()
+    }
+
+    private fun createListOfAttachmentsOriginalName(
+        attachments: List<VaultFile?>?
+    ): List<String> {
+        val listAttachments: MutableList<String> = mutableListOf()
+        try {
+            if (attachments != null) {
+                for (i in attachments.indices) {
+                    attachments[i]?.let { vaultFile ->
+                        listAttachments.add(vaultFile.name)
+                    }
+                }
+            }
         } catch (e: Exception) {
             Timber.d(e.message ?: "Error attaching files")
         }
