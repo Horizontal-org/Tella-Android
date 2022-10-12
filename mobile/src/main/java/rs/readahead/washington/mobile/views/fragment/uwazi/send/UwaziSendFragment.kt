@@ -23,7 +23,7 @@ const val SEND_ENTITY = "send_entity"
 
 class UwaziSendFragment : BaseFragment(), OnNavBckListener {
     private val viewModel: SharedUwaziSubmissionViewModel by lazy {
-        ViewModelProvider(activity).get(SharedUwaziSubmissionViewModel::class.java)
+        ViewModelProvider(activity)[SharedUwaziSubmissionViewModel::class.java]
     }
     private lateinit var binding: UwaziSendFragmentBinding
     private var entityInstance: UwaziEntityInstance? = null

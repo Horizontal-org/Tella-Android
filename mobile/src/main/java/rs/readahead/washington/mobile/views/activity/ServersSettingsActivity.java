@@ -18,7 +18,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.lifecycle.Observer;
 
 import com.google.gson.Gson;
 
@@ -37,9 +36,6 @@ import kotlin.Unit;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
-import rs.readahead.washington.mobile.bus.EventObserver;
-import rs.readahead.washington.mobile.bus.event.CreateUwaziServerEvent;
-import rs.readahead.washington.mobile.bus.event.UpdateUwaziServerEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.Server;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
@@ -587,7 +583,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
         ViewGroup row = item.findViewById(R.id.server_row);
         TextView name = item.findViewById(R.id.server_title);
-        ImageView options = item.findViewById(R.id.options);
 
         if (server != null) {
             name.setText(server.getName());

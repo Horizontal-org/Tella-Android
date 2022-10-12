@@ -209,7 +209,7 @@ class UwaziParser(private val context: Context?) {
         return true
     }
 
-    fun prepareFormView(): UwaziFormView {
+    private fun prepareFormView(): UwaziFormView {
         entryPrompts.clear()
 
         //TODO Handle this special common props smarter

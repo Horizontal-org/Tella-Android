@@ -44,7 +44,7 @@ class UwaziEntryFragment :
     OnNavBckListener {
 
     private val viewModel: SharedUwaziSubmissionViewModel by lazy {
-        ViewModelProvider(activity).get(SharedUwaziSubmissionViewModel::class.java)
+        ViewModelProvider(activity)[SharedUwaziSubmissionViewModel::class.java]
     }
     private val uwaziParser: UwaziParser by lazy { UwaziParser(context) }
 
@@ -111,7 +111,7 @@ class UwaziEntryFragment :
                 }
             }
         }
-        binding!!.toolbar.setStartTextTitle(uwaziParser.getTemplate()?.entityRow?.translatedName.toString())
+        binding?.toolbar?.setStartTextTitle(uwaziParser.getTemplate()?.entityRow?.translatedName.toString())
     }
 
 
@@ -144,7 +144,6 @@ class UwaziEntryFragment :
     private fun sendEntity() {
         if (!uwaziParser.getAnswersFromForm(true, uwaziFormView)) {
             uwaziFormView.setFocus(context)
-            //showValidationMandatoryFieldsDialog()
             showValidationErrorsFieldsDialog()
         } else {
             bundle.putString(SEND_ENTITY, uwaziParser.getGsonTemplate())
@@ -177,14 +176,6 @@ class UwaziEntryFragment :
         DialogUtils.showBottomMessage(
             activity,
             getString(R.string.Uwazi_EntryInstance_SavedInfo),
-            false
-        )
-    }
-
-    private fun showValidationMandatoryFieldsDialog() {
-        DialogUtils.showBottomMessage(
-            activity,
-            getString(R.string.Uwazi_Entry_Validation_MandatoryFields),
             false
         )
     }

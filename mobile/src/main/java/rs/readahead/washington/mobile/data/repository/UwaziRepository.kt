@@ -23,7 +23,7 @@ class UwaziRepository : IUwaziUserRepository {
 
     override fun login(server: UWaziUploadServer): Single<LoginResult> {
         return uwaziApi.login(
-            loginEntity = LoginEntity(server.username, server.password,server.token),
+            loginEntity = LoginEntity(server.username, server.password, server.token),
             url = StringUtils.append(
                 '/',
                 server.url,
@@ -34,18 +34,21 @@ class UwaziRepository : IUwaziUserRepository {
             .map {
                 val cookieList: List<String> = it.headers().values("Set-Cookie")
                 var jsessionid = ""
-                if (!cookieList.isNullOrEmpty()){
-                     jsessionid = cookieList[0].split(";")[0]
+                if (!cookieList.isNullOrEmpty()) {
+                    jsessionid = cookieList[0].split(";")[0]
                 }
 
-                LoginResult(it.isSuccessful, jsessionid,it.code())
+                LoginResult(it.isSuccessful, jsessionid, it.code())
             }
 
     }
 
     override fun getTemplatesResult(server: UWaziUploadServer): Single<ListTemplateResult> {
         return Single.zip(getTemplates(server),
-            getDictionary(server), getTranslation(server),getFullSettings(server), { templates, dictionary, translations,settings ->
+            getDictionary(server),
+            getTranslation(server),
+            getFullSettings(server),
+            { templates, dictionary, translations, settings ->
 
                 templates.forEach {
                     it.properties.forEach { property ->
@@ -58,17 +61,17 @@ class UwaziRepository : IUwaziUserRepository {
                 }
                 var resultTemplates = mutableListOf<UwaziRow>()
 
-                if (server.username.isNullOrEmpty() || server.password.isNullOrEmpty()){
-                    if (!settings.allowedPublicTemplates.isNullOrEmpty()){
+                if (server.username.isNullOrEmpty() || server.password.isNullOrEmpty()) {
+                    if (!settings.allowedPublicTemplates.isNullOrEmpty()) {
                         templates.forEach { row ->
-                            settings.allowedPublicTemplates.forEach { id->
-                                if (row._id == id){
+                            settings.allowedPublicTemplates.forEach { id ->
+                                if (row._id == id) {
                                     resultTemplates.add(row)
                                 }
                             }
                         }
                     }
-                }else {
+                } else {
                     resultTemplates = templates.toMutableList()
                 }
 
@@ -179,7 +182,7 @@ class UwaziRepository : IUwaziUserRepository {
         return uwaziApi.getSettings(
             url = StringUtils.append(
                 '/',
-               url,
+                url,
                 ParamsNetwork.URL_SETTINGS
             ),
             cookies = arrayListOf()
@@ -232,10 +235,14 @@ class UwaziRepository : IUwaziUserRepository {
     override fun submitEntity(
         server: UWaziUploadServer,
         entity: RequestBody,
-        attachments: List<MultipartBody.Part?>
+        attachments: List<MultipartBody.Part?>,
+        attachmentsOriginalName: List<String>,
+        documents: List<MultipartBody.Part?>
     ): Single<UwaziEntityRow> {
         return uwaziApi.submitEntity(
             attachments = attachments,
+            documents = documents,
+            attachmentsOriginalName = attachmentsOriginalName,
             entity = entity,
             url = StringUtils.append(
                 '/',
@@ -246,16 +253,19 @@ class UwaziRepository : IUwaziUserRepository {
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSuccess {  }
+            .doOnSuccess { }
     }
 
     override fun submitWhiteListedEntity(
         server: UWaziUploadServer,
         entity: RequestBody,
-        attachments: List<MultipartBody.Part?>
+        attachments: List<MultipartBody.Part?>,
+        attachmentsOriginalName: List<String>,
+        documents: List<MultipartBody.Part?>
     ): Single<UwaziEntityRow> {
         return uwaziApi.submitWhiteListedEntity(
             attachments = attachments,
+            documents = documents,
             entity = entity,
             url = StringUtils.append(
                 '/',
