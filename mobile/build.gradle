@@ -120,8 +120,8 @@ dependencies {
     implementation 'com.burgstaller:okhttp-digest:1.15'
 
     // collect
-    implementation group: 'org.getodk', name: 'javarosa', version: '3.5.0'
-    //implementation "org.opendatakit:opendatakit-javarosa:2.4.0"
+    //implementation group: 'org.getodk', name: 'javarosa', version: '3.5.0'
+    implementation "org.opendatakit:opendatakit-javarosa:2.4.0"
     implementation 'net.sf.kxml:kxml2:2.3.0'
     implementation "commons-io:commons-io:2.6"
 
