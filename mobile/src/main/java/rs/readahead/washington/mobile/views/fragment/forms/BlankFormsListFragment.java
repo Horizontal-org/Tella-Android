@@ -93,12 +93,7 @@ public class BlankFormsListFragment extends FormListFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-       if (!Preferences.isJavarosa3Upgraded()) {
-            model.getShowFab().postValue(false);
-            showJavarosa2UpgradeSheet();
-        } else {
-            listBlankForms();
-       }
+        listBlankForms();
     }
 
     @Override
