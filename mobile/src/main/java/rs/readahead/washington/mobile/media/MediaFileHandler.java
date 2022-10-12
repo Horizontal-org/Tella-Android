@@ -64,7 +64,6 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.provider.EncryptedFileProvider;
 import rs.readahead.washington.mobile.presentation.entity.mapper.PublicMetadataMapper;
 import rs.readahead.washington.mobile.util.C;
-import rs.readahead.washington.mobile.util.DateUtil;
 import rs.readahead.washington.mobile.util.FileUtil;
 import timber.log.Timber;
 
@@ -160,7 +159,7 @@ public class MediaFileHandler {
         } else {
             DocumentFile documentFile = DocumentFile.fromTreeUri(context, envDirUri);
             if (documentFile != null) {
-                DocumentFile newDocumentFile = documentFile.createFile(vaultFile.mimeType, vaultFile.id);
+                DocumentFile newDocumentFile = documentFile.createFile(vaultFile.mimeType, vaultFile.name);
                 ContentResolver contentResolver = context.getContentResolver();
                 assert newDocumentFile != null;
                 os = contentResolver.openOutputStream(newDocumentFile.getUri());
@@ -168,7 +167,7 @@ public class MediaFileHandler {
         }
         File file = null;
         if (path != null) {
-            file = new File(path.getAbsolutePath(), vaultFile.id);
+            file = new File(path.getAbsolutePath(), MyApplication.rxVault.getFile(vaultFile).getName());
         }
 
         try {
@@ -477,7 +476,7 @@ public class MediaFileHandler {
 
     public static Uri getEncryptedUri(Context context, VaultFile vaultFile) {
         File newFile = getFile(vaultFile);
-        return FileProvider.getUriForFile(context, EncryptedFileProvider.AUTHORITY, newFile);
+        return FileProvider.getUriForFile(context, EncryptedFileProvider.AUTHORITY, newFile, vaultFile.name);
     }
 
     @Nullable
@@ -495,8 +494,9 @@ public class MediaFileHandler {
     //TODO CHECJ CSV FILE
     public static VaultFile maybeCreateMetadataMediaFile(VaultFile vaultFile) {
         VaultFile mmf = new VaultFile();
-        mmf.name = vaultFile.name + ".csv";
-        mmf.id = vaultFile.id;
+        String name = vaultFile.name.substring(0, vaultFile.name.lastIndexOf('.'));
+        mmf.name = name + ".csv";
+        mmf.id = name;
         mmf.mimeType = "text/csv";
 
         try {
