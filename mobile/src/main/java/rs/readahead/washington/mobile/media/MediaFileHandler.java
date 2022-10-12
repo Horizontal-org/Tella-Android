@@ -7,7 +7,6 @@ import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -17,7 +16,6 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.provider.OpenableColumns;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
@@ -66,7 +64,6 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.provider.EncryptedFileProvider;
 import rs.readahead.washington.mobile.presentation.entity.mapper.PublicMetadataMapper;
 import rs.readahead.washington.mobile.util.C;
-import rs.readahead.washington.mobile.util.DateUtil;
 import rs.readahead.washington.mobile.util.FileUtil;
 import timber.log.Timber;
 
@@ -109,14 +106,12 @@ public class MediaFileHandler {
             intent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeType);
         }
 
-        if (Build.VERSION.SDK_INT >= 19) {
-            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
-            try {
-                activity.startActivityForResult(intent, requestCode);
-                return;
-            } catch (ActivityNotFoundException e) {
-                Timber.d(e, activity.getClass().getName());
-            }
+        intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+        try {
+            activity.startActivityForResult(intent, requestCode);
+            return;
+        } catch (ActivityNotFoundException e) {
+            Timber.d(e, activity.getClass().getName());
         }
 
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
@@ -176,7 +171,6 @@ public class MediaFileHandler {
         }
 
         try {
-            //noinspection ResultOfMethodCallIgnored
             if (path != null) {
                 if (!path.exists()) path.mkdirs();
             }
@@ -245,7 +239,7 @@ public class MediaFileHandler {
         RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault
                 .builder(input)
                 .setMimeType("image/jpeg")
-                .setName("Photo " + DateUtil.getDate(System.currentTimeMillis()) + ".jpg")
+                .setName(uid + ".jpg")
                 .setAnonymous(true)
                 .setType(VaultFile.Type.FILE)
                 .setId(uid)
@@ -272,11 +266,13 @@ public class MediaFileHandler {
 
         // encode png
         InputStream input = new ByteArrayInputStream(pngImage);
+        String uid = UUID.randomUUID().toString();
 
         return MyApplication.rxVault
                 .builder(input)
+                .setId(uid)
                 .setMimeType("image/png")
-                .setName("Photo " + DateUtil.getDate(System.currentTimeMillis()) + ".png")
+                .setName(uid + ".png")
                 .setAnonymous(true)
                 .setType(VaultFile.Type.FILE)
                 .setThumb(getThumbByteArray(thumb))
@@ -333,14 +329,15 @@ public class MediaFileHandler {
 
             assert DocumentFile.fromSingleUri(context, uri) != null;
             return MyApplication.rxVault
-                    .builder(is)
-                    .setMimeType(mimeType)
-                    .setAnonymous(true)
-                    .setName(DocumentFile.fromSingleUri(context, uri).getName())
-                    .setType(VaultFile.Type.FILE)
-                    .build(parentId)
-                    .subscribeOn(Schedulers.io())
-                    .blockingGet();
+                        .builder(is)
+                        .setMimeType(mimeType)
+                        .setAnonymous(true)
+                        .setName(DocumentFile.fromSingleUri(context, uri).getName())
+                        .setType(VaultFile.Type.FILE)
+                        .build(parentId)
+                        .subscribeOn(Schedulers.io())
+                        .blockingGet();
+
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
             Timber.e(e, MediaFileHandler.class.getName());
@@ -352,8 +349,6 @@ public class MediaFileHandler {
     @WorkerThread
     public static VaultFile saveMp4Video(File video, String parent) throws IOException {
         FileInputStream vis = null;
-        InputStream is = null;
-
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
 
         try {
@@ -366,12 +361,14 @@ public class MediaFileHandler {
             // thumbnail
             byte[] thumb = getThumbByteArray(retriever.getFrameAtTime());
 
+            String uid = UUID.randomUUID().toString();
             RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault
                     .builder(new FileInputStream(video))
                     .setAnonymous(false)
+                    .setId(uid)
                     .setDuration(Long.parseLong(time))
                     .setType(VaultFile.Type.FILE)
-                    .setName("Video " + DateUtil.getDate(System.currentTimeMillis()) + ".mp4")
+                    .setName(uid + ".mp4")
                     .setMimeType("video/mp4")
                     .setThumb(thumb);
 
@@ -391,7 +388,6 @@ public class MediaFileHandler {
             throw e;
         } finally {
             FileUtil.close(vis);
-            FileUtil.close(is);
             FileUtil.delete(video);
             try {
                 retriever.release();
@@ -480,7 +476,7 @@ public class MediaFileHandler {
 
     public static Uri getEncryptedUri(Context context, VaultFile vaultFile) {
         File newFile = getFile(vaultFile);
-        return FileProvider.getUriForFile(context, EncryptedFileProvider.AUTHORITY, newFile);
+        return FileProvider.getUriForFile(context, EncryptedFileProvider.AUTHORITY, newFile, vaultFile.name);
     }
 
     @Nullable
@@ -496,23 +492,25 @@ public class MediaFileHandler {
     }
 
     //TODO CHECJ CSV FILE
-    public static VaultFile maybeCreateMetadataMediaFile(VaultFile vaultFile) throws Exception {
-        RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault.builder()
-                .setName(vaultFile.name + ".csv")
-                .setMimeType("text/csv");
+    public static VaultFile maybeCreateMetadataMediaFile(VaultFile vaultFile) {
+        VaultFile mmf = new VaultFile();
+        String name = vaultFile.name.substring(0, vaultFile.name.lastIndexOf('.'));
+        mmf.name = name + ".csv";
+        mmf.id = name;
+        mmf.mimeType = "text/csv";
 
-        VaultFile mmf = rxVaultFileBuilder.
-                build()
-                .blockingGet();
+        try {
+            OutputStream os = getMetadataOutputStream(mmf);
 
-        OutputStream os = getMetadataOutputStream(mmf);
+            if (os == null) throw new NullPointerException();
 
-        if (os == null) throw new NullPointerException();
-
-        createMetadataFile(os, vaultFile);
-
+            createMetadataFile(os, vaultFile);
+        } catch (Exception e) {
+            Timber.d(e);
+        }
         return mmf;
     }
+
 
     public static File getTempFile() {
         if (tmpPath == null) {
@@ -594,10 +592,6 @@ public class MediaFileHandler {
         chooser.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
 
         context.startActivity(chooser);
-    }
-
-    private static String getMetadataFilename(VaultFile vaultFile) {
-        return vaultFile.id + ".csv";
     }
 
     private static File getFile(VaultFile vaultFile) {
@@ -706,13 +700,6 @@ public class MediaFileHandler {
     private static List<VaultFile> getAllFiles(VaultFile vaultFile) {
         FileWalker fileWalker = new FileWalker();
         return fileWalker.walk(vaultFile);
-    }
-
-    private static String getOriginalFileName(Context context, Uri uri) {
-        Cursor query = context.getContentResolver().query(uri, null, null, null, null);
-        int nameColumnIndex = query.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-        query.moveToFirst();
-        return query.getString(nameColumnIndex);
     }
 
     @Nullable
