@@ -240,7 +240,7 @@ public class MediaFileHandler {
         RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault
                 .builder(input)
                 .setMimeType("image/jpeg")
-                .setName("Photo " + DateUtil.getDate(System.currentTimeMillis()) + ".jpg")
+                .setName(uid + ".jpg")
                 .setAnonymous(true)
                 .setType(VaultFile.Type.FILE)
                 .setId(uid)
@@ -267,11 +267,13 @@ public class MediaFileHandler {
 
         // encode png
         InputStream input = new ByteArrayInputStream(pngImage);
+        String uid = UUID.randomUUID().toString();
 
         return MyApplication.rxVault
                 .builder(input)
+                .setId(uid)
                 .setMimeType("image/png")
-                .setName("Photo " + DateUtil.getDate(System.currentTimeMillis()) + ".png")
+                .setName(uid + ".png")
                 .setAnonymous(true)
                 .setType(VaultFile.Type.FILE)
                 .setThumb(getThumbByteArray(thumb))
@@ -360,12 +362,14 @@ public class MediaFileHandler {
             // thumbnail
             byte[] thumb = getThumbByteArray(retriever.getFrameAtTime());
 
+            String uid = UUID.randomUUID().toString();
             RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault
                     .builder(new FileInputStream(video))
                     .setAnonymous(false)
+                    .setId(uid)
                     .setDuration(Long.parseLong(time))
                     .setType(VaultFile.Type.FILE)
-                    .setName("Video " + DateUtil.getDate(System.currentTimeMillis()) + ".mp4")
+                    .setName(uid + ".mp4")
                     .setMimeType("video/mp4")
                     .setThumb(thumb);
 
