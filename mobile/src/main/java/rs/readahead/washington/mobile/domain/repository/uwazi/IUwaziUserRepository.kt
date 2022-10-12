@@ -39,6 +39,7 @@ interface IUwaziUserRepository {
         server: UWaziUploadServer,
         entity: RequestBody,
         attachments: List<MultipartBody.Part?>,
+        attachmentsOriginalName: List<String>,
         documents: List<MultipartBody.Part?>
     ): Single<UwaziEntityRow>
 }

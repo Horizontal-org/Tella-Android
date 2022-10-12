@@ -148,6 +148,11 @@ class SharedUwaziSubmissionViewModel : ViewModel() {
                     removeDocumentsList(entity),
                     _progressCallBack
                 ),
+                attachmentsOriginalName = createListOfAttachmentsOriginalName(
+                    removeDocumentsList(
+                        entity
+                    )
+                ),
                 documents = createListOfDocuments(getDocumentsList(entity), _progressCallBack)
             )
                 .subscribeOn(Schedulers.io())
@@ -191,8 +196,10 @@ class SharedUwaziSubmissionViewModel : ViewModel() {
     }
 
     private fun getDocumentsList(uwaziEntityInstance: UwaziEntityInstance): List<VaultFile?> {
+        val primaryDocumentsNode =
+            uwaziEntityInstance.metadata["primary_documents"] ?: return emptyList()
         val newAttachments = mutableListOf<VaultFile>()
-        ((uwaziEntityInstance.metadata["primary_documents"]?.get(0) as LinkedTreeMap<*, *>).get("value") as ArrayList<String>).forEach { fileId ->
+        ((primaryDocumentsNode[0] as LinkedTreeMap<*, *>).get("value") as ArrayList<String>).forEach { fileId ->
             uwaziEntityInstance.widgetMediaFiles.forEach { vaultFile ->
                 if (vaultFile.id?.equals(fileId) == true) {
                     newAttachments.add(vaultFile)
@@ -203,9 +210,11 @@ class SharedUwaziSubmissionViewModel : ViewModel() {
     }
 
     private fun removeDocumentsList(uwaziEntityInstance: UwaziEntityInstance): List<VaultFile?> {
+        val primaryDocumentsNode =
+            uwaziEntityInstance.metadata["primary_documents"] ?: return emptyList()
         val newAttachments = arrayListOf<VaultFile>()
         newAttachments.addAll(uwaziEntityInstance.widgetMediaFiles)
-        ((uwaziEntityInstance.metadata["primary_documents"]?.get(0) as LinkedTreeMap<*, *>).get("value") as ArrayList<String>).forEach { fileName ->
+        ((primaryDocumentsNode[0] as LinkedTreeMap<*, *>)["value"] as ArrayList<String>).forEach { fileName ->
             uwaziEntityInstance.widgetMediaFiles.forEach { vaultFile ->
                 if (vaultFile.id?.equals(fileName) == true) {
                     newAttachments.remove(vaultFile)
@@ -253,7 +262,6 @@ class SharedUwaziSubmissionViewModel : ViewModel() {
         attachments: List<VaultFile?>?,
         progressCallBack: SingleLiveEvent<Pair<String, Float>>,
     ): List<MultipartBody.Part?> {
-
         val listAttachments: MutableList<MultipartBody.Part?> = mutableListOf()
         var fileToUpload: MultipartBody.Part?
         try {
