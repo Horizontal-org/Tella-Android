@@ -181,13 +181,13 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         createServerViews(servers);
 
         tuServers = tellaReportServers;
-        if (tuServers.size() > 0) {
+       /* if (tuServers.size() > 0) {
              binding.autoUploadSwitchView.setVisibility(View.VISIBLE);
             setupAutoUploadSwitch();
             setupAutoUploadView();
         } else {
             binding.autoUploadSwitchView.setVisibility(View.GONE);
-        }
+        }*/
     }
 
     @Override
@@ -201,14 +201,14 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         binding.collectServersList.addView(getServerItem(server), servers.indexOf(server));
 
         tuServers.add(server);
-        if (tuServers.size() == 1) {
+       /* if (tuServers.size() == 1) {
             binding.autoUploadSwitchView.setVisibility(View.VISIBLE);
             setupAutoUploadSwitch();
         }
 
         if (tuServers.size()== 1) {
             binding.selectedUploadServerLayout.setVisibility(View.VISIBLE);
-        }
+        }*/
 
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_created), false);
     }
@@ -265,14 +265,14 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         binding.collectServersList.removeAllViews();
 
         tuServers.remove(server);
-        if (tuServers.size() == 0) {
+       /* if (tuServers.size() == 0) {
             binding.autoUploadSwitchView.setVisibility(View.GONE);
             binding.uploadLayout.setVisibility(View.GONE);
         }
 
         if (tuServers.size() == 1) {
             binding.selectedUploadServerLayout.setVisibility(View.GONE);
-        }
+        }*/
 
         createServerViews(servers);
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_deleted), false);
@@ -691,11 +691,11 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             }
         }
 
-        if (tuServers.size() > 1) {
+      /*  if (tuServers.size() > 1) {
             binding.selectedUploadServerLayout.setVisibility(View.VISIBLE);
         } else {
             binding.selectedUploadServerLayout.setVisibility(View.GONE);
-        }
+        }*/
     }
 
     private void stopRefreshPresenter() {

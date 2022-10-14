@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/space_cadet"
+    android:padding="@dimen/activity_horizontal_margin">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_light_purple_background"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/collect_form_padding_vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/serverNameLabel"
+            style="@style/Tella_Main_White_Text.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/collect_form_padding_vertical"
+            android:gravity="start"
+            android:paddingVertical="2dp"
+            android:text="@string/settings.docu_field_server.name"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/serverNameTv"
+            style="@style/Tella_Main_White_Text.Meduim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/collect_form_padding_vertical"
+            android:padding="2dp"
+            android:text="@string/settings.docu_field_server.name" />
+
+        <View
+            style="@style/SettingsMainShadowLine"
+            android:layout_marginVertical="@dimen/collect_form_padding_vertical" />
+
+        <TextView
+            android:id="@+id/serverUrlLabel"
+            style="@style/Tella_Main_White_Text.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/collect_form_padding_vertical"
+            android:gravity="start"
+            android:padding="2dp"
+            android:text="@string/settings.docu_field_server.url"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/serverUrlTv"
+            style="@style/Tella_Main_White_Text.Meduim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/collect_form_padding_vertical"
+            android:padding="2dp"
+            android:text="@string/settings.docu_field_server.name" />
+
+        <View
+            style="@style/SettingsMainShadowLine"
+            android:layout_marginVertical="@dimen/collect_form_padding_vertical" />
+
+        <TextView
+            android:id="@+id/userNameLabel"
+            style="@style/Tella_Main_White_Text.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/collect_form_padding_vertical"
+            android:gravity="start"
+            android:padding="2dp"
+            android:text="@string/settings.docu_field_server.url"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/userNameTv"
+            style="@style/Tella_Main_White_Text.Meduim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/collect_form_padding_vertical"
+            android:padding="2dp"
+            android:text="@string/settings.docu_field_server.name" />
+
+        <View
+            style="@style/SettingsMainShadowLine"
+            android:layout_marginTop="@dimen/collect_form_padding_vertical" />
+
+        <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+            android:id="@+id/share_verification_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:explainText="@string/Setting_Reports_Share_Information_Description"
+            app:titleText="@string/Setting_Reports_Share_Information_Title" />
+
+        <View
+            style="@style/SettingsMainShadowLine"
+            android:layout_marginTop="@dimen/collect_form_padding_vertical" />
+
+        <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+            android:id="@+id/background_upload_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:explainText="@string/Setting_Reports_Background_Upload_Description"
+            app:titleText="@string/Setting_Reports_Background_Upload" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/cancel"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/cancel_button_background"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:text="@string/action_cancel"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/wa_white"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/next" />
+
+    <Button
+        android:id="@+id/next"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/action_button_background"
+        android:maxLines="1"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:text="@string/action_save"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/wa_white"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

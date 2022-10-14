@@ -16,10 +16,7 @@ import rs.readahead.washington.mobile.databinding.FragmentLoginReportsScreenBind
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.util.KeyboardLiveData
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
-import rs.readahead.washington.mobile.views.dialog.ID_KEY
-import rs.readahead.washington.mobile.views.dialog.IS_UPDATE_SERVER
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
-import rs.readahead.washington.mobile.views.dialog.TITLE_KEY
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowViewModel
 import rs.readahead.washington.mobile.views.dialog.reports.step4.SuccessfulLoginFragment
 
@@ -28,17 +25,14 @@ class LoginReportsFragment :
     BaseBindingFragment<FragmentLoginReportsScreenBinding>(FragmentLoginReportsScreenBinding::inflate) {
     private var validated = true
     private lateinit var serverReports: TellaReportServer
-    private var isUpdate = false
     private val viewModel by viewModels<ReportsConnectFlowViewModel>()
 
     companion object {
         @JvmStatic
-        fun newInstance(server: TellaReportServer, isUpdate: Boolean): LoginReportsFragment {
+        fun newInstance(server: TellaReportServer): LoginReportsFragment {
             val frag = LoginReportsFragment()
             val args = Bundle()
-            args.putSerializable(ID_KEY, server.id)
             args.putString(OBJECT_KEY, Gson().toJson(server))
-            args.putBoolean(IS_UPDATE_SERVER, isUpdate)
             frag.arguments = args
             return frag
         }
@@ -81,8 +75,7 @@ class LoginReportsFragment :
             if (isSuccess) {
                 baseActivity.addFragment(
                     SuccessfulLoginFragment.newInstance(
-                        serverReports,
-                        isUpdate
+                        serverReports
                     ), R.id.container
                 )
             }
@@ -112,6 +105,7 @@ class LoginReportsFragment :
         server.url = serverReports.url
         server.username = binding?.username?.text.toString().trim(' ')
         server.password = binding?.password?.text.toString()
+        server.name = serverReports.name
         serverReports = server
         return server
     }
@@ -120,9 +114,7 @@ class LoginReportsFragment :
         arguments?.getString(OBJECT_KEY)?.let {
             serverReports = Gson().fromJson(it, TellaReportServer::class.java)
         }
-        arguments?.getBoolean(IS_UPDATE_SERVER)?.let {
-            isUpdate = it
-        }
+
         if (!serverReports.username.isNullOrEmpty() && !serverReports.password.isNullOrEmpty()) {
             binding?.username?.setText(serverReports.username)
             binding?.password?.setText(serverReports.password)

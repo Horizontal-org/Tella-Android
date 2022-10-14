@@ -98,7 +98,7 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
             }
     }
 
-    fun submitEntity(server: UWaziUploadServer, entity: UwaziEntityInstance) {
+    private fun submitEntity(server: UWaziUploadServer, entity: UwaziEntityInstance) {
         disposables.add(
             repository.submitEntity(
                 server = server,

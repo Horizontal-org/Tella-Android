@@ -15,7 +15,6 @@ import rs.readahead.washington.mobile.views.dialog.reports.step5.ServerAdvancedS
 class SuccessfulLoginFragment : BaseBindingFragment<FragmentSuccessfulLoginBinding>(
     FragmentSuccessfulLoginBinding::inflate
 ) {
-    private var isUpdate = false
     private lateinit var server: TellaReportServer
 
     companion object {
@@ -23,14 +22,11 @@ class SuccessfulLoginFragment : BaseBindingFragment<FragmentSuccessfulLoginBindi
 
         @JvmStatic
         fun newInstance(
-            server: TellaReportServer,
-            isUpdate: Boolean
+            server: TellaReportServer
         ): SuccessfulLoginFragment {
             val frag = SuccessfulLoginFragment()
             val args = Bundle()
-            args.putSerializable(ID_KEY, server.id)
             args.putString(OBJECT_KEY, Gson().toJson(server))
-            args.putBoolean(IS_UPDATE_SERVER, isUpdate)
             frag.arguments = args
             return frag
         }
@@ -48,16 +44,13 @@ class SuccessfulLoginFragment : BaseBindingFragment<FragmentSuccessfulLoginBindi
         arguments?.getString(OBJECT_KEY)?.let {
             server = Gson().fromJson(it, TellaReportServer::class.java)
         }
-        arguments?.getBoolean(IS_UPDATE_SERVER)?.let {
-            isUpdate = it
-        }
     }
 
     private fun initListeners() {
         binding?.goToAdvancedSettingsBtn?.setOnClickListener {
             binding?.goToAdvancedSettingsBtn?.isChecked = true
             binding?.goToReportsBtn?.isChecked = false
-            baseActivity.addFragment(ServerAdvancedSettingsFragment.newInstance(server,isUpdate), R.id.container)
+            baseActivity.addFragment(ServerAdvancedSettingsFragment.newInstance(server), R.id.container)
         }
 
         binding?.goToReportsBtn?.setOnClickListener {

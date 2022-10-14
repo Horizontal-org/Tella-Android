@@ -7,7 +7,6 @@ import rs.readahead.washington.mobile.databinding.FragmentSuccessfulSetServerBin
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.ID_KEY
-import rs.readahead.washington.mobile.views.dialog.IS_UPDATE_SERVER
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.SharedLiveData
 
@@ -15,7 +14,6 @@ class SuccessfulSetServerFragment :
     BaseBindingFragment<FragmentSuccessfulSetServerBinding>(
         FragmentSuccessfulSetServerBinding::inflate
     ) {
-    private var isUpdate = false
     private lateinit var server: TellaReportServer
 
 
@@ -24,14 +22,12 @@ class SuccessfulSetServerFragment :
 
         @JvmStatic
         fun newInstance(
-            server: TellaReportServer,
-            isUpdate: Boolean
+            server: TellaReportServer
         ): SuccessfulSetServerFragment {
             val frag = SuccessfulSetServerFragment()
             val args = Bundle()
             args.putSerializable(ID_KEY, server.id)
             args.putString(OBJECT_KEY, Gson().toJson(server))
-            args.putBoolean(IS_UPDATE_SERVER, isUpdate)
             frag.arguments = args
             return frag
         }
@@ -50,9 +46,6 @@ class SuccessfulSetServerFragment :
         arguments?.getString(OBJECT_KEY)?.let {
             server = Gson().fromJson(it, TellaReportServer::class.java)
         }
-        arguments?.getBoolean(IS_UPDATE_SERVER)?.let {
-            isUpdate = it
-        }
     }
 
     private fun initListeners() {
@@ -63,11 +56,7 @@ class SuccessfulSetServerFragment :
     }
 
     private fun save(server: TellaReportServer) {
-        if (server.id == 0L) {
-            SharedLiveData.createReportsServer.postValue(server)
-        } else {
-            SharedLiveData.updateReportsServer.postValue(server)
-        }
+        SharedLiveData.createReportsServer.postValue(server)
         baseActivity.finish()
     }
 

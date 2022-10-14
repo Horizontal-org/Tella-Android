@@ -17,7 +17,6 @@ import rs.readahead.washington.mobile.views.dialog.uwazi.step2.LoginTypeFragment
 class ChooseUserNamePasswordFragment :
     BaseBindingFragment<FragmentChooseUsernamePasswordBinding>(FragmentChooseUsernamePasswordBinding::inflate),
     View.OnClickListener {
-    private var isUpdate = false
     private var server: TellaReportServer? = null
 
     companion object {
@@ -25,15 +24,10 @@ class ChooseUserNamePasswordFragment :
 
         @JvmStatic
         fun newInstance(
-            server: TellaReportServer,
-            isUpdate: Boolean
-        ): ChooseUserNamePasswordFragment {
+            server: TellaReportServer): ChooseUserNamePasswordFragment {
             val frag = ChooseUserNamePasswordFragment()
             val args = Bundle()
-            args.putInt(TITLE_KEY, R.string.settings_docu_dialog_title_server_settings)
-            args.putSerializable(ID_KEY, server.id)
             args.putString(OBJECT_KEY, Gson().toJson(server))
-            args.putBoolean(IS_UPDATE_SERVER, isUpdate)
             frag.arguments = args
             return frag
         }
@@ -65,9 +59,6 @@ class ChooseUserNamePasswordFragment :
         arguments?.getString(OBJECT_KEY)?.let {
             server = Gson().fromJson(it, TellaReportServer::class.java)
         }
-        arguments?.getBoolean(IS_UPDATE_SERVER)?.let {
-            isUpdate = it
-        }
     }
 
     override fun onClick(v: View?) {
@@ -90,10 +81,7 @@ class ChooseUserNamePasswordFragment :
     private fun validateAndLogin() {
         if (server == null) return
         if (binding?.yesBtn?.isChecked == true) {
-            baseActivity.addFragment(
-                LoginReportsFragment.newInstance(server!!, isUpdate),
-                R.id.container
-            )
+
         } else {
 
         }

@@ -15,8 +15,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_gravity="top">
+            android:layout_gravity="top"
+            android:layout_marginBottom="@dimen/activity_vertical_margin">
 
             <LinearLayout
                 android:id="@+id/options_layout"
@@ -144,10 +144,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:paddingStart="@dimen/activity_vertical_margin"
                         android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
                         android:paddingEnd="@dimen/activity_vertical_margin"
-                        android:paddingStart="@dimen/activity_vertical_margin">
+                        android:paddingBottom="8dp">
 
                         <TextView
                             android:id="@+id/delete_vault_title"
@@ -163,8 +163,8 @@
                         <ImageView
                             android:id="@+id/delete_vault_tooltip"
                             android:layout_width="wrap_content"
-                            android:layout_gravity="center_vertical"
                             android:layout_height="@dimen/tooltip_icon_size"
+                            android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/tooltip_icon_margin_start"
                             android:layout_marginTop="@dimen/tooltip_icon_margin_top"
                             android:layout_toEndOf="@id/delete_vault_title"
@@ -187,10 +187,10 @@
                         android:layout_gravity="center_vertical"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
+                        android:paddingStart="@dimen/activity_vertical_margin"
                         android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
                         android:paddingEnd="@dimen/activity_vertical_margin"
-                        android:paddingStart="@dimen/activity_vertical_margin">
+                        android:paddingBottom="8dp">
 
                         <TextView
                             android:id="@+id/delete_forms_title"
@@ -225,10 +225,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:paddingStart="@dimen/activity_vertical_margin"
                         android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
                         android:paddingEnd="@dimen/activity_vertical_margin"
-                        android:paddingStart="@dimen/activity_vertical_margin">
+                        android:paddingBottom="8dp">
 
                         <TextView
                             android:id="@+id/delete_server_settings_title"
@@ -244,8 +244,8 @@
                         <ImageView
                             android:id="@+id/delete_server_tooltip"
                             android:layout_width="wrap_content"
-                            android:layout_gravity="center_vertical"
                             android:layout_height="@dimen/tooltip_icon_size"
+                            android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/tooltip_icon_margin_start"
                             android:layout_marginTop="@dimen/tooltip_icon_margin_top"
                             android:layout_toEndOf="@id/delete_server_settings_title"
@@ -265,10 +265,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:paddingStart="@dimen/activity_vertical_margin"
                         android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
                         android:paddingEnd="@dimen/activity_vertical_margin"
-                        android:paddingStart="@dimen/activity_vertical_margin">
+                        android:paddingBottom="8dp">
 
                         <TextView
                             android:id="@+id/delete_tella_title"
@@ -283,8 +283,8 @@
                         <ImageView
                             android:id="@+id/delete_app_tooltip"
                             android:layout_width="wrap_content"
-                            android:layout_gravity="center_vertical"
                             android:layout_height="@dimen/tooltip_icon_size"
+                            android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/tooltip_icon_margin_start"
                             android:layout_marginTop="@dimen/tooltip_icon_margin_top"
                             android:layout_toEndOf="@id/delete_tella_title"
@@ -327,7 +327,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/camera_silent_switch"
                 app:titleText="@string/settings_sec_security_screen" />
 
-         <!--   <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+            <!--   <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
                 android:id="@+id/bypass_censorship_switch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

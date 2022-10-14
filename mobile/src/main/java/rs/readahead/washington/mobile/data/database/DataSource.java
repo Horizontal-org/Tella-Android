@@ -2077,7 +2077,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         server.setUsername(cursor.getString(cursor.getColumnIndexOrThrow(D.C_USERNAME)));
         server.setPassword(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PASSWORD)));
         server.setChecked(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_CHECKED)) > 0);
-
+        server.setActivatedBackgroundUpload(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_BACKGROUND_UPLOAD)) > 0);
+        server.setActivatedMetadata(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_ACTIVATED_METADATA)) > 0);
         return server;
     }
 

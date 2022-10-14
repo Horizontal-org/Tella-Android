@@ -9,15 +9,11 @@ import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 import rs.readahead.washington.mobile.views.dialog.IS_UPDATE_SERVER
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowActivity.*
+import rs.readahead.washington.mobile.views.dialog.reports.edit.EditTellaServerFragment
 import rs.readahead.washington.mobile.views.dialog.reports.step1.EnterUploadServerFragment
 
-interface TellaUploadServerDialogHandler {
-    fun onTellaUploadServerDialogCreate(server: TellaReportServer?)
-    fun onTellaUploadServerDialogUpdate(server: TellaReportServer?)
-}
-
 @AndroidEntryPoint
-class ReportsConnectFlowActivity : BaseLockActivity() , TellaUploadServerDialogHandler {
+class ReportsConnectFlowActivity : BaseLockActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,18 +24,10 @@ class ReportsConnectFlowActivity : BaseLockActivity() , TellaUploadServerDialogH
             intent.getStringExtra(OBJECT_KEY)?.let {
                 val server = Gson().fromJson(it, TellaReportServer::class.java)
                 addFragment(
-                    EnterUploadServerFragment.newInstance(server, true),
+                    EditTellaServerFragment.newInstance(server),
                     R.id.container
                 )
             }
         }
     }
-
-    override fun onTellaUploadServerDialogCreate(server: TellaReportServer?) {
-    }
-
-    override fun onTellaUploadServerDialogUpdate(server: TellaReportServer?) {
-
-    }
-
 }
