@@ -60,7 +60,8 @@ public class KeyboardUtil {
     ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
         @Override
         public void onGlobalLayout() {
-            Rect r = new Rect();
+
+           Rect r = new Rect();
             //r will be populated with the coordinates of your view that area still visible.
             decorView.getWindowVisibleDisplayFrame(r);
 
@@ -70,17 +71,16 @@ public class KeyboardUtil {
 
             //if it could be a keyboard add the padding to the view
             if (diff != 0) {
-                // if the use-able screen height differs from the total screen height we assume that it shows a keyboard now
-                //check if the padding is 0 (if yes set the padding for the keyboard)
                 if (contentView.getPaddingBottom() < diff) {
-                    if (Build.VERSION.SDK_INT > 19) {
-                        //set the padding of the contentView for the keyboard
-                        contentView.setPadding(30, 30, 30, diff+30);
-                    }else {
+                    if(diff < 400) {
                         contentView.setPadding(30, 30, 30, 30);
+                    }else  {
+                        contentView.setPadding(30, 30, 30, diff+30);
                     }
                 }
-            } else {
+
+
+            }  else {
                 //check if the padding is != 0 (if yes reset the padding)
                 if (contentView.getPaddingBottom() != 0) {
                     //reset the padding of the contentView
