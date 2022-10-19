@@ -219,7 +219,9 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
         configBackPressCallback()
         if (statusBarColor != null) applyStatusBarColor(statusBarColor!!)
 
-        KeyboardUtil(activity, view)
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1) {
+            KeyboardUtil(activity, view)
+        }
     }
 
     private fun configBackPressCallback() {
