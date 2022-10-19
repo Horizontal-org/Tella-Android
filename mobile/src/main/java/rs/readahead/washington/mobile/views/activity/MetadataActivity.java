@@ -353,17 +353,21 @@ public abstract class MetadataActivity extends BaseLockActivity implements
     }
 
     private void showGpsMetadataDialog(final int requestCode, final LocationSettingsCheckDoneListener listener) {
-        maybeChangeTemporaryTimeout(() -> {
-            BottomSheetUtils.showConfirmSheet(
-                    getSupportFragmentManager(),
-                    getString(R.string.verification_prompt_dialog_title),
-                    getString(R.string.verification_prompt_dialog_expl),
-                    getString(R.string.verification_prompt_action_enable_GPS),
-                    getString(R.string.verification_prompt_action_ignore),
-                    isConfirmed -> manageLocationSettings(requestCode, listener)
-            );
-            return Unit.INSTANCE;
-        });
+        BottomSheetUtils.showConfirmSheet(
+                getSupportFragmentManager(),
+                getString(R.string.verification_prompt_dialog_title),
+                getString(R.string.verification_prompt_dialog_expl),
+                getString(R.string.verification_prompt_action_enable_GPS),
+                getString(R.string.verification_prompt_action_ignore),
+                isConfirmed -> {
+                    if (isConfirmed){
+                        maybeChangeTemporaryTimeout(() -> {
+                            manageLocationSettings(requestCode, listener);
+                            return Unit.INSTANCE;
+                        });
+                    }
+                }
+        );
     }
 
     public SensorData getLightSensorData() {
