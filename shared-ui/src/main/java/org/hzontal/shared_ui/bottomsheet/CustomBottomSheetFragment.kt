@@ -254,15 +254,6 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment(),
         val dialog = super.onCreateDialog(savedInstanceState)
 
         dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-        dialog.setOnShowListener {
-            lifecycleScope.launch {
-                val bottomSheet =
-                    (dialog as? BottomSheetDialog)?.findViewById<View>(R.id.design_bottom_sheet) as? FrameLayout
-                bottomSheet?.let {
-                    BottomSheetBehavior.from(it).state = BottomSheetBehavior.STATE_EXPANDED
-                }
-            }
-        }
 
         return dialog
     }
