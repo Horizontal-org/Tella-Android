@@ -69,7 +69,14 @@ public class KeyboardUtil {
             int diff = height - r.bottom;
 
             //if it could be a keyboard add the padding to the view
-            if (diff != 0) {
+             if (diff == 0){
+                 //check if the padding is != 0 (if yes reset the padding)
+                 if (contentView.getPaddingBottom() != 0) {
+                     //reset the padding of the contentView
+                     contentView.setPadding(30, 30, 30, 25);
+                 }
+            }
+           else {
                 // if the use-able screen height differs from the total screen height we assume that it shows a keyboard now
                 //check if the padding is 0 (if yes set the padding for the keyboard)
                 if (contentView.getPaddingBottom() < diff) {
@@ -80,13 +87,7 @@ public class KeyboardUtil {
                         contentView.setPadding(30, 30, 30, 30);
                     }
                 }
-            } else {
-                //check if the padding is != 0 (if yes reset the padding)
-                if (contentView.getPaddingBottom() != 0) {
-                    //reset the padding of the contentView
-                    contentView.setPadding(30, 30, 30, 25);
-                }
-            }
+             }
         }
     };
 

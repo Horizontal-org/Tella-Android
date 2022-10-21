@@ -21,7 +21,8 @@ import kotlinx.coroutines.launch
 import org.hzontal.shared_ui.R
 import java.util.*
 
-class CustomBottomSheetFragment : BottomSheetDialogFragment() {
+class CustomBottomSheetFragment : BottomSheetDialogFragment(),
+    SoftKeyboardStateWatcher.SoftKeyboardStateListener {
 
     @LayoutRes
     private var layoutRes: Int = 0
@@ -43,6 +44,8 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
     private var isCancellable = false
     private var isTransparent: Boolean = false
     private var isFullscreen: Boolean = false
+    private var softKeyboardStateWatcher: SoftKeyboardStateWatcher? = null
+
 
     /**
      * Called to init LayoutRes with ID layout.
@@ -219,8 +222,11 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
         configBackPressCallback()
         if (statusBarColor != null) applyStatusBarColor(statusBarColor!!)
 
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-            KeyboardUtil(activity, view)
+
+        if (softKeyboardStateWatcher == null) {
+            softKeyboardStateWatcher =
+                SoftKeyboardStateWatcher(view)
+            softKeyboardStateWatcher?.addSoftKeyboardStateListener(this)
         }
     }
 
@@ -244,7 +250,7 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
         }
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
 
         dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
@@ -283,6 +289,48 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
             return process
         }
     }
+
+    override fun onSoftKeyboardOpened(
+        keyboardHeightInPx: Int,
+        screenSize: Int,
+        visibleScreenArea: Int
+    ) {
+        onSoftKeyboardIsOpened(
+            keyboardHeightInPx,
+            screenSize,
+            visibleScreenArea
+        )
+    }
+
+    override fun onSoftKeyboardClosed(keyboardHeightInPx: Int) {
+        onSoftKeyboardIsClosed(keyboardHeightInPx)
+    }
+
+    /**
+     * CallBack fired when the keyboard is closed
+     */
+    private fun onSoftKeyboardIsOpened(
+        keyboardHeightInPx: Int,
+        screenSize: Int,
+        visibleScreenArea: Int
+    ) {
+        view?.layoutParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT, screenSize - keyboardHeightInPx
+        )
+    }
+
+    /**
+     * CallBack fired when the keyboard is opened
+     */
+    private fun onSoftKeyboardIsClosed(keyboardHeightInPx: Int) {
+        val layoutParams: FrameLayout.LayoutParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
+        )
+        view?.layoutParams = layoutParams
+
+    }
+
+
 }
 
 fun DialogFragment.showOnce(manager: FragmentManager, tag: String) {
