@@ -4,6 +4,7 @@ import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.At
 import static rs.readahead.washington.mobile.views.fragment.vault.home.HomeVaultFragmentKt.VAULT_FILTER;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -118,7 +119,6 @@ public class MainActivity extends MetadataActivity implements
         assert navHostFragment != null;
         navController = navHostFragment.getNavController();
         btmNavMain = findViewById(R.id.btm_nav_main);
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.homeScreen, R.id.cameraScreen, R.id.reportsScreen, R.id.uwaziScreen, R.id.micScreen, R.id.formScreen).build();
         NavigationUI.setupWithNavController(btmNavMain, navController);
         navController.addOnDestinationChangedListener((navController1, navDestination, bundle) -> {
             switch (navDestination.getId()) {
@@ -128,6 +128,7 @@ public class MainActivity extends MetadataActivity implements
                 case (R.id.homeScreen):
                 case R.id.formScreen:
                 case R.id.uwaziScreen:
+                case R.id.reportsScreen:
                     showBottomNavigation();
                     break;
                 default:
@@ -186,6 +187,7 @@ public class MainActivity extends MetadataActivity implements
         }
     }
 
+    @SuppressLint("NeedOnRequestPermissionsResult")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -268,6 +270,7 @@ public class MainActivity extends MetadataActivity implements
         btmNavMain.getMenu().findItem(R.id.home).setChecked(true);
         homeScreenPresenter.countCollectServers();
         homeScreenPresenter.countUwaziServers();
+        homeScreenPresenter.countTUServers();
         startLocationMetadataListening();
         mOrientationEventListener.enable();
     }
@@ -427,14 +430,14 @@ public class MainActivity extends MetadataActivity implements
         invalidateOptionsMenu();
     }
 
+    private void maybeShowTUserver(Long num){
+        btmNavMain.getMenu().findItem(R.id.reports).setVisible(num > 0);
+        invalidateOptionsMenu();
+    }
+
     public void selectHome() {
         btmNavMain.getMenu().findItem(R.id.home).setChecked(true);
         navController.navigate(R.id.home);
-    }
-
-    private void maybeShowTUserver(Long num){
-        //btmNavMain.getMenu().findItem(R.id.reports).setVisible(num > 0);
-      //  invalidateOptionsMenu();
     }
 }
 

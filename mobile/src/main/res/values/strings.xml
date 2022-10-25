@@ -691,4 +691,8 @@ button to add a new template.</string>
     <string name="Setting_Reports_Background_Upload_Description" translatable="false">Continue uploading reports while doing other tasks or if you exit Tella.\nWARNING: If enabled, Tella will remain unlocked until all reports are fully uploaded.</string>
     <string name="Setting_Reports_Settings_Completed" translatable="false">Advanced settings complete</string>
     <string name="Setting_Reports_Settings_Completed_Description" translatable="false">You can always change your Reports preferences in the Tella Settings.</string>
+    <string name="Drafts_Reports_Empty_Message" translatable="false">Your Drafts is currently empty. Reports that you have not submitted will appear here.</string>
+    <string name="Outbox_Reports_Empty_Message" translatable="false">Your Outbox is currently empty. Reports that are ready to be sent will appear here.</string>
+    <string name="Submitted_Reports_Empty_Message" translatable="false">You have no submitted reports.</string>
+    <string name="New_Reports_Text" translatable="false">NEW REPORT</string>
 </resources>

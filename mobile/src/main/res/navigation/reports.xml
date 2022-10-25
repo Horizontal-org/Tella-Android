@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,11 +7,8 @@
 
     <fragment
         android:id="@+id/reportsScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.ReportsFragment"
+        android:name="rs.readahead.washington.mobile.views.fragment.reports.ReportsFragment"
         android:label="@string/Home_BottomNav_Reports"
-        tools:layout="@layout/fragment_reports">
-
-
-    </fragment>
+        tools:layout="@layout/fragment_reports" />
 
 </navigation>

@@ -37,10 +37,8 @@ class UwaziRepository : IUwaziUserRepository {
                 if (!cookieList.isNullOrEmpty()) {
                     jsessionid = cookieList[0].split(";")[0]
                 }
-
                 LoginResult(it.isSuccessful, jsessionid, it.code())
             }
-
     }
 
     override fun getTemplatesResult(server: UWaziUploadServer): Single<ListTemplateResult> {
@@ -103,7 +101,6 @@ class UwaziRepository : IUwaziUserRepository {
                                                     context.values[nestedSelectValue.label]
                                                         ?: nestedSelectValue.label
                                             }
-
                                         }
 
                                     }
