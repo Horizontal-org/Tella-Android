@@ -42,7 +42,7 @@ import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.util.StringUtils;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
-import rs.readahead.washington.mobile.views.custom.PanelToggleButton;
+import org.hzontal.shared_ui.buttons.PanelToggleButton;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
 
 

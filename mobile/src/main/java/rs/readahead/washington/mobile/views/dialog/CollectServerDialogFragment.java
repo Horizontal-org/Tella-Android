@@ -39,7 +39,7 @@ import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
 import rs.readahead.washington.mobile.mvp.contract.ICheckOdkServerContract;
 import rs.readahead.washington.mobile.mvp.presenter.CheckOdkServerPresenter;
-import rs.readahead.washington.mobile.views.custom.PanelToggleButton;
+import org.hzontal.shared_ui.buttons.PanelToggleButton;
 import timber.log.Timber;
 
 

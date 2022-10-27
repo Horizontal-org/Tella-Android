@@ -1,11 +1,12 @@
-package rs.readahead.washington.mobile.views.custom;
+package org.hzontal.shared_ui.buttons;
 
 import android.content.Context;
 import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatButton;
 
-import rs.readahead.washington.mobile.R;
+import org.hzontal.shared_ui.R;
+
 
 public class PanelToggleButton extends AppCompatButton {
     private boolean open = false;

@@ -41,16 +41,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-        <rs.readahead.washington.mobile.views.custom.PanelToggleButton
+        <org.hzontal.shared_ui.dropdownlist.CustomDropdownList
             android:id="@+id/servers_dropdown"
-            style="@style/Tella_Main_White_Text.Meduim"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:background="@color/wa_white_8"
-            android:paddingStart="@dimen/activity_horizontal_margin"
-            android:text="@string/Reports_Select_Your_Project"
             android:textAlignment="viewStart"
             app:layout_constraintTop_toBottomOf="@id/send_report_text" />
 
@@ -125,6 +121,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/report_description_layout" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/files_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/attach_files_text"
+            android:visibility="gone"
+            >
+        </androidx.recyclerview.widget.RecyclerView>
+
         <ImageView
             android:id="@+id/attach_files_btn"
             android:layout_width="wrap_content"
@@ -133,7 +138,7 @@
             android:layout_marginTop="@dimen/activity_horizontal_small_margin"
             android:src="@drawable/upload_box"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/attach_files_text" />
+            app:layout_constraintTop_toBottomOf="@id/files_recyclerView" />
 
         <Button
             android:id="@+id/new_report_btn"

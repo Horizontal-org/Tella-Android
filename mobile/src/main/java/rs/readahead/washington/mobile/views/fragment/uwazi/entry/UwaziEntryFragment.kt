@@ -47,7 +47,6 @@ class UwaziEntryFragment :
         ViewModelProvider(baseActivity).get(SharedUwaziSubmissionViewModel::class.java)
     }
     private val uwaziParser: UwaziParser by lazy { UwaziParser(context) }
-
     private val bundle by lazy { Bundle() }
     private var screenView: ViewGroup? = null
     private lateinit var uwaziFormView: UwaziFormView
@@ -113,7 +112,6 @@ class UwaziEntryFragment :
         }
         binding!!.toolbar.setStartTextTitle(uwaziParser.getTemplate()?.entityRow?.translatedName.toString())
     }
-
 
     private fun initObservers() {
         with(viewModel) {
