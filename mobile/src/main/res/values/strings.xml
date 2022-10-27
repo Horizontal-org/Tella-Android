@@ -695,4 +695,10 @@ button to add a new template.</string>
     <string name="Outbox_Reports_Empty_Message" translatable="false">Your Outbox is currently empty. Reports that are ready to be sent will appear here.</string>
     <string name="Submitted_Reports_Empty_Message" translatable="false">You have no submitted reports.</string>
     <string name="New_Reports_Text" translatable="false">NEW REPORT</string>
+    <string name="Reports_Title_Screen" translatable="false">REPORT</string>
+    <string name="Reports_Send_To_Text" translatable="false">Send report to:</string>
+    <string name="Reports_Select_Your_Project" translatable="false">Select your project</string>
+    <string name="Reports_Select_Title" translatable="false">Title</string>
+    <string name="Reports_Select_Description" translatable="false">Description</string>
+    <string name="Reports_Attach_files_Here" translatable="false">Attach files here</string>
 </resources>

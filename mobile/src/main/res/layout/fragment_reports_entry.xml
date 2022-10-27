@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/wa_purple"
+    android:clipToPadding="false"
+    android:fillViewport="true"
+    android:scrollbarStyle="outsideOverlay"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".views.fragment.uwazi.entry.UwaziEntryFragment">
+
+
+        <org.hzontal.shared_ui.appbar.ToolbarComponent
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:rightIcon="@drawable/ic_save_white_24dp"
+            app:startTitle="@string/Reports_Title_Screen" />
+
+        <TextView
+            android:id="@+id/send_report_text"
+            style="@style/Tella_Main_White_Text.Meduim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/activity_horizontal_margin"
+            android:text="@string/Reports_Send_To_Text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+        <rs.readahead.washington.mobile.views.custom.PanelToggleButton
+            android:id="@+id/servers_dropdown"
+            style="@style/Tella_Main_White_Text.Meduim"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:background="@color/wa_white_8"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:text="@string/Reports_Select_Your_Project"
+            android:textAlignment="viewStart"
+            app:layout_constraintTop_toBottomOf="@id/send_report_text" />
+
+
+        <View
+            android:id="@+id/separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_horizontal_large_margin"
+            android:background="@color/wa_white_20"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/servers_dropdown"
+
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/report_title_layout"
+            style="@style/DialogDataCollectionTextEntryLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="40dp"
+            android:textColorHint="@color/wa_white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/separator">
+
+            <EditText
+                android:id="@+id/report_title_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/Reports_Select_Title"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="@color/wa_white"
+                app:backgroundTint="@color/wa_white" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/report_description_layout"
+            style="@style/DialogDataCollectionTextEntryLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_large_margin"
+            android:textColorHint="@color/wa_white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/report_title_layout">
+
+            <EditText
+                android:id="@+id/report_description_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/Reports_Select_Description"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:textColor="@color/wa_white"
+                app:backgroundTint="@color/wa_white" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/attach_files_text"
+            style="@style/Tella_Main_White_Text.Meduim"
+            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_large_margin"
+            android:text="@string/Reports_Attach_files_Here"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/report_description_layout" />
+
+        <ImageView
+            android:id="@+id/attach_files_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_horizontal_small_margin"
+            android:src="@drawable/upload_box"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/attach_files_text" />
+
+        <Button
+            android:id="@+id/new_report_btn"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_gravity="bottom|end"
+            android:layout_marginHorizontal="@dimen/tella_main_vertical"
+            android:background="@drawable/bg_round_orange_btn"
+            android:backgroundTint="@color/wa_orange_16"
+            android:fontFamily="@font/open_sans"
+            android:gravity="center_vertical"
+            android:text="@string/New_Reports_Text"
+            android:textAlignment="center"
+            android:textColor="@color/wa_white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/send_later_btn"
+            app:layout_constraintTop_toBottomOf="@+id/attach_files_btn"
+            tools:ignore="RtlCompat" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/send_later_btn"
+            android:layout_width="52dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="@dimen/activity_vertical_large_margin"
+            android:background="@drawable/bg_send_later"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintCircleRadius="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/attach_files_btn">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/ic_watch_later_black_24dp" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

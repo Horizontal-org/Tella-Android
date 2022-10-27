@@ -9,6 +9,16 @@
         android:id="@+id/reportsScreen"
         android:name="rs.readahead.washington.mobile.views.fragment.reports.ReportsFragment"
         android:label="@string/Home_BottomNav_Reports"
-        tools:layout="@layout/fragment_reports" />
+        tools:layout="@layout/fragment_reports">
 
+        <action
+            android:id="@+id/action_reportsScreen_to_newReport_screen"
+            app:destination="@id/newReportScreen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/newReportScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.reports.entry.ReportsEntryFragment"/>
 </navigation>

@@ -42,6 +42,9 @@ class ReportsFragment :
             ContextCompat.getColor(baseActivity, R.color.wa_white)
         )
 
+        binding?.newReportBtn?.setOnClickListener {
+            nav().navigate(R.id.action_reportsScreen_to_newReport_screen)
+        }
 
     }
 

@@ -42,7 +42,8 @@
                 android:layout_height="?attr/actionBarSize"
                 android:textStyle="bold"
                 app:bigStartTitle="@string/Home_BottomNav_Reports"
-                app:layout_collapseMode="pin"></org.hzontal.shared_ui.appbar.ToolbarComponent>
+                app:layout_collapseMode="pin">
+            </org.hzontal.shared_ui.appbar.ToolbarComponent>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
