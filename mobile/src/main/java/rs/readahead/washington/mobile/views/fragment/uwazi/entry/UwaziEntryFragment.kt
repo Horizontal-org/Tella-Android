@@ -44,7 +44,7 @@ class UwaziEntryFragment :
     OnNavBckListener {
 
     private val viewModel: SharedUwaziSubmissionViewModel by lazy {
-        ViewModelProvider(baseActivity).get(SharedUwaziSubmissionViewModel::class.java)
+        ViewModelProvider(baseActivity)[SharedUwaziSubmissionViewModel::class.java]
     }
     private val uwaziParser: UwaziParser by lazy { UwaziParser(context) }
     private val bundle by lazy { Bundle() }

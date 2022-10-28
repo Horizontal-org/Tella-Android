@@ -2,11 +2,7 @@ package rs.readahead.washington.mobile.data.database;
 
 import android.content.Context;
 
-import com.hzontal.tella_locking_ui.common.CredentialsCallback;
-
 import org.hzontal.tella.keys.key.LifecycleMainKey;
-
-import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.AsyncSubject;

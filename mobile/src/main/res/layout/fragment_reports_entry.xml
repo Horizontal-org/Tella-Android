@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
+            app:arrowBackIcon="@drawable/ic_close_white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -61,7 +61,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/servers_dropdown"
+            android:layout_marginBottom="24dp"
 
+            />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/dropdown_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="separator,servers_dropdown,send_report_text"
             />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -70,7 +79,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="16dp"
             android:textColorHint="@color/wa_white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
