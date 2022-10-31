@@ -4,13 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
-import rs.readahead.washington.mobile.domain.usecases.server.GetReportsServersUseCase
+import rs.readahead.washington.mobile.domain.usecases.reports.GetReportsServersUseCase
+import rs.readahead.washington.mobile.domain.usecases.reports.SaveReportFormInstanceUseCase
 import javax.inject.Inject
 
 
 @HiltViewModel
-class ReportsEntryViewModel @Inject constructor(private val getReportsServersUseCase: GetReportsServersUseCase) :
+class ReportsEntryViewModel @Inject constructor(
+    private val getReportsServersUseCase: GetReportsServersUseCase,
+    private val saveReportFormInstanceUseCase: SaveReportFormInstanceUseCase
+) :
     ViewModel() {
 
     private val _progress = MutableLiveData<Boolean>()
@@ -19,6 +24,8 @@ class ReportsEntryViewModel @Inject constructor(private val getReportsServersUse
     val serversList: LiveData<List<TellaReportServer>> get() = _serversList
     private var _error = MutableLiveData<Throwable>()
     val error: LiveData<Throwable> get() = _error
+    private val _draftReportFormInstance = MutableLiveData<ReportFormInstance>()
+    val draftReportFormInstance: LiveData<ReportFormInstance> get() = _draftReportFormInstance
 
     init {
         listServers()
@@ -39,8 +46,23 @@ class ReportsEntryViewModel @Inject constructor(private val getReportsServersUse
         )
     }
 
-    private fun saveDraft(){
+    fun saveDraft(reportFormInstance: ReportFormInstance) {
+        _progress.postValue(true)
+        saveReportFormInstanceUseCase.execute(
+            onSuccess = { result ->
+                _draftReportFormInstance.postValue(result)
+            },
+            onError = {
+                _error.postValue(it)
+            },
+            onFinished = {
+                _progress.postValue(false)
+            }
+        )
+    }
 
+    fun getDraftFormInstance() : ReportFormInstance{
+        return ReportFormInstance()
     }
 }
 

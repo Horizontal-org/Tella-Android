@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.domain.usecases.server
+package rs.readahead.washington.mobile.domain.usecases.reports
 
 import io.reactivex.Single
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer

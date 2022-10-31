@@ -59,12 +59,18 @@ class ReportsEntryFragment :
         }
     }
 
-    fun highLightButton(isTitleEnabled: Boolean, isDescriptionEnabled: Boolean) {
+    private fun highLightButton(isTitleEnabled: Boolean, isDescriptionEnabled: Boolean) {
         if (isTitleEnabled && isDescriptionEnabled) {
             binding?.sendReportBtn?.setTint(R.color.wa_orange)
+            binding?.sendReportBtn?.setOnClickListener {}
         } else {
             binding?.sendReportBtn?.setTint(R.color.wa_orange_16)
+            binding?.sendReportBtn?.setOnClickListener(null)
         }
+    }
+
+    private fun saveReportAsDraft(){
+      //  viewModel.saveDraft()
     }
 
     private fun initData() {
