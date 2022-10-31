@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.hzontal.tella_locking_ui.common.extensions.onChange
 import com.hzontal.tella_vault.filter.FilterType
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.IVaultFilesSelector
@@ -15,6 +16,7 @@ import rs.readahead.washington.mobile.databinding.FragmentReportsEntryBinding
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.hide
+import rs.readahead.washington.mobile.util.setTint
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.activity.CameraActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity
@@ -37,6 +39,31 @@ class ReportsEntryFragment :
     private fun initView() {
         binding?.attachFilesBtn?.setOnClickListener {
             showSelectFilesSheet()
+        }
+
+        binding?.toolbar?.backClickListener = { nav().popBackStack() }
+
+        highLightSubmitButton()
+    }
+
+    private fun highLightSubmitButton() {
+        var isTitleEnabled = false
+        var isDescriptionEnabled = false
+        binding?.reportTitleEt?.onChange { title ->
+            isTitleEnabled = title.length > 1
+            highLightButton(isTitleEnabled, isDescriptionEnabled)
+        }
+        binding?.reportDescriptionEt?.onChange { description ->
+            isDescriptionEnabled = description.length > 1
+            highLightButton(isTitleEnabled, isDescriptionEnabled)
+        }
+    }
+
+    fun highLightButton(isTitleEnabled: Boolean, isDescriptionEnabled: Boolean) {
+        if (isTitleEnabled && isDescriptionEnabled) {
+            binding?.sendReportBtn?.setTint(R.color.wa_orange)
+        } else {
+            binding?.sendReportBtn?.setTint(R.color.wa_orange_16)
         }
     }
 

@@ -69,7 +69,7 @@
             android:id="@+id/dropdown_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="visible"
             app:constraint_referenced_ids="separator,servers_dropdown,send_report_text"
             />
 
@@ -86,7 +86,7 @@
             app:layout_constraintTop_toBottomOf="@id/separator">
 
             <EditText
-                android:id="@+id/report_title_tv"
+                android:id="@+id/report_title_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/Reports_Select_Title"
@@ -111,7 +111,7 @@
             app:layout_constraintTop_toBottomOf="@id/report_title_layout">
 
             <EditText
-                android:id="@+id/report_description_tv"
+                android:id="@+id/report_description_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/Reports_Select_Description"
@@ -150,7 +150,7 @@
             app:layout_constraintTop_toBottomOf="@id/files_recyclerView" />
 
         <Button
-            android:id="@+id/new_report_btn"
+            android:id="@+id/send_report_btn"
             android:layout_width="0dp"
             android:layout_height="54dp"
             android:layout_gravity="bottom|end"

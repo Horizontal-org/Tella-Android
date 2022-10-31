@@ -38,5 +38,9 @@ class ReportsEntryViewModel @Inject constructor(private val getReportsServersUse
             }
         )
     }
+
+    private fun saveDraft(){
+
+    }
 }
 
