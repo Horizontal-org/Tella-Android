@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/attachmentImg"
+        android:layout_width="116dp"
+        android:layout_height="116dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
+        android:background="@color/light_gray"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/attachmentSmallImg"
+        android:layout_width="62dp"
+        android:layout_height="62dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
+        android:background="@color/light_gray"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView_remove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:padding="5dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/attachmentImg"
+        app:layout_constraintTop_toTopOf="@id/attachmentImg"
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+    <ImageView
+        android:id="@+id/otherImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/attachmentImg"
+        app:layout_constraintEnd_toEndOf="@id/attachmentImg"
+        app:layout_constraintStart_toStartOf="@id/attachmentImg"
+        app:layout_constraintTop_toTopOf="@id/attachmentImg"
+        app:srcCompat="@android:drawable/ic_media_play" />
+
+
+    <ImageView
+        android:id="@+id/otherSmallImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/attachmentSmallImg"
+        app:layout_constraintEnd_toEndOf="@id/attachmentSmallImg"
+        app:layout_constraintStart_toStartOf="@id/attachmentSmallImg"
+        app:layout_constraintTop_toTopOf="@id/attachmentSmallImg"
+        app:srcCompat="@android:drawable/ic_media_play" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/smallGrp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="attachmentSmallImg,otherSmallImg" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/ordinaryGrp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="attachmentImg" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
