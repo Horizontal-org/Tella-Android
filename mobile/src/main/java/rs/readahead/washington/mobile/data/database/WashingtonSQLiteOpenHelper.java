@@ -84,6 +84,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         db.execSQL(alterTableTellaUploadServerAddAccessToken());
         db.execSQL(alterTableTellaUploadServerAddMetatData());
         db.execSQL(alterTableTellaUploadServerAddBackgourndUpload());
+        db.execSQL(createTableReportFormInstance());
     }
 
     @Override
@@ -124,6 +125,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 db.execSQL(alterTableTellaUploadServerAddAccessToken());
                 db.execSQL(alterTableTellaUploadServerAddMetatData());
                 db.execSQL(alterTableTellaUploadServerAddBackgourndUpload());
+                db.execSQL(createTableReportFormInstance());
         }
     }
 
@@ -358,4 +360,17 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 "UNIQUE(" + sq(D.C_UWAZI_ENTITY_INSTANCE_ID) + ", " + sq(D.C_VAULT_FILE_ID) + ") ON CONFLICT IGNORE" +
                 ");";
     }
+
+    private String createTableReportFormInstance() {
+        return "CREATE TABLE " + sq(D.T_REPORT_FORM_INSTANCE) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_REPORT_SERVER_ID, D.INTEGER, true) + " , " +
+                cddl(D.C_STATUS, D.INTEGER, true) + " , " +
+                cddl(D.C_FORM_NAME, D.TEXT, true) + " , " +
+                cddl(D.C_DESCRIPTION_TEXT, D.TEXT, true) + " , " +
+                "FOREIGN KEY(" + sq(D.T_TELLA_UPLOAD_SERVER) + ") REFERENCES " +
+                sq(D.T_TELLA_UPLOAD_SERVER) + "(" + sq(D.C_ID) + ") ON DELETE RESTRICT" +
+                ");";
+    }
+
 }

@@ -10,6 +10,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.hzontal.tella_vault.VaultFile
+import com.hzontal.tella_locking_ui.common.extensions.onChange
 import com.hzontal.tella_vault.filter.FilterType
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.schedulers.Schedulers
@@ -22,6 +23,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.hide
+import rs.readahead.washington.mobile.util.setTint
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.activity.CameraActivity
 import rs.readahead.washington.mobile.views.adapters.reports.ReportsFilesRecyclerViewAdapter
@@ -56,6 +58,37 @@ class ReportsEntryFragment : BaseBindingFragment<FragmentReportsEntryBinding>(Fr
         }
         binding?.filesRecyclerView?.apply { adapter = filesRecyclerViewAdapter
             layoutManager = gridLayoutManager }
+
+        binding?.toolbar?.backClickListener = { nav().popBackStack() }
+
+        highLightSubmitButton()
+    }
+
+    private fun highLightSubmitButton() {
+        var isTitleEnabled = false
+        var isDescriptionEnabled = false
+        binding?.reportTitleEt?.onChange { title ->
+            isTitleEnabled = title.length > 1
+            highLightButton(isTitleEnabled, isDescriptionEnabled)
+        }
+        binding?.reportDescriptionEt?.onChange { description ->
+            isDescriptionEnabled = description.length > 1
+            highLightButton(isTitleEnabled, isDescriptionEnabled)
+        }
+    }
+
+    private fun highLightButton(isTitleEnabled: Boolean, isDescriptionEnabled: Boolean) {
+        if (isTitleEnabled && isDescriptionEnabled) {
+            binding?.sendReportBtn?.setTint(R.color.wa_orange)
+            binding?.sendReportBtn?.setOnClickListener {}
+        } else {
+            binding?.sendReportBtn?.setTint(R.color.wa_orange_16)
+            binding?.sendReportBtn?.setOnClickListener(null)
+        }
+    }
+
+    private fun saveReportAsDraft(){
+      //  viewModel.saveDraft()
     }
 
     private fun initData() {

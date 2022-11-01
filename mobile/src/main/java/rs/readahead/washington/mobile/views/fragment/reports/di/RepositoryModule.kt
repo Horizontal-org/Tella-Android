@@ -8,6 +8,7 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.reports.remote.ReportsApiService
 import rs.readahead.washington.mobile.data.reports.repository.ReportsRepositoryImp
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadServersRepository
+import rs.readahead.washington.mobile.domain.repository.reports.ITellaReportsRepository
 import rs.readahead.washington.mobile.domain.repository.reports.ReportsRepository
 import javax.inject.Singleton
 
@@ -23,7 +24,13 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideKeyDataSource() : ITellaUploadServersRepository {
+    fun provideReportsServerRepository(): ITellaUploadServersRepository {
+        return MyApplication.getKeyDataSource().dataSource.blockingFirst()
+    }
+
+    @Provides
+    @Singleton
+    fun provideReportsRepository(): ITellaReportsRepository {
         return MyApplication.getKeyDataSource().dataSource.blockingFirst()
     }
 

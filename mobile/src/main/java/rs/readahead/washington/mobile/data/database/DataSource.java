@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
@@ -56,7 +57,9 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.ListFormResult;
 import rs.readahead.washington.mobile.domain.entity.collect.OdkForm;
+import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance;
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
+import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus;
 import rs.readahead.washington.mobile.domain.exception.NotFountException;
 import rs.readahead.washington.mobile.domain.repository.ICollectFormsRepository;
 import rs.readahead.washington.mobile.domain.repository.ICollectServersRepository;
@@ -64,12 +67,13 @@ import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordReposito
 import rs.readahead.washington.mobile.domain.repository.IServersRepository;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadServersRepository;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
+import rs.readahead.washington.mobile.domain.repository.reports.ITellaReportsRepository;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.FileUtil;
 import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
 
-public class DataSource implements IServersRepository, ITellaUploadServersRepository, ITellaUploadsRepository, ICollectServersRepository, ICollectFormsRepository,
+public class DataSource implements IServersRepository, ITellaUploadServersRepository, ITellaUploadsRepository, ITellaReportsRepository, ICollectServersRepository, ICollectFormsRepository,
         IMediaFileRecordRepository{
     private static DataSource dataSource;
     private final SQLiteDatabase database;
@@ -2237,6 +2241,71 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return setting;
     }
 
+    @NonNull
+    @Override
+    public Single<ReportFormInstance> saveInstance(@NonNull ReportFormInstance instance) {
+        return Single.fromCallable(() -> updateTellaReportsFormInstance(instance))
+                .compose(applySchedulers());
+    }
+
+
+    private ReportFormInstance updateTellaReportsFormInstance(ReportFormInstance instance) {
+        try {
+            int statusOrdinal;
+            ContentValues values = new ContentValues();
+
+            if (instance.getId() > 0) {
+                values.put(D.C_ID, instance.getId());
+            }
+
+            values.put(D.T_TELLA_UPLOAD_SERVER, instance.getServerId());
+            values.put(D.C_FORM_NAME, instance.getTitle());
+            values.put(D.C_DESCRIPTION_TEXT, instance.getDescription());
+            values.put(D.C_UPDATED, Util.currentTimestamp());
+            values.put(D.C_FORM_PART_STATUS, instance.getFormPartStatus().ordinal());
+
+            if (instance.getStatus() == UwaziEntityStatus.UNKNOWN) {
+                statusOrdinal = UwaziEntityStatus.DRAFT.ordinal();
+            } else {
+                statusOrdinal = instance.getStatus().ordinal();
+            }
+            values.put(D.C_STATUS, statusOrdinal);
+
+
+            database.beginTransaction();
+
+            // insert/update form instance
+            long id = database.insertWithOnConflict(
+                    D.T_REPORT_FORM_INSTANCE,
+                    null,
+                    values,
+                    SQLiteDatabase.CONFLICT_REPLACE);
+            instance.setId(id);
+
+            // clear FormMediaFiles
+            database.delete(
+                    D.T_REPORT_INSTANCE_VAULT_FILE,
+                    D.C_COLLECT_FORM_INSTANCE_ID + " = ?",
+                    new String[]{Long.toString(id)});
+
+            // insert FormMediaFiles
+            List<FormMediaFile> mediaFiles = instance.getWidgetMediaFiles();
+            for (FormMediaFile mediaFile : mediaFiles) {
+                values = new ContentValues();
+                values.put(D.C_COLLECT_FORM_INSTANCE_ID, id);
+                values.put(D.C_VAULT_FILE_ID, mediaFile.id);
+                values.put(D.C_STATUS, mediaFile.status.ordinal());
+
+                database.insert(D.T_REPORT_INSTANCE_VAULT_FILE, null, values);
+            }
+
+            database.setTransactionSuccessful();
+        } finally {
+            database.endTransaction();
+        }
+
+        return instance;
+    }
 
 
 

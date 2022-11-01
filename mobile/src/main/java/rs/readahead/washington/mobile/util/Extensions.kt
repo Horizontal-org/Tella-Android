@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.util
 import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
+import android.graphics.PorterDuff
 import android.graphics.Rect
 import android.os.Build
 import android.util.TypedValue
@@ -10,6 +11,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import androidx.annotation.ColorRes
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import org.cleaninsights.sdk.Campaign
 import org.cleaninsights.sdk.CleanInsights
 import org.cleaninsights.sdk.CleanInsightsConfiguration
@@ -62,26 +66,19 @@ fun createCleanInsightsInstance(context: Context, startDate: Long): CleanInsight
     }
 }
 
-fun Activity.isKeyboardOpened(): Boolean {
-    val r = Rect()
-
-    val activityRoot = getActivityRoot()
-    val visibleThreshold = dip(100)
-
-    activityRoot.getWindowVisibleDisplayFrame(r)
-
-    val heightDiff = activityRoot.rootView.height - r.height()
-
-    return heightDiff > visibleThreshold;
+fun View.highlightBackground(color: Int) {
+    apply {
+        setBackgroundColor(color)
+    }
 }
 
-fun Activity.getActivityRoot(): View {
-    return (findViewById<ViewGroup>(android.R.id.content)).getChildAt(0);
+fun View.setTint(@ColorRes colorRes: Int) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        background.setTintList(
+            ContextCompat.getColorStateList(context,colorRes));
+    }
 }
 
-fun dip(value: Int): Int {
-    return (value * Resources.getSystem().displayMetrics.density).toInt()
-}
 
 fun View.hide() {
     visibility = View.GONE
