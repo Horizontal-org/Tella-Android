@@ -192,9 +192,9 @@ class ReportsEntryFragment : BaseBindingFragment<FragmentReportsEntryBinding>(Fr
         }
     }
 
-    private fun putVaultFilesInForm(vaultFiler: String){
+    private fun putVaultFilesInForm(vaultFileList: String){
         val files = Gson().fromJson<ArrayList<String>>(
-            vaultFiler as String?,
+            vaultFileList as String?,
             object : TypeToken<List<String?>?>() {}.type
         )
         for (i in 0 until files.size) {
