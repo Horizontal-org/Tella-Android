@@ -39,7 +39,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 const val TIME_FORMAT: String = "%02d:%02d"
-private const val COLLECT_ENTRY = "collect_entry"
+const val COLLECT_ENTRY = "collect_entry"
 
 class MicFragment : MetadataBaseLockFragment(),
     IAudioCapturePresenterContract.IView,

@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_locking_ui.common.extensions.onChange
+import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.schedulers.Schedulers
@@ -29,9 +29,11 @@ import rs.readahead.washington.mobile.views.activity.CameraActivity
 import rs.readahead.washington.mobile.views.adapters.reports.ReportsFilesRecyclerViewAdapter
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.fragment.COLLECT_ENTRY
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.*
-import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface
 import rs.readahead.washington.mobile.views.interfaces.IAttachmentsMediaHandler
+import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface
+import timber.log.Timber
 
 @AndroidEntryPoint
 class ReportsEntryFragment : BaseBindingFragment<FragmentReportsEntryBinding>(FragmentReportsEntryBinding::inflate),
@@ -40,6 +42,7 @@ class ReportsEntryFragment : BaseBindingFragment<FragmentReportsEntryBinding>(Fr
     private lateinit var gridLayoutManager: GridLayoutManager
     private lateinit var filesRecyclerViewAdapter: ReportsFilesRecyclerViewAdapter
     private var vaultFiles: ArrayList<VaultFile> = arrayListOf()
+    private val bundle by lazy { Bundle() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
@@ -105,7 +108,7 @@ class ReportsEntryFragment : BaseBindingFragment<FragmentReportsEntryBinding>(Fr
         showVaultSelectFilesSheet(
             baseActivity.supportFragmentManager,
             baseActivity.getString(R.string.Uwazi_WidgetMedia_Take_Photo),
-            baseActivity.getString(R.string.Vault_RecordAudio_SheetAction),
+            null,//baseActivity.getString(R.string.Vault_RecordAudio_SheetAction),
             baseActivity.getString(R.string.Uwazi_WidgetMedia_Select_From_Device),
             baseActivity.getString(R.string.Uwazi_WidgetMedia_Select_From_Tella),
             null,
@@ -149,7 +152,7 @@ class ReportsEntryFragment : BaseBindingFragment<FragmentReportsEntryBinding>(Fr
 
     private fun showCameraActivity() {
         try {
-            val activity = context as Activity?
+            val activity = getActivity()
             activity!!.startActivityForResult(
                 Intent(context, CameraActivity::class.java)
                     .putExtra(
@@ -164,7 +167,7 @@ class ReportsEntryFragment : BaseBindingFragment<FragmentReportsEntryBinding>(Fr
     }
 
     private fun importMedia() {
-        val activity = context as BaseActivity?
+        val activity = getActivity() as BaseActivity?
         activity!!.maybeChangeTemporaryTimeout {
             MediaFileHandler.startSelectMediaActivity(
                 activity,
@@ -172,17 +175,17 @@ class ReportsEntryFragment : BaseBindingFragment<FragmentReportsEntryBinding>(Fr
                 null,
                 C.IMPORT_FILE
             )
-            Unit
         }
     }
 
     private fun showAudioRecorderActivity() {
-        try {
-            val activity = context as ICollectEntryInterface?
-            activity!!.openAudioRecorder()
+        /*try {
+            bundle.putString(COLLECT_ENTRY, true.toString())
+            nav().navigate(R.id.action_newReport_to_micScreen, bundle)
+
         } catch (e: java.lang.Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
-        }
+        }*/
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
