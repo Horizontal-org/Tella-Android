@@ -39,7 +39,6 @@ import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.views.activity.CollectFormEntryActivity
 import rs.readahead.washington.mobile.views.activity.CollectHelpActivity
 import rs.readahead.washington.mobile.views.activity.FormSubmitActivity
-import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.adapters.ViewPagerAdapter
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import timber.log.Timber
@@ -214,7 +213,6 @@ class CollectMainFragment :
 
     override fun onResume() {
         super.onResume()
-        (baseActivity as MainActivity).selectNavForm()
         countServers()
     }
 

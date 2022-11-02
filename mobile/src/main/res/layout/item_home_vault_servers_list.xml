@@ -6,10 +6,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:paddingStart="17dp"
     android:paddingEnd="17dp"
-    android:layout_marginTop="17dp"
+    android:background="@color/wa_purple"
     >
     <TextView
-        android:id="@+id/recentFilesText"
+        android:id="@+id/serversText"
         style="@style/Tella_Main_White_Text.Meduim"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,8 +19,8 @@
         />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recentFilesRecyclerView"
-        app:layout_constraintTop_toBottomOf="@id/recentFilesText"
+        android:id="@+id/serversRecyclerView"
+        app:layout_constraintTop_toBottomOf="@id/serversText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

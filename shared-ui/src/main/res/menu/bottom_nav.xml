@@ -7,13 +7,6 @@
         android:title="@string/Home_BottomNav_Home" />
 
     <item
-        android:id="@+id/form"
-        android:contentDescription="@string/Home_BottomNav_Forms"
-        android:icon="@drawable/ic_list_numbered_24"
-        android:title="@string/Home_BottomNav_Forms"
-        android:visible="false" />
-
-    <item
         android:id="@+id/camera"
         android:contentDescription="@string/Home_BottomNav_Camera"
         android:icon="@drawable/ic_camera"
@@ -24,19 +17,5 @@
         android:contentDescription="@string/Home_BottomNav_Rec"
         android:icon="@drawable/ic_mic"
         android:title="@string/Home_BottomNav_Rec" />
-
-   <!-- <item
-        android:id="@+id/uwazi"
-        android:contentDescription="@string/Home_BottomNav_Uwazi"
-        android:icon="@drawable/ic_uwazi"
-        android:title="@string/Home_BottomNav_Uwazi"
-        android:visible="false" /> -->
-
-     <item
-       android:id="@+id/reports"
-       android:contentDescription="@string/Home_BottomNav_Reports"
-       android:icon="@drawable/ic_reports"
-       android:title="@string/Home_BottomNav_Reports"
-       android:visible="false" />
 
 </menu>

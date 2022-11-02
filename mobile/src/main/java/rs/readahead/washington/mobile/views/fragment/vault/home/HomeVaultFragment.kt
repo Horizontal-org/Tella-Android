@@ -26,7 +26,10 @@ import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
+import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
+import rs.readahead.washington.mobile.domain.entity.collect.CollectServer
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.LockTimeoutManager
@@ -42,7 +45,10 @@ import rs.readahead.washington.mobile.views.custom.CountdownTextView
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.ImproveClickOptions
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
+import rs.readahead.washington.mobile.views.fragment.vault.adapters.connections.ServerDataItem
+import rs.readahead.washington.mobile.views.fragment.vault.adapters.connections.ServerType
 import timber.log.Timber
+import java.util.*
 
 const val VAULT_FILTER = "vf"
 
@@ -61,6 +67,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private lateinit var permissionsLauncher: ActivityResultLauncher<Array<String>>
     private var writePermissionGranted = false
     private var vaultFile: VaultFile? = null
+    private var serversList: MutableList<ServerDataItem>? = null
+    private var tuServers: ArrayList<TellaReportServer>? = null
+    private var uwaziServers: ArrayList<UWaziUploadServer>? = null
+    private var collectServers: ArrayList<CollectServer>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -116,6 +126,11 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         // vaultAdapter.addImprovementSection()
         timerDuration = resources.getInteger(R.integer.panic_countdown_duration)
 
+        serversList = ArrayList()
+        tuServers = ArrayList()
+        uwaziServers = ArrayList()
+        collectServers = ArrayList()
+
         CleanInsightUtils.measureEvent()
     }
 
@@ -160,6 +175,14 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             homeVaultPresenter.getFavoriteCollectTemplates()
         } else {
             vaultAdapter.removeFavoriteTemplates()
+        }
+    }
+
+    private fun maybeShowConnections() {
+        if (serversList?.isNotEmpty() == true) {
+            vaultAdapter.addConnectionServers(serversList!!)
+        } else {
+            vaultAdapter.removeConnectionServers()
         }
     }
 
@@ -264,6 +287,20 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     }
 
+    override fun onServerItemClickListener(item: ServerDataItem) {
+        when (item.type) {
+            ServerType.ODK -> {
+                nav().navigate(R.id.action_homeScreen_to_forms_screen)
+            }
+            ServerType.REPORTS -> {
+                nav().navigate(R.id.action_homeScreen_to_reports_screen)
+            }
+            ServerType.UWAZI -> {
+                nav().navigate(R.id.action_homeScreen_to_uwazi_screen)
+            }
+        }
+    }
+
 
     override fun onImproveItemClickListener(improveClickOptions: ImproveClickOptions) {
         when (improveClickOptions) {
@@ -336,6 +373,13 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         maybeGetRecentForms()
         maybeHideFilesTitle()
         maybeGetRecentTemplates()
+        maybeCountServers()
+    }
+
+    private fun maybeCountServers() {
+        homeVaultPresenter.countCollectServers()
+        homeVaultPresenter.countTUServers()
+        homeVaultPresenter.countUwaziServers()
     }
 
     private fun maybeClosePanic(): Boolean {
@@ -389,16 +433,48 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         stopPanicking()
     }
 
-    override fun onCountTUServersEnded(num: Long?) {
+
+    override fun onCountTUServersEnded(servers: List<TellaReportServer>?) {
+        tuServers?.clear()
+        serversList?.removeIf { item -> item.type == ServerType.REPORTS }
+        if (!servers.isNullOrEmpty()) {
+            tuServers?.addAll(servers)
+            serversList?.add(ServerDataItem(servers, ServerType.REPORTS))
+        }
+        maybeShowConnections()
     }
 
     override fun onCountTUServersFailed(throwable: Throwable?) {
+        Timber.d("***onCountTUServersFailed**$throwable")
     }
 
-    override fun onCountCollectServersEnded(num: Long?) {
+    override fun onCountCollectServersEnded(servers: List<CollectServer>?) {
+        collectServers?.clear()
+        serversList?.removeIf { item -> item.type == ServerType.ODK }
+        if (!servers.isNullOrEmpty()) {
+            collectServers?.addAll(servers)
+            serversList?.add(ServerDataItem(servers, ServerType.ODK))
+        }
+        maybeShowConnections()
     }
+
 
     override fun onCountCollectServersFailed(throwable: Throwable?) {
+        Timber.d("***onCountCollectServersFailed**$throwable")
+    }
+
+    override fun onCountUwaziServersEnded(servers: List<UWaziUploadServer>?) {
+        uwaziServers?.clear()
+        serversList?.removeIf { item -> item.type == ServerType.UWAZI }
+        if (!servers.isNullOrEmpty()) {
+            uwaziServers?.addAll(servers)
+            serversList?.add(ServerDataItem(servers, ServerType.ODK))
+        }
+        maybeShowConnections()
+    }
+
+    override fun onCountUwaziServersFailed(throwable: Throwable?) {
+        Timber.d("***onCountUwaziServersFailed**$throwable")
     }
 
     override fun onGetFilesSuccess(files: List<VaultFile?>) {

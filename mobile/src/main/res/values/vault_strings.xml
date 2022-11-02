@@ -58,5 +58,4 @@
     <string name="Vault_FavoriteTemplates_Title" >Favorite templates</string>
     <string name="Vault_DeleteFile_SheetTitle" >Delete file?</string>
     <string name="Vault_deleteFile_SheetDesc" >The selected file will be permanently delated from Tella.</string>
-
 </resources>

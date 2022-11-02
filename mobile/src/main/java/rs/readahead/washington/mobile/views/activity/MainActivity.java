@@ -19,10 +19,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.Gson;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
 
@@ -52,9 +52,6 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.download.DownloadedTe
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryFragment;
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.UwaziSendFragment;
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment;
-
-import com.google.gson.Gson;
-
 import timber.log.Timber;
 
 @AndroidEntryPoint
@@ -123,12 +120,8 @@ public class MainActivity extends MetadataActivity implements
         navController.addOnDestinationChangedListener((navController1, navDestination, bundle) -> {
             switch (navDestination.getId()) {
                 case (R.id.micScreen):
-                    checkLocationSettings(C.START_AUDIO_RECORD, () -> {
-                    });
                 case (R.id.homeScreen):
-                case R.id.formScreen:
-                case R.id.uwaziScreen:
-                case R.id.reportsScreen:
+                case R.id.cameraScreen:
                     showBottomNavigation();
                     break;
                 default:
@@ -267,10 +260,6 @@ public class MainActivity extends MetadataActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        btmNavMain.getMenu().findItem(R.id.home).setChecked(true);
-        homeScreenPresenter.countCollectServers();
-        homeScreenPresenter.countUwaziServers();
-        homeScreenPresenter.countTUServers();
         startLocationMetadataListening();
         mOrientationEventListener.enable();
     }
@@ -336,8 +325,8 @@ public class MainActivity extends MetadataActivity implements
     @Override
     public void onCountTUServersEnded(Long num) {
         if (num > 0) {
-            CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_TELLA);
-            maybeShowTUserver(num);
+          //  CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_TELLA);
+          //  maybeShowTUserver(num);
         }
     }
 
@@ -348,7 +337,7 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     public void onCountCollectServersEnded(Long num) {
-        maybeShowFormsMenu(num);
+       // maybeShowFormsMenu(num);
         if (num > 0) {
             CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_COLLECT);
         } else {
@@ -364,7 +353,7 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     public void onCountUwaziServersEnded(Long num) {
-        maybeShowUwaziMenu(num);
+       // maybeShowUwaziMenu(num);
         if (num > 0)
             CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_UWAZI);
     }
@@ -414,25 +403,6 @@ public class MainActivity extends MetadataActivity implements
 
     public void selectNavMic() {
         btmNavMain.getMenu().findItem(R.id.mic).setChecked(true);
-    }
-
-    public void selectNavForm() {
-        btmNavMain.getMenu().findItem(R.id.form).setChecked(true);
-    }
-
-    private void maybeShowFormsMenu(Long num) {
-        btmNavMain.getMenu().findItem(R.id.form).setVisible(num > 0);
-        invalidateOptionsMenu();
-    }
-
-    private void maybeShowUwaziMenu(Long num) {
-        btmNavMain.getMenu().findItem(R.id.uwazi).setVisible(num > 0);
-        invalidateOptionsMenu();
-    }
-
-    private void maybeShowTUserver(Long num){
-        btmNavMain.getMenu().findItem(R.id.reports).setVisible(num > 0);
-        invalidateOptionsMenu();
     }
 
     public void selectHome() {

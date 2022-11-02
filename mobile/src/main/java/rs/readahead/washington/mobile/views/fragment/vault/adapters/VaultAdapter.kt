@@ -10,22 +10,25 @@ import kotlinx.coroutines.withContext
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
+import rs.readahead.washington.mobile.views.fragment.vault.adapters.connections.ServerDataItem
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.*
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.BaseViewHolder
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.data.DataItem
 
-const val ITEM_RECENT_FILES = 0
-const val ITEM_FAVORITES_FORMS = 1
-const val ITEM_FAVORITES_TEMPLATES = 2
-const val ITEM_PANIC_BUTTON = 3
-const val ITEM_FILES_ACTIONS = 4
-const val ITEM_TITLE = 5
-const val ITEM_TEllA_IMPROVE = 6
+const val ITEM_CONNECTIONS = 0
+const val ITEM_RECENT_FILES = 1
+const val ITEM_FAVORITES_FORMS = 2
+const val ITEM_FAVORITES_TEMPLATES = 3
+const val ITEM_PANIC_BUTTON = 4
+const val ITEM_FILES_ACTIONS = 5
+const val ITEM_TITLE = 6
+const val ITEM_TEllA_IMPROVE = 7
 
-private const val ID_FILES_ACTIONS = "1"
-private const val ID_PANIC_MODE = "2"
-private const val ID_FILES_TITLE = "3"
-private const val ID_IMPROVEMENT = "4"
+const val ID_CONNECTIONS = "1"
+private const val ID_FILES_ACTIONS = "2"
+private const val ID_PANIC_MODE = "3"
+private const val ID_FILES_TITLE = "4"
+private const val ID_IMPROVEMENT = "5"
 
 
 class VaultAdapter(private val onClick: VaultClickListener) :
@@ -39,10 +42,25 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     private var actions = listOf<DataItem.FileActions>()
     private var titles = listOf<DataItem.Titles>()
     private var improveInsights = listOf<DataItem.ImproveAction>()
+    private var connections = listOf<DataItem.ConnectionsItem>()
     private var items = listOf<DataItem>()
 
     init {
         addFileActions()
+    }
+
+    fun addConnectionServers(connectionsList: List<ServerDataItem>) {
+        connections = listOf(DataItem.ConnectionsItem(connectionsList))
+        renderList()
+    }
+
+    fun removeConnectionServers() {
+        adapterScope.launch {
+            items = items - connections.toSet()
+            withContext(Dispatchers.Main) {
+                submitList(items)
+            }
+        }
     }
 
     fun addRecentFiles(vaultFiles: List<VaultFile?>) {
@@ -52,7 +70,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
 
     fun removeRecentFiles() {
         adapterScope.launch {
-            items = items - recentFiles
+            items = items - recentFiles.toSet()
             withContext(Dispatchers.Main) {
                 submitList(items)
             }
@@ -61,25 +79,25 @@ class VaultAdapter(private val onClick: VaultClickListener) :
 
     fun removeFavoriteForms() {
         adapterScope.launch {
-            items =  items - favoriteForms.toSet()
+            items = items - favoriteForms.toSet()
             withContext(Dispatchers.Main) {
                 submitList(items)
             }
         }
     }
 
-    fun removeFavoriteTemplates(){
+    fun removeFavoriteTemplates() {
         adapterScope.launch {
-            items =  items - favoriteTemplates.toSet()
+            items = items - favoriteTemplates.toSet()
             withContext(Dispatchers.Main) {
                 submitList(items)
             }
         }
     }
 
-    fun removeTitle(){
+    fun removeTitle() {
         adapterScope.launch {
-            items =  items - titles.toSet()
+            items = items - titles.toSet()
             withContext(Dispatchers.Main) {
                 submitList(items)
             }
@@ -104,7 +122,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
 
     fun removeImprovementSection() {
         adapterScope.launch {
-            items = items - improveInsights
+            items = items - improveInsights.toSet()
             withContext(Dispatchers.Main) { submitList(items) }
         }
     }
@@ -126,7 +144,8 @@ class VaultAdapter(private val onClick: VaultClickListener) :
 
     private fun renderList() {
         adapterScope.launch {
-            items = improveInsights + favoriteForms + favoriteTemplates + recentFiles + titles + actions
+            items =
+                connections + improveInsights + favoriteForms + favoriteTemplates + recentFiles + titles + actions
             withContext(Dispatchers.Main) {
                 submitList(items)
             }
@@ -154,6 +173,9 @@ class VaultAdapter(private val onClick: VaultClickListener) :
 
     override fun onCreateViewHolder(view: ViewGroup, viewType: Int): BaseViewHolder<*> {
         return when (viewType) {
+            ITEM_CONNECTIONS -> {
+                ServersViewHolder.from(view)
+            }
             ITEM_RECENT_FILES -> {
                 RecentFilesViewHolder.from(view)
             }
@@ -182,6 +204,10 @@ class VaultAdapter(private val onClick: VaultClickListener) :
 
     override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
         when (holder) {
+            is ServersViewHolder -> {
+                val connectionsList = getItem(position) as DataItem.ConnectionsItem
+                holder.bind(connectionsList.item, onClick)
+            }
             is FavoriteFormsViewHolder -> {
                 val favoriteItem = getItem(position) as DataItem.FavoriteForms
                 holder.bind(favoriteItem.forms, onClick)
@@ -210,6 +236,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
+            is DataItem.ConnectionsItem -> ITEM_CONNECTIONS
             is DataItem.FileActions -> ITEM_FILES_ACTIONS
             is DataItem.RecentFiles -> ITEM_RECENT_FILES
             is DataItem.FavoriteForms -> ITEM_FAVORITES_FORMS

@@ -179,7 +179,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         binding.collectServersList.removeAllViews();
         this.servers.addAll(tellaReportServers);
         createServerViews(servers);
-
         tuServers = tellaReportServers;
        /* if (tuServers.size() > 0) {
              binding.autoUploadSwitchView.setVisibility(View.VISIBLE);
