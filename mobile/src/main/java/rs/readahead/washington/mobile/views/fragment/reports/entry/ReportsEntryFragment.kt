@@ -216,10 +216,14 @@ class ReportsEntryFragment : BaseBindingFragment<FragmentReportsEntryBinding>(Fr
     }
 
     override fun playMedia(mediaFile: VaultFile?) {
-        TODO("Not yet implemented")
+
     }
 
     override fun onRemoveAttachment(vaultFile: VaultFile?) {
         vaultFiles.remove(vaultFile)
+        if (vaultFiles.isEmpty()){
+            binding?.attachFilesBtn?.visibility = View.VISIBLE
+            binding?.filesRecyclerView?.visibility = View.GONE
+        }
     }
 }
