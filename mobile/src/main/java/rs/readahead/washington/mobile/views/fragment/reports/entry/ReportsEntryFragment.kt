@@ -29,18 +29,24 @@ import rs.readahead.washington.mobile.views.activity.CameraActivity
 import rs.readahead.washington.mobile.views.adapters.reports.ReportsFilesRecyclerViewAdapter
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
-import rs.readahead.washington.mobile.views.fragment.COLLECT_ENTRY
-import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.*
+import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector
+import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILES_FILTER
+import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
+import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_PICKER_SINGLE
 import rs.readahead.washington.mobile.views.interfaces.IAttachmentsMediaHandler
-import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface
-import timber.log.Timber
 
 @AndroidEntryPoint
-class ReportsEntryFragment : BaseBindingFragment<FragmentReportsEntryBinding>(FragmentReportsEntryBinding::inflate),
+class ReportsEntryFragment :
+    BaseBindingFragment<FragmentReportsEntryBinding>(FragmentReportsEntryBinding::inflate),
     IAttachmentsMediaHandler {
     private val viewModel by viewModels<ReportsEntryViewModel>()
     private lateinit var gridLayoutManager: GridLayoutManager
-    private lateinit var filesRecyclerViewAdapter: ReportsFilesRecyclerViewAdapter
+    private val filesRecyclerViewAdapter: ReportsFilesRecyclerViewAdapter by lazy {
+        ReportsFilesRecyclerViewAdapter(
+            this,
+            baseActivity, MediaFileHandler()
+        )
+    }
     private var vaultFiles: ArrayList<VaultFile> = arrayListOf()
     private val bundle by lazy { Bundle() }
 
@@ -51,16 +57,14 @@ class ReportsEntryFragment : BaseBindingFragment<FragmentReportsEntryBinding>(Fr
 
     private fun initView() {
         gridLayoutManager = GridLayoutManager(context, 3)
-        filesRecyclerViewAdapter = context?.let {
-            ReportsFilesRecyclerViewAdapter( this@ReportsEntryFragment,
-                it, MediaFileHandler()
-            )
-        }!!
+
         binding?.attachFilesBtn?.setOnClickListener {
             showSelectFilesSheet()
         }
-        binding?.filesRecyclerView?.apply { adapter = filesRecyclerViewAdapter
-            layoutManager = gridLayoutManager }
+        binding?.filesRecyclerView?.apply {
+            adapter = filesRecyclerViewAdapter
+            layoutManager = gridLayoutManager
+        }
 
         binding?.toolbar?.backClickListener = { nav().popBackStack() }
 
@@ -90,8 +94,8 @@ class ReportsEntryFragment : BaseBindingFragment<FragmentReportsEntryBinding>(Fr
         }
     }
 
-    private fun saveReportAsDraft(){
-      //  viewModel.saveDraft()
+    private fun saveReportAsDraft() {
+        //  viewModel.saveDraft()
     }
 
     private fun initData() {
@@ -135,6 +139,7 @@ class ReportsEntryFragment : BaseBindingFragment<FragmentReportsEntryBinding>(Fr
 
     private fun showAttachmentsFragment() {
         try {
+            //TODO Djordje CONSIDER USING PERMISSION LIBRARY INSTEAD
             baseActivity.startActivityForResult(
                 Intent(activity, AttachmentsActivitySelector::class.java)
                     // .putExtra(VAULT_FILE_KEY, Gson().toJson(ids))
@@ -152,6 +157,7 @@ class ReportsEntryFragment : BaseBindingFragment<FragmentReportsEntryBinding>(Fr
 
     private fun showCameraActivity() {
         try {
+            //TODO Djordje WE SHOULD BE ABLE TO USE `baseActivity instance` instead
             val activity = getActivity()
             activity!!.startActivityForResult(
                 Intent(context, CameraActivity::class.java)
@@ -195,13 +201,14 @@ class ReportsEntryFragment : BaseBindingFragment<FragmentReportsEntryBinding>(Fr
         }
     }
 
-    private fun putVaultFilesInForm(vaultFileList: String){
+    //TODO THIS LOGIC SHOULD BE IN THE VIEWMODEL FRAGMENT SHOULD ONLY CARE ABOUT PRESNTATION LAYER
+    private fun putVaultFilesInForm(vaultFileList: String) {
         val files = Gson().fromJson<ArrayList<String>>(
             vaultFileList as String?,
             object : TypeToken<List<String?>?>() {}.type
         )
         for (i in 0 until files.size) {
-            if (!files.isEmpty() && !files[i].isEmpty()) {
+            if (files.isNotEmpty() && files[i].isNotEmpty()) {
                 val vaultFile = MyApplication.rxVault[files[i]]
                     .subscribeOn(Schedulers.io())
                     .blockingGet()
@@ -212,7 +219,7 @@ class ReportsEntryFragment : BaseBindingFragment<FragmentReportsEntryBinding>(Fr
         putFiles()
     }
 
-    fun putFiles() {
+    private fun putFiles() {
         filesRecyclerViewAdapter.setFiles(vaultFiles)
         binding?.attachFilesBtn?.visibility = View.GONE
         binding?.filesRecyclerView?.visibility = View.VISIBLE
@@ -224,7 +231,7 @@ class ReportsEntryFragment : BaseBindingFragment<FragmentReportsEntryBinding>(Fr
 
     override fun onRemoveAttachment(vaultFile: VaultFile?) {
         vaultFiles.remove(vaultFile)
-        if (vaultFiles.isEmpty()){
+        if (vaultFiles.isEmpty()) {
             binding?.attachFilesBtn?.visibility = View.VISIBLE
             binding?.filesRecyclerView?.visibility = View.GONE
         }
