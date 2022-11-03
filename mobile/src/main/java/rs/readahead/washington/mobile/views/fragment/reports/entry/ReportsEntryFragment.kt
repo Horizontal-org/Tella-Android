@@ -34,12 +34,12 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.Attachmen
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILES_FILTER
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_PICKER_SINGLE
-import rs.readahead.washington.mobile.views.interfaces.IAttachmentsMediaHandler
+import rs.readahead.washington.mobile.views.interfaces.IReportAttachmentsHandler
 
 @AndroidEntryPoint
 class ReportsEntryFragment :
     BaseBindingFragment<FragmentReportsEntryBinding>(FragmentReportsEntryBinding::inflate),
-    IAttachmentsMediaHandler {
+    IReportAttachmentsHandler {
     private val viewModel by viewModels<ReportsEntryViewModel>()
     private lateinit var gridLayoutManager: GridLayoutManager
     private val filesRecyclerViewAdapter: ReportsFilesRecyclerViewAdapter by lazy {
@@ -48,7 +48,6 @@ class ReportsEntryFragment :
             baseActivity, MediaFileHandler()
         )
     }
-    private var vaultFiles: ArrayList<VaultFile> = arrayListOf()
     private lateinit var selectedServer: TellaReportServer
     private val bundle by lazy { Bundle() }
 
@@ -111,7 +110,7 @@ class ReportsEntryFragment :
             viewModel.getDraftFormInstance(
                 binding?.reportTitleEt?.text.toString(),
                 binding?.reportDescriptionEt?.text.toString(),
-                files = viewModel.vaultFilesToMediaFiles(vaultFiles),
+                files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
                 server = selectedServer
             )
         )
@@ -122,7 +121,7 @@ class ReportsEntryFragment :
             viewModel.getOutboxFormInstance(
                 binding?.reportTitleEt?.text.toString(),
                 binding?.reportDescriptionEt?.text.toString(),
-                files = viewModel.vaultFilesToMediaFiles(vaultFiles),
+                files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
                 server = selectedServer
             )
         )
@@ -228,30 +227,15 @@ class ReportsEntryFragment :
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == C.MEDIA_FILE_ID && resultCode == Activity.RESULT_OK) {
             val vaultFile = data?.getStringExtra(VAULT_FILE_KEY) ?: ""
-            putVaultFilesInForm(vaultFile)
+            putFiles(viewModel.putVaultFilesInForm(vaultFile))
         }
     }
 
-    //TODO THIS LOGIC SHOULD BE IN THE VIEWMODEL FRAGMENT SHOULD ONLY CARE ABOUT PRESNTATION LAYER
-    private fun putVaultFilesInForm(vaultFileList: String) {
-        val files = Gson().fromJson<ArrayList<String>>(
-            vaultFileList as String?,
-            object : TypeToken<List<String?>?>() {}.type
-        )
-        for (i in 0 until files.size) {
-            if (files.isNotEmpty() && files[i].isNotEmpty()) {
-                val vaultFile = MyApplication.rxVault[files[i]]
-                    .subscribeOn(Schedulers.io())
-                    .blockingGet()
-                val file = FormMediaFile.fromMediaFile(vaultFile)
-                vaultFiles.add(file)
-            }
-        }
-        putFiles()
-    }
 
-    private fun putFiles() {
-        filesRecyclerViewAdapter.setFiles(vaultFiles)
+    private fun putFiles(vaultFileList: ArrayList<VaultFile>) {
+        for (file in vaultFileList) {
+            filesRecyclerViewAdapter.insertAttachment(file)
+        }
         binding?.attachFilesBtn?.visibility = View.GONE
         binding?.filesRecyclerView?.visibility = View.VISIBLE
     }
@@ -260,11 +244,8 @@ class ReportsEntryFragment :
 
     }
 
-    override fun onRemoveAttachment(vaultFile: VaultFile?) {
-        vaultFiles.remove(vaultFile)
-        if (vaultFiles.isEmpty()) {
-            binding?.attachFilesBtn?.visibility = View.VISIBLE
-            binding?.filesRecyclerView?.visibility = View.GONE
-        }
+    override fun onRemovedAttachments() {
+        binding?.attachFilesBtn?.visibility = View.VISIBLE
+        binding?.filesRecyclerView?.visibility = View.GONE
     }
 }

@@ -17,11 +17,11 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader
 import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel
-import rs.readahead.washington.mobile.views.interfaces.IAttachmentsMediaHandler
+import rs.readahead.washington.mobile.views.interfaces.IReportAttachmentsHandler
 
 
 open class ReportsFilesRecyclerViewAdapter(
-    private val iAttachmentsMediaHandler: IAttachmentsMediaHandler,
+    private val iAttachmentsMediaHandler: IReportAttachmentsHandler,
     context: Context,
     mediaFileHandler: MediaFileHandler
 ) :
@@ -49,6 +49,9 @@ open class ReportsFilesRecyclerViewAdapter(
 
     private fun removeFile(position: Int, name: VaultFile?) {
         listAttachment.removeAt(position)
+        if (listAttachment.isEmpty()) {
+            iAttachmentsMediaHandler.onRemovedAttachments()
+        }
         notifyItemRemoved(position)
     }
 
@@ -73,7 +76,7 @@ open class ReportsFilesRecyclerViewAdapter(
         private lateinit var fileNameTextView: TextView
         private lateinit var removeBtn: View
 
-        fun bind(vaultFile: VaultFile?, iAttachmentsMediaHandler: IAttachmentsMediaHandler) {
+        fun bind(vaultFile: VaultFile?, iAttachmentsMediaHandler: IReportAttachmentsHandler) {
             view.apply {
                 fileNameTextView = findViewById(R.id.fileNameTextView)
                 filePreviewImg = findViewById(R.id.attachmentImg)
@@ -83,11 +86,6 @@ open class ReportsFilesRecyclerViewAdapter(
 
             removeBtn.setOnClickListener {
                 removeFile(position = layoutPosition,vaultFile)
-                vaultFile?.let { it1 ->
-                    iAttachmentsMediaHandler.onRemoveAttachment(
-                        it1
-                    )
-                }
             }
 
             if (isImageFileType(vaultFile!!.mimeType)) {
