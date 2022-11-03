@@ -27,7 +27,6 @@ import io.reactivex.SingleTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.domain.entity.EntityStatus;
-import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
@@ -150,7 +149,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
         });
     }
 
-    private List<EntityStatus> getSubmittedUwaziEntityInstances() {
+    private List<UwaziEntityInstance> getSubmittedUwaziEntityInstances() {
         return getUwaziEntityInstances(new EntityStatus[]{
                 EntityStatus.SUBMITTED
         });
@@ -466,7 +465,6 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
     private void updateUBlankTemplates(ListTemplateResult result,List<CollectTemplate> oldList) {
 
         List<CollectTemplate> templates = result.getTemplates();
-        List<IErrorBundle> errors = result.getErrors();
 
         for (CollectTemplate template : templates) {
             ContentValues values = new ContentValues();
@@ -543,7 +541,6 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
 
         CollectTemplate current = getBlankTemplate(String.valueOf(collectTemplate.getId()));
         ContentValues values = new ContentValues();
-        Gson gson = new Gson();
 
         if (current != null) {
             values.put(D.C_UPDATED, true);
@@ -683,8 +680,6 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
                 List<String> vaultFileIds = getEntityInstanceFileIds(instance.getId());
                 String[] iDs = new String[vaultFileIds.size()];
                 vaultFileIds.toArray(iDs);
-                for (String ide : vaultFileIds.toArray(iDs)){
-                }
                 bundle.setFileIds(iDs);
 
                 return bundle;
@@ -727,7 +722,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
         return ids;
     }
 
-    private List<EntityStatus> getUwaziEntityInstances(EntityStatus[] statuses) {
+    private List<UwaziEntityInstance> getUwaziEntityInstances(EntityStatus[] statuses) {
         Gson gson = new Gson();
         Cursor cursor = null;
         List<UwaziEntityInstance> instances = new ArrayList<>();

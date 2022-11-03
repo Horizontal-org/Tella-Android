@@ -44,6 +44,7 @@ import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.data.entity.MetadataEntity;
 import rs.readahead.washington.mobile.data.entity.mapper.EntityMapper;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
+import rs.readahead.washington.mobile.domain.entity.EntityStatus;
 import rs.readahead.washington.mobile.domain.entity.FileUploadBundle;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
@@ -2257,11 +2258,12 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 values.put(D.C_ID, instance.getId());
             }
 
-            values.put(D.T_TELLA_UPLOAD_SERVER, instance.getServerId());
-            values.put(D.C_FORM_NAME, instance.getTitle());
+            values.put(D.C_REPORT_SERVER_ID, instance.getServerId());
+            values.put(D.C_TITLE, instance.getTitle());
             values.put(D.C_DESCRIPTION_TEXT, instance.getDescription());
             values.put(D.C_UPDATED, Util.currentTimestamp());
-            values.put(D.C_FORM_PART_STATUS, instance.getFormPartStatus().ordinal());
+            //TODO CHECK FILES IMPLEMENTATION AND ADD FILES STATUS
+          //  values.put(D.C_FORM_PART_STATUS, instance.getFormPartStatus().ordinal());
 
             if (instance.getStatus() == EntityStatus.UNKNOWN) {
                 statusOrdinal = EntityStatus.DRAFT.ordinal();

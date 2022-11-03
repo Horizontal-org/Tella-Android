@@ -277,7 +277,7 @@ class SharedUwaziViewModel : ViewModel() {
         /*if (instance.status == EntityStatus.SUBMITTED) {
             instance.clonedId = instance.id // we are clone of submitted form
             instance.id = 0
-            instance.status = EntityStatus.UNKNOWN
+            instance.status = UwaziEntityStatus.UNKNOWN
             instance.updated = 0
             //instance.title = instance.title
             for (mediaFile in instance.widgetMediaFiles) {

@@ -11,7 +11,7 @@ class SaveReportFormInstanceUseCase @Inject constructor(private val reportsRepos
 
     private lateinit var reportFormInstance: ReportFormInstance
 
-    public fun setReportFormInstance(reportFormInstance: ReportFormInstance) {
+    fun setReportFormInstance(reportFormInstance: ReportFormInstance) {
         this.reportFormInstance = reportFormInstance
     }
 

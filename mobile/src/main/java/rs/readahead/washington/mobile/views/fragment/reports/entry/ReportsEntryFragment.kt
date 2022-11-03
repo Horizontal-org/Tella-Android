@@ -20,6 +20,7 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsEntryBinding
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.hide
@@ -48,6 +49,7 @@ class ReportsEntryFragment :
         )
     }
     private var vaultFiles: ArrayList<VaultFile> = arrayListOf()
+    private lateinit var selectedServer: TellaReportServer
     private val bundle by lazy { Bundle() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -88,14 +90,42 @@ class ReportsEntryFragment :
         if (isTitleEnabled && isDescriptionEnabled) {
             binding?.sendReportBtn?.setTint(R.color.wa_orange)
             binding?.sendReportBtn?.setOnClickListener {}
+            binding?.sendLaterBtn?.setOnClickListener {}
+            binding?.toolbar?.onRightClickListener = {
+                saveReportAsDraft()
+            }
+            binding?.sendLaterBtn?.setOnClickListener {
+                saveReportAsOutbox()
+            }
+
         } else {
             binding?.sendReportBtn?.setTint(R.color.wa_orange_16)
             binding?.sendReportBtn?.setOnClickListener(null)
+            binding?.toolbar?.onRightClickListener = {}
+            binding?.sendLaterBtn?.setOnClickListener {}
         }
     }
 
     private fun saveReportAsDraft() {
-        //  viewModel.saveDraft()
+        viewModel.saveDraft(
+            viewModel.getDraftFormInstance(
+                binding?.reportTitleEt?.text.toString(),
+                binding?.reportDescriptionEt?.text.toString(),
+                files = viewModel.vaultFilesToMediaFiles(vaultFiles),
+                server = selectedServer
+            )
+        )
+    }
+
+    private fun saveReportAsOutbox() {
+        viewModel.saveOutbox(
+            viewModel.getOutboxFormInstance(
+                binding?.reportTitleEt?.text.toString(),
+                binding?.reportDescriptionEt?.text.toString(),
+                files = viewModel.vaultFilesToMediaFiles(vaultFiles),
+                server = selectedServer
+            )
+        )
     }
 
     private fun initData() {
@@ -104,6 +134,7 @@ class ReportsEntryFragment :
                 binding?.dropdownGroup?.show()
             } else {
                 binding?.dropdownGroup?.hide()
+                selectedServer = serversList[0]
             }
         })
     }

@@ -1,7 +1,5 @@
 package rs.readahead.washington.mobile;
 
-import static rs.readahead.washington.mobile.util.ExtensionsKt.createCleanInsightsInstance;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -208,7 +206,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), Preferences.getLockTimeout());
         keyDataSource = new KeyDataSource(getApplicationContext());
         TellaKeysUI.initialize(mainKeyStore, mainKeyHolder, unlockRegistry, this);
-        initCleanInsights();
+        //initCleanInsights();
     }
 
     private void configureCrashlytics() {
@@ -316,7 +314,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         return unlockRegistry;
     }
 
-    private void initCleanInsights() {
+  /*  private void initCleanInsights() {
         if (Preferences.hasAcceptedImprovements()) {
             try {
                 cleanInsights = createCleanInsightsInstance(getApplicationContext(), Preferences.getTimeAcceptedImprovements());
@@ -325,7 +323,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
             }
         }
     }
-
+*/
     @Override
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);

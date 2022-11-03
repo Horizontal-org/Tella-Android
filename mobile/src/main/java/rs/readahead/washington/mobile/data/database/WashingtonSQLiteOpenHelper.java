@@ -366,10 +366,9 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         return "CREATE TABLE " + sq(D.T_REPORT_FORM_INSTANCE) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_REPORT_SERVER_ID, D.INTEGER, true) + " , " +
-                cddl(D.C_METADATA, D.TEXT, true) + " , " +
+                cddl(D.C_METADATA, D.TEXT, false) + " , " +
                 cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0 , " +
                 cddl(D.C_UPDATED, D.INTEGER, true) + " DEFAULT 0 , " +
-                cddl(D.C_FORM_NAME, D.TEXT, true) + " , " +
                 cddl(D.C_TITLE, D.TEXT, true) + " , " +
                 cddl(D.C_DESCRIPTION_TEXT, D.TEXT, true) + " , " +
                 "FOREIGN KEY(" + sq(D.C_REPORT_SERVER_ID) + ") REFERENCES " +
