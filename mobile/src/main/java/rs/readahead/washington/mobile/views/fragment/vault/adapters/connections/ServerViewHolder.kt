@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.domain.entity.ServerType
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.BaseViewHolder
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.inflate
@@ -30,7 +31,7 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                     )
                 )
             }
-            ServerType.REPORTS -> {
+            ServerType.TELLA_UPLOAD -> {
                 reportTypeTextView.text = view.context.getText(R.string.Home_BottomNav_Reports)
                 reportTypeImg.setImageDrawable(
                     ResourcesCompat.getDrawable(
@@ -40,7 +41,7 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                     )
                 )
             }
-            ServerType.ODK -> {
+            ServerType.ODK_COLLECT -> {
                 reportTypeTextView.text = view.context.getText(R.string.Home_BottomNav_Forms)
                 reportTypeImg.setImageDrawable(
                     ResourcesCompat.getDrawable(
@@ -49,6 +50,8 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                         null
                     )
                 )
+            }
+            else -> { //todo create default server type
             }
         }
 

@@ -26,6 +26,7 @@ import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
+import rs.readahead.washington.mobile.domain.entity.ServerType
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer
@@ -46,7 +47,6 @@ import rs.readahead.washington.mobile.views.fragment.vault.adapters.ImproveClick
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.connections.ServerDataItem
-import rs.readahead.washington.mobile.views.fragment.vault.adapters.connections.ServerType
 import timber.log.Timber
 import java.util.*
 
@@ -289,10 +289,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     override fun onServerItemClickListener(item: ServerDataItem) {
         when (item.type) {
-            ServerType.ODK -> {
+            ServerType.ODK_COLLECT -> {
                 nav().navigate(R.id.action_homeScreen_to_forms_screen)
             }
-            ServerType.REPORTS -> {
+            ServerType.TELLA_UPLOAD -> {
                 nav().navigate(R.id.action_homeScreen_to_reports_screen)
             }
             ServerType.UWAZI -> {
@@ -436,10 +436,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     override fun onCountTUServersEnded(servers: List<TellaReportServer>?) {
         tuServers?.clear()
-        serversList?.removeIf { item -> item.type == ServerType.REPORTS }
+        serversList?.removeIf { item -> item.type == ServerType.TELLA_UPLOAD }
         if (!servers.isNullOrEmpty()) {
             tuServers?.addAll(servers)
-            serversList?.add(ServerDataItem(servers, ServerType.REPORTS))
+            serversList?.add(ServerDataItem(servers, ServerType.TELLA_UPLOAD))
         }
         maybeShowConnections()
     }
@@ -450,10 +450,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     override fun onCountCollectServersEnded(servers: List<CollectServer>?) {
         collectServers?.clear()
-        serversList?.removeIf { item -> item.type == ServerType.ODK }
+        serversList?.removeIf { item -> item.type == ServerType.ODK_COLLECT }
         if (!servers.isNullOrEmpty()) {
             collectServers?.addAll(servers)
-            serversList?.add(ServerDataItem(servers, ServerType.ODK))
+            serversList?.add(ServerDataItem(servers, ServerType.ODK_COLLECT))
         }
         maybeShowConnections()
     }
@@ -468,7 +468,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         serversList?.removeIf { item -> item.type == ServerType.UWAZI }
         if (!servers.isNullOrEmpty()) {
             uwaziServers?.addAll(servers)
-            serversList?.add(ServerDataItem(servers, ServerType.ODK))
+            serversList?.add(ServerDataItem(servers, ServerType.UWAZI))
         }
         maybeShowConnections()
     }
