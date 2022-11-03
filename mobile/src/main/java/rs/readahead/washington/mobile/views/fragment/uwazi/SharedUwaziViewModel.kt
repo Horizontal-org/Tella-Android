@@ -274,10 +274,10 @@ class SharedUwaziViewModel : ViewModel() {
     }
 
     private fun maybeCloneInstance(instance: UwaziEntityInstance): UwaziEntityInstance {
-        /*if (instance.status == UwaziEntityStatus.SUBMITTED) {
+        /*if (instance.status == EntityStatus.SUBMITTED) {
             instance.clonedId = instance.id // we are clone of submitted form
             instance.id = 0
-            instance.status = UwaziEntityStatus.UNKNOWN
+            instance.status = EntityStatus.UNKNOWN
             instance.updated = 0
             //instance.title = instance.title
             for (mediaFile in instance.widgetMediaFiles) {

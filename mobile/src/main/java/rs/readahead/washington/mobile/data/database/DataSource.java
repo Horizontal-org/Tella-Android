@@ -60,7 +60,6 @@ import rs.readahead.washington.mobile.domain.entity.collect.OdkForm;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstanceBundle;
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
-import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus;
 import rs.readahead.washington.mobile.domain.exception.NotFountException;
 import rs.readahead.washington.mobile.domain.repository.ICollectFormsRepository;
 import rs.readahead.washington.mobile.domain.repository.ICollectServersRepository;
@@ -2264,8 +2263,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             values.put(D.C_UPDATED, Util.currentTimestamp());
             values.put(D.C_FORM_PART_STATUS, instance.getFormPartStatus().ordinal());
 
-            if (instance.getStatus() == UwaziEntityStatus.UNKNOWN) {
-                statusOrdinal = UwaziEntityStatus.DRAFT.ordinal();
+            if (instance.getStatus() == EntityStatus.UNKNOWN) {
+                statusOrdinal = EntityStatus.DRAFT.ordinal();
             } else {
                 statusOrdinal = instance.getStatus().ordinal();
             }

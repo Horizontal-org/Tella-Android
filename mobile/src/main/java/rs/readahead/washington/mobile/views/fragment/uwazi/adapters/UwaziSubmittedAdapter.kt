@@ -7,8 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.hzontal.shared_ui.submission.SubmittedItem
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.databinding.SubmittedCollectFormInstanceRowBinding
-import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
+import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.util.Util
 import rs.readahead.washington.mobile.util.ViewUtil
 import rs.readahead.washington.mobile.views.adapters.uwazi.VIEW_TYPE_HEADER
@@ -55,12 +54,12 @@ class UwaziSubmittedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             submittedItem.apply {
                 setName(entityRow.instanceName)
                  setOrganization(entityRow.translatedTemplateName)
-                if (entityRow.status == UwaziEntityStatus.SUBMITTED) {
+                if (entityRow.status == EntityStatus.SUBMITTED) {
                     setDates(entityRow.updated)
                     setSubmittedIcon()
-                } else if (entityRow.status == UwaziEntityStatus.SUBMISSION_ERROR) {
+                } else if (entityRow.status == EntityStatus.SUBMISSION_ERROR) {
                     setSubmitErrorIcon()
-                } else if (entityRow.status == UwaziEntityStatus.FINALIZED || entityRow.status == UwaziEntityStatus.SUBMISSION_PENDING || entityRow.status == UwaziEntityStatus.SUBMISSION_PARTIAL_PARTS) {
+                } else if (entityRow.status == EntityStatus.FINALIZED || entityRow.status == EntityStatus.SUBMISSION_PENDING || entityRow.status == EntityStatus.SUBMISSION_PARTIAL_PARTS) {
                     setPendingIcon()
                 }
                 setOnClickListener { entityRow.onOpenClicked() }

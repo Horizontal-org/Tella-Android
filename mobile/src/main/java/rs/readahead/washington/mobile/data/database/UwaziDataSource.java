@@ -26,6 +26,7 @@ import io.reactivex.Single;
 import io.reactivex.SingleTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import rs.readahead.washington.mobile.domain.entity.EntityStatus;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
@@ -34,7 +35,6 @@ import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate;
 import rs.readahead.washington.mobile.domain.entity.uwazi.EntityInstanceBundle;
 import rs.readahead.washington.mobile.domain.entity.uwazi.ListTemplateResult;
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance;
-import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus;
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziRow;
 import rs.readahead.washington.mobile.domain.exception.NotFountException;
 import rs.readahead.washington.mobile.domain.repository.IUWAZIServersRepository;
@@ -144,24 +144,24 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
     }
 
     private List<UwaziEntityInstance> getDraftUwaziEntityInstances() {
-        return getUwaziEntityInstances(new UwaziEntityStatus[]{
-                UwaziEntityStatus.UNKNOWN,
-                UwaziEntityStatus.DRAFT
+        return getUwaziEntityInstances(new EntityStatus[]{
+                EntityStatus.UNKNOWN,
+                EntityStatus.DRAFT
         });
     }
 
-    private List<UwaziEntityInstance> getSubmittedUwaziEntityInstances() {
-        return getUwaziEntityInstances(new UwaziEntityStatus[]{
-                UwaziEntityStatus.SUBMITTED
+    private List<EntityStatus> getSubmittedUwaziEntityInstances() {
+        return getUwaziEntityInstances(new EntityStatus[]{
+                EntityStatus.SUBMITTED
         });
     }
 
     private List<UwaziEntityInstance> getOutboxUwaziEntityInstances() {
-        return getUwaziEntityInstances(new UwaziEntityStatus[]{
-                UwaziEntityStatus.FINALIZED,
-                UwaziEntityStatus.SUBMISSION_ERROR,
-                UwaziEntityStatus.SUBMISSION_PENDING,
-                UwaziEntityStatus.SUBMISSION_PARTIAL_PARTS
+        return getUwaziEntityInstances(new EntityStatus[]{
+                EntityStatus.FINALIZED,
+                EntityStatus.SUBMISSION_ERROR,
+                EntityStatus.SUBMISSION_PENDING,
+                EntityStatus.SUBMISSION_PARTIAL_PARTS
         });
     }
 
@@ -592,8 +592,8 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
             values.put(D.C_FORM_PART_STATUS, instance.getFormPartStatus().ordinal());
             instance.setUpdated(updated);
 
-            if (instance.getStatus() == UwaziEntityStatus.UNKNOWN) {
-                statusOrdinal =  UwaziEntityStatus.DRAFT.ordinal();
+            if (instance.getStatus() == EntityStatus.UNKNOWN) {
+                statusOrdinal =  EntityStatus.DRAFT.ordinal();
             } else {
                 statusOrdinal = instance.getStatus().ordinal();
             }
@@ -727,13 +727,13 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
         return ids;
     }
 
-    private List<UwaziEntityInstance> getUwaziEntityInstances(UwaziEntityStatus[] statuses) {
+    private List<EntityStatus> getUwaziEntityInstances(EntityStatus[] statuses) {
         Gson gson = new Gson();
         Cursor cursor = null;
         List<UwaziEntityInstance> instances = new ArrayList<>();
 
         List<String> s = new ArrayList<>(statuses.length);
-        for (UwaziEntityStatus status : statuses) {
+        for (EntityStatus status : statuses) {
             s.add(Integer.toString(status.ordinal()));
         }
         String selection = "(" + TextUtils.join(", ", s) + ")";
@@ -792,7 +792,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
         instance.setServerName(cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_NAME)));
         instance.setUsername(cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_USERNAME)));*/
         int statusOrdinal = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_STATUS));
-        instance.setStatus(UwaziEntityStatus.values()[statusOrdinal]);
+        instance.setStatus(EntityStatus.values()[statusOrdinal]);
         int formPartStatusOrdinal = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_FORM_PART_STATUS));
         instance.setFormPartStatus(FormMediaFileStatus.values()[formPartStatusOrdinal]);
         instance.setUpdated(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_UPDATED)));

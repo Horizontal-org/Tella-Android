@@ -9,9 +9,9 @@ import com.google.gson.Gson
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.UwaziSendFragmentBinding
+import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
-import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.SharedUwaziSubmissionViewModel
@@ -56,8 +56,8 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
 
             cancelBtn.setOnClickListener {
                 entityInstance?.let { entity ->
-                    if (entity.status != UwaziEntityStatus.SUBMISSION_PENDING) {
-                        entity.status = UwaziEntityStatus.SUBMISSION_PENDING
+                    if (entity.status != EntityStatus.SUBMISSION_PENDING) {
+                        entity.status = EntityStatus.SUBMISSION_PENDING
                         viewModel.saveEntityInstance(entity)
                     } else {
                         nav().popBackStack()
@@ -79,17 +79,17 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
 
             progress.observe(viewLifecycleOwner,{ status ->
              when(status){
-                 UwaziEntityStatus.SUBMITTED -> {
+                 EntityStatus.SUBMITTED -> {
                      nav().popBackStack()
                  }
-                 UwaziEntityStatus.SUBMISSION_ERROR -> {
+                 EntityStatus.SUBMISSION_ERROR -> {
                      DialogUtils.showBottomMessage(activity,getString(R.string.collect_toast_fail_sending_form),true)
-                     entityInstance?.status = UwaziEntityStatus.SUBMISSION_ERROR
+                     entityInstance?.status = EntityStatus.SUBMISSION_ERROR
                      entityInstance?.let { viewModel.saveEntityInstance(it) }
                      nav().popBackStack()
                      SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
                  }
-                 UwaziEntityStatus.SUBMISSION_PENDING -> {
+                 EntityStatus.SUBMISSION_PENDING -> {
                      nav().popBackStack()
                  }
              }

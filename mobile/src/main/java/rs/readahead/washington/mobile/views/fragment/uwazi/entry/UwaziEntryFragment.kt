@@ -19,7 +19,7 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.EventObserver
 import rs.readahead.washington.mobile.bus.event.LocationPermissionRequiredEvent
 import rs.readahead.washington.mobile.databinding.UwaziEntryFragmentBinding
-import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
+import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziGeoData
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.views.activity.LocationMapActivity
@@ -79,7 +79,7 @@ class UwaziEntryFragment :
         binding?.apply {
             toolbar.backClickListener = { onBackPressed() }
             toolbar.onRightClickListener = {
-                uwaziParser.setInstanceStatus(UwaziEntityStatus.DRAFT)
+                uwaziParser.setInstanceStatus(EntityStatus.DRAFT)
                 if (!uwaziParser.getAnswersFromForm(false, uwaziFormView)) {
                     uwaziFormView.setFocus(context)
                     showValidationMandatoryTitleDialog()
@@ -117,21 +117,21 @@ class UwaziEntryFragment :
         with(viewModel) {
             progress.observe(viewLifecycleOwner, { status ->
                 when (status) {
-                    UwaziEntityStatus.SUBMISSION_PENDING, UwaziEntityStatus.SUBMISSION_ERROR -> {
+                    EntityStatus.SUBMISSION_PENDING, EntityStatus.SUBMISSION_ERROR -> {
                         SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
                         nav().popBackStack()
-                        progress.postValue(UwaziEntityStatus.UNKNOWN)
+                        progress.postValue(EntityStatus.UNKNOWN)
                     }
-                    UwaziEntityStatus.SUBMITTED -> {
+                    EntityStatus.SUBMITTED -> {
                         SharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
                         nav().popBackStack()
-                        progress.postValue(UwaziEntityStatus.UNKNOWN)
+                        progress.postValue(EntityStatus.UNKNOWN)
                     }
-                    UwaziEntityStatus.DRAFT -> {
+                    EntityStatus.DRAFT -> {
                         SharedLiveData.updateViewPagerPosition.postValue(DRAFT_LIST_PAGE_INDEX)
                         nav().popBackStack()
                         showSavedDialog()
-                        progress.postValue(UwaziEntityStatus.UNKNOWN)
+                        progress.postValue(EntityStatus.UNKNOWN)
                     }
                     else -> {}
                 }
@@ -247,7 +247,7 @@ class UwaziEntryFragment :
                 baseActivity.getString(R.string.collect_form_exit_dialog_action_save_exit),
                 baseActivity.getString(R.string.collect_form_exit_dialog_action_exit_anyway),
                 onConfirmClick = {
-                    uwaziParser.setInstanceStatus(UwaziEntityStatus.DRAFT)
+                    uwaziParser.setInstanceStatus(EntityStatus.DRAFT)
                     uwaziParser.getInstance().let { viewModel.saveEntityInstance(it) }
                 },
                 onCancelClick = {

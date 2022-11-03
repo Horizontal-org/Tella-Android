@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.views.fragment.reports.entry
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
@@ -61,8 +62,17 @@ class ReportsEntryViewModel @Inject constructor(
         )
     }
 
-    fun getDraftFormInstance() : ReportFormInstance{
-        return ReportFormInstance()
+    fun getDraftFormInstance(
+        title: String,
+        description: String,
+        files: List<VaultFile>?,
+        server: TellaReportServer
+    ): ReportFormInstance {
+        return ReportFormInstance(
+            title = title,
+            description = description,
+
+        )
     }
 }
 
