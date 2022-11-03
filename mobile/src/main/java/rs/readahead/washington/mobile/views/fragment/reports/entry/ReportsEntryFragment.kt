@@ -5,31 +5,44 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.hzontal.tella_locking_ui.common.extensions.onChange
+import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.schedulers.Schedulers
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.IVaultFilesSelector
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultSelectFilesSheet
+import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsEntryBinding
+import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.setTint
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.activity.CameraActivity
+import rs.readahead.washington.mobile.views.adapters.reports.ReportsFilesRecyclerViewAdapter
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
-import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector
-import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILES_FILTER
-import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_PICKER_SINGLE
+import rs.readahead.washington.mobile.views.fragment.COLLECT_ENTRY
+import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.*
+import rs.readahead.washington.mobile.views.interfaces.IAttachmentsMediaHandler
 import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface
+import timber.log.Timber
 
 @AndroidEntryPoint
-class ReportsEntryFragment :
-    BaseBindingFragment<FragmentReportsEntryBinding>(FragmentReportsEntryBinding::inflate) {
+class ReportsEntryFragment : BaseBindingFragment<FragmentReportsEntryBinding>(FragmentReportsEntryBinding::inflate),
+    IAttachmentsMediaHandler {
     private val viewModel by viewModels<ReportsEntryViewModel>()
+    private lateinit var gridLayoutManager: GridLayoutManager
+    private lateinit var filesRecyclerViewAdapter: ReportsFilesRecyclerViewAdapter
+    private var vaultFiles: ArrayList<VaultFile> = arrayListOf()
+    private val bundle by lazy { Bundle() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
@@ -37,9 +50,17 @@ class ReportsEntryFragment :
     }
 
     private fun initView() {
+        gridLayoutManager = GridLayoutManager(context, 3)
+        filesRecyclerViewAdapter = context?.let {
+            ReportsFilesRecyclerViewAdapter( this@ReportsEntryFragment,
+                it, MediaFileHandler()
+            )
+        }!!
         binding?.attachFilesBtn?.setOnClickListener {
             showSelectFilesSheet()
         }
+        binding?.filesRecyclerView?.apply { adapter = filesRecyclerViewAdapter
+            layoutManager = gridLayoutManager }
 
         binding?.toolbar?.backClickListener = { nav().popBackStack() }
 
@@ -87,7 +108,7 @@ class ReportsEntryFragment :
         showVaultSelectFilesSheet(
             baseActivity.supportFragmentManager,
             baseActivity.getString(R.string.Uwazi_WidgetMedia_Take_Photo),
-            baseActivity.getString(R.string.Vault_RecordAudio_SheetAction),
+            null,//baseActivity.getString(R.string.Vault_RecordAudio_SheetAction),
             baseActivity.getString(R.string.Uwazi_WidgetMedia_Select_From_Device),
             baseActivity.getString(R.string.Uwazi_WidgetMedia_Select_From_Tella),
             null,
@@ -131,7 +152,7 @@ class ReportsEntryFragment :
 
     private fun showCameraActivity() {
         try {
-            val activity = context as Activity?
+            val activity = getActivity()
             activity!!.startActivityForResult(
                 Intent(context, CameraActivity::class.java)
                     .putExtra(
@@ -146,7 +167,7 @@ class ReportsEntryFragment :
     }
 
     private fun importMedia() {
-        val activity = context as BaseActivity?
+        val activity = getActivity() as BaseActivity?
         activity!!.maybeChangeTemporaryTimeout {
             MediaFileHandler.startSelectMediaActivity(
                 activity,
@@ -154,18 +175,58 @@ class ReportsEntryFragment :
                 null,
                 C.IMPORT_FILE
             )
-            Unit
         }
     }
 
     private fun showAudioRecorderActivity() {
-        try {
-            val activity = context as ICollectEntryInterface?
-            activity!!.openAudioRecorder()
+        /*try {
+            bundle.putString(COLLECT_ENTRY, true.toString())
+            nav().navigate(R.id.action_newReport_to_micScreen, bundle)
+
         } catch (e: java.lang.Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
+        }*/
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == C.MEDIA_FILE_ID && resultCode == Activity.RESULT_OK) {
+            val vaultFile = data?.getStringExtra(VAULT_FILE_KEY) ?: ""
+            putVaultFilesInForm(vaultFile)
         }
     }
 
+    private fun putVaultFilesInForm(vaultFileList: String){
+        val files = Gson().fromJson<ArrayList<String>>(
+            vaultFileList as String?,
+            object : TypeToken<List<String?>?>() {}.type
+        )
+        for (i in 0 until files.size) {
+            if (!files.isEmpty() && !files[i].isEmpty()) {
+                val vaultFile = MyApplication.rxVault[files[i]]
+                    .subscribeOn(Schedulers.io())
+                    .blockingGet()
+                val file = FormMediaFile.fromMediaFile(vaultFile)
+                vaultFiles.add(file)
+            }
+        }
+        putFiles()
+    }
 
+    fun putFiles() {
+        filesRecyclerViewAdapter.setFiles(vaultFiles)
+        binding?.attachFilesBtn?.visibility = View.GONE
+        binding?.filesRecyclerView?.visibility = View.VISIBLE
+    }
+
+    override fun playMedia(mediaFile: VaultFile?) {
+
+    }
+
+    override fun onRemoveAttachment(vaultFile: VaultFile?) {
+        vaultFiles.remove(vaultFile)
+        if (vaultFiles.isEmpty()){
+            binding?.attachFilesBtn?.visibility = View.VISIBLE
+            binding?.filesRecyclerView?.visibility = View.GONE
+        }
+    }
 }

@@ -58,6 +58,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.ListFormResult;
 import rs.readahead.washington.mobile.domain.entity.collect.OdkForm;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance;
+import rs.readahead.washington.mobile.domain.entity.reports.ReportInstanceBundle;
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus;
 import rs.readahead.washington.mobile.domain.exception.NotFountException;
@@ -2248,7 +2249,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 .compose(applySchedulers());
     }
 
-
     private ReportFormInstance updateTellaReportsFormInstance(ReportFormInstance instance) {
         try {
             int statusOrdinal;
@@ -2307,7 +2307,35 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return instance;
     }
 
+    @NonNull
+    @Override
+    public Completable deleteReportInstance(long id) {
+        return null;
+    }
 
+    @Nullable
+    @Override
+    public Single<List<ReportFormInstance>> listDraftReportInstances() {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public Single<List<ReportFormInstance>> listOutboxReportInstances() {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public Single<List<ReportFormInstance>> listSubmittedReportInstances() {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public Single<ReportInstanceBundle> getReportBundle(long id) {
+        return null;
+    }
 
     private static class Setting {
         Integer intValue;

@@ -118,7 +118,8 @@
                 android:imeOptions="actionDone"
                 android:inputType="text"
                 android:textColor="@color/wa_white"
-                app:backgroundTint="@color/wa_white" />
+                app:backgroundTint="@color/wa_white"
+                android:autofillHints="description" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -134,6 +135,7 @@
             android:id="@+id/files_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
             app:layout_constraintTop_toBottomOf="@+id/attach_files_text"
             android:visibility="gone"
             >
@@ -145,9 +147,10 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_horizontal_small_margin"
-            android:src="@drawable/upload_box"
+            android:src="@drawable/upload_box_btn"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/files_recyclerView" />
+            app:layout_constraintTop_toBottomOf="@id/files_recyclerView"
+            android:contentDescription="@string/Reports_Attach_files_Here" />
 
         <Button
             android:id="@+id/send_report_btn"

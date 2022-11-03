@@ -80,11 +80,12 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         db.execSQL(createTableCollectFormInstanceVaultFile());
         db.execSQL(createTableUwaziEntityInstanceVaultFile());
 
-        //BBV10
+        //DBV10
         db.execSQL(alterTableTellaUploadServerAddAccessToken());
         db.execSQL(alterTableTellaUploadServerAddMetatData());
         db.execSQL(alterTableTellaUploadServerAddBackgourndUpload());
         db.execSQL(createTableReportFormInstance());
+        db.execSQL(createTableReportInstanceVaultFile());
     }
 
     @Override
@@ -365,11 +366,26 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         return "CREATE TABLE " + sq(D.T_REPORT_FORM_INSTANCE) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_REPORT_SERVER_ID, D.INTEGER, true) + " , " +
-                cddl(D.C_STATUS, D.INTEGER, true) + " , " +
+                cddl(D.C_METADATA, D.TEXT, true) + " , " +
+                cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0 , " +
+                cddl(D.C_UPDATED, D.INTEGER, true) + " DEFAULT 0 , " +
                 cddl(D.C_FORM_NAME, D.TEXT, true) + " , " +
+                cddl(D.C_TITLE, D.TEXT, true) + " , " +
                 cddl(D.C_DESCRIPTION_TEXT, D.TEXT, true) + " , " +
-                "FOREIGN KEY(" + sq(D.T_TELLA_UPLOAD_SERVER) + ") REFERENCES " +
+                "FOREIGN KEY(" + sq(D.C_REPORT_SERVER_ID) + ") REFERENCES " +
                 sq(D.T_TELLA_UPLOAD_SERVER) + "(" + sq(D.C_ID) + ") ON DELETE RESTRICT" +
+                ");";
+    }
+
+    private String createTableReportInstanceVaultFile() {
+        return "CREATE TABLE " + sq(D.T_REPORT_INSTANCE_VAULT_FILE) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_REPORT_INSTANCE_ID, D.INTEGER, true) + " , " +
+                cddl(D.C_VAULT_FILE_ID, D.TEXT, true) + " , " +
+                cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0," +
+                "FOREIGN KEY(" + sq(D.C_REPORT_INSTANCE_ID) + ") REFERENCES " +
+                sq(D.T_REPORT_FORM_INSTANCE) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE," +
+                "UNIQUE(" + sq(D.C_REPORT_INSTANCE_ID) + ", " + sq(D.C_VAULT_FILE_ID) + ") ON CONFLICT IGNORE" +
                 ");";
     }
 

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="94dp"
+    android:layout_height="94dp"
+    android:layout_marginStart="12dp"
+    android:background="@color/light_purple"
+    android:layout_marginTop="16dp">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/attachmentImg"
+        android:layout_width="94dp"
+        android:layout_height="94dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/icAttachmentImg"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        app:layout_constraintBottom_toBottomOf="@id/attachmentImg"
+        app:layout_constraintEnd_toEndOf="@id/attachmentImg"
+        app:layout_constraintStart_toStartOf="@id/attachmentImg"
+        app:layout_constraintTop_toTopOf="@id/attachmentImg" />
+
+    <TextView
+        android:id="@+id/fileNameTextView"
+        style="@style/Tella_Main_White_Text.Small"
+        android:layout_width="88dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:ellipsize="end"
+        android:gravity="center_horizontal"
+        android:maxLines="1"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="@id/attachmentImg"
+        app:layout_constraintEnd_toEndOf="@id/attachmentImg"
+        app:layout_constraintStart_toStartOf="@id/attachmentImg"
+        tools:text="TestTestTestTestTestTest " />
+
+    <ImageView
+        android:id="@+id/remove"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:background="@drawable/ic_close_white"
+        android:padding="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/action_remove" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

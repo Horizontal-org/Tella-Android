@@ -3,7 +3,6 @@ package rs.readahead.washington.mobile.data.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
@@ -27,13 +26,10 @@ import io.reactivex.Single;
 import io.reactivex.SingleTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import rs.readahead.washington.mobile.data.entity.uwazi.UwaziEntityRow;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
-import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
-import rs.readahead.washington.mobile.domain.entity.collect.ListFormResult;
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate;
 import rs.readahead.washington.mobile.domain.entity.uwazi.EntityInstanceBundle;
 import rs.readahead.washington.mobile.domain.entity.uwazi.ListTemplateResult;
@@ -575,7 +571,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
         return template;
     }
 
-    private UwaziEntityInstance updateEntityInstanceDB(UwaziEntityInstance instance) {
+    private UwaziEntityInstance   updateEntityInstanceDB(UwaziEntityInstance instance) {
         try {
             ContentValues values = new ContentValues();
             long updated = Util.currentTimestamp();

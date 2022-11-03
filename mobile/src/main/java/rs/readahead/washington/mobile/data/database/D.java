@@ -19,7 +19,7 @@ class D {
     static final String T_COLLECT_SERVER = "t_collect_server";
     static final String T_COLLECT_BLANK_FORM = "t_collect_blank_xform";
     static final String T_COLLECT_FORM_INSTANCE = "t_collect_xform_instance";
-    static final String T_REPORT_FORM_INSTANCE = "t_report_xform_instance";
+    static final String T_REPORT_FORM_INSTANCE = "t_report_form_instance";
     static final String T_MEDIA_FILE = "t_media_file";
     static final String T_COLLECT_FORM_INSTANCE_MEDIA_FILE = "t_collect_xform_instance_media_file";
     static final String T_SETTINGS = "t_settings";
@@ -90,8 +90,7 @@ class D {
     static final String T_UWAZI_ENTITY_INSTANCE_VAULT_FILE = "t_uwazi_entity_instance_vault_file";
     static final String C_UWAZI_ENTITY_INSTANCE_ID = "c_uwazi_entity_instance_id";
     static final String T_REPORT_INSTANCE_VAULT_FILE = "t_report_instance_vault_file";
-
-
+    static final String C_REPORT_INSTANCE_ID = "c_report_instance_id";
 
     //Uwazi cloumns
     static  final String C_UWAZI_SERVER_ID= "c_uwazi_server_id";
