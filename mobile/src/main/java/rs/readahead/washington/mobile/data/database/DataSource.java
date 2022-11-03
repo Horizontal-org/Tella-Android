@@ -2282,15 +2282,15 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     values,
                     SQLiteDatabase.CONFLICT_REPLACE);
             instance.setId(id);
-
+        //TODO FIX FILES
             // clear FormMediaFiles
-            database.delete(
+           /* database.delete(
                     D.T_REPORT_INSTANCE_VAULT_FILE,
                     D.C_COLLECT_FORM_INSTANCE_ID + " = ?",
                     new String[]{Long.toString(id)});
-
+*/
             // insert FormMediaFiles
-            List<FormMediaFile> mediaFiles = instance.getWidgetMediaFiles();
+          /*  List<FormMediaFile> mediaFiles = instance.getWidgetMediaFiles();
             for (FormMediaFile mediaFile : mediaFiles) {
                 values = new ContentValues();
                 values.put(D.C_COLLECT_FORM_INSTANCE_ID, id);
@@ -2298,7 +2298,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 values.put(D.C_STATUS, mediaFile.status.ordinal());
 
                 database.insert(D.T_REPORT_INSTANCE_VAULT_FILE, null, values);
-            }
+            }*/
 
             database.setTransactionSuccessful();
         } finally {
