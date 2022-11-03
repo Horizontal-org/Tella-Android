@@ -63,15 +63,7 @@ class ReportsFragment :
     }
 
     private fun initData() {
-        with(viewModel) {
-            outboxReportFormInstance.observe(viewLifecycleOwner, { outbox ->
 
-            })
-
-            draftReportFormInstance.observe(viewLifecycleOwner, { draft ->
-
-            })
-        }
     }
 
 }
