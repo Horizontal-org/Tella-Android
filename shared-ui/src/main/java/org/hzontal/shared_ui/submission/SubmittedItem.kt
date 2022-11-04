@@ -4,7 +4,10 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.*
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
@@ -78,7 +81,7 @@ class SubmittedItem @JvmOverloads constructor(
             name.isVisible = true
         }
         if (popupMenuRes != -1) {
-           // popupMenu.setBackgroundResource(popupMenuRes)
+            // popupMenu.setBackgroundResource(popupMenuRes)
             //popupMenu.isVisible = true
         }
         if (updatedRes != -1) {
@@ -95,16 +98,26 @@ class SubmittedItem @JvmOverloads constructor(
         name.text = partName
     }
 
-    fun setOrganization(organizationName: String) {
-        organization.text = organizationName
+    fun setOrganization(organizationName: String?) {
+        if (organizationName == null){
+            organization.isVisible = false
+        }else {
+            organization.isVisible = true
+            organization.text = organizationName
+        }
     }
 
     fun setIcon(iconId: Int) {
         icon.setImageResource(iconId)
     }
 
-    fun setIconDrawable(drawable: Drawable) {
-        icon.setImageDrawable(drawable)
+    fun setIconDrawable(drawable: Drawable?) {
+        if (drawable == null) {
+            icon.isVisible = false
+        } else {
+            icon.isVisible = true
+            icon.setImageDrawable(drawable)
+        }
     }
 
     fun setUpdated(updateTime: String) {

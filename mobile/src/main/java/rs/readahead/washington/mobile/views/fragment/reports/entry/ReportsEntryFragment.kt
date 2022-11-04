@@ -130,6 +130,7 @@ class ReportsEntryFragment :
 
     private fun initData() {
         with(viewModel) {
+            listServers()
             serversList.observe(viewLifecycleOwner, { serversList ->
                 if (serversList.size > 1) {
                     binding?.dropdownGroup?.show()

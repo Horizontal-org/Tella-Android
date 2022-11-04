@@ -2308,6 +2308,78 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return instance;
     }
 
+    private List<ReportFormInstance> getReportFormInstances(EntityStatus[] statuses){
+        Cursor cursor = null;
+        List<ReportFormInstance> instances = new ArrayList<>();
+
+        List<String> s = new ArrayList<>(statuses.length);
+        for (EntityStatus status : statuses) {
+            s.add(Integer.toString(status.ordinal()));
+        }
+        String selection = "(" + TextUtils.join(", ", s) + ")";
+
+        try {
+
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_REPORT_FORM_INSTANCE +
+                            " JOIN " + D.T_TELLA_UPLOAD_SERVER + " ON " +
+                            cn(D.T_REPORT_FORM_INSTANCE, D.C_REPORT_SERVER_ID) + " = " + cn(D.T_TELLA_UPLOAD_SERVER, D.C_ID),
+                    new String[]{
+                            cn(D.T_REPORT_FORM_INSTANCE, D.C_ID, D.A_TELLA_UPLOAD_INSTANCE_ID),
+                            D.C_REPORT_SERVER_ID,
+                            D.C_STATUS,
+                            D.C_UPDATED,
+                            D.C_METADATA,
+                            D.C_DESCRIPTION_TEXT,
+                            D.C_TITLE,
+                          //TODO CHECK WHEN FIX FILES  D.C_FORM_PART_STATUS,
+                            cn(D.T_TELLA_UPLOAD_SERVER, D.C_NAME, D.A_SERVER_NAME),
+                            cn(D.T_TELLA_UPLOAD_SERVER, D.C_USERNAME, D.A_SERVER_USERNAME)},
+                    D.C_STATUS + " IN " + selection,
+                    null, null,
+                    cn(D.T_REPORT_FORM_INSTANCE, D.C_ID) + " DESC",
+                    null
+            );
+            cursor = database.rawQuery(query, null);
+
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                ReportFormInstance instance = cursorToReportFormInstance(cursor);
+                instances.add(instance);
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return instances;
+    }
+
+    private ReportFormInstance cursorToReportFormInstance(Cursor cursor) {
+        ReportFormInstance instance = new ReportFormInstance();
+        instance.setId(cursor.getLong(cursor.getColumnIndexOrThrow(D.A_TELLA_UPLOAD_INSTANCE_ID)));
+        instance.setServerId(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_REPORT_SERVER_ID)));
+        int statusOrdinal = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_STATUS));
+        instance.setStatus(EntityStatus.values()[statusOrdinal]);
+        instance.setUpdated(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_UPDATED)));
+        instance.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TITLE)));
+        instance.setDescription(cursor.getString(cursor.getColumnIndexOrThrow(D.C_DESCRIPTION_TEXT)));
+        //TODO DJORDJE FIX FILES
+        //int formPartStatusOrdinal = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_FORM_PART_STATUS));
+        //instance.setFormPartStatus(FormMediaFileStatus.values()[formPartStatusOrdinal]);
+        return instance;
+    }
+
+    private List<ReportFormInstance> getDraftReportInstances() {
+        return getReportFormInstances(new EntityStatus[]{
+                EntityStatus.UNKNOWN,
+                EntityStatus.DRAFT
+        });
+    }
+
     @NonNull
     @Override
     public Completable deleteReportInstance(long id) {
@@ -2317,7 +2389,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     @Nullable
     @Override
     public Single<List<ReportFormInstance>> listDraftReportInstances() {
-        return null;
+        return Single.fromCallable(this::getDraftReportInstances)
+                .compose(applySchedulers());
     }
 
     @Nullable

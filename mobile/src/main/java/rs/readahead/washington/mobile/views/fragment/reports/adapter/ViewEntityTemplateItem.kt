@@ -1,17 +1,19 @@
-package rs.readahead.washington.mobile.views.fragment.uwazi.adapters
+package rs.readahead.washington.mobile.views.fragment.reports.adapter
+
+import rs.readahead.washington.mobile.domain.entity.EntityStatus
 
 data class ViewEntityTemplateItem(
     val id: Long,
     val serverId: Long,
-    val templateName: String,
-    val translatedTemplateName: String,
+    val title: String,
+    val description: String,
     val serverName: String? = "",
+    val updated: Long = 0,
     val isFavorite: Boolean = false,
-    val onFavoriteClicked: () -> Unit,
+    val status: EntityStatus,
     val onMoreClicked: () -> Unit,
     val onOpenEntityClicked: () -> Unit
 ) {
-    fun onFavoriteClicked() = onFavoriteClicked.invoke()
     fun onMoreClicked() = onMoreClicked.invoke()
     fun onOpenEntityClicked() = onOpenEntityClicked.invoke()
 }

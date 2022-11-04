@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.fragment.uwazi.adapters
+package rs.readahead.washington.mobile.views.fragment.reports.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -10,12 +10,10 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.util.Util
 import rs.readahead.washington.mobile.util.ViewUtil
-import rs.readahead.washington.mobile.views.adapters.uwazi.VIEW_TYPE_HEADER
 
-class UwaziSubmittedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class EntityAdapter : RecyclerView.Adapter<EntityAdapter.EntityViewHolder>() {
 
     private var submitted: MutableList<Any> = ArrayList()
-
 
     @SuppressLint("NotifyDataSetChanged")
     fun setEntities(submitted: List<Any>) {
@@ -23,47 +21,40 @@ class UwaziSubmittedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if (viewType == VIEW_TYPE_HEADER) {
-            EntityMessageViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.templates_uwazi_message_row, parent, false)
-            )
-        } else {
-            EntityViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.submitted_collect_form_instance_row, parent, false)
-            )
-        }
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): EntityAdapter.EntityViewHolder {
+        return EntityViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.submitted_collect_form_instance_row, parent, false)
+        )
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (position == 0) {
-            (holder as EntityMessageViewHolder).bind(message = submitted[position] as String)
-        } else {
-            (holder as EntityViewHolder).bind(entityRow = submitted[position] as ViewEntityInstanceItem)
-        }
+    override fun onBindViewHolder(holder: EntityAdapter.EntityViewHolder, position: Int) {
+        holder.bind(entityRow = submitted[position] as ViewEntityTemplateItem)
     }
 
     inner class EntityViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         private lateinit var submittedItem: SubmittedItem
 
-        fun bind(entityRow: ViewEntityInstanceItem) {
+        fun bind(entityRow: ViewEntityTemplateItem) {
             submittedItem = view.findViewById(R.id.submittedItem)
             submittedItem.apply {
-                setName(entityRow.instanceName)
-                setOrganization(entityRow.translatedTemplateName)
+                setName(entityRow.title)
+                setDates(entityRow.updated)
+                setOrganization(null)
                 if (entityRow.status == EntityStatus.SUBMITTED) {
-                    setDates(entityRow.updated)
                     setSubmittedIcon()
                 } else if (entityRow.status == EntityStatus.SUBMISSION_ERROR) {
                     setSubmitErrorIcon()
                 } else if (entityRow.status == EntityStatus.FINALIZED || entityRow.status == EntityStatus.SUBMISSION_PENDING || entityRow.status == EntityStatus.SUBMISSION_PARTIAL_PARTS) {
                     setPendingIcon()
+                }else {
+                    submittedItem.setIconDrawable(null)
                 }
-                setOnClickListener { entityRow.onOpenClicked() }
+                setOnClickListener { entityRow.onOpenEntityClicked() }
                 popClickListener = { entityRow.onMoreClicked() }
-
             }
         }
 
@@ -113,4 +104,5 @@ class UwaziSubmittedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun getItemCount() = submitted.size
+
 }
