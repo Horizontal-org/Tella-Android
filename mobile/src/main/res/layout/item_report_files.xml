@@ -5,7 +5,7 @@
     android:id="@+id/root"
     android:layout_width="94dp"
     android:layout_height="94dp"
-    android:layout_marginStart="12dp"
+    android:layout_marginStart="16dp"
     android:background="@color/light_purple"
     android:layout_marginTop="16dp">
 

@@ -7,19 +7,14 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.hzontal.tella_locking_ui.common.extensions.onChange
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.schedulers.Schedulers
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.IVaultFilesSelector
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultSelectFilesSheet
-import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsEntryBinding
-import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.util.C
@@ -247,7 +242,6 @@ class ReportsEntryFragment :
         for (file in vaultFileList) {
             filesRecyclerViewAdapter.insertAttachment(file)
         }
-        binding?.attachFilesBtn?.visibility = View.GONE
         binding?.filesRecyclerView?.visibility = View.VISIBLE
     }
 
@@ -256,7 +250,6 @@ class ReportsEntryFragment :
     }
 
     override fun onRemovedAttachments() {
-        binding?.attachFilesBtn?.visibility = View.VISIBLE
         binding?.filesRecyclerView?.visibility = View.GONE
     }
 }
