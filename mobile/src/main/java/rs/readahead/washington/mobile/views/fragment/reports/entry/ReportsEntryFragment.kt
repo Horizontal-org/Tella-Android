@@ -128,14 +128,25 @@ class ReportsEntryFragment :
     }
 
     private fun initData() {
-        viewModel.serversList.observe(viewLifecycleOwner, { serversList ->
-            if (serversList.size > 1) {
-                binding?.dropdownGroup?.show()
-            } else {
-                binding?.dropdownGroup?.hide()
-                selectedServer = serversList[0]
-            }
-        })
+        with(viewModel) {
+            serversList.observe(viewLifecycleOwner, { serversList ->
+                if (serversList.size > 1) {
+                    binding?.dropdownGroup?.show()
+                } else {
+                    binding?.dropdownGroup?.hide()
+                    selectedServer = serversList[0]
+                }
+            })
+
+            draftReportFormInstance.observe(viewLifecycleOwner, {
+                nav().popBackStack()
+            })
+
+            outboxReportFormInstance.observe(viewLifecycleOwner, {
+                nav().popBackStack()
+            })
+        }
+
     }
 
     private fun showSelectFilesSheet() {

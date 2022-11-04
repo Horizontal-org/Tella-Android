@@ -88,4 +88,5 @@ abstract class BaseBindingFragment<VB : ViewBinding>(
     open fun back() {
         nav().navigateUp()
     }
+
 }

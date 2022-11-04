@@ -15,6 +15,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.usecases.reports.GetReportsServersUseCase
+import rs.readahead.washington.mobile.domain.usecases.reports.GetReportsUseCase
 import rs.readahead.washington.mobile.domain.usecases.reports.SaveReportFormInstanceUseCase
 import javax.inject.Inject
 
@@ -22,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ReportsEntryViewModel @Inject constructor(
     private val getReportsServersUseCase: GetReportsServersUseCase,
-    private val saveReportFormInstanceUseCase: SaveReportFormInstanceUseCase
+    private val saveReportFormInstanceUseCase: SaveReportFormInstanceUseCase,
+    private val getReportsUseCase: GetReportsUseCase
 ) :
     ViewModel() {
 
@@ -34,6 +36,8 @@ class ReportsEntryViewModel @Inject constructor(
     val error: LiveData<Throwable> get() = _error
     private val _draftReportFormInstance = MutableLiveData<ReportFormInstance>()
     val draftReportFormInstance: LiveData<ReportFormInstance> get() = _draftReportFormInstance
+    private val _outboxReportFormInstance = MutableLiveData<ReportFormInstance>()
+    val outboxReportFormInstance: LiveData<ReportFormInstance> get() = _outboxReportFormInstance
 
     init {
         listServers()
@@ -75,7 +79,7 @@ class ReportsEntryViewModel @Inject constructor(
         saveReportFormInstanceUseCase.setReportFormInstance(reportFormInstance)
         saveReportFormInstanceUseCase.execute(
             onSuccess = { result ->
-                _draftReportFormInstance.postValue(result)
+                _outboxReportFormInstance.postValue(result)
             },
             onError = {
                 _error.postValue(it)
@@ -84,6 +88,18 @@ class ReportsEntryViewModel @Inject constructor(
                 _progress.postValue(false)
             }
         )
+    }
+
+    private fun listDrafts() {
+
+    }
+
+    private fun listOutbox() {
+
+    }
+
+    private fun listSubmitted() {
+
     }
 
     fun getDraftFormInstance(
