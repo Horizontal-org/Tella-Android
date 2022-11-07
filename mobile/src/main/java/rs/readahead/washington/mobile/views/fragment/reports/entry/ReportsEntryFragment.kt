@@ -15,7 +15,6 @@ import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.IVaultFilesSelector
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultSelectFilesSheet
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsEntryBinding
-import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.media.MediaFileHandler
@@ -47,17 +46,7 @@ class ReportsEntryFragment :
         )
     }
     private lateinit var selectedServer: TellaReportServer
-
-    companion object {
-        fun newInstance(reportFormInstance: ReportFormInstance): ReportsEntryFragment {
-            return ReportsEntryFragment().apply {
-                val args = Bundle()
-                args.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportFormInstance)
-                arguments = args
-            }
-        }
-    }
-
+    private var reportFormInstance: ReportFormInstance? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
@@ -78,6 +67,16 @@ class ReportsEntryFragment :
         binding?.toolbar?.backClickListener = { nav().popBackStack() }
 
         highLightSubmitButton()
+
+        arguments?.let { bundle ->
+            reportFormInstance = bundle.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportFormInstance
+        }
+
+        reportFormInstance?.let { instance ->
+            binding?.reportTitleEt?.setText(instance.title)
+            binding?.reportDescriptionEt?.setText(instance.description)
+        }
+
     }
 
     private fun highLightSubmitButton() {
@@ -256,9 +255,7 @@ class ReportsEntryFragment :
         binding?.filesRecyclerView?.visibility = View.VISIBLE
     }
 
-    override fun playMedia(mediaFile: VaultFile?) {
-
-    }
+    override fun playMedia(mediaFile: VaultFile?) {}
 
     override fun onRemovedAttachments() {
         binding?.filesRecyclerView?.visibility = View.GONE
