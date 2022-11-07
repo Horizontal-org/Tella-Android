@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.views.fragment.reports.viewpagerfragments
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
@@ -13,6 +14,7 @@ import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.EntityAdapter
+import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_FORM_INSTANCE
 import rs.readahead.washington.mobile.views.fragment.reports.entry.ReportsEntryViewModel
 
 @AndroidEntryPoint
@@ -54,6 +56,10 @@ class DraftsReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
                 showDraftsMenu(instance)
             })
 
+            onOpenClickedFormInstance.observe(viewLifecycleOwner, { instance ->
+                openEntityInstance(instance)
+            })
+
             instanceDeleted.observe(viewLifecycleOwner, {
                 viewModel.listDrafts()
             })
@@ -69,7 +75,7 @@ class DraftsReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
             object : BottomSheetUtils.ActionSeleceted {
                 override fun accept(action: BottomSheetUtils.Action) {
                     if (action === BottomSheetUtils.Action.EDIT) {
-                        openDraft(instance)
+                        openEntityInstance(instance)
                     }
                     if (action === BottomSheetUtils.Action.DELETE) {
                         viewModel.deleteReport(instance)
@@ -83,8 +89,11 @@ class DraftsReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
         )
     }
 
-    private fun openDraft(entityInstance: ReportFormInstance) {
-        // viewModel.getInstancReportEntity(entityInstance.id)
+    private fun openEntityInstance(reportFormInstance: ReportFormInstance) {
+        val bundle = Bundle()
+        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportFormInstance)
+        NavHostFragment.findNavController(this)
+            .navigate(R.id.action_reportsScreen_to_newReport_screen, bundle)
     }
 
     override fun onResume() {

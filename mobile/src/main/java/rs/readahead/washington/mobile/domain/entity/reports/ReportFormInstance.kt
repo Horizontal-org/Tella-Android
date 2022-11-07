@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.domain.entity.reports
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
+import java.io.Serializable
 
 data class ReportFormInstance(
     var id: Long = -1,
@@ -14,4 +15,4 @@ data class ReportFormInstance(
     var formPartStatus: FormMediaFileStatus = FormMediaFileStatus.UNKNOWN,
     var title: String = "",
     var description: String = ""
-)
+) : Serializable

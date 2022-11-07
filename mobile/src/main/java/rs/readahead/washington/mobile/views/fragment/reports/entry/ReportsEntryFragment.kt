@@ -20,6 +20,7 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsEntryBinding
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
+import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.util.C
@@ -28,13 +29,14 @@ import rs.readahead.washington.mobile.util.setTint
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.activity.CameraActivity
 import rs.readahead.washington.mobile.views.adapters.reports.ReportsFilesRecyclerViewAdapter
-import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILES_FILTER
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_PICKER_SINGLE
 import rs.readahead.washington.mobile.views.interfaces.IAttachmentsMediaHandler
+
+const val BUNDLE_REPORT_FORM_INSTANCE = "bundle_report_form_instance"
 
 @AndroidEntryPoint
 class ReportsEntryFragment :
@@ -50,7 +52,17 @@ class ReportsEntryFragment :
     }
     private var vaultFiles: ArrayList<VaultFile> = arrayListOf()
     private lateinit var selectedServer: TellaReportServer
-    private val bundle by lazy { Bundle() }
+
+    companion object {
+        fun newInstance(reportFormInstance: ReportFormInstance): ReportsEntryFragment {
+            return ReportsEntryFragment().apply {
+                val args = Bundle()
+                args.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportFormInstance)
+                arguments = args
+            }
+        }
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
@@ -201,8 +213,7 @@ class ReportsEntryFragment :
     private fun showCameraActivity() {
         try {
             //TODO Djordje WE SHOULD BE ABLE TO USE `baseActivity instance` instead
-            val activity = getActivity()
-            activity!!.startActivityForResult(
+            baseActivity.startActivityForResult(
                 Intent(context, CameraActivity::class.java)
                     .putExtra(
                         CameraActivity.INTENT_MODE,
@@ -216,8 +227,7 @@ class ReportsEntryFragment :
     }
 
     private fun importMedia() {
-        val activity = getActivity() as BaseActivity?
-        activity!!.maybeChangeTemporaryTimeout {
+        baseActivity.maybeChangeTemporaryTimeout {
             MediaFileHandler.startSelectMediaActivity(
                 activity,
                 "*/*",
