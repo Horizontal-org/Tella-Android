@@ -3,8 +3,12 @@ package rs.readahead.washington.mobile.views.fragment.reports.entry
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.schedulers.Schedulers
+import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
@@ -174,8 +178,25 @@ class ReportsEntryViewModel @Inject constructor(
         files.map { vaultFile ->
             vaultFiles.add(FormMediaFile.fromMediaFile(vaultFile))
         }
-
         return vaultFiles
+    }
+
+    fun putVaultFilesInForm(vaultFileList: String) : ArrayList<VaultFile>{
+        val vaultFormfiles: ArrayList<VaultFile> = arrayListOf()
+        val files = Gson().fromJson<ArrayList<String>>(
+            vaultFileList as String?,
+            object : TypeToken<List<String?>?>() {}.type
+        )
+        for (i in 0 until files.size) {
+            if (files.isNotEmpty() && files[i].isNotEmpty()) {
+                val vaultFile = MyApplication.rxVault[files[i]]
+                    .subscribeOn(Schedulers.io())
+                    .blockingGet()
+                val file = FormMediaFile.fromMediaFile(vaultFile)
+                vaultFormfiles.add(file)
+            }
+        }
+        return vaultFormfiles
     }
 
     fun deleteReport(instance: ReportFormInstance) {

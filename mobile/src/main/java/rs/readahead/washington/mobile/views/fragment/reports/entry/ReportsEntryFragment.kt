@@ -7,16 +7,12 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.hzontal.tella_locking_ui.common.extensions.onChange
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.schedulers.Schedulers
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.IVaultFilesSelector
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultSelectFilesSheet
-import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsEntryBinding
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
@@ -34,14 +30,14 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.Attachmen
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILES_FILTER
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_PICKER_SINGLE
-import rs.readahead.washington.mobile.views.interfaces.IAttachmentsMediaHandler
+import rs.readahead.washington.mobile.views.interfaces.IReportAttachmentsHandler
 
 const val BUNDLE_REPORT_FORM_INSTANCE = "bundle_report_form_instance"
 
 @AndroidEntryPoint
 class ReportsEntryFragment :
     BaseBindingFragment<FragmentReportsEntryBinding>(FragmentReportsEntryBinding::inflate),
-    IAttachmentsMediaHandler {
+    IReportAttachmentsHandler {
     private val viewModel by viewModels<ReportsEntryViewModel>()
     private lateinit var gridLayoutManager: GridLayoutManager
     private val filesRecyclerViewAdapter: ReportsFilesRecyclerViewAdapter by lazy {
@@ -50,7 +46,6 @@ class ReportsEntryFragment :
             baseActivity, MediaFileHandler()
         )
     }
-    private var vaultFiles: ArrayList<VaultFile> = arrayListOf()
     private lateinit var selectedServer: TellaReportServer
 
     companion object {
@@ -123,7 +118,7 @@ class ReportsEntryFragment :
             viewModel.getDraftFormInstance(
                 binding?.reportTitleEt?.text.toString(),
                 binding?.reportDescriptionEt?.text.toString(),
-                files = viewModel.vaultFilesToMediaFiles(vaultFiles),
+                files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
                 server = selectedServer
             )
         )
@@ -134,7 +129,7 @@ class ReportsEntryFragment :
             viewModel.getOutboxFormInstance(
                 binding?.reportTitleEt?.text.toString(),
                 binding?.reportDescriptionEt?.text.toString(),
-                files = viewModel.vaultFilesToMediaFiles(vaultFiles),
+                files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
                 server = selectedServer
             )
         )
@@ -250,31 +245,14 @@ class ReportsEntryFragment :
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == C.MEDIA_FILE_ID && resultCode == Activity.RESULT_OK) {
             val vaultFile = data?.getStringExtra(VAULT_FILE_KEY) ?: ""
-            putVaultFilesInForm(vaultFile)
+            putFiles(viewModel.putVaultFilesInForm(vaultFile))
         }
     }
 
-    //TODO THIS LOGIC SHOULD BE IN THE VIEWMODEL FRAGMENT SHOULD ONLY CARE ABOUT PRESNTATION LAYER
-    private fun putVaultFilesInForm(vaultFileList: String) {
-        val files = Gson().fromJson<ArrayList<String>>(
-            vaultFileList as String?,
-            object : TypeToken<List<String?>?>() {}.type
-        )
-        for (i in 0 until files.size) {
-            if (files.isNotEmpty() && files[i].isNotEmpty()) {
-                val vaultFile = MyApplication.rxVault[files[i]]
-                    .subscribeOn(Schedulers.io())
-                    .blockingGet()
-                val file = FormMediaFile.fromMediaFile(vaultFile)
-                vaultFiles.add(file)
-            }
+    private fun putFiles(vaultFileList: ArrayList<VaultFile>) {
+        for (file in vaultFileList) {
+            filesRecyclerViewAdapter.insertAttachment(file)
         }
-        putFiles()
-    }
-
-    private fun putFiles() {
-        filesRecyclerViewAdapter.setFiles(vaultFiles)
-        binding?.attachFilesBtn?.visibility = View.GONE
         binding?.filesRecyclerView?.visibility = View.VISIBLE
     }
 
@@ -282,11 +260,7 @@ class ReportsEntryFragment :
 
     }
 
-    override fun onRemoveAttachment(vaultFile: VaultFile?) {
-        vaultFiles.remove(vaultFile)
-        if (vaultFiles.isEmpty()) {
-            binding?.attachFilesBtn?.visibility = View.VISIBLE
-            binding?.filesRecyclerView?.visibility = View.GONE
-        }
+    override fun onRemovedAttachments() {
+        binding?.filesRecyclerView?.visibility = View.GONE
     }
 }
