@@ -53,6 +53,10 @@ class DraftsReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
             onMoreClickedFormInstance.observe(viewLifecycleOwner, { instance ->
                 showDraftsMenu(instance)
             })
+
+            instanceDeleted.observe(viewLifecycleOwner, {
+                viewModel.listDrafts()
+            })
         }
     }
 
@@ -68,7 +72,7 @@ class DraftsReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
                         openDraft(instance)
                     }
                     if (action === BottomSheetUtils.Action.DELETE) {
-                        // viewModel.confirmDelete(instance)
+                        viewModel.deleteReport(instance)
                     }
                 }
             },
@@ -80,7 +84,7 @@ class DraftsReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
     }
 
     private fun openDraft(entityInstance: ReportFormInstance) {
-        //  viewModel.getInstancReportEntity(entityInstance.id)
+        // viewModel.getInstancReportEntity(entityInstance.id)
     }
 
     override fun onResume() {

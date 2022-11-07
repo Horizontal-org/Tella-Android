@@ -14,6 +14,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
+import rs.readahead.washington.mobile.domain.usecases.reports.DeleteReportUseCase
 import rs.readahead.washington.mobile.domain.usecases.reports.GetReportsServersUseCase
 import rs.readahead.washington.mobile.domain.usecases.reports.GetReportsUseCase
 import rs.readahead.washington.mobile.domain.usecases.reports.SaveReportFormInstanceUseCase
@@ -26,7 +27,8 @@ import javax.inject.Inject
 class ReportsEntryViewModel @Inject constructor(
     private val getReportsServersUseCase: GetReportsServersUseCase,
     private val saveReportFormInstanceUseCase: SaveReportFormInstanceUseCase,
-    private val getReportsUseCase: GetReportsUseCase
+    private val getReportsUseCase: GetReportsUseCase,
+    private val deleteReportUseCase: DeleteReportUseCase
 ) :
     ViewModel() {
 
@@ -46,7 +48,8 @@ class ReportsEntryViewModel @Inject constructor(
     val onMoreClickedFormInstance: LiveData<ReportFormInstance> get() = _onMoreClickedFormInstance
     private val _onOpenClickedFormInstance = MutableLiveData<ReportFormInstance>()
     val onOpenClickedFormInstance: LiveData<ReportFormInstance> get() = _onOpenClickedFormInstance
-
+    private val _instanceDeleted = MutableLiveData<Boolean>()
+    val instanceDeleted: LiveData<Boolean> get() = _instanceDeleted
 
     fun listServers() {
         _progress.postValue(true)
@@ -195,5 +198,23 @@ class ReportsEntryViewModel @Inject constructor(
         }
         return vaultFormfiles
     }
+
+    fun deleteReport(instance: ReportFormInstance) {
+        _progress.postValue(true)
+        deleteReportUseCase.setId(instance.id)
+
+        deleteReportUseCase.execute(
+            onSuccess = {
+                _instanceDeleted.postValue(true)
+            },
+            onError = {
+                _error.postValue(it)
+            },
+            onFinished = {
+                _progress.postValue(false)
+            }
+        )
+    }
+
 }
 
