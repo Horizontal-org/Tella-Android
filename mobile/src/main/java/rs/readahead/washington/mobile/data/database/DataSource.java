@@ -2383,7 +2383,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     @NonNull
     @Override
     public Completable deleteReportInstance(long id) {
-        return null;
+        return Completable.fromCallable((Callable<Void>) () -> {
+            deleteReportFormInstance(id);
+            return null;
+        }).compose(applyCompletableSchedulers());
     }
 
     @Nullable
@@ -2414,5 +2417,13 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     private static class Setting {
         Integer intValue;
         String stringValue;
+    }
+    @SuppressWarnings("MethodOnlyUsedFromInnerClass")
+    private void deleteReportFormInstance(long id) throws NotFountException {
+        int count = database.delete(D.T_REPORT_FORM_INSTANCE, D.C_ID + " = ?", new String[]{Long.toString(id)});
+
+        if (count != 1) {
+            throw new NotFountException();
+        }
     }
 }

@@ -9,6 +9,7 @@ import javax.inject.Inject
 
 class CheckReportsServerUseCase @Inject constructor(private val reportsRepository: ReportsRepository) :
     SingleUseCase<ReportsLoginResult>() {
+
     private lateinit var server: TellaReportServer
 
     fun saveServer(server: TellaReportServer) {
