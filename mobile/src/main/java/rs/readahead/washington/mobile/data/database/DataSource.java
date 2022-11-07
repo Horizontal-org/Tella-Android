@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.VaultFile;
 
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Completable;
@@ -75,7 +77,7 @@ import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
 
 public class DataSource implements IServersRepository, ITellaUploadServersRepository, ITellaUploadsRepository, ITellaReportsRepository, ICollectServersRepository, ICollectFormsRepository,
-        IMediaFileRecordRepository{
+        IMediaFileRecordRepository {
     private static DataSource dataSource;
     private final SQLiteDatabase database;
 
@@ -673,7 +675,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return forms;
     }
 
-    private List<CollectForm> getFavoriteCollectForms(){
+    private List<CollectForm> getFavoriteCollectForms() {
         Cursor cursor = null;
         List<CollectForm> forms = new ArrayList<>();
 
@@ -695,7 +697,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                             D.C_DOWNLOAD_URL,
                             cn(D.T_COLLECT_SERVER, D.C_NAME, D.A_SERVER_NAME),
                             cn(D.T_COLLECT_SERVER, D.C_USERNAME, D.A_SERVER_USERNAME)},
-                    D.C_FAVORITE +" =1 " , null, null,
+                    D.C_FAVORITE + " =1 ", null, null,
                     cn(D.T_COLLECT_BLANK_FORM, D.C_FAVORITE) + " DESC, " + cn(D.T_COLLECT_BLANK_FORM, D.C_ID) + " DESC",
                     null
             );
@@ -735,7 +737,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return forms;
     }
 
-    public List<CollectInstanceVaultFile> getCollectInstanceVaultFilesDB(){
+    public List<CollectInstanceVaultFile> getCollectInstanceVaultFilesDB() {
         List<CollectInstanceVaultFile> files = new ArrayList<>();
         Cursor cursor = null;
 
@@ -761,7 +763,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 String vaultFileId = cursor.getString(cursor.getColumnIndexOrThrow(D.C_UID));
                 int status = cursor.getInt(cursor.getColumnIndexOrThrow(D.A_FORM_MEDIA_FILE_STATUS));
 
-                files.add(new CollectInstanceVaultFile(id, instanceId,vaultFileId,status));
+                files.add(new CollectInstanceVaultFile(id, instanceId, vaultFileId, status));
             }
         } catch (Exception e) {
             Timber.d(e, getClass().getName());
@@ -1147,7 +1149,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 values.put(D.C_STATUS, UploadStatus.SCHEDULED.ordinal());
                 values.put(D.C_INCLUDE_METADATA, metadata ? 1 : 0);
                 values.put(D.C_MANUAL_UPLOAD, manualUpload);
-                values.put(D.C_SERVER_ID, uploadServerId );
+                values.put(D.C_SERVER_ID, uploadServerId);
                 values.put(D.C_SIZE, vaultFile.size);
                 values.put(D.C_SET, set);
                 values.put(D.C_RETRY_COUNT, retries);
@@ -1168,7 +1170,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             long set = calculateCurrentFileUploadSet();
 
-            int metadata = Preferences.isMetadataAutoUpload()? 1 : 0;
+            int metadata = Preferences.isMetadataAutoUpload() ? 1 : 0;
             long uploadServerId = Preferences.getAutoUploadServerId();
 
             for (VaultFile vaultFile : vaultFiles) {
@@ -1178,8 +1180,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 values.put(D.C_CREATED, Util.currentTimestamp());
                 values.put(D.C_STATUS, UploadStatus.SCHEDULED.ordinal());
                 values.put(D.C_INCLUDE_METADATA, metadata);
-                values.put(D.C_MANUAL_UPLOAD, 0 );
-                values.put(D.C_SERVER_ID, uploadServerId );
+                values.put(D.C_MANUAL_UPLOAD, 0);
+                values.put(D.C_SERVER_ID, uploadServerId);
                 values.put(D.C_SIZE, vaultFile.size);
                 values.put(D.C_SET, set);
 
@@ -1325,7 +1327,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 CollectFormInstance instance = cursorToCollectFormInstance(cursor);
 
                 instance.setFormDef(deserializeFormDef(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF))));
-               // instance.setFormDef(getCollectFormDef(instance.getFormID(),instance.getVersion()));
+                // instance.setFormDef(getCollectFormDef(instance.getFormID(),instance.getVersion()));
 
                 HashMap<String, Integer> vaultFileIds = getFormInstanceMediaFilesIdsFromDb(instance.getId());
                 instance.setWidgetMediaFilesIds(vaultFileIds);
@@ -1353,22 +1355,22 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void deleteFileUploadInstancesInStatusDB(UploadStatus status){
+    private void deleteFileUploadInstancesInStatusDB(UploadStatus status) {
         int count = database.delete(D.T_MEDIA_FILE_UPLOAD, D.C_STATUS + " = ?", new String[]{Integer.toString(status.ordinal())});
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void deleteFileUploadInstancesNotInStatusDB(UploadStatus status){
+    private void deleteFileUploadInstancesNotInStatusDB(UploadStatus status) {
         int count = database.delete(D.T_MEDIA_FILE_UPLOAD, D.C_STATUS + " <> ?", new String[]{Integer.toString(status.ordinal())});
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void deleteFileUploadInstancesBySetDB(long set){
+    private void deleteFileUploadInstancesBySetDB(long set) {
         int count = database.delete(D.T_MEDIA_FILE_UPLOAD, D.C_SET + " = ?", new String[]{Long.toString(set)});
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void deleteFileUploadInstanceByIdDB(long id){
+    private void deleteFileUploadInstanceByIdDB(long id) {
         int count = database.delete(D.T_MEDIA_FILE_UPLOAD, D.C_ID + " = ?", new String[]{Long.toString(id)});
     }
 
@@ -1439,7 +1441,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     null, null, D.C_SET + " DESC", null
             );
 
-            cursor = database.rawQuery(query,  new String[]{Long.toString(set)});
+            cursor = database.rawQuery(query, new String[]{Long.toString(set)});
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 FileUploadInstance instance = cursorToFileUploadInstance(cursor);
@@ -1544,7 +1546,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             if (cursor.moveToFirst()) {
                 VaultFile vaultFile = new VaultFile();
-                    vaultFile.thumb = cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_THUMBNAIL));
+                vaultFile.thumb = cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_THUMBNAIL));
                 if (vaultFile.thumb != null) {
                     return vaultFile;
                 }
@@ -1604,7 +1606,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             cursor = database.rawQuery(query, null);
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                 VaultFile vaultFile = cursorToMediaFile(cursor);
+                VaultFile vaultFile = cursorToMediaFile(cursor);
               /*  if (mediaFileFilter(vaultFile, filter)) {
                     mediaFiles.add(vaultFile);
                 }*/
@@ -1621,48 +1623,48 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     private List<OldMediaFile> getAllOldMediaFiles() {
-            Cursor cursor = null;
-            List<OldMediaFile> mediaFiles = new ArrayList<>();
+        Cursor cursor = null;
+        List<OldMediaFile> mediaFiles = new ArrayList<>();
 
-            String order = "DESC";
+        String order = "DESC";
 
-            try {
-                final String query = SQLiteQueryBuilder.buildQueryString(
-                        false,
-                        D.T_MEDIA_FILE,
-                        new String[]{
-                                cn(D.T_MEDIA_FILE, D.C_ID, D.A_MEDIA_FILE_ID),
-                                D.C_PATH,
-                                D.C_UID,
-                                D.C_FILE_NAME,
-                                D.C_METADATA,
-                                D.C_CREATED,
-                                D.C_DURATION,
-                                D.C_ANONYMOUS,
-                                D.C_SIZE,
-                                D.C_HASH,
-                                D.C_THUMBNAIL},
-                        null, null, null,
-                        D.C_CREATED + " " + order,
-                        null
-                );
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_MEDIA_FILE,
+                    new String[]{
+                            cn(D.T_MEDIA_FILE, D.C_ID, D.A_MEDIA_FILE_ID),
+                            D.C_PATH,
+                            D.C_UID,
+                            D.C_FILE_NAME,
+                            D.C_METADATA,
+                            D.C_CREATED,
+                            D.C_DURATION,
+                            D.C_ANONYMOUS,
+                            D.C_SIZE,
+                            D.C_HASH,
+                            D.C_THUMBNAIL},
+                    null, null, null,
+                    D.C_CREATED + " " + order,
+                    null
+            );
 
-                cursor = database.rawQuery(query, null);
+            cursor = database.rawQuery(query, null);
 
-                for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                    OldMediaFile mediaFile = cursorToOldMediaFile(cursor);
-                    mediaFiles.add(mediaFile);
-                }
-            } catch (Exception e) {
-                Timber.d(e, getClass().getName());
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                OldMediaFile mediaFile = cursorToOldMediaFile(cursor);
+                mediaFiles.add(mediaFile);
             }
-
-            return mediaFiles;
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
+
+        return mediaFiles;
+    }
 
     private List<VaultFile> getUploadMediaFilesDB(final UploadStatus status) {
         Cursor cursor = null;
@@ -1801,8 +1803,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 //CollectFormInstanceStatus.FINALIZED,
                 CollectFormInstanceStatus.SUBMITTED//,
                 //CollectFormInstanceStatus.SUBMISSION_ERROR,
-               // CollectFormInstanceStatus.SUBMISSION_PENDING,
-               //CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS
+                // CollectFormInstanceStatus.SUBMISSION_PENDING,
+                //CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS
         });
     }
 
@@ -2263,7 +2265,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             values.put(D.C_DESCRIPTION_TEXT, instance.getDescription());
             values.put(D.C_UPDATED, Util.currentTimestamp());
             //TODO CHECK FILES IMPLEMENTATION AND ADD FILES STATUS
-          //  values.put(D.C_FORM_PART_STATUS, instance.getFormPartStatus().ordinal());
+            //  values.put(D.C_FORM_PART_STATUS, instance.getFormPartStatus().ordinal());
 
             if (instance.getStatus() == EntityStatus.UNKNOWN) {
                 statusOrdinal = EntityStatus.DRAFT.ordinal();
@@ -2282,25 +2284,26 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     values,
                     SQLiteDatabase.CONFLICT_REPLACE);
             instance.setId(id);
-        //TODO FIX FILES
+
             // clear FormMediaFiles
-           /* database.delete(
+            database.delete(
                     D.T_REPORT_INSTANCE_VAULT_FILE,
-                    D.C_COLLECT_FORM_INSTANCE_ID + " = ?",
+                    D.C_REPORT_INSTANCE_ID + " = ?",
                     new String[]{Long.toString(id)});
-*/
+
             // insert FormMediaFiles
-          /*  List<FormMediaFile> mediaFiles = instance.getWidgetMediaFiles();
+            List<FormMediaFile> mediaFiles = instance.getWidgetMediaFiles();
             for (FormMediaFile mediaFile : mediaFiles) {
                 values = new ContentValues();
-                values.put(D.C_COLLECT_FORM_INSTANCE_ID, id);
+                values.put(D.C_REPORT_INSTANCE_ID, id);
                 values.put(D.C_VAULT_FILE_ID, mediaFile.id);
                 values.put(D.C_STATUS, mediaFile.status.ordinal());
-
                 database.insert(D.T_REPORT_INSTANCE_VAULT_FILE, null, values);
-            }*/
+            }
 
             database.setTransactionSuccessful();
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
         } finally {
             database.endTransaction();
         }
@@ -2308,7 +2311,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return instance;
     }
 
-    private List<ReportFormInstance> getReportFormInstances(EntityStatus[] statuses){
+    private List<ReportFormInstance> getReportFormInstances(EntityStatus[] statuses) {
         Cursor cursor = null;
         List<ReportFormInstance> instances = new ArrayList<>();
 
@@ -2333,7 +2336,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                             D.C_METADATA,
                             D.C_DESCRIPTION_TEXT,
                             D.C_TITLE,
-                          //TODO CHECK WHEN FIX FILES  D.C_FORM_PART_STATUS,
+                            //D.C_FORM_PART_STATUS,
                             cn(D.T_TELLA_UPLOAD_SERVER, D.C_NAME, D.A_SERVER_NAME),
                             cn(D.T_TELLA_UPLOAD_SERVER, D.C_USERNAME, D.A_SERVER_USERNAME)},
                     D.C_STATUS + " IN " + selection,
@@ -2367,7 +2370,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         instance.setUpdated(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_UPDATED)));
         instance.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TITLE)));
         instance.setDescription(cursor.getString(cursor.getColumnIndexOrThrow(D.C_DESCRIPTION_TEXT)));
-        //TODO DJORDJE FIX FILES
         //int formPartStatusOrdinal = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_FORM_PART_STATUS));
         //instance.setFormPartStatus(FormMediaFileStatus.values()[formPartStatusOrdinal]);
         return instance;
@@ -2408,11 +2410,87 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     @Nullable
     @Override
     public Single<ReportInstanceBundle> getReportBundle(long id) {
-        return null;
+        return Single.fromCallable(() -> getReportInstanceBundle(id))
+                .compose(applySchedulers());
+    }
+
+    private ReportInstanceBundle getReportInstanceBundle(long id) {
+        Cursor cursor = null;
+        Gson gson = new Gson();
+        ReportInstanceBundle bundle = new ReportInstanceBundle();
+
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_REPORT_FORM_INSTANCE,
+                    new String[]{
+                            cn(D.T_REPORT_FORM_INSTANCE, D.C_ID, D.A_UWAZI_ENTITY_INSTANCE_ID),
+                            D.C_REPORT_SERVER_ID,
+                            D.C_STATUS,
+                            D.C_UPDATED,
+                            D.C_METADATA,
+                            D.C_DESCRIPTION_TEXT,
+                            D.C_TITLE},
+                    cn(D.T_REPORT_FORM_INSTANCE, D.C_ID) + "= ?",
+                    null, null, null, null
+            );
+
+            cursor = database.rawQuery(query, new String[]{Long.toString(id)});
+
+            if (cursor.moveToFirst()) {
+                ReportFormInstance instance = cursorToReportFormInstance(cursor);
+                Map<String, ArrayList<Object>> metadata = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_METADATA)), new TypeToken<Map<String, ArrayList<Object>>>() {
+                }.getType());
+                instance.setMetadata(metadata);
+                bundle.setInstance(instance);
+
+                List<String> vaultFileIds = getReportInstanceFileIds(instance.getId());
+                String[] iDs = new String[vaultFileIds.size()];
+                vaultFileIds.toArray(iDs);
+                bundle.setFileIds(iDs);
+
+                return bundle;
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return new ReportInstanceBundle();
     }
 
     private static class Setting {
         Integer intValue;
         String stringValue;
+    }
+
+    private List<String> getReportInstanceFileIds(long instanceId) {
+        List<String> ids = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_REPORT_INSTANCE_VAULT_FILE,
+                    new String[]{
+                            D.C_VAULT_FILE_ID},
+                    D.C_REPORT_INSTANCE_ID + "= ?",
+                    null, null, D.C_VAULT_FILE_ID + " DESC", null
+            );
+            cursor = database.rawQuery(query, new String[]{Long.toString(instanceId)});
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                String vaultFileId = cursor.getString(cursor.getColumnIndexOrThrow(D.C_VAULT_FILE_ID));
+                ids.add(vaultFileId);
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return ids;
     }
 }
