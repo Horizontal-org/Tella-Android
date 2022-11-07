@@ -17,6 +17,8 @@ import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.usecases.reports.GetReportsServersUseCase
 import rs.readahead.washington.mobile.domain.usecases.reports.GetReportsUseCase
 import rs.readahead.washington.mobile.domain.usecases.reports.SaveReportFormInstanceUseCase
+import rs.readahead.washington.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
+import rs.readahead.washington.mobile.views.fragment.reports.mappers.toViewEntityInstanceItem
 import javax.inject.Inject
 
 
@@ -34,16 +36,19 @@ class ReportsEntryViewModel @Inject constructor(
     val serversList: LiveData<List<TellaReportServer>> get() = _serversList
     private var _error = MutableLiveData<Throwable>()
     val error: LiveData<Throwable> get() = _error
+    private val _draftListReportFormInstance = MutableLiveData<List<ViewEntityTemplateItem>>()
+    val draftListReportFormInstance: LiveData<List<ViewEntityTemplateItem>> get() = _draftListReportFormInstance
     private val _draftReportFormInstance = MutableLiveData<ReportFormInstance>()
     val draftReportFormInstance: LiveData<ReportFormInstance> get() = _draftReportFormInstance
     private val _outboxReportFormInstance = MutableLiveData<ReportFormInstance>()
     val outboxReportFormInstance: LiveData<ReportFormInstance> get() = _outboxReportFormInstance
+    private val _onMoreClickedFormInstance = MutableLiveData<ReportFormInstance>()
+    val onMoreClickedFormInstance: LiveData<ReportFormInstance> get() = _onMoreClickedFormInstance
+    private val _onOpenClickedFormInstance = MutableLiveData<ReportFormInstance>()
+    val onOpenClickedFormInstance: LiveData<ReportFormInstance> get() = _onOpenClickedFormInstance
 
-    init {
-        listServers()
-    }
 
-    private fun listServers() {
+    fun listServers() {
         _progress.postValue(true)
         getReportsServersUseCase.execute(
             onSuccess = { result ->
@@ -90,7 +95,30 @@ class ReportsEntryViewModel @Inject constructor(
         )
     }
 
-    private fun listDrafts() {
+    fun listDrafts() {
+        _progress.postValue(true)
+        getReportsUseCase.setEntityStatus(EntityStatus.DRAFT)
+        getReportsUseCase.execute(
+            onSuccess = { result ->
+                val resultList = mutableListOf<ViewEntityTemplateItem>()
+
+                result.map { instance ->
+                    resultList.add(
+                        instance.toViewEntityInstanceItem(
+                            onOpenClicked = { openInstance(instance) },
+                            onMoreClicked = { onMoreClicked(instance) })
+                    )
+
+                }
+                _draftListReportFormInstance.postValue(resultList)
+            },
+            onError = {
+                _error.postValue(it)
+            },
+            onFinished = {
+                _progress.postValue(false)
+            }
+        )
 
     }
 
@@ -100,6 +128,14 @@ class ReportsEntryViewModel @Inject constructor(
 
     private fun listSubmitted() {
 
+    }
+
+    private fun openInstance(reportFormInstance: ReportFormInstance) {
+        _onOpenClickedFormInstance.postValue(reportFormInstance)
+    }
+
+    private fun onMoreClicked(reportFormInstance: ReportFormInstance) {
+        _onMoreClickedFormInstance.postValue(reportFormInstance)
     }
 
     fun getDraftFormInstance(

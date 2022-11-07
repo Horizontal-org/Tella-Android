@@ -26,6 +26,8 @@ class D {
     static final String T_TELLA_UPLOAD_SERVER = "t_tella_upload_server";
     static final String T_MEDIA_FILE_UPLOAD = "t_media_file_upload";
     static final String T_COLLECT_FORM_INSTANCE_VAULT_FILE = "t_collect_xform_instance_vault_file";
+    static  final String A_TELLA_UPLOAD_INSTANCE_ID = "a_tella_upload_instance_id";
+
     /* UWAZI DATABASE TABLE*/
     static final String T_UWAZI_SERVER = "t_uwazi_server";
     static  final String T_UWAZI_BLANK_TEMPLATES = "t_uwazi_collect_blank_templates";
