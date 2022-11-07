@@ -115,8 +115,9 @@ class ReportsEntryFragment :
     private fun saveReportAsDraft() {
         viewModel.saveDraft(
             viewModel.getDraftFormInstance(
-                binding?.reportTitleEt?.text.toString(),
-                binding?.reportDescriptionEt?.text.toString(),
+                id = reportFormInstance?.id,
+                title = binding?.reportTitleEt?.text.toString(),
+                description = binding?.reportDescriptionEt?.text.toString(),
                 files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
                 server = selectedServer
             )
@@ -126,8 +127,9 @@ class ReportsEntryFragment :
     private fun saveReportAsOutbox() {
         viewModel.saveOutbox(
             viewModel.getOutboxFormInstance(
-                binding?.reportTitleEt?.text.toString(),
-                binding?.reportDescriptionEt?.text.toString(),
+                id = reportFormInstance?.id,
+                title = binding?.reportTitleEt?.text.toString(),
+                description = binding?.reportDescriptionEt?.text.toString(),
                 files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
                 server = selectedServer
             )

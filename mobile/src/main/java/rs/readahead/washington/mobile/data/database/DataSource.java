@@ -2382,6 +2382,15 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         });
     }
 
+    private List<ReportFormInstance> getOutboxReportInstances() {
+        return getReportFormInstances(new EntityStatus[]{
+                EntityStatus.FINALIZED,
+                EntityStatus.SUBMISSION_ERROR,
+                EntityStatus.SUBMISSION_PENDING,
+                EntityStatus.SUBMISSION_PARTIAL_PARTS
+        });
+    }
+
     @NonNull
     @Override
     public Completable deleteReportInstance(long id) {
@@ -2391,7 +2400,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }).compose(applyCompletableSchedulers());
     }
 
-    @Nullable
+    @NonNull
     @Override
     public Single<List<ReportFormInstance>> listDraftReportInstances() {
         return Single.fromCallable(this::getDraftReportInstances)
@@ -2401,8 +2410,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     @Nullable
     @Override
     public Single<List<ReportFormInstance>> listOutboxReportInstances() {
-        return null;
-    }
+        return Single.fromCallable(this::getOutboxReportInstances)
+                .compose(applySchedulers());    }
 
     @Nullable
     @Override

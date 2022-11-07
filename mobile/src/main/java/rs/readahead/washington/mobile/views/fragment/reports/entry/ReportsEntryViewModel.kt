@@ -44,6 +44,8 @@ class ReportsEntryViewModel @Inject constructor(
     val draftReportFormInstance: LiveData<ReportFormInstance> get() = _draftReportFormInstance
     private val _outboxReportFormInstance = MutableLiveData<ReportFormInstance>()
     val outboxReportFormInstance: LiveData<ReportFormInstance> get() = _outboxReportFormInstance
+    private val _outboxReportListFormInstance = MutableLiveData<List<ViewEntityTemplateItem>>()
+    val outboxReportListFormInstance: LiveData<List<ViewEntityTemplateItem>> get() = _outboxReportListFormInstance
     private val _onMoreClickedFormInstance = MutableLiveData<ReportFormInstance>()
     val onMoreClickedFormInstance: LiveData<ReportFormInstance> get() = _onMoreClickedFormInstance
     private val _onOpenClickedFormInstance = MutableLiveData<ReportFormInstance>()
@@ -122,11 +124,31 @@ class ReportsEntryViewModel @Inject constructor(
                 _progress.postValue(false)
             }
         )
-
     }
 
-    private fun listOutbox() {
+    fun listOutbox() {
+        _progress.postValue(true)
+        getReportsUseCase.setEntityStatus(EntityStatus.FINALIZED)
+        getReportsUseCase.execute(
+            onSuccess = { result ->
+                val resultList = mutableListOf<ViewEntityTemplateItem>()
+                result.map { instance ->
+                    resultList.add(
+                        instance.toViewEntityInstanceItem(
+                            onOpenClicked = { openInstance(instance) },
+                            onMoreClicked = { onMoreClicked(instance) })
+                    )
 
+                }
+                _outboxReportListFormInstance.postValue(resultList)
+            },
+            onError = {
+                _error.postValue(it)
+            },
+            onFinished = {
+                _progress.postValue(false)
+            }
+        )
     }
 
     private fun listSubmitted() {
@@ -145,9 +167,11 @@ class ReportsEntryViewModel @Inject constructor(
         title: String,
         description: String,
         files: List<FormMediaFile>?,
-        server: TellaReportServer
+        server: TellaReportServer,
+        id: Long? = null
     ): ReportFormInstance {
         return ReportFormInstance(
+            id = id ?: 0L,
             title = title,
             description = description,
             status = EntityStatus.DRAFT,
@@ -161,9 +185,11 @@ class ReportsEntryViewModel @Inject constructor(
         title: String,
         description: String,
         files: List<FormMediaFile>?,
-        server: TellaReportServer
+        server: TellaReportServer,
+        id: Long? = null
     ): ReportFormInstance {
         return ReportFormInstance(
+            id = id ?: 0L,
             title = title,
             description = description,
             status = EntityStatus.FINALIZED,
@@ -181,7 +207,7 @@ class ReportsEntryViewModel @Inject constructor(
         return vaultFiles
     }
 
-    fun putVaultFilesInForm(vaultFileList: String) : ArrayList<VaultFile>{
+    fun putVaultFilesInForm(vaultFileList: String): ArrayList<VaultFile> {
         val vaultFormfiles: ArrayList<VaultFile> = arrayListOf()
         val files = Gson().fromJson<ArrayList<String>>(
             vaultFileList as String?,
