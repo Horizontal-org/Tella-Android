@@ -70,6 +70,7 @@ class ReportsEntryFragment :
 
         arguments?.let { bundle ->
             reportFormInstance = bundle.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportFormInstance
+            putFiles(viewModel.mediaFilesToVaultFiles(reportFormInstance!!.widgetMediaFiles))
         }
 
         reportFormInstance?.let { instance ->

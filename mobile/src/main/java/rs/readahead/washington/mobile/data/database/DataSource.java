@@ -2427,7 +2427,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     false,
                     D.T_REPORT_FORM_INSTANCE,
                     new String[]{
-                            cn(D.T_REPORT_FORM_INSTANCE, D.C_ID, D.A_UWAZI_ENTITY_INSTANCE_ID),
+                            cn(D.T_REPORT_FORM_INSTANCE, D.C_ID, D.A_TELLA_UPLOAD_INSTANCE_ID),
                             D.C_REPORT_SERVER_ID,
                             D.C_STATUS,
                             D.C_UPDATED,
@@ -2442,9 +2442,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             if (cursor.moveToFirst()) {
                 ReportFormInstance instance = cursorToReportFormInstance(cursor);
-                Map<String, ArrayList<Object>> metadata = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_METADATA)), new TypeToken<Map<String, ArrayList<Object>>>() {
-                }.getType());
-                instance.setMetadata(metadata);
                 bundle.setInstance(instance);
 
                 List<String> vaultFileIds = getReportInstanceFileIds(instance.getId());

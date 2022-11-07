@@ -13,5 +13,4 @@ class GetReportsServersUseCase @Inject constructor(private val serverRepository 
     override fun buildUseCaseSingle(): Single<List<TellaReportServer>> {
        return serverRepository.listTellaUploadServers()
     }
-
 }

@@ -2,7 +2,6 @@ package rs.readahead.washington.mobile.views.fragment.forms
 
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
