@@ -3,8 +3,6 @@ package rs.readahead.washington.mobile.views.fragment.reports.entry
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.schedulers.Schedulers
@@ -14,10 +12,8 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
-import rs.readahead.washington.mobile.domain.usecases.reports.DeleteReportUseCase
-import rs.readahead.washington.mobile.domain.usecases.reports.GetReportsServersUseCase
-import rs.readahead.washington.mobile.domain.usecases.reports.GetReportsUseCase
-import rs.readahead.washington.mobile.domain.usecases.reports.SaveReportFormInstanceUseCase
+import rs.readahead.washington.mobile.domain.usecases.reports.*
+import rs.readahead.washington.mobile.util.fromJsonToObjectList
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 import rs.readahead.washington.mobile.views.fragment.reports.mappers.toViewEntityInstanceItem
 import javax.inject.Inject
@@ -28,7 +24,8 @@ class ReportsEntryViewModel @Inject constructor(
     private val getReportsServersUseCase: GetReportsServersUseCase,
     private val saveReportFormInstanceUseCase: SaveReportFormInstanceUseCase,
     private val getReportsUseCase: GetReportsUseCase,
-    private val deleteReportUseCase: DeleteReportUseCase
+    private val deleteReportUseCase: DeleteReportUseCase,
+    private val getReportBundleUseCase: GetReportBundleUseCase
 ) :
     ViewModel() {
 
@@ -52,6 +49,8 @@ class ReportsEntryViewModel @Inject constructor(
     val onOpenClickedFormInstance: LiveData<ReportFormInstance> get() = _onOpenClickedFormInstance
     private val _instanceDeleted = MutableLiveData<Boolean>()
     val instanceDeleted: LiveData<Boolean> get() = _instanceDeleted
+    private val _draftReportInstance = MutableLiveData<ReportFormInstance>()
+    val draftReportInstance: LiveData<ReportFormInstance> get() = _draftReportInstance
 
     fun listServers() {
         _progress.postValue(true)
@@ -138,7 +137,6 @@ class ReportsEntryViewModel @Inject constructor(
                             onOpenClicked = { openInstance(instance) },
                             onMoreClicked = { onMoreClicked(instance) })
                     )
-
                 }
                 _outboxReportListFormInstance.postValue(resultList)
             },
@@ -156,7 +154,7 @@ class ReportsEntryViewModel @Inject constructor(
     }
 
     private fun openInstance(reportFormInstance: ReportFormInstance) {
-        _onOpenClickedFormInstance.postValue(reportFormInstance)
+        getDraftBundle(reportFormInstance)
     }
 
     private fun onMoreClicked(reportFormInstance: ReportFormInstance) {
@@ -207,22 +205,26 @@ class ReportsEntryViewModel @Inject constructor(
         return vaultFiles
     }
 
-    fun putVaultFilesInForm(vaultFileList: String): ArrayList<VaultFile> {
-        val vaultFormfiles: ArrayList<VaultFile> = arrayListOf()
-        val files = Gson().fromJson<ArrayList<String>>(
-            vaultFileList as String?,
-            object : TypeToken<List<String?>?>() {}.type
-        )
-        for (i in 0 until files.size) {
-            if (files.isNotEmpty() && files[i].isNotEmpty()) {
-                val vaultFile = MyApplication.rxVault[files[i]]
-                    .subscribeOn(Schedulers.io())
-                    .blockingGet()
-                val file = FormMediaFile.fromMediaFile(vaultFile)
-                vaultFormfiles.add(file)
-            }
+    fun mediaFilesToVaultFiles(files: List<FormMediaFile>): List<VaultFile> {
+        val vaultFiles = ArrayList<VaultFile>()
+        files.map { mediaFile ->
+            vaultFiles.add(mediaFile.vaultFile)
         }
-        return vaultFormfiles
+        return vaultFiles
+    }
+
+    fun putVaultFilesInForm(vaultFileList: String): List<VaultFile> {
+        val vaultFormFiles = mutableListOf<VaultFile>()
+        val files = vaultFileList.fromJsonToObjectList(String::class.java)
+        files?.map { file ->
+            //TODO WE NEED TO INJECT RX VAULT WITH DAGGER
+            val vaultFile = MyApplication.rxVault[file]
+                .subscribeOn(Schedulers.io())
+                .blockingGet()
+            val mappedFile = FormMediaFile.fromMediaFile(vaultFile)
+            vaultFormFiles.add(mappedFile)
+        }
+        return vaultFormFiles
     }
 
     fun deleteReport(instance: ReportFormInstance) {
@@ -232,6 +234,26 @@ class ReportsEntryViewModel @Inject constructor(
         deleteReportUseCase.execute(
             onSuccess = {
                 _instanceDeleted.postValue(true)
+            },
+            onError = {
+                _error.postValue(it)
+            },
+            onFinished = {
+                _progress.postValue(false)
+            }
+        )
+    }
+
+    fun getDraftBundle(instance: ReportFormInstance) {
+        _progress.postValue(true)
+        getReportBundleUseCase.setId(instance.id)
+
+        getReportBundleUseCase.execute(
+            onSuccess = { result ->
+                val resultInstance = result.instance
+                //TODO WE NEED TO INJECT RXX VAULT USING DAGGER
+                resultInstance.widgetMediaFiles  = vaultFilesToMediaFiles( MyApplication.rxVault.get(result.fileIds).blockingGet())
+                _draftReportInstance.postValue(resultInstance)
             },
             onError = {
                 _error.postValue(it)

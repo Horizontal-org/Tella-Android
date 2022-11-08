@@ -75,6 +75,7 @@ class ReportsEntryFragment :
         reportFormInstance?.let { instance ->
             binding?.reportTitleEt?.setText(instance.title)
             binding?.reportDescriptionEt?.setText(instance.description)
+            putFiles(viewModel.mediaFilesToVaultFiles(instance.widgetMediaFiles))
         }
 
     }
@@ -139,22 +140,22 @@ class ReportsEntryFragment :
     private fun initData() {
         with(viewModel) {
             listServers()
-            serversList.observe(viewLifecycleOwner, { serversList ->
+            serversList.observe(viewLifecycleOwner) { serversList ->
                 if (serversList.size > 1) {
                     binding?.dropdownGroup?.show()
                 } else {
                     binding?.dropdownGroup?.hide()
                     selectedServer = serversList[0]
                 }
-            })
+            }
 
-            draftReportFormInstance.observe(viewLifecycleOwner, {
+            draftReportFormInstance.observe(viewLifecycleOwner) {
                 nav().popBackStack()
-            })
+            }
 
-            outboxReportFormInstance.observe(viewLifecycleOwner, {
+            outboxReportFormInstance.observe(viewLifecycleOwner) {
                 nav().popBackStack()
-            })
+            }
         }
 
     }
@@ -250,14 +251,16 @@ class ReportsEntryFragment :
         }
     }
 
-    private fun putFiles(vaultFileList: ArrayList<VaultFile>) {
+    private fun putFiles(vaultFileList: List<VaultFile>) {
         for (file in vaultFileList) {
             filesRecyclerViewAdapter.insertAttachment(file)
         }
         binding?.filesRecyclerView?.visibility = View.VISIBLE
     }
 
-    override fun playMedia(mediaFile: VaultFile?) {}
+    override fun playMedia(mediaFile: VaultFile?) {
+
+    }
 
     override fun onRemovedAttachments() {
         binding?.filesRecyclerView?.visibility = View.GONE

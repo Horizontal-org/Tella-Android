@@ -28,7 +28,6 @@ import rs.readahead.washington.mobile.bus.event.GPSProviderRequiredEvent;
 import rs.readahead.washington.mobile.bus.event.LocationPermissionRequiredEvent;
 import rs.readahead.washington.mobile.mvp.contract.ILocationGettingPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.LocationGettingPresenter;
-import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziGeoData;
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.util.C;

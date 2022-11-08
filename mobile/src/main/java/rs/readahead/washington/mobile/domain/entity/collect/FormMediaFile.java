@@ -33,6 +33,23 @@ public class FormMediaFile extends VaultFile {
         return formMediaFile;
     }
 
+    public VaultFile getVaultFile() {
+        VaultFile vaultFile = new VaultFile();
+        vaultFile.id = this.id;
+        vaultFile.created = this.created;
+        vaultFile.duration = this.duration;
+        vaultFile.metadata = this.metadata;
+        vaultFile.size = this.size;
+        vaultFile.anonymous = this.anonymous;
+        vaultFile.mimeType = this.mimeType;
+        vaultFile.thumb = this.thumb;
+        vaultFile.type = this.type;
+        vaultFile.name = this.name;
+        vaultFile.hash = this.hash;
+        vaultFile.path = this.path;
+        return vaultFile;
+    }
+
     public String getPartName() {
         return id;
     }
