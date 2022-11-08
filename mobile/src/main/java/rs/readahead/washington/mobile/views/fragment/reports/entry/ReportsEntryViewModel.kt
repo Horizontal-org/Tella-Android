@@ -252,7 +252,8 @@ class ReportsEntryViewModel @Inject constructor(
             onSuccess = { result ->
                 val resultInstance = result.instance
                 //TODO WE NEED TO INJECT RXX VAULT USING DAGGER
-                resultInstance.widgetMediaFiles  = vaultFilesToMediaFiles( MyApplication.rxVault.get(result.fileIds).blockingGet())
+                resultInstance.widgetMediaFiles =
+                    vaultFilesToMediaFiles(MyApplication.rxVault.get(result.fileIds).blockingGet())
                 _draftReportInstance.postValue(resultInstance)
             },
             onError = {
@@ -263,6 +264,5 @@ class ReportsEntryViewModel @Inject constructor(
             }
         )
     }
-
 }
 

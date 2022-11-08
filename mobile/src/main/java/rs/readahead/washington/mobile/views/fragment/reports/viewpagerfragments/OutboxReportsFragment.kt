@@ -36,7 +36,6 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
             adapter = entityAdapter
             layoutManager = LinearLayoutManager(baseActivity)
         }
-
     }
 
     private fun initData() {
@@ -55,8 +54,12 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
                 showOutboxMenu(instance)
             })
 
-            onOpenClickedFormInstance.observe(viewLifecycleOwner, { instance ->
+            draftReportInstance.observe(viewLifecycleOwner, { instance ->
                 openEntityInstance(instance)
+            })
+
+            onOpenClickedFormInstance.observe(viewLifecycleOwner, { instance ->
+                loadEntityInstance(instance)
             })
 
             instanceDeleted.observe(viewLifecycleOwner, {
@@ -74,7 +77,7 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
             object : BottomSheetUtils.ActionSeleceted {
                 override fun accept(action: BottomSheetUtils.Action) {
                     if (action === BottomSheetUtils.Action.EDIT) {
-                        openEntityInstance(instance)
+                        loadEntityInstance(instance)
                     }
                     if (action === BottomSheetUtils.Action.DELETE) {
                         viewModel.deleteReport(instance)
@@ -86,6 +89,10 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
             requireContext().getString(R.string.action_remove),
             requireContext().getString(R.string.action_cancel)
         )
+    }
+
+    private fun loadEntityInstance(reportFormInstance: ReportFormInstance) {
+        viewModel.getDraftBundle(reportFormInstance)
     }
 
     private fun openEntityInstance(reportFormInstance: ReportFormInstance) {
