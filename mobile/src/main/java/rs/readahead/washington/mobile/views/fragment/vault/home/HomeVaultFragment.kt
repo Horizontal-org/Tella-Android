@@ -20,11 +20,17 @@ import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Limits
 import com.hzontal.tella_vault.filter.Sort
 import com.hzontal.utils.MediaFile
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.hzontal.shared_ui.appbar.ToolbarComponent
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.bus.EventCompositeDisposable
+import rs.readahead.washington.mobile.bus.EventObserver
+import rs.readahead.washington.mobile.bus.event.GoToReportsScreenEvent
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.domain.entity.ServerType
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
@@ -43,12 +49,12 @@ import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsight
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.custom.CountdownTextView
+import rs.readahead.washington.mobile.views.fragment.reports.ReportsFragment
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.ImproveClickOptions
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.connections.ServerDataItem
 import timber.log.Timber
-import java.util.*
 
 const val VAULT_FILTER = "vf"
 
@@ -71,6 +77,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private var tuServers: ArrayList<TellaReportServer>? = null
     private var uwaziServers: ArrayList<UWaziUploadServer>? = null
     private var collectServers: ArrayList<CollectServer>? = null
+    private var disposables: EventCompositeDisposable? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,6 +95,20 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         countDownTextView = view.findViewById(R.id.countdown_timer)
         seekBar = view.findViewById(R.id.panic_seek)
         seekBarContainer = view.findViewById(R.id.panicSeekContainer)
+        disposables = MyApplication.bus().createCompositeDisposable()
+
+        disposables?.wire(
+            GoToReportsScreenEvent::class.java,
+            object : EventObserver<GoToReportsScreenEvent?>() {
+                override fun onNext(event: GoToReportsScreenEvent) {
+                    GlobalScope.launch(Dispatchers.Main) {
+                        activity.addFragment(
+                            ReportsFragment(),
+                            R.id.main_container
+                        )
+                    }
+                }
+            })
         setUpToolbar()
         initData()
         initListeners()
@@ -433,6 +455,11 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         stopPanicking()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables?.dispose()
+    }
+
 
     override fun onCountTUServersEnded(servers: List<TellaReportServer>?) {
         tuServers?.clear()
@@ -478,7 +505,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     override fun onGetFilesSuccess(files: List<VaultFile?>) {
-        if (!files.isNullOrEmpty()) {
+        if (files.isNotEmpty()) {
             vaultAdapter.addRecentFiles(files)
         } else {
             vaultAdapter.removeRecentFiles()
@@ -511,7 +538,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     override fun onGetFavoriteCollectFormsSuccess(files: List<CollectForm>) {
-        if (!files.isNullOrEmpty()) {
+        if (files.isNotEmpty()) {
             vaultAdapter.addFavoriteForms(files)
         } else {
             vaultAdapter.removeFavoriteForms()

@@ -25,7 +25,7 @@ class EnterUploadServerFragment :
     }
 
     companion object {
-        val TAG = EnterUploadServerFragment::class.java.simpleName
+        val TAG: String = EnterUploadServerFragment::class.java.simpleName
 
         @JvmStatic
         fun newInstance(server: TellaReportServer): EnterUploadServerFragment {

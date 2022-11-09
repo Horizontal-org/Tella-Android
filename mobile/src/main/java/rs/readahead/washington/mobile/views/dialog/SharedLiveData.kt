@@ -9,5 +9,6 @@ object SharedLiveData {
     val updateServer = SingleLiveEvent<UWaziUploadServer>()
 
     val createReportsServer = SingleLiveEvent<TellaReportServer>()
+    val createReportsServerAndCloseActivity = SingleLiveEvent<TellaReportServer>()
     val updateReportsServer = SingleLiveEvent<TellaReportServer>()
 }
