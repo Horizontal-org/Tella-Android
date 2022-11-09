@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -35,6 +36,7 @@ import rs.readahead.washington.mobile.views.interfaces.IReportAttachmentsHandler
 
 const val BUNDLE_REPORT_FORM_INSTANCE = "bundle_report_form_instance"
 const val BUNDLE_REPORT_VAULT_FILE = "bundle_report_vault_file"
+const val BUNDLE_REPORT_AUDIO = "bundle_report_audio"
 
 @AndroidEntryPoint
 class ReportsEntryFragment :
@@ -51,6 +53,13 @@ class ReportsEntryFragment :
     private lateinit var selectedServer: TellaReportServer
     private var reportFormInstance: ReportFormInstance? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setFragmentResultListener(BUNDLE_REPORT_AUDIO) { requestKey, bundle ->
+            val audioFile = bundle.get(BUNDLE_REPORT_VAULT_FILE) as VaultFile
+            putFiles(listOf(audioFile))
+        }
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
         initData()
@@ -75,10 +84,6 @@ class ReportsEntryFragment :
             if (bundle.get(BUNDLE_REPORT_FORM_INSTANCE) != null) {
                 reportFormInstance = bundle.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportFormInstance
             }
-            if (bundle.get(BUNDLE_REPORT_VAULT_FILE) != null) {
-                val audioFile = bundle.get(BUNDLE_REPORT_VAULT_FILE) as VaultFile
-                putFiles(listOf(audioFile))
-            }
         }
 
         reportFormInstance?.let { instance ->
@@ -86,7 +91,6 @@ class ReportsEntryFragment :
             binding?.reportDescriptionEt?.setText(instance.description)
             putFiles(viewModel.mediaFilesToVaultFiles(instance.widgetMediaFiles))
         }
-
     }
 
     private fun highLightSubmitButton() {
