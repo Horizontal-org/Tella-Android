@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_locking_ui.common.extensions.onChange
@@ -25,6 +26,7 @@ import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.activity.CameraActivity
 import rs.readahead.washington.mobile.views.adapters.reports.ReportsFilesRecyclerViewAdapter
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.fragment.REPORT_ENTRY
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILES_FILTER
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
@@ -32,6 +34,7 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_PIC
 import rs.readahead.washington.mobile.views.interfaces.IReportAttachmentsHandler
 
 const val BUNDLE_REPORT_FORM_INSTANCE = "bundle_report_form_instance"
+const val BUNDLE_REPORT_VAULT_FILE = "bundle_report_vault_file"
 
 @AndroidEntryPoint
 class ReportsEntryFragment :
@@ -69,7 +72,13 @@ class ReportsEntryFragment :
         highLightSubmitButton()
 
         arguments?.let { bundle ->
-            reportFormInstance = bundle.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportFormInstance
+            if (bundle.get(BUNDLE_REPORT_FORM_INSTANCE) != null) {
+                reportFormInstance = bundle.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportFormInstance
+            }
+            if (bundle.get(BUNDLE_REPORT_VAULT_FILE) != null) {
+                val audioFile = bundle.get(BUNDLE_REPORT_VAULT_FILE) as VaultFile
+                putFiles(listOf(audioFile))
+            }
         }
 
         reportFormInstance?.let { instance ->
@@ -164,7 +173,7 @@ class ReportsEntryFragment :
         showVaultSelectFilesSheet(
             baseActivity.supportFragmentManager,
             baseActivity.getString(R.string.Uwazi_WidgetMedia_Take_Photo),
-            null,//baseActivity.getString(R.string.Vault_RecordAudio_SheetAction),
+            baseActivity.getString(R.string.Vault_RecordAudio_SheetAction),
             baseActivity.getString(R.string.Uwazi_WidgetMedia_Select_From_Device),
             baseActivity.getString(R.string.Uwazi_WidgetMedia_Select_From_Tella),
             null,
@@ -235,11 +244,12 @@ class ReportsEntryFragment :
     }
 
     private fun showAudioRecorderActivity() {
-        /*try {
-            bundle.putString(COLLECT_ENTRY, true.toString())
-            nav().navigate(R.id.action_newReport_to_micScreen, bundle)
-
-        } catch (e: java.lang.Exception) {
+       // try {
+            val bundle = Bundle()
+            bundle.putString(REPORT_ENTRY, true.toString())
+            NavHostFragment.findNavController(this)
+                .navigate(R.id.action_newReport_to_micScreen, bundle)
+       /*} catch (e: java.lang.Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
         }*/
     }
