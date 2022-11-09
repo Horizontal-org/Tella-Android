@@ -16,29 +16,33 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showBinaryTypeSheet
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
-import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment.CollectServerDialogHandler
-import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragment
-import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragment.TellaUploadServerDialogHandler
+import rs.readahead.washington.mobile.views.dialog.SharedLiveData.createReportsServer
 import rs.readahead.washington.mobile.views.dialog.SharedLiveData.createServer
+import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragment.TellaUploadServerDialogHandler
+import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowActivity
 import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity
 
 class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     IOnBoardPresenterContract.IView, CollectServerDialogHandler,
     TellaUploadServerDialogHandler {
 
-    private val isFromSettings by lazy { intent.getBooleanExtra(IS_FROM_SETTINGS, false)  }
-    private val isOnboardLockSet by lazy { intent.getBooleanExtra(IS_ONBOARD_LOCK_SET, false)  }
+    private val isFromSettings by lazy { intent.getBooleanExtra(IS_FROM_SETTINGS, false) }
+    private val isOnboardLockSet by lazy { intent.getBooleanExtra(IS_ONBOARD_LOCK_SET, false) }
     private val presenter by lazy { OnBoardPresenter(this) }
     private lateinit var indicatorsContainer: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        overridePendingTransition(com.hzontal.tella_locking_ui.R.anim.`in`, com.hzontal.tella_locking_ui.R.anim.out)
+        overridePendingTransition(
+            com.hzontal.tella_locking_ui.R.anim.`in`,
+            com.hzontal.tella_locking_ui.R.anim.out
+        )
 
         setContentView(R.layout.activity_onboarding)
 
@@ -55,9 +59,10 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
             )
         }
         initUwaziEvents()
+        initReportsEvents()
     }
 
-    private fun setupIndicators(indicatorCount : Int) {
+    private fun setupIndicators(indicatorCount: Int) {
         indicatorsContainer.removeAllViews()
         val indicators = arrayOfNulls<ImageView>(indicatorCount)
         val layoutParams: LinearLayout.LayoutParams =
@@ -82,13 +87,23 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     }
 
     private fun initUwaziEvents() {
-        createServer.observe(this,
-            { server: UWaziUploadServer? ->
-                if (server != null) {
-                    presenter.create(server)
-                    addFragment(OnBoardHideOptionFragment(),R.id.rootOnboard)
-                }
-            })
+        createServer.observe(
+            this
+        ) { server: UWaziUploadServer? ->
+            if (server != null) {
+                presenter.create(server)
+                addFragment(OnBoardHideOptionFragment(), R.id.rootOnboard)
+            }
+        }
+    }
+
+    private fun initReportsEvents(){
+        createReportsServer.observe(this){ server ->
+            if (server != null) {
+                presenter.create(server)
+                addFragment(OnBoardHideOptionFragment(), R.id.rootOnboard)
+            }
+        }
     }
 
     override fun setCurrentIndicator(index: Int) {
@@ -137,20 +152,20 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
                 }
             }
         )
-       /* showDualChoiceTypeSheet(this.supportFragmentManager,
-            getString(R.string.settings_servers_add_server_dialog_title),
-            getString(R.string.settings_serv_add_server_selection_dialog_title),
-            getString(R.string.settings_servers_add_server_forms),
-            getString(R.string.settings_servers_add_server_reports),
-            object : DualChoiceConsumer {
-                override fun accept(option: Boolean) {
-                    if (option) {
-                        showCollectServerDialog()
-                    } else {
-                        showTellaUploadServerDialog()
-                    }
-                }
-            })*/
+        /* showDualChoiceTypeSheet(this.supportFragmentManager,
+             getString(R.string.settings_servers_add_server_dialog_title),
+             getString(R.string.settings_serv_add_server_selection_dialog_title),
+             getString(R.string.settings_servers_add_server_forms),
+             getString(R.string.settings_servers_add_server_reports),
+             object : DualChoiceConsumer {
+                 override fun accept(option: Boolean) {
+                     if (option) {
+                         showCollectServerDialog()
+                     } else {
+                         showTellaUploadServerDialog()
+                     }
+                 }
+             })*/
     }
 
     private fun showUwaziServerDialog() {
@@ -177,7 +192,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     }
 
     override fun onCreatedTUServer(server: TellaReportServer?) {
-        addFragment(OnBoardConnectedFragment(),R.id.rootOnboard)
+        addFragment(OnBoardConnectedFragment(), R.id.rootOnboard)
     }
 
     override fun onCreateTUServerError(throwable: Throwable?) {
@@ -197,11 +212,11 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     }
 
     override fun onCreatedServer(server: CollectServer?) {
-        addFragment(OnBoardConnectedFragment(),R.id.rootOnboard)
+        addFragment(OnBoardConnectedFragment(), R.id.rootOnboard)
     }
 
     override fun onCreatedUwaziServer(server: UWaziUploadServer?) {
-        addFragment(OnBoardHideOptionFragment(),R.id.rootOnboard)
+        addFragment(OnBoardHideOptionFragment(), R.id.rootOnboard)
     }
 
     override fun onCollectServerDialogCreate(server: CollectServer?) {
@@ -219,7 +234,6 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     }
 
 
-
     override fun onDialogDismiss() {
 
     }
@@ -230,8 +244,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     }
 
     private fun showTellaUploadServerDialog() {
-        TellaUploadServerDialogFragment.newInstance(null)
-            .show(supportFragmentManager, TellaUploadServerDialogFragment.TAG)
+        startActivity(Intent(this, ReportsConnectFlowActivity::class.java))
     }
 
     override fun enterCustomizationCode() {

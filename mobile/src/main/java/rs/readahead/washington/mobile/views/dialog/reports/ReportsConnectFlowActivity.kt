@@ -8,7 +8,6 @@ import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 import rs.readahead.washington.mobile.views.dialog.IS_UPDATE_SERVER
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
-import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowActivity.*
 import rs.readahead.washington.mobile.views.dialog.reports.edit.EditTellaServerFragment
 import rs.readahead.washington.mobile.views.dialog.reports.step1.EnterUploadServerFragment
 
