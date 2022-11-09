@@ -46,6 +46,7 @@ class ReportsFragment :
         binding?.newReportBtn?.setOnClickListener {
             nav().navigate(R.id.action_reportsScreen_to_newReport_screen)
         }
+        binding?.toolbar?.backClickListener = { nav().popBackStack() }
 
     }
 
