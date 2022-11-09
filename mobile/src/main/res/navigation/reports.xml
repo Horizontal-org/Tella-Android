@@ -22,7 +22,7 @@
         android:id="@+id/newReportScreen"
         android:name="rs.readahead.washington.mobile.views.fragment.reports.entry.ReportsEntryFragment"
         android:label="@string/Reports_Title_Screen"
-        tools:layout="@layout/fragment_reports_entry">>
+        tools:layout="@layout/fragment_reports_entry">
         <action
             android:id="@+id/action_newReport_to_micScreen"
             app:destination="@id/micScreen"

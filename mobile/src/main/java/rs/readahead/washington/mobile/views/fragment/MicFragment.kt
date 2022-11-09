@@ -112,7 +112,7 @@ class MicFragment : MetadataBaseLockFragment(),
         redDot = view.findViewById(R.id.red_dot)
         recordingName = view.findViewById(R.id.rec_name)
 
-        if (isCollect) {
+        if (isCollect || isReport) {
             mPlay.visibility = View.GONE
         }
 

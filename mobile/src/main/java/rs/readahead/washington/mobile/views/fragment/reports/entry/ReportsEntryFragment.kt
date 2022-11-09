@@ -244,14 +244,14 @@ class ReportsEntryFragment :
     }
 
     private fun showAudioRecorderActivity() {
-       // try {
+       try {
             val bundle = Bundle()
-            bundle.putString(REPORT_ENTRY, true.toString())
+            bundle.putBoolean(REPORT_ENTRY, true)
             NavHostFragment.findNavController(this)
                 .navigate(R.id.action_newReport_to_micScreen, bundle)
-       /*} catch (e: java.lang.Exception) {
+       } catch (e: java.lang.Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
-        }*/
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

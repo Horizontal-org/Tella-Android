@@ -85,9 +85,32 @@
 
     <fragment
         android:id="@+id/newReportScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.reports.entry.ReportsEntryFragment"/>
+        android:name="rs.readahead.washington.mobile.views.fragment.reports.entry.ReportsEntryFragment"
+        android:label="@string/Reports_Title_Screen"
+        tools:layout="@layout/fragment_reports_entry">
+        <action
+            android:id="@+id/action_newReport_to_micScreen"
+            app:destination="@id/micScreen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
+    </fragment>
 
-
+    <fragment
+        android:id="@+id/micScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.MicFragment"
+        android:label="@string/Home_BottomNav_Rec"
+        tools:layout="@layout/fragment_mic">
+        <action
+            android:id="@+id/action_micScreen_to_newReport"
+            app:destination="@id/newReportScreen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_micScreen_to_attachments_screen"
+            app:destination="@id/attachments_screen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"/>
+    </fragment>
     <fragment
         android:id="@+id/formScreen"
         android:name="rs.readahead.washington.mobile.views.fragment.forms.CollectMainFragment"
