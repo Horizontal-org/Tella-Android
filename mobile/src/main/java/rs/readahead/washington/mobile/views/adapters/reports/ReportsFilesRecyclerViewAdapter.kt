@@ -34,8 +34,10 @@ open class ReportsFilesRecyclerViewAdapter(
     }
 
     fun insertAttachment(newAttachment: VaultFile) {
-        listAttachment.add(0, newAttachment)
-        notifyItemInserted(0)
+        if (!listAttachment.contains(newAttachment)) {
+            listAttachment.add(0, newAttachment)
+            notifyItemInserted(0)
+        }
     }
 
     fun setFiles(listAttachment: ArrayList<VaultFile>) {
