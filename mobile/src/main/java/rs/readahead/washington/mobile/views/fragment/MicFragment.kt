@@ -34,10 +34,10 @@ import rs.readahead.washington.mobile.views.activity.CameraActivity.VAULT_CURREN
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.base_ui.MetadataBaseLockFragment
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_AUDIO
-import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_FORM_INSTANCE
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_VAULT_FILE
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface
+import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface
 
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -117,6 +117,8 @@ class MicFragment : MetadataBaseLockFragment(),
 
         if (isCollect || isReport) {
             mPlay.visibility = View.GONE
+            val activity = context as IMainNavigationInterface
+            activity.hideBottomNavigation()
         }
 
         mRecord.setOnClickListener {

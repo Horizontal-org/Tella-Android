@@ -52,6 +52,7 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.download.DownloadedTe
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryFragment;
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.UwaziSendFragment;
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment;
+import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface;
 import timber.log.Timber;
 
 @AndroidEntryPoint
@@ -59,7 +60,8 @@ import timber.log.Timber;
 public class MainActivity extends MetadataActivity implements
         IHomeScreenPresenterContract.IView,
         IMediaImportPresenterContract.IView,
-        IMetadataAttachPresenterContract.IView {
+        IMetadataAttachPresenterContract.IView,
+        IMainNavigationInterface {
     public static final String PHOTO_VIDEO_FILTER = "gallery_filter";
 
     private boolean mExit = false;
@@ -393,10 +395,12 @@ public class MainActivity extends MetadataActivity implements
         };
     }
 
+    @Override
     public void hideBottomNavigation() {
         btmNavMain.setVisibility(View.GONE);
     }
 
+    @Override
     public void showBottomNavigation() {
         btmNavMain.setVisibility(View.VISIBLE);
     }
