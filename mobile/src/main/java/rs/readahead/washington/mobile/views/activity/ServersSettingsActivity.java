@@ -136,6 +136,13 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             }
         });
 
+        INSTANCE.getCreateReportsServerAndCloseActivity().observe(this, server -> {
+            if (server != null) {
+                tellaUploadServersPresenter.create(server);
+                finish();
+            }
+        });
+
         INSTANCE.getUpdateReportsServer().observe(this, server -> {
             if (server != null) {
                 tellaUploadServersPresenter.update(server);
@@ -146,14 +153,12 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         stopPresenting();
         stopRefreshPresenter();
     }
 
     private void initListeners() {
         binding.addServer.setOnClickListener((view) -> showChooseServerTypeDialog());
-
         binding.selectedUploadServerLayout.setOnClickListener((view) -> showChooseAutoUploadServerDialog(tuServers));
     }
 

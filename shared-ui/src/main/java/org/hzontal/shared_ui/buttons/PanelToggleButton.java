@@ -70,6 +70,16 @@ public class PanelToggleButton extends AppCompatButton {
         }
     }
 
+    public void setClose() {
+        open = false;
+
+        updateState();
+
+        if (listener != null) {
+            listener.stateChanged(open);
+        }
+    }
+
     private void updateState() {
         setCompoundDrawablesWithIntrinsicBounds(
                 0,

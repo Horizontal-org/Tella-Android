@@ -65,10 +65,10 @@ class LoginReportsFragment :
 
     private fun initObservers() {
 
-        viewModel.error.observe(baseActivity, {
+        viewModel.error.observe(baseActivity) {
             binding?.passwordLayout?.error =
                 getString(R.string.settings_docu_error_wrong_credentials)
-        })
+        }
 
         viewModel.authenticationSuccess.observe(baseActivity, { isSuccess ->
 
@@ -119,8 +119,8 @@ class LoginReportsFragment :
             binding?.username?.setText(serverReports.username)
             binding?.password?.setText(serverReports.password)
         }
-        KeyboardLiveData(binding!!.root).observe(baseActivity, {
+        KeyboardLiveData(binding!!.root).observe(baseActivity) {
             binding?.backBtn?.isVisible = !it.first
-        })
+        }
     }
 }

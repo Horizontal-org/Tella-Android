@@ -79,7 +79,7 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun maybeRestoreExitTimeOut() {
+    private fun maybeRestoreExitTimeOut() {
         if (Preferences.isExitTimeout()) {
             MyApplication.getMainKeyHolder().timeout = Preferences.getLockTimeout()
             Preferences.setTempTimeout(false)
