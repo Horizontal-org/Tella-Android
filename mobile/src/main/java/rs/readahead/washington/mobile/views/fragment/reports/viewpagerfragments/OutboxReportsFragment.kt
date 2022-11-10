@@ -98,8 +98,7 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
     private fun openEntityInstance(reportFormInstance: ReportFormInstance) {
         val bundle = Bundle()
         bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportFormInstance)
-        NavHostFragment.findNavController(this)
-            .navigate(R.id.action_reportsScreen_to_newReport_screen, bundle)
+        nav().navigate(R.id.action_reportsScreen_to_newReport_screen, bundle)
     }
 
     override fun onResume() {

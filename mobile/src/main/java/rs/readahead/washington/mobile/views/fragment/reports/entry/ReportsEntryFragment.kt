@@ -57,6 +57,7 @@ class ReportsEntryFragment :
         super.onCreate(savedInstanceState)
         setFragmentResultListener(BUNDLE_REPORT_AUDIO) { requestKey, bundle ->
             val audioFile = bundle.get(BUNDLE_REPORT_VAULT_FILE) as VaultFile
+            bundle.remove(BUNDLE_REPORT_VAULT_FILE)
             putFiles(listOf(audioFile))
         }
     }
@@ -83,6 +84,7 @@ class ReportsEntryFragment :
         arguments?.let { bundle ->
             if (bundle.get(BUNDLE_REPORT_FORM_INSTANCE) != null) {
                 reportFormInstance = bundle.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportFormInstance
+                bundle.remove(BUNDLE_REPORT_FORM_INSTANCE)
             }
         }
 
@@ -251,8 +253,7 @@ class ReportsEntryFragment :
        try {
             val bundle = Bundle()
             bundle.putBoolean(REPORT_ENTRY, true)
-            NavHostFragment.findNavController(this)
-                .navigate(R.id.action_newReport_to_micScreen, bundle)
+            nav().navigate(R.id.action_newReport_to_micScreen, bundle)
        } catch (e: java.lang.Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
