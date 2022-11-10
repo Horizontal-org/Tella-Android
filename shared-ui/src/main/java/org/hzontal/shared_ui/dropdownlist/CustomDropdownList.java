@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,9 +20,6 @@ import java.util.Objects;
 
 
 public class CustomDropdownList extends FrameLayout {
-
-    float scale = getResources().getDisplayMetrics().density;
-
     private int defaultName = -1;
     private RecyclerView dropDownRV;
     private PanelToggleButton toggleButton;
@@ -67,8 +65,8 @@ public class CustomDropdownList extends FrameLayout {
     public void onDropDownTopBottomImageClicked(LinearLayoutManager linearLayoutManager) {
         dropDownRV.setLayoutManager(linearLayoutManager);
         toggleButton.setOnStateChangedListener(isOpen -> {
-
             dropDownRV.setVisibility(isOpen ? VISIBLE : GONE);
+            toggleButton.setBackground(ContextCompat.getDrawable(getContext(), isOpen ? R.drawable.bg_dropdown : R.drawable.bg_dropdown_closed));
             if (dropDownRV.getAdapter() == null) return;
             int totalItemCount = Objects.requireNonNull(dropDownRV.getAdapter()).getItemCount();
             if (totalItemCount <= 0) {

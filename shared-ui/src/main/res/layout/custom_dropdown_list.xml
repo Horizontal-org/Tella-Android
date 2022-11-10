@@ -12,7 +12,7 @@
         style="@style/Tella_Main_White_Text.Meduim"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@drawable/bg_dropdown"
+        android:background="@drawable/bg_dropdown_closed"
         android:paddingStart="@dimen/activity_horizontal_margin"
         android:textAlignment="viewStart"
         app:layout_constraintTop_toTopOf="parent"
