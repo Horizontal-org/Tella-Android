@@ -1,7 +1,6 @@
 package org.hzontal.shared_ui.dropdownlist
 
 import android.content.Context
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,7 +40,6 @@ class DropdownListAdapter(
         private val tvName: TextView = view.findViewById(R.id.country_name_tv)
 
         init {
-
             itemView.setOnClickListener {
 
                 if (checkedPosition != adapterPosition) {

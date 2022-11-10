@@ -172,6 +172,12 @@ class ReportsEntryFragment :
                         this@ReportsEntryFragment,
                         baseActivity
                     )
+                    reportFormInstance?.let {
+                        servers?.first { server -> server.id == it.serverId }?.let {
+                            selectedServer = it
+                            binding?.serversDropdown?.setDefaultName(it.name)
+                        }
+                    }
                 } else {
                     binding?.dropdownGroup?.hide()
                     selectedServer = serversList[0]
@@ -301,4 +307,6 @@ class ReportsEntryFragment :
             selectedServer = it
         }
     }
+
+
 }
