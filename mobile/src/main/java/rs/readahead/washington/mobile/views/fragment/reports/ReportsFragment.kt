@@ -16,7 +16,6 @@ import rs.readahead.washington.mobile.views.fragment.reports.viewpager.ViewPager
 class ReportsFragment :
     BaseBindingFragment<FragmentReportsBinding>(FragmentReportsBinding::inflate) {
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
         initData()

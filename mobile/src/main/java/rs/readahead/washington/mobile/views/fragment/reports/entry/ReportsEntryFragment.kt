@@ -10,9 +10,11 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_locking_ui.common.extensions.onChange
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
+import com.proxym.shared.widget.dropdown_list.CustomDropdownItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.IVaultFilesSelector
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultSelectFilesSheet
+import org.hzontal.shared_ui.dropdownlist.DropDownItem
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsEntryBinding
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
@@ -36,7 +38,7 @@ const val BUNDLE_REPORT_FORM_INSTANCE = "bundle_report_form_instance"
 @AndroidEntryPoint
 class ReportsEntryFragment :
     BaseBindingFragment<FragmentReportsEntryBinding>(FragmentReportsEntryBinding::inflate),
-    IReportAttachmentsHandler {
+    IReportAttachmentsHandler, CustomDropdownItemClickListener {
     private val viewModel by viewModels<ReportsEntryViewModel>()
     private lateinit var gridLayoutManager: GridLayoutManager
     private val filesRecyclerViewAdapter: ReportsFilesRecyclerViewAdapter by lazy {
@@ -46,6 +48,7 @@ class ReportsEntryFragment :
         )
     }
     private lateinit var selectedServer: TellaReportServer
+    private var servers: ArrayList<TellaReportServer>? = null
     private var reportFormInstance: ReportFormInstance? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -142,7 +145,18 @@ class ReportsEntryFragment :
             listServers()
             serversList.observe(viewLifecycleOwner) { serversList ->
                 if (serversList.size > 1) {
+                    servers = arrayListOf()
+                    servers?.addAll(serversList)
+                    val listDropDown = mutableListOf<DropDownItem>()
+                    serversList.map { server ->
+                        listDropDown.add(DropDownItem(server.id, server.name))
+                    }
                     binding?.dropdownGroup?.show()
+                    binding?.serversDropdown?.setListAdapter(
+                        listDropDown,
+                        this@ReportsEntryFragment,
+                        baseActivity
+                    )
                 } else {
                     binding?.dropdownGroup?.hide()
                     selectedServer = serversList[0]
@@ -264,5 +278,12 @@ class ReportsEntryFragment :
 
     override fun onRemovedAttachments() {
         binding?.filesRecyclerView?.visibility = View.GONE
+    }
+
+    override fun onDropDownItemClicked(position: Int, chosenItem: DropDownItem) {
+        binding?.serversDropdown?.setDefaultName(chosenItem.name)
+        servers?.first { server -> server.id == chosenItem.id }?.let {
+            selectedServer = it
+        }
     }
 }

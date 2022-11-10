@@ -65,14 +65,10 @@ public class CustomDropdownList extends FrameLayout {
     }
 
     public void onDropDownTopBottomImageClicked(LinearLayoutManager linearLayoutManager) {
+        dropDownRV.setLayoutManager(linearLayoutManager);
         toggleButton.setOnStateChangedListener(isOpen -> {
-            int firstVisibleItemIndex = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
-            if (firstVisibleItemIndex > 0) {
-                linearLayoutManager.smoothScrollToPosition(dropDownRV, null, firstVisibleItemIndex - 1);
-            }
-        });
 
-        toggleButton.setOnStateChangedListener(isOpen -> {
+            dropDownRV.setVisibility(isOpen ? VISIBLE : GONE);
             if (dropDownRV.getAdapter() == null) return;
             int totalItemCount = Objects.requireNonNull(dropDownRV.getAdapter()).getItemCount();
             if (totalItemCount <= 0) {
@@ -88,17 +84,15 @@ public class CustomDropdownList extends FrameLayout {
     }
 
 
-    public void setListVisibility(int visibility) {
-        dropDownRV.setVisibility(visibility);
-    }
-
     public void setListAdapter(List<DropDownItem> data, CustomDropdownItemClickListener itemClickListener, Context context) {
         DropdownListAdapter dropdownListAdapter = new DropdownListAdapter(data, itemClickListener, context);
         dropDownRV.setAdapter(dropdownListAdapter);
     }
 
-    public void setDropDownListHeight(int heightInDp) {
-        dropDownRV.getLayoutParams().height = (int) (heightInDp * scale + 0.5f);
+    public void setDefaultName(String name) {
+        if (name != null) {
+            toggleButton.setText(name);
+            toggleButton.setClose();
+        }
     }
-
 }

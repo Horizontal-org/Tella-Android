@@ -48,8 +48,8 @@
             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:textAlignment="viewStart"
+            app:name="@string/Reports_Select_Your_Project"
             app:layout_constraintTop_toBottomOf="@id/send_report_text" />
-
 
         <View
             android:id="@+id/separator"
