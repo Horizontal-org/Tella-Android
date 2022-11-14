@@ -76,7 +76,7 @@
         android:layout_height="50dp"
         android:layout_gravity="bottom|end"
         android:layout_marginHorizontal="@dimen/tella_main_vertical"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="@dimen/activity_vertical_large_margin"
         android:background="@drawable/bg_round_orange_btn"
         android:fontFamily="@font/open_sans"
         android:gravity="center_vertical"
