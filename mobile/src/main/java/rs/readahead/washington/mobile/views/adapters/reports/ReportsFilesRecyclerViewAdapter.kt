@@ -29,31 +29,38 @@ open class ReportsFilesRecyclerViewAdapter(
     private var listAttachment: ArrayList<VaultFile> = arrayListOf()
     private val glideLoader = VaultFileUrlLoader(context, mediaFileHandler)
 
+    init {
+        val file = VaultFile()
+        file.type = VaultFile.Type.UNKNOWN
+        insertAttachment(file)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GridAttachmentsViewHolder {
         return GridAttachmentsViewHolder(parent)
     }
 
     fun insertAttachment(newAttachment: VaultFile) {
-        if (!listAttachment.contains(newAttachment)) {
+        if (newAttachment.type != VaultFile.Type.UNKNOWN) {
+            if (!listAttachment.contains(newAttachment)) {
+                listAttachment.add(0, newAttachment)
+                notifyItemInserted(0)
+            }
+        } else {
             listAttachment.add(0, newAttachment)
             notifyItemInserted(0)
         }
     }
 
-    fun setFiles(listAttachment: ArrayList<VaultFile>) {
-        this.listAttachment = listAttachment
-        notifyDataSetChanged()
-    }
-
     fun getFiles(): ArrayList<VaultFile> {
-        return listAttachment
+        val listFiles: ArrayList<VaultFile> = arrayListOf()
+        for (file in listAttachment) {
+            if (file.type != VaultFile.Type.UNKNOWN) listFiles.add(file)
+        }
+        return listFiles
     }
 
-    private fun removeFile(position: Int, name: VaultFile?) {
+    private fun removeFile(position: Int) {
         listAttachment.removeAt(position)
-        if (listAttachment.isEmpty()) {
-            iAttachmentsMediaHandler.onRemovedAttachments()
-        }
         notifyItemRemoved(position)
     }
 
@@ -68,15 +75,18 @@ open class ReportsFilesRecyclerViewAdapter(
         )
     }
 
-    inner class GridAttachmentsViewHolder(view: View) : BaseAttachmentViewHolder(view) {
+    inner class GridAttachmentsViewHolder(val view: View) : RecyclerView.ViewHolder(view)  {
 
         constructor(parent: ViewGroup)
                 : this(
             LayoutInflater.from(parent.context).inflate(R.layout.item_report_files, parent, false)
         )
 
+        protected lateinit var icAttachmentImg: ImageView
+        protected lateinit var filePreviewImg: ImageView
         private lateinit var fileNameTextView: TextView
         private lateinit var removeBtn: View
+        protected val context: Context by lazy { view.context }
 
         fun bind(vaultFile: VaultFile?, iAttachmentsMediaHandler: IReportAttachmentsHandler) {
             view.apply {
@@ -86,41 +96,49 @@ open class ReportsFilesRecyclerViewAdapter(
                 icAttachmentImg = findViewById(R.id.icAttachmentImg)
             }
 
-            removeBtn.setOnClickListener {
-                removeFile(position = layoutPosition,vaultFile)
-            }
+            if (vaultFile!!.type != VaultFile.Type.UNKNOWN) {
+                removeBtn.setOnClickListener {
+                    removeFile(position = layoutPosition)
+                }
 
-            if (isImageFileType(vaultFile!!.mimeType)) {
-                this.showImageInfo(vaultFile)
-                Glide.with(context)
-                    .using(glideLoader)
-                    .load(VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(filePreviewImg)
-            } else if (isAudioFileType(vaultFile.mimeType)) {
-                this.showAudioInfo()
-                fileNameTextView.text = vaultFile.name
-            } else if (isVideoFileType(vaultFile.mimeType)) {
-                this.showVideoInfo(vaultFile)
-                Glide.with(context)
-                    .using(glideLoader)
-                    .load(VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(filePreviewImg)
-
+                if (isImageFileType(vaultFile.mimeType)) {
+                    this.showImageInfo(vaultFile)
+                    Glide.with(context)
+                        .using(glideLoader)
+                        .load(
+                            VaultFileLoaderModel(
+                                vaultFile,
+                                VaultFileLoaderModel.LoadType.THUMBNAIL
+                            )
+                        )
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .into(filePreviewImg)
+                } else if (isAudioFileType(vaultFile.mimeType)) {
+                    this.showAudioInfo()
+                    fileNameTextView.text = vaultFile.name
+                } else if (isVideoFileType(vaultFile.mimeType)) {
+                    this.showVideoInfo(vaultFile)
+                    Glide.with(context)
+                        .using(glideLoader)
+                        .load(
+                            VaultFileLoaderModel(
+                                vaultFile,
+                                VaultFileLoaderModel.LoadType.THUMBNAIL
+                            )
+                        )
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .into(filePreviewImg)
+                } else {
+                    fileNameTextView.text = vaultFile.name
+                    this.showDocInfo()
+                }
             } else {
-                fileNameTextView.text = vaultFile.name
-                this.showDocInfo()
+                removeBtn.visibility = View.GONE
+                showAddLink()
             }
         }
-    }
-
-    abstract inner class BaseAttachmentViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        protected lateinit var icAttachmentImg: ImageView
-        protected lateinit var filePreviewImg: ImageView
-        protected val context: Context by lazy { view.context }
 
         fun showVideoInfo(vaultFile: VaultFile) {
             Glide.with(context)
@@ -147,6 +165,14 @@ open class ReportsFilesRecyclerViewAdapter(
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(filePreviewImg)
+        }
+
+        fun showAddLink() {
+            filePreviewImg.setBackground(context.getDrawable(R.drawable.transparent_solid))
+            filePreviewImg.setImageResource(R.drawable.upload_box_btn)
+            filePreviewImg.setOnClickListener {
+                iAttachmentsMediaHandler.addFiles()
+            }
         }
     }
 }

@@ -102,14 +102,14 @@ public class CollectOutboxFormInstanceRecycleViewAdapter extends RecyclerView.Ad
         }
 
         private void setPendingIcon() {
-            Drawable drawable = ViewUtil.getTintedDrawable(item.getContext(), R.drawable.ic_watch_later_black_24dp, R.color.tigers_eye);
+            Drawable drawable = ViewUtil.getTintedDrawable(item.getContext(), R.drawable.ic_watch_later_orange_24dp, R.color.tigers_eye);
             if (drawable != null) {
                 item.setIconDrawable(drawable);
             }
         }
 
         private void setPartlySubmittedIcon() {
-            Drawable drawable = ViewUtil.getTintedDrawable(item.getContext(), R.drawable.ic_watch_later_black_24dp, R.color.wa_gray);
+            Drawable drawable = ViewUtil.getTintedDrawable(item.getContext(), R.drawable.ic_watch_later_orange_24dp, R.color.wa_gray);
             if (drawable != null) {
                 item.setIconDrawable(drawable);
             }
