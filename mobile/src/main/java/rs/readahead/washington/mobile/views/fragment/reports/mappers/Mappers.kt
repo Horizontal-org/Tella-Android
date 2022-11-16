@@ -5,7 +5,8 @@ import rs.readahead.washington.mobile.views.fragment.reports.adapter.ViewEntityT
 
 fun ReportFormInstance.toViewEntityInstanceItem(
     onMoreClicked: () -> Unit,
-    onOpenClicked: () -> Unit) = ViewEntityTemplateItem(
+    onOpenClicked: () -> Unit
+) = ViewEntityTemplateItem(
     id = id,
     title = title,
     serverId = serverId,
@@ -14,4 +15,5 @@ fun ReportFormInstance.toViewEntityInstanceItem(
     serverName = "",
     description = "",
     onMoreClicked = onMoreClicked,
-    onOpenEntityClicked = onOpenClicked)
+    onOpenEntityClicked = onOpenClicked
+)

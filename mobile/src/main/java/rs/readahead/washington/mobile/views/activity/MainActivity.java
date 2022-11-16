@@ -54,7 +54,6 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.send.UwaziSendFragmen
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment;
 import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface;
 import timber.log.Timber;
-
 @AndroidEntryPoint
 @RuntimePermissions
 public class MainActivity extends MetadataActivity implements
@@ -327,8 +326,8 @@ public class MainActivity extends MetadataActivity implements
     @Override
     public void onCountTUServersEnded(Long num) {
         if (num > 0) {
-          //  CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_TELLA);
-          //  maybeShowTUserver(num);
+            //  CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_TELLA);
+            //  maybeShowTUserver(num);
         }
     }
 
@@ -339,7 +338,7 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     public void onCountCollectServersEnded(Long num) {
-       // maybeShowFormsMenu(num);
+        // maybeShowFormsMenu(num);
         if (num > 0) {
             CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_COLLECT);
         } else {
@@ -355,7 +354,7 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     public void onCountUwaziServersEnded(Long num) {
-       // maybeShowUwaziMenu(num);
+        // maybeShowUwaziMenu(num);
         if (num > 0)
             CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_UWAZI);
     }
