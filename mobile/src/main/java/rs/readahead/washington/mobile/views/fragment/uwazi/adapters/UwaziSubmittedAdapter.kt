@@ -103,7 +103,7 @@ class UwaziSubmittedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private fun setPendingIcon() {
             val drawable = ViewUtil.getTintedDrawable(
                 submittedItem.context,
-                R.drawable.ic_watch_later_black_24dp,
+                R.drawable.ic_watch_later_orange_24dp,
                 R.color.dark_orange
             )
             if (drawable != null) {

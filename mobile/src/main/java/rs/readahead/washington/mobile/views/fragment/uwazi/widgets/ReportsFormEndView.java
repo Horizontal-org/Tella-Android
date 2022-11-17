@@ -86,9 +86,7 @@ public class ReportsFormEndView extends FrameLayout {
             return;
         }
 
-        //  titleView.setText(title);
-
-        TextView formNameView = findViewById(R.id.formName);
+        TextView formNameView = findViewById(R.id.title);
 
         formNameView.setText(Objects.requireNonNull(instance.getTitle()));
 

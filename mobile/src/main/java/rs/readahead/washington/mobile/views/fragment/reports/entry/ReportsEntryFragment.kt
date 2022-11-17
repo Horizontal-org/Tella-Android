@@ -72,9 +72,9 @@ class ReportsEntryFragment :
     private fun initView() {
         gridLayoutManager = GridLayoutManager(context, 3)
 
-        binding?.attachFilesBtn?.setOnClickListener {
+        /*binding?.attachFilesBtn?.setOnClickListener {
             showSelectFilesSheet()
-        }
+        }*/
         binding?.filesRecyclerView?.apply {
             adapter = filesRecyclerViewAdapter
             layoutManager = gridLayoutManager
@@ -299,15 +299,15 @@ class ReportsEntryFragment :
         for (file in vaultFileList) {
             filesRecyclerViewAdapter.insertAttachment(file)
         }
-        binding?.filesRecyclerView?.visibility = View.VISIBLE
+        //binding?.filesRecyclerView?.visibility = View.VISIBLE
     }
 
     override fun playMedia(mediaFile: VaultFile?) {
 
     }
 
-    override fun onRemovedAttachments() {
-        binding?.filesRecyclerView?.visibility = View.GONE
+    override fun addFiles() {
+        showSelectFilesSheet()
     }
 
     override fun onDropDownItemClicked(position: Int, chosenItem: DropDownItem) {
