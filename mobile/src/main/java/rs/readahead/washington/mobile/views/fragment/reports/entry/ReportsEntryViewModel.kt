@@ -163,11 +163,13 @@ class ReportsEntryViewModel @Inject constructor(
         description: String,
         files: List<FormMediaFile>?,
         server: TellaReportServer,
-        id: Long? = null
+        id: Long? = null,
+        reportApiId: String = "",
     ): ReportFormInstance {
         return ReportFormInstance(
             id = id ?: 0L,
             title = title,
+            reportApiId = reportApiId,
             description = description,
             status = EntityStatus.FINALIZED,
             widgetMediaFiles = files ?: emptyList(),
@@ -244,11 +246,23 @@ class ReportsEntryViewModel @Inject constructor(
         submitReportUseCase.setData(
             server = server, reportBodyEntity = ReportBodyEntity(title, description)
         )
-        submitReportUseCase.execute(onSuccess = {
-           saveOutbox(reportFormInstance = getDraftFormInstance(title, description,files,server))
-        }, onError = { _error.postValue(it) }, onFinished = {
+        submitReportUseCase.execute(onSuccess = { result ->
+            saveOutbox(
+                reportFormInstance = getOutboxFormInstance(
+                    title = title,
+                    description = description,
+                    files = files,
+                    server = server,
+                    reportApiId = result.id
+                )
+            )
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
             _progress.postValue(false)
         })
     }
+
+
 }
 
