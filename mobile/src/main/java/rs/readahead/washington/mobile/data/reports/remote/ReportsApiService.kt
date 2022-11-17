@@ -1,11 +1,13 @@
 package rs.readahead.washington.mobile.data.reports.remote
 
 import io.reactivex.Single
-import retrofit2.http.Body
-import retrofit2.http.POST
-import retrofit2.http.Url
+import okhttp3.MultipartBody
+import retrofit2.http.*
+import rs.readahead.washington.mobile.data.ParamsNetwork.COOKIE
 import rs.readahead.washington.mobile.data.entity.reports.LoginEntity
+import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
 import rs.readahead.washington.mobile.data.entity.reports.ReportsLoginResponse
+import rs.readahead.washington.mobile.domain.entity.reports.ReportPostResult
 
 interface ReportsApiService {
     companion object {
@@ -20,4 +22,32 @@ interface ReportsApiService {
         @Url
         url: String
     ): Single<ReportsLoginResponse>
+
+    @POST
+    fun submitReport(
+        @Body
+        reportBodyEntity: ReportBodyEntity,
+        @Url
+        url: String,
+        @Header(COOKIE) access_token: String
+    ): Single<ReportPostResult>
+
+    @GET
+    fun getProjects(
+        @Query("limit")
+        limit: Int,
+        @Query("offset")
+        offset: Int,
+        @Url
+        url: String,
+        @Header(COOKIE) access_token: String
+    ): Single<ReportPostResult>
+
+    @Multipart
+    @PUT
+    fun putFile(
+        @Part("file") file: MultipartBody.Part?,
+        @Url url: String,
+        @Header(COOKIE) access_token: String
+    ): Single<ReportPostResult>
 }

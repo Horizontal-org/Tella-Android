@@ -23,7 +23,7 @@ const val SEND_ENTITY = "send_entity"
 
 class UwaziSendFragment : BaseFragment(), OnNavBckListener {
     private val viewModel: SharedUwaziSubmissionViewModel by lazy {
-        ViewModelProvider(activity).get(SharedUwaziSubmissionViewModel::class.java)
+        ViewModelProvider(activity)[SharedUwaziSubmissionViewModel::class.java]
     }
     private lateinit var binding: UwaziSendFragmentBinding
     private var entityInstance: UwaziEntityInstance? = null
@@ -69,31 +69,35 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
 
     private fun initObservers() {
         with(viewModel) {
-            server.observe(viewLifecycleOwner, {
+            server.observe(viewLifecycleOwner) {
                 uwaziServer = it
-            })
+            }
 
-            progressCallBack.observe(viewLifecycleOwner,{
-                onShowProgress(it.first,it.second)
-            })
+            progressCallBack.observe(viewLifecycleOwner) {
+                onShowProgress(it.first, it.second)
+            }
 
-            progress.observe(viewLifecycleOwner,{ status ->
-             when(status){
-                 EntityStatus.SUBMITTED -> {
-                     nav().popBackStack()
-                 }
-                 EntityStatus.SUBMISSION_ERROR -> {
-                     DialogUtils.showBottomMessage(activity,getString(R.string.collect_toast_fail_sending_form),true)
-                     entityInstance?.status = EntityStatus.SUBMISSION_ERROR
-                     entityInstance?.let { viewModel.saveEntityInstance(it) }
-                     nav().popBackStack()
-                     SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
-                 }
-                 EntityStatus.SUBMISSION_PENDING -> {
-                     nav().popBackStack()
-                 }
-             }
-            })
+            progress.observe(viewLifecycleOwner) { status ->
+                when (status) {
+                    EntityStatus.SUBMITTED -> {
+                        nav().popBackStack()
+                    }
+                    EntityStatus.SUBMISSION_ERROR -> {
+                        DialogUtils.showBottomMessage(
+                            activity,
+                            getString(R.string.collect_toast_fail_sending_form),
+                            true
+                        )
+                        entityInstance?.status = EntityStatus.SUBMISSION_ERROR
+                        entityInstance?.let { viewModel.saveEntityInstance(it) }
+                        nav().popBackStack()
+                        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
+                    }
+                    EntityStatus.SUBMISSION_PENDING -> {
+                        nav().popBackStack()
+                    }
+                }
+            }
         }
     }
 

@@ -2264,6 +2264,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             values.put(D.C_TITLE, instance.getTitle());
             values.put(D.C_DESCRIPTION_TEXT, instance.getDescription());
             values.put(D.C_UPDATED, Util.currentTimestamp());
+            values.put(D.C_REPORT_API_ID, instance.getReportApiId());
             //TODO CHECK FILES IMPLEMENTATION AND ADD FILES STATUS
             //  values.put(D.C_FORM_PART_STATUS, instance.getFormPartStatus().ordinal());
 

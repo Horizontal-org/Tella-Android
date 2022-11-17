@@ -7,6 +7,7 @@ import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
@@ -25,9 +26,9 @@ class ReportsEntryViewModel @Inject constructor(
     private val saveReportFormInstanceUseCase: SaveReportFormInstanceUseCase,
     private val getReportsUseCase: GetReportsUseCase,
     private val deleteReportUseCase: DeleteReportUseCase,
-    private val getReportBundleUseCase: GetReportBundleUseCase
-) :
-    ViewModel() {
+    private val getReportBundleUseCase: GetReportBundleUseCase,
+    private val submitReportUseCase: SubmitReportUseCase
+) : ViewModel() {
 
     private val _progress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean> get() = _progress
@@ -54,99 +55,77 @@ class ReportsEntryViewModel @Inject constructor(
 
     fun listServers() {
         _progress.postValue(true)
-        getReportsServersUseCase.execute(
-            onSuccess = { result ->
-                _serversList.postValue(result)
-            },
-            onError = {
-                _error.postValue(it)
-            },
-            onFinished = {
-                _progress.postValue(false)
-            }
-        )
+        getReportsServersUseCase.execute(onSuccess = { result ->
+            _serversList.postValue(result)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
     fun saveDraft(reportFormInstance: ReportFormInstance) {
         _progress.postValue(true)
         saveReportFormInstanceUseCase.setReportFormInstance(reportFormInstance)
-        saveReportFormInstanceUseCase.execute(
-            onSuccess = { result ->
-                _draftReportFormInstance.postValue(result)
-            },
-            onError = {
-                _error.postValue(it)
-            },
-            onFinished = {
-                _progress.postValue(false)
-            }
-        )
+        saveReportFormInstanceUseCase.execute(onSuccess = { result ->
+            _draftReportFormInstance.postValue(result)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
     fun saveOutbox(reportFormInstance: ReportFormInstance) {
         _progress.postValue(true)
         saveReportFormInstanceUseCase.setReportFormInstance(reportFormInstance)
-        saveReportFormInstanceUseCase.execute(
-            onSuccess = { result ->
-                _outboxReportFormInstance.postValue(result)
-            },
-            onError = {
-                _error.postValue(it)
-            },
-            onFinished = {
-                _progress.postValue(false)
-            }
-        )
+        saveReportFormInstanceUseCase.execute(onSuccess = { result ->
+            _outboxReportFormInstance.postValue(result)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
     fun listDrafts() {
         _progress.postValue(true)
         getReportsUseCase.setEntityStatus(EntityStatus.DRAFT)
-        getReportsUseCase.execute(
-            onSuccess = { result ->
-                val resultList = mutableListOf<ViewEntityTemplateItem>()
+        getReportsUseCase.execute(onSuccess = { result ->
+            val resultList = mutableListOf<ViewEntityTemplateItem>()
 
-                result.map { instance ->
-                    resultList.add(
-                        instance.toViewEntityInstanceItem(
-                            onOpenClicked = { openInstance(instance) },
-                            onMoreClicked = { onMoreClicked(instance) })
-                    )
+            result.map { instance ->
+                resultList.add(
+                    instance.toViewEntityInstanceItem(onOpenClicked = { openInstance(instance) },
+                        onMoreClicked = { onMoreClicked(instance) })
+                )
 
-                }
-                _draftListReportFormInstance.postValue(resultList)
-            },
-            onError = {
-                _error.postValue(it)
-            },
-            onFinished = {
-                _progress.postValue(false)
             }
-        )
+            _draftListReportFormInstance.postValue(resultList)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
     fun listOutbox() {
         _progress.postValue(true)
         getReportsUseCase.setEntityStatus(EntityStatus.FINALIZED)
-        getReportsUseCase.execute(
-            onSuccess = { result ->
-                val resultList = mutableListOf<ViewEntityTemplateItem>()
-                result.map { instance ->
-                    resultList.add(
-                        instance.toViewEntityInstanceItem(
-                            onOpenClicked = { openInstance(instance) },
-                            onMoreClicked = { onMoreClicked(instance) })
-                    )
-                }
-                _outboxReportListFormInstance.postValue(resultList)
-            },
-            onError = {
-                _error.postValue(it)
-            },
-            onFinished = {
-                _progress.postValue(false)
+        getReportsUseCase.execute(onSuccess = { result ->
+            val resultList = mutableListOf<ViewEntityTemplateItem>()
+            result.map { instance ->
+                resultList.add(
+                    instance.toViewEntityInstanceItem(onOpenClicked = { openInstance(instance) },
+                        onMoreClicked = { onMoreClicked(instance) })
+                )
             }
-        )
+            _outboxReportListFormInstance.postValue(resultList)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
     private fun listSubmitted() {
@@ -184,11 +163,13 @@ class ReportsEntryViewModel @Inject constructor(
         description: String,
         files: List<FormMediaFile>?,
         server: TellaReportServer,
-        id: Long? = null
+        id: Long? = null,
+        reportApiId: String = "",
     ): ReportFormInstance {
         return ReportFormInstance(
             id = id ?: 0L,
             title = title,
+            reportApiId = reportApiId,
             description = description,
             status = EntityStatus.FINALIZED,
             widgetMediaFiles = files ?: emptyList(),
@@ -218,9 +199,7 @@ class ReportsEntryViewModel @Inject constructor(
         val files = vaultFileList.fromJsonToObjectList(String::class.java)
         files?.map { file ->
             //TODO WE NEED TO INJECT RX VAULT WITH DAGGER
-            val vaultFile = MyApplication.rxVault[file]
-                .subscribeOn(Schedulers.io())
-                .blockingGet()
+            val vaultFile = MyApplication.rxVault[file].subscribeOn(Schedulers.io()).blockingGet()
             val mappedFile = FormMediaFile.fromMediaFile(vaultFile)
             vaultFormFiles.add(mappedFile)
         }
@@ -231,38 +210,59 @@ class ReportsEntryViewModel @Inject constructor(
         _progress.postValue(true)
         deleteReportUseCase.setId(instance.id)
 
-        deleteReportUseCase.execute(
-            onSuccess = {
-                _instanceDeleted.postValue(true)
-            },
-            onError = {
-                _error.postValue(it)
-            },
-            onFinished = {
-                _progress.postValue(false)
-            }
-        )
+        deleteReportUseCase.execute(onSuccess = {
+            _instanceDeleted.postValue(true)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
     fun getDraftBundle(instance: ReportFormInstance) {
         _progress.postValue(true)
         getReportBundleUseCase.setId(instance.id)
 
-        getReportBundleUseCase.execute(
-            onSuccess = { result ->
-                val resultInstance = result.instance
-                //TODO WE NEED TO INJECT RXX VAULT USING DAGGER
-                resultInstance.widgetMediaFiles =
-                    vaultFilesToMediaFiles(MyApplication.rxVault.get(result.fileIds).blockingGet())
-                _draftReportInstance.postValue(resultInstance)
-            },
-            onError = {
-                _error.postValue(it)
-            },
-            onFinished = {
-                _progress.postValue(false)
-            }
-        )
+        getReportBundleUseCase.execute(onSuccess = { result ->
+            val resultInstance = result.instance
+            //TODO WE NEED TO INJECT RXX VAULT USING DAGGER
+            resultInstance.widgetMediaFiles =
+                vaultFilesToMediaFiles(MyApplication.rxVault.get(result.fileIds).blockingGet())
+            _draftReportInstance.postValue(resultInstance)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
+
+    fun submitReport(
+        title: String,
+        description: String,
+        server: TellaReportServer,
+        files: List<FormMediaFile>
+    ) {
+        _progress.postValue(true)
+        submitReportUseCase.setData(
+            server = server, reportBodyEntity = ReportBodyEntity(title, description)
+        )
+        submitReportUseCase.execute(onSuccess = { result ->
+            saveOutbox(
+                reportFormInstance = getOutboxFormInstance(
+                    title = title,
+                    description = description,
+                    files = files,
+                    server = server,
+                    reportApiId = result.id
+                )
+            )
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
+    }
+
+
 }
 

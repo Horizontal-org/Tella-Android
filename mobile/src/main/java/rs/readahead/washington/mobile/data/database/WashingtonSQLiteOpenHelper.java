@@ -127,6 +127,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 db.execSQL(alterTableTellaUploadServerAddMetatData());
                 db.execSQL(alterTableTellaUploadServerAddBackgourndUpload());
                 db.execSQL(createTableReportFormInstance());
+                db.execSQL(createTableReportInstanceVaultFile());
         }
     }
 
@@ -366,6 +367,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         return "CREATE TABLE " + sq(D.T_REPORT_FORM_INSTANCE) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_REPORT_SERVER_ID, D.INTEGER, true) + " , " +
+                cddl(D.C_REPORT_API_ID, D.TEXT, false) + " , " +
                 cddl(D.C_METADATA, D.TEXT, false) + " , " +
                 cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0 , " +
                 cddl(D.C_UPDATED, D.INTEGER, true) + " DEFAULT 0 , " +

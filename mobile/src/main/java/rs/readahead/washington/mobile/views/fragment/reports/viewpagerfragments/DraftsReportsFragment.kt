@@ -3,7 +3,6 @@ package rs.readahead.washington.mobile.views.fragment.reports.viewpagerfragments
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
@@ -42,7 +41,7 @@ class DraftsReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
 
     private fun initData() {
         with(viewModel) {
-            draftListReportFormInstance.observe(viewLifecycleOwner, { drafts ->
+            draftListReportFormInstance.observe(viewLifecycleOwner) { drafts ->
                 if (drafts.isEmpty()) {
                     binding?.listReportsRecyclerView?.hide()
                     binding?.textViewEmpty?.show()
@@ -51,22 +50,22 @@ class DraftsReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
                     binding?.listReportsRecyclerView?.show()
                     binding?.textViewEmpty?.hide()
                 }
-            })
-            onMoreClickedFormInstance.observe(viewLifecycleOwner, { instance ->
+            }
+            onMoreClickedFormInstance.observe(viewLifecycleOwner) { instance ->
                 showDraftsMenu(instance)
-            })
+            }
 
-            draftReportInstance.observe(viewLifecycleOwner, { instance ->
+            draftReportInstance.observe(viewLifecycleOwner) { instance ->
                 openEntityInstance(instance)
-            })
+            }
 
-            onOpenClickedFormInstance.observe(viewLifecycleOwner, { instance ->
+            onOpenClickedFormInstance.observe(viewLifecycleOwner) { instance ->
                 loadEntityInstance(instance)
-            })
+            }
 
-            instanceDeleted.observe(viewLifecycleOwner, {
+            instanceDeleted.observe(viewLifecycleOwner) {
                 viewModel.listDrafts()
-            })
+            }
         }
     }
 

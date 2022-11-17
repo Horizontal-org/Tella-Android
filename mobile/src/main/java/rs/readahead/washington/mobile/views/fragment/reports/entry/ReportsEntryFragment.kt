@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_locking_ui.common.extensions.onChange
@@ -58,12 +57,13 @@ class ReportsEntryFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setFragmentResultListener(BUNDLE_REPORT_AUDIO) { requestKey, bundle ->
-            val audioFile = bundle.get(BUNDLE_REPORT_VAULT_FILE) as VaultFile
+        setFragmentResultListener(BUNDLE_REPORT_AUDIO) { _, bundle ->
+            val file = bundle.get(BUNDLE_REPORT_VAULT_FILE) as VaultFile
             bundle.remove(BUNDLE_REPORT_VAULT_FILE)
-            putFiles(listOf(audioFile))
+            putFiles(listOf(file))
         }
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
         initData()
@@ -121,6 +121,14 @@ class ReportsEntryFragment :
             }
             binding?.sendLaterBtn?.setOnClickListener {
                 saveReportAsOutbox()
+            }
+            binding?.sendReportBtn?.setOnClickListener {
+                viewModel.submitReport(
+                    title = binding?.reportTitleEt?.text.toString(),
+                    description = binding?.reportDescriptionEt?.text.toString(),
+                    server = selectedServer,
+                    files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
+                    )
             }
 
         } else {
@@ -206,7 +214,7 @@ class ReportsEntryFragment :
             baseActivity.getString(R.string.Uwazi_MiltiFileWidget_SelectFiles),
             object : IVaultFilesSelector {
                 override fun importFromVault() {
-                    showAttachmentsFragment()
+                    showAttachmentsActivity()
                 }
 
                 override fun goToRecorder() {
@@ -224,7 +232,7 @@ class ReportsEntryFragment :
         )
     }
 
-    private fun showAttachmentsFragment() {
+    private fun showAttachmentsActivity() {
         try {
             //TODO Djordje CONSIDER USING PERMISSION LIBRARY INSTEAD
             baseActivity.startActivityForResult(
@@ -270,15 +278,16 @@ class ReportsEntryFragment :
     }
 
     private fun showAudioRecorderActivity() {
-       try {
+        try {
             val bundle = Bundle()
             bundle.putBoolean(REPORT_ENTRY, true)
             nav().navigate(R.id.action_newReport_to_micScreen, bundle)
-       } catch (e: java.lang.Exception) {
+        } catch (e: java.lang.Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == C.MEDIA_FILE_ID && resultCode == Activity.RESULT_OK) {
             val vaultFile = data?.getStringExtra(VAULT_FILE_KEY) ?: ""
@@ -307,6 +316,4 @@ class ReportsEntryFragment :
             selectedServer = it
         }
     }
-
-
 }
