@@ -32,6 +32,7 @@ interface ReportsApiService {
         @Header(COOKIE) access_token: String
     ): Single<ReportPostResult>
 
+    //TODO AHLEM REMOVE ALL HARDCODED :)
     @GET
     fun getProjects(
         @Query("limit")

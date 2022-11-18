@@ -38,7 +38,7 @@ public class ReportsFormEndView extends FrameLayout {
     LinearLayout partsListView;
     TextView titleView;
     TextView descriptionView;
-    //TextView subTitleView;
+    TextView formStatusTextView;
     String title;
     private ReportFormInstance instance;
     private boolean previewUploaded;
@@ -59,7 +59,7 @@ public class ReportsFormEndView extends FrameLayout {
         glide = Glide.with(getContext()).using(glideLoader);
     }
 
-    public ReportsFormEndView(Context context, String title, String description) {
+    public ReportsFormEndView(Context context, String title, String description, String status) {
         super(context);
         inflate(context, R.layout.reports_form_end_view, this);
 
@@ -70,6 +70,9 @@ public class ReportsFormEndView extends FrameLayout {
 
         descriptionView = findViewById(R.id.form_description);
         descriptionView.setText(description);
+
+        formStatusTextView = findViewById(R.id.form_status);
+
         MediaFileHandler mediaFileHandler = new MediaFileHandler();
         VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
         glide = Glide.with(getContext()).using(glideLoader);

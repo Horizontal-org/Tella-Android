@@ -2,14 +2,13 @@ package rs.readahead.washington.mobile.views.fragment.reports.send
 
 import android.os.Bundle
 import android.view.View
-import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.databinding.FragmentSendReportBinding
+import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
-import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
+import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_FORM_INSTANCE
-import rs.readahead.washington.mobile.views.fragment.uwazi.send.SEND_ENTITY
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.ReportsFormEndView
 
 @AndroidEntryPoint
@@ -33,9 +32,9 @@ class ReportsSendFragment :
     }
 
     private fun initView() {
+        binding?.toolbar?.backClickListener = { nav().popBackStack() }
         arguments?.let {
-            entityInstance =  it.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportFormInstance
-
+            entityInstance = it.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportFormInstance
             showFormEndView()
         }
     }
@@ -46,6 +45,9 @@ class ReportsSendFragment :
         }
 
         entityInstance?.let { reportFormInstance ->
+            if (reportFormInstance.status == EntityStatus.SUBMITTED) {
+                binding?.nextBtn?.hide()
+            }
             endView = ReportsFormEndView(
                 activity,
                 reportFormInstance.title,
@@ -54,6 +56,14 @@ class ReportsSendFragment :
             endView.setInstance(reportFormInstance, false, false)
             binding?.endViewContainer?.removeAllViews()
             binding?.endViewContainer?.addView(endView)
+        }
+    }
+
+    fun getStatusLabel(reportFormInstance: ReportFormInstance) : String {
+        if (reportFormInstance.status == EntityStatus.SUBMITTED){
+            return ""
+        } else {
+            return ""
         }
     }
 }
