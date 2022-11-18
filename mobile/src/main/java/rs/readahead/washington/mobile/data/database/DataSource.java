@@ -12,7 +12,6 @@ import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.VaultFile;
 
@@ -32,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Completable;
@@ -2392,6 +2390,12 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         });
     }
 
+    private List<ReportFormInstance> getSubmittedReportInstances() {
+        return getReportFormInstances(new EntityStatus[]{
+                EntityStatus.SUBMITTED
+        });
+    }
+
     @NonNull
     @Override
     public Completable deleteReportInstance(long id) {
@@ -2412,12 +2416,14 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     @Override
     public Single<List<ReportFormInstance>> listOutboxReportInstances() {
         return Single.fromCallable(this::getOutboxReportInstances)
-                .compose(applySchedulers());    }
+                .compose(applySchedulers());
+    }
 
     @Nullable
     @Override
     public Single<List<ReportFormInstance>> listSubmittedReportInstances() {
-        return null;
+        return Single.fromCallable(this::getSubmittedReportInstances)
+                .compose(applySchedulers());
     }
 
     @Nullable

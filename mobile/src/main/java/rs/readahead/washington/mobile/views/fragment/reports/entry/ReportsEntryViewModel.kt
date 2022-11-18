@@ -44,6 +44,9 @@ class ReportsEntryViewModel @Inject constructor(
     val outboxReportFormInstance: LiveData<ReportFormInstance> get() = _outboxReportFormInstance
     private val _outboxReportListFormInstance = MutableLiveData<List<ViewEntityTemplateItem>>()
     val outboxReportListFormInstance: LiveData<List<ViewEntityTemplateItem>> get() = _outboxReportListFormInstance
+    private val _submittedReportListFormInstance = MutableLiveData<List<ViewEntityTemplateItem>>()
+    val submittedReportListFormInstance: LiveData<List<ViewEntityTemplateItem>> get() = _submittedReportListFormInstance
+
     private val _onMoreClickedFormInstance = MutableLiveData<ReportFormInstance>()
     val onMoreClickedFormInstance: LiveData<ReportFormInstance> get() = _onMoreClickedFormInstance
     private val _onOpenClickedFormInstance = MutableLiveData<ReportFormInstance>()
@@ -77,6 +80,18 @@ class ReportsEntryViewModel @Inject constructor(
     }
 
     fun saveOutbox(reportFormInstance: ReportFormInstance) {
+        _progress.postValue(true)
+        saveReportFormInstanceUseCase.setReportFormInstance(reportFormInstance)
+        saveReportFormInstanceUseCase.execute(onSuccess = { result ->
+            _outboxReportFormInstance.postValue(result)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
+    }
+
+    fun saveSubmitted(reportFormInstance: ReportFormInstance) {
         _progress.postValue(true)
         saveReportFormInstanceUseCase.setReportFormInstance(reportFormInstance)
         saveReportFormInstanceUseCase.execute(onSuccess = { result ->
@@ -128,8 +143,23 @@ class ReportsEntryViewModel @Inject constructor(
         })
     }
 
-    private fun listSubmitted() {
-
+    fun listSubmitted() {
+        _progress.postValue(true)
+        getReportsUseCase.setEntityStatus(EntityStatus.SUBMITTED)
+        getReportsUseCase.execute(onSuccess = { result ->
+            val resultList = mutableListOf<ViewEntityTemplateItem>()
+            result.map { instance ->
+                resultList.add(
+                    instance.toViewEntityInstanceItem(onOpenClicked = { openInstance(instance) },
+                        onMoreClicked = { onMoreClicked(instance) })
+                )
+            }
+            _submittedReportListFormInstance.postValue(resultList)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
     private fun openInstance(reportFormInstance: ReportFormInstance) {
@@ -174,6 +204,26 @@ class ReportsEntryViewModel @Inject constructor(
             status = EntityStatus.FINALIZED,
             widgetMediaFiles = files ?: emptyList(),
             formPartStatus = FormMediaFileStatus.NOT_SUBMITTED,
+            serverId = server.id
+        )
+    }
+
+    fun getSubmittedFormInstance(
+        title: String,
+        description: String,
+        files: List<FormMediaFile>?,
+        server: TellaReportServer,
+        id: Long? = null,
+        reportApiId: String = "",
+    ): ReportFormInstance {
+        return ReportFormInstance(
+            id = id ?: 0L,
+            title = title,
+            reportApiId = reportApiId,
+            description = description,
+            status = EntityStatus.SUBMITTED,
+            widgetMediaFiles = files ?: emptyList(),
+            formPartStatus = FormMediaFileStatus.SUBMITTED,
             serverId = server.id
         )
     }
@@ -247,15 +297,28 @@ class ReportsEntryViewModel @Inject constructor(
             server = server, reportBodyEntity = ReportBodyEntity(title, description)
         )
         submitReportUseCase.execute(onSuccess = { result ->
-            saveOutbox(
-                reportFormInstance = getOutboxFormInstance(
-                    title = title,
-                    description = description,
-                    files = files,
-                    server = server,
-                    reportApiId = result.id
+            if (files.isEmpty()) {
+                saveSubmitted(
+                    getSubmittedFormInstance(
+                        title = title,
+                        description = description,
+                        files = files,
+                        server = server,
+                        reportApiId = result.id
+                    )
                 )
-            )
+            } else {
+                saveOutbox(
+                    reportFormInstance = getOutboxFormInstance(
+                        title = title,
+                        description = description,
+                        files = files,
+                        server = server,
+                        reportApiId = result.id
+                    )
+                )
+            }
+
         }, onError = {
             _error.postValue(it)
         }, onFinished = {
