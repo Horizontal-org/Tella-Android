@@ -19,10 +19,6 @@ class ReportsSendFragment :
     private var entityInstance: ReportFormInstance? = null
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
         initData()
@@ -51,7 +47,8 @@ class ReportsSendFragment :
             endView = ReportsFormEndView(
                 activity,
                 reportFormInstance.title,
-                reportFormInstance.description
+                reportFormInstance.description,
+                getStatusLabel(reportFormInstance)
             )
             endView.setInstance(reportFormInstance, false, false)
             binding?.endViewContainer?.removeAllViews()
@@ -59,8 +56,8 @@ class ReportsSendFragment :
         }
     }
 
-    fun getStatusLabel(reportFormInstance: ReportFormInstance) : String {
-        if (reportFormInstance.status == EntityStatus.SUBMITTED){
+    fun getStatusLabel(reportFormInstance: ReportFormInstance): String {
+        if (reportFormInstance.status == EntityStatus.SUBMITTED) {
             return ""
         } else {
             return ""
