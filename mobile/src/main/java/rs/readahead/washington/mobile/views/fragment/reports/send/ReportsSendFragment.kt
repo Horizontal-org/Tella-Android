@@ -28,10 +28,8 @@ class ReportsSendFragment :
     }
 
     private fun initView() {
-        binding?.toolbar?.backClickListener = { nav().popBackStack() }
         arguments?.let {
             reportInstance = it.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportFormInstance
-            entityInstance = it.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportFormInstance
             showFormEndView()
         }
 
@@ -43,7 +41,6 @@ class ReportsSendFragment :
                     submitEntity()
                 }
             }
-
         }
     }
 
@@ -52,11 +49,10 @@ class ReportsSendFragment :
             return
         }
 
-        entityInstance?.let { reportFormInstance ->
+        reportInstance?.let { reportFormInstance ->
             if (reportFormInstance.status == EntityStatus.SUBMITTED) {
                 binding?.nextBtn?.hide()
             }
-        reportInstance?.let { reportFormInstance ->
             endView = ReportsFormEndView(
                 activity,
                 reportFormInstance.title,
@@ -69,13 +65,11 @@ class ReportsSendFragment :
         }
     }
 
-    private fun submitEntity() {
+    fun submitEntity() {
         reportInstance?.let { entity ->
 
         }
     }
-
-
 
     fun getStatusLabel(reportFormInstance: ReportFormInstance): String {
         if (reportFormInstance.status == EntityStatus.SUBMITTED) {

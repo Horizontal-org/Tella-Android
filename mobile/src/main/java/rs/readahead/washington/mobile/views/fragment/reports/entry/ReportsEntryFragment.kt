@@ -72,9 +72,6 @@ class ReportsEntryFragment :
     private fun initView() {
         gridLayoutManager = GridLayoutManager(context, 3)
 
-        /*binding?.attachFilesBtn?.setOnClickListener {
-            showSelectFilesSheet()
-        }*/
         binding?.filesRecyclerView?.apply {
             adapter = filesRecyclerViewAdapter
             layoutManager = gridLayoutManager
@@ -114,8 +111,6 @@ class ReportsEntryFragment :
     private fun highLightButton(isTitleEnabled: Boolean, isDescriptionEnabled: Boolean) {
         if (isTitleEnabled && isDescriptionEnabled) {
             binding?.sendReportBtn?.setTint(R.color.wa_orange)
-            binding?.sendReportBtn?.setOnClickListener {}
-            binding?.sendLaterBtn?.setOnClickListener {}
             binding?.toolbar?.onRightClickListener = {
                 saveReportAsDraft()
             }
@@ -130,7 +125,6 @@ class ReportsEntryFragment :
                     files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
                     )
             }
-
         } else {
             binding?.sendReportBtn?.setTint(R.color.wa_orange_16)
             binding?.sendReportBtn?.setOnClickListener(null)
