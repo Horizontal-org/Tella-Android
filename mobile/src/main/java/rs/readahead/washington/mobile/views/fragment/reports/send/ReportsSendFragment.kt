@@ -16,7 +16,7 @@ class ReportsSendFragment :
     BaseBindingFragment<FragmentSendReportBinding>(FragmentSendReportBinding::inflate) {
 
     private lateinit var endView: ReportsFormEndView
-    private var entityInstance: ReportFormInstance? = null
+    private var reportInstance: ReportFormInstance? = null
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,13 +30,25 @@ class ReportsSendFragment :
     private fun initView() {
         binding?.toolbar?.backClickListener = { nav().popBackStack() }
         arguments?.let {
+            reportInstance = it.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportFormInstance
             entityInstance = it.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportFormInstance
             showFormEndView()
+        }
+
+        with(binding) {
+            this?.toolbar?.backClickListener = { nav().popBackStack() }
+
+            this?.nextBtn?.setOnClickListener {
+                reportInstance?.let {
+                    submitEntity()
+                }
+            }
+
         }
     }
 
     private fun showFormEndView() {
-        if (entityInstance == null) {
+        if (reportInstance == null) {
             return
         }
 
@@ -44,6 +56,7 @@ class ReportsSendFragment :
             if (reportFormInstance.status == EntityStatus.SUBMITTED) {
                 binding?.nextBtn?.hide()
             }
+        reportInstance?.let { reportFormInstance ->
             endView = ReportsFormEndView(
                 activity,
                 reportFormInstance.title,
@@ -55,6 +68,14 @@ class ReportsSendFragment :
             binding?.endViewContainer?.addView(endView)
         }
     }
+
+    private fun submitEntity() {
+        reportInstance?.let { entity ->
+
+        }
+    }
+
+
 
     fun getStatusLabel(reportFormInstance: ReportFormInstance): String {
         if (reportFormInstance.status == EntityStatus.SUBMITTED) {
