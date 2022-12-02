@@ -11,6 +11,7 @@ import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
+import rs.readahead.washington.mobile.domain.entity.reports.ProjectResult
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.usecases.reports.*
@@ -19,7 +20,6 @@ import rs.readahead.washington.mobile.views.fragment.reports.adapter.ViewEntityT
 import rs.readahead.washington.mobile.views.fragment.reports.mappers.toViewEntityInstanceItem
 import javax.inject.Inject
 
-
 @HiltViewModel
 class ReportsEntryViewModel @Inject constructor(
     private val getReportsServersUseCase: GetReportsServersUseCase,
@@ -27,7 +27,8 @@ class ReportsEntryViewModel @Inject constructor(
     private val getReportsUseCase: GetReportsUseCase,
     private val deleteReportUseCase: DeleteReportUseCase,
     private val getReportBundleUseCase: GetReportBundleUseCase,
-    private val submitReportUseCase: SubmitReportUseCase
+    private val submitReportUseCase: SubmitReportUseCase,
+    private val getReportProjectsUseCase: GetReportProjectsUseCase
 ) : ViewModel() {
 
     private val _progress = MutableLiveData<Boolean>()
@@ -55,6 +56,8 @@ class ReportsEntryViewModel @Inject constructor(
     val instanceDeleted: LiveData<Boolean> get() = _instanceDeleted
     private val _draftReportInstance = MutableLiveData<ReportFormInstance>()
     val draftReportInstance: LiveData<ReportFormInstance> get() = _draftReportInstance
+    private val _serverProjectList = MutableLiveData<List<ProjectResult>>()
+    val serverProjectList: LiveData<List<ProjectResult>> get() = _serverProjectList
 
     fun listServers() {
         _progress.postValue(true)
@@ -326,6 +329,19 @@ class ReportsEntryViewModel @Inject constructor(
         })
     }
 
+    fun listReportProjects(servers: List<TellaReportServer>) {
+        _progress.postValue(true)
+        getReportProjectsUseCase.setReportServersList(servers)
+        getReportProjectsUseCase.execute(
+            onSuccess = { result -> _serverProjectList.pservers = {ArrayList@9178}  size = 1ostValue(result) },
+            onError = {
+                _error.postValue(it)
+            },
+            onFinished = {
+                _progress.postValue(false)
+            }
+        )
+    }
 
 }
 

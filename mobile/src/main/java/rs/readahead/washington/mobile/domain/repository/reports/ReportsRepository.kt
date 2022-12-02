@@ -15,7 +15,8 @@ interface ReportsRepository {
 
     fun submitReport(
         server: TellaReportServer,
-        reportBody: ReportBodyEntity
+        reportBody: ReportBodyEntity,
+        projectId: String
     ): Single<ReportPostResult>
 
     fun getProjects(

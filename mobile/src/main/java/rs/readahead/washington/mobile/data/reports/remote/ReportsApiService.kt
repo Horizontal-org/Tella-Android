@@ -7,6 +7,7 @@ import rs.readahead.washington.mobile.data.ParamsNetwork.COOKIE
 import rs.readahead.washington.mobile.data.entity.reports.LoginEntity
 import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
 import rs.readahead.washington.mobile.data.entity.reports.ReportsLoginResponse
+import rs.readahead.washington.mobile.domain.entity.reports.ProjectResult
 import rs.readahead.washington.mobile.domain.entity.reports.ReportPostResult
 
 interface ReportsApiService {
@@ -35,14 +36,14 @@ interface ReportsApiService {
     //TODO AHLEM REMOVE ALL HARDCODED :)
     @GET
     fun getProjects(
+        @Url
+        url: String,
         @Query("limit")
         limit: Int,
         @Query("offset")
         offset: Int,
-        @Url
-        url: String,
         @Header(COOKIE) access_token: String
-    ): Single<ReportPostResult>
+    ): Single<List<ProjectResult>>
 
     @Multipart
     @PUT

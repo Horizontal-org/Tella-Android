@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.data.reports.repository
 
 import com.hzontal.tella_vault.VaultFile
 import io.reactivex.*
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
@@ -30,6 +31,7 @@ import java.net.UnknownHostException
 import java.util.*
 import javax.inject.Inject
 
+
 class ReportsRepositoryImp @Inject internal constructor(
     private val apiService: ReportsApiService,
     private val okHttpClient: OkHttpClient
@@ -51,15 +53,15 @@ class ReportsRepositoryImp @Inject internal constructor(
 
     override fun submitReport(
         server: TellaReportServer,
-        reportBody: ReportBodyEntity
+        reportBody: ReportBodyEntity,
+        projectId: String
     ): Single<ReportPostResult> {
         return apiService.submitReport(
             reportBodyEntity = reportBody,
             url = StringUtils.append(
                 '/',
                 server.url,
-                //TODO AHLEM GET PROJECT ID DYNAMICLY
-                "$URL_PROJECTS/31db99af-979f-4c55-8eb3-464b53314fae"
+                "$URL_PROJECTS/$projectId"
             ),
             access_token = server.accessToken
         )
@@ -70,7 +72,26 @@ class ReportsRepositoryImp @Inject internal constructor(
         offset: Int,
         servers: List<TellaReportServer>
     ): Single<List<ProjectResult>> {
-        TODO("TODO AHLEM GET PROJECTS LIST FROM SERVER")
+        val projectsList = mutableListOf<ProjectResult>()
+        return Observable
+            .range(0, servers.size)
+            .concatMap { serverIndex ->
+                apiService.getProjects(
+                    limit = limit,
+                    offset = offset,
+                    access_token = servers[serverIndex].accessToken,
+                    url = StringUtils.append(
+                        '/',
+                        servers[serverIndex].url,
+                        URL_PROJECTS
+                    )
+                ).toObservable()
+            }
+            .doOnNext { list ->
+                projectsList.addAll(list)
+            }
+            .filter { list -> list.isNotEmpty() }
+            .firstOrError()
     }
 
     override fun upload(

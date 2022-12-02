@@ -19,6 +19,6 @@ class SubmitReportUseCase @Inject constructor(val reportsRepository: ReportsRepo
     }
 
     override fun buildUseCaseSingle(): Single<ReportPostResult> {
-        return reportsRepository.submitReport(server, reportBodyEntity)
+        return reportsRepository.submitReport(server, reportBodyEntity,"")
     }
 }

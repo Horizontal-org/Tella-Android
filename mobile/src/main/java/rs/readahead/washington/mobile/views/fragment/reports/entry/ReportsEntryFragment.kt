@@ -18,8 +18,8 @@ import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultSelectFilesShe
 import org.hzontal.shared_ui.dropdownlist.DropDownItem
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsEntryBinding
+import rs.readahead.washington.mobile.domain.entity.reports.ProjectResult
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
-import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.hide
@@ -47,12 +47,11 @@ class ReportsEntryFragment :
     private lateinit var gridLayoutManager: GridLayoutManager
     private val filesRecyclerViewAdapter: ReportsFilesRecyclerViewAdapter by lazy {
         ReportsFilesRecyclerViewAdapter(
-            this,
-            baseActivity, MediaFileHandler()
+            this, baseActivity, MediaFileHandler()
         )
     }
-    private lateinit var selectedServer: TellaReportServer
-    private var servers: ArrayList<TellaReportServer>? = null
+    private lateinit var selectedProject: ProjectResult
+    private var projectIds: ArrayList<ProjectResult>? = null
     private var reportFormInstance: ReportFormInstance? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -117,14 +116,14 @@ class ReportsEntryFragment :
             binding?.sendLaterBtn?.setOnClickListener {
                 saveReportAsOutbox()
             }
-            binding?.sendReportBtn?.setOnClickListener {
-                viewModel.submitReport(
-                    title = binding?.reportTitleEt?.text.toString(),
-                    description = binding?.reportDescriptionEt?.text.toString(),
-                    server = selectedServer,
-                    files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
-                    )
-            }
+            /*  binding?.sendReportBtn?.setOnClickListener {
+                 viewModel.submitReport(
+                     title = binding?.reportTitleEt?.text.toString(),
+                     description = binding?.reportDescriptionEt?.text.toString(),
+                     server = selectedProject,
+                     files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
+                 )
+             }*/
         } else {
             binding?.sendReportBtn?.setTint(R.color.wa_orange_16)
             binding?.sendReportBtn?.setOnClickListener(null)
@@ -134,6 +133,7 @@ class ReportsEntryFragment :
     }
 
     private fun saveReportAsDraft() {
+        /*
         viewModel.saveDraft(
             viewModel.getDraftFormInstance(
                 id = reportFormInstance?.id,
@@ -142,48 +142,26 @@ class ReportsEntryFragment :
                 files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
                 server = selectedServer
             )
-        )
+        )*/
     }
 
     private fun saveReportAsOutbox() {
-        viewModel.saveOutbox(
-            viewModel.getOutboxFormInstance(
-                id = reportFormInstance?.id,
-                title = binding?.reportTitleEt?.text.toString(),
-                description = binding?.reportDescriptionEt?.text.toString(),
-                files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
-                server = selectedServer
-            )
-        )
+        /*   viewModel.saveOutbox(
+              viewModel.getOutboxFormInstance(
+                  id = reportFormInstance?.id,
+                  title = binding?.reportTitleEt?.text.toString(),
+                  description = binding?.reportDescriptionEt?.text.toString(),
+                  files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
+                  server = selectedServer
+              )
+          )*/
     }
 
     private fun initData() {
         with(viewModel) {
             listServers()
             serversList.observe(viewLifecycleOwner) { serversList ->
-                if (serversList.size > 1) {
-                    servers = arrayListOf()
-                    servers?.addAll(serversList)
-                    val listDropDown = mutableListOf<DropDownItem>()
-                    serversList.map { server ->
-                        listDropDown.add(DropDownItem(server.id, server.name))
-                    }
-                    binding?.dropdownGroup?.show()
-                    binding?.serversDropdown?.setListAdapter(
-                        listDropDown,
-                        this@ReportsEntryFragment,
-                        baseActivity
-                    )
-                    reportFormInstance?.let {
-                        servers?.first { server -> server.id == it.serverId }?.let {
-                            selectedServer = it
-                            binding?.serversDropdown?.setDefaultName(it.name)
-                        }
-                    }
-                } else {
-                    binding?.dropdownGroup?.hide()
-                    selectedServer = serversList[0]
-                }
+                listReportProjects(serversList)
             }
 
             draftReportFormInstance.observe(viewLifecycleOwner) {
@@ -193,13 +171,36 @@ class ReportsEntryFragment :
             outboxReportFormInstance.observe(viewLifecycleOwner) {
                 nav().popBackStack()
             }
+
+            serverProjectList.observe(viewLifecycleOwner) { projectsList ->
+                if (projectsList.size > 1) {
+                    projectIds = arrayListOf()
+                    projectIds?.addAll(projectsList)
+                    val listDropDown = mutableListOf<DropDownItem>()
+                    projectsList.map { project ->
+                        listDropDown.add(DropDownItem(project.id, project.name))
+                    }
+                    binding?.dropdownGroup?.show()
+                    binding?.serversDropdown?.setListAdapter(
+                        listDropDown, this@ReportsEntryFragment, baseActivity
+                    )
+                    /*   reportFormInstance?.let {
+                           projectIds?.first { project -> project.id == it. }?.let {
+                               selectedServer = it
+                               binding?.serversDropdown?.setDefaultName(it.name)
+                           }*/
+
+                } else {
+                    binding?.dropdownGroup?.hide()
+                    //selectedServer = serversList[0]
+                }
+            }
         }
 
     }
 
     private fun showSelectFilesSheet() {
-        showVaultSelectFilesSheet(
-            baseActivity.supportFragmentManager,
+        showVaultSelectFilesSheet(baseActivity.supportFragmentManager,
             baseActivity.getString(R.string.Uwazi_WidgetMedia_Take_Photo),
             baseActivity.getString(R.string.Vault_RecordAudio_SheetAction),
             baseActivity.getString(R.string.Uwazi_WidgetMedia_Select_From_Device),
@@ -222,8 +223,7 @@ class ReportsEntryFragment :
                 override fun importFromDevice() {
                     importMedia()
                 }
-            }
-        )
+            })
     }
 
     private fun showAttachmentsActivity() {
@@ -233,11 +233,8 @@ class ReportsEntryFragment :
                 Intent(activity, AttachmentsActivitySelector::class.java)
                     // .putExtra(VAULT_FILE_KEY, Gson().toJson(ids))
                     .putExtra(
-                        VAULT_FILES_FILTER,
-                        FilterType.ALL_WITHOUT_DIRECTORY
-                    )
-                    .putExtra(VAULT_PICKER_SINGLE, false),
-                C.MEDIA_FILE_ID
+                        VAULT_FILES_FILTER, FilterType.ALL_WITHOUT_DIRECTORY
+                    ).putExtra(VAULT_PICKER_SINGLE, false), C.MEDIA_FILE_ID
             )
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
@@ -248,12 +245,9 @@ class ReportsEntryFragment :
         try {
             //TODO Djordje WE SHOULD BE ABLE TO USE `baseActivity instance` instead
             baseActivity.startActivityForResult(
-                Intent(context, CameraActivity::class.java)
-                    .putExtra(
-                        CameraActivity.INTENT_MODE,
-                        CameraActivity.IntentMode.COLLECT.name
-                    ),
-                C.MEDIA_FILE_ID
+                Intent(context, CameraActivity::class.java).putExtra(
+                    CameraActivity.INTENT_MODE, CameraActivity.IntentMode.COLLECT.name
+                ), C.MEDIA_FILE_ID
             )
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
@@ -263,10 +257,7 @@ class ReportsEntryFragment :
     private fun importMedia() {
         baseActivity.maybeChangeTemporaryTimeout {
             MediaFileHandler.startSelectMediaActivity(
-                activity,
-                "*/*",
-                null,
-                C.IMPORT_FILE
+                activity, "*/*", null, C.IMPORT_FILE
             )
         }
     }
@@ -306,8 +297,8 @@ class ReportsEntryFragment :
 
     override fun onDropDownItemClicked(position: Int, chosenItem: DropDownItem) {
         binding?.serversDropdown?.setDefaultName(chosenItem.name)
-        servers?.first { server -> server.id == chosenItem.id }?.let {
-            selectedServer = it
-        }
+        /*  projectIds?.first { server -> server.id == chosenItem.id }?.let {
+              selectedServer = it
+          }*/
     }
 }

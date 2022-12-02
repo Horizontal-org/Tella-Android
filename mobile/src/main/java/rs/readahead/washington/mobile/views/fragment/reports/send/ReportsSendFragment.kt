@@ -71,7 +71,7 @@ class ReportsSendFragment :
         }
     }
 
-    fun getStatusLabel(reportFormInstance: ReportFormInstance): String {
+    private fun getStatusLabel(reportFormInstance: ReportFormInstance): String {
         if (reportFormInstance.status == EntityStatus.SUBMITTED) {
             return ""
         } else {
