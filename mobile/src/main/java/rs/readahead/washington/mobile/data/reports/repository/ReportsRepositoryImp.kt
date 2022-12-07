@@ -61,7 +61,7 @@ class ReportsRepositoryImp @Inject internal constructor(
             url = StringUtils.append(
                 '/',
                 server.url,
-                "$URL_PROJECTS/$projectId"
+                "$URL_PROJECTS/31db99af-979f-4c55-8eb3-464b53314fae"
             ),
             access_token = server.accessToken
         )

@@ -160,7 +160,8 @@ dependencies {
     implementation 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:3.2.0'
     implementation 'com.github.lzyzsd:circleprogress:1.2.1'
     implementation "com.github.ihsanbal:LoggingInterceptor:3.0.0"
-
+    // optional - RxJava2 support
+    implementation "androidx.work:work-rxjava2:2.7.1"
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}"
 
     testImplementation 'junit:junit:4.13'

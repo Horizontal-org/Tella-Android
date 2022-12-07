@@ -13,6 +13,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.multidex.MultiDexApplication;
+import androidx.work.Configuration;
+import androidx.work.WorkManager;
 
 import com.bumptech.glide.Glide;
 import com.evernote.android.job.JobManager;
@@ -64,7 +66,7 @@ import rs.readahead.washington.mobile.views.activity.onboarding.OnBoardingActivi
 import timber.log.Timber;
 
 @HiltAndroidApp
-public class MyApplication extends MultiDexApplication implements IUnlockRegistryHolder, CredentialsCallback {
+public class MyApplication extends MultiDexApplication implements IUnlockRegistryHolder, CredentialsCallback, Configuration.Provider  {
     public static Vault vault;
     public static RxVault rxVault;
     private static TellaBus bus;
@@ -173,6 +175,14 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         // todo: implement dagger2
         SharedPrefs.getInstance().init(this);
         configureCrashlytics();
+
+        // provide custom configuration
+        Configuration myConfig = new Configuration.Builder()
+                .setMinimumLoggingLevel(android.util.Log.INFO)
+                .build();
+
+       //initialize WorkManager
+        WorkManager.initialize(this, myConfig);
 
         RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
             @Override
@@ -339,5 +349,13 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     public void onTerminate() {
         super.onTerminate();
         persistCleanInsights();
+    }
+
+    @NonNull
+    @Override
+    public Configuration getWorkManagerConfiguration() {
+        return new Configuration.Builder()
+                .setMinimumLoggingLevel(android.util.Log.INFO)
+                .build();
     }
 }

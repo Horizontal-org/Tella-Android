@@ -2,16 +2,14 @@ package rs.readahead.washington.mobile.domain.entity;
 
 import com.hzontal.tella_vault.VaultFile;
 
-import java.io.Serializable;
+import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 
-import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository.UploadStatus;
-
-public class FileUploadInstance implements Serializable {
+public class ReportFileUploadInstance  extends VaultFile {
     private long id;
     private VaultFile vaultFile;
     private long updated;
     private long started;
-    private UploadStatus status;
+    private ITellaUploadsRepository.UploadStatus status;
     private long size;
     private long uploaded;
     //TODO MAYBE ESCAPE IT FOR NOW
@@ -51,11 +49,11 @@ public class FileUploadInstance implements Serializable {
         this.started = started;
     }
 
-    public UploadStatus getStatus() {
+    public ITellaUploadsRepository.UploadStatus getStatus() {
         return status;
     }
 
-    public void setStatus(UploadStatus status) {
+    public void setStatus(ITellaUploadsRepository.UploadStatus status) {
         this.status = status;
     }
 

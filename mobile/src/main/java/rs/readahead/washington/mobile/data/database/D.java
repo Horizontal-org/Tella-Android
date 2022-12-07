@@ -25,6 +25,7 @@ class D {
     static final String T_SETTINGS = "t_settings";
     static final String T_TELLA_UPLOAD_SERVER = "t_tella_upload_server";
     static final String T_MEDIA_FILE_UPLOAD = "t_media_file_upload";
+    static final String T_REPORT_FILES_UPLOAD = "t_report_files_upload";
     static final String T_COLLECT_FORM_INSTANCE_VAULT_FILE = "t_collect_xform_instance_vault_file";
     static  final String A_TELLA_UPLOAD_INSTANCE_ID = "a_tella_upload_instance_id";
 
@@ -71,6 +72,7 @@ class D {
     static final String C_THUMBNAIL = "c_thumbnail";
     static final String C_FILE_NAME = "c_file_name";
     static final String C_MEDIA_FILE_ID = "c_media_file_id";
+    static final String C_REPORT_FILE_ID = "c_report_file_id";
     static final String C_CREATED = "c_created";
     static final String C_COLLECT_FORM_INSTANCE_ID = "c_collect_form_instance_id";
     static final String C_DURATION = "c_duration";

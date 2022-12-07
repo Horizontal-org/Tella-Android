@@ -20,6 +20,7 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsEntryBinding
 import rs.readahead.washington.mobile.domain.entity.reports.ProjectResult
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.hide
@@ -50,8 +51,8 @@ class ReportsEntryFragment :
             this, baseActivity, MediaFileHandler()
         )
     }
-    private lateinit var selectedProject: ProjectResult
-    private var projectIds: ArrayList<ProjectResult>? = null
+    private lateinit var selectedServer: TellaReportServer
+    private var servers: ArrayList<TellaReportServer>? = null
     private var reportFormInstance: ReportFormInstance? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -116,14 +117,14 @@ class ReportsEntryFragment :
             binding?.sendLaterBtn?.setOnClickListener {
                 saveReportAsOutbox()
             }
-            /*  binding?.sendReportBtn?.setOnClickListener {
+             binding?.sendReportBtn?.setOnClickListener {
                  viewModel.submitReport(
                      title = binding?.reportTitleEt?.text.toString(),
                      description = binding?.reportDescriptionEt?.text.toString(),
-                     server = selectedProject,
+                     server = selectedServer,
                      files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
                  )
-             }*/
+             }
         } else {
             binding?.sendReportBtn?.setTint(R.color.wa_orange_16)
             binding?.sendReportBtn?.setOnClickListener(null)
@@ -133,7 +134,7 @@ class ReportsEntryFragment :
     }
 
     private fun saveReportAsDraft() {
-        /*
+
         viewModel.saveDraft(
             viewModel.getDraftFormInstance(
                 id = reportFormInstance?.id,
@@ -142,11 +143,11 @@ class ReportsEntryFragment :
                 files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
                 server = selectedServer
             )
-        )*/
+        )
     }
 
     private fun saveReportAsOutbox() {
-        /*   viewModel.saveOutbox(
+      viewModel.saveOutbox(
               viewModel.getOutboxFormInstance(
                   id = reportFormInstance?.id,
                   title = binding?.reportTitleEt?.text.toString(),
@@ -154,45 +155,35 @@ class ReportsEntryFragment :
                   files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
                   server = selectedServer
               )
-          )*/
+          )
     }
 
     private fun initData() {
         with(viewModel) {
             listServers()
             serversList.observe(viewLifecycleOwner) { serversList ->
-                listReportProjects(serversList)
-            }
-
-            draftReportFormInstance.observe(viewLifecycleOwner) {
-                nav().popBackStack()
-            }
-
-            outboxReportFormInstance.observe(viewLifecycleOwner) {
-                nav().popBackStack()
-            }
-
-            serverProjectList.observe(viewLifecycleOwner) { projectsList ->
-                if (projectsList.size > 1) {
-                    projectIds = arrayListOf()
-                    projectIds?.addAll(projectsList)
+                if (serversList.size > 1) {
+                    servers = arrayListOf()
+                    servers?.addAll(serversList)
                     val listDropDown = mutableListOf<DropDownItem>()
-                    projectsList.map { project ->
-                        listDropDown.add(DropDownItem(project.id, project.name))
+                    serversList.map { server ->
+                        listDropDown.add(DropDownItem(server.id, server.name))
                     }
                     binding?.dropdownGroup?.show()
                     binding?.serversDropdown?.setListAdapter(
-                        listDropDown, this@ReportsEntryFragment, baseActivity
+                        listDropDown,
+                        this@ReportsEntryFragment,
+                        baseActivity
                     )
-                    /*   reportFormInstance?.let {
-                           projectIds?.first { project -> project.id == it. }?.let {
-                               selectedServer = it
-                               binding?.serversDropdown?.setDefaultName(it.name)
-                           }*/
-
+                    reportFormInstance?.let {
+                        servers?.first { server -> server.id == it.serverId }?.let {
+                            selectedServer = it
+                            binding?.serversDropdown?.setDefaultName(it.name)
+                        }
+                    }
                 } else {
                     binding?.dropdownGroup?.hide()
-                    //selectedServer = serversList[0]
+                    selectedServer = serversList[0]
                 }
             }
         }

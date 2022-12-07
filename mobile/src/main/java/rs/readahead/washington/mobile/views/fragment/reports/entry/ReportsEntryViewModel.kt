@@ -299,6 +299,11 @@ class ReportsEntryViewModel @Inject constructor(
         submitReportUseCase.setData(
             server = server, reportBodyEntity = ReportBodyEntity(title, description)
         )
+        if (server.isActivatedBackgroundUpload){
+
+        }else {
+
+        }
         submitReportUseCase.execute(onSuccess = { result ->
             if (files.isEmpty()) {
                 saveSubmitted(
@@ -328,12 +333,12 @@ class ReportsEntryViewModel @Inject constructor(
             _progress.postValue(false)
         })
     }
-
+    /*todo */
     fun listReportProjects(servers: List<TellaReportServer>) {
         _progress.postValue(true)
         getReportProjectsUseCase.setReportServersList(servers)
         getReportProjectsUseCase.execute(
-            onSuccess = { result -> _serverProjectList.pservers = {ArrayList@9178}  size = 1ostValue(result) },
+            onSuccess = { result -> _serverProjectList.postValue(result)},
             onError = {
                 _error.postValue(it)
             },

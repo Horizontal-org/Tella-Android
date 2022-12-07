@@ -356,6 +356,12 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
+    public Completable scheduleUploadReportInstances(List<ReportFormInstance> reportFormInstances) {
+        return null;
+    }
+
+
+    @Override
     public Completable logUploadedFile(final VaultFile vaultFile) {
         return Completable.fromCallable((Callable<Void>) () -> {
             logUploadedFileDb(vaultFile);
@@ -369,6 +375,11 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             setUploadStatusDb(mediaFileId, status, uploadedSize, retry);
             return null;
         }).compose(applyCompletableSchedulers());
+    }
+
+    @Override
+    public Completable setUploadReportStatus(String reportId, String vaultFileId, UploadStatus status, long uploadedSize, boolean retry) {
+        return null;
     }
 
 
@@ -395,6 +406,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     public Single<List<FileUploadBundle>> getFileUploadBundles(final UploadStatus status) {
         return Single.fromCallable(() -> getFileUploadBundlesDB(status))
                 .compose(applySchedulers());
+    }
+
+    public Single<List<ReportFormInstance>> getFileUploadReportBundles(final UploadStatus status) {
+        return null;
     }
 
     @Override
@@ -1154,6 +1169,37 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
                 database.insertWithOnConflict(
                         D.T_MEDIA_FILE_UPLOAD,
+                        null,
+                        values,
+                        SQLiteDatabase.CONFLICT_REPLACE);
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        }
+    }
+
+    private void scheduleUploadReportFilesWithPriorityDb(ReportFormInstance report, long uploadServerId, boolean metadata) {
+        try {
+
+            long set = calculateCurrentFileUploadSet();
+            int retries = getMaxRetries(); //make sure that these files are taken first from the set
+            int manualUpload = 1;
+
+            for (VaultFile vaultFile : report.getWidgetMediaFiles()) {
+                ContentValues values = new ContentValues();
+                values.put(D.C_MEDIA_FILE_ID, vaultFile.id);
+                values.put(D.C_UPDATED, Util.currentTimestamp());
+                values.put(D.C_CREATED, Util.currentTimestamp());
+                values.put(D.C_STATUS, UploadStatus.SCHEDULED.ordinal());
+                values.put(D.C_INCLUDE_METADATA, metadata ? 1 : 0);
+                values.put(D.C_MANUAL_UPLOAD, manualUpload);
+                values.put(D.C_REPORT_INSTANCE_ID, report.getId());
+                values.put(D.C_SIZE, vaultFile.size);
+                values.put(D.C_SET, set);
+                values.put(D.C_RETRY_COUNT, retries);
+
+                database.insertWithOnConflict(
+                        D.T_REPORT_FILES_UPLOAD,
                         null,
                         values,
                         SQLiteDatabase.CONFLICT_REPLACE);

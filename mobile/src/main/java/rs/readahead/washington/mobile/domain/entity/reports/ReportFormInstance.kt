@@ -1,7 +1,7 @@
 package rs.readahead.washington.mobile.domain.entity.reports
 
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
-import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
+import rs.readahead.washington.mobile.domain.entity.ReportFileUploadInstance
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import java.io.Serializable
 
@@ -12,7 +12,7 @@ data class ReportFormInstance(
     var updated: Long = 0,
     var metadata: Map<String, List<Any>> = mutableMapOf(),
     var status: EntityStatus = EntityStatus.UNKNOWN,
-    var widgetMediaFiles: List<FormMediaFile> = emptyList(),
+    var widgetMediaFiles: List<ReportFileUploadInstance> = emptyList(),
     var formPartStatus: FormMediaFileStatus = FormMediaFileStatus.UNKNOWN,
     var title: String = "",
     var description: String = ""
