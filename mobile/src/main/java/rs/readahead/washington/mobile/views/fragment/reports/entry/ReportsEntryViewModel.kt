@@ -185,7 +185,7 @@ class ReportsEntryViewModel @Inject constructor(
             title = title,
             description = description,
             status = EntityStatus.DRAFT,
-            widgetMediaFiles = files ?: emptyList(),
+            widgetMediaFiles = /*files ?:*/ emptyList(),
             formPartStatus = FormMediaFileStatus.NOT_SUBMITTED,
             serverId = server.id
         )
@@ -205,7 +205,7 @@ class ReportsEntryViewModel @Inject constructor(
             reportApiId = reportApiId,
             description = description,
             status = EntityStatus.FINALIZED,
-            widgetMediaFiles = files ?: emptyList(),
+            widgetMediaFiles = /*files ?:*/  emptyList(),
             formPartStatus = FormMediaFileStatus.NOT_SUBMITTED,
             serverId = server.id
         )
@@ -225,7 +225,7 @@ class ReportsEntryViewModel @Inject constructor(
             reportApiId = reportApiId,
             description = description,
             status = EntityStatus.SUBMITTED,
-            widgetMediaFiles = files ?: emptyList(),
+            widgetMediaFiles = /*files ?:*/ emptyList(),
             formPartStatus = FormMediaFileStatus.SUBMITTED,
             serverId = server.id
         )
@@ -279,8 +279,8 @@ class ReportsEntryViewModel @Inject constructor(
         getReportBundleUseCase.execute(onSuccess = { result ->
             val resultInstance = result.instance
             //TODO WE NEED TO INJECT RXX VAULT USING DAGGER
-            resultInstance.widgetMediaFiles =
-                vaultFilesToMediaFiles(MyApplication.rxVault.get(result.fileIds).blockingGet())
+           /* resultInstance.widgetMediaFiles =
+                vaultFilesToMediaFiles(MyApplication.rxVault.get(result.fileIds).blockingGet())*/
             _draftReportInstance.postValue(resultInstance)
         }, onError = {
             _error.postValue(it)

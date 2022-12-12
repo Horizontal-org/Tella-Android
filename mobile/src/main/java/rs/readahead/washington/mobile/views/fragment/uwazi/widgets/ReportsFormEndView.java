@@ -103,11 +103,11 @@ public class ReportsFormEndView extends FrameLayout {
         partsListView.removeAllViews();
 
         partsListView.addView(createFormSubmissionPartItemView(instance, formSize, offline));
-        for (FormMediaFile mediaFile : instance.getWidgetMediaFiles()) {
+      /*  for (FormMediaFile mediaFile : instance.getWidgetMediaFiles()) {
             partsListView.addView(createFormMediaFileItemView(mediaFile, offline));
             formSize += mediaFile.size;
             formElements++;
-        }
+        }*/
 
         // TextView formElementsView = findViewById(R.id.formElements);
         TextView formSizeView = findViewById(R.id.formSize);

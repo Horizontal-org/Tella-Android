@@ -7,16 +7,14 @@ import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.reports.ProjectResult
 import rs.readahead.washington.mobile.domain.entity.reports.ReportPostResult
-import rs.readahead.washington.mobile.domain.entity.reports.ReportsLoginResult
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 
 interface ReportsRepository {
-    fun login(server: TellaReportServer): Single<ReportsLoginResult>
+    fun login(server: TellaReportServer, projectSlug: String): Single<TellaReportServer>
 
     fun submitReport(
         server: TellaReportServer,
-        reportBody: ReportBodyEntity,
-        projectId: String
+        reportBody: ReportBodyEntity
     ): Single<ReportPostResult>
 
     fun getProjects(

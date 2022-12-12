@@ -18,7 +18,6 @@ import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultSelectFilesShe
 import org.hzontal.shared_ui.dropdownlist.DropDownItem
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsEntryBinding
-import rs.readahead.washington.mobile.domain.entity.reports.ProjectResult
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.media.MediaFileHandler
@@ -91,7 +90,6 @@ class ReportsEntryFragment :
         reportFormInstance?.let { instance ->
             binding?.reportTitleEt?.setText(instance.title)
             binding?.reportDescriptionEt?.setText(instance.description)
-            putFiles(viewModel.mediaFilesToVaultFiles(instance.widgetMediaFiles))
         }
     }
 
@@ -106,6 +104,7 @@ class ReportsEntryFragment :
             isDescriptionEnabled = description.length > 1
             highLightButton(isTitleEnabled, isDescriptionEnabled)
         }
+
     }
 
     private fun highLightButton(isTitleEnabled: Boolean, isDescriptionEnabled: Boolean) {
@@ -117,14 +116,14 @@ class ReportsEntryFragment :
             binding?.sendLaterBtn?.setOnClickListener {
                 saveReportAsOutbox()
             }
-             binding?.sendReportBtn?.setOnClickListener {
-                 viewModel.submitReport(
-                     title = binding?.reportTitleEt?.text.toString(),
-                     description = binding?.reportDescriptionEt?.text.toString(),
-                     server = selectedServer,
-                     files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
-                 )
-             }
+            binding?.sendReportBtn?.setOnClickListener {
+                viewModel.submitReport(
+                    title = binding?.reportTitleEt?.text.toString(),
+                    description = binding?.reportDescriptionEt?.text.toString(),
+                    server = selectedServer,
+                    files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
+                )
+            }
         } else {
             binding?.sendReportBtn?.setTint(R.color.wa_orange_16)
             binding?.sendReportBtn?.setOnClickListener(null)
@@ -147,15 +146,15 @@ class ReportsEntryFragment :
     }
 
     private fun saveReportAsOutbox() {
-      viewModel.saveOutbox(
-              viewModel.getOutboxFormInstance(
-                  id = reportFormInstance?.id,
-                  title = binding?.reportTitleEt?.text.toString(),
-                  description = binding?.reportDescriptionEt?.text.toString(),
-                  files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
-                  server = selectedServer
-              )
-          )
+        viewModel.saveOutbox(
+            viewModel.getOutboxFormInstance(
+                id = reportFormInstance?.id,
+                title = binding?.reportTitleEt?.text.toString(),
+                description = binding?.reportDescriptionEt?.text.toString(),
+                files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
+                server = selectedServer
+            )
+        )
     }
 
     private fun initData() {
@@ -167,7 +166,7 @@ class ReportsEntryFragment :
                     servers?.addAll(serversList)
                     val listDropDown = mutableListOf<DropDownItem>()
                     serversList.map { server ->
-                        listDropDown.add(DropDownItem(server.id, server.name))
+                        listDropDown.add(DropDownItem(server.projectId, server.projectName))
                     }
                     binding?.dropdownGroup?.show()
                     binding?.serversDropdown?.setListAdapter(
@@ -288,8 +287,5 @@ class ReportsEntryFragment :
 
     override fun onDropDownItemClicked(position: Int, chosenItem: DropDownItem) {
         binding?.serversDropdown?.setDefaultName(chosenItem.name)
-        /*  projectIds?.first { server -> server.id == chosenItem.id }?.let {
-              selectedServer = it
-          }*/
     }
 }

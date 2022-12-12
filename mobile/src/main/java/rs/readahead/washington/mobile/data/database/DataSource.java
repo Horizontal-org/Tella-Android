@@ -92,6 +92,12 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     .observeOn(AndroidSchedulers.mainThread());
 
 
+    private DataSource(Context context, byte[] key) {
+        WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context);
+        SQLiteDatabase.loadLibs(context);
+        database = sqLiteOpenHelper.getWritableDatabase(key);
+    }
+
     public static synchronized DataSource getInstance(Context context, byte[] key) {
         if (dataSource == null) {
             dataSource = new DataSource(context.getApplicationContext(), key);
@@ -100,10 +106,16 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return dataSource;
     }
 
-    private DataSource(Context context, byte[] key) {
-        WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context);
-        SQLiteDatabase.loadLibs(context);
-        database = sqLiteOpenHelper.getWritableDatabase(key);
+    private static String createSQLInsert(final String tableName, final String[] columnNames) {
+        if (tableName == null || columnNames == null || columnNames.length == 0) {
+            throw new IllegalArgumentException();
+        }
+
+        return "INSERT INTO " + tableName + " (" +
+                TextUtils.join(", ", columnNames) +
+                ") VALUES( " +
+                TextUtils.join(", ", Collections.nCopies(columnNames.length, "?")) +
+                ")";
     }
 
     private <T> SingleTransformer<T, T> applySchedulers() {
@@ -255,7 +267,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 .compose(applySchedulers());
     }
 
-
     public Single<CollectForm> getBlankCollectFormById(final String formID) {
         return Single.fromCallable(() -> dataSource.getBlankCollectForm(formID))
                 .compose(applySchedulers());
@@ -360,7 +371,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return null;
     }
 
-
     @Override
     public Completable logUploadedFile(final VaultFile vaultFile) {
         return Completable.fromCallable((Callable<Void>) () -> {
@@ -381,7 +391,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     public Completable setUploadReportStatus(String reportId, String vaultFileId, UploadStatus status, long uploadedSize, boolean retry) {
         return null;
     }
-
 
     public Single<List<VaultFile>> listMediaFiles(final Filter filter, final Sort sort) {
         return Single.fromCallable(() -> getMediaFiles(filter, sort))
@@ -476,7 +485,19 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         try {
             cursor = database.query(
                     D.T_TELLA_UPLOAD_SERVER,
-                    new String[]{D.C_ID, D.C_NAME, D.C_URL, D.C_USERNAME, D.C_PASSWORD, D.C_CHECKED, D.C_ACCESS_TOKEN, D.C_ACTIVATED_METADATA, D.C_BACKGROUND_UPLOAD},
+                    new String[]{D.C_ID,
+                            D.C_NAME,
+                            D.C_URL,
+                            D.C_USERNAME,
+                            D.C_PASSWORD,
+                            D.C_CHECKED,
+                            D.C_ACCESS_TOKEN,
+                            D.C_ACTIVATED_METADATA,
+                            D.C_BACKGROUND_UPLOAD,
+                            D.C_PROJECT_SLUG,
+                            D.C_PROJECT_NAME,
+                            D.C_PROJECT_ID
+                    },
                     null,
                     null,
                     null, null,
@@ -564,7 +585,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
         return TellaReportServer.NONE;
     }
-
 
     @Nullable
     private CollectForm getBlankCollectForm(String formID) {
@@ -830,6 +850,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         values.put(D.C_NAME, server.getName());
         values.put(D.C_URL, server.getUrl());
         values.put(D.C_USERNAME, server.getUsername());
+        values.put(D.C_PROJECT_ID, server.getProjectId());
+        values.put(D.C_PROJECT_NAME, server.getProjectName());
+        values.put(D.C_PROJECT_SLUG, server.getProjectSlug());
+        values.put(D.C_USERNAME, server.getUsername());
         values.put(D.C_PASSWORD, server.getPassword());
         values.put(D.C_CHECKED, server.isChecked() ? 1 : 0);
         values.put(D.C_ACCESS_TOKEN, server.getAccessToken());
@@ -917,6 +941,26 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return form;
     }
 
+   /* @Nullable
+    private FormDef getCollectFormDef(String formId, String versionId) {
+
+        try (Cursor cursor = database.query(
+                D.T_COLLECT_BLANK_FORM,
+                new String[]{D.C_FORM_DEF},
+                D.C_FORM_ID + "= ? AND " + D.C_VERSION + " = ?",
+                new String[]{formId, versionId},
+                null, null, null, null)) {
+
+            if (cursor.moveToFirst()) {
+                return deserializeFormDef(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF)));
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        }
+
+        return null;
+    }*/
+
     @Nullable
     private FormDef getCollectFormDef(CollectForm form) {
         Cursor cursor = null;
@@ -943,26 +987,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
         return null; // let rx crash for this..
     }
-
-   /* @Nullable
-    private FormDef getCollectFormDef(String formId, String versionId) {
-
-        try (Cursor cursor = database.query(
-                D.T_COLLECT_BLANK_FORM,
-                new String[]{D.C_FORM_DEF},
-                D.C_FORM_ID + "= ? AND " + D.C_VERSION + " = ?",
-                new String[]{formId, versionId},
-                null, null, null, null)) {
-
-            if (cursor.moveToFirst()) {
-                return deserializeFormDef(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF)));
-            }
-        } catch (Exception e) {
-            Timber.d(e, getClass().getName());
-        }
-
-        return null;
-    }*/
 
     @Nullable
     private void removeCollectFormDef(Long formId) throws NotFountException {
@@ -2034,7 +2058,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return server;
     }
 
-
     private void removeTUServerDB(long id) {
         database.delete(D.T_TELLA_UPLOAD_SERVER, D.C_ID + " = ?", new String[]{Long.toString(id)});
         deleteTable(D.T_MEDIA_FILE_UPLOAD);
@@ -2130,6 +2153,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         server.setChecked(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_CHECKED)) > 0);
         server.setActivatedBackgroundUpload(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_BACKGROUND_UPLOAD)) > 0);
         server.setActivatedMetadata(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_ACTIVATED_METADATA)) > 0);
+        server.setProjectSlug(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PROJECT_SLUG)));
+        server.setProjectId(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PROJECT_ID)));
+        server.setProjectName(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PROJECT_NAME)));
+
         return server;
     }
 
@@ -2251,18 +2278,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return instance;
     }
 
-    private static String createSQLInsert(final String tableName, final String[] columnNames) {
-        if (tableName == null || columnNames == null || columnNames.length == 0) {
-            throw new IllegalArgumentException();
-        }
-
-        return "INSERT INTO " + tableName + " (" +
-                TextUtils.join(", ", columnNames) +
-                ") VALUES( " +
-                TextUtils.join(", ", Collections.nCopies(columnNames.length, "?")) +
-                ")";
-    }
-
     private String cn(String table, String column) {
         return table + "." + column;
     }
@@ -2337,7 +2352,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     new String[]{Long.toString(id)});
 
             // insert FormMediaFiles
-            List<FormMediaFile> mediaFiles = instance.getWidgetMediaFiles();
+            List<FormMediaFile> mediaFiles = null;
+            // = instance.getWidgetMediaFiles();
             for (FormMediaFile mediaFile : mediaFiles) {
                 values = new ContentValues();
                 values.put(D.C_REPORT_INSTANCE_ID, id);
@@ -2381,6 +2397,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                             D.C_METADATA,
                             D.C_DESCRIPTION_TEXT,
                             D.C_TITLE,
+                            D.C_PROJECT_ID,
+                            D.C_PROJECT_NAME,
+                            D.C_PROJECT_SLUG,
                             //D.C_FORM_PART_STATUS,
                             cn(D.T_TELLA_UPLOAD_SERVER, D.C_NAME, D.A_SERVER_NAME),
                             cn(D.T_TELLA_UPLOAD_SERVER, D.C_USERNAME, D.A_SERVER_USERNAME)},
@@ -2495,6 +2514,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                             D.C_UPDATED,
                             D.C_METADATA,
                             D.C_DESCRIPTION_TEXT,
+                            D.C_PROJECT_ID,
+                            D.C_PROJECT_NAME,
+                            D.C_PROJECT_SLUG,
                             D.C_TITLE},
                     cn(D.T_REPORT_FORM_INSTANCE, D.C_ID) + "= ?",
                     null, null, null, null
@@ -2524,11 +2546,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return new ReportInstanceBundle();
     }
 
-    private static class Setting {
-        Integer intValue;
-        String stringValue;
-    }
-
     private List<String> getReportInstanceFileIds(long instanceId) {
         List<String> ids = new ArrayList<>();
         Cursor cursor = null;
@@ -2555,6 +2572,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }
         return ids;
     }
+
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
     private void deleteReportFormInstance(long id) throws NotFountException {
         int count = database.delete(D.T_REPORT_FORM_INSTANCE, D.C_ID + " = ?", new String[]{Long.toString(id)});
@@ -2562,5 +2580,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         if (count != 1) {
             throw new NotFountException();
         }
+    }
+
+    private static class Setting {
+        Integer intValue;
+        String stringValue;
     }
 }

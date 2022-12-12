@@ -15,6 +15,7 @@ import rs.readahead.washington.mobile.views.dialog.ConnectFlowUtils.validateUrl
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.reports.step3.LoginReportsFragment
 
+
 @AndroidEntryPoint
 class EnterUploadServerFragment :
     BaseBindingFragment<FragmentEnterServerBinding>(FragmentEnterServerBinding::inflate) {
@@ -56,10 +57,14 @@ class EnterUploadServerFragment :
                     )
                 } else {
                     if (validateUrl(url, urlLayout, baseActivity, serverReports)) {
+                        val url = serverReports.url
+                        val projectSlug = url.substring(url.lastIndexOf('/') - 1)
+                        serverReports.url = url.substring(0, url.lastIndexOf('/') - 1)
                         KeyboardUtil.hideKeyboard(activity)
                         baseActivity.addFragment(
                             LoginReportsFragment.newInstance(
-                                serverReports
+                                serverReports,
+                                projectSlug
                             ), R.id.container
                         )
                     }

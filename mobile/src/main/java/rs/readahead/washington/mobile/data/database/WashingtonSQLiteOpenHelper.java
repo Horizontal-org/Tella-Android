@@ -84,6 +84,9 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         db.execSQL(alterTableTellaUploadServerAddAccessToken());
         db.execSQL(alterTableTellaUploadServerAddMetatData());
         db.execSQL(alterTableTellaUploadServerAddBackgourndUpload());
+        db.execSQL(alterTableTellaUploadServerAddProjectName());
+        db.execSQL(alterTableTellaUploadServerAddProjectSlug());
+        db.execSQL(alterTableTellaUploadServerAddProjectID());
         db.execSQL(createTableReportFormInstance());
         db.execSQL(createTableReportInstanceVaultFile());
         db.execSQL(createTableReportFileUploads());
@@ -127,8 +130,12 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 db.execSQL(alterTableTellaUploadServerAddAccessToken());
                 db.execSQL(alterTableTellaUploadServerAddMetatData());
                 db.execSQL(alterTableTellaUploadServerAddBackgourndUpload());
+                db.execSQL(alterTableTellaUploadServerAddProjectName());
+                db.execSQL(alterTableTellaUploadServerAddProjectSlug());
+                db.execSQL(alterTableTellaUploadServerAddProjectID());
                 db.execSQL(createTableReportFormInstance());
                 db.execSQL(createTableReportInstanceVaultFile());
+                db.execSQL(createTableReportFileUploads());
         }
     }
 
@@ -284,6 +291,21 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
     private String alterTableTellaUploadServerAddAccessToken() {
         return "ALTER TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " ADD COLUMN " +
                 cddl(D.C_ACCESS_TOKEN, D.TEXT);
+    }
+
+    private String alterTableTellaUploadServerAddProjectName() {
+        return "ALTER TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " ADD COLUMN " +
+                cddl(D.C_PROJECT_NAME, D.TEXT);
+    }
+
+    private String alterTableTellaUploadServerAddProjectID() {
+        return "ALTER TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " ADD COLUMN " +
+                cddl(D.C_PROJECT_ID, D.TEXT);
+    }
+
+    private String alterTableTellaUploadServerAddProjectSlug() {
+        return "ALTER TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " ADD COLUMN " +
+                cddl(D.C_PROJECT_SLUG, D.TEXT);
     }
 
     private String alterTableTellaUploadServerAddMetatData() {

@@ -7,6 +7,9 @@ import java.io.Serializable
 class TellaReportServer @JvmOverloads constructor(
     id: Long = 0,
     var accessToken: String = "",
+    var projectId: String = "",
+    var projectName: String = "",
+    var projectSlug: String = "",
     var isActivatedMetadata: Boolean = false,
     var isActivatedBackgroundUpload: Boolean = false
 ) :

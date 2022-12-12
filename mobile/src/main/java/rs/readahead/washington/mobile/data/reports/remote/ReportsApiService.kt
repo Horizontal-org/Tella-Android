@@ -5,9 +5,11 @@ import okhttp3.MultipartBody
 import retrofit2.http.*
 import rs.readahead.washington.mobile.data.ParamsNetwork.COOKIE
 import rs.readahead.washington.mobile.data.entity.reports.LoginEntity
+import rs.readahead.washington.mobile.data.entity.reports.ProjectSlugResponse
 import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
 import rs.readahead.washington.mobile.data.entity.reports.ReportsLoginResponse
 import rs.readahead.washington.mobile.domain.entity.reports.ProjectResult
+import rs.readahead.washington.mobile.domain.entity.reports.ProjectSlugResult
 import rs.readahead.washington.mobile.domain.entity.reports.ReportPostResult
 
 interface ReportsApiService {
@@ -23,6 +25,13 @@ interface ReportsApiService {
         @Url
         url: String
     ): Single<ReportsLoginResponse>
+
+    @GET
+    fun getProjectSlug(
+        @Url
+        url: String,
+        @Header(COOKIE) access_token: String
+    ): Single<ProjectSlugResponse>
 
     @POST
     fun submitReport(

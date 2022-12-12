@@ -102,7 +102,7 @@ public class TellaRequestUploadJob extends Job {
             server = dataSource.getTellaUploadServer(serverId).blockingGet();
 
             if (reportFormInstance.getStatus() == EntityStatus.SUBMISSION_PENDING) {
-                reportsRepository.submitReport(server, new ReportBodyEntity(reportFormInstance.getTitle(), reportFormInstance.getDescription()), "")
+             /*   reportsRepository.submitReport(server, new ReportBodyEntity(reportFormInstance.getTitle(), reportFormInstance.getDescription()), "")
                         .subscribeOn(Schedulers.io())
                         .doOnError(Timber::e)
                         .subscribe(reportPostResult -> {
@@ -116,7 +116,7 @@ public class TellaRequestUploadJob extends Job {
                                         Timber.d(throwable);
                                         FirebaseCrashlytics.getInstance().recordException(throwable);
                                     });
-                        }).dispose();
+                        }).dispose();*/
             }
 
             if (server != TellaReportServer.NONE) {

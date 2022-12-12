@@ -20,19 +20,23 @@ import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowViewModel
 import rs.readahead.washington.mobile.views.dialog.reports.step4.SuccessfulLoginFragment
 
+internal const val OBJECT_SLUG = "os"
+
 @AndroidEntryPoint
 class LoginReportsFragment :
     BaseBindingFragment<FragmentLoginReportsScreenBinding>(FragmentLoginReportsScreenBinding::inflate) {
     private var validated = true
     private lateinit var serverReports: TellaReportServer
     private val viewModel by viewModels<ReportsConnectFlowViewModel>()
+    private var projectSlug = ""
 
     companion object {
         @JvmStatic
-        fun newInstance(server: TellaReportServer): LoginReportsFragment {
+        fun newInstance(server: TellaReportServer, slug: String): LoginReportsFragment {
             val frag = LoginReportsFragment()
             val args = Bundle()
             args.putString(OBJECT_KEY, Gson().toJson(server))
+            args.putString(OBJECT_SLUG, slug)
             frag.arguments = args
             return frag
         }
@@ -57,7 +61,7 @@ class LoginReportsFragment :
             } else {
                 validate()
                 if (validated) {
-                    viewModel.checkServer(copyFields(TellaReportServer(0)))
+                    viewModel.checkServer(copyFields(TellaReportServer(0)), projectSlug)
                 }
             }
         }
@@ -70,21 +74,17 @@ class LoginReportsFragment :
                 getString(R.string.settings_docu_error_wrong_credentials)
         }
 
-        viewModel.authenticationSuccess.observe(baseActivity, { isSuccess ->
+        viewModel.authenticationSuccess.observe(baseActivity) { server ->
+            baseActivity.addFragment(
+                SuccessfulLoginFragment.newInstance(
+                    server
+                ), R.id.container
+            )
+        }
 
-            if (isSuccess) {
-                baseActivity.addFragment(
-                    SuccessfulLoginFragment.newInstance(
-                        serverReports
-                    ), R.id.container
-                )
-            }
-
-        })
-
-        viewModel.progress.observe(baseActivity, {
+        viewModel.progress.observe(baseActivity) {
             binding?.progressBar?.isVisible = it
-        })
+        }
     }
 
     private fun validate() {
@@ -94,9 +94,9 @@ class LoginReportsFragment :
     }
 
     private fun validateRequired(field: EditText?, layout: TextInputLayout?) {
-        layout!!.error = null
+        layout?.error = null
         if (TextUtils.isEmpty(field!!.text.toString())) {
-            layout.error = getString(R.string.settings_text_empty_field)
+            layout?.error = getString(R.string.settings_text_empty_field)
             validated = false
         }
     }
@@ -113,6 +113,9 @@ class LoginReportsFragment :
     private fun initView() {
         arguments?.getString(OBJECT_KEY)?.let {
             serverReports = Gson().fromJson(it, TellaReportServer::class.java)
+        }
+        arguments?.getString(OBJECT_SLUG)?.let {
+            projectSlug = it
         }
 
         if (!serverReports.username.isNullOrEmpty() && !serverReports.password.isNullOrEmpty()) {

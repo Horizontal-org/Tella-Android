@@ -27,13 +27,13 @@ class D {
     static final String T_MEDIA_FILE_UPLOAD = "t_media_file_upload";
     static final String T_REPORT_FILES_UPLOAD = "t_report_files_upload";
     static final String T_COLLECT_FORM_INSTANCE_VAULT_FILE = "t_collect_xform_instance_vault_file";
-    static  final String A_TELLA_UPLOAD_INSTANCE_ID = "a_tella_upload_instance_id";
+    static final String A_TELLA_UPLOAD_INSTANCE_ID = "a_tella_upload_instance_id";
 
     /* UWAZI DATABASE TABLE*/
     static final String T_UWAZI_SERVER = "t_uwazi_server";
-    static  final String T_UWAZI_BLANK_TEMPLATES = "t_uwazi_collect_blank_templates";
-    static  final String T_UWAZI_ENTITY_INSTANCES = "t_uwazi_entity_instances";
-    static  final String A_UWAZI_ENTITY_INSTANCE_ID = "a_uwazi_entity_instance_id";
+    static final String T_UWAZI_BLANK_TEMPLATES = "t_uwazi_collect_blank_templates";
+    static final String T_UWAZI_ENTITY_INSTANCES = "t_uwazi_entity_instances";
+    static final String A_UWAZI_ENTITY_INSTANCE_ID = "a_uwazi_entity_instance_id";
 
     /* DATABASE COLUMNS */
     static final String C_ID = "c_id";
@@ -54,6 +54,9 @@ class D {
     static final String C_ACCESS_TOKEN = "c_access_token";
     static final String C_ACTIVATED_METADATA = "c_activated_metadata";
     static final String C_BACKGROUND_UPLOAD = "c_background_upload";
+    static final String C_PROJECT_ID = "c_project_id";
+    static final String C_PROJECT_NAME = "c_project_name";
+    static final String C_PROJECT_SLUG = "c_project_slug";
 
     static final String C_DESCRIPTION_TEXT = "c_description_text";
     static final String C_DOWNLOAD_URL = "c_download_url";
@@ -98,8 +101,8 @@ class D {
     static final String C_REPORT_INSTANCE_ID = "c_report_instance_id";
 
     //Uwazi cloumns
-    static  final String C_UWAZI_SERVER_ID= "c_uwazi_server_id";
-    static  final String C_TEMPLATE_ENTITY= "c_template_entity";
+    static final String C_UWAZI_SERVER_ID = "c_uwazi_server_id";
+    static final String C_TEMPLATE_ENTITY = "c_template_entity";
     static final String A_SERVER_NAME = "a_server_name";
 
     static final String A_COLLECT_BLANK_FORM_ID = "a_collect_blank_xform_id";

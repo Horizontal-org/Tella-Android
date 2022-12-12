@@ -11,7 +11,6 @@ import okhttp3.RequestBody
 import okhttp3.Response
 import rs.readahead.washington.mobile.data.entity.reports.LoginEntity
 import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
-import rs.readahead.washington.mobile.data.entity.reports.mapper.mapToDomainModel
 import rs.readahead.washington.mobile.data.http.HttpStatus
 import rs.readahead.washington.mobile.data.reports.remote.ReportsApiService
 import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.URL_LOGIN
@@ -20,7 +19,6 @@ import rs.readahead.washington.mobile.data.repository.SkippableMediaFileRequestB
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.reports.ProjectResult
 import rs.readahead.washington.mobile.domain.entity.reports.ReportPostResult
-import rs.readahead.washington.mobile.domain.entity.reports.ReportsLoginResult
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.repository.reports.ReportsRepository
 import rs.readahead.washington.mobile.util.StringUtils
@@ -38,30 +36,36 @@ class ReportsRepositoryImp @Inject internal constructor(
 ) :
     ReportsRepository {
 
-    override fun login(server: TellaReportServer): Single<ReportsLoginResult> {
+    override fun login(server: TellaReportServer, slug: String): Single<TellaReportServer> {
         return apiService.login(
             loginEntity = LoginEntity(server.username, server.password),
-            url = StringUtils.append(
-                '/',
-                server.url,
-                URL_LOGIN
-            )
-        ).subscribeOn(Schedulers.io())
+            url = server.url + URL_LOGIN
+        ).flatMap { response ->
+            apiService.getProjectSlug(
+                url = server.url + slug,
+                access_token = response.access_token
+            ).map { result ->
+                server.apply {
+                    accessToken = response.access_token
+                    projectId = result.id
+                    projectName = result.name
+                    projectSlug = result.slug
+                }
+            }
+        }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .map { result -> result.mapToDomainModel() }
     }
 
     override fun submitReport(
         server: TellaReportServer,
-        reportBody: ReportBodyEntity,
-        projectId: String
+        reportBody: ReportBodyEntity
     ): Single<ReportPostResult> {
         return apiService.submitReport(
             reportBodyEntity = reportBody,
             url = StringUtils.append(
                 '/',
                 server.url,
-                "$URL_PROJECTS/31db99af-979f-4c55-8eb3-464b53314fae"
+                "$URL_PROJECTS/${server.projectId}"
             ),
             access_token = server.accessToken
         )

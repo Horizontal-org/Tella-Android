@@ -17,16 +17,15 @@ class ReportsConnectFlowViewModel @Inject constructor(private val useCase: Check
     val progress: LiveData<Boolean> get() = _progress
     private var _error = MutableLiveData<Throwable>()
     val error: LiveData<Throwable> get() = _error
-    private val _authenticationSuccess = SingleLiveEvent<Boolean>()
-    val authenticationSuccess: LiveData<Boolean> get() = _authenticationSuccess
+    private val _authenticationSuccess = SingleLiveEvent<TellaReportServer>()
+    val authenticationSuccess: LiveData<TellaReportServer> get() = _authenticationSuccess
 
-    fun checkServer(server: TellaReportServer) {
-        useCase.saveServer(server)
+    fun checkServer(server: TellaReportServer, projectSlug: String) {
+        useCase.saveServer(server, projectSlug)
         _progress.postValue(true)
         useCase.execute(
             onSuccess = { result ->
-                server.accessToken = result.accessToken
-                _authenticationSuccess.postValue(true)
+                _authenticationSuccess.postValue(result)
             },
             onError = {
                 _error.postValue(it)

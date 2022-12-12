@@ -182,7 +182,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
                 .build();
 
        //initialize WorkManager
-        WorkManager.initialize(this, myConfig);
+      //  WorkManager.initialize(this, myConfig);
 
         RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
             @Override
