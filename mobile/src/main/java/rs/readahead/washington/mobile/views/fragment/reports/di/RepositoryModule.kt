@@ -4,7 +4,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import okhttp3.OkHttpClient
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.reports.remote.ReportsApiService
 import rs.readahead.washington.mobile.data.reports.repository.ReportsRepositoryImp
@@ -19,11 +18,8 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideProductsRepository(
-        service: ReportsApiService,
-        client: OkHttpClient
-    ): ReportsRepository {
-        return ReportsRepositoryImp(service, client)
+    fun provideProductsRepository(service: ReportsApiService): ReportsRepository {
+        return ReportsRepositoryImp(service)
     }
 
     @Provides

@@ -17,7 +17,6 @@ import rs.readahead.washington.mobile.domain.entity.uwazi.*
 import rs.readahead.washington.mobile.domain.repository.uwazi.IUwaziUserRepository
 import rs.readahead.washington.mobile.util.StringUtils
 
-
 class UwaziRepository : IUwaziUserRepository {
     private val uwaziApi by lazy { UwaziService.newInstance().services }
 
@@ -42,7 +41,8 @@ class UwaziRepository : IUwaziUserRepository {
     }
 
     override fun getTemplatesResult(server: UWaziUploadServer): Single<ListTemplateResult> {
-        return Single.zip(getTemplates(server),
+        return Single.zip(
+            getTemplates(server),
             getDictionary(server),
             getTranslation(server),
             getFullSettings(server)

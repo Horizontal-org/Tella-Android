@@ -2,13 +2,8 @@ package rs.readahead.washington.mobile.data.reports.repository
 
 import com.hzontal.tella_vault.VaultFile
 import io.reactivex.*
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
-import okhttp3.Response
 import rs.readahead.washington.mobile.data.entity.reports.LoginEntity
 import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
 import rs.readahead.washington.mobile.data.http.HttpStatus
@@ -17,7 +12,6 @@ import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.URL_LOGIN
 import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.URL_PROJECTS
 import rs.readahead.washington.mobile.data.repository.SkippableMediaFileRequestBody
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
-import rs.readahead.washington.mobile.domain.entity.reports.ProjectResult
 import rs.readahead.washington.mobile.domain.entity.reports.ReportPostResult
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.repository.reports.ReportsRepository
@@ -31,8 +25,7 @@ import javax.inject.Inject
 
 
 class ReportsRepositoryImp @Inject internal constructor(
-    private val apiService: ReportsApiService,
-    private val okHttpClient: OkHttpClient
+    private val apiService: ReportsApiService
 ) :
     ReportsRepository {
 
@@ -71,56 +64,46 @@ class ReportsRepositoryImp @Inject internal constructor(
         )
     }
 
-    override fun getProjects(
-        limit: Int,
-        offset: Int,
-        servers: List<TellaReportServer>
-    ): Single<List<ProjectResult>> {
-        val projectsList = mutableListOf<ProjectResult>()
-        return Observable
-            .range(0, servers.size)
-            .concatMap { serverIndex ->
-                apiService.getProjects(
-                    limit = limit,
-                    offset = offset,
-                    access_token = servers[serverIndex].accessToken,
-                    url = StringUtils.append(
-                        '/',
-                        servers[serverIndex].url,
-                        URL_PROJECTS
-                    )
-                ).toObservable()
-            }
-            .doOnNext { list ->
-                projectsList.addAll(list)
-            }
-            .filter { list -> list.isNotEmpty() }
-            .firstOrError()
-    }
-
     override fun upload(
-        mediaFile: VaultFile,
-        server: TellaReportServer
-    ): Flowable<UploadProgressInfo?> {
-        return getStatus(mediaFile, server.url)
+        vaultFile: VaultFile,
+        urlServer: String,
+        reportId: String,
+        accessToken: String
+    ): Flowable<UploadProgressInfo> {
+        val url = StringUtils.append(
+            '/',
+            urlServer,
+            "$reportId${vaultFile.name}"
+        )
+        return getStatus(url, accessToken)
             .flatMapPublisher { skipBytes: Long ->
                 appendFile(
-                    mediaFile,
+                    vaultFile,
                     skipBytes,
-                    server.url
+                    url,
+                    accessToken
                 )
             }
             .onErrorReturn { throwable: Throwable? ->
                 mapThrowable(
-                    throwable, mediaFile
+                    throwable, vaultFile
                 )
             }
     }
 
-    override fun check(baseUrl: String): Single<UploadProgressInfo?> {
-        val vaultFile = VaultFile()
-        vaultFile.name = "test"
-        return getStatus(vaultFile, baseUrl)
+    override fun check(
+        vaultFile: VaultFile,
+        urlServer: String,
+        reportId: String,
+        accessToken: String
+    ): Single<UploadProgressInfo> {
+
+        val url = StringUtils.append(
+            '/',
+            urlServer,
+            "$reportId${vaultFile.name}"
+        )
+        return getStatus(url, accessToken)
             .map { aLong: Long? ->
                 UploadProgressInfo(
                     vaultFile,
@@ -130,28 +113,27 @@ class ReportsRepositoryImp @Inject internal constructor(
             }
             .onErrorReturn { throwable: Throwable? ->
                 mapThrowable(
-                    throwable!!, vaultFile
+                    throwable, vaultFile
                 )
             }
     }
 
-    private fun getStatus(vaultFile: VaultFile, baseUrl: String): Single<Long> {
-        val request: Request = Request.Builder()
-            .url(getUploadUrl(vaultFile.name, URI.create(baseUrl)))
-            .head()
-            .build()
+    private fun getStatus(url: String, accessToken: String): Single<Long> {
         return Single.create { emitter: SingleEmitter<Long> ->
             try {
-                val response: Response = okHttpClient.newCall(request).execute()
+                val response = apiService.getStatus(
+                    url,
+                    accessToken
+                )
                 if (response.isSuccessful) {
                     val skip = Util.parseLong(
-                        response.header("content-length"),
+                        response.headers()["size"],
                         0
                     )
                     emitter.onSuccess(skip)
                     return@create
                 }
-                emitter.onError(UploadError(response))
+                emitter.onError(UploadError(response.code()))
             } catch (e: Exception) {
                 emitter.onError(UploadError(e))
             }
@@ -161,9 +143,10 @@ class ReportsRepositoryImp @Inject internal constructor(
     private fun appendFile(
         vaultFile: VaultFile,
         skipBytes: Long,
-        baseUrl: String
-    ): Flowable<UploadProgressInfo?> {
-        return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo?> ->
+        baseUrl: String,
+        accessToken: String
+    ): Flowable<UploadProgressInfo> {
+        return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo> ->
             try {
                 val size = vaultFile.size
                 val fileName = vaultFile.name
@@ -175,34 +158,35 @@ class ReportsRepositoryImp @Inject internal constructor(
                         UploadProgressInfo.Status.STARTED
                     )
                 )
-                val appendRequest: Request = Request.Builder()
-                    .url(getUploadUrl(fileName, URI.create(baseUrl)))
-                    .put(
-                        SkippableMediaFileRequestBody(
-                            vaultFile, skipBytes
-                        ) { current: Long, total: Long ->
-                            uploadEmitter.emit(
-                                emitter,
-                                vaultFile,
-                                skipBytes + current,
-                                size
-                            )
-                        }
+
+                val file = SkippableMediaFileRequestBody(
+                    vaultFile, skipBytes
+                ) { current: Long, total: Long ->
+                    uploadEmitter.emit(
+                        emitter,
+                        vaultFile,
+                        skipBytes + current,
+                        size
                     )
-                    .build()
-                var response: Response = okHttpClient.newCall(appendRequest).execute()
+                }
+
+                var response = apiService.putFile(
+                    file = file,
+                    url = baseUrl,
+                    access_token = accessToken
+                )
                 if (!response.isSuccessful) {
-                    emitter.onError(UploadError(response))
+                    emitter.onError(UploadError(response.code()))
                     return@create
                 }
-                val closeRequest: Request = Request.Builder()
-                    .url(getUploadUrl(fileName, URI.create(baseUrl)))
-                    .header("content-length", "0")
-                    .post(RequestBody.create(null, ByteArray(0)))
-                    .build()
-                response = okHttpClient.newCall(closeRequest).execute()
+
+                response = apiService.postFile(
+                    file = file,
+                    url = baseUrl,
+                    access_token = accessToken
+                )
                 if (!response.isSuccessful) {
-                    emitter.onError(UploadError(response))
+                    emitter.onError(UploadError(response.code()))
                     return@create
                 }
                 emitter.onNext(
@@ -274,12 +258,12 @@ class ReportsRepositoryImp @Inject internal constructor(
     private class UploadError : Exception {
         var code = -1
 
-        constructor(response: Response) : super(
+        constructor(code: Int) : super(
             String.format(
-                Locale.ROOT, "Request failed, response code: %d", response.code()
+                Locale.ROOT, "Request failed, response code: %d", code
             )
         ) {
-            code = response.code()
+            this.code = code
         }
 
         constructor(cause: Throwable?) : super(cause)

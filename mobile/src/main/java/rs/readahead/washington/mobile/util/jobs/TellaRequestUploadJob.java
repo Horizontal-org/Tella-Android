@@ -11,7 +11,6 @@ import com.hzontal.tella_vault.VaultFile;
 import org.hzontal.tella.keys.key.LifecycleMainKey;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -102,12 +101,12 @@ public class TellaRequestUploadJob extends Job {
             server = dataSource.getTellaUploadServer(serverId).blockingGet();
 
             if (reportFormInstance.getStatus() == EntityStatus.SUBMISSION_PENDING) {
-             /*   reportsRepository.submitReport(server, new ReportBodyEntity(reportFormInstance.getTitle(), reportFormInstance.getDescription()), "")
-                        .subscribeOn(Schedulers.io())
-                        .doOnError(Timber::e)
-                        .subscribe(reportPostResult -> {
-                            Flowable.fromIterable(reportFormInstance.getWidgetMediaFiles())
-                                    .flatMap(reportsRepository::upload)
+                if (reportFormInstance.getReportApiId().isEmpty()) {
+                    reportsRepository.submitReport(server, new ReportBodyEntity(reportFormInstance.getTitle(), reportFormInstance.getDescription()))
+                            .subscribeOn(Schedulers.io())
+                            .doOnError(Timber::e)
+                            .subscribe(reportPostResult -> Flowable.fromIterable(reportFormInstance.getWidgetMediaFiles())
+                                    .flatMap(file -> reportsRepository.upload(file, server.getUrl(), reportPostResult.getId(), server.getAccessToken()))
                                     .blockingSubscribe(this::updateProgress, throwable -> {
                                         if (throwable instanceof NoConnectivityException) {
                                             exitResult = Result.RESCHEDULE;
@@ -115,53 +114,27 @@ public class TellaRequestUploadJob extends Job {
                                         }
                                         Timber.d(throwable);
                                         FirebaseCrashlytics.getInstance().recordException(throwable);
-                                    });
-                        }).dispose();*/
-            }
-
-            if (server != TellaReportServer.NONE) {
-                break;
-            }
-
-        }
-        if (server == TellaReportServer.NONE) {
-            return exit(Result.FAILURE);
-        }
-
-        List<VaultFile> vaultFiles = new ArrayList<>();
-
-
-
-       /* for (FileUploadBundle fileUploadBundle : fileUploadBundles) {
-            long serverId = fileUploadBundle.getServerId();
-            server = dataSource.getTellaUploadServer(serverId).blockingGet();
-
-            if (server != TellaReportServer.NONE) {
-                break;
-            }
-        }*/
-
-      /*  for (FileUploadBundle fileUploadBundle : fileUploadBundles) {
-
-            if (fileUploadBundle.getServerId() != server.getId()) {
-                continue;
-            } else {
-                vaultFiles.add(fileUploadBundle.getMediaFile());
-            }
-
-            if (!fileUploadBundle.isManualUpload()) {
-                fileMap.put(fileUploadBundle.getMediaFile().id, fileUploadBundle.getMediaFile());
-            }
-
-            if (fileUploadBundle.isIncludeMetdata()) {
-                try {
-                    vaultFiles.add(MediaFileHandler.maybeCreateMetadataMediaFile(fileUploadBundle.getMediaFile()));
-                } catch (Exception e) {
-                    Timber.d(e);
+                                    })).dispose();
+                } else {
+                    Flowable.fromIterable(reportFormInstance.getWidgetMediaFiles())
+                            .flatMap(file -> reportsRepository.upload(file, server.getUrl(), reportFormInstance.getReportApiId(), server.getAccessToken()))
+                            .blockingSubscribe(this::updateProgress, throwable -> {
+                                if (throwable instanceof NoConnectivityException) {
+                                    exitResult = Result.RESCHEDULE;
+                                    return;
+                                }
+                                Timber.d(throwable);
+                                FirebaseCrashlytics.getInstance().recordException(throwable);
+                            });
                 }
-            }
-        }*/
 
+            }
+
+            if (server != TellaReportServer.NONE) {
+                return exit(Result.FAILURE);
+            }
+
+        }
 
         if (exitResult != null) {
             return exit(exitResult);
