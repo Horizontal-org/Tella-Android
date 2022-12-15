@@ -25,8 +25,7 @@ import javax.inject.Inject
 
 
 class ReportsRepositoryImp @Inject internal constructor(
-    private val apiService: ReportsApiService
-) :
+    private val apiService: ReportsApiService) :
     ReportsRepository {
 
     override fun login(server: TellaReportServer, slug: String): Single<TellaReportServer> {
@@ -46,7 +45,7 @@ class ReportsRepositoryImp @Inject internal constructor(
                 }
             }
         }.subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        .observeOn(AndroidSchedulers.mainThread())
     }
 
     override fun submitReport(
@@ -181,7 +180,6 @@ class ReportsRepositoryImp @Inject internal constructor(
                 }
 
                 response = apiService.postFile(
-                    file = file,
                     url = baseUrl,
                     access_token = accessToken
                 )
@@ -268,6 +266,5 @@ class ReportsRepositoryImp @Inject internal constructor(
 
         constructor(cause: Throwable?) : super(cause)
     }
-
 
 }

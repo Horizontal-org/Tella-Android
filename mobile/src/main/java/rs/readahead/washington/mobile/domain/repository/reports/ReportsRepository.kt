@@ -5,7 +5,6 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
-import rs.readahead.washington.mobile.domain.entity.reports.ProjectResult
 import rs.readahead.washington.mobile.domain.entity.reports.ReportPostResult
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 

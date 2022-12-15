@@ -27,9 +27,7 @@ class ReportsEntryViewModel @Inject constructor(
     private val getReportsUseCase: GetReportsUseCase,
     private val deleteReportUseCase: DeleteReportUseCase,
     private val getReportBundleUseCase: GetReportBundleUseCase,
-    private val submitReportUseCase: SubmitReportUseCase,
-    private val getReportProjectsUseCase: GetReportProjectsUseCase
-) : ViewModel() {
+    private val submitReportUseCase: SubmitReportUseCase) : ViewModel() {
 
     private val _progress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean> get() = _progress
@@ -302,50 +300,44 @@ class ReportsEntryViewModel @Inject constructor(
         if (server.isActivatedBackgroundUpload){
 
         }else {
+            submitReportUseCase.execute(onSuccess = { result ->
 
-        }
-        submitReportUseCase.execute(onSuccess = { result ->
-            if (files.isEmpty()) {
-                saveSubmitted(
-                    getSubmittedFormInstance(
-                        title = title,
-                        description = description,
-                        files = files,
-                        server = server,
-                        reportApiId = result.id
-                    )
-                )
-            } else {
+
+            }, onError = {
                 saveOutbox(
                     reportFormInstance = getOutboxFormInstance(
                         title = title,
                         description = description,
                         files = files,
                         server = server,
-                        reportApiId = result.id
-                    )
-                )
-            }
-
-        }, onError = {
-            _error.postValue(it)
-        }, onFinished = {
-            _progress.postValue(false)
-        })
-    }
-    /*todo */
-    fun listReportProjects(servers: List<TellaReportServer>) {
-        _progress.postValue(true)
-        getReportProjectsUseCase.setReportServersList(servers)
-        getReportProjectsUseCase.execute(
-            onSuccess = { result -> _serverProjectList.postValue(result)},
-            onError = {
+                        reportApiId = ""
+                    ))
                 _error.postValue(it)
-            },
-            onFinished = {
+            }, onFinished = {
                 _progress.postValue(false)
-            }
-        )
+            })
+        }
+        /*submitReportUseCase.execute(onSuccess = { result ->
+              if (files.isEmpty()) {
+                  saveSubmitted(
+                      getSubmittedFormInstance(
+                          title = title,
+                          description = description,
+                          files = files,
+                          server = server,
+                          reportApiId = result.id
+                      )
+                  )
+              } else {
+
+                  )
+              }
+
+          }, onError = {
+              _error.postValue(it)
+          }, onFinished = {
+              _progress.postValue(false)
+          })*/
     }
 
 }

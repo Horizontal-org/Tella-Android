@@ -50,9 +50,8 @@ interface ReportsApiService {
     ): Response<Long>
 
     @Multipart
-    @PUT
+    @POST
     fun postFile(
-        @Part("file") file: SkippableMediaFileRequestBody,
         @Url url: String,
         @Header(COOKIE) access_token: String
     ): Response<Long>
