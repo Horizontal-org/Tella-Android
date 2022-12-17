@@ -17,5 +17,6 @@ fun ReportsLoginResponse.mapToDomainModel() =
     user?.mapToDomainModel()
         ?.let { ReportsLoginResult(accessToken = access_token ?: "", user = it) }
 
+
 fun UserResponse.mapToDomainModel() =
     User(id = id ?: "", note = note ?: "", role = role ?: "", username = username ?: "")

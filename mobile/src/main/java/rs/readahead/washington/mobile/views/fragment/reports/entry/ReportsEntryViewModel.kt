@@ -1,23 +1,32 @@
 package rs.readahead.washington.mobile.views.fragment.reports.entry
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.Flowable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
+import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
-import rs.readahead.washington.mobile.domain.entity.reports.ProjectResult
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
+import rs.readahead.washington.mobile.domain.exception.NoConnectivityException
+import rs.readahead.washington.mobile.domain.repository.reports.ReportsRepository
 import rs.readahead.washington.mobile.domain.usecases.reports.*
 import rs.readahead.washington.mobile.util.fromJsonToObjectList
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 import rs.readahead.washington.mobile.views.fragment.reports.mappers.toViewEntityInstanceItem
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,7 +36,12 @@ class ReportsEntryViewModel @Inject constructor(
     private val getReportsUseCase: GetReportsUseCase,
     private val deleteReportUseCase: DeleteReportUseCase,
     private val getReportBundleUseCase: GetReportBundleUseCase,
-    private val submitReportUseCase: SubmitReportUseCase) : ViewModel() {
+    private val submitReportUseCase: SubmitReportUseCase,
+    private val reportsRepository: ReportsRepository,
+    private val dataSource: DataSource
+) : ViewModel() {
+
+    private val disposables = CompositeDisposable()
 
     private val _progress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean> get() = _progress
@@ -54,8 +68,6 @@ class ReportsEntryViewModel @Inject constructor(
     val instanceDeleted: LiveData<Boolean> get() = _instanceDeleted
     private val _draftReportInstance = MutableLiveData<ReportFormInstance>()
     val draftReportInstance: LiveData<ReportFormInstance> get() = _draftReportInstance
-    private val _serverProjectList = MutableLiveData<List<ProjectResult>>()
-    val serverProjectList: LiveData<List<ProjectResult>> get() = _serverProjectList
 
     fun listServers() {
         _progress.postValue(true)
@@ -277,8 +289,8 @@ class ReportsEntryViewModel @Inject constructor(
         getReportBundleUseCase.execute(onSuccess = { result ->
             val resultInstance = result.instance
             //TODO WE NEED TO INJECT RXX VAULT USING DAGGER
-           /* resultInstance.widgetMediaFiles =
-                vaultFilesToMediaFiles(MyApplication.rxVault.get(result.fileIds).blockingGet())*/
+            /* resultInstance.widgetMediaFiles =
+                 vaultFilesToMediaFiles(MyApplication.rxVault.get(result.fileIds).blockingGet())*/
             _draftReportInstance.postValue(resultInstance)
         }, onError = {
             _error.postValue(it)
@@ -287,6 +299,7 @@ class ReportsEntryViewModel @Inject constructor(
         })
     }
 
+    @SuppressLint("TimberArgCount")
     fun submitReport(
         title: String,
         description: String,
@@ -294,50 +307,44 @@ class ReportsEntryViewModel @Inject constructor(
         files: List<FormMediaFile>
     ) {
         _progress.postValue(true)
-        submitReportUseCase.setData(
-            server = server, reportBodyEntity = ReportBodyEntity(title, description)
-        )
-        if (server.isActivatedBackgroundUpload){
 
-        }else {
-            submitReportUseCase.execute(onSuccess = { result ->
+        if (!server.isActivatedBackgroundUpload) {
+            disposables.add(
+                reportsRepository.submitReport(server, ReportBodyEntity(title, description))
+                    .subscribe { reportPostResult ->
+                        Flowable.fromIterable(files)
+                            .flatMap { file ->
+                                reportsRepository.upload(
+                                    file,
+                                    server.url,
+                                    reportPostResult.id,
+                                    server.accessToken
+                                )
+                            }
+                            .blockingSubscribe(
+                                { progressInfo: UploadProgressInfo? ->
+
+                                }
+                            ) { throwable: Throwable? ->
+
+                                Timber.d(throwable)
+                                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                            }
+                    })
+        } else {
 
 
-            }, onError = {
-                saveOutbox(
-                    reportFormInstance = getOutboxFormInstance(
-                        title = title,
-                        description = description,
-                        files = files,
-                        server = server,
-                        reportApiId = ""
-                    ))
-                _error.postValue(it)
-            }, onFinished = {
-                _progress.postValue(false)
-            })
         }
-        /*submitReportUseCase.execute(onSuccess = { result ->
-              if (files.isEmpty()) {
-                  saveSubmitted(
-                      getSubmittedFormInstance(
-                          title = title,
-                          description = description,
-                          files = files,
-                          server = server,
-                          reportApiId = result.id
-                      )
-                  )
-              } else {
+    }
 
-                  )
-              }
 
-          }, onError = {
-              _error.postValue(it)
-          }, onFinished = {
-              _progress.postValue(false)
-          })*/
+    fun dispose() {
+        disposables.clear()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        dispose()
     }
 
 }

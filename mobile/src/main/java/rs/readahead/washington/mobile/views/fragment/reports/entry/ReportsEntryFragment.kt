@@ -287,5 +287,8 @@ class ReportsEntryFragment :
 
     override fun onDropDownItemClicked(position: Int, chosenItem: DropDownItem) {
         binding?.serversDropdown?.setDefaultName(chosenItem.name)
+         servers?.get(position)?.let {
+             selectedServer = it
+        }
     }
 }

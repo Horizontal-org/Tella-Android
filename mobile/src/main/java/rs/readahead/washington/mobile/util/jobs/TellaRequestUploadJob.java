@@ -1,5 +1,9 @@
 package rs.readahead.washington.mobile.util.jobs;
 
+import static rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository.UploadStatus.ERROR;
+import static rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository.UploadStatus.SCHEDULED;
+import static rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository.UploadStatus.UPLOADING;
+
 import androidx.annotation.NonNull;
 
 import com.evernote.android.job.Job;
@@ -13,10 +17,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
 import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.SingleSource;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent;
@@ -24,6 +32,7 @@ import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.EntityStatus;
+import rs.readahead.washington.mobile.domain.entity.ReportFileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance;
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
@@ -43,6 +52,7 @@ public class TellaRequestUploadJob extends Job {
     private DataSource dataSource;
     private TellaReportServer server;
 
+
     public static void scheduleJob() {
         new JobRequest.Builder(TellaUploadJob.TAG)
                 .setExecutionWindow(1_000L, 10_000L) // start between 1-10sec from now
@@ -55,9 +65,11 @@ public class TellaRequestUploadJob extends Job {
                 .schedule();
     }
 
+
     public static void cancelJob() {
         JobManager.instance().cancelAllForTag(TellaUploadJob.TAG);
     }
+
 
     @NonNull
     @Override
@@ -82,7 +94,7 @@ public class TellaRequestUploadJob extends Job {
 
 
         dataSource = DataSource.getInstance(getContext(), key);
-        List<ReportFormInstance> reportFormInstances = dataSource.getFileUploadReportBundles(ITellaUploadsRepository.UploadStatus.SCHEDULED).blockingGet();
+        List<ReportFormInstance> reportFormInstances = dataSource.getFileUploadReportBundles(SCHEDULED).blockingGet();
 
         if (reportFormInstances.size() == 0) {
             return exit(Result.SUCCESS);
@@ -97,51 +109,59 @@ public class TellaRequestUploadJob extends Job {
 
         //Grab the server instance from the server
         for (ReportFormInstance reportFormInstance : reportFormInstances) {
-            long serverId = reportFormInstance.getServerId();
-            server = dataSource.getTellaUploadServer(serverId).blockingGet();
 
-            if (reportFormInstance.getStatus() == EntityStatus.SUBMISSION_PENDING) {
-                if (reportFormInstance.getReportApiId().isEmpty()) {
-                    reportsRepository.submitReport(server, new ReportBodyEntity(reportFormInstance.getTitle(), reportFormInstance.getDescription()))
-                            .subscribeOn(Schedulers.io())
-                            .doOnError(Timber::e)
-                            .subscribe(reportPostResult -> Flowable.fromIterable(reportFormInstance.getWidgetMediaFiles())
-                                    .flatMap(file -> reportsRepository.upload(file, server.getUrl(), reportPostResult.getId(), server.getAccessToken()))
-                                    .blockingSubscribe(this::updateProgress, throwable -> {
-                                        if (throwable instanceof NoConnectivityException) {
-                                            exitResult = Result.RESCHEDULE;
-                                            return;
+            if (reportFormInstance.getStatus() != EntityStatus.SUBMISSION_PENDING) {
+                continue;
+            }
+            if (reportFormInstance.getReportApiId().isEmpty()) {
+                Observable.just(dataSource)
+                        .flatMapSingle((Function<DataSource, SingleSource<TellaReportServer>>) dataSource1 ->
+                                dataSource1.getTellaUploadServer(reportFormInstance.getServerId()))
+                        .flatMapSingle(server -> {
+                            if (!MyApplication.isConnectedToInternet(getContext())) {
+                                throw new NoConnectivityException();
+                            }
+                            reportFormInstance.setStatus(EntityStatus.SUBMISSION_PENDING);
+                            dataSource.saveInstance(reportFormInstance);
+                            return reportsRepository.submitReport(server, new ReportBodyEntity(reportFormInstance.getTitle(), reportFormInstance.getDescription()));
+                        }).subscribe(reportPostResult -> Flowable.fromIterable(getPendingSubmittedFiles(reportFormInstance.getWidgetMediaFiles()))
+                                .flatMap(file -> reportsRepository.upload(file, server.getUrl(), reportPostResult.getId(), server.getAccessToken()))
+                                .doFinally(() -> {
+                                            reportFormInstance.setStatus(EntityStatus.SUBMITTED);
+                                            dataSource.saveInstance(reportFormInstance);
                                         }
-                                        Timber.d(throwable);
-                                        FirebaseCrashlytics.getInstance().recordException(throwable);
-                                    })).dispose();
-                } else {
-                    Flowable.fromIterable(reportFormInstance.getWidgetMediaFiles())
-                            .flatMap(file -> reportsRepository.upload(file, server.getUrl(), reportFormInstance.getReportApiId(), server.getAccessToken()))
-                            .blockingSubscribe(this::updateProgress, throwable -> {
-                                if (throwable instanceof NoConnectivityException) {
-                                    exitResult = Result.RESCHEDULE;
-                                    return;
-                                }
-                                Timber.d(throwable);
-                                FirebaseCrashlytics.getInstance().recordException(throwable);
-                            });
-                }
-
+                                )
+                                .blockingSubscribe(this::updateProgress, throwable -> {
+                                    if (throwable instanceof NoConnectivityException) {
+                                        exitResult = Result.RESCHEDULE;
+                                        return;
+                                    }
+                                    Timber.d(throwable);
+                                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                                })).dispose();
+            } else {
+                Flowable.fromIterable(reportFormInstance.getWidgetMediaFiles())
+                        .flatMap(file -> reportsRepository.upload(file, server.getUrl(), reportFormInstance.getReportApiId(), server.getAccessToken()))
+                        .blockingSubscribe(this::updateProgress, throwable -> {
+                            if (throwable instanceof NoConnectivityException) {
+                                exitResult = Result.RESCHEDULE;
+                                return;
+                            }
+                            Timber.d(throwable);
+                            FirebaseCrashlytics.getInstance().recordException(throwable);
+                        });
             }
 
-            if (server != TellaReportServer.NONE) {
-                return exit(Result.FAILURE);
-            }
 
         }
 
-        if (exitResult != null) {
-            return exit(exitResult);
+        if (server != TellaReportServer.NONE) {
+            return exit(Result.FAILURE);
         }
 
         return exit(Result.SUCCESS);
     }
+
 
     @Override
     protected void onReschedule(int newJobId) {
@@ -166,7 +186,7 @@ public class TellaRequestUploadJob extends Job {
         switch (progressInfo.status) {
             case STARTED:
             case OK:
-                dataSource.setUploadStatus(progressInfo.fileId, ITellaUploadsRepository.UploadStatus.UPLOADING, progressInfo.current, false).blockingAwait();
+                dataSource.setUploadStatus(progressInfo.fileId, UPLOADING, progressInfo.current, false).blockingAwait();
                 break;
 
             case CONFLICT:
@@ -178,7 +198,7 @@ public class TellaRequestUploadJob extends Job {
                 break;
 
             case ERROR:
-                dataSource.setUploadStatus(progressInfo.fileId, ITellaUploadsRepository.UploadStatus.SCHEDULED, progressInfo.current, true).blockingAwait();
+                dataSource.setUploadStatus(progressInfo.fileId, SCHEDULED, progressInfo.current, true).blockingAwait();
                 break;
 
             default:
@@ -186,10 +206,6 @@ public class TellaRequestUploadJob extends Job {
                 break;
         }
         postProgressEvent(progressInfo);
-    }
-
-    private void updateReportInstanceStatus(UploadProgressInfo progressInfo) {
-
     }
 
     private void deleteMediaFile(String id) {
@@ -200,6 +216,11 @@ public class TellaRequestUploadJob extends Job {
             Timber.d("Deleted file %s", id);
         }
     }
+
+    private List<ReportFileUploadInstance> getPendingSubmittedFiles(List<ReportFileUploadInstance> files) {
+        return files.stream().filter(reportFileUploadInstance -> reportFileUploadInstance.getStatus() == UPLOADING || reportFileUploadInstance.getStatus() == SCHEDULED || reportFileUploadInstance.getStatus() == ERROR).collect(Collectors.toList());
+    }
+
 
     private void postProgressEvent(UploadProgressInfo progress) {
         ThreadUtil.runOnMain(() -> MyApplication.bus().post(new FileUploadProgressEvent(progress)));

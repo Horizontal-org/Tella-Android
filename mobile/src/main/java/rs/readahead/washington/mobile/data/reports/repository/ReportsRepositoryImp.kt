@@ -6,6 +6,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.data.entity.reports.LoginEntity
 import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
+import rs.readahead.washington.mobile.data.entity.reports.mapper.mapToDomainModel
 import rs.readahead.washington.mobile.data.http.HttpStatus
 import rs.readahead.washington.mobile.data.reports.remote.ReportsApiService
 import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.URL_LOGIN
@@ -18,15 +19,14 @@ import rs.readahead.washington.mobile.domain.repository.reports.ReportsRepositor
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.util.Util
 import timber.log.Timber
-import java.net.URI
 import java.net.UnknownHostException
 import java.util.*
 import javax.inject.Inject
 
 
 class ReportsRepositoryImp @Inject internal constructor(
-    private val apiService: ReportsApiService) :
-    ReportsRepository {
+    private val apiService: ReportsApiService
+) : ReportsRepository {
 
     override fun login(server: TellaReportServer, slug: String): Single<TellaReportServer> {
         return apiService.login(
@@ -45,7 +45,7 @@ class ReportsRepositoryImp @Inject internal constructor(
                 }
             }
         }.subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
     override fun submitReport(
@@ -54,13 +54,11 @@ class ReportsRepositoryImp @Inject internal constructor(
     ): Single<ReportPostResult> {
         return apiService.submitReport(
             reportBodyEntity = reportBody,
-            url = StringUtils.append(
-                '/',
-                server.url,
-                "$URL_PROJECTS/${server.projectId}"
-            ),
+            url = server.url + URL_PROJECTS + "/${server.projectId}",
             access_token = server.accessToken
-        )
+        ).map { it.mapToDomainModel() }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
     override fun upload(
@@ -72,7 +70,7 @@ class ReportsRepositoryImp @Inject internal constructor(
         val url = StringUtils.append(
             '/',
             urlServer,
-            "$reportId${vaultFile.name}"
+            "file/$reportId/${vaultFile.name}"
         )
         return getStatus(url, accessToken)
             .flatMapPublisher { skipBytes: Long ->
@@ -82,12 +80,12 @@ class ReportsRepositoryImp @Inject internal constructor(
                     url,
                     accessToken
                 )
-            }
-            .onErrorReturn { throwable: Throwable? ->
+            }.onErrorReturn {
                 mapThrowable(
-                    throwable, vaultFile
+                    it, vaultFile
                 )
             }
+
     }
 
     override fun check(
@@ -118,25 +116,15 @@ class ReportsRepositoryImp @Inject internal constructor(
     }
 
     private fun getStatus(url: String, accessToken: String): Single<Long> {
-        return Single.create { emitter: SingleEmitter<Long> ->
-            try {
-                val response = apiService.getStatus(
-                    url,
-                    accessToken
+        return apiService.getStatus(url, accessToken)
+            .subscribeOn(Schedulers.io())
+            .doOnError { UploadError(it) }
+            .map {
+                Util.parseLong(
+                    it.headers()["size"],
+                    0
                 )
-                if (response.isSuccessful) {
-                    val skip = Util.parseLong(
-                        response.headers()["size"],
-                        0
-                    )
-                    emitter.onSuccess(skip)
-                    return@create
-                }
-                emitter.onError(UploadError(response.code()))
-            } catch (e: Exception) {
-                emitter.onError(UploadError(e))
             }
-        }
     }
 
     private fun appendFile(
@@ -168,21 +156,24 @@ class ReportsRepositoryImp @Inject internal constructor(
                         size
                     )
                 }
-
+                Timber.i("xf$baseUrl")
                 var response = apiService.putFile(
                     file = file,
                     url = baseUrl,
                     access_token = accessToken
-                )
+                ).blockingGet()
+
                 if (!response.isSuccessful) {
                     emitter.onError(UploadError(response.code()))
                     return@create
                 }
 
                 response = apiService.postFile(
+                    file = file,
                     url = baseUrl,
                     access_token = accessToken
-                )
+                ).blockingGet()
+
                 if (!response.isSuccessful) {
                     emitter.onError(UploadError(response.code()))
                     return@create
@@ -211,10 +202,6 @@ class ReportsRepositoryImp @Inject internal constructor(
             status = UploadProgressInfo.Status.UNKNOWN_HOST
         }
         return UploadProgressInfo(vaultFile, 0, status)
-    }
-
-    private fun getUploadUrl(name: String, baseUrl: URI): String {
-        return baseUrl.resolve("/").resolve(name).toString()
     }
 
     private fun toStatus(code: Int): UploadProgressInfo.Status {
