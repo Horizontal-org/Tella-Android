@@ -5,8 +5,9 @@ import retrofit2.Response
 import retrofit2.http.*
 import rs.readahead.washington.mobile.data.ParamsNetwork.COOKIE
 import rs.readahead.washington.mobile.data.entity.reports.*
+import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.AUTHORIZATION_HEADER
+import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.URL_FILE
 import rs.readahead.washington.mobile.data.repository.SkippableMediaFileRequestBody
-import rs.readahead.washington.mobile.domain.entity.reports.FileResult
 
 @JvmSuppressWildcards
 interface ReportsApiService {
@@ -34,7 +35,7 @@ interface ReportsApiService {
     fun submitReport(
         @Url
         url: String,
-        @Header("Authorization") access_token: String,
+        @Header(AUTHORIZATION_HEADER) access_token: String,
         @Body
         reportBodyEntity: ReportBodyEntity,
     ): Single<ReportPostResponse>
@@ -42,22 +43,22 @@ interface ReportsApiService {
     @Multipart
     @PUT
     fun putFile(
-        @Part("file") file: SkippableMediaFileRequestBody,
+        @Part(URL_FILE) file: SkippableMediaFileRequestBody,
         @Url url: String,
-        @Header("Authorization") access_token: String,
+        @Header(AUTHORIZATION_HEADER) access_token: String,
     ): Single<Response<Void>>
 
     @Multipart
     @POST
     fun postFile(
-        @Part("file") file: SkippableMediaFileRequestBody,
+        @Part(URL_FILE) file: SkippableMediaFileRequestBody,
         @Url url: String,
-        @Header("Authorization") access_token: String
+        @Header(AUTHORIZATION_HEADER) access_token: String
     ): Single<Response<Void>>
 
     @HEAD
     fun getStatus(
         @Url url: String,
-        @Header("Authorization") access_token: String
+        @Header(AUTHORIZATION_HEADER) access_token: String
     ): Single<Response<Void>>
 }

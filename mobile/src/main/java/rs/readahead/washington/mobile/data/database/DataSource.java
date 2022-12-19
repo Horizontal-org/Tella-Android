@@ -49,6 +49,7 @@ import rs.readahead.washington.mobile.domain.entity.FileUploadBundle;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.OldMediaFile;
+import rs.readahead.washington.mobile.domain.entity.ReportFileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
@@ -2352,8 +2353,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     new String[]{Long.toString(id)});
 
             // insert FormMediaFiles
-            List<FormMediaFile> mediaFiles = null;
-            // = instance.getWidgetMediaFiles();
+            List<FormMediaFile> mediaFiles = instance.getWidgetMediaFiles();
             for (FormMediaFile mediaFile : mediaFiles) {
                 values = new ContentValues();
                 values.put(D.C_REPORT_INSTANCE_ID, id);
@@ -2397,9 +2397,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                             D.C_METADATA,
                             D.C_DESCRIPTION_TEXT,
                             D.C_TITLE,
-                            D.C_PROJECT_ID,
-                            D.C_PROJECT_NAME,
-                            D.C_PROJECT_SLUG,
                             //D.C_FORM_PART_STATUS,
                             cn(D.T_TELLA_UPLOAD_SERVER, D.C_NAME, D.A_SERVER_NAME),
                             cn(D.T_TELLA_UPLOAD_SERVER, D.C_USERNAME, D.A_SERVER_USERNAME)},
@@ -2514,9 +2511,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                             D.C_UPDATED,
                             D.C_METADATA,
                             D.C_DESCRIPTION_TEXT,
-                            D.C_PROJECT_ID,
-                            D.C_PROJECT_NAME,
-                            D.C_PROJECT_SLUG,
                             D.C_TITLE},
                     cn(D.T_REPORT_FORM_INSTANCE, D.C_ID) + "= ?",
                     null, null, null, null
@@ -2537,6 +2531,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             }
         } catch (Exception e) {
             Timber.d(e, getClass().getName());
+            throw e;
         } finally {
             if (cursor != null) {
                 cursor.close();

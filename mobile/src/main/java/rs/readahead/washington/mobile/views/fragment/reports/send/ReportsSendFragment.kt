@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.views.fragment.reports.send
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.databinding.FragmentSendReportBinding
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
@@ -9,12 +10,14 @@ import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_FORM_INSTANCE
+import rs.readahead.washington.mobile.views.fragment.reports.entry.ReportsEntryViewModel
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.ReportsFormEndView
 
 @AndroidEntryPoint
 class ReportsSendFragment :
     BaseBindingFragment<FragmentSendReportBinding>(FragmentSendReportBinding::inflate) {
 
+    private val viewModel by viewModels<ReportsEntryViewModel>()
     private lateinit var endView: ReportsFormEndView
     private var reportInstance: ReportFormInstance? = null
 

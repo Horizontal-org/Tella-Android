@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.util.jobs;
 
-import static rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository.UploadStatus.ERROR;
 import static rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository.UploadStatus.SCHEDULED;
 import static rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository.UploadStatus.UPLOADING;
 
@@ -32,8 +31,9 @@ import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.domain.entity.EntityStatus;
-import rs.readahead.washington.mobile.domain.entity.ReportFileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
+import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
+import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance;
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
 import rs.readahead.washington.mobile.domain.exception.NoConnectivityException;
@@ -217,8 +217,8 @@ public class TellaRequestUploadJob extends Job {
         }
     }
 
-    private List<ReportFileUploadInstance> getPendingSubmittedFiles(List<ReportFileUploadInstance> files) {
-        return files.stream().filter(reportFileUploadInstance -> reportFileUploadInstance.getStatus() == UPLOADING || reportFileUploadInstance.getStatus() == SCHEDULED || reportFileUploadInstance.getStatus() == ERROR).collect(Collectors.toList());
+    private List<FormMediaFile> getPendingSubmittedFiles(List<FormMediaFile> files) {
+        return files.stream().filter(reportFileUploadInstance -> reportFileUploadInstance.status == FormMediaFileStatus.NOT_SUBMITTED).collect(Collectors.toList());
     }
 
 

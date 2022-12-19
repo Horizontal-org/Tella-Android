@@ -8,7 +8,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Flowable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
@@ -20,7 +19,6 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
-import rs.readahead.washington.mobile.domain.exception.NoConnectivityException
 import rs.readahead.washington.mobile.domain.repository.reports.ReportsRepository
 import rs.readahead.washington.mobile.domain.usecases.reports.*
 import rs.readahead.washington.mobile.util.fromJsonToObjectList
@@ -195,7 +193,7 @@ class ReportsEntryViewModel @Inject constructor(
             title = title,
             description = description,
             status = EntityStatus.DRAFT,
-            widgetMediaFiles = /*files ?:*/ emptyList(),
+            widgetMediaFiles = files ?: emptyList(),
             formPartStatus = FormMediaFileStatus.NOT_SUBMITTED,
             serverId = server.id
         )
@@ -215,7 +213,7 @@ class ReportsEntryViewModel @Inject constructor(
             reportApiId = reportApiId,
             description = description,
             status = EntityStatus.FINALIZED,
-            widgetMediaFiles = /*files ?:*/  emptyList(),
+            widgetMediaFiles = files  ?: emptyList(),
             formPartStatus = FormMediaFileStatus.NOT_SUBMITTED,
             serverId = server.id
         )
@@ -235,7 +233,7 @@ class ReportsEntryViewModel @Inject constructor(
             reportApiId = reportApiId,
             description = description,
             status = EntityStatus.SUBMITTED,
-            widgetMediaFiles = /*files ?:*/ emptyList(),
+            widgetMediaFiles = files ?: emptyList(),
             formPartStatus = FormMediaFileStatus.SUBMITTED,
             serverId = server.id
         )
@@ -288,9 +286,8 @@ class ReportsEntryViewModel @Inject constructor(
 
         getReportBundleUseCase.execute(onSuccess = { result ->
             val resultInstance = result.instance
-            //TODO WE NEED TO INJECT RXX VAULT USING DAGGER
-            /* resultInstance.widgetMediaFiles =
-                 vaultFilesToMediaFiles(MyApplication.rxVault.get(result.fileIds).blockingGet())*/
+            resultInstance.widgetMediaFiles =
+                 vaultFilesToMediaFiles(MyApplication.rxVault.get(result.fileIds).blockingGet())
             _draftReportInstance.postValue(resultInstance)
         }, onError = {
             _error.postValue(it)

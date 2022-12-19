@@ -18,6 +18,7 @@ import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultSelectFilesShe
 import org.hzontal.shared_ui.dropdownlist.DropDownItem
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsEntryBinding
+import rs.readahead.washington.mobile.domain.entity.ReportFileUploadInstance
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.media.MediaFileHandler
@@ -133,7 +134,6 @@ class ReportsEntryFragment :
     }
 
     private fun saveReportAsDraft() {
-
         viewModel.saveDraft(
             viewModel.getDraftFormInstance(
                 id = reportFormInstance?.id,
@@ -218,7 +218,6 @@ class ReportsEntryFragment :
 
     private fun showAttachmentsActivity() {
         try {
-            //TODO Djordje CONSIDER USING PERMISSION LIBRARY INSTEAD
             baseActivity.startActivityForResult(
                 Intent(activity, AttachmentsActivitySelector::class.java)
                     // .putExtra(VAULT_FILE_KEY, Gson().toJson(ids))
@@ -287,8 +286,8 @@ class ReportsEntryFragment :
 
     override fun onDropDownItemClicked(position: Int, chosenItem: DropDownItem) {
         binding?.serversDropdown?.setDefaultName(chosenItem.name)
-         servers?.get(position)?.let {
-             selectedServer = it
+        servers?.get(position)?.let {
+            selectedServer = it
         }
     }
 }
