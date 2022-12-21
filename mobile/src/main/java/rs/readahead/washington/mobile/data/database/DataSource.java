@@ -2152,6 +2152,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         server.setUsername(cursor.getString(cursor.getColumnIndexOrThrow(D.C_USERNAME)));
         server.setPassword(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PASSWORD)));
         server.setChecked(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_CHECKED)) > 0);
+        server.setAccessToken(cursor.getString(cursor.getColumnIndexOrThrow(D.C_ACCESS_TOKEN)));
         server.setActivatedBackgroundUpload(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_BACKGROUND_UPLOAD)) > 0);
         server.setActivatedMetadata(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_ACTIVATED_METADATA)) > 0);
         server.setProjectSlug(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PROJECT_SLUG)));
@@ -2448,7 +2449,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 EntityStatus.FINALIZED,
                 EntityStatus.SUBMISSION_ERROR,
                 EntityStatus.SUBMISSION_PENDING,
-                EntityStatus.SUBMISSION_PARTIAL_PARTS
+                EntityStatus.SUBMISSION_PARTIAL_PARTS,
+                EntityStatus.PAUSED
         });
     }
 
