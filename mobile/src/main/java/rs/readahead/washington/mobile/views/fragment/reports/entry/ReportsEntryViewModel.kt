@@ -317,6 +317,9 @@ class ReportsEntryViewModel @Inject constructor(
                                         reportPostResult.id,
                                         server.accessToken
                                     )
+                                }.doAfterTerminate {
+                                    instance.status = EntityStatus.SUBMITTED
+                                    dataSource.saveInstance(instance)
                                 }
                                 .blockingSubscribe(
                                     { progressInfo: UploadProgressInfo ->
@@ -338,7 +341,9 @@ class ReportsEntryViewModel @Inject constructor(
                                             }
                                         }
                                         instance.widgetMediaFiles.first { it.name == progressInfo.name }
+                                        _progressInfo.postValue(progressInfo)
                                     }
+
                                 ) { throwable: Throwable? ->
 
                                     Timber.d(throwable)
@@ -346,10 +351,16 @@ class ReportsEntryViewModel @Inject constructor(
                                 }
                         })
             } else {
+
             }
         },
-            onError = {},
-            onFinished = {}
+            onError = {
+                instance.status = EntityStatus.SUBMISSION_ERROR
+                dataSource.saveInstance(instance)
+            },
+            onFinished = {
+
+            }
         )
 
     }

@@ -857,7 +857,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         values.put(D.C_USERNAME, server.getUsername());
         values.put(D.C_PASSWORD, server.getPassword());
         values.put(D.C_CHECKED, server.isChecked() ? 1 : 0);
-        values.put(D.C_ACCESS_TOKEN, server.getAccessToken());
+        values.put(D.C_ACCESS_TOKEN, "Bearer "+ server.getAccessToken());
         values.put(D.C_ACTIVATED_METADATA, server.isActivatedMetadata() ? 1 : 0);
         values.put(D.C_BACKGROUND_UPLOAD, server.isActivatedMetadata() ? 1 : 0);
 

@@ -122,7 +122,7 @@
                   android:autofillHints="description"
                   android:hint="@string/Reports_Select_Description"
                   android:imeOptions="actionDone"
-                  android:inputType="text"
+                  android:inputType="textImeMultiLine"
                   android:textColor="@color/wa_white"
                   app:backgroundTint="@color/wa_white" />
           </com.google.android.material.textfield.TextInputLayout>

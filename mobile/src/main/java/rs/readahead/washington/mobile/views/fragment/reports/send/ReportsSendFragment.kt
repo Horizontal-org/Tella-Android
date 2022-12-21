@@ -67,7 +67,7 @@ class ReportsSendFragment :
                 reportFormInstance.description,
                 getStatusLabel(reportFormInstance)
             )
-            endView.setInstance(reportFormInstance, false, false)
+            endView.setInstance(reportFormInstance, false, true)
             binding?.endViewContainer?.removeAllViews()
             binding?.endViewContainer?.addView(endView)
         }
