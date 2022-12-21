@@ -49,11 +49,12 @@ class SubmittedReportsFragment : BaseBindingFragment<FragmentReportsListBinding>
                     binding?.textViewEmpty?.hide()
                 }
             })
+
             onMoreClickedFormInstance.observe(viewLifecycleOwner, { instance ->
                 showOutboxMenu(instance)
             })
-            //TODO RENAME TO THE SAME INSTANCE FOR (DRAFT/SUBMITTED/OUTBOX)
-            draftReportInstance.observe(viewLifecycleOwner, { instance ->
+
+            reportInstance.observe(viewLifecycleOwner, { instance ->
                 openEntityInstance(instance)
             })
 

@@ -55,7 +55,7 @@ class DraftsReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
                 showDraftsMenu(instance)
             }
 
-            draftReportInstance.observe(viewLifecycleOwner) { instance ->
+            reportInstance.observe(viewLifecycleOwner) { instance ->
                 openEntityInstance(instance)
             }
 

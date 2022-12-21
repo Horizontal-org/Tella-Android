@@ -18,7 +18,7 @@ import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultSelectFilesShe
 import org.hzontal.shared_ui.dropdownlist.DropDownItem
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsEntryBinding
-import rs.readahead.washington.mobile.domain.entity.ReportFileUploadInstance
+import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.media.MediaFileHandler
@@ -71,16 +71,12 @@ class ReportsEntryFragment :
 
     private fun initView() {
         gridLayoutManager = GridLayoutManager(context, 3)
-
         binding?.filesRecyclerView?.apply {
-            adapter = filesRecyclerViewAdapter
             layoutManager = gridLayoutManager
+            adapter = filesRecyclerViewAdapter
         }
-
         binding?.toolbar?.backClickListener = { nav().popBackStack() }
-
         highLightSubmitButton()
-
         arguments?.let { bundle ->
             if (bundle.get(BUNDLE_REPORT_FORM_INSTANCE) != null) {
                 reportFormInstance = bundle.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportFormInstance
@@ -91,6 +87,7 @@ class ReportsEntryFragment :
         reportFormInstance?.let { instance ->
             binding?.reportTitleEt?.setText(instance.title)
             binding?.reportDescriptionEt?.setText(instance.description)
+            putFiles(viewModel.mediaFilesToVaultFiles(instance.widgetMediaFiles))
         }
     }
 
@@ -118,12 +115,7 @@ class ReportsEntryFragment :
                 saveReportAsOutbox()
             }
             binding?.sendReportBtn?.setOnClickListener {
-                viewModel.submitReport(
-                    title = binding?.reportTitleEt?.text.toString(),
-                    description = binding?.reportDescriptionEt?.text.toString(),
-                    server = selectedServer,
-                    files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
-                )
+                saveReportAsOutbox()
             }
         } else {
             binding?.sendReportBtn?.setTint(R.color.wa_orange_16)
@@ -184,6 +176,14 @@ class ReportsEntryFragment :
                     binding?.dropdownGroup?.hide()
                     selectedServer = serversList[0]
                 }
+            }
+            reportInstance.observe(viewLifecycleOwner){ instance->
+                when(instance.status){
+                    EntityStatus.DRAFT -> showToast(getString(R.string.Reports_Saved_Draft))
+                    EntityStatus.FINALIZED -> { nav().popBackStack() }
+                    else -> {}
+                }
+
             }
         }
 
@@ -273,7 +273,7 @@ class ReportsEntryFragment :
         for (file in vaultFileList) {
             filesRecyclerViewAdapter.insertAttachment(file)
         }
-        //binding?.filesRecyclerView?.visibility = View.VISIBLE
+        binding?.filesRecyclerView?.visibility = View.VISIBLE
     }
 
     override fun playMedia(mediaFile: VaultFile?) {

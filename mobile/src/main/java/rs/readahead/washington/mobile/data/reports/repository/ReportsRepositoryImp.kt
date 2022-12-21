@@ -85,7 +85,6 @@ class ReportsRepositoryImp @Inject internal constructor(
                     it, vaultFile
                 )
             }
-
     }
 
     override fun check(
@@ -118,7 +117,7 @@ class ReportsRepositoryImp @Inject internal constructor(
     private fun getStatus(url: String, accessToken: String): Single<Long> {
         return apiService.getStatus(url, accessToken)
             .subscribeOn(Schedulers.io())
-            .doOnError { UploadError(it) }
+            .doOnError { throw (it) }
             .map {
                 Util.parseLong(
                     it.headers()["size"],
@@ -168,7 +167,7 @@ class ReportsRepositoryImp @Inject internal constructor(
                     return@create
                 }
 
-                response = apiService.postFile(
+               response = apiService.postFile(
                     file = file,
                     url = baseUrl,
                     access_token = accessToken

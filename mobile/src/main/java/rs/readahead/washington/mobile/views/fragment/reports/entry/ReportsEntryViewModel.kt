@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.views.fragment.reports.entry
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -49,23 +48,22 @@ class ReportsEntryViewModel @Inject constructor(
     val error: LiveData<Throwable> get() = _error
     private val _draftListReportFormInstance = MutableLiveData<List<ViewEntityTemplateItem>>()
     val draftListReportFormInstance: LiveData<List<ViewEntityTemplateItem>> get() = _draftListReportFormInstance
-    private val _draftReportFormInstance = MutableLiveData<ReportFormInstance>()
-    val draftReportFormInstance: LiveData<ReportFormInstance> get() = _draftReportFormInstance
-    private val _outboxReportFormInstance = MutableLiveData<ReportFormInstance>()
-    val outboxReportFormInstance: LiveData<ReportFormInstance> get() = _outboxReportFormInstance
     private val _outboxReportListFormInstance = MutableLiveData<List<ViewEntityTemplateItem>>()
     val outboxReportListFormInstance: LiveData<List<ViewEntityTemplateItem>> get() = _outboxReportListFormInstance
     private val _submittedReportListFormInstance = MutableLiveData<List<ViewEntityTemplateItem>>()
     val submittedReportListFormInstance: LiveData<List<ViewEntityTemplateItem>> get() = _submittedReportListFormInstance
-
     private val _onMoreClickedFormInstance = MutableLiveData<ReportFormInstance>()
     val onMoreClickedFormInstance: LiveData<ReportFormInstance> get() = _onMoreClickedFormInstance
     private val _onOpenClickedFormInstance = MutableLiveData<ReportFormInstance>()
     val onOpenClickedFormInstance: LiveData<ReportFormInstance> get() = _onOpenClickedFormInstance
     private val _instanceDeleted = MutableLiveData<Boolean>()
     val instanceDeleted: LiveData<Boolean> get() = _instanceDeleted
-    private val _draftReportInstance = MutableLiveData<ReportFormInstance>()
-    val draftReportInstance: LiveData<ReportFormInstance> get() = _draftReportInstance
+    private val _reportInstance = MutableLiveData<ReportFormInstance>()
+    val reportInstance: LiveData<ReportFormInstance> get() = _reportInstance
+
+    private val _progressInfo = MutableLiveData<UploadProgressInfo>()
+    val progressInfo: LiveData<UploadProgressInfo> get() = _progressInfo
+
 
     fun listServers() {
         _progress.postValue(true)
@@ -82,7 +80,7 @@ class ReportsEntryViewModel @Inject constructor(
         _progress.postValue(true)
         saveReportFormInstanceUseCase.setReportFormInstance(reportFormInstance)
         saveReportFormInstanceUseCase.execute(onSuccess = { result ->
-            _draftReportFormInstance.postValue(result)
+            _reportInstance.postValue(result)
         }, onError = {
             _error.postValue(it)
         }, onFinished = {
@@ -94,7 +92,7 @@ class ReportsEntryViewModel @Inject constructor(
         _progress.postValue(true)
         saveReportFormInstanceUseCase.setReportFormInstance(reportFormInstance)
         saveReportFormInstanceUseCase.execute(onSuccess = { result ->
-            _outboxReportFormInstance.postValue(result)
+            _reportInstance.postValue(result)
         }, onError = {
             _error.postValue(it)
         }, onFinished = {
@@ -106,7 +104,7 @@ class ReportsEntryViewModel @Inject constructor(
         _progress.postValue(true)
         saveReportFormInstanceUseCase.setReportFormInstance(reportFormInstance)
         saveReportFormInstanceUseCase.execute(onSuccess = { result ->
-            _outboxReportFormInstance.postValue(result)
+            _reportInstance.postValue(result)
         }, onError = {
             _error.postValue(it)
         }, onFinished = {
@@ -213,7 +211,7 @@ class ReportsEntryViewModel @Inject constructor(
             reportApiId = reportApiId,
             description = description,
             status = EntityStatus.FINALIZED,
-            widgetMediaFiles = files  ?: emptyList(),
+            widgetMediaFiles = files ?: emptyList(),
             formPartStatus = FormMediaFileStatus.NOT_SUBMITTED,
             serverId = server.id
         )
@@ -287,8 +285,8 @@ class ReportsEntryViewModel @Inject constructor(
         getReportBundleUseCase.execute(onSuccess = { result ->
             val resultInstance = result.instance
             resultInstance.widgetMediaFiles =
-                 vaultFilesToMediaFiles(MyApplication.rxVault.get(result.fileIds).blockingGet())
-            _draftReportInstance.postValue(resultInstance)
+                vaultFilesToMediaFiles(MyApplication.rxVault.get(result.fileIds).blockingGet())
+            _reportInstance.postValue(resultInstance)
         }, onError = {
             _error.postValue(it)
         }, onFinished = {
@@ -296,42 +294,64 @@ class ReportsEntryViewModel @Inject constructor(
         })
     }
 
-    @SuppressLint("TimberArgCount")
-    fun submitReport(
-        title: String,
-        description: String,
-        server: TellaReportServer,
-        files: List<FormMediaFile>
-    ) {
+    fun submitReport(instance: ReportFormInstance) {
         _progress.postValue(true)
-
-        if (!server.isActivatedBackgroundUpload) {
-            disposables.add(
-                reportsRepository.submitReport(server, ReportBodyEntity(title, description))
-                    .subscribe { reportPostResult ->
-                        Flowable.fromIterable(files)
-                            .flatMap { file ->
-                                reportsRepository.upload(
-                                    file,
-                                    server.url,
-                                    reportPostResult.id,
-                                    server.accessToken
-                                )
-                            }
-                            .blockingSubscribe(
-                                { progressInfo: UploadProgressInfo? ->
-
+        getReportsServersUseCase.execute(onSuccess = { servers ->
+            val server = servers.first { it.id == instance.serverId }
+            if (!server.isActivatedBackgroundUpload) {
+                disposables.add(
+                    reportsRepository.submitReport(
+                        server,
+                        ReportBodyEntity(instance.title, instance.description)
+                    )
+                        .doOnError {
+                            instance.status = EntityStatus.SUBMISSION_ERROR
+                            dataSource.saveInstance(instance)
+                        }
+                        .subscribe { reportPostResult ->
+                            Flowable.fromIterable(instance.widgetMediaFiles)
+                                .flatMap { file ->
+                                    reportsRepository.upload(
+                                        file,
+                                        server.url,
+                                        reportPostResult.id,
+                                        server.accessToken
+                                    )
                                 }
-                            ) { throwable: Throwable? ->
+                                .blockingSubscribe(
+                                    { progressInfo: UploadProgressInfo ->
+                                        _progressInfo.postValue(progressInfo)
+                                        when (progressInfo.status) {
+                                            UploadProgressInfo.Status.ERROR, UploadProgressInfo.Status.UNAUTHORIZED, UploadProgressInfo.Status.UNKNOWN_HOST -> {
+                                                instance.widgetMediaFiles.first { it.name == progressInfo.name }
+                                                    .apply {
+                                                        status = FormMediaFileStatus.NOT_SUBMITTED
+                                                    }
+                                                dataSource.saveInstance(instance)
+                                            }
+                                            UploadProgressInfo.Status.OK, UploadProgressInfo.Status.FINISHED -> {
+                                                instance.widgetMediaFiles.first { it.name == progressInfo.name }
+                                                    .apply {
+                                                        status = FormMediaFileStatus.SUBMITTED
+                                                    }
+                                                dataSource.saveInstance(instance)
+                                            }
+                                        }
+                                        instance.widgetMediaFiles.first { it.name == progressInfo.name }
+                                    }
+                                ) { throwable: Throwable? ->
 
-                                Timber.d(throwable)
-                                FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                            }
-                    })
-        } else {
+                                    Timber.d(throwable)
+                                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                                }
+                        })
+            } else {
+            }
+        },
+            onError = {},
+            onFinished = {}
+        )
 
-
-        }
     }
 
 

@@ -123,7 +123,7 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
         }
     }
 
-    private fun onShowProgress(partName : String,total : Float){
+    private fun onShowProgress(partName : String,total: Float){
         endView.showUploadProgress(partName)
         endView.setUploadProgress(partName,total)
     }

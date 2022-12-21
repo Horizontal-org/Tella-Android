@@ -54,7 +54,7 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
                 showOutboxMenu(instance)
             })
 
-            draftReportInstance.observe(viewLifecycleOwner, { instance ->
+            reportInstance.observe(viewLifecycleOwner, { instance ->
                 openEntityInstance(instance)
             })
 

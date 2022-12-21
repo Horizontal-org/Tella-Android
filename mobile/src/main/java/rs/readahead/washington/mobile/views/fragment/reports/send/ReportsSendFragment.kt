@@ -28,6 +28,11 @@ class ReportsSendFragment :
     }
 
     private fun initData() {
+        with(viewModel) {
+            progressInfo.observe(viewLifecycleOwner) {
+                endView.setUploadProgress(it.name, it.current.toFloat())
+            }
+        }
     }
 
     private fun initView() {
@@ -70,7 +75,7 @@ class ReportsSendFragment :
 
     fun submitEntity() {
         reportInstance?.let { entity ->
-
+            viewModel.submitReport(entity)
         }
     }
 

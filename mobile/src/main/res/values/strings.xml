@@ -702,5 +702,6 @@ button to add a new template.</string>
     <string name="Reports_Select_Description" translatable="false">Description</string>
     <string name="Reports_Attach_files_Here" translatable="false">Attach files here</string>
     <string name="Connection_Title" translatable="false">Connections</string>
+    <string name="Reports_Saved_Draft" translatable="false">The report was saved as a draft</string>
 
 </resources>

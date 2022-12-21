@@ -97,17 +97,17 @@ public class ReportsFormEndView extends FrameLayout {
 
         long formSize = instance.getTitle().getBytes(StandardCharsets.UTF_8).length +
                 instance.getMetadata().toString().getBytes(StandardCharsets.UTF_8).length;
-        // + instance.getType().getBytes(StandardCharsets.UTF_8).length
+       //  + instance.getType().getBytes(StandardCharsets.UTF_8).length;
 
         partsListView = findViewById(R.id.formPartsList);
         partsListView.removeAllViews();
 
         partsListView.addView(createFormSubmissionPartItemView(instance, formSize, offline));
-      /*  for (FormMediaFile mediaFile : instance.getWidgetMediaFiles()) {
+        for (FormMediaFile mediaFile : instance.getWidgetMediaFiles()) {
             partsListView.addView(createFormMediaFileItemView(mediaFile, offline));
             formSize += mediaFile.size;
             formElements++;
-        }*/
+        }
 
         // TextView formElementsView = findViewById(R.id.formElements);
         TextView formSizeView = findViewById(R.id.formSize);
