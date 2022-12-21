@@ -26,7 +26,6 @@ import rs.readahead.washington.mobile.domain.entity.EntityStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance;
-import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
@@ -141,13 +140,15 @@ public class ReportsFormEndView extends FrameLayout {
         }
     }
 
-    public void clearPartsProgress(UwaziEntityInstance instance) {
+    public void clearPartsProgress(ReportFormInstance instance) {
         setPartsCleared(instance);
     }
 
     private View createFormSubmissionPartItemView(@NonNull ReportFormInstance instance, long size, boolean offline) {
 
         SubmittingItem item = new SubmittingItem(getContext(), null, 0);
+
+        item.setTag("REPORT_RESPONSE");
 
         item.setPartName(R.string.collect_end_item_form_data);
         item.setPartSize(size);
@@ -199,8 +200,8 @@ public class ReportsFormEndView extends FrameLayout {
         return item;
     }
 
-    private void setPartsCleared(UwaziEntityInstance instance) {
-        SubmittingItem item = partsListView.findViewWithTag("UWAZI_RESPONSE");
+    private void setPartsCleared(ReportFormInstance instance) {
+        SubmittingItem item = partsListView.findViewWithTag("REPORT_RESPONSE");
 
         if (instance.getStatus() == EntityStatus.SUBMITTED ||
                 instance.getStatus() == EntityStatus.SUBMISSION_PARTIAL_PARTS) {

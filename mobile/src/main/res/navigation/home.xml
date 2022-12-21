@@ -100,6 +100,12 @@
             app:destination="@id/micScreen"
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out" />
+
+        <action
+            android:id="@+id/action_newReport_to_reportSendScreen"
+            app:destination="@id/reportSendScreen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
     </fragment>
 
     <fragment

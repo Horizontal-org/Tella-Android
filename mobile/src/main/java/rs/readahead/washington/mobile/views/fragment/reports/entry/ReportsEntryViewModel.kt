@@ -217,6 +217,26 @@ class ReportsEntryViewModel @Inject constructor(
         )
     }
 
+    fun getFinalizedFormInstance(
+        title: String,
+        description: String,
+        files: List<FormMediaFile>?,
+        server: TellaReportServer,
+        id: Long? = null,
+        reportApiId: String = "",
+    ): ReportFormInstance {
+        return ReportFormInstance(
+            id = id ?: 0L,
+            title = title,
+            reportApiId = reportApiId,
+            description = description,
+            status = EntityStatus.FINALIZED,
+            widgetMediaFiles = files ?: emptyList(),
+            formPartStatus = FormMediaFileStatus.NOT_SUBMITTED,
+            serverId = server.id
+        )
+    }
+
     fun getSubmittedFormInstance(
         title: String,
         description: String,
@@ -240,6 +260,8 @@ class ReportsEntryViewModel @Inject constructor(
     fun vaultFilesToMediaFiles(files: List<VaultFile>): List<FormMediaFile> {
         val vaultFiles = mutableListOf<FormMediaFile>()
         files.map { vaultFile ->
+            val mediaFile = FormMediaFile.fromMediaFile(vaultFile)
+            mediaFile.status = FormMediaFileStatus.NOT_SUBMITTED
             vaultFiles.add(FormMediaFile.fromMediaFile(vaultFile))
         }
         return vaultFiles

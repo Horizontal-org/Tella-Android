@@ -115,7 +115,7 @@ class ReportsEntryFragment :
                 saveReportAsOutbox()
             }
             binding?.sendReportBtn?.setOnClickListener {
-                saveReportAsOutbox()
+                openEntityInstance()
             }
         } else {
             binding?.sendReportBtn?.setTint(R.color.wa_orange_16)
@@ -289,5 +289,18 @@ class ReportsEntryFragment :
         servers?.get(position)?.let {
             selectedServer = it
         }
+    }
+
+    private fun openEntityInstance() {
+        val bundle = Bundle()
+        reportFormInstance = viewModel.getFinalizedFormInstance(
+            id = reportFormInstance?.id,
+            title = binding?.reportTitleEt?.text.toString(),
+            description = binding?.reportDescriptionEt?.text.toString(),
+            files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
+            server = selectedServer
+        )
+        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportFormInstance)
+        nav().navigate(R.id.action_newReport_to_reportSendScreen, bundle)
     }
 }

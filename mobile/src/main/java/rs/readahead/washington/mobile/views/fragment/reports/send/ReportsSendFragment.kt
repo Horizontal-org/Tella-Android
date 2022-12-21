@@ -70,6 +70,7 @@ class ReportsSendFragment :
             endView.setInstance(reportFormInstance, false, true)
             binding?.endViewContainer?.removeAllViews()
             binding?.endViewContainer?.addView(endView)
+            endView.clearPartsProgress(reportFormInstance)
         }
     }
 
