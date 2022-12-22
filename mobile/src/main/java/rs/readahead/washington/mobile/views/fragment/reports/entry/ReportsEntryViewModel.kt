@@ -60,10 +60,10 @@ class ReportsEntryViewModel @Inject constructor(
     val instanceDeleted: LiveData<Boolean> get() = _instanceDeleted
     private val _reportInstance = MutableLiveData<ReportFormInstance>()
     val reportInstance: LiveData<ReportFormInstance> get() = _reportInstance
-
     private val _progressInfo = MutableLiveData<UploadProgressInfo>()
     val progressInfo: LiveData<UploadProgressInfo> get() = _progressInfo
-
+    private val _entityStatus = MutableLiveData<ReportFormInstance>()
+    val entityStatus: LiveData<ReportFormInstance> get() = _entityStatus
 
     fun listServers() {
         _progress.postValue(true)
@@ -328,9 +328,12 @@ class ReportsEntryViewModel @Inject constructor(
                     )
                         .doOnError {
                             instance.status = EntityStatus.SUBMISSION_ERROR
-                            dataSource.saveInstance(instance)
+                            _entityStatus.postValue(instance)
                         }
                         .subscribe { reportPostResult ->
+                            instance.status = EntityStatus.SUBMISSION_PARTIAL_PARTS
+                            instance.reportApiId = reportPostResult.id
+                            _entityStatus.postValue(instance)
                             Flowable.fromIterable(instance.widgetMediaFiles)
                                 .flatMap { file ->
                                     reportsRepository.upload(
@@ -339,35 +342,35 @@ class ReportsEntryViewModel @Inject constructor(
                                         reportPostResult.id,
                                         server.accessToken
                                     )
-                                }.doAfterTerminate {
+                                }.doOnComplete {
                                     instance.status = EntityStatus.SUBMITTED
-                                    dataSource.saveInstance(instance)
+                                    _entityStatus.postValue(instance)
                                 }
                                 .blockingSubscribe(
                                     { progressInfo: UploadProgressInfo ->
-                                        _progressInfo.postValue(progressInfo)
                                         when (progressInfo.status) {
-                                            UploadProgressInfo.Status.ERROR, UploadProgressInfo.Status.UNAUTHORIZED, UploadProgressInfo.Status.UNKNOWN_HOST -> {
+                                            UploadProgressInfo.Status.ERROR, UploadProgressInfo.Status.UNAUTHORIZED, UploadProgressInfo.Status.UNKNOWN_HOST, UploadProgressInfo.Status.UNKNOWN, UploadProgressInfo.Status.CONFLICT -> {
                                                 instance.widgetMediaFiles.first { it.name == progressInfo.name }
                                                     .apply {
                                                         status = FormMediaFileStatus.NOT_SUBMITTED
                                                     }
                                                 dataSource.saveInstance(instance)
                                             }
-                                            UploadProgressInfo.Status.OK, UploadProgressInfo.Status.FINISHED -> {
+                                            UploadProgressInfo.Status.STARTED -> {
+                                                _progressInfo.postValue(progressInfo)
+                                            }
+                                            UploadProgressInfo.Status.FINISHED -> {
                                                 instance.widgetMediaFiles.first { it.name == progressInfo.name }
                                                     .apply {
                                                         status = FormMediaFileStatus.SUBMITTED
                                                     }
-                                                dataSource.saveInstance(instance)
                                             }
                                         }
-                                        instance.widgetMediaFiles.first { it.name == progressInfo.name }
-                                        _progressInfo.postValue(progressInfo)
                                     }
 
                                 ) { throwable: Throwable? ->
-
+                                    instance.status = EntityStatus.SUBMISSION_ERROR
+                                    _entityStatus.postValue(instance)
                                     Timber.d(throwable)
                                     FirebaseCrashlytics.getInstance().recordException(throwable!!)
                                 }

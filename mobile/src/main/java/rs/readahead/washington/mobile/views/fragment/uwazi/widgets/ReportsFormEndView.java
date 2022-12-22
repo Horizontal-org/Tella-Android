@@ -94,12 +94,13 @@ public class ReportsFormEndView extends FrameLayout {
 
         long formSize = instance.getTitle().getBytes(StandardCharsets.UTF_8).length +
                 instance.getMetadata().toString().getBytes(StandardCharsets.UTF_8).length;
-       //  + instance.getType().getBytes(StandardCharsets.UTF_8).length;
+        //  + instance.getType().getBytes(StandardCharsets.UTF_8).length;
 
         partsListView = findViewById(R.id.formPartsList);
         partsListView.removeAllViews();
 
-        partsListView.addView(createFormSubmissionPartItemView(instance, formSize, offline));
+        //  partsListView.addView(createFormSubmissionPartItemView(instance, formSize, offline));
+
         for (FormMediaFile mediaFile : instance.getWidgetMediaFiles()) {
             partsListView.addView(createFormMediaFileItemView(mediaFile, offline));
             formSize += mediaFile.size;
@@ -201,17 +202,9 @@ public class ReportsFormEndView extends FrameLayout {
     }
 
     private void setPartsCleared(ReportFormInstance instance) {
-        SubmittingItem item = partsListView.findViewWithTag("REPORT_RESPONSE");
-
-        if (instance.getStatus() == EntityStatus.SUBMITTED ||
-                instance.getStatus() == EntityStatus.SUBMISSION_PARTIAL_PARTS) {
-            item.setPartUploaded();
-        } else {
-            item.setPartCleared();
-        }
 
         for (FormMediaFile mediaFile : instance.getWidgetMediaFiles()) {
-            item = partsListView.findViewWithTag(mediaFile.getPartName());
+            SubmittingItem item = partsListView.findViewWithTag(mediaFile.getPartName());
 
             if (mediaFile.status == FormMediaFileStatus.SUBMITTED) {
                 item.setPartUploaded();

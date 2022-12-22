@@ -1,5 +1,7 @@
 package rs.readahead.washington.mobile.data.reports.repository
 
+import android.text.TextUtils
+import android.webkit.MimeTypeMap
 import com.hzontal.tella_vault.VaultFile
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -59,6 +61,12 @@ class ReportsRepositoryImp @Inject internal constructor(
         ).map { it.mapToDomainModel() }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnError {  }
+    }
+
+    private fun getFileName(vaultFile: VaultFile): String {
+        val ext =  MimeTypeMap.getSingleton().getExtensionFromMimeType(vaultFile.mimeType)
+        return vaultFile.id + if (!TextUtils.isEmpty(ext)) ".$ext" else ""
     }
 
     override fun upload(
@@ -70,7 +78,7 @@ class ReportsRepositoryImp @Inject internal constructor(
         val url = StringUtils.append(
             '/',
             urlServer,
-            "file/$reportId/${vaultFile.name}"
+            "file/$reportId/${getFileName(vaultFile)}"
         )
         return getStatus(url, accessToken)
             .flatMapPublisher { skipBytes: Long ->
@@ -97,7 +105,7 @@ class ReportsRepositoryImp @Inject internal constructor(
         val url = StringUtils.append(
             '/',
             urlServer,
-            "$reportId${vaultFile.name}"
+            "$reportId${getFileName(vaultFile)}"
         )
         return getStatus(url, accessToken)
             .map { aLong: Long? ->

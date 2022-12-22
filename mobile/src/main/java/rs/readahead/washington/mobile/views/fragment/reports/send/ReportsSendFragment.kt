@@ -32,6 +32,27 @@ class ReportsSendFragment :
             progressInfo.observe(viewLifecycleOwner) {
                 endView.setUploadProgress(it.name, it.current.toFloat())
             }
+
+            entityStatus.observe(viewLifecycleOwner) { entity ->
+                when (entity.status) {
+                    EntityStatus.SUBMITTED -> {
+                        viewModel.saveSubmitted(entity)
+                    }
+                    EntityStatus.SUBMISSION_ERROR, EntityStatus.SUBMISSION_PARTIAL_PARTS, EntityStatus.SUBMISSION_PENDING, EntityStatus.PAUSED, EntityStatus.FINALIZED -> {
+                        viewModel.saveOutbox(entity)
+                    }
+                    else -> {}
+                }
+
+                reportInstance.observe(viewLifecycleOwner) { entity ->
+                    when (entity.status) {
+                        EntityStatus.SUBMITTED -> {
+                            nav().popBackStack()
+                        }
+                        else -> {}
+                    }
+                }
+            }
         }
     }
 
