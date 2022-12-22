@@ -348,6 +348,15 @@ class ReportsEntryViewModel @Inject constructor(
                                 }
                                 .blockingSubscribe(
                                     { progressInfo: UploadProgressInfo ->
+                                        Timber.d(
+                                            "+++++ UploadProgressInfo, %s, %s, %s, %s %s",
+                                            progressInfo.name,
+                                            progressInfo.status.name,
+                                            progressInfo.current,
+                                            progressInfo.size,
+                                            progressInfo.fileId
+                                        )
+                                        _progressInfo.postValue(progressInfo)
                                         when (progressInfo.status) {
                                             UploadProgressInfo.Status.ERROR, UploadProgressInfo.Status.UNAUTHORIZED, UploadProgressInfo.Status.UNKNOWN_HOST, UploadProgressInfo.Status.UNKNOWN, UploadProgressInfo.Status.CONFLICT -> {
                                                 instance.widgetMediaFiles.first { it.name == progressInfo.name }
@@ -356,14 +365,14 @@ class ReportsEntryViewModel @Inject constructor(
                                                     }
                                                 dataSource.saveInstance(instance)
                                             }
-                                            UploadProgressInfo.Status.STARTED -> {
-                                                _progressInfo.postValue(progressInfo)
-                                            }
                                             UploadProgressInfo.Status.FINISHED -> {
                                                 instance.widgetMediaFiles.first { it.name == progressInfo.name }
                                                     .apply {
                                                         status = FormMediaFileStatus.SUBMITTED
                                                     }
+                                            }
+                                            else -> {
+                                                //_progressInfo.postValue(progressInfo)
                                             }
                                         }
                                     }
