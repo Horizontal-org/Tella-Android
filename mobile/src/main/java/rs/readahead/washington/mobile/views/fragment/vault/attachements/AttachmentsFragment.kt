@@ -820,12 +820,14 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     }
 
-    override fun onMoveFilesSuccess() {
+    override fun onMoveFilesSuccess(filesSize: Int) {
         attachmentsPresenter.addNewVaultFiles()
         enableMoveTheme(false)
         currentMove = null
         selectMode = SelectMode.SELECT_ALL
         handleSelectMode()
+        activity.showToast(resources.getQuantityString(R.plurals.File_Successfully_Moved,filesSize))
+
     }
 
     override fun onMoveFilesError(error: Throwable?) {

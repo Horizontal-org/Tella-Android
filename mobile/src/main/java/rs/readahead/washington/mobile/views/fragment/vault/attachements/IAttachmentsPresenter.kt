@@ -38,7 +38,7 @@ class IAttachmentsPresenter {
         fun onCreateFolderError(error: Throwable?)
         fun onGetRootIdSuccess(vaultFile: VaultFile?)
         fun onGetRootIdError(error: Throwable?)
-        fun onMoveFilesSuccess()
+        fun onMoveFilesSuccess(filesSize:Int)
         fun onMoveFilesError(error: Throwable?)
         fun getContext(): Context?
     }

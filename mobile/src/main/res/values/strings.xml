@@ -676,4 +676,5 @@ button to add a new template.</string>
   <string name="Timeout_Warning_Description">To perform this action, Tella will remain unlocked for 3 minutes.</string>
   <string name="Javarosa_Upgrade_Warning_Description">Javarosa library has been upgraded and it is not possible to work on old forms. In order to continue, we have to remove all the local forms.</string>
   <string name="Javarosa_Upgrade_Toast">We are about to flush the cached form definitions.</string>
+
 </resources>

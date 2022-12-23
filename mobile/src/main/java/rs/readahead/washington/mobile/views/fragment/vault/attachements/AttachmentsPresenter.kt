@@ -125,7 +125,7 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
             ) { objects: Array<Any?> -> objects.size }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                    { view?.onMoveFilesSuccess() }
+                    { view?.onMoveFilesSuccess(vaultFiles.size) }
                 ) { throwable: Throwable? ->
                     FirebaseCrashlytics.getInstance().recordException(throwable!!)
                     view?.onMoveFilesError(throwable)
