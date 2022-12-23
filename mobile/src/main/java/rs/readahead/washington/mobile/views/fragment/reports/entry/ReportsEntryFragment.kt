@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_locking_ui.common.extensions.onChange
@@ -30,6 +31,8 @@ import rs.readahead.washington.mobile.views.activity.CameraActivity
 import rs.readahead.washington.mobile.views.adapters.reports.ReportsFilesRecyclerViewAdapter
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.REPORT_ENTRY
+import rs.readahead.washington.mobile.views.fragment.reports.viewpager.OUTBOX_LIST_PAGE_INDEX
+import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILES_FILTER
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
@@ -115,7 +118,7 @@ class ReportsEntryFragment :
                 saveReportAsOutbox()
             }
             binding?.sendReportBtn?.setOnClickListener {
-                openEntityInstance()
+                submitReport()
             }
         } else {
             binding?.sendReportBtn?.setTint(R.color.wa_orange_16)
@@ -177,10 +180,13 @@ class ReportsEntryFragment :
                     selectedServer = serversList[0]
                 }
             }
-            reportInstance.observe(viewLifecycleOwner){ instance->
-                when(instance.status){
+            reportInstance.observe(viewLifecycleOwner) { instance ->
+                when (instance.status) {
                     EntityStatus.DRAFT -> showToast(getString(R.string.Reports_Saved_Draft))
-                    EntityStatus.FINALIZED -> { nav().popBackStack() }
+                    EntityStatus.FINALIZED -> {
+                        nav().popBackStack()
+                        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
+                    }
                     else -> {}
                 }
 
@@ -291,7 +297,7 @@ class ReportsEntryFragment :
         }
     }
 
-    private fun openEntityInstance() {
+    private fun submitReport() {
         val bundle = Bundle()
         reportFormInstance = viewModel.getFinalizedFormInstance(
             id = reportFormInstance?.id,
