@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.databinding.FragmentSendReportBinding
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
+import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
@@ -31,7 +32,7 @@ class ReportsSendFragment :
     private fun initData() {
         with(viewModel) {
             progressInfo.observe(viewLifecycleOwner) {
-                endView.setUploadProgress(it.name,it.current.toFloat() / it.size.toFloat())
+                //endView.setUploadProgress(it.name,it.current.toFloat() / it.size.toFloat())
                 Timber.d(
                     "+++++ observed UploadProgressInfo, %s, %s, %s, %s %s",
                     it.name,
@@ -41,6 +42,9 @@ class ReportsSendFragment :
                     it.fileId
                 )
                 endView.setUploadProgress(it.name, it.current.toFloat())
+                if (it.status == UploadProgressInfo.Status.FINISHED){
+                    endView.hideUploadProgress(it.name)
+                }
             }
 
             entityStatus.observe(viewLifecycleOwner) { entity ->

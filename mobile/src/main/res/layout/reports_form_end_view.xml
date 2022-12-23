@@ -49,6 +49,17 @@
             android:textColor="@color/wa_white"
             tools:text="15MB" />
 
+        <ProgressBar
+            android:id="@+id/totalProgress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_gravity="center_vertical"
+            android:max="100"
+            android:minHeight="3dp"
+            android:layout_marginBottom="@dimen/activity_vertical_small_margin"
+            android:visibility="visible" />
+
         <TextView
             android:id="@+id/form_description"
             style="@style/Tella_Main_White_Text.Small"

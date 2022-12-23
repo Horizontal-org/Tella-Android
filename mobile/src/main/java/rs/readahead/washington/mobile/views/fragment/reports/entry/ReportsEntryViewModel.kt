@@ -363,6 +363,7 @@ class ReportsEntryViewModel @Inject constructor(
                                         _progressInfo.postValue(progressInfo)
                                         when (progressInfo.status) {
                                             UploadProgressInfo.Status.ERROR, UploadProgressInfo.Status.UNAUTHORIZED, UploadProgressInfo.Status.UNKNOWN_HOST, UploadProgressInfo.Status.UNKNOWN, UploadProgressInfo.Status.CONFLICT -> {
+                                                //_progressInfo.postValue(progressInfo)
                                                 instance.widgetMediaFiles.first { it.name == progressInfo.name }
                                                     .apply {
                                                         status = FormMediaFileStatus.NOT_SUBMITTED
@@ -370,13 +371,14 @@ class ReportsEntryViewModel @Inject constructor(
                                                 dataSource.saveInstance(instance)
                                             }
                                             UploadProgressInfo.Status.FINISHED -> {
+                                               // _progressInfo.postValue(progressInfo)
                                                 instance.widgetMediaFiles.first { it.name == progressInfo.name }
                                                     .apply {
                                                         status = FormMediaFileStatus.SUBMITTED
                                                     }
                                             }
                                             else -> {
-                                                //_progressInfo.postValue(progressInfo)
+                                               // _progressInfo.postValue(progressInfo)
                                             }
                                         }
                                     }

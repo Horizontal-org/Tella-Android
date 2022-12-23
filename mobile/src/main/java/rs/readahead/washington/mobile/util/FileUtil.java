@@ -117,6 +117,12 @@ public class FileUtil {
         return fileSize;
     }
 
+    @NonNull
+    public static String getUploadedFileSize(Float pct, Long size) {
+        float uploadedSize = (pct * size);
+        return getFileSizeString ((long)uploadedSize) +" / " + getFileSizeString (size);
+    }
+
     private static boolean deletePath(File path) {
         if (path.isDirectory()) {
             File[] children = path.listFiles();
