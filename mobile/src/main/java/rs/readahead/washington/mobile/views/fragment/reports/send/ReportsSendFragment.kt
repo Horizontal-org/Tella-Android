@@ -31,6 +31,7 @@ class ReportsSendFragment :
     private fun initData() {
         with(viewModel) {
             progressInfo.observe(viewLifecycleOwner) {
+                endView.setUploadProgress(it.name,it.current.toFloat() / it.size.toFloat())
                 Timber.d(
                     "+++++ observed UploadProgressInfo, %s, %s, %s, %s %s",
                     it.name,
@@ -50,16 +51,18 @@ class ReportsSendFragment :
                     EntityStatus.SUBMISSION_ERROR, EntityStatus.SUBMISSION_PARTIAL_PARTS, EntityStatus.SUBMISSION_PENDING, EntityStatus.PAUSED, EntityStatus.FINALIZED -> {
                         viewModel.saveOutbox(entity)
                     }
-                    else -> {}
-                }
+                    else -> {
 
-                reportInstance.observe(viewLifecycleOwner) { entity ->
-                    when (entity.status) {
-                        EntityStatus.SUBMITTED -> {
-                            nav().popBackStack()
-                        }
-                        else -> {}
                     }
+                }
+            }
+
+            reportInstance.observe(viewLifecycleOwner) { instance ->
+                when (instance.status) {
+                    EntityStatus.SUBMITTED -> {
+                        nav().popBackStack()
+                    }
+                    else -> {}
                 }
             }
         }

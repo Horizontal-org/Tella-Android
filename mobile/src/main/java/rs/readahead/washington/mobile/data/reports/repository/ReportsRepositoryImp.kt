@@ -61,11 +61,11 @@ class ReportsRepositoryImp @Inject internal constructor(
         ).map { it.mapToDomainModel() }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnError {  }
+            .doOnError { }
     }
 
     private fun getFileName(vaultFile: VaultFile): String {
-        val ext =  MimeTypeMap.getSingleton().getExtensionFromMimeType(vaultFile.mimeType)
+        val ext = MimeTypeMap.getSingleton().getExtensionFromMimeType(vaultFile.mimeType)
         return vaultFile.id + if (!TextUtils.isEmpty(ext)) ".$ext" else ""
     }
 
@@ -154,8 +154,9 @@ class ReportsRepositoryImp @Inject internal constructor(
                 )
 
                 val file = SkippableMediaFileRequestBody(
-                    vaultFile, skipBytes
-                ) { current: Long, total: Long ->
+                    vaultFile, skipBytes,
+
+                    ) { current: Long, total: Long ->
                     uploadEmitter.emit(
                         emitter,
                         vaultFile,
@@ -163,6 +164,7 @@ class ReportsRepositoryImp @Inject internal constructor(
                         size
                     )
                 }
+
                 Timber.i("xf$baseUrl")
                 var response = apiService.putFile(
                     file = file,
@@ -175,7 +177,7 @@ class ReportsRepositoryImp @Inject internal constructor(
                     return@create
                 }
 
-               response = apiService.postFile(
+                response = apiService.postFile(
                     file = file,
                     url = baseUrl,
                     access_token = accessToken

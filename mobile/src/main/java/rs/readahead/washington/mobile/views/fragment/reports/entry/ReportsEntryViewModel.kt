@@ -10,6 +10,7 @@ import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
@@ -65,6 +66,7 @@ class ReportsEntryViewModel @Inject constructor(
     private val _entityStatus = MutableLiveData<ReportFormInstance>()
     val entityStatus: LiveData<ReportFormInstance> get() = _entityStatus
 
+    //TODO THIS IS UGLY WILL REPLACE IT FLOWABLE RX LATER
     fun listServers() {
         _progress.postValue(true)
         getReportsServersUseCase.execute(onSuccess = { result ->
@@ -340,10 +342,12 @@ class ReportsEntryViewModel @Inject constructor(
                                         file,
                                         server.url,
                                         reportPostResult.id,
-                                        server.accessToken
-                                    )
+                                        server.accessToken)
                                 }.doOnComplete {
                                     instance.status = EntityStatus.SUBMITTED
+                                    _entityStatus.postValue(instance)
+                                }.doOnCancel {
+                                    instance.status = EntityStatus.PAUSED
                                     _entityStatus.postValue(instance)
                                 }
                                 .blockingSubscribe(
@@ -397,6 +401,64 @@ class ReportsEntryViewModel @Inject constructor(
             }
         )
 
+    }
+
+    private fun updateProgress(instance: ReportFormInstance){
+        when(instance.status){
+            EntityStatus.FINALIZED -> {
+
+            }
+        }
+    }
+
+    private fun uploadFiles(
+        instance: ReportFormInstance,
+        server: TellaReportServer,
+        reportId: String
+    ) {
+        Flowable.fromIterable(instance.widgetMediaFiles)
+            .flatMap { file ->
+                reportsRepository.upload(
+                    file,
+                    server.url,
+                    reportId,
+                    server.accessToken
+                )
+            }.doOnComplete {
+                instance.status = EntityStatus.SUBMITTED
+                _entityStatus.postValue(instance)
+            }.doOnCancel {
+                instance.status = EntityStatus.PAUSED
+                _entityStatus.postValue(instance)
+            }
+            .blockingSubscribe(
+                { progressInfo: UploadProgressInfo ->
+                    when (progressInfo.status) {
+                        UploadProgressInfo.Status.ERROR, UploadProgressInfo.Status.UNAUTHORIZED, UploadProgressInfo.Status.UNKNOWN_HOST, UploadProgressInfo.Status.UNKNOWN, UploadProgressInfo.Status.CONFLICT -> {
+                            instance.widgetMediaFiles.first { it.name == progressInfo.name }
+                                .apply {
+                                    status = FormMediaFileStatus.NOT_SUBMITTED
+                                }
+                            dataSource.saveInstance(instance)
+                        }
+                        UploadProgressInfo.Status.STARTED -> {
+                            _progressInfo.postValue(progressInfo)
+                        }
+                        UploadProgressInfo.Status.FINISHED -> {
+                            instance.widgetMediaFiles.first { it.name == progressInfo.name }
+                                .apply {
+                                    status = FormMediaFileStatus.SUBMITTED
+                                }
+                        }
+                    }
+                }
+
+            ) { throwable: Throwable? ->
+                instance.status = EntityStatus.SUBMISSION_ERROR
+                _entityStatus.postValue(instance)
+                Timber.d(throwable)
+                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+            }
     }
 
 
