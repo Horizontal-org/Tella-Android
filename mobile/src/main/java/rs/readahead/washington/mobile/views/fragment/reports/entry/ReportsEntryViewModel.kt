@@ -10,7 +10,6 @@ import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
-import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
@@ -350,20 +349,11 @@ class ReportsEntryViewModel @Inject constructor(
                                     instance.status = EntityStatus.PAUSED
                                     _entityStatus.postValue(instance)
                                 }
-                                .blockingSubscribe(
+                                .subscribe(
                                     { progressInfo: UploadProgressInfo ->
-                                        Timber.d(
-                                            "+++++ UploadProgressInfo, %s, %s, %s, %s %s",
-                                            progressInfo.name,
-                                            progressInfo.status.name,
-                                            progressInfo.current,
-                                            progressInfo.size,
-                                            progressInfo.fileId
-                                        )
-                                        _progressInfo.postValue(progressInfo)
+                                         _progressInfo.postValue(progressInfo)
                                         when (progressInfo.status) {
                                             UploadProgressInfo.Status.ERROR, UploadProgressInfo.Status.UNAUTHORIZED, UploadProgressInfo.Status.UNKNOWN_HOST, UploadProgressInfo.Status.UNKNOWN, UploadProgressInfo.Status.CONFLICT -> {
-                                                //_progressInfo.postValue(progressInfo)
                                                 instance.widgetMediaFiles.first { it.name == progressInfo.name }
                                                     .apply {
                                                         status = FormMediaFileStatus.NOT_SUBMITTED
@@ -371,19 +361,19 @@ class ReportsEntryViewModel @Inject constructor(
                                                 dataSource.saveInstance(instance)
                                             }
                                             UploadProgressInfo.Status.FINISHED -> {
-                                               // _progressInfo.postValue(progressInfo)
                                                 instance.widgetMediaFiles.first { it.name == progressInfo.name }
                                                     .apply {
                                                         status = FormMediaFileStatus.SUBMITTED
                                                     }
                                             }
                                             else -> {
-                                               // _progressInfo.postValue(progressInfo)
+
                                             }
                                         }
                                     }
 
-                                ) { throwable: Throwable? ->
+                                )
+                                { throwable: Throwable? ->
                                     instance.status = EntityStatus.SUBMISSION_ERROR
                                     _entityStatus.postValue(instance)
                                     Timber.d(throwable)

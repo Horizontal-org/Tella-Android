@@ -13,7 +13,6 @@ import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_FORM_INSTANCE
 import rs.readahead.washington.mobile.views.fragment.reports.entry.ReportsEntryViewModel
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.ReportsFormEndView
-import timber.log.Timber
 
 @AndroidEntryPoint
 class ReportsSendFragment :
@@ -33,15 +32,7 @@ class ReportsSendFragment :
         with(viewModel) {
             progressInfo.observe(viewLifecycleOwner) {
                 //endView.setUploadProgress(it.name,it.current.toFloat() / it.size.toFloat())
-                Timber.d(
-                    "+++++ observed UploadProgressInfo, %s, %s, %s, %s %s",
-                    it.name,
-                    it.status.name,
-                    it.current,
-                    it.size,
-                    it.fileId
-                )
-                 endView.setUploadProgress(it.fileId, it.current.toFloat())
+                endView.setUploadProgress(it.fileId, it.current.toFloat())
                 if (it.status == UploadProgressInfo.Status.FINISHED){
                     endView.hideUploadProgress(it.fileId)
                 }

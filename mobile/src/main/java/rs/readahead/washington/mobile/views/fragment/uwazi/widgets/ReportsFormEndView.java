@@ -32,7 +32,6 @@ import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.FileUtil;
-import timber.log.Timber;
 
 @SuppressLint("ViewConstructor")
 public class ReportsFormEndView extends FrameLayout {
@@ -142,7 +141,6 @@ public class ReportsFormEndView extends FrameLayout {
     }
 
     public void setUploadProgress(String partName, float pct) {
-        Timber.d("++++ setUploadProgress, %s, %s", partName, pct);
         if (pct < 0 || pct > 1) {
             return;
         }
