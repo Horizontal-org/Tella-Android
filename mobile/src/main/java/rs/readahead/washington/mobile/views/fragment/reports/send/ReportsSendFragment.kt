@@ -41,9 +41,9 @@ class ReportsSendFragment :
                     it.size,
                     it.fileId
                 )
-                endView.setUploadProgress(it.name, it.current.toFloat())
+                 endView.setUploadProgress(it.fileId, it.current.toFloat())
                 if (it.status == UploadProgressInfo.Status.FINISHED){
-                    endView.hideUploadProgress(it.name)
+                    endView.hideUploadProgress(it.fileId)
                 }
             }
 

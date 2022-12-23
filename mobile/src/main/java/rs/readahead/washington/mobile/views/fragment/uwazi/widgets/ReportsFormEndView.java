@@ -116,12 +116,12 @@ public class ReportsFormEndView extends FrameLayout {
         for (FormMediaFile mediaFile : instance.getWidgetMediaFiles()) {
             partsListView.addView(createFormMediaFileItemView(mediaFile, offline));
             formSize += mediaFile.size;
-            formParts.put(mediaFile.name, mediaFile.size);
-            uploadedPartsPct.put(mediaFile.name, 0F);
+            formParts.put(mediaFile.getPartName(), mediaFile.size);
+            uploadedPartsPct.put(mediaFile.getPartName(), 0F);
         }
 
         //    formElementsView.setText(getResources().getQuantityString(R.plurals.collect_end_meta_number_of_elements, formElements, formElements));
-        formSizeView.setText(FileUtil.getFileSizeString(formSize));
+         formSizeView.setText(FileUtil.getFileSizeString(formSize));
     }
 
     public void showUploadProgress(String partName) {
