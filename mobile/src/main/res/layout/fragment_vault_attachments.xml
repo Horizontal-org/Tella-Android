@@ -129,6 +129,7 @@
         tools:ignore="VectorDrawableCompat"
         style="@style/Main_Floating_Action_Button_Style" />
 
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_move_button"
         app:backgroundTint="@color/dark_orange"
@@ -141,6 +142,15 @@
         tools:ignore="VectorDrawableCompat"
         android:visibility="gone"
         style="@style/Move_Floating_Action_Button_Style" />
+
+    <ImageView
+        android:id="@+id/vault_tooltip"
+        android:layout_width="match_parent"
+        android:layout_gravity="bottom"
+        android:layout_height="@dimen/tooltip_icon_size"
+        android:layout_marginStart="@dimen/tooltip_icon_margin_start"
+        android:textColor="@color/wa_white" />
+
 
     <LinearLayout
         android:id="@+id/emptyViewMsgContainer"
