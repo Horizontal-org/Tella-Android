@@ -247,26 +247,35 @@ public class LocationMapActivity extends MetadataActivity implements
     }
 
     private void showMyLocation(@NonNull MyLocation myLocation) {
-        LatLng latLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+       // LatLng latLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+
+        GeoPoint point = new GeoPoint(myLocation.getLatitude(), myLocation.getLongitude());
+
+        Marker startMarker = new Marker(map);
+        startMarker.setPosition(point);
+        startMarker.setAnchor(org.osmdroid.views.overlay.Marker.ANCHOR_CENTER, org.osmdroid.views.overlay.Marker.ANCHOR_CENTER);
+        map.getOverlays().add(startMarker);
+
+        map.getController().setCenter(point);
 
         if (selectedMarker == null) {
-          //  selectedMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(getString(R.string.collect_form_geopoint_marker_content_desc)));
+            selectedMarker = startMarker; //mMap.addMarker(new MarkerOptions().position(latLng).title(getString(R.string.collect_form_geopoint_marker_content_desc)));
         } else {
             //selectedMarker.setPosition(latLng);
         }
 
         selectedMarker.setDraggable(!readOnly);
 
-        //float currentZoom = mMap.getCameraPosition().zoom;
+        /*float currentZoom = mMap.getCameraPosition().zoom;
 
-       /*CameraPosition cameraPosition = new CameraPosition.Builder()
+       CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(latLng)
                 .bearing(0)
                 .tilt(0)
                 .zoom(Math.max(15f, currentZoom))
-                .build();*/
+                .build();
 
-      //  mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));*/
     }
 
     private void initMapLocationAndCamera() {
