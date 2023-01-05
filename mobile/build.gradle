@@ -134,12 +134,11 @@ dependencies {
         exclude module: "animated-vector-drawble"
     }
 
-    implementation 'com.github.apl-devs:appintro:v4.2.3'
+    implementation 'org.osmdroid:osmdroid-android:6.1.13'
+
     implementation 'com.simplify:ink:1.0.2'
     implementation 'com.mikhaellopez:circularimageview:3.2.0'
     implementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
-    implementation 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:3.2.0'
-    implementation 'com.github.lzyzsd:circleprogress:1.2.1'
     implementation "com.github.ihsanbal:LoggingInterceptor:3.0.0"
 
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}"
