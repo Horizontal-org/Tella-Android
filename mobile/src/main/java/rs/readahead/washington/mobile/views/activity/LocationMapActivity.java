@@ -1,14 +1,20 @@
 package rs.readahead.washington.mobile.views.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,10 +27,19 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hzontal.tella_vault.MyLocation;
+
+import org.osmdroid.config.Configuration;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.CustomZoomButtonsController;
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.compass.CompassOverlay;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,7 +55,10 @@ public class LocationMapActivity extends MetadataActivity implements
     public static final String SELECTED_LOCATION = "sl";
     public static final String CURRENT_LOCATION_ONLY = "ro";
 
-    private GoogleMap mMap;
+    private final int REQUEST_PERMISSIONS_REQUEST_CODE = 151;
+
+   // private GoogleMap mMap;
+    private MapView map;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -78,9 +96,36 @@ public class LocationMapActivity extends MetadataActivity implements
             actionBar.setHomeAsUpIndicator(R.drawable.ic_close_white);
         }
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        Context ctx = this.getApplicationContext();
+        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
+
+        map = findViewById(R.id.mapView);
+        map.setTileSource(TileSourceFactory.MAPNIK);
+        map.getController().setZoom(18.0);
+
+        requestPermissionsIfNecessary(new String[]{
+                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE, Manifest.permission.INTERNET
+        });
+        map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.ALWAYS);
+        map.setMultiTouchControls(true);
+
+
+        CompassOverlay compassOverlay = new CompassOverlay(this, map);
+        compassOverlay.enableCompass();
+        map.getOverlays().add(compassOverlay);
+
+        GeoPoint point = new GeoPoint(45.845557, 26.170010);
+
+        Marker startMarker = new Marker(map);
+        startMarker.setPosition(point);
+        startMarker.setAnchor(org.osmdroid.views.overlay.Marker.ANCHOR_CENTER, org.osmdroid.views.overlay.Marker.ANCHOR_CENTER);
+        map.getOverlays().add(startMarker);
+
+        map.getController().setCenter(point);
+
+       /* SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mapView);
+        mapFragment.getMapAsync(this);*/
 
         faButton.setOnClickListener(view -> {
                     if (locationGettingPresenter.isGPSProviderEnabled()) {
@@ -124,8 +169,8 @@ public class LocationMapActivity extends MetadataActivity implements
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setOnMapLongClickListener(this);
+       // mMap = googleMap;
+        //mMap.setOnMapLongClickListener(this);
 
         initMapLocationAndCamera();
     }
@@ -149,15 +194,15 @@ public class LocationMapActivity extends MetadataActivity implements
 
     @Override
     public void onGettingLocationStart() {
-        mMap.getUiSettings().setScrollGesturesEnabled(false);
-        mMap.getUiSettings().setZoomGesturesEnabled(false);
+       // mMap.getUiSettings().setScrollGesturesEnabled(false);
+      //  mMap.getUiSettings().setZoomGesturesEnabled(false);
         progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onGettingLocationEnd() {
-        mMap.getUiSettings().setScrollGesturesEnabled(true);
-        mMap.getUiSettings().setZoomGesturesEnabled(true);
+      //  mMap.getUiSettings().setScrollGesturesEnabled(true);
+      //  mMap.getUiSettings().setZoomGesturesEnabled(true);
         progressBar.setVisibility(View.GONE);
     }
 
@@ -167,6 +212,22 @@ public class LocationMapActivity extends MetadataActivity implements
             virginMap = false;
             myLocation = MyLocation.fromLocation(location);
             showMyLocation(myLocation);
+        }
+    }
+
+    private void requestPermissionsIfNecessary(String[] permissions) {
+        ArrayList<String> permissionsToRequest = new ArrayList<>();
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission)
+                    != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(permission);
+            }
+        }
+        if (permissionsToRequest.size() > 0) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    permissionsToRequest.toArray(new String[0]),
+                    REQUEST_PERMISSIONS_REQUEST_CODE);
         }
     }
 
@@ -189,23 +250,23 @@ public class LocationMapActivity extends MetadataActivity implements
         LatLng latLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
 
         if (selectedMarker == null) {
-            selectedMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(getString(R.string.collect_form_geopoint_marker_content_desc)));
+          //  selectedMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(getString(R.string.collect_form_geopoint_marker_content_desc)));
         } else {
-            selectedMarker.setPosition(latLng);
+            //selectedMarker.setPosition(latLng);
         }
 
         selectedMarker.setDraggable(!readOnly);
 
-        float currentZoom = mMap.getCameraPosition().zoom;
+        //float currentZoom = mMap.getCameraPosition().zoom;
 
-        CameraPosition cameraPosition = new CameraPosition.Builder()
+       /*CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(latLng)
                 .bearing(0)
                 .tilt(0)
                 .zoom(Math.max(15f, currentZoom))
-                .build();
+                .build();*/
 
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+      //  mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
     private void initMapLocationAndCamera() {
