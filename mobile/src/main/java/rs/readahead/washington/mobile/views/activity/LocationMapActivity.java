@@ -32,6 +32,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hzontal.tella_vault.MyLocation;
 
 import org.osmdroid.config.Configuration;
+import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
@@ -50,7 +51,8 @@ import rs.readahead.washington.mobile.util.C;
 
 
 public class LocationMapActivity extends MetadataActivity implements
-        OnMapReadyCallback, GoogleMap.OnMapLongClickListener, GoogleMap.OnCameraMoveStartedListener,
+        /*OnMapReadyCallback, GoogleMap.OnMapLongClickListener, GoogleMap.OnCameraMoveStartedListener,
+        MapEventsReceiver,*/
         ILocationGettingPresenterContract.IView {
     public static final String SELECTED_LOCATION = "sl";
     public static final String CURRENT_LOCATION_ONLY = "ro";
@@ -109,7 +111,6 @@ public class LocationMapActivity extends MetadataActivity implements
         map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.ALWAYS);
         map.setMultiTouchControls(true);
 
-
         CompassOverlay compassOverlay = new CompassOverlay(this, map);
         compassOverlay.enableCompass();
         map.getOverlays().add(compassOverlay);
@@ -166,7 +167,7 @@ public class LocationMapActivity extends MetadataActivity implements
         super.onDestroy();
         locationGettingPresenter.destroy();
     }
-
+/*
     @Override
     public void onMapReady(GoogleMap googleMap) {
        // mMap = googleMap;
@@ -191,7 +192,7 @@ public class LocationMapActivity extends MetadataActivity implements
     public void onCameraMoveStarted(int i) {
         virginMap = false;
     }
-
+*/
     @Override
     public void onGettingLocationStart() {
        // mMap.getUiSettings().setScrollGesturesEnabled(false);
@@ -263,8 +264,9 @@ public class LocationMapActivity extends MetadataActivity implements
         } else {
             //selectedMarker.setPosition(latLng);
         }
-
+        map.getController().animateTo(point);
         selectedMarker.setDraggable(!readOnly);
+
 
         /*float currentZoom = mMap.getCameraPosition().zoom;
 
@@ -306,9 +308,12 @@ public class LocationMapActivity extends MetadataActivity implements
     }
 
     private void setResultAndFinish() {
-        if (myLocation == null) {
+        if (selectedMarker == null) {
             setCancelAndFinish();
         } else {
+            myLocation = new MyLocation();
+            myLocation.setLatitude(selectedMarker.getPosition().getLatitude());
+            myLocation.setLongitude(selectedMarker.getPosition().getLongitude());
             setResult(Activity.RESULT_OK, new Intent().putExtra(SELECTED_LOCATION, myLocation));
             finish();
         }
