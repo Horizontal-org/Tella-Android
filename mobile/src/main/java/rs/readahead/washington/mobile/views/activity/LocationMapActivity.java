@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -21,22 +22,13 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hzontal.tella_vault.MyLocation;
 
 import org.osmdroid.config.Configuration;
-import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
-import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
 
@@ -48,19 +40,16 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.mvp.contract.ILocationGettingPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.LocationGettingPresenter;
 import rs.readahead.washington.mobile.util.C;
+import rs.readahead.washington.mobile.views.custom.MapViewOverlay;
 
 
-public class LocationMapActivity extends MetadataActivity implements
-        /*OnMapReadyCallback, GoogleMap.OnMapLongClickListener, GoogleMap.OnCameraMoveStartedListener,
-        MapEventsReceiver,*/
-        ILocationGettingPresenterContract.IView {
+public class LocationMapActivity extends MetadataActivity implements ILocationGettingPresenterContract.IView {
     public static final String SELECTED_LOCATION = "sl";
     public static final String CURRENT_LOCATION_ONLY = "ro";
 
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 151;
 
-   // private GoogleMap mMap;
-    private MapView map;
+    private MapViewOverlay map;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -115,19 +104,18 @@ public class LocationMapActivity extends MetadataActivity implements
         compassOverlay.enableCompass();
         map.getOverlays().add(compassOverlay);
 
-        GeoPoint point = new GeoPoint(45.845557, 26.170010);
+        map.addTapListener(new MapViewOverlay.OnTapListener() {
+            @Override
+            public void onMapTapped(GeoPoint geoPoint) {
+            }
 
-        Marker startMarker = new Marker(map);
-        startMarker.setPosition(point);
-        startMarker.setAnchor(org.osmdroid.views.overlay.Marker.ANCHOR_CENTER, org.osmdroid.views.overlay.Marker.ANCHOR_CENTER);
-        map.getOverlays().add(startMarker);
-
-        map.getController().setCenter(point);
-
-       /* SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.mapView);
-        mapFragment.getMapAsync(this);*/
-
+            @Override
+            public void onMapLongPress(Location location) {
+                if (!readOnly) {
+                    showMyLocation(MyLocation.fromLocation(location));
+                }
+            }
+        });
         faButton.setOnClickListener(view -> {
                     if (locationGettingPresenter.isGPSProviderEnabled()) {
                         startGettingLocation();
@@ -136,6 +124,7 @@ public class LocationMapActivity extends MetadataActivity implements
                     }
                 }
         );
+        initMapLocationAndCamera();
     }
 
     @Override
@@ -167,43 +156,18 @@ public class LocationMapActivity extends MetadataActivity implements
         super.onDestroy();
         locationGettingPresenter.destroy();
     }
-/*
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-       // mMap = googleMap;
-        //mMap.setOnMapLongClickListener(this);
 
-        initMapLocationAndCamera();
-    }
-
-    @Override
-    public void onMapLongClick(LatLng latLng) {
-        if (readOnly) {
-            return;
-        }
-
-        myLocation = new MyLocation();
-        myLocation.setLatitude(latLng.latitude);
-        myLocation.setLongitude(latLng.longitude);
-        showMyLocation(myLocation);
-    }
-
-    @Override
-    public void onCameraMoveStarted(int i) {
-        virginMap = false;
-    }
-*/
     @Override
     public void onGettingLocationStart() {
-       // mMap.getUiSettings().setScrollGesturesEnabled(false);
-      //  mMap.getUiSettings().setZoomGesturesEnabled(false);
+        // mMap.getUiSettings().setScrollGesturesEnabled(false);
+        //  mMap.getUiSettings().setZoomGesturesEnabled(false);
         progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onGettingLocationEnd() {
-      //  mMap.getUiSettings().setScrollGesturesEnabled(true);
-      //  mMap.getUiSettings().setZoomGesturesEnabled(true);
+        //  mMap.getUiSettings().setScrollGesturesEnabled(true);
+        //  mMap.getUiSettings().setZoomGesturesEnabled(true);
         progressBar.setVisibility(View.GONE);
     }
 
@@ -248,36 +212,22 @@ public class LocationMapActivity extends MetadataActivity implements
     }
 
     private void showMyLocation(@NonNull MyLocation myLocation) {
-       // LatLng latLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
-
         GeoPoint point = new GeoPoint(myLocation.getLatitude(), myLocation.getLongitude());
 
-        Marker startMarker = new Marker(map);
-        startMarker.setPosition(point);
-        startMarker.setAnchor(org.osmdroid.views.overlay.Marker.ANCHOR_CENTER, org.osmdroid.views.overlay.Marker.ANCHOR_CENTER);
-        map.getOverlays().add(startMarker);
-
-        map.getController().setCenter(point);
-
-        if (selectedMarker == null) {
-            selectedMarker = startMarker; //mMap.addMarker(new MarkerOptions().position(latLng).title(getString(R.string.collect_form_geopoint_marker_content_desc)));
+        if (selectedMarker != null) {
+            selectedMarker.setPosition(point);
+            selectedMarker.setAnchor(org.osmdroid.views.overlay.Marker.ANCHOR_CENTER, org.osmdroid.views.overlay.Marker.ANCHOR_CENTER);
         } else {
-            //selectedMarker.setPosition(latLng);
+            Marker startMarker = new Marker(map);
+            startMarker.setPosition(point);
+            startMarker.setAnchor(org.osmdroid.views.overlay.Marker.ANCHOR_CENTER, org.osmdroid.views.overlay.Marker.ANCHOR_CENTER);
+            selectedMarker = startMarker;
+            map.getOverlays().add(selectedMarker);
         }
+
         map.getController().animateTo(point);
         selectedMarker.setDraggable(!readOnly);
-
-
-        /*float currentZoom = mMap.getCameraPosition().zoom;
-
-       CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(latLng)
-                .bearing(0)
-                .tilt(0)
-                .zoom(Math.max(15f, currentZoom))
-                .build();
-
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));*/
+        //map.getController().setCenter(point);
     }
 
     private void initMapLocationAndCamera() {
@@ -303,7 +253,7 @@ public class LocationMapActivity extends MetadataActivity implements
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == C.GPS_PROVIDER && resultCode == RESULT_OK) {
-                startGettingLocation();
+            startGettingLocation();
         }
     }
 
@@ -323,4 +273,5 @@ public class LocationMapActivity extends MetadataActivity implements
         setResult(Activity.RESULT_CANCELED, new Intent().putExtra(SELECTED_LOCATION, myLocation));
         finish();
     }
+
 }
