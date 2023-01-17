@@ -2,7 +2,7 @@ package rs.readahead.washington.mobile.javarosa;
 
 import android.content.Context;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +31,7 @@ import rs.readahead.washington.mobile.domain.exception.NoConnectivityException;
 import rs.readahead.washington.mobile.domain.repository.IOpenRosaRepository;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.Util;
+import timber.log.Timber;
 
 
 public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitter {
@@ -85,7 +86,7 @@ public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitte
                                 // PendingFormSendJob.scheduleJob();
                                 view.formReSubmitNoConnectivity();
                             } else {
-                                FirebaseCrashlytics.getInstance().recordException(throwable);
+                                Timber.e(throwable);
                                 view.formPartReSubmitError(throwable);
                             }
                         },

@@ -3,7 +3,7 @@ package rs.readahead.washington.mobile.views.dialog.uwazi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+//import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -17,6 +17,7 @@ import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.Language
 import rs.readahead.washington.mobile.views.adapters.uwazi.ViewLanguageItem
 import rs.readahead.washington.mobile.views.fragment.uwazi.mappers.toViewLanguageItem
+import timber.log.Timber
 
 private const val TWO_FACTOR_AUTHENTICATION_CODE = 409
 private const val AUTHENTICATION_FAILED = 401
@@ -53,7 +54,7 @@ class UwaziConnectFlowViewModel : ViewModel() {
                 _isPublic.postValue(true)
             }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(
+                Timber.d(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
                 )
@@ -81,7 +82,7 @@ class UwaziConnectFlowViewModel : ViewModel() {
                     }
                 }
             }) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(
+                Timber.d(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
                 )
@@ -102,7 +103,7 @@ class UwaziConnectFlowViewModel : ViewModel() {
                 _settings.postValue(Pair(it.serverName, list))
             }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(
+                Timber.d(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
                 )
@@ -126,7 +127,7 @@ class UwaziConnectFlowViewModel : ViewModel() {
             .subscribe(
                 { _ -> _languageUpdated.postValue(true) }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                Timber.d(throwable!!)
                 error.postValue(throwable)
             }
         )

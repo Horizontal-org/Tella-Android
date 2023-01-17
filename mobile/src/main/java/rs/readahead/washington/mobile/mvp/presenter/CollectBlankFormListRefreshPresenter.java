@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +21,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
 import rs.readahead.washington.mobile.domain.entity.collect.ListFormResult;
 import rs.readahead.washington.mobile.domain.repository.IOpenRosaRepository;
 import rs.readahead.washington.mobile.mvp.contract.ICollectBlankFormListRefreshPresenterContract;
+import timber.log.Timber;
 
 
 public class CollectBlankFormListRefreshPresenter implements
@@ -78,10 +79,10 @@ public class CollectBlankFormListRefreshPresenter implements
                 .subscribe(listFormResult -> {
                     // log errors if any in result..
                     for (IErrorBundle error : listFormResult.getErrors()) {
-                        FirebaseCrashlytics.getInstance().recordException(error.getException());
+                        Timber.e(error.getException());
                     }
                 }, throwable -> {
-                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    Timber.e(throwable);
                     view.onRefreshBlankFormsError(throwable);
                 })
         );

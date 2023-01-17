@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.MyLocation;
 
 import org.javarosa.core.model.data.GeoPointData;
@@ -34,6 +34,7 @@ import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.LocationUtil;
 import rs.readahead.washington.mobile.views.activity.LocationMapActivity;
+import timber.log.Timber;
 
 
 /**
@@ -227,7 +228,7 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
                     C.SELECTED_LOCATION
             );
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
+            Timber.e(e);
             FormController.getActive().setIndexWaitingForData(null);
         }
     }

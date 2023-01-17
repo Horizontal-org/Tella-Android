@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.utils.MediaFile;
 
@@ -33,6 +33,7 @@ import rs.readahead.washington.mobile.views.activity.AudioPlayActivity;
 import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity;
 import rs.readahead.washington.mobile.views.activity.VideoViewerActivity;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
+import timber.log.Timber;
 
 
 public class CollectAttachmentPreviewView extends LinearLayout implements ICollectAttachmentMediaFilePresenterContract.IView {
@@ -184,7 +185,7 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
                     .putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile)
                     .putExtra(VideoViewerActivity.NO_ACTIONS, true));
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
+            Timber.e(e);
         }
     }
 
@@ -199,7 +200,7 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
                     .putExtra(PhotoViewerActivity.VIEW_PHOTO, vaultFile)
                     .putExtra(PhotoViewerActivity.NO_ACTIONS, true));
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
+            Timber.e(e);
         }
     }
 
@@ -214,7 +215,7 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
                     .putExtra(AudioPlayActivity.PLAY_MEDIA_FILE, vaultFile)
                     .putExtra(AudioPlayActivity.NO_ACTIONS, true));
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
+            Timber.e(e);
         }
     }
 }

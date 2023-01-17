@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.List;
 
@@ -15,6 +15,7 @@ import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadPresenterContract;
+import timber.log.Timber;
 
 public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContract.IPresenter {
     private ITellaFileUploadPresenterContract.IView view;
@@ -40,7 +41,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(filesUploadInstances -> view.onGetFileUploadInstancesSuccess(filesUploadInstances), throwable -> {
-                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    Timber.e(throwable);
                     view.onGetFileUploadInstancesError(throwable);
                 })
         );
@@ -53,7 +54,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(filesUploadInstances -> view.onGetFileUploadSetInstancesSuccess(filesUploadInstances), throwable -> {
-                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    Timber.e(throwable);
                     view.onGetFileUploadSetInstancesError(throwable);
                 })
         );
@@ -67,7 +68,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
                 .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstanceById(id))
                 .subscribe(() -> view.onFileUploadInstancesDeleted(),
                         throwable -> {
-                            FirebaseCrashlytics.getInstance().recordException(throwable);
+                            Timber.e(throwable);
                             view.onFileUploadInstancesDeletionError(throwable);
                         })
         );
@@ -81,7 +82,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
                 .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstancesBySet(set))
                 .subscribe(() -> view.onFileUploadInstancesDeleted(),
                         throwable -> {
-                            FirebaseCrashlytics.getInstance().recordException(throwable);
+                            Timber.e(throwable);
                             view.onFileUploadInstancesDeletionError(throwable);
                         })
         );
@@ -95,7 +96,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
                 .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstancesInStatus(status))
                 .subscribe(() -> view.onFileUploadInstancesDeleted(),
                         throwable -> {
-                            FirebaseCrashlytics.getInstance().recordException(throwable);
+                            Timber.e(throwable);
                             view.onFileUploadInstancesDeletionError(throwable);
                         })
         );
@@ -109,7 +110,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
                 .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstancesNotInStatus(status))
                 .subscribe(() -> view.onFileUploadInstancesDeleted(),
                         throwable -> {
-                            FirebaseCrashlytics.getInstance().recordException(throwable);
+                            Timber.e(throwable);
                             view.onFileUploadInstancesDeletionError(throwable);
                         })
         );

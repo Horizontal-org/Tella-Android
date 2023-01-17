@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
 
 import java.util.List;
@@ -12,6 +12,7 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePresenterContract;
 import rs.readahead.washington.mobile.util.jobs.TellaUploadJob;
+import timber.log.Timber;
 
 
 public class TellaFileUploadSchedulePresenter implements ITellaFileUploadSchedulePresenterContract.IPresenter {
@@ -42,7 +43,7 @@ public class TellaFileUploadSchedulePresenter implements ITellaFileUploadSchedul
                     TellaUploadJob.scheduleJob();
                     view.onMediaFilesUploadScheduled();
                 }, throwable -> {
-                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    Timber.e(throwable);
                     view.onMediaFilesUploadScheduleError(throwable);
                 })
         );
@@ -60,7 +61,7 @@ public class TellaFileUploadSchedulePresenter implements ITellaFileUploadSchedul
                     TellaUploadJob.scheduleJob();
                     view.onMediaFilesUploadScheduled();
                 }, throwable -> {
-                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    Timber.e(throwable);
                     view.onMediaFilesUploadScheduleError(throwable);
                 })
         );

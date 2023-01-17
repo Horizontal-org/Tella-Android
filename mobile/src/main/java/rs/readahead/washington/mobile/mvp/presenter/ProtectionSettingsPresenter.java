@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -11,6 +11,7 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.mvp.contract.IProtectionSettingsPresenterContract;
+import timber.log.Timber;
 
 public class ProtectionSettingsPresenter implements IProtectionSettingsPresenterContract.IPresenter {
     private IProtectionSettingsPresenterContract.IView view;
@@ -31,7 +32,7 @@ public class ProtectionSettingsPresenter implements IProtectionSettingsPresenter
                 .subscribe(
                         num -> view.onCountCollectServersEnded(num),
                         throwable -> {
-                            FirebaseCrashlytics.getInstance().recordException(throwable);
+                            Timber.e(throwable);
                             view.onCountCollectServersFailed(throwable);
                         }
                 )

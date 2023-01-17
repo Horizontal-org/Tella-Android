@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -12,6 +12,7 @@ import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
 import rs.readahead.washington.mobile.domain.repository.IOpenRosaRepository;
 import rs.readahead.washington.mobile.mvp.contract.ICheckOdkServerContract;
+import timber.log.Timber;
 
 
 public class CheckOdkServerPresenter implements
@@ -60,7 +61,7 @@ public class CheckOdkServerPresenter implements
                         view.onServerCheckSuccess(server);
                     }
                 }, throwable -> {
-                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    Timber.e(throwable);
                     view.onServerCheckError(throwable);
                 })
         );

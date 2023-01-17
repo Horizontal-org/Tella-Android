@@ -3,7 +3,7 @@ package rs.readahead.washington.mobile.views.fragment.vault.home
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+//import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Limits
@@ -24,6 +24,7 @@ import rs.readahead.washington.mobile.data.sharedpref.SharedPrefs
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.media.MediaFileHandler
+import timber.log.Timber
 
 class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
     IHomeVaultPresenter.IPresenter {
@@ -85,7 +86,7 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
                     )
                 }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                Timber.d(throwable!!)
                 view?.onCountCollectServersFailed(throwable)
             }
         )
@@ -109,7 +110,7 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
                 .subscribe(
                     { num: Int? -> view?.onMediaExported(num!!) }
                 ) { throwable: Throwable? ->
-                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                    Timber.d(throwable!!)
                     view?.onExportError(throwable)
                 }
         )
@@ -127,7 +128,7 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
                     )
                 }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                Timber.d(throwable!!)
                 view?.onGetFilesError(throwable)
             }?.let { disposables.add(it) }
     }

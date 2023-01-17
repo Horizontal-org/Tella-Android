@@ -18,7 +18,7 @@ import androidx.multidex.MultiDexApplication;
 
 import com.bumptech.glide.Glide;
 import com.evernote.android.job.JobManager;
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_locking_ui.TellaKeysUI;
 import com.hzontal.tella_locking_ui.common.CredentialsCallback;
 import com.hzontal.tella_locking_ui.ui.AppCompatActivityUnlocker;
@@ -173,13 +173,13 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         }
         // todo: implement dagger2
         SharedPrefs.getInstance().init(this);
-        configureCrashlytics();
+        //configureCrashlytics();
 
         RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) {
                 Timber.d(throwable, getClass().getName());
-                FirebaseCrashlytics.getInstance().recordException(throwable);
+                Timber.e(throwable);
             }
         });
         bus = TellaBus.create();
@@ -210,7 +210,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         initCleanInsights();
     }
 
-    private void configureCrashlytics() {
+    /*private void configureCrashlytics() {
         boolean enabled = (!BuildConfig.DEBUG && Preferences.isSubmittingCrashReports());
 
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(enabled);
@@ -218,7 +218,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         if (!enabled) {
             FirebaseCrashlytics.getInstance().deleteUnsentReports();
         }
-    }
+    }*/
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void initializeLockConfigRegistry() {
@@ -293,7 +293,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
     @Override
     public void onUnSuccessfulUnlock(String tag, Throwable throwable) {
-        // FirebaseCrashlytics.getInstance().recordException(throwable);
+        // Timber.e(throwable);
     }
 
     @Override

@@ -3,7 +3,7 @@ package rs.readahead.washington.mobile.util.jobs;
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
 
 import org.hzontal.tella.keys.key.LifecycleMainKey;
@@ -130,7 +130,7 @@ public class TellaUploadJob extends Job {
                         return;
                     }
                     Timber.d(throwable);
-                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    Timber.e(throwable);
                 });
 
         if (exitResult != null) {

@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
 
 import java.util.List;
@@ -17,6 +17,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.mvp.contract.IFormSubmitPresenterContract;
+import timber.log.Timber;
 
 
 public class FormSubmitPresenter implements IFormSubmitPresenterContract.IPresenter {
@@ -45,7 +46,7 @@ public class FormSubmitPresenter implements IFormSubmitPresenterContract.IPresen
                     collectFormInstance.setCollectInstanceAttachments(vaultFiles);
                     view.onGetFormInstanceSuccess(collectFormInstance);
                 }, throwable -> {
-                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    Timber.e(throwable);
                     view.onGetFormInstanceError(throwable);
                 })
         );

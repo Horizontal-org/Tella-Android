@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.mvp.presenter
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+//import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -9,6 +9,7 @@ import rs.readahead.washington.mobile.data.repository.UwaziRepository
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.mvp.contract.ICheckUwaziServerContract
+import timber.log.Timber
 
 class CheckUwaziServerPresenter constructor(private var view: ICheckUwaziServerContract.IView?) :
     ICheckUwaziServerContract.IPresenter {
@@ -47,9 +48,7 @@ class CheckUwaziServerPresenter constructor(private var view: ICheckUwaziServerC
                 }
                 view?.hideServerCheckLoading()
             }) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(
-                    throwable
-                        ?: throw NullPointerException("Expression 'throwable' must not be null")
+                Timber.d(throwable?: throw NullPointerException("Expression 'throwable' must not be null")
                 )
                 view?.onServerCheckError(throwable)
                 view?.onServerCheckFailure(UploadProgressInfo.Status.ERROR)

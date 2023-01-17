@@ -3,7 +3,7 @@ package rs.readahead.washington.mobile.mvp.presenter;
 import android.content.Context;
 import android.net.Uri;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.filter.Filter;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
@@ -24,6 +24,7 @@ import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IGalleryPresenterContract;
+import timber.log.Timber;
 
 
 public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
@@ -45,7 +46,7 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onGetFilesEnd())
                 .subscribe(vaultFile -> view.onGetFilesSuccess(vaultFile),throwable ->  {
-                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    Timber.e(throwable);
                     view.onGetFilesError(throwable);
                 }));
     }
@@ -64,7 +65,7 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onImportEnded())
                 .subscribe(vaultFile -> view.onMediaImported(vaultFile), throwable -> {
-                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    Timber.e(throwable);
                     view.onImportError(throwable);
                 }));
 
@@ -78,7 +79,7 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onImportEnded())
                 .subscribe(vaultFile -> view.onMediaImported(vaultFile), throwable -> {
-                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    Timber.e(throwable);
                     view.onImportError(throwable);
                 })
         );
@@ -99,7 +100,7 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
         disposables.add(Single.zip(completables, objects -> objects.length)
                  .observeOn(AndroidSchedulers.mainThread())
                  .subscribe(num -> view.onMediaFilesDeleted(num), throwable -> {
-                     FirebaseCrashlytics.getInstance().recordException(throwable);
+                     Timber.e(throwable);
                      view.onMediaFilesDeletionError(throwable);
                  })
         );
@@ -128,7 +129,7 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onExportEnded())
                 .subscribe(num -> view.onMediaExported(num), throwable -> {
-                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    Timber.e(throwable);
                     view.onExportError(throwable);
                 })
         );
@@ -144,7 +145,7 @@ public class GalleryPresenter implements IGalleryPresenterContract.IPresenter {
                 .subscribe(
                         num -> view.onCountTUServersEnded(num),
                         throwable -> {
-                            FirebaseCrashlytics.getInstance().recordException(throwable);
+                            Timber.e(throwable);
                             view.onCountTUServersFailed(throwable);
                         }
                 )

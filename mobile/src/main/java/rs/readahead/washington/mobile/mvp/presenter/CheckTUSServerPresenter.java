@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -11,6 +11,7 @@ import rs.readahead.washington.mobile.data.upload.TUSClient;
 import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.mvp.contract.ICheckTUSServerContract;
+import timber.log.Timber;
 
 
 public class CheckTUSServerPresenter implements
@@ -59,7 +60,7 @@ public class CheckTUSServerPresenter implements
                         view.onServerCheckFailure(uploadProgressInfo.status);
                     }
                 }, throwable -> {
-                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    Timber.e(throwable);
                     view.onServerCheckError(throwable);
                 })
         );

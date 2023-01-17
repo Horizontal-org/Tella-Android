@@ -29,7 +29,7 @@ import androidx.core.content.FileProvider;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.exifinterface.media.ExifInterface;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultException;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
@@ -89,7 +89,7 @@ public class MediaFileHandler {
             return FileUtil.mkdirs(tmpPath) && ret;
         } catch (Exception e) {
             Timber.e(e);
-            FirebaseCrashlytics.getInstance().recordException(e);
+            //FirebaseCrashlytics.getInstance().recordException(e);
             return false;
         }
     }
@@ -195,7 +195,7 @@ public class MediaFileHandler {
                 MediaScannerConnection.scanFile(context, new String[]{file.toString()}, null, null);
             }
         } catch (VaultException e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
+            Timber.e(e);
         } finally {
             FileUtil.close(is);
             FileUtil.close(os);
@@ -312,7 +312,7 @@ public class MediaFileHandler {
                     .subscribeOn(Schedulers.io())
                     .blockingGet();
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
+            Timber.e(e);
             Timber.e(e, MediaFileHandler.class.getName());
 
             throw e;
@@ -342,7 +342,7 @@ public class MediaFileHandler {
                     .subscribeOn(Schedulers.io())
                     .blockingGet();
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
+            Timber.e(e);
             Timber.e(e, MediaFileHandler.class.getName());
 
             throw e;
@@ -385,7 +385,7 @@ public class MediaFileHandler {
                         .blockingGet();
             }
         } catch (IOException e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
+            Timber.e(e);
             Timber.e(e, MediaFileHandler.class.getName());
 
             throw e;

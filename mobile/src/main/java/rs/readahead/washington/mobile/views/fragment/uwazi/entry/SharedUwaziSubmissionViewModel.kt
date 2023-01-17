@@ -3,7 +3,7 @@ package rs.readahead.washington.mobile.views.fragment.uwazi.entry
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+//import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.Gson
 import com.hzontal.tella_vault.VaultFile
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -60,7 +60,7 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
             }
 
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(
+                Timber.d(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
                 )
@@ -88,7 +88,7 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
                     }
                 },
                 { throwable: Throwable? ->
-                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                    Timber.d(throwable!!)
                     error.postValue(throwable)
                 }
             )?.let {
@@ -117,7 +117,7 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
                     progress.postValue(UwaziEntityStatus.SUBMITTED)
                 }
                 ) { throwable: Throwable? ->
-                    FirebaseCrashlytics.getInstance().recordException(
+                    Timber.d(
                         throwable
                             ?: throw NullPointerException("Expression 'throwable' must not be null")
                     )
@@ -145,7 +145,7 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
                     progress.postValue(UwaziEntityStatus.SUBMITTED)
                 }
                 ) { throwable: Throwable? ->
-                    FirebaseCrashlytics.getInstance().recordException(
+                    Timber.d(
                         throwable
                             ?: throw NullPointerException("Expression 'throwable' must not be null")
                     )

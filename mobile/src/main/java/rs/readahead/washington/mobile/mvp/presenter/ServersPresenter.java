@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -10,6 +10,7 @@ import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.mvp.contract.IServersPresenterContract;
+import timber.log.Timber;
 
 
 public class ServersPresenter implements IServersPresenterContract.IPresenter {
@@ -32,7 +33,7 @@ public class ServersPresenter implements IServersPresenterContract.IPresenter {
                 .subscribe(
                         () -> view.onServersDeleted(),
                         throwable -> {
-                            FirebaseCrashlytics.getInstance().recordException(throwable);
+                            Timber.e(throwable);
                             view.onServersDeletedError(throwable);
                         }
                 )

@@ -16,7 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.internal.LinkedTreeMap;
 import com.hzontal.tella_vault.MyLocation;
 
@@ -36,6 +36,7 @@ import rs.readahead.washington.mobile.util.LocationUtil;
 import rs.readahead.washington.mobile.views.activity.LocationMapActivity;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
+import timber.log.Timber;
 
 /**
  * Based on ODK GeoPointWidget.
@@ -235,7 +236,7 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
                     C.SELECTED_LOCATION
             );
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
+            Timber.e(e);
         }
     }
 

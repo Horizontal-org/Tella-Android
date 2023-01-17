@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.javarosa.core.model.FormDef;
 
@@ -24,6 +24,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.ListFormResult;
 import rs.readahead.washington.mobile.domain.exception.NoConnectivityException;
 import rs.readahead.washington.mobile.domain.repository.IOpenRosaRepository;
 import rs.readahead.washington.mobile.mvp.contract.ICollectBlankFormListPresenterContract;
+import timber.log.Timber;
 
 
 public class CollectBlankFormListPresenter implements
@@ -87,7 +88,7 @@ public class CollectBlankFormListPresenter implements
                 .subscribe(listFormResult -> {
                     // log errors if any in result..
                     for (IErrorBundle error : listFormResult.getErrors()) {
-                        FirebaseCrashlytics.getInstance().recordException(error.getException());
+                        Timber.e(error.getException());
                     }
 
                     view.onBlankFormsListResult(listFormResult);
@@ -95,7 +96,7 @@ public class CollectBlankFormListPresenter implements
                     if (throwable instanceof NoConnectivityException) {
                         view.onNoConnectionAvailable();
                     } else {
-                        FirebaseCrashlytics.getInstance().recordException(throwable);
+                        Timber.e(throwable);
                         view.onBlankFormsListError(throwable);
                     }
                 })
@@ -122,7 +123,7 @@ public class CollectBlankFormListPresenter implements
                 .flatMapCompletable(dataSource -> dataSource.removeBlankFormDef(form))
                 .subscribe(() -> view.onBlankFormDefRemoved(),
                         throwable -> {
-                            FirebaseCrashlytics.getInstance().recordException(throwable);
+                            Timber.e(throwable);
                             view.onBlankFormDefRemoveError(throwable);
                         })
         );
@@ -147,7 +148,7 @@ public class CollectBlankFormListPresenter implements
                 .subscribe(
                         formDef -> view.onDownloadBlankFormDefSuccess(form),
                         throwable -> {
-                            FirebaseCrashlytics.getInstance().recordException(throwable);
+                            Timber.e(throwable);
                             view.onFormDefError(throwable);
                         }
                 )
@@ -173,7 +174,7 @@ public class CollectBlankFormListPresenter implements
                 .subscribe(
                         formDef -> view.onUpdateBlankFormDefSuccess(form, formDef),
                         throwable -> {
-                            FirebaseCrashlytics.getInstance().recordException(throwable);
+                            Timber.e(throwable);
                             view.onFormDefError(throwable);
                         }
                 )

@@ -5,7 +5,7 @@ import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +36,7 @@ import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.ThreadUtil;
 import rs.readahead.washington.mobile.util.Util;
+import timber.log.Timber;
 
 
 public class FormSubmitter implements IFormSubmitterContract.IFormSubmitter {
@@ -150,7 +151,7 @@ public class FormSubmitter implements IFormSubmitterContract.IFormSubmitter {
                                 // PendingFormSendJob.scheduleJob();
                                 view.formSubmitNoConnectivity();
                             } else {
-                                FirebaseCrashlytics.getInstance().recordException(throwable);
+                                Timber.e(throwable);
                                 view.formPartSubmitError(throwable);
                             }
                         },

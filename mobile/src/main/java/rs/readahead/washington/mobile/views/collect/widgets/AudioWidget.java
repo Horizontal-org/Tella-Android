@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
 
@@ -38,6 +38,7 @@ import rs.readahead.washington.mobile.views.base_ui.BaseActivity;
 import rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView;
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector;
 import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface;
+import timber.log.Timber;
 
 /**
  * Based on ODK AudioWidget.
@@ -122,7 +123,7 @@ public class AudioWidget extends MediaFileBinaryWidget {
                     C.MEDIA_FILE_ID
             );*/
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
+            Timber.e(e);
             FormController.getActive().setIndexWaitingForData(null);
         }
     }
@@ -205,7 +206,7 @@ public class AudioWidget extends MediaFileBinaryWidget {
                     C.MEDIA_FILE_ID);
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
+            Timber.e(e);
             FormController.getActive().setIndexWaitingForData(null);
         }
     }

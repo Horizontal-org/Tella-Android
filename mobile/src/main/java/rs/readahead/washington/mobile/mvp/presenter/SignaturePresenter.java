@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
 
 import io.reactivex.Observable;
@@ -13,6 +13,7 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.ISignaturePresenterContract;
+import timber.log.Timber;
 
 
 public class SignaturePresenter implements ISignaturePresenterContract.IPresenter {
@@ -32,7 +33,7 @@ public class SignaturePresenter implements ISignaturePresenterContract.IPresente
                         .observeOn(AndroidSchedulers.mainThread())
                         .doFinally(() -> view.onAddingEnd())
                         .subscribe(mediaFile -> view.onAddSuccess(mediaFile), throwable -> {
-                            FirebaseCrashlytics.getInstance().recordException(throwable);
+                            Timber.e(throwable);
                             view.onAddError(throwable);
                         })
         );

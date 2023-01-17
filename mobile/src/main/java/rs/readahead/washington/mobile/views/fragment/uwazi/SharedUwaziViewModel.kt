@@ -3,7 +3,7 @@ package rs.readahead.washington.mobile.views.fragment.uwazi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+//import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -20,6 +20,7 @@ import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.ViewEntityInstanceItem
 import rs.readahead.washington.mobile.views.fragment.uwazi.mappers.toViewEntityInstanceItem
 import rs.readahead.washington.mobile.views.fragment.uwazi.mappers.toViewEntityTemplateItem
+import timber.log.Timber
 
 class SharedUwaziViewModel : ViewModel() {
 
@@ -187,7 +188,7 @@ class SharedUwaziViewModel : ViewModel() {
             .flatMapSingle { dataSource: UwaziDataSource -> dataSource.toggleFavorite(template) }
             .subscribe({ listTemplates() }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                Timber.d(throwable!!)
                 error.postValue(throwable)
             }
         )
@@ -207,7 +208,7 @@ class SharedUwaziViewModel : ViewModel() {
             .subscribe(
                 { listTemplates() }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                Timber.d(throwable!!)
                 error.postValue(throwable)
             }
         )
@@ -229,7 +230,7 @@ class SharedUwaziViewModel : ViewModel() {
                     _instanceDeleteD.postValue(true)
                 }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                Timber.d(throwable!!)
                 error.postValue(throwable)
             }
         )
@@ -267,7 +268,7 @@ class SharedUwaziViewModel : ViewModel() {
                     uwaziEntityInstance?.let { maybeCloneInstance(it) }
                 )
             }) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                Timber.d(throwable!!)
                 onGetInstanceError.postValue(throwable)
             }
         )

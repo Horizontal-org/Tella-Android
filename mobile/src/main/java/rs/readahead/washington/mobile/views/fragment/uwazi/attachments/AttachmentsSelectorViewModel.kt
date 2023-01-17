@@ -5,7 +5,7 @@ import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+//import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Sort
@@ -15,6 +15,7 @@ import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.views.activity.QuestionAttachmentActivity
+import timber.log.Timber
 
 class AttachmentsSelectorViewModel : ViewModel() {
     private val disposables by lazy{CompositeDisposable()}
@@ -47,12 +48,12 @@ class AttachmentsSelectorViewModel : ViewModel() {
                                 _vaultFiles.postValue(result?: emptyList())
                             }
                         ) { throwable: Throwable? ->
-                            FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                            Timber.d(throwable!!)
                             _error.postValue(throwable)
                         })
                 }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                Timber.d(throwable!!)
                 _error.postValue(throwable)
             }.dispose()
     }
@@ -62,7 +63,7 @@ class AttachmentsSelectorViewModel : ViewModel() {
             ?.subscribe(
                 { vaultFile: VaultFile? -> _rootVaultFile.postValue(vaultFile) }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                Timber.d(throwable!!)
                 _error.postValue(throwable)
             }?.dispose()
     }
@@ -75,7 +76,7 @@ class AttachmentsSelectorViewModel : ViewModel() {
                     _selectVaultFiles.postValue(vaultFiles)
                 }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                Timber.d(throwable!!)
                 _error.postValue(throwable)
             }.dispose()
     }

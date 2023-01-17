@@ -2,7 +2,7 @@ package rs.readahead.washington.mobile.mvp.presenter;
 
 import android.net.Uri;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
 
 import java.util.concurrent.Callable;
@@ -14,6 +14,7 @@ import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IMediaFileViewerPresenterContract;
+import timber.log.Timber;
 
 
 public class MediaFileViewerPresenter implements IMediaFileViewerPresenterContract.IPresenter {
@@ -38,7 +39,7 @@ public class MediaFileViewerPresenter implements IMediaFileViewerPresenterContra
                         .observeOn(AndroidSchedulers.mainThread())
                         .doFinally(() -> view.onExportEnded())
                         .subscribe(() -> view.onMediaExported(), throwable -> {
-                            FirebaseCrashlytics.getInstance().recordException(throwable);
+                            Timber.e(throwable);
                             view.onExportError(throwable);
                         })
         );
@@ -50,7 +51,7 @@ public class MediaFileViewerPresenter implements IMediaFileViewerPresenterContra
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(isDeleted -> view.onMediaFileDeleted(), throwable -> {
-                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    Timber.e(throwable);
                     view.onMediaFileDeletionError(throwable);
                 }));
     }
@@ -61,7 +62,7 @@ public class MediaFileViewerPresenter implements IMediaFileViewerPresenterContra
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(vaultFile -> view.onMediaFileRename(vaultFile), throwable -> {
-                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    Timber.e(throwable);
                     view.onMediaFileRenameError(throwable);
                 }));
     }

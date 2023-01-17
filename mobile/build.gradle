@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
+//apply plugin: 'com.google.gms.google-services'
+//apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'kotlin-android'
 
 ext {
     supportLibVersion = "28.0.3"
     permissionDispatcherVersion = "4.8.0"
-    googlePlayServicesVersion = "17.0.0"
+    //googlePlayServicesVersion = "17.0.0"
     leakCanaryVersion = '2.4'
     butterknifeVersion = '10.1.0'
 }
@@ -71,8 +71,8 @@ dependencies {
 
     // implementation 'com.madgag.spongycastle:pg:1.54.0.0'// needed for above
 
-    implementation platform('com.google.firebase:firebase-bom:26.1.0')
-    implementation 'com.google.firebase:firebase-crashlytics'
+  //  implementation platform('com.google.firebase:firebase-bom:26.1.0')
+  //  implementation 'com.google.firebase:firebase-crashlytics'
 
     api 'androidx.navigation:navigation-fragment-ktx:2.5.1'
     api 'androidx.navigation:navigation-ui-ktx:2.5.1'
@@ -80,8 +80,8 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.exifinterface:exifinterface:1.3.3'
-    implementation "com.google.android.gms:play-services-location:${googlePlayServicesVersion}"
-    implementation "com.google.android.gms:play-services-maps:${googlePlayServicesVersion}"
+   // implementation "com.google.android.gms:play-services-location:${googlePlayServicesVersion}"
+    //implementation "com.google.android.gms:play-services-maps:${googlePlayServicesVersion}"
     // implementation "com.google.android.gms:play-services-gcm:${googlePlayServicesVersion}" // android-job, optional
 
     implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"

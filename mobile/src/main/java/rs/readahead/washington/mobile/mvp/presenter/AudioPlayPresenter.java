@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.rx.RxVault;
 
 import io.reactivex.Single;
@@ -10,6 +10,7 @@ import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.domain.exception.NotFountException;
 import rs.readahead.washington.mobile.mvp.contract.IAudioPlayPresenterContract;
+import timber.log.Timber;
 
 
 public class AudioPlayPresenter implements
@@ -41,7 +42,7 @@ public class AudioPlayPresenter implements
                         },
 
                         throwable -> {
-                            FirebaseCrashlytics.getInstance().recordException(throwable);
+                            Timber.e(throwable);
                             view.onMediaFileError(throwable);
                         }));
     }

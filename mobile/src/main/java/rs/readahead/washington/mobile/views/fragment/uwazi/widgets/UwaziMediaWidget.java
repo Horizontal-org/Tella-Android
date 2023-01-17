@@ -16,7 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hzontal.tella_vault.VaultFile;
@@ -41,6 +41,7 @@ import rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView;
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
 import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface;
+import timber.log.Timber;
 
 
 @SuppressLint("ViewConstructor")
@@ -156,7 +157,7 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
                     C.MEDIA_FILE_ID);
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
+            Timber.e(e);
         }
     }
 
@@ -180,7 +181,7 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
                     C.MEDIA_FILE_ID
             );
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
+            Timber.e(e);
         }
     }
 
@@ -191,7 +192,7 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
             activity.openAudioRecorder();
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
+            Timber.e(e);
         }
     }
 

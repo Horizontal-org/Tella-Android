@@ -24,7 +24,7 @@ import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 import com.hzontal.tella_vault.VaultFile;
 import com.otaliastudios.cameraview.CameraException;
@@ -74,6 +74,7 @@ import rs.readahead.washington.mobile.views.custom.CameraFlashButton;
 import rs.readahead.washington.mobile.views.custom.CameraGridButton;
 import rs.readahead.washington.mobile.views.custom.CameraResolutionButton;
 import rs.readahead.washington.mobile.views.custom.CameraSwitchButton;
+import timber.log.Timber;
 
 
 public class CameraActivity extends MetadataActivity implements
@@ -556,7 +557,7 @@ public class CameraActivity extends MetadataActivity implements
 
             @Override
             public void onCameraError(@NonNull CameraException exception) {
-                FirebaseCrashlytics.getInstance().recordException(exception);
+                Timber.e(exception);
             }
 
             @Override

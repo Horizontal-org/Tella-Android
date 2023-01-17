@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
 import com.simplify.ink.InkView;
 
@@ -24,6 +24,7 @@ import rs.readahead.washington.mobile.mvp.contract.ISignaturePresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.SignaturePresenter;
 import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
+import timber.log.Timber;
 
 
 public class SignatureActivity extends BaseLockActivity implements
@@ -107,7 +108,7 @@ public class SignatureActivity extends BaseLockActivity implements
                 presenter.addPngImage(stream.toByteArray());
             }
         } catch (Exception exception) {
-            FirebaseCrashlytics.getInstance().recordException(exception);
+            Timber.e(exception);
         }
     }
 
