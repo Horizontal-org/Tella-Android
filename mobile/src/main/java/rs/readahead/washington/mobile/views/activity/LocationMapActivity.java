@@ -31,6 +31,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
+import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
 
 import java.util.ArrayList;
 
@@ -274,4 +275,8 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
         finish();
     }
 
+    @Override
+    public void onLocationChanged(Location location, IMyLocationProvider source) {
+        showMyLocation(MyLocation.fromLocation(location));
+    }
 }

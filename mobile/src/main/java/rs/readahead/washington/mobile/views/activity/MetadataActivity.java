@@ -25,7 +25,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.google.android.gms.common.api.ApiException;
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
+import org.osmdroid.views.overlay.mylocation.IMyLocationConsumer;
+import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
+/*import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -36,7 +39,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.location.SettingsClient;*/
 import com.google.android.gms.tasks.Task;
 import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.MyLocation;
@@ -68,7 +71,7 @@ import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 
 
 public abstract class MetadataActivity extends BaseLockActivity implements
-        SensorEventListener {
+        SensorEventListener, IMyLocationConsumer {
     private static final long LOCATION_REQUEST_INTERVAL = 5000; // aggressive
     private final static SensorData lightSensorData = new SensorData();
     private final static SensorData ambientTemperatureSensorData = new SensorData();
@@ -78,8 +81,9 @@ public abstract class MetadataActivity extends BaseLockActivity implements
     private SensorManager mSensorManager;
     private Sensor mLight;
     private Sensor mAmbientTemperature;
-    private FusedLocationProviderClient fusedLocationProviderClient;
-    private LocationCallback locationCallback;
+    //private FusedLocationProviderClient fusedLocationProviderClient;
+    private GpsMyLocationProvider locationProvider;
+   // private LocationCallback locationCallback;
     private WifiManager wifiManager;
     private BroadcastReceiver wifiScanResultReceiver;
     private boolean locationListenerRegistered = false;
@@ -112,8 +116,9 @@ public abstract class MetadataActivity extends BaseLockActivity implements
 
         // Location
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        locationCallback = new MetadataLocationCallback();
+        locationProvider = new GpsMyLocationProvider(this);
+        //fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        //locationCallback = new MetadataLocationCallback();
 
         // Wifi
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -165,7 +170,8 @@ public abstract class MetadataActivity extends BaseLockActivity implements
         }
 
         // google services way..
-        fusedLocationProviderClient.requestLocationUpdates(createLocationRequest(), locationCallback, null);
+        locationProvider.startLocationProvider(this);
+        //fusedLocationProviderClient.requestLocationUpdates(createLocationRequest(), locationCallback, null);
         locationListenerRegistered = true;
 
         // get last known location to start with..
@@ -182,12 +188,14 @@ public abstract class MetadataActivity extends BaseLockActivity implements
             return;
         }
 
-        fusedLocationProviderClient.getLastLocation()
-                .addOnSuccessListener(location -> {
-                    if (location != null) {
-                        acceptBetterLocation(location);
-                    }
-                });
+        if (locationProvider.getLastKnownLocation() != null) {
+            acceptBetterLocation(locationProvider.getLastKnownLocation());
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location, IMyLocationProvider source) {
+        acceptBetterLocation(location);
     }
 
     private synchronized void startWifiListening() {
@@ -238,8 +246,8 @@ public abstract class MetadataActivity extends BaseLockActivity implements
             return;
         }
 
-        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
-                .addOnCompleteListener(task -> locationListenerRegistered = false);
+        locationProvider.stopLocationProvider();
+        locationListenerRegistered = false;
     }
 
     private synchronized void stopWifiListening() {
@@ -305,13 +313,13 @@ public abstract class MetadataActivity extends BaseLockActivity implements
         return lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
-    private LocationRequest createLocationRequest() {
+   /* private LocationRequest createLocationRequest() {
         LocationRequest locationRequest = new LocationRequest();
         locationRequest.setInterval(LOCATION_REQUEST_INTERVAL);
         locationRequest.setFastestInterval(LOCATION_REQUEST_INTERVAL);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         return locationRequest;
-    }
+    }*/
 
     protected void checkLocationSettings(final int requestCode, final LocationSettingsCheckDoneListener listener) {
         if (isFineLocationPermissionDenied()) {
@@ -327,7 +335,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements
     }
 
     protected void manageLocationSettings(final int requestCode, final LocationSettingsCheckDoneListener listener) {
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+       /* LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
         builder.addLocationRequest(createLocationRequest());
 
         SettingsClient client = LocationServices.getSettingsClient(this);
@@ -349,7 +357,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements
                     listener.onContinue();
                     break;
             }
-        });
+        });*/
     }
 
     private void showGpsMetadataDialog(final int requestCode, final LocationSettingsCheckDoneListener listener) {
@@ -527,13 +535,13 @@ public abstract class MetadataActivity extends BaseLockActivity implements
         void onContinue();
     }
 
-    private static class MetadataLocationCallback extends LocationCallback {
+   /* private static class MetadataLocationCallback extends LocationCallback {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             Location location = locationResult.getLastLocation();
             acceptBetterLocation(location);
         }
-    }
+    }*/
 
     // Helper Classes
     static class MetadataHolder {

@@ -14,9 +14,9 @@ import android.widget.EditText
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDialogFragment
-import com.google.android.gms.common.GoogleApiAvailability
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException
-import com.google.android.gms.common.GooglePlayServicesRepairableException
+//import com.google.android.gms.common.GoogleApiAvailability
+//import com.google.android.gms.common.GooglePlayServicesNotAvailableException
+//import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.security.ProviderInstaller
 import com.google.android.material.textfield.TextInputLayout
 import rs.readahead.washington.mobile.R
@@ -247,14 +247,17 @@ class UwaziServerDialogFragment  : AppCompatDialogFragment(), ICheckUwaziServerC
         ) {
             try {
                 ProviderInstaller.installIfNeeded(context)
-            } catch (e: GooglePlayServicesRepairableException) {
+            } catch (e: Exception){
+                Timber.d(e)
+            }
+        /*(e: GooglePlayServicesRepairableException) {
                 GoogleApiAvailability.getInstance()
-                    .showErrorNotification(context, e.connectionStatusCode)
+                  .showErrorNotification(context, e.connectionStatusCode)
                 securityProviderUpgradeAttempted = true
                 return
             } catch (e: GooglePlayServicesNotAvailableException) {
                 Timber.d(e)
-            }
+            }*/
         }
 
         presenter?.checkServer(server)
