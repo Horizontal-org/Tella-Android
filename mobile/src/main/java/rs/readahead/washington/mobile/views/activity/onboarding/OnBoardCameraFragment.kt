@@ -38,11 +38,9 @@ class OnBoardCameraFragment : BaseFragment() {
 
         nextBtn = view.findViewById(R.id.next_btn)
         nextBtn.setOnClickListener {
-            activity.addFragment(
-                    this,
-                    OnBoardRecorderFragment(),
-                    R.id.rootOnboard
-            )
+            (activity as OnBoardingActivity).onNextPressed()
+
         }
+
     }
 }

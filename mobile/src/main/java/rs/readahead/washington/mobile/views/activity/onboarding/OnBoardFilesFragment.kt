@@ -38,11 +38,11 @@ class OnBoardFilesFragment : BaseFragment() {
         nextBtn = view.findViewById(R.id.next_btn)
         nextBtn.setOnClickListener {
             (activity as OnBoardActivityInterface).setCurrentIndicator(3)
-            activity.addFragment(
-                this,
-                OnBoardLockFragment.newInstance(false),
-                R.id.rootOnboard
-            )
+
+            (activity as OnBoardingActivity).onNextPressed()
+
+
+
         }
     }
 }

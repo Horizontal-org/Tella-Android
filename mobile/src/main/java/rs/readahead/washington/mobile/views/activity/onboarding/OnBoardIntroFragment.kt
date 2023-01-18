@@ -35,11 +35,13 @@ class OnBoardIntroFragment : BaseFragment() {
 
         val startBtn = view.findViewById<TextView>(R.id.startBtn)
         startBtn.setOnClickListener {
-            activity.addFragment(
+          /*  activity.addFragment(
                 this,
                 OnBoardCameraFragment(),
                 R.id.rootOnboard
-            )
+            )*/
+            (activity as OnBoardingActivity).onNextPressed()
+
         }
     }
 }

@@ -9,7 +9,9 @@
     <FrameLayout
         android:id="@+id/rootOnboard"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="match_parent"/>
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineBottom"
@@ -17,6 +19,15 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.95" />
+
+
+    <androidx.viewpager2.widget.ViewPager2
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:background="@color/calculator_background" />
 
     <LinearLayout
         android:id="@+id/indicatorsContainer"

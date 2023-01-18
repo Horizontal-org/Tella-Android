@@ -37,11 +37,8 @@ class OnBoardRecorderFragment : BaseFragment() {
 
         nextBtn = view.findViewById(R.id.next_btn)
         nextBtn.setOnClickListener {
-            activity.addFragment(
-                    this,
-                    OnBoardFilesFragment(),
-                    R.id.rootOnboard
-            )
+            (activity as OnBoardingActivity).onNextPressed()
+
         }
     }
 }

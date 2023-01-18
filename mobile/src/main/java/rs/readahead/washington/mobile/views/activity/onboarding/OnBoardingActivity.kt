@@ -36,6 +36,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     IOnBoardPresenterContract.IView, CollectServerDialogHandler,
     TellaUploadServerDialogHandler {
 
+    private  var items = 0
     private val isFromSettings by lazy { intent.getBooleanExtra(IS_FROM_SETTINGS, false)  }
     private val isOnboardLockSet by lazy { intent.getBooleanExtra(IS_ONBOARD_LOCK_SET, false)  }
     private val presenter by lazy { OnBoardPresenter(this) }
@@ -53,10 +54,10 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
             Preferences.setFirstStart(false)
             replaceFragmentNoAddToBackStack(OnBoardLockSetFragment(), R.id.rootOnboard)
         } else {
-            replaceFragmentNoAddToBackStack(
-                if (!isFromSettings) OnBoardIntroFragment() else OnBoardLockFragment.newInstance(
-                    true
-                ), R.id.rootOnboard
+           replaceFragmentNoAddToBackStack(
+            if (!isFromSettings) OnBoardIntroFragment() else OnBoardLockFragment.newInstance(
+                true
+               ), R.id.rootOnboard
             )
         }
         initUwaziEvents()
@@ -96,6 +97,28 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
             })
     }
 
+    override fun onBackPressed() {
+        if (mPager.currentItem == 0) {
+            // If the user is currently looking at the first step, allow the system to handle the
+            // Back button. This calls finish() on this activity and pops the back stack.
+            super.onBackPressed()
+        } else {
+            // Otherwise, select the previous step.
+            mPager.currentItem = mPager.currentItem - 1
+        }
+    }
+
+
+     fun onNextPressed() {
+        if (mPager.currentItem == 4) {
+            // If the user is currently looking at the first step, allow the system to handle the
+            // Back button. This calls finish() on this activity and pops the back stack.
+           // super.onBackPressed()
+        } else {
+            // Otherwise, select the previous step.
+            mPager.currentItem = mPager.currentItem + 1
+        }
+    }
     override fun setCurrentIndicator(index: Int) {
         val childCount = indicatorsContainer.childCount
         for (i in 0 until childCount) {
@@ -165,6 +188,8 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
 
     override fun hideProgress() {
         indicatorsContainer.visibility = View.INVISIBLE
+     //   mPager.visibility = View.GONE
+
     }
 
     override fun showProgress() {
@@ -173,6 +198,8 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
 
     override fun initProgress(itemCount: Int) {
         setupIndicators(itemCount)
+        items = itemCount
+        mPager.visibility = View.VISIBLE
     }
 
     override fun showLoading() {
@@ -255,5 +282,33 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
 
     private fun handleCustomizationCode(code: String) {
         showToast(code)
+    }
+
+
+
+    private  inner class ScreenSlidePagerAdapter(fm: FragmentManager,lifecycle:Lifecycle) : FragmentStateAdapter(fm,lifecycle) {
+
+        override fun getItemCount(): Int = 5
+        override fun createFragment(position: Int): Fragment {
+            var fragment: Fragment = when (position){
+                0 ->
+                    OnBoardIntroFragment()
+                1 ->
+                    OnBoardCameraFragment()
+                2 ->
+                    OnBoardRecorderFragment()
+                3 ->
+                    OnBoardFilesFragment()
+                4 -> {
+                    OnBoardLockFragment()
+                }
+
+                else -> {
+                    OnBoardIntroFragment()
+                }
+            }
+            return fragment
+        }
+
     }
 }
