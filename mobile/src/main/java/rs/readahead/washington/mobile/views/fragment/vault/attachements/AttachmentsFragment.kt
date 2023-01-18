@@ -109,7 +109,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     private lateinit var root: View
     private lateinit var breadcrumbView: BreadcrumbsView
     private lateinit var appBar: AppBarLayout
-    private lateinit var vaultTooltip: ImageView
     private lateinit var moveContainer: LinearLayout
     private var progressDialog: ProgressDialog? = null
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
@@ -208,7 +207,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         toolbar = view.findViewById(R.id.toolbar)
         root = view.findViewById(R.id.root)
         appBar = view.findViewById(R.id.appbar)
-        vaultTooltip = view.findViewById(R.id.vault_tooltip)
 
         if (SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             appBar.outlineProvider = null
@@ -829,7 +827,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         currentMove = null
         selectMode = SelectMode.SELECT_ALL
         handleSelectMode()
-        showTooltip(vaultTooltip,resources.getQuantityString(R.plurals.File_Successfully_Moved,filesSize),Gravity.TOP)
+        DialogUtils.showBottomMessage(activity, resources.getQuantityString(R.plurals.File_Successfully_Moved,filesSize), false)
 
     }
 
