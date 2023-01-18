@@ -53,7 +53,7 @@
     <item quantity="one">items</item>
     <item quantity="other"></item>
   </plurals>
-  <plurals name="File_Successfully_Moved">
+  <plurals name="Vault_File_Successfully_Moved">
     <item quantity="one">File successfully moved</item>
     <item quantity="other">Files successfully moved</item>
   </plurals>
