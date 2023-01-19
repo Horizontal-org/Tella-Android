@@ -326,8 +326,10 @@ public class CollectFormEntryActivity extends MetadataActivity implements
 
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     public void startPermissionProcess() {
-        manageLocationSettings(C.GPS_PROVIDER, () -> {
+        checkLocationSettings(C.GPS_PROVIDER, () -> {
         });
+        /*manageLocationSettings(C.GPS_PROVIDER, () -> {
+        });*/
     }
 
     @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)

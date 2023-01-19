@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -28,19 +27,6 @@ import androidx.core.content.ContextCompat;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.IMyLocationConsumer;
 import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
-/*import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.location.SettingsClient;*/
-import com.google.android.gms.tasks.Task;
 import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.MyLocation;
 import com.hzontal.tella_vault.VaultFile;
@@ -117,8 +103,6 @@ public abstract class MetadataActivity extends BaseLockActivity implements
         // Location
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationProvider = new GpsMyLocationProvider(this);
-        //fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        //locationCallback = new MetadataLocationCallback();
 
         // Wifi
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -169,9 +153,8 @@ public abstract class MetadataActivity extends BaseLockActivity implements
             return;
         }
 
-        // google services way..
+
         locationProvider.startLocationProvider(this);
-        //fusedLocationProviderClient.requestLocationUpdates(createLocationRequest(), locationCallback, null);
         locationListenerRegistered = true;
 
         // get last known location to start with..
@@ -334,8 +317,8 @@ public abstract class MetadataActivity extends BaseLockActivity implements
         }
     }
 
-    protected void manageLocationSettings(final int requestCode, final LocationSettingsCheckDoneListener listener) {
-       /* LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+    /*protected void manageLocationSettings(final int requestCode, final LocationSettingsCheckDoneListener listener) {
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
         builder.addLocationRequest(createLocationRequest());
 
         SettingsClient client = LocationServices.getSettingsClient(this);
@@ -357,10 +340,10 @@ public abstract class MetadataActivity extends BaseLockActivity implements
                     listener.onContinue();
                     break;
             }
-        });*/
-    }
+        });
+    }*/
 
-    private void showGpsMetadataDialog(final int requestCode, final LocationSettingsCheckDoneListener listener) {
+    public void showGpsMetadataDialog(final int requestCode, final LocationSettingsCheckDoneListener listener) {
         maybeChangeTemporaryTimeout(() -> {
             BottomSheetUtils.showConfirmSheet(
                     getSupportFragmentManager(),
@@ -368,10 +351,21 @@ public abstract class MetadataActivity extends BaseLockActivity implements
                     getString(R.string.verification_prompt_dialog_expl),
                     getString(R.string.verification_prompt_action_enable_GPS),
                     getString(R.string.verification_prompt_action_ignore),
-                    isConfirmed -> manageLocationSettings(requestCode, listener)
+                    isConfirmed -> startEnableLocationIntent(requestCode, listener)
             );
             return Unit.INSTANCE;
         });
+    }
+
+    private void startEnableLocationIntent(final int requestCode, final LocationSettingsCheckDoneListener listener) {
+        final Intent intent = LocationUtil.getDeviceLocationSettingIntent(this);
+        if (intent != null)
+        {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+            this.startActivityForResult(intent,requestCode);
+        }
     }
 
     public SensorData getLightSensorData() {

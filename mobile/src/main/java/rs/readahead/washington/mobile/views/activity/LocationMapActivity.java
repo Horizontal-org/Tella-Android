@@ -47,9 +47,7 @@ import rs.readahead.washington.mobile.views.custom.MapViewOverlay;
 public class LocationMapActivity extends MetadataActivity implements ILocationGettingPresenterContract.IView {
     public static final String SELECTED_LOCATION = "sl";
     public static final String CURRENT_LOCATION_ONLY = "ro";
-
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 151;
-
     private MapViewOverlay map;
 
     @BindView(R.id.toolbar)
@@ -96,7 +94,7 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
         map.getController().setZoom(18.0);
 
         requestPermissionsIfNecessary(new String[]{
-                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE, Manifest.permission.INTERNET
+                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE, Manifest.permission.INTERNET
         });
         map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.ALWAYS);
         map.setMultiTouchControls(true);
@@ -121,7 +119,7 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
                     if (locationGettingPresenter.isGPSProviderEnabled()) {
                         startGettingLocation();
                     } else {
-                        manageLocationSettings(C.GPS_PROVIDER, this::startGettingLocation);
+                        checkLocationSettings(C.GPS_PROVIDER, this::startGettingLocation);
                     }
                 }
         );
@@ -160,15 +158,11 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
 
     @Override
     public void onGettingLocationStart() {
-        // mMap.getUiSettings().setScrollGesturesEnabled(false);
-        //  mMap.getUiSettings().setZoomGesturesEnabled(false);
         progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onGettingLocationEnd() {
-        //  mMap.getUiSettings().setScrollGesturesEnabled(true);
-        //  mMap.getUiSettings().setZoomGesturesEnabled(true);
         progressBar.setVisibility(View.GONE);
     }
 
@@ -189,6 +183,7 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
                 permissionsToRequest.add(permission);
             }
         }
+
         if (permissionsToRequest.size() > 0) {
             ActivityCompat.requestPermissions(
                     this,
@@ -204,7 +199,7 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
 
     @Override
     public void onGPSProviderDisabled() {
-
+        showGpsMetadataDialog(C.GPS_PROVIDER, this::startGettingLocation);
     }
 
     @Override

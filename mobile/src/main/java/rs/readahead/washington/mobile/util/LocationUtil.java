@@ -1,7 +1,12 @@
 package rs.readahead.washington.mobile.util;
 
+import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 
 public class LocationUtil {
@@ -76,6 +81,27 @@ public class LocationUtil {
         int index = ((int) coordinate) < 0 ? 1 : 0;
 
         return separated[0] + (char) 0x00B0 + " " + separated[1] + "' " + separated[2] + "\" " +  pString[index];
+    }
+
+    public static boolean isIntentSupported(@NonNull Context context, @NonNull Intent intent)
+    {
+        return context.getPackageManager().resolveActivity(intent, 0) != null;
+    }
+
+    public static @Nullable Intent getDeviceLocationSettingIntent(@NonNull Context context)
+    {
+        Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        if (isIntentSupported(context, intent))
+            return intent;
+        intent = new Intent(android.provider.Settings.ACTION_SECURITY_SETTINGS);
+        if (isIntentSupported(context, intent))
+            return intent;
+        intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", context.getPackageName(), null);
+        intent.setData(uri);
+        if (isIntentSupported(context, intent))
+            return intent;
+        return null;
     }
 
 //    public static String getLocationData(Location location){
