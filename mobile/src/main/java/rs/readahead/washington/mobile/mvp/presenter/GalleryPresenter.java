@@ -3,8 +3,6 @@ package rs.readahead.washington.mobile.mvp.presenter;
 import android.content.Context;
 import android.net.Uri;
 
-//import com.google.firebase.crashlytics.FirebaseCrashlytics;
-import com.hzontal.tella_vault.filter.Filter;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
 import com.hzontal.tella_vault.filter.Sort;

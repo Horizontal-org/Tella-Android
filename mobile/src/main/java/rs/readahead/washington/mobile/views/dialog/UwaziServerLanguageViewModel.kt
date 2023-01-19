@@ -3,7 +3,6 @@ package rs.readahead.washington.mobile.views.dialog
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-//import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -14,7 +13,6 @@ import rs.readahead.washington.mobile.data.entity.uwazi.LanguageEntity
 import rs.readahead.washington.mobile.data.repository.UwaziRepository
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.views.adapters.uwazi.ViewLanguageItem
-import rs.readahead.washington.mobile.views.fragment.uwazi.mappers.toViewLanguageItem
 import timber.log.Timber
 
 class UwaziServerLanguageViewModel : ViewModel() {
@@ -47,7 +45,7 @@ class UwaziServerLanguageViewModel : ViewModel() {
                 _listLanguage.postValue(list)
             }
             ) { throwable: Throwable? ->
-                Timber.d(
+                Timber.e(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
                 )
@@ -72,7 +70,7 @@ class UwaziServerLanguageViewModel : ViewModel() {
             .subscribe(
                 { _ -> _languageUpdated.postValue(true) }
             ) { throwable: Throwable? ->
-                Timber.d(throwable!!)
+                Timber.e(throwable!!)
                 error.postValue(throwable)
             }
         )

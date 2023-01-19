@@ -1,7 +1,5 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-//import com.google.firebase.crashlytics.FirebaseCrashlytics;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,10 +24,10 @@ import timber.log.Timber;
 
 public class CollectBlankFormListRefreshPresenter implements
         ICollectBlankFormListRefreshPresenterContract.IPresenter {
-    private IOpenRosaRepository odkRepository;
+    private final IOpenRosaRepository odkRepository;
     private ICollectBlankFormListRefreshPresenterContract.IView view;
-    private CompositeDisposable disposables = new CompositeDisposable();
-    private KeyDataSource keyDataSource;
+    private final CompositeDisposable disposables = new CompositeDisposable();
+    private final KeyDataSource keyDataSource;
 
 
     public CollectBlankFormListRefreshPresenter(ICollectBlankFormListRefreshPresenterContract.IView view) {
@@ -61,7 +59,6 @@ public class CollectBlankFormListRefreshPresenter implements
 
                         for (Object obj : objects) {
                             if (obj instanceof ListFormResult) {
-                                @SuppressWarnings("unchecked")
                                 List<CollectForm> forms = ((ListFormResult) obj).getForms();
                                 List<IErrorBundle> errors = ((ListFormResult) obj).getErrors();
 

@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.MyLocation;
 
 import org.javarosa.core.model.data.GeoPointData;
@@ -56,7 +55,7 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
 
     private String locationString;
     private String appearance;
-    private LocationGettingPresenter locationGettingPresenter;
+    private final LocationGettingPresenter locationGettingPresenter;
     private boolean locationGathering;
 
 

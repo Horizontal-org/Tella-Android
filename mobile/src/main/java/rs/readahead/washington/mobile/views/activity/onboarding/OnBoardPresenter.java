@@ -1,7 +1,5 @@
 package rs.readahead.washington.mobile.views.activity.onboarding;
 
-//import com.google.firebase.crashlytics.FirebaseCrashlytics;
-
 import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;

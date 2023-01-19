@@ -2,7 +2,6 @@ package rs.readahead.washington.mobile.javarosa;
 
 import android.text.TextUtils;
 
-//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.VaultFile;
 
@@ -25,13 +24,13 @@ import timber.log.Timber;
 
 public class FormParser implements IFormParserContract.IFormParser {
     private IFormParserContract.IView view;
-    private FormController formController;
+    private final FormController formController;
 
     private FormEntryPrompt[] prompts;
     private FormEntryCaption[] groups;
 
-    private String locationFieldPrefix;
-    private String metadataFieldPrefix;
+    private final String locationFieldPrefix;
+    private final String metadataFieldPrefix;
 
     private enum Direction {
         PREVIOUS,

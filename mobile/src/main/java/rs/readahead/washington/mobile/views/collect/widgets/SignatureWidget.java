@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
 
 import org.javarosa.form.api.FormEntryPrompt;
@@ -36,7 +35,6 @@ import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity;
 import rs.readahead.washington.mobile.views.activity.QuestionAttachmentActivity;
 import rs.readahead.washington.mobile.views.activity.SignatureActivity;
 import timber.log.Timber;
-
 
 /**
  * Based on ODK SignatureWidget.

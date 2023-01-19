@@ -3,7 +3,7 @@ package rs.readahead.washington.mobile.views.fragment.vault.home
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-//import com.google.firebase.crashlytics.FirebaseCrashlytics
+
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Limits
@@ -86,7 +86,7 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
                     )
                 }
             ) { throwable: Throwable? ->
-                Timber.d(throwable!!)
+                Timber.e(throwable!!)
                 view?.onCountCollectServersFailed(throwable)
             }
         )
@@ -110,7 +110,7 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
                 .subscribe(
                     { num: Int? -> view?.onMediaExported(num!!) }
                 ) { throwable: Throwable? ->
-                    Timber.d(throwable!!)
+                    Timber.e(throwable!!)
                     view?.onExportError(throwable)
                 }
         )
@@ -128,7 +128,7 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
                     )
                 }
             ) { throwable: Throwable? ->
-                Timber.d(throwable!!)
+                Timber.e(throwable!!)
                 view?.onGetFilesError(throwable)
             }?.let { disposables.add(it) }
     }

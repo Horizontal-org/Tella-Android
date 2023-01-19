@@ -1,7 +1,5 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-//import com.google.firebase.crashlytics.FirebaseCrashlytics;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -17,7 +15,7 @@ import timber.log.Timber;
 public class CheckTUSServerPresenter implements
         ICheckTUSServerContract.IPresenter {
     private ICheckTUSServerContract.IView view;
-    private CompositeDisposable disposables = new CompositeDisposable();
+    private final CompositeDisposable disposables = new CompositeDisposable();
     private boolean saveAnyway = false;
 
 

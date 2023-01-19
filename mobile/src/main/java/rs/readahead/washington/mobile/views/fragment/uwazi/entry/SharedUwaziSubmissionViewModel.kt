@@ -3,7 +3,6 @@ package rs.readahead.washington.mobile.views.fragment.uwazi.entry
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-//import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.Gson
 import com.hzontal.tella_vault.VaultFile
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -60,7 +59,7 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
             }
 
             ) { throwable: Throwable? ->
-                Timber.d(
+                Timber.e(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
                 )
@@ -88,7 +87,7 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
                     }
                 },
                 { throwable: Throwable? ->
-                    Timber.d(throwable!!)
+                    Timber.e(throwable!!)
                     error.postValue(throwable)
                 }
             )?.let {
@@ -117,7 +116,7 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
                     progress.postValue(UwaziEntityStatus.SUBMITTED)
                 }
                 ) { throwable: Throwable? ->
-                    Timber.d(
+                    Timber.e(
                         throwable
                             ?: throw NullPointerException("Expression 'throwable' must not be null")
                     )
@@ -145,7 +144,7 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
                     progress.postValue(UwaziEntityStatus.SUBMITTED)
                 }
                 ) { throwable: Throwable? ->
-                    Timber.d(
+                    Timber.e(
                         throwable
                             ?: throw NullPointerException("Expression 'throwable' must not be null")
                     )
@@ -204,7 +203,7 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
             }
 
         } catch (e: Exception) {
-            Timber.d(e.message ?: "Error attaching files")
+            Timber.e(e.message ?: "Error attaching files")
         }
         return listAttachments.toList()
     }

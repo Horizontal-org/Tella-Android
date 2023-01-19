@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,7 +14,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.utils.MediaFile;
 
@@ -28,7 +26,6 @@ import rs.readahead.washington.mobile.mvp.contract.ICollectAttachmentMediaFilePr
 import rs.readahead.washington.mobile.mvp.presenter.CollectAttachmentMediaFilePresenter;
 import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.FileUtil;
-import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.views.activity.AudioPlayActivity;
 import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity;
 import rs.readahead.washington.mobile.views.activity.VideoViewerActivity;

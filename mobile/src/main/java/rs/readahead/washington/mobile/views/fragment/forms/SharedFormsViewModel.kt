@@ -3,7 +3,6 @@ package rs.readahead.washington.mobile.views.fragment.forms
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-//import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -123,7 +122,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
                     }
                 },
                 { throwable: Throwable? ->
-                    Timber.d(throwable!!)
+                    Timber.e(throwable!!)
                     onFormDefError.postValue(throwable)
                 }
             )?.let {
@@ -158,7 +157,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
                     collectFormInstance?.let { maybeCloneInstance(it) }
                 )
             }) { throwable: Throwable? ->
-                Timber.d(throwable!!)
+                Timber.e(throwable!!)
                 onFormDefError.postValue(throwable)
             }
         )
@@ -194,7 +193,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
                     )
                 }
             ) { throwable: Throwable? ->
-                Timber.d(throwable!!)
+                Timber.e(throwable!!)
                 onError.postValue(throwable)
             }
         )
@@ -212,7 +211,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
             .subscribe(
                 { onFormInstanceDeleteSuccess.postValue(true) }
             ) { throwable: Throwable? ->
-                Timber.d(throwable!!)
+                Timber.e(throwable!!)
                 onError.postValue(throwable)
             }
         )
@@ -230,7 +229,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
                     )
                 }
             ) { throwable: Throwable? ->
-                Timber.d(throwable!!)
+                Timber.e(throwable!!)
                 onError.postValue(throwable)
             }
         )
@@ -285,7 +284,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
                 { listFormResult: ListFormResult ->
                     // log errors if any in result..
                     for (error in listFormResult.errors) {
-                        Timber.d(error.exception)
+                        Timber.e(error.exception)
                     }
                     onBlankFormsListResult.postValue(listFormResult)
                 }
@@ -293,7 +292,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
                 if (throwable is NoConnectivityException) {
                     onNoConnectionAvailable.postValue(true)
                 } else {
-                    Timber.d(
+                    Timber.e(
                         throwable
                             ?: throw NullPointerException("Expression 'throwable' must not be null")
                     )
@@ -336,7 +335,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
             .subscribe(
                 { onBlankFormDefRemoved.postValue(true) }
             ) { throwable: Throwable? ->
-                Timber.d(
+                Timber.e(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
                 )
@@ -375,7 +374,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
                     )
                 }
             ) { throwable: Throwable? ->
-                Timber.d(
+                Timber.e(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
                 )
@@ -417,7 +416,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
                     )
                 }
             ) { throwable: Throwable? ->
-                Timber.d(throwable!!)
+                Timber.e(throwable!!)
                 onFormDefError.postValue(throwable)
             }
         )
@@ -476,7 +475,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
             .subscribe(
                 { onFormCacheCleared.postValue(true) }
             ) { throwable: Throwable? ->
-                Timber.d(
+                Timber.e(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
                 )

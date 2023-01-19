@@ -2,8 +2,6 @@ package rs.readahead.washington.mobile.javarosa;
 
 import android.content.Context;
 
-//import com.google.firebase.crashlytics.FirebaseCrashlytics;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,10 +34,10 @@ import timber.log.Timber;
 
 public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitter {
     private IFormReSubmitterContract.IView view;
-    private KeyDataSource keyDataSource;
-    private CompositeDisposable disposables = new CompositeDisposable();
-    private IOpenRosaRepository openRosaRepository;
-    private Context context;
+    private final KeyDataSource keyDataSource;
+    private final CompositeDisposable disposables = new CompositeDisposable();
+    private final IOpenRosaRepository openRosaRepository;
+    private final Context context;
 
 
     public FormReSubmitter(IFormReSubmitterContract.IView view) {
@@ -232,8 +230,8 @@ public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitte
     // todo: merge IForm{Re}Submitter presenter interfaces
     static class ProgressListener implements IProgressListener {
         private static final long REFRESH_TIME_MS = 500;
-        private String partName;
-        private IFormReSubmitterContract.IView view;
+        private final String partName;
+        private final IFormReSubmitterContract.IView view;
         private long time;
 
         ProgressListener(String partName, IFormReSubmitterContract.IView view) {

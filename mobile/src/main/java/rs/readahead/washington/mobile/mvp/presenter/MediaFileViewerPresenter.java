@@ -2,7 +2,6 @@ package rs.readahead.washington.mobile.mvp.presenter;
 
 import android.net.Uri;
 
-//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
 
 import java.util.concurrent.Callable;
@@ -58,7 +57,7 @@ public class MediaFileViewerPresenter implements IMediaFileViewerPresenterContra
 
     @Override
     public void renameVaultFile(String id, String name) {
-        disposables.add(MyApplication.rxVault.rename(id,name)
+        disposables.add(MyApplication.rxVault.rename(id, name)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(vaultFile -> view.onMediaFileRename(vaultFile), throwable -> {

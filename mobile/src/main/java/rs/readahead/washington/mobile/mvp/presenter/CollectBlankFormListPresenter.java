@@ -1,7 +1,5 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-//import com.google.firebase.crashlytics.FirebaseCrashlytics;
-
 import org.javarosa.core.model.FormDef;
 
 import java.util.ArrayList;

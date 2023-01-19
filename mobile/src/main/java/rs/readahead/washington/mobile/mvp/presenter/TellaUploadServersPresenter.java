@@ -1,7 +1,5 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-//import com.google.firebase.crashlytics.FirebaseCrashlytics;
-
 import java.util.List;
 
 import io.reactivex.SingleSource;

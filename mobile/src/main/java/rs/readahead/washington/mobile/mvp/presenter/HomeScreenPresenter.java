@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-//import com.google.firebase.crashlytics.FirebaseCrashlytics;
-
 import io.reactivex.Completable;
 import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -27,7 +25,7 @@ import timber.log.Timber;
 public class HomeScreenPresenter implements IHomeScreenPresenterContract.IPresenter {
     private final Context appContext;
     private IHomeScreenPresenterContract.IView view;
-    private CompositeDisposable disposable;
+    private final CompositeDisposable disposable;
     private final KeyDataSource keyDataSource;
 
 

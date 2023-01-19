@@ -29,7 +29,6 @@ import androidx.core.content.FileProvider;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.exifinterface.media.ExifInterface;
 
-//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultException;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
@@ -89,7 +88,6 @@ public class MediaFileHandler {
             return FileUtil.mkdirs(tmpPath) && ret;
         } catch (Exception e) {
             Timber.e(e);
-            //FirebaseCrashlytics.getInstance().recordException(e);
             return false;
         }
     }
@@ -115,7 +113,7 @@ public class MediaFileHandler {
                 activity.startActivityForResult(intent, requestCode);
                 return;
             } catch (ActivityNotFoundException e) {
-                Timber.d(e, activity.getClass().getName());
+                Timber.e(e, activity.getClass().getName());
             }
         }
 
@@ -126,7 +124,7 @@ public class MediaFileHandler {
         try {
             activity.startActivityForResult(intent, requestCode);
         } catch (ActivityNotFoundException e) {
-            Timber.d(e, activity.getClass().getName());
+            Timber.e(e, activity.getClass().getName());
             Toast.makeText(activity, R.string.gallery_toast_fail_import, Toast.LENGTH_LONG).show();
         }
     }
@@ -472,7 +470,7 @@ public class MediaFileHandler {
         try {
             return MyApplication.rxVault.getStream(vaultFile);
         } catch (VaultException e) {
-            Timber.d(e, MediaFileHandler.class.getName());
+            Timber.e(e, MediaFileHandler.class.getName());
         }
 
         return null;
@@ -490,7 +488,7 @@ public class MediaFileHandler {
             return FileProvider.getUriForFile(context, EncryptedFileProvider.AUTHORITY,
                     getFile(mmf));
         } catch (Exception e) {
-            Timber.d(e);
+            Timber.e(e);
             return null;
         }
     }
@@ -545,7 +543,7 @@ public class MediaFileHandler {
         try {
             return MyApplication.rxVault.getOutStream(file);
         } catch (VaultException e) {
-            Timber.d(e, MediaFileHandler.class.getName());
+            Timber.e(e, MediaFileHandler.class.getName());
         }
 
         return null;

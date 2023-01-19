@@ -18,7 +18,6 @@ import androidx.multidex.MultiDexApplication;
 
 import com.bumptech.glide.Glide;
 import com.evernote.android.job.JobManager;
-//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_locking_ui.TellaKeysUI;
 import com.hzontal.tella_locking_ui.common.CredentialsCallback;
 import com.hzontal.tella_locking_ui.ui.AppCompatActivityUnlocker;
@@ -287,7 +286,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
                 TellaUpgrader.upgradeV2(context, key);
             }
         } catch (LifecycleMainKey.MainKeyUnavailableException e) {
-            Timber.d(e);
+            Timber.e(e);
         }
     }
 

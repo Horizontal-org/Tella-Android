@@ -3,7 +3,7 @@ package rs.readahead.washington.mobile.views.fragment.uwazi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-//import com.google.firebase.crashlytics.FirebaseCrashlytics
+
 import com.hzontal.tella_vault.VaultFile
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -188,7 +188,7 @@ class SharedUwaziViewModel : ViewModel() {
             .flatMapSingle { dataSource: UwaziDataSource -> dataSource.toggleFavorite(template) }
             .subscribe({ listTemplates() }
             ) { throwable: Throwable? ->
-                Timber.d(throwable!!)
+                Timber.e(throwable!!)
                 error.postValue(throwable)
             }
         )
@@ -208,7 +208,7 @@ class SharedUwaziViewModel : ViewModel() {
             .subscribe(
                 { listTemplates() }
             ) { throwable: Throwable? ->
-                Timber.d(throwable!!)
+                Timber.e(throwable!!)
                 error.postValue(throwable)
             }
         )
@@ -230,7 +230,7 @@ class SharedUwaziViewModel : ViewModel() {
                     _instanceDeleteD.postValue(true)
                 }
             ) { throwable: Throwable? ->
-                Timber.d(throwable!!)
+                Timber.e(throwable!!)
                 error.postValue(throwable)
             }
         )
@@ -268,7 +268,7 @@ class SharedUwaziViewModel : ViewModel() {
                     uwaziEntityInstance?.let { maybeCloneInstance(it) }
                 )
             }) { throwable: Throwable? ->
-                Timber.d(throwable!!)
+                Timber.e(throwable!!)
                 onGetInstanceError.postValue(throwable)
             }
         )

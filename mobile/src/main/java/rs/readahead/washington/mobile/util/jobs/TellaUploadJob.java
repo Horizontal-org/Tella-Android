@@ -3,7 +3,6 @@ package rs.readahead.washington.mobile.util.jobs;
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
-//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
 
 import org.hzontal.tella.keys.key.LifecycleMainKey;
@@ -72,7 +71,7 @@ public class TellaUploadJob extends Job {
                 return exit(Result.RESCHEDULE);
             }
         } catch (LifecycleMainKey.MainKeyUnavailableException e) {
-            Timber.d(e);
+            Timber.e(e);
             return exit(Result.RESCHEDULE);
         }
 
@@ -115,7 +114,7 @@ public class TellaUploadJob extends Job {
                 try {
                     vaultFiles.add(MediaFileHandler.maybeCreateMetadataMediaFile(fileUploadBundle.getMediaFile()));
                 } catch (Exception e) {
-                    Timber.d(e);
+                    Timber.e(e);
                 }
             }
         }
@@ -129,7 +128,6 @@ public class TellaUploadJob extends Job {
                         exitResult = Result.RESCHEDULE;
                         return;
                     }
-                    Timber.d(throwable);
                     Timber.e(throwable);
                 });
 
@@ -190,7 +188,7 @@ public class TellaUploadJob extends Job {
                 .flatMap(vaultFile -> MyApplication.rxVault.delete(vaultFile))
                 .subscribeOn(Schedulers.io())
                 .blockingGet()) {
-            Timber.d("Deleted file %s", id);
+            Timber.i("Deleted file %s", id);
         }
     }
 

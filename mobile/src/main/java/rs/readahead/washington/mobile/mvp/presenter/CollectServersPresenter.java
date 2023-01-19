@@ -1,7 +1,5 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-//import com.google.firebase.crashlytics.FirebaseCrashlytics;
-
 import java.util.List;
 
 import io.reactivex.SingleSource;
@@ -19,9 +17,9 @@ import timber.log.Timber;
 
 
 public class CollectServersPresenter implements ICollectServersPresenterContract.IPresenter {
-    private KeyDataSource keyDataSource;
+    private final KeyDataSource keyDataSource;
     private ICollectServersPresenterContract.IView view;
-    private CompositeDisposable disposables = new CompositeDisposable();
+    private final CompositeDisposable disposables = new CompositeDisposable();
 
     //@Inject
     public CollectServersPresenter(ICollectServersPresenterContract.IView view) {

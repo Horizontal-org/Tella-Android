@@ -2,7 +2,6 @@ package rs.readahead.washington.mobile.mvp.presenter;
 
 import android.net.Uri;
 
-//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
 
 import androidx.annotation.Nullable;

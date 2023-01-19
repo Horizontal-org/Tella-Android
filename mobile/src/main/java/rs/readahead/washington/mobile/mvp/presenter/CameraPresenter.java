@@ -1,8 +1,5 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-//import com.google.firebase.crashlytics.FirebaseCrashlytics;
-import com.hzontal.tella_vault.VaultFile;
-
 import java.io.File;
 
 import io.reactivex.Observable;

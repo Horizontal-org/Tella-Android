@@ -16,7 +16,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.internal.LinkedTreeMap;
 import com.hzontal.tella_vault.MyLocation;
 
@@ -28,7 +27,6 @@ import rs.readahead.washington.mobile.bus.event.GPSProviderRequiredEvent;
 import rs.readahead.washington.mobile.bus.event.LocationPermissionRequiredEvent;
 import rs.readahead.washington.mobile.mvp.contract.ILocationGettingPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.LocationGettingPresenter;
-import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziGeoData;
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.util.C;
@@ -56,8 +54,8 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
     TextView accuracy;
 
     private String locationString;
-    private String appearance;
-    private LocationGettingPresenter locationGettingPresenter;
+    private final String appearance;
+    private final LocationGettingPresenter locationGettingPresenter;
     private boolean locationGathering;
 
 

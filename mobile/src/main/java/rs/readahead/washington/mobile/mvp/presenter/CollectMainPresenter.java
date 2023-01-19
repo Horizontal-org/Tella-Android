@@ -1,7 +1,5 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
-//import com.google.firebase.crashlytics.FirebaseCrashlytics;
-
 import org.javarosa.core.model.FormDef;
 
 import io.reactivex.ObservableSource;
@@ -25,8 +23,8 @@ import timber.log.Timber;
 
 public class CollectMainPresenter implements ICollectMainPresenterContract.IPresenter {
     private ICollectMainPresenterContract.IView view;
-    private KeyDataSource keyDataSource;
-    private CompositeDisposable disposables = new CompositeDisposable();
+    private final KeyDataSource keyDataSource;
+    private final CompositeDisposable disposables = new CompositeDisposable();
 
 
     public CollectMainPresenter(ICollectMainPresenterContract.IView view) {
