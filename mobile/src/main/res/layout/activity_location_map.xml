@@ -22,7 +22,9 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_location_map" />
+    <include
+        android:id="@+id/content"
+        layout="@layout/content_location_map" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_button"

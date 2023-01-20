@@ -35,9 +35,8 @@ import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.databinding.ActivityLocationMapBinding;
 import rs.readahead.washington.mobile.mvp.contract.ILocationGettingPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.LocationGettingPresenter;
 import rs.readahead.washington.mobile.util.C;
@@ -47,18 +46,14 @@ import rs.readahead.washington.mobile.views.custom.MapViewOverlay;
 public class LocationMapActivity extends MetadataActivity implements ILocationGettingPresenterContract.IView {
     public static final String SELECTED_LOCATION = "sl";
     public static final String CURRENT_LOCATION_ONLY = "ro";
-    private final int REQUEST_PERMISSIONS_REQUEST_CODE = 151;
+    private final int PERMISSIONS_REQUEST_CODE = 1051;
     private MapViewOverlay map;
+    private ActivityLocationMapBinding binding;
 
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.progressBar)
     ProgressBar progressBar;
-    @BindView(R.id.info)
     TextView hint;
-    @BindView(R.id.fab_button)
     FloatingActionButton faButton;
-
     @Nullable
     private MyLocation myLocation;
     private Marker selectedMarker;
@@ -71,8 +66,9 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_location_map);
-        ButterKnife.bind(this);
+        binding = ActivityLocationMapBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        initView();
 
         myLocation = (MyLocation) getIntent().getSerializableExtra(SELECTED_LOCATION);
         readOnly = getIntent().getBooleanExtra(CURRENT_LOCATION_ONLY, true);
@@ -89,7 +85,6 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
         Context ctx = this.getApplicationContext();
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
 
-        map = findViewById(R.id.mapView);
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.getController().setZoom(18.0);
 
@@ -188,7 +183,7 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
             ActivityCompat.requestPermissions(
                     this,
                     permissionsToRequest.toArray(new String[0]),
-                    REQUEST_PERMISSIONS_REQUEST_CODE);
+                    PERMISSIONS_REQUEST_CODE);
         }
     }
 
@@ -273,5 +268,13 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
     @Override
     public void onLocationChanged(Location location, IMyLocationProvider source) {
         showMyLocation(MyLocation.fromLocation(location));
+    }
+
+    private void initView() {
+        toolbar = binding.toolbar;
+        progressBar = binding.content.progressBar;
+        hint = binding.content.info;
+        faButton = binding.fabButton;
+        map = binding.content.mapView;
     }
 }

@@ -153,7 +153,6 @@ public abstract class MetadataActivity extends BaseLockActivity implements
             return;
         }
 
-
         locationProvider.startLocationProvider(this);
         locationListenerRegistered = true;
 
@@ -296,14 +295,6 @@ public abstract class MetadataActivity extends BaseLockActivity implements
         return lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
-   /* private LocationRequest createLocationRequest() {
-        LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(LOCATION_REQUEST_INTERVAL);
-        locationRequest.setFastestInterval(LOCATION_REQUEST_INTERVAL);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        return locationRequest;
-    }*/
-
     protected void checkLocationSettings(final int requestCode, final LocationSettingsCheckDoneListener listener) {
         if (isFineLocationPermissionDenied()) {
             listener.onContinue();
@@ -316,32 +307,6 @@ public abstract class MetadataActivity extends BaseLockActivity implements
             listener.onContinue();
         }
     }
-
-    /*protected void manageLocationSettings(final int requestCode, final LocationSettingsCheckDoneListener listener) {
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
-        builder.addLocationRequest(createLocationRequest());
-
-        SettingsClient client = LocationServices.getSettingsClient(this);
-        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
-
-        task.addOnSuccessListener(this, locationSettingsResponse -> listener.onContinue());
-
-        task.addOnFailureListener(this, e -> {
-            int statusCode = ((ApiException) e).getStatusCode();
-            switch (statusCode) {
-                case CommonStatusCodes.RESOLUTION_REQUIRED:
-                    try {
-                        ResolvableApiException resolvable = (ResolvableApiException) e;
-                        resolvable.startResolutionForResult(MetadataActivity.this, requestCode);
-                    } catch (IntentSender.SendIntentException ignored) {
-                    }
-                    break;
-                case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                    listener.onContinue();
-                    break;
-            }
-        });
-    }*/
 
     public void showGpsMetadataDialog(final int requestCode, final LocationSettingsCheckDoneListener listener) {
         maybeChangeTemporaryTimeout(() -> {
