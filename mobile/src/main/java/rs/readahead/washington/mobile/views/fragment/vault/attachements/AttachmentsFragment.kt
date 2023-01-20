@@ -827,7 +827,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         currentMove = null
         selectMode = SelectMode.SELECT_ALL
         handleSelectMode()
-        DialogUtils.showBottomMessage(activity, resources.getQuantityString(R.plurals.File_Successfully_Moved,filesSize), false)
+        DialogUtils.showBottomMessage(activity, resources.getQuantityString(R.plurals.Vault_File_Successfully_Moved, filesSize), false)
 
     }
 
