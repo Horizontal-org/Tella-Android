@@ -28,7 +28,7 @@ public class CameraPresenter implements ICameraPresenterContract.IPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onAddingEnd())
                 .subscribe(bundle -> view.onAddSuccess(bundle.blockingGet()), throwable -> {
-                    Timber.e(throwable);
+                    Timber.e(throwable);//TODO Crahslytics removed
                     view.onAddError(throwable);
                 })
         );
@@ -42,7 +42,7 @@ public class CameraPresenter implements ICameraPresenterContract.IPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onAddingEnd())
                 .subscribe(vaultFile -> view.onAddSuccess(vaultFile), throwable -> {
-                    Timber.e(throwable);
+                    Timber.e(throwable);//TODO Crahslytics removed
                     view.onAddError(throwable);
                 })
         );

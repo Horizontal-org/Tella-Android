@@ -31,7 +31,7 @@ class UwaziServersPresenter constructor(var view: IUWAZIServersPresenterContract
                     )
                 }
             ) { throwable: Throwable? ->
-                Timber.e(throwable!!)
+                Timber.e(throwable!!)//TODO Crahslytics removed
                 view?.onLoadUwaziServersError(throwable)
             }
         )
@@ -56,7 +56,7 @@ class UwaziServersPresenter constructor(var view: IUWAZIServersPresenterContract
                         )
                     },
                     { throwable: Throwable? ->
-                        Timber.e(throwable!!)
+                        Timber.e(throwable!!)//TODO Crahslytics removed
                         view?.onCreateUwaziServerError(throwable)
                     })
         )
@@ -74,7 +74,7 @@ class UwaziServersPresenter constructor(var view: IUWAZIServersPresenterContract
             .subscribe(
                 { server1 -> view?.onUpdatedUwaziServer(server1) }
             ) { throwable: Throwable? ->
-                Timber.e(throwable!!)
+                Timber.e(throwable!!)//TODO Crahslytics removed
                 view?.onUpdateUwaziServerError(throwable)
             }
         )
@@ -95,7 +95,7 @@ class UwaziServersPresenter constructor(var view: IUWAZIServersPresenterContract
                     view?.onRemovedUwaziServer(server)
                 }
             ) { throwable: Throwable? ->
-                Timber.e(throwable!!)
+                Timber.e(throwable!!)//TODO Crahslytics removed
                 view?.onRemoveUwaziServerError(throwable)
             }
         )

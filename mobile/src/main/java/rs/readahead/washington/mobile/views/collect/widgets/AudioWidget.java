@@ -120,7 +120,7 @@ public class AudioWidget extends MediaFileBinaryWidget {
                     C.MEDIA_FILE_ID
             );*/
         } catch (Exception e) {
-            Timber.e(e);
+            Timber.e(e);//TODO Crahslytics removed
             FormController.getActive().setIndexWaitingForData(null);
         }
     }
@@ -203,7 +203,7 @@ public class AudioWidget extends MediaFileBinaryWidget {
                     C.MEDIA_FILE_ID);
 
         } catch (Exception e) {
-            Timber.e(e);
+            Timber.e(e);//TODO Crahslytics removed
             FormController.getActive().setIndexWaitingForData(null);
         }
     }

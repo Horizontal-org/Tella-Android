@@ -78,7 +78,7 @@ public class HomeScreenPresenter implements IHomeScreenPresenterContract.IPresen
                 .subscribe(
                         num -> view.onCountTUServersEnded(num),
                         throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onCountTUServersFailed(throwable);
                         }
                 )
@@ -94,7 +94,7 @@ public class HomeScreenPresenter implements IHomeScreenPresenterContract.IPresen
                 .subscribe(
                         num -> view.onCountCollectServersEnded(num),
                         throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onCountCollectServersFailed(throwable);
                         }
                 )

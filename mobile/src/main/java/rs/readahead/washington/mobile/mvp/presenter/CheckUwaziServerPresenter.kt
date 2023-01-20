@@ -48,7 +48,7 @@ class CheckUwaziServerPresenter constructor(private var view: ICheckUwaziServerC
                 view?.hideServerCheckLoading()
             }) { throwable: Throwable? ->
                 Timber.e(throwable?: throw NullPointerException("Expression 'throwable' must not be null")
-                )
+                )//TODO Crahslytics removed
                 view?.onServerCheckError(throwable)
                 view?.onServerCheckFailure(UploadProgressInfo.Status.ERROR)
                 view?.hideServerCheckLoading()

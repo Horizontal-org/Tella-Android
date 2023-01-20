@@ -35,12 +35,12 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
                                 )
                             }
                         ) { throwable: Throwable? ->
-                            Timber.e(throwable!!)
+                            Timber.e(throwable!!)//TODO Crahslytics removed
                             view?.onGetFilesError(throwable)
                         })
                 }
             ) { throwable: Throwable? ->
-                Timber.e(throwable!!)
+                Timber.e(throwable!!)//TODO Crahslytics removed
                 view?.onGetRootIdError(throwable)
             }.dispose()
     }
@@ -61,7 +61,7 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
 
                 }
             ) { throwable: Throwable? ->
-                Timber.e(throwable!!)
+                Timber.e(throwable!!)//TODO Crahslytics removed
                 view?.onImportError(throwable)
             })
 
@@ -80,7 +80,7 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
             .subscribe(
                 { view?.onRenameFileSuccess() }
             ) { throwable: Throwable? ->
-                Timber.e(throwable!!)
+                Timber.e(throwable!!)//TODO Crahslytics removed
                 view?.onRenameFileError(throwable)
             })
     }
@@ -104,7 +104,7 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
                 .subscribe(
                     { num: Int? -> view?.onMediaFilesDeleted(num!!) }
                 ) { throwable: Throwable? ->
-                    Timber.e(throwable!!)
+                    Timber.e(throwable!!)//TODO Crahslytics removed
                     view?.onMediaFilesDeletionError(throwable)
                 }
         )
@@ -127,7 +127,7 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
                 .subscribe(
                     { view?.onMoveFilesSuccess(vaultFiles.size) }
                 ) { throwable: Throwable? ->
-                    Timber.e(throwable!!)
+                    Timber.e(throwable!!)//TODO Crahslytics removed
                     view?.onMoveFilesError(throwable)
                 }
         )
@@ -152,7 +152,7 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
             .subscribe(
                 { view?.onMediaFileDeleted() }
             ) { throwable: Throwable? ->
-                Timber.e(throwable!!)
+                Timber.e(throwable!!)//TODO Crahslytics removed
                 view?.onMediaFileDeletionError(throwable)
             })
     }
@@ -187,7 +187,7 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
                         }
                     }
                 ) { throwable: Throwable? ->
-                    Timber.e(throwable!!)
+                    Timber.e(throwable!!)//TODO Crahslytics removed
                     view?.onExportError(throwable)
                 }
         )
@@ -202,7 +202,7 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
             .subscribe(
                 { view?.onCreateFolderSuccess() }
             ) { throwable: Throwable? ->
-                Timber.e(throwable!!)
+                Timber.e(throwable!!)//TODO Crahslytics removed
                 view?.onCountTUServersFailed(throwable)
             }.dispose()
 
@@ -213,7 +213,7 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
             ?.subscribe(
                 { vaultFile: VaultFile? -> view?.onGetRootIdSuccess(vaultFile) }
             ) { throwable: Throwable? ->
-                Timber.e(throwable!!)
+                Timber.e(throwable!!)//TODO Crahslytics removed
                 view?.onGetRootIdError(throwable)
             }?.dispose()
     }

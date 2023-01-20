@@ -84,7 +84,7 @@ public class MediaFileHandler {
             tmpPath = new File(context.getFilesDir(), C.TMP_DIR);
             return FileUtil.mkdirs(tmpPath) && ret;
         } catch (Exception e) {
-            Timber.e(e);
+            Timber.e(e);//TODO Crahslytics removed
             return false;
         }
     }
@@ -187,7 +187,7 @@ public class MediaFileHandler {
                 MediaScannerConnection.scanFile(context, new String[]{file.toString()}, null, null);
             }
         } catch (VaultException e) {
-            Timber.e(e);
+            Timber.e(e);//TODO Crahslytics removed
         } finally {
             FileUtil.close(is);
             FileUtil.close(os);
@@ -306,7 +306,7 @@ public class MediaFileHandler {
                     .subscribeOn(Schedulers.io())
                     .blockingGet();
         } catch (Exception e) {
-            Timber.e(e, MediaFileHandler.class.getName());
+            Timber.e(e, MediaFileHandler.class.getName());//TODO Crahslytics removed
             throw e;
         } finally {
             try {
@@ -335,7 +335,7 @@ public class MediaFileHandler {
                         .blockingGet();
 
         } catch (Exception e) {
-            Timber.e(e, MediaFileHandler.class.getName());
+            Timber.e(e, MediaFileHandler.class.getName());//TODO Crahslytics removed
             throw e;
         }
     }
@@ -376,7 +376,7 @@ public class MediaFileHandler {
                         .blockingGet();
             }
         } catch (IOException e) {
-            Timber.e(e, MediaFileHandler.class.getName());
+            Timber.e(e, MediaFileHandler.class.getName());//TODO Crahslytics removed
             throw e;
         } finally {
             FileUtil.close(vis);
@@ -460,7 +460,7 @@ public class MediaFileHandler {
         try {
             return MyApplication.rxVault.getStream(vaultFile);
         } catch (VaultException e) {
-            Timber.e(e, MediaFileHandler.class.getName());
+            Timber.e(e, MediaFileHandler.class.getName());//TODO Crahslytics removed
         }
 
         return null;
@@ -478,7 +478,7 @@ public class MediaFileHandler {
             return FileProvider.getUriForFile(context, EncryptedFileProvider.AUTHORITY,
                     getFile(mmf));
         } catch (Exception e) {
-            Timber.e(e);
+            Timber.e(e);//TODO Crahslytics removed
             return null;
         }
     }
@@ -534,7 +534,7 @@ public class MediaFileHandler {
         try {
             return MyApplication.rxVault.getOutStream(file);
         } catch (VaultException e) {
-            Timber.e(e, MediaFileHandler.class.getName());
+            Timber.e(e, MediaFileHandler.class.getName());//TODO Crahslytics removed
         }
 
         return null;

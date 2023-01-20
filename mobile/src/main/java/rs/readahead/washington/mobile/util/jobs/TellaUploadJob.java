@@ -71,7 +71,7 @@ public class TellaUploadJob extends Job {
                 return exit(Result.RESCHEDULE);
             }
         } catch (LifecycleMainKey.MainKeyUnavailableException e) {
-            Timber.e(e);
+            Timber.e(e);//TODO Crahslytics removed
             return exit(Result.RESCHEDULE);
         }
 
@@ -114,7 +114,7 @@ public class TellaUploadJob extends Job {
                 try {
                     vaultFiles.add(MediaFileHandler.maybeCreateMetadataMediaFile(fileUploadBundle.getMediaFile()));
                 } catch (Exception e) {
-                    Timber.e(e);
+                    Timber.e(e);//TODO Crahslytics removed
                 }
             }
         }
@@ -128,7 +128,7 @@ public class TellaUploadJob extends Job {
                         exitResult = Result.RESCHEDULE;
                         return;
                     }
-                    Timber.e(throwable);
+                    Timber.e(throwable);//TODO Crahslytics removed
                 });
 
         if (exitResult != null) {

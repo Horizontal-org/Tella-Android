@@ -35,7 +35,7 @@ public class OnBoardPresenter implements IOnBoardPresenterContract.IPresenter {
                 .doFinally(() -> view.hideLoading())
                 .subscribe(server1 -> view.onCreatedTUServer(server1),
                         throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onCreateTUServerError(throwable);
                         })
         );
@@ -52,7 +52,7 @@ public class OnBoardPresenter implements IOnBoardPresenterContract.IPresenter {
                 .doFinally(() -> view.hideLoading())
                 .subscribe(server1 -> view.onCreatedServer(server1),
                         throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onCreateCollectServerError(throwable);
                         })
         );
@@ -67,7 +67,7 @@ public class OnBoardPresenter implements IOnBoardPresenterContract.IPresenter {
                         dataSource -> dataSource.createUWAZIServer(server))
                 .subscribe(server1 -> view.onCreatedUwaziServer(server1),
                         throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onCreateCollectServerError(throwable);
                         })
         );

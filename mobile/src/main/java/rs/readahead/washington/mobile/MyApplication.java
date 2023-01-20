@@ -178,7 +178,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
             @Override
             public void accept(Throwable throwable) {
                 Timber.d(throwable, getClass().getName());
-                Timber.e(throwable);
+                Timber.e(throwable);//TODO Crahslytics removed
             }
         });
         bus = TellaBus.create();
@@ -273,7 +273,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
                 upgradeTella2(context);
             }
         } catch (Exception e) {
-            Timber.e(e);
+            Timber.e(e);//TODO Crahslytics removed
         }
 
         startMainActivity(context);
@@ -286,13 +286,13 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
                 TellaUpgrader.upgradeV2(context, key);
             }
         } catch (LifecycleMainKey.MainKeyUnavailableException e) {
-            Timber.e(e);
+            Timber.e(e);//TODO Crahslytics removed
         }
     }
 
     @Override
     public void onUnSuccessfulUnlock(String tag, Throwable throwable) {
-        // Timber.e(throwable);
+        //TODO Crahslytics removed
     }
 
     @Override

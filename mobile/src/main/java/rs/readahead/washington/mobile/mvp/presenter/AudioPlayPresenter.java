@@ -41,7 +41,7 @@ public class AudioPlayPresenter implements
                         },
 
                         throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onMediaFileError(throwable);
                         }));
     }

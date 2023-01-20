@@ -67,7 +67,7 @@ public class QuestionAttachmentPresenter implements IQuestionAttachmentPresenter
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onImportEnded())
                 .subscribe(vaultFile -> view.onMediaFileImported(vaultFile), throwable -> {
-                    Timber.e(throwable);
+                    Timber.e(throwable);//TODO Crahslytics removed
                     view.onImportError(throwable);
                 })
         );
@@ -81,7 +81,7 @@ public class QuestionAttachmentPresenter implements IQuestionAttachmentPresenter
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onImportEnded())
                 .subscribe(mediaHolder -> view.onMediaFileImported(mediaHolder), throwable -> {
-                    Timber.e(throwable);
+                    Timber.e(throwable);//TODO Crahslytics removed
                     view.onImportError(throwable);
                 })
         );

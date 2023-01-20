@@ -31,7 +31,7 @@ public class ServersPresenter implements IServersPresenterContract.IPresenter {
                 .subscribe(
                         () -> view.onServersDeleted(),
                         throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onServersDeletedError(throwable);
                         }
                 )

@@ -122,7 +122,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
                     }
                 },
                 { throwable: Throwable? ->
-                    Timber.e(throwable!!)
+                    Timber.e(throwable!!)//TODO Crahslytics removed
                     onFormDefError.postValue(throwable)
                 }
             )?.let {
@@ -157,7 +157,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
                     collectFormInstance?.let { maybeCloneInstance(it) }
                 )
             }) { throwable: Throwable? ->
-                Timber.e(throwable!!)
+                Timber.e(throwable!!)//TODO Crahslytics removed
                 onFormDefError.postValue(throwable)
             }
         )
@@ -193,7 +193,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
                     )
                 }
             ) { throwable: Throwable? ->
-                Timber.e(throwable!!)
+                Timber.e(throwable!!)//TODO Crahslytics removed
                 onError.postValue(throwable)
             }
         )
@@ -211,7 +211,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
             .subscribe(
                 { onFormInstanceDeleteSuccess.postValue(true) }
             ) { throwable: Throwable? ->
-                Timber.e(throwable!!)
+                Timber.e(throwable!!)//TODO Crahslytics removed
                 onError.postValue(throwable)
             }
         )
@@ -229,7 +229,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
                     )
                 }
             ) { throwable: Throwable? ->
-                Timber.e(throwable!!)
+                Timber.e(throwable!!)//TODO Crahslytics removed
                 onError.postValue(throwable)
             }
         )
@@ -284,7 +284,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
                 { listFormResult: ListFormResult ->
                     // log errors if any in result..
                     for (error in listFormResult.errors) {
-                        Timber.e(error.exception)
+                        Timber.e(error.exception)//TODO Crahslytics removed
                     }
                     onBlankFormsListResult.postValue(listFormResult)
                 }
@@ -295,7 +295,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
                     Timber.e(
                         throwable
                             ?: throw NullPointerException("Expression 'throwable' must not be null")
-                    )
+                    )//TODO Crahslytics removed
                     onError.postValue(throwable)
                 }
             }
@@ -338,7 +338,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
                 Timber.e(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
-                )
+                )//TODO Crahslytics removed
                 onError.postValue(throwable)
             }
         )
@@ -377,7 +377,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
                 Timber.e(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
-                )
+                )//TODO Crahslytics removed
                 onFormDefError.postValue(throwable)
             }
         )
@@ -416,7 +416,7 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
                     )
                 }
             ) { throwable: Throwable? ->
-                Timber.e(throwable!!)
+                Timber.e(throwable!!)//TODO Crahslytics removed
                 onFormDefError.postValue(throwable)
             }
         )

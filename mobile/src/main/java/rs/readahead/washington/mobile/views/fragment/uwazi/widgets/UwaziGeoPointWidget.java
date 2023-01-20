@@ -234,7 +234,7 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
                     C.SELECTED_LOCATION
             );
         } catch (Exception e) {
-            Timber.e(e);
+            Timber.e(e);//TODO Crahslytics removed
         }
     }
 

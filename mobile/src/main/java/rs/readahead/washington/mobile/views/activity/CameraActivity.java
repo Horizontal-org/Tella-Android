@@ -557,7 +557,7 @@ public class CameraActivity extends MetadataActivity implements
 
             @Override
             public void onCameraError(@NonNull CameraException exception) {
-                Timber.e(exception);
+                Timber.e(exception);//TODO Crahslytics removed
             }
 
             @Override

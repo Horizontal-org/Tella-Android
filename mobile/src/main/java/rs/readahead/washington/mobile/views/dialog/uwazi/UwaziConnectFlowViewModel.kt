@@ -57,7 +57,7 @@ class UwaziConnectFlowViewModel : ViewModel() {
                 Timber.e(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
-                )
+                )//TODO Crahslytics removed
                 _isPublic.postValue(false)
 
             })
@@ -85,7 +85,7 @@ class UwaziConnectFlowViewModel : ViewModel() {
                 Timber.e(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
-                )
+                )//TODO Crahslytics removed
             })
     }
 
@@ -106,7 +106,7 @@ class UwaziConnectFlowViewModel : ViewModel() {
                 Timber.e(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
-                )
+                )//TODO Crahslytics removed
             })
     }
 
@@ -127,7 +127,7 @@ class UwaziConnectFlowViewModel : ViewModel() {
             .subscribe(
                 { _ -> _languageUpdated.postValue(true) }
             ) { throwable: Throwable? ->
-                Timber.e(throwable!!)
+                Timber.e(throwable!!)//TODO Crahslytics removed
                 error.postValue(throwable)
             }
         )

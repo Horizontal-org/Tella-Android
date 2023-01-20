@@ -42,7 +42,7 @@ public class TellaFileUploadSchedulePresenter implements ITellaFileUploadSchedul
                     TellaUploadJob.scheduleJob();
                     view.onMediaFilesUploadScheduled();
                 }, throwable -> {
-                    Timber.e(throwable);
+                    Timber.e(throwable);//TODO Crahslytics removed
                     view.onMediaFilesUploadScheduleError(throwable);
                 })
         );
@@ -60,7 +60,7 @@ public class TellaFileUploadSchedulePresenter implements ITellaFileUploadSchedul
                     TellaUploadJob.scheduleJob();
                     view.onMediaFilesUploadScheduled();
                 }, throwable -> {
-                    Timber.e(throwable);
+                    Timber.e(throwable);//TODO Crahslytics removed
                     view.onMediaFilesUploadScheduleError(throwable);
                 })
         );

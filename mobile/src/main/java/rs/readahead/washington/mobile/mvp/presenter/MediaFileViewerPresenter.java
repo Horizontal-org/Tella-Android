@@ -38,7 +38,7 @@ public class MediaFileViewerPresenter implements IMediaFileViewerPresenterContra
                         .observeOn(AndroidSchedulers.mainThread())
                         .doFinally(() -> view.onExportEnded())
                         .subscribe(() -> view.onMediaExported(), throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onExportError(throwable);
                         })
         );
@@ -50,7 +50,7 @@ public class MediaFileViewerPresenter implements IMediaFileViewerPresenterContra
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(isDeleted -> view.onMediaFileDeleted(), throwable -> {
-                    Timber.e(throwable);
+                    Timber.e(throwable);//TODO Crahslytics removed
                     view.onMediaFileDeletionError(throwable);
                 }));
     }
@@ -61,7 +61,7 @@ public class MediaFileViewerPresenter implements IMediaFileViewerPresenterContra
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(vaultFile -> view.onMediaFileRename(vaultFile), throwable -> {
-                    Timber.e(throwable);
+                    Timber.e(throwable);//TODO Crahslytics removed
                     view.onMediaFileRenameError(throwable);
                 }));
     }

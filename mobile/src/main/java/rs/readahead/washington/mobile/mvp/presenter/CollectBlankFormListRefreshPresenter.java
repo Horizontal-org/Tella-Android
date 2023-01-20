@@ -76,10 +76,10 @@ public class CollectBlankFormListRefreshPresenter implements
                 .subscribe(listFormResult -> {
                     // log errors if any in result..
                     for (IErrorBundle error : listFormResult.getErrors()) {
-                        Timber.e(error.getException());
+                        Timber.e(error.getException());//TODO Crahslytics removed
                     }
                 }, throwable -> {
-                    Timber.e(throwable);
+                    Timber.e(throwable);//TODO Crahslytics removed
                     view.onRefreshBlankFormsError(throwable);
                 })
         );

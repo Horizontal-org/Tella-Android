@@ -26,7 +26,7 @@ public class SignaturePresenter implements ISignaturePresenterContract.IPresente
                         .observeOn(AndroidSchedulers.mainThread())
                         .doFinally(() -> view.onAddingEnd())
                         .subscribe(mediaFile -> view.onAddSuccess(mediaFile), throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onAddError(throwable);
                         })
         );

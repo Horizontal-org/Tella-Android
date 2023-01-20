@@ -44,7 +44,7 @@ public class CollectMainPresenter implements ICollectMainPresenterContract.IPres
                 .subscribe(
                         formDef -> view.onGetBlankFormDefSuccess(form, formDef),
                         throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onFormDefError(throwable);
                         }
                 )
@@ -61,7 +61,7 @@ public class CollectMainPresenter implements ICollectMainPresenterContract.IPres
                 ).subscribe(
                         instance -> view.onInstanceFormDefSuccess(maybeCloneInstance(instance)),
                         throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onFormDefError(throwable);
                         }
                 )
@@ -78,7 +78,7 @@ public class CollectMainPresenter implements ICollectMainPresenterContract.IPres
                 .subscribe(
                         form -> view.onToggleFavoriteSuccess(form),
                         throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onToggleFavoriteError(throwable);
                         }
                 )
@@ -94,7 +94,7 @@ public class CollectMainPresenter implements ICollectMainPresenterContract.IPres
                 .subscribe(
                         () -> view.onFormInstanceDeleteSuccess(),
                         throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onFormInstanceDeleteError(throwable);
                         }
                 )
@@ -110,7 +110,7 @@ public class CollectMainPresenter implements ICollectMainPresenterContract.IPres
                 .subscribe(
                         num -> view.onCountCollectServersEnded(num),
                         throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onCountCollectServersFailed(throwable);
                         }
                 )

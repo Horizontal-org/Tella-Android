@@ -86,7 +86,7 @@ public class CollectBlankFormListPresenter implements
                 .subscribe(listFormResult -> {
                     // log errors if any in result..
                     for (IErrorBundle error : listFormResult.getErrors()) {
-                        Timber.e(error.getException());
+                        Timber.e(error.getException());//TODO Crahslytics removed
                     }
 
                     view.onBlankFormsListResult(listFormResult);
@@ -94,7 +94,7 @@ public class CollectBlankFormListPresenter implements
                     if (throwable instanceof NoConnectivityException) {
                         view.onNoConnectionAvailable();
                     } else {
-                        Timber.e(throwable);
+                        Timber.e(throwable);//TODO Crahslytics removed
                         view.onBlankFormsListError(throwable);
                     }
                 })
@@ -121,7 +121,7 @@ public class CollectBlankFormListPresenter implements
                 .flatMapCompletable(dataSource -> dataSource.removeBlankFormDef(form))
                 .subscribe(() -> view.onBlankFormDefRemoved(),
                         throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onBlankFormDefRemoveError(throwable);
                         })
         );
@@ -146,7 +146,7 @@ public class CollectBlankFormListPresenter implements
                 .subscribe(
                         formDef -> view.onDownloadBlankFormDefSuccess(form),
                         throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onFormDefError(throwable);
                         }
                 )
@@ -172,7 +172,7 @@ public class CollectBlankFormListPresenter implements
                 .subscribe(
                         formDef -> view.onUpdateBlankFormDefSuccess(form, formDef),
                         throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onFormDefError(throwable);
                         }
                 )

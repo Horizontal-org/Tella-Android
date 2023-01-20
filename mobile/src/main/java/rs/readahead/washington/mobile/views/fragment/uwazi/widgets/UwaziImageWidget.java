@@ -153,7 +153,7 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
                     C.MEDIA_FILE_ID);
 
         } catch (Exception e) {
-            Timber.e(e);
+            Timber.e(e);//TODO Crahslytics removed
         }
     }
 
@@ -168,7 +168,7 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
                     C.MEDIA_FILE_ID
             );
         } catch (Exception e) {
-            Timber.e(e);
+            Timber.e(e);//TODO Crahslytics removed
         }
     }
 

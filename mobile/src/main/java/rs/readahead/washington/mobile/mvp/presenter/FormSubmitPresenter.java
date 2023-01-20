@@ -45,7 +45,7 @@ public class FormSubmitPresenter implements IFormSubmitPresenterContract.IPresen
                     collectFormInstance.setCollectInstanceAttachments(vaultFiles);
                     view.onGetFormInstanceSuccess(collectFormInstance);
                 }, throwable -> {
-                    Timber.e(throwable);
+                    Timber.e(throwable);//TODO Crahslytics removed
                     view.onGetFormInstanceError(throwable);
                 })
         );

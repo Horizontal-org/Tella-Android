@@ -188,7 +188,7 @@ class SharedUwaziViewModel : ViewModel() {
             .flatMapSingle { dataSource: UwaziDataSource -> dataSource.toggleFavorite(template) }
             .subscribe({ listTemplates() }
             ) { throwable: Throwable? ->
-                Timber.e(throwable!!)
+                Timber.e(throwable!!)//TODO Crahslytics removed
                 error.postValue(throwable)
             }
         )
@@ -208,7 +208,7 @@ class SharedUwaziViewModel : ViewModel() {
             .subscribe(
                 { listTemplates() }
             ) { throwable: Throwable? ->
-                Timber.e(throwable!!)
+                Timber.e(throwable!!)//TODO Crahslytics removed
                 error.postValue(throwable)
             }
         )
@@ -230,7 +230,7 @@ class SharedUwaziViewModel : ViewModel() {
                     _instanceDeleteD.postValue(true)
                 }
             ) { throwable: Throwable? ->
-                Timber.e(throwable!!)
+                Timber.e(throwable!!)//TODO Crahslytics removed
                 error.postValue(throwable)
             }
         )
@@ -268,7 +268,7 @@ class SharedUwaziViewModel : ViewModel() {
                     uwaziEntityInstance?.let { maybeCloneInstance(it) }
                 )
             }) { throwable: Throwable? ->
-                Timber.e(throwable!!)
+                Timber.e(throwable!!)//TODO Crahslytics removed
                 onGetInstanceError.postValue(throwable)
             }
         )

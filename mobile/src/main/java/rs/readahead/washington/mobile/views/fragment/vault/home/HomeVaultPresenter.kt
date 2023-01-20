@@ -86,7 +86,7 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
                     )
                 }
             ) { throwable: Throwable? ->
-                Timber.e(throwable!!)
+                Timber.e(throwable!!)//TODO Crahslytics removed
                 view?.onCountCollectServersFailed(throwable)
             }
         )
@@ -110,7 +110,7 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
                 .subscribe(
                     { num: Int? -> view?.onMediaExported(num!!) }
                 ) { throwable: Throwable? ->
-                    Timber.e(throwable!!)
+                    Timber.e(throwable!!)//TODO Crahslytics removed
                     view?.onExportError(throwable)
                 }
         )
@@ -128,7 +128,7 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
                     )
                 }
             ) { throwable: Throwable? ->
-                Timber.e(throwable!!)
+                Timber.e(throwable!!)//TODO Crahslytics removed
                 view?.onGetFilesError(throwable)
             }?.let { disposables.add(it) }
     }

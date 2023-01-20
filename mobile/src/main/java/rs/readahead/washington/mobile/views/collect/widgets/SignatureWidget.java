@@ -134,7 +134,7 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
                     C.MEDIA_FILE_ID
             );
         } catch (Exception e) {
-            Timber.e(e);
+            Timber.e(e);//TODO Crahslytics removed
             FormController.getActive().setIndexWaitingForData(null);
         }
     }
@@ -206,7 +206,7 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
                     .putExtra(PhotoViewerActivity.VIEW_PHOTO, vaultFile)
                     .putExtra(PhotoViewerActivity.NO_ACTIONS, true));
         } catch (Exception e) {
-            Timber.e(e);
+            Timber.e(e);//TODO Crahslytics removed
         }
     }
 

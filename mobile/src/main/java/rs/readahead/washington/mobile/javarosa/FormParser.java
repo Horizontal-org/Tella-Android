@@ -239,7 +239,7 @@ public class FormParser implements IFormParserContract.IFormParser {
     }
 
     private void viewFormParseError(Throwable throwable) {
-        Timber.d(throwable);
+        Timber.e(throwable); //TODO Crahslytics removed
         view.formParseError(throwable);
     }
 

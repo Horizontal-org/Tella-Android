@@ -295,7 +295,7 @@ public class TellaUploadServerDialogFragment extends AppCompatDialogFragment imp
             try {
                 ProviderInstaller.installIfNeeded(getContext());
             } catch (Exception e) {
-                Timber.e(e);
+                Timber.e(e);//TODO Crahslytics removed
             }/*catch (GooglePlayServicesRepairableException e) {
                 GoogleApiAvailability.getInstance()
                         .showErrorNotification(getContext(), e.getConnectionStatusCode());

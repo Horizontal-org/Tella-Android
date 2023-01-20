@@ -227,7 +227,7 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
                     C.SELECTED_LOCATION
             );
         } catch (Exception e) {
-            Timber.e(e);
+            Timber.e(e);//TODO Crahslytics removed
             FormController.getActive().setIndexWaitingForData(null);
         }
     }

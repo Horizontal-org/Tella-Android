@@ -57,7 +57,7 @@ public class TelephonyUtils {
              //   }
             }
         } catch (Exception e) {
-            Timber.e(e);
+            Timber.e(e);//TODO Crahslytics removed
         }
 
         return list;

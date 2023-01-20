@@ -172,7 +172,7 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
                     C.MEDIA_FILE_ID);
 
         } catch (Exception e) {
-            Timber.e(e);
+            Timber.e(e);//TODO Crahslytics removed
         }
     }
 
@@ -187,7 +187,7 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
                     C.MEDIA_FILE_ID
             );
         } catch (Exception e) {
-            Timber.e(e);
+            Timber.e(e);//TODO Crahslytics removed
         }
     }
 

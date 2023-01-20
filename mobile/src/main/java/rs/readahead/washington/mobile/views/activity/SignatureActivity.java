@@ -107,7 +107,7 @@ public class SignatureActivity extends BaseLockActivity implements
                 presenter.addPngImage(stream.toByteArray());
             }
         } catch (Exception exception) {
-            Timber.e(exception);
+            Timber.e(exception);//TODO Crahslytics removed
         }
     }
 

@@ -272,7 +272,7 @@ public class CollectServerDialogFragment extends AppCompatDialogFragment impleme
             try {
                 ProviderInstaller.installIfNeeded(getContext());
             } catch (Exception e) {
-                Timber.e(e);
+                Timber.e(e);//TODO Crahslytics removed
             }
             /*(GooglePlayServicesRepairableException e) {
                 GoogleApiAvailability.getInstance()

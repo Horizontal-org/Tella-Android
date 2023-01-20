@@ -156,7 +156,7 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
                     C.MEDIA_FILE_ID);
 
         } catch (Exception e) {
-            Timber.e(e);
+            Timber.e(e);//TODO Crahslytics removed
         }
     }
 
@@ -180,7 +180,7 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
                     C.MEDIA_FILE_ID
             );
         } catch (Exception e) {
-            Timber.e(e);
+            Timber.e(e);//TODO Crahslytics removed
         }
     }
 
@@ -191,7 +191,7 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
             activity.openAudioRecorder();
 
         } catch (Exception e) {
-            Timber.e(e);
+            Timber.e(e);//TODO Crahslytics removed
         }
     }
 

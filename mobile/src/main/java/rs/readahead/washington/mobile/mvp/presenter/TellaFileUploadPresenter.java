@@ -39,7 +39,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(filesUploadInstances -> view.onGetFileUploadInstancesSuccess(filesUploadInstances), throwable -> {
-                    Timber.e(throwable);
+                    Timber.e(throwable);//TODO Crahslytics removed
                     view.onGetFileUploadInstancesError(throwable);
                 })
         );
@@ -52,7 +52,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(filesUploadInstances -> view.onGetFileUploadSetInstancesSuccess(filesUploadInstances), throwable -> {
-                    Timber.e(throwable);
+                    Timber.e(throwable);//TODO Crahslytics removed
                     view.onGetFileUploadSetInstancesError(throwable);
                 })
         );
@@ -66,7 +66,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
                 .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstanceById(id))
                 .subscribe(() -> view.onFileUploadInstancesDeleted(),
                         throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onFileUploadInstancesDeletionError(throwable);
                         })
         );
@@ -80,7 +80,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
                 .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstancesBySet(set))
                 .subscribe(() -> view.onFileUploadInstancesDeleted(),
                         throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onFileUploadInstancesDeletionError(throwable);
                         })
         );
@@ -94,7 +94,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
                 .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstancesInStatus(status))
                 .subscribe(() -> view.onFileUploadInstancesDeleted(),
                         throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onFileUploadInstancesDeletionError(throwable);
                         })
         );
@@ -108,7 +108,7 @@ public class TellaFileUploadPresenter implements ITellaFileUploadPresenterContra
                 .flatMapCompletable(dataSource -> dataSource.deleteFileUploadInstancesNotInStatus(status))
                 .subscribe(() -> view.onFileUploadInstancesDeleted(),
                         throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onFileUploadInstancesDeletionError(throwable);
                         })
         );

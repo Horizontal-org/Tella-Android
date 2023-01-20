@@ -182,7 +182,7 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
                     .putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile)
                     .putExtra(VideoViewerActivity.NO_ACTIONS, true));
         } catch (Exception e) {
-            Timber.e(e);
+            Timber.e(e);//TODO Crahslytics removed
         }
     }
 
@@ -197,7 +197,7 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
                     .putExtra(PhotoViewerActivity.VIEW_PHOTO, vaultFile)
                     .putExtra(PhotoViewerActivity.NO_ACTIONS, true));
         } catch (Exception e) {
-            Timber.e(e);
+            Timber.e(e);//TODO Crahslytics removed
         }
     }
 
@@ -212,7 +212,7 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
                     .putExtra(AudioPlayActivity.PLAY_MEDIA_FILE, vaultFile)
                     .putExtra(AudioPlayActivity.NO_ACTIONS, true));
         } catch (Exception e) {
-            Timber.e(e);
+            Timber.e(e);//TODO Crahslytics removed
         }
     }
 }

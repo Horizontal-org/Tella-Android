@@ -37,7 +37,7 @@ public class CollectServersPresenter implements ICollectServersPresenterContract
                 .doFinally(() -> view.hideLoading())
                 .subscribe(list -> view.onServersLoaded(list),
                         throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onLoadServersError(throwable);
                         })
         );
@@ -53,7 +53,7 @@ public class CollectServersPresenter implements ICollectServersPresenterContract
                 .doFinally(() -> view.hideLoading())
                 .subscribe(server1 -> view.onCreatedServer(server1),
                         throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onCreateCollectServerError(throwable);
                         })
         );
@@ -72,7 +72,7 @@ public class CollectServersPresenter implements ICollectServersPresenterContract
                             view.onUpdatedServer(server1);
                         },
                         throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onUpdateServerError(throwable);
                         })
         );
@@ -90,7 +90,7 @@ public class CollectServersPresenter implements ICollectServersPresenterContract
                             view.onRemovedServer(server);
                         },
                         throwable -> {
-                            Timber.e(throwable);
+                            Timber.e(throwable);//TODO Crahslytics removed
                             view.onRemoveServerError(throwable);
                         })
         );

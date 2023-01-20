@@ -149,7 +149,7 @@ public class FormSubmitter implements IFormSubmitterContract.IFormSubmitter {
                                 // PendingFormSendJob.scheduleJob();
                                 view.formSubmitNoConnectivity();
                             } else {
-                                Timber.e(throwable);
+                                Timber.e(throwable);//TODO Crahslytics removed
                                 view.formPartSubmitError(throwable);
                             }
                         },

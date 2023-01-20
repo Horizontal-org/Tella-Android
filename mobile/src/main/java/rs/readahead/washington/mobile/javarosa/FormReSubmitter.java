@@ -84,7 +84,7 @@ public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitte
                                 // PendingFormSendJob.scheduleJob();
                                 view.formReSubmitNoConnectivity();
                             } else {
-                                Timber.e(throwable);
+                                Timber.e(throwable);//TODO Crahslytics removed
                                 view.formPartReSubmitError(throwable);
                             }
                         },
