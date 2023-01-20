@@ -3,7 +3,7 @@ ext {
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext{
+    ext {
         kotlin_version = '1.6.0'
         retrofitVersion = '2.9.0'
     }
@@ -42,7 +42,7 @@ allprojects {
 
     project.ext {
         // these are common variables used in */build.gradle
-        buildToolsVersion="28.0.0"
+        buildToolsVersion = "28.0.0"
     }
 }
 

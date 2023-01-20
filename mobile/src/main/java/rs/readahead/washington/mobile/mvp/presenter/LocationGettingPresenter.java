@@ -6,37 +6,27 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+
 import androidx.core.content.ContextCompat;
+
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.IMyLocationConsumer;
 import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
-
-
-/*import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;*/
-import com.google.android.gms.tasks.OnSuccessListener;
-
-import java.lang.ref.WeakReference;
 
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.mvp.contract.ILocationGettingPresenterContract;
 import rs.readahead.washington.mobile.util.LocationUtil;
 
 
-public class LocationGettingPresenter implements ILocationGettingPresenterContract.IPresenter {
+public class LocationGettingPresenter implements ILocationGettingPresenterContract.IPresenter, IMyLocationConsumer {
     private static final long LOCATION_REQUEST_INTERVAL = 100; // very aggressive
 
     private ILocationGettingPresenterContract.IView view;
     private LocationManager locationManager;
     private GpsMyLocationProvider locationProvider;
-   /* private FusedLocationProviderClient fusedLocationProviderClient;
-    private LocationCallback locationCallback;*/
     private boolean listenerRegistered;
-    private boolean untilThreshold;
-    private float threshold;
+    private final boolean untilThreshold;
+    private final float threshold;
     private Location currentBestLocation;
 
 
@@ -44,14 +34,10 @@ public class LocationGettingPresenter implements ILocationGettingPresenterContra
         this.view = view;
         this.untilThreshold = untilThreshold;
         threshold = Preferences.getLocationAccuracyThreshold();
-        //locationCallback = new MyLocationCallback(this);
 
         locationManager = (LocationManager) view.getContext().getApplicationContext()
                 .getSystemService(Context.LOCATION_SERVICE);
-       // fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(
-        //        view.getContext().getApplicationContext());
         locationProvider = new GpsMyLocationProvider(view.getContext());
-
     }
 
     @Override
@@ -71,7 +57,6 @@ public class LocationGettingPresenter implements ILocationGettingPresenterContra
         currentBestLocation = null;
 
         if (useLastKnownLocation) {
-           /* fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new MySuccessListener(this));*/
             sendLocation(locationProvider.getLastKnownLocation());
         }
 
@@ -103,16 +88,13 @@ public class LocationGettingPresenter implements ILocationGettingPresenterContra
 
         // throw them some NPEs on calls after destroy..
         view = null;
-       // locationCallback = null;
         locationManager = null;
         locationProvider = null;
-
-        //fusedLocationProviderClient = null;
     }
 
     private void sendLocation(Location location) {
         if (!LocationUtil.isBetterLocation(location, currentBestLocation)) {
-             return;
+            return;
         }
 
         currentBestLocation = location;
@@ -144,72 +126,20 @@ public class LocationGettingPresenter implements ILocationGettingPresenterContra
     @SuppressLint("MissingPermission")
     private void startLocationListening() {
         if (!listenerRegistered) {
-           //fusedLocationProviderClient.requestLocationUpdates(createLocationRequest(), locationCallback, null);
-            locationProvider.startLocationProvider(new MyLocationConsumer(this));
+            locationProvider.startLocationProvider(this);
             listenerRegistered = true;
         }
     }
 
     private void stopLocationListening() {
         if (listenerRegistered) {
-            //fusedLocationProviderClient.removeLocationUpdates(locationCallback);
             locationProvider.stopLocationProvider();
             listenerRegistered = false;
         }
     }
 
-    /*private LocationRequest createLocationRequest() {
-        LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(LOCATION_REQUEST_INTERVAL);
-        locationRequest.setFastestInterval(LOCATION_REQUEST_INTERVAL);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        return locationRequest;
-    }*/
-
-    private static class MySuccessListener implements OnSuccessListener<Location> {
-        private WeakReference<LocationGettingPresenter> presenter;
-
-        MySuccessListener(LocationGettingPresenter presenter) {
-            this.presenter = new WeakReference<>(presenter);
-        }
-
-        @Override
-        public void onSuccess(Location location) {
-            if (presenter.get() != null) {
-                presenter.get().sendLocation(location);
-            }
-        }
-    }
-
-    /*private static class MyLocationCallback extends LocationCallback {
-        private WeakReference<LocationGettingPresenter> presenter;
-
-        MyLocationCallback(LocationGettingPresenter presenter) {
-            this.presenter = new WeakReference<>(presenter);
-        }
-
-        @Override
-        public void onLocationResult(LocationResult locationResult) {
-            Location location = locationResult.getLastLocation();
-
-            if (presenter.get() != null) {
-                presenter.get().sendLocation(location);
-            }
-        }
-    }*/
-
-    private static class MyLocationConsumer implements IMyLocationConsumer {
-        private WeakReference<LocationGettingPresenter> presenter;
-
-        MyLocationConsumer(LocationGettingPresenter presenter) {
-            this.presenter = new WeakReference<>(presenter);
-        }
-
-        @Override
-        public void onLocationChanged(Location location, IMyLocationProvider source) {
-            if (presenter.get() != null) {
-                presenter.get().sendLocation(location);
-            }
-        }
+    @Override
+    public void onLocationChanged(Location location, IMyLocationProvider source) {
+        sendLocation(location);
     }
 }
