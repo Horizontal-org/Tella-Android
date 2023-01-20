@@ -17,9 +17,9 @@ import timber.log.Timber;
 
 
 public class TellaUploadServersPresenter implements ITellaUploadServersPresenterContract.IPresenter {
-    private KeyDataSource keyDataSource;
+    private final KeyDataSource keyDataSource;
     private ITellaUploadServersPresenterContract.IView view;
-    private CompositeDisposable disposables = new CompositeDisposable();
+    private final CompositeDisposable disposables = new CompositeDisposable();
 
 
     //@Inject

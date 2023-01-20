@@ -207,6 +207,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         toolbar = view.findViewById(R.id.toolbar)
         root = view.findViewById(R.id.root)
         appBar = view.findViewById(R.id.appbar)
+
         if (SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             appBar.outlineProvider = null
         } else {
@@ -820,12 +821,14 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     }
 
-    override fun onMoveFilesSuccess() {
+    override fun onMoveFilesSuccess(filesSize: Int) {
         attachmentsPresenter.addNewVaultFiles()
         enableMoveTheme(false)
         currentMove = null
         selectMode = SelectMode.SELECT_ALL
         handleSelectMode()
+        DialogUtils.showBottomMessage(activity, resources.getQuantityString(R.plurals.File_Successfully_Moved,filesSize), false)
+
     }
 
     override fun onMoveFilesError(error: Throwable?) {
