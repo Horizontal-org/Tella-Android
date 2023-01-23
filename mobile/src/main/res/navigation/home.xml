@@ -104,7 +104,6 @@
         <action
             android:id="@+id/action_newReport_to_reportSendScreen"
             app:popUpToInclusive="true"
-            app:launchSingleTop="true"
             app:destination="@id/reportSendScreen"
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out" />

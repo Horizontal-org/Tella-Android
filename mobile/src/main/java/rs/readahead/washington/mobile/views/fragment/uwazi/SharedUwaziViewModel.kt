@@ -72,8 +72,8 @@ class SharedUwaziViewModel : ViewModel() {
                                 it
                             )
                         }, onFavoriteClicked = { toggleFavorite(it) },
-                           onOpenEntityClicked = {openEntity(it)}
-                            ))
+                            onOpenEntityClicked = { openEntity(it) }
+                        ))
                     }
                     _templates.postValue(resultList)
                 }
@@ -98,9 +98,13 @@ class SharedUwaziViewModel : ViewModel() {
                 { drafts: List<UwaziEntityInstance> ->
                     val resultList = mutableListOf<ViewEntityInstanceItem>()
                     drafts.map {
-                        resultList.add(it.toViewEntityInstanceItem (onMoreClicked = { onInstanceMoreClicked(it) },
-                        onOpenClicked = {openEntityInstance(it)}
-                            ))
+                        resultList.add(it.toViewEntityInstanceItem(onMoreClicked = {
+                            onInstanceMoreClicked(
+                                it
+                            )
+                        },
+                            onOpenClicked = { openEntityInstance(it) }
+                        ))
                     }
                     _draftInstances.postValue(resultList)
                 }
@@ -128,7 +132,7 @@ class SharedUwaziViewModel : ViewModel() {
                         resultList.add(it.toViewEntityInstanceItem(
                             onMoreClicked = { onInstanceMoreClicked(it) },
                             onOpenClicked = { getInstanceUwaziEntity(it.id) }
-                            )
+                        )
                         )
                     }
                     _submittedInstances.postValue(resultList)
@@ -154,13 +158,13 @@ class SharedUwaziViewModel : ViewModel() {
                 { outboxes: List<UwaziEntityInstance> ->
                     val resultList = mutableListOf<ViewEntityInstanceItem>()
                     outboxes.map {
-                        resultList.add(it.toViewEntityInstanceItem (onMoreClicked = {
+                        resultList.add(it.toViewEntityInstanceItem(onMoreClicked = {
                             onInstanceMoreClicked(
                                 it
                             )
                         },
-                            onOpenClicked = {openEntityInstance(it)}
-                            ))
+                            onOpenClicked = { openEntityInstance(it) }
+                        ))
                     }
                     _outboxInstances.postValue(resultList)
                 }
@@ -235,11 +239,11 @@ class SharedUwaziViewModel : ViewModel() {
         )
     }
 
-    private fun openEntity(template: CollectTemplate){
+    private fun openEntity(template: CollectTemplate) {
         _openEntity.postValue(template)
     }
 
-    private fun openEntityInstance(entity: UwaziEntityInstance){
+    private fun openEntityInstance(entity: UwaziEntityInstance) {
         _openEntityInstance.postValue(entity)
     }
 

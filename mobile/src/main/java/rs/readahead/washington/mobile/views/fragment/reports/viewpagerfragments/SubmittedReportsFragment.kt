@@ -39,7 +39,7 @@ class SubmittedReportsFragment : BaseBindingFragment<FragmentReportsListBinding>
 
     private fun initData() {
         with(viewModel) {
-            submittedReportListFormInstance.observe(viewLifecycleOwner, { outboxes ->
+            submittedReportListFormInstance.observe(viewLifecycleOwner) { outboxes ->
                 if (outboxes.isEmpty()) {
                     binding?.listReportsRecyclerView?.hide()
                     binding?.textViewEmpty?.show()
@@ -48,23 +48,23 @@ class SubmittedReportsFragment : BaseBindingFragment<FragmentReportsListBinding>
                     binding?.listReportsRecyclerView?.show()
                     binding?.textViewEmpty?.hide()
                 }
-            })
+            }
 
-            onMoreClickedFormInstance.observe(viewLifecycleOwner, { instance ->
+            onMoreClickedFormInstance.observe(viewLifecycleOwner) { instance ->
                 showOutboxMenu(instance)
-            })
+            }
 
-            reportInstance.observe(viewLifecycleOwner, { instance ->
+            reportInstance.observe(viewLifecycleOwner) { instance ->
                 openEntityInstance(instance)
-            })
+            }
 
-            onOpenClickedFormInstance.observe(viewLifecycleOwner, { instance ->
+            onOpenClickedFormInstance.observe(viewLifecycleOwner) { instance ->
                 loadEntityInstance(instance)
-            })
+            }
 
-            instanceDeleted.observe(viewLifecycleOwner, {
+            instanceDeleted.observe(viewLifecycleOwner) {
                 viewModel.listOutbox()
-            })
+            }
         }
     }
 

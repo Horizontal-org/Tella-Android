@@ -413,8 +413,9 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_UPDATED, D.INTEGER, true) + " DEFAULT 0 , " +
                 cddl(D.C_TITLE, D.TEXT, true) + " , " +
                 cddl(D.C_DESCRIPTION_TEXT, D.TEXT, true) + " , " +
+                cddl(D.C_FORM_PART_STATUS, D.INTEGER, true) + " DEFAULT 0 , " +
                 "FOREIGN KEY(" + sq(D.C_REPORT_SERVER_ID) + ") REFERENCES " +
-                sq(D.T_TELLA_UPLOAD_SERVER) + "(" + sq(D.C_ID) + ") ON DELETE RESTRICT" +
+                sq(D.T_TELLA_UPLOAD_SERVER) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE" +
                 ");";
     }
 

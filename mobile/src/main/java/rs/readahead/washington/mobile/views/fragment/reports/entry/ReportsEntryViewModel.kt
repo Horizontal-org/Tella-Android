@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.views.fragment.reports.entry
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,10 +8,10 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Flowable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
-import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
@@ -61,12 +62,11 @@ class ReportsEntryViewModel @Inject constructor(
     val instanceDeleted: LiveData<Boolean> get() = _instanceDeleted
     private val _reportInstance = MutableLiveData<ReportFormInstance>()
     val reportInstance: LiveData<ReportFormInstance> get() = _reportInstance
-    private val _progressInfo = MutableLiveData<UploadProgressInfo>()
-    val progressInfo: LiveData<UploadProgressInfo> get() = _progressInfo
+    private val _progressInfo = MutableLiveData<Pair<UploadProgressInfo, ReportFormInstance>>()
+    val progressInfo: LiveData<Pair<UploadProgressInfo, ReportFormInstance>> get() = _progressInfo
     private val _entityStatus = MutableLiveData<ReportFormInstance>()
     val entityStatus: LiveData<ReportFormInstance> get() = _entityStatus
 
-    //TODO THIS IS UGLY WILL REPLACE IT FLOWABLE RX LATER
     fun listServers() {
         _progress.postValue(true)
         getReportsServersUseCase.execute(onSuccess = { result ->
@@ -305,12 +305,32 @@ class ReportsEntryViewModel @Inject constructor(
     fun getDraftBundle(instance: ReportFormInstance) {
         _progress.postValue(true)
         getReportBundleUseCase.setId(instance.id)
-
         getReportBundleUseCase.execute(onSuccess = { result ->
             val resultInstance = result.instance
-            resultInstance.widgetMediaFiles =
-                vaultFilesToMediaFiles(MyApplication.rxVault.get(result.fileIds).blockingGet())
-            _reportInstance.postValue(resultInstance)
+            disposables.add(dataSource.getReportMediaFiles(result.instance)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ files ->
+                    val vaultFiles = MyApplication.rxVault.get(result.fileIds).blockingGet()
+                    val filesResult = arrayListOf<FormMediaFile>()
+
+                    files.forEach { formMediaFile ->
+                        val vaultFile =
+                            vaultFiles.first { vaultFile -> formMediaFile.id == vaultFile.id }
+                        if (vaultFile != null) {
+                            val fileResult = FormMediaFile.fromMediaFile(vaultFile)
+                            fileResult.status = formMediaFile.status
+                            filesResult.add(fileResult)
+                        }
+                    }
+                    resultInstance.widgetMediaFiles = filesResult
+                    _reportInstance.postValue(resultInstance)
+                }) { throwable: Throwable? ->
+                    Timber.d(throwable)
+                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                }
+            )
+
         }, onError = {
             _error.postValue(it)
         }, onFinished = {
@@ -318,81 +338,72 @@ class ReportsEntryViewModel @Inject constructor(
         })
     }
 
+    @SuppressLint("CheckResult")
     fun submitReport(instance: ReportFormInstance) {
         _progress.postValue(true)
         getReportsServersUseCase.execute(onSuccess = { servers ->
             val server = servers.first { it.id == instance.serverId }
-            if (!server.isActivatedBackgroundUpload) {
-                disposables.add(
-                    reportsRepository.submitReport(
-                        server,
-                        ReportBodyEntity(instance.title, instance.description)
-                    )
-                        .doOnError {
-                            instance.status = EntityStatus.SUBMISSION_ERROR
-                            _entityStatus.postValue(instance)
-                        }
-                        .subscribe { reportPostResult ->
-                            instance.status = EntityStatus.SUBMISSION_PARTIAL_PARTS
-                            instance.reportApiId = reportPostResult.id
-                            _entityStatus.postValue(instance)
-                            Flowable.fromIterable(instance.widgetMediaFiles)
-                                .flatMap { file ->
-                                    reportsRepository.upload(
-                                        file,
-                                        server.url,
-                                        reportPostResult.id,
-                                        server.accessToken)
-                                }.doOnComplete {
-                                    instance.status = EntityStatus.SUBMITTED
-                                    _entityStatus.postValue(instance)
-                                }.doOnCancel {
-                                    instance.status = EntityStatus.PAUSED
-                                    _entityStatus.postValue(instance)
-                                }
-                                .blockingSubscribe(
-                                    { progressInfo: UploadProgressInfo ->
-                                        Timber.d(
-                                            "+++++ UploadProgressInfo, %s, %s, %s, %s %s",
-                                            progressInfo.name,
-                                            progressInfo.status.name,
-                                            progressInfo.current,
-                                            progressInfo.size,
-                                            progressInfo.fileId
-                                        )
-                                        _progressInfo.postValue(progressInfo)
-                                        when (progressInfo.status) {
-                                            UploadProgressInfo.Status.ERROR, UploadProgressInfo.Status.UNAUTHORIZED, UploadProgressInfo.Status.UNKNOWN_HOST, UploadProgressInfo.Status.UNKNOWN, UploadProgressInfo.Status.CONFLICT -> {
-                                                //_progressInfo.postValue(progressInfo)
-                                                instance.widgetMediaFiles.first { it.name == progressInfo.name }
-                                                    .apply {
-                                                        status = FormMediaFileStatus.NOT_SUBMITTED
-                                                    }
-                                                dataSource.saveInstance(instance)
+            // if (!server.isActivatedBackgroundUpload) {
+            disposables.add(
+                reportsRepository.submitReport(
+                    server,
+                    ReportBodyEntity(instance.title, instance.description)
+                )
+                    .doOnError {
+                        instance.status = EntityStatus.SUBMISSION_ERROR
+                        _entityStatus.postValue(instance)
+                    }
+                    .subscribe { reportPostResult ->
+                        instance.status = EntityStatus.SUBMISSION_PARTIAL_PARTS
+                        instance.reportApiId = reportPostResult.id
+                        _entityStatus.postValue(instance)
+                        Flowable.fromIterable(instance.widgetMediaFiles)
+                            .flatMap { file ->
+                                reportsRepository.upload(
+                                    file,
+                                    server.url,
+                                    reportPostResult.id,
+                                    server.accessToken
+                                )
+                            }.doOnComplete {
+                                instance.status = EntityStatus.SUBMITTED
+                                instance.formPartStatus = FormMediaFileStatus.SUBMITTED
+                                _entityStatus.postValue(instance)
+                            }.doOnCancel {
+                                instance.status = EntityStatus.PAUSED
+                                _entityStatus.postValue(instance)
+                            }
+                            .subscribeOn(Schedulers.io(), true)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({ progressInfo: UploadProgressInfo ->
+
+                                when (progressInfo.status) {
+                                    UploadProgressInfo.Status.ERROR, UploadProgressInfo.Status.UNAUTHORIZED, UploadProgressInfo.Status.UNKNOWN_HOST, UploadProgressInfo.Status.UNKNOWN, UploadProgressInfo.Status.CONFLICT -> {
+                                        instance.widgetMediaFiles.first { it.id == progressInfo.fileId }
+                                            .apply {
+                                                status = FormMediaFileStatus.NOT_SUBMITTED
                                             }
-                                            UploadProgressInfo.Status.FINISHED -> {
-                                               // _progressInfo.postValue(progressInfo)
-                                                instance.widgetMediaFiles.first { it.name == progressInfo.name }
-                                                    .apply {
-                                                        status = FormMediaFileStatus.SUBMITTED
-                                                    }
-                                            }
-                                            else -> {
-                                               // _progressInfo.postValue(progressInfo)
-                                            }
-                                        }
+                                        dataSource.saveInstance(instance)
                                     }
-
-                                ) { throwable: Throwable? ->
-                                    instance.status = EntityStatus.SUBMISSION_ERROR
-                                    _entityStatus.postValue(instance)
-                                    Timber.d(throwable)
-                                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                                    UploadProgressInfo.Status.FINISHED, UploadProgressInfo.Status.OK -> {
+                                        instance.widgetMediaFiles.first { it.id == progressInfo.fileId }
+                                            .apply {
+                                                status = FormMediaFileStatus.SUBMITTED
+                                            }
+                                    }
+                                    else -> {
+                                    }
                                 }
-                        })
-            } else {
+                                _progressInfo.postValue(Pair(progressInfo, instance))
+                            }) { throwable: Throwable? ->
+                                instance.status = EntityStatus.SUBMISSION_ERROR
+                                _entityStatus.postValue(instance)
+                                Timber.d(throwable)
+                                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                            }
 
-            }
+                    })
+
         },
             onError = {
                 instance.status = EntityStatus.SUBMISSION_ERROR
@@ -405,64 +416,13 @@ class ReportsEntryViewModel @Inject constructor(
 
     }
 
-    private fun updateProgress(instance: ReportFormInstance){
-        when(instance.status){
+    private fun updateProgress(instance: ReportFormInstance) {
+        when (instance.status) {
             EntityStatus.FINALIZED -> {
 
             }
         }
     }
-
-    private fun uploadFiles(
-        instance: ReportFormInstance,
-        server: TellaReportServer,
-        reportId: String
-    ) {
-        Flowable.fromIterable(instance.widgetMediaFiles)
-            .flatMap { file ->
-                reportsRepository.upload(
-                    file,
-                    server.url,
-                    reportId,
-                    server.accessToken
-                )
-            }.doOnComplete {
-                instance.status = EntityStatus.SUBMITTED
-                _entityStatus.postValue(instance)
-            }.doOnCancel {
-                instance.status = EntityStatus.PAUSED
-                _entityStatus.postValue(instance)
-            }
-            .blockingSubscribe(
-                { progressInfo: UploadProgressInfo ->
-                    when (progressInfo.status) {
-                        UploadProgressInfo.Status.ERROR, UploadProgressInfo.Status.UNAUTHORIZED, UploadProgressInfo.Status.UNKNOWN_HOST, UploadProgressInfo.Status.UNKNOWN, UploadProgressInfo.Status.CONFLICT -> {
-                            instance.widgetMediaFiles.first { it.name == progressInfo.name }
-                                .apply {
-                                    status = FormMediaFileStatus.NOT_SUBMITTED
-                                }
-                            dataSource.saveInstance(instance)
-                        }
-                        UploadProgressInfo.Status.STARTED -> {
-                            _progressInfo.postValue(progressInfo)
-                        }
-                        UploadProgressInfo.Status.FINISHED -> {
-                            instance.widgetMediaFiles.first { it.name == progressInfo.name }
-                                .apply {
-                                    status = FormMediaFileStatus.SUBMITTED
-                                }
-                        }
-                    }
-                }
-
-            ) { throwable: Throwable? ->
-                instance.status = EntityStatus.SUBMISSION_ERROR
-                _entityStatus.postValue(instance)
-                Timber.d(throwable)
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
-            }
-    }
-
 
     fun dispose() {
         disposables.clear()

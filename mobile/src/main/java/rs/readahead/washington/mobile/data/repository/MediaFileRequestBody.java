@@ -70,7 +70,7 @@ public class MediaFileRequestBody extends RequestBody {
 
             // writeAll method from RealBufferedSink
             long totalBytesRead = 0;
-            for (long readCount; (readCount = source.read(sink.buffer(), 8192)) != -1; ) {
+            for (long readCount; (readCount = source.read(sink.getBuffer(), 8192)) != -1; ) {
                 totalBytesRead += readCount;
                 sink.emitCompleteSegments();
 
