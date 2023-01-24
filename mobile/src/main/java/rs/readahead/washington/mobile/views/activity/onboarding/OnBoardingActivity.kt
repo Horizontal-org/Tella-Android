@@ -6,8 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.IS_ONBOARD_LOCK_SET
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
@@ -33,92 +42,104 @@ import rs.readahead.washington.mobile.views.dialog.uwazi.SharedLiveData.updateSe
 import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity
 
 class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
-    IOnBoardPresenterContract.IView, CollectServerDialogHandler,
-    TellaUploadServerDialogHandler {
+    IOnBoardPresenterContract.IView, CollectServerDialogHandler, TellaUploadServerDialogHandler {
 
-    private  var items = 0
-    private val isFromSettings by lazy { intent.getBooleanExtra(IS_FROM_SETTINGS, false)  }
-    private val isOnboardLockSet by lazy { intent.getBooleanExtra(IS_ONBOARD_LOCK_SET, false)  }
+    private var items = 0
+    private val isFromSettings by lazy { intent.getBooleanExtra(IS_FROM_SETTINGS, false) }
+    private val isOnboardLockSet by lazy { intent.getBooleanExtra(IS_ONBOARD_LOCK_SET, false) }
     private val presenter by lazy { OnBoardPresenter(this) }
     private lateinit var indicatorsContainer: LinearLayout
+    private lateinit var viewPager: ViewPager2
+    private lateinit var tabLayout: TabLayout
+    private lateinit var backBtn: TextView
+    private lateinit var nextBtn: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        overridePendingTransition(com.hzontal.tella_locking_ui.R.anim.`in`, com.hzontal.tella_locking_ui.R.anim.out)
+        overridePendingTransition(
+            com.hzontal.tella_locking_ui.R.anim.`in`, com.hzontal.tella_locking_ui.R.anim.out
+        )
 
         setContentView(R.layout.activity_onboarding)
 
         indicatorsContainer = findViewById(R.id.indicatorsContainer)
 
+        viewPager = findViewById(R.id.view_pager)
+
+        tabLayout = findViewById(R.id.tabLayout)
+
+
+
+        // Instantiate a ViewPager and a Tablayout
+        if(!isOnboardLockSet && !isFromSettings)  initProgress(5)
+
+        // Instantiate next and back buttons
+        initButtons()
+
         if (isOnboardLockSet) {
             Preferences.setFirstStart(false)
             replaceFragmentNoAddToBackStack(OnBoardLockSetFragment(), R.id.rootOnboard)
         } else {
-           replaceFragmentNoAddToBackStack(
-            if (!isFromSettings) OnBoardIntroFragment() else OnBoardLockFragment.newInstance(
-                true
-               ), R.id.rootOnboard
-            )
+            if (isFromSettings)
+                viewPager.visibility = View.GONE
+                replaceFragmentNoAddToBackStack(OnBoardLockSetFragment(), R.id.rootOnboard)
         }
+
+
         initUwaziEvents()
     }
 
-    private fun setupIndicators(indicatorCount : Int) {
-        indicatorsContainer.removeAllViews()
-        val indicators = arrayOfNulls<ImageView>(indicatorCount)
-        val layoutParams: LinearLayout.LayoutParams =
-            LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-        layoutParams.setMargins(12, 0, 12, 0)
-        for (i in indicators.indices) {
-            indicators[i] = ImageView(applicationContext)
-            indicators[i].apply {
-                this?.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        applicationContext,
-                        R.drawable.onboarding_indicator_inactive
-                    )
-                )
-                this?.layoutParams = layoutParams
-            }
-            indicatorsContainer.addView(indicators[i])
+    private fun initButtons() {
+
+        backBtn = findViewById(R.id.back_btn)
+        backBtn.setOnClickListener {
+            onBackPressed()
         }
+
+        nextBtn = findViewById(R.id.next_btn)
+        nextBtn.setOnClickListener {
+            onNextPressed()
+
+        }
+
     }
 
     private fun initUwaziEvents() {
-        createServer.observe(this,
-            { server: UWaziUploadServer? ->
-                if (server != null) {
-                    presenter.create(server)
-                    addFragment(OnBoardHideOptionFragment(),R.id.rootOnboard)
-                }
-            })
+        createServer.observe(
+            this
+        ) { server: UWaziUploadServer? ->
+            if (server != null) {
+                presenter.create(server)
+                addFragment(OnBoardHideOptionFragment(), R.id.rootOnboard)
+            }
+        }
     }
 
     override fun onBackPressed() {
-        if (mPager.currentItem == 0) {
+
+        if (viewPager.currentItem == 0) {
             // If the user is currently looking at the first step, allow the system to handle the
             // Back button. This calls finish() on this activity and pops the back stack.
             super.onBackPressed()
         } else {
             // Otherwise, select the previous step.
-            mPager.currentItem = mPager.currentItem - 1
+            viewPager.currentItem = viewPager.currentItem - 1
         }
+
+
     }
 
 
-     fun onNextPressed() {
-        if (mPager.currentItem == 4) {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
-           // super.onBackPressed()
-        } else {
-            // Otherwise, select the previous step.
-            mPager.currentItem = mPager.currentItem + 1
+    fun onNextPressed() {
+
+        if (viewPager.currentItem != items) {
+            // select the Next step in the viewpager
+            viewPager.currentItem = viewPager.currentItem + 1
         }
+
+
     }
+
     override fun setCurrentIndicator(index: Int) {
         val childCount = indicatorsContainer.childCount
         for (i in 0 until childCount) {
@@ -126,15 +147,13 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
             if (i == index) {
                 imageView.setImageDrawable(
                     ContextCompat.getDrawable(
-                        applicationContext,
-                        R.drawable.onboarding_indicator_active
+                        applicationContext, R.drawable.onboarding_indicator_active
                     )
                 )
             } else {
                 imageView.setImageDrawable(
                     ContextCompat.getDrawable(
-                        applicationContext,
-                        R.drawable.onboarding_indicator_inactive
+                        applicationContext, R.drawable.onboarding_indicator_inactive
                     )
                 )
             }
@@ -163,22 +182,21 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
                 override fun addODKServer() {
                     showCollectServerDialog()
                 }
-            }
-        )
-       /* showDualChoiceTypeSheet(this.supportFragmentManager,
-            getString(R.string.settings_servers_add_server_dialog_title),
-            getString(R.string.settings_serv_add_server_selection_dialog_title),
-            getString(R.string.settings_servers_add_server_forms),
-            getString(R.string.settings_servers_add_server_reports),
-            object : DualChoiceConsumer {
-                override fun accept(option: Boolean) {
-                    if (option) {
-                        showCollectServerDialog()
-                    } else {
-                        showTellaUploadServerDialog()
-                    }
-                }
-            })*/
+            })
+        /* showDualChoiceTypeSheet(this.supportFragmentManager,
+             getString(R.string.settings_servers_add_server_dialog_title),
+             getString(R.string.settings_serv_add_server_selection_dialog_title),
+             getString(R.string.settings_servers_add_server_forms),
+             getString(R.string.settings_servers_add_server_reports),
+             object : DualChoiceConsumer {
+                 override fun accept(option: Boolean) {
+                     if (option) {
+                         showCollectServerDialog()
+                     } else {
+                         showTellaUploadServerDialog()
+                     }
+                 }
+             })*/
     }
 
     private fun showUwaziServerDialog() {
@@ -187,19 +205,24 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     }
 
     override fun hideProgress() {
-        indicatorsContainer.visibility = View.INVISIBLE
-     //   mPager.visibility = View.GONE
+         indicatorsContainer.visibility = View.INVISIBLE
 
     }
 
     override fun showProgress() {
         indicatorsContainer.visibility = View.VISIBLE
+
     }
 
     override fun initProgress(itemCount: Int) {
-        setupIndicators(itemCount)
         items = itemCount
-        mPager.visibility = View.VISIBLE
+        // The pager adapter, which provides the pages to the view pager widget.
+        val pagerAdapter = ScreenSlidePagerAdapter(supportFragmentManager, this.lifecycle)
+        viewPager.adapter = pagerAdapter
+        TabLayoutMediator(tabLayout, viewPager) { _, _ ->
+        }.attach()
+
+        viewPager.visibility = View.VISIBLE
     }
 
     override fun showLoading() {
@@ -209,31 +232,27 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     }
 
     override fun onCreatedTUServer(server: TellaUploadServer?) {
-        addFragment(OnBoardConnectedFragment(),R.id.rootOnboard)
+        addFragment(OnBoardConnectedFragment(), R.id.rootOnboard)
     }
 
     override fun onCreateTUServerError(throwable: Throwable?) {
         DialogUtils.showBottomMessage(
-            this,
-            getString(R.string.settings_docu_toast_fail_create_server),
-            true
+            this, getString(R.string.settings_docu_toast_fail_create_server), true
         )
     }
 
     override fun onCreateCollectServerError(throwable: Throwable?) {
         DialogUtils.showBottomMessage(
-            this,
-            getString(R.string.settings_docu_toast_fail_create_server),
-            true
+            this, getString(R.string.settings_docu_toast_fail_create_server), true
         )
     }
 
     override fun onCreatedServer(server: CollectServer?) {
-        addFragment(OnBoardConnectedFragment(),R.id.rootOnboard)
+        addFragment(OnBoardConnectedFragment(), R.id.rootOnboard)
     }
 
     override fun onCreatedUwaziServer(server: UWaziUploadServer?) {
-        addFragment(OnBoardHideOptionFragment(),R.id.rootOnboard)
+        addFragment(OnBoardHideOptionFragment(), R.id.rootOnboard)
     }
 
     override fun onCollectServerDialogCreate(server: CollectServer?) {
@@ -249,7 +268,6 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
 
     override fun onTellaUploadServerDialogUpdate(server: TellaUploadServer?) {
     }
-
 
 
     override fun onDialogDismiss() {
@@ -276,8 +294,20 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
                 override fun accept(code: String) {
                     handleCustomizationCode(code)
                 }
-            }
-        )
+            })
+    }
+
+    override fun enableSwipe(isSwipeable: Boolean, isTabLayoutVisible: Boolean) {
+        viewPager.isUserInputEnabled = isSwipeable
+        tabLayout.isVisible = isTabLayoutVisible
+
+
+    }
+
+    override fun showButtons(isNextButtonVisible: Boolean, isBackButtonVisible: Boolean) {
+
+        nextBtn.isVisible = isNextButtonVisible
+        backBtn.isVisible = isBackButtonVisible
     }
 
     private fun handleCustomizationCode(code: String) {
@@ -285,28 +315,21 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     }
 
 
+    private inner class ScreenSlidePagerAdapter(fm: FragmentManager, lifecycle: Lifecycle) :
+        FragmentStateAdapter(fm, lifecycle) {
 
-    private  inner class ScreenSlidePagerAdapter(fm: FragmentManager,lifecycle:Lifecycle) : FragmentStateAdapter(fm,lifecycle) {
-
-        override fun getItemCount(): Int = 5
+        override fun getItemCount(): Int = items
         override fun createFragment(position: Int): Fragment {
-            var fragment: Fragment = when (position){
-                0 ->
-                    OnBoardIntroFragment()
-                1 ->
-                    OnBoardCameraFragment()
-                2 ->
-                    OnBoardRecorderFragment()
-                3 ->
-                    OnBoardFilesFragment()
-                4 -> {
-                    OnBoardLockFragment()
+            var fragment: Fragment =
+                when (position) {
+                    0 -> OnBoardIntroFragment()
+                    1 -> OnBoardCameraFragment()
+                    2 -> OnBoardRecorderFragment()
+                    3 -> OnBoardFilesFragment()
+                    4 -> OnBoardLockFragment()
+                    else ->
+                        OnBoardIntroFragment()
                 }
-
-                else -> {
-                    OnBoardIntroFragment()
-                }
-            }
             return fragment
         }
 

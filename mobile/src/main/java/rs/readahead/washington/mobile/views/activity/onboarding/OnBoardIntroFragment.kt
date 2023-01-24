@@ -24,6 +24,19 @@ class OnBoardIntroFragment : BaseFragment() {
 
         initView(view)
     }
+    override fun onResume() {
+        super.onResume()
+        (activity as OnBoardActivityInterface).enableSwipe(
+            isSwipeable = false,
+            isTabLayoutVisible = false
+        )
+        (activity as OnBoardActivityInterface).showButtons(
+            isNextButtonVisible = false,
+            isBackButtonVisible = false
+        )
+
+
+    }
 
     override fun initView(view: View) {
         (activity as OnBoardActivityInterface).hideProgress()

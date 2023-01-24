@@ -24,6 +24,19 @@ class OnBoardConnectedFragment : BaseFragment() {
 
         initView(view)
     }
+    override fun onResume() {
+        super.onResume()
+        (activity as OnBoardActivityInterface).enableSwipe(
+            isSwipeable = true,
+            isTabLayoutVisible = true
+        )
+        (activity as OnBoardActivityInterface).showButtons(
+            isNextButtonVisible = true,
+            isBackButtonVisible = true
+        )
+
+
+    }
 
     override fun initView(view: View) {
         (activity as OnBoardActivityInterface).setCurrentIndicator(0)

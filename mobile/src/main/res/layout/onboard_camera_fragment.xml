@@ -70,6 +70,7 @@
         style="@style/Unlock_White_Text_Back"
         android:id="@+id/back_btn"
         android:text="@string/LockSelect_Action_Back"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
@@ -77,6 +78,7 @@
         style="@style/Unlock_White_Text_Back"
         android:id="@+id/next_btn"
         android:text="@string/action_next"
+        android:visibility="gone"
         android:layout_marginEnd="34dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
