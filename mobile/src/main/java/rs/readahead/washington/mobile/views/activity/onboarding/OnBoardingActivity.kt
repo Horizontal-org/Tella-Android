@@ -69,9 +69,8 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         tabLayout = findViewById(R.id.tabLayout)
 
 
-
         // Instantiate a ViewPager and a Tablayout
-        if(!isOnboardLockSet && !isFromSettings)  initProgress(5)
+        if(!isOnboardLockSet && !isFromSettings)  initViewPager(5)
 
         // Instantiate next and back buttons
         initButtons()
@@ -81,7 +80,6 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
             replaceFragmentNoAddToBackStack(OnBoardLockSetFragment(), R.id.rootOnboard)
         } else {
             if (isFromSettings)
-                viewPager.visibility = View.GONE
                 replaceFragmentNoAddToBackStack(OnBoardLockSetFragment(), R.id.rootOnboard)
         }
 
@@ -102,6 +100,35 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
 
         }
 
+    }
+
+    override fun initProgress(itemCount: Int) {
+        setupIndicators(itemCount)
+    }
+
+
+    private fun setupIndicators(indicatorCount : Int) {
+        indicatorsContainer.removeAllViews()
+        val indicators = arrayOfNulls<ImageView>(indicatorCount)
+        val layoutParams: LinearLayout.LayoutParams =
+            LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+        layoutParams.setMargins(12, 0, 12, 0)
+        for (i in indicators.indices) {
+            indicators[i] = ImageView(applicationContext)
+            indicators[i].apply {
+                this?.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        applicationContext,
+                        R.drawable.onboarding_indicator_inactive
+                    )
+                )
+                this?.layoutParams = layoutParams
+            }
+            indicatorsContainer.addView(indicators[i])
+        }
     }
 
     private fun initUwaziEvents() {
@@ -214,7 +241,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
 
     }
 
-    override fun initProgress(itemCount: Int) {
+    override fun initViewPager(itemCount: Int) {
         items = itemCount
         // The pager adapter, which provides the pages to the view pager widget.
         val pagerAdapter = ScreenSlidePagerAdapter(supportFragmentManager, this.lifecycle)
