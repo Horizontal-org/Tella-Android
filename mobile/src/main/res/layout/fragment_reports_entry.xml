@@ -19,137 +19,138 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-     <androidx.constraintlayout.widget.ConstraintLayout
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:background="@color/wa_purple"
-          tools:context=".views.fragment.reports.entry.ReportsEntryFragment">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/wa_purple"
+            tools:context=".views.fragment.reports.entry.ReportsEntryFragment">
 
-          <org.hzontal.shared_ui.appbar.ToolbarComponent
-              android:id="@+id/toolbar"
-              android:layout_width="match_parent"
-              android:layout_height="?attr/actionBarSize"
-              android:background="?attr/colorPrimary"
-              app:arrowBackIcon="@drawable/ic_close_white"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toTopOf="parent"
-              app:popupTheme="@style/AppTheme.PopupOverlay"
-              app:rightIcon="@drawable/ic_save_white_24dp"
-              app:startTitle="@string/Reports_Title_Screen" />
+            <org.hzontal.shared_ui.appbar.ToolbarComponent
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:arrowBackIcon="@drawable/ic_close_white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:rightIcon="@drawable/ic_save_white_24dp"
+                app:startTitle="@string/Reports_Title_Screen" />
 
-          <TextView
-              android:id="@+id/send_report_text"
-              style="@style/Tella_Main_White_Text.Meduim"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:paddingHorizontal="@dimen/activity_horizontal_margin"
-              android:text="@string/Reports_Send_To_Text"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toBottomOf="@id/toolbar" />
+            <TextView
+                android:id="@+id/send_report_text"
+                style="@style/Tella_Main_White_Text.Meduim"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/activity_horizontal_margin"
+                android:text="@string/Reports_Send_To_Text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-          <org.hzontal.shared_ui.dropdownlist.CustomDropdownList
-              android:id="@+id/servers_dropdown"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-              android:layout_marginTop="@dimen/activity_horizontal_margin"
-              android:textAlignment="viewStart"
-              app:layout_constraintTop_toBottomOf="@id/send_report_text"
-              app:name="@string/Reports_Select_Your_Project" />
+            <org.hzontal.shared_ui.dropdownlist.CustomDropdownList
+                android:id="@+id/servers_dropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:textAlignment="viewStart"
+                app:layout_constraintTop_toBottomOf="@id/send_report_text"
+                app:name="@string/Reports_Select_Your_Project" />
 
-          <View
-              android:id="@+id/separator"
-              android:layout_width="match_parent"
-              android:layout_height="1dp"
-              android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-              android:layout_marginTop="@dimen/activity_horizontal_large_margin"
-              android:layout_marginBottom="24dp"
-              android:background="@color/wa_white_20"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toBottomOf="@id/servers_dropdown"
-              />
+            <View
+                android:id="@+id/separator"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_large_margin"
+                android:layout_marginBottom="24dp"
+                android:background="@color/wa_white_20"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/servers_dropdown" />
 
-          <androidx.constraintlayout.widget.Group
-              android:id="@+id/dropdown_group"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:visibility="visible"
-              app:constraint_referenced_ids="separator,servers_dropdown,send_report_text" />
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/dropdown_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:constraint_referenced_ids="separator,servers_dropdown,send_report_text" />
 
-          <com.google.android.material.textfield.TextInputLayout
-              android:id="@+id/report_title_layout"
-              style="@style/DialogDataCollectionTextEntryLayout"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-              android:layout_marginTop="16dp"
-              android:textColorHint="@color/wa_white"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toBottomOf="@id/separator">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/report_title_layout"
+                style="@style/DialogDataCollectionTextEntryLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="16dp"
+                android:textColorHint="@color/wa_white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/separator">
 
-              <EditText
-                  android:id="@+id/report_title_et"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:hint="@string/Reports_Select_Title"
-                  android:imeOptions="actionDone"
-                  android:inputType="text"
-                  android:maxLines="1"
-                  android:textColor="@color/wa_white"
-                  app:backgroundTint="@color/wa_white" />
-          </com.google.android.material.textfield.TextInputLayout>
+                <EditText
+                    android:id="@+id/report_title_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/Reports_Select_Title"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="@color/wa_white"
+                    app:backgroundTint="@color/wa_white" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-          <com.google.android.material.textfield.TextInputLayout
-              android:id="@+id/report_description_layout"
-              style="@style/DialogDataCollectionTextEntryLayout"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-              android:layout_marginTop="@dimen/activity_vertical_large_margin"
-              android:textColorHint="@color/wa_white"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toBottomOf="@id/report_title_layout">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/report_description_layout"
+                style="@style/DialogDataCollectionTextEntryLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_large_margin"
+                android:textColorHint="@color/wa_white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/report_title_layout">
 
-              <EditText
-                  android:id="@+id/report_description_et"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:autofillHints="description"
-                  android:hint="@string/Reports_Select_Description"
-                  android:imeOptions="actionDone"
-                  android:inputType="textImeMultiLine"
-                  android:textColor="@color/wa_white"
-                  app:backgroundTint="@color/wa_white" />
-          </com.google.android.material.textfield.TextInputLayout>
+                <EditText
+                    android:id="@+id/report_description_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="description"
+                    android:hint="@string/Reports_Select_Description"
+                    android:imeOptions="actionDone"
+                    android:inputType="text|textMultiLine"
+                    android:textColor="@color/wa_white"
+                    app:backgroundTint="@color/wa_white"
+                    tools:text="felf,ef,lk,frlezf,elfelkferf,er,ff
+knkerfkefkfekfkekekl,f,klferkl,f,lkefe,fe,lf,lef,lef,lef,er,f,ref,f,,llkf,elk,f,ef,e" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-          <TextView
-              android:id="@+id/attach_files_text"
-              style="@style/Tella_Main_White_Text.Meduim"
-              android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-              android:layout_marginTop="@dimen/activity_vertical_large_margin"
-              android:text="@string/Reports_Attach_files_Here"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toBottomOf="@id/report_description_layout" />
+            <TextView
+                android:id="@+id/attach_files_text"
+                style="@style/Tella_Main_White_Text.Meduim"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_large_margin"
+                android:text="@string/Reports_Attach_files_Here"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/report_description_layout" />
 
-          <androidx.recyclerview.widget.RecyclerView
-              android:layout_margin="8dp"
-              android:paddingBottom="94dp"
-              android:id="@+id/files_recyclerView"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintEnd_toEndOf="parent"
-              android:visibility="visible"
-              app:layout_constraintTop_toBottomOf="@+id/attach_files_text" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/files_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:paddingBottom="94dp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/attach_files_text" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-      </androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <RelativeLayout
         android:id="@+id/buttons_bottom"

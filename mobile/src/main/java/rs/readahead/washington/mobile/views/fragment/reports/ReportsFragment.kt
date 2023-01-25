@@ -34,6 +34,7 @@ class ReportsFragment :
             isSaveEnabled = false
             adapter = viewPagerAdapter
         }
+
         // Set the text for each tab
         binding?.viewPager?.let {
             TabLayoutMediator(binding?.tabs!!, it) { tab, position ->

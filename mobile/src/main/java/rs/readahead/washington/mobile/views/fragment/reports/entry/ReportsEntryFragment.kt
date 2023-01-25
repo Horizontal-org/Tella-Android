@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavOptions
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_locking_ui.common.extensions.onChange
@@ -306,7 +305,10 @@ class ReportsEntryFragment :
             files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
             server = selectedServer
         )
+
         bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportFormInstance)
+        // nav().navigateUp()
         nav().navigate(R.id.action_newReport_to_reportSendScreen, bundle)
+        nav().clearBackStack(R.id.action_newReport_to_reportSendScreen)
     }
 }

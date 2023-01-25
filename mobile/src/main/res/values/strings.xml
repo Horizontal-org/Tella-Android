@@ -493,9 +493,11 @@ connecting to a server</string>
     <string name="settings.docu_auto.delete_action.expl">Tella will automatically delete the files from your device as soon as they are uploaded to the server.</string>
     <string name="settings.docu_delete.upload.server_dialog.expl">You will no longer be able to upload files to this server.</string>
     <plurals name="upload.main_meta_number.of.files">
-        <item quantity="one">%d file</item>
+        <item quantity="one">One file</item>
         <item quantity="other">%d files</item>
     </plurals>
+    <string name="upload.main_meta_number.of.files_with_average" translatable="false">%d/%d MB uploaded</string>
+
     <plurals name="upload.main_meta_number.of.files.uploaded">
         <item quantity="one">%d file uploaded</item>
         <item quantity="other">%d files uploaded</item>
@@ -703,5 +705,15 @@ button to add a new template.</string>
     <string name="Reports_Attach_files_Here" translatable="false">Attach files here</string>
     <string name="Connection_Title" translatable="false">Connections</string>
     <string name="Reports_Saved_Draft" translatable="false">The report was saved as a draft</string>
+    <string name="Reports_Pause" translatable="false">Pause</string>
+    <string name="Reports_Resume" translatable="false">Resume</string>
+    <string name="File_Uploaded_on" translatable="false">Uploaded on</string>
+    <string name="File_Uploaded" translatable="false">uploaded</string>
+    <string name="Delete_Report_Confirmation" translatable="false">Are you sure you want to delete this report? </string>
+    <string name="Delete_Submitted_Report_Confirmation" translatable="false">Are you sure you want to delete this semt report from your records? </string>
+    <string name="View_Report" translatable="false">View </string>
+    <string name="Delete_Report" translatable="false">Delete </string>
+    <string name="Paused_Report" translatable="false">Paused </string>
+    <string name="Report_Waiting_For_Connection" translatable="false">Waiting for connection </string>
 
 </resources>

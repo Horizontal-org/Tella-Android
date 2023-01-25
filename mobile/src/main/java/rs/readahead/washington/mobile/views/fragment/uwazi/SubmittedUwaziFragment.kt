@@ -68,7 +68,7 @@ class SubmittedUwaziFragment : BaseBindingFragment<FragmentSubmittedUwaziBinding
         BottomSheetUtils.showEditDeleteMenuSheet(
             requireActivity().supportFragmentManager,
             instance.title,
-            getString(R.string.Uwazi_Action_ViewEntity),
+            getString(R.string.View_Report),
             getString(R.string.Uwazi_Action_DeleteEntity),
             object : BottomSheetUtils.ActionSeleceted {
                 override fun accept(action: BottomSheetUtils.Action) {

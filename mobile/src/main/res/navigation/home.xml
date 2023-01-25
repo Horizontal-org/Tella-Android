@@ -87,6 +87,12 @@
             app:destination="@id/reportSendScreen"
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out" />
+
+        <action
+            android:id="@+id/action_reportsScreen_to_reportSubmittedScreen"
+            app:destination="@id/reportSubmittedScreen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
     </fragment>
 
     <fragment
@@ -124,6 +130,13 @@
     <fragment
         android:id="@+id/reportSendScreen"
         android:name="rs.readahead.washington.mobile.views.fragment.reports.send.ReportsSendFragment"
+        android:label="Send"
+        tools:layout="@layout/fragment_send_report">
+    </fragment>
+
+    <fragment
+        android:id="@+id/reportSubmittedScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.reports.submitted.ReportSubmittedFragment"
         android:label="Send"
         tools:layout="@layout/fragment_send_report">
     </fragment>

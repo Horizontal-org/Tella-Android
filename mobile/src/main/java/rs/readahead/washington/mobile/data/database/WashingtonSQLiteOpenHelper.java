@@ -425,6 +425,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_REPORT_INSTANCE_ID, D.INTEGER, true) + " , " +
                 cddl(D.C_VAULT_FILE_ID, D.TEXT, true) + " , " +
                 cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0," +
+                cddl(D.C_UPLOADED_SIZE, D.INTEGER, true) + " DEFAULT 0," +
                 "FOREIGN KEY(" + sq(D.C_REPORT_INSTANCE_ID) + ") REFERENCES " +
                 sq(D.T_REPORT_FORM_INSTANCE) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE," +
                 "UNIQUE(" + sq(D.C_REPORT_INSTANCE_ID) + ", " + sq(D.C_VAULT_FILE_ID) + ") ON CONFLICT IGNORE" +

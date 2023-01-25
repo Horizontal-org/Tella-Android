@@ -99,6 +99,7 @@ class D {
     static final String C_UWAZI_ENTITY_INSTANCE_ID = "c_uwazi_entity_instance_id";
     static final String T_REPORT_INSTANCE_VAULT_FILE = "t_report_instance_vault_file";
     static final String C_REPORT_INSTANCE_ID = "c_report_instance_id";
+    static final String C_UPLOADED_SIZE = "c_uploaded_size";
 
     //Uwazi cloumns
     static final String C_UWAZI_SERVER_ID = "c_uwazi_server_id";

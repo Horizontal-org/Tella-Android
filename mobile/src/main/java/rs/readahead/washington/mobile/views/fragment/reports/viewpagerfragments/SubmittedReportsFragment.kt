@@ -51,7 +51,7 @@ class SubmittedReportsFragment : BaseBindingFragment<FragmentReportsListBinding>
             }
 
             onMoreClickedFormInstance.observe(viewLifecycleOwner) { instance ->
-                showOutboxMenu(instance)
+                showSubmittedMenu(instance)
             }
 
             reportInstance.observe(viewLifecycleOwner) { instance ->
@@ -68,12 +68,12 @@ class SubmittedReportsFragment : BaseBindingFragment<FragmentReportsListBinding>
         }
     }
 
-    private fun showOutboxMenu(instance: ReportFormInstance) {
+    private fun showSubmittedMenu(instance: ReportFormInstance) {
         BottomSheetUtils.showEditDeleteMenuSheet(
             requireActivity().supportFragmentManager,
             instance.title,
-            getString(R.string.Uwazi_Action_EditDraft),
-            getString(R.string.Uwazi_Action_RemoveDraft),
+            getString(R.string.View_Report),
+            getString(R.string.Delete_Report),
             object : BottomSheetUtils.ActionSeleceted {
                 override fun accept(action: BottomSheetUtils.Action) {
                     if (action === BottomSheetUtils.Action.EDIT) {
@@ -85,9 +85,9 @@ class SubmittedReportsFragment : BaseBindingFragment<FragmentReportsListBinding>
                 }
             },
             getString(R.string.action_delete) + " \"" + instance.title + "\"?",
-            requireContext().resources.getString(R.string.Uwazi_Subtitle_RemoveDraft),
-            requireContext().getString(R.string.action_remove),
-            requireContext().getString(R.string.action_cancel)
+            requireContext().resources.getString(R.string.Delete_Submitted_Report_Confirmation),
+            requireContext().getString(R.string.action_yes),
+            requireContext().getString(R.string.action_no)
         )
     }
 
@@ -98,7 +98,7 @@ class SubmittedReportsFragment : BaseBindingFragment<FragmentReportsListBinding>
     private fun openEntityInstance(reportFormInstance: ReportFormInstance) {
         val bundle = Bundle()
         bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportFormInstance)
-        nav().navigate(R.id.action_reportsScreen_to_reportSendScreen, bundle)
+        nav().navigate(R.id.action_reportsScreen_to_reportSubmittedScreen, bundle)
     }
 
     override fun onResume() {

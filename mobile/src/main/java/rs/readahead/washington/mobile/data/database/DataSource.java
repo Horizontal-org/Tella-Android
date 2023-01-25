@@ -425,7 +425,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             final String query = SQLiteQueryBuilder.buildQueryString(
                     false,
                     D.T_REPORT_INSTANCE_VAULT_FILE,
-                    new String[]{D.C_VAULT_FILE_ID, D.C_STATUS},
+                    new String[]{D.C_VAULT_FILE_ID, D.C_STATUS,D.C_UPLOADED_SIZE},
                     D.C_REPORT_INSTANCE_ID + "= ?",
                     null, null, null, null
             );
@@ -2244,21 +2244,23 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
         int statusOrdinal = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_STATUS));
         String id = cursor.getString(cursor.getColumnIndexOrThrow(D.C_VAULT_FILE_ID));
+        long uploadedSize = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_UPLOADED_SIZE));
         formMediaFile.status = FormMediaFileStatus.values()[statusOrdinal];
-        formMediaFile.id  = id;
+        formMediaFile.id = id;
+        formMediaFile.uploadedSize = uploadedSize;
 
         return formMediaFile;
     }
 
     private VaultFile cursorToMediaFile(Cursor cursor) {
-      //  String path = cursor.getString(cursor.getColumnIndexOrThrow(D.C_PATH));
+        //  String path = cursor.getString(cursor.getColumnIndexOrThrow(D.C_PATH));
         String uid = cursor.getString(cursor.getColumnIndexOrThrow(D.C_UID));
         String fileName = cursor.getString(cursor.getColumnIndexOrThrow(D.C_FILE_NAME));
         MetadataEntity metadataEntity = new Gson().fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_METADATA)), MetadataEntity.class);
 
         VaultFile vaultFile = new VaultFile();
         vaultFile.id = cursor.getString(cursor.getColumnIndexOrThrow(D.C_UID));
-      //  vaultFile.path = path;
+        //  vaultFile.path = path;
         vaultFile.name = fileName;
         vaultFile.metadata = new EntityMapper().transform(metadataEntity);
         vaultFile.created = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_CREATED));
@@ -2397,6 +2399,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 values.put(D.C_REPORT_INSTANCE_ID, id);
                 values.put(D.C_VAULT_FILE_ID, mediaFile.id);
                 values.put(D.C_STATUS, mediaFile.status.ordinal());
+                values.put(D.C_UPLOADED_SIZE, mediaFile.uploadedSize);
                 database.insert(D.T_REPORT_INSTANCE_VAULT_FILE, null, values);
             }
 

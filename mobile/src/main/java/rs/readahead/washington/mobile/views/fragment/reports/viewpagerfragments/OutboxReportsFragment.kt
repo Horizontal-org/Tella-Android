@@ -17,6 +17,8 @@ import rs.readahead.washington.mobile.views.fragment.reports.adapter.EntityAdapt
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_FORM_INSTANCE
 import rs.readahead.washington.mobile.views.fragment.reports.entry.ReportsEntryViewModel
 
+const val BUNDLE_IS_FROM_OUTBOX = "bundle_is_from_outbox"
+
 @AndroidEntryPoint
 class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
     FragmentReportsListBinding::inflate
@@ -72,8 +74,8 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
         BottomSheetUtils.showEditDeleteMenuSheet(
             requireActivity().supportFragmentManager,
             instance.title,
-            getString(R.string.Uwazi_Action_EditDraft),
-            getString(R.string.Uwazi_Action_RemoveDraft),
+            getString(R.string.View_Report),
+            getString(R.string.Delete_Report),
             object : BottomSheetUtils.ActionSeleceted {
                 override fun accept(action: BottomSheetUtils.Action) {
                     if (action === BottomSheetUtils.Action.EDIT) {
@@ -85,7 +87,7 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
                 }
             },
             getString(R.string.action_delete) + " \"" + instance.title + "\"?",
-            requireContext().resources.getString(R.string.Uwazi_Subtitle_RemoveDraft),
+            requireContext().resources.getString(R.string.Delete_Report_Confirmation),
             requireContext().getString(R.string.action_remove),
             requireContext().getString(R.string.action_cancel)
         )
@@ -98,6 +100,8 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
     private fun openEntityInstance(reportFormInstance: ReportFormInstance) {
         val bundle = Bundle()
         bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportFormInstance)
+        bundle.putBoolean(BUNDLE_IS_FROM_OUTBOX, true)
+
         nav().navigate(R.id.action_reportsScreen_to_reportSendScreen, bundle)
     }
 

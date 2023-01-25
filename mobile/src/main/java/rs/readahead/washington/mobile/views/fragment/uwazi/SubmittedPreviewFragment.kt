@@ -36,9 +36,9 @@ class SubmittedPreviewFragment : BaseFragment() {
 
     private fun initObservers() {
         with(viewModel) {
-            instanceDeleteD.observe(viewLifecycleOwner, { deleted ->
+            instanceDeleteD.observe(viewLifecycleOwner) { deleted ->
                 if (deleted) nav().popBackStack()
-            })
+            }
         }
     }
 

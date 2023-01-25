@@ -117,6 +117,7 @@ class ReportsEntryViewModel @Inject constructor(
     fun listDrafts() {
         _progress.postValue(true)
         getReportsUseCase.setEntityStatus(EntityStatus.DRAFT)
+
         getReportsUseCase.execute(onSuccess = { result ->
             val resultList = mutableListOf<ViewEntityTemplateItem>()
 
@@ -125,7 +126,6 @@ class ReportsEntryViewModel @Inject constructor(
                     instance.toViewEntityInstanceItem(onOpenClicked = { openInstance(instance) },
                         onMoreClicked = { onMoreClicked(instance) })
                 )
-
             }
             _draftListReportFormInstance.postValue(resultList)
         }, onError = {
@@ -353,6 +353,10 @@ class ReportsEntryViewModel @Inject constructor(
                         instance.status = EntityStatus.SUBMISSION_ERROR
                         _entityStatus.postValue(instance)
                     }
+                    .doOnDispose {
+                        instance.status = EntityStatus.PAUSED
+                        _entityStatus.postValue(instance)
+                    }
                     .subscribe { reportPostResult ->
                         instance.status = EntityStatus.SUBMISSION_PARTIAL_PARTS
                         instance.reportApiId = reportPostResult.id
@@ -376,25 +380,26 @@ class ReportsEntryViewModel @Inject constructor(
                             .subscribeOn(Schedulers.io(), true)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({ progressInfo: UploadProgressInfo ->
-
                                 when (progressInfo.status) {
                                     UploadProgressInfo.Status.ERROR, UploadProgressInfo.Status.UNAUTHORIZED, UploadProgressInfo.Status.UNKNOWN_HOST, UploadProgressInfo.Status.UNKNOWN, UploadProgressInfo.Status.CONFLICT -> {
                                         instance.widgetMediaFiles.first { it.id == progressInfo.fileId }
                                             .apply {
                                                 status = FormMediaFileStatus.NOT_SUBMITTED
+                                                uploadedSize = progressInfo.current
                                             }
                                         dataSource.saveInstance(instance)
                                     }
-                                    UploadProgressInfo.Status.FINISHED, UploadProgressInfo.Status.OK -> {
+                                    UploadProgressInfo.Status.FINISHED, UploadProgressInfo.Status.OK, UploadProgressInfo.Status.STARTED -> {
                                         instance.widgetMediaFiles.first { it.id == progressInfo.fileId }
                                             .apply {
                                                 status = FormMediaFileStatus.SUBMITTED
+                                                uploadedSize = progressInfo.current
                                             }
+                                        _progressInfo.postValue(Pair(progressInfo, instance))
                                     }
                                     else -> {
                                     }
                                 }
-                                _progressInfo.postValue(Pair(progressInfo, instance))
                             }) { throwable: Throwable? ->
                                 instance.status = EntityStatus.SUBMISSION_ERROR
                                 _entityStatus.postValue(instance)
@@ -425,7 +430,7 @@ class ReportsEntryViewModel @Inject constructor(
     }
 
     fun dispose() {
-        disposables.clear()
+        disposables.dispose()
     }
 
     override fun onCleared() {
