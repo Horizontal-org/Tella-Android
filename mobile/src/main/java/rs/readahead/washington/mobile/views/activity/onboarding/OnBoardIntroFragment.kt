@@ -21,21 +21,17 @@ class OnBoardIntroFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initView(view)
     }
+
     override fun onResume() {
         super.onResume()
         (activity as OnBoardActivityInterface).enableSwipe(
-            isSwipeable = false,
-            isTabLayoutVisible = false
+            isSwipeable = true, isTabLayoutVisible = true
         )
         (activity as OnBoardActivityInterface).showButtons(
-            isNextButtonVisible = false,
-            isBackButtonVisible = false
+            isNextButtonVisible = true, isBackButtonVisible = true
         )
-
-
     }
 
     override fun initView(view: View) {
@@ -48,11 +44,6 @@ class OnBoardIntroFragment : BaseFragment() {
 
         val startBtn = view.findViewById<TextView>(R.id.startBtn)
         startBtn.setOnClickListener {
-          /*  activity.addFragment(
-                this,
-                OnBoardCameraFragment(),
-                R.id.rootOnboard
-            )*/
             (activity as OnBoardingActivity).onNextPressed()
 
         }

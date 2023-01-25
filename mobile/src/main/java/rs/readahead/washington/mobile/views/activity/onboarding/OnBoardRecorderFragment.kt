@@ -13,9 +13,9 @@ class OnBoardRecorderFragment : BaseFragment() {
     private lateinit var backBtn: TextView
     private lateinit var nextBtn: TextView
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         return inflater.inflate(R.layout.onboard_recorder_fragment, container, false)
     }
@@ -41,14 +41,7 @@ class OnBoardRecorderFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
-     //   (activity as OnBoardActivityInterface).setCurrentIndicator(1)
-
         backBtn = view.findViewById(R.id.back_btn)
-       /* backBtn.setOnClickListener {
-            (activity as OnBoardActivityInterface).setCurrentIndicator(0)
-            activity.onBackPressed()
-        }*/
-
         nextBtn = view.findViewById(R.id.next_btn)
         nextBtn.setOnClickListener {
             (activity as OnBoardingActivity).onNextPressed()

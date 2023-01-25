@@ -48,16 +48,11 @@ class OnBoardLockFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         (activity as OnBoardActivityInterface).enableSwipe(
-            isSwipeable = true,
-            isTabLayoutVisible = true
-        )
+            isSwipeable = true, isTabLayoutVisible = true)
         (activity as OnBoardActivityInterface).showButtons(
-            isNextButtonVisible = false,
-            isBackButtonVisible = true
-        )
-
-
+            isNextButtonVisible = true, isBackButtonVisible = true)
     }
+
     override fun initView(view: View) {
        arguments?.let { isFromSettings=  it.getBoolean(IS_FROM_SETTINGS,false) }
         lockPasswordBtn = view.findViewById(R.id.lockPasswordBtn)
