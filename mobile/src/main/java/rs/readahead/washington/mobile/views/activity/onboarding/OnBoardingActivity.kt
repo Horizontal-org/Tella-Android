@@ -337,6 +337,10 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         backBtn.isVisible = isBackButtonVisible
     }
 
+    override fun hideViewpager() {
+        viewPager.visibility = View.GONE
+    }
+
     private fun handleCustomizationCode(code: String) {
         showToast(code)
     }

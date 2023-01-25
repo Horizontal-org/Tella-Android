@@ -38,6 +38,8 @@
         app:tabBackground="@drawable/tab_selector"
         android:visibility="gone"
         app:tabGravity="center"
+        app:tabPaddingStart="8dp"
+        app:tabPaddingEnd="8dp"
         app:tabIndicatorHeight="0dp" />
 
     <TextView

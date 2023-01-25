@@ -41,9 +41,6 @@ class OnBoardCameraFragment : BaseFragment() {
 
     }
     override fun initView(view: View) {
-        (activity as OnBoardActivityInterface).showProgress()
-      /*  (activity as OnBoardActivityInterface).initProgress(5)
-        (activity as OnBoardActivityInterface).setCurrentIndicator(0)*/
 
         backBtn = view.findViewById(R.id.back_btn)
         backBtn.setOnClickListener {
