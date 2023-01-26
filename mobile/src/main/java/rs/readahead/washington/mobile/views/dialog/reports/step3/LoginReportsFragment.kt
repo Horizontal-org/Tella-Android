@@ -65,6 +65,7 @@ class LoginReportsFragment :
                 }
             }
         }
+        binding?.backBtn?.setOnClickListener { baseActivity.onBackPressed() }
     }
 
     private fun initObservers() {
