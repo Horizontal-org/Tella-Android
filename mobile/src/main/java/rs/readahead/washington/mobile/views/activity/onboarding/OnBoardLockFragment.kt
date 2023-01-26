@@ -50,7 +50,7 @@ class OnBoardLockFragment : BaseFragment() {
         (activity as OnBoardActivityInterface).enableSwipe(
             isSwipeable = true, isTabLayoutVisible = true)
         (activity as OnBoardActivityInterface).showButtons(
-            isNextButtonVisible = true, isBackButtonVisible = true)
+            isNextButtonVisible = false, isBackButtonVisible = true)
     }
 
     override fun initView(view: View) {
