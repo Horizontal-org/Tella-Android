@@ -36,9 +36,16 @@ import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragme
 import rs.readahead.washington.mobile.views.dialog.uwazi.SharedLiveData.createServer
 import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity
 
+private const val ONBOARDING_INTRODUCTION_VIEW_INDEX = 0
+private const val ONBOARDING_CAMERA_VIEW_INDEX = 1
+private const val ONBOARDING_RECORDER_VIEW_INDEX = 2
+private const val ONBOARDING_FILES_VIEW_INDEX = 3
+private const val ONBOARDING_LOCK_VIEW_INDEX = 4
+
 class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     IOnBoardPresenterContract.IView, CollectServerDialogHandler, TellaUploadServerDialogHandler {
 
+  
     private var viewpagerItemsCount = 0
     private val isFromSettings by lazy { intent.getBooleanExtra(IS_FROM_SETTINGS, false) }
     private val isOnboardLockSet by lazy { intent.getBooleanExtra(IS_ONBOARD_LOCK_SET, false) }
@@ -46,11 +53,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     private lateinit var backBtn: TextView
     private lateinit var nextBtn: TextView
     private lateinit var binding: ActivityOnboardingBinding
-    val ONBOARDING_INTRODUCTION_VIEW_INDEX = 0
-    val ONBOARDING_CAMERA_VIEW_INDEX = 1
-    val ONBOARDING_RECORDER_VIEW_INDEX = 2
-    val ONBOARDING_FILES_VIEW_INDEX = 3
-    val ONBOARDING_LOCK_VIEW_INDEX = 4
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,12 +82,10 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     }
 
     private fun initButtons() {
-        backBtn = findViewById(R.id.back_btn)
-        backBtn.setOnClickListener {
+        binding.backBtn.setOnClickListener {
             onBackPressed()
         }
-        nextBtn = findViewById(R.id.next_btn)
-        nextBtn.setOnClickListener {
+        binding.nextBtn.setOnClickListener {
             onNextPressed()
 
         }
@@ -328,5 +329,8 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
             return fragment
         }
 
+    }
+
+    companion object {
     }
 }
