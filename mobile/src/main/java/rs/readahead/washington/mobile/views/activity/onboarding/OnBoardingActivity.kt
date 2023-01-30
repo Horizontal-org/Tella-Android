@@ -300,8 +300,8 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     }
 
     override fun showButtons(isNextButtonVisible: Boolean, isBackButtonVisible: Boolean) {
-        nextBtn.isVisible = isNextButtonVisible
-        backBtn.isVisible = isBackButtonVisible
+        binding.nextBtn.isVisible = isNextButtonVisible
+        binding.backBtn.isVisible = isBackButtonVisible
     }
 
     override fun hideViewpager() {
