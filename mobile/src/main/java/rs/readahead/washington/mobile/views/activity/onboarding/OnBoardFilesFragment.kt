@@ -22,27 +22,21 @@ class OnBoardFilesFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initView(view)
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as OnBoardActivityInterface).enableSwipe(
+            isSwipeable = true, isTabLayoutVisible = true
+        )
+        (activity as OnBoardActivityInterface).showButtons(
+            isNextButtonVisible = true, isBackButtonVisible = true
+        )
+    }
+
     override fun initView(view: View) {
-        (activity as OnBoardActivityInterface).setCurrentIndicator(2)
-
         backBtn = view.findViewById(R.id.back_btn)
-        backBtn.setOnClickListener {
-            (activity as OnBoardActivityInterface).setCurrentIndicator(1)
-            activity.onBackPressed()
-        }
-
         nextBtn = view.findViewById(R.id.next_btn)
-        nextBtn.setOnClickListener {
-            (activity as OnBoardActivityInterface).setCurrentIndicator(3)
-            activity.addFragment(
-                this,
-                OnBoardLockFragment.newInstance(false),
-                R.id.rootOnboard
-            )
-        }
     }
 }
