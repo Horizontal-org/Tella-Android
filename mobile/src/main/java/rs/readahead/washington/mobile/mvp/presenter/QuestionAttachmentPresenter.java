@@ -66,7 +66,7 @@ public class QuestionAttachmentPresenter implements IQuestionAttachmentPresenter
                 .doOnSubscribe(disposable -> view.onImportStarted())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onImportEnded())
-                .subscribe(vaultFile -> view.onMediaFileImported(vaultFile), throwable -> {
+                .subscribe(vaultFile -> view.onMediaFileImported(vaultFile.blockingGet()), throwable -> {
                     FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onImportError(throwable);
                 })
@@ -80,7 +80,7 @@ public class QuestionAttachmentPresenter implements IQuestionAttachmentPresenter
                 .doOnSubscribe(disposable -> view.onImportStarted())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> view.onImportEnded())
-                .subscribe(mediaHolder -> view.onMediaFileImported(mediaHolder), throwable -> {
+                .subscribe(mediaHolder -> view.onMediaFileImported(mediaHolder.blockingGet()), throwable -> {
                     FirebaseCrashlytics.getInstance().recordException(throwable);
                     view.onImportError(throwable);
                 })

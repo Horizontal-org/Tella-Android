@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.LiveData
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import org.hzontal.shared_ui.R
@@ -476,6 +477,61 @@ BottomSheetUtils {
 
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
+    }
+
+    @JvmStatic
+    fun showConfirmSheet(
+        fragmentManager: FragmentManager,
+        titleText: LiveData<String>,
+        descriptionText: String?,
+        actionButtonLabel: String? = null,
+        cancelButtonLabel: String? = null,
+        consumer: ActionConfirmed,
+        isAlreadyShown : Boolean
+
+    ) : CustomBottomSheetFragment {
+
+        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
+            .page(R.layout.standar_sheet_layout)
+            .cancellable(true)
+            .screenTag("ConfirmSheet")
+        customSheetFragment.holder(GenericSheetHolder(), object :
+            CustomBottomSheetFragment.Binder<GenericSheetHolder> {
+            override fun onBind(holder: GenericSheetHolder) {
+                with(holder) {
+                    title.text = titleText.value
+                    description.text = descriptionText
+                    actionButtonLabel?.let {
+                        actionButton.text = it
+                    }
+                    cancelButtonLabel?.let {
+                        cancelButton.text = it
+                    }
+
+                    actionButton.setOnClickListener {
+                        consumer.accept(isConfirmed = true)
+                        customSheetFragment.dismiss()
+                    }
+
+                    cancelButton.setOnClickListener {
+                        consumer.accept(isConfirmed = false)
+                        customSheetFragment.dismiss()
+                    }
+
+                    actionButton.visibility =
+                        if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+
+                }
+            }
+        })
+
+        customSheetFragment.transparentBackground()
+        if (!isAlreadyShown){
+            customSheetFragment.launch()
+        }
+
+       // customSheetFragment.onResume()
+        return customSheetFragment
     }
 
     class ConfirmImageSheetHolder : CustomBottomSheetFragment.PageHolder() {

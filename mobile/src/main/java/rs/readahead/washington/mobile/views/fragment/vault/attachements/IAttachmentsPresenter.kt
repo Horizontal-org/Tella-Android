@@ -6,6 +6,7 @@ import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Sort
 import rs.readahead.washington.mobile.mvp.contract.IBasePresenter
+import java.util.concurrent.atomic.AtomicInteger
 
 class IAttachmentsPresenter {
     interface IView {
@@ -41,6 +42,7 @@ class IAttachmentsPresenter {
         fun onMoveFilesSuccess(filesSize:Int)
         fun onMoveFilesError(error: Throwable?)
         fun getContext(): Context?
+        fun onGetProgressPercent(numberFilesImported: Int, totalFilesToImport: Int)
     }
 
     interface IPresenter : IBasePresenter {

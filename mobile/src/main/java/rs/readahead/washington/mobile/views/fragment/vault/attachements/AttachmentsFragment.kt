@@ -25,6 +25,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.updatePadding
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -47,6 +48,7 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.RadioOptionConsumer
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showRadioListOptionsSheet
+import org.hzontal.shared_ui.bottomsheet.CustomBottomSheetFragment
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils
 import org.hzontal.shared_ui.breadcrumb.BreadcrumbsView
 import org.hzontal.shared_ui.breadcrumb.DefaultBreadcrumbsCallback
@@ -71,6 +73,7 @@ import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import rs.readahead.washington.mobile.views.fragment.vault.info.VAULT_FILE_INFO_TOOLBAR
 import timber.log.Timber
+import java.util.concurrent.atomic.AtomicInteger
 
 
 const val VAULT_FILE_ARG = "VaultFileArg"
@@ -152,8 +155,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 true
             }
             R.id.action_share -> {
-                activity.maybeChangeTemporaryTimeout{
-                        shareVaultFiles()
+                activity.maybeChangeTemporaryTimeout {
+                    shareVaultFiles()
                 }
                 return true
             }
@@ -337,6 +340,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                         }
 
                         override fun import() {
+                            //first step in importing files
                             importAndDelete = false
                             activity.maybeChangeTemporaryTimeout {
                                 MediaFileHandler.startImportFiles(activity, true, getCurrentType())
@@ -700,6 +704,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
 
     override fun onMediaImported(vaultFile: List<VaultFile?>) {
         attachmentsPresenter.addNewVaultFiles()
+
+
     }
 
     override fun onMediaImportedWithDelete(vaultFile: List<VaultFile?>, uris: List<Uri?>) {
@@ -827,7 +833,11 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         currentMove = null
         selectMode = SelectMode.SELECT_ALL
         handleSelectMode()
-        DialogUtils.showBottomMessage(activity, resources.getQuantityString(R.plurals.Vault_File_Successfully_Moved,filesSize), false)
+        DialogUtils.showBottomMessage(
+            activity,
+            resources.getQuantityString(R.plurals.Vault_File_Successfully_Moved, filesSize),
+            false
+        )
 
     }
 
@@ -836,6 +846,25 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
         currentMove = null
         selectMode = SelectMode.SELECT_ALL
         handleSelectMode()
+    }
+
+    override fun onGetProgressPercent(numberFilesImported: Int, totalFilesToImport: Int) {
+        //passed here when  files  imported
+        var mutableLiveData = MutableLiveData("{$numberFilesImported/$totalFilesToImport}")
+
+            showConfirmSheet(
+            activity.supportFragmentManager,
+            mutableLiveData,
+            getString(R.string.gallery_save_to_device_dialog_title),
+            "",
+            "",
+            consumer = object : ActionConfirmed {
+                override fun accept(isConfirmed: Boolean) {
+
+                }
+            },
+            numberFilesImported > 1
+        )
     }
 
     private fun exportVaultFiles(
@@ -990,6 +1019,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                             listVaultFilesUris.add(returnedUri)
                         }
                     }
+
+                    //import multiple files
                     attachmentsPresenter.importVaultFiles(
                         listVaultFilesUris,
                         currentRootID,
