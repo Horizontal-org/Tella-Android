@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.views.fragment.vault.attachements
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
@@ -10,21 +11,15 @@ import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import okhttp3.Request
-import okhttp3.RequestBody
-import okhttp3.Response
 import rs.readahead.washington.mobile.MyApplication
-import rs.readahead.washington.mobile.data.repository.SkippableMediaFileRequestBody
-import rs.readahead.washington.mobile.data.upload.TUSClient
-import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.media.MediaFileHandler.walkAllFiles
 import rs.readahead.washington.mobile.media.MediaFileHandler.walkAllFilesWithDirectories
-import java.util.concurrent.atomic.AtomicInteger
 
 class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
     IAttachmentsPresenter.IPresenter {
     private val disposables = CompositeDisposable()
+    val counterData = MutableLiveData<Int>()
 
     override fun getFiles(parent: String?, filterType: FilterType?, sort: Sort?) {
         MyApplication.rxVault.get(parent)
@@ -51,39 +46,12 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
                 view?.onGetRootIdError(throwable)
             }.dispose()
     }
-    private fun progressImportFile(counter: Int): Flowable<Int?>? {
-        return Flowable.create({ emitter: FlowableEmitter<Int?> ->
-            try {
-              //  emitter.onNext()
-                emitter.onComplete()
-            } catch (e: Exception) {
-                emitter.onError((e))
-            }
-        }, BackpressureStrategy.LATEST)
-    }
 
-    @SuppressLint("CheckResult")
     override fun importVaultFiles(uris: List<Uri?>, parentId: String?, deleteOriginal: Boolean) {
         var counter = 0
-            //AtomicInteger(0)
-
-        val list = mutableListOf(10,20,30,40)
-
-        Flowable.fromIterable(list)
-           // .flatMap { i-> Observable.just(counter++) }
-            .doOnComplete {
-                view?.onImportEnded()
-            }
-            .subscribeOn(Schedulers.computation())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                counter++
-                view?.onGetProgressPercent((counter), uris.size)
-            }
-
-       /* Flowable.fromIterable<Uri>(uris)
-            .flatMap {
-                    uri -> MediaFileHandler.importVaultFileUri(view?.getContext(),uri, parentId).toFlowable()
+        Flowable.fromIterable<Uri>(uris)
+            .flatMap { uri ->
+                MediaFileHandler.importVaultFileUri(view?.getContext(), uri, parentId).toFlowable()
             }
             .doOnComplete {
                 view?.onImportEnded()
@@ -91,32 +59,12 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnNext {
-                counter.incrementAndGet()
-                view?.onGetProgressPercent((counter), uris.size)
-            }.subscribe()*/
-
-
-
-        /*     disposables.add(Observable.fromCallable {
-                 MediaFileHandler.importVaultFilesUris(
-                     view?.getContext(), uris, parentId
-                 )
-             }
-                 .subscribeOn(Schedulers.computation())
-                 .doOnSubscribe { view?.onImportStarted() }
-                 .observeOn(AndroidSchedulers.mainThread())
-                 .doFinally {` view?.onImportEnded()` }
-                 .subscribe(
-                     { vaultFiles ->
-                         // passed here when import file
-                         view?.onMediaImported(vaultFiles)
-
-                     }
-                 ) { throwable: Throwable? ->
-                     FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                     view?.onImportError(throwable)
-                 })*/
-
+                if (counter == 0)
+                    view?.onGetProgressPercent(counter++, uris.size)
+                else
+                    counterData.postValue(counter++)
+            }
+            .subscribe()
     }
 
     override fun addNewVaultFiles() {

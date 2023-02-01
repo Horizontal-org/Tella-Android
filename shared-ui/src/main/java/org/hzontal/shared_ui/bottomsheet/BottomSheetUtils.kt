@@ -9,7 +9,11 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import org.hzontal.shared_ui.R
@@ -482,14 +486,14 @@ BottomSheetUtils {
     @JvmStatic
     fun showConfirmSheet(
         fragmentManager: FragmentManager,
-        titleText: LiveData<String>,
+        titleText: MutableLiveData<Int>,
         descriptionText: String?,
         actionButtonLabel: String? = null,
         cancelButtonLabel: String? = null,
         consumer: ActionConfirmed,
-        isAlreadyShown : Boolean
+        lifecycleOwner: LifecycleOwner
 
-    ) : CustomBottomSheetFragment {
+    )  {
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.standar_sheet_layout)
@@ -499,7 +503,10 @@ BottomSheetUtils {
             CustomBottomSheetFragment.Binder<GenericSheetHolder> {
             override fun onBind(holder: GenericSheetHolder) {
                 with(holder) {
-                    title.text = titleText.value
+                    titleText.observe(lifecycleOwner)
+                    {
+                        title.text = titleText.value.toString()
+                    }
                     description.text = descriptionText
                     actionButtonLabel?.let {
                         actionButton.text = it
@@ -526,12 +533,7 @@ BottomSheetUtils {
         })
 
         customSheetFragment.transparentBackground()
-        if (!isAlreadyShown){
-            customSheetFragment.launch()
-        }
-
-       // customSheetFragment.onResume()
-        return customSheetFragment
+        customSheetFragment.launch()
     }
 
     class ConfirmImageSheetHolder : CustomBottomSheetFragment.PageHolder() {

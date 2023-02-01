@@ -849,12 +849,9 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
     }
 
     override fun onGetProgressPercent(numberFilesImported: Int, totalFilesToImport: Int) {
-        //passed here when  files  imported
-        var mutableLiveData = MutableLiveData("{$numberFilesImported/$totalFilesToImport}")
-
             showConfirmSheet(
             activity.supportFragmentManager,
-            mutableLiveData,
+            attachmentsPresenter.counterData,
             getString(R.string.gallery_save_to_device_dialog_title),
             "",
             "",
@@ -862,8 +859,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                 override fun accept(isConfirmed: Boolean) {
 
                 }
-            },
-            numberFilesImported > 1
+            }, viewLifecycleOwner
         )
     }
 
@@ -1019,8 +1015,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
                             listVaultFilesUris.add(returnedUri)
                         }
                     }
-
-                    //import multiple files
+                    //import multiple files call
                     attachmentsPresenter.importVaultFiles(
                         listVaultFilesUris,
                         currentRootID,
