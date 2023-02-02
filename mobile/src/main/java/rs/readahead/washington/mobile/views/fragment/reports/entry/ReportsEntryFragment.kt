@@ -181,14 +181,16 @@ class ReportsEntryFragment :
             }
             reportInstance.observe(viewLifecycleOwner) { instance ->
                 when (instance.status) {
-                    EntityStatus.DRAFT -> showToast(getString(R.string.Reports_Saved_Draft))
+                    EntityStatus.DRAFT -> {
+                        reportFormInstance = instance
+                        showToast(getString(R.string.Reports_Saved_Draft))
+                    }
                     EntityStatus.FINALIZED -> {
                         nav().popBackStack()
                         SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
                     }
                     else -> {}
                 }
-
             }
         }
 
