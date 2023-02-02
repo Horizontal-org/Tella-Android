@@ -426,12 +426,12 @@
   <string name="Vault_CreateFolder_SheetAction">إنشاء مجلد جديد</string>
   <string name="ServerSettings_ServerName_ToolTip">أعط الخادم الخاص بك اسمًا للتعرف عليه في حال إضافة المزيد من الخوادم لاحقًا. يمكن أن يكون هذا الاسم اسم المنظمة أو اسم المشروع أو غير ذلك من الأسماء.</string>
   <plurals name="Vault_Importing_SheetProgress">
-    <item quantity="zero">%s ملف مستورد</item>
-    <item quantity="one">%s ملف مستورد</item>
-    <item quantity="two">%s ملفان مستوردان</item>
-    <item quantity="few">%s من الملفات مستوردة</item>
-    <item quantity="many">%s من الملفات مستوردة</item>
-    <item quantity="other">%s من الملفات مستوردة</item>
+    <item quantity="zero">ملف مستورد</item>
+    <item quantity="one"> ملف مستورد</item>
+    <item quantity="two"> ملفان مستوردان</item>
+    <item quantity="few"> من الملفات مستوردة</item>
+    <item quantity="many"> من الملفات مستوردة</item>
+    <item quantity="other"> من الملفات مستوردة</item>
   </plurals>
   <string name="Vault_Importing_SheetTitle">الاستيراد والتشفير</string>
   <string name="Rec_Exit_SheetTitle">هل ترغب في حفظ التسجيل؟</string>
