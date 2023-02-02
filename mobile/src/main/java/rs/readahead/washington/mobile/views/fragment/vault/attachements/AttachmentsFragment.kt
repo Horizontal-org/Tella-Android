@@ -853,13 +853,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener,
             activity.supportFragmentManager,
             attachmentsPresenter.counterData,
             getString(R.string.gallery_save_to_device_dialog_title),
-            "",
-            "",
-            consumer = object : ActionConfirmed {
-                override fun accept(isConfirmed: Boolean) {
-
-                }
-            }, viewLifecycleOwner
+            "cancel", viewLifecycleOwner
         )
     }
 

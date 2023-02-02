@@ -16,6 +16,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.progressindicator.LinearProgressIndicator
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.hzontal.shared_ui.R
 import org.hzontal.shared_ui.buttons.RoundButton
 import org.hzontal.shared_ui.utils.DialogUtils
@@ -488,9 +491,7 @@ BottomSheetUtils {
         fragmentManager: FragmentManager,
         titleText: MutableLiveData<Int>,
         descriptionText: String?,
-        actionButtonLabel: String? = null,
         cancelButtonLabel: String? = null,
-        consumer: ActionConfirmed,
         lifecycleOwner: LifecycleOwner
 
     )  {
@@ -505,28 +506,17 @@ BottomSheetUtils {
                 with(holder) {
                     titleText.observe(lifecycleOwner)
                     {
-                        title.text = titleText.value.toString()
+
+                        val handler = Handler()
+                        handler.postDelayed(Runnable {
+                            title.text = titleText.value.toString()
+                          }, 3000)
                     }
                     description.text = descriptionText
-                    actionButtonLabel?.let {
-                        actionButton.text = it
-                    }
+
                     cancelButtonLabel?.let {
                         cancelButton.text = it
                     }
-
-                    actionButton.setOnClickListener {
-                        consumer.accept(isConfirmed = true)
-                        customSheetFragment.dismiss()
-                    }
-
-                    cancelButton.setOnClickListener {
-                        consumer.accept(isConfirmed = false)
-                        customSheetFragment.dismiss()
-                    }
-
-                    actionButton.visibility =
-                        if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
 
                 }
             }

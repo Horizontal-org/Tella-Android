@@ -1,13 +1,14 @@
 package rs.readahead.washington.mobile.views.fragment.vault.attachements
 
-import android.annotation.SuppressLint
 import android.net.Uri
+import android.os.Handler
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Sort
-import io.reactivex.*
+import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -60,8 +61,9 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
             .observeOn(AndroidSchedulers.mainThread())
             .doOnNext {
                 if (counter == 0)
+                {
                     view?.onGetProgressPercent(counter++, uris.size)
-                else
+                }
                     counterData.postValue(counter++)
             }
             .subscribe()
