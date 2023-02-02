@@ -46,6 +46,7 @@ class ReportsRepositoryImp @Inject internal constructor(
                     projectId = result.id
                     projectName = result.name
                     projectSlug = result.slug
+                    name = result.name
                 }
             }
         }.subscribeOn(Schedulers.io())

@@ -20,9 +20,7 @@ import rs.readahead.washington.mobile.views.dialog.reports.step3.LoginReportsFra
 class EnterUploadServerFragment :
     BaseBindingFragment<FragmentEnterServerBinding>(FragmentEnterServerBinding::inflate) {
     private val serverReports: TellaReportServer by lazy {
-        TellaReportServer().apply {
-            name = "Tella web"
-        }
+        TellaReportServer()
     }
 
     companion object {
