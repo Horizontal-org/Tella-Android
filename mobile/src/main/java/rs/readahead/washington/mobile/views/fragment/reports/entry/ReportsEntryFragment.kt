@@ -16,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.IVaultFilesSelector
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultSelectFilesSheet
 import org.hzontal.shared_ui.dropdownlist.DropDownItem
+import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsEntryBinding
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
@@ -183,7 +184,10 @@ class ReportsEntryFragment :
                 when (instance.status) {
                     EntityStatus.DRAFT -> {
                         reportFormInstance = instance
-                        showToast(getString(R.string.Reports_Saved_Draft))
+                        DialogUtils.showBottomMessage(
+                            baseActivity, getString(R.string.Reports_Saved_Draft),
+                            false
+                        )
                     }
                     EntityStatus.FINALIZED -> {
                         nav().popBackStack()
