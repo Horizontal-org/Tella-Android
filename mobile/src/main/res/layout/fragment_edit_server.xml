@@ -70,7 +70,7 @@
             android:layout_marginStart="@dimen/collect_form_padding_vertical"
             android:gravity="start"
             android:padding="2dp"
-            android:text="@string/settings.docu_field_server.url"
+            android:text="@string/settings.docu_field_username"
             android:textStyle="bold" />
 
         <TextView
@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/collect_form_padding_vertical"
             android:padding="2dp"
-            android:text="@string/settings.docu_field_server.name" />
+            android:text="@string/settings.docu_field_username" />
 
         <View
             style="@style/SettingsMainShadowLine"
