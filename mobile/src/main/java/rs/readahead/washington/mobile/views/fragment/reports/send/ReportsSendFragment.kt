@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentSendReportBinding
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
+import rs.readahead.washington.mobile.util.ConnectionLiveData
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_FORM_INSTANCE
@@ -24,7 +26,8 @@ class ReportsSendFragment :
     private val viewModel by viewModels<ReportsEntryViewModel>()
     private lateinit var endView: ReportsFormEndView
     private var reportInstance: ReportFormInstance? = null
-    private var isFromOutbox = false;
+    private var isFromOutbox = false
+    private lateinit var connectionLiveData: ConnectionLiveData
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
@@ -32,6 +35,12 @@ class ReportsSendFragment :
     }
 
     private fun initData() {
+        connectionLiveData = ConnectionLiveData(baseActivity)
+
+        connectionLiveData.observe(viewLifecycleOwner) { isOnline ->
+            checkAndSubmitEntity(isOnline)
+        }
+
         with(viewModel) {
 
             progressInfo.observe(viewLifecycleOwner) { progress ->
@@ -98,6 +107,18 @@ class ReportsSendFragment :
         }
         binding?.toolbar?.setRightIcon(-1)
         reportInstance?.let {
+            checkAndSubmitEntity(MyApplication.isConnectedToInternet(baseActivity))
+        }
+        if (reportInstance?.status == EntityStatus.SUBMITTED) {
+            binding?.nextBtn?.hide()
+        }
+        highlightSubmitButton()
+    }
+
+    private fun checkAndSubmitEntity(isOnline: Boolean) {
+        if (!isOnline) {
+            binding?.nextBtn?.text = getString(R.string.Reports_Resume)
+        } else {
             if (isFromOutbox) {
                 submitEntity()
             } else {
@@ -110,14 +131,9 @@ class ReportsSendFragment :
                     }
                 }
             }
+        }
 
-        }
-        if (reportInstance?.status == EntityStatus.SUBMITTED) {
-            binding?.nextBtn?.hide()
-        }
-        highlightSubmitButton()
     }
-
 
     private fun highlightSubmitButton() {
         binding?.nextBtn?.setOnClickListener {
@@ -150,7 +166,7 @@ class ReportsSendFragment :
                 reportFormInstance.title,
                 reportFormInstance.description,
             )
-            endView.setInstance(reportFormInstance, false, true)
+            endView.setInstance(reportFormInstance, MyApplication.isConnectedToInternet(baseActivity), true)
             binding?.endViewContainer?.removeAllViews()
             binding?.endViewContainer?.addView(endView)
             endView.clearPartsProgress(reportFormInstance)

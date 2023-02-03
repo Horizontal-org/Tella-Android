@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.views.fragment.reports.entry
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,9 +19,11 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
+import rs.readahead.washington.mobile.domain.exception.NoConnectivityException
 import rs.readahead.washington.mobile.domain.repository.reports.ReportsRepository
 import rs.readahead.washington.mobile.domain.usecases.reports.*
 import rs.readahead.washington.mobile.util.fromJsonToObjectList
+import rs.readahead.washington.mobile.util.jobs.TellaRequestUploadJob
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 import rs.readahead.washington.mobile.views.fragment.reports.mappers.toViewEntityInstanceItem
 import timber.log.Timber
@@ -338,94 +339,114 @@ class ReportsEntryViewModel @Inject constructor(
         })
     }
 
-    @SuppressLint("CheckResult")
     fun submitReport(instance: ReportFormInstance) {
         _progress.postValue(true)
-        getReportsServersUseCase.execute(onSuccess = { servers ->
-            val server = servers.first { it.id == instance.serverId }
-            // if (!server.isActivatedBackgroundUpload) {
-            disposables.add(
-                reportsRepository.submitReport(
-                    server,
-                    ReportBodyEntity(instance.title, instance.description)
-                )
-                    .doOnError {
-                        instance.status = EntityStatus.SUBMISSION_ERROR
-                        _entityStatus.postValue(instance)
-                    }
-                    .doOnDispose {
-                        instance.status = EntityStatus.PAUSED
-                        _entityStatus.postValue(instance)
-                    }
-                    .subscribe { reportPostResult ->
-                        instance.status = EntityStatus.SUBMISSION_PARTIAL_PARTS
-                        instance.reportApiId = reportPostResult.id
-                        _entityStatus.postValue(instance)
-                        Flowable.fromIterable(instance.widgetMediaFiles)
-                            .flatMap { file ->
-                                reportsRepository.upload(
-                                    file,
-                                    server.url,
-                                    reportPostResult.id,
-                                    server.accessToken
-                                )
-                            }.doOnComplete {
-                                instance.status = EntityStatus.SUBMITTED
-                                instance.formPartStatus = FormMediaFileStatus.SUBMITTED
+        if (instance.reportApiId.isEmpty()) {
+            getReportsServersUseCase.execute(onSuccess = { servers ->
+                val server = servers.first { it.id == instance.serverId }
+                // if (!server.isActivatedBackgroundUpload) {
+                if (instance.reportApiId.isEmpty()) {
+                    disposables.add(
+                        reportsRepository.submitReport(
+                            server,
+                            ReportBodyEntity(instance.title, instance.description)
+                        )
+                            .doOnError { throwable ->
+                                if (throwable is NoConnectivityException) {
+                                    instance.status = EntityStatus.SUBMISSION_PENDING
+                                }else {
+                                    instance.status = EntityStatus.SUBMISSION_ERROR
+                                }
                                 _entityStatus.postValue(instance)
-                            }.doOnCancel {
+                                scheduleAutoUpload(server.isActivatedBackgroundUpload)
+                            }
+                            .doOnDispose {
                                 instance.status = EntityStatus.PAUSED
                                 _entityStatus.postValue(instance)
                             }
-                            .subscribeOn(Schedulers.io(), true)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({ progressInfo: UploadProgressInfo ->
-                                when (progressInfo.status) {
-                                    UploadProgressInfo.Status.ERROR, UploadProgressInfo.Status.UNAUTHORIZED, UploadProgressInfo.Status.UNKNOWN_HOST, UploadProgressInfo.Status.UNKNOWN, UploadProgressInfo.Status.CONFLICT -> {
-                                        instance.widgetMediaFiles.first { it.id == progressInfo.fileId }
-                                            .apply {
-                                                status = FormMediaFileStatus.NOT_SUBMITTED
-                                                uploadedSize = progressInfo.current
-                                            }
-                                        dataSource.saveInstance(instance)
-                                    }
-                                    UploadProgressInfo.Status.FINISHED, UploadProgressInfo.Status.OK, UploadProgressInfo.Status.STARTED -> {
-                                        instance.widgetMediaFiles.first { it.id == progressInfo.fileId }
-                                            .apply {
-                                                status = FormMediaFileStatus.SUBMITTED
-                                                uploadedSize = progressInfo.current
-                                            }
-                                        _progressInfo.postValue(Pair(progressInfo, instance))
-                                    }
-                                    else -> {
-                                    }
-                                }
-                            }) { throwable: Throwable? ->
-                                instance.status = EntityStatus.SUBMISSION_ERROR
-                                _entityStatus.postValue(instance)
-                                Timber.d(throwable)
-                                FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                            }
+                            .subscribe { reportPostResult ->
+                                submitFiles(instance, server, reportPostResult.id)
+                            })
+                } else {
+                    submitFiles(instance, server, instance.reportApiId)
+                }
 
-                    })
-
-        },
-            onError = {
-                instance.status = EntityStatus.SUBMISSION_ERROR
-                dataSource.saveInstance(instance)
             },
-            onFinished = {
+                onError = { throwable ->
+                    if (throwable is NoConnectivityException) {
+                        instance.status = EntityStatus.SUBMISSION_PENDING
+                    }else {
+                        instance.status = EntityStatus.SUBMISSION_ERROR
+                    }
+                    dataSource.saveInstance(instance).blockingGet()
+                },
+                onFinished = {
 
-            }
+                }
+            )
+        }
+
+    }
+
+    private fun submitFiles(
+        instance: ReportFormInstance,
+        server: TellaReportServer,
+        reportApiId: String
+    ) {
+        instance.status = EntityStatus.SUBMISSION_PARTIAL_PARTS
+        instance.reportApiId = reportApiId
+        _entityStatus.postValue(instance)
+        disposables.add(
+            Flowable.fromIterable(instance.widgetMediaFiles)
+                .flatMap { file ->
+                    reportsRepository.upload(
+                        file,
+                        server.url,
+                        reportApiId,
+                        server.accessToken
+                    )
+                }.doOnComplete {
+                    instance.status = EntityStatus.SUBMITTED
+                    instance.formPartStatus = FormMediaFileStatus.SUBMITTED
+                    _entityStatus.postValue(instance)
+                }.doOnCancel {
+                    instance.status = EntityStatus.PAUSED
+                    _entityStatus.postValue(instance)
+                }.doOnError {
+                    instance.status = EntityStatus.SUBMISSION_ERROR
+                    _entityStatus.postValue(instance)
+                    scheduleAutoUpload(server.isActivatedBackgroundUpload)
+                }
+                .doOnNext { progressInfo: UploadProgressInfo ->
+                    when (progressInfo.status) {
+                        UploadProgressInfo.Status.ERROR, UploadProgressInfo.Status.UNAUTHORIZED, UploadProgressInfo.Status.UNKNOWN_HOST, UploadProgressInfo.Status.UNKNOWN, UploadProgressInfo.Status.CONFLICT -> {
+                            instance.widgetMediaFiles.first { it.id == progressInfo.fileId }
+                                .apply {
+                                    status = FormMediaFileStatus.NOT_SUBMITTED
+                                    uploadedSize = progressInfo.current
+                                }
+                            dataSource.saveInstance(instance).blockingGet()
+                            scheduleAutoUpload(server.isActivatedBackgroundUpload)
+                        }
+                        UploadProgressInfo.Status.FINISHED, UploadProgressInfo.Status.OK, UploadProgressInfo.Status.STARTED -> {
+                            instance.widgetMediaFiles.first { it.id == progressInfo.fileId }
+                                .apply {
+                                    status = FormMediaFileStatus.SUBMITTED
+                                    uploadedSize = progressInfo.current
+                                }
+                            _progressInfo.postValue(Pair(progressInfo, instance))
+                        }
+                        else -> {
+                        }
+                    }
+                }.subscribe()
         )
 
     }
 
-    private fun updateProgress(instance: ReportFormInstance) {
-        when (instance.status) {
-            EntityStatus.FINALIZED -> {
-
-            }
+    private fun scheduleAutoUpload(isAutoUploadEnabled: Boolean) {
+        if (isAutoUploadEnabled) {
+            TellaRequestUploadJob.scheduleJob()
         }
     }
 

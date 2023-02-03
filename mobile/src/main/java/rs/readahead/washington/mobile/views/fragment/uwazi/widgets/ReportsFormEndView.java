@@ -120,34 +120,49 @@ public class ReportsFormEndView extends FrameLayout {
             uploadedPartsPct.put(mediaFile.getPartName(), 0F);
         }
         setFormSizeLabel(instance);
-        uploadProgressVisibity(instance.getStatus());
+        uploadProgressVisibity(instance.getStatus(), offline);
     }
 
     void setFormSizeLabel(@NonNull ReportFormInstance instance) {
         String title;
-        String uploadedFiles = "";
-        if (instance.getWidgetMediaFiles().size() > 0) {
-            uploadedFiles = getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + ", " + FileUtil.getFileSizeString(formSize);
-        } else {
-            formSizeView.setVisibility(GONE);
+        if (instance.getWidgetMediaFiles().size() == 0) {
+            title = getStatusLabel(instance.getStatus());
+            formSizeView.setText(title);
             return;
         }
 
         if (instance.getStatus() == EntityStatus.SUBMITTED) {
-            title = getResources().getString(R.string.File_Uploaded_on) + " " + Util.getDateTimeString(instance.getUpdated()) + "\n" + uploadedFiles;
+            title = getStatusLabel(instance.getStatus()) + " " + Util.getDateTimeString(instance.getUpdated()) + "\n" + getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + ", " + FileUtil.getFileSizeString(formSize);
         } else if (instance.getStatus() == EntityStatus.PAUSED) {
-            title = getResources().getString(R.string.Paused_Report) + "\n" + getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + "," + getTotalUploadedSize(instance) + "/" + FileUtil.getFileSizeString(formSize);
+            title = getStatusLabel(instance.getStatus()) + "\n" + getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + "," + getTotalUploadedSize(instance) + "/" + FileUtil.getFileSizeString(formSize);
         } else if (instance.getStatus() == EntityStatus.FINALIZED || instance.getStatus() == EntityStatus.SUBMISSION_PENDING || instance.getStatus() == EntityStatus.SUBMISSION_ERROR) {
-            title = getResources().getString(R.string.Report_Waiting_For_Connection) + "\n" + " " + getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + "," + getTotalUploadedSize(instance) + "/" + FileUtil.getFileSizeString(formSize) + " " + getResources().getString(R.string.File_Uploaded);
+            title = getStatusLabel(instance.getStatus()) + "\n" + " " + getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + "," + getTotalUploadedSize(instance) + "/" + FileUtil.getFileSizeString(formSize) + " " + getResources().getString(R.string.File_Uploaded);
         } else {
-           //TODO CHECK THE PERCENT  (getPercentUploadedSize(instance)*100) + "% " +
-            title =  getResources().getString(R.string.File_Uploaded) + "\n" + getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + "," + FileUtil.getFileSize(getTotalUploadedSize(instance)) + "/" + FileUtil.getFileSizeString(formSize) + " " + getResources().getString(R.string.File_Uploaded);
+            //TODO CHECK THE PERCENT  (getPercentUploadedSize(instance)*100) + "% " +
+            title = getResources().getString(R.string.File_Uploaded) + "\n" + getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + "," + FileUtil.getFileSize(getTotalUploadedSize(instance)) + "/" + FileUtil.getFileSizeString(formSize) + " " + getResources().getString(R.string.File_Uploaded);
         }
 
         formSizeView.setText(title);
     }
 
-    private void uploadProgressVisibity(EntityStatus status) {
+    String getStatusLabel(EntityStatus status) {
+        String title = "";
+        if (status == EntityStatus.SUBMITTED) {
+            title = getResources().getString(R.string.File_Uploaded_on);
+        } else if (status == EntityStatus.PAUSED) {
+            title = getResources().getString(R.string.Paused_Report);
+        } else if (status == EntityStatus.FINALIZED || instance.getStatus() == EntityStatus.SUBMISSION_PENDING || instance.getStatus() == EntityStatus.SUBMISSION_ERROR) {
+            title = getResources().getString(R.string.Report_Waiting_For_Connection);
+        }
+        return title;
+    }
+
+    private void uploadProgressVisibity(EntityStatus status, Boolean isOnline) {
+        if (!isOnline) {
+            totalProgress.setVisibility(GONE);
+            return;
+        }
+
         if (status == EntityStatus.SUBMITTED) {
             totalProgress.setVisibility(GONE);
         } else {
@@ -188,16 +203,16 @@ public class ReportsFormEndView extends FrameLayout {
         Timber.d("***Test*** PCT " + pct + "\n getTotalUploadedSize " + getTotalUploadedSize(instance) + "\n FormSize " + formSize + "\n percentComplete " + percentComplete + " \n Math.round(percentComplete) " + Math.toIntExact(percentComplete));
 
 
-        totalProgress.setProgress(percentComplete,true);
+        totalProgress.setProgress(percentComplete, true);
         setFormSizeLabel(instance);
     }
 
     private long getTotalUploadedSize(ReportFormInstance instance) {
         int totalUploadedSize = 0;
         for (FormMediaFile formMediaFile : instance.getWidgetMediaFiles()) {
-            Timber.d("***Test*** FormMediaFile " + ""+formMediaFile.status + " \n" + formMediaFile.size);
+            Timber.d("***Test*** FormMediaFile " + "" + formMediaFile.status + " \n" + formMediaFile.size);
 
-            if (formMediaFile.status == FormMediaFileStatus.SUBMITTED){
+            if (formMediaFile.status == FormMediaFileStatus.SUBMITTED) {
                 totalUploadedSize += formMediaFile.size;
             }
         }
@@ -207,13 +222,13 @@ public class ReportsFormEndView extends FrameLayout {
     private int getPercentUploadedSize(ReportFormInstance instance) {
         int totalUploadedSize = 0;
         for (FormMediaFile formMediaFile : instance.getWidgetMediaFiles()) {
-            Timber.d("***Test*** FormMediaFile " + ""+formMediaFile.status + " \n" + formMediaFile.size);
+            Timber.d("***Test*** FormMediaFile " + "" + formMediaFile.status + " \n" + formMediaFile.size);
 
-            if (formMediaFile.status == FormMediaFileStatus.SUBMITTED){
-                totalUploadedSize += 1;
+            if (formMediaFile.status == FormMediaFileStatus.SUBMITTED) {
+                totalUploadedSize += formMediaFile.uploadedSize;
             }
         }
-        return (totalUploadedSize / instance.getWidgetMediaFiles().size());
+        return (int) (totalUploadedSize / formSize);
     }
 
     public void clearPartsProgress(ReportFormInstance instance) {

@@ -493,6 +493,7 @@ connecting to a server</string>
     <string name="settings.docu_auto.delete_action.expl">Tella will automatically delete the files from your device as soon as they are uploaded to the server.</string>
     <string name="settings.docu_delete.upload.server_dialog.expl">You will no longer be able to upload files to this server.</string>
     <plurals name="upload.main_meta_number.of.files">
+        <item quantity="zero" />
         <item quantity="one">One file</item>
         <item quantity="other">%d files</item>
     </plurals>
@@ -715,5 +716,6 @@ button to add a new template.</string>
     <string name="Delete_Report" translatable="false">Delete </string>
     <string name="Paused_Report" translatable="false">Paused </string>
     <string name="Report_Waiting_For_Connection" translatable="false">Waiting for connection </string>
+    <string name="Project_Url_Screen_Title" translatable="false">Enter project URL</string>
 
 </resources>
