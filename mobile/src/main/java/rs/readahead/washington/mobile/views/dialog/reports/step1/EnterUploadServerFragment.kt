@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.views.dialog.reports.step1
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.KeyboardUtil
@@ -13,6 +14,7 @@ import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.ConnectFlowUtils.validateUrl
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
+import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowViewModel
 import rs.readahead.washington.mobile.views.dialog.reports.step3.LoginReportsFragment
 
 
@@ -22,6 +24,8 @@ class EnterUploadServerFragment :
     private val serverReports: TellaReportServer by lazy {
         TellaReportServer()
     }
+    private val viewModel by viewModels<ReportsConnectFlowViewModel>()
+    private var projectSlug = ""
 
     companion object {
         val TAG: String = EnterUploadServerFragment::class.java.simpleName
@@ -39,6 +43,27 @@ class EnterUploadServerFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initListeners()
+        initObservers()
+    }
+
+    private fun initObservers() {
+        viewModel.serverAlreadyExist.observe(viewLifecycleOwner) { serverAlreadyExist ->
+            if (serverAlreadyExist) {
+                DialogUtils.showBottomMessage(
+                    baseActivity,
+                    getString(R.string.Report_Server_Already_Exist_Error),
+                    false
+                )
+            } else {
+                KeyboardUtil.hideKeyboard(activity)
+                baseActivity.addFragment(
+                    LoginReportsFragment.newInstance(
+                        serverReports,
+                        projectSlug
+                    ), R.id.container
+                )
+            }
+        }
     }
 
     private fun initListeners() {
@@ -56,15 +81,9 @@ class EnterUploadServerFragment :
                 } else {
                     if (validateUrl(url, urlLayout, baseActivity, serverReports)) {
                         val url = serverReports.url
-                        val projectSlug = url.substring(url.lastIndexOf('/') - 1)
+                        projectSlug = url.substring(url.lastIndexOf('/') - 1)
                         serverReports.url = url.substring(0, url.lastIndexOf('/') - 1)
-                        KeyboardUtil.hideKeyboard(activity)
-                        baseActivity.addFragment(
-                            LoginReportsFragment.newInstance(
-                                serverReports,
-                                projectSlug
-                            ), R.id.container
-                        )
+                        viewModel.listServers(url)
                     }
                 }
             }

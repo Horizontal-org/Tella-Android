@@ -7,10 +7,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.usecases.reports.CheckReportsServerUseCase
+import rs.readahead.washington.mobile.domain.usecases.reports.GetReportsServersUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class ReportsConnectFlowViewModel @Inject constructor(private val useCase: CheckReportsServerUseCase) :
+class ReportsConnectFlowViewModel @Inject constructor(
+    private val useCase: CheckReportsServerUseCase,
+    private val getReportsServersUseCase: GetReportsServersUseCase,
+) :
     ViewModel() {
 
     private val _progress = MutableLiveData<Boolean>()
@@ -19,6 +23,23 @@ class ReportsConnectFlowViewModel @Inject constructor(private val useCase: Check
     val error: LiveData<Throwable> get() = _error
     private val _authenticationSuccess = SingleLiveEvent<TellaReportServer>()
     val authenticationSuccess: LiveData<TellaReportServer> get() = _authenticationSuccess
+    private val _serverAlreadyExist = MutableLiveData<Boolean>()
+    val serverAlreadyExist: LiveData<Boolean> get() = _serverAlreadyExist
+
+    fun listServers(serverUrl: String) {
+        _progress.postValue(true)
+        getReportsServersUseCase.execute(onSuccess = { result ->
+            if (result.isEmpty()) {
+                _serverAlreadyExist.postValue(false)
+            } else {
+                _serverAlreadyExist.postValue(result.any { server -> server.url + "p" + "/${server.projectSlug}" == serverUrl })
+            }
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
+    }
 
     fun checkServer(server: TellaReportServer, projectSlug: String) {
         useCase.saveServer(server, projectSlug)
