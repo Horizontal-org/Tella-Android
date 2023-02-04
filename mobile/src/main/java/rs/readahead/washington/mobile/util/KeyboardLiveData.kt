@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.util
 
-import android.annotation.SuppressLint
 import android.graphics.Rect
 import android.view.ViewGroup
 import android.view.ViewTreeObserver

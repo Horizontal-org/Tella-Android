@@ -67,6 +67,8 @@ class ReportsEntryViewModel @Inject constructor(
     val progressInfo: LiveData<Pair<UploadProgressInfo, ReportFormInstance>> get() = _progressInfo
     private val _entityStatus = MutableLiveData<ReportFormInstance>()
     val entityStatus: LiveData<ReportFormInstance> get() = _entityStatus
+    private val _exitAfterSave = MutableLiveData<Boolean>()
+    val exitAfterSave: LiveData<Boolean> get() = _exitAfterSave
 
     fun listServers() {
         _progress.postValue(true)
@@ -79,11 +81,12 @@ class ReportsEntryViewModel @Inject constructor(
         })
     }
 
-    fun saveDraft(reportFormInstance: ReportFormInstance) {
+    fun saveDraft(reportFormInstance: ReportFormInstance, exitAfterSave: Boolean) {
         _progress.postValue(true)
         saveReportFormInstanceUseCase.setReportFormInstance(reportFormInstance)
         saveReportFormInstanceUseCase.execute(onSuccess = { result ->
             _reportInstance.postValue(result)
+            _exitAfterSave.postValue(exitAfterSave)
         }, onError = {
             _error.postValue(it)
         }, onFinished = {
@@ -270,9 +273,9 @@ class ReportsEntryViewModel @Inject constructor(
         return vaultFiles
     }
 
-    fun mediaFilesToVaultFiles(files: List<FormMediaFile>): List<VaultFile> {
+    fun mediaFilesToVaultFiles(files: List<FormMediaFile>?): List<VaultFile> {
         val vaultFiles = ArrayList<VaultFile>()
-        files.map { mediaFile ->
+        files?.map { mediaFile ->
             vaultFiles.add(mediaFile.vaultFile)
         }
         return vaultFiles
@@ -317,7 +320,7 @@ class ReportsEntryViewModel @Inject constructor(
 
                     files.forEach { formMediaFile ->
                         val vaultFile =
-                            vaultFiles.first { vaultFile -> formMediaFile.id == vaultFile.id }
+                            vaultFiles.first { vaultFile -> formMediaFile.id == vaultFile?.id }
                         if (vaultFile != null) {
                             val fileResult = FormMediaFile.fromMediaFile(vaultFile)
                             fileResult.status = formMediaFile.status
@@ -354,7 +357,7 @@ class ReportsEntryViewModel @Inject constructor(
                             .doOnError { throwable ->
                                 if (throwable is NoConnectivityException) {
                                     instance.status = EntityStatus.SUBMISSION_PENDING
-                                }else {
+                                } else {
                                     instance.status = EntityStatus.SUBMISSION_ERROR
                                 }
                                 _entityStatus.postValue(instance)
@@ -375,7 +378,7 @@ class ReportsEntryViewModel @Inject constructor(
                 onError = { throwable ->
                     if (throwable is NoConnectivityException) {
                         instance.status = EntityStatus.SUBMISSION_PENDING
-                    }else {
+                    } else {
                         instance.status = EntityStatus.SUBMISSION_ERROR
                     }
                     dataSource.saveInstance(instance).blockingGet()

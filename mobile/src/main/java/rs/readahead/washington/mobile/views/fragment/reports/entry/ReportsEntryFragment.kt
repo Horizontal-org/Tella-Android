@@ -13,6 +13,7 @@ import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.proxym.shared.widget.dropdown_list.CustomDropdownItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.IVaultFilesSelector
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultSelectFilesSheet
 import org.hzontal.shared_ui.dropdownlist.DropDownItem
@@ -78,7 +79,9 @@ class ReportsEntryFragment :
             layoutManager = gridLayoutManager
             adapter = filesRecyclerViewAdapter
         }
-        binding?.toolbar?.backClickListener = { nav().popBackStack() }
+        binding?.toolbar?.backClickListener = {
+            exitOrSave()
+        }
         highLightSubmitButton()
         arguments?.let { bundle ->
             if (bundle.get(BUNDLE_REPORT_FORM_INSTANCE) != null) {
@@ -92,6 +95,51 @@ class ReportsEntryFragment :
             binding?.reportDescriptionEt?.setText(instance.description)
             putFiles(viewModel.mediaFilesToVaultFiles(instance.widgetMediaFiles))
         }
+    }
+
+    private fun exitOrSave() {
+        val title = binding?.reportTitleEt!!.text.toString()
+        val description = binding?.reportDescriptionEt!!.text.toString()
+        if (reportFormInstance == null && title.isEmpty()) {
+            nav().popBackStack()
+        } else if (reportFormInstance == null && title.isNotEmpty()) {
+            showConfirmSaveOrExit(reportFormInstance)
+        } else if (reportFormInstance != null && (reportFormInstance?.title != title || reportFormInstance?.description != description
+                    || filesRecyclerViewAdapter.getFiles() != viewModel.mediaFilesToVaultFiles(
+                reportFormInstance?.widgetMediaFiles
+            ))
+        ) {
+            showConfirmSaveOrExit(reportFormInstance)
+        } else {
+            nav().popBackStack()
+        }
+    }
+
+    private fun showConfirmSaveOrExit(reportFormInstance: ReportFormInstance?) {
+        BottomSheetUtils.showConfirmSheet(
+            baseActivity.supportFragmentManager,
+            getString(R.string.Report_Dialog_Draft_Title),
+            getString(R.string.collect_form_exit_dialog_expl),
+            getString(R.string.collect_form_exit_dialog_action_save_exit),
+            getString(R.string.collect_form_exit_dialog_action_exit_anyway),
+            object : BottomSheetUtils.ActionConfirmed {
+                override fun accept(isConfirmed: Boolean) {
+                    if (isConfirmed) {
+                        if (reportFormInstance == null) {
+                            saveReportAsDraft(true)
+                        } else {
+                            if (reportFormInstance.status == EntityStatus.DRAFT) {
+                                saveReportAsDraft(true)
+                            } else {
+                                saveReportAsOutbox()
+                            }
+                        }
+                    } else {
+                        nav().popBackStack()
+                    }
+                }
+            }
+        )
     }
 
     private fun highLightSubmitButton() {
@@ -112,7 +160,7 @@ class ReportsEntryFragment :
         if (isTitleEnabled && isDescriptionEnabled) {
             binding?.sendReportBtn?.setTint(R.color.wa_orange)
             binding?.toolbar?.onRightClickListener = {
-                saveReportAsDraft()
+                saveReportAsDraft(false)
             }
             binding?.sendLaterBtn?.setOnClickListener {
                 saveReportAsOutbox()
@@ -128,7 +176,7 @@ class ReportsEntryFragment :
         }
     }
 
-    private fun saveReportAsDraft() {
+    private fun saveReportAsDraft(exitAfterSave: Boolean) {
         viewModel.saveDraft(
             viewModel.getDraftFormInstance(
                 id = reportFormInstance?.id,
@@ -136,7 +184,8 @@ class ReportsEntryFragment :
                 description = binding?.reportDescriptionEt?.text.toString(),
                 files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
                 server = selectedServer
-            )
+            ),
+            exitAfterSave
         )
     }
 
@@ -194,6 +243,11 @@ class ReportsEntryFragment :
                         SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
                     }
                     else -> {}
+                }
+            }
+            exitAfterSave.observe(viewLifecycleOwner) { exitAfterSave ->
+                if (exitAfterSave) {
+                    nav().popBackStack()
                 }
             }
         }
