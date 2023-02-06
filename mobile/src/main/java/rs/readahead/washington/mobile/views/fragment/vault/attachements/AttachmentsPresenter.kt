@@ -11,6 +11,7 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.media.MediaFileHandler
@@ -21,6 +22,7 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
     IAttachmentsPresenter.IPresenter {
     private val disposables = CompositeDisposable()
     val counterData = MutableLiveData<Int>()
+    private var disposableImportFiles = CompositeDisposable()
 
 
     override fun getFiles(parent: String?, filterType: FilterType?, sort: Sort?) {
@@ -44,11 +46,13 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
 
     @SuppressLint("CheckResult")
     override fun importVaultFiles(uris: List<Uri>, parentId: String?, deleteOriginal: Boolean) {
+        if(disposableImportFiles.isDisposed) disposableImportFiles = CompositeDisposable()
         if (uris.isEmpty()) return
         var counter = 1
-        disposables.add(Flowable.fromIterable<Uri>(uris).flatMap { uri ->
+        disposableImportFiles.add(Flowable.fromIterable<Uri>(uris).flatMap { uri ->
             MediaFileHandler.importVaultFileUri(view?.getContext(), uri, parentId).toFlowable()
-        }.doOnComplete { view?.onImportEnded() }.doOnSubscribe { view?.onImportStarted() }
+        }
+            .doOnComplete { view?.onImportEnded() }.doOnSubscribe { view?.onImportStarted() }
             .observeOn(AndroidSchedulers.mainThread()).doFinally { view?.onImportEnded() }
             .subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread())
             .doOnNext {
@@ -63,10 +67,13 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
                 view?.onImportError(throwable)
             })
 
+
     }
+
     override fun cancelImportVaultFiles() {
-        disposables.dispose()
+        disposableImportFiles.dispose()
     }
+
     override fun addNewVaultFiles() {
         view?.onMediaFilesAdded()
     }
