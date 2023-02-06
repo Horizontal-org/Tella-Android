@@ -830,11 +830,15 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
             activity.supportFragmentManager,
             getString(R.string.Vault_Importing_SheetTitle),
             totalFilesToImport,
-            resources.getQuantityString(R.plurals.Vault_Importing_SheetProgress,totalFilesToImport),
+            resources.getQuantityString(
+                R.plurals.Vault_Importing_SheetProgress, totalFilesToImport
+            ),
             attachmentsPresenter.counterData,
             getString(R.string.action_cancel).uppercase(),
             viewLifecycleOwner
-        )
+        ) {
+            attachmentsPresenter.cancelImportVaultFiles()
+        }
     }
 
     private fun exportVaultFiles(
@@ -965,15 +969,15 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
         when (requestCode) {
             C.IMPORT_MULTIPLE_FILES -> {
                 if (null != data) {
-                    val listVaultFilesUris = arrayListOf<Uri?>()
+                    val listVaultFilesUris = arrayListOf<Uri>()
                     if (data.clipData != null) {
                         for (i in 0 until data.clipData?.itemCount!!) {
-                            val uri = data.clipData?.getItemAt(i)?.uri
+                            val uri = data.clipData?.getItemAt(i)!!.uri
                             listVaultFilesUris.add(uri)
                         }
                     } else {
-                        data.data?.let { returnedUri ->
-                            listVaultFilesUris.add(returnedUri)
+                        data.data.let { returnedUri ->
+                            if (returnedUri != null) listVaultFilesUris.add(returnedUri)
                         }
                     }
                     //import multiple files call

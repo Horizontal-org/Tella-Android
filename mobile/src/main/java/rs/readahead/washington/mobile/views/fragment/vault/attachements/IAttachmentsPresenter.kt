@@ -46,7 +46,7 @@ class IAttachmentsPresenter {
 
     interface IPresenter : IBasePresenter {
         fun getFiles(parent: String?, filterType: FilterType?, sort: Sort?)
-        fun importVaultFiles(uris: List<Uri?>, parentId: String?, deleteOriginal: Boolean)
+        fun importVaultFiles(uris: List<Uri>, parentId: String?, deleteOriginal: Boolean)
         fun addNewVaultFiles()
         fun renameVaultFile(id: String, name: String)
         fun deleteVaultFiles(vaultFiles: List<VaultFile?>?)
@@ -56,5 +56,6 @@ class IAttachmentsPresenter {
         fun createFolder(folderName: String, parent: String)
         fun getRootId()
         fun countTUServers()
+        fun cancelImportVaultFiles()
     }
 }

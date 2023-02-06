@@ -12,7 +12,7 @@
         style="@style/Tella_Main_White_Text.Bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="@dimen/activity_horizontal_larger_margin"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -36,10 +36,9 @@
         style="@style/Tella_Main_White_Text.Meduim"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
         android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/progress_circular"
         app:layout_constraintTop_toBottomOf="@id/standard_sheet_title"
         tools:text="90% complete" />
 
@@ -47,7 +46,6 @@
         android:id="@+id/progress_linear"
         android:layout_width="match_parent"
         android:layout_height="4dp"
-        android:layout_marginStart="50dp"
         android:layout_marginTop="30dp"
         app:indicatorColor="@color/green"
         app:layout_constraintStart_toStartOf="@id/tv_progress_indicator"
@@ -61,11 +59,10 @@
         style="@style/Tella_Main_White_Text.Meduim"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
         android:layout_marginTop="40dp"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/progress_linear"
-        tools:text="CANCEL DOWNLOAD" />
+        tools:text="CANCEL" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

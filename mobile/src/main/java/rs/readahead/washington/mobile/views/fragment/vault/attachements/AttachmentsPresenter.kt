@@ -43,32 +43,30 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
     }
 
     @SuppressLint("CheckResult")
-    override fun importVaultFiles(uris: List<Uri?>, parentId: String?, deleteOriginal: Boolean) {
+    override fun importVaultFiles(uris: List<Uri>, parentId: String?, deleteOriginal: Boolean) {
+        if (uris.isEmpty()) return
         var counter = 1
         disposables.add(Flowable.fromIterable<Uri>(uris).flatMap { uri ->
-            MediaFileHandler.importVaultFileUri(view?.getContext(), uri, parentId).toFlowable() }
-            .doOnComplete { view?.onImportEnded() }
-            .doOnSubscribe { view?.onImportStarted() }
-            .observeOn(AndroidSchedulers.mainThread())
-            .doFinally { view?.onImportEnded() }
-            .subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).doOnNext {
-            if (counter == 1) {
-                counterData.postValue(counter)
-                view?.onGetProgressPercent(counter++.toDouble(), uris.size)
-            } else counterData.postValue(counter++)
-        }.subscribe(
-                { vaultFiles ->
-                    view?.onMediaImported(vaultFiles)
-                }
-                ) { throwable: Throwable? ->
-            FirebaseCrashlytics.getInstance().recordException(throwable!!)
-            view?.onImportError(throwable)
-        })
-
-
+            MediaFileHandler.importVaultFileUri(view?.getContext(), uri, parentId).toFlowable()
+        }.doOnComplete { view?.onImportEnded() }.doOnSubscribe { view?.onImportStarted() }
+            .observeOn(AndroidSchedulers.mainThread()).doFinally { view?.onImportEnded() }
+            .subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread())
+            .doOnNext {
+                if (counter == 1) {
+                    view?.onGetProgressPercent(counter.toDouble(), uris.size)
+                    counterData.postValue(counter++)
+                } else counterData.postValue(counter++)
+            }.subscribe({ vaultFiles ->
+                view?.onMediaImported(vaultFiles)
+            }) { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                view?.onImportError(throwable)
+            })
 
     }
-
+    override fun cancelImportVaultFiles() {
+        disposables.dispose()
+    }
     override fun addNewVaultFiles() {
         view?.onMediaFilesAdded()
     }

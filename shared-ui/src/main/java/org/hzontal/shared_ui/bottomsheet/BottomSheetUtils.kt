@@ -36,8 +36,7 @@ object BottomSheetUtils {
         val customSheetFragment =
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.standar_sheet_layout)
                 .cancellable(true)
-        customSheetFragment.holder(
-            GenericSheetHolder(),
+        customSheetFragment.holder(GenericSheetHolder(),
             object : CustomBottomSheetFragment.Binder<GenericSheetHolder> {
                 override fun onBind(holder: GenericSheetHolder) {
                     with(holder) {
@@ -104,8 +103,7 @@ object BottomSheetUtils {
         val customSheetFragment =
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.radio_list_sheet_layout)
                 .cancellable(true)
-        customSheetFragment.holder(
-            RadioListSheetHolder(),
+        customSheetFragment.holder(RadioListSheetHolder(),
             object : CustomBottomSheetFragment.Binder<RadioListSheetHolder> {
                 override fun onBind(holder: RadioListSheetHolder) {
                     with(holder) {
@@ -133,8 +131,7 @@ object BottomSheetUtils {
                         for (option in radioList) {
                             val inflater = LayoutInflater.from(context)
                             val button = inflater.inflate(
-                                R.layout.radio_list_item_layout,
-                                null
+                                R.layout.radio_list_item_layout, null
                             ) as RadioButton
                             button.tag = option.key
                             button.setText(option.value)
@@ -191,8 +188,7 @@ object BottomSheetUtils {
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.radio_list_sheet_layout)
                 .cancellable(true).screenTag("RadioListOptionsSheet")
 
-        customSheetFragment.holder(
-            RadioListSheetHolder(),
+        customSheetFragment.holder(RadioListSheetHolder(),
             object : CustomBottomSheetFragment.Binder<RadioListSheetHolder> {
                 override fun onBind(holder: RadioListSheetHolder) {
                     with(holder) {
@@ -220,8 +216,7 @@ object BottomSheetUtils {
                         for (option in radioList) {
                             val inflater = LayoutInflater.from(context)
                             val button = inflater.inflate(
-                                R.layout.radio_list_item_layout,
-                                null
+                                R.layout.radio_list_item_layout, null
                             ) as RadioButton
                             button.tag = option.key
                             button.setText(option.value)
@@ -291,8 +286,7 @@ object BottomSheetUtils {
         val customSheetFragment =
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.dual_choose_layout)
                 .cancellable(true).fullScreen().statusBarColor(R.color.space_cadet)
-        customSheetFragment.holder(
-            DualChoiceSheetHolder(),
+        customSheetFragment.holder(DualChoiceSheetHolder(),
             object : CustomBottomSheetFragment.Binder<DualChoiceSheetHolder> {
                 override fun onBind(holder: DualChoiceSheetHolder) {
                     with(holder) {
@@ -399,8 +393,7 @@ object BottomSheetUtils {
         val customSheetFragment =
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.change_camouflage_layout)
                 .cancellable(true).fullScreen().statusBarColor(R.color.space_cadet)
-        customSheetFragment.holder(
-            CamouflageSheetHolder(),
+        customSheetFragment.holder(CamouflageSheetHolder(),
             object : CustomBottomSheetFragment.Binder<CamouflageSheetHolder> {
                 override fun onBind(holder: CamouflageSheetHolder) {
                     with(holder) {
@@ -450,8 +443,7 @@ object BottomSheetUtils {
         val customSheetFragment =
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.standar_sheet_layout)
                 .cancellable(true).screenTag("ConfirmSheet")
-        customSheetFragment.holder(
-            GenericSheetHolder(),
+        customSheetFragment.holder(GenericSheetHolder(),
             object : CustomBottomSheetFragment.Binder<GenericSheetHolder> {
                 override fun onBind(holder: GenericSheetHolder) {
                     with(holder) {
@@ -493,14 +485,14 @@ object BottomSheetUtils {
         progressNumberText: String,
         progressStatus: MutableLiveData<Int>,
         cancelText: String,
-        lifecycleOwner: LifecycleOwner
+        lifecycleOwner: LifecycleOwner,
+        onCancelImport: (() -> Unit)
 
     ) {
         val customSheetFragment =
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.layout_progess_sheet)
                 .cancellable(true).statusBarColor(R.color.space_cadet)
-        customSheetFragment.holder(
-            DownloadStatustHolder(),
+        customSheetFragment.holder(DownloadStatustHolder(),
             object : CustomBottomSheetFragment.Binder<DownloadStatustHolder> {
                 @RequiresApi(Build.VERSION_CODES.N)
                 override fun onBind(holder: DownloadStatustHolder) {
@@ -510,16 +502,15 @@ object BottomSheetUtils {
                             val statusPercent = status * 100 / totalProgress
                             circularProgress.setProgress(statusPercent, true)
                             linearProgress.setProgress(statusPercent, true)
-                            /* TODO(WAFA) CHECK IF WE NEED TO HIDE THE SHEET if (status == totalProgress) {
-                                 customSheetFragment.dismiss()
-                             }*/
+
                         }
                         title.text = titleText
                         cancelTextView.text = cancelText
-
                         cancelTextView.setOnClickListener {
+                            onCancelImport.invoke()
                             customSheetFragment.dismiss()
                         }
+
                     }
                 }
             })
@@ -560,8 +551,7 @@ object BottomSheetUtils {
 
         val customSheetFragment2 = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.confirm_image_sheet_layout).cancellable(false)
-        customSheetFragment2.holder(
-            ConfirmImageSheetHolder(),
+        customSheetFragment2.holder(ConfirmImageSheetHolder(),
             object : CustomBottomSheetFragment.Binder<ConfirmImageSheetHolder> {
                 override fun onBind(holder: ConfirmImageSheetHolder) {
                     with(holder) {
@@ -585,8 +575,7 @@ object BottomSheetUtils {
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.confirm_image_sheet_layout).cancellable(true)
             .screenTag("ConfirmImageSheet")
-        customSheetFragment.holder(
-            ConfirmImageSheetHolder(),
+        customSheetFragment.holder(ConfirmImageSheetHolder(),
             object : CustomBottomSheetFragment.Binder<ConfirmImageSheetHolder> {
                 override fun onBind(holder: ConfirmImageSheetHolder) {
                     with(holder) {
@@ -639,8 +628,7 @@ object BottomSheetUtils {
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.confirm_image_sheet_layout).cancellable(false)
-        customSheetFragment.holder(
-            ConfirmImageSheetHolder(),
+        customSheetFragment.holder(ConfirmImageSheetHolder(),
             object : CustomBottomSheetFragment.Binder<ConfirmImageSheetHolder> {
                 override fun onBind(holder: ConfirmImageSheetHolder) {
                     with(holder) {
@@ -682,8 +670,7 @@ object BottomSheetUtils {
         val customSheetFragment =
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.radio_list_sheet_layout)
                 .cancellable(true)
-        customSheetFragment.holder(
-            RadioListSheetHolder(),
+        customSheetFragment.holder(RadioListSheetHolder(),
             object : CustomBottomSheetFragment.Binder<RadioListSheetHolder> {
                 override fun onBind(holder: RadioListSheetHolder) {
                     with(holder) {
@@ -711,11 +698,10 @@ object BottomSheetUtils {
                         for (option in radioList) {
                             val inflater = LayoutInflater.from(context)
                             val button = inflater.inflate(
-                                R.layout.radio_list_item_layout,
-                                null
+                                R.layout.radio_list_item_layout, null
                             ) as RadioButton
                             button.tag = option.key
-                            button.setText(option.value)
+                            button.text = option.value
                             radioGroup.addView(button)
                             if (option.key == currentServerId) {
                                 button.isChecked = true
@@ -783,8 +769,7 @@ object BottomSheetUtils {
         val customSheetFragment2 =
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.standar_sheet_layout)
                 .cancellable(true)
-        customSheetFragment2.holder(
-            GenericSheetHolder(),
+        customSheetFragment2.holder(GenericSheetHolder(),
             object : CustomBottomSheetFragment.Binder<GenericSheetHolder> {
                 override fun onBind(holder: GenericSheetHolder) {
                     with(holder) {
@@ -816,8 +801,7 @@ object BottomSheetUtils {
         val customSheetFragment =
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.server_menu_sheet_layout)
                 .cancellable(true)
-        customSheetFragment.holder(
-            ServerMenuSheetHolder(),
+        customSheetFragment.holder(ServerMenuSheetHolder(),
             object : CustomBottomSheetFragment.Binder<ServerMenuSheetHolder> {
                 override fun onBind(holder: ServerMenuSheetHolder) {
                     with(holder) {
@@ -875,8 +859,7 @@ object BottomSheetUtils {
         val renameFileSheet =
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.sheet_rename)
                 .screenTag("FileRenameSheet").cancellable(true)
-        renameFileSheet.holder(
-            RenameFileSheetHolder(),
+        renameFileSheet.holder(RenameFileSheetHolder(),
             object : CustomBottomSheetFragment.Binder<RenameFileSheetHolder> {
                 override fun onBind(holder: RenameFileSheetHolder) {
                     with(holder) {
@@ -938,8 +921,7 @@ object BottomSheetUtils {
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.enter_string_bottomsheet_layout).cancellable(true).fullScreen()
             .statusBarColor(R.color.space_cadet)
-        customSheetFragment.holder(
-            EnterCodeSheetHolder(),
+        customSheetFragment.holder(EnterCodeSheetHolder(),
             object : CustomBottomSheetFragment.Binder<EnterCodeSheetHolder> {
                 override fun onBind(holder: EnterCodeSheetHolder) {
                     with(holder) {
@@ -980,8 +962,7 @@ object BottomSheetUtils {
         val customSheetFragment =
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.layout_progess_sheet)
                 .cancellable(true).fullScreen().statusBarColor(R.color.space_cadet)
-        customSheetFragment.holder(
-            DownloadStatustHolder(),
+        customSheetFragment.holder(DownloadStatustHolder(),
             object : CustomBottomSheetFragment.Binder<DownloadStatustHolder> {
                 override fun onBind(holder: DownloadStatustHolder) {
                     with(holder) {
@@ -1032,8 +1013,7 @@ object BottomSheetUtils {
         val customSheetFragment =
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.sheet_confirm_delete)
                 .cancellable(true).statusBarColor(R.color.space_cadet)
-        customSheetFragment.holder(
-            ConfirmDeletetHolder(),
+        customSheetFragment.holder(ConfirmDeletetHolder(),
             object : CustomBottomSheetFragment.Binder<ConfirmDeletetHolder> {
                 override fun onBind(holder: ConfirmDeletetHolder) {
                     with(holder) {
@@ -1080,8 +1060,7 @@ object BottomSheetUtils {
         val customSheetFragment2 =
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.standar_sheet_layout)
                 .cancellable(true)
-        customSheetFragment2.holder(
-            GenericSheetHolder(),
+        customSheetFragment2.holder(GenericSheetHolder(),
             object : CustomBottomSheetFragment.Binder<GenericSheetHolder> {
                 override fun onBind(holder: GenericSheetHolder) {
                     with(holder) {
@@ -1112,8 +1091,7 @@ object BottomSheetUtils {
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.three_options_sheet_layout).cancellable(true)
-        customSheetFragment.holder(
-            ThreeOptionsMenuSheetHolder(),
+        customSheetFragment.holder(ThreeOptionsMenuSheetHolder(),
             object : CustomBottomSheetFragment.Binder<ThreeOptionsMenuSheetHolder> {
                 override fun onBind(holder: ThreeOptionsMenuSheetHolder) {
                     with(holder) {

@@ -694,24 +694,6 @@ public class MediaFileHandler {
         return vaultFile;
     }
 
-   /* public static Single<VaultFile> importVaultFileUri(Context context, @Nullable Uri uri, String parentId) throws Exception {
-        VaultFile vaultFile = new VaultFile();
-        if (uri != null) {
-            String mimeType = getMimeType(uri, context.getContentResolver());
-            if (mimeType != null) {
-                if (MediaFile.INSTANCE.isImageFileType(mimeType)) {
-                    vaultFile = importPhotoUri(context, uri, parentId);
-                } else if (MediaFile.INSTANCE.isVideoFileType(mimeType)) {
-                    vaultFile = importVideoUri(context, uri, parentId);
-                } else {
-                    vaultFile = importOthersUri(context, uri, parentId);
-                }
-            }
-        }
-        return Single.create(emitter -> {
-            vaultFile
-        });
-    }*/
 
     private static List<VaultFile> getAllFiles(VaultFile vaultFile) {
         FileWalker fileWalker = new FileWalker();
