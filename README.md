@@ -22,7 +22,7 @@
 
 In challenging environments, with limited or no internet connectivity or in the face of repression, Tella is an app that makes it easier and safer to document human rights violations and collect data. Tella is available Android and iOS. 
 
-More information about how to get Tella --including user guides-- can be found on our [documentation platfrom] (https://docs.tella-app.org/).
+More information about how to get Tella --including user guides-- can be found on our [documentation platfrom](https://docs.tella-app.org/).
 
 | [![Camouflage](docs/camouflage.gif)](https://tella-app.org/)  | [![Encrypting](docs/encrypting.gif)](https://tella-app.org/) | [![Offline data collection](docs/data_collection.gif)](https://tella-app.org/) |
 |:---:|:---:|:---:|
@@ -47,7 +47,7 @@ Easily produce high quality documentation that can be used for research, advocac
 
 ## Detailed list of features <a id="features"></a>
 
-A detailed list of features for both Tella Android and iOS can be found [on the documentation] (https://docs.tella-app.org/).
+A detailed list of features for both Tella Android and iOS can be found [on the documentation](https://docs.tella-app.org/).
 
 ## How to get Tella and start using it? <a id="use-tella"></a>
 
