@@ -8,7 +8,7 @@ import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 
 
-public class ExoEventListener implements Player.EventListener {
+public class ExoEventListener implements Player.Listener {
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
         switch(playbackState) {
@@ -26,7 +26,7 @@ public class ExoEventListener implements Player.EventListener {
     public void onRepeatModeChanged(int repeatMode) {
     }
 
-    @Override
+   // @Override
     public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
     }
 
@@ -34,7 +34,7 @@ public class ExoEventListener implements Player.EventListener {
     public void onLoadingChanged(boolean isLoading) {
     }
 
-    @Override
+   // @Override
     public void onPlayerError(ExoPlaybackException error) {
     }
 

@@ -12,12 +12,12 @@ ext {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
     defaultConfig {
         applicationId "org.hzontal.tella"
         minSdkVersion 19
-        compileSdkVersion 31
-        targetSdkVersion 32
+        compileSdkVersion 33
+        targetSdkVersion 33
         versionCode 131
         versionName "2.0.12"
         multiDexEnabled true
@@ -126,7 +126,7 @@ dependencies {
     implementation "commons-io:commons-io:2.6"
 
     // exo
-    implementation 'com.google.android.exoplayer:exoplayer:2.10.0'
+    implementation 'com.google.android.exoplayer:exoplayer:2.18.2'
 
     // camera
     implementation('com.otaliastudios:cameraview:2.7.2') {
