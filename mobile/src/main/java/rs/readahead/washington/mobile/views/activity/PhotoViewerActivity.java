@@ -231,6 +231,26 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     }
 
     @Override
+    public void onMediaFileDeleteConfirmation(VaultFile vaultFile, Boolean showConfirmDelete) {
+        if (showConfirmDelete) {
+            BottomSheetUtils.showConfirmSheet(
+                    getSupportFragmentManager(),
+                    getString(R.string.Vault_Warning_Title),
+                    getString(R.string.Vault_Confirm_delete_Description),
+                    getString(R.string.Vault_Delete_anyway),
+                    getString(R.string.action_cancel),
+                    isConfirmed -> {
+                        if (isConfirmed) {
+                            presenter.deleteMediaFiles(vaultFile);
+                        }
+                    }
+            );
+        } else {
+            presenter.deleteMediaFiles(vaultFile);
+        }
+    }
+
+    @Override
     public void onMediaFileDeleted() {
         MyApplication.bus().post(new MediaFileDeletedEvent());
         finish();
@@ -409,7 +429,9 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                                 getString(R.string.action_delete),
                                 getString(R.string.action_cancel),
                                 isConfirmed -> {
-                                    presenter.deleteMediaFiles(vaultFile);
+                                    if (isConfirmed){
+                                        presenter.confirmDeleteMediaFile(vaultFile);
+                                    }
                                 }
                         );
 

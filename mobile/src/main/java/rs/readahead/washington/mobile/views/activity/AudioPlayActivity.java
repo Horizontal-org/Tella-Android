@@ -41,6 +41,7 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
 import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent;
+import rs.readahead.washington.mobile.databinding.ActivityAudioPlayBinding;
 import rs.readahead.washington.mobile.media.AudioPlayer;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IAudioPlayPresenterContract;
@@ -52,7 +53,6 @@ import rs.readahead.washington.mobile.util.PermissionUtil;
 import rs.readahead.washington.mobile.util.ThreadUtil;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment;
-import rs.readahead.washington.mobile.databinding.ActivityAudioPlayBinding;
 import timber.log.Timber;
 
 @RuntimePermissions
@@ -336,6 +336,26 @@ public class AudioPlayActivity extends BaseLockActivity implements
     }
 
     @Override
+    public void onMediaFileDeleteConfirmation(VaultFile vaultFile, Boolean showConfirmDelete) {
+        if (showConfirmDelete) {
+            BottomSheetUtils.showConfirmSheet(
+                    getSupportFragmentManager(),
+                    getString(R.string.Vault_Warning_Title),
+                    getString(R.string.Vault_Confirm_delete_Description),
+                    getString(R.string.Vault_Delete_anyway),
+                    getString(R.string.action_cancel),
+                    isConfirmed -> {
+                        if (isConfirmed) {
+                            viewerPresenter.deleteMediaFiles(vaultFile);
+                        }
+                    }
+            );
+        } else {
+            viewerPresenter.deleteMediaFiles(vaultFile);
+        }
+    }
+
+    @Override
     public void onMediaFileDeleted() {
         MyApplication.bus().post(new MediaFileDeletedEvent());
         finish();
@@ -582,7 +602,9 @@ public class AudioPlayActivity extends BaseLockActivity implements
                                 getString(R.string.action_delete),
                                 getString(R.string.action_cancel),
                                 isConfirmed -> {
-                                    viewerPresenter.deleteMediaFiles(vaultFile);
+                                    if (isConfirmed) {
+                                        viewerPresenter.confirmDeleteMediaFile(vaultFile);
+                                    }
                                 }
                         );
 

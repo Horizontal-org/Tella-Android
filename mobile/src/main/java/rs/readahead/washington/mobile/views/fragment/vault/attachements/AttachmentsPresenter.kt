@@ -11,6 +11,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.data.database.DataSource
+import rs.readahead.washington.mobile.data.database.KeyDataSource
+import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.media.MediaFileHandler.walkAllFiles
 import rs.readahead.washington.mobile.media.MediaFileHandler.walkAllFilesWithDirectories
@@ -18,8 +21,10 @@ import rs.readahead.washington.mobile.media.MediaFileHandler.walkAllFilesWithDir
 class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
     IAttachmentsPresenter.IPresenter {
     private val disposables = CompositeDisposable()
+    private var keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
 
     override fun getFiles(parent: String?, filterType: FilterType?, sort: Sort?) {
+
         MyApplication.rxVault.get(parent)
             .subscribe(
                 { vaultFile: VaultFile? ->
@@ -193,6 +198,27 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
         )
     }
 
+    override fun deleteFilesAfterConfirmation(
+        vaultFiles: List<VaultFile?>
+    ) {
+        disposables.add(keyDataSource.dataSource
+            .flatMapSingle { dataSource: DataSource ->
+                dataSource.reportMediaFiles
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { files : List<FormMediaFile> ->
+                    val doesFileExist =  files.any { file ->  vaultFiles.any { vaultFile -> vaultFile?.id == file.id }}
+                    view?.onConfirmDeleteFiles(vaultFiles,doesFileExist)
+                }
+            ) { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                view?.onMediaFileDeletionError(throwable)
+            }
+        )
+    }
+
     override fun createFolder(folderName: String, parent: String) {
         MyApplication.rxVault
             .builder()
@@ -205,7 +231,6 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 view?.onCountTUServersFailed(throwable)
             }.dispose()
-
     }
 
     override fun getRootId() {

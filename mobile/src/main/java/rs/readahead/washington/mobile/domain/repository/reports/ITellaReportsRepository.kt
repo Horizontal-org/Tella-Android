@@ -8,6 +8,7 @@ import rs.readahead.washington.mobile.domain.entity.reports.ReportInstanceBundle
 interface ITellaReportsRepository {
     fun saveInstance(instance: ReportFormInstance): Single<ReportFormInstance>
     fun deleteReportInstance(id: Long): Completable
+    fun listAllReportInstances(): Single<List<ReportFormInstance>>
     fun listDraftReportInstances(): Single<List<ReportFormInstance>>
     fun listOutboxReportInstances(): Single<List<ReportFormInstance>>
     fun listSubmittedReportInstances(): Single<List<ReportFormInstance>>

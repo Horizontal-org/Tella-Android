@@ -19,6 +19,7 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 @AndroidEntryPoint
 class ReportsFragment :
     BaseBindingFragment<FragmentReportsBinding>(FragmentReportsBinding::inflate) {
+
     private val viewModel by viewModels<ReportsEntryViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

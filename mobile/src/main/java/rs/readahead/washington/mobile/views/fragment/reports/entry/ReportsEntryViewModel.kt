@@ -315,12 +315,14 @@ class ReportsEntryViewModel @Inject constructor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ files ->
-                    val vaultFiles = MyApplication.rxVault.get(result.fileIds).blockingGet()
+                    val vaultFiles : MutableList<VaultFile?>? =
+                        MyApplication.rxVault.get(result.fileIds).blockingGet()
+                            ?: return@subscribe
                     val filesResult = arrayListOf<FormMediaFile>()
 
                     files.forEach { formMediaFile ->
                         val vaultFile =
-                            vaultFiles.first { vaultFile -> formMediaFile.id == vaultFile?.id }
+                            vaultFiles?.firstOrNull { vaultFile -> formMediaFile.id == vaultFile?.id }
                         if (vaultFile != null) {
                             val fileResult = FormMediaFile.fromMediaFile(vaultFile)
                             fileResult.status = formMediaFile.status
@@ -344,50 +346,48 @@ class ReportsEntryViewModel @Inject constructor(
 
     fun submitReport(instance: ReportFormInstance) {
         _progress.postValue(true)
-        if (instance.reportApiId.isEmpty()) {
-            getReportsServersUseCase.execute(onSuccess = { servers ->
-                val server = servers.first { it.id == instance.serverId }
-                // if (!server.isActivatedBackgroundUpload) {
-                if (instance.reportApiId.isEmpty()) {
-                    disposables.add(
-                        reportsRepository.submitReport(
-                            server,
-                            ReportBodyEntity(instance.title, instance.description)
-                        )
-                            .doOnError { throwable ->
-                                if (throwable is NoConnectivityException) {
-                                    instance.status = EntityStatus.SUBMISSION_PENDING
-                                } else {
-                                    instance.status = EntityStatus.SUBMISSION_ERROR
-                                }
-                                _entityStatus.postValue(instance)
-                                scheduleAutoUpload(server.isActivatedBackgroundUpload)
+        getReportsServersUseCase.execute(onSuccess = { servers ->
+            val server = servers.first { it.id == instance.serverId }
+            // if (!server.isActivatedBackgroundUpload) {
+            if (instance.reportApiId.isEmpty()) {
+                disposables.add(
+                    reportsRepository.submitReport(
+                        server,
+                        ReportBodyEntity(instance.title, instance.description)
+                    )
+                        .doOnError { throwable ->
+                            if (throwable is NoConnectivityException) {
+                                instance.status = EntityStatus.SUBMISSION_PENDING
+                            } else {
+                                instance.status = EntityStatus.SUBMISSION_ERROR
                             }
-                            .doOnDispose {
-                                instance.status = EntityStatus.PAUSED
-                                _entityStatus.postValue(instance)
-                            }
-                            .subscribe { reportPostResult ->
-                                submitFiles(instance, server, reportPostResult.id)
-                            })
+                            _entityStatus.postValue(instance)
+                            scheduleAutoUpload(server.isActivatedBackgroundUpload)
+                        }
+                        .doOnDispose {
+                            instance.status = EntityStatus.PAUSED
+                            _entityStatus.postValue(instance)
+                        }
+                        .subscribe { reportPostResult ->
+                            submitFiles(instance, server, reportPostResult.id)
+                        })
+            } else {
+                submitFiles(instance, server, instance.reportApiId)
+            }
+
+        },
+            onError = { throwable ->
+                if (throwable is NoConnectivityException) {
+                    instance.status = EntityStatus.SUBMISSION_PENDING
                 } else {
-                    submitFiles(instance, server, instance.reportApiId)
+                    instance.status = EntityStatus.SUBMISSION_ERROR
                 }
-
+                _entityStatus.postValue(instance)
             },
-                onError = { throwable ->
-                    if (throwable is NoConnectivityException) {
-                        instance.status = EntityStatus.SUBMISSION_PENDING
-                    } else {
-                        instance.status = EntityStatus.SUBMISSION_ERROR
-                    }
-                    dataSource.saveInstance(instance).blockingGet()
-                },
-                onFinished = {
+            onFinished = {
 
-                }
-            )
-        }
+            }
+        )
 
     }
 

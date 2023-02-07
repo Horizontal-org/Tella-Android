@@ -417,6 +417,41 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 .compose(applySchedulers());
     }
 
+    public Single<List<FormMediaFile>> getReportMediaFiles() {
+        return Single.fromCallable(this::getReportMediaFilesDB)
+                .compose(applySchedulers());
+    }
+
+    private List<FormMediaFile> getReportMediaFilesDB() {
+        Cursor cursor = null;
+        List<FormMediaFile> files = new ArrayList<>();
+
+        try {
+            cursor = database.query(
+                    D.T_REPORT_INSTANCE_VAULT_FILE,
+                    new String[]{D.C_VAULT_FILE_ID, D.C_STATUS,D.C_UPLOADED_SIZE},
+                    null,
+                    null,
+                    null, null,
+                    D.C_VAULT_FILE_ID + " ASC",
+                    null);
+
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                FormMediaFile formMediaFile = cursorToFormMediaFile(cursor);
+                files.add(formMediaFile);
+            }
+
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return files;
+    }
+
     private List<FormMediaFile> getReportMediaFilesDB(final ReportFormInstance instance) {
         Cursor cursor = null;
         List<FormMediaFile> files = new ArrayList<>();
@@ -2617,6 +2652,12 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         if (count != 1) {
             throw new NotFountException();
         }
+    }
+
+    @NonNull
+    @Override
+    public Single<List<ReportFormInstance>> listAllReportInstances() {
+        return null;
     }
 
     private static class Setting {

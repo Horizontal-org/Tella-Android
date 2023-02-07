@@ -53,9 +53,12 @@
     <item quantity="one">items</item>
     <item quantity="other"></item>
   </plurals>
-  <string name="Vault_No_Files_Title">You don’t have any files in Tella yet.</string>
+  <string name="Vault_No_Files_Title" translatable="false">You don’t have any files in Tella yet.</string>
     <string name="Vault_Items">items</string>
     <string name="Vault_FavoriteTemplates_Title" >Favorite templates</string>
     <string name="Vault_DeleteFile_SheetTitle" >Delete file?</string>
     <string name="Vault_deleteFile_SheetDesc" >The selected file will be permanently delated from Tella.</string>
+  <string name="Vault_Confirm_delete_Description" translatable="false">Some of the selected files are currently used in your connections. Deleting may impact forms and reports that haven’t been sent yet.</string>
+  <string name="Vault_Warning_Title" translatable="false">Warning</string>
+  <string name="Vault_Delete_anyway">Delete anyway</string>
 </resources>
