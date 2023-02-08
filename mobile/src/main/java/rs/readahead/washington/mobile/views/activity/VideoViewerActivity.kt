@@ -1,27 +1,28 @@
 package rs.readahead.washington.mobile.views.activity
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
+import android.provider.Settings
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
-import butterknife.ButterKnife
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.exoplayer2.*
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
-import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import com.google.android.exoplayer2.trackselection.TrackSelection
 import com.google.android.exoplayer2.ui.*
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.google.android.exoplayer2.upstream.*
@@ -39,16 +40,17 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent
 import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent
+import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.databinding.ActivityVideoViewerBinding
 import rs.readahead.washington.mobile.media.MediaFileHandler
-import rs.readahead.washington.mobile.media.exo.ExoEventListener
 import rs.readahead.washington.mobile.media.exo.MediaFileDataSourceFactory
 import rs.readahead.washington.mobile.mvp.contract.IMediaFileViewerPresenterContract
 import rs.readahead.washington.mobile.mvp.presenter.MediaFileViewerPresenter
 import rs.readahead.washington.mobile.util.DialogsUtil
-import rs.readahead.washington.mobile.util.PermissionUtil.showRationale
+import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.PICKER_FILE_REQUEST_CODE
+import rs.readahead.washington.mobile.views.fragment.vault.attachements.WRITE_REQUEST_CODE
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment
 
 @RuntimePermissions
@@ -142,27 +144,6 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
         super.onDestroy()
     }
 
-    /*override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        VideoViewerActivityPermissionsDispatcher.onRequestPermissionsResult(
-            this,
-            requestCode,
-            grantResults
-        )
-    }*/
-
-    @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    fun onWriteExternalStoragePermissionDenied() {
-    }
-
-    @OnNeverAskAgain(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    fun onWriteExternalStorageNeverAskAgain() {
-    }
-
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     fun exportMediaFile() {
         if (vaultFile != null && presenter != null) {
@@ -177,24 +158,37 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
         }
     }
 
-    @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    fun showWriteExternalStorageRationale(request: PermissionRequest?) {
-        maybeChangeTemporaryTimeout {
-            alertDialog = showRationale(
-                this,
-                request!!,
-                getString(R.string.permission_dialog_expl_device_storage)
-            )
-            Unit
+    private fun performFileSearch() {
+        if (hasStoragePermissions(this)) {
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+                intent.addFlags(
+                    Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or
+                            Intent.FLAG_GRANT_WRITE_URI_PERMISSION or
+                            Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+                startActivityForResult(intent, PICKER_FILE_REQUEST_CODE)
+            } else {
+                presenter!!.exportNewMediaFile(withMetadata, vaultFile, null)
+            }
+        } else {
+            requestStoragePermissions()
         }
     }
 
-    private fun performFileSearch() {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-            startActivityForResult(intent, PICKER_FILE_REQUEST_CODE)
+    private fun hasStoragePermissions(context: Context): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Environment.isExternalStorageManager()
         } else {
-            presenter!!.exportNewMediaFile(withMetadata, vaultFile, null)
+            val result: Int =
+                ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+            val result1: Int =
+                ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+            result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED
         }
     }
 
@@ -247,17 +241,6 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
         return this
     }
 
-    private fun showExportDialog() {
-        alertDialog = DialogsUtil.showExportMediaDialog(
-            this
-        ) { dialog: DialogInterface?, which: Int ->
-            /*VideoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(
-                this@VideoViewerActivity
-            )*/
-            exportMediaFile()
-        }
-    }
-
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         // Show the controls on any key event.
         simpleExoPlayerView.showController()
@@ -286,13 +269,6 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
     private fun initializePlayer() {
         val needNewPlayer = player == null
         if (needNewPlayer) {
-            val bandwidthMeter: BandwidthMeter = DefaultBandwidthMeter()
-            val mediaDataSourceFactory: DataSource.Factory = DefaultDataSource.Factory(this)
-
-            /*val mediaSource = ProgressiveMediaSource.Factory(mediaDataSourceFactory)
-                .createMediaSource(MediaItem.fromUri(STREAM_URL))*/
-
-            val mediaSourceFactory = DefaultMediaSourceFactory(mediaDataSourceFactory)
 
             player = ExoPlayer.Builder(this).build()
             player?.let { exo ->
@@ -300,16 +276,6 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
                 binding.playerView.player = exo
             }
 
-         /*   simpleExoPlayer = ExoPlayer.Builder(this)
-                .setMediaSourceFactory(mediaSourceFactory)
-                .build()
-
-
-            val videoTrackSelectionFactory: TrackSelection.Factory =
-                AdaptiveTrackSelection.Factory(bandwidthMeter)
-            trackSelector = DefaultTrackSelector(videoTrackSelectionFactory)
-            player = ExoPlayerFactory.newSimpleInstance(this, trackSelector)
-            player!!.addListener(ExoEventListener())*/
             simpleExoPlayerView.setPlayer(player)
             player!!.playWhenReady = shouldAutoPlay
         }
@@ -327,17 +293,10 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
                 vaultFile!!, null
             )
 
-            val defaultHttpDataSourceFactory = DefaultHttpDataSource.Factory()
             val mediaItem = MediaItem.fromUri(MediaFileHandler.getEncryptedUri(this, vaultFile))
             val mediaSource: MediaSource = ProgressiveMediaSource.Factory(mediaFileDataSourceFactory)
                 .createMediaSource(mediaItem)
 
-            /*val mediaSource: MediaSource = ExtractorMediaSource(
-                MediaFileHandler.getEncryptedUri(this, vaultFile),
-                mediaFileDataSourceFactory,
-                DefaultExtractorsFactory(),
-                null, null
-            )*/
             val haveResumePosition = resumeWindow != C.INDEX_UNSET
             if (haveResumePosition) {
                 player!!.seekTo(resumeWindow, resumePosition)
@@ -374,7 +333,7 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
     private fun setupToolbar() {
         toolbar = binding.playerToolbar
         toolbar!!.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
-        toolbar!!.setNavigationOnClickListener(View.OnClickListener { v: View? -> onBackPressed() })
+        toolbar!!.setNavigationOnClickListener({ v: View? -> onBackPressed() })
         if (!actionsDisabled) {
             toolbar!!.inflateMenu(R.menu.video_view_menu)
             if (vaultFile != null) {
@@ -439,7 +398,6 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
                 override fun share() {
                     maybeChangeTemporaryTimeout {
                         shareMediaFile()
-                        Unit
                     }
                 }
 
@@ -454,7 +412,6 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
                         vaultFile.name
                     ) { name: String? ->
                         presenter!!.renameVaultFile(vaultFile.id, name)
-                        Unit
                     }
                 }
 
@@ -467,9 +424,6 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
                         getString(R.string.action_cancel),
                         object : ActionConfirmed {
                             override fun accept(isConfirmed: Boolean) {
-                                /*VideoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(
-                                    this@VideoViewerActivity
-                                )*/
                                 exportMediaFile()
                             }
                         }
@@ -508,11 +462,7 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
 
     override fun onBackPressed() {
         super.onBackPressed()
-        /*toolbar.setStartTextTitle(vaultFile.name);
-        toolbar.getMenu().findItem(R.id.menu_item_more).setVisible(true);
-        setupMetadataMenuItem(vaultFile.metadata != null);
-        invalidateOptionsMenu();
-        isInfoShown = false;*/finish()
+        finish()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -561,7 +511,6 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
                         withMetadata = option > 0
                         maybeChangeTemporaryTimeout {
                             performFileSearch()
-                            Unit
                         }
                     }
                 }
@@ -575,4 +524,46 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
         val SDK_INT =
             if (Build.VERSION.SDK_INT == 25 && Build.VERSION.CODENAME[0] == 'O') 26 else Build.VERSION.SDK_INT
     }
+
+    private fun requestStoragePermissions() {
+        maybeChangeTemporaryTimeout()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            try {
+                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                intent.addCategory("android.intent.category.DEFAULT")
+                intent.data = Uri.parse(
+                    String.format(
+                        "package:%s",
+                        application.packageName
+                    )
+                )
+                startActivityForResult(intent, WRITE_REQUEST_CODE)
+            } catch (e: Exception) {
+                val intent = Intent()
+                intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+                startActivityForResult(intent, WRITE_REQUEST_CODE)
+            }
+        } else {
+            //below android 11
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                WRITE_REQUEST_CODE
+            )
+        }
+    }
+
+    @SuppressLint("NeedOnRequestPermissionsResult")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == WRITE_REQUEST_CODE) {
+                performFileSearch()
+             LockTimeoutManager().lockTimeout = Preferences.getLockTimeout()
+        }
+    }
+
 }
