@@ -1,10 +1,10 @@
-package org.hzontal.shared_ui.bottomsheet
+package org.hzontal.shared_ui.extensions
 
 import android.os.Build
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.progressindicator.LinearProgressIndicator
 
-fun CircularProgressIndicator.setProgressImport(progress: Int, animation: Boolean) {
+fun CircularProgressIndicator.setProgressPercent(progress: Int, animation: Boolean) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         this.setProgress(progress, animation)
     } else {
@@ -12,7 +12,7 @@ fun CircularProgressIndicator.setProgressImport(progress: Int, animation: Boolea
     }
 }
 
-fun LinearProgressIndicator.setProgressImport(progress: Int, animation: Boolean) {
+fun LinearProgressIndicator.setProgressPercent(progress: Int, animation: Boolean) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         this.setProgress(progress, animation)
     } else {

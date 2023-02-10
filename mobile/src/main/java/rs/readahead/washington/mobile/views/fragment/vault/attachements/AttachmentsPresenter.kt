@@ -22,8 +22,6 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
     IAttachmentsPresenter.IPresenter {
     private val disposables = CompositeDisposable()
     val counterData = MutableLiveData<Int>()
-    private var disposableImportFiles = CompositeDisposable()
-
 
     override fun getFiles(parent: String?, filterType: FilterType?, sort: Sort?) {
         MyApplication.rxVault.get(parent).subscribe({ vaultFile: VaultFile? ->
@@ -46,10 +44,9 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
 
     @SuppressLint("CheckResult")
     override fun importVaultFiles(uris: List<Uri>, parentId: String?, deleteOriginal: Boolean) {
-        if(disposableImportFiles.isDisposed) disposableImportFiles = CompositeDisposable()
         if (uris.isEmpty()) return
         var counter = 1
-        disposableImportFiles.add(Flowable.fromIterable<Uri>(uris).flatMap { uri ->
+        disposables.add(Flowable.fromIterable<Uri>(uris).flatMap { uri ->
             MediaFileHandler.importVaultFileUri(view?.getContext(), uri, parentId).toFlowable()
         }
             .doOnComplete { view?.onImportEnded() }.doOnSubscribe { view?.onImportStarted() }
@@ -71,7 +68,7 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
     }
 
     override fun cancelImportVaultFiles() {
-        disposableImportFiles.dispose()
+        disposables.clear()
     }
 
     override fun addNewVaultFiles() {
