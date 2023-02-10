@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion versions.compileSdk
 
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 31
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
         versionCode 10
         versionName '2.6.0'
 
@@ -40,7 +40,7 @@ android {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$versions.kotlin"
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
     implementation 'com.google.code.gson:gson:2.9.0'

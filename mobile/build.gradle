@@ -12,12 +12,12 @@ ext {
 }
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion versions.compileSdk
     defaultConfig {
         applicationId "org.hzontal.tella"
-        minSdkVersion 19
-        compileSdkVersion 33
-        targetSdkVersion 33
+        minSdkVersion versions.minSdk
+        compileSdkVersion versions.compileSdk
+        targetSdkVersion versions.targetSdk
         versionCode 131
         versionName "2.0.12"
         multiDexEnabled true
@@ -84,10 +84,10 @@ dependencies {
     implementation "com.google.android.gms:play-services-maps:${googlePlayServicesVersion}"
     // implementation "com.google.android.gms:play-services-gcm:${googlePlayServicesVersion}" // android-job, optional
 
-    implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}"
-    implementation "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
-    implementation("com.squareup.retrofit2:converter-simplexml:${retrofitVersion}") {
+    implementation "com.squareup.retrofit2:retrofit:${versions.retrofit}"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}"
+    implementation "com.squareup.retrofit2:converter-gson:${versions.retrofit}"
+    implementation("com.squareup.retrofit2:converter-simplexml:${versions.retrofit}") {
         exclude group: 'xpp3', module: 'xpp3'
         exclude group: 'stax', module: 'stax-api'
         exclude group: 'stax', module: 'stax'
@@ -97,7 +97,7 @@ dependencies {
     implementation("org.permissionsdispatcher:permissionsdispatcher:${permissionDispatcherVersion}") {
         exclude module: "support-v13"
     }
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
     implementation 'androidx.navigation:navigation-runtime:2.5.1'
     implementation 'androidx.navigation:navigation-fragment:2.5.1'
     implementation 'androidx.databinding:databinding-runtime:7.2.2'
@@ -106,7 +106,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
     implementation 'com.squareup:tape:1.2.3' // todo: follow this, v2 should be soon
     implementation "com.jakewharton.timber:timber:4.7.1"
-    implementation 'net.zetetic:android-database-sqlcipher:3.5.9@aar'
+    implementation "net.zetetic:android-database-sqlcipher:${versions.sqlcipher}@aar"
     implementation 'info.guardianproject.cacheword:cachewordlib:0.1.1'
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
@@ -134,15 +134,12 @@ dependencies {
         exclude module: "animated-vector-drawble"
     }
 
-    implementation 'com.github.apl-devs:appintro:v4.2.3'
     implementation 'com.simplify:ink:1.0.2'
     implementation 'com.mikhaellopez:circularimageview:3.2.0'
     implementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
-    implementation 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:3.2.0'
-    implementation 'com.github.lzyzsd:circleprogress:1.2.1'
     implementation "com.github.ihsanbal:LoggingInterceptor:3.0.0"
 
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}"
 
-    testImplementation 'junit:junit:4.13'
+    testImplementation "junit:junit:$versions.junit"
 }
