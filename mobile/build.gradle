@@ -60,26 +60,24 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
-    implementation 'androidx.multidex:multidex:2.0.1'
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$versions.desugar"
+    implementation "androidx.multidex:multidex:$versions.multidex"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':tella-vault')
     implementation project(':clean-insights')
     api project(':tella-locking-ui')
 
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycleExtensions"
 
-    // implementation 'com.madgag.spongycastle:pg:1.54.0.0'// needed for above
-
-    implementation platform('com.google.firebase:firebase-bom:26.1.0')
+    implementation platform("com.google.firebase:firebase-bom:$versions.firebaseBom")
     implementation 'com.google.firebase:firebase-crashlytics'
 
-    api 'androidx.navigation:navigation-fragment-ktx:2.5.1'
-    api 'androidx.navigation:navigation-ui-ktx:2.5.1'
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.exifinterface:exifinterface:1.3.3'
+    api "androidx.navigation:navigation-fragment-ktx:$versions.navigationFragmentKtx"
+    api "androidx.navigation:navigation-ui-ktx:$versions.navigationUI"
+    implementation "androidx.appcompat:appcompat:$versions.appcompat"
+    implementation "androidx.cardview:cardview:$versions.cardview"
+    implementation "androidx.legacy:legacy-support-v4:$versions.legacyV4"
+    implementation "androidx.exifinterface:exifinterface:$versions.exifinterface"
     implementation "com.google.android.gms:play-services-location:${googlePlayServicesVersion}"
     implementation "com.google.android.gms:play-services-maps:${googlePlayServicesVersion}"
     // implementation "com.google.android.gms:play-services-gcm:${googlePlayServicesVersion}" // android-job, optional
@@ -92,52 +90,52 @@ dependencies {
         exclude group: 'stax', module: 'stax-api'
         exclude group: 'stax', module: 'stax'
     }
-    implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
+    implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$versions.retrofit2KotliCoroutinesAdapter"
 
     implementation("org.permissionsdispatcher:permissionsdispatcher:${permissionDispatcherVersion}") {
         exclude module: "support-v13"
     }
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
-    implementation 'androidx.navigation:navigation-runtime:2.5.1'
-    implementation 'androidx.navigation:navigation-fragment:2.5.1'
-    implementation 'androidx.databinding:databinding-runtime:7.2.2'
+    implementation "androidx.navigation:navigation-runtime:$versions.navigationRuntime"
+    implementation "androidx.navigation:navigation-fragment:$versions.navigationFragment"
+    implementation "androidx.databinding:databinding-runtime:$versions.databindingRuntime"
     annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:${permissionDispatcherVersion}"
 
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
-    implementation 'com.squareup:tape:1.2.3' // todo: follow this, v2 should be soon
-    implementation "com.jakewharton.timber:timber:4.7.1"
+    implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3LoggingInterceptor"
+    implementation "com.squareup:tape:$versions.squareupTape" // todo: follow this, v2 should be soon
+    implementation "com.jakewharton.timber:timber:$versions.timber"
     implementation "net.zetetic:android-database-sqlcipher:${versions.sqlcipher}@aar"
-    implementation 'info.guardianproject.cacheword:cachewordlib:0.1.1'
-    implementation 'com.github.bumptech.glide:glide:3.7.0'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.1'
-    implementation 'com.evernote:android-job:1.3.0-rc1'
+    implementation "info.guardianproject.cacheword:cachewordlib:$versions.cacheword"
+    implementation "com.github.bumptech.glide:glide:$versions.glide"
+    implementation "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"
+    implementation "com.jakewharton.rxrelay2:rxrelay:$versions.rxrelay"
+    implementation "com.evernote:android-job:$versions.evernoteJob"
 
     implementation "com.jakewharton:butterknife:${butterknifeVersion}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${butterknifeVersion}"
 
     // digest auth
-    implementation 'com.burgstaller:okhttp-digest:1.15'
+    implementation "com.burgstaller:okhttp-digest:$versions.burgstallerOkhttpDigest"
 
     // collect
-    implementation group: 'org.getodk', name: 'javarosa', version: '3.5.0'
+    implementation group: "org.getodk", name: "javarosa", version: "$versions.javarosa"
     //implementation "org.opendatakit:opendatakit-javarosa:2.4.0"
-    implementation 'net.sf.kxml:kxml2:2.3.0'
-    implementation "commons-io:commons-io:2.6"
+    implementation "net.sf.kxml:kxml2:$versions.kxml2"
+    implementation "commons-io:commons-io:$versions.commonsIo"
 
     // exo
-    implementation 'com.google.android.exoplayer:exoplayer:2.18.2'
+    implementation "com.google.android.exoplayer:exoplayer:$versions.exoplayer"
 
     // camera
-    implementation('com.otaliastudios:cameraview:2.7.2') {
+    implementation("com.otaliastudios:cameraview:$versions.cameraview") {
         exclude module: "exifinterface"
         exclude module: "animated-vector-drawble"
     }
 
-    implementation 'com.simplify:ink:1.0.2'
-    implementation 'com.mikhaellopez:circularimageview:3.2.0'
-    implementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
-    implementation "com.github.ihsanbal:LoggingInterceptor:3.0.0"
+    implementation "com.simplify:ink:$versions.simplifyInk"
+    implementation "com.mikhaellopez:circularimageview:$versions.circularimageview"
+    implementation "org.apache.directory.studio:org.apache.commons.io:$versions.apacheCommonsIo"
+    implementation "com.github.ihsanbal:LoggingInterceptor:$versions.ihsanbalLoggingInterceptor"
 
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}"
 

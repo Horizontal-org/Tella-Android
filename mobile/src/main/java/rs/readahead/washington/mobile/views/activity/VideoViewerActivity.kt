@@ -54,7 +54,7 @@ import rs.readahead.washington.mobile.views.fragment.vault.attachements.WRITE_RE
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment
 
 @RuntimePermissions
-class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityListener, StyledPlayerControlView.VisibilityListener,
+class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.VisibilityListener,
     IMediaFileViewerPresenterContract.IView {
     private lateinit var simpleExoPlayerView: StyledPlayerView
     private var player: ExoPlayer? = null
@@ -133,9 +133,10 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
     }
 
     override fun onDestroy() {
-        if (alertDialog != null && alertDialog!!.isShowing) {
-
-            alertDialog!!.dismiss()
+        if (alertDialog != null) {
+            if (alertDialog!!.isShowing) {
+                alertDialog!!.dismiss()
+            }
         }
         hideProgressDialog()
         if (presenter != null) {
@@ -147,7 +148,7 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     fun exportMediaFile() {
         if (vaultFile != null && presenter != null) {
-            if (vaultFile!!.metadata != null) {
+            if (vaultFile?.metadata != null) {
                 showExportWithMetadataDialog()
             } else {
                 withMetadata = false
@@ -163,13 +164,13 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
                 val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
                 intent.addFlags(
-                    Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or
-                            Intent.FLAG_GRANT_WRITE_URI_PERMISSION or
-                            Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION
                 )
                 startActivityForResult(intent, PICKER_FILE_REQUEST_CODE)
             } else {
-                presenter!!.exportNewMediaFile(withMetadata, vaultFile, null)
+                if (presenter != null) {
+                    presenter!!.exportNewMediaFile(withMetadata, vaultFile, null)
+                }
             }
         } else {
             requestStoragePermissions()
@@ -180,14 +181,12 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             Environment.isExternalStorageManager()
         } else {
-            val result: Int =
-                ContextCompat.checkSelfPermission(context,
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                )
-            val result1: Int =
-                ContextCompat.checkSelfPermission(context,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                )
+            val result: Int = ContextCompat.checkSelfPermission(
+                context, Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+            val result1: Int = ContextCompat.checkSelfPermission(
+                context, Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
             result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED
         }
     }
@@ -202,8 +201,7 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
 
     override fun onExportStarted() {
         progressDialog = DialogsUtil.showProgressDialog(
-            this,
-            getString(R.string.gallery_save_to_device_dialog_progress_expl)
+            this, getString(R.string.gallery_save_to_device_dialog_progress_expl)
         )
     }
 
@@ -231,9 +229,7 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
     override fun onMediaFileRenameError(throwable: Throwable) {
         //TODO CHECK ERROR MSG WHEN RENAME
         DialogUtils.showBottomMessage(
-            this,
-            getString(R.string.gallery_toast_fail_deleting_files),
-            true
+            this, getString(R.string.gallery_toast_fail_deleting_files), true
         )
     }
 
@@ -252,7 +248,7 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
         if (vaultFile == null) {
             return
         }
-        if (vaultFile!!.metadata != null) {
+        if (vaultFile?.metadata != null) {
             showShareWithMetadataDialog()
         } else {
             startShareActivity(false)
@@ -269,33 +265,31 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
     private fun initializePlayer() {
         val needNewPlayer = player == null
         if (needNewPlayer) {
-
             player = ExoPlayer.Builder(this).build()
-            player?.let { exo ->
-                exo.playWhenReady = true
-                binding.playerView.player = exo
+            player?.apply {
+                binding.playerView.player
+                playWhenReady = shouldAutoPlay
             }
 
             simpleExoPlayerView.setPlayer(player)
-            player!!.playWhenReady = shouldAutoPlay
         }
         if (needNewPlayer || needRetrySource) {
             if (intent.hasExtra(VIEW_VIDEO) && intent.extras != null) {
                 val vaultFile = intent.extras!![VIEW_VIDEO] as VaultFile?
                 if (vaultFile != null) {
                     this.vaultFile = vaultFile
-                    toolbar!!.title = vaultFile.name
+                    toolbar?.title = vaultFile.name
                     setupMetadataMenuItem(vaultFile.metadata != null)
                 }
             }
             val mediaFileDataSourceFactory = MediaFileDataSourceFactory(
-                this,
-                vaultFile!!, null
+                this, vaultFile!!, null
             )
 
             val mediaItem = MediaItem.fromUri(MediaFileHandler.getEncryptedUri(this, vaultFile))
-            val mediaSource: MediaSource = ProgressiveMediaSource.Factory(mediaFileDataSourceFactory)
-                .createMediaSource(mediaItem)
+            val mediaSource: MediaSource =
+                ProgressiveMediaSource.Factory(mediaFileDataSourceFactory)
+                    .createMediaSource(mediaItem)
 
             val haveResumePosition = resumeWindow != C.INDEX_UNSET
             if (haveResumePosition) {
@@ -310,7 +304,7 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
         if (player != null) {
             shouldAutoPlay = player!!.playWhenReady
             //updateResumePosition(); // todo: fix source skipping..
-            player!!.release()
+            player?.release()
             player = null
             trackSelector = null
             clearResumePosition()
@@ -349,8 +343,7 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
 
     private fun showMetadata() {
         val viewMetadata = Intent(
-            this,
-            MetadataViewerActivity::class.java
+            this, MetadataViewerActivity::class.java
         )
         viewMetadata.putExtra(MetadataViewerActivity.VIEW_METADATA, vaultFile)
         startActivity(viewMetadata)
@@ -379,8 +372,7 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
     }
 
     private fun showVaultActionsDialog(vaultFile: VaultFile?) {
-        showVaultActionsSheet(
-            supportFragmentManager,
+        showVaultActionsSheet(supportFragmentManager,
             vaultFile!!.name,
             getString(R.string.Vault_Upload_SheetAction),
             getString(R.string.Vault_Share_SheetAction),
@@ -416,8 +408,7 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
                 }
 
                 override fun save() {
-                    showConfirmSheet(
-                        supportFragmentManager,
+                    showConfirmSheet(supportFragmentManager,
                         getString(R.string.gallery_save_to_device_dialog_title),
                         getString(R.string.gallery_save_to_device_dialog_expl),
                         getString(R.string.action_save),
@@ -426,8 +417,7 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
                             override fun accept(isConfirmed: Boolean) {
                                 exportMediaFile()
                             }
-                        }
-                    )
+                        })
                 }
 
                 override fun info() {
@@ -441,8 +431,7 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
                 }
 
                 override fun delete() {
-                    showConfirmSheet(
-                        supportFragmentManager,
+                    showConfirmSheet(supportFragmentManager,
                         getString(R.string.Vault_DeleteFile_SheetTitle),
                         getString(R.string.Vault_deleteFile_SheetDesc),
                         getString(R.string.action_delete),
@@ -453,11 +442,9 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
                                     vaultFile
                                 )
                             }
-                        }
-                    )
+                        })
                 }
-            }
-        )
+            })
     }
 
     override fun onBackPressed() {
@@ -477,8 +464,7 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
         val options = LinkedHashMap<Int, Int>()
         options[1] = R.string.verification_share_select_media_and_verification
         options[0] = R.string.verification_share_select_only_media
-        showRadioListOptionsSheet(
-            supportFragmentManager,
+        showRadioListOptionsSheet(supportFragmentManager,
             context,
             options,
             getString(R.string.verification_share_dialog_title),
@@ -489,8 +475,7 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
                 override fun accept(option: Int) {
                     startShareActivity(option > 0)
                 }
-            }
-        )
+            })
     }
 
     private fun showExportWithMetadataDialog() {
@@ -498,8 +483,7 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
         options[1] = R.string.verification_share_select_media_and_verification
         options[0] = R.string.verification_share_select_only_media
         Handler().post {
-            showRadioListOptionsSheet(
-                supportFragmentManager,
+            showRadioListOptionsSheet(supportFragmentManager,
                 context,
                 options,
                 getString(R.string.verification_share_dialog_title),
@@ -513,8 +497,7 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
                             performFileSearch()
                         }
                     }
-                }
-            )
+                })
         }
     }
 
@@ -533,8 +516,7 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
                 intent.addCategory("android.intent.category.DEFAULT")
                 intent.data = Uri.parse(
                     String.format(
-                        "package:%s",
-                        application.packageName
+                        "package:%s", application.packageName
                     )
                 )
                 startActivityForResult(intent, WRITE_REQUEST_CODE)
@@ -546,23 +528,19 @@ class VideoViewerActivity : BaseLockActivity(), PlayerControlView.VisibilityList
         } else {
             //below android 11
             ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                WRITE_REQUEST_CODE
+                this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_REQUEST_CODE
             )
         }
     }
 
     @SuppressLint("NeedOnRequestPermissionsResult")
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == WRITE_REQUEST_CODE) {
-                performFileSearch()
-             LockTimeoutManager().lockTimeout = Preferences.getLockTimeout()
+            performFileSearch()
+            LockTimeoutManager().lockTimeout = Preferences.getLockTimeout()
         }
     }
 

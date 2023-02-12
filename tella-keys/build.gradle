@@ -35,7 +35,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
 
-    api "com.jakewharton.timber:timber:4.7.1" // todo: remove this
+    api "com.jakewharton.timber:timber:$versions.timber" // todo: remove this
     api "androidx.core:core-ktx:$versions.ktx"
     api "androidx.biometric:biometric:$versions.biometric"
 
