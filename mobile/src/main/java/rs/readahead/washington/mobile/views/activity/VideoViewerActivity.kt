@@ -57,8 +57,9 @@ import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragmen
 class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.VisibilityListener,
     IMediaFileViewerPresenterContract.IView {
     private lateinit var simpleExoPlayerView: StyledPlayerView
-    private var player: ExoPlayer? = null
     private lateinit var binding: ActivityVideoViewerBinding
+    private lateinit var toolbar: Toolbar
+    private var player: ExoPlayer? = null
     private var trackSelector: DefaultTrackSelector? = null
     private var needRetrySource = false
     private var shouldAutoPlay = false
@@ -66,7 +67,6 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
     private var resumeWindow = 0
     private var resumePosition: Long = 0
     private var vaultFile: VaultFile? = null
-    private var toolbar: Toolbar? = null
     private var actionsDisabled = false
     private var presenter: MediaFileViewerPresenter? = null
     private var alertDialog: AlertDialog? = null
@@ -192,11 +192,11 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
     }
 
     override fun onMediaExported() {
-        showToast(resources.getQuantityString(R.plurals.gallery_toast_files_exported, 1, 1))
+        DialogUtils.showBottomMessage(this, resources.getQuantityString(R.plurals.gallery_toast_files_exported, 1, 1),false)
     }
 
     override fun onExportError(error: Throwable) {
-        showToast(R.string.gallery_toast_fail_exporting_to_device)
+        DialogUtils.showBottomMessage(this, getString(R.string.gallery_toast_fail_exporting_to_device),true)
     }
 
     override fun onExportStarted() {
@@ -215,11 +215,11 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
     }
 
     override fun onMediaFileDeletionError(throwable: Throwable) {
-        showToast(R.string.gallery_toast_fail_deleting_files)
+        DialogUtils.showBottomMessage(this, getString(R.string.gallery_toast_fail_deleting_files),true)
     }
 
     override fun onMediaFileRename(vaultFile: VaultFile) {
-        toolbar!!.title = vaultFile.name
+        toolbar.title = vaultFile.name
         this.vaultFile = vaultFile
         MyApplication.bus().post(VaultFileRenameEvent())
     }
@@ -276,25 +276,25 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
                 val vaultFile = intent.extras!![VIEW_VIDEO] as VaultFile?
                 if (vaultFile != null) {
                     this.vaultFile = vaultFile
-                    toolbar?.title = vaultFile.name
+                    toolbar.title = vaultFile.name
                     setupMetadataMenuItem(vaultFile.metadata != null)
+                    val mediaFileDataSourceFactory = MediaFileDataSourceFactory(
+                        this, vaultFile, null
+                    )
+                    val mediaItem =
+                        MediaItem.fromUri(MediaFileHandler.getEncryptedUri(this, vaultFile))
+                    val mediaSource: MediaSource =
+                        ProgressiveMediaSource.Factory(mediaFileDataSourceFactory)
+                            .createMediaSource(mediaItem)
+
+                    val haveResumePosition = resumeWindow != C.INDEX_UNSET
+                    if (haveResumePosition) {
+                        player!!.seekTo(resumeWindow, resumePosition)
+                    }
+                    player!!.prepare(mediaSource, !haveResumePosition, false)
+                    needRetrySource = false
                 }
             }
-            val mediaFileDataSourceFactory = MediaFileDataSourceFactory(
-                this, vaultFile!!, null
-            )
-
-            val mediaItem = MediaItem.fromUri(MediaFileHandler.getEncryptedUri(this, vaultFile))
-            val mediaSource: MediaSource =
-                ProgressiveMediaSource.Factory(mediaFileDataSourceFactory)
-                    .createMediaSource(mediaItem)
-
-            val haveResumePosition = resumeWindow != C.INDEX_UNSET
-            if (haveResumePosition) {
-                player!!.seekTo(resumeWindow, resumePosition)
-            }
-            player!!.prepare(mediaSource, !haveResumePosition, false)
-            needRetrySource = false
         }
     }
 
@@ -316,22 +316,22 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
 
     override fun onVisibilityChange(visibility: Int) {
         if (!isInfoShown) {
-            toolbar!!.visibility = visibility
+            toolbar.visibility = visibility
         } else {
-            toolbar!!.visibility = View.VISIBLE
+            toolbar.visibility = View.VISIBLE
         }
     }
 
     private fun setupToolbar() {
         toolbar = binding.playerToolbar
-        toolbar!!.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
-        toolbar!!.setNavigationOnClickListener({ v: View? -> onBackPressed() })
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
+        toolbar.setNavigationOnClickListener({ v: View? -> onBackPressed() })
         if (!actionsDisabled) {
-            toolbar!!.inflateMenu(R.menu.video_view_menu)
+            toolbar.inflateMenu(R.menu.video_view_menu)
             if (vaultFile != null) {
                 setupMetadataMenuItem(vaultFile!!.metadata != null)
             }
-            toolbar!!.getMenu().findItem(R.id.menu_item_more)
+            toolbar.getMenu().findItem(R.id.menu_item_more)
                 .setOnMenuItemClickListener { item: MenuItem? ->
                     showVaultActionsDialog(vaultFile)
                     false
@@ -358,7 +358,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
         if (actionsDisabled) {
             return
         }
-        val mdMenuItem = toolbar!!.menu.findItem(R.id.menu_item_metadata)
+        val mdMenuItem = toolbar.menu.findItem(R.id.menu_item_metadata)
         if (visible) {
             mdMenuItem.setVisible(true).setOnMenuItemClickListener { item: MenuItem? ->
                 showMetadata()
@@ -421,9 +421,9 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
                 override fun info() {
                     isInfoShown = true
                     onVisibilityChange(View.VISIBLE)
-                    toolbar!!.title = getString(R.string.Vault_FileInfo)
-                    toolbar!!.menu.findItem(R.id.menu_item_more).isVisible = false
-                    toolbar!!.menu.findItem(R.id.menu_item_metadata).isVisible = false
+                    toolbar.title = getString(R.string.Vault_FileInfo)
+                    toolbar.menu.findItem(R.id.menu_item_more).isVisible = false
+                    toolbar.menu.findItem(R.id.menu_item_metadata).isVisible = false
                     invalidateOptionsMenu()
                     addFragment(VaultInfoFragment().newInstance(vaultFile, false), R.id.container)
                 }
