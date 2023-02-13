@@ -69,7 +69,6 @@ buildscript {
         mavenCentral()
         jcenter()
         // fabric.io
-        maven { url 'https://maven.fabric.io/public' }
         maven {
             url 'https://maven.google.com/'
             name 'Google'
@@ -88,7 +87,6 @@ allprojects {
     repositories {
         mavenCentral()
         jcenter()
-        maven { url 'https://maven.fabric.io/public' }
         maven {
             url 'https://maven.google.com/'
             name 'Google'

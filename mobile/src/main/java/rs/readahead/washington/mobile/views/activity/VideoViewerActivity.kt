@@ -219,10 +219,8 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
     }
 
     override fun onMediaFileRename(vaultFile: VaultFile) {
-        if (vaultFile != null) {
-            toolbar!!.title = vaultFile.name
-            this.vaultFile = vaultFile
-        }
+        toolbar!!.title = vaultFile.name
+        this.vaultFile = vaultFile
         MyApplication.bus().post(VaultFileRenameEvent())
     }
 
@@ -302,7 +300,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
 
     private fun releasePlayer() {
         if (player != null) {
-            shouldAutoPlay = player!!.playWhenReady
+            shouldAutoPlay = player?.playWhenReady == true
             //updateResumePosition(); // todo: fix source skipping..
             player?.release()
             player = null
@@ -445,11 +443,6 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
                         })
                 }
             })
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        finish()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
