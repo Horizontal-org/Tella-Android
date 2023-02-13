@@ -412,7 +412,7 @@
   <string name="Vault_CreateFolder_SheetAction">ဖိုင်တွဲအသစ်တစ်ခု ဖန်တီးမည်</string>
   <string name="ServerSettings_ServerName_ToolTip">နောက်ထပ်ဆာဗာများ ထပ်ထည့်ပါက ၎င်းကိုမှတ်မိရန် သင့်ဆာဗာကို အမည်ပေးပါ။ ၎င်းသည် အဖွဲ့အစည်းအမည်၊ ပရောဂျက်အမည် စသည်ဖြင့် ဖြစ်နိုင်သည်။</string>
   <plurals name="Vault_Importing_SheetProgress">
-    <item quantity="other">%s ဖိုင်များ ထည့်သွင်းပြီးပါပြီ</item>
+    <item quantity="other"> ဖိုင်များ ထည့်သွင်းပြီးပါပြီ</item>
   </plurals>
   <string name="Vault_Importing_SheetTitle">ထည့်သွင်းခြင်းနှင့် ကုဒ်ဝှက်ခြင်း</string>
   <string name="Rec_Exit_SheetTitle">အသံသွင်းထားသောဖိုင်ကို သိမ်းမလား။</string>
