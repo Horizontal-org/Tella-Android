@@ -288,10 +288,12 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
                             .createMediaSource(mediaItem)
 
                     val haveResumePosition = resumeWindow != C.INDEX_UNSET
-                    if (haveResumePosition) {
-                        player!!.seekTo(resumeWindow, resumePosition)
+                    if (player != null) {
+                        if (haveResumePosition) {
+                            player?.seekTo(resumeWindow, resumePosition)
+                        }
+                        player?.prepare(mediaSource, !haveResumePosition, false)
                     }
-                    player!!.prepare(mediaSource, !haveResumePosition, false)
                     needRetrySource = false
                 }
             }
