@@ -60,7 +60,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
     private lateinit var simpleExoPlayerView: StyledPlayerView
     private lateinit var binding: ActivityVideoViewerBinding
     private lateinit var toolbar: Toolbar
-    private lateinit var player: ExoPlayer
+    private var player: ExoPlayer? = null
     private var trackSelector: DefaultTrackSelector? = null
     private var needRetrySource = false
     private var shouldAutoPlay = false
@@ -73,6 +73,14 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
     private var alertDialog: AlertDialog? = null
     private var progressDialog: ProgressDialog? = null
     private var isInfoShown = false
+
+    companion object {
+        const val VIEW_VIDEO = "vv"
+        const val NO_ACTIONS = "na"
+        val SDK_INT =
+            if (Build.VERSION.SDK_INT == 25 && Build.VERSION.CODENAME[0] == 'O') 26 else Build.VERSION.SDK_INT
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityVideoViewerBinding.inflate(layoutInflater)
@@ -114,7 +122,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
 
     public override fun onResume() {
         super.onResume()
-        if (SDK_INT <= 23 || !this::player.isInitialized) {
+        if (SDK_INT <= 23 || player == null) {
             initializePlayer()
         }
     }
@@ -193,11 +201,19 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
     }
 
     override fun onMediaExported() {
-        DialogUtils.showBottomMessage(this, resources.getQuantityString(R.plurals.gallery_toast_files_exported, 1, 1),false)
+        DialogUtils.showBottomMessage(
+            this,
+            resources.getQuantityString(R.plurals.gallery_toast_files_exported, 1, 1),
+            false
+        )
     }
 
     override fun onExportError(error: Throwable) {
-        DialogUtils.showBottomMessage(this, getString(R.string.gallery_toast_fail_exporting_to_device),true)
+        DialogUtils.showBottomMessage(
+            this,
+            getString(R.string.gallery_toast_fail_exporting_to_device),
+            true
+        )
     }
 
     override fun onExportStarted() {
@@ -216,7 +232,11 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
     }
 
     override fun onMediaFileDeletionError(throwable: Throwable) {
-        DialogUtils.showBottomMessage(this, getString(R.string.gallery_toast_fail_deleting_files),true)
+        DialogUtils.showBottomMessage(
+            this,
+            getString(R.string.gallery_toast_fail_deleting_files),
+            true
+        )
     }
 
     override fun onMediaFileRename(vaultFile: VaultFile) {
@@ -262,10 +282,10 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
     }
 
     private fun initializePlayer() {
-        val needNewPlayer = this::player.isInitialized
+        val needNewPlayer = player == null
         if (needNewPlayer) {
             player = ExoPlayer.Builder(this).build()
-            player.apply {
+            player?.apply {
                 binding.playerView.player
                 playWhenReady = shouldAutoPlay
             }
@@ -289,10 +309,12 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
                             .createMediaSource(mediaItem)
 
                     val haveResumePosition = resumeWindow != C.INDEX_UNSET
-                    if (haveResumePosition) {
-                        player.seekTo(resumeWindow, resumePosition)
+                    if (player != null) {
+                        if (haveResumePosition) {
+                            player?.seekTo(resumeWindow, resumePosition)
+                        }
+                        player?.prepare(mediaSource, !haveResumePosition, false)
                     }
-                    player.prepare(mediaSource, !haveResumePosition, false)
                     needRetrySource = false
                 }
             }
@@ -300,11 +322,14 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
     }
 
     private fun releasePlayer() {
-        shouldAutoPlay = player.playWhenReady == true
-        //updateResumePosition(); // todo: fix source skipping..
-        player.release()
-        trackSelector = null
-        clearResumePosition()
+        if (player != null) {
+            shouldAutoPlay = player?.playWhenReady == true
+            //updateResumePosition(); // todo: fix source skipping..
+            player?.release()
+            player = null
+            trackSelector = null
+            clearResumePosition()
+        }
     }
 
     private fun clearResumePosition() {
@@ -369,7 +394,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
 
     private fun showVaultActionsDialog(vaultFile: VaultFile?) {
         showVaultActionsSheet(supportFragmentManager,
-            vaultFile!!.name,
+            vaultFile?.name,
             getString(R.string.Vault_Upload_SheetAction),
             getString(R.string.Vault_Share_SheetAction),
             getString(R.string.Vault_Move_SheetDesc),
@@ -397,9 +422,9 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
                         getString(R.string.action_cancel),
                         getString(R.string.action_ok),
                         this@VideoViewerActivity,
-                        vaultFile.name
+                        vaultFile?.name
                     ) { name: String? ->
-                        presenter!!.renameVaultFile(vaultFile.id, name)
+                        presenter?.renameVaultFile(vaultFile?.id, name)
                     }
                 }
 
@@ -423,7 +448,8 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
                     toolbar.menu.findItem(R.id.menu_item_more).isVisible = false
                     toolbar.menu.findItem(R.id.menu_item_metadata).isVisible = false
                     invalidateOptionsMenu()
-                    addFragment(VaultInfoFragment().newInstance(vaultFile, false), R.id.container)
+                    vaultFile?.let { VaultInfoFragment().newInstance(it, false) }
+                        ?.let { addFragment(it, R.id.container) }
                 }
 
                 override fun delete() {
@@ -434,7 +460,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
                         getString(R.string.action_cancel),
                         object : ActionConfirmed {
                             override fun accept(isConfirmed: Boolean) {
-                                presenter!!.deleteMediaFiles(
+                                presenter?.deleteMediaFiles(
                                     vaultFile
                                 )
                             }
@@ -447,7 +473,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PICKER_FILE_REQUEST_CODE) {
             assert(data != null)
-            presenter!!.exportNewMediaFile(withMetadata, vaultFile, data!!.data)
+            presenter?.exportNewMediaFile(withMetadata, vaultFile, data?.data)
         }
     }
 
@@ -490,13 +516,6 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
                     }
                 })
         }
-    }
-
-    companion object {
-        const val VIEW_VIDEO = "vv"
-        const val NO_ACTIONS = "na"
-        val SDK_INT =
-            if (Build.VERSION.SDK_INT == 25 && Build.VERSION.CODENAME[0] == 'O') 26 else Build.VERSION.SDK_INT
     }
 
     private fun requestStoragePermissions() {
