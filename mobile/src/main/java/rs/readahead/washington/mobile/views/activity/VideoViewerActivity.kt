@@ -59,7 +59,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
     private lateinit var simpleExoPlayerView: StyledPlayerView
     private lateinit var binding: ActivityVideoViewerBinding
     private lateinit var toolbar: Toolbar
-    private var player: ExoPlayer? = null
+    private lateinit var player: ExoPlayer
     private var trackSelector: DefaultTrackSelector? = null
     private var needRetrySource = false
     private var shouldAutoPlay = false
@@ -113,7 +113,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
 
     public override fun onResume() {
         super.onResume()
-        if (SDK_INT <= 23 || player == null) {
+        if (SDK_INT <= 23 || !this::player.isInitialized) {
             initializePlayer()
         }
     }
@@ -261,10 +261,10 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
     }
 
     private fun initializePlayer() {
-        val needNewPlayer = player == null
+        val needNewPlayer = this::player.isInitialized
         if (needNewPlayer) {
             player = ExoPlayer.Builder(this).build()
-            player?.apply {
+            player.apply {
                 binding.playerView.player
                 playWhenReady = shouldAutoPlay
             }
@@ -288,12 +288,10 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
                             .createMediaSource(mediaItem)
 
                     val haveResumePosition = resumeWindow != C.INDEX_UNSET
-                    if (player != null) {
-                        if (haveResumePosition) {
-                            player?.seekTo(resumeWindow, resumePosition)
-                        }
-                        player?.prepare(mediaSource, !haveResumePosition, false)
+                    if (haveResumePosition) {
+                        player.seekTo(resumeWindow, resumePosition)
                     }
+                    player.prepare(mediaSource, !haveResumePosition, false)
                     needRetrySource = false
                 }
             }
@@ -301,14 +299,11 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
     }
 
     private fun releasePlayer() {
-        if (player != null) {
-            shouldAutoPlay = player?.playWhenReady == true
-            //updateResumePosition(); // todo: fix source skipping..
-            player?.release()
-            player = null
-            trackSelector = null
-            clearResumePosition()
-        }
+        shouldAutoPlay = player.playWhenReady == true
+        //updateResumePosition(); // todo: fix source skipping..
+        player.release()
+        trackSelector = null
+        clearResumePosition()
     }
 
     private fun clearResumePosition() {
