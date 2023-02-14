@@ -331,6 +331,5 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
 
     }
 
-    companion object {
-    }
+
 }

@@ -17,4 +17,6 @@
     <color name="wa_calc_gray">#A4A2A2</color>
     <color name="wa_dark_green">#3C6E72</color>
     <color name="wa_calc_color">#545957</color>
+    <color name="calc_blue_skin_dark_blue">#333380FF</color>
+
 </resources>

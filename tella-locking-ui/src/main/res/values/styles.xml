@@ -132,4 +132,9 @@
         <item name="android:textColor">@color/wa_white</item>
     </style>
 
+    <style name="AwesomeCustomView" parent="">
+        <item name="awesomeImageTintColor">@color/calc_blue_skin_dark_blue</item>
+        <item name="awesomeImage">@drawable/bg_yellow_btn</item>
+
+    </style>
 </resources>

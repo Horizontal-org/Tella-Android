@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.views.activity.onboarding
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
@@ -79,6 +80,7 @@ class OnBoardHideTellaFragment : BaseFragment() {
             OnBoardCalculatorFragment(),
             R.id.rootOnboard
         )
+
     }
 
     private fun chooseNameAndLogo(){

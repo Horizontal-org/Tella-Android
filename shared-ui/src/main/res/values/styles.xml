@@ -130,4 +130,18 @@
         <item name="android:paddingBottom">8dp</item>
     </style>
 
+    <style name="Tella_Progress_Circular">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:indeterminate">true</item>
+        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:visibility">gone</item>
+        <item name="trackColor">@color/wa_white</item>
+        <item name="indicatorColor">@color/tigers_eye</item>
+        <item name="trackThickness">4dp</item>
+    </style>
+
+
+
 </resources>

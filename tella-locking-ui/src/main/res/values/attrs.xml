@@ -57,4 +57,10 @@
         </attr>
 
     </declare-styleable>
+
+
+    <declare-styleable name="AwesomeCustomView">
+        <attr name="awesomeImage" format="reference"/>
+        <attr name="awesomeImageTintColor" format="color"/>
+    </declare-styleable>
 </resources>
