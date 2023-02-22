@@ -479,6 +479,6 @@ class MicFragment : MetadataBaseLockFragment(),
     }
 
     private fun updateRecordingName() {
-        recordingName.text = getString(R.string.mic_recording).plus(" ").plus(getDateTimeString())
+        recordingName.text = UUID.randomUUID().toString() + ".aac"
     }
 }

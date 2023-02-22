@@ -422,12 +422,12 @@
   <string name="Vault_CreateFolder_SheetAction">Shalat shapraw u</string>
   <string name="ServerSettings_ServerName_ToolTip">Hpang de, madung kompyuta (server) ni bai jat bang ai rai yang, dai hpe matsing lu na matu, na a madung kompyuta hpe amying langai jaw da u. Dai gaw, wuhpung langai a mying, bungli masing hte seng ai mying zawn re ai ni mai byin nga ai.</string>
   <plurals name="Vault_Importing_SheetProgress">
-    <item quantity="zero">% htawt la ngut sai lamang nhtan (file)</item>
-    <item quantity="one">% htawt la ngut sai lamang nhtan (file)</item>
-    <item quantity="two">% htawt la ngut sai lamang nhtan ni (files)</item>
-    <item quantity="few">% htawt la ngut sai lamang nhtan ni (files)</item>
-    <item quantity="many">% htawt la ngut sai lamang nhtan ni (files)</item>
-    <item quantity="other">% htawt la ngut sai lamang nhtan ni (files)</item>
+    <item quantity="zero"> htawt la ngut sai lamang nhtan (file)</item>
+    <item quantity="one"> htawt la ngut sai lamang nhtan (file)</item>
+    <item quantity="two"> htawt la ngut sai lamang nhtan ni (files)</item>
+    <item quantity="few">htawt la ngut sai lamang nhtan ni (files)</item>
+    <item quantity="many">htawt la ngut sai lamang nhtan ni (files)</item>
+    <item quantity="other"> htawt la ngut sai lamang nhtan ni (files)</item>
   </plurals>
   <string name="Vault_Importing_SheetTitle">Lamang htawt la ai lam hte ning-ip ga makoi la da ai lam</string>
   <string name="Rec_Exit_SheetTitle">Na a nsen rim da ai lamang nhtan hpe matsing bang da na kun?</string>

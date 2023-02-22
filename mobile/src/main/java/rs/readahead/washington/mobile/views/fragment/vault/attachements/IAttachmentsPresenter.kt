@@ -13,7 +13,7 @@ class IAttachmentsPresenter {
         fun onGetFilesEnd()
         fun onGetFilesSuccess(files: List<VaultFile?>)
         fun onGetFilesError(error: Throwable?)
-        fun onMediaImported(vaultFile: List<VaultFile?>)
+        fun onMediaImported(vaultFile: VaultFile)
         fun onMediaImportedWithDelete(vaultFile: List<VaultFile?>, uris: List<Uri?>)
         fun onConfirmDeleteFiles(vaultFiles: List<VaultFile?>,showConfirmDelete: Boolean)
         fun onImportError(error: Throwable?)
@@ -39,14 +39,15 @@ class IAttachmentsPresenter {
         fun onCreateFolderError(error: Throwable?)
         fun onGetRootIdSuccess(vaultFile: VaultFile?)
         fun onGetRootIdError(error: Throwable?)
-        fun onMoveFilesSuccess()
+        fun onMoveFilesSuccess(filesSize:Int)
         fun onMoveFilesError(error: Throwable?)
         fun getContext(): Context?
+        fun onGetProgressPercent(numberFilesImported: Double, totalFilesToImport: Int)
     }
 
     interface IPresenter : IBasePresenter {
         fun getFiles(parent: String?, filterType: FilterType?, sort: Sort?)
-        fun importVaultFiles(uris: List<Uri?>, parentId: String?, deleteOriginal: Boolean)
+        fun importVaultFiles(uris: List<Uri>, parentId: String?, deleteOriginal: Boolean)
         fun addNewVaultFiles()
         fun renameVaultFile(id: String, name: String)
         fun deleteVaultFiles(vaultFiles: List<VaultFile?>?)
@@ -57,5 +58,6 @@ class IAttachmentsPresenter {
         fun createFolder(folderName: String, parent: String)
         fun getRootId()
         fun countTUServers()
+        fun cancelImportVaultFiles()
     }
 }

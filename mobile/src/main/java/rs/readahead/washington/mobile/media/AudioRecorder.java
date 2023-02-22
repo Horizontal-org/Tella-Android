@@ -53,11 +53,11 @@ public class AudioRecorder {
         cancelled = false;
     }
 
-    public Observable<VaultFile> startRecording(String filemane, @Nullable String parent) {
+    public Observable<VaultFile> startRecording(String filename, @Nullable String parent) {
         return Observable.fromCallable(() -> {
             VaultFile vaultFile;
             RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault.builder()
-                    .setName(filemane)
+                    .setName(filename)
                     .setMimeType("audio/aac");
             if (parent == null) {
                 vaultFile = rxVaultFileBuilder.

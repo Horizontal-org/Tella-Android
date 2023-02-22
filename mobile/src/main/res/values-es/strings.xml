@@ -416,8 +416,8 @@ conectarse a un servidor</string>
   <string name="Vault_CreateFolder_SheetAction">Crear una nueva carpeta</string>
   <string name="ServerSettings_ServerName_ToolTip">Dale un nombre a tu servidor para reconocerlo si agregas más servidores más adelante. Podría ser el nombre de la organización, el nombre del proyecto, etc.</string>
   <plurals name="Vault_Importing_SheetProgress">
-    <item quantity="one">%s archivo importado</item>
-    <item quantity="other">%s archivos importados</item>
+    <item quantity="one">archivo importado</item>
+    <item quantity="other">archivos importados</item>
   </plurals>
   <string name="Vault_Importing_SheetTitle">Importando y cifrando</string>
   <string name="Rec_Exit_SheetTitle">¿Guardar grabación?</string>

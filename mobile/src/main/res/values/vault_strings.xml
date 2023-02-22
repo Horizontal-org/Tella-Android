@@ -53,7 +53,11 @@
     <item quantity="one">items</item>
     <item quantity="other"></item>
   </plurals>
-  <string name="Vault_No_Files_Title" translatable="false">You don’t have any files in Tella yet.</string>
+  <plurals name="Vault_File_Successfully_Moved">
+    <item quantity="one">File successfully moved</item>
+    <item quantity="other">Files successfully moved</item>
+  </plurals>
+  <string name="Vault_No_Files_Title">You don’t have any files in Tella yet.</string>
     <string name="Vault_Items">items</string>
     <string name="Vault_FavoriteTemplates_Title" >Favorite templates</string>
     <string name="Vault_DeleteFile_SheetTitle" >Delete file?</string>

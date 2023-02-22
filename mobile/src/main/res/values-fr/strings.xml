@@ -401,8 +401,8 @@
   <string name="Vault_CreateFolder_SheetAction">Créer un nouveau dossier</string>
   <string name="ServerSettings_ServerName_ToolTip">Donnez un nom à votre serveur pour le reconnaître si vous ajoutez d\'autres serveurs par la suite. Il peut s\'agir du nom de l\'organisation, du nom du projet, etc.</string>
   <plurals name="Vault_Importing_SheetProgress">
-    <item quantity="one">%s fichier importé</item>
-    <item quantity="other">%s fichiers importés</item>
+    <item quantity="one"> fichier importé</item>
+    <item quantity="other"> fichiers importés</item>
   </plurals>
   <string name="Vault_Importing_SheetTitle">Importation et chiffrement</string>
   <string name="Rec_Exit_SheetTitle">Sauvegarder l\'enregistrement ?</string>

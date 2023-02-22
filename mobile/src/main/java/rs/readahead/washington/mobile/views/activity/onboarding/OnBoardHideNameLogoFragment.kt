@@ -27,15 +27,12 @@ class OnBoardHideNameLogoFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_name_and_logo, container, false)
-
         initView(view)
-
         return view
     }
 
     override fun initView(view: View) {
         (activity as OnBoardActivityInterface).hideProgress()
-
         recyclerView = view.findViewById(R.id.iconsRecyclerView)
 
         adapter = CamouflageRecycleViewAdapter()
@@ -61,10 +58,13 @@ class OnBoardHideNameLogoFragment : BaseFragment() {
             getString(R.string.SettingsCamo_Dialog_TimeoutTitle),
             getString(R.string.SettingsCamo_Dialog_TimeoutDesc),
             getString(R.string.settings_sec_confirm_camouflage_title),
-            getString(R.string.settings_sec_confirm_camouflage_desc, getString(cm.options[position].stringResId)),
+            getString(
+                R.string.settings_sec_confirm_camouflage_desc,
+                getString(cm.options[position].stringResId)
+            ),
             getString(R.string.settings_sec_confirm_exit_tella),
             getString(R.string.action_cancel),
-            ContextCompat.getDrawable(activity,cm.options[position].drawableResId),
+            ContextCompat.getDrawable(activity, cm.options[position].drawableResId),
             consumer = object : BottomSheetUtils.ActionConfirmed {
                 override fun accept(isConfirmed: Boolean) {
                     camouflage(position)
