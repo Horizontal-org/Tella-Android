@@ -7,115 +7,123 @@
     android:layout_gravity="center_horizontal">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline74v"
+        android:id="@+id/guideline75v"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.74" />
+        app:layout_constraintGuide_percent="0.75" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline50v"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.50" />
+        app:layout_constraintGuide_percent="0.5" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline26v"
+        android:id="@+id/zeroBtnGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.26" />
+        app:layout_constraintGuide_percent="0.0" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2h"
+        android:id="@+id/guideline25v"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.25" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline20h"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.02" />
+        app:layout_constraintGuide_percent="0.205" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline22h"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.21" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline42h"
+        android:id="@+id/guideline40h"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.41" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline62h"
+        android:id="@+id/guideline60h"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.60" />
+        app:layout_constraintGuide_percent="0.605" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline82h"
+        android:id="@+id/guideline80h"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.79" />
+        app:layout_constraintGuide_percent="0.805" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline98h"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.96" />
 
     <TextView
         android:id="@+id/deleteBtn"
         style="@style/Calculator_Green_Keys"
         android:text="AC"
-        app:layout_constraintBottom_toTopOf="@+id/guideline22h"
-        app:layout_constraintEnd_toStartOf="@+id/guideline26v"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline20h"
+        app:layout_constraintEnd_toEndOf="@+id/guideline25v"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guideline2h"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/plusMinusBtn"
         style="@style/Calculator_Green_Keys"
         android:text="+/-"
-        app:layout_constraintTop_toTopOf="@id/guideline2h"
-        app:layout_constraintBottom_toTopOf="@+id/guideline22h"
-        app:layout_constraintEnd_toStartOf="@+id/guideline50v"
-        app:layout_constraintStart_toEndOf="@+id/guideline26v"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline20h"
+        app:layout_constraintEnd_toEndOf="@+id/guideline50v"
+        app:layout_constraintStart_toStartOf="@+id/guideline25v"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/percentBtn"
         style="@style/Calculator_Green_Keys"
         android:text=" % "
-        app:layout_constraintBottom_toTopOf="@+id/guideline22h"
-        app:layout_constraintEnd_toStartOf="@+id/guideline74v"
-        app:layout_constraintStart_toEndOf="@+id/guideline50v"
-        app:layout_constraintTop_toTopOf="@id/guideline2h"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline20h"
+        app:layout_constraintEnd_toEndOf="@+id/guideline75v"
+        app:layout_constraintStart_toStartOf="@+id/guideline50v"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
+
+
+    <ImageView
+        android:id="@+id/cancelBtn"
+        style="@style/Calculator_Green_Keys"
+        android:src="@drawable/icon_orange_vector"
+        android:scaleType="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline20h"
+        app:layout_constraintEnd_toEndOf="@+id/guideline75v"
+        app:layout_constraintStart_toStartOf="@+id/guideline50v"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/devideBtn"
         style="@style/Calculator_Gray_Keys"
         android:text=" ÷ "
-        app:layout_constraintBottom_toTopOf="@+id/guideline22h"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline20h"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/guideline74v"
-        app:layout_constraintTop_toTopOf="@id/guideline2h"
+        app:layout_constraintStart_toStartOf="@+id/guideline75v"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/sevenBtn"
         style="@style/Calculator_Light_Keys"
         android:text="7"
-        app:layout_constraintBottom_toTopOf="@+id/guideline42h"
-        app:layout_constraintTop_toBottomOf="@+id/guideline22h"
-        app:layout_constraintEnd_toStartOf="@+id/guideline26v"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline40h"
+        app:layout_constraintTop_toTopOf="@+id/guideline20h"
+        app:layout_constraintEnd_toEndOf="@+id/guideline25v"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="HardcodedText" />
 
@@ -123,30 +131,30 @@
         android:id="@+id/eightBtn"
         style="@style/Calculator_Light_Keys"
         android:text="8"
-        app:layout_constraintBottom_toTopOf="@+id/guideline42h"
-        app:layout_constraintTop_toBottomOf="@+id/guideline22h"
-        app:layout_constraintEnd_toStartOf="@+id/guideline50v"
-        app:layout_constraintStart_toEndOf="@+id/guideline26v"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline40h"
+        app:layout_constraintTop_toTopOf="@+id/guideline20h"
+        app:layout_constraintEnd_toEndOf="@+id/guideline50v"
+        app:layout_constraintStart_toStartOf="@+id/guideline25v"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/nineBtn"
         style="@style/Calculator_Light_Keys"
         android:text="9"
-        app:layout_constraintBottom_toTopOf="@+id/guideline42h"
-        app:layout_constraintTop_toBottomOf="@+id/guideline22h"
-        app:layout_constraintEnd_toStartOf="@id/guideline74v"
-        app:layout_constraintStart_toEndOf="@+id/guideline50v"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline40h"
+        app:layout_constraintTop_toTopOf="@+id/guideline20h"
+        app:layout_constraintEnd_toEndOf="@id/guideline75v"
+        app:layout_constraintStart_toStartOf="@+id/guideline50v"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/multiplyBtn"
         style="@style/Calculator_Gray_Keys"
         android:text=" x "
-        app:layout_constraintBottom_toTopOf="@+id/guideline42h"
-        app:layout_constraintTop_toBottomOf="@+id/guideline22h"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline40h"
+        app:layout_constraintTop_toTopOf="@+id/guideline20h"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/guideline74v"
+        app:layout_constraintStart_toStartOf="@+id/guideline75v"
         android:paddingBottom="8dp"
         tools:ignore="HardcodedText" />
 
@@ -154,9 +162,9 @@
         android:id="@+id/fourBtn"
         style="@style/Calculator_Light_Keys"
         android:text="4"
-        app:layout_constraintBottom_toTopOf="@+id/guideline62h"
-        app:layout_constraintTop_toBottomOf="@+id/guideline42h"
-        app:layout_constraintEnd_toStartOf="@+id/guideline26v"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline60h"
+        app:layout_constraintTop_toTopOf="@+id/guideline40h"
+        app:layout_constraintEnd_toEndOf="@+id/guideline25v"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="HardcodedText" />
 
@@ -164,39 +172,39 @@
         android:id="@+id/fiveBtn"
         style="@style/Calculator_Light_Keys"
         android:text="5"
-        app:layout_constraintBottom_toTopOf="@+id/guideline62h"
-        app:layout_constraintTop_toBottomOf="@+id/guideline42h"
-        app:layout_constraintEnd_toStartOf="@+id/guideline50v"
-        app:layout_constraintStart_toEndOf="@+id/guideline26v"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline60h"
+        app:layout_constraintTop_toTopOf="@+id/guideline40h"
+        app:layout_constraintEnd_toEndOf="@+id/guideline50v"
+        app:layout_constraintStart_toStartOf="@+id/guideline25v"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/sixBtn"
         style="@style/Calculator_Light_Keys"
         android:text="6"
-        app:layout_constraintBottom_toTopOf="@+id/guideline62h"
-        app:layout_constraintTop_toBottomOf="@+id/guideline42h"
-        app:layout_constraintEnd_toStartOf="@id/guideline74v"
-        app:layout_constraintStart_toEndOf="@+id/guideline50v"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline60h"
+        app:layout_constraintTop_toTopOf="@+id/guideline40h"
+        app:layout_constraintEnd_toEndOf="@id/guideline75v"
+        app:layout_constraintStart_toStartOf="@+id/guideline50v"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/minusBtn"
         style="@style/Calculator_Gray_Keys"
         android:text=" - "
-        app:layout_constraintBottom_toTopOf="@+id/guideline62h"
-        app:layout_constraintTop_toBottomOf="@+id/guideline42h"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline60h"
+        app:layout_constraintTop_toTopOf="@+id/guideline40h"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/guideline74v"
+        app:layout_constraintStart_toStartOf="@+id/guideline75v"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/oneBtn"
         style="@style/Calculator_Light_Keys"
         android:text="1"
-        app:layout_constraintBottom_toTopOf="@+id/guideline82h"
-        app:layout_constraintTop_toBottomOf="@+id/guideline62h"
-        app:layout_constraintEnd_toStartOf="@+id/guideline26v"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline80h"
+        app:layout_constraintTop_toTopOf="@+id/guideline60h"
+        app:layout_constraintEnd_toEndOf="@+id/guideline25v"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="HardcodedText" />
 
@@ -204,67 +212,92 @@
         android:id="@+id/twoBtn"
         style="@style/Calculator_Light_Keys"
         android:text="2"
-        app:layout_constraintBottom_toTopOf="@+id/guideline82h"
-        app:layout_constraintTop_toBottomOf="@+id/guideline62h"
-        app:layout_constraintEnd_toStartOf="@+id/guideline50v"
-        app:layout_constraintStart_toEndOf="@+id/guideline26v"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline80h"
+        app:layout_constraintTop_toTopOf="@+id/guideline60h"
+        app:layout_constraintEnd_toEndOf="@+id/guideline50v"
+        app:layout_constraintStart_toStartOf="@+id/guideline25v"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/threeBtn"
         style="@style/Calculator_Light_Keys"
         android:text="3"
-        app:layout_constraintBottom_toTopOf="@+id/guideline82h"
-        app:layout_constraintTop_toBottomOf="@+id/guideline62h"
-        app:layout_constraintEnd_toStartOf="@+id/guideline74v"
-        app:layout_constraintStart_toEndOf="@+id/guideline50v"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline80h"
+        app:layout_constraintTop_toTopOf="@+id/guideline60h"
+        app:layout_constraintEnd_toEndOf="@+id/guideline75v"
+        app:layout_constraintStart_toStartOf="@+id/guideline50v"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/plusBtn"
         style="@style/Calculator_Gray_Keys"
         android:text=" + "
-        app:layout_constraintBottom_toTopOf="@+id/guideline82h"
-        app:layout_constraintTop_toBottomOf="@+id/guideline62h"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline80h"
+        app:layout_constraintTop_toTopOf="@+id/guideline60h"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/guideline74v"
+        app:layout_constraintStart_toStartOf="@+id/guideline75v"
         tools:ignore="HardcodedText" />
-
     <TextView
         android:id="@+id/zeroBtn"
         style="@style/Calculator_Light_Keys"
-        android:layout_width="@dimen/calc_key_wide"
         android:text="0"
-        app:layout_constraintBottom_toTopOf="@id/guideline98h"
-        app:layout_constraintEnd_toStartOf="@+id/guideline50v"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/guideline50v"
+        app:layout_constraintStart_toStartOf="@+id/zeroBtnGuideline"
+        app:layout_constraintTop_toTopOf="@+id/guideline80h"
+        tools:ignore="HardcodedText" />
+    <TextView
+        android:id="@+id/plus_minus_bottom_btn"
+        style="@style/Calculator_Light_Keys"
+        android:text="+/-"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guideline82h"
+        app:layout_constraintTop_toTopOf="@+id/guideline80h"
+        app:layout_constraintEnd_toEndOf="@+id/guideline25v"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/commaBtn"
         style="@style/Calculator_Light_Keys"
         android:text=","
-        app:layout_constraintBottom_toTopOf="@id/guideline98h"
-        app:layout_constraintEnd_toStartOf="@+id/guideline74v"
-        app:layout_constraintStart_toEndOf="@+id/guideline50v"
-        app:layout_constraintTop_toBottomOf="@+id/guideline82h"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/guideline75v"
+        app:layout_constraintStart_toStartOf="@+id/guideline50v"
+        app:layout_constraintTop_toTopOf="@+id/guideline80h"
+        tools:ignore="HardcodedText" />
+    <ImageView
+        android:id="@+id/vectorBtn"
+        style="@style/Calculator_Light_Keys"
+        android:src="@drawable/icon_vector"
+        android:scaleType="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/guideline75v"
+        app:layout_constraintStart_toStartOf="@+id/guideline50v"
+        app:layout_constraintTop_toTopOf="@+id/guideline80h"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/okBtn"
         style="@style/Calculator_Dark_Green_Keys"
         android:text="="
-        app:layout_constraintBottom_toTopOf="@id/guideline98h"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/guideline74v"
-        app:layout_constraintTop_toBottomOf="@+id/guideline82h"
+        app:layout_constraintStart_toStartOf="@+id/guideline75v"
+        app:layout_constraintTop_toTopOf="@+id/guideline80h"
         tools:ignore="HardcodedText" />
     <androidx.constraintlayout.widget.Group
         android:id="@+id/btnOperatorsGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:constraint_referenced_ids="plusBtn,minusBtn,plusMinusBtn,multiplyBtn,devideBtn,percentBtn,okBtn,deleteBtn" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/btnNumbersGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="zeroBtn,oneBtn,twoBtn,threeBtn,fourBtn,fiveBtn,sixBtn,sevenBtn,eightBtn,nineBtn" />
 
 
     <androidx.constraintlayout.widget.Group

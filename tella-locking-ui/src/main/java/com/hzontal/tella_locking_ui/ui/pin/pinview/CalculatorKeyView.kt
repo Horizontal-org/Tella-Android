@@ -4,78 +4,128 @@ package com.hzontal.tella_locking_ui.ui.pin.pinview
 */
 
 import android.content.Context
-import android.content.res.ColorStateList
-import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.constraintlayout.widget.Group
 import androidx.core.content.ContextCompat
-import androidx.core.widget.ImageViewCompat
-import com.hzontal.tella_locking_ui.R
+import com.hzontal.tella_locking_ui.databinding.CalculatorKeysViewBinding
+import org.hzontal.shared_ui.utils.CalculatorTheme
 
 class CalculatorKeyView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : RelativeLayout(context, attrs, defStyleAttr),PinViewListener{
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0
+) : RelativeLayout(context, attrs, defStyleAttr), PinViewListener {
     var minPinLength = 1
     private var mPinLockListener: PinLockListener? = null
-    private lateinit var mGroupButtons : Group
-    private lateinit var mGroupOperatorsButtons : Group
-    private lateinit var mOnKeyBoardClickListener : OnKeyBoardClickListener
-    private lateinit var mResultListener : ResultListener
-    private lateinit var mOkButton : TextView
-    private lateinit var deleteButton : TextView
-    private var imageTintColor : Int = 0
-    private lateinit var imageBackgroundImg : Drawable
+    private lateinit var mOnKeyBoardClickListener: OnKeyBoardClickListener
+    private lateinit var mResultListener: ResultListener
 
-    init {
-        LayoutInflater.from(context).inflate(R.layout.calculator_keys_view, this, true)
-        attrs?.let {
-            val typedArray = context.obtainStyledAttributes(it, R.styleable.AwesomeCustomView)
-            val imageTintColorResource = typedArray.getResourceId(R.styleable.AwesomeCustomView_awesomeImageTintColor,  android.R.color.white)
-            val imagerResource = typedArray.getResourceId(R.styleable.AwesomeCustomView_awesomeImage,-1)
-             imageTintColor = ContextCompat.getColor(context, imageTintColorResource)
-            if(imagerResource != -1)
-             imageBackgroundImg  = ContextCompat.getDrawable(context, imagerResource)!!
-            typedArray.recycle()
-        }
-        initView()
-    }
-
-    private fun initView() {
-        mGroupButtons = findViewById(R.id.btnsGroup)
-        mGroupOperatorsButtons = findViewById(R.id.btnOperatorsGroup)
-        mOkButton = findViewById(R.id.okBtn)
-        deleteButton = findViewById(R.id.deleteBtn)
-        deleteButton.setTextColor(imageTintColor)
-        deleteButton.background = imageBackgroundImg
-    }
+    private val binding: CalculatorKeysViewBinding = CalculatorKeysViewBinding.inflate(LayoutInflater.from(context), this, true)
 
     fun setListenerers(pinLockListener: PinLockListener?, resultListener: ResultListener?) {
         mPinLockListener = pinLockListener
         if (resultListener != null) {
             mResultListener = resultListener
         }
-        mOnKeyBoardClickListener = OnKeyBoardClickListener(minPinLength,pinLockListener,this)
+        mOnKeyBoardClickListener = OnKeyBoardClickListener(minPinLength, pinLockListener, this)
         initListeners()
     }
 
-    private fun initListeners () {
-        mGroupButtons.referencedIds.forEach {
+     fun initTheme(style: CalculatorThemeStyle, calculatorTheme: CalculatorTheme) {
+
+         when (calculatorTheme) {
+             CalculatorTheme.BLUE_SKIN -> {
+                binding.btnOperatorsGroup.referencedIds.forEach {
+                         val button = findViewById<TextView>(it)
+                         button.setBackgroundColor(ContextCompat.getColor(context, style.calculatorOperatorsBackgroundColor))
+                         button.setTextColor(ContextCompat.getColor(context, style.calculatorOperatorsTextColor))
+                 }
+
+                 binding.btnNumbersGroup.referencedIds.forEach {
+                         val button = findViewById<TextView>(it)
+                         button.setBackgroundColor(ContextCompat.getColor(context, style.calculatorNumbersBackgroundColor))
+                         button.setTextColor(ContextCompat.getColor(context, style.calculatorNumbersTextColor))
+                 }
+
+                 binding.plusMinusBottomBtn.setBackgroundColor(ContextCompat.getColor(context, style.calculatorNumbersBackgroundColor))
+                 binding.plusMinusBottomBtn.setTextColor(ContextCompat.getColor(context, style.calculatorOperatorsTextColor))
+                 binding.commaBtn.setBackgroundColor(ContextCompat.getColor(context, style.calculatorNumbersBackgroundColor))
+                 binding.commaBtn.setTextColor(ContextCompat.getColor(context, style.calculatorOperatorsTextColor))
+                 binding.okBtn.setBackgroundColor(ContextCompat.getColor(context, style.calculatorOkBtnBackgroundColor))
+
+                 binding.plusMinusBtn.text = "()"
+                 binding.plusMinusBottomBtn.visibility = VISIBLE
+                 binding.zeroBtnGuideline.setGuidelinePercent(0.25F)
+
+             }
+
+             CalculatorTheme.ORANGE_SKIN -> {
+
+                 binding.btnsGroup.referencedIds.forEach {
+                         val button = findViewById<TextView>(it)
+                         button.setBackgroundResource(style.calculatorBackgroundDrawable)
+                         button.setTextColor(ContextCompat.getColor(context, style.calculatorNumbersTextColor))
+                 }
+
+                 binding.btnOperatorsGroup.referencedIds.forEach {
+                     val button = findViewById<TextView>(it)
+                     button.setBackgroundResource(style.calculatorBackgroundDrawable)
+                     button.setTextColor(ContextCompat.getColor(context, style.calculatorOperatorsTextColor))
+                 }
+                 binding.okBtn.setBackgroundResource(style.calculatorOkBtnTextBackgroundDrawable)
+                 binding.okBtn.setTextColor(ContextCompat.getColor(context, style.calculatorOkBtnTextColor))
+
+                 binding.plusMinusBottomBtn.text = "0"
+                 binding.plusMinusBtn.text = "()"
+                 binding.zeroBtn.text = "."
+                 binding.deleteBtn.text = "C"
+                 binding.commaBtn.visibility = GONE
+                 binding.vectorBtn.visibility = VISIBLE
+                 binding.vectorBtn.setBackgroundResource(style.calculatorBackgroundDrawable)
+                 binding.plusMinusBottomBtn.visibility = VISIBLE
+                 binding.zeroBtnGuideline.setGuidelinePercent(0.25F)
+
+             }
+
+             CalculatorTheme.YELLOW_SKIN -> {
+
+                 binding.btnOperatorsGroup.referencedIds.forEach {
+                     val button = findViewById<TextView>(it)
+                     button.setBackgroundResource(style.calculatorBackgroundDrawable)
+                     button.setTextColor(ContextCompat.getColor(context, style.calculatorOperatorsTextColor))
+                 }
+
+                 binding.btnNumbersGroup.referencedIds.forEach {
+                     val button = findViewById<TextView>(it)
+                     button.setBackgroundResource(style.calculatorBackgroundDrawable)
+                     button.setTextColor(ContextCompat.getColor(context, style.calculatorNumbersTextColor))
+                 }
+
+                 binding.plusMinusBottomBtn.visibility = GONE
+                 binding.commaBtn.text = "."
+                 binding.commaBtn.setBackgroundResource(style.calculatorBackgroundDrawable)
+                 binding.cancelBtn.setBackgroundResource( style.calculatorBackgroundDrawable)
+
+                 binding.plusMinusBtn.text = "%"
+                 binding.percentBtn.visibility = GONE
+                 binding.cancelBtn.visibility = VISIBLE
+                 binding.okBtn.setBackgroundResource(style.calculatorOkBtnTextBackgroundDrawable)
+                 binding.okBtn.setTextColor(ContextCompat.getColor(context, style.calculatorOkBtnTextColor))
+
+
+             }
+
+      }
+     }
+    private fun initListeners() {
+        binding.btnsGroup.referencedIds.forEach {
             val button = findViewById<TextView>(it)
             button.setOnClickListener(mOnKeyBoardClickListener)
         }
-        mGroupOperatorsButtons.referencedIds.forEach {
-            val button = findViewById<TextView>(it)
-            button.setBackgroundColor(imageTintColor)
 
-        }
-        deleteButton.setOnClickListener{
+        binding.deleteBtn.setOnClickListener {
             mResultListener.onClearResult()
             mOnKeyBoardClickListener.onClearClicked()
         }

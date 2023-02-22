@@ -77,7 +77,25 @@
         <item name="android:layout_marginTop">20dp</item>
         <item name="android:inputType">text</item>
         <item name="android:textSize">24sp</item>
-        <item name="android:textColor">@color/wa_calc_color</item>
+        <item name="android:textColor">@color/wa_black</item>
+    </style>
+
+    <style name="Calculator_Edit_Text_Blue_Skin" parent="Calculator_Edit_Text">
+        <item name="android:textSize">56sp</item>
+        <item name="android:textColor">@color/calc_blue_skin_white</item>
+    </style>
+    <style name="Calculator_Result_Text_Orange_Skin" parent="Calculator_Result_Text">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/wa_black</item>
+    </style>
+
+    <style name="Calculator_Edit_Text_Orange_Skin" parent="Calculator_Edit_Text">
+        <item name="android:textSize">48sp</item>
+        <item name="android:textColor">@color/calc_orange_skin_black</item>
+    </style>
+    <style name="Calculator_Result_Text_Blue_Skin" parent="Calculator_Result_Text">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/calc_orange_skin_grey</item>
     </style>
 
     <style name="Calculator_Result_Text" parent="Calculator_Text">
@@ -98,17 +116,13 @@
     </style>
 
     <style name="Calculator_Keys">
-        <item name="android:layout_margin">6dp</item>
-        <item name="android:layout_width">@dimen/calc_key_size</item>
-        <item name="android:layout_height">@dimen/calc_key_size</item>
-        <item name="android:layout_marginStart">0dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
         <item name="android:textAlignment">center</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">@dimen/calc_text_size</item>
         <item name="android:layout_marginBottom">0dp</item>
         <item name="android:fontFamily">@font/open_sans</item>
-        <item name="layout_constraintHorizontal_bias">0.5</item>
-        <item name="layout_constraintVertical_bias">0.5</item>
         <item name="android:clickable">true</item>
     </style>
 
@@ -132,9 +146,4 @@
         <item name="android:textColor">@color/wa_white</item>
     </style>
 
-    <style name="AwesomeCustomView" parent="">
-        <item name="awesomeImageTintColor">@color/calc_blue_skin_dark_blue</item>
-        <item name="awesomeImage">@drawable/bg_yellow_btn</item>
-
-    </style>
 </resources>

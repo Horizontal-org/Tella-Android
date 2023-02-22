@@ -8,6 +8,8 @@ import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pin.calculator.CalculatorActivity
 import info.guardianproject.cacheword.SecretsManager
+import org.hzontal.shared_ui.utils.CALCULATOR_THEME
+import org.hzontal.shared_ui.utils.CalculatorTheme
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder
 import org.hzontal.tella.keys.config.UnlockRegistry
 import rs.readahead.washington.mobile.MyApplication
@@ -15,7 +17,9 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.views.activity.PatternUpgradeActivity
 
+
 abstract class BaseLockActivity : BaseActivity() {
+
 
     private val holder by lazy { applicationContext as IUnlockRegistryHolder }
 
@@ -46,7 +50,7 @@ abstract class BaseLockActivity : BaseActivity() {
             UnlockRegistry.Method.TELLA_PIN -> {
                 //temp switch
                 if (Preferences.getAppAlias() == "rs.readahead.washington.mobile.views.activity.AliasCalculator") {
-                    Intent(this, CalculatorActivity::class.java)
+                    Intent(this, CalculatorActivity::class.java).putExtra(CALCULATOR_THEME, CalculatorTheme.YELLOW_SKIN.toString())
                 } else {
                     Intent(this, PinUnlockActivity::class.java)
                 }
