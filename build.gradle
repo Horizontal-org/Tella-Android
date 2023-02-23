@@ -65,6 +65,12 @@ buildscript {
     versions.buildToolsVersion = "30.0.2"
     versions.workermanger = "2.7.1"
     versions.hilt_version = "1.0.0"
+    versions.hilt_android = "2.38.1"
+    versions.hilt_viewmodel = '1.0.0-alpha03'
+    versions.leakCanaryVersion = "2.4"
+    versions.hilt_android_compiler = "2.37"
+    versions.permissionDispatcher = "4.8.0"
+    versions.googlePlayServices = "17.0.0"
 
 
     repositories {
