@@ -139,7 +139,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         INSTANCE.getCreateReportsServerAndCloseActivity().observe(this, server -> {
             if (server != null) {
                 tellaUploadServersPresenter.create(server);
-                finish();
             }
         });
 

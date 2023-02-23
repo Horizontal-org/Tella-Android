@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.views.fragment.uwazi.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -10,7 +11,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -19,8 +19,6 @@ import com.hzontal.utils.MediaFile;
 
 import org.hzontal.shared_ui.submission.SubmittingItem;
 
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Objects;
 
 import rs.readahead.washington.mobile.R;
@@ -46,26 +44,9 @@ public class ReportsFormEndView extends FrameLayout {
     String title;
     ProgressBar totalProgress;
     long formSize = 0L;
-    HashMap<String, Long> formParts = new HashMap();
-    HashMap<String, Float> uploadedPartsPct = new HashMap();
     private ReportFormInstance instance;
     private boolean previewUploaded;
 
-
-    public ReportsFormEndView(Context context, @StringRes int titleResId) {
-        super(context);
-        inflate(context, R.layout.reports_form_end_view, this);
-
-        title = getResources().getString(titleResId);
-
-        titleView = findViewById(R.id.title);
-
-        titleView.setText(title);
-
-        MediaFileHandler mediaFileHandler = new MediaFileHandler();
-        VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
-        glide = Glide.with(getContext()).using(glideLoader);
-    }
 
     public ReportsFormEndView(Context context, String title, String description) {
         super(context);
@@ -104,26 +85,18 @@ public class ReportsFormEndView extends FrameLayout {
 
         formNameView.setText(Objects.requireNonNull(instance.getTitle()));
 
-        formSize = instance.getTitle().getBytes(StandardCharsets.UTF_8).length +
-                instance.getMetadata().toString().getBytes(StandardCharsets.UTF_8).length;
-        //  + instance.getType().getBytes(StandardCharsets.UTF_8).length;
-
         partsListView = findViewById(R.id.formPartsList);
         partsListView.removeAllViews();
-
-        //  partsListView.addView(createFormSubmissionPartItemView(instance, formSize, offline));
 
         for (FormMediaFile mediaFile : instance.getWidgetMediaFiles()) {
             partsListView.addView(createFormMediaFileItemView(mediaFile, offline));
             formSize += mediaFile.size;
-            formParts.put(mediaFile.getPartName(), mediaFile.size);
-            uploadedPartsPct.put(mediaFile.getPartName(), 0F);
         }
-        setFormSizeLabel(instance);
+        setFormSizeLabel(instance, 0);
         uploadProgressVisibity(instance.getStatus(), offline);
     }
 
-    void setFormSizeLabel(@NonNull ReportFormInstance instance) {
+    void setFormSizeLabel(@NonNull ReportFormInstance instance, int percent) {
         String title;
         if (instance.getWidgetMediaFiles().size() == 0) {
             title = getStatusLabel(instance.getStatus());
@@ -139,7 +112,7 @@ public class ReportsFormEndView extends FrameLayout {
             title = getStatusLabel(instance.getStatus()) + "\n" + " " + getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + "," + getTotalUploadedSize(instance) + "/" + FileUtil.getFileSizeString(formSize) + " " + getResources().getString(R.string.File_Uploaded);
         } else {
             //TODO CHECK THE PERCENT  (getPercentUploadedSize(instance)*100) + "% " +
-            title = getResources().getString(R.string.File_Uploaded) + "\n" + getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + "," + FileUtil.getFileSize(getTotalUploadedSize(instance)) + "/" + FileUtil.getFileSizeString(formSize) + " " + getResources().getString(R.string.File_Uploaded);
+            title = (percent) + "% " + getResources().getString(R.string.File_Uploaded) + "\n" + getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + "," + getTotalUploadedSize(instance) + "/" + FileUtil.getFileSizeString(formSize) + " " + getResources().getString(R.string.File_Uploaded);
         }
 
         formSizeView.setText(title);
@@ -170,23 +143,6 @@ public class ReportsFormEndView extends FrameLayout {
         }
     }
 
-    public void showUploadProgress(String partName) {
-        titleView.setText(R.string.collect_end_heading_submitting);
-        //  subTitleView.setVisibility(GONE);
-
-        SubmittingItem item = findViewWithTag(partName);
-        if (item != null) {
-            item.setPartUploading();
-        }
-    }
-
-    public void hideUploadProgress(String partName) {
-        SubmittingItem item = findViewWithTag(partName);
-        if (item != null) {
-            item.setPartUploaded();
-        }
-    }
-
     public void setUploadProgress(ReportFormInstance instance, float pct) {
         if (pct < 0 || pct > 1) {
             return;
@@ -195,74 +151,47 @@ public class ReportsFormEndView extends FrameLayout {
         int percentComplete;
 
         if (instance.getWidgetMediaFiles().size() > 1) {
-            percentComplete = getPercentUploadedSize(instance) * 100;
+            percentComplete = getTotalUploadedSizePercent(instance);
         } else {
-            percentComplete = (int) (pct);
+            percentComplete = (int) (pct * 100);
         }
 
         Timber.d("***Test*** PCT " + pct + "\n getTotalUploadedSize " + getTotalUploadedSize(instance) + "\n FormSize " + formSize + "\n percentComplete " + percentComplete + " \n Math.round(percentComplete) " + Math.toIntExact(percentComplete));
 
-
-        totalProgress.setProgress(percentComplete, true);
-        setFormSizeLabel(instance);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            totalProgress.setProgress(percentComplete, true);
+        } else {
+            totalProgress.setProgress(percentComplete);
+        }
+        setFormSizeLabel(instance, percentComplete);
     }
 
-    private long getTotalUploadedSize(ReportFormInstance instance) {
+    private int getTotalUploadedSizePercent(ReportFormInstance instance) {
         int totalUploadedSize = 0;
         for (FormMediaFile formMediaFile : instance.getWidgetMediaFiles()) {
-            Timber.d("***Test*** FormMediaFile " + "" + formMediaFile.status + " \n" + formMediaFile.size);
-
-            if (formMediaFile.status == FormMediaFileStatus.SUBMITTED) {
-                totalUploadedSize += formMediaFile.size;
-            }
+            totalUploadedSize += formMediaFile.uploadedSize;
         }
-        return totalUploadedSize;
+        if (totalUploadedSize > 0) {
+            float percent = ((float) (totalUploadedSize * 1.0) / formSize);
+            return Math.round(percent * 100);
+
+        } else {
+            return 0;
+        }
     }
 
-    private int getPercentUploadedSize(ReportFormInstance instance) {
-        int totalUploadedSize = 0;
+    private double getTotalUploadedSize(ReportFormInstance instance) {
+        long totalUploadedSize = 0;
         for (FormMediaFile formMediaFile : instance.getWidgetMediaFiles()) {
-            Timber.d("***Test*** FormMediaFile " + "" + formMediaFile.status + " \n" + formMediaFile.size);
-
-            if (formMediaFile.status == FormMediaFileStatus.SUBMITTED) {
-                totalUploadedSize += formMediaFile.uploadedSize;
-            }
+            totalUploadedSize += formMediaFile.uploadedSize;
         }
-        return (int) (totalUploadedSize / formSize);
+        return FileUtil.getFileSize(totalUploadedSize);
     }
 
     public void clearPartsProgress(ReportFormInstance instance) {
         setPartsCleared(instance);
     }
 
-    private View createFormSubmissionPartItemView(@NonNull ReportFormInstance instance, long size, boolean offline) {
-
-        SubmittingItem item = new SubmittingItem(getContext(), null, 0);
-
-        item.setTag("REPORT_RESPONSE");
-
-        item.setPartName(R.string.collect_end_item_form_data);
-
-        item.setPartSize(size);
-        item.setPartIcon(R.drawable.ic_assignment_white_24dp);
-
-        if (instance.getStatus() == EntityStatus.SUBMITTED || // back compatibility down
-                instance.getStatus() == EntityStatus.SUBMISSION_PARTIAL_PARTS) {
-            item.setPartUploaded();
-        } else {
-            item.setPartPrepared(offline);
-        }
-
-        if (offline || instance.getStatus() == EntityStatus.SUBMITTED) {
-            totalProgress.setVisibility(View.GONE);
-            //   subTitleView.setVisibility(GONE);
-        } else {
-            // subTitleView.setVisibility(VISIBLE);
-            totalProgress.setVisibility(View.VISIBLE);
-        }
-
-        return item;
-    }
 
     private View createFormMediaFileItemView(@NonNull FormMediaFile mediaFile, boolean offline) {
 
@@ -294,11 +223,10 @@ public class ReportsFormEndView extends FrameLayout {
     }
 
     private void setPartsCleared(ReportFormInstance instance) {
-
         for (FormMediaFile mediaFile : instance.getWidgetMediaFiles()) {
             SubmittingItem item = partsListView.findViewWithTag(mediaFile.getVaultFile().id);
 
-            if (mediaFile.status == FormMediaFileStatus.SUBMITTED) {
+            if (mediaFile.status == FormMediaFileStatus.SUBMITTED && instance.getStatus() == EntityStatus.SUBMITTED) {
                 item.setPartUploaded();
             } else {
                 item.setPartCleared();

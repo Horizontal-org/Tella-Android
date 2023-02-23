@@ -13,6 +13,7 @@ import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.SharedLiveData
 import rs.readahead.washington.mobile.views.dialog.reports.step5.ServerAdvancedSettingsFragment
+import rs.readahead.washington.mobile.views.fragment.reports.ReportsFragment
 
 class SuccessfulLoginFragment : BaseBindingFragment<FragmentSuccessfulLoginBinding>(
     FragmentSuccessfulLoginBinding::inflate
@@ -66,7 +67,7 @@ class SuccessfulLoginFragment : BaseBindingFragment<FragmentSuccessfulLoginBindi
 
     private fun saveServerAndGoToReportsScreen() {
         SharedLiveData.createReportsServerAndCloseActivity.postValue(server)
-        MyApplication.bus().post(CloseSettingsActivityEvent())
+        baseActivity.replaceFragmentNoAddToBackStack(ReportsFragment(),R.id.container)
         baseActivity.finish()
     }
 

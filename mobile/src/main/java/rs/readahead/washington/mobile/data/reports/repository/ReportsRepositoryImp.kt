@@ -6,7 +6,6 @@ import com.hzontal.tella_vault.VaultFile
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import okhttp3.MultipartBody
 import rs.readahead.washington.mobile.data.entity.reports.LoginEntity
 import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
 import rs.readahead.washington.mobile.data.entity.reports.mapper.mapToDomainModel
@@ -14,7 +13,7 @@ import rs.readahead.washington.mobile.data.http.HttpStatus
 import rs.readahead.washington.mobile.data.reports.remote.ReportsApiService
 import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.URL_LOGIN
 import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.URL_PROJECTS
-import rs.readahead.washington.mobile.data.repository.MediaFileRequestBody
+import rs.readahead.washington.mobile.data.repository.SkippableMediaFileRequestBody
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.reports.ReportPostResult
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
@@ -22,7 +21,6 @@ import rs.readahead.washington.mobile.domain.repository.reports.ReportsRepositor
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.util.Util
 import timber.log.Timber
-import java.net.URLEncoder
 import java.net.UnknownHostException
 import java.util.*
 import javax.inject.Inject
@@ -156,9 +154,9 @@ class ReportsRepositoryImp @Inject internal constructor(
                     )
                 )
 
-                val file = MediaFileRequestBody(
-                    vaultFile,
-                    ) { current: Long, total: Long ->
+                val fileToUpload = SkippableMediaFileRequestBody(
+                    vaultFile, skipBytes
+                ) { current: Long, total: Long ->
                     uploadEmitter.emit(
                         emitter,
                         vaultFile,
@@ -166,12 +164,6 @@ class ReportsRepositoryImp @Inject internal constructor(
                         size
                     )
                 }
-
-              val  fileToUpload =  MultipartBody.Part.createFormData(
-                    "file",
-                    URLEncoder.encode(vaultFile.name, "utf-8"),
-                    file
-                )
 
                 var response = apiService.putFile(
                     file = fileToUpload,
@@ -185,7 +177,7 @@ class ReportsRepositoryImp @Inject internal constructor(
                 }
 
                 response = apiService.postFile(
-                    file = fileToUpload,
+                    //   file = fileToUpload,
                     url = baseUrl,
                     access_token = accessToken
                 ).blockingGet()

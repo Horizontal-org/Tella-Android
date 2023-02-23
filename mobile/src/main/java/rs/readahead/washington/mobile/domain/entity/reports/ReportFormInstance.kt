@@ -15,7 +15,8 @@ data class ReportFormInstance(
     var widgetMediaFiles: List<FormMediaFile> = emptyList(),
     var formPartStatus: FormMediaFileStatus = FormMediaFileStatus.UNKNOWN,
     var title: String = "",
-    var description: String = ""
+    var description: String = "",
+    var current: Int = 0
 ) : Serializable {
 
     override fun equals(other: Any?): Boolean {

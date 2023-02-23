@@ -719,4 +719,6 @@ button to add a new template.</string>
     <string name="Project_Url_Screen_Title" translatable="false">Enter project URL</string>
     <string name="Report_Dialog_Draft_Title" translatable="false">Exit report?</string>
     <string name="Report_Server_Already_Exist_Error" translatable="false">You are already connected to this project. Please enter another URL.</string>
+    <string name="Report_Deleted_Confirmation" translatable="false"> %s has been deleted.</string>
+    <string name="Report_Save_Outbox_Confirmation" translatable="false">The report was saved to your Outbox. You can submit it when you are ready.</string>
 </resources>

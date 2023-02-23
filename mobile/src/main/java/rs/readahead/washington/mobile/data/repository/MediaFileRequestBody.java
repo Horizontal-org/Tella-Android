@@ -18,7 +18,6 @@ import okio.Okio;
 import okio.Source;
 import rs.readahead.washington.mobile.domain.entity.IProgressListener;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.util.FileUtil;
 import timber.log.Timber;
 
 
@@ -70,7 +69,7 @@ public class MediaFileRequestBody extends RequestBody {
 
             // writeAll method from RealBufferedSink
             long totalBytesRead = 0;
-            for (long readCount; (readCount = source.read(sink.getBuffer(), 8192)) != -1; ) {
+            for (long readCount; (readCount = source.read(sink.buffer(), 8192)) != -1; ) {
                 totalBytesRead += readCount;
                 sink.emitCompleteSegments();
 

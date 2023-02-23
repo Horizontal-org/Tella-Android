@@ -11,14 +11,14 @@ import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_FORM_INSTANCE
-import rs.readahead.washington.mobile.views.fragment.reports.entry.ReportsEntryViewModel
+import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.ReportsFormEndView
 
 @AndroidEntryPoint
 class ReportSubmittedFragment :
     BaseBindingFragment<FragmentSendReportBinding>(FragmentSendReportBinding::inflate) {
 
-    private val viewModel by viewModels<ReportsEntryViewModel>()
+    private val viewModel by viewModels<ReportsViewModel>()
     private lateinit var endView: ReportsFormEndView
     private var reportInstance: ReportFormInstance? = null
 
@@ -30,10 +30,11 @@ class ReportSubmittedFragment :
 
     private fun initData() {
         with(viewModel) {
-            instanceDeleted.observe(viewLifecycleOwner) { deleted ->
-                if (deleted) {
+            instanceDeleted.observe(viewLifecycleOwner) { title ->
+                title?.let {
                     nav().popBackStack()
                 }
+
             }
         }
     }

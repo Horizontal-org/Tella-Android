@@ -24,7 +24,7 @@ class TellaReportServer @JvmOverloads constructor(
         if (other !is TellaReportServer) {
             return false
         }
-        return id == other.id
+        return (id == other.id && projectId == other.projectId)
     }
 
     override fun hashCode(): Int {

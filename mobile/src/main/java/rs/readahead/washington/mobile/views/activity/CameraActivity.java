@@ -94,7 +94,6 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
     TextView photoModeText;
     TextView videoModeText;
     CameraResolutionButton resolutionButton;
-
     private CameraPresenter presenter;
     private TellaFileUploadSchedulePresenter uploadPresenter;
     private MetadataAttacher metadataAttacher;
@@ -266,7 +265,7 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
     public void onMetadataAttached(VaultFile vaultFile) {
         returnIntent(vaultFile);
 
-        //scheduleFileUpload(capturedMediaFile);
+        scheduleFileUpload(capturedMediaFile);
     }
 
     private void returnIntent(VaultFile vaultFile) {

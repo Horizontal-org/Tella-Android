@@ -43,18 +43,16 @@ interface ReportsApiService {
         reportBodyEntity: ReportBodyEntity,
     ): Single<ReportPostResponse>
 
-    @Multipart
     @PUT
     fun putFile(
-        @Part file: MultipartBody.Part,
+        @Body file: SkippableMediaFileRequestBody,
         @Url url: String,
         @Header(AUTHORIZATION_HEADER) access_token: String,
     ): Single<Response<Void>>
 
-    @Multipart
     @POST
     fun postFile(
-        @Part file: MultipartBody.Part,
+      //  @Part file: MultipartBody.Part,
         @Url url: String,
         @Header(AUTHORIZATION_HEADER) access_token: String
     ): Single<Response<Void>>

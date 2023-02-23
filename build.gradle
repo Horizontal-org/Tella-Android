@@ -63,6 +63,8 @@ buildscript {
     versions.crashlyticsGradle = '2.4.1'
     versions.retrofit = "2.9.0"
     versions.buildToolsVersion = "30.0.2"
+    versions.workermanger = "2.7.1"
+    versions.hilt_version = "1.0.0"
 
 
     repositories {

@@ -70,12 +70,11 @@ open class ReportsFilesRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: GridAttachmentsViewHolder, position: Int) {
         holder.bind(
-            vaultFile = listAttachment[position],
-            iAttachmentsMediaHandler = iAttachmentsMediaHandler
+            vaultFile = listAttachment[position]
         )
     }
 
-    inner class GridAttachmentsViewHolder(val view: View) : RecyclerView.ViewHolder(view)  {
+    open inner class GridAttachmentsViewHolder(val view: View) : RecyclerView.ViewHolder(view)  {
 
         constructor(parent: ViewGroup)
                 : this(
@@ -83,12 +82,12 @@ open class ReportsFilesRecyclerViewAdapter(
         )
 
         protected lateinit var icAttachmentImg: ImageView
-        protected lateinit var filePreviewImg: ImageView
+        private lateinit var filePreviewImg: ImageView
         private lateinit var fileNameTextView: TextView
         private lateinit var removeBtn: View
         protected val context: Context by lazy { view.context }
 
-        fun bind(vaultFile: VaultFile?, iAttachmentsMediaHandler: IReportAttachmentsHandler) {
+        fun bind(vaultFile: VaultFile?) {
             view.apply {
                 fileNameTextView = findViewById(R.id.fileNameTextView)
                 filePreviewImg = findViewById(R.id.attachmentImg)
@@ -140,7 +139,7 @@ open class ReportsFilesRecyclerViewAdapter(
             }
         }
 
-        fun showVideoInfo(vaultFile: VaultFile) {
+        private fun showVideoInfo(vaultFile: VaultFile) {
             Glide.with(context)
                 .using(glideLoader)
                 .load(VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
@@ -150,15 +149,15 @@ open class ReportsFilesRecyclerViewAdapter(
             icAttachmentImg.setBackgroundResource(R.drawable.ic_play)
         }
 
-        fun showAudioInfo() {
+        private fun showAudioInfo() {
             icAttachmentImg.setBackgroundResource(R.drawable.ic_audio_w_small)
         }
 
-        fun showDocInfo() {
+        private fun showDocInfo() {
             icAttachmentImg.setBackgroundResource(R.drawable.ic_reports)
         }
 
-        fun showImageInfo(vaultFile: VaultFile) {
+        private fun showImageInfo(vaultFile: VaultFile) {
             Glide.with(filePreviewImg.context)
                 .using(glideLoader)
                 .load(VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
@@ -167,8 +166,8 @@ open class ReportsFilesRecyclerViewAdapter(
                 .into(filePreviewImg)
         }
 
-        fun showAddLink() {
-            filePreviewImg.setBackground(context.getDrawable(R.drawable.transparent_solid))
+        private fun showAddLink() {
+            filePreviewImg.background = context.getDrawable(R.drawable.transparent_solid)
             filePreviewImg.setImageResource(R.drawable.upload_box_btn)
             filePreviewImg.setOnClickListener {
                 iAttachmentsMediaHandler.addFiles()

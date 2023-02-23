@@ -13,7 +13,7 @@ import rs.readahead.washington.mobile.util.ConnectionLiveData
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_FORM_INSTANCE
-import rs.readahead.washington.mobile.views.fragment.reports.entry.ReportsEntryViewModel
+import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.reports.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.reports.viewpagerfragments.BUNDLE_IS_FROM_OUTBOX
 import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
@@ -23,7 +23,7 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.ReportsFormEn
 class ReportsSendFragment :
     BaseBindingFragment<FragmentSendReportBinding>(FragmentSendReportBinding::inflate) {
 
-    private val viewModel by viewModels<ReportsEntryViewModel>()
+    private val viewModel by viewModels<ReportsViewModel>()
     private lateinit var endView: ReportsFormEndView
     private var reportInstance: ReportFormInstance? = null
     private var isFromOutbox = false
@@ -42,7 +42,6 @@ class ReportsSendFragment :
         }
 
         with(viewModel) {
-
             progressInfo.observe(viewLifecycleOwner) { progress ->
                 val pct = progress.first
                 val instance = progress.second
@@ -106,9 +105,7 @@ class ReportsSendFragment :
             handleBackButton()
         }
         binding?.toolbar?.setRightIcon(-1)
-        reportInstance?.let {
-            checkAndSubmitEntity(MyApplication.isConnectedToInternet(baseActivity))
-        }
+
         if (reportInstance?.status == EntityStatus.SUBMITTED) {
             binding?.nextBtn?.hide()
         }
@@ -140,7 +137,7 @@ class ReportsSendFragment :
             if (reportInstance?.status == EntityStatus.PAUSED || reportInstance?.status == EntityStatus.SUBMISSION_ERROR) {
                 submitEntity()
             } else {
-                viewModel.dispose()
+                viewModel.clearDisposabe()
             }
         }
         pauseResumeLabel()
@@ -166,7 +163,11 @@ class ReportsSendFragment :
                 reportFormInstance.title,
                 reportFormInstance.description,
             )
-            endView.setInstance(reportFormInstance, MyApplication.isConnectedToInternet(baseActivity), true)
+            endView.setInstance(
+                reportFormInstance,
+                MyApplication.isConnectedToInternet(baseActivity),
+                false
+            )
             binding?.endViewContainer?.removeAllViews()
             binding?.endViewContainer?.addView(endView)
             endView.clearPartsProgress(reportFormInstance)

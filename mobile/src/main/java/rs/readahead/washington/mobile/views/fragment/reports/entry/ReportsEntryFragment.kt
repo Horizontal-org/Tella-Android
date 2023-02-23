@@ -26,12 +26,12 @@ import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.hide
-import rs.readahead.washington.mobile.util.setTint
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.activity.CameraActivity
 import rs.readahead.washington.mobile.views.adapters.reports.ReportsFilesRecyclerViewAdapter
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.REPORT_ENTRY
+import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.reports.viewpager.OUTBOX_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector
@@ -48,7 +48,7 @@ const val BUNDLE_REPORT_AUDIO = "bundle_report_audio"
 class ReportsEntryFragment :
     BaseBindingFragment<FragmentReportsEntryBinding>(FragmentReportsEntryBinding::inflate),
     IReportAttachmentsHandler, CustomDropdownItemClickListener {
-    private val viewModel by viewModels<ReportsEntryViewModel>()
+    private val viewModel by viewModels<ReportsViewModel>()
     private lateinit var gridLayoutManager: GridLayoutManager
     private val filesRecyclerViewAdapter: ReportsFilesRecyclerViewAdapter by lazy {
         ReportsFilesRecyclerViewAdapter(
@@ -158,7 +158,7 @@ class ReportsEntryFragment :
 
     private fun highLightButton(isTitleEnabled: Boolean, isDescriptionEnabled: Boolean) {
         if (isTitleEnabled && isDescriptionEnabled) {
-            binding?.sendReportBtn?.setTint(R.color.wa_orange)
+            binding?.sendReportBtn?.setBackgroundResource(R.drawable.bg_round_orange_btn)
             binding?.toolbar?.onRightClickListener = {
                 saveReportAsDraft(false)
             }
@@ -169,7 +169,7 @@ class ReportsEntryFragment :
                 submitReport()
             }
         } else {
-            binding?.sendReportBtn?.setTint(R.color.wa_orange_16)
+            binding?.sendReportBtn?.setBackgroundResource(R.drawable.bg_round_orange16_btn)
             binding?.sendReportBtn?.setOnClickListener(null)
             binding?.toolbar?.onRightClickListener = {}
             binding?.sendLaterBtn?.setOnClickListener {}

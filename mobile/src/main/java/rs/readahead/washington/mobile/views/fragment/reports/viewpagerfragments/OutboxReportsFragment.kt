@@ -3,7 +3,6 @@ package rs.readahead.washington.mobile.views.fragment.reports.viewpagerfragments
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
@@ -15,7 +14,7 @@ import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.EntityAdapter
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_FORM_INSTANCE
-import rs.readahead.washington.mobile.views.fragment.reports.entry.ReportsEntryViewModel
+import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
 
 const val BUNDLE_IS_FROM_OUTBOX = "bundle_is_from_outbox"
 
@@ -23,7 +22,7 @@ const val BUNDLE_IS_FROM_OUTBOX = "bundle_is_from_outbox"
 class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
     FragmentReportsListBinding::inflate
 ) {
-    private val viewModel by viewModels<ReportsEntryViewModel>()
+    private val viewModel by viewModels<ReportsViewModel>()
     private val entityAdapter: EntityAdapter by lazy { EntityAdapter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,7 +41,7 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
 
     private fun initData() {
         with(viewModel) {
-            outboxReportListFormInstance.observe(viewLifecycleOwner, { outboxes ->
+            outboxReportListFormInstance.observe(viewLifecycleOwner) { outboxes ->
                 if (outboxes.isEmpty()) {
                     binding?.listReportsRecyclerView?.hide()
                     binding?.textViewEmpty?.show()
@@ -51,22 +50,22 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
                     binding?.listReportsRecyclerView?.show()
                     binding?.textViewEmpty?.hide()
                 }
-            })
-            onMoreClickedFormInstance.observe(viewLifecycleOwner, { instance ->
+            }
+            onMoreClickedFormInstance.observe(viewLifecycleOwner) { instance ->
                 showOutboxMenu(instance)
-            })
+            }
 
-            reportInstance.observe(viewLifecycleOwner, { instance ->
+            reportInstance.observe(viewLifecycleOwner) { instance ->
                 openEntityInstance(instance)
-            })
+            }
 
-            onOpenClickedFormInstance.observe(viewLifecycleOwner, { instance ->
+            onOpenClickedFormInstance.observe(viewLifecycleOwner) { instance ->
                 loadEntityInstance(instance)
-            })
+            }
 
-            instanceDeleted.observe(viewLifecycleOwner, {
+            instanceDeleted.observe(viewLifecycleOwner) {
                 viewModel.listOutbox()
-            })
+            }
         }
     }
 
@@ -94,7 +93,7 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
     }
 
     private fun loadEntityInstance(reportFormInstance: ReportFormInstance) {
-        viewModel.getDraftBundle(reportFormInstance)
+        viewModel.getReportBundle(reportFormInstance)
     }
 
     private fun openEntityInstance(reportFormInstance: ReportFormInstance) {

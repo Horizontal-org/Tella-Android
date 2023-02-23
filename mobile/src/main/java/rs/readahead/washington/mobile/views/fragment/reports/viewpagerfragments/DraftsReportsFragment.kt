@@ -14,14 +14,14 @@ import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.EntityAdapter
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_FORM_INSTANCE
-import rs.readahead.washington.mobile.views.fragment.reports.entry.ReportsEntryViewModel
+import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
 
 @AndroidEntryPoint
 class DraftsReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
     FragmentReportsListBinding::inflate
 ) {
 
-    private val viewModel by viewModels<ReportsEntryViewModel>()
+    private val viewModel by viewModels<ReportsViewModel>()
     private val entityAdapter: EntityAdapter by lazy { EntityAdapter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -93,7 +93,7 @@ class DraftsReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
     }
 
     private fun loadEntityInstance(reportFormInstance: ReportFormInstance) {
-        viewModel.getDraftBundle(reportFormInstance)
+        viewModel.getReportBundle(reportFormInstance)
     }
 
     private fun openEntityInstance(reportFormInstance: ReportFormInstance) {

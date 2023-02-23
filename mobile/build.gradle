@@ -13,7 +13,6 @@ ext {
     googlePlayServicesVersion = "17.0.0"
     leakCanaryVersion = '2.4'
     hilt_android_version = "2.38.1"
-    hilt_version = '1.0.0'
     hilt_viewmodel_version = '1.0.0-alpha03'
     hilt_android_compiler_version = '2.37'
 }
@@ -107,8 +106,8 @@ dependencies {
         exclude module: "support-v13"
     }
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
-    implementation "androidx.navigation:navigation-runtime:$versions.navigationRuntime"
-    implementation "androidx.navigation:navigation-fragment:$versions.navigationFragment"
+    implementation "androidx.navigation:navigation-runtime-ktx:$versions.navigationRuntime"
+    implementation "androidx.navigation:navigation-fragment-ktx:$versions.navigationFragment"
     implementation "androidx.databinding:databinding-runtime:$versions.databindingRuntime"
     annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:${permissionDispatcherVersion}"
 
@@ -131,6 +130,7 @@ dependencies {
     implementation "net.sf.kxml:kxml2:$versions.kxml2"
     implementation "commons-io:commons-io:$versions.commonsIo"
 
+
     // exo
     implementation "com.google.android.exoplayer:exoplayer:$versions.exoplayer"
 
@@ -145,12 +145,19 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:$hilt_android_compiler_version"
     //hilt-view-model
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_viewmodel_version"
-    kapt "androidx.hilt:hilt-compiler:$hilt_version"
+    kapt "androidx.hilt:hilt-compiler:$versions.hilt_version"
 
     implementation "com.simplify:ink:$versions.simplifyInk"
     implementation "com.mikhaellopez:circularimageview:$versions.circularimageview"
     implementation "org.apache.directory.studio:org.apache.commons.io:$versions.apacheCommonsIo"
     implementation "com.github.ihsanbal:LoggingInterceptor:$versions.ihsanbalLoggingInterceptor"
+
+    //worker manager
+    implementation "androidx.work:work-runtime-ktx:$versions.workermanger"
+    implementation("androidx.hilt:hilt-work:$versions.hilt_version")
+
+    //optional - RxJava2 support
+    implementation "androidx.work:work-rxjava2:$versions.workermanger"
 
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}"
 

@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.fragment.reports.entry
+package rs.readahead.washington.mobile.views.fragment.reports
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -23,20 +23,18 @@ import rs.readahead.washington.mobile.domain.exception.NoConnectivityException
 import rs.readahead.washington.mobile.domain.repository.reports.ReportsRepository
 import rs.readahead.washington.mobile.domain.usecases.reports.*
 import rs.readahead.washington.mobile.util.fromJsonToObjectList
-import rs.readahead.washington.mobile.util.jobs.TellaRequestUploadJob
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 import rs.readahead.washington.mobile.views.fragment.reports.mappers.toViewEntityInstanceItem
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class ReportsEntryViewModel @Inject constructor(
+class ReportsViewModel @Inject constructor(
     private val getReportsServersUseCase: GetReportsServersUseCase,
     private val saveReportFormInstanceUseCase: SaveReportFormInstanceUseCase,
     private val getReportsUseCase: GetReportsUseCase,
     private val deleteReportUseCase: DeleteReportUseCase,
     private val getReportBundleUseCase: GetReportBundleUseCase,
-    private val submitReportUseCase: SubmitReportUseCase,
     private val reportsRepository: ReportsRepository,
     private val dataSource: DataSource
 ) : ViewModel() {
@@ -59,8 +57,8 @@ class ReportsEntryViewModel @Inject constructor(
     val onMoreClickedFormInstance: LiveData<ReportFormInstance> get() = _onMoreClickedFormInstance
     private val _onOpenClickedFormInstance = MutableLiveData<ReportFormInstance>()
     val onOpenClickedFormInstance: LiveData<ReportFormInstance> get() = _onOpenClickedFormInstance
-    private val _instanceDeleted = MutableLiveData<Boolean>()
-    val instanceDeleted: LiveData<Boolean> get() = _instanceDeleted
+    private val _instanceDeleted = MutableLiveData<String?>()
+    val instanceDeleted: LiveData<String?> get() = _instanceDeleted
     private val _reportInstance = MutableLiveData<ReportFormInstance>()
     val reportInstance: LiveData<ReportFormInstance> get() = _reportInstance
     private val _progressInfo = MutableLiveData<Pair<UploadProgressInfo, ReportFormInstance>>()
@@ -69,6 +67,7 @@ class ReportsEntryViewModel @Inject constructor(
     val entityStatus: LiveData<ReportFormInstance> get() = _entityStatus
     private val _exitAfterSave = MutableLiveData<Boolean>()
     val exitAfterSave: LiveData<Boolean> get() = _exitAfterSave
+
 
     fun listServers() {
         _progress.postValue(true)
@@ -178,7 +177,7 @@ class ReportsEntryViewModel @Inject constructor(
     }
 
     private fun openInstance(reportFormInstance: ReportFormInstance) {
-        getDraftBundle(reportFormInstance)
+        getReportBundle(reportFormInstance)
     }
 
     private fun onMoreClicked(reportFormInstance: ReportFormInstance) {
@@ -298,7 +297,7 @@ class ReportsEntryViewModel @Inject constructor(
         deleteReportUseCase.setId(instance.id)
 
         deleteReportUseCase.execute(onSuccess = {
-            _instanceDeleted.postValue(true)
+            _instanceDeleted.postValue(instance.title)
         }, onError = {
             _error.postValue(it)
         }, onFinished = {
@@ -306,7 +305,7 @@ class ReportsEntryViewModel @Inject constructor(
         })
     }
 
-    fun getDraftBundle(instance: ReportFormInstance) {
+    fun getReportBundle(instance: ReportFormInstance) {
         _progress.postValue(true)
         getReportBundleUseCase.setId(instance.id)
         getReportBundleUseCase.execute(onSuccess = { result ->
@@ -315,14 +314,14 @@ class ReportsEntryViewModel @Inject constructor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ files ->
-                    val vaultFiles : MutableList<VaultFile?>? =
+                    val vaultFiles: MutableList<VaultFile?> =
                         MyApplication.rxVault.get(result.fileIds).blockingGet()
                             ?: return@subscribe
                     val filesResult = arrayListOf<FormMediaFile>()
 
                     files.forEach { formMediaFile ->
                         val vaultFile =
-                            vaultFiles?.firstOrNull { vaultFile -> formMediaFile.id == vaultFile?.id }
+                            vaultFiles.firstOrNull { vaultFile -> formMediaFile.id == vaultFile?.id }
                         if (vaultFile != null) {
                             val fileResult = FormMediaFile.fromMediaFile(vaultFile)
                             fileResult.status = formMediaFile.status
@@ -344,11 +343,16 @@ class ReportsEntryViewModel @Inject constructor(
         })
     }
 
+    fun checkIfDisposed() {
+        if (disposables.isDisposed) {
+            disposables.clear()
+        }
+    }
+
     fun submitReport(instance: ReportFormInstance) {
         _progress.postValue(true)
         getReportsServersUseCase.execute(onSuccess = { servers ->
             val server = servers.first { it.id == instance.serverId }
-            // if (!server.isActivatedBackgroundUpload) {
             if (instance.reportApiId.isEmpty()) {
                 disposables.add(
                     reportsRepository.submitReport(
@@ -362,13 +366,15 @@ class ReportsEntryViewModel @Inject constructor(
                                 instance.status = EntityStatus.SUBMISSION_ERROR
                             }
                             _entityStatus.postValue(instance)
-                            scheduleAutoUpload(server.isActivatedBackgroundUpload)
                         }
                         .doOnDispose {
                             instance.status = EntityStatus.PAUSED
                             _entityStatus.postValue(instance)
                         }
                         .subscribe { reportPostResult ->
+                            instance.apply {
+                                reportApiId = reportPostResult.id
+                            }
                             submitFiles(instance, server, reportPostResult.id)
                         })
             } else {
@@ -396,9 +402,6 @@ class ReportsEntryViewModel @Inject constructor(
         server: TellaReportServer,
         reportApiId: String
     ) {
-        instance.status = EntityStatus.SUBMISSION_PARTIAL_PARTS
-        instance.reportApiId = reportApiId
-        _entityStatus.postValue(instance)
         disposables.add(
             Flowable.fromIterable(instance.widgetMediaFiles)
                 .flatMap { file ->
@@ -408,9 +411,13 @@ class ReportsEntryViewModel @Inject constructor(
                         reportApiId,
                         server.accessToken
                     )
-                }.doOnComplete {
+                }.doOnEach {
+                    instance.apply {
+                        status = EntityStatus.UNKNOWN
+                    }
+                }
+                .doOnTerminate {
                     instance.status = EntityStatus.SUBMITTED
-                    instance.formPartStatus = FormMediaFileStatus.SUBMITTED
                     _entityStatus.postValue(instance)
                 }.doOnCancel {
                     instance.status = EntityStatus.PAUSED
@@ -418,43 +425,38 @@ class ReportsEntryViewModel @Inject constructor(
                 }.doOnError {
                     instance.status = EntityStatus.SUBMISSION_ERROR
                     _entityStatus.postValue(instance)
-                    scheduleAutoUpload(server.isActivatedBackgroundUpload)
-                }
-                .doOnNext { progressInfo: UploadProgressInfo ->
+                  //  scheduleAutoUpload(server.isActivatedBackgroundUpload)
+                }.doOnNext { progressInfo: UploadProgressInfo ->
+                    val file = instance.widgetMediaFiles.first { it.id == progressInfo.fileId }
                     when (progressInfo.status) {
-                        UploadProgressInfo.Status.ERROR, UploadProgressInfo.Status.UNAUTHORIZED, UploadProgressInfo.Status.UNKNOWN_HOST, UploadProgressInfo.Status.UNKNOWN, UploadProgressInfo.Status.CONFLICT -> {
-                            instance.widgetMediaFiles.first { it.id == progressInfo.fileId }
-                                .apply {
-                                    status = FormMediaFileStatus.NOT_SUBMITTED
-                                    uploadedSize = progressInfo.current
-                                }
-                            dataSource.saveInstance(instance).blockingGet()
-                            scheduleAutoUpload(server.isActivatedBackgroundUpload)
-                        }
-                        UploadProgressInfo.Status.FINISHED, UploadProgressInfo.Status.OK, UploadProgressInfo.Status.STARTED -> {
-                            instance.widgetMediaFiles.first { it.id == progressInfo.fileId }
+                        UploadProgressInfo.Status.FINISHED -> {
+                            file
                                 .apply {
                                     status = FormMediaFileStatus.SUBMITTED
                                     uploadedSize = progressInfo.current
                                 }
-                            _progressInfo.postValue(Pair(progressInfo, instance))
                         }
                         else -> {
+                            file
+                                .apply {
+                                    uploadedSize = progressInfo.current
+                                }
                         }
                     }
+
+                }.doAfterNext { progressInfo ->
+                    _progressInfo.postValue(Pair(progressInfo, instance))
                 }.subscribe()
         )
 
     }
 
-    private fun scheduleAutoUpload(isAutoUploadEnabled: Boolean) {
-        if (isAutoUploadEnabled) {
-            TellaRequestUploadJob.scheduleJob()
-        }
-    }
-
     fun dispose() {
         disposables.dispose()
+    }
+
+    fun clearDisposabe() {
+        disposables.clear()
     }
 
     override fun onCleared() {
