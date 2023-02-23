@@ -37,6 +37,13 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.95" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline47h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.47" />
+
     <TextView
         android:id="@+id/sheet_subtitle"
         android:layout_width="wrap_content"
@@ -69,10 +76,33 @@
         android:layout_height="match_parent" />
   </FrameLayout>
 
+    <ImageButton
+        android:id="@+id/back_btn"
+        android:layout_height="@dimen/main_navigation_bar_height"
+        android:layout_width="@dimen/main_navigation_bar_height"
+        android:layout_marginStart="@dimen/margin_start"
+        android:src="@drawable/short_arrow_back"
+        android:visibility="invisible"
+        android:background="@drawable/light_purple_circle_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline47h"
+        tools:layout_editor_absoluteY="360dp" />
+
+    <ImageButton
+        android:id="@+id/next_btn"
+        android:layout_height="@dimen/main_navigation_bar_height"
+        android:layout_width="@dimen/main_navigation_bar_height"
+        android:visibility="visible"
+        android:background="@drawable/light_purple_circle_background"
+        android:src="@drawable/short_arrow_next"
+        android:layout_marginStart="@dimen/margin_start"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline47h"
+        />
     <TextView
         android:id="@+id/calculatorBtn"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/main_navigation_bar_height"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:background="@drawable/round_orange_button_selector"
