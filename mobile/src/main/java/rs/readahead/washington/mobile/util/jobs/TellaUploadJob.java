@@ -22,7 +22,7 @@ import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.data.upload.TUSClient;
 import rs.readahead.washington.mobile.domain.entity.FileUploadBundle;
-import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.domain.exception.NoConnectivityException;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
@@ -37,7 +37,7 @@ public class TellaUploadJob extends Job {
     private Job.Result exitResult = null;
     private final HashMap<String, VaultFile> fileMap = new HashMap<>();
     private DataSource dataSource;
-    private TellaUploadServer server;
+    private TellaReportServer server;
 
     public static void scheduleJob() {
         new JobRequest.Builder(TellaUploadJob.TAG)
@@ -89,12 +89,12 @@ public class TellaUploadJob extends Job {
             long serverId = fileUploadBundle.getServerId();
             server = dataSource.getTellaUploadServer(serverId).blockingGet();
 
-            if (server != TellaUploadServer.NONE) {
+            if (server != TellaReportServer.NONE) {
                 break;
             }
         }
 
-        if (server == TellaUploadServer.NONE) {
+        if (server == TellaReportServer.NONE) {
             return exit(Result.FAILURE);
         }
 

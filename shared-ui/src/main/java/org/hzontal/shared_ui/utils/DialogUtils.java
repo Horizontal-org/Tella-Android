@@ -27,10 +27,8 @@ public class DialogUtils {
         container.addView(view);
         view.setAlpha(0f);
         view.animate().alphaBy(1f).setDuration(500).withEndAction(() -> {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                if (view.isAttachedToWindow()) {
-                    view.animate().alpha(0).setStartDelay(2000).setDuration(500);
-                }
+            if (view.isAttachedToWindow()) {
+                view.animate().alpha(0).setStartDelay(2000).setDuration(500);
             }
         });
     }

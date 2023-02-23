@@ -7,7 +7,6 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.ItemLanguageSelectorBinding
-import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 
 
 class LanguageSelectorAdapter  : RecyclerView.Adapter<LanguageSelectorAdapter.LanguageSelectorViewHolder>() {

@@ -8,7 +8,7 @@ import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.openrosa.OpenRosaService;
 import rs.readahead.washington.mobile.data.upload.TUSClient;
-import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.mvp.contract.ICheckTUSServerContract;
 
@@ -25,7 +25,7 @@ public class CheckTUSServerPresenter implements
     }
 
     @Override
-    public void checkServer(final TellaUploadServer server, boolean connectionRequired) {
+    public void checkServer(final TellaReportServer server, boolean connectionRequired) {
         if (! MyApplication.isConnectedToInternet(view.getContext())) {
             if (saveAnyway && !connectionRequired) {
                 server.setChecked(false);

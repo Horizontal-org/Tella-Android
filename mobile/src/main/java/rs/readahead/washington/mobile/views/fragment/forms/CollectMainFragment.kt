@@ -9,22 +9,16 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Html
 import android.text.method.LinkMovementMethod
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
-import butterknife.ButterKnife
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import org.hzontal.shared_ui.utils.DialogUtils
 import org.javarosa.core.model.FormDef
@@ -36,6 +30,7 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.EventObserver
 import rs.readahead.washington.mobile.bus.event.*
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
+import rs.readahead.washington.mobile.databinding.FragmentCollectMainBinding
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance
 import rs.readahead.washington.mobile.javarosa.FormUtils
@@ -44,24 +39,19 @@ import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.views.activity.CollectFormEntryActivity
 import rs.readahead.washington.mobile.views.activity.CollectHelpActivity
 import rs.readahead.washington.mobile.views.activity.FormSubmitActivity
-import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.adapters.ViewPagerAdapter
-import rs.readahead.washington.mobile.views.base_ui.BaseFragment
+import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import timber.log.Timber
 
 const val LOCATION_REQUEST_CODE = 1003
 
-class CollectMainFragment : BaseFragment() {
+class CollectMainFragment :
+    BaseBindingFragment<FragmentCollectMainBinding>(FragmentCollectMainBinding::inflate) {
     private var blankFragmentPosition = 0
-    private lateinit var fab: FloatingActionButton
-    private lateinit var tabLayout: TabLayout
-    private lateinit var formsViewPager: View
-    private lateinit var noServersView: View
-    private lateinit var blankFormsText: TextView
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
     private var alertDialog: AlertDialog? = null
-    private lateinit var mViewPager: ViewPager
-    private val adapter by lazy { ViewPagerAdapter(activity.supportFragmentManager) }
+    private var mViewPager: ViewPager? = null
+    private val adapter by lazy { ViewPagerAdapter(baseActivity.supportFragmentManager) }
     private var numOfCollectServers: Long = 0
     private val model: SharedFormsViewModel by activityViewModels()
 
@@ -76,49 +66,44 @@ class CollectMainFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        setHasOptionsMenu(true)
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_collect_main, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        ButterKnife.bind(view)
+        baseActivity.setSupportActionBar(binding?.toolbar)
 
-        val toolbar: Toolbar = view.findViewById(R.id.toolbar)
-        activity.setSupportActionBar(toolbar)
-
-        val actionBar: ActionBar? = activity.supportActionBar
+        val actionBar: ActionBar? = baseActivity.supportActionBar
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false)
             actionBar.setTitle(R.string.settings_servers_add_server_forms)
         }
+
+        if (!hasInitializedRootView) {
+            hasInitializedRootView = true
+        }
+
         initObservers()
         initViewPageAdapter()
-        mViewPager = view.findViewById(R.id.container)
-        mViewPager.adapter = adapter
 
-        mViewPager.currentItem = blankFragmentPosition
+        mViewPager = binding?.formsViewPager
+        mViewPager?.adapter = adapter
+        mViewPager?.currentItem = blankFragmentPosition
 
-        val tabLayout: TabLayout = view.findViewById(R.id.tabs)
-        tabLayout.setupWithViewPager(mViewPager)
+        val tabLayout: TabLayout? = binding?.tabs
+        if (tabLayout != null) {
+            tabLayout.setupWithViewPager(mViewPager)
+        }
 
-        fab.setOnClickListener {
+        binding?.fab?.setOnClickListener {
             if (MyApplication.isConnectedToInternet(context)) {
-                if (mViewPager.currentItem == blankFragmentPosition) {
+                if (mViewPager?.currentItem == blankFragmentPosition) {
                     getBlankFormsListFragment().refreshBlankForms()
                 }
             } else {
-                activity.showToast(getString(R.string.collect_blank_toast_not_connected))
+                baseActivity.showToast(getString(R.string.collect_blank_toast_not_connected))
             }
         }
 
-        mViewPager.addOnPageChangeListener(object : OnPageChangeListener {
+        mViewPager?.addOnPageChangeListener(object : OnPageChangeListener {
             override fun onPageScrolled(
                 position: Int,
                 positionOffset: Float,
@@ -127,17 +112,17 @@ class CollectMainFragment : BaseFragment() {
             }
 
             override fun onPageSelected(position: Int) {
-                fab.visibility =
+                binding?.fab?.visibility =
                     if (position == blankFragmentPosition && numOfCollectServers > 0) View.VISIBLE else View.GONE
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
 
-        blankFormsText.text =
+        binding?.blankFormsText?.text =
             Html.fromHtml(getString(R.string.collect_expl_not_connected_to_server))
-        blankFormsText.movementMethod = LinkMovementMethod.getInstance()
-        StringUtils.stripUnderlines(blankFormsText)
+        binding?.blankFormsText?.movementMethod = LinkMovementMethod.getInstance()
+        StringUtils.stripUnderlines(binding?.blankFormsText)
 
         disposables.wire(
             ShowBlankFormEntryEvent::class.java,
@@ -219,16 +204,6 @@ class CollectMainFragment : BaseFragment() {
             })
     }
 
-    override fun initView(view: View) {
-        view.apply {
-            fab = findViewById(R.id.fab)
-            tabLayout = findViewById(R.id.tabs)
-            formsViewPager = findViewById(R.id.container)
-            noServersView = findViewById(R.id.blank_forms_layout)
-            blankFormsText = findViewById(R.id.blank_forms_text)
-        }
-    }
-
     override fun onStart() {
         super.onStart()
         Handler(Looper.getMainLooper()).post {
@@ -238,7 +213,6 @@ class CollectMainFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as MainActivity).selectNavForm()
         countServers()
     }
 
@@ -283,19 +257,19 @@ class CollectMainFragment : BaseFragment() {
     }
 
     private fun requestLocationPermissions() {
-        activity.maybeChangeTemporaryTimeout()
-            val permissions = arrayOf(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-            ActivityCompat.requestPermissions(
-                //1
-                activity,
-                //2
-                permissions,
-                //3
-                LOCATION_REQUEST_CODE
-            )
+        baseActivity.maybeChangeTemporaryTimeout()
+        val permissions = arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+        ActivityCompat.requestPermissions(
+            //1
+            baseActivity,
+            //2
+            permissions,
+            //3
+            LOCATION_REQUEST_CODE
+        )
 
     }
 
@@ -313,13 +287,13 @@ class CollectMainFragment : BaseFragment() {
         })
 
         model.onFormDefError.observe(viewLifecycleOwner, Observer { error ->
-            val errorMessage = FormUtils.getFormDefErrorMessage(activity, error)
-            activity.showToast(errorMessage)
+            val errorMessage = FormUtils.getFormDefErrorMessage(baseActivity, error)
+            baseActivity.showToast(errorMessage)
         })
 
         model.onFormDefError.observe(viewLifecycleOwner, Observer { error ->
-            val errorMessage = FormUtils.getFormDefErrorMessage(activity, error)
-            activity.showToast(errorMessage)
+            val errorMessage = FormUtils.getFormDefErrorMessage(baseActivity, error)
+            baseActivity.showToast(errorMessage)
         })
 
         model.onCreateFormController.observe(viewLifecycleOwner, { form ->
@@ -327,7 +301,7 @@ class CollectMainFragment : BaseFragment() {
                 if (Preferences.isAnonymousMode()) {
                     startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
                 } else {
-                    if (!hasLocationPermissions(activity)) {
+                    if (!hasLocationPermissions(baseActivity)) {
                         requestLocationPermissions()
                     } else {
                         startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
@@ -348,25 +322,24 @@ class CollectMainFragment : BaseFragment() {
         model.onCountCollectServersEnded.observe(viewLifecycleOwner, Observer { num ->
             numOfCollectServers = num
             if (numOfCollectServers < 1) {
-                tabLayout.visibility = View.GONE
-                formsViewPager.visibility = View.GONE
-                fab.visibility = View.GONE
-                noServersView.visibility = View.VISIBLE
+                binding?.tabs?.visibility = View.GONE
+                binding?.formsViewPager?.visibility = View.GONE
+                binding?.fab?.visibility = View.GONE
+                binding?.noServersView?.visibility = View.VISIBLE
             } else {
-                tabLayout.visibility = View.VISIBLE
-                formsViewPager.visibility = View.VISIBLE
-                noServersView.visibility = View.GONE
-                if (mViewPager.currentItem == blankFragmentPosition) {
-                    fab.visibility = View.VISIBLE
+                binding?.tabs?.visibility = View.VISIBLE
+                binding?.formsViewPager?.visibility = View.VISIBLE
+                binding?.noServersView?.visibility = View.GONE
+                if (mViewPager?.currentItem == blankFragmentPosition) {
+                    binding?.fab?.visibility = View.VISIBLE
                 }
             }
         })
 
         model.showFab.observe(viewLifecycleOwner, Observer { show ->
-            fab.isVisible = show
+            binding?.fab?.isVisible = show
         })
     }
-
 
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     fun startCollectFormEntryActivity() {
@@ -375,9 +348,9 @@ class CollectMainFragment : BaseFragment() {
 
     @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
     fun showFineLocationRationale(request: PermissionRequest) {
-        activity.maybeChangeTemporaryTimeout()
+        baseActivity.maybeChangeTemporaryTimeout()
         alertDialog = PermissionUtil.showRationale(
-            activity,
+            baseActivity,
             request,
             getString(R.string.permission_dialog_expl_GPS)
         )
@@ -406,7 +379,7 @@ class CollectMainFragment : BaseFragment() {
     }*/
 
     private fun showCancelPendingFormDialog(instanceId: Long) {
-        alertDialog = AlertDialog.Builder(activity)
+        alertDialog = AlertDialog.Builder(baseActivity)
             .setMessage(R.string.collect_sent_dialog_expl_discard_unsent_form)
             .setPositiveButton(R.string.action_discard) { _, _ ->
                 model.deleteFormInstance(
@@ -420,7 +393,7 @@ class CollectMainFragment : BaseFragment() {
 
     private fun reSubmitFormInstance(instance: CollectFormInstance) {
         startActivity(
-            Intent(activity, FormSubmitActivity::class.java)
+            Intent(baseActivity, FormSubmitActivity::class.java)
                 .putExtra(FormSubmitActivity.FORM_INSTANCE_ID_KEY, instance.id)
         )
     }
@@ -458,28 +431,28 @@ class CollectMainFragment : BaseFragment() {
             SubmittedFormsListFragment.newInstance(),
             getString(R.string.collect_sent_tab_title)
         )
-        blankFragmentPosition = getFragmentPosition(FormListFragment.Type.BLANK)
+        blankFragmentPosition = getFragmentPosition(FormListInterfce.Type.BLANK)
     }
 
     private fun getDraftFormsListFragment(): DraftFormsListFragment {
-        return getFormListFragment(FormListFragment.Type.DRAFT)
+        return getFormListFragment(FormListInterfce.Type.DRAFT)
     }
 
     private fun getBlankFormsListFragment(): BlankFormsListFragment {
-        return getFormListFragment(FormListFragment.Type.BLANK)
+        return getFormListFragment(FormListInterfce.Type.BLANK)
     }
 
     private fun getSubmittedFormsListFragment(): SubmittedFormsListFragment {
-        return getFormListFragment(FormListFragment.Type.SUBMITTED)
+        return getFormListFragment(FormListInterfce.Type.SUBMITTED)
     }
 
     private fun getOutboxFormListFragment(): OutboxFormListFragment {
-        return getFormListFragment(FormListFragment.Type.OUTBOX)
+        return getFormListFragment(FormListInterfce.Type.OUTBOX)
     }
 
-    private fun <T> getFormListFragment(type: FormListFragment.Type): T {
+    private fun <T> getFormListFragment(type: FormListInterfce.Type): T {
         for (i in 0 until adapter.count) {
-            val fragment = adapter.getItem(i) as FormListFragment
+            val fragment = adapter.getItem(i) as FormListInterfce
             if (fragment.formListType == type) {
                 return fragment as T
             }
@@ -487,9 +460,9 @@ class CollectMainFragment : BaseFragment() {
         throw IllegalArgumentException()
     }
 
-    private fun getFragmentPosition(type: FormListFragment.Type): Int {
+    private fun getFragmentPosition(type: FormListInterfce.Type): Int {
         for (i in 0 until adapter.count) {
-            val fragment = adapter.getItem(i) as FormListFragment
+            val fragment = adapter.getItem(i) as FormListInterfce
             if (fragment.formListType == type) {
                 return i
             }
@@ -498,22 +471,22 @@ class CollectMainFragment : BaseFragment() {
     }
 
     private fun setPagerToSubmittedFragment() {
-        mViewPager.currentItem = getFragmentPosition(FormListFragment.Type.SUBMITTED)
-        fab.visibility = View.GONE
+        mViewPager?.currentItem = getFragmentPosition(FormListInterfce.Type.SUBMITTED)
+        binding?.fab?.visibility = View.GONE
     }
 
     private fun setPagerToOutboxFragment() {
-        mViewPager.currentItem = getFragmentPosition(FormListFragment.Type.OUTBOX)
-        fab.visibility = View.GONE
+        mViewPager?.currentItem = getFragmentPosition(FormListInterfce.Type.OUTBOX)
+        binding?.fab?.visibility = View.GONE
     }
 
     private fun startCollectHelp() {
-        startActivity(Intent(activity, CollectHelpActivity::class.java))
+        startActivity(Intent(baseActivity, CollectHelpActivity::class.java))
     }
 
     private fun showStoppedMessage() {
         DialogUtils.showBottomMessage(
-            activity,
+            baseActivity,
             getString(R.string.Collect_DialogInfo_FormSubmissionStopped),
             true
         )

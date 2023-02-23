@@ -1,21 +1,47 @@
 package rs.readahead.washington.mobile.util
 
-import android.app.Activity
 import android.content.Context
-import android.content.res.Resources
-import android.graphics.Rect
 import android.os.Build
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
+import com.fasterxml.jackson.core.JsonParseException
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import org.cleaninsights.sdk.Campaign
 import org.cleaninsights.sdk.CleanInsights
 import org.cleaninsights.sdk.CleanInsightsConfiguration
 import timber.log.Timber
 import java.net.URL
 
+/**
+ * function that converts data from json to object
+ * @param classMapper the class of T.
+ * @param <T> the type of the desired object.
+ * @return an object of type T from the string.
+ */
+fun <T> String.fromJsonToObject(classMapper: Class<T>): T? {
+    return try {
+        Gson().fromJson(this, classMapper)
+    } catch (e: JsonParseException) {
+        Timber.e(e)
+        null
+    }
+}
+
+fun <T> String.fromJsonToObjectList(clazz: Class<T>?): List<T>? {
+    return try {
+        val typeOfT = TypeToken.getParameterized(MutableList::class.java, clazz).type
+        return Gson().fromJson(this, typeOfT)
+    } catch (e: JsonParseException) {
+        Timber.e(e)
+        null
+    }
+}
 
 fun View.setMargins(
     leftMarginDp: Int? = null,
@@ -62,26 +88,15 @@ fun createCleanInsightsInstance(context: Context, startDate: Long): CleanInsight
     }
 }
 
-fun Activity.isKeyboardOpened(): Boolean {
-    val r = Rect()
 
-    val activityRoot = getActivityRoot()
-    val visibleThreshold = dip(100)
-
-    activityRoot.getWindowVisibleDisplayFrame(r)
-
-    val heightDiff = activityRoot.rootView.height - r.height()
-
-    return heightDiff > visibleThreshold;
+fun View.setTint(@ColorRes colorRes: Int) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        background.setTintList(
+            ContextCompat.getColorStateList(context, colorRes)
+        );
+    }
 }
 
-fun Activity.getActivityRoot(): View {
-    return (findViewById<ViewGroup>(android.R.id.content)).getChildAt(0);
-}
-
-fun dip(value: Int): Int {
-    return (value * Resources.getSystem().displayMetrics.density).toInt()
-}
 
 fun View.hide() {
     visibility = View.GONE

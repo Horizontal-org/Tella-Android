@@ -2,35 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/home"
+        android:contentDescription="@string/Home_BottomNav_Home"
         android:icon="@drawable/ic_home"
-        android:contentDescription="Home"
         android:title="@string/Home_BottomNav_Home" />
 
     <item
-        android:id="@+id/form"
-        android:icon="@drawable/ic_list_numbered_24"
-        android:contentDescription="Forms"
-        android:title="@string/Home_BottomNav_Forms"
-        android:visible="false"
-        />
-
-    <item
         android:id="@+id/camera"
+        android:contentDescription="@string/Home_BottomNav_Camera"
         android:icon="@drawable/ic_camera"
-        android:contentDescription="Camera"
         android:title="@string/Home_BottomNav_Camera" />
 
     <item
         android:id="@+id/mic"
+        android:contentDescription="@string/Home_BottomNav_Rec"
         android:icon="@drawable/ic_mic"
-        android:contentDescription="Mic"
         android:title="@string/Home_BottomNav_Rec" />
 
-    <item
-        android:id="@+id/uwazi"
-        android:icon="@drawable/ic_uwazi"
-        android:contentDescription="uwazi"
-        android:title="@string/Home_BottomNav_Uwazi"
-        android:visible="false"
-        />
 </menu>

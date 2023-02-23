@@ -17,6 +17,12 @@
     <declare-styleable name="RoundButton">
         <attr name="text" format="reference|string" />
         <attr name="check_state" format="boolean"/>
+        <attr name="tint_color" format="color|reference"/>
+    </declare-styleable>
+
+
+    <declare-styleable name="CustomDropdownList">
+        <attr name="name" format="reference|string" />
     </declare-styleable>
 
     <declare-styleable name="CenterMessageTextView">

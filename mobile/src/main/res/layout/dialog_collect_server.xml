@@ -110,7 +110,7 @@
                     app:backgroundTint="@color/wa_white" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <rs.readahead.washington.mobile.views.custom.PanelToggleButton
+            <org.hzontal.shared_ui.buttons.PanelToggleButton
                 android:id="@+id/toggle_button"
                 style="?android:attr/borderlessButtonStyle"
 

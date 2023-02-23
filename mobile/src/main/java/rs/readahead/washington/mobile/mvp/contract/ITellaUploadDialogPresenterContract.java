@@ -4,12 +4,12 @@ import android.content.Context;
 
 import java.util.List;
 
-import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
 
 public class ITellaUploadDialogPresenterContract {
     public interface IView {
         Context getContext();
-        void onServersLoaded(List<TellaUploadServer> servers);
+        void onServersLoaded(List<TellaReportServer> servers);
         void onServersLoadError(Throwable throwable);
     }
 

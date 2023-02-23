@@ -19,6 +19,7 @@
     <color name="dark_orange">#D6933B</color>
     <color name="wa_purple">#2C275A</color>
     <color name="wa_orange">#D6933B</color>
+    <color name="wa_orange_16">#29D6933B</color>
     <color name="delimiter">#47426F</color>
     <color name="onboardingIndicatorInactive">#DCDCDC</color>
     <color name="onboardingIndicatorActive">#D6933B</color>

@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
 import com.bumptech.glide.Glide;
@@ -23,10 +22,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.domain.entity.EntityStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance;
-import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
@@ -155,15 +154,15 @@ public class UwaziFormEndView extends FrameLayout {
         item.setPartSize(size);
         item.setPartIcon(R.drawable.ic_assignment_white_24dp);
 
-        if (instance.getStatus() == UwaziEntityStatus.SUBMITTED ||
-                instance.getStatus() == UwaziEntityStatus.SUBMITTED || // back compatibility down
-                instance.getStatus() == UwaziEntityStatus.SUBMISSION_PARTIAL_PARTS) {
+        if (instance.getStatus() == EntityStatus.SUBMITTED ||
+                instance.getStatus() == EntityStatus.SUBMITTED || // back compatibility down
+                instance.getStatus() == EntityStatus.SUBMISSION_PARTIAL_PARTS) {
             item.setPartUploaded();
         } else {
             item.setPartPrepared(offline);
         }
 
-        if (offline || instance.getStatus() == UwaziEntityStatus.SUBMITTED) {
+        if (offline || instance.getStatus() == EntityStatus.SUBMITTED) {
          //   subTitleView.setVisibility(GONE);
         } else {
            // subTitleView.setVisibility(VISIBLE);
@@ -204,8 +203,8 @@ public class UwaziFormEndView extends FrameLayout {
     private void setPartsCleared(UwaziEntityInstance instance) {
         SubmittingItem item = partsListView.findViewWithTag("UWAZI_RESPONSE");
 
-        if (instance.getStatus() == UwaziEntityStatus.SUBMITTED ||
-                instance.getStatus() == UwaziEntityStatus.SUBMISSION_PARTIAL_PARTS) {
+        if (instance.getStatus() == EntityStatus.SUBMITTED ||
+                instance.getStatus() == EntityStatus.SUBMISSION_PARTIAL_PARTS) {
             item.setPartUploaded();
         } else {
             item.setPartCleared();

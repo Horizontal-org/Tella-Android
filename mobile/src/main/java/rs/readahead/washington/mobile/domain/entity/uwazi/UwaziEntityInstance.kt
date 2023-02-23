@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.domain.entity.uwazi
 
+import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 
@@ -9,7 +10,7 @@ data class UwaziEntityInstance(
     var updated: Long = 0,
     var collectTemplate: CollectTemplate? = null,
     var metadata: Map<String, List<Any>> = mutableMapOf(),
-    var status : UwaziEntityStatus = UwaziEntityStatus.UNKNOWN,
+    var status : EntityStatus = EntityStatus.UNKNOWN,
     var widgetMediaFiles: List<FormMediaFile> = emptyList(),
     var formPartStatus : FormMediaFileStatus = FormMediaFileStatus.UNKNOWN,
     var template: String = "",

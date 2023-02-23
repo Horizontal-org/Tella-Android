@@ -4,11 +4,9 @@ import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivi
 import static rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragmentKt.PICKER_FILE_REQUEST_CODE;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,7 +17,6 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
@@ -33,9 +30,6 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import kotlin.Unit;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
@@ -47,6 +41,7 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
 import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent;
+import rs.readahead.washington.mobile.databinding.ActivityAudioPlayBinding;
 import rs.readahead.washington.mobile.media.AudioPlayer;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IAudioPlayPresenterContract;
@@ -68,20 +63,14 @@ public class AudioPlayActivity extends BaseLockActivity implements
     public static final String PLAY_MEDIA_FILE_ID_KEY = "pmfik";
     public static final String NO_ACTIONS = "na";
     private static final String TIME_FORMAT = "%02d:%02d:%02d";
+    private static final int SEEK_DELAY = 15000;
 
-    @BindView(R.id.play_audio)
     ImageButton mPlay;
-    @BindView(R.id.rwd_button)
     ImageButton mRwd;
-    @BindView(R.id.fwd_button)
     ImageButton mFwd;
-    @BindView(R.id.audio_time)
     TextView mTimer;
-    @BindView(R.id.duration)
     TextView mDuration;
-    @BindView(R.id.forward)
     View forward;
-    @BindView(R.id.rewind)
     View rewind;
 
     private AudioPlayPresenter presenter;
@@ -100,17 +89,20 @@ public class AudioPlayActivity extends BaseLockActivity implements
     private boolean paused = true;
     private Toolbar toolbar;
     private boolean isInfoShown = false;
+    private ActivityAudioPlayBinding binding;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_audio_play);
-        overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
-        ButterKnife.bind(this);
+        binding = ActivityAudioPlayBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        initView();
+        initListeners();
 
-        toolbar = findViewById(R.id.toolbar);
+        overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
+
         setSupportActionBar(toolbar);
         viewerPresenter = new MediaFileViewerPresenter(this);
         enablePlay();
@@ -200,24 +192,18 @@ public class AudioPlayActivity extends BaseLockActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick({R.id.play_audio, R.id.fwd_button, R.id.rwd_button})
-    public void manageClick(View view) {
-        int SEEK_DELAY = 15000;
-        switch (view.getId()) {
-            case R.id.play_audio:
-                if (paused) {
-                    handlePlay();
-                } else {
-                    handlePause();
-                }
-                break;
-            case R.id.rwd_button:
-                audioPlayer.rwd(SEEK_DELAY);
-                break;
-            case R.id.fwd_button:
-                audioPlayer.ffwd(SEEK_DELAY);
-                break;
-        }
+    private void initListeners() {
+        mPlay.setOnClickListener((view) -> {
+            if (paused) {
+                handlePlay();
+            } else {
+                handlePause();
+            }
+        });
+
+        forward.setOnClickListener((view) -> audioPlayer.ffwd(SEEK_DELAY));
+
+        rewind.setOnClickListener((view) -> audioPlayer.rwd(SEEK_DELAY));
     }
 
     @Override
@@ -267,12 +253,12 @@ public class AudioPlayActivity extends BaseLockActivity implements
     }
 
 
-    @SuppressLint("NeedOnRequestPermissionsResult")
+    /*@SuppressLint("NeedOnRequestPermissionsResult")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         AudioPlayActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
-    }
+    }*/
 
     @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void onWriteExternalStoragePermissionDenied() {
@@ -350,6 +336,26 @@ public class AudioPlayActivity extends BaseLockActivity implements
     }
 
     @Override
+    public void onMediaFileDeleteConfirmation(VaultFile vaultFile, Boolean showConfirmDelete) {
+        if (showConfirmDelete) {
+            BottomSheetUtils.showConfirmSheet(
+                    getSupportFragmentManager(),
+                    getString(R.string.Vault_Warning_Title),
+                    getString(R.string.Vault_Confirm_delete_Description),
+                    getString(R.string.Vault_Delete_anyway),
+                    getString(R.string.action_cancel),
+                    isConfirmed -> {
+                        if (isConfirmed) {
+                            viewerPresenter.deleteMediaFiles(vaultFile);
+                        }
+                    }
+            );
+        } else {
+            viewerPresenter.deleteMediaFiles(vaultFile);
+        }
+    }
+
+    @Override
     public void onMediaFileDeleted() {
         MyApplication.bus().post(new MediaFileDeletedEvent());
         finish();
@@ -397,8 +403,8 @@ public class AudioPlayActivity extends BaseLockActivity implements
     }
 
     private void showExportDialog() {
-        alertDialog = DialogsUtil.showExportMediaDialog(this, (dialog, which) ->
-                AudioPlayActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(AudioPlayActivity.this));
+      /*  alertDialog = DialogsUtil.showExportMediaDialog(this, (dialog, which) ->
+                AudioPlayActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(AudioPlayActivity.this));*/
     }
 
     private void showDeleteMediaDialog() {
@@ -573,7 +579,7 @@ public class AudioPlayActivity extends BaseLockActivity implements
                                 getString(R.string.gallery_save_to_device_dialog_expl),
                                 getString(R.string.action_save),
                                 getString(R.string.action_cancel),
-                                isConfirmed -> AudioPlayActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(AudioPlayActivity.this)
+                                isConfirmed -> {/*AudioPlayActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(AudioPlayActivity.this)*/}
                         );
                     }
 
@@ -596,7 +602,9 @@ public class AudioPlayActivity extends BaseLockActivity implements
                                 getString(R.string.action_delete),
                                 getString(R.string.action_cancel),
                                 isConfirmed -> {
-                                    viewerPresenter.deleteMediaFiles(vaultFile);
+                                    if (isConfirmed) {
+                                        viewerPresenter.confirmDeleteMediaFile(vaultFile);
+                                    }
                                 }
                         );
 
@@ -653,5 +661,16 @@ public class AudioPlayActivity extends BaseLockActivity implements
                     }
             );
         });
+    }
+
+    private void initView() {
+        mPlay = binding.content.playAudio;
+        mRwd = binding.content.rwdButton;
+        mFwd = binding.content.rwdButton;
+        mTimer = binding.content.audioTime;
+        mDuration = binding.content.duration;
+        forward = binding.content.fwdButton;
+        rewind = binding.content.rwdButton;
+        toolbar = binding.toolbar;
     }
 }

@@ -1,10 +1,9 @@
 package rs.readahead.washington.mobile;
 
-import static rs.readahead.washington.mobile.util.ExtensionsKt.createCleanInsightsInstance;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -44,6 +43,7 @@ import org.hzontal.tella.keys.wrapper.UnencryptedKeyWrapper;
 
 import java.io.File;
 
+import dagger.hilt.android.HiltAndroidApp;
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
 import rs.readahead.washington.mobile.bus.TellaBus;
@@ -64,7 +64,7 @@ import rs.readahead.washington.mobile.views.activity.MainActivity;
 import rs.readahead.washington.mobile.views.activity.onboarding.OnBoardingActivity;
 import timber.log.Timber;
 
-
+@HiltAndroidApp
 public class MyApplication extends MultiDexApplication implements IUnlockRegistryHolder, CredentialsCallback {
     public static Vault vault;
     public static RxVault rxVault;
@@ -175,6 +175,14 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         SharedPrefs.getInstance().init(this);
         configureCrashlytics();
 
+        // provide custom configuration
+     /*   Configuration myConfig = new Configuration.Builder()
+                .setMinimumLoggingLevel(android.util.Log.INFO)
+                .build();*/
+
+       //initialize WorkManager
+      //  WorkManager.initialize(this, myConfig);
+
         RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) {
@@ -207,7 +215,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), Preferences.getLockTimeout());
         keyDataSource = new KeyDataSource(getApplicationContext());
         TellaKeysUI.initialize(mainKeyStore, mainKeyHolder, unlockRegistry, this);
-        initCleanInsights();
+        //initCleanInsights();
     }
 
     private void configureCrashlytics() {
@@ -315,7 +323,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         return unlockRegistry;
     }
 
-    private void initCleanInsights() {
+  /*  private void initCleanInsights() {
         if (Preferences.hasAcceptedImprovements()) {
             try {
                 cleanInsights = createCleanInsightsInstance(getApplicationContext(), Preferences.getTimeAcceptedImprovements());
@@ -324,7 +332,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
             }
         }
     }
-
+*/
     @Override
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
@@ -341,4 +349,5 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         super.onTerminate();
         persistCleanInsights();
     }
+
 }

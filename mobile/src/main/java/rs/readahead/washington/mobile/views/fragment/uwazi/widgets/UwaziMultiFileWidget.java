@@ -44,7 +44,7 @@ import rs.readahead.washington.mobile.views.activity.CameraActivity;
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView;
-import rs.readahead.washington.mobile.views.custom.PanelToggleButton;
+import org.hzontal.shared_ui.buttons.PanelToggleButton;
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
 
@@ -65,7 +65,6 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
 
     public UwaziMultiFileWidget(Context context, @NonNull UwaziEntryPrompt formEntryPrompt, boolean isPdf) {
         super(context, formEntryPrompt);
-
         this.context = context;
         this.isPdf = isPdf;
         LinearLayout linearLayout = new LinearLayout(getContext());

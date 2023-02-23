@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
@@ -79,7 +80,7 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun maybeRestoreExitTimeOut() {
+    private fun maybeRestoreExitTimeOut() {
         if (Preferences.isExitTimeout()) {
             MyApplication.getMainKeyHolder().timeout = Preferences.getLockTimeout()
             Preferences.setTempTimeout(false)

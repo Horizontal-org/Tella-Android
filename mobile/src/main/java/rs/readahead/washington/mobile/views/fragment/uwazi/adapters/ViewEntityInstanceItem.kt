@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.adapters
 
-import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
+import rs.readahead.washington.mobile.domain.entity.EntityStatus
 
 data class ViewEntityInstanceItem (
     val id: Long,
@@ -9,7 +9,7 @@ data class ViewEntityInstanceItem (
     val serverName: String = "",
     val translatedTemplateName : String,
     val updated : Long,
-    val status : UwaziEntityStatus,
+    val status : EntityStatus,
     val onMoreClicked: () -> Unit,
     val onOpenClicked: () -> Unit,
 ) {

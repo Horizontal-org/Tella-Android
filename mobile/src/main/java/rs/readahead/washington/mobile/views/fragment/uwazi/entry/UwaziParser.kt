@@ -6,10 +6,10 @@ import com.google.gson.internal.LinkedTreeMap
 import com.hzontal.tella_vault.VaultFile
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.uwazi.UwaziConstants
+import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
-import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValueAttachment
 
@@ -249,7 +249,7 @@ class UwaziParser(private val context: Context?) {
         return Gson().toJson(entityInstance)
     }
 
-    fun setInstanceStatus(entityStatus: UwaziEntityStatus){
+    fun setInstanceStatus(entityStatus: EntityStatus){
         entityInstance.status = entityStatus
     }
 }

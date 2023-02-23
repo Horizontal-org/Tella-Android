@@ -14,6 +14,7 @@ public class FileUploadInstance implements Serializable {
     private UploadStatus status;
     private long size;
     private long uploaded;
+    //TODO MAYBE ESCAPE IT FOR NOW
     private int retryCount;
     private long set;
 

@@ -63,6 +63,14 @@ buildscript {
     versions.crashlyticsGradle = '2.4.1'
     versions.retrofit = "2.9.0"
     versions.buildToolsVersion = "30.0.2"
+    versions.workermanger = "2.7.1"
+    versions.hilt_version = "1.0.0"
+    versions.hilt_android = "2.38.1"
+    versions.hilt_viewmodel = '1.0.0-alpha03'
+    versions.leakCanaryVersion = "2.4"
+    versions.hilt_android_compiler = "2.37"
+    versions.permissionDispatcher = "4.8.0"
+    versions.googlePlayServices = "17.0.0"
 
 
     repositories {
@@ -80,6 +88,8 @@ buildscript {
         classpath "com.google.gms:google-services:$versions.googleServices"
         classpath "com.google.firebase:firebase-crashlytics-gradle:$versions.crashlyticsGradle"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+        classpath 'com.google.dagger:hilt-android-gradle-plugin:2.39.1'
+
     }
 }
 

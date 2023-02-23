@@ -19,6 +19,7 @@
         android:textStyle="bold"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

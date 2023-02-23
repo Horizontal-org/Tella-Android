@@ -71,22 +71,49 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
     }
 
     override fun countTUServers() {
+        disposable.add(keyDataSource.dataSource
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .flatMapSingle { obj: DataSource -> obj.listTellaUploadServers() }
+            .subscribe(
+                { servers ->
+                    view?.onCountTUServersEnded(servers)
+                }
+            ) { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                view?.onCountUwaziServersFailed(throwable)
+            }
+        )
     }
 
     override fun countCollectServers() {
         disposable.add(keyDataSource.dataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .flatMapSingle { obj: DataSource -> obj.countCollectServers() }
+            .flatMapSingle { obj: DataSource -> obj.listCollectServers() }
             .subscribe(
-                { num: Long? ->
-                    view?.onCountCollectServersEnded(
-                        num
-                    )
+                { servers ->
+                    view?.onCountCollectServersEnded(servers)
                 }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 view?.onCountCollectServersFailed(throwable)
+            }
+        )
+    }
+
+    override fun countUwaziServers() {
+        disposable.add(keyDataSource.uwaziDataSource
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .flatMapSingle { obj: UwaziDataSource -> obj.listUwaziServers() }
+            .subscribe(
+                { servers ->
+                    view?.onCountUwaziServersEnded(servers)
+                }
+            ) { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                view?.onCountUwaziServersFailed(throwable)
             }
         )
     }

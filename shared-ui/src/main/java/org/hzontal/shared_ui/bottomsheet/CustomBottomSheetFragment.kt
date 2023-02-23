@@ -88,7 +88,7 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
     /**
      * Called to init PageHolder with a View extends PageHolder Object
      *
-     * @param pageHolder CustomView for ButterKnife.bind on Message Activity
+     * @param pageHolder CustomView for bind on Message Activity
      * @param binder Interface for bind CustomView extends PageHolder
      * @param <T> CustomView Object
      * @return Instantiated CustomView

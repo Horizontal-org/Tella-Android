@@ -20,13 +20,23 @@ import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Limits
 import com.hzontal.tella_vault.filter.Sort
 import com.hzontal.utils.MediaFile
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.hzontal.shared_ui.appbar.ToolbarComponent
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.bus.EventCompositeDisposable
+import rs.readahead.washington.mobile.bus.EventObserver
+import rs.readahead.washington.mobile.bus.event.GoToReportsScreenEvent
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
+import rs.readahead.washington.mobile.domain.entity.ServerType
+import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
+import rs.readahead.washington.mobile.domain.entity.collect.CollectServer
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.LockTimeoutManager
@@ -39,9 +49,11 @@ import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsight
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.custom.CountdownTextView
+import rs.readahead.washington.mobile.views.fragment.reports.ReportsFragment
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.ImproveClickOptions
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
+import rs.readahead.washington.mobile.views.fragment.vault.adapters.connections.ServerDataItem
 import timber.log.Timber
 
 const val VAULT_FILTER = "vf"
@@ -61,6 +73,12 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private lateinit var permissionsLauncher: ActivityResultLauncher<Array<String>>
     private var writePermissionGranted = false
     private var vaultFile: VaultFile? = null
+    private var serversList: MutableList<ServerDataItem>? = null
+    private var tuServers: ArrayList<TellaReportServer>? = null
+    private var uwaziServers: ArrayList<UWaziUploadServer>? = null
+    private var collectServers: ArrayList<CollectServer>? = null
+    private var disposables: EventCompositeDisposable? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -77,6 +95,20 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         countDownTextView = view.findViewById(R.id.countdown_timer)
         seekBar = view.findViewById(R.id.panic_seek)
         seekBarContainer = view.findViewById(R.id.panicSeekContainer)
+        disposables = MyApplication.bus().createCompositeDisposable()
+
+        disposables?.wire(
+            GoToReportsScreenEvent::class.java,
+            object : EventObserver<GoToReportsScreenEvent?>() {
+                override fun onNext(event: GoToReportsScreenEvent) {
+                    GlobalScope.launch(Dispatchers.Main) {
+                        activity.addFragment(
+                            ReportsFragment(),
+                            R.id.main_container
+                        )
+                    }
+                }
+            })
         setUpToolbar()
         initData()
         initListeners()
@@ -115,6 +147,11 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         //Uncomment to add improvement section
         // vaultAdapter.addImprovementSection()
         timerDuration = resources.getInteger(R.integer.panic_countdown_duration)
+
+        serversList = ArrayList()
+        tuServers = ArrayList()
+        uwaziServers = ArrayList()
+        collectServers = ArrayList()
 
         CleanInsightUtils.measureEvent()
     }
@@ -160,6 +197,14 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             homeVaultPresenter.getFavoriteCollectTemplates()
         } else {
             vaultAdapter.removeFavoriteTemplates()
+        }
+    }
+
+    private fun maybeShowConnections() {
+        if (serversList?.isNotEmpty() == true) {
+            vaultAdapter.addConnectionServers(serversList!!)
+        } else {
+            vaultAdapter.removeConnectionServers()
         }
     }
 
@@ -264,6 +309,20 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     }
 
+    override fun onServerItemClickListener(item: ServerDataItem) {
+        when (item.type) {
+            ServerType.ODK_COLLECT -> {
+                nav().navigate(R.id.action_homeScreen_to_forms_screen)
+            }
+            ServerType.TELLA_UPLOAD -> {
+                nav().navigate(R.id.action_homeScreen_to_reports_screen)
+            }
+            ServerType.UWAZI -> {
+                nav().navigate(R.id.action_homeScreen_to_uwazi_screen)
+            }
+        }
+    }
+
 
     override fun onImproveItemClickListener(improveClickOptions: ImproveClickOptions) {
         when (improveClickOptions) {
@@ -336,6 +395,13 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         maybeGetRecentForms()
         maybeHideFilesTitle()
         maybeGetRecentTemplates()
+        maybeCountServers()
+    }
+
+    private fun maybeCountServers() {
+        homeVaultPresenter.countCollectServers()
+        homeVaultPresenter.countTUServers()
+        homeVaultPresenter.countUwaziServers()
     }
 
     private fun maybeClosePanic(): Boolean {
@@ -389,20 +455,57 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         stopPanicking()
     }
 
-    override fun onCountTUServersEnded(num: Long?) {
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables?.dispose()
+    }
+
+
+    override fun onCountTUServersEnded(servers: List<TellaReportServer>?) {
+        tuServers?.clear()
+        serversList?.removeIf { item -> item.type == ServerType.TELLA_UPLOAD }
+        if (!servers.isNullOrEmpty()) {
+            tuServers?.addAll(servers)
+            serversList?.add(ServerDataItem(servers, ServerType.TELLA_UPLOAD))
+        }
+        maybeShowConnections()
     }
 
     override fun onCountTUServersFailed(throwable: Throwable?) {
+        Timber.d("***onCountTUServersFailed**$throwable")
     }
 
-    override fun onCountCollectServersEnded(num: Long?) {
+    override fun onCountCollectServersEnded(servers: List<CollectServer>?) {
+        collectServers?.clear()
+        serversList?.removeIf { item -> item.type == ServerType.ODK_COLLECT }
+        if (!servers.isNullOrEmpty()) {
+            collectServers?.addAll(servers)
+            serversList?.add(ServerDataItem(servers, ServerType.ODK_COLLECT))
+        }
+        maybeShowConnections()
     }
+
 
     override fun onCountCollectServersFailed(throwable: Throwable?) {
+        Timber.d("***onCountCollectServersFailed**$throwable")
+    }
+
+    override fun onCountUwaziServersEnded(servers: List<UWaziUploadServer>?) {
+        uwaziServers?.clear()
+        serversList?.removeIf { item -> item.type == ServerType.UWAZI }
+        if (!servers.isNullOrEmpty()) {
+            uwaziServers?.addAll(servers)
+            serversList?.add(ServerDataItem(servers, ServerType.UWAZI))
+        }
+        maybeShowConnections()
+    }
+
+    override fun onCountUwaziServersFailed(throwable: Throwable?) {
+        Timber.d("***onCountUwaziServersFailed**$throwable")
     }
 
     override fun onGetFilesSuccess(files: List<VaultFile?>) {
-        if (!files.isNullOrEmpty()) {
+        if (files.isNotEmpty()) {
             vaultAdapter.addRecentFiles(files)
         } else {
             vaultAdapter.removeRecentFiles()
@@ -435,7 +538,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     override fun onGetFavoriteCollectFormsSuccess(files: List<CollectForm>) {
-        if (!files.isNullOrEmpty()) {
+        if (files.isNotEmpty()) {
             vaultAdapter.addFavoriteForms(files)
         } else {
             vaultAdapter.removeFavoriteForms()

@@ -8,28 +8,26 @@ import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.databinding.ActivityCollectHelpBinding;
 import rs.readahead.washington.mobile.util.StringUtils;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 
 
 public class CollectHelpActivity extends BaseLockActivity {
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.servers_help)
     TextView mCollectServerTextView;
-    @BindView(R.id.odk_help)
     TextView mODKTextView;
+    private ActivityCollectHelpBinding binding;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_collect_help);
 
-        ButterKnife.bind(this);
+        binding = ActivityCollectHelpBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        initView();
 
         setSupportActionBar(toolbar);
 
@@ -58,5 +56,11 @@ public class CollectHelpActivity extends BaseLockActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initView() {
+        toolbar = binding.toolbar;
+        mCollectServerTextView = binding.content.serversHelp;
+        mODKTextView = binding.content.odkHelp;
     }
 }

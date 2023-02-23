@@ -18,7 +18,6 @@ import okio.Okio;
 import okio.Source;
 import rs.readahead.washington.mobile.domain.entity.IProgressListener;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.util.FileUtil;
 import timber.log.Timber;
 
 

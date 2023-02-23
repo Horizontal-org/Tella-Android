@@ -4,7 +4,7 @@ import android.content.Context;
 
 import java.util.List;
 
-import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
 
 
 public class ITellaUploadServersPresenterContract {
@@ -12,20 +12,20 @@ public class ITellaUploadServersPresenterContract {
         Context getContext();
         void showLoading();
         void hideLoading();
-        void onTUServersLoaded(List<TellaUploadServer> servers);
+        void onTUServersLoaded(List<TellaReportServer> servers);
         void onLoadTUServersError(Throwable throwable);
-        void onCreatedTUServer(TellaUploadServer server);
+        void onCreatedTUServer(TellaReportServer server);
         void onCreateTUServerError(Throwable throwable);
-        void onRemovedTUServer(TellaUploadServer server);
+        void onRemovedTUServer(TellaReportServer server);
         void onRemoveTUServerError(Throwable throwable);
-        void onUpdatedTUServer(TellaUploadServer server);
+        void onUpdatedTUServer(TellaReportServer server);
         void onUpdateTUServerError(Throwable throwable);
     }
 
     public interface IPresenter extends IBasePresenter {
         void getTUServers();
-        void create(TellaUploadServer server);
-        void update(TellaUploadServer server);
-        void remove(TellaUploadServer server);
+        void create(TellaReportServer server);
+        void update(TellaReportServer server);
+        void remove(TellaReportServer server);
     }
 }
