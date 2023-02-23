@@ -28,7 +28,7 @@ public class MediaImportPresenter implements IMediaImportPresenterContract.IPres
 
     @Override
     public void importImage(final Uri uri) {
-        disposables.add(Observable.fromCallable(() -> MediaFileHandler.importPhotoUri(view.getContext(), uri,null))
+        disposables.add(Observable.fromCallable(() -> MediaFileHandler.importPhotoUri(view.getContext(), uri,null).blockingGet())
                 .subscribeOn(Schedulers.computation())
                 .doOnSubscribe(disposable -> view.onImportStarted())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -42,7 +42,7 @@ public class MediaImportPresenter implements IMediaImportPresenterContract.IPres
 
     @Override
     public void importVideo(final Uri uri) {
-        disposables.add(Observable.fromCallable(() -> MediaFileHandler.importVideoUri(view.getContext(), uri,null))
+        disposables.add(Observable.fromCallable(() -> MediaFileHandler.importVideoUri(view.getContext(), uri,null).blockingGet())
                 .subscribeOn(Schedulers.computation())
                 .doOnSubscribe(disposable -> view.onImportStarted())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -76,7 +76,7 @@ public class MediaImportPresenter implements IMediaImportPresenterContract.IPres
 
     @Override
     public void importFile(final Uri uri) {
-        disposables.add(Observable.fromCallable(() -> MediaFileHandler.importVaultFileUri(view.getContext(), uri,null))
+        disposables.add(Observable.fromCallable(() -> MediaFileHandler.importVaultFileUri(view.getContext(), uri,null).blockingGet())
                 .subscribeOn(Schedulers.computation())
                 .doOnSubscribe(disposable -> view.onImportStarted())
                 .observeOn(AndroidSchedulers.mainThread())

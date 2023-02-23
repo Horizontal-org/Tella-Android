@@ -17,12 +17,12 @@ fun View.toggleVisibility(show: Boolean) {
         .setDuration(300)
         .alpha(alpha)
         .setListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationStart(animation: Animator?) {
+            override fun onAnimationStart(animation: Animator) {
                 super.onAnimationStart(animation)
                 if (show) visibility = mVisibility
             }
 
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationEnd(animation: Animator) {
                 super.onAnimationEnd(animation)
                 visibility = mVisibility
             }

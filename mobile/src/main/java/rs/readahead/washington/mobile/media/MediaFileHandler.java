@@ -185,7 +185,7 @@ public class MediaFileHandler {
             }
 
             IOUtils.copy(is, os);
-            if (file != null){
+            if (file != null) {
                 MediaScannerConnection.scanFile(context, new String[]{file.toString()}, null, null);
             }
         } catch (VaultException e) {
@@ -197,7 +197,7 @@ public class MediaFileHandler {
     }
 
 
-    public static VaultFile importPhotoUri(Context context, Uri uri, @Nullable String parentId) throws Exception {
+    public static Single<VaultFile> importPhotoUri(Context context, Uri uri, @Nullable String parentId) throws Exception {
         // Vault replacement methods
         InputStream v_input = context.getContentResolver().openInputStream(uri); // original photo
         Bitmap v_bm = modifyOrientation(BitmapFactory.decodeStream(v_input), v_input); // bitmap of photo
@@ -217,8 +217,7 @@ public class MediaFileHandler {
                 .setType(VaultFile.Type.FILE)
                 .setThumb(v_thumb_jpeg_stream.toByteArray())
                 .build(parentId)
-                .subscribeOn(Schedulers.io())
-                .blockingGet();
+                .subscribeOn(Schedulers.io());
     }
 
     public static Single<VaultFile> saveJpegPhoto(@NonNull byte[] jpegPhoto, @Nullable String parent) throws Exception {
@@ -281,7 +280,7 @@ public class MediaFileHandler {
                 .blockingGet();
     }
 
-    public static VaultFile importVideoUri(Context context, Uri uri, String parentID) throws Exception {
+    public static Single<VaultFile> importVideoUri(Context context, Uri uri, String parentID) throws Exception {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         String mimeType = context.getContentResolver().getType(uri);
 
@@ -305,8 +304,7 @@ public class MediaFileHandler {
                     .setType(VaultFile.Type.FILE)
                     .setDuration(duration)
                     .build(parentID)
-                    .subscribeOn(Schedulers.io())
-                    .blockingGet();
+                    .subscribeOn(Schedulers.io());
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
             Timber.e(e, MediaFileHandler.class.getName());
@@ -320,7 +318,7 @@ public class MediaFileHandler {
         }
     }
 
-    public static VaultFile importOthersUri(Context context, Uri uri, String parentId) throws Exception {
+    public static Single<VaultFile> importOthersUri(Context context, Uri uri, String parentId) throws Exception {
         String mimeType = context.getContentResolver().getType(uri);
 
         try {
@@ -329,14 +327,13 @@ public class MediaFileHandler {
 
             assert DocumentFile.fromSingleUri(context, uri) != null;
             return MyApplication.rxVault
-                        .builder(is)
-                        .setMimeType(mimeType)
-                        .setAnonymous(true)
-                        .setName(DocumentFile.fromSingleUri(context, uri).getName())
-                        .setType(VaultFile.Type.FILE)
-                        .build(parentId)
-                        .subscribeOn(Schedulers.io())
-                        .blockingGet();
+                    .builder(is)
+                    .setMimeType(mimeType)
+                    .setAnonymous(true)
+                    .setName(DocumentFile.fromSingleUri(context, uri).getName())
+                    .setType(VaultFile.Type.FILE)
+                    .build(parentId)
+                    .subscribeOn(Schedulers.io());
 
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
@@ -396,8 +393,8 @@ public class MediaFileHandler {
         }
     }
 
-    public static List<VaultFile> importVaultFilesUris(Context context, @Nullable List<Uri> uris, String parentId) throws Exception {
-        List<VaultFile> vaultFiles = new ArrayList<>();
+    public static List<Single<VaultFile>> importVaultFilesUris(Context context, @Nullable List<Uri> uris, String parentId) throws Exception {
+        List<Single<VaultFile>> vaultFiles = new ArrayList<>();
         assert uris != null;
         for (Uri uri : uris) {
             String mimeType = getMimeType(uri, context.getContentResolver());
@@ -680,8 +677,8 @@ public class MediaFileHandler {
         return resultList;
     }
 
-    public static VaultFile importVaultFileUri(Context context, @Nullable Uri uri, String parentId) throws Exception {
-        VaultFile vaultFile = new VaultFile();
+    public static Single<VaultFile> importVaultFileUri(Context context, @Nullable Uri uri, String parentId) throws Exception {
+        Single<VaultFile> vaultFile = null;
         if (uri != null) {
             String mimeType = getMimeType(uri, context.getContentResolver());
             if (mimeType != null) {
@@ -696,6 +693,7 @@ public class MediaFileHandler {
         }
         return vaultFile;
     }
+
 
     private static List<VaultFile> getAllFiles(VaultFile vaultFile) {
         FileWalker fileWalker = new FileWalker();
