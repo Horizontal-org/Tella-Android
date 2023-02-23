@@ -132,7 +132,7 @@ dependencies {
 
     //hilt
     implementation "com.google.dagger:hilt-android:$versions.hilt_android"
-    kapt "com.google.dagger:hilt-android-compiler:$hilt_android_compiler_version"
+    kapt "com.google.dagger:hilt-android-compiler:$versions.hilt_android_compiler"
     //hilt-view-model
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$versions.hilt_viewmodel"
     kapt "androidx.hilt:hilt-compiler:$versions.hilt_version"
