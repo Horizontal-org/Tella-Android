@@ -3,9 +3,11 @@ package com.hzontal.tella_locking_ui.ui.pin.calculator
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.ContextThemeWrapper
+import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet.*
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getColor
+import androidx.core.view.marginEnd
 import androidx.core.widget.TextViewCompat
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.TellaKeysUI
@@ -23,7 +25,7 @@ private const val TAG = "CalculatorActivity"
 
 class CalculatorActivity : BasePinActivity(), ResultListener {
     private var calculatorTheme: String? = null
-    private lateinit var binding:ActivityCalculatorBinding
+    private lateinit var binding: ActivityCalculatorBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,26 +38,30 @@ class CalculatorActivity : BasePinActivity(), ResultListener {
 
     }
 
-    private  fun setTheme()
-    {
+    private fun setTheme() {
         when (calculatorTheme) {
             CalculatorTheme.BLUE_SKIN.name -> {
-                binding.pinLockView.initTheme(ThemeManager.getTheme(CalculatorTheme.BLUE_SKIN),CalculatorTheme.BLUE_SKIN)
+                binding.pinLockView.initTheme(ThemeManager.getTheme(CalculatorTheme.BLUE_SKIN), CalculatorTheme.BLUE_SKIN)
                 TextViewCompat.setTextAppearance(pinEditText, R.style.Calculator_Edit_Text_Blue_Skin)
                 TextViewCompat.setTextAppearance(binding.resultText, R.style.Calculator_Result_Text_Blue_Skin)
             }
             CalculatorTheme.ORANGE_SKIN.name -> {
-                binding.root.setBackgroundColor(ContextCompat.getColor(this,R.color.wa_white))
-                binding.pinLockView.initTheme(ThemeManager.getTheme(CalculatorTheme.ORANGE_SKIN),CalculatorTheme.ORANGE_SKIN)
+                binding.root.setBackgroundColor(ContextCompat.getColor(this, R.color.wa_white))
+                binding.pinLockView.initTheme(ThemeManager.getTheme(CalculatorTheme.ORANGE_SKIN), CalculatorTheme.ORANGE_SKIN)
                 TextViewCompat.setTextAppearance(pinEditText, R.style.Calculator_Edit_Text_Orange_Skin)
                 TextViewCompat.setTextAppearance(binding.resultText, R.style.Calculator_Result_Text_Orange_Skin)
             }
             CalculatorTheme.GREEN_SKIN.name -> {
-                binding.root.setBackgroundColor(ContextCompat.getColor(this,R.color.wa_white))
+                binding.root.setBackgroundColor(ContextCompat.getColor(this, R.color.wa_white))
+                val param = binding.pinLockView.layoutParams as ViewGroup.MarginLayoutParams
+                param.setMargins(10,10,10,10)
+                binding.pinLockView.layoutParams = param
+                binding.pinLockView.initTheme(ThemeManager.getTheme(CalculatorTheme.GREEN_SKIN), CalculatorTheme.GREEN_SKIN)
+
             }
             CalculatorTheme.YELLOW_SKIN.name -> {
-                binding.root.setBackgroundColor(ContextCompat.getColor(this,R.color.wa_white))
-                binding.pinLockView.initTheme(ThemeManager.getTheme(CalculatorTheme.YELLOW_SKIN),CalculatorTheme.YELLOW_SKIN)
+                binding.root.setBackgroundColor(ContextCompat.getColor(this, R.color.wa_white))
+                binding.pinLockView.initTheme(ThemeManager.getTheme(CalculatorTheme.YELLOW_SKIN), CalculatorTheme.YELLOW_SKIN)
                 TextViewCompat.setTextAppearance(pinEditText, R.style.Calculator_Edit_Text_Orange_Skin)
                 TextViewCompat.setTextAppearance(binding.resultText, R.style.Calculator_Result_Text_Orange_Skin)
 
@@ -63,7 +69,6 @@ class CalculatorActivity : BasePinActivity(), ResultListener {
 
         }
     }
-
 
 
     private fun initView() {

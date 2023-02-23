@@ -50,7 +50,7 @@ abstract class BaseLockActivity : BaseActivity() {
             UnlockRegistry.Method.TELLA_PIN -> {
                 //temp switch
                 if (Preferences.getAppAlias() == "rs.readahead.washington.mobile.views.activity.AliasCalculator") {
-                    Intent(this, CalculatorActivity::class.java).putExtra(CALCULATOR_THEME, CalculatorTheme.YELLOW_SKIN.toString())
+                    Intent(this, CalculatorActivity::class.java).putExtra(CALCULATOR_THEME, Preferences.getCalculatorTheme())
                 } else {
                     Intent(this, PinUnlockActivity::class.java)
                 }

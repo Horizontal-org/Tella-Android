@@ -119,7 +119,14 @@ public class Preferences {
     public static void setAppAlias(@NonNull String value) {
         setString(SharedPrefs.APP_ALIAS_NAME, value);
     }
+    @Nullable
+    public static String getCalculatorTheme() {
+        return getString(SharedPrefs.CALCULATOR_THEME, null);
+    }
 
+    public static void setCalculatorTheme(@NonNull String value) {
+        setString(SharedPrefs.CALCULATOR_THEME, value);
+    }
     @Nullable
     public static String getVideoResolution() {
         return getString(SharedPrefs.VIDEO_RESOLUTION, null);
