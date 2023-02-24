@@ -73,7 +73,7 @@ class SettingsCalculatorActivity : BaseActivity() {
                 getString(R.string.settings_sec_confirm_calc_camouflage_desc),
                 getString(R.string.settings_sec_confirm_exit_tella),
                 getString(R.string.action_cancel),
-                ContextCompat.getDrawable(this, cm.calculatorOption.drawableResId),
+                ContextCompat.getDrawable(this, cm.getCalculatorOptionByTheme(calculatorTheme.name).drawableResId),
                 consumer = object : BottomSheetUtils.ActionConfirmed {
                     override fun accept(isConfirmed: Boolean) {
                         hideTellaBehindCalculator()

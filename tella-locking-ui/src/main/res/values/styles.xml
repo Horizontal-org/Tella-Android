@@ -95,7 +95,7 @@
     </style>
     <style name="Calculator_Result_Text_Blue_Skin" parent="Calculator_Result_Text">
         <item name="android:textSize">24sp</item>
-        <item name="android:textColor">@color/calc_orange_skin_grey</item>
+        <item name="android:textColor">@color/calc_blue_skin_white</item>
     </style>
 
     <style name="Calculator_Result_Text" parent="Calculator_Text">

@@ -42,12 +42,18 @@ class CalculatorKeyView @JvmOverloads constructor(
                     val button = findViewById<TextView>(it)
                     button.setBackgroundColor(ContextCompat.getColor(context, style.calculatorOperatorsBackgroundColor))
                     button.setTextColor(ContextCompat.getColor(context, style.calculatorOperatorsTextColor))
+                    val param = button.layoutParams as ViewGroup.MarginLayoutParams
+                    param.setMargins(8, 8, 8, 8)
+                    button.layoutParams = param
                 }
 
                 binding.btnNumbersGroup.referencedIds.forEach {
                     val button = findViewById<TextView>(it)
                     button.setBackgroundColor(ContextCompat.getColor(context, style.calculatorNumbersBackgroundColor))
                     button.setTextColor(ContextCompat.getColor(context, style.calculatorNumbersTextColor))
+                    val param = button.layoutParams as ViewGroup.MarginLayoutParams
+                    param.setMargins(8, 8, 8, 8)
+                    button.layoutParams = param
                 }
 
                 binding.plusMinusBottomBtn.setBackgroundColor(ContextCompat.getColor(context, style.calculatorNumbersBackgroundColor))

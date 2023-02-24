@@ -12,6 +12,7 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent
+import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.databinding.OnboardCalculatorFragmentBinding
 import rs.readahead.washington.mobile.databinding.OnboardLockSetFragmentBinding
 import rs.readahead.washington.mobile.util.CamouflageManager
@@ -64,7 +65,7 @@ class OnBoardCalculatorFragment : BaseFragment() {
                 getString(R.string.settings_sec_confirm_calc_camouflage_desc),
                 getString(R.string.settings_sec_confirm_exit_tella),
                 getString(R.string.action_cancel),
-                ContextCompat.getDrawable(activity, cm.calculatorOption.drawableResId),
+                ContextCompat.getDrawable(activity, cm.getCalculatorOptionByTheme(Preferences.getCalculatorTheme()).drawableResId),
                 consumer = object : BottomSheetUtils.ActionConfirmed {
                     override fun accept(isConfirmed: Boolean) {
                         hideTellaBehindCalculator()

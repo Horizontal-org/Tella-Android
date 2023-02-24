@@ -41,6 +41,7 @@ class CalculatorActivity : BasePinActivity(), ResultListener {
     private fun setTheme() {
         when (calculatorTheme) {
             CalculatorTheme.BLUE_SKIN.name -> {
+                binding.root.setBackgroundColor(ContextCompat.getColor(this, R.color.wa_black))
                 binding.pinLockView.initTheme(ThemeManager.getTheme(CalculatorTheme.BLUE_SKIN), CalculatorTheme.BLUE_SKIN)
                 TextViewCompat.setTextAppearance(pinEditText, R.style.Calculator_Edit_Text_Blue_Skin)
                 TextViewCompat.setTextAppearance(binding.resultText, R.style.Calculator_Result_Text_Blue_Skin)
