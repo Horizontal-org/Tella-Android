@@ -35,14 +35,11 @@ class HideBehindCalculator : BaseFragment() {
     }
 
     override fun initView(view: View) {
-
         val position = requireArguments().getInt(VIEWPAGER_POSITION)
         var drawables = resources.obtainTypedArray(R.array.calculator_skin_array)
         with(binding) {
             this.calculatorImg.setImageDrawable(drawables.getDrawable(position))
-
         }
-
     }
 
 

@@ -62,11 +62,11 @@ public class CamouflageManager {
         switch (calculatorTheme)
         {
             case "BLUE_SKIN":
-                return new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calc_blue_skin_foreground, R.string.settings_camo_calculator2);
+                return new CamouflageOption(getOptionAlias("CalculatorBlueSkin"), R.drawable.calc_blue_skin_foreground, R.string.settings_camo_calculator2);
             case "YELLOW_SKIN":
-                return new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calc_yellow_skin_foreground, R.string.settings_camo_calculator2);
+                return new CamouflageOption(getOptionAlias("CalculatorYellowSkin"), R.drawable.calc_yellow_skin_foreground, R.string.settings_camo_calculator2);
             case "ORANGE_SKIN":
-                return new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calc_orange_skin_foreground, R.string.settings_camo_calculator2);
+                return new CamouflageOption(getOptionAlias("CalculatorOrangeSkin"), R.drawable.calc_orange_skin_foreground, R.string.settings_camo_calculator2);
             default:
                 return new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calc_green_skin_foreground, R.string.settings_camo_calculator2);
 

@@ -2,6 +2,9 @@ package rs.readahead.washington.mobile.views.base_ui
 
 import android.content.Intent
 import android.view.WindowManager
+import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS
+import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS_BLUE_SKIN
+import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS_ORANGE_SKIN
 import com.hzontal.tella_locking_ui.ui.password.PasswordUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternSetActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity
@@ -39,8 +42,8 @@ abstract class BaseLockActivity : BaseActivity() {
 
     private fun startKeySetup() {
         val intent = Intent(
-            this,
-            if (SecretsManager.isInitialized(this)) PatternUpgradeActivity::class.java else PatternSetActivity::class.java
+                this,
+                if (SecretsManager.isInitialized(this)) PatternUpgradeActivity::class.java else PatternSetActivity::class.java
         )
         this.startActivity(intent)
     }
@@ -49,11 +52,12 @@ abstract class BaseLockActivity : BaseActivity() {
         val intent = when (holder.unlockRegistry.getActiveMethod(this)) {
             UnlockRegistry.Method.TELLA_PIN -> {
                 //temp switch
-                if (Preferences.getAppAlias() == "rs.readahead.washington.mobile.views.activity.AliasCalculator") {
-                    Intent(this, CalculatorActivity::class.java).putExtra(CALCULATOR_THEME, Preferences.getCalculatorTheme())
-                } else {
-                    Intent(this, PinUnlockActivity::class.java)
+                when (Preferences.getAppAlias()) {
+                    CALCULATOR_ALIAS,CALCULATOR_ALIAS_BLUE_SKIN,CALCULATOR_ALIAS_ORANGE_SKIN,CALCULATOR_ALIAS_BLUE_SKIN
+                    -> Intent(this, CalculatorActivity::class.java).putExtra(CALCULATOR_THEME, Preferences.getCalculatorTheme())
+                    else -> Intent(this, PinUnlockActivity::class.java)
                 }
+
             }
             UnlockRegistry.Method.TELLA_PATTERN -> {
                 Intent(this, PatternUnlockActivity::class.java)
@@ -78,7 +82,7 @@ abstract class BaseLockActivity : BaseActivity() {
 
     private fun maybeRestoreTimeout() {
         if (Preferences.isTempTimeout()) {
-            MyApplication.getMainKeyHolder().timeout  = LockTimeoutManager.IMMEDIATE_SHUTDOWN
+            MyApplication.getMainKeyHolder().timeout = LockTimeoutManager.IMMEDIATE_SHUTDOWN
             Preferences.setTempTimeout(false)
         }
     }
@@ -86,12 +90,12 @@ abstract class BaseLockActivity : BaseActivity() {
     private fun maybeEnableSecurityScreen() {
         if (Preferences.isSecurityScreenEnabled()) {
             window.setFlags(
-                WindowManager.LayoutParams.FLAG_SECURE,
-                WindowManager.LayoutParams.FLAG_SECURE
+                    WindowManager.LayoutParams.FLAG_SECURE,
+                    WindowManager.LayoutParams.FLAG_SECURE
             )
         } else {
             window.clearFlags(
-                WindowManager.LayoutParams.FLAG_SECURE
+                    WindowManager.LayoutParams.FLAG_SECURE
             )
         }
     }

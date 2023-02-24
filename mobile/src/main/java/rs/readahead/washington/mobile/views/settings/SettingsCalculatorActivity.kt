@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.CalculatorTheme
 import rs.readahead.washington.mobile.MyApplication
@@ -83,11 +82,11 @@ class SettingsCalculatorActivity : BaseActivity() {
     }
 
     private fun hideTellaBehindCalculator() {
-        if (cm.setLauncherActivityAlias(this, CALCULATOR_ALIAS)) {
+        if (cm.setLauncherActivityAlias(this, cm.getCalculatorOptionByTheme(calculatorTheme.name).alias))
             MyApplication.bus()
                     .post(CamouflageAliasChangedEvent())
         }
-    }
+
 
     private fun setTheme() {
         when (binding.viewPager.currentItem) {

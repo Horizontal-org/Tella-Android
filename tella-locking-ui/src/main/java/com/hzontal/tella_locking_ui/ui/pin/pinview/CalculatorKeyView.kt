@@ -74,23 +74,31 @@ class CalculatorKeyView @JvmOverloads constructor(
                     val button = findViewById<TextView>(it)
                     button.setBackgroundResource(style.calculatorBackgroundDrawable)
                     button.setTextColor(ContextCompat.getColor(context, style.calculatorNumbersTextColor))
+                    val param = button.layoutParams as ViewGroup.MarginLayoutParams
+                    param.setMargins(8, 8, 8, 8)
+                    button.layoutParams = param
                 }
 
                 binding.btnOperatorsGroup.referencedIds.forEach {
                     val button = findViewById<TextView>(it)
                     button.setBackgroundResource(style.calculatorBackgroundDrawable)
                     button.setTextColor(ContextCompat.getColor(context, style.calculatorOperatorsTextColor))
+                    val param = button.layoutParams as ViewGroup.MarginLayoutParams
+                    param.setMargins(8, 8, 8, 8)
+                    button.layoutParams = param
                 }
                 binding.okBtn.setBackgroundResource(style.calculatorOkBtnTextBackgroundDrawable)
                 binding.okBtn.setTextColor(ContextCompat.getColor(context, style.calculatorOkBtnTextColor))
+                val param = binding.okBtn.layoutParams as ViewGroup.MarginLayoutParams
+                param.setMargins(8, 8, 8, 8)
+                binding.okBtn.layoutParams = param
 
                 binding.plusMinusBottomBtn.text = "0"
+                binding.plusMinusBottomBtn.setBackgroundResource(style.calculatorBackgroundDrawable)
                 binding.plusMinusBtn.text = "()"
                 binding.zeroBtn.text = "."
                 binding.deleteBtn.text = "C"
                 binding.commaBtn.visibility = GONE
-                binding.vectorBtn.visibility = VISIBLE
-                binding.vectorBtn.setBackgroundResource(style.calculatorBackgroundDrawable)
                 binding.plusMinusBottomBtn.visibility = VISIBLE
                 binding.zeroBtnGuideline.setGuidelinePercent(0.25F)
 
@@ -113,11 +121,8 @@ class CalculatorKeyView @JvmOverloads constructor(
                 binding.plusMinusBottomBtn.visibility = GONE
                 binding.commaBtn.text = "."
                 binding.commaBtn.setBackgroundResource(style.calculatorBackgroundDrawable)
-                binding.cancelBtn.setBackgroundResource(style.calculatorBackgroundDrawable)
 
-                binding.plusMinusBtn.text = "%"
                 binding.percentBtn.visibility = GONE
-                binding.cancelBtn.visibility = VISIBLE
                 binding.okBtn.setBackgroundResource(style.calculatorOkBtnTextBackgroundDrawable)
                 binding.okBtn.setTextColor(ContextCompat.getColor(context, style.calculatorOkBtnTextColor))
             }

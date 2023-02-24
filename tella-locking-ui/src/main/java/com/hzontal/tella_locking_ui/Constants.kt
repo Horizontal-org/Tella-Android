@@ -22,5 +22,8 @@ const val IS_ONBOARD_LOCK_SET = "IS_ONBOARD_LOCK_SET"
 const val IS_CAMOUFLAGE = "IS_CAMOUFLAGE"
 
 const val CALCULATOR_ALIAS = "rs.readahead.washington.mobile.views.activity.AliasCalculator"
+const val CALCULATOR_ALIAS_BLUE_SKIN = "rs.readahead.washington.mobile.views.activity.AliasCalculatorBlueSkin"
+const val CALCULATOR_ALIAS_ORANGE_SKIN = "rs.readahead.washington.mobile.views.activity.AliasCalculatorOrangeSkin"
+const val CALCULATOR_ALIAS_YELLOW_SKIN = "rs.readahead.washington.mobile.views.activity.AliasCalculatorYellowSkin"
 
 const val FINISH_ACTIVITY_REQUEST_CODE = 123

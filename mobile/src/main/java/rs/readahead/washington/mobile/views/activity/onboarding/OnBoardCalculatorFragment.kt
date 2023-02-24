@@ -75,9 +75,9 @@ class OnBoardCalculatorFragment : BaseFragment() {
     }
 
     private fun hideTellaBehindCalculator() {
-        if (cm.setLauncherActivityAlias(requireContext(), CALCULATOR_ALIAS)) {
+        if (cm.setLauncherActivityAlias(activity, cm.getCalculatorOptionByTheme(Preferences.getCalculatorTheme()).alias))
             MyApplication.bus()
                     .post(CamouflageAliasChangedEvent())
         }
-    }
+
 }

@@ -94,19 +94,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="HardcodedText" />
 
-
-    <ImageView
-        android:id="@+id/cancelBtn"
-        style="@style/Calculator_Green_Keys"
-        android:src="@drawable/icon_orange_vector"
-        android:scaleType="center"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/guideline20h"
-        app:layout_constraintEnd_toEndOf="@+id/guideline75v"
-        app:layout_constraintStart_toStartOf="@+id/guideline50v"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="HardcodedText" />
-
     <TextView
         android:id="@+id/devideBtn"
         style="@style/Calculator_Gray_Keys"
@@ -261,17 +248,6 @@
         android:id="@+id/commaBtn"
         style="@style/Calculator_Light_Keys"
         android:text=","
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/guideline75v"
-        app:layout_constraintStart_toStartOf="@+id/guideline50v"
-        app:layout_constraintTop_toTopOf="@+id/guideline80h"
-        tools:ignore="HardcodedText" />
-    <ImageView
-        android:id="@+id/vectorBtn"
-        style="@style/Calculator_Light_Keys"
-        android:src="@drawable/icon_vector"
-        android:scaleType="center"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/guideline75v"
         app:layout_constraintStart_toStartOf="@+id/guideline50v"
