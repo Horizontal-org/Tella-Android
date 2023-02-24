@@ -180,7 +180,7 @@ public class ReportsFormEndView extends FrameLayout {
         }
     }
 
-    private double getTotalUploadedSize(ReportFormInstance instance) {
+    private String getTotalUploadedSize(ReportFormInstance instance) {
         long totalUploadedSize = 0;
         for (FormMediaFile formMediaFile : instance.getWidgetMediaFiles()) {
             totalUploadedSize += formMediaFile.uploadedSize;

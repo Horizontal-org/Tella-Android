@@ -45,6 +45,7 @@ class ReportsSendFragment :
             progressInfo.observe(viewLifecycleOwner) { progress ->
                 val pct = progress.first
                 val instance = progress.second
+                pauseResumeLabel(instance)
                 endView.setUploadProgress(instance, pct.current.toFloat() / pct.size.toFloat())
             }
 
@@ -56,12 +57,9 @@ class ReportsSendFragment :
                     EntityStatus.SUBMISSION_ERROR, EntityStatus.FINALIZED -> {
                         viewModel.saveOutbox(entity)
                     }
-                    EntityStatus.SUBMISSION_PARTIAL_PARTS, EntityStatus.SUBMISSION_PENDING -> {
-                        pauseResumeLabel()
-                    }
                     EntityStatus.PAUSED -> {
+                        pauseResumeLabel(entity)
                         viewModel.saveOutbox(entity)
-                        pauseResumeLabel()
                     }
                     else -> {
 
@@ -140,11 +138,11 @@ class ReportsSendFragment :
                 viewModel.clearDisposabe()
             }
         }
-        pauseResumeLabel()
+        pauseResumeLabel(reportInstance)
     }
 
-    private fun pauseResumeLabel() {
-        if (reportInstance?.status == EntityStatus.PAUSED) {
+    private fun pauseResumeLabel(reportFormInstance: ReportFormInstance?) {
+        if (reportFormInstance?.status == EntityStatus.PAUSED) {
             binding?.nextBtn?.text = getString(R.string.Reports_Resume)
         } else {
             binding?.nextBtn?.text = getString(R.string.Reports_Pause)
