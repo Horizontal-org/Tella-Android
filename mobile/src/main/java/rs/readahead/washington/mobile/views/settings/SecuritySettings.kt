@@ -226,7 +226,7 @@ class SecuritySettings : BaseFragment() {
         if ((activity.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(
                 activity
             ) == UnlockRegistry.Method.TELLA_PIN
-            && Preferences.getAppAlias().equals(cm.getCalculatorOptionByTheme(Preferences.getCalculatorTheme()).alias)
+            && Preferences.getAppAlias().equals(cm.calculatorOption.alias)
         ) {
             showConfirmSheet(
                 requireActivity().supportFragmentManager,

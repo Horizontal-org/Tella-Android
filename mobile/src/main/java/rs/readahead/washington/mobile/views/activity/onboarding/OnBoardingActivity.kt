@@ -75,10 +75,11 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
             replaceFragmentNoAddToBackStack(OnBoardLockSetFragment(), R.id.rootOnboard)
         } else {
             if (isFromSettings) replaceFragmentNoAddToBackStack(
-                OnBoardLockSetFragment(), R.id.rootOnboard
+                    OnBoardLockFragment(), R.id.rootOnboard
             )
         }
         initUwaziEvents()
+
     }
 
     private fun initButtons() {
