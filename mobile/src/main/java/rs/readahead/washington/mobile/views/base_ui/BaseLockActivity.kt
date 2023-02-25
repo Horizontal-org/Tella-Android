@@ -5,6 +5,7 @@ import android.view.WindowManager
 import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS
 import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS_BLUE_SKIN
 import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS_ORANGE_SKIN
+import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS_YELLOW_SKIN
 import com.hzontal.tella_locking_ui.ui.password.PasswordUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternSetActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity
@@ -42,8 +43,8 @@ abstract class BaseLockActivity : BaseActivity() {
 
     private fun startKeySetup() {
         val intent = Intent(
-                this,
-                if (SecretsManager.isInitialized(this)) PatternUpgradeActivity::class.java else PatternSetActivity::class.java
+            this,
+            if (SecretsManager.isInitialized(this)) PatternUpgradeActivity::class.java else PatternSetActivity::class.java
         )
         this.startActivity(intent)
     }
@@ -53,8 +54,11 @@ abstract class BaseLockActivity : BaseActivity() {
             UnlockRegistry.Method.TELLA_PIN -> {
                 //temp switch
                 when (Preferences.getAppAlias()) {
-                    CALCULATOR_ALIAS,CALCULATOR_ALIAS_BLUE_SKIN,CALCULATOR_ALIAS_ORANGE_SKIN,CALCULATOR_ALIAS_BLUE_SKIN
-                    -> Intent(this, CalculatorActivity::class.java).putExtra(CALCULATOR_THEME, Preferences.getCalculatorTheme())
+                    CALCULATOR_ALIAS, CALCULATOR_ALIAS_BLUE_SKIN, CALCULATOR_ALIAS_ORANGE_SKIN, CALCULATOR_ALIAS_YELLOW_SKIN
+                    -> Intent(this, CalculatorActivity::class.java).putExtra(
+                        CALCULATOR_THEME,
+                        Preferences.getCalculatorTheme()
+                    )
                     else -> Intent(this, PinUnlockActivity::class.java)
                 }
 
@@ -90,12 +94,12 @@ abstract class BaseLockActivity : BaseActivity() {
     private fun maybeEnableSecurityScreen() {
         if (Preferences.isSecurityScreenEnabled()) {
             window.setFlags(
-                    WindowManager.LayoutParams.FLAG_SECURE,
-                    WindowManager.LayoutParams.FLAG_SECURE
+                WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE
             )
         } else {
             window.clearFlags(
-                    WindowManager.LayoutParams.FLAG_SECURE
+                WindowManager.LayoutParams.FLAG_SECURE
             )
         }
     }

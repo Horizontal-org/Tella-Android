@@ -24,7 +24,7 @@ public class CamouflageManager {
     private final List<CamouflageOption> options;
     public static final int defaultAliasPosition = 15;
 
-    public final CamouflageOption calculatorOption = new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calc_orange_skin_foreground, R.string.settings_camo_calculator2);
+    public final CamouflageOption calculatorOption = new CamouflageOption(getOptionAlias("CalculatorOrangeSkin"), R.drawable.calc_orange_skin_foreground, R.string.settings_camo_calculator2);
     final CamouflageOption defaultOption = new CamouflageOption(defaultAlias, R.drawable.tella_black, R.string.app_name);
 
     public synchronized static CamouflageManager getInstance() {
@@ -50,17 +50,17 @@ public class CamouflageManager {
         options.add(new CamouflageOption(getOptionAlias("Clock"), R.drawable.clock_foreground, R.string.settings_camo_clock));
         options.add(new CamouflageOption(getOptionAlias("Time"), R.drawable.time_foreground, R.string.settings_camo_time));
         options.add(new CamouflageOption(getOptionAlias("StopWatch"), R.drawable.stopwatch_foreground, R.string.settings_camo_stopwatch));
-       // options.add(new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calculator_foreground_circle, R.string.settings_camo_calculator2));
-      //  options.add(new CamouflageOption(getOptionAlias("Calculate"), R.drawable.calculate_foreground, R.string.settings_camo_calculate));
-      //  options.add(new CamouflageOption(getOptionAlias("CalculatorPlus"), R.drawable.calculatorplus_foreground, R.string.settings_camo_calculator_plus));
-       // options.add(new CamouflageOption(getOptionAlias("iCalculator"), R.drawable.icalculator_foreground, R.string.settings_camo_icalculator));
-       // options.add(new CamouflageOption(getOptionAlias("iCalculator"), R.drawable.icalculator_foreground, R.string.settings_camo_icalculator));
+        // options.add(new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calculator_foreground_circle, R.string.settings_camo_calculator2));
+        //  options.add(new CamouflageOption(getOptionAlias("Calculate"), R.drawable.calculate_foreground, R.string.settings_camo_calculate));
+        //  options.add(new CamouflageOption(getOptionAlias("CalculatorPlus"), R.drawable.calculatorplus_foreground, R.string.settings_camo_calculator_plus));
+        // options.add(new CamouflageOption(getOptionAlias("iCalculator"), R.drawable.icalculator_foreground, R.string.settings_camo_icalculator));
+        // options.add(new CamouflageOption(getOptionAlias("iCalculator"), R.drawable.icalculator_foreground, R.string.settings_camo_icalculator));
 
     }
 
-    public CamouflageOption getCalculatorOptionByTheme(String calculatorTheme){
-        switch (calculatorTheme)
-        {
+    public CamouflageOption getCalculatorOptionByTheme(String calculatorTheme) {
+        if (calculatorTheme == null) return calculatorOption;
+        switch (calculatorTheme) {
             case "BLUE_SKIN":
                 return new CamouflageOption(getOptionAlias("CalculatorBlueSkin"), R.drawable.calc_blue_skin_foreground, R.string.settings_camo_calculator2);
             case "YELLOW_SKIN":
@@ -68,11 +68,10 @@ public class CamouflageManager {
             case "ORANGE_SKIN":
                 return new CamouflageOption(getOptionAlias("CalculatorOrangeSkin"), R.drawable.calc_orange_skin_foreground, R.string.settings_camo_calculator2);
             default:
-                return new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calc_green_skin_foreground, R.string.settings_camo_calculator2);
-
+                return calculatorOption;
         }
-
     }
+
     public boolean setLauncherActivityAlias(@NonNull Context context, @NonNull String activityAlias) {
         String currentAlias = Preferences.getAppAlias();
         if (activityAlias.equals(currentAlias)) {
@@ -84,7 +83,7 @@ public class CamouflageManager {
 
         List<CamouflageOption> fullOptions = new ArrayList<>(options);
         fullOptions.add(defaultOption);
-        fullOptions.add(getCalculatorOptionByTheme(Preferences.getCalculatorTheme()));
+        fullOptions.add(getCalculatorOptionByTheme(Preferences.getCalculatorTheme() != null ? Preferences.getCalculatorTheme() : calculatorOption.alias));
 
         for (CamouflageOption option : fullOptions) {
             packageManager.setComponentEnabledSetting(
