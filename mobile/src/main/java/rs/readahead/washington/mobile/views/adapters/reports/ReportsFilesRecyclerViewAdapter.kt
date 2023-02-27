@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -74,7 +75,7 @@ open class ReportsFilesRecyclerViewAdapter(
         )
     }
 
-    open inner class GridAttachmentsViewHolder(val view: View) : RecyclerView.ViewHolder(view)  {
+    open inner class GridAttachmentsViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
         constructor(parent: ViewGroup)
                 : this(
@@ -167,7 +168,8 @@ open class ReportsFilesRecyclerViewAdapter(
         }
 
         private fun showAddLink() {
-            filePreviewImg.background = context.getDrawable(R.drawable.transparent_solid)
+            filePreviewImg.background =
+                ResourcesCompat.getDrawable(context.resources, R.drawable.transparent_solid, null)
             filePreviewImg.setImageResource(R.drawable.upload_box_btn)
             filePreviewImg.setOnClickListener {
                 iAttachmentsMediaHandler.addFiles()
