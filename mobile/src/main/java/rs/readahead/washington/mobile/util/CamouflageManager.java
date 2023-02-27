@@ -24,7 +24,7 @@ public class CamouflageManager {
     private final List<CamouflageOption> options;
     public static final int defaultAliasPosition = 15;
 
-    public final CamouflageOption calculatorOption = new CamouflageOption(getOptionAlias("CalculatorOrangeSkin"), R.drawable.calc_orange_skin_foreground, R.string.settings_camo_calculator2);
+    public final CamouflageOption calculatorOption = new CamouflageOption(getOptionAlias(Preferences.getAppAlias()), getOptionDrawable(Preferences.getAppAlias()), R.string.settings_camo_calculator2);
     final CamouflageOption defaultOption = new CamouflageOption(defaultAlias, R.drawable.tella_black, R.string.app_name);
 
     public synchronized static CamouflageManager getInstance() {
@@ -172,5 +172,20 @@ public class CamouflageManager {
 
     private String getOptionAlias(String alias) {
         return "rs.readahead.washington.mobile.views.activity.Alias" + alias;
+    }
+
+    private int getOptionDrawable(String alias) {
+
+        if (alias == null) return R.drawable.calc_green_skin_foreground;
+        switch (alias) {
+            case "CalculatorBlueSkin":
+                return R.drawable.calc_blue_skin_foreground;
+            case "CalculatorYellowSkin":
+                return R.drawable.calc_yellow_skin_foreground;
+            case "CalculatorOrangeSkin":
+                return R.drawable.calc_orange_skin_foreground;
+            default:
+                return R.drawable.calc_green_skin_foreground;
+        }
     }
 }
