@@ -118,16 +118,16 @@ public class FileUtil {
     }
 
     @NonNull
-    public static double getFileSize(long size) {
-        double fileSize ;
+    public static String getFileSize(long size) {
+        String fileSize ;
         double m = size / 1000000.0; //ne 1024 na 2
         double k = size / 1000.0; //ne 1024 na 2
         DecimalFormat dec = new DecimalFormat("0.00");
 
         if (m > 1) {
-            fileSize = m;
+            fileSize = dec.format(m);
         } else {
-            fileSize = k;
+            fileSize = dec.format(k);
         }
 
         return fileSize;

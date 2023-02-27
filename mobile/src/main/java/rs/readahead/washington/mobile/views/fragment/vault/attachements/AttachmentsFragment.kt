@@ -118,7 +118,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
     private var importAndDelete = false
     private var uriToDelete: Uri? = null
     private val bundle by lazy { Bundle() }
-    private var selectAll = false
     private var withMetadata = false
     private var selectMode = SelectMode.DESELECT_ALL
 
@@ -1266,7 +1265,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
             if (file.metadata != null) withMetadata = true
         }
 
-        if (vaultFile != null && vaultFile.metadata != null) {
+        if (vaultFile?.metadata != null) {
             withMetadata = true
         }
 

@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.views.fragment.reports.send
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.MyApplication
@@ -11,6 +12,7 @@ import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
 import rs.readahead.washington.mobile.util.ConnectionLiveData
 import rs.readahead.washington.mobile.util.hide
+import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_FORM_INSTANCE
 import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
@@ -45,6 +47,7 @@ class ReportsSendFragment :
             progressInfo.observe(viewLifecycleOwner) { progress ->
                 val pct = progress.first
                 val instance = progress.second
+                pauseResumeLabel(instance)
                 endView.setUploadProgress(instance, pct.current.toFloat() / pct.size.toFloat())
             }
 
@@ -56,12 +59,9 @@ class ReportsSendFragment :
                     EntityStatus.SUBMISSION_ERROR, EntityStatus.FINALIZED -> {
                         viewModel.saveOutbox(entity)
                     }
-                    EntityStatus.SUBMISSION_PARTIAL_PARTS, EntityStatus.SUBMISSION_PENDING -> {
-                        pauseResumeLabel()
-                    }
                     EntityStatus.PAUSED -> {
+                        pauseResumeLabel(entity)
                         viewModel.saveOutbox(entity)
-                        pauseResumeLabel()
                     }
                     else -> {
 
@@ -93,9 +93,9 @@ class ReportsSendFragment :
     }
 
     private fun initView() {
-        arguments?.let {
-            reportInstance = it.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportFormInstance
-            isFromOutbox = it.getBoolean(BUNDLE_IS_FROM_OUTBOX)
+        arguments?.let { bundle ->
+            reportInstance = bundle.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportFormInstance
+            isFromOutbox = bundle.getBoolean(BUNDLE_IS_FROM_OUTBOX)
             showFormEndView()
         }
         if (isFromOutbox) {
@@ -110,6 +110,7 @@ class ReportsSendFragment :
             binding?.nextBtn?.hide()
         }
         highlightSubmitButton()
+        handleOnBackPressed()
     }
 
     private fun checkAndSubmitEntity(isOnline: Boolean) {
@@ -137,18 +138,28 @@ class ReportsSendFragment :
             if (reportInstance?.status == EntityStatus.PAUSED || reportInstance?.status == EntityStatus.SUBMISSION_ERROR) {
                 submitEntity()
             } else {
-                viewModel.clearDisposabe()
+                viewModel.clearDisposable()
             }
         }
-        pauseResumeLabel()
+        pauseResumeLabel(reportInstance)
     }
 
-    private fun pauseResumeLabel() {
-        if (reportInstance?.status == EntityStatus.PAUSED) {
+    private fun pauseResumeLabel(reportFormInstance: ReportFormInstance?) {
+        if (reportFormInstance?.status == EntityStatus.PAUSED) {
             binding?.nextBtn?.text = getString(R.string.Reports_Resume)
         } else {
             binding?.nextBtn?.text = getString(R.string.Reports_Pause)
         }
+    }
+
+    private fun handleOnBackPressed() {
+        (activity as MainActivity).onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    viewModel.clearDisposable()
+                }
+            })
     }
 
     private fun showFormEndView() {
@@ -173,6 +184,7 @@ class ReportsSendFragment :
             endView.clearPartsProgress(reportFormInstance)
         }
     }
+
 
     fun submitEntity() {
         reportInstance?.let { entity ->

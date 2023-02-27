@@ -166,7 +166,7 @@ class ReportsEntryFragment :
                 saveReportAsOutbox()
             }
             binding?.sendReportBtn?.setOnClickListener {
-                submitReport()
+                saveReportAsPending()
             }
         } else {
             binding?.sendReportBtn?.setBackgroundResource(R.drawable.bg_round_orange16_btn)
@@ -191,12 +191,26 @@ class ReportsEntryFragment :
 
     private fun saveReportAsOutbox() {
         viewModel.saveOutbox(
-            viewModel.getOutboxFormInstance(
+            viewModel.getFormInstance(
                 id = reportFormInstance?.id,
                 title = binding?.reportTitleEt?.text.toString(),
                 description = binding?.reportDescriptionEt?.text.toString(),
                 files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
-                server = selectedServer
+                server = selectedServer,
+                status = EntityStatus.FINALIZED
+            )
+        )
+    }
+
+    private fun saveReportAsPending() {
+        viewModel.saveOutbox(
+            viewModel.getFormInstance(
+                id = reportFormInstance?.id,
+                title = binding?.reportTitleEt?.text.toString(),
+                description = binding?.reportDescriptionEt?.text.toString(),
+                files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
+                server = selectedServer,
+                status = EntityStatus.SUBMISSION_PENDING
             )
         )
     }
@@ -237,6 +251,9 @@ class ReportsEntryFragment :
                             baseActivity, getString(R.string.Reports_Saved_Draft),
                             false
                         )
+                    }
+                    EntityStatus.SUBMISSION_PENDING -> {
+                        submitReport()
                     }
                     EntityStatus.FINALIZED -> {
                         nav().popBackStack()
