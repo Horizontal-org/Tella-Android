@@ -202,20 +202,21 @@ class ReportsViewModel @Inject constructor(
         )
     }
 
-    fun getOutboxFormInstance(
+    fun getFormInstance(
         title: String,
         description: String,
         files: List<FormMediaFile>?,
         server: TellaReportServer,
         id: Long? = null,
         reportApiId: String = "",
+        status: EntityStatus
     ): ReportFormInstance {
         return ReportFormInstance(
             id = id ?: 0L,
             title = title,
             reportApiId = reportApiId,
             description = description,
-            status = EntityStatus.FINALIZED,
+            status = status,
             widgetMediaFiles = files ?: emptyList(),
             formPartStatus = FormMediaFileStatus.NOT_SUBMITTED,
             serverId = server.id
@@ -235,29 +236,9 @@ class ReportsViewModel @Inject constructor(
             title = title,
             reportApiId = reportApiId,
             description = description,
-            status = EntityStatus.FINALIZED,
+            status = EntityStatus.SUBMISSION_PENDING,
             widgetMediaFiles = files ?: emptyList(),
             formPartStatus = FormMediaFileStatus.NOT_SUBMITTED,
-            serverId = server.id
-        )
-    }
-
-    fun getSubmittedFormInstance(
-        title: String,
-        description: String,
-        files: List<FormMediaFile>?,
-        server: TellaReportServer,
-        id: Long? = null,
-        reportApiId: String = "",
-    ): ReportFormInstance {
-        return ReportFormInstance(
-            id = id ?: 0L,
-            title = title,
-            reportApiId = reportApiId,
-            description = description,
-            status = EntityStatus.SUBMITTED,
-            widgetMediaFiles = files ?: emptyList(),
-            formPartStatus = FormMediaFileStatus.SUBMITTED,
             serverId = server.id
         )
     }
@@ -341,12 +322,6 @@ class ReportsViewModel @Inject constructor(
         }, onFinished = {
             _progress.postValue(false)
         })
-    }
-
-    fun checkIfDisposed() {
-        if (disposables.isDisposed) {
-            disposables.clear()
-        }
     }
 
     fun submitReport(instance: ReportFormInstance) {
@@ -455,7 +430,7 @@ class ReportsViewModel @Inject constructor(
         disposables.dispose()
     }
 
-    fun clearDisposabe() {
+    fun clearDisposable() {
         disposables.clear()
     }
 
