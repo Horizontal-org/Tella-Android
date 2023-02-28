@@ -1,5 +1,16 @@
 package rs.readahead.washington.mobile.util;
 
+import static com.hzontal.tella_locking_ui.ConstantsKt.CALCULATOR_ALIAS_BLUE_SKIN;
+import static com.hzontal.tella_locking_ui.ConstantsKt.CALCULATOR_ALIAS_ORANGE_SKIN;
+import static com.hzontal.tella_locking_ui.ConstantsKt.CALCULATOR_ALIAS_YELLOW_SKIN;
+import static com.hzontal.tella_locking_ui.ConstantsKt.CALCULATOR_BLUE_SKIN;
+import static com.hzontal.tella_locking_ui.ConstantsKt.CALCULATOR_ORANGE_SKIN;
+import static com.hzontal.tella_locking_ui.ConstantsKt.CALCULATOR_YELLOW_SKIN;
+import static com.hzontal.tella_locking_ui.ConstantsKt.CALC_ALIAS_BLUE_SKIN;
+import static com.hzontal.tella_locking_ui.ConstantsKt.CALC_ALIAS_GREEN_SKIN;
+import static com.hzontal.tella_locking_ui.ConstantsKt.CALC_ALIAS_ORANGE_SKIN;
+import static com.hzontal.tella_locking_ui.ConstantsKt.CALC_ALIAS_YELLOW_SKIN;
+
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -24,7 +35,7 @@ public class CamouflageManager {
     private final List<CamouflageOption> options;
     public static final int defaultAliasPosition = 15;
 
-    public final CamouflageOption calculatorOption = new CamouflageOption(getOptionAlias(Preferences.getAppAlias()), getOptionDrawable(Preferences.getAppAlias()), R.string.settings_camo_calculator2);
+    public final CamouflageOption calculatorOption = new CamouflageOption(getOptionAlias(CALC_ALIAS_GREEN_SKIN), R.drawable.calculator_foreground, R.string.settings_camo_calculator2);
     final CamouflageOption defaultOption = new CamouflageOption(defaultAlias, R.drawable.tella_black, R.string.app_name);
 
     public synchronized static CamouflageManager getInstance() {
@@ -61,12 +72,12 @@ public class CamouflageManager {
     public CamouflageOption getCalculatorOptionByTheme(String calculatorTheme) {
         if (calculatorTheme == null) return calculatorOption;
         switch (calculatorTheme) {
-            case "BLUE_SKIN":
-                return new CamouflageOption(getOptionAlias("CalculatorBlueSkin"), R.drawable.calc_blue_skin_foreground, R.string.settings_camo_calculator2);
-            case "YELLOW_SKIN":
-                return new CamouflageOption(getOptionAlias("CalculatorYellowSkin"), R.drawable.calc_yellow_skin_foreground, R.string.settings_camo_calculator2);
-            case "ORANGE_SKIN":
-                return new CamouflageOption(getOptionAlias("CalculatorOrangeSkin"), R.drawable.calc_orange_skin_foreground, R.string.settings_camo_calculator2);
+            case CALCULATOR_BLUE_SKIN:
+                return new CamouflageOption(getOptionAlias(CALC_ALIAS_BLUE_SKIN), R.drawable.calc_blue_skin_foreground, R.string.settings_camo_calculator2);
+            case CALCULATOR_YELLOW_SKIN:
+                return new CamouflageOption(getOptionAlias(CALC_ALIAS_YELLOW_SKIN), R.drawable.calc_yellow_skin_foreground, R.string.settings_camo_calculator2);
+            case CALCULATOR_ORANGE_SKIN:
+                return new CamouflageOption(getOptionAlias(CALC_ALIAS_ORANGE_SKIN), R.drawable.calc_orange_skin_foreground, R.string.settings_camo_calculator2);
             default:
                 return calculatorOption;
         }
@@ -74,26 +85,29 @@ public class CamouflageManager {
 
     public boolean setLauncherActivityAlias(@NonNull Context context, @NonNull String activityAlias) {
         String currentAlias = Preferences.getAppAlias();
+        Preferences.setAppAlias(activityAlias);
         if (activityAlias.equals(currentAlias)) {
             return false;
         }
-
         PackageManager packageManager = context.getPackageManager();
         String packageName = context.getApplicationContext().getPackageName();
-
         List<CamouflageOption> fullOptions = new ArrayList<>(options);
-        fullOptions.add(defaultOption);
-        fullOptions.add(getCalculatorOptionByTheme(Preferences.getCalculatorTheme() != null ? Preferences.getCalculatorTheme() : calculatorOption.alias));
+        if (currentAlias != null)
+        {
+            CamouflageOption calculatorCurrentOption = new CamouflageOption(currentAlias, getOptionDrawable(currentAlias), R.string.settings_camo_calculator2);
+            fullOptions.add(calculatorCurrentOption);
 
-        for (CamouflageOption option : fullOptions) {
-            packageManager.setComponentEnabledSetting(
-                    new ComponentName(packageName, option.alias),
-                    option.alias.equals(activityAlias) ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED :
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                    PackageManager.DONT_KILL_APP);
         }
-
-        Preferences.setAppAlias(activityAlias);
+        CamouflageOption calculatorChosenOption = new CamouflageOption(activityAlias, getOptionDrawable(activityAlias), R.string.settings_camo_calculator2);
+        fullOptions.add(defaultOption);
+            fullOptions.add(calculatorChosenOption);
+            for (CamouflageOption option : fullOptions) {
+                packageManager.setComponentEnabledSetting(
+                        new ComponentName(packageName, option.alias),
+                        option.alias.equals(activityAlias) ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED :
+                                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP);
+            }
 
         return true;
     }
@@ -176,16 +190,16 @@ public class CamouflageManager {
 
     private int getOptionDrawable(String alias) {
 
-        if (alias == null) return R.drawable.calc_green_skin_foreground;
+        if (alias == null) return R.drawable.calculator_foreground;
         switch (alias) {
-            case "CalculatorBlueSkin":
+            case CALCULATOR_ALIAS_BLUE_SKIN:
                 return R.drawable.calc_blue_skin_foreground;
-            case "CalculatorYellowSkin":
+            case CALCULATOR_ALIAS_YELLOW_SKIN:
                 return R.drawable.calc_yellow_skin_foreground;
-            case "CalculatorOrangeSkin":
+            case CALCULATOR_ALIAS_ORANGE_SKIN:
                 return R.drawable.calc_orange_skin_foreground;
             default:
-                return R.drawable.calc_green_skin_foreground;
+                return R.drawable.calculator_foreground;
         }
     }
 }

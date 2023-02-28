@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.data.sharedpref;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.hzontal.shared_ui.utils.CalculatorTheme;
 import org.joda.time.DateTime;
 
 import java.util.Date;
@@ -121,7 +122,7 @@ public class Preferences {
     }
     @Nullable
     public static String getCalculatorTheme() {
-        return getString(SharedPrefs.CALCULATOR_THEME, null);
+        return getString(SharedPrefs.CALCULATOR_THEME, CalculatorTheme.GREEN_SKIN.name());
     }
 
     public static void setCalculatorTheme(@NonNull String value) {
