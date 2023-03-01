@@ -289,7 +289,8 @@
             android:name=".views.activity.AliasCalculatorBlueSkin"
             android:enabled="false"
             android:exported="true"
-            android:icon="@drawable/calc_blue_skin_foreground"
+            android:icon="@mipmap/ic_calculator_blue_skin"
+            android:roundIcon="@mipmap/ic_calculator_blue_skin_round"
             android:label="@string/settings.camo_calculator2"
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
@@ -302,7 +303,8 @@
             android:name=".views.activity.AliasCalculatorOrangeSkin"
             android:enabled="false"
             android:exported="true"
-            android:icon="@drawable/calc_orange_skin_foreground"
+            android:icon="@mipmap/ic_calculator_orange_skin"
+            android:roundIcon="@mipmap/ic_calculator_orange_skin_round"
             android:label="@string/settings.camo_calculator2"
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>
@@ -314,7 +316,8 @@
             android:name=".views.activity.AliasCalculatorYellowSkin"
             android:enabled="false"
             android:exported="true"
-            android:icon="@drawable/calc_yellow_skin_foreground"
+            android:icon="@mipmap/ic_calculator_yellow_skin"
+            android:roundIcon="@mipmap/ic_calculator_yellow_skin_round"
             android:label="@string/settings.camo_calculator2"
             android:targetActivity=".views.activity.SplashActivity">
             <intent-filter>

@@ -40,29 +40,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.205" />
+        app:layout_constraintGuide_percent="0.2" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline40h"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.41" />
+        app:layout_constraintGuide_percent="0.4" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline60h"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.605" />
+        app:layout_constraintGuide_percent="0.6" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline80h"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.805" />
-
+        app:layout_constraintGuide_percent="0.80" />
 
     <TextView
         android:id="@+id/deleteBtn"
@@ -267,7 +266,7 @@
         android:id="@+id/btnOperatorsGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="plusBtn,minusBtn,plusMinusBtn,multiplyBtn,devideBtn,percentBtn,okBtn,deleteBtn" />
+        app:constraint_referenced_ids="plusBtn,minusBtn,plusMinusBtn,multiplyBtn,devideBtn,percentBtn,deleteBtn" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/btnNumbersGroup"
