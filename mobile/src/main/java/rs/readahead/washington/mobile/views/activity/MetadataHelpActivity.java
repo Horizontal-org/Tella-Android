@@ -3,36 +3,37 @@ package rs.readahead.washington.mobile.views.activity;
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.databinding.ActivityMetadataHelpBinding;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 
 
 public class MetadataHelpActivity extends BaseLockActivity {
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.metadata_help_list)
     LinearLayout metadataList;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_metadata_help);
+
         overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
 
-        ButterKnife.bind(this);
+        ActivityMetadataHelpBinding binding = ActivityMetadataHelpBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
+        metadataList = binding.content.metadataHelpList;
+        toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();

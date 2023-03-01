@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.domain.entity.uwazi
 
-import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 
 data class EntityInstanceBundle (
     var instance: UwaziEntityInstance = UwaziEntityInstance(),

@@ -4,7 +4,7 @@ import okhttp3.Cookie
 import okhttp3.CookieJar
 import okhttp3.HttpUrl
 
-private class UvCookieJar : CookieJar {
+class UvCookieJar : CookieJar {
 
         private val cookies = mutableListOf<Cookie>()
 

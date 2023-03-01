@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.google.android.material.textfield.TextInputLayout
@@ -19,7 +17,6 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentLoginUwaziScreenBinding
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.util.KeyboardLiveData
-import rs.readahead.washington.mobile.util.isKeyboardOpened
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.dialog.ID_KEY
 import rs.readahead.washington.mobile.views.dialog.IS_UPDATE_SERVER

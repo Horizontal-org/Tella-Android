@@ -12,7 +12,7 @@ import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
-import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
 import rs.readahead.washington.mobile.mvp.contract.ITellaUploadDialogPresenterContract;
 
 
@@ -31,7 +31,7 @@ public class TellaUploadDialogPresenter implements ITellaUploadDialogPresenterCo
         disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMapSingle((Function<DataSource, SingleSource<List<TellaUploadServer>>>)
+                .flatMapSingle((Function<DataSource, SingleSource<List<TellaReportServer>>>)
                         DataSource::listTellaUploadServers)
                 .subscribe(list -> view.onServersLoaded(list),
                         throwable -> {

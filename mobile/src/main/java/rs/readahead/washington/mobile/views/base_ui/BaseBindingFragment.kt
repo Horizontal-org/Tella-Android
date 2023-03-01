@@ -16,11 +16,11 @@ import timber.log.Timber
 
 typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
 
-abstract class BaseBindingFragment<VB: ViewBinding>(
+abstract class BaseBindingFragment<VB : ViewBinding>(
     private val inflate: Inflate<VB>
 ) : Fragment() {
 
-    protected lateinit var activity: BaseActivity
+    protected lateinit var baseActivity: BaseActivity
     private var _binding: VB? = null
     val binding get() = _binding
     private var rootView: View? = null
@@ -59,12 +59,12 @@ abstract class BaseBindingFragment<VB: ViewBinding>(
 
         super.onAttach(context)
 
-        activity = context as BaseActivity
+        baseActivity = context as BaseActivity
     }
 
     protected fun showToast(message: String) {
         if (isAdded) {
-            activity.showToast(message)
+            baseActivity.showToast(message)
         }
     }
 
@@ -88,4 +88,5 @@ abstract class BaseBindingFragment<VB: ViewBinding>(
     open fun back() {
         nav().navigateUp()
     }
+
 }

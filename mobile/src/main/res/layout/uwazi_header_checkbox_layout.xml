@@ -43,7 +43,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp" />
 
-        <rs.readahead.washington.mobile.views.custom.PanelToggleButton
+        <org.hzontal.shared_ui.buttons.PanelToggleButton
             android:id="@+id/toggle_button"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_width="wrap_content"

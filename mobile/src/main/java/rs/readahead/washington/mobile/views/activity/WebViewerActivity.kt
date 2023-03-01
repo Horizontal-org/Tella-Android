@@ -72,6 +72,10 @@ class WebViewerActivity : BaseLockActivity(),
         TODO("Not yet implemented")
     }
 
+    override fun onMediaFileDeleteConfirmation(vaultFile: VaultFile?, showConfirmDelete: Boolean?) {
+        TODO("Not yet implemented")
+    }
+
     override fun onMediaFileDeleted() {
         TODO("Not yet implemented")
     }

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewbinding.ViewBinding;
 
 import com.bumptech.glide.Glide;
 import com.hzontal.tella_vault.VaultFile;
@@ -21,13 +22,13 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.DateUtil;
+import rs.readahead.washington.mobile.databinding.ItemVaultAttachmentGridBinding;
+import rs.readahead.washington.mobile.databinding.ItemVaultAttachmentHorBinding;
 
 public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<AttachmentsRecycleViewAdapter.ViewHolder> {
     private List<VaultFile> files = new ArrayList<>();
@@ -38,6 +39,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
     private boolean isMoveMode;
     private final boolean singleSelection;
     private GridLayoutManager layoutManager;
+    private ViewBinding binding;
 
 
     public AttachmentsRecycleViewAdapter(Context context, IGalleryVaultHandler galleryMediaHandler,
@@ -63,11 +65,11 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == ViewType.SMALL.ordinal()) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_vault_attachment_grid, parent, false);
-            return new GridViewHolder(v, this.selectable);
+            binding = ItemVaultAttachmentGridBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            return new GridViewHolder((ItemVaultAttachmentGridBinding)binding, this.selectable);
         } else {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_vault_attachment_hor, parent, false);
-            return new ListViewHolder(v, this.selectable);
+            binding = ItemVaultAttachmentHorBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            return new ListViewHolder((ItemVaultAttachmentHorBinding)binding, this.selectable);
         }
 
     }
@@ -108,7 +110,6 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
                         .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                         .signature(messageDigest -> { })
                         .into(holder.mediaView);
-
             } else {
                 holder.showDocumentInfo();
             }
@@ -252,20 +253,27 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.attachmentImg)
         ImageView mediaView;
-        @BindView(R.id.checkbox_type_single)
-        ImageView checkBox;
-        @BindView(R.id.fileNameTextView)
         TextView fileName;
-        @BindView(R.id.more)
         ImageView more;
-        @BindView(R.id.icAttachmentImg)
         ImageView icAttachmentImg;
+        ImageView checkBox;
 
-        public ViewHolder(View itemView, boolean selectable) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        public ViewHolder(ViewBinding binding, boolean selectable) {
+            super(binding.getRoot());
+            if (binding instanceof ItemVaultAttachmentGridBinding){
+                icAttachmentImg = ((ItemVaultAttachmentGridBinding) binding).icAttachmentImg;
+                more = ((ItemVaultAttachmentGridBinding) binding).more;
+                fileName =  ((ItemVaultAttachmentGridBinding) binding).fileNameTextView;
+                mediaView = ((ItemVaultAttachmentGridBinding) binding).attachmentImg;
+                checkBox = ((ItemVaultAttachmentGridBinding) binding).checkboxTypeSingle;
+            } else {
+                icAttachmentImg = ((ItemVaultAttachmentHorBinding) binding).icAttachmentImg;
+                more = ((ItemVaultAttachmentHorBinding) binding).more;
+                fileName =  ((ItemVaultAttachmentHorBinding) binding).fileNameTextView;
+                mediaView = ((ItemVaultAttachmentHorBinding) binding).attachmentImg;
+                checkBox = ((ItemVaultAttachmentHorBinding) binding).checkboxTypeSingle;
+            }
         }
 
         void showVideoInfo() {
@@ -304,23 +312,24 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
     }
 
     static class GridViewHolder extends ViewHolder {
+        ItemVaultAttachmentGridBinding binding;
 
-        public GridViewHolder(View itemView, boolean selectable) {
-            super(itemView, selectable);
+        public GridViewHolder(ItemVaultAttachmentGridBinding gridBinding, boolean selectable) {
+            super(gridBinding, selectable);
+            this.binding = gridBinding;
         }
     }
 
     static class ListViewHolder extends ViewHolder {
-        @BindView(R.id.fileDateTextView)
-        TextView fileDateTextView;
+        ItemVaultAttachmentHorBinding horBinding;
 
-        public ListViewHolder(View itemView, boolean selectable) {
-            super(itemView, selectable);
+        public ListViewHolder(ItemVaultAttachmentHorBinding horBinding, boolean selectable) {
+            super(horBinding, selectable);
+            this.horBinding = horBinding;
         }
 
         public void setFileDateTextView(VaultFile vaultFile) {
-            fileDateTextView.setText(DateUtil.getDate(vaultFile.created));
+            horBinding.fileDateTextView.setText(DateUtil.getDate(vaultFile.created));
         }
     }
-
 }

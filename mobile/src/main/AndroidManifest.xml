@@ -7,7 +7,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:node="replace" />
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:node="replace" />
     <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
@@ -43,6 +44,7 @@
         android:icon="@mipmap/tella_icon"
         android:label="@string/app_name"
         android:largeHeap="true"
+        android:usesCleartextTraffic="true"
         android:networkSecurityConfig="@xml/configure_localhost_media_file_http_server"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/tella_icon_round"
@@ -493,12 +495,20 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <!--  <meta-data
-                 android:name="com.google.android.geo.API_KEY"
-                 android:value="@string/google_maps_key" />-->
+        <activity
+            android:name=".views.dialog.reports.ReportsConnectFlowActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            tools:node="remove">
+        </provider>
+
     </application>
 
 </manifest>

@@ -36,9 +36,9 @@ class SubmittedPreviewFragment : BaseFragment() {
 
     private fun initObservers() {
         with(viewModel) {
-            instanceDeleteD.observe(viewLifecycleOwner, { deleted ->
+            instanceDeleteD.observe(viewLifecycleOwner) { deleted ->
                 if (deleted) nav().popBackStack()
-            })
+            }
         }
     }
 
@@ -77,7 +77,9 @@ class SubmittedPreviewFragment : BaseFragment() {
         binding?.toolbar?.backClickListener = { nav().popBackStack() }
     }
 
-    private fun getFormattedFormTitle(entityInstance : UwaziEntityInstance) : String {
-        return getString(R.string.Uwazi_Server_Title) +" "+ entityInstance.collectTemplate?.serverName + "\n"+getString(R.string.Uwazi_Template_Title) +" "+ entityInstance.collectTemplate?.entityRow?.translatedName
+    private fun getFormattedFormTitle(entityInstance: UwaziEntityInstance): String {
+        return getString(R.string.Uwazi_Server_Title) + " " + entityInstance.collectTemplate?.serverName + "\n" + getString(
+            R.string.Uwazi_Template_Title
+        ) + " " + entityInstance.collectTemplate?.entityRow?.translatedName
     }
 }

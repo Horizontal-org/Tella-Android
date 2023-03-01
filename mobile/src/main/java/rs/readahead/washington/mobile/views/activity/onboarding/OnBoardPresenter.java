@@ -11,7 +11,7 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.DataSource;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.data.database.UwaziDataSource;
-import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
 
@@ -26,12 +26,12 @@ public class OnBoardPresenter implements IOnBoardPresenterContract.IPresenter {
     }
 
     @Override
-    public void create(final TellaUploadServer server) {
+    public void create(final TellaReportServer server) {
         disposables.add(keyDataSource.getDataSource()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> view.showLoading())
-                .flatMapSingle((Function<DataSource, SingleSource<TellaUploadServer>>)
+                .flatMapSingle((Function<DataSource, SingleSource<TellaReportServer>>)
                         dataSource -> dataSource.createTellaUploadServer(server))
                 .doFinally(() -> view.hideLoading())
                 .subscribe(server1 -> view.onCreatedTUServer(server1),

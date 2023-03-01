@@ -55,7 +55,7 @@ class GeneralSettings : BaseFragment() {
 
         binding?.shareDataSwitch.let {
             if (it != null) {
-                it.mSwitch.setChecked(Preferences.hasAcceptedImprovements())
+                it.mSwitch.isChecked = Preferences.hasAcceptedImprovements()
                 it.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
                     try {
                         Preferences.setIsAcceptedImprovements(isChecked)

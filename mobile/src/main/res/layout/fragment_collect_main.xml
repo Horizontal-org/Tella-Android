@@ -11,7 +11,7 @@
     tools:context="rs.readahead.washington.mobile.views.activity.CollectMainActivity">
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/container"
+        android:id="@+id/forms_view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -48,7 +48,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
-        android:id="@+id/blank_forms_layout"
+        android:id="@+id/no_servers_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="@dimen/activity_vertical_margin"

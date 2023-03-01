@@ -9,11 +9,13 @@ import com.hzontal.tella_vault.VaultFile;
 public class FormMediaFile extends VaultFile {
     public FormMediaFileStatus status; // break away from getters/setters :)
     public boolean uploading;
+    public long uploadedSize;
 
-    private FormMediaFile() {
+     public FormMediaFile() {
         super();
         status = FormMediaFileStatus.UNKNOWN;
         uploading = true;
+        uploadedSize = 0;
     }
 
     public static FormMediaFile fromMediaFile(@NonNull VaultFile vaultFile) {
@@ -31,6 +33,23 @@ public class FormMediaFile extends VaultFile {
         formMediaFile.hash = vaultFile.hash;
         formMediaFile.path = vaultFile.path;
         return formMediaFile;
+    }
+
+    public VaultFile getVaultFile() {
+        VaultFile vaultFile = new VaultFile();
+        vaultFile.id = this.id;
+        vaultFile.created = this.created;
+        vaultFile.duration = this.duration;
+        vaultFile.metadata = this.metadata;
+        vaultFile.size = this.size;
+        vaultFile.anonymous = this.anonymous;
+        vaultFile.mimeType = this.mimeType;
+        vaultFile.thumb = this.thumb;
+        vaultFile.type = this.type;
+        vaultFile.name = this.name;
+        vaultFile.hash = this.hash;
+        vaultFile.path = this.path;
+        return vaultFile;
     }
 
     public String getPartName() {

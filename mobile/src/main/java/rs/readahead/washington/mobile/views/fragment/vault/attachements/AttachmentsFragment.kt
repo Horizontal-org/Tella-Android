@@ -181,6 +181,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
             FilterType.OTHERS -> toolbar.setStartTextTitle(getString(R.string.Vault_Others_Title))
             FilterType.ALL -> toolbar.setStartTextTitle(getString(R.string.Vault_AllFiles_Title))
             FilterType.PHOTO_VIDEO -> toolbar.setStartTextTitle(getString(R.string.Vault_PhotosAndVideos_Title))
+            else -> ""
         }
     }
 
@@ -647,11 +648,18 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
                         getString(R.string.action_cancel),
                         consumer = object : ActionConfirmed {
                             override fun accept(isConfirmed: Boolean) {
-                                if (isMultipleFiles) {
-                                    attachmentsPresenter.deleteVaultFiles(attachmentsAdapter.selectedMediaFiles)
-                                } else {
-                                    attachmentsPresenter.deleteVaultFile(vaultFile)
+                                if (isConfirmed) {
+                                    if (isMultipleFiles) {
+                                        attachmentsPresenter.deleteFilesAfterConfirmation(
+                                            attachmentsAdapter.selectedMediaFiles
+                                        )
+                                    } else {
+                                        val files = mutableListOf<VaultFile?>()
+                                        files.add(vaultFile)
+                                        attachmentsPresenter.deleteFilesAfterConfirmation(files)
+                                    }
                                 }
+
                             }
                         })
                 }
@@ -690,13 +698,43 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
         for (uri in uris) {
             lifecycleScope.launch {
                 uri?.let {
-
                     deleteFileFromExternalStorage(it)
                     uriToDelete = it
                 }
             }
         }
         attachmentsPresenter.addNewVaultFiles()
+    }
+
+    override fun onConfirmDeleteFiles(
+        vaultFiles: List<VaultFile?>,
+        showConfirmDelete: Boolean
+    ) {
+        if (showConfirmDelete) {
+            showConfirmSheet(activity.supportFragmentManager,
+                getString(R.string.Vault_Warning_Title),
+                getString(R.string.Vault_Confirm_delete_Description),
+                getString(R.string.Vault_Delete_anyway),
+                getString(R.string.action_cancel), consumer = object : ActionConfirmed {
+                    override fun accept(isConfirmed: Boolean) {
+                        if (isConfirmed) {
+                            deleteFiles(vaultFiles)
+                        }
+                    }
+                })
+        } else {
+            deleteFiles(vaultFiles)
+        }
+    }
+
+    private fun deleteFiles(vaultFiles: List<VaultFile?>) {
+        if (vaultFiles.isEmpty()) return
+
+        if (vaultFiles.size > 1) {
+            attachmentsPresenter.deleteVaultFiles(attachmentsAdapter.selectedMediaFiles)
+        } else {
+            attachmentsPresenter.deleteVaultFile(vaultFiles.get(0))
+        }
     }
 
     override fun onImportError(error: Throwable?) {}

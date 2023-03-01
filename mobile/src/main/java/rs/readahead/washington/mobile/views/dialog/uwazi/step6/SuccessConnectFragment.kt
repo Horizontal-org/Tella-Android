@@ -5,10 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.gson.Gson
-import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.bus.event.CreateUwaziServerEvent
-import rs.readahead.washington.mobile.bus.event.UpdateUwaziServerEvent
 import rs.readahead.washington.mobile.databinding.FragmentSuccessConnectFlowBinding
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
@@ -16,9 +13,8 @@ import rs.readahead.washington.mobile.views.dialog.ID_KEY
 import rs.readahead.washington.mobile.views.dialog.IS_UPDATE_SERVER
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.TITLE_KEY
-import rs.readahead.washington.mobile.views.dialog.uwazi.SharedLiveData.createServer
-import rs.readahead.washington.mobile.views.dialog.uwazi.SharedLiveData.updateServer
-import rs.readahead.washington.mobile.views.dialog.uwazi.step2.LoginTypeFragment
+import rs.readahead.washington.mobile.views.dialog.SharedLiveData.createServer
+import rs.readahead.washington.mobile.views.dialog.SharedLiveData.updateServer
 
 class SuccessConnectFragment : BaseFragment() {
     private lateinit var binding: FragmentSuccessConnectFlowBinding

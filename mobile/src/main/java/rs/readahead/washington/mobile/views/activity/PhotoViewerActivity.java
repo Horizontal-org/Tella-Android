@@ -6,20 +6,16 @@ import static rs.readahead.washington.mobile.views.fragment.vault.attachements.A
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -34,8 +30,6 @@ import org.hzontal.shared_ui.utils.DialogUtils;
 
 import java.util.LinkedHashMap;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import kotlin.Unit;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
@@ -47,6 +41,7 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent;
 import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent;
+import rs.readahead.washington.mobile.databinding.ActivityPhotoViewerBinding;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.mvp.contract.IMediaFileViewerPresenterContract;
@@ -63,11 +58,6 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     public static final String VIEW_PHOTO = "vp";
     public static final String NO_ACTIONS = "na";
 
-    @BindView(R.id.photoImageView)
-    ImageView photoImageView;
-    @BindView(R.id.progressBar)
-    ProgressBar progressBar;
-
     private MediaFileViewerPresenter presenter;
     private VaultFile vaultFile;
 
@@ -75,25 +65,27 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     private boolean actionsDisabled = false;
     private boolean withMetadata = false;
     private AlertDialog alertDialog;
-    private Toolbar toolbar;
     private Menu menu;
+    private ActivityPhotoViewerBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_photo_viewer);
-        overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
-        ButterKnife.bind(this);
+        binding = ActivityPhotoViewerBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        setSupportActionBar(binding.toolbar);
+
         setTitle(null);
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            findViewById(R.id.appbar).setOutlineProvider(null);
+            binding.appbar.setOutlineProvider(null);
         } else {
-            findViewById(R.id.appbar).bringToFront();
+            binding.appbar.bringToFront();
         }
+
+        overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
 
         presenter = new MediaFileViewerPresenter(this);
 
@@ -169,7 +161,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PhotoViewerActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+        //PhotoViewerActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
     @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -230,12 +222,32 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     @Override
     public void onExportStarted() {
-        progressBar.setVisibility(View.VISIBLE);
+        binding.content.progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onExportEnded() {
-        progressBar.setVisibility(View.GONE);
+        binding.content.progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onMediaFileDeleteConfirmation(VaultFile vaultFile, Boolean showConfirmDelete) {
+        if (showConfirmDelete) {
+            BottomSheetUtils.showConfirmSheet(
+                    getSupportFragmentManager(),
+                    getString(R.string.Vault_Warning_Title),
+                    getString(R.string.Vault_Confirm_delete_Description),
+                    getString(R.string.Vault_Delete_anyway),
+                    getString(R.string.action_cancel),
+                    isConfirmed -> {
+                        if (isConfirmed) {
+                            presenter.deleteMediaFiles(vaultFile);
+                        }
+                    }
+            );
+        } else {
+            presenter.deleteMediaFiles(vaultFile);
+        }
     }
 
     @Override
@@ -251,7 +263,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     @Override
     public void onMediaFileRename(VaultFile vaultFile) {
-        toolbar.setTitle(vaultFile.name);
+        binding.toolbar.setTitle(vaultFile.name);
         MyApplication.bus().post(new VaultFileRenameEvent());
     }
 
@@ -270,7 +282,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
         if (vaultFile.metadata != null && menu.findItem(R.id.menu_item_metadata) != null) {
             menu.findItem(R.id.menu_item_metadata).setVisible(true);
         }
-        toolbar.setTitle(vaultFile.name);
+        binding.toolbar.setTitle(vaultFile.name);
         finish();
     }
 
@@ -307,20 +319,20 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                     @Override
                     public boolean onException(Exception e, VaultFileLoaderModel model,
                                                Target<GlideDrawable> target, boolean isFirstResource) {
-                        progressBar.setVisibility(View.GONE);
+                        binding.content.progressBar.setVisibility(View.GONE);
                         return false;
                     }
 
                     @Override
                     public boolean onResourceReady(GlideDrawable resource, VaultFileLoaderModel model,
                                                    Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        progressBar.setVisibility(View.GONE);
+                        binding.content.progressBar.setVisibility(View.GONE);
                         return false;
                     }
                 })
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
-                .into(photoImageView);
+                .into(binding.content.photoImageView);
     }
 
     private void showMetadata() {
@@ -394,14 +406,14 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                                 getString(R.string.action_save),
                                 getString(R.string.action_cancel),
                                 isConfirmed -> {
-                                    PhotoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(PhotoViewerActivity.this);
+                                    //PhotoViewerActivityPermissionsDispatcher.exportMediaFileWithPermissionCheck(PhotoViewerActivity.this);
                                 }
                         );
                     }
 
                     @Override
                     public void info() {
-                        toolbar.setTitle(getString(R.string.Vault_FileInfo));
+                        binding.toolbar.setTitle(getString(R.string.Vault_FileInfo));
                         menu.findItem(R.id.menu_item_more).setVisible(false);
                         menu.findItem(R.id.menu_item_metadata).setVisible(false);
                         invalidateOptionsMenu();
@@ -417,7 +429,9 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                                 getString(R.string.action_delete),
                                 getString(R.string.action_cancel),
                                 isConfirmed -> {
-                                    presenter.deleteMediaFiles(vaultFile);
+                                    if (isConfirmed){
+                                        presenter.confirmDeleteMediaFile(vaultFile);
+                                    }
                                 }
                         );
 
@@ -476,5 +490,4 @@ public class PhotoViewerActivity extends BaseLockActivity implements
             );
         });
     }
-
 }

@@ -24,7 +24,6 @@ import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.ui.*
-import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.google.android.exoplayer2.upstream.*
 import com.hzontal.tella_vault.VaultFile
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
@@ -53,6 +52,7 @@ import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.PICKER_FILE_REQUEST_CODE
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.WRITE_REQUEST_CODE
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment
+
 
 @RuntimePermissions
 class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.VisibilityListener,
@@ -224,6 +224,27 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
 
     override fun onExportEnded() {
         hideProgressDialog()
+    }
+
+    override fun onMediaFileDeleteConfirmation(vaultFile: VaultFile, showConfirmDelete: Boolean) {
+        if (showConfirmDelete) {
+            showConfirmSheet(
+                supportFragmentManager,
+                getString(R.string.Vault_Warning_Title),
+                getString(R.string.Vault_Confirm_delete_Description),
+                getString(R.string.Vault_Delete_anyway),
+                getString(R.string.action_cancel),
+                object : ActionConfirmed {
+                    override fun accept(isConfirmed: Boolean) {
+                        if (isConfirmed) {
+                            presenter?.deleteMediaFiles(vaultFile)
+                        }
+                    }
+                }
+            )
+        } else {
+            presenter?.deleteMediaFiles(vaultFile)
+        }
     }
 
     override fun onMediaFileDeleted() {

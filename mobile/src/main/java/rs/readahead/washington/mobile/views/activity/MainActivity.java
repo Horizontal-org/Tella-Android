@@ -4,6 +4,7 @@ import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.At
 import static rs.readahead.washington.mobile.views.fragment.vault.home.HomeVaultFragmentKt.VAULT_FILTER;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -18,10 +19,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.Gson;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
 
@@ -29,8 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import dagger.hilt.android.AndroidEntryPoint;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 import rs.readahead.washington.mobile.MyApplication;
@@ -52,20 +52,17 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.download.DownloadedTe
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryFragment;
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.UwaziSendFragment;
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment;
-
-import com.google.gson.Gson;
-
+import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface;
 import timber.log.Timber;
-
-
+@AndroidEntryPoint
 @RuntimePermissions
 public class MainActivity extends MetadataActivity implements
         IHomeScreenPresenterContract.IView,
         IMediaImportPresenterContract.IView,
-        IMetadataAttachPresenterContract.IView {
+        IMetadataAttachPresenterContract.IView,
+        IMainNavigationInterface {
     public static final String PHOTO_VIDEO_FILTER = "gallery_filter";
-    @BindView(R.id.main_container)
-    View root;
+
     private boolean mExit = false;
     private Handler handler;
     private EventCompositeDisposable disposables;
@@ -80,7 +77,6 @@ public class MainActivity extends MetadataActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-        ButterKnife.bind(this);
 
         //  setupToolbar();
         setupNavigation();
@@ -125,11 +121,8 @@ public class MainActivity extends MetadataActivity implements
         navController.addOnDestinationChangedListener((navController1, navDestination, bundle) -> {
             switch (navDestination.getId()) {
                 case (R.id.micScreen):
-                    checkLocationSettings(C.START_AUDIO_RECORD, () -> {
-                    });
                 case (R.id.homeScreen):
-                case R.id.formScreen:
-                case R.id.uwaziScreen:
+                case R.id.cameraScreen:
                     showBottomNavigation();
                     break;
                 default:
@@ -188,11 +181,12 @@ public class MainActivity extends MetadataActivity implements
         }
     }
 
+    @SuppressLint("NeedOnRequestPermissionsResult")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        MainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+        //MainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
     @Override
@@ -267,9 +261,6 @@ public class MainActivity extends MetadataActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        btmNavMain.getMenu().findItem(R.id.home).setChecked(true);
-        homeScreenPresenter.countCollectServers();
-        homeScreenPresenter.countUwaziServers();
         startLocationMetadataListening();
         mOrientationEventListener.enable();
     }
@@ -334,8 +325,10 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     public void onCountTUServersEnded(Long num) {
-        if (num > 0)
-            CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_TELLA);
+        if (num > 0) {
+            //  CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_TELLA);
+            //  maybeShowTUserver(num);
+        }
     }
 
     @Override
@@ -345,7 +338,7 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     public void onCountCollectServersEnded(Long num) {
-        maybeShowFormsMenu(num);
+        // maybeShowFormsMenu(num);
         if (num > 0) {
             CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_COLLECT);
         } else {
@@ -361,7 +354,7 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     public void onCountUwaziServersEnded(Long num) {
-        maybeShowUwaziMenu(num);
+        // maybeShowUwaziMenu(num);
         if (num > 0)
             CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_UWAZI);
     }
@@ -401,30 +394,18 @@ public class MainActivity extends MetadataActivity implements
         };
     }
 
+    @Override
     public void hideBottomNavigation() {
         btmNavMain.setVisibility(View.GONE);
     }
 
+    @Override
     public void showBottomNavigation() {
         btmNavMain.setVisibility(View.VISIBLE);
     }
 
     public void selectNavMic() {
         btmNavMain.getMenu().findItem(R.id.mic).setChecked(true);
-    }
-
-    public void selectNavForm() {
-        btmNavMain.getMenu().findItem(R.id.form).setChecked(true);
-    }
-
-    private void maybeShowFormsMenu(Long num) {
-        btmNavMain.getMenu().findItem(R.id.form).setVisible(num > 0);
-        invalidateOptionsMenu();
-    }
-
-    private void maybeShowUwaziMenu(Long num) {
-        btmNavMain.getMenu().findItem(R.id.uwazi).setVisible(num > 0);
-        invalidateOptionsMenu();
     }
 
     public void selectHome() {

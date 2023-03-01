@@ -56,4 +56,25 @@ public class VaultFile  implements Serializable {
             return UNKNOWN;
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+
+        try {
+            if (o == null || getClass() != o.getClass())
+                return false;
+
+            VaultFile p = (VaultFile) o;
+
+            return ((id.equals(p.id))
+                    && (name.equals(p.name))
+                    && (type.equals(p.type))
+                    && (mimeType.equals(p.mimeType))
+                    && (hash.equals(p.hash))
+                    && (duration == p.duration)
+                    && (size == p.size));
+        } catch (Exception ex) {
+            return false;
+        }
+    }
 }

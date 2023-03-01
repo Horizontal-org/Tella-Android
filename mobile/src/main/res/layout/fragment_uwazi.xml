@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,10 +11,10 @@
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
-        app:layout_constraintTop_toBottomOf="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintTop_toBottomOf="@+id/appbar" />
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -43,9 +42,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:textStyle="bold"
-                app:layout_collapseMode="pin"
                 app:bigStartTitle="@string/fragment_uwazi"
-                >
+                app:layout_collapseMode="pin">
             </org.hzontal.shared_ui.appbar.ToolbarComponent>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -56,23 +54,22 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:tabMode="scrollable"
-            app:tabTextColor="@color/bottom_nav_item_color"/>
+            app:tabTextColor="@color/bottom_nav_item_color" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-   <com.google.android.material.floatingactionbutton.FloatingActionButton
-    android:id="@+id/fab_button"
-    app:backgroundTint="@color/dark_orange"
-    app:fabCustomSize="50dp"
-    app:layout_anchorGravity="center"
-    app:maxImageSize="30dp"
-    android:layout_marginBottom="60dp"
-    app:srcCompat="@drawable/ic_plus"
-    app:useCompatPadding="true"
-    tools:ignore="VectorDrawableCompat"
-    style="@style/Main_Floating_Action_Button_Style"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-       />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_button"
+        style="@style/Main_Floating_Action_Button_Style"
+        android:layout_marginBottom="60dp"
+        app:backgroundTint="@color/dark_orange"
+        app:fabCustomSize="50dp"
+        app:layout_anchorGravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="30dp"
+        app:srcCompat="@drawable/ic_plus"
+        app:useCompatPadding="true"
+        tools:ignore="VectorDrawableCompat" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

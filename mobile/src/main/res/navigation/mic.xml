@@ -16,8 +16,12 @@
             app:destination="@id/attachments_screen"
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out"/>
+        <action
+            android:id="@+id/action_micScreen_to_newReport"
+            app:destination="@id/newReportScreen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
     </fragment>
-
 
     <fragment
         android:id="@+id/attachments_screen"

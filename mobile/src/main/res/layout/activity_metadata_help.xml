@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/wa_white"
     android:fitsSystemWindows="true"
-    tools:context="rs.readahead.washington.mobile.views.activity.MetadataHelpActivity"
-    android:background="@color/wa_white">
+    tools:context="rs.readahead.washington.mobile.views.activity.MetadataHelpActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -23,6 +23,8 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_metadata_help" />
+    <include
+        android:id="@+id/content"
+        layout="@layout/content_metadata_help" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

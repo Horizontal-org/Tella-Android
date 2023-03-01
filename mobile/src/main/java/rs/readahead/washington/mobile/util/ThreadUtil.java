@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 
 
 public class ThreadUtil {
-    private static Handler handler = new Handler(Looper.getMainLooper());
+    private static final Handler handler = new Handler(Looper.getMainLooper());
 
 
     public static boolean isMainThread() {

@@ -1,18 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.fragment.ReportsFragment">
+    android:background="@color/wa_purple"
+    android:fitsSystemWindows="true"
+    android:keepScreenOn="true"
+    android:textDirection="locale">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintTop_toBottomOf="@+id/appbar" />
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Reports Fragment"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:fitsSystemWindows="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/space_cadet"
+            android:fitsSystemWindows="true"
+            app:contentScrim="@color/space_cadet"
+            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
+            app:titleTextColor="@color/wa_white">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_collapseMode="pin">
+
+                <org.hzontal.shared_ui.appbar.ToolbarComponent
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:textStyle="bold"
+                    app:arrowBackIcon="@drawable/ic_back_white"/>
+
+                <TextView
+                    style="@style/Tella_Main_White_Text.Bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                    android:text="Reports" />
+            </LinearLayout>
+
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        <!-- Override tabIconTint attribute of style with selector -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:tabMode="scrollable"
+            app:tabTextColor="@color/bottom_nav_item_color" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <Button
+        android:id="@+id/new_report_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginHorizontal="@dimen/tella_main_vertical"
+        android:layout_marginBottom="@dimen/activity_vertical_large_margin"
+        android:background="@drawable/bg_round_orange_btn"
+        android:fontFamily="@font/open_sans"
+        android:gravity="center_vertical"
+        android:text="@string/New_Reports_Text"
+        android:textAlignment="center"
+        android:textColor="@color/wa_white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:cornerRadius="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="RtlCompat" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

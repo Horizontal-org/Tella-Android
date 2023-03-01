@@ -17,13 +17,12 @@ import rs.readahead.washington.mobile.domain.entity.uwazi.*
 import rs.readahead.washington.mobile.domain.repository.uwazi.IUwaziUserRepository
 import rs.readahead.washington.mobile.util.StringUtils
 
-
 class UwaziRepository : IUwaziUserRepository {
     private val uwaziApi by lazy { UwaziService.newInstance().services }
 
     override fun login(server: UWaziUploadServer): Single<LoginResult> {
         return uwaziApi.login(
-            loginEntity = LoginEntity(server.username, server.password,server.token),
+            loginEntity = LoginEntity(server.username, server.password, server.token),
             url = StringUtils.append(
                 '/',
                 server.url,
@@ -34,96 +33,97 @@ class UwaziRepository : IUwaziUserRepository {
             .map {
                 val cookieList: List<String> = it.headers().values("Set-Cookie")
                 var jsessionid = ""
-                if (!cookieList.isNullOrEmpty()){
-                     jsessionid = cookieList[0].split(";")[0]
+                if (cookieList.isNotEmpty()) {
+                    jsessionid = cookieList[0].split(";")[0]
                 }
-
-                LoginResult(it.isSuccessful, jsessionid,it.code())
+                LoginResult(it.isSuccessful, jsessionid, it.code())
             }
-
     }
 
     override fun getTemplatesResult(server: UWaziUploadServer): Single<ListTemplateResult> {
-        return Single.zip(getTemplates(server),
-            getDictionary(server), getTranslation(server),getFullSettings(server), { templates, dictionary, translations,settings ->
+        return Single.zip(
+            getTemplates(server),
+            getDictionary(server),
+            getTranslation(server),
+            getFullSettings(server)
+        ) { templates, dictionary, translations, settings ->
 
-                templates.forEach {
-                    it.properties.forEach { property ->
-                        dictionary.forEach { dictionaryItem ->
-                            if (dictionaryItem._id == property.content) {
-                                property.values = dictionaryItem.values
+            templates.forEach {
+                it.properties.forEach { property ->
+                    dictionary.forEach { dictionaryItem ->
+                        if (dictionaryItem._id == property.content) {
+                            property.values = dictionaryItem.values
+                        }
+                    }
+                }
+            }
+            var resultTemplates = mutableListOf<UwaziRow>()
+
+            if (server.username.isNullOrEmpty() || server.password.isNullOrEmpty()) {
+                if (settings.allowedPublicTemplates.isNotEmpty()) {
+                    templates.forEach { row ->
+                        settings.allowedPublicTemplates.forEach { id ->
+                            if (row._id == id) {
+                                resultTemplates.add(row)
                             }
                         }
                     }
                 }
-                var resultTemplates = mutableListOf<UwaziRow>()
+            } else {
+                resultTemplates = templates.toMutableList()
+            }
 
-                if (server.username.isNullOrEmpty() || server.password.isNullOrEmpty()){
-                    if (!settings.allowedPublicTemplates.isNullOrEmpty()){
-                        templates.forEach { row ->
-                            settings.allowedPublicTemplates.forEach { id->
-                                if (row._id == id){
-                                    resultTemplates.add(row)
-                                }
+
+            resultTemplates.forEach { template ->
+                translations.filter { row -> row.locale == server.localeCookie }[0]
+                    .contexts.forEach { context ->
+                        if (context.id == template._id) {
+                            template.properties.forEach { property ->
+                                property.translatedLabel = context.values[property.label] ?: ""
                             }
-                        }
-                    }
-                }else {
-                    resultTemplates = templates.toMutableList()
-                }
+                            template.commonProperties.forEach { property ->
+                                property.translatedLabel = context.values[property.label] ?: ""
+                            }
 
-
-                resultTemplates.forEach { template ->
-                    translations.filter { row -> row.locale == server.localeCookie }[0]
-                        .contexts.forEach { context ->
-                            if (context.id == template._id) {
-                                template.properties.forEach { property ->
-                                    property.translatedLabel = context.values[property.label] ?: ""
-                                }
-                                template.commonProperties.forEach { property ->
-                                    property.translatedLabel = context.values[property.label] ?: ""
-                                }
-
-                                template.translatedName = context.values[template.name] ?: ""
-                            } else {
-                                template.properties.forEach { property ->
-                                    property.values?.forEach { selectValue ->
-                                        if (context.id == property.content) {
-                                            selectValue.translatedLabel =
-                                                context.values[selectValue.label]
-                                                    ?: selectValue.label
-                                        }
-
-                                        selectValue.values.forEach { nestedSelectValue ->
-                                            if (context.id == property.content) {
-                                                nestedSelectValue.translatedLabel =
-                                                    context.values[nestedSelectValue.label]
-                                                        ?: nestedSelectValue.label
-                                            }
-
-                                        }
-
+                            template.translatedName = context.values[template.name] ?: ""
+                        } else {
+                            template.properties.forEach { property ->
+                                property.values?.forEach { selectValue ->
+                                    if (context.id == property.content) {
+                                        selectValue.translatedLabel =
+                                            context.values[selectValue.label]
+                                                ?: selectValue.label
                                     }
+
+                                    selectValue.values.forEach { nestedSelectValue ->
+                                        if (context.id == property.content) {
+                                            nestedSelectValue.translatedLabel =
+                                                context.values[nestedSelectValue.label]
+                                                    ?: nestedSelectValue.label
+                                        }
+                                    }
+
                                 }
                             }
-
                         }
-                }
 
-                val listTemplates = mutableListOf<CollectTemplate>()
-                resultTemplates.forEach { entity ->
-                    val collectTemplate = CollectTemplate(
-                        serverId = server.id,
-                        entityRow = entity,
-                        serverName = server.name
-                    )
-                    listTemplates.add(collectTemplate)
-                }
+                    }
+            }
 
-                val listTemplateResult = ListTemplateResult()
-                listTemplateResult.templates = listTemplates
-                listTemplateResult
-            }).onErrorResumeNext { throwable: Throwable? ->
+            val listTemplates = mutableListOf<CollectTemplate>()
+            resultTemplates.forEach { entity ->
+                val collectTemplate = CollectTemplate(
+                    serverId = server.id,
+                    entityRow = entity,
+                    serverName = server.name
+                )
+                listTemplates.add(collectTemplate)
+            }
+
+            val listTemplateResult = ListTemplateResult()
+            listTemplateResult.templates = listTemplates
+            listTemplateResult
+        }.onErrorResumeNext { throwable: Throwable? ->
             val listTemplateResult = ListTemplateResult()
             val errorBundle = ErrorBundle(throwable)
             errorBundle.serverId = server.id
@@ -179,7 +179,7 @@ class UwaziRepository : IUwaziUserRepository {
         return uwaziApi.getSettings(
             url = StringUtils.append(
                 '/',
-               url,
+                url,
                 ParamsNetwork.URL_SETTINGS
             ),
             cookies = arrayListOf()
@@ -246,7 +246,7 @@ class UwaziRepository : IUwaziUserRepository {
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSuccess {  }
+            .doOnSuccess { }
     }
 
     override fun submitWhiteListedEntity(

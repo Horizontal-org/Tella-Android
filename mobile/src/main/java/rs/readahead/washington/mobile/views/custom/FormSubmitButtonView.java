@@ -34,6 +34,6 @@ public class FormSubmitButtonView extends FrameLayout {
         ImageView imageView = findViewById(R.id.submit_button_image);
 
         textView.setText(offline ? R.string.collect_end_action_save_send_later : R.string.collect_end_action_submit);
-        imageView.setImageResource(offline ? R.drawable.ic_watch_later_black_24dp : R.drawable.ic_send_black_24dp);
+        imageView.setImageResource(offline ? R.drawable.ic_watch_later_orange_24dp : R.drawable.ic_send_black_24dp);
     }
 }

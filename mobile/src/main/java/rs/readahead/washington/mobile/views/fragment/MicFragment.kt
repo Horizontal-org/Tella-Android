@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.setFragmentResult
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
@@ -32,14 +33,18 @@ import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.views.activity.CameraActivity.VAULT_CURRENT_ROOT_PARENT
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.base_ui.MetadataBaseLockFragment
+import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_AUDIO
+import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_VAULT_FILE
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface
+import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface
 
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 const val TIME_FORMAT: String = "%02d:%02d"
-private const val COLLECT_ENTRY = "collect_entry"
+const val COLLECT_ENTRY = "collect_entry"
+const val REPORT_ENTRY = "report_entry"
 
 class MicFragment : MetadataBaseLockFragment(),
     IAudioCapturePresenterContract.IView,
@@ -49,6 +54,7 @@ class MicFragment : MetadataBaseLockFragment(),
 
     private var animator: ObjectAnimator? = null
     private var isCollect: Boolean = false
+    private var isReport: Boolean = false
     private var notRecording = false
 
     private val UPDATE_SPACE_TIME_MS: Long = 60000
@@ -68,6 +74,7 @@ class MicFragment : MetadataBaseLockFragment(),
             MicFragment().apply {
                 arguments = Bundle().apply {
                     putBoolean(COLLECT_ENTRY, value)
+                    putBoolean(REPORT_ENTRY, value)
                 }
             }
     }
@@ -95,6 +102,7 @@ class MicFragment : MetadataBaseLockFragment(),
         super.onCreate(savedInstanceState)
         arguments?.let {
             isCollect = it.getBoolean(COLLECT_ENTRY)
+            isReport = it.getBoolean(REPORT_ENTRY)
         }
     }
 
@@ -107,8 +115,10 @@ class MicFragment : MetadataBaseLockFragment(),
         redDot = view.findViewById(R.id.red_dot)
         recordingName = view.findViewById(R.id.rec_name)
 
-        if (isCollect) {
+        if (isCollect || isReport) {
             mPlay.visibility = View.GONE
+            val activity = context as IMainNavigationInterface
+            activity.hideBottomNavigation()
         }
 
         mRecord.setOnClickListener {
@@ -277,6 +287,12 @@ class MicFragment : MetadataBaseLockFragment(),
         if (isCollect) {
             val activity = context as ICollectEntryInterface
             activity.returnFileToForm(vaultFile)
+        }
+        if (isReport) {
+            val bundle = Bundle()
+            bundle.putSerializable(BUNDLE_REPORT_VAULT_FILE, vaultFile)
+            setFragmentResult(BUNDLE_REPORT_AUDIO, bundle)
+            nav().navigateUp()
         }
     }
 

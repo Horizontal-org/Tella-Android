@@ -14,6 +14,8 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
+import rs.readahead.washington.mobile.bus.event.CloseSettingsActivityEvent;
+import rs.readahead.washington.mobile.bus.event.GoToReportsScreenEvent;
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
 import rs.readahead.washington.mobile.databinding.ActivitySettingsBinding;
 import rs.readahead.washington.mobile.util.CamouflageManager;
@@ -26,10 +28,10 @@ import rs.readahead.washington.mobile.views.settings.SecuritySettings;
 
 
 public class SettingsActivity extends BaseLockActivity implements OnFragmentSelected {
-    private ActivitySettingsBinding binding;
-    private EventCompositeDisposable disposables;
     private final CamouflageManager cm = CamouflageManager.getInstance();
     protected boolean isCamouflage = false;
+    private ActivitySettingsBinding binding;
+    private EventCompositeDisposable disposables;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +56,12 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
         }
 
         if (getIntent().hasExtra(IS_CAMOUFLAGE)) {
-            addFragment(new MainSettings(),R.id.my_nav_host_fragment);
-            addFragment(new SecuritySettings(),R.id.my_nav_host_fragment);
+            addFragment(new MainSettings(), R.id.my_nav_host_fragment);
+            addFragment(new SecuritySettings(), R.id.my_nav_host_fragment);
             if (cm.isDefaultLauncherActivityAlias()) {
-                addFragment(new HideTella(),R.id.my_nav_host_fragment);
+                addFragment(new HideTella(), R.id.my_nav_host_fragment);
             } else {
-                addFragment(new ChangeRemoveCamouflage(),R.id.my_nav_host_fragment);
+                addFragment(new ChangeRemoveCamouflage(), R.id.my_nav_host_fragment);
             }
         }
 
@@ -70,6 +72,15 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
                 recreate();
             }
         });
+
+        disposables.wire(CloseSettingsActivityEvent.class, new EventObserver<CloseSettingsActivityEvent>() {
+            @Override
+            public void onNext(@NotNull CloseSettingsActivityEvent event) {
+                finish();
+                MyApplication.bus().post(new GoToReportsScreenEvent());
+            }
+        });
+
     }
 
     @Override

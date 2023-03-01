@@ -30,8 +30,8 @@ class UwaziFragment : BaseBindingFragment<FragmentUwaziBinding>(FragmentUwaziBin
             }.attach()
 
             tabs.setTabTextColors(
-                ContextCompat.getColor(activity, R.color.wa_white_44),
-                ContextCompat.getColor(activity, R.color.wa_white)
+                ContextCompat.getColor(baseActivity, R.color.wa_white_44),
+                ContextCompat.getColor(baseActivity, R.color.wa_white)
                 )
 
             fabButton.setOnClickListener {
@@ -39,7 +39,7 @@ class UwaziFragment : BaseBindingFragment<FragmentUwaziBinding>(FragmentUwaziBin
             }
         }
 
-        SharedLiveData.updateViewPagerPosition.observe(activity,{ position ->
+        SharedLiveData.updateViewPagerPosition.observe(baseActivity,{ position ->
              when (position) {
                 TEMPLATES_LIST_PAGE_INDEX -> setCurrentTab(TEMPLATES_LIST_PAGE_INDEX)
                 DRAFT_LIST_PAGE_INDEX -> setCurrentTab(DRAFT_LIST_PAGE_INDEX)

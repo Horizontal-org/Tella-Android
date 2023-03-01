@@ -25,15 +25,16 @@ import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.databinding.ActivityOnboardingBinding
-import rs.readahead.washington.mobile.domain.entity.TellaUploadServer
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment.CollectServerDialogHandler
-import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragment
+import rs.readahead.washington.mobile.views.dialog.SharedLiveData.createReportsServer
+import rs.readahead.washington.mobile.views.dialog.SharedLiveData.createServer
 import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragment.TellaUploadServerDialogHandler
-import rs.readahead.washington.mobile.views.dialog.uwazi.SharedLiveData.createServer
+import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowActivity
 import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity
 
 private const val ONBOARDING_INTRODUCTION_VIEW_INDEX = 0
@@ -79,7 +80,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
             )
         }
         initUwaziEvents()
-
+        initReportsEvents()
     }
 
     private fun initButtons() {
@@ -122,6 +123,15 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         createServer.observe(
             this
         ) { server: UWaziUploadServer? ->
+            if (server != null) {
+                presenter.create(server)
+                addFragment(OnBoardHideOptionFragment(), R.id.rootOnboard)
+            }
+        }
+    }
+
+    private fun initReportsEvents(){
+        createReportsServer.observe(this){ server ->
             if (server != null) {
                 presenter.create(server)
                 addFragment(OnBoardHideOptionFragment(), R.id.rootOnboard)
@@ -229,7 +239,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     override fun hideLoading() {
     }
 
-    override fun onCreatedTUServer(server: TellaUploadServer?) {
+    override fun onCreatedTUServer(server: TellaReportServer?) {
         addFragment(OnBoardConnectedFragment(), R.id.rootOnboard)
     }
 
@@ -260,11 +270,11 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     override fun onCollectServerDialogUpdate(server: CollectServer?) {
     }
 
-    override fun onTellaUploadServerDialogCreate(server: TellaUploadServer?) {
+    override fun onTellaUploadServerDialogCreate(server: TellaReportServer?) {
         presenter.create(server)
     }
 
-    override fun onTellaUploadServerDialogUpdate(server: TellaUploadServer?) {
+    override fun onTellaUploadServerDialogUpdate(server: TellaReportServer?) {
     }
 
 
@@ -278,8 +288,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     }
 
     private fun showTellaUploadServerDialog() {
-        TellaUploadServerDialogFragment.newInstance(null)
-            .show(supportFragmentManager, TellaUploadServerDialogFragment.TAG)
+        startActivity(Intent(this, ReportsConnectFlowActivity::class.java))
     }
 
     override fun enterCustomizationCode() {

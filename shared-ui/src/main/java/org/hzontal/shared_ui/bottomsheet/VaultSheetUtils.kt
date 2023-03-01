@@ -454,7 +454,7 @@ object VaultSheetUtils {
         recordLabel: String?,
         importLabel: String,
         importVaultLabel: String,
-        descriptionText: String,
+        descriptionText: String?,
         titleText: String,
         action: IVaultFilesSelector
     ) {
@@ -467,7 +467,12 @@ object VaultSheetUtils {
             override fun onBind(holder: VaultSelectFilesSheetHolder) {
                 with(holder) {
                     title.text = titleText
-                    descriptionTV.text = descriptionText
+                    if (descriptionText != null) {
+                        descriptionTV.text = descriptionText
+                    } else {
+                        descriptionTV.isVisible = false
+                    }
+
                     //Go to camera action
                     if (cameraLabel != null) {
                         cameraActionTV.text = cameraLabel

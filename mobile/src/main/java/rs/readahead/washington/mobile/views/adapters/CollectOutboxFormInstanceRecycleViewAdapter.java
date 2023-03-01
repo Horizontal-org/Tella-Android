@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import org.hzontal.shared_ui.submission.SubmittedItem;
@@ -14,9 +13,8 @@ import org.hzontal.shared_ui.submission.SubmittedItem;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.databinding.SubmittedCollectFormInstanceRowBinding;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
 import rs.readahead.washington.mobile.util.Util;
@@ -27,6 +25,7 @@ import rs.readahead.washington.mobile.views.interfaces.ISavedFormsInterface;
 public class CollectOutboxFormInstanceRecycleViewAdapter extends RecyclerView.Adapter<CollectOutboxFormInstanceRecycleViewAdapter.ViewHolder> {
     private List<CollectFormInstance> instances = Collections.emptyList();
     private final ISavedFormsInterface savedFormsInterface;
+    private SubmittedCollectFormInstanceRowBinding itemBinding;
 
     public CollectOutboxFormInstanceRecycleViewAdapter(ISavedFormsInterface savedFormsInterface) {
         this.savedFormsInterface = savedFormsInterface;
@@ -35,8 +34,8 @@ public class CollectOutboxFormInstanceRecycleViewAdapter extends RecyclerView.Ad
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.submitted_collect_form_instance_row, parent, false);
-        return new ViewHolder(v);
+        itemBinding = SubmittedCollectFormInstanceRowBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new CollectOutboxFormInstanceRecycleViewAdapter.ViewHolder(itemBinding);
     }
 
     @Override
@@ -75,12 +74,13 @@ public class CollectOutboxFormInstanceRecycleViewAdapter extends RecyclerView.Ad
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.submittedItem)
+        SubmittedCollectFormInstanceRowBinding binding;
         SubmittedItem item;
 
-        ViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        ViewHolder(SubmittedCollectFormInstanceRowBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            item = binding.submittedItem;
         }
 
         void setDates(long timestamp) {
@@ -102,14 +102,14 @@ public class CollectOutboxFormInstanceRecycleViewAdapter extends RecyclerView.Ad
         }
 
         private void setPendingIcon() {
-            Drawable drawable = ViewUtil.getTintedDrawable(item.getContext(), R.drawable.ic_watch_later_black_24dp, R.color.tigers_eye);
+            Drawable drawable = ViewUtil.getTintedDrawable(item.getContext(), R.drawable.ic_watch_later_orange_24dp, R.color.tigers_eye);
             if (drawable != null) {
                 item.setIconDrawable(drawable);
             }
         }
 
         private void setPartlySubmittedIcon() {
-            Drawable drawable = ViewUtil.getTintedDrawable(item.getContext(), R.drawable.ic_watch_later_black_24dp, R.color.wa_gray);
+            Drawable drawable = ViewUtil.getTintedDrawable(item.getContext(), R.drawable.ic_watch_later_orange_24dp, R.color.wa_gray);
             if (drawable != null) {
                 item.setIconDrawable(drawable);
             }

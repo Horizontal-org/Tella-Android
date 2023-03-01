@@ -94,7 +94,6 @@ public class CollectFormEntryActivity extends MetadataActivity implements
     private FormSubmitter formSubmitter;
     private EventCompositeDisposable disposables;
     private QuestionAttachmentPresenter presenter; // todo: use separate presenter just for importing, extract from this one
-
     private CollectFormEndView endView;
     private AlertDialog alertDialog;
     private ProgressDialog progressDialog;
@@ -159,13 +158,13 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         disposables.wire(LocationPermissionRequiredEvent.class, new EventObserver<LocationPermissionRequiredEvent>() {
             @Override
             public void onNext(@NonNull LocationPermissionRequiredEvent event) {
-                CollectFormEntryActivityPermissionsDispatcher.startPermissionProcessWithPermissionCheck(CollectFormEntryActivity.this);
+                //CollectFormEntryActivityPermissionsDispatcher.startPermissionProcessWithPermissionCheck(CollectFormEntryActivity.this);
             }
         });
         disposables.wire(GPSProviderRequiredEvent.class, new EventObserver<GPSProviderRequiredEvent>() {
             @Override
             public void onNext(@NonNull GPSProviderRequiredEvent event) {
-                CollectFormEntryActivityPermissionsDispatcher.startPermissionProcessWithPermissionCheck(CollectFormEntryActivity.this);
+               // CollectFormEntryActivityPermissionsDispatcher.startPermissionProcessWithPermissionCheck(CollectFormEntryActivity.this);
             }
         });
         disposables.wire(MediaFileBinaryWidgetCleared.class, new EventObserver<MediaFileBinaryWidgetCleared>() {
@@ -318,11 +317,11 @@ public class CollectFormEntryActivity extends MetadataActivity implements
         saveCurrentScreen(false);
     }
 
-    @Override
+ /*   @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         CollectFormEntryActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
-    }
+    }*/
 
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     public void startPermissionProcess() {

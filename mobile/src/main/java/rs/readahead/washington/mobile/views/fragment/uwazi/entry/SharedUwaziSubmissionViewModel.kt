@@ -19,12 +19,12 @@ import rs.readahead.washington.mobile.data.database.UwaziDataSource
 import rs.readahead.washington.mobile.data.repository.MediaFileRequestBody
 import rs.readahead.washington.mobile.data.repository.ProgressListener
 import rs.readahead.washington.mobile.data.repository.UwaziRepository
+import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
-import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
 import rs.readahead.washington.mobile.presentation.uwazi.SendEntityRequest
 import timber.log.Timber
 import java.net.URLEncoder
@@ -38,7 +38,7 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
     private val _template = MutableLiveData<CollectTemplate>()
     val template: LiveData<CollectTemplate> get() = _template
     private val repository = UwaziRepository()
-    val progress = MutableLiveData<UwaziEntityStatus>()
+    val progress = MutableLiveData<EntityStatus>()
     private val _server = MutableLiveData<UWaziUploadServer>()
     val server: LiveData<UWaziUploadServer> get() = _server
     var error = MutableLiveData<Throwable>()
@@ -98,7 +98,7 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
             }
     }
 
-    fun submitEntity(server: UWaziUploadServer, entity: UwaziEntityInstance) {
+    private fun submitEntity(server: UWaziUploadServer, entity: UwaziEntityInstance) {
         disposables.add(
             repository.submitEntity(
                 server = server,
@@ -107,14 +107,14 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
             )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnError {  progress.postValue(UwaziEntityStatus.SUBMISSION_ERROR) }
+                .doOnError {  progress.postValue(EntityStatus.SUBMISSION_ERROR) }
                 .flatMap {
-                    entity.status = UwaziEntityStatus.SUBMITTED
+                    entity.status = EntityStatus.SUBMITTED
                     entity.formPartStatus = FormMediaFileStatus.SUBMITTED
                     keyDataSource.uwaziDataSource.blockingFirst().saveEntityInstance(entity)
                 }
                 .subscribe({
-                    progress.postValue(UwaziEntityStatus.SUBMITTED)
+                    progress.postValue(EntityStatus.SUBMITTED)
                 }
                 ) { throwable: Throwable? ->
                     FirebaseCrashlytics.getInstance().recordException(
@@ -122,7 +122,7 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
                             ?: throw NullPointerException("Expression 'throwable' must not be null")
                     )
                     error.postValue(throwable)
-                    progress.postValue(UwaziEntityStatus.SUBMISSION_ERROR)
+                    progress.postValue(EntityStatus.SUBMISSION_ERROR)
                 })
     }
 
@@ -135,14 +135,14 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
             )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnError {  progress.postValue(UwaziEntityStatus.SUBMISSION_ERROR) }
+                .doOnError {  progress.postValue(EntityStatus.SUBMISSION_ERROR) }
                 .flatMap {
-                    entity.status = UwaziEntityStatus.SUBMITTED
+                    entity.status = EntityStatus.SUBMITTED
                     entity.formPartStatus = FormMediaFileStatus.SUBMITTED
                     keyDataSource.uwaziDataSource.blockingFirst().saveEntityInstance(entity)
                 }
                 .subscribe({
-                    progress.postValue(UwaziEntityStatus.SUBMITTED)
+                    progress.postValue(EntityStatus.SUBMITTED)
                 }
                 ) { throwable: Throwable? ->
                     FirebaseCrashlytics.getInstance().recordException(
@@ -150,7 +150,7 @@ class SharedUwaziSubmissionViewModel : ViewModel(){
                             ?: throw NullPointerException("Expression 'throwable' must not be null")
                     )
                     error.postValue(throwable)
-                    progress.postValue(UwaziEntityStatus.SUBMISSION_ERROR)
+                    progress.postValue(EntityStatus.SUBMISSION_ERROR)
                 })
     }
 

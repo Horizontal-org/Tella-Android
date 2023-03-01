@@ -1,14 +1,10 @@
-apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
-apply plugin: 'kotlin-android'
-
-ext {
-    supportLibVersion = "28.0.3"
-    permissionDispatcherVersion = "4.8.0"
-    googlePlayServicesVersion = "17.0.0"
-    leakCanaryVersion = '2.4'
-    butterknifeVersion = '10.1.0'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+    id 'com.google.firebase.crashlytics'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -18,7 +14,7 @@ android {
         minSdkVersion versions.minSdk
         compileSdkVersion versions.compileSdk
         targetSdkVersion versions.targetSdk
-        versionCode 131
+        versionCode 140
         versionName "2.0.12"
         multiDexEnabled true
         // vectorDrawables.useSupportLibrary = true // don't care about apk size, care about crashes
@@ -57,6 +53,9 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    lintOptions {
+        checkReleaseBuilds false
+    }
 }
 
 dependencies {
@@ -78,9 +77,9 @@ dependencies {
     implementation "androidx.cardview:cardview:$versions.cardview"
     implementation "androidx.legacy:legacy-support-v4:$versions.legacyV4"
     implementation "androidx.exifinterface:exifinterface:$versions.exifinterface"
-    implementation "com.google.android.gms:play-services-location:${googlePlayServicesVersion}"
-    implementation "com.google.android.gms:play-services-maps:${googlePlayServicesVersion}"
-    // implementation "com.google.android.gms:play-services-gcm:${googlePlayServicesVersion}" // android-job, optional
+    implementation "com.google.android.gms:play-services-location:$versions.googlePlayServices"
+    implementation "com.google.android.gms:play-services-maps:$versions.googlePlayServices"
+    // implementation "com.google.android.gms:play-services-gcm:$versions.googlePlayServices" // android-job, optional
 
     implementation "com.squareup.retrofit2:retrofit:${versions.retrofit}"
     implementation "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}"
@@ -92,14 +91,15 @@ dependencies {
     }
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$versions.retrofit2KotliCoroutinesAdapter"
 
-    implementation("org.permissionsdispatcher:permissionsdispatcher:${permissionDispatcherVersion}") {
+    apply plugin: 'kotlin-kapt'
+    implementation("com.github.permissions-dispatcher:permissionsdispatcher:$versions.permissionDispatcher") {
         exclude module: "support-v13"
     }
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
-    implementation "androidx.navigation:navigation-runtime:$versions.navigationRuntime"
-    implementation "androidx.navigation:navigation-fragment:$versions.navigationFragment"
+    implementation "androidx.navigation:navigation-runtime-ktx:$versions.navigationRuntime"
+    implementation "androidx.navigation:navigation-fragment-ktx:$versions.navigationFragment"
     implementation "androidx.databinding:databinding-runtime:$versions.databindingRuntime"
-    annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:${permissionDispatcherVersion}"
+    annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:$versions.permissionDispatcher"
 
     implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3LoggingInterceptor"
     implementation "com.squareup:tape:$versions.squareupTape" // todo: follow this, v2 should be soon
@@ -111,9 +111,6 @@ dependencies {
     implementation "com.jakewharton.rxrelay2:rxrelay:$versions.rxrelay"
     implementation "com.evernote:android-job:$versions.evernoteJob"
 
-    implementation "com.jakewharton:butterknife:${butterknifeVersion}"
-    annotationProcessor "com.jakewharton:butterknife-compiler:${butterknifeVersion}"
-
     // digest auth
     implementation "com.burgstaller:okhttp-digest:$versions.burgstallerOkhttpDigest"
 
@@ -122,6 +119,7 @@ dependencies {
     //implementation "org.opendatakit:opendatakit-javarosa:2.4.0"
     implementation "net.sf.kxml:kxml2:$versions.kxml2"
     implementation "commons-io:commons-io:$versions.commonsIo"
+
 
     // exo
     implementation "com.google.android.exoplayer:exoplayer:$versions.exoplayer"
@@ -132,12 +130,26 @@ dependencies {
         exclude module: "animated-vector-drawble"
     }
 
+    //hilt
+    implementation "com.google.dagger:hilt-android:$versions.hilt_android"
+    kapt "com.google.dagger:hilt-android-compiler:$versions.hilt_android_compiler"
+    //hilt-view-model
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$versions.hilt_viewmodel"
+    kapt "androidx.hilt:hilt-compiler:$versions.hilt_version"
+
     implementation "com.simplify:ink:$versions.simplifyInk"
     implementation "com.mikhaellopez:circularimageview:$versions.circularimageview"
     implementation "org.apache.directory.studio:org.apache.commons.io:$versions.apacheCommonsIo"
     implementation "com.github.ihsanbal:LoggingInterceptor:$versions.ihsanbalLoggingInterceptor"
 
-    debugImplementation "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}"
+    //worker manager
+    implementation "androidx.work:work-runtime-ktx:$versions.workermanger"
+    implementation("androidx.hilt:hilt-work:$versions.hilt_version")
+
+    //optional - RxJava2 support
+    implementation "androidx.work:work-rxjava2:$versions.workermanger"
+
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$versions.leakCanaryVersion"
 
     testImplementation "junit:junit:$versions.junit"
 }
