@@ -33,7 +33,6 @@ class OnBoardCalculatorFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initView(view)
     }
 

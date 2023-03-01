@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.Group
 import androidx.core.content.ContextCompat
 import androidx.core.view.setMargins
 import com.hzontal.tella_locking_ui.databinding.CalculatorKeysViewBinding
@@ -34,116 +35,113 @@ class CalculatorKeyView @JvmOverloads constructor(context: Context, attrs: Attri
     fun initTheme(style: CalculatorThemeStyle, calculatorTheme: CalculatorTheme) =
             when (calculatorTheme) {
                 CalculatorTheme.BLUE_SKIN -> {
-                    binding.btnOperatorsGroup.referencedIds.forEach {
-                        val button = findViewById<TextView>(it)
-                        button.setBackgroundColor(ContextCompat.getColor(context, style.calculatorOperatorsBackgroundColor))
-                        button.setTextColor(ContextCompat.getColor(context, style.calculatorOperatorsTextColor))
-                        val param = button.layoutParams as ViewGroup.MarginLayoutParams
-                        param.setMargins(8)
-                        button.layoutParams = param
-                    }
-
-                    binding.btnNumbersGroup.referencedIds.forEach {
-                        val button = findViewById<TextView>(it)
-                        button.setBackgroundColor(ContextCompat.getColor(context, style.calculatorNumbersBackgroundColor))
-                        button.setTextColor(ContextCompat.getColor(context, style.calculatorNumbersTextColor))
-                        val param = button.layoutParams as ViewGroup.MarginLayoutParams
-                        param.setMargins(8)
-                        button.layoutParams = param
-                    }
-
-                    binding.plusMinusBottomBtn.setBackgroundColor(ContextCompat.getColor(context, style.calculatorNumbersBackgroundColor))
-                    binding.plusMinusBottomBtn.setTextColor(ContextCompat.getColor(context, style.calculatorOperatorsTextColor))
-                    val param =  binding.plusMinusBottomBtn.layoutParams as ViewGroup.MarginLayoutParams
-                    param.setMargins(8)
-                    binding.plusMinusBottomBtn.layoutParams = param
-                    binding.commaBtn.setBackgroundColor(ContextCompat.getColor(context, style.calculatorNumbersBackgroundColor))
-                    binding.commaBtn.setTextColor(ContextCompat.getColor(context, style.calculatorOperatorsTextColor))
-                    val params =  binding.commaBtn.layoutParams as ViewGroup.MarginLayoutParams
-                    params.setMargins(8)
-                    binding.commaBtn.layoutParams = params
-                    binding.okBtn.setBackgroundColor(ContextCompat.getColor(context, style.calculatorOkBtnBackgroundColor))
-                    val paramss =  binding.okBtn.layoutParams as ViewGroup.MarginLayoutParams
-                    paramss.setMargins(8)
-                    binding.okBtn.layoutParams = paramss
+                    setButtonsGroupStyleWithBackgroundColor(binding.btnOperatorsGroup, style.calculatorOperatorsBackgroundColor, style.calculatorOperatorsTextColor, 8)
+                    setButtonsGroupStyleWithBackgroundColor(binding.btnNumbersGroup, style.calculatorNumbersBackgroundColor, style.calculatorNumbersTextColor, 8)
+                    setButtonStyleWithBackgroundColor(binding.plusMinusBottomBtn, style.calculatorNumbersBackgroundColor, style.calculatorOperatorsTextColor, 8)
+                    setButtonStyleWithBackgroundColor(binding.commaBtn, style.calculatorNumbersBackgroundColor, style.calculatorOperatorsTextColor, 8)
+                    setButtonStyleWithBackgroundColor(binding.okBtn, style.calculatorOkBtnBackgroundColor, style.calculatorOperatorsTextColor, 8)
                     binding.plusMinusBtn.text = "()"
                     binding.plusMinusBottomBtn.visibility = VISIBLE
                     binding.zeroBtnGuideline.setGuidelinePercent(0.25F)
-
                 }
 
                 CalculatorTheme.ORANGE_SKIN -> {
-
-                    binding.btnNumbersGroup.referencedIds.forEach {
-                        val button = findViewById<TextView>(it)
-                        button.setBackgroundResource(style.calculatorBackgroundDrawable)
-                        button.setTextColor(ContextCompat.getColor(context, style.calculatorNumbersTextColor))
+                    setButtonsGroupStyleWithBackgroundResource(binding.btnNumbersGroup, style.calculatorBackgroundDrawable, style.calculatorNumbersTextColor, 0)
+                    setButtonsGroupStyleWithBackgroundResource(binding.btnOperatorsGroup, style.calculatorBackgroundDrawable, style.calculatorOperatorsTextColor, 0)
+                    binding.okBtn.apply {
+                        setBackgroundResource(style.calculatorOkBtnTextBackgroundDrawable)
+                        setTextColor(ContextCompat.getColor(context, style.calculatorOkBtnTextColor))
                     }
-
-                    binding.btnOperatorsGroup.referencedIds.forEach {
-                        val button = findViewById<TextView>(it)
-                        button.setBackgroundResource(style.calculatorBackgroundDrawable)
-                        button.setTextColor(ContextCompat.getColor(context, style.calculatorOperatorsTextColor))
+                    binding.plusMinusBottomBtn.apply {
+                        setBackgroundResource(style.calculatorBackgroundDrawable)
+                        text = "0"
+                        visibility = VISIBLE
                     }
-                    binding.okBtn.setBackgroundResource(style.calculatorOkBtnTextBackgroundDrawable)
-                    binding.okBtn.setTextColor(ContextCompat.getColor(context, style.calculatorOkBtnTextColor))
-                    binding.plusMinusBottomBtn.setBackgroundResource(style.calculatorBackgroundDrawable)
-                    binding.plusMinusBottomBtn.text = "0"
                     binding.plusMinusBtn.text = "()"
                     binding.zeroBtn.text = "."
                     binding.deleteBtn.text = "C"
                     binding.commaBtn.setBackgroundResource(style.calculatorBackgroundDrawable)
-                    binding.plusMinusBottomBtn.visibility = VISIBLE
                     binding.zeroBtnGuideline.setGuidelinePercent(0.25F)
 
                 }
 
                 CalculatorTheme.YELLOW_SKIN -> {
-
-                    binding.btnOperatorsGroup.referencedIds.forEach {
-                        val button = findViewById<TextView>(it)
-                        button.setBackgroundResource(style.calculatorBackgroundDrawable)
-                        button.setTextColor(ContextCompat.getColor(context, style.calculatorOperatorsTextColor))
-                    }
-
-                    binding.btnNumbersGroup.referencedIds.forEach {
-                        val button = findViewById<TextView>(it)
-                        button.setBackgroundResource(style.calculatorBackgroundDrawable)
-                        button.setTextColor(ContextCompat.getColor(context, style.calculatorNumbersTextColor))
-                    }
-
+                    setButtonsGroupStyleWithBackgroundResource(binding.btnOperatorsGroup, style.calculatorBackgroundDrawable, style.calculatorOperatorsTextColor, 0)
+                    setButtonsGroupStyleWithBackgroundResource(binding.btnNumbersGroup, style.calculatorBackgroundDrawable, style.calculatorNumbersTextColor, 0)
                     binding.plusMinusBottomBtn.visibility = GONE
-                    binding.commaBtn.text = "."
-                    binding.commaBtn.setBackgroundResource(style.calculatorBackgroundDrawable)
-
+                    binding.commaBtn.apply {
+                        text = "."
+                        setBackgroundResource(style.calculatorBackgroundDrawable)
+                    }
+                    binding.okBtn.apply {
+                        setBackgroundResource(style.calculatorOkBtnTextBackgroundDrawable)
+                        setTextColor(ContextCompat.getColor(context, style.calculatorOkBtnTextColor))
+                    }
                     binding.percentBtn.visibility = GONE
-                    binding.okBtn.setBackgroundResource(style.calculatorOkBtnTextBackgroundDrawable)
-                    binding.okBtn.setTextColor(ContextCompat.getColor(context, style.calculatorOkBtnTextColor))
                 }
-
-
                 CalculatorTheme.GREEN_SKIN -> {
-                    binding.btnOperatorsGroup.referencedIds.forEach {
-                        val button = findViewById<TextView>(it)
-                        val param = button.layoutParams as ViewGroup.MarginLayoutParams
-                        param.setMargins(16)
-                        button.layoutParams = param
-                    }
-                    binding.btnNumbersGroup.referencedIds.forEach {
-                        val button = findViewById<TextView>(it)
-                        val param = button.layoutParams as ViewGroup.MarginLayoutParams
-                        param.setMargins(16)
-                        button.layoutParams = param
-                    }
-                    val param = binding.commaBtn.layoutParams as ViewGroup.MarginLayoutParams
-                    param.setMargins(16)
-                    binding.commaBtn.layoutParams = param
-                    val params = binding.okBtn.layoutParams as ViewGroup.MarginLayoutParams
-                    params.setMargins(16)
-                    binding.okBtn.layoutParams = params
-
+                    setButtonsGroupMargin(binding.btnOperatorsGroup, 16)
+                    setButtonsGroupMargin(binding.btnNumbersGroup, 16)
+                    setTextViewMargin(binding.commaBtn, 16)
+                    setTextViewMargin(binding.okBtn, 16)
                 }
             }
+
+    private fun setTextViewMargin(button: TextView, margin: Int) {
+        button.apply {
+            val params = layoutParams as ViewGroup.MarginLayoutParams
+            params.setMargins(margin)
+            layoutParams = params
+        }
+    }
+
+    private fun setButtonsGroupMargin(group: Group, margin: Int) {
+        group.referencedIds.forEach {
+            val button = findViewById<TextView>(it)
+            button.apply {
+                val params = layoutParams as ViewGroup.MarginLayoutParams
+                params.setMargins(margin)
+                layoutParams = params
+            }
+        }
+    }
+
+    private fun setButtonsGroupStyleWithBackgroundColor(group: Group, backgroundColor: Int, textColor: Int, margin: Int) {
+        group.referencedIds.forEach {
+            val button = findViewById<TextView>(it)
+            button.apply {
+                setBackgroundColor(ContextCompat.getColor(context, backgroundColor))
+                setTextColor(ContextCompat.getColor(context, textColor))
+                val params = layoutParams as ViewGroup.MarginLayoutParams
+                params.setMargins(margin)
+                layoutParams = params
+            }
+        }
+    }
+
+    private fun setButtonStyleWithBackgroundColor(button: TextView, backgroundColor: Int, textColor: Int, margin: Int) {
+        button.apply {
+            setBackgroundColor(ContextCompat.getColor(context, backgroundColor))
+            setTextColor(ContextCompat.getColor(context, textColor))
+            val params = layoutParams as ViewGroup.MarginLayoutParams
+            params.setMargins(margin)
+            layoutParams = params
+        }
+    }
+
+
+    private fun setButtonsGroupStyleWithBackgroundResource(group: Group, backgroundResource: Int, textColor: Int, margin: Int) {
+        group.referencedIds.forEach {
+            val button = findViewById<TextView>(it)
+            button.apply {
+                setBackgroundResource(backgroundResource)
+                setTextColor(ContextCompat.getColor(context, textColor))
+                val params = layoutParams as ViewGroup.MarginLayoutParams
+                params.setMargins(margin)
+                layoutParams = params
+            }
+        }
+    }
 
     private fun initListeners() {
         binding.btnsGroup.referencedIds.forEach {

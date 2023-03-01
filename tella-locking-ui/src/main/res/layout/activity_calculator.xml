@@ -6,24 +6,24 @@
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline36h"
+        android:id="@+id/guideline32h"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.32" />
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline28h"
+        android:id="@+id/guideline22h"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.28" />
+        app:layout_constraintGuide_percent="0.22" />
 
     <com.hzontal.tella_locking_ui.ui.pin.edit_text.NoImeEditText
         android:id="@+id/pin_editText"
         style="@style/Calculator_Edit_Text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/guideline28h"
+        app:layout_constraintBottom_toTopOf="@+id/guideline22h"
         app:layout_constraintEnd_toEndOf="parent"
         android:ellipsize="end"
         android:maxLines="1"
@@ -37,7 +37,7 @@
         android:maxLines="1"
         android:visibility="visible"
         android:ellipsize="end"
-        app:layout_constraintBottom_toTopOf="@+id/guideline36h"
+        app:layout_constraintBottom_toTopOf="@+id/guideline32h"
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <com.hzontal.tella_locking_ui.ui.pin.pinview.CalculatorKeyView
