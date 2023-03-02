@@ -7,9 +7,16 @@ import androidx.annotation.StringRes;
 public class CamouflageOption {
     public String alias;
     public int drawableResId;
+    public int drawableResIdSquare = -1;
     public int stringResId;
 
-    public CamouflageOption(String alias, @DrawableRes int drawableResId, @StringRes int stringResId) {
+    public CamouflageOption(String alias, @DrawableRes int drawableResId,  @DrawableRes int drawableResIdSquare,@StringRes int stringResId) {
+        this.alias = alias;
+        this.drawableResId = drawableResId;
+        this.drawableResIdSquare = drawableResIdSquare;
+        this.stringResId = stringResId;
+    }
+    public CamouflageOption(String alias, @DrawableRes int drawableResId,@StringRes int stringResId) {
         this.alias = alias;
         this.drawableResId = drawableResId;
         this.stringResId = stringResId;

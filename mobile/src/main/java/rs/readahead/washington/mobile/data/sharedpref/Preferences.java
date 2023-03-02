@@ -120,7 +120,7 @@ public class Preferences {
     public static void setAppAlias(@NonNull String value) {
         setString(SharedPrefs.APP_ALIAS_NAME, value);
     }
-    @Nullable
+
     public static String getCalculatorTheme() {
         return getString(SharedPrefs.CALCULATOR_THEME, CalculatorTheme.GREEN_SKIN.name());
     }

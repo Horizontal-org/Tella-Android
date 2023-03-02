@@ -13,36 +13,30 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
+import rs.readahead.washington.mobile.databinding.FragmentEditServerBinding
 import rs.readahead.washington.mobile.databinding.OnboardCalculatorFragmentBinding
 import rs.readahead.washington.mobile.databinding.OnboardLockSetFragmentBinding
 import rs.readahead.washington.mobile.util.CamouflageManager
+import rs.readahead.washington.mobile.views.base_ui.BaseActivity
+import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 
-class OnBoardCalculatorFragment : BaseFragment() {
+class OnBoardCalculatorFragment : BaseBindingFragment<OnboardCalculatorFragmentBinding>(OnboardCalculatorFragmentBinding::inflate)  {
 
-    private val cm = CamouflageManager.getInstance()
-    private lateinit var binding: OnboardCalculatorFragmentBinding
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View {
-        binding = OnboardCalculatorFragmentBinding.inflate(layoutInflater, container, false)
-        return binding.root
-    }
+    private val cm by lazy { CamouflageManager.getInstance() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView(view)
     }
 
-    override fun initView(view: View) {
+     fun initView(view: View) {
         (activity as OnBoardActivityInterface).hideProgress()
 
         val calcButton = view.findViewById<TextView>(R.id.calculatorBtn)
         calcButton.setOnClickListener {
             confirmHideBehindCalculator()
-            activity.addFragment(
+            (activity as OnBoardingActivity).addFragment(
                     this,
                     OnBoardHideTellaSet(),
                     R.id.rootOnboard
@@ -51,20 +45,20 @@ class OnBoardCalculatorFragment : BaseFragment() {
 
         val backBtn = view.findViewById<TextView>(R.id.back_btn)
         backBtn.setOnClickListener {
-            activity.onBackPressed()
+            (activity as OnBoardingActivity).onBackPressed()
         }
     }
 
     private fun confirmHideBehindCalculator() {
         BottomSheetUtils.showConfirmSheetWithImageAndTimeout(
-                activity.supportFragmentManager,
+                (activity as OnBoardingActivity).supportFragmentManager,
                 getString(R.string.SettingsCamo_Dialog_TimeoutTitle),
                 getString(R.string.SettingsCamo_Dialog_TimeoutDesc),
                 getString(R.string.settings_sec_confirm_camouflage_title),
                 getString(R.string.settings_sec_confirm_calc_camouflage_desc),
                 getString(R.string.settings_sec_confirm_exit_tella),
                 getString(R.string.action_cancel),
-                ContextCompat.getDrawable(activity, cm.getCalculatorOptionByTheme(Preferences.getCalculatorTheme()).drawableResId),
+                ContextCompat.getDrawable( (activity as OnBoardingActivity), cm.getCalculatorOptionByTheme(Preferences.getCalculatorTheme()).drawableResId),
                 consumer = object : BottomSheetUtils.ActionConfirmed {
                     override fun accept(isConfirmed: Boolean) {
                         hideTellaBehindCalculator()
@@ -74,7 +68,7 @@ class OnBoardCalculatorFragment : BaseFragment() {
     }
 
     private fun hideTellaBehindCalculator() {
-        if (cm.setLauncherActivityAlias(activity, cm.getCalculatorOptionByTheme(Preferences.getCalculatorTheme()).alias))
+        if (cm.setLauncherActivityAlias((activity as OnBoardingActivity), cm.getCalculatorOptionByTheme(Preferences.getCalculatorTheme()).alias))
             MyApplication.bus()
                     .post(CamouflageAliasChangedEvent())
         }

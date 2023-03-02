@@ -61,11 +61,11 @@ public class CamouflageManager {
         options.add(new CamouflageOption(getOptionAlias("Clock"), R.drawable.clock_foreground, R.string.settings_camo_clock));
         options.add(new CamouflageOption(getOptionAlias("Time"), R.drawable.time_foreground, R.string.settings_camo_time));
         options.add(new CamouflageOption(getOptionAlias("StopWatch"), R.drawable.stopwatch_foreground, R.string.settings_camo_stopwatch));
-        // options.add(new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calculator_foreground_circle, R.string.settings_camo_calculator2));
-        //  options.add(new CamouflageOption(getOptionAlias("Calculate"), R.drawable.calculate_foreground, R.string.settings_camo_calculate));
-        //  options.add(new CamouflageOption(getOptionAlias("CalculatorPlus"), R.drawable.calculatorplus_foreground, R.string.settings_camo_calculator_plus));
-        // options.add(new CamouflageOption(getOptionAlias("iCalculator"), R.drawable.icalculator_foreground, R.string.settings_camo_icalculator));
-        // options.add(new CamouflageOption(getOptionAlias("iCalculator"), R.drawable.icalculator_foreground, R.string.settings_camo_icalculator));
+        options.add(new CamouflageOption(getOptionAlias("Calculator"), R.drawable.easyweather, R.string.settings_camo_calculator2));
+        options.add(new CamouflageOption(getOptionAlias("Calculate"), R.drawable.calculate_foreground, R.drawable.calculate_foreground_square, R.string.settings_camo_calculate));
+        options.add(new CamouflageOption(getOptionAlias("CalculatorPlus"), R.drawable.calculatorplus_foreground, R.drawable.calculator_plus_foreground_square, R.string.settings_camo_calculator_plus));
+        options.add(new CamouflageOption(getOptionAlias("iCalculator"), R.drawable.icalculator_foreground, R.string.settings_camo_icalculator));
+        options.add(new CamouflageOption(getOptionAlias("iCalculator"), R.drawable.icalculator_foreground, R.string.settings_camo_icalculator));
 
     }
 
@@ -92,23 +92,20 @@ public class CamouflageManager {
         PackageManager packageManager = context.getPackageManager();
         String packageName = context.getApplicationContext().getPackageName();
         List<CamouflageOption> fullOptions = new ArrayList<>(options);
-        if (currentAlias != null)
-        {
+        if (currentAlias != null) {
             CamouflageOption calculatorCurrentOption = new CamouflageOption(currentAlias, getOptionDrawable(currentAlias), R.string.settings_camo_calculator2);
             fullOptions.add(calculatorCurrentOption);
-
         }
         CamouflageOption calculatorChosenOption = new CamouflageOption(activityAlias, getOptionDrawable(activityAlias), R.string.settings_camo_calculator2);
         fullOptions.add(defaultOption);
-            fullOptions.add(calculatorChosenOption);
-            for (CamouflageOption option : fullOptions) {
-                packageManager.setComponentEnabledSetting(
-                        new ComponentName(packageName, option.alias),
-                        option.alias.equals(activityAlias) ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED :
-                                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                        PackageManager.DONT_KILL_APP);
-            }
-
+        fullOptions.add(calculatorChosenOption);
+        for (CamouflageOption option : fullOptions) {
+            packageManager.setComponentEnabledSetting(
+                    new ComponentName(packageName, option.alias),
+                    option.alias.equals(activityAlias) ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED :
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP);
+        }
         return true;
     }
 
@@ -139,7 +136,6 @@ public class CamouflageManager {
                 return i;
             }
         }
-
         return 0;
     }
 

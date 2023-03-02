@@ -32,60 +32,59 @@ class CalculatorKeyView @JvmOverloads constructor(context: Context, attrs: Attri
         initListeners()
     }
 
-    fun initTheme(style: CalculatorThemeStyle, calculatorTheme: CalculatorTheme) =
-            when (calculatorTheme) {
-                CalculatorTheme.BLUE_SKIN -> {
-                    setButtonsGroupStyleWithBackgroundColor(binding.btnOperatorsGroup, style.calculatorOperatorsBackgroundColor, style.calculatorOperatorsTextColor, 8)
-                    setButtonsGroupStyleWithBackgroundColor(binding.btnNumbersGroup, style.calculatorNumbersBackgroundColor, style.calculatorNumbersTextColor, 8)
-                    setButtonStyleWithBackgroundColor(binding.plusMinusBottomBtn, style.calculatorNumbersBackgroundColor, style.calculatorOperatorsTextColor, 8)
-                    setButtonStyleWithBackgroundColor(binding.commaBtn, style.calculatorNumbersBackgroundColor, style.calculatorOperatorsTextColor, 8)
-                    setButtonStyleWithBackgroundColor(binding.okBtn, style.calculatorOkBtnBackgroundColor, style.calculatorOperatorsTextColor, 8)
-                    binding.plusMinusBtn.text = "()"
-                    binding.plusMinusBottomBtn.visibility = VISIBLE
-                    binding.zeroBtnGuideline.setGuidelinePercent(0.25F)
-                }
+    fun initTheme(style: CalculatorThemeStyle, calculatorTheme: CalculatorTheme) = when (calculatorTheme) {
+        CalculatorTheme.BLUE_SKIN -> {
+            setButtonsGroupStyleWithBackgroundColor(binding.btnOperatorsGroup, style.calculatorOperatorsBackgroundColor, style.calculatorOperatorsTextColor, 8)
+            setButtonsGroupStyleWithBackgroundColor(binding.btnNumbersGroup, style.calculatorNumbersBackgroundColor, style.calculatorNumbersTextColor, 8)
+            setButtonStyleWithBackgroundColor(binding.plusMinusBottomBtn, style.calculatorNumbersBackgroundColor, style.calculatorOperatorsTextColor, 8)
+            setButtonStyleWithBackgroundColor(binding.commaBtn, style.calculatorNumbersBackgroundColor, style.calculatorOperatorsTextColor, 8)
+            setButtonStyleWithBackgroundColor(binding.okBtn, style.calculatorOkBtnBackgroundColor, style.calculatorOperatorsTextColor, 8)
+            binding.plusMinusBtn.text = "()"
+            binding.plusMinusBottomBtn.visibility = VISIBLE
+            binding.zeroBtnGuideline.setGuidelinePercent(0.25F)
+        }
 
-                CalculatorTheme.ORANGE_SKIN -> {
-                    setButtonsGroupStyleWithBackgroundResource(binding.btnNumbersGroup, style.calculatorBackgroundDrawable, style.calculatorNumbersTextColor, 0)
-                    setButtonsGroupStyleWithBackgroundResource(binding.btnOperatorsGroup, style.calculatorBackgroundDrawable, style.calculatorOperatorsTextColor, 0)
-                    binding.okBtn.apply {
-                        setBackgroundResource(style.calculatorOkBtnTextBackgroundDrawable)
-                        setTextColor(ContextCompat.getColor(context, style.calculatorOkBtnTextColor))
-                    }
-                    binding.plusMinusBottomBtn.apply {
-                        setBackgroundResource(style.calculatorBackgroundDrawable)
-                        text = "0"
-                        visibility = VISIBLE
-                    }
-                    binding.plusMinusBtn.text = "()"
-                    binding.zeroBtn.text = "."
-                    binding.deleteBtn.text = "C"
-                    binding.commaBtn.setBackgroundResource(style.calculatorBackgroundDrawable)
-                    binding.zeroBtnGuideline.setGuidelinePercent(0.25F)
-
-                }
-
-                CalculatorTheme.YELLOW_SKIN -> {
-                    setButtonsGroupStyleWithBackgroundResource(binding.btnOperatorsGroup, style.calculatorBackgroundDrawable, style.calculatorOperatorsTextColor, 0)
-                    setButtonsGroupStyleWithBackgroundResource(binding.btnNumbersGroup, style.calculatorBackgroundDrawable, style.calculatorNumbersTextColor, 0)
-                    binding.plusMinusBottomBtn.visibility = GONE
-                    binding.commaBtn.apply {
-                        text = "."
-                        setBackgroundResource(style.calculatorBackgroundDrawable)
-                    }
-                    binding.okBtn.apply {
-                        setBackgroundResource(style.calculatorOkBtnTextBackgroundDrawable)
-                        setTextColor(ContextCompat.getColor(context, style.calculatorOkBtnTextColor))
-                    }
-                    binding.percentBtn.visibility = GONE
-                }
-                CalculatorTheme.GREEN_SKIN -> {
-                    setButtonsGroupMargin(binding.btnOperatorsGroup, 16)
-                    setButtonsGroupMargin(binding.btnNumbersGroup, 16)
-                    setTextViewMargin(binding.commaBtn, 16)
-                    setTextViewMargin(binding.okBtn, 16)
-                }
+        CalculatorTheme.ORANGE_SKIN -> {
+            setButtonsGroupStyleWithBackgroundResource(binding.btnNumbersGroup, style.calculatorBackgroundDrawable, style.calculatorNumbersTextColor, 0)
+            setButtonsGroupStyleWithBackgroundResource(binding.btnOperatorsGroup, style.calculatorBackgroundDrawable, style.calculatorOperatorsTextColor, 0)
+            binding.okBtn.apply {
+                setBackgroundResource(style.calculatorOkBtnTextBackgroundDrawable)
+                setTextColor(ContextCompat.getColor(context, style.calculatorOkBtnTextColor))
             }
+            binding.plusMinusBottomBtn.apply {
+                setBackgroundResource(style.calculatorBackgroundDrawable)
+                text = "0"
+                visibility = VISIBLE
+            }
+            binding.plusMinusBtn.text = "()"
+            binding.zeroBtn.text = "."
+            binding.deleteBtn.text = "C"
+            binding.commaBtn.setBackgroundResource(style.calculatorBackgroundDrawable)
+            binding.zeroBtnGuideline.setGuidelinePercent(0.25F)
+
+        }
+
+        CalculatorTheme.YELLOW_SKIN -> {
+            setButtonsGroupStyleWithBackgroundResource(binding.btnOperatorsGroup, style.calculatorBackgroundDrawable, style.calculatorOperatorsTextColor, 0)
+            setButtonsGroupStyleWithBackgroundResource(binding.btnNumbersGroup, style.calculatorBackgroundDrawable, style.calculatorNumbersTextColor, 0)
+            binding.plusMinusBottomBtn.visibility = GONE
+            binding.commaBtn.apply {
+                text = "."
+                setBackgroundResource(style.calculatorBackgroundDrawable)
+            }
+            binding.okBtn.apply {
+                setBackgroundResource(style.calculatorOkBtnTextBackgroundDrawable)
+                setTextColor(ContextCompat.getColor(context, style.calculatorOkBtnTextColor))
+            }
+            binding.percentBtn.visibility = GONE
+        }
+        CalculatorTheme.GREEN_SKIN -> {
+            setButtonsGroupMargin(binding.btnOperatorsGroup, 16)
+            setButtonsGroupMargin(binding.btnNumbersGroup, 16)
+            setTextViewMargin(binding.commaBtn, 16)
+            setTextViewMargin(binding.okBtn, 16)
+        }
+    }
 
     private fun setTextViewMargin(button: TextView, margin: Int) {
         button.apply {
