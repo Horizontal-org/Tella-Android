@@ -74,10 +74,13 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         if (isOnboardLockSet) {
             Preferences.setFirstStart(false)
             replaceFragmentNoAddToBackStack(OnBoardLockSetFragment(), R.id.rootOnboard)
+            hideViewpager()
         } else {
-            if (isFromSettings) replaceFragmentNoAddToBackStack(
-                    OnBoardLockFragment(), R.id.rootOnboard
-            )
+            if (isFromSettings)
+            {
+                replaceFragmentNoAddToBackStack(OnBoardLockFragment.newInstance(isFromSettings), R.id.rootOnboard)
+                hideViewpager()
+            }
         }
         initUwaziEvents()
         initReportsEvents()
