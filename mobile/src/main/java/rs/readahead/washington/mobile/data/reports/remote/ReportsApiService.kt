@@ -52,7 +52,6 @@ interface ReportsApiService {
 
     @POST
     fun postFile(
-      //  @Part file: MultipartBody.Part,
         @Url url: String,
         @Header(AUTHORIZATION_HEADER) access_token: String
     ): Single<Response<Void>>

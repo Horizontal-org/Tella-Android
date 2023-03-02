@@ -8,7 +8,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsListBinding
-import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
+import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
@@ -51,7 +51,7 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
                     binding?.textViewEmpty?.hide()
                 }
             }
-            onMoreClickedFormInstance.observe(viewLifecycleOwner) { instance ->
+            onMoreClickedInstance.observe(viewLifecycleOwner) { instance ->
                 showOutboxMenu(instance)
             }
 
@@ -59,7 +59,7 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
                 openEntityInstance(instance)
             }
 
-            onOpenClickedFormInstance.observe(viewLifecycleOwner) { instance ->
+            onOpenClickedInstance.observe(viewLifecycleOwner) { instance ->
                 loadEntityInstance(instance)
             }
 
@@ -69,7 +69,7 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
         }
     }
 
-    private fun showOutboxMenu(instance: ReportFormInstance) {
+    private fun showOutboxMenu(instance: ReportInstance) {
         BottomSheetUtils.showEditDeleteMenuSheet(
             requireActivity().supportFragmentManager,
             instance.title,
@@ -92,13 +92,13 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
         )
     }
 
-    private fun loadEntityInstance(reportFormInstance: ReportFormInstance) {
-        viewModel.getReportBundle(reportFormInstance)
+    private fun loadEntityInstance(reportInstance: ReportInstance) {
+        viewModel.getReportBundle(reportInstance)
     }
 
-    private fun openEntityInstance(reportFormInstance: ReportFormInstance) {
+    private fun openEntityInstance(reportInstance: ReportInstance) {
         val bundle = Bundle()
-        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportFormInstance)
+        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
         bundle.putBoolean(BUNDLE_IS_FROM_OUTBOX, true)
 
         nav().navigate(R.id.action_reportsScreen_to_reportSendScreen, bundle)

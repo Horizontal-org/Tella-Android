@@ -25,7 +25,7 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.EntityStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
-import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance;
+import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
@@ -44,7 +44,7 @@ public class ReportsFormEndView extends FrameLayout {
     String title;
     ProgressBar totalProgress;
     long formSize = 0L;
-    private ReportFormInstance instance;
+    private ReportInstance instance;
     private boolean previewUploaded;
 
 
@@ -70,7 +70,7 @@ public class ReportsFormEndView extends FrameLayout {
         glide = Glide.with(getContext()).using(glideLoader);
     }
 
-    public void setInstance(@NonNull ReportFormInstance instance, boolean offline, boolean previewUploaded) {
+    public void setInstance(@NonNull ReportInstance instance, boolean offline, boolean previewUploaded) {
         this.instance = instance;
         this.previewUploaded = previewUploaded;
         refreshInstance(offline);
@@ -96,7 +96,7 @@ public class ReportsFormEndView extends FrameLayout {
         uploadProgressVisibity(instance.getStatus(), offline);
     }
 
-    void setFormSizeLabel(@NonNull ReportFormInstance instance, int percent) {
+    void setFormSizeLabel(@NonNull ReportInstance instance, int percent) {
         String title;
         if (instance.getWidgetMediaFiles().size() == 0) {
             title = getStatusLabel(instance.getStatus());
@@ -143,7 +143,7 @@ public class ReportsFormEndView extends FrameLayout {
         }
     }
 
-    public void setUploadProgress(ReportFormInstance instance, float pct) {
+    public void setUploadProgress(ReportInstance instance, float pct) {
         if (pct < 0 || pct > 1) {
             return;
         }
@@ -166,7 +166,7 @@ public class ReportsFormEndView extends FrameLayout {
         setFormSizeLabel(instance, percentComplete);
     }
 
-    private int getTotalUploadedSizePercent(ReportFormInstance instance) {
+    private int getTotalUploadedSizePercent(ReportInstance instance) {
         int totalUploadedSize = 0;
         for (FormMediaFile formMediaFile : instance.getWidgetMediaFiles()) {
             totalUploadedSize += formMediaFile.uploadedSize;
@@ -180,7 +180,7 @@ public class ReportsFormEndView extends FrameLayout {
         }
     }
 
-    private double getTotalUploadedSize(ReportFormInstance instance) {
+    private double getTotalUploadedSize(ReportInstance instance) {
         long totalUploadedSize = 0;
         for (FormMediaFile formMediaFile : instance.getWidgetMediaFiles()) {
             totalUploadedSize += formMediaFile.uploadedSize;
@@ -188,7 +188,7 @@ public class ReportsFormEndView extends FrameLayout {
         return FileUtil.getFileSize(totalUploadedSize);
     }
 
-    public void clearPartsProgress(ReportFormInstance instance) {
+    public void clearPartsProgress(ReportInstance instance) {
         setPartsCleared(instance);
     }
 
@@ -222,7 +222,7 @@ public class ReportsFormEndView extends FrameLayout {
         return item;
     }
 
-    private void setPartsCleared(ReportFormInstance instance) {
+    private void setPartsCleared(ReportInstance instance) {
         for (FormMediaFile mediaFile : instance.getWidgetMediaFiles()) {
             SubmittingItem item = partsListView.findViewWithTag(mediaFile.getVaultFile().id);
 

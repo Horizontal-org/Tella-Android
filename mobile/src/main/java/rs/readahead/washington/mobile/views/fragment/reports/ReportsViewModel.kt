@@ -17,7 +17,7 @@ import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
-import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
+import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.exception.NoConnectivityException
 import rs.readahead.washington.mobile.domain.repository.reports.ReportsRepository
@@ -53,18 +53,18 @@ class ReportsViewModel @Inject constructor(
     val outboxReportListFormInstance: LiveData<List<ViewEntityTemplateItem>> get() = _outboxReportListFormInstance
     private val _submittedReportListFormInstance = MutableLiveData<List<ViewEntityTemplateItem>>()
     val submittedReportListFormInstance: LiveData<List<ViewEntityTemplateItem>> get() = _submittedReportListFormInstance
-    private val _onMoreClickedFormInstance = MutableLiveData<ReportFormInstance>()
-    val onMoreClickedFormInstance: LiveData<ReportFormInstance> get() = _onMoreClickedFormInstance
-    private val _onOpenClickedFormInstance = MutableLiveData<ReportFormInstance>()
-    val onOpenClickedFormInstance: LiveData<ReportFormInstance> get() = _onOpenClickedFormInstance
+    private val _onMoreClickedFormInstance = MutableLiveData<ReportInstance>()
+    val onMoreClickedInstance: LiveData<ReportInstance> get() = _onMoreClickedFormInstance
+    private val _onOpenClickedFormInstance = MutableLiveData<ReportInstance>()
+    val onOpenClickedInstance: LiveData<ReportInstance> get() = _onOpenClickedFormInstance
     private val _instanceDeleted = MutableLiveData<String?>()
     val instanceDeleted: LiveData<String?> get() = _instanceDeleted
-    private val _reportInstance = MutableLiveData<ReportFormInstance>()
-    val reportInstance: LiveData<ReportFormInstance> get() = _reportInstance
-    private val _progressInfo = MutableLiveData<Pair<UploadProgressInfo, ReportFormInstance>>()
-    val progressInfo: LiveData<Pair<UploadProgressInfo, ReportFormInstance>> get() = _progressInfo
-    private val _entityStatus = MutableLiveData<ReportFormInstance>()
-    val entityStatus: LiveData<ReportFormInstance> get() = _entityStatus
+    private val _reportInstance = MutableLiveData<ReportInstance>()
+    val reportInstance: LiveData<ReportInstance> get() = _reportInstance
+    private val _progressInfo = MutableLiveData<Pair<UploadProgressInfo, ReportInstance>>()
+    val progressInfo: LiveData<Pair<UploadProgressInfo, ReportInstance>> get() = _progressInfo
+    private val _entityStatus = MutableLiveData<ReportInstance>()
+    val entityStatus: LiveData<ReportInstance> get() = _entityStatus
     private val _exitAfterSave = MutableLiveData<Boolean>()
     val exitAfterSave: LiveData<Boolean> get() = _exitAfterSave
 
@@ -80,9 +80,9 @@ class ReportsViewModel @Inject constructor(
         })
     }
 
-    fun saveDraft(reportFormInstance: ReportFormInstance, exitAfterSave: Boolean) {
+    fun saveDraft(reportInstance: ReportInstance, exitAfterSave: Boolean) {
         _progress.postValue(true)
-        saveReportFormInstanceUseCase.setReportFormInstance(reportFormInstance)
+        saveReportFormInstanceUseCase.setReportFormInstance(reportInstance)
         saveReportFormInstanceUseCase.execute(onSuccess = { result ->
             _reportInstance.postValue(result)
             _exitAfterSave.postValue(exitAfterSave)
@@ -93,9 +93,9 @@ class ReportsViewModel @Inject constructor(
         })
     }
 
-    fun saveOutbox(reportFormInstance: ReportFormInstance) {
+    fun saveOutbox(reportInstance: ReportInstance) {
         _progress.postValue(true)
-        saveReportFormInstanceUseCase.setReportFormInstance(reportFormInstance)
+        saveReportFormInstanceUseCase.setReportFormInstance(reportInstance)
         saveReportFormInstanceUseCase.execute(onSuccess = { result ->
             _reportInstance.postValue(result)
         }, onError = {
@@ -105,9 +105,9 @@ class ReportsViewModel @Inject constructor(
         })
     }
 
-    fun saveSubmitted(reportFormInstance: ReportFormInstance) {
+    fun saveSubmitted(reportInstance: ReportInstance) {
         _progress.postValue(true)
-        saveReportFormInstanceUseCase.setReportFormInstance(reportFormInstance)
+        saveReportFormInstanceUseCase.setReportFormInstance(reportInstance)
         saveReportFormInstanceUseCase.execute(onSuccess = { result ->
             _reportInstance.postValue(result)
         }, onError = {
@@ -176,12 +176,12 @@ class ReportsViewModel @Inject constructor(
         })
     }
 
-    private fun openInstance(reportFormInstance: ReportFormInstance) {
-        getReportBundle(reportFormInstance)
+    private fun openInstance(reportInstance: ReportInstance) {
+        getReportBundle(reportInstance)
     }
 
-    private fun onMoreClicked(reportFormInstance: ReportFormInstance) {
-        _onMoreClickedFormInstance.postValue(reportFormInstance)
+    private fun onMoreClicked(reportInstance: ReportInstance) {
+        _onMoreClickedFormInstance.postValue(reportInstance)
     }
 
     fun getDraftFormInstance(
@@ -190,8 +190,8 @@ class ReportsViewModel @Inject constructor(
         files: List<FormMediaFile>?,
         server: TellaReportServer,
         id: Long? = null
-    ): ReportFormInstance {
-        return ReportFormInstance(
+    ): ReportInstance {
+        return ReportInstance(
             id = id ?: 0L,
             title = title,
             description = description,
@@ -209,8 +209,8 @@ class ReportsViewModel @Inject constructor(
         server: TellaReportServer,
         id: Long? = null,
         reportApiId: String = "",
-    ): ReportFormInstance {
-        return ReportFormInstance(
+    ): ReportInstance {
+        return ReportInstance(
             id = id ?: 0L,
             title = title,
             reportApiId = reportApiId,
@@ -229,8 +229,8 @@ class ReportsViewModel @Inject constructor(
         server: TellaReportServer,
         id: Long? = null,
         reportApiId: String = "",
-    ): ReportFormInstance {
-        return ReportFormInstance(
+    ): ReportInstance {
+        return ReportInstance(
             id = id ?: 0L,
             title = title,
             reportApiId = reportApiId,
@@ -249,8 +249,8 @@ class ReportsViewModel @Inject constructor(
         server: TellaReportServer,
         id: Long? = null,
         reportApiId: String = "",
-    ): ReportFormInstance {
-        return ReportFormInstance(
+    ): ReportInstance {
+        return ReportInstance(
             id = id ?: 0L,
             title = title,
             reportApiId = reportApiId,
@@ -292,7 +292,7 @@ class ReportsViewModel @Inject constructor(
         return vaultFormFiles
     }
 
-    fun deleteReport(instance: ReportFormInstance) {
+    fun deleteReport(instance: ReportInstance) {
         _progress.postValue(true)
         deleteReportUseCase.setId(instance.id)
 
@@ -305,7 +305,7 @@ class ReportsViewModel @Inject constructor(
         })
     }
 
-    fun getReportBundle(instance: ReportFormInstance) {
+    fun getReportBundle(instance: ReportInstance) {
         _progress.postValue(true)
         getReportBundleUseCase.setId(instance.id)
         getReportBundleUseCase.execute(onSuccess = { result ->
@@ -349,7 +349,7 @@ class ReportsViewModel @Inject constructor(
         }
     }
 
-    fun submitReport(instance: ReportFormInstance) {
+    fun submitReport(instance: ReportInstance) {
         _progress.postValue(true)
         getReportsServersUseCase.execute(onSuccess = { servers ->
             val server = servers.first { it.id == instance.serverId }
@@ -398,7 +398,7 @@ class ReportsViewModel @Inject constructor(
     }
 
     private fun submitFiles(
-        instance: ReportFormInstance,
+        instance: ReportInstance,
         server: TellaReportServer,
         reportApiId: String
     ) {

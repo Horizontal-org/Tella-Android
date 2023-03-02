@@ -8,7 +8,7 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentSendReportBinding
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
-import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
+import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.util.ConnectionLiveData
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
@@ -25,7 +25,7 @@ class ReportsSendFragment :
 
     private val viewModel by viewModels<ReportsViewModel>()
     private lateinit var endView: ReportsFormEndView
-    private var reportInstance: ReportFormInstance? = null
+    private var reportInstance: ReportInstance? = null
     private var isFromOutbox = false
     private lateinit var connectionLiveData: ConnectionLiveData
 
@@ -94,7 +94,7 @@ class ReportsSendFragment :
 
     private fun initView() {
         arguments?.let {
-            reportInstance = it.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportFormInstance
+            reportInstance = it.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportInstance
             isFromOutbox = it.getBoolean(BUNDLE_IS_FROM_OUTBOX)
             showFormEndView()
         }

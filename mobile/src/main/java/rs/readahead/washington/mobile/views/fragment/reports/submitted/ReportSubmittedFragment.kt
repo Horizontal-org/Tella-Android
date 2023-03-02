@@ -7,7 +7,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentSendReportBinding
-import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
+import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_FORM_INSTANCE
@@ -20,7 +20,7 @@ class ReportSubmittedFragment :
 
     private val viewModel by viewModels<ReportsViewModel>()
     private lateinit var endView: ReportsFormEndView
-    private var reportInstance: ReportFormInstance? = null
+    private var reportInstance: ReportInstance? = null
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,7 +41,7 @@ class ReportSubmittedFragment :
 
     private fun initView() {
         arguments?.let {
-            reportInstance = it.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportFormInstance
+            reportInstance = it.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportInstance
             showFormEndView()
         }
 
@@ -55,7 +55,7 @@ class ReportSubmittedFragment :
 
     }
 
-    private fun showDeleteBottomSheet(entityInstance: ReportFormInstance) {
+    private fun showDeleteBottomSheet(entityInstance: ReportInstance) {
         BottomSheetUtils.showConfirmSheet(
             baseActivity.supportFragmentManager,
             entityInstance.title,
