@@ -19,7 +19,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+//import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.hzontal.tella_vault.VaultFile;
@@ -312,12 +312,13 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     }
 
     private void showGalleryImage(VaultFile vaultFile) {
+
         Glide.with(this)
-                .using(new VaultFileUrlLoader(this, new MediaFileHandler()))
+                //.using(new VaultFileUrlLoader(this, new MediaFileHandler()))
                 .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.ORIGINAL))
-                .listener(new RequestListener<VaultFileLoaderModel, GlideDrawable>() {
+               /* .addDefaultRequestListener(new RequestListener<VaultFileLoaderModel, GlideDrawable>() {
                     @Override
-                    public boolean onException(Exception e, VaultFileLoaderModel model,
+                    public boolean onLoadFailed(Exception e, VaultFileLoaderModel model,
                                                Target<GlideDrawable> target, boolean isFirstResource) {
                         binding.content.progressBar.setVisibility(View.GONE);
                         return false;
@@ -329,7 +330,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                         binding.content.progressBar.setVisibility(View.GONE);
                         return false;
                     }
-                })
+                })*/
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(binding.content.photoImageView);

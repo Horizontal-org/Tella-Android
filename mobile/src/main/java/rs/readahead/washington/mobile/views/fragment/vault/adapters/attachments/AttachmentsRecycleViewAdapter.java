@@ -32,7 +32,7 @@ import rs.readahead.washington.mobile.databinding.ItemVaultAttachmentHorBinding;
 
 public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<AttachmentsRecycleViewAdapter.ViewHolder> {
     private List<VaultFile> files = new ArrayList<>();
-    private final VaultFileUrlLoader glideLoader;
+    //private final VaultFileUrlLoader glideLoader;
     private final IGalleryVaultHandler galleryMediaHandler;
     private final Set<VaultFile> selected;
     private boolean selectable;
@@ -52,7 +52,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
                                          boolean selectable,
                                          boolean singleSelection,
                                          boolean isMoveMode) {
-        this.glideLoader = new VaultFileUrlLoader(context.getApplicationContext(), mediaFileHandler);
+       // this.glideLoader = new VaultFileUrlLoader(context.getApplicationContext(), mediaFileHandler);
         this.galleryMediaHandler = galleryMediaHandler;
         this.selected = new LinkedHashSet<>();
         this.selectable = selectable;
@@ -96,20 +96,20 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
         if (vaultFile.mimeType != null) {
             if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
                 holder.mediaView.setVisibility(View.VISIBLE);
-                Glide.with(holder.mediaView.getContext())
+             /*   Glide.with(holder.mediaView.getContext())
                         .using(glideLoader)
                         .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                         .signature(messageDigest -> { })
-                        .into(holder.mediaView);
+                        .into(holder.mediaView);*/
             } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
                 holder.showAudioInfo();
             } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
                 holder.showVideoInfo();
-                Glide.with(holder.mediaView.getContext())
+               /* Glide.with(holder.mediaView.getContext())
                         .using(glideLoader)
                         .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                         .signature(messageDigest -> { })
-                        .into(holder.mediaView);
+                        .into(holder.mediaView);*/
             } else {
                 holder.showDocumentInfo();
             }

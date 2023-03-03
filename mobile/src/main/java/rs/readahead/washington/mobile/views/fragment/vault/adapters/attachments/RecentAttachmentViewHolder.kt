@@ -23,7 +23,7 @@ import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.inflate
 
 class RecentAttachmentViewHolder (val view: View) : BaseViewHolder<VaultFile?>(view) {
-    private val glideLoader = VaultFileUrlLoader(mContext.applicationContext, MediaFileHandler())
+   // private val glideLoader = VaultFileUrlLoader(mContext.applicationContext, MediaFileHandler())
     private lateinit var previewImageView : AppCompatImageView
     private lateinit var icAttachmentImg : AppCompatImageView
     private lateinit var more : AppCompatImageView
@@ -45,24 +45,24 @@ class RecentAttachmentViewHolder (val view: View) : BaseViewHolder<VaultFile?>(v
         if (vaultFile.mimeType == null ) return
         when {
             isImageFileType(vaultFile.mimeType) -> {
-                Glide.with(previewImageView.context)
+                /*Glide.with(previewImageView.context)
                     .using(glideLoader)
                     .load(VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
-                    .into(previewImageView)
+                    .into(previewImageView)*/
             }
             isAudioFileType(vaultFile.mimeType) -> {
                 showAudioInfo(vaultFile)
             }
             isVideoFileType(vaultFile.mimeType) -> {
                 showVideoInfo()
-                Glide.with(mContext)
+               /* Glide.with(mContext)
                     .using(glideLoader)
                     .load(VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
-                    .into(previewImageView)
+                    .into(previewImageView)*/
             }
             isTextFileType(vaultFile.mimeType) -> {
                 showDocumentInfo(vaultFile)

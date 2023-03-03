@@ -28,7 +28,7 @@ open class ReportsFilesRecyclerViewAdapter(
 ) :
     RecyclerView.Adapter<ReportsFilesRecyclerViewAdapter.GridAttachmentsViewHolder>() {
     private var listAttachment: ArrayList<VaultFile> = arrayListOf()
-    private val glideLoader = VaultFileUrlLoader(context, mediaFileHandler)
+   // private val glideLoader = VaultFileUrlLoader(context, mediaFileHandler)
 
     init {
         val file = VaultFile()
@@ -103,7 +103,7 @@ open class ReportsFilesRecyclerViewAdapter(
 
                 if (isImageFileType(vaultFile.mimeType)) {
                     this.showImageInfo(vaultFile)
-                    Glide.with(context)
+                    /*Glide.with(context)
                         .using(glideLoader)
                         .load(
                             VaultFileLoaderModel(
@@ -113,13 +113,13 @@ open class ReportsFilesRecyclerViewAdapter(
                         )
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
-                        .into(filePreviewImg)
+                        .into(filePreviewImg)*/
                 } else if (isAudioFileType(vaultFile.mimeType)) {
                     this.showAudioInfo()
                     fileNameTextView.text = vaultFile.name
                 } else if (isVideoFileType(vaultFile.mimeType)) {
                     this.showVideoInfo(vaultFile)
-                    Glide.with(context)
+                    /*Glide.with(context)
                         .using(glideLoader)
                         .load(
                             VaultFileLoaderModel(
@@ -129,7 +129,7 @@ open class ReportsFilesRecyclerViewAdapter(
                         )
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
-                        .into(filePreviewImg)
+                        .into(filePreviewImg)*/
                 } else {
                     fileNameTextView.text = vaultFile.name
                     this.showDocInfo()
@@ -141,12 +141,12 @@ open class ReportsFilesRecyclerViewAdapter(
         }
 
         private fun showVideoInfo(vaultFile: VaultFile) {
-            Glide.with(context)
+           /* Glide.with(context)
                 .using(glideLoader)
                 .load(VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
-                .into(filePreviewImg)
+                .into(filePreviewImg)*/
             icAttachmentImg.setBackgroundResource(R.drawable.ic_play)
         }
 
@@ -159,12 +159,12 @@ open class ReportsFilesRecyclerViewAdapter(
         }
 
         private fun showImageInfo(vaultFile: VaultFile) {
-            Glide.with(filePreviewImg.context)
+           /* Glide.with(filePreviewImg.context)
                 .using(glideLoader)
                 .load(VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
-                .into(filePreviewImg)
+                .into(filePreviewImg)*/
         }
 
         private fun showAddLink() {

@@ -108,7 +108,7 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
     private AlertDialog videoQualityDialog;
     private VideoResolutionManager videoResolutionManager;
     private long lastClickTime = System.currentTimeMillis();
-    private RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
+    //private RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
     private String currentRootParent = null;
     private ActivityCameraBinding binding;
 
@@ -144,8 +144,8 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
         }
 
         MediaFileHandler mediaFileHandler = new MediaFileHandler();
-        VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
-        glide = Glide.with(getContext()).using(glideLoader);
+      //  VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
+        //glide = Glide.with(getContext()).using(glideLoader);
 
         setupCameraView();
         setupCameraModeButton();
@@ -327,7 +327,7 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
     public void onLastMediaFileSuccess(VaultFile vaultFile) {
         if (intentMode != IntentMode.COLLECT) {
             previewView.setVisibility(View.VISIBLE);
-            glide.load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(previewView);
+            //glide.load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(previewView);
         }
     }
 

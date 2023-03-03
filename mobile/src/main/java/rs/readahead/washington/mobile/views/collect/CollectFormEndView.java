@@ -54,7 +54,7 @@ public class CollectFormEndView extends FrameLayout {
     Long submittedSize = 0L;
 
     private CollectFormInstance instance;
-    private final RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
+   // private final RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
 
     public CollectFormEndView(Context context, @StringRes int titleResId) {
         super(context);
@@ -66,8 +66,8 @@ public class CollectFormEndView extends FrameLayout {
         subTitleView = findViewById(R.id.subtitle);
 
         MediaFileHandler mediaFileHandler = new MediaFileHandler();
-        VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
-        glide = Glide.with(getContext()).using(glideLoader);
+       // VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
+      //  glide = Glide.with(getContext()).using(glideLoader);
     }
 
     public void setInstance(@NonNull CollectFormInstance instance, boolean offline) {
@@ -221,10 +221,10 @@ public class CollectFormEndView extends FrameLayout {
         sizeView.setText(FileUtil.getFileSizeString(mediaFile.size));
 
         if (MediaFile.INSTANCE.isImageFileType(mediaFile.mimeType) || (MediaFile.INSTANCE.isVideoFileType(mediaFile.mimeType))) {
-            glide.load(new VaultFileLoaderModel(mediaFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+            /*glide.load(new VaultFileLoaderModel(mediaFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
-                    .into(thumbView);
+                    .into(thumbView);*/
             iconView.setVisibility(GONE);
         } else if (MediaFile.INSTANCE.isAudioFileType(mediaFile.mimeType)) {
             iconView.setImageResource(R.drawable.ic_headset_white_24dp);

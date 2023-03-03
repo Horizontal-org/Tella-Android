@@ -39,7 +39,7 @@ public class UwaziFormEndView extends FrameLayout {
     String title;
     private UwaziEntityInstance instance;
     private boolean previewUploaded;
-    private final RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
+   // private final RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
 
 
     public UwaziFormEndView(Context context, @StringRes int titleResId) {
@@ -53,8 +53,8 @@ public class UwaziFormEndView extends FrameLayout {
         titleView.setText(title);
 
         MediaFileHandler mediaFileHandler = new MediaFileHandler();
-        VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
-        glide = Glide.with(getContext()).using(glideLoader);
+       // VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
+     //   glide = Glide.with(getContext()).using(glideLoader);
     }
 
     public UwaziFormEndView(Context context,String title) {
@@ -68,8 +68,8 @@ public class UwaziFormEndView extends FrameLayout {
         titleView.setText(title);
 
         MediaFileHandler mediaFileHandler = new MediaFileHandler();
-        VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
-        glide = Glide.with(getContext()).using(glideLoader);
+       // VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
+       // glide = Glide.with(getContext()).using(glideLoader);
     }
 
     public void setInstance(@NonNull UwaziEntityInstance instance, boolean offline, boolean previewUploaded) {
@@ -181,10 +181,10 @@ public class UwaziFormEndView extends FrameLayout {
         item.setPartSize(mediaFile.size);
 
         if (MediaFile.INSTANCE.isImageFileType(mediaFile.mimeType) || (MediaFile.INSTANCE.isVideoFileType(mediaFile.mimeType))) {
-            glide.load(new VaultFileLoaderModel(mediaFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+            /*glide.load(new VaultFileLoaderModel(mediaFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
-                    .into(thumbView);
+                    .into(thumbView);*/
         } else if (MediaFile.INSTANCE.isAudioFileType(mediaFile.mimeType)) {
             item.setPartIcon(R.drawable.ic_headset_white_24dp);
         } else {

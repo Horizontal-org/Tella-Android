@@ -35,7 +35,7 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
 
     private VaultFile vaultFile;
     private final CollectAttachmentMediaFilePresenter presenter;
-    private final RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
+   // private final RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
 
 
     public CollectAttachmentPreviewView(Context context) {
@@ -52,9 +52,9 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
         binding = CollectAttachemntPreviewViewBinding.inflate(LayoutInflater.from(context), this, true);
 
         MediaFileHandler mediaFileHandler = new MediaFileHandler();
-        VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
+       // VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
 
-        glide = Glide.with(getContext()).using(glideLoader);
+       // glide = Glide.with(getContext()).using(glideLoader);
         presenter = new CollectAttachmentMediaFilePresenter(this);
     }
 
@@ -128,10 +128,10 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
     }
 
     private void loadThumbnail() {
-        glide.load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+        /*glide.load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
-                .into(binding.thumbView);
+                .into(binding.thumbView);*/
     }
 
     private void showMediaFileInfo() {

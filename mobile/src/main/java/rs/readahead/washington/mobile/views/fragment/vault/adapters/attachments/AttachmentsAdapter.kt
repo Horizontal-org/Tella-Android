@@ -34,11 +34,11 @@ class AttachmentsAdapter constructor(private val iGalleryMediaHandler: IGalleryV
     private val selected = LinkedHashSet<VaultFile>()
     private var selectable : Boolean
     private lateinit var layoutManager: GridLayoutManager
-    private var  glideLoader:VaultFileUrlLoader
+    //private var  glideLoader:VaultFileUrlLoader
     private val mediaFileHandler by lazy { MediaFileHandler() }
 
     init {
-        glideLoader = VaultFileUrlLoader(context.applicationContext, mediaFileHandler)
+      //  glideLoader = VaultFileUrlLoader(context.applicationContext, mediaFileHandler)
         vaultList = ArrayList()
         selectable = false
     }
@@ -191,12 +191,12 @@ class AttachmentsAdapter constructor(private val iGalleryMediaHandler: IGalleryV
         protected lateinit var checkBox : CheckBox
 
         fun showVideoInfo(vaultFile: VaultFile){
-            Glide.with(context)
+            /*Glide.with(context)
                 .using(glideLoader)
                 .load(VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
-                .into(filePreviewImg)
+                .into(filePreviewImg)*/
             icAttachmentImg.setBackgroundResource(R.drawable.ic_play)
 
         }
@@ -204,12 +204,12 @@ class AttachmentsAdapter constructor(private val iGalleryMediaHandler: IGalleryV
            icAttachmentImg.setBackgroundResource(R.drawable.ic_audio_w_small)
         }
         fun showImageInfo(vaultFile: VaultFile){
-            Glide.with(filePreviewImg.context)
+           /* Glide.with(filePreviewImg.context)
                 .using(glideLoader)
                 .load(VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
-                .into(filePreviewImg)
+                .into(filePreviewImg)*/
         }
 
         fun maybeEnableCheckBox(selectable: Boolean) {

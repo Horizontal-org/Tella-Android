@@ -2,7 +2,10 @@ package rs.readahead.washington.mobile.media;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.data.DataFetcher;
 
 import java.io.IOException;
@@ -24,7 +27,7 @@ public class VaultFileDataFetcher implements DataFetcher<InputStream> {
         this.model = vaultFileLoaderModel;
     }
 
-    @Override
+    //@Override
     public InputStream loadData(Priority priority) {
         if (model == null) {
             return null;
@@ -46,11 +49,16 @@ public class VaultFileDataFetcher implements DataFetcher<InputStream> {
     }
 
     @Override
+    public void loadData(@NonNull Priority priority, @NonNull DataCallback<? super InputStream> callback) {
+        loadData(priority);
+    }
+
+    @Override
     public void cleanup() {
         cancel();
     }
 
-    @Override
+    //@Override
     public String getId() {
         return model.getMediaFile().id;
     }
@@ -66,5 +74,17 @@ public class VaultFileDataFetcher implements DataFetcher<InputStream> {
             } catch (IOException ignore) {
             }
         }
+    }
+
+    @NonNull
+    @Override
+    public Class<InputStream> getDataClass() {
+        return null;
+    }
+
+    @NonNull
+    @Override
+    public DataSource getDataSource() {
+        return null;
     }
 }

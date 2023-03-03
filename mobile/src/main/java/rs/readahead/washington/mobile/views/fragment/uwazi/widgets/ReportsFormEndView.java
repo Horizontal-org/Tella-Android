@@ -35,7 +35,7 @@ import timber.log.Timber;
 
 @SuppressLint("ViewConstructor")
 public class ReportsFormEndView extends FrameLayout {
-    private final RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
+    //private final RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
     LinearLayout partsListView;
     TextView titleView;
     TextView descriptionView;
@@ -66,8 +66,8 @@ public class ReportsFormEndView extends FrameLayout {
         formStatusTextView = findViewById(R.id.form_status);
 
         MediaFileHandler mediaFileHandler = new MediaFileHandler();
-        VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
-        glide = Glide.with(getContext()).using(glideLoader);
+       //VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
+       // glide = Glide.with(getContext()).using(glideLoader);
     }
 
     public void setInstance(@NonNull ReportFormInstance instance, boolean offline, boolean previewUploaded) {
@@ -203,10 +203,10 @@ public class ReportsFormEndView extends FrameLayout {
         item.setPartSize(mediaFile.size);
 
         if (MediaFile.INSTANCE.isImageFileType(mediaFile.mimeType) || (MediaFile.INSTANCE.isVideoFileType(mediaFile.mimeType))) {
-            glide.load(new VaultFileLoaderModel(mediaFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+            /*glide.load(new VaultFileLoaderModel(mediaFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
-                    .into(thumbView);
+                    .into(thumbView);*/
         } else if (MediaFile.INSTANCE.isAudioFileType(mediaFile.mimeType)) {
             item.setPartIcon(R.drawable.ic_headset_white_24dp);
         } else {

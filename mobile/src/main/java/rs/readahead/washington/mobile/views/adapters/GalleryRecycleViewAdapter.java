@@ -48,7 +48,7 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
                                      MediaFileHandler mediaFileHandler, @LayoutRes int cardLayoutId,
                                      boolean selectable,
                                      boolean singleSelection) {
-        this.glideLoader = new VaultFileUrlLoader(context.getApplicationContext(), mediaFileHandler);
+     //   this.glideLoader = new VaultFileUrlLoader(context.getApplicationContext(), mediaFileHandler);
         this.galleryMediaHandler = galleryMediaHandler;
         this.selected = new LinkedHashSet<>();
         this.cardLayoutId = cardLayoutId;
@@ -74,12 +74,12 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
 
         if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
             holder.showImageInfo();
-            Glide.with(holder.binding.mediaView.getContext())
+            /*Glide.with(holder.binding.mediaView.getContext())
                     .using(glideLoader)
                     .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
-                    .into(holder.binding.mediaView);
+                    .into(holder.binding.mediaView);*/
         } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
             holder.showAudioInfo(vaultFile);
             Drawable drawable = VectorDrawableCompat.create(holder.itemView.getContext().getResources(),
@@ -87,12 +87,12 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
             holder.binding.mediaView.setImageDrawable(drawable);
         } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
             holder.showVideoInfo(vaultFile);
-            Glide.with(holder.binding.mediaView.getContext())
+          /*  Glide.with(holder.binding.mediaView.getContext())
                     .using(glideLoader)
                     .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
-                    .into(holder.binding.mediaView);
+                    .into(holder.binding.mediaView);*/
         }
 
         holder.binding.mediaView.setOnClickListener(v -> galleryMediaHandler.playMedia(vaultFile));
