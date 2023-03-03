@@ -1,8 +1,8 @@
 package rs.readahead.washington.mobile.views.activity;
 
 import static rs.readahead.washington.mobile.views.dialog.ConstantsKt.IS_UPDATE_SERVER;
+import static rs.readahead.washington.mobile.views.dialog.SharedLiveData.INSTANCE;
 import static rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageViewModelKt.OBJECT_KEY;
-import static rs.readahead.washington.mobile.views.dialog.SharedLiveData.*;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -202,8 +202,8 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     public void onCreatedTUServer(TellaReportServer server) {
         servers.add(server);
         binding.collectServersList.addView(getServerItem(server), servers.indexOf(server));
-
         tuServers.add(server);
+        saveAutoUploadServer(server);
        /* if (tuServers.size() == 1) {
             binding.autoUploadSwitchView.setVisibility(View.VISIBLE);
             setupAutoUploadSwitch();
@@ -289,6 +289,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     @Override
     public void onUpdatedTUServer(TellaReportServer server) {
         int i = servers.indexOf(server);
+        saveAutoUploadServer(server);
         if (i != -1) {
             servers.set(i, server);
             binding.collectServersList.removeViewAt(i);
@@ -759,6 +760,12 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             binding.collectServersList.removeViewAt(i);
             binding.collectServersList.addView(getServerItem(server), i);
             DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_updated), false);
+        }
+    }
+
+    private void saveAutoUploadServer(TellaReportServer server){
+        if (server.isActivatedBackgroundUpload()) {
+            Preferences.setAutoUploadServerId(server.getId());
         }
     }
 }

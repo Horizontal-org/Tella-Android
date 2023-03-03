@@ -10,7 +10,6 @@ import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 
 private const val SPLASH_TIMEOUT_MS = 1000L
-@AndroidEntryPoint
 class SplashActivity : BaseActivity() {
 
     private val cm = CamouflageManager.getInstance()

@@ -5,6 +5,7 @@ import com.hzontal.tella_vault.VaultFile;
 import java.util.List;
 
 import io.reactivex.Completable;
+import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance;
 
 public interface ITellaUploadsRepository {
@@ -18,6 +19,7 @@ public interface ITellaUploadsRepository {
     Completable deleteFileUploadInstancesNotInStatus(UploadStatus status);
     Completable deleteFileUploadInstancesBySet(long set);
     Completable deleteFileUploadInstanceById(long id);
+    Completable scheduleUploadReport(FormMediaFile mediaFile, Long serverId);
 
     enum UploadStatus {
         UNKNOWN,

@@ -411,6 +411,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_METADATA, D.TEXT, false) + " , " +
                 cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0 , " +
                 cddl(D.C_UPDATED, D.INTEGER, true) + " DEFAULT 0 , " +
+                cddl(D.C_CURRENT_UPLOAD, D.INTEGER, true) + " DEFAULT 0 , " +
                 cddl(D.C_TITLE, D.TEXT, true) + " , " +
                 cddl(D.C_DESCRIPTION_TEXT, D.TEXT, true) + " , " +
                 cddl(D.C_FORM_PART_STATUS, D.INTEGER, true) + " DEFAULT 0 , " +

@@ -3,10 +3,13 @@ package rs.readahead.washington.mobile.views.fragment.reports
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
+import androidx.work.*
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsBinding
+import rs.readahead.washington.mobile.util.jobs.WorkerUploadReport
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.reports.viewpager.DRAFT_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.reports.viewpager.OUTBOX_LIST_PAGE_INDEX
@@ -14,8 +17,11 @@ import rs.readahead.washington.mobile.views.fragment.reports.viewpager.SUBMITTED
 import rs.readahead.washington.mobile.views.fragment.reports.viewpager.ViewPagerAdapter
 import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 
+@AndroidEntryPoint
 class ReportsFragment :
     BaseBindingFragment<FragmentReportsBinding>(FragmentReportsBinding::inflate) {
+
+    private val viewModel by viewModels<ReportsViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
@@ -61,6 +67,15 @@ class ReportsFragment :
     }
 
     private fun initData() {
+        viewModel.listServers()
+        viewModel.serversList.observe(viewLifecycleOwner) { servers ->
+            val isActivatedBackgroundUpload =
+                servers.any { server -> server.isActivatedBackgroundUpload }
+
+            if (isActivatedBackgroundUpload) {
+                scheduleWorker()
+            }
+        }
         SharedLiveData.updateViewPagerPosition.observe(baseActivity) { position ->
             when (position) {
                 DRAFT_LIST_PAGE_INDEX -> setCurrentTab(
@@ -80,5 +95,16 @@ class ReportsFragment :
         binding?.viewPager?.post {
             binding?.viewPager?.setCurrentItem(position, true)
         }
+    }
+
+    private fun scheduleWorker() {
+        val constraints =
+            Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build()
+        val onetimeJob = OneTimeWorkRequest.Builder(WorkerUploadReport::class.java)
+            .setConstraints(constraints).build()
+        WorkManager.getInstance(baseActivity)
+            .enqueueUniqueWork("WorkerUploadReport", ExistingWorkPolicy.KEEP, onetimeJob)
     }
 }

@@ -5,23 +5,37 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import java.io.Serializable
 
-data class ReportFormInstance(
+data class ReportInstance(
     var id: Long = -1,
     var serverId: Long = -1,
     var reportApiId: String = "",
     var updated: Long = 0,
     var metadata: Map<String, List<Any>> = mutableMapOf(),
     var status: EntityStatus = EntityStatus.UNKNOWN,
-    var widgetMediaFiles: List<FormMediaFile> = emptyList(),
+    var widgetMediaFiles: List<FormMediaFile> = mutableListOf(),
     var formPartStatus: FormMediaFileStatus = FormMediaFileStatus.UNKNOWN,
     var title: String = "",
     var description: String = "",
-    var current: Int = 0
+    var current: Long = 0
 ) : Serializable {
+
+
+    companion object {
+
+        @JvmStatic
+        fun getAutoReportReportInstance(serverId: Long, title: String): ReportInstance {
+            return ReportInstance(
+                serverId = serverId,
+                title = title,
+                status = EntityStatus.SCHEDULED,
+                current = 1)
+        }
+    }
+
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is ReportFormInstance) return false
+        if (other !is ReportInstance) return false
 
 
         if (title != other.title) return false

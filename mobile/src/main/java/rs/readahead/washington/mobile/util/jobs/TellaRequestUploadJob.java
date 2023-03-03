@@ -9,13 +9,13 @@ import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
-import com.hzontal.tella_vault.VaultFile;
 
 import org.hzontal.tella.keys.key.LifecycleMainKey;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -34,7 +34,7 @@ import rs.readahead.washington.mobile.domain.entity.EntityStatus;
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
-import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance;
+import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance;
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
 import rs.readahead.washington.mobile.domain.exception.NoConnectivityException;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
@@ -45,7 +45,6 @@ import timber.log.Timber;
 public class TellaRequestUploadJob extends Job {
     static final String TAG = "TellaRequestUploadJob";
     private static boolean running = false;
-    private final HashMap<String, VaultFile> fileMap = new HashMap<>();
     @Inject
     ReportsRepository reportsRepository;
     private Job.Result exitResult = null;
@@ -54,11 +53,12 @@ public class TellaRequestUploadJob extends Job {
 
 
     public static void scheduleJob() {
-        new JobRequest.Builder(TellaUploadJob.TAG)
-                .setExecutionWindow(1_000L, 10_000L) // start between 1-10sec from now
-                .setBackoffCriteria(10_000L, JobRequest.BackoffPolicy.LINEAR)
+        new JobRequest.Builder(TellaRequestUploadJob.TAG)
+                .setExecutionWindow(TimeUnit.SECONDS.toSeconds(1), TimeUnit.SECONDS.toSeconds(10)) // start between 1-10sec from now
+                .setBackoffCriteria(TimeUnit.SECONDS.toSeconds(10), JobRequest.BackoffPolicy.LINEAR)
                 .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
                 .setRequirementsEnforced(true)
+                .setRequiresDeviceIdle(true)
                 //.setPersisted(true) // android.Manifest.permission.RECEIVE_BOOT_COMPLETED
                 .setUpdateCurrent(true) // also, jobs will sync them self while running
                 .build()
@@ -67,7 +67,7 @@ public class TellaRequestUploadJob extends Job {
 
 
     public static void cancelJob() {
-        JobManager.instance().cancelAllForTag(TellaUploadJob.TAG);
+        JobManager.instance().cancelAllForTag(TellaRequestUploadJob.TAG);
     }
 
 
@@ -94,9 +94,15 @@ public class TellaRequestUploadJob extends Job {
 
 
         dataSource = DataSource.getInstance(getContext(), key);
-        List<ReportFormInstance> reportFormInstances = dataSource.getFileUploadReportBundles(SCHEDULED).blockingGet();
+        List<ReportInstance> reportInstances;
 
-        if (reportFormInstances.size() == 0) {
+        try {
+            reportInstances = dataSource.listOutboxReportInstances().blockingGet();
+        } catch (NullPointerException e) {
+            reportInstances = new ArrayList<>();
+        }
+
+        if (reportInstances.size() == 0) {
             return exit(Result.SUCCESS);
         }
 
@@ -108,40 +114,40 @@ public class TellaRequestUploadJob extends Job {
 
 
         //Grab the server instance from the server
-        for (ReportFormInstance reportFormInstance : reportFormInstances) {
+        for (ReportInstance reportInstance : reportInstances) {
 
-            if (reportFormInstance.getStatus() != EntityStatus.SUBMISSION_PENDING) {
+            if (reportInstance.getStatus() != EntityStatus.SUBMISSION_PENDING) {
                 continue;
             }
-            if (reportFormInstance.getReportApiId().isEmpty()) {
+            if (reportInstance.getReportApiId().isEmpty()) {
                 Observable.just(dataSource)
                         .flatMapSingle((Function<DataSource, SingleSource<TellaReportServer>>) dataSource1 ->
-                                dataSource1.getTellaUploadServer(reportFormInstance.getServerId()))
+                                dataSource1.getTellaUploadServer(reportInstance.getServerId()))
                         .flatMapSingle(server -> {
                             if (!MyApplication.isConnectedToInternet(getContext())) {
                                 throw new NoConnectivityException();
                             }
-                            reportFormInstance.setStatus(EntityStatus.SUBMISSION_PENDING);
-                            dataSource.saveInstance(reportFormInstance);
-                            return reportsRepository.submitReport(server, new ReportBodyEntity(reportFormInstance.getTitle(), reportFormInstance.getDescription()));
-                        }).subscribe(reportPostResult -> Flowable.fromIterable(getPendingSubmittedFiles(reportFormInstance.getWidgetMediaFiles()))
-                                .flatMap(file -> reportsRepository.upload(file, server.getUrl(), reportPostResult.getId(), server.getAccessToken()))
-                                .doFinally(() -> {
-                                            reportFormInstance.setStatus(EntityStatus.SUBMITTED);
-                                            dataSource.saveInstance(reportFormInstance);
-                                        }
-                                )
-                                .blockingSubscribe(this::updateProgress, throwable -> {
-                                    if (throwable instanceof NoConnectivityException) {
-                                        exitResult = Result.RESCHEDULE;
-                                        return;
-                                    }
-                                    Timber.d(throwable);
-                                    FirebaseCrashlytics.getInstance().recordException(throwable);
-                                })).dispose();
+                            reportInstance.setStatus(EntityStatus.SUBMISSION_PENDING);
+                            dataSource.saveInstance(reportInstance);
+                            return reportsRepository.submitReport(server, new ReportBodyEntity(reportInstance.getTitle(), reportInstance.getDescription()));
+                        }).subscribe(reportPostResult -> Flowable.fromIterable(reportInstance.getWidgetMediaFiles())
+                        .flatMap(file -> reportsRepository.upload(file, server.getUrl(), reportPostResult.getId(), server.getAccessToken()))
+                        .doFinally(() -> {
+                                    reportInstance.setStatus(EntityStatus.SUBMITTED);
+                                    dataSource.saveInstance(reportInstance);
+                                }
+                        )
+                        .blockingSubscribe(this::updateProgress, throwable -> {
+                            if (throwable instanceof NoConnectivityException) {
+                                exitResult = Result.RESCHEDULE;
+                                return;
+                            }
+                            Timber.d(throwable);
+                            FirebaseCrashlytics.getInstance().recordException(throwable);
+                        })).dispose();
             } else {
-                Flowable.fromIterable(reportFormInstance.getWidgetMediaFiles())
-                        .flatMap(file -> reportsRepository.upload(file, server.getUrl(), reportFormInstance.getReportApiId(), server.getAccessToken()))
+                Flowable.fromIterable(reportInstance.getWidgetMediaFiles())
+                        .flatMap(file -> reportsRepository.upload(file, server.getUrl(), reportInstance.getReportApiId(), server.getAccessToken()))
                         .blockingSubscribe(this::updateProgress, throwable -> {
                             if (throwable instanceof NoConnectivityException) {
                                 exitResult = Result.RESCHEDULE;
@@ -168,7 +174,7 @@ public class TellaRequestUploadJob extends Job {
     }
 
     private boolean enter() {
-        synchronized (TellaUploadJob.class) {
+        synchronized (TellaRequestUploadJob.class) {
             boolean current = running;
             running = true;
             return !current;
@@ -176,7 +182,7 @@ public class TellaRequestUploadJob extends Job {
     }
 
     private Job.Result exit(Job.Result result) {
-        synchronized (TellaUploadJob.class) {
+        synchronized (TellaRequestUploadJob.class) {
             running = false;
             return result;
         }

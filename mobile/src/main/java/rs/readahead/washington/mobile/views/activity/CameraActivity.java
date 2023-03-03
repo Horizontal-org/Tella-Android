@@ -46,13 +46,13 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.CaptureEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
+import rs.readahead.washington.mobile.databinding.ActivityCameraBinding;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.mvp.contract.ICameraPresenterContract;
@@ -71,7 +71,6 @@ import rs.readahead.washington.mobile.views.custom.CameraFlashButton;
 import rs.readahead.washington.mobile.views.custom.CameraGridButton;
 import rs.readahead.washington.mobile.views.custom.CameraResolutionButton;
 import rs.readahead.washington.mobile.views.custom.CameraSwitchButton;
-import rs.readahead.washington.mobile.databinding.ActivityCameraBinding;
 
 
 public class CameraActivity extends MetadataActivity implements ICameraPresenterContract.IView, ITellaFileUploadSchedulePresenterContract.IView, IMetadataAttachPresenterContract.IView {
@@ -252,7 +251,7 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
         } else {
             returnIntent(bundle);
         }
-
+        scheduleFileUpload(capturedMediaFile);
         MyApplication.bus().post(new CaptureEvent());
     }
 
@@ -264,8 +263,6 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
     @Override
     public void onMetadataAttached(VaultFile vaultFile) {
         returnIntent(vaultFile);
-
-        scheduleFileUpload(capturedMediaFile);
     }
 
     private void returnIntent(VaultFile vaultFile) {
@@ -716,24 +713,13 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
     }
 
     private void scheduleFileUpload(VaultFile vaultFile) {
-        if (Preferences.isAutoUploadEnabled()) {
-            List<VaultFile> upload = Collections.singletonList(vaultFile);
-            uploadPresenter.scheduleUploadMediaFiles(upload);
-        } else {
-            onMediaFilesUploadScheduled();
+        if (Preferences.getAutoUploadServerId() != -1) {
+            uploadPresenter.scheduleUploadReportFiles(vaultFile, Preferences.getAutoUploadServerId());
         }
     }
 
     private void setupShutterSound() {
         cameraView.setPlaySounds(!Preferences.isShutterMute());
-    }
-
-    public enum CameraMode {
-        PHOTO, VIDEO
-    }
-
-    public enum IntentMode {
-        COLLECT, RETURN, STAND, ODK
     }
 
     private void initView() {
@@ -750,5 +736,13 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
         photoModeText = binding.photoText;
         videoModeText = binding.videoText;
         resolutionButton = binding.resolutionButton;
+    }
+
+    public enum CameraMode {
+        PHOTO, VIDEO
+    }
+
+    public enum IntentMode {
+        COLLECT, RETURN, STAND, ODK
     }
 }

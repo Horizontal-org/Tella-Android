@@ -1,5 +1,11 @@
 package rs.readahead.washington.mobile.mvp.presenter;
 
+import androidx.work.Constraints;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
 
@@ -10,8 +16,10 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
+import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePresenterContract;
 import rs.readahead.washington.mobile.util.jobs.TellaUploadJob;
+import rs.readahead.washington.mobile.util.jobs.WorkerUploadReport;
 
 
 public class TellaFileUploadSchedulePresenter implements ITellaFileUploadSchedulePresenterContract.IPresenter {
@@ -64,5 +72,30 @@ public class TellaFileUploadSchedulePresenter implements ITellaFileUploadSchedul
                     view.onMediaFilesUploadScheduleError(throwable);
                 })
         );
+    }
+
+    @Override
+    public void scheduleUploadReportFiles(VaultFile vaultFile, long uploadServerId) {
+        disposables.add(keyDataSource.getDataSource()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMapCompletable(dataSource -> dataSource.scheduleUploadReport(FormMediaFile.fromMediaFile(vaultFile), uploadServerId))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                    Constraints constraints =
+                            new Constraints.Builder()
+                                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                                    .build();
+                    OneTimeWorkRequest onetimeJob = new OneTimeWorkRequest.Builder(WorkerUploadReport.class)
+                            .setConstraints(constraints).build();
+                    WorkManager.getInstance(view.getContext())
+                            .enqueueUniqueWork("WorkerUploadReport", ExistingWorkPolicy.APPEND, onetimeJob);
+                    view.onMediaFilesUploadScheduled();
+                }, throwable -> {
+                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    view.onMediaFilesUploadScheduleError(throwable);
+                })
+        );
+
     }
 }

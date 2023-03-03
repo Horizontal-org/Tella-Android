@@ -21,7 +21,7 @@ import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsEntryBinding
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
-import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
+import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.util.C
@@ -57,7 +57,7 @@ class ReportsEntryFragment :
     }
     private lateinit var selectedServer: TellaReportServer
     private var servers: ArrayList<TellaReportServer>? = null
-    private var reportFormInstance: ReportFormInstance? = null
+    private var reportInstance: ReportInstance? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,12 +85,12 @@ class ReportsEntryFragment :
         highLightSubmitButton()
         arguments?.let { bundle ->
             if (bundle.get(BUNDLE_REPORT_FORM_INSTANCE) != null) {
-                reportFormInstance = bundle.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportFormInstance
+                reportInstance = bundle.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportInstance
                 bundle.remove(BUNDLE_REPORT_FORM_INSTANCE)
             }
         }
 
-        reportFormInstance?.let { instance ->
+        reportInstance?.let { instance ->
             binding?.reportTitleEt?.setText(instance.title)
             binding?.reportDescriptionEt?.setText(instance.description)
             putFiles(viewModel.mediaFilesToVaultFiles(instance.widgetMediaFiles))
@@ -100,22 +100,22 @@ class ReportsEntryFragment :
     private fun exitOrSave() {
         val title = binding?.reportTitleEt!!.text.toString()
         val description = binding?.reportDescriptionEt!!.text.toString()
-        if (reportFormInstance == null && title.isEmpty()) {
+        if (reportInstance == null && title.isEmpty()) {
             nav().popBackStack()
-        } else if (reportFormInstance == null && title.isNotEmpty()) {
-            showConfirmSaveOrExit(reportFormInstance)
-        } else if (reportFormInstance != null && (reportFormInstance?.title != title || reportFormInstance?.description != description
+        } else if (reportInstance == null && title.isNotEmpty()) {
+            showConfirmSaveOrExit(reportInstance)
+        } else if (reportInstance != null && (reportInstance?.title != title || reportInstance?.description != description
                     || filesRecyclerViewAdapter.getFiles() != viewModel.mediaFilesToVaultFiles(
-                reportFormInstance?.widgetMediaFiles
+                reportInstance?.widgetMediaFiles
             ))
         ) {
-            showConfirmSaveOrExit(reportFormInstance)
+            showConfirmSaveOrExit(reportInstance)
         } else {
             nav().popBackStack()
         }
     }
 
-    private fun showConfirmSaveOrExit(reportFormInstance: ReportFormInstance?) {
+    private fun showConfirmSaveOrExit(reportInstance: ReportInstance?) {
         BottomSheetUtils.showConfirmSheet(
             baseActivity.supportFragmentManager,
             getString(R.string.Report_Dialog_Draft_Title),
@@ -125,10 +125,10 @@ class ReportsEntryFragment :
             object : BottomSheetUtils.ActionConfirmed {
                 override fun accept(isConfirmed: Boolean) {
                     if (isConfirmed) {
-                        if (reportFormInstance == null) {
+                        if (reportInstance == null) {
                             saveReportAsDraft(true)
                         } else {
-                            if (reportFormInstance.status == EntityStatus.DRAFT) {
+                            if (reportInstance.status == EntityStatus.DRAFT) {
                                 saveReportAsDraft(true)
                             } else {
                                 saveReportAsOutbox()
@@ -179,7 +179,7 @@ class ReportsEntryFragment :
     private fun saveReportAsDraft(exitAfterSave: Boolean) {
         viewModel.saveDraft(
             viewModel.getDraftFormInstance(
-                id = reportFormInstance?.id,
+                id = reportInstance?.id,
                 title = binding?.reportTitleEt?.text.toString(),
                 description = binding?.reportDescriptionEt?.text.toString(),
                 files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
@@ -192,7 +192,7 @@ class ReportsEntryFragment :
     private fun saveReportAsOutbox() {
         viewModel.saveOutbox(
             viewModel.getOutboxFormInstance(
-                id = reportFormInstance?.id,
+                id = reportInstance?.id,
                 title = binding?.reportTitleEt?.text.toString(),
                 description = binding?.reportDescriptionEt?.text.toString(),
                 files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
@@ -218,7 +218,7 @@ class ReportsEntryFragment :
                         this@ReportsEntryFragment,
                         baseActivity
                     )
-                    reportFormInstance?.let {
+                    this@ReportsEntryFragment.reportInstance?.let {
                         servers?.first { server -> server.id == it.serverId }?.let {
                             selectedServer = it
                             binding?.serversDropdown?.setDefaultName(it.name)
@@ -232,7 +232,7 @@ class ReportsEntryFragment :
             reportInstance.observe(viewLifecycleOwner) { instance ->
                 when (instance.status) {
                     EntityStatus.DRAFT -> {
-                        reportFormInstance = instance
+                        this@ReportsEntryFragment.reportInstance = instance
                         DialogUtils.showBottomMessage(
                             baseActivity, getString(R.string.Reports_Saved_Draft),
                             false
@@ -358,15 +358,15 @@ class ReportsEntryFragment :
 
     private fun submitReport() {
         val bundle = Bundle()
-        reportFormInstance = viewModel.getFinalizedFormInstance(
-            id = reportFormInstance?.id,
+        reportInstance = viewModel.getFinalizedFormInstance(
+            id = reportInstance?.id,
             title = binding?.reportTitleEt?.text.toString(),
             description = binding?.reportDescriptionEt?.text.toString(),
             files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
             server = selectedServer
         )
 
-        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportFormInstance)
+        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
         // nav().navigateUp()
         nav().navigate(R.id.action_newReport_to_reportSendScreen, bundle)
         nav().clearBackStack(R.id.action_newReport_to_reportSendScreen)

@@ -142,7 +142,7 @@ dependencies {
     implementation "org.apache.directory.studio:org.apache.commons.io:$versions.apacheCommonsIo"
     implementation "com.github.ihsanbal:LoggingInterceptor:$versions.ihsanbalLoggingInterceptor"
 
-    //worker manager
+   //worker manager
     implementation "androidx.work:work-runtime-ktx:$versions.workermanger"
     implementation("androidx.hilt:hilt-work:$versions.hilt_version")
 

@@ -1,9 +1,9 @@
 package rs.readahead.washington.mobile.views.fragment.reports.mappers
 
-import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
+import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 
-fun ReportFormInstance.toViewEntityInstanceItem(
+fun ReportInstance.toViewEntityInstanceItem(
     onMoreClicked: () -> Unit,
     onOpenClicked: () -> Unit
 ) = ViewEntityTemplateItem(
