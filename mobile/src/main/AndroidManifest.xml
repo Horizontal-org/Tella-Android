@@ -484,7 +484,6 @@
             android:name=".views.settings.SettingsCalculatorActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
-        />
 
         <activity
             android:name=".views.activity.clean_insights.CleanInsightsActivity"
@@ -506,7 +505,8 @@
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
-            tools:node="remove">
+            tools:node="merge"
+            android:exported="false">
         </provider>
 
     </application>
