@@ -13,7 +13,9 @@ import org.hzontal.tella.keys.config.UnlockRegistry
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.show
+import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
+import rs.readahead.washington.mobile.views.settings.SettingsCalculatorActivity
 
 class OnBoardHideTellaFragment : BaseFragment() {
 
@@ -75,12 +77,9 @@ class OnBoardHideTellaFragment : BaseFragment() {
     }
 
     private fun hideTellaBehindCalculator(){
-        activity.addFragment(
-            this,
-            OnBoardCalculatorFragment(),
-            R.id.rootOnboard
-        )
-
+       // activity.addFragment(this, OnBoardCalculatorFragment(), R.id.rootOnboard)
+        val intent = Intent(activity, SettingsCalculatorActivity::class.java)
+        activity.startActivity(intent)
     }
 
     private fun chooseNameAndLogo(){
