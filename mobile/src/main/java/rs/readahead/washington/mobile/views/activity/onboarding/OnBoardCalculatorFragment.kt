@@ -1,25 +1,17 @@
 package rs.readahead.washington.mobile.views.activity.onboarding
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
-import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
-import rs.readahead.washington.mobile.databinding.FragmentEditServerBinding
 import rs.readahead.washington.mobile.databinding.OnboardCalculatorFragmentBinding
-import rs.readahead.washington.mobile.databinding.OnboardLockSetFragmentBinding
 import rs.readahead.washington.mobile.util.CamouflageManager
-import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
-import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 
 class OnBoardCalculatorFragment : BaseBindingFragment<OnboardCalculatorFragmentBinding>(OnboardCalculatorFragmentBinding::inflate)  {
 

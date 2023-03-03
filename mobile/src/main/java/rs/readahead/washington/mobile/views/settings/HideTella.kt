@@ -58,7 +58,6 @@ class HideTella : BaseFragment() {
             btnTwoLabel.setAlpha(1f)
             btnTwo.setClickable(true)
             btnTwo.setOnClickListener {
-              //  activity.addFragment(HideBehindCalculator(), R.id.my_nav_host_fragment)
                 val intent = Intent(activity, SettingsCalculatorActivity::class.java)
                 activity.startActivity(intent)
             }

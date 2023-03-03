@@ -17,14 +17,11 @@ import android.content.pm.PackageManager;
 
 import androidx.annotation.NonNull;
 
-import org.hzontal.shared_ui.utils.CalculatorTheme;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
-import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 import rs.readahead.washington.mobile.presentation.entity.CamouflageOption;
 import rs.readahead.washington.mobile.views.activity.SplashActivity;
 

@@ -13,7 +13,6 @@ import org.hzontal.tella.keys.config.UnlockRegistry
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.show
-import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.settings.SettingsCalculatorActivity
 

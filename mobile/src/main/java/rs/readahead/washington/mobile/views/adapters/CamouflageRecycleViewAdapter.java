@@ -36,9 +36,7 @@ public class CamouflageRecycleViewAdapter extends RecyclerView.Adapter<Camouflag
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final CamouflageOption icon = icons.get(position);
 
-        if(icon.drawableResIdSquare != -1)
-        holder.iconView.setImageResource(icon.drawableResIdSquare);
-        else holder.iconView.setImageResource(icon.drawableResId);
+        holder.iconView.setImageResource(icon.drawableResId);
         holder.nameView.setText(icon.stringResId);
 
         holder.rootView.setSelected(position == selectedPosition);

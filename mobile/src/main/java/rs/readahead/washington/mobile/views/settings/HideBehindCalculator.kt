@@ -24,7 +24,7 @@ class HideBehindCalculator : BaseFragment() {
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
+    ): View{
         binding = OnboardCalculatorFragmentBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
