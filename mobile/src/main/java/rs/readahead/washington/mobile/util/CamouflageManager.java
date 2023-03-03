@@ -61,11 +61,6 @@ public class CamouflageManager {
         options.add(new CamouflageOption(getOptionAlias("Clock"), R.drawable.clock_foreground, R.string.settings_camo_clock));
         options.add(new CamouflageOption(getOptionAlias("Time"), R.drawable.time_foreground, R.string.settings_camo_time));
         options.add(new CamouflageOption(getOptionAlias("StopWatch"), R.drawable.stopwatch_foreground, R.string.settings_camo_stopwatch));
-        options.add(new CamouflageOption(getOptionAlias("Calculator"), R.drawable.easyweather, R.string.settings_camo_calculator2));
-        options.add(new CamouflageOption(getOptionAlias("Calculate"), R.drawable.calculate_foreground, R.drawable.calculate_foreground_square, R.string.settings_camo_calculate));
-        options.add(new CamouflageOption(getOptionAlias("CalculatorPlus"), R.drawable.calculatorplus_foreground, R.drawable.calculator_plus_foreground_square, R.string.settings_camo_calculator_plus));
-        options.add(new CamouflageOption(getOptionAlias("iCalculator"), R.drawable.icalculator_foreground, R.string.settings_camo_icalculator));
-        options.add(new CamouflageOption(getOptionAlias("iCalculator"), R.drawable.icalculator_foreground, R.string.settings_camo_icalculator));
 
     }
 
