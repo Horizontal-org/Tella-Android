@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.views.activity.onboarding
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
+import rs.readahead.washington.mobile.views.settings.SettingsCalculatorActivity
 
 class OnBoardHideTellaFragment : BaseFragment() {
 
@@ -74,11 +76,9 @@ class OnBoardHideTellaFragment : BaseFragment() {
     }
 
     private fun hideTellaBehindCalculator(){
-        activity.addFragment(
-            this,
-            OnBoardCalculatorFragment(),
-            R.id.rootOnboard
-        )
+       // activity.addFragment(this, OnBoardCalculatorFragment(), R.id.rootOnboard)
+        val intent = Intent(activity, SettingsCalculatorActivity::class.java)
+        activity.startActivity(intent)
     }
 
     private fun chooseNameAndLogo(){

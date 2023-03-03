@@ -54,12 +54,16 @@ class OnBoardLockFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
-       arguments?.let { isFromSettings=  it.getBoolean(IS_FROM_SETTINGS,false) }
+        arguments?.let { isFromSettings=  it.getBoolean(IS_FROM_SETTINGS,false) }
         lockPasswordBtn = view.findViewById(R.id.lockPasswordBtn)
         lockPINdBtn = view.findViewById(R.id.lockPINdBtn)
         lockPatternBtn = view.findViewById(R.id.lockPatternBtn)
         cancelBtn = view.findViewById(R.id.cancelBtn)
-        if (isFromSettings) cancelBtn.visibility = View.VISIBLE
+        if (isFromSettings) {
+            cancelBtn.visibility = View.VISIBLE
+            (activity as OnBoardingActivity).hideViewpager()
+
+        }
         initListeners()
     }
 

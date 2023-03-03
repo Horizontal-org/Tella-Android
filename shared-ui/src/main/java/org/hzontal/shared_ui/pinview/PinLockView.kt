@@ -1,4 +1,4 @@
-package com.hzontal.tella_locking_ui.ui.pin.pinview
+package org.hzontal.shared_ui.pinview
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.Group
-import com.hzontal.tella_locking_ui.R
+import org.hzontal.shared_ui.R
 
 /**
  * Represents a numeric lock view which can used to taken numbers as input.
@@ -21,7 +21,7 @@ class PinLockView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : RelativeLayout(context, attrs, defStyleAttr),PinViewListener{
+) : RelativeLayout(context, attrs, defStyleAttr), PinViewListener {
     var minPinLength = 0
     private var mHorizontalSpacing = 0
     private var mVerticalSpacing = 0

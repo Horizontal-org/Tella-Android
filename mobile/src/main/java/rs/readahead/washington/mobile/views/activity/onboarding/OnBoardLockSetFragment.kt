@@ -39,7 +39,6 @@ class OnBoardLockSetFragment : BaseFragment() {
                     R.id.rootOnboard
                 )
             }
-
             backBtn.hide()
         }
     }

@@ -1,4 +1,4 @@
-package com.hzontal.tella_locking_ui.ui.pin.pinview
+package org.hzontal.shared_ui.pinview
 
 interface PinViewListener {
     fun onHiLightView(pin : String)

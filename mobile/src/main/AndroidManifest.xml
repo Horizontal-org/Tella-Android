@@ -287,6 +287,47 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
+        <activity-alias
+            android:name=".views.activity.AliasCalculatorBlueSkin"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_calculator_blue_skin"
+            android:roundIcon="@mipmap/ic_calculator_blue_skin_round"
+            android:label="@string/settings.camo_calculator2"
+            android:targetActivity=".views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".views.activity.AliasCalculatorOrangeSkin"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_calculator_orange_skin"
+            android:roundIcon="@mipmap/ic_calculator_orange_skin_round"
+            android:label="@string/settings.camo_calculator2"
+            android:targetActivity=".views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".views.activity.AliasCalculatorYellowSkin"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_calculator_yellow_skin"
+            android:roundIcon="@mipmap/ic_calculator_yellow_skin_round"
+            android:label="@string/settings.camo_calculator2"
+            android:targetActivity=".views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
         <!-- activity aliases end -->
 
         <activity
@@ -439,6 +480,12 @@
             android:name=".views.activity.onboarding.OnBoardingActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".views.settings.SettingsCalculatorActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:theme="@style/AppTheme.NoActionBar" />
+        />
+
         <activity
             android:name=".views.activity.clean_insights.CleanInsightsActivity"
             android:theme="@style/AppTheme.NoActionBar" />

@@ -34,6 +34,7 @@ public class SharedPrefs {
     static final String UNINSTALL_ON_PANIC = "uninstall_on_panic";
     static final String APP_FIRST_START = "app_first_start";
     static final String APP_ALIAS_NAME = "app_alias_name";
+    static final String CALCULATOR_THEME = "app_calculator_theme";
     static final String SUBMIT_CRASH_REPORTS = "submit_crash_reports";
     static final String ENABLE_CAMERA_PREVIEW = "enable_camera_preview";
     static final String LOCATION_ACCURACY_THRESHOLD = "location_threshold";

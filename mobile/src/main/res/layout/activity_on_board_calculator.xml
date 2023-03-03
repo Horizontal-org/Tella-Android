@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/wa_purple"
+    tools:context=".views.settings.SettingsCalculatorActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:theme="@style/AppTheme.AppBarOverlay">
+      <org.hzontal.shared_ui.appbar.ToolbarComponent
+          android:id="@+id/toolbar"
+          android:layout_width="match_parent"
+          android:layout_height="?attr/actionBarSize"
+          android:background="@color/space_cadet"
+          app:popupTheme="@style/AppTheme.PopupOverlay"
+          app:titleTextAppearance="@style/Toolbar.TitleText"
+          app:contentInsetLeft="0dp"
+          app:contentInsetStart="0dp"
+          app:contentInsetStartWithNavigation="0dp"
+          app:titleMarginStart="0dp"
+          app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
+          />
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline47h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.47" />
+
+    <TextView
+        android:id="@+id/sheet_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/open_sans"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:padding="@dimen/hide_tella_small_margin"
+        android:text="Use the arrows to see calculator styles and app icons"
+        android:textColor="@color/wa_white"
+        android:layout_marginBottom="16dp"
+        android:paddingHorizontal="21dp"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appbar"
+        tools:ignore="RtlSymmetry" />
+  <FrameLayout
+      android:id="@+id/framelayout_slider"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="16dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintBottom_toTopOf="@+id/calculatorBtn"
+      app:layout_constraintTop_toBottomOf="@+id/sheet_subtitle">
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+  </FrameLayout>
+
+    <ImageButton
+        android:id="@+id/back_btn"
+        android:layout_height="@dimen/main_navigation_bar_height"
+        android:layout_width="@dimen/main_navigation_bar_height"
+        android:layout_marginStart="@dimen/margin_start"
+        android:src="@drawable/short_arrow_back"
+        android:visibility="invisible"
+        android:background="@drawable/light_purple_circle_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline47h"
+        tools:layout_editor_absoluteY="360dp" />
+
+    <ImageButton
+        android:id="@+id/next_btn"
+        android:layout_height="@dimen/main_navigation_bar_height"
+        android:layout_width="@dimen/main_navigation_bar_height"
+        android:visibility="visible"
+        android:background="@drawable/light_purple_circle_background"
+        android:src="@drawable/short_arrow_next"
+        android:layout_marginStart="@dimen/margin_start"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline47h"
+        />
+    <TextView
+        android:id="@+id/calculatorBtn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/main_navigation_bar_height"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/round_orange_button_selector"
+        android:fontFamily="@font/open_sans"
+        android:gravity="center"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="@string/onboard.calculator_button"
+        android:textAllCaps="true"
+        android:textColor="@color/wa_white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:backgroundTint="@color/wa_orange"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+
