@@ -40,7 +40,7 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline32h"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <com.hzontal.tella_locking_ui.ui.pin.pinview.CalculatorKeyView
+    <org.hzontal.shared_ui.pinview.CalculatorKeyView
         android:id="@+id/pin_lock_view"
         android:layout_width="0dp"
         android:layout_height="0dp"

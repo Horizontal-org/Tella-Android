@@ -2,19 +2,15 @@ package com.hzontal.tella_locking_ui.ui.pin.calculator
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.ContextThemeWrapper
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet.*
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getColor
-import androidx.core.view.marginEnd
 import androidx.core.widget.TextViewCompat
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.TellaKeysUI
 import com.hzontal.tella_locking_ui.databinding.ActivityCalculatorBinding
 import com.hzontal.tella_locking_ui.ui.pin.base.BasePinActivity
-import com.hzontal.tella_locking_ui.ui.pin.pinview.ResourceUtils.getColor
-import com.hzontal.tella_locking_ui.ui.pin.pinview.ResultListener
+import org.hzontal.shared_ui.pinview.ResultListener
 import org.hzontal.shared_ui.utils.CALCULATOR_THEME
 import org.hzontal.shared_ui.utils.CalculatorTheme
 import org.hzontal.tella.keys.MainKeyStore
@@ -55,7 +51,7 @@ class CalculatorActivity : BasePinActivity(), ResultListener {
             CalculatorTheme.GREEN_SKIN.name -> {
                 binding.root.setBackgroundColor(ContextCompat.getColor(this, R.color.wa_white))
                 val param = binding.pinLockView.layoutParams as ViewGroup.MarginLayoutParams
-                param.setMargins(10,10,10,10)
+                param.setMargins(10, 10, 10, 10)
                 binding.pinLockView.layoutParams = param
                 binding.pinLockView.initTheme(ThemeManager.getTheme(CalculatorTheme.GREEN_SKIN), CalculatorTheme.GREEN_SKIN)
 
@@ -73,7 +69,6 @@ class CalculatorActivity : BasePinActivity(), ResultListener {
 
 
     private fun initView() {
-
         binding.pinLockView.minPinLength = 1
         binding.pinLockView.setListenerers(this, this)
         onClearResult()

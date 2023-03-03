@@ -2,7 +2,7 @@ package com.hzontal.tella_locking_ui.ui.pin.calculator
 
 import android.content.Context
 import com.hzontal.tella_locking_ui.R
-import com.hzontal.tella_locking_ui.ui.pin.pinview.CalculatorThemeStyle
+import org.hzontal.shared_ui.pinview.CalculatorThemeStyle
 import org.hzontal.shared_ui.utils.CalculatorTheme
 
 object ThemeManager {

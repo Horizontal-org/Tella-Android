@@ -1,11 +1,11 @@
-package com.hzontal.tella_locking_ui.ui.pin.pinview
+package org.hzontal.shared_ui.pinview
 
 import android.view.View
 import android.widget.TextView
-import com.hzontal.tella_locking_ui.R
+import org.hzontal.shared_ui.R
 
 
-class OnKeyBoardClickListener (private val minLength : Int,private val mPinLockListener: PinLockListener?,private val mPinViewListener: PinViewListener) : View.OnClickListener{
+class OnKeyBoardClickListener (private val minLength : Int, private val mPinLockListener: PinLockListener?, private val mPinViewListener: PinViewListener) : View.OnClickListener{
 
     private var mPin = ""
 

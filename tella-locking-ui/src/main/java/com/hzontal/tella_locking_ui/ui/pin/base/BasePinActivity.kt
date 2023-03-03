@@ -9,8 +9,8 @@ import androidx.core.content.ContextCompat
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.common.BaseActivity
 import com.hzontal.tella_locking_ui.ui.pin.edit_text.NoImeEditText
-import com.hzontal.tella_locking_ui.ui.pin.pinview.PinLockListener
-import com.hzontal.tella_locking_ui.ui.pin.pinview.PinLockView
+import org.hzontal.shared_ui.pinview.PinLockListener
+import org.hzontal.shared_ui.pinview.PinLockView
 
 abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickListener, OnSetPinClickListener {
 

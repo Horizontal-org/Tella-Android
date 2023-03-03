@@ -1,4 +1,4 @@
-package com.hzontal.tella_locking_ui.ui.pin.pinview;
+package org.hzontal.shared_ui.pinview;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

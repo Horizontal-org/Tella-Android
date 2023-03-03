@@ -31,7 +31,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.hzontal.tella_locking_ui.common.extensions.toggleVisibility
-import com.hzontal.tella_locking_ui.ui.pin.pinview.ResourceUtils.getColor
+import org.hzontal.shared_ui.pinview.ResourceUtils.getColor
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Sort
