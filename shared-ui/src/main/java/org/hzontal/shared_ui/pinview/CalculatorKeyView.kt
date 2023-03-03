@@ -6,13 +6,14 @@ package org.hzontal.shared_ui.pinview
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.Group
 import androidx.core.content.ContextCompat
+import androidx.core.view.updateLayoutParams
 import org.hzontal.shared_ui.databinding.CalculatorKeysViewBinding
 import org.hzontal.shared_ui.utils.CalculatorTheme
-import org.hzontal.shared_ui.utils.setMargins
 
 class CalculatorKeyView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : RelativeLayout(context, attrs, defStyleAttr), PinViewListener {
     var minPinLength = 1
@@ -86,17 +87,16 @@ class CalculatorKeyView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     private fun setTextViewMargin(button: TextView, margin: Int) {
-
-        button.apply {
-            setMargins(margin)
+        button.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            setMargins(margin, margin, margin, margin)
         }
     }
 
     private fun setButtonsGroupMargin(group: Group, margin: Int) {
         group.referencedIds.forEach {
             val button = findViewById<TextView>(it)
-            button.apply {
-                setMargins(margin)
+            button.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                setMargins(margin, margin, margin, margin)
             }
         }
     }
@@ -107,7 +107,9 @@ class CalculatorKeyView @JvmOverloads constructor(context: Context, attrs: Attri
             button.apply {
                 setBackgroundColor(ContextCompat.getColor(context, backgroundColor))
                 setTextColor(ContextCompat.getColor(context, textColor))
-                setMargins(margin)
+                updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    setMargins(margin, margin, margin, margin)
+                }
             }
         }
     }
@@ -116,7 +118,9 @@ class CalculatorKeyView @JvmOverloads constructor(context: Context, attrs: Attri
         button.apply {
             setBackgroundColor(ContextCompat.getColor(context, backgroundColor))
             setTextColor(ContextCompat.getColor(context, textColor))
-            setMargins(margin)
+            updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                setMargins(margin, margin, margin, margin)
+            }
         }
     }
 
@@ -127,7 +131,9 @@ class CalculatorKeyView @JvmOverloads constructor(context: Context, attrs: Attri
             button.apply {
                 setBackgroundResource(backgroundResource)
                 setTextColor(ContextCompat.getColor(context, textColor))
-                setMargins(margin)
+                updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    setMargins(margin, margin, margin, margin)
+                }
             }
         }
     }
