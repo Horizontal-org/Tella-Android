@@ -33,7 +33,7 @@ class CamouflageNameAndLogo : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        (activity as OnFragmentSelected?)?.hideAppbar()
+        (baseActivity as OnFragmentSelected?)?.hideAppbar()
 
         recyclerView = view.findViewById(R.id.iconsRecyclerView)
 
@@ -45,8 +45,8 @@ class CamouflageNameAndLogo : BaseFragment() {
         adapter.setIcons(cm.options, cm.selectedAliasPosition)
 
         view.findViewById<View>(R.id.back).setOnClickListener {
-            (activity as OnFragmentSelected?)?.showAppbar()
-            activity.onBackPressed()
+            (baseActivity as OnFragmentSelected?)?.showAppbar()
+            baseActivity.onBackPressed()
         }
 
         view.findViewById<View>(R.id.next).setOnClickListener {
@@ -56,14 +56,14 @@ class CamouflageNameAndLogo : BaseFragment() {
 
     private fun confirmCamouflage(position: Int) {
         BottomSheetUtils.showConfirmSheetWithImageAndTimeout(
-            activity.supportFragmentManager,
+            baseActivity.supportFragmentManager,
             getString(R.string.SettingsCamo_Dialog_TimeoutTitle),
             getString(R.string.SettingsCamo_Dialog_TimeoutDesc),
             getString(R.string.settings_sec_confirm_camouflage_title),
             getString(R.string.settings_sec_confirm_camouflage_desc, getString(cm.options[position].stringResId)),
             getString(R.string.settings_sec_confirm_exit_tella),
             getString(R.string.action_cancel),
-            ContextCompat.getDrawable(activity,cm.options[position].drawableResId),
+            ContextCompat.getDrawable(baseActivity,cm.options[position].drawableResId),
             consumer = object : BottomSheetUtils.ActionConfirmed {
                 override fun accept(isConfirmed: Boolean) {
                     camouflage(position)

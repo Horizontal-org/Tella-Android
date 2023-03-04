@@ -31,8 +31,6 @@ abstract class BaseBindingFragment<VB : ViewBinding>(
             // Inflate the layout for this fragment
             _binding = inflate.invoke(inflater, container, false)
             rootView = binding?.root
-
-
         } else {
             // Do not inflate the layout again.
             // The returned View of onCreateView will be added into the fragment.
@@ -50,7 +48,6 @@ abstract class BaseBindingFragment<VB : ViewBinding>(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return getPersistentView(inflater, container)
     }
 

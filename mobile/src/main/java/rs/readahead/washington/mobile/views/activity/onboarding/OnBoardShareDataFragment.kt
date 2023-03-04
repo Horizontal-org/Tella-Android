@@ -27,17 +27,17 @@ class OnBoardShareDataFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        (activity as OnBoardActivityInterface).initProgress(2)
-        (activity as OnBoardActivityInterface).setCurrentIndicator(0)
+        (baseActivity as OnBoardActivityInterface).initProgress(2)
+        (baseActivity as OnBoardActivityInterface).setCurrentIndicator(0)
 
         connectBtn = view.findViewById(R.id.startBtn)
         connectBtn.setOnClickListener {
-            (activity as OnBoardActivityInterface).showChooseServerTypeDialog()
+            (baseActivity as OnBoardActivityInterface).showChooseServerTypeDialog()
         }
 
         continueBtn = view.findViewById(R.id.sheet_two_btn)
         continueBtn.setOnClickListener {
-            activity.addFragment(
+            baseActivity.addFragment(
                 this,
                 OnBoardHideOptionFragment(),
                 R.id.rootOnboard

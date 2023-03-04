@@ -27,10 +27,10 @@ class OnBoardFilesFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as OnBoardActivityInterface).enableSwipe(
+        (baseActivity as OnBoardActivityInterface).enableSwipe(
             isSwipeable = true, isTabLayoutVisible = true
         )
-        (activity as OnBoardActivityInterface).showButtons(
+        (baseActivity as OnBoardActivityInterface).showButtons(
             isNextButtonVisible = true, isBackButtonVisible = true
         )
     }

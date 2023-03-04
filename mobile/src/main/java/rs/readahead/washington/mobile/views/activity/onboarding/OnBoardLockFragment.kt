@@ -47,9 +47,9 @@ class OnBoardLockFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as OnBoardActivityInterface).enableSwipe(
+        (baseActivity as OnBoardActivityInterface).enableSwipe(
             isSwipeable = true, isTabLayoutVisible = true)
-        (activity as OnBoardActivityInterface).showButtons(
+        (baseActivity as OnBoardActivityInterface).showButtons(
             isNextButtonVisible = false, isBackButtonVisible = true)
     }
 
@@ -61,7 +61,7 @@ class OnBoardLockFragment : BaseFragment() {
         cancelBtn = view.findViewById(R.id.cancelBtn)
         if (isFromSettings) {
             cancelBtn.visibility = View.VISIBLE
-            (activity as OnBoardingActivity).hideViewpager()
+            (baseActivity as OnBoardingActivity).hideViewpager()
 
         }
         initListeners()
@@ -83,8 +83,8 @@ class OnBoardLockFragment : BaseFragment() {
         }
 
         cancelBtn.setOnClickListener {
-            (activity as OnBoardActivityInterface).setCurrentIndicator(2)
-            activity.onBackPressed()
+            (baseActivity as OnBoardActivityInterface).setCurrentIndicator(2)
+            baseActivity.onBackPressed()
         }
     }
 
@@ -95,10 +95,10 @@ class OnBoardLockFragment : BaseFragment() {
     }
 
     private fun goUnlockingActivity(destination : Activity){
-        val intent = Intent(activity, destination::class.java)
+        val intent = Intent(baseActivity, destination::class.java)
         intent.putExtra(IS_FROM_SETTINGS,isFromSettings)
         startActivity(intent)
-        if (isFromSettings) activity.finish()
+        if (isFromSettings) baseActivity.finish()
     }
 
 }

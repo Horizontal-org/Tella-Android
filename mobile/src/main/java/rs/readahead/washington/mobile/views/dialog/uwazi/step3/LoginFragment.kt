@@ -66,9 +66,9 @@ class LoginFragment : BaseFragment() {
 
     private fun initListeners() {
         binding.loginButton.setOnClickListener {
-            if (!MyApplication.isConnectedToInternet(activity)) {
+            if (!MyApplication.isConnectedToInternet(baseActivity)) {
                 DialogUtils.showBottomMessage(
-                    activity,
+                    baseActivity,
                     getString(R.string.settings_docu_error_no_internet),
                     true
                 )
@@ -84,8 +84,8 @@ class LoginFragment : BaseFragment() {
     private fun initObservers() {
         with(viewModel) {
             twoFactorAuthentication.observe(viewLifecycleOwner, {
-                KeyboardUtil.hideKeyboard(activity)
-                activity.addFragment(
+                KeyboardUtil.hideKeyboard(baseActivity)
+                baseActivity.addFragment(
                     TwoFactorAuthenticationFragment.newInstance(
                         serverUwazi,
                         isUpdate
@@ -102,8 +102,8 @@ class LoginFragment : BaseFragment() {
 
             authenticationSuccess.observe(viewLifecycleOwner, { isSuccess ->
                 if (isSuccess) {
-                    KeyboardUtil.hideKeyboard(activity)
-                    activity.addFragment(
+                    KeyboardUtil.hideKeyboard(baseActivity)
+                    baseActivity.addFragment(
                         LanguageFragment.newInstance(serverUwazi, isUpdate),
                         R.id.container
                     )
@@ -115,7 +115,7 @@ class LoginFragment : BaseFragment() {
             })
         }
         binding.backBtn.setOnClickListener {
-            activity.supportFragmentManager.popBackStack()
+            baseActivity.supportFragmentManager.popBackStack()
         }
     }
 

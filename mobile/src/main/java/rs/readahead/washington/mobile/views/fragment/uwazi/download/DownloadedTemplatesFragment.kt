@@ -65,7 +65,7 @@ class DownloadedTemplatesFragment : BaseFragment() {
             })
 
             showDeleteSheet.observe(viewLifecycleOwner, {
-                BottomSheetUtils.showConfirmDelete(activity.supportFragmentManager,
+                BottomSheetUtils.showConfirmDelete(baseActivity.supportFragmentManager,
                 it.second.entityRow.name,
                 getString(R.string.Uwazi_RemoveTemplate_SheetTitle)
                 ) { viewModel.confirmDelete(it.second) }

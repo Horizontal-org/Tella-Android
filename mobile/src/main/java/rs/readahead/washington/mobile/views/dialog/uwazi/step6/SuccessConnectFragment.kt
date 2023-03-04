@@ -69,7 +69,7 @@ class SuccessConnectFragment : BaseFragment() {
                 }else {
                     createServer.postValue(server)
                 }
-                activity.finish()
+                baseActivity.finish()
             }
         }
     }

@@ -28,12 +28,12 @@ class OnBoardAdvancedComplete : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        (activity as OnBoardActivityInterface).hideProgress()
+        (baseActivity as OnBoardActivityInterface).hideProgress()
 
         startBtn = view.findViewById(R.id.startBtn)
         startBtn.setOnClickListener {
             TellaKeysUI.getCredentialsCallback().onLockConfirmed(requireContext())
-            activity.finish()
+            baseActivity.finish()
         }
     }
 }

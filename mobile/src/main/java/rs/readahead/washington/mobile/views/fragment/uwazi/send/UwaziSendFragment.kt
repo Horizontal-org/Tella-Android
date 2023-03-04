@@ -23,7 +23,7 @@ const val SEND_ENTITY = "send_entity"
 
 class UwaziSendFragment : BaseFragment(), OnNavBckListener {
     private val viewModel: SharedUwaziSubmissionViewModel by lazy {
-        ViewModelProvider(activity)[SharedUwaziSubmissionViewModel::class.java]
+        ViewModelProvider(baseActivity)[SharedUwaziSubmissionViewModel::class.java]
     }
     private lateinit var binding: UwaziSendFragmentBinding
     private var entityInstance: UwaziEntityInstance? = null
@@ -84,7 +84,7 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
                     }
                     EntityStatus.SUBMISSION_ERROR -> {
                         DialogUtils.showBottomMessage(
-                            activity,
+                            baseActivity,
                             getString(R.string.collect_toast_fail_sending_form),
                             true
                         )
@@ -133,7 +133,7 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
             return
         }
 
-        endView = UwaziFormEndView(activity, getFormattedFormTitle(entityInstance!!))
+        endView = UwaziFormEndView(baseActivity, getFormattedFormTitle(entityInstance!!))
         endView.setInstance(entityInstance!!, false, false)
         binding.endViewContainer.removeAllViews()
         binding.endViewContainer.addView(endView)

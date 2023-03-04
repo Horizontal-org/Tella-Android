@@ -26,7 +26,7 @@ class MainSettings : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        (activity as OnFragmentSelected?)?.setToolbarLabel(string.settings_app_bar)
+        (baseActivity as OnFragmentSelected?)?.setToolbarLabel(string.settings_app_bar)
 
         binding?.generalSettingsButton?.setOnClickListener {
             nav().navigate(R.id.action_main_to_general_settings)

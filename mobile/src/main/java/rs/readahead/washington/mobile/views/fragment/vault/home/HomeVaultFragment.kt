@@ -97,18 +97,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         seekBarContainer = view.findViewById(R.id.panicSeekContainer)
         disposables = MyApplication.bus().createCompositeDisposable()
 
-        disposables?.wire(
-            GoToReportsScreenEvent::class.java,
-            object : EventObserver<GoToReportsScreenEvent?>() {
-                override fun onNext(event: GoToReportsScreenEvent) {
-                    GlobalScope.launch(Dispatchers.Main) {
-                        activity.addFragment(
-                            ReportsFragment(),
-                            R.id.main_container
-                        )
-                    }
-                }
-            })
         setUpToolbar()
         initData()
         initListeners()
@@ -142,7 +130,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         homeVaultPresenter = HomeVaultPresenter(this)
         vaultRecyclerView.apply {
             adapter = vaultAdapter
-            layoutManager = LinearLayoutManager(activity)
+            layoutManager = LinearLayoutManager(baseActivity)
         }
         //Uncomment to add improvement section
         // vaultAdapter.addImprovementSection()
@@ -230,9 +218,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         panicModeView.setOnClickListener { onPanicClicked() }
         toolbar.onLeftClickListener = { nav().navigate(R.id.main_settings) }
         toolbar.onRightClickListener = {
-            MyApplication.exit(activity)
             MyApplication.getMainKeyHolder().timeout = LockTimeoutManager.IMMEDIATE_SHUTDOWN
             Preferences.setExitTimeout(true)
+            MyApplication.exit(baseActivity)
+            baseActivity.finish()
         }
         vaultAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onChanged() {
@@ -274,27 +263,27 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     override fun onRecentFilesItemClickListener(vaultFile: VaultFile) {
         when {
             MediaFile.isImageFileType(vaultFile.mimeType) -> {
-                val intent = Intent(activity, PhotoViewerActivity::class.java)
+                val intent = Intent(baseActivity, PhotoViewerActivity::class.java)
                 intent.putExtra(PhotoViewerActivity.VIEW_PHOTO, vaultFile)
                 startActivity(intent)
             }
             MediaFile.isAudioFileType(vaultFile.mimeType) -> {
-                val intent = Intent(activity, AudioPlayActivity::class.java)
+                val intent = Intent(baseActivity, AudioPlayActivity::class.java)
                 intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, vaultFile.id)
                 startActivity(intent)
             }
             MediaFile.isVideoFileType(vaultFile.mimeType) -> {
-                val intent = Intent(activity, VideoViewerActivity::class.java)
+                val intent = Intent(baseActivity, VideoViewerActivity::class.java)
                 intent.putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile)
                 startActivity(intent)
             }
             else -> {
                 BottomSheetUtils.showStandardSheet(
-                    activity.supportFragmentManager,
-                    activity.getString(R.string.Vault_Export_SheetAction) + " " + vaultFile.name + "?",
-                    activity.getString(R.string.Vault_ViewerOther_SheetDesc),
-                    activity.getString(R.string.Vault_Export_SheetAction),
-                    activity.getString(R.string.action_cancel),
+                    baseActivity.supportFragmentManager,
+                    baseActivity.getString(R.string.Vault_Export_SheetAction) + " " + vaultFile.name + "?",
+                    baseActivity.getString(R.string.Vault_ViewerOther_SheetDesc),
+                    baseActivity.getString(R.string.Vault_Export_SheetAction),
+                    baseActivity.getString(R.string.action_cancel),
                     onConfirmClick = { exportVaultFiles(vaultFile) }
                 )
             }
@@ -413,7 +402,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     private fun hidePanicScreens() {
-        (activity as MainActivity).showBottomNavigation()
+        (baseActivity as MainActivity).showBottomNavigation()
         setupPanicView()
         panicModeView.visibility = View.GONE
         toolbar.visibility = View.VISIBLE
@@ -421,7 +410,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     private fun showPanicScreens() {
         // really show panic screen
-        (activity as MainActivity).hideBottomNavigation()
+        (baseActivity as MainActivity).hideBottomNavigation()
         toolbar.visibility = View.GONE
         panicModeView.visibility = View.VISIBLE
         panicModeView.alpha = 1f
@@ -518,23 +507,23 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     override fun onMediaExported(num: Int) {
-        activity.toggleLoading(false)
+        baseActivity.toggleLoading(false)
     }
 
     override fun onExportError(error: Throwable?) {
         DialogUtils.showBottomMessage(
-            activity,
+            baseActivity,
             getString(R.string.gallery_toast_fail_exporting_to_device),
             false
         )
     }
 
     override fun onExportStarted() {
-        activity.toggleLoading(true)
+        baseActivity.toggleLoading(true)
     }
 
     override fun onExportEnded() {
-        activity.toggleLoading(false)
+        baseActivity.toggleLoading(false)
     }
 
     override fun onGetFavoriteCollectFormsSuccess(files: List<CollectForm>) {
@@ -575,9 +564,9 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     private fun updateOrRequestPermissions() {
-        activity.maybeChangeTemporaryTimeout()
+        baseActivity.maybeChangeTemporaryTimeout()
         val hasWritePermission = ContextCompat.checkSelfPermission(
-            activity,
+            baseActivity,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
         val minSdk29 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
