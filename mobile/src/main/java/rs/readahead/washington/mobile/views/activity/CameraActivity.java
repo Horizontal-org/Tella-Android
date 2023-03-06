@@ -174,7 +174,6 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
             maybeChangeTemporaryTimeout();
         }
 
-
     }
 
     @Override
@@ -264,8 +263,7 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
     @Override
     public void onMetadataAttached(VaultFile vaultFile) {
         returnIntent(vaultFile);
-
-        scheduleFileUpload(capturedMediaFile);
+        //scheduleFileUpload(capturedMediaFile);
     }
 
     private void returnIntent(VaultFile vaultFile) {
