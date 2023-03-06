@@ -20,17 +20,12 @@ import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Limits
 import com.hzontal.tella_vault.filter.Sort
 import com.hzontal.utils.MediaFile
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.hzontal.shared_ui.appbar.ToolbarComponent
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable
-import rs.readahead.washington.mobile.bus.EventObserver
-import rs.readahead.washington.mobile.bus.event.GoToReportsScreenEvent
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.domain.entity.ServerType
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
@@ -49,7 +44,6 @@ import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsight
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.custom.CountdownTextView
-import rs.readahead.washington.mobile.views.fragment.reports.ReportsFragment
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.ImproveClickOptions
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
@@ -189,7 +183,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     private fun maybeShowConnections() {
-        if (serversList?.isNotEmpty() == true) {
+        if (serversList?.isNullOrEmpty() == false) {
             vaultAdapter.addConnectionServers(serversList!!)
         } else {
             vaultAdapter.removeConnectionServers()
@@ -309,6 +303,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             ServerType.UWAZI -> {
                 nav().navigate(R.id.action_homeScreen_to_uwazi_screen)
             }
+            else -> {}
         }
     }
 
@@ -584,7 +579,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     private fun maybeHideFilesTitle() {
-        if (!Preferences.isShowRecentFiles() && !Preferences.isShowFavoriteForms()) {
+        if (!Preferences.isShowRecentFiles() && !Preferences.isShowFavoriteForms() && serversList?.isNullOrEmpty() == false) {
             vaultAdapter.removeTitle()
         } else {
             vaultAdapter.addTitle()

@@ -186,8 +186,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
                 FavoriteTemplatesViewHolder.from(view)
             }
             ITEM_PANIC_BUTTON -> {
-                val from = PanicModeViewHolder.from(view)
-                from
+                PanicModeViewHolder.from(view)
             }
             ITEM_FILES_ACTIONS -> {
                 FileActionsViewHolder.from(view)
