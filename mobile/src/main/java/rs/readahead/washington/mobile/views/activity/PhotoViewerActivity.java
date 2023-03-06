@@ -6,9 +6,11 @@ import static rs.readahead.washington.mobile.views.fragment.vault.attachements.A
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -313,7 +315,17 @@ public class PhotoViewerActivity extends BaseLockActivity implements
 
     private void showGalleryImage(VaultFile vaultFile) {
 
+
+        Uri uri = MediaFileHandler.getEncryptedUri(getContext(),vaultFile);
+               /* Uri.withAppendedPath(
+                        ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
+                        Uri.encode(numberEntry.getText().toString()));*/
         Glide.with(this)
+                .load(uri)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(binding.content.photoImageView);
+        /*Glide.with(this)
                 //.using(new VaultFileUrlLoader(this, new MediaFileHandler()))
                 .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.ORIGINAL))
                /* .addDefaultRequestListener(new RequestListener<VaultFileLoaderModel, GlideDrawable>() {
@@ -331,9 +343,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                         return false;
                     }
                 })*/
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(binding.content.photoImageView);
+
     }
 
     private void showMetadata() {
