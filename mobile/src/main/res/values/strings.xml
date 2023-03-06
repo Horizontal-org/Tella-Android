@@ -711,7 +711,7 @@ button to add a new template.</string>
     <string name="File_Uploaded_on" translatable="false">Uploaded on</string>
     <string name="File_Uploaded" translatable="false">uploaded</string>
     <string name="Delete_Report_Confirmation" translatable="false">Are you sure you want to delete this report? </string>
-    <string name="Delete_Submitted_Report_Confirmation" translatable="false">Are you sure you want to delete this semt report from your records? </string>
+    <string name="Delete_Submitted_Report_Confirmation" translatable="false">Are you sure you want to delete this sent report from your records? </string>
     <string name="View_Report" translatable="false">View </string>
     <string name="Delete_Report" translatable="false">Delete </string>
     <string name="Paused_Report" translatable="false">Paused </string>
@@ -721,4 +721,5 @@ button to add a new template.</string>
     <string name="Report_Server_Already_Exist_Error" translatable="false">You are already connected to this project. Please enter another URL.</string>
     <string name="Report_Deleted_Confirmation" translatable="false"> %s has been deleted.</string>
     <string name="Report_Save_Outbox_Confirmation" translatable="false">The report was saved to your Outbox. You can submit it when you are ready.</string>
+    <string name="Send_Action_Label" translatable="false">SEND</string>
 </resources>
