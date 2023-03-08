@@ -20,9 +20,7 @@ import java.util.List;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.presentation.entity.MediaFilesData;
-import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.presentation.entity.ViewType;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.views.interfaces.IAttachmentsMediaHandler;
@@ -31,7 +29,6 @@ import rs.readahead.washington.mobile.databinding.CardAttachmentMediaFileBinding
 
 public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<AttachmentsRecycleViewAdapter.ViewHolder> {
     private List<VaultFile> attachments = new ArrayList<>();
-    //private final VaultFileUrlLoader glideLoader;
     private final IAttachmentsMediaHandler attachmentsMediaHandler;
     protected ViewType type;
     private CardAttachmentMediaFileBinding itemBinding;
@@ -39,7 +36,6 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
 
     public AttachmentsRecycleViewAdapter(Context context, IAttachmentsMediaHandler attachmentsMediaHandler,
                                          MediaFileHandler mediaFileHandler, ViewType type) {
-        //this.glideLoader = new VaultFileUrlLoader(context.getApplicationContext(), mediaFileHandler);
         this.attachmentsMediaHandler = attachmentsMediaHandler;
         this.type = type;
     }
@@ -61,12 +57,11 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
 
         if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
             holder.showImageInfo();
-            /*Glide.with(itemBinding.mediaView.getContext())
-                    .using(glideLoader)
-                    .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+            Glide.with(itemBinding.mediaView.getContext())
+                    .load(vaultFile.thumb)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
-                    .into(itemBinding.mediaView);*/
+                    .into(itemBinding.mediaView);
         } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
             holder.showAudioInfo(vaultFile);
             Drawable drawable = VectorDrawableCompat.create(holder.itemView.getContext().getResources(),
@@ -74,12 +69,11 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
             itemBinding.mediaView.setImageDrawable(drawable);
         } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
             holder.showVideoInfo(vaultFile);
-            /*Glide.with(itemBinding.mediaView.getContext())
-                    .using(glideLoader)
-                    .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+            Glide.with(itemBinding.mediaView.getContext())
+                    .load(vaultFile.thumb)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
-                    .into(itemBinding.mediaView);*/
+                    .into(itemBinding.mediaView);
         }
 
         itemBinding.mediaView.setOnClickListener(v -> attachmentsMediaHandler.playMedia(vaultFile));

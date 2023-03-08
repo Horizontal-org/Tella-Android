@@ -33,7 +33,6 @@ import permissions.dispatcher.RuntimePermissions;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.databinding.ActivityQuestionAttachmentBinding;
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
-import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.IQuestionAttachmentPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.QuestionAttachmentPresenter;
 import rs.readahead.washington.mobile.util.C;
@@ -90,7 +89,6 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
         setupFab();
 
         galleryAdapter = new GalleryRecycleViewAdapter(this, this,
-                new MediaFileHandler(),
                 R.layout.card_gallery_attachment_media_file,
                 true, true);
         RecyclerView.LayoutManager galleryLayoutManager = new GridLayoutManager(this, 3);
@@ -337,7 +335,7 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
 
         VaultFile vaultFile = (VaultFile) getIntent().getSerializableExtra(MEDIA_FILE_KEY);
 
-        if (vaultFile != null ) {
+        if (vaultFile != null) {
             presenter.setAttachment(vaultFile);
             galleryAdapter.selectMediaFile(vaultFile);
             onSelectionNumChange(1);

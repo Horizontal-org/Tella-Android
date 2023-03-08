@@ -311,7 +311,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     }
 
     private void showGalleryImage(VaultFile vaultFile) {
-        Uri uri = MediaFileHandler.getEncryptedUri(getContext(),vaultFile);
+        Uri uri = MediaFileHandler.getEncryptedUri(getContext(), vaultFile);
 
         Glide.with(this)
                 .load(uri)
@@ -323,6 +323,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                         binding.content.progressBar.setVisibility(View.GONE);
                         return false;
                     }
+
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         binding.content.progressBar.setVisibility(View.GONE);
@@ -426,7 +427,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                                 getString(R.string.action_delete),
                                 getString(R.string.action_cancel),
                                 isConfirmed -> {
-                                    if (isConfirmed){
+                                    if (isConfirmed) {
                                         presenter.confirmDeleteMediaFile(vaultFile);
                                     }
                                 }

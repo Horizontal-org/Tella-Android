@@ -2,10 +2,12 @@ package rs.readahead.washington.mobile.views.adapters;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,16 +24,12 @@ import java.util.Set;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.databinding.CardGalleryAttachmentMediaFileBinding;
-import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
-import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.views.interfaces.IGalleryMediaHandler;
 
 
 public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecycleViewAdapter.ViewHolder> {
     private List<VaultFile> files = new ArrayList<>();
-    private VaultFileUrlLoader glideLoader;
     private IGalleryMediaHandler galleryMediaHandler;
     private Set<VaultFile> selected;
     private int cardLayoutId;
@@ -39,16 +37,13 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
     private boolean singleSelection;
 
 
-    public GalleryRecycleViewAdapter(Context context, IGalleryMediaHandler galleryMediaHandler,
-                                     MediaFileHandler mediaFileHandler, @LayoutRes int cardLayoutId) {
-        this(context, galleryMediaHandler, mediaFileHandler, cardLayoutId, true, false);
+    public GalleryRecycleViewAdapter(Context context, IGalleryMediaHandler galleryMediaHandler, @LayoutRes int cardLayoutId) {
+        this(context, galleryMediaHandler, cardLayoutId, true, false);
     }
 
-    public GalleryRecycleViewAdapter(Context context, IGalleryMediaHandler galleryMediaHandler,
-                                     MediaFileHandler mediaFileHandler, @LayoutRes int cardLayoutId,
+    public GalleryRecycleViewAdapter(Context context, IGalleryMediaHandler galleryMediaHandler, @LayoutRes int cardLayoutId,
                                      boolean selectable,
                                      boolean singleSelection) {
-     //   this.glideLoader = new VaultFileUrlLoader(context.getApplicationContext(), mediaFileHandler);
         this.galleryMediaHandler = galleryMediaHandler;
         this.selected = new LinkedHashSet<>();
         this.cardLayoutId = cardLayoutId;
@@ -79,12 +74,6 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(holder.binding.mediaView);
-            /*Glide.with(holder.binding.mediaView.getContext())
-                    .using(glideLoader)
-                    .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(holder.binding.mediaView);*/
         } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
             holder.showAudioInfo(vaultFile);
             Drawable drawable = VectorDrawableCompat.create(holder.itemView.getContext().getResources(),
@@ -97,12 +86,6 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(holder.binding.mediaView);
-          /*  Glide.with(holder.binding.mediaView.getContext())
-                    .using(glideLoader)
-                    .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(holder.binding.mediaView);*/
         }
 
         holder.binding.mediaView.setOnClickListener(v -> galleryMediaHandler.playMedia(vaultFile));
@@ -169,7 +152,7 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
     }
 
     private void removeAllSelections() {
-        for (VaultFile selection: selected) {
+        for (VaultFile selection : selected) {
             deselectMediaFile(selection);
             galleryMediaHandler.onMediaDeselected(selection);
         }

@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
@@ -21,15 +20,13 @@ import com.hzontal.tella_vault.VaultFile;
 import org.javarosa.form.api.FormEntryPrompt;
 
 import androidx.annotation.NonNull;
+
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.mvp.contract.ICollectAttachmentMediaFilePresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CollectAttachmentMediaFilePresenter;
 import rs.readahead.washington.mobile.odk.FormController;
-import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.FileUtil;
 import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity;
@@ -50,7 +47,6 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
 
     private VaultFile vaultFile;
     private CollectAttachmentMediaFilePresenter presenter;
-   // private RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
 
     public SignatureWidget(Context context, FormEntryPrompt formEntryPrompt) {
         super(context, formEntryPrompt);
@@ -96,11 +92,6 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
         attachmentPreview = view.findViewById(R.id.attachedMedia);
         thumbView = view.findViewById(R.id.thumbView);
         fileSize = view.findViewById(R.id.fileSize);
-
-        MediaFileHandler mediaFileHandler = new MediaFileHandler();
-        //VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
-
-       // glide = Glide.with(getContext()).using(glideLoader);
         presenter = new CollectAttachmentMediaFilePresenter(this);
 
         signatureButton = view.findViewById(R.id.selectButton);
@@ -190,10 +181,11 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
     }
 
     private void loadThumbnail() {
-        /*glide.load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+        Glide.with(getContext())
+                .load(vaultFile.thumb)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
-                .into(thumbView);*/
+                .into(thumbView);
     }
 
     private void showPhotoViewerActivity() {

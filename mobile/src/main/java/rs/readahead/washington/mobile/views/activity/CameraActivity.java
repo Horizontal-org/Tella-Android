@@ -22,7 +22,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
@@ -54,14 +53,12 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.CaptureEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.media.VaultFileLoader;
 import rs.readahead.washington.mobile.mvp.contract.ICameraPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CameraPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.MetadataAttacher;
 import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulePresenter;
-import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.DialogsUtil;
 import rs.readahead.washington.mobile.util.VideoResolutionManager;
@@ -141,10 +138,6 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
         if (getIntent().hasExtra(VAULT_CURRENT_ROOT_PARENT)) {
             currentRootParent = getIntent().getStringExtra(VAULT_CURRENT_ROOT_PARENT);
         }
-
-        MediaFileHandler mediaFileHandler = new MediaFileHandler();
-       //VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
-        //glide = Glide.with(getContext()).using(glideLoader);
 
         setupCameraView();
         setupCameraModeButton();

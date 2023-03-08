@@ -51,9 +51,7 @@ class ReportsEntryFragment :
     private val viewModel by viewModels<ReportsViewModel>()
     private lateinit var gridLayoutManager: GridLayoutManager
     private val filesRecyclerViewAdapter: ReportsFilesRecyclerViewAdapter by lazy {
-        ReportsFilesRecyclerViewAdapter(
-            this, baseActivity, MediaFileHandler()
-        )
+        ReportsFilesRecyclerViewAdapter(this)
     }
     private lateinit var selectedServer: TellaReportServer
     private var servers: ArrayList<TellaReportServer>? = null

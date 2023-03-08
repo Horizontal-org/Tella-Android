@@ -17,7 +17,6 @@ import org.hzontal.shared_ui.breadcrumb.model.BreadcrumbItem
 import org.hzontal.shared_ui.breadcrumb.model.Item
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentAttachmentsSelectorBinding
-import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.views.activity.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.CameraActivity
@@ -61,7 +60,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
 
         attachmentsAdapter = AttachmentsSelectorAdapter(
             this@AttachmentsActivitySelector, this,
-            MediaFileHandler(), gridLayoutManager, true, isMultiplePicker
+            gridLayoutManager, true, isMultiplePicker
         )
         with(binding) {
 
@@ -168,7 +167,8 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
             binding.toolbar.setRightIcon(-1)
         } else {
             binding.toolbar.setStartTextTitle(
-                attachmentsAdapter.selectedMediaFiles.size.toString() + " " + getString( R.string.Vault_Items ) )
+                attachmentsAdapter.selectedMediaFiles.size.toString() + " " + getString(R.string.Vault_Items)
+            )
             binding.toolbar.setRightIcon(R.drawable.ic_check_white)
         }
     }

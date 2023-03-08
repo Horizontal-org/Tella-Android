@@ -22,17 +22,19 @@ import rs.readahead.washington.mobile.util.DateUtil
 import rs.readahead.washington.mobile.views.interfaces.IGalleryVaultHandler
 import java.util.*
 
-class AttachmentsAdapter constructor(private val iGalleryMediaHandler: IGalleryVaultHandler,private val context: Context) :
-     RecyclerView.Adapter<AttachmentsAdapter.BaseAttachmentViewHolder>() {
-    private var vaultList : MutableList<VaultFile?>
+class AttachmentsAdapter constructor(
+    private val iGalleryMediaHandler: IGalleryVaultHandler,
+    private val context: Context
+) :
+    RecyclerView.Adapter<AttachmentsAdapter.BaseAttachmentViewHolder>() {
+    private var vaultList: MutableList<VaultFile?>
     private val selected = LinkedHashSet<VaultFile>()
-    private var selectable : Boolean
+    private var selectable: Boolean
     private lateinit var layoutManager: GridLayoutManager
-    //private var  glideLoader:VaultFileUrlLoader
+
     private val mediaFileHandler by lazy { MediaFileHandler() }
 
     init {
-      //  glideLoader = VaultFileUrlLoader(context.applicationContext, mediaFileHandler)
         vaultList = ArrayList()
         selectable = false
     }
@@ -41,18 +43,35 @@ class AttachmentsAdapter constructor(private val iGalleryMediaHandler: IGalleryV
         SMALL,
         DETAILED
     }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : AttachmentsAdapter.BaseAttachmentViewHolder{
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): AttachmentsAdapter.BaseAttachmentViewHolder {
         return when (viewType) {
             ViewType.DETAILED.ordinal -> AttachmentsViewHolder(parent)
-            else ->GridAttachmentsViewHolder(parent)
+            else -> GridAttachmentsViewHolder(parent)
         }
     }
 
-    override fun onBindViewHolder(holder: AttachmentsAdapter.BaseAttachmentViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: AttachmentsAdapter.BaseAttachmentViewHolder,
+        position: Int
+    ) {
         val vaultFile = vaultList[position]!!
-        when(holder){
-            is AttachmentsViewHolder -> {holder.bind(vaultFile = vaultList[position],iGalleryMediaHandler = iGalleryMediaHandler)}
-            is GridAttachmentsViewHolder -> {holder.bind(vaultFile = vaultList[position],iGalleryMediaHandler = iGalleryMediaHandler)}
+        when (holder) {
+            is AttachmentsViewHolder -> {
+                holder.bind(
+                    vaultFile = vaultList[position],
+                    iGalleryMediaHandler = iGalleryMediaHandler
+                )
+            }
+            is GridAttachmentsViewHolder -> {
+                holder.bind(
+                    vaultFile = vaultList[position],
+                    iGalleryMediaHandler = iGalleryMediaHandler
+                )
+            }
         }
 
 
@@ -75,7 +94,7 @@ class AttachmentsAdapter constructor(private val iGalleryMediaHandler: IGalleryV
 
     override fun getItemCount() = vaultList.size
 
-        fun submitList(vaultList: List<VaultFile?>) {
+    fun submitList(vaultList: List<VaultFile?>) {
         this.vaultList = vaultList.toMutableList()
         notifyItemChanged(0)
     }
@@ -85,7 +104,7 @@ class AttachmentsAdapter constructor(private val iGalleryMediaHandler: IGalleryV
         else ViewType.SMALL.ordinal
     }
 
-    fun setLayoutManager(gridLayoutManager : GridLayoutManager){
+    fun setLayoutManager(gridLayoutManager: GridLayoutManager) {
         layoutManager = gridLayoutManager
     }
 
@@ -118,23 +137,26 @@ class AttachmentsAdapter constructor(private val iGalleryMediaHandler: IGalleryV
         vaultList.remove(vaultFile)
         notifyItemRemoved(position)
     }
+
     @SuppressLint("NotifyDataSetChanged")
-    fun enableSelectMode(selectable: Boolean){
+    fun enableSelectMode(selectable: Boolean) {
         this.selectable = selectable
         notifyDataSetChanged()
     }
 
-
-    inner class AttachmentsViewHolder(view: View)  : BaseAttachmentViewHolder(view){
+    inner class AttachmentsViewHolder(view: View) : BaseAttachmentViewHolder(view) {
 
         constructor(parent: ViewGroup)
-                : this(LayoutInflater.from(parent.context).inflate(R.layout.item_vault_attachment_hor, parent, false))
+                : this(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_vault_attachment_hor, parent, false)
+        )
 
-        private lateinit var dateTextView : TextView;
-        private lateinit var nameFileTextVew : TextView
-        private lateinit var moreBtn : View
+        private lateinit var dateTextView: TextView;
+        private lateinit var nameFileTextVew: TextView
+        private lateinit var moreBtn: View
 
-        fun bind(vaultFile: VaultFile?,iGalleryMediaHandler: IGalleryVaultHandler){
+        fun bind(vaultFile: VaultFile?, iGalleryMediaHandler: IGalleryVaultHandler) {
             view.apply {
                 dateTextView = findViewById(R.id.fileDateTextView)
                 nameFileTextVew = findViewById(R.id.fileNameTextView)
@@ -151,18 +173,21 @@ class AttachmentsAdapter constructor(private val iGalleryMediaHandler: IGalleryV
             moreBtn.setOnClickListener {
                 vaultFile?.let { it1 -> iGalleryMediaHandler.playMedia(it1) }
             }
-
         }
+    }
 
-   }
-    inner class GridAttachmentsViewHolder (view: View)  : BaseAttachmentViewHolder(view) {
+    inner class GridAttachmentsViewHolder(view: View) : BaseAttachmentViewHolder(view) {
 
         constructor(parent: ViewGroup)
-                : this(LayoutInflater.from(parent.context).inflate(R.layout.item_vault_attachment_grid, parent, false))
-        private lateinit var fileNameTextView : TextView
-        private lateinit var moreBtn : View
+                : this(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_vault_attachment_grid, parent, false)
+        )
 
-        fun bind(vaultFile: VaultFile?, iGalleryMediaHandler: IGalleryVaultHandler){
+        private lateinit var fileNameTextView: TextView
+        private lateinit var moreBtn: View
+
+        fun bind(vaultFile: VaultFile?, iGalleryMediaHandler: IGalleryVaultHandler) {
             view.apply {
                 fileNameTextView = findViewById(R.id.fileNameTextView)
                 filePreviewImg = findViewById(R.id.attachmentImg)
@@ -178,25 +203,27 @@ class AttachmentsAdapter constructor(private val iGalleryMediaHandler: IGalleryV
         }
 
     }
-    abstract inner class BaseAttachmentViewHolder (val view: View)  : RecyclerView.ViewHolder(view){
-        protected lateinit var icAttachmentImg : ImageView
-        protected lateinit var filePreviewImg : ImageView
-        protected val context: Context by lazy {view.context}
-        protected lateinit var checkBox : CheckBox
 
-        fun showVideoInfo(vaultFile: VaultFile){
+    abstract inner class BaseAttachmentViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+        protected lateinit var icAttachmentImg: ImageView
+        protected lateinit var filePreviewImg: ImageView
+        protected val context: Context by lazy { view.context }
+        protected lateinit var checkBox: CheckBox
+
+        fun showVideoInfo(vaultFile: VaultFile) {
             Glide.with(context)
                 .load(vaultFile.thumb)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(filePreviewImg)
             icAttachmentImg.setBackgroundResource(R.drawable.ic_play)
+        }
 
+        fun showAudioInfo(vaultFile: VaultFile) {
+            icAttachmentImg.setBackgroundResource(R.drawable.ic_audio_w_small)
         }
-        fun showAudioInfo(vaultFile: VaultFile){
-           icAttachmentImg.setBackgroundResource(R.drawable.ic_audio_w_small)
-        }
-        fun showImageInfo(vaultFile: VaultFile){
+
+        fun showImageInfo(vaultFile: VaultFile) {
             Glide.with(filePreviewImg.context)
                 .load(vaultFile.thumb)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
