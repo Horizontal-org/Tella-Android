@@ -87,7 +87,7 @@
         tools:text="bjbewjfqw bjfjwq" />
 
 
-    <com.hzontal.tella_locking_ui.ui.pin.pinview.PinLockView
+    <org.hzontal.shared_ui.pinview.PinLockView
         android:id="@+id/pin_lock_view"
         android:layout_width="0dp"
         android:layout_height="0dp"

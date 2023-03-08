@@ -1,5 +1,16 @@
 package rs.readahead.washington.mobile.util;
 
+import static com.hzontal.tella_locking_ui.ConstantsKt.CALCULATOR_ALIAS_BLUE_SKIN;
+import static com.hzontal.tella_locking_ui.ConstantsKt.CALCULATOR_ALIAS_ORANGE_SKIN;
+import static com.hzontal.tella_locking_ui.ConstantsKt.CALCULATOR_ALIAS_YELLOW_SKIN;
+import static com.hzontal.tella_locking_ui.ConstantsKt.CALCULATOR_BLUE_SKIN;
+import static com.hzontal.tella_locking_ui.ConstantsKt.CALCULATOR_ORANGE_SKIN;
+import static com.hzontal.tella_locking_ui.ConstantsKt.CALCULATOR_YELLOW_SKIN;
+import static com.hzontal.tella_locking_ui.ConstantsKt.CALC_ALIAS_BLUE_SKIN;
+import static com.hzontal.tella_locking_ui.ConstantsKt.CALC_ALIAS_GREEN_SKIN;
+import static com.hzontal.tella_locking_ui.ConstantsKt.CALC_ALIAS_ORANGE_SKIN;
+import static com.hzontal.tella_locking_ui.ConstantsKt.CALC_ALIAS_YELLOW_SKIN;
+
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -21,7 +32,7 @@ public class CamouflageManager {
     private final List<CamouflageOption> options;
     public static final int defaultAliasPosition = 15;
 
-    public final CamouflageOption calculatorOption = new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calculator_foreground, R.string.settings_camo_calculator2);
+    public final CamouflageOption calculatorOption = new CamouflageOption(getOptionAlias(CALC_ALIAS_GREEN_SKIN), R.drawable.calc_green_skin_foreground, R.string.settings_camo_calculator2);
     final CamouflageOption defaultOption = new CamouflageOption(defaultAlias, R.drawable.tella_black, R.string.app_name);
 
     public synchronized static CamouflageManager getInstance() {
@@ -32,14 +43,12 @@ public class CamouflageManager {
         return instance;
     }
 
+
     private CamouflageManager() {
         options = new ArrayList<>();
         options.add(new CamouflageOption(getOptionAlias("iCamera"), R.drawable.icamera_foreground, R.string.settings_camo_icamera));
         options.add(new CamouflageOption(getOptionAlias("SelfieCam"), R.drawable.selfiecamera_foreground, R.string.settings_camo_selfie_cam));
         options.add(new CamouflageOption(getOptionAlias("SnapCamera"), R.drawable.snapcamera_foreground, R.string.settings_camo_snap_camera));
-       // options.add(new CamouflageOption(getOptionAlias("Calculate"), R.drawable.calculate_foreground, R.string.settings_camo_calculate));
-       // options.add(new CamouflageOption(getOptionAlias("CalculatorPlus"), R.drawable.calculatorplus_foreground, R.string.settings_camo_calculator_plus));
-      //  options.add(new CamouflageOption(getOptionAlias("iCalculator"), R.drawable.icalculator_foreground, R.string.settings_camo_icalculator));
         options.add(new CamouflageOption(getOptionAlias("Weather"), R.drawable.weather_foreground, R.string.settings_camo_weather));
         options.add(new CamouflageOption(getOptionAlias("EasyWeather"), R.drawable.easyweather_foreground, R.string.settings_camo_easyweather));
         options.add(new CamouflageOption(getOptionAlias("SunnyDay"), R.drawable.sunnyday_foreground, R.string.settings_camo_sunnyday));
@@ -49,23 +58,39 @@ public class CamouflageManager {
         options.add(new CamouflageOption(getOptionAlias("Clock"), R.drawable.clock_foreground, R.string.settings_camo_clock));
         options.add(new CamouflageOption(getOptionAlias("Time"), R.drawable.time_foreground, R.string.settings_camo_time));
         options.add(new CamouflageOption(getOptionAlias("StopWatch"), R.drawable.stopwatch_foreground, R.string.settings_camo_stopwatch));
-        //options.add(new CamouflageOption(defaultAlias, R.drawable.tella_black, R.string.app_name));
-        //options.add(new CamouflageOption(getOptionAlias("Calculator"), R.drawable.calculator, R.string.settings_camo_calculator2));
+
+    }
+
+    public CamouflageOption getCalculatorOptionByTheme(String calculatorTheme) {
+        if (calculatorTheme == null) return calculatorOption;
+        switch (calculatorTheme) {
+            case CALCULATOR_BLUE_SKIN:
+                return new CamouflageOption(getOptionAlias(CALC_ALIAS_BLUE_SKIN), R.drawable.calc_blue_skin_foreground, R.string.settings_camo_calculator2);
+            case CALCULATOR_YELLOW_SKIN:
+                return new CamouflageOption(getOptionAlias(CALC_ALIAS_YELLOW_SKIN), R.drawable.calc_yellow_skin_foreground, R.string.settings_camo_calculator2);
+            case CALCULATOR_ORANGE_SKIN:
+                return new CamouflageOption(getOptionAlias(CALC_ALIAS_ORANGE_SKIN), R.drawable.calc_orange_skin_foreground, R.string.settings_camo_calculator2);
+            default:
+                return calculatorOption;
+        }
     }
 
     public boolean setLauncherActivityAlias(@NonNull Context context, @NonNull String activityAlias) {
         String currentAlias = Preferences.getAppAlias();
+        Preferences.setAppAlias(activityAlias);
         if (activityAlias.equals(currentAlias)) {
             return false;
         }
-
         PackageManager packageManager = context.getPackageManager();
         String packageName = context.getApplicationContext().getPackageName();
-
         List<CamouflageOption> fullOptions = new ArrayList<>(options);
+        if (currentAlias != null) {
+            CamouflageOption calculatorCurrentOption = new CamouflageOption(currentAlias, getOptionDrawable(currentAlias), R.string.settings_camo_calculator2);
+            fullOptions.add(calculatorCurrentOption);
+        }
+        CamouflageOption calculatorChosenOption = new CamouflageOption(activityAlias, getOptionDrawable(activityAlias), R.string.settings_camo_calculator2);
         fullOptions.add(defaultOption);
-        fullOptions.add(calculatorOption);
-
+        fullOptions.add(calculatorChosenOption);
         for (CamouflageOption option : fullOptions) {
             packageManager.setComponentEnabledSetting(
                     new ComponentName(packageName, option.alias),
@@ -73,9 +98,6 @@ public class CamouflageManager {
                             PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                     PackageManager.DONT_KILL_APP);
         }
-
-        Preferences.setAppAlias(activityAlias);
-
         return true;
     }
 
@@ -106,7 +128,6 @@ public class CamouflageManager {
                 return i;
             }
         }
-
         return 0;
     }
 
@@ -153,5 +174,20 @@ public class CamouflageManager {
 
     private String getOptionAlias(String alias) {
         return "rs.readahead.washington.mobile.views.activity.Alias" + alias;
+    }
+
+    private int getOptionDrawable(String alias) {
+
+        if (alias == null) return R.drawable.calculator_foreground;
+        switch (alias) {
+            case CALCULATOR_ALIAS_BLUE_SKIN:
+                return R.drawable.calc_blue_skin_foreground;
+            case CALCULATOR_ALIAS_YELLOW_SKIN:
+                return R.drawable.calc_yellow_skin_foreground;
+            case CALCULATOR_ALIAS_ORANGE_SKIN:
+                return R.drawable.calc_orange_skin_foreground;
+            default:
+                return R.drawable.calculator_foreground;
+        }
     }
 }

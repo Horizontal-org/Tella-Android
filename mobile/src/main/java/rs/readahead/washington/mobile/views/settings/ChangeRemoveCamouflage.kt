@@ -87,8 +87,8 @@ class ChangeRemoveCamouflage : BaseFragment() {
         var drawable = ContextCompat.getDrawable(activity, R.drawable.ic_server)
         val currentAlias = Preferences.getAppAlias()
 
-        if (currentAlias == cm.calculatorOption.alias) {
-            return ContextCompat.getDrawable(activity, cm.calculatorOption.drawableResId)
+        if (currentAlias == cm.getCalculatorOptionByTheme(Preferences.getCalculatorTheme()).alias) {
+            return ContextCompat.getDrawable(activity, cm.getCalculatorOptionByTheme(Preferences.getCalculatorTheme()).drawableResId)
         }
 
         for (option in cm.options) {
