@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.utils.MediaFile;
 
@@ -96,20 +97,22 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
         if (vaultFile.mimeType != null) {
             if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
                 holder.mediaView.setVisibility(View.VISIBLE);
-             /*   Glide.with(holder.mediaView.getContext())
-                        .using(glideLoader)
-                        .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+                Glide.with(holder.mediaView.getContext())
+                        .load(vaultFile.thumb)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .signature(messageDigest -> { })
-                        .into(holder.mediaView);*/
+                        .skipMemoryCache(true)
+                        .into(holder.mediaView);
             } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
                 holder.showAudioInfo();
             } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
                 holder.showVideoInfo();
-               /* Glide.with(holder.mediaView.getContext())
-                        .using(glideLoader)
-                        .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+                Glide.with(holder.mediaView.getContext())
+                        .load(vaultFile.thumb)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .signature(messageDigest -> { })
-                        .into(holder.mediaView);*/
+                        .skipMemoryCache(true)
+                        .into(holder.mediaView);
             } else {
                 holder.showDocumentInfo();
             }

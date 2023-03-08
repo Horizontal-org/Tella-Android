@@ -16,13 +16,12 @@ import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 public class VaultFileDataFetcher implements DataFetcher<InputStream> {
     private MediaFileHandler mediaFileHandler;
     private VaultFileLoaderModel model;
-    private Context context;
+
     private boolean cancelled = false;
     private InputStream inputStream;
 
 
-    VaultFileDataFetcher(Context context, MediaFileHandler mediaFileHandler, VaultFileLoaderModel vaultFileLoaderModel) {
-        this.context = context;
+    VaultFileDataFetcher(MediaFileHandler mediaFileHandler, VaultFileLoaderModel vaultFileLoaderModel) {
         this.mediaFileHandler = mediaFileHandler;
         this.model = vaultFileLoaderModel;
     }

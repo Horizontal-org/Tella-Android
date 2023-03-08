@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.views.activity;
 
-import static rs.readahead.washington.mobile.views.activity.MetadataViewerActivity.VIEW_METADATA;
+import static com.hzontal.tella_vault.Metadata.VIEW_METADATA;
 import static rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragmentKt.PICKER_FILE_REQUEST_CODE;
 
 import android.Manifest;
@@ -311,10 +311,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
     }
 
     private void showGalleryImage(VaultFile vaultFile) {
-
-        //UrlUriLoader loader = new UrlUriLoader();
         Uri uri = MediaFileHandler.getEncryptedUri(getContext(),vaultFile);
-
 
         Glide.with(this)
                 .load(uri)
@@ -326,7 +323,6 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                         binding.content.progressBar.setVisibility(View.GONE);
                         return false;
                     }
-
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         binding.content.progressBar.setVisibility(View.GONE);

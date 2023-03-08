@@ -1,26 +1,22 @@
 package rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments
 
-import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.Key
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.hzontal.tella_vault.VaultFile
-import com.hzontal.utils.MediaFile
 import com.hzontal.utils.MediaFile.isAudioFileType
 import com.hzontal.utils.MediaFile.isImageFileType
 import com.hzontal.utils.MediaFile.isTextFileType
 import com.hzontal.utils.MediaFile.isVideoFileType
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.media.MediaFileHandler
-import rs.readahead.washington.mobile.media.VaultFileUrlLoader
-import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.BaseViewHolder
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.inflate
+import java.security.MessageDigest
 
 class RecentAttachmentViewHolder (val view: View) : BaseViewHolder<VaultFile?>(view) {
    // private val glideLoader = VaultFileUrlLoader(mContext.applicationContext, MediaFileHandler())
@@ -45,24 +41,22 @@ class RecentAttachmentViewHolder (val view: View) : BaseViewHolder<VaultFile?>(v
         if (vaultFile.mimeType == null ) return
         when {
             isImageFileType(vaultFile.mimeType) -> {
-                /*Glide.with(previewImageView.context)
-                    .using(glideLoader)
-                    .load(VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+                Glide.with(previewImageView.context)
+                    .load(vaultFile.thumb)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
-                    .into(previewImageView)*/
+                    .into(previewImageView)
             }
             isAudioFileType(vaultFile.mimeType) -> {
                 showAudioInfo(vaultFile)
             }
             isVideoFileType(vaultFile.mimeType) -> {
                 showVideoInfo()
-               /* Glide.with(mContext)
-                    .using(glideLoader)
-                    .load(VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+                Glide.with(mContext)
+                    .load(vaultFile.thumb)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
-                    .into(previewImageView)*/
+                    .into(previewImageView)
             }
             isTextFileType(vaultFile.mimeType) -> {
                 showDocumentInfo(vaultFile)

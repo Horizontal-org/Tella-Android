@@ -25,6 +25,7 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.ui.*
 import com.google.android.exoplayer2.upstream.*
+import com.hzontal.tella_vault.Metadata.VIEW_METADATA
 import com.hzontal.tella_vault.VaultFile
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.RadioOptionConsumer
@@ -387,7 +388,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
         val viewMetadata = Intent(
             this, MetadataViewerActivity::class.java
         )
-        viewMetadata.putExtra(MetadataViewerActivity.VIEW_METADATA, vaultFile)
+        viewMetadata.putExtra(VIEW_METADATA, vaultFile)
         startActivity(viewMetadata)
     }
 

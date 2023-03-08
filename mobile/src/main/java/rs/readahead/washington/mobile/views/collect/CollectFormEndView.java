@@ -221,10 +221,11 @@ public class CollectFormEndView extends FrameLayout {
         sizeView.setText(FileUtil.getFileSizeString(mediaFile.size));
 
         if (MediaFile.INSTANCE.isImageFileType(mediaFile.mimeType) || (MediaFile.INSTANCE.isVideoFileType(mediaFile.mimeType))) {
-            /*glide.load(new VaultFileLoaderModel(mediaFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+            Glide.with(getContext())
+                    .load(mediaFile.thumb)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
-                    .into(thumbView);*/
+                    .into(thumbView);
             iconView.setVisibility(GONE);
         } else if (MediaFile.INSTANCE.isAudioFileType(mediaFile.mimeType)) {
             iconView.setImageResource(R.drawable.ic_headset_white_24dp);

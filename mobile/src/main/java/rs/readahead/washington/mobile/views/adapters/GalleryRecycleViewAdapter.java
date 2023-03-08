@@ -74,6 +74,11 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
 
         if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
             holder.showImageInfo();
+            Glide.with(holder.binding.mediaView.getContext())
+                    .load(vaultFile.thumb)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(holder.binding.mediaView);
             /*Glide.with(holder.binding.mediaView.getContext())
                     .using(glideLoader)
                     .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
@@ -87,6 +92,11 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
             holder.binding.mediaView.setImageDrawable(drawable);
         } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
             holder.showVideoInfo(vaultFile);
+            Glide.with(holder.binding.mediaView.getContext())
+                    .load(vaultFile.thumb)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(holder.binding.mediaView);
           /*  Glide.with(holder.binding.mediaView.getContext())
                     .using(glideLoader)
                     .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))

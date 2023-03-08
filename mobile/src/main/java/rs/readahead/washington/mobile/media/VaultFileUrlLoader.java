@@ -52,10 +52,10 @@ public class VaultFileUrlLoader<Data> implements ModelLoader<Uri, Data> {
 
 
    public DataFetcher<InputStream> getResourceFetcher(VaultFileLoaderModel model, int width, int height) {
-        return new VaultFileDataFetcher(context, mediaFileHandler, model);
+        return new VaultFileDataFetcher(mediaFileHandler, model);
     }
 
     public DataFetcher<InputStream> build(VaultFileLoaderModel model) {
-        return new VaultFileDataFetcher(context, mediaFileHandler, model);
+        return new VaultFileDataFetcher(mediaFileHandler, model);
     }
 }

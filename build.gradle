@@ -43,7 +43,7 @@ buildscript {
     versions.okhttp3LoggingInterceptor = '3.6.0'
     versions.squareupTape = '1.2.3'
     versions.cacheword = '0.1.1'
-    versions.glide = '4.13.2'
+    versions.glide = '4.15.0'
     versions.burgstallerOkhttpDigest = '1.15'
     versions.javarosa = '3.5.0'
     versions.kxml2 = '2.3.0'

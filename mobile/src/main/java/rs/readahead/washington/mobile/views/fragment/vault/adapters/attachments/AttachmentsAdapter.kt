@@ -2,8 +2,6 @@ package rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.text.format.DateFormat
-import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,13 +18,9 @@ import com.hzontal.utils.MediaFile.isImageFileType
 import com.hzontal.utils.MediaFile.isVideoFileType
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.media.MediaFileHandler
-import rs.readahead.washington.mobile.media.VaultFileUrlLoader
-import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel
 import rs.readahead.washington.mobile.util.DateUtil
 import rs.readahead.washington.mobile.views.interfaces.IGalleryVaultHandler
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.LinkedHashSet
 
 class AttachmentsAdapter constructor(private val iGalleryMediaHandler: IGalleryVaultHandler,private val context: Context) :
      RecyclerView.Adapter<AttachmentsAdapter.BaseAttachmentViewHolder>() {
@@ -191,12 +185,11 @@ class AttachmentsAdapter constructor(private val iGalleryMediaHandler: IGalleryV
         protected lateinit var checkBox : CheckBox
 
         fun showVideoInfo(vaultFile: VaultFile){
-            /*Glide.with(context)
-                .using(glideLoader)
-                .load(VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+            Glide.with(context)
+                .load(vaultFile.thumb)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
-                .into(filePreviewImg)*/
+                .into(filePreviewImg)
             icAttachmentImg.setBackgroundResource(R.drawable.ic_play)
 
         }
@@ -204,12 +197,11 @@ class AttachmentsAdapter constructor(private val iGalleryMediaHandler: IGalleryV
            icAttachmentImg.setBackgroundResource(R.drawable.ic_audio_w_small)
         }
         fun showImageInfo(vaultFile: VaultFile){
-           /* Glide.with(filePreviewImg.context)
-                .using(glideLoader)
-                .load(VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+            Glide.with(filePreviewImg.context)
+                .load(vaultFile.thumb)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
-                .into(filePreviewImg)*/
+                .into(filePreviewImg)
         }
 
         fun maybeEnableCheckBox(selectable: Boolean) {

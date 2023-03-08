@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.utils.MediaFile;
 
@@ -34,7 +35,6 @@ import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.
 
 public class AttachmentsSelectorAdapter extends RecyclerView.Adapter<AttachmentsSelectorAdapter.ViewHolder> {
     private List<VaultFile> files = new ArrayList<>();
-    ///private final VaultFileUrlLoader glideLoader;
     private final ISelectorVaultHandler selectorVaultHandler;
     private final Set<VaultFile> selected;
     private boolean selectable;
@@ -92,20 +92,22 @@ public class AttachmentsSelectorAdapter extends RecyclerView.Adapter<Attachments
         if (vaultFile.mimeType != null) {
             if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
                 holder.mediaView.setVisibility(View.VISIBLE);
-               /* Glide.with(holder.mediaView.getContext())
-                        .using(glideLoader)
-                        .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+                Glide.with(holder.mediaView.getContext())
+                        .load(vaultFile.thumb)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
                         .signature(messageDigest -> { })
-                        .into(holder.mediaView);*/
+                        .into(holder.mediaView);
             } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
                 holder.showAudioInfo();
             } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
                 holder.showVideoInfo();
-            /*    Glide.with(holder.mediaView.getContext())
-                        .using(glideLoader)
-                        .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+                Glide.with(holder.mediaView.getContext())
+                        .load(vaultFile.thumb)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
                         .signature(messageDigest -> { })
-                        .into(holder.mediaView);*/
+                        .into(holder.mediaView);
 
             } else {
                 holder.showDocumentInfo();

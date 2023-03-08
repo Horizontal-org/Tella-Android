@@ -54,7 +54,7 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.CaptureEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
+import rs.readahead.washington.mobile.media.VaultFileLoader;
 import rs.readahead.washington.mobile.mvp.contract.ICameraPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePresenterContract;
@@ -108,7 +108,6 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
     private AlertDialog videoQualityDialog;
     private VideoResolutionManager videoResolutionManager;
     private long lastClickTime = System.currentTimeMillis();
-    //private RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
     private String currentRootParent = null;
     private ActivityCameraBinding binding;
 
@@ -144,7 +143,7 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
         }
 
         MediaFileHandler mediaFileHandler = new MediaFileHandler();
-      //  VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
+       //VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
         //glide = Glide.with(getContext()).using(glideLoader);
 
         setupCameraView();
@@ -327,7 +326,10 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
     public void onLastMediaFileSuccess(VaultFile vaultFile) {
         if (intentMode != IntentMode.COLLECT) {
             previewView.setVisibility(View.VISIBLE);
-            //glide.load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(previewView);
+            Glide.with(this).load(vaultFile.thumb)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(previewView);
         }
     }
 
