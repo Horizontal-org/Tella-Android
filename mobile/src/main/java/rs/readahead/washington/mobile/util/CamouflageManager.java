@@ -60,9 +60,9 @@ public class CamouflageManager {
         options.add(new CamouflageOption(getOptionAlias("Forecast"), R.mipmap.ic_forecast_round, R.string.settings_camo_forecast));
         options.add(new CamouflageOption(getOptionAlias("GameStation"), R.mipmap.ic_game_station_round, R.string.settings_camo_gamestation));
         options.add(new CamouflageOption(getOptionAlias("PlayNow"), R.mipmap.ic_play_now_round, R.string.settings_camo_playnow));
-        options.add(new CamouflageOption(getOptionAlias("JewelDash"), R.mipmap.ic_jewel_dash_round, R.string.settings_camo_jeweldash));
-        options.add(new CamouflageOption(getOptionAlias("GameLauncher"), R.mipmap.ic_game_launcher_round, R.string.settings_camo_jeweldash));
+        options.add(new CamouflageOption(getOptionAlias("GameLauncher"), R.mipmap.ic_game_launcher_round, R.string.settings_camo_game_launcher));
         options.add(new CamouflageOption(getOptionAlias("Clock"), R.mipmap.ic_clock_round, R.string.settings_camo_clock));
+        options.add(new CamouflageOption(getOptionAlias("JewelDash"), R.mipmap.ic_jewel_dash_round, R.string.settings_camo_jeweldash));
         options.add(new CamouflageOption(getOptionAlias("Time"), R.mipmap.ic_time_round, R.string.settings_camo_time));
         options.add(new CamouflageOption(getOptionAlias("StopWatch"), R.mipmap.ic_stop_watch_round, R.string.settings_camo_stopwatch));
         options.add(new CamouflageOption(getOptionAlias("Watch"), R.mipmap.ic_watch_round, R.string.settings_camo_watch));

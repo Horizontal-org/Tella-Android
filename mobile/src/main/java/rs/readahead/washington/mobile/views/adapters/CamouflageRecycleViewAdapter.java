@@ -43,9 +43,6 @@ public class CamouflageRecycleViewAdapter extends RecyclerView.Adapter<Camouflag
 
         holder.rootView.setOnClickListener(v -> setSelectedPosition(holder.getAdapterPosition()));
 
-        if (position == defaultAliasPosition){
-            holder.itemView.setVisibility(View.GONE);
-        }
     }
 
     @Override

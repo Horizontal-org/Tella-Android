@@ -374,7 +374,7 @@ mode activation</string>
     <string name="settings.camo_sunnyday">SunnyDay</string>
     <string name="settings.camo_forecast">Forecast</string>
     <string name="settings.camo_gamestation">GameStation</string>
-    <string name="settings.camo_game_launcher">GameStation</string>
+    <string name="settings.camo_game_launcher">Game Launcher</string>
     <string name="settings.camo_playnow">PlayNow</string>
     <string name="settings.camo_jeweldash">Jewel Dash</string>
     <string name="settings.camo_clock">Clock</string>
