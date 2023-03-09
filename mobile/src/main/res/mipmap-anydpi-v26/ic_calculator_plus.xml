@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-    <background android:drawable="@color/ic_calculator_plus_background"/>
+    <background android:drawable="@color/green"/>
     <foreground android:drawable="@mipmap/ic_calculator_plus_foreground"/>
 </adaptive-icon>

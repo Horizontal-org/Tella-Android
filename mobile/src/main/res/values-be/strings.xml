@@ -333,6 +333,9 @@
   <string name="settings.camo_weather">Weather</string>
   <string name="settings.camo_easyweather">EasyWeather</string>
   <string name="settings.camo_sunnyday">SunnyDay</string>
+  <string name="settings.camo_micamera">MiCamera</string>
+  <string name="settings.camo_forecast">Forecast</string>
+  <string name="settings.camo_game_launcher">Game Launcher</string>
   <string name="settings.camo_gamestation">GameStation</string>
   <string name="settings.camo_playnow">PlayNow</string>
   <string name="settings.camo_jeweldash">Jewel Dash</string>
