@@ -10,7 +10,6 @@ import static com.hzontal.tella_locking_ui.ConstantsKt.CALC_ALIAS_BLUE_SKIN;
 import static com.hzontal.tella_locking_ui.ConstantsKt.CALC_ALIAS_GREEN_SKIN;
 import static com.hzontal.tella_locking_ui.ConstantsKt.CALC_ALIAS_ORANGE_SKIN;
 import static com.hzontal.tella_locking_ui.ConstantsKt.CALC_ALIAS_YELLOW_SKIN;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -30,7 +29,6 @@ public class CamouflageManager {
     private static CamouflageManager instance;
     private static final String defaultAlias = SplashActivity.class.getCanonicalName();
     private final List<CamouflageOption> options;
-    public static final int defaultAliasPosition = 15;
 
     public final CamouflageOption calculatorOption = new CamouflageOption(getOptionAlias(CALC_ALIAS_GREEN_SKIN), R.drawable.calc_green_skin_foreground, R.string.settings_camo_calculator2);
     final CamouflageOption defaultOption = new CamouflageOption(defaultAlias, R.drawable.tella_black, R.string.app_name);

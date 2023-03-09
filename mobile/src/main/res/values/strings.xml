@@ -447,8 +447,8 @@ connecting to a server</string>
     <string name="Vault_CreateFolder_SheetAction">Create a new folder</string>
     <string name="ServerSettings_ServerName_ToolTip">Give your server a name to recognize it if you add more servers later. It could be the organization’s name, the project’s name, etc.</string>
     <plurals name="Vault_Importing_SheetProgress">
-        <item quantity="one">%s file imported</item>
-        <item quantity="other">%s files imported</item>
+        <item quantity="one">file imported</item>
+        <item quantity="other">files imported</item>
     </plurals>
     <string name="Vault_Importing_SheetTitle">Importing and encrypting</string>
     <string name="Rec_Exit_SheetTitle">Save recording?</string>

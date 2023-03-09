@@ -1,18 +1,14 @@
 package rs.readahead.washington.mobile.views.adapters;
 
-import static rs.readahead.washington.mobile.util.CamouflageManager.defaultAliasPosition;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import java.util.Collections;
 import java.util.List;
-
 import rs.readahead.washington.mobile.databinding.CardCamouflageIconBinding;
 import rs.readahead.washington.mobile.presentation.entity.CamouflageOption;
 
