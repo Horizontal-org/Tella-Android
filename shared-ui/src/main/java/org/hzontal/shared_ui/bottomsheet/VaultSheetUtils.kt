@@ -377,8 +377,8 @@ object VaultSheetUtils {
                         action.import()
                     }
                     //Share action
-                    createDeleteActionTV.visibility = View.GONE
-                    deleteVaultTooltip.visibility = View.GONE
+                    createDeleteActionTV.visibility = View.VISIBLE
+                    deleteVaultTooltip.visibility = View.VISIBLE
                     createDeleteActionTV.text = importDeleteLabel
                     createDeleteActionTV.setOnClickListener {
                         vaultManageFilesSheet.dismiss()
