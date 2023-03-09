@@ -378,9 +378,6 @@ mode activation</string>
     <string name="settings.camo_playnow">PlayNow</string>
     <string name="settings.camo_jeweldash">Jewel Dash</string>
     <string name="settings.camo_clock">Clock</string>
-    <string name="settings.camo_micamera">MiCamera</string>
-    <string name="settings.camo_forecast">Forecast</string>
-    <string name="settings.camo_game_launcher">Game Launcher</string>
     <string name="settings.camo_time">Time</string>
     <string name="settings.camo_stopwatch">StopWatch</string>
     <string name="settings.camo_music">Music</string>
