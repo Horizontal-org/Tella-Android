@@ -94,24 +94,13 @@ open class ReportsFilesRecyclerViewAdapter(
                 removeBtn.setOnClickListener {
                     removeFile(position = layoutPosition)
                 }
-
                 if (isImageFileType(vaultFile.mimeType)) {
                     this.showImageInfo(vaultFile)
-                    Glide.with(context)
-                        .load(vaultFile.thumb)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
-                        .into(filePreviewImg)
                 } else if (isAudioFileType(vaultFile.mimeType)) {
                     this.showAudioInfo()
                     fileNameTextView.text = vaultFile.name
                 } else if (isVideoFileType(vaultFile.mimeType)) {
                     this.showVideoInfo(vaultFile)
-                    Glide.with(context)
-                        .load(vaultFile.thumb)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
-                        .into(filePreviewImg)
                 } else {
                     fileNameTextView.text = vaultFile.name
                     this.showDocInfo()
@@ -123,11 +112,7 @@ open class ReportsFilesRecyclerViewAdapter(
         }
 
         private fun showVideoInfo(vaultFile: VaultFile) {
-            Glide.with(context)
-                .load(vaultFile.thumb)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(filePreviewImg)
+            filePreviewImg.loadImage(vaultFile.thumb)
             icAttachmentImg.setBackgroundResource(R.drawable.ic_play)
         }
 
@@ -140,11 +125,15 @@ open class ReportsFilesRecyclerViewAdapter(
         }
 
         private fun showImageInfo(vaultFile: VaultFile) {
-            Glide.with(filePreviewImg.context)
-                .load(vaultFile.thumb)
+            filePreviewImg.loadImage(vaultFile.thumb)
+        }
+
+        fun ImageView.loadImage(thumb: ByteArray) {
+            Glide.with(this)
+                .load(thumb)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
-                .into(filePreviewImg)
+                .into(this)
         }
 
         private fun showAddLink() {

@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import com.bumptech.glide.Glide
@@ -38,22 +39,14 @@ class RecentAttachmentViewHolder(val view: View) : BaseViewHolder<VaultFile?>(vi
         if (vaultFile.mimeType == null) return
         when {
             isImageFileType(vaultFile.mimeType) -> {
-                Glide.with(previewImageView.context)
-                    .load(vaultFile.thumb)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(previewImageView)
+                previewImageView.loadImage(vaultFile.thumb)
             }
             isAudioFileType(vaultFile.mimeType) -> {
                 showAudioInfo(vaultFile)
             }
             isVideoFileType(vaultFile.mimeType) -> {
                 showVideoInfo()
-                Glide.with(mContext)
-                    .load(vaultFile.thumb)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(previewImageView)
+                previewImageView.loadImage(vaultFile.thumb)
             }
             isTextFileType(vaultFile.mimeType) -> {
                 showDocumentInfo(vaultFile)
@@ -76,6 +69,14 @@ class RecentAttachmentViewHolder(val view: View) : BaseViewHolder<VaultFile?>(vi
         fileNameTextView.visibility = View.VISIBLE
         fileNameTextView.text = vaultFile?.name
         more.visibility = View.VISIBLE
+    }
+
+    fun ImageView.loadImage(thumb: ByteArray) {
+        Glide.with(this)
+            .load(thumb)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true)
+            .into(this)
     }
 
     companion object {

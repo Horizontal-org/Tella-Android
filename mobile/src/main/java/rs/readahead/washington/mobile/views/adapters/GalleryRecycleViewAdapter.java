@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.views.adapters;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 
 import androidx.annotation.LayoutRes;
@@ -32,21 +31,19 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
     private List<VaultFile> files = new ArrayList<>();
     private IGalleryMediaHandler galleryMediaHandler;
     private Set<VaultFile> selected;
-    private int cardLayoutId;
     private boolean selectable;
     private boolean singleSelection;
 
 
-    public GalleryRecycleViewAdapter(Context context, IGalleryMediaHandler galleryMediaHandler, @LayoutRes int cardLayoutId) {
-        this(context, galleryMediaHandler, cardLayoutId, true, false);
+    public GalleryRecycleViewAdapter(IGalleryMediaHandler galleryMediaHandler) {
+        this(galleryMediaHandler,true, false);
     }
 
-    public GalleryRecycleViewAdapter(Context context, IGalleryMediaHandler galleryMediaHandler, @LayoutRes int cardLayoutId,
+    public GalleryRecycleViewAdapter(IGalleryMediaHandler galleryMediaHandler,
                                      boolean selectable,
                                      boolean singleSelection) {
         this.galleryMediaHandler = galleryMediaHandler;
         this.selected = new LinkedHashSet<>();
-        this.cardLayoutId = cardLayoutId;
         this.selectable = selectable;
         this.singleSelection = singleSelection;
     }

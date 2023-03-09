@@ -298,5 +298,4 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
         }
     }
 
-
 }

@@ -88,8 +88,7 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
         setupToolbar();
         setupFab();
 
-        galleryAdapter = new GalleryRecycleViewAdapter(this, this,
-                R.layout.card_gallery_attachment_media_file,
+        galleryAdapter = new GalleryRecycleViewAdapter(this,
                 true, true);
         RecyclerView.LayoutManager galleryLayoutManager = new GridLayoutManager(this, 3);
         recyclerView.setLayoutManager(galleryLayoutManager);
