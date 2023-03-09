@@ -359,6 +359,9 @@
   <string name="settings.camo_playnow">PlayNow</string>
   <string name="settings.camo_jeweldash">ဂျ၀ဲလ်ဒက်ရှ်</string>
   <string name="settings.camo_clock">နာရီ</string>
+  <string name="settings.camo_micamera">MiCamera</string>
+  <string name="settings.camo_forecast">Forecast</string>
+  <string name="settings.camo_game_launcher">Game Launcher</string>
   <string name="settings.camo_time">အချိန်</string>
   <string name="settings.camo_stopwatch">StopWatch</string>
   <string name="fragment_mic">အသံဖမ်းစက်</string>
