@@ -62,6 +62,7 @@ open class ReportsFilesRecyclerViewAdapter(
 
     private fun removeFile(position: Int) {
         listAttachment.removeAt(position)
+        iAttachmentsMediaHandler.removeFiles()
         notifyItemRemoved(position)
     }
 

@@ -60,6 +60,8 @@ class ReportsEntryFragment :
     private var servers: ArrayList<TellaReportServer>? = null
     private var reportFormInstance: ReportFormInstance? = null
     private var isNewDraft = true
+    private var isTitleEnabled = false
+    private var isDescriptionEnabled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -148,19 +150,37 @@ class ReportsEntryFragment :
 
     private fun highLightSubmitButton() {
         binding?.reportTitleEt?.onChange { title ->
-            highLightButton(title.length > 1)
+            isTitleEnabled = title.length > 1
+            highLightDraftButton(isTitleEnabled)
         }
+
+        binding?.reportDescriptionEt?.onChange { description ->
+            isDescriptionEnabled = description.length > 1
+            highLightButtonOutBoxButton()
+        }
+
         binding?.deleteBtn?.setOnClickListener {
             reportFormInstance?.let { instance -> showDeleteBottomSheet(instance) }
         }
     }
 
-    private fun highLightButton(isTitleEnabled: Boolean) {
+    private fun highLightDraftButton(isTitleEnabled: Boolean) {
         if (isTitleEnabled) {
-            binding?.sendReportBtn?.setBackgroundResource(R.drawable.bg_round_orange_btn)
             binding?.toolbar?.onRightClickListener = {
                 saveReportAsDraft(false)
             }
+
+        } else {
+            binding?.toolbar?.onRightClickListener = {}
+        }
+    }
+
+    private fun highLightButtonOutBoxButton() {
+        if (isTitleEnabled && (isDescriptionEnabled || filesRecyclerViewAdapter.getFiles()
+                .isNotEmpty())
+        ) {
+            binding?.sendReportBtn?.setBackgroundResource(R.drawable.bg_round_orange_btn)
+
             binding?.sendLaterBtn?.setOnClickListener {
                 saveReportAsOutbox()
             }
@@ -170,7 +190,6 @@ class ReportsEntryFragment :
         } else {
             binding?.sendReportBtn?.setBackgroundResource(R.drawable.bg_round_orange16_btn)
             binding?.sendReportBtn?.setOnClickListener(null)
-            binding?.toolbar?.onRightClickListener = {}
             binding?.sendLaterBtn?.setOnClickListener {}
         }
     }
@@ -370,6 +389,7 @@ class ReportsEntryFragment :
             filesRecyclerViewAdapter.insertAttachment(file)
         }
         binding?.filesRecyclerView?.visibility = View.VISIBLE
+        highLightButtonOutBoxButton()
     }
 
     override fun playMedia(mediaFile: VaultFile?) {
@@ -378,6 +398,10 @@ class ReportsEntryFragment :
 
     override fun addFiles() {
         showSelectFilesSheet()
+    }
+
+    override fun removeFiles() {
+        highLightButtonOutBoxButton()
     }
 
     override fun onDropDownItemClicked(position: Int, chosenItem: DropDownItem) {
