@@ -26,9 +26,6 @@ import rs.readahead.washington.mobile.domain.entity.EntityStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance;
-import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
-import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.FileUtil;
 
 @SuppressLint("ViewConstructor")
@@ -39,8 +36,6 @@ public class UwaziFormEndView extends FrameLayout {
     String title;
     private UwaziEntityInstance instance;
     private boolean previewUploaded;
-    private final RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
-
 
     public UwaziFormEndView(Context context, @StringRes int titleResId) {
         super(context);
@@ -51,13 +46,9 @@ public class UwaziFormEndView extends FrameLayout {
         titleView = findViewById(R.id.title);
 
         titleView.setText(title);
-
-        MediaFileHandler mediaFileHandler = new MediaFileHandler();
-        VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
-        glide = Glide.with(getContext()).using(glideLoader);
     }
 
-    public UwaziFormEndView(Context context,String title) {
+    public UwaziFormEndView(Context context, String title) {
         super(context);
         inflate(context, R.layout.uwazi_form_end_view, this);
 
@@ -66,10 +57,6 @@ public class UwaziFormEndView extends FrameLayout {
         titleView = findViewById(R.id.title);
 
         titleView.setText(title);
-
-        MediaFileHandler mediaFileHandler = new MediaFileHandler();
-        VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
-        glide = Glide.with(getContext()).using(glideLoader);
     }
 
     public void setInstance(@NonNull UwaziEntityInstance instance, boolean offline, boolean previewUploaded) {
@@ -82,7 +69,6 @@ public class UwaziFormEndView extends FrameLayout {
         if (this.instance == null) {
             return;
         }
-
         //  titleView.setText(title);
 
         TextView formNameView = findViewById(R.id.formName);
@@ -105,16 +91,16 @@ public class UwaziFormEndView extends FrameLayout {
             formElements++;
         }
 
-       // TextView formElementsView = findViewById(R.id.formElements);
+        // TextView formElementsView = findViewById(R.id.formElements);
         TextView formSizeView = findViewById(R.id.formSize);
 
-    //    formElementsView.setText(getResources().getQuantityString(R.plurals.collect_end_meta_number_of_elements, formElements, formElements));
+        //    formElementsView.setText(getResources().getQuantityString(R.plurals.collect_end_meta_number_of_elements, formElements, formElements));
         formSizeView.setText(FileUtil.getFileSizeString(formSize));
     }
 
     public void showUploadProgress(String partName) {
         titleView.setText(R.string.collect_end_heading_submitting);
-      //  subTitleView.setVisibility(GONE);
+        //  subTitleView.setVisibility(GONE);
 
         SubmittingItem item = findViewWithTag(partName);
         if (item != null) {
@@ -163,9 +149,9 @@ public class UwaziFormEndView extends FrameLayout {
         }
 
         if (offline || instance.getStatus() == EntityStatus.SUBMITTED) {
-         //   subTitleView.setVisibility(GONE);
+            //   subTitleView.setVisibility(GONE);
         } else {
-           // subTitleView.setVisibility(VISIBLE);
+            // subTitleView.setVisibility(VISIBLE);
         }
 
         return item;
@@ -181,7 +167,8 @@ public class UwaziFormEndView extends FrameLayout {
         item.setPartSize(mediaFile.size);
 
         if (MediaFile.INSTANCE.isImageFileType(mediaFile.mimeType) || (MediaFile.INSTANCE.isVideoFileType(mediaFile.mimeType))) {
-            glide.load(new VaultFileLoaderModel(mediaFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+            Glide.with(getContext())
+                    .load(mediaFile.thumb)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(thumbView);
