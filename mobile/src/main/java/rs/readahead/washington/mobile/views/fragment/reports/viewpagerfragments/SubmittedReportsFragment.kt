@@ -88,7 +88,7 @@ class SubmittedReportsFragment : BaseBindingFragment<FragmentReportsListBinding>
             requireContext().resources.getString(R.string.Delete_Submitted_Report_Confirmation),
             requireContext().getString(R.string.action_yes),
             requireContext().getString(R.string.action_no),
-            R.drawable.ic_baseline_white_eye_24
+            R.drawable.ic_eye_white
         )
     }
 
