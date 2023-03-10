@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.data.sharedpref;
 
-import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.ERASE_GALLERY;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,10 +13,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 public class Preferences {
-    private static SharedPrefs sharedPrefs = SharedPrefs.getInstance();
+    private static final SharedPrefs sharedPrefs = SharedPrefs.getInstance();
 
     // cache
-    private static Map<String, Boolean> bCache = new ConcurrentHashMap<>();
+    private static final Map<String, Boolean> bCache = new ConcurrentHashMap<>();
 
 
     public static boolean isSecretModeActive() {
@@ -96,14 +95,6 @@ public class Preferences {
 
     public static void setDeleteServerSettingsActive(boolean value) {
         setBoolean(SharedPrefs.DELETE_SERVER_SETTINGS, value);
-    }
-
-    public boolean isEraseGalleryActive() {
-        return getBoolean(ERASE_GALLERY, false);
-    }
-
-    public void setEraseGalleryActive(boolean value) {
-        setBoolean(ERASE_GALLERY, value);
     }
 
     public static boolean isEraseForms() {
@@ -204,11 +195,11 @@ public class Preferences {
     }
 
     public static boolean isDeleteGalleryEnabled() {
-        return getBoolean(ERASE_GALLERY, false);
+        return getBoolean(SharedPrefs.ERASE_GALLERY, false);
     }
 
     public static void setDeleteGallery(boolean value) {
-        setBoolean(ERASE_GALLERY, value);
+        setBoolean(SharedPrefs.ERASE_GALLERY, value);
     }
 
     public static float getLocationAccuracyThreshold() {
