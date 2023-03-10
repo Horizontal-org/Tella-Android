@@ -89,7 +89,7 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
             requireContext().resources.getString(R.string.Delete_Report_Confirmation),
             requireContext().getString(R.string.action_remove),
             requireContext().getString(R.string.action_cancel),
-            R.drawable.ic_eye_white
+            R.drawable.ic_baseline_white_eye_24
         )
     }
 
