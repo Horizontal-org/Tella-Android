@@ -74,7 +74,7 @@ class LanguageFragment : BaseFragment() {
 
             languageUpdated.observe(viewLifecycleOwner, { updated ->
                 if (updated) {
-                    activity.addFragment(
+                    baseActivity.addFragment(
                         SuccessConnectFragment.newInstance(serverUwazi, isUpdate),
                         R.id.container
                     )
@@ -101,13 +101,13 @@ class LanguageFragment : BaseFragment() {
                 adapter = languageSelectorAdapter
             }
             nextBtn.setOnClickListener {
-                activity.addFragment(
+                baseActivity.addFragment(
                     SuccessConnectFragment.newInstance(serverUwazi, isUpdate),
                     R.id.container
                 )
             }
             backBtn.setOnClickListener {
-                activity.supportFragmentManager.popBackStack()
+                baseActivity.supportFragmentManager.popBackStack()
             }
         }
 

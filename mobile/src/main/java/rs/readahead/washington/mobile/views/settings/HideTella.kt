@@ -26,8 +26,8 @@ class HideTella : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        (activity as OnFragmentSelected?)?.showAppbar()
-        (activity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_servers_hide_tella_title)
+        (baseActivity as OnFragmentSelected?)?.showAppbar()
+        (baseActivity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_servers_hide_tella_title)
 
         val btnOneDesc = view.findViewById<TextView>(R.id.subtitle_btn_one)
         btnOneDesc.setText(Html.fromHtml(getString(R.string.settings_servers_setup_change_name_icon_subtitle)))
@@ -39,16 +39,16 @@ class HideTella : BaseFragment() {
         hideNotPossible.text = Html.fromHtml(getString(R.string.settings_servers_setup_hide_behind_calculator_not_possible))
 
         view.findViewById<LinearLayout>(R.id.sheet_one_btn).setOnClickListener {
-            activity.addFragment(CamouflageNameAndLogo(), R.id.my_nav_host_fragment)
+            baseActivity.addFragment(CamouflageNameAndLogo(), R.id.my_nav_host_fragment)
         }
 
         val btnTwoLabel = view.findViewById<LinearLayout>(R.id.sheet_two_btn_label)
         val btnTwo = view.findViewById<LinearLayout>(R.id.sheet_two_btn)
 
-        if ((activity.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(activity) != UnlockRegistry.Method.TELLA_PIN) {
+        if ((baseActivity.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(baseActivity) != UnlockRegistry.Method.TELLA_PIN) {
             hideNotPossible.visibility = View.VISIBLE
             hideNotPossible.setOnClickListener {
-                activity.addFragment(SecuritySettings(), R.id.my_nav_host_fragment)
+                baseActivity.addFragment(SecuritySettings(), R.id.my_nav_host_fragment)
             }
             btnTwoLabel.setAlpha(0.38f)
             btnTwo.setClickable(false)
@@ -58,14 +58,14 @@ class HideTella : BaseFragment() {
             btnTwoLabel.setAlpha(1f)
             btnTwo.setClickable(true)
             btnTwo.setOnClickListener {
-                val intent = Intent(activity, SettingsCalculatorActivity::class.java)
-                activity.startActivity(intent)
+                val intent = Intent(baseActivity, SettingsCalculatorActivity::class.java)
+                baseActivity.startActivity(intent)
             }
         }
 
         view.findViewById<View>(R.id.back_btn).setOnClickListener {
-            (activity as OnFragmentSelected?)?.showAppbar()
-            activity.onBackPressed()
+            (baseActivity as OnFragmentSelected?)?.showAppbar()
+            baseActivity.onBackPressed()
         }
     }
 }

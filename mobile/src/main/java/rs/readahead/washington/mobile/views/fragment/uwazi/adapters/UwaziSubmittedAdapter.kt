@@ -11,6 +11,7 @@ import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.util.Util
 import rs.readahead.washington.mobile.util.ViewUtil
 import rs.readahead.washington.mobile.views.adapters.uwazi.VIEW_TYPE_HEADER
+import rs.readahead.washington.mobile.views.adapters.uwazi.VIEW_TYPE_LIST
 
 class UwaziSubmittedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -53,13 +54,18 @@ class UwaziSubmittedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             submittedItem.apply {
                 setName(entityRow.instanceName)
                 setOrganization(entityRow.translatedTemplateName)
-                if (entityRow.status == EntityStatus.SUBMITTED) {
-                    setDates(entityRow.updated)
-                    setSubmittedIcon()
-                } else if (entityRow.status == EntityStatus.SUBMISSION_ERROR) {
-                    setSubmitErrorIcon()
-                } else if (entityRow.status == EntityStatus.FINALIZED || entityRow.status == EntityStatus.SUBMISSION_PENDING || entityRow.status == EntityStatus.SUBMISSION_PARTIAL_PARTS) {
-                    setPendingIcon()
+                when (entityRow.status) {
+                    EntityStatus.SUBMITTED -> {
+                        setDates(entityRow.updated)
+                        setSubmittedIcon()
+                    }
+                    EntityStatus.SUBMISSION_ERROR -> {
+                        setSubmitErrorIcon()
+                    }
+                    EntityStatus.FINALIZED, EntityStatus.SUBMISSION_PENDING, EntityStatus.SUBMISSION_PARTIAL_PARTS -> {
+                        setPendingIcon()
+                    }
+                    else -> {}
                 }
                 setOnClickListener { entityRow.onOpenClicked() }
                 popClickListener = { entityRow.onMoreClicked() }
@@ -113,4 +119,9 @@ class UwaziSubmittedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun getItemCount() = submitted.size
+
+    override fun getItemViewType(position: Int): Int {
+        return if (position == 0) VIEW_TYPE_HEADER else VIEW_TYPE_LIST
+    }
+
 }

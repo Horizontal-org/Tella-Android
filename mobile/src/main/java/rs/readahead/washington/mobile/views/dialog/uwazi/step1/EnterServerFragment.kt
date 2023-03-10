@@ -35,7 +35,7 @@ class EnterServerFragment : BaseFragment() {
     private var serverUwazi: UWaziUploadServer? = null
 
     companion object {
-        val TAG = EnterServerFragment::class.java.simpleName
+        val TAG: String = EnterServerFragment::class.java.simpleName
 
         @JvmStatic
         fun newInstance(server: UWaziUploadServer, isUpdate: Boolean): EnterServerFragment {
@@ -79,12 +79,12 @@ class EnterServerFragment : BaseFragment() {
     private fun initListeners() {
         with(binding) {
             backBtn.setOnClickListener {
-                activity.finish()
+                baseActivity.finish()
             }
             nextBtn.setOnClickListener {
-                if (!MyApplication.isConnectedToInternet(activity)) {
+                if (!MyApplication.isConnectedToInternet(baseActivity)) {
                     DialogUtils.showBottomMessage(
-                        activity,
+                        baseActivity,
                         getString(R.string.settings_docu_error_no_internet),
                         true
                     )
@@ -121,9 +121,9 @@ class EnterServerFragment : BaseFragment() {
 
     private fun initObservers() {
         with(viewModel) {
-            isPublic.observe(viewLifecycleOwner, { isPublicInstance ->
+            isPublic.observe(viewLifecycleOwner) { isPublicInstance ->
                 if (isPublicInstance) {
-                    activity.addFragment(
+                    baseActivity.addFragment(
                         LoginTypeFragment.newInstance(
                             if (serverUwazi == null) server else serverUwazi!!,
                             isUpdate
@@ -131,7 +131,7 @@ class EnterServerFragment : BaseFragment() {
                         R.id.container
                     )
                 } else {
-                    activity.addFragment(
+                    baseActivity.addFragment(
                         LoginFragment.newInstance(
                             if (serverUwazi == null) server else serverUwazi!!,
                             isUpdate
@@ -139,12 +139,12 @@ class EnterServerFragment : BaseFragment() {
                         R.id.container
                     )
                 }
-                KeyboardUtil.hideKeyboard(activity)
-            })
+                KeyboardUtil.hideKeyboard(baseActivity)
+            }
 
-            progress.observe(viewLifecycleOwner, {
+            progress.observe(viewLifecycleOwner) {
                 binding.progressBar.isVisible = it
-            })
+            }
         }
     }
 

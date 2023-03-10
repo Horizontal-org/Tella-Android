@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.views.dialog.reports
 
 import android.os.Bundle
+import androidx.fragment.app.commit
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R
@@ -18,15 +19,22 @@ class ReportsConnectFlowActivity : BaseLockActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_uwazi_connect_flow)
         if (!intent.getBooleanExtra(IS_UPDATE_SERVER, false)) {
-            addFragment(EnterUploadServerFragment(), R.id.container)
+            supportFragmentManager.commit {
+                add(
+                    R.id.container,
+                    EnterUploadServerFragment(),
+                    EnterUploadServerFragment::class.java.simpleName
+                )
+            }
         } else {
-            intent.getStringExtra(OBJECT_KEY)?.let {
-                val server = Gson().fromJson(it, TellaReportServer::class.java)
+            intent.getStringExtra(OBJECT_KEY)?.let { reportServer ->
+                val server = Gson().fromJson(reportServer, TellaReportServer::class.java)
                 addFragment(
                     EditTellaServerFragment.newInstance(server),
                     R.id.container
                 )
             }
+
         }
     }
 }

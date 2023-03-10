@@ -35,11 +35,11 @@ class OnBoardHideTellaFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        (activity as OnBoardActivityInterface).hideProgress()
+        (baseActivity as OnBoardActivityInterface).hideProgress()
 
         backBtn = view.findViewById(R.id.back_btn)
         backBtn.setOnClickListener {
-            activity.onBackPressed()
+            baseActivity.onBackPressed()
         }
 
         val btnOneDesc = view.findViewById<TextView>(R.id.subtitle_btn_one)
@@ -53,7 +53,7 @@ class OnBoardHideTellaFragment : BaseFragment() {
 
         val hideNotPossible = view.findViewById<TextView>(R.id.hide_behind_calc_not_possible)
 
-        if ((activity.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(activity) != UnlockRegistry.Method.TELLA_PIN) {
+        if ((baseActivity.getApplicationContext() as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(baseActivity) != UnlockRegistry.Method.TELLA_PIN) {
             hideNotPossible.show()
             /*hideNotPossible.setOnClickListener {
                 activity.addFragment(SecuritySettings(), R.id.my_nav_host_fragment)
@@ -77,12 +77,12 @@ class OnBoardHideTellaFragment : BaseFragment() {
 
     private fun hideTellaBehindCalculator(){
        // activity.addFragment(this, OnBoardCalculatorFragment(), R.id.rootOnboard)
-        val intent = Intent(activity, SettingsCalculatorActivity::class.java)
-        activity.startActivity(intent)
+        val intent = Intent(baseActivity, SettingsCalculatorActivity::class.java)
+        baseActivity.startActivity(intent)
     }
 
     private fun chooseNameAndLogo(){
-        activity.addFragment(
+        baseActivity.addFragment(
             this,
             OnBoardHideNameLogoFragment(),
             R.id.rootOnboard

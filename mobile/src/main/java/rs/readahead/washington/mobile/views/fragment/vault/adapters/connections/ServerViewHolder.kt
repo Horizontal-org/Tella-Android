@@ -18,15 +18,15 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
     override fun bind(item: ServerDataItem, vaultClickListener: VaultClickListener) {
 
         reportTypeTextView = view.findViewById(R.id.server_name_textView)
-        reportTypeImg = view.findViewById(R.id.report_img)
+        reportTypeImg = view.findViewById(R.id.server_img)
 
         when (item.type) {
             ServerType.UWAZI -> {
-                reportTypeTextView.text = view.context.getText(R.string.Home_BottomNav_Uwazi)
+                reportTypeTextView.text = view.context.getString(R.string.Home_BottomNav_Uwazi)
                 reportTypeImg.setImageDrawable(
                     ResourcesCompat.getDrawable(
                         view.resources,
-                        R.drawable.ic_uwazi,
+                        R.drawable.ic_uwazi_small,
                         null
                     )
                 )

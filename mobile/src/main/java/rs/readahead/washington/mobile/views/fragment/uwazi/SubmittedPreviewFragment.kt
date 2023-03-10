@@ -44,7 +44,7 @@ class SubmittedPreviewFragment : BaseFragment() {
 
     private fun showDeleteBottomSheet(entityInstance: UwaziEntityInstance) {
         BottomSheetUtils.showConfirmDelete(
-            activity.supportFragmentManager,
+            baseActivity.supportFragmentManager,
             entityInstance.title,
             getString(R.string.Uwazi_RemoveTemplate_SheetTitle)
         ) { viewModel.confirmDelete(entityInstance) }
@@ -64,7 +64,7 @@ class SubmittedPreviewFragment : BaseFragment() {
         arguments?.get(SEND_ENTITY)?.let { entity ->
             submittedInstance = Gson().fromJson(entity as String, UwaziEntityInstance::class.java)
             submittedInstance?.let {
-                endView = UwaziFormEndView(activity, getFormattedFormTitle(submittedInstance!!))
+                endView = UwaziFormEndView(baseActivity, getFormattedFormTitle(submittedInstance!!))
 
                 endView.setInstance(it, true, true)
                 binding?.endViewContainer?.removeAllViews()

@@ -181,6 +181,26 @@ knkerfkefkfekfkekekl,f,klferkl,f,lkefe,fe,lf,lef,lef,lef,er,f,ref,f,,llkf,elk,f,
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/delete_btn"
+            android:layout_width="52dp"
+            android:layout_height="54dp"
+            android:visibility="gone"
+            android:layout_alignParentStart="true"
+            android:layout_marginVertical="@dimen/activity_vertical_large_margin"
+            android:layout_marginStart="@dimen/activity_vertical_large_margin"
+            android:background="@drawable/bg_send_later"
+            app:layout_constraintCircleRadius="16dp">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/ic_delete_white_24px" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
         <Button
             android:id="@+id/send_report_btn"
             android:layout_width="wrap_content"

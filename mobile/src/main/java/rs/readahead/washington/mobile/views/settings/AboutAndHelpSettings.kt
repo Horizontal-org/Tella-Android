@@ -27,7 +27,7 @@ class AboutAndHelpSettings : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        (activity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_about_app_bar)
+        (baseActivity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_about_app_bar)
 
         binding?.version?.setText(
             String.format(

@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.core.view.isVisible
@@ -18,6 +17,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.IS_ONBOARD_LOCK_SET
+import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.IServerChoiceActions
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showBinaryTypeSheet
@@ -43,16 +43,14 @@ private const val ONBOARDING_RECORDER_VIEW_INDEX = 2
 private const val ONBOARDING_FILES_VIEW_INDEX = 3
 private const val ONBOARDING_LOCK_VIEW_INDEX = 4
 
+@AndroidEntryPoint
 class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     IOnBoardPresenterContract.IView, CollectServerDialogHandler, TellaUploadServerDialogHandler {
 
-  
     private var viewpagerItemsCount = 0
     private val isFromSettings by lazy { intent.getBooleanExtra(IS_FROM_SETTINGS, false) }
     private val isOnboardLockSet by lazy { intent.getBooleanExtra(IS_ONBOARD_LOCK_SET, false) }
     private val presenter by lazy { OnBoardPresenter(this) }
-    private lateinit var backBtn: TextView
-    private lateinit var nextBtn: TextView
     private lateinit var binding: ActivityOnboardingBinding
 
 
@@ -100,7 +98,6 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         setupIndicators(itemCount)
     }
 
-
     private fun setupIndicators(indicatorCount: Int) {
         binding.indicatorsContainer.removeAllViews()
         val indicators = arrayOfNulls<ImageView>(indicatorCount)
@@ -142,6 +139,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (binding.viewPager.currentItem == 0) {
             // If the user is currently looking at the first step, allow the system to handle the
@@ -154,7 +152,6 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         }
 
     }
-
 
     fun onNextPressed() {
         if (binding.viewPager.currentItem != viewpagerItemsCount) {
@@ -212,7 +209,6 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
 
     private fun showUwaziServerDialog() {
         startActivity(Intent(this, UwaziConnectFlowActivity::class.java))
-
     }
 
     override fun hideProgress() {
@@ -331,7 +327,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
 
         override fun getItemCount(): Int = viewpagerItemsCount
         override fun createFragment(position: Int): Fragment {
-            var fragment: Fragment = when (position) {
+            val fragment: Fragment = when (position) {
                 ONBOARDING_INTRODUCTION_VIEW_INDEX -> OnBoardIntroFragment()
                 ONBOARDING_CAMERA_VIEW_INDEX -> OnBoardCameraFragment()
                 ONBOARDING_RECORDER_VIEW_INDEX -> OnBoardRecorderFragment()

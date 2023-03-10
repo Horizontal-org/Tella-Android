@@ -28,11 +28,11 @@ class OnBoardRecorderFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as OnBoardActivityInterface).enableSwipe(
+        (baseActivity as OnBoardActivityInterface).enableSwipe(
             isSwipeable = true,
             isTabLayoutVisible = true
         )
-        (activity as OnBoardActivityInterface).showButtons(
+        (baseActivity as OnBoardActivityInterface).showButtons(
             isNextButtonVisible = true,
             isBackButtonVisible = true
         )
@@ -44,7 +44,7 @@ class OnBoardRecorderFragment : BaseFragment() {
         backBtn = view.findViewById(R.id.back_btn)
         nextBtn = view.findViewById(R.id.next_btn)
         nextBtn.setOnClickListener {
-            (activity as OnBoardingActivity).onNextPressed()
+            (baseActivity as OnBoardingActivity).onNextPressed()
 
         }
     }

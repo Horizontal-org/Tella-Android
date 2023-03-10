@@ -20,7 +20,6 @@ import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.data.database.UwaziDataSource
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
-import rs.readahead.washington.mobile.data.sharedpref.SharedPrefs
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.media.MediaFileHandler
@@ -48,7 +47,7 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
         keyDataSource.dataSource
             .subscribeOn(Schedulers.io())
             .flatMapCompletable { dataSource: DataSource ->
-                if (SharedPrefs.getInstance().isEraseGalleryActive) {
+                if (Preferences.isDeleteGalleryEnabled()) {
                     rxVault?.destroy()?.blockingAwait()
                     MediaFileHandler.destroyGallery(appContext!!)
                 }

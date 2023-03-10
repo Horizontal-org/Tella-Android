@@ -43,8 +43,8 @@ class GeneralSettings : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        (activity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_select_general)
-        (activity as OnFragmentSelected?)?.setToolbarHomeIcon(R.drawable.ic_arrow_back_white_24dp)
+        (baseActivity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_select_general)
+        (baseActivity as OnFragmentSelected?)?.setToolbarHomeIcon(R.drawable.ic_arrow_back_white_24dp)
 
         binding?.languageSettingsButton?.setOnClickListener {
             Navigation.findNavController(view)
@@ -162,7 +162,7 @@ class GeneralSettings : BaseFragment() {
     }
 
     private fun hasLocationPermission(context: Context): Boolean {
-        activity.maybeChangeTemporaryTimeout()
+        baseActivity.maybeChangeTemporaryTimeout()
         if (ActivityCompat.checkSelfPermission(
                 context,
                 Manifest.permission.ACCESS_FINE_LOCATION

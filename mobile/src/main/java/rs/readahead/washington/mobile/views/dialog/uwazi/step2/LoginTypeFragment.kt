@@ -65,13 +65,13 @@ class LoginTypeFragment : BaseFragment() {
     private fun initListeners() {
         with(binding) {
             backBtn.setOnClickListener {
-               activity.supportFragmentManager.popBackStack()
+               baseActivity.supportFragmentManager.popBackStack()
             }
             nextBtn.setOnClickListener {
                 if(validated&&loginAsPublicInstance){
-                    activity.addFragment(LanguageFragment.newInstance(server,isUpdate),R.id.container)
+                    baseActivity.addFragment(LanguageFragment.newInstance(server,isUpdate),R.id.container)
                 }else if (validated && !loginAsPublicInstance){
-                    activity.addFragment(LoginFragment.newInstance(server,isUpdate),R.id.container)
+                    baseActivity.addFragment(LoginFragment.newInstance(server,isUpdate),R.id.container)
                 }
             }
 
