@@ -89,7 +89,7 @@ public class TellaFileUploadSchedulePresenter implements ITellaFileUploadSchedul
                     OneTimeWorkRequest onetimeJob = new OneTimeWorkRequest.Builder(WorkerUploadReport.class)
                             .setConstraints(constraints).build();
                     WorkManager.getInstance(view.getContext())
-                            .enqueueUniqueWork("WorkerUploadReport", ExistingWorkPolicy.APPEND, onetimeJob);
+                            .enqueueUniqueWork("WorkerUploadReport ", ExistingWorkPolicy.KEEP, onetimeJob);
                     view.onMediaFilesUploadScheduled();
                 }, throwable -> {
                     FirebaseCrashlytics.getInstance().recordException(throwable);

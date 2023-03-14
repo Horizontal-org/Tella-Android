@@ -3,12 +3,10 @@ package org.hzontal.shared_ui.bottomsheet
 import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
-import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
@@ -762,7 +760,8 @@ object BottomSheetUtils {
             titleText2: String?,
             descriptionText: String?,
             actionButtonLabel: String? = null,
-            cancelButtonLabel: String? = null
+            cancelButtonLabel: String? = null,
+            iconView : Int = -1
     ) {
 
         val customSheetFragment2 =
@@ -805,6 +804,10 @@ object BottomSheetUtils {
                     override fun onBind(holder: ServerMenuSheetHolder) {
                         with(holder) {
                             title.text = titleText
+
+                            if (iconView != -1){
+                                actionEdit.setCompoundDrawablesWithIntrinsicBounds(iconView,0,0,0)
+                            }
                             actionEditLabel?.let {
                                 actionEdit.text = it
                             }

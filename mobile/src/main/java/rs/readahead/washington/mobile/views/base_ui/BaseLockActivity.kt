@@ -2,12 +2,17 @@ package rs.readahead.washington.mobile.views.base_ui
 
 import android.content.Intent
 import android.view.WindowManager
+import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS
+import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS_BLUE_SKIN
+import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS_ORANGE_SKIN
+import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS_YELLOW_SKIN
 import com.hzontal.tella_locking_ui.ui.password.PasswordUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternSetActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pin.calculator.CalculatorActivity
 import info.guardianproject.cacheword.SecretsManager
+import org.hzontal.shared_ui.utils.CALCULATOR_THEME
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder
 import org.hzontal.tella.keys.config.UnlockRegistry
 import rs.readahead.washington.mobile.MyApplication
@@ -18,7 +23,6 @@ import rs.readahead.washington.mobile.views.activity.PatternUpgradeActivity
 abstract class BaseLockActivity : BaseActivity() {
 
     private val holder by lazy { applicationContext as IUnlockRegistryHolder }
-
     var isLocked = false
         private set
 
@@ -45,11 +49,15 @@ abstract class BaseLockActivity : BaseActivity() {
         val intent = when (holder.unlockRegistry.getActiveMethod(this)) {
             UnlockRegistry.Method.TELLA_PIN -> {
                 //temp switch
-                if (Preferences.getAppAlias() == "rs.readahead.washington.mobile.views.activity.AliasCalculator") {
-                    Intent(this, CalculatorActivity::class.java)
-                } else {
-                    Intent(this, PinUnlockActivity::class.java)
+                when (Preferences.getAppAlias()) {
+                    CALCULATOR_ALIAS, CALCULATOR_ALIAS_BLUE_SKIN, CALCULATOR_ALIAS_ORANGE_SKIN, CALCULATOR_ALIAS_YELLOW_SKIN
+                    -> Intent(this, CalculatorActivity::class.java).putExtra(
+                        CALCULATOR_THEME,
+                        Preferences.getCalculatorTheme()
+                    )
+                    else -> Intent(this, PinUnlockActivity::class.java)
                 }
+
             }
             UnlockRegistry.Method.TELLA_PATTERN -> {
                 Intent(this, PatternUnlockActivity::class.java)

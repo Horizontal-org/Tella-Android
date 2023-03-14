@@ -26,6 +26,7 @@ import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.hide
+import rs.readahead.washington.mobile.util.invisible
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.activity.CameraActivity
 import rs.readahead.washington.mobile.views.adapters.reports.ReportsFilesRecyclerViewAdapter
@@ -51,13 +52,14 @@ class ReportsEntryFragment :
     private val viewModel by viewModels<ReportsViewModel>()
     private lateinit var gridLayoutManager: GridLayoutManager
     private val filesRecyclerViewAdapter: ReportsFilesRecyclerViewAdapter by lazy {
-        ReportsFilesRecyclerViewAdapter(
-            this, baseActivity, MediaFileHandler()
-        )
+        ReportsFilesRecyclerViewAdapter(this)
     }
     private lateinit var selectedServer: TellaReportServer
     private var servers: ArrayList<TellaReportServer>? = null
     private var reportInstance: ReportInstance? = null
+    private var isNewDraft = true
+    private var isTitleEnabled = false
+    private var isDescriptionEnabled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,7 +96,9 @@ class ReportsEntryFragment :
             binding?.reportTitleEt?.setText(instance.title)
             binding?.reportDescriptionEt?.setText(instance.description)
             putFiles(viewModel.mediaFilesToVaultFiles(instance.widgetMediaFiles))
+            isNewDraft = false
         }
+        checkIsNewDraftEntry()
     }
 
     private fun exitOrSave() {
@@ -143,35 +147,47 @@ class ReportsEntryFragment :
     }
 
     private fun highLightSubmitButton() {
-        var isTitleEnabled = false
-        var isDescriptionEnabled = false
         binding?.reportTitleEt?.onChange { title ->
             isTitleEnabled = title.length > 1
-            highLightButton(isTitleEnabled, isDescriptionEnabled)
+            highLightDraftButton(isTitleEnabled)
         }
+
         binding?.reportDescriptionEt?.onChange { description ->
             isDescriptionEnabled = description.length > 1
-            highLightButton(isTitleEnabled, isDescriptionEnabled)
+            highLightButtonOutBoxButton()
         }
 
+        binding?.deleteBtn?.setOnClickListener {
+            reportInstance?.let { instance -> showDeleteBottomSheet(instance) }
+        }
     }
 
-    private fun highLightButton(isTitleEnabled: Boolean, isDescriptionEnabled: Boolean) {
-        if (isTitleEnabled && isDescriptionEnabled) {
-            binding?.sendReportBtn?.setBackgroundResource(R.drawable.bg_round_orange_btn)
+    private fun highLightDraftButton(isTitleEnabled: Boolean) {
+        if (isTitleEnabled) {
             binding?.toolbar?.onRightClickListener = {
                 saveReportAsDraft(false)
             }
+
+        } else {
+            binding?.toolbar?.onRightClickListener = {}
+        }
+    }
+
+    private fun highLightButtonOutBoxButton() {
+        if (isTitleEnabled && (isDescriptionEnabled || filesRecyclerViewAdapter.getFiles()
+                .isNotEmpty())
+        ) {
+            binding?.sendReportBtn?.setBackgroundResource(R.drawable.bg_round_orange_btn)
+
             binding?.sendLaterBtn?.setOnClickListener {
                 saveReportAsOutbox()
             }
             binding?.sendReportBtn?.setOnClickListener {
-                submitReport()
+                saveReportAsPending()
             }
         } else {
             binding?.sendReportBtn?.setBackgroundResource(R.drawable.bg_round_orange16_btn)
             binding?.sendReportBtn?.setOnClickListener(null)
-            binding?.toolbar?.onRightClickListener = {}
             binding?.sendLaterBtn?.setOnClickListener {}
         }
     }
@@ -191,12 +207,26 @@ class ReportsEntryFragment :
 
     private fun saveReportAsOutbox() {
         viewModel.saveOutbox(
-            viewModel.getOutboxFormInstance(
+            viewModel.getFormInstance(
                 id = reportInstance?.id,
                 title = binding?.reportTitleEt?.text.toString(),
                 description = binding?.reportDescriptionEt?.text.toString(),
                 files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
-                server = selectedServer
+                server = selectedServer,
+                status = EntityStatus.FINALIZED
+            )
+        )
+    }
+
+    private fun saveReportAsPending() {
+        viewModel.saveOutbox(
+            viewModel.getFormInstance(
+                id = reportInstance?.id,
+                title = binding?.reportTitleEt?.text.toString(),
+                description = binding?.reportDescriptionEt?.text.toString(),
+                files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
+                server = selectedServer,
+                status = EntityStatus.SUBMISSION_PENDING
             )
         )
     }
@@ -238,6 +268,9 @@ class ReportsEntryFragment :
                             false
                         )
                     }
+                    EntityStatus.SUBMISSION_PENDING -> {
+                        submitReport()
+                    }
                     EntityStatus.FINALIZED -> {
                         nav().popBackStack()
                         SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
@@ -249,6 +282,9 @@ class ReportsEntryFragment :
                 if (exitAfterSave) {
                     nav().popBackStack()
                 }
+            }
+            instanceDeleted.observe(viewLifecycleOwner) {
+                nav().popBackStack()
             }
         }
 
@@ -279,6 +315,18 @@ class ReportsEntryFragment :
                     importMedia()
                 }
             })
+    }
+
+    private fun checkIsNewDraftEntry() {
+        if (isNewDraft) {
+            binding?.deleteBtn?.invisible()
+            binding?.sendLaterBtn?.show()
+            binding?.sendReportBtn?.text = getString(R.string.collect_end_action_submit)
+        } else {
+            binding?.deleteBtn?.show()
+            binding?.sendLaterBtn?.invisible()
+            binding?.sendReportBtn?.text = getString(R.string.Send_Action_Label)
+        }
     }
 
     private fun showAttachmentsActivity() {
@@ -339,6 +387,7 @@ class ReportsEntryFragment :
             filesRecyclerViewAdapter.insertAttachment(file)
         }
         binding?.filesRecyclerView?.visibility = View.VISIBLE
+        highLightButtonOutBoxButton()
     }
 
     override fun playMedia(mediaFile: VaultFile?) {
@@ -347,6 +396,10 @@ class ReportsEntryFragment :
 
     override fun addFiles() {
         showSelectFilesSheet()
+    }
+
+    override fun removeFiles() {
+        highLightButtonOutBoxButton()
     }
 
     override fun onDropDownItemClicked(position: Int, chosenItem: DropDownItem) {
@@ -370,5 +423,20 @@ class ReportsEntryFragment :
         // nav().navigateUp()
         nav().navigate(R.id.action_newReport_to_reportSendScreen, bundle)
         nav().clearBackStack(R.id.action_newReport_to_reportSendScreen)
+    }
+
+    private fun showDeleteBottomSheet(entityInstance: ReportInstance) {
+        BottomSheetUtils.showConfirmSheet(
+            baseActivity.supportFragmentManager,
+            entityInstance.title,
+            getString(R.string.Collect_DeleteDraftForm_SheetExpl),
+            getString(R.string.action_yes),
+            getString(R.string.action_no), consumer = object : BottomSheetUtils.ActionConfirmed {
+                override fun accept(isConfirmed: Boolean) {
+                    if (isConfirmed) {
+                        viewModel.deleteReport(entityInstance)
+                    }
+                }
+            })
     }
 }

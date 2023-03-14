@@ -25,11 +25,11 @@ class OnBoardHideTellaSet : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        (activity as OnBoardActivityInterface).showProgress()
-        (activity as OnBoardActivityInterface).setCurrentIndicator(1)
+        (baseActivity as OnBoardActivityInterface).showProgress()
+        (baseActivity as OnBoardActivityInterface).setCurrentIndicator(1)
         nextBtn = view.findViewById(R.id.next_btn)
         nextBtn.setOnClickListener {
-            activity.addFragment(
+            baseActivity.addFragment(
                 this,
                 OnBoardAdvancedComplete(),
                 R.id.rootOnboard

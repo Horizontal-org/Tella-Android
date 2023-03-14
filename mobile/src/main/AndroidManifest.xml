@@ -96,197 +96,404 @@
         </activity>
 
         <activity-alias
-            android:name=".views.activity.AliasiCamera"
+            android:name="rs.readahead.washington.mobile.views.activity.AliasCalculatorYellowSkin"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/icamera_round"
-            android:label="@string/settings.camo_icamera"
-            android:targetActivity=".views.activity.SplashActivity">
+            android:icon="@mipmap/ic_calculator_yellow_skin"
+            android:label="@string/settings.camo_calculator2"
+            android:roundIcon="@mipmap/ic_calculator_yellow_skin_round"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="rs.readahead.washington.mobile.views.activity.AliasCalculatorOrangeSkin"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_calculator_orange_skin"
+            android:label="@string/settings.camo_calculator2"
+            android:roundIcon="@mipmap/ic_calculator_orange_skin_round"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="rs.readahead.washington.mobile.views.activity.AliasCalculatorBlueSkin"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_calculator_blue_skin"
+            android:label="@string/settings.camo_calculator2"
+            android:roundIcon="@mipmap/ic_calculator_blue_skin_round"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="rs.readahead.washington.mobile.views.activity.AliasCalculator2"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_calculator_round"
+            android:label="@string/settings.camo_calculator2"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name="rs.readahead.washington.mobile.views.activity.AliasCalculator"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/calculator_round"
+            android:label="@string/settings.camo_calculator2"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="rs.readahead.washington.mobile.views.activity.AliasStopWatch"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_stop_watch"
+            android:label="@string/settings.camo_stopwatch"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="rs.readahead.washington.mobile.views.activity.AliasWatch"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_watch"
+            android:label="@string/settings.camo_watch"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="rs.readahead.washington.mobile.views.activity.AliasWorkout"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_workout"
+            android:label="@string/settings.camo_workout"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="rs.readahead.washington.mobile.views.activity.AliasFitnessLife"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_fitness_life"
+            android:label="@string/settings.camo_fitness_life"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".views.activity.AliasSelfieCam"
+            android:name="rs.readahead.washington.mobile.views.activity.AliasHealth"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/selfiecamera_round"
-            android:label="@string/settings.camo_selfie_cam"
-            android:targetActivity=".views.activity.SplashActivity">
+            android:icon="@mipmap/ic_health"
+            android:label="@string/settings.camo_health"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".views.activity.AliasSnapCamera"
+            android:name="rs.readahead.washington.mobile.views.activity.AliasPeriodTracker"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/snapcamera_round"
-            android:label="@string/settings.camo_snap_camera"
-            android:targetActivity=".views.activity.SplashActivity">
+            android:icon="@mipmap/ic_period_tracker"
+            android:label="@string/settings.camo_period_tracker"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="rs.readahead.washington.mobile.views.activity.AliasMusic"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_music"
+            android:label="@string/settings.camo_music"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="rs.readahead.washington.mobile.views.activity.AliasTime"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_time"
+            android:label="@string/settings.camo_time"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="rs.readahead.washington.mobile.views.activity.AliasClock"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_clock"
+            android:label="@string/settings.camo_clock"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="rs.readahead.washington.mobile.views.activity.AliasJewelDash"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_jewel_dash"
+            android:label="@string/settings.camo_jeweldash"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="rs.readahead.washington.mobile.views.activity.AliasGameLauncher"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_game_launcher"
+            android:label="@string/settings.camo_game_launcher"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name="rs.readahead.washington.mobile.views.activity.AliasPlayNow"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_play_now"
+            android:label="@string/settings.camo_playnow"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="rs.readahead.washington.mobile.views.activity.AliasGameStation"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_game_station"
+            android:label="@string/settings.camo_gamestation"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="rs.readahead.washington.mobile.views.activity.AliasSunnyDay"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_sunny_day"
+            android:label="@string/settings.camo_sunnyday"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="rs.readahead.washington.mobile.views.activity.AliasEasyWeather"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_easy_weather"
+            android:label="@string/settings.camo_easyweather"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="rs.readahead.washington.mobile.views.activity.AliasForecast"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_forecast"
+            android:label="@string/settings.camo_forecast"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name="rs.readahead.washington.mobile.views.activity.AliasWeather"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_weather_round"
+            android:label="@string/settings.camo_weather"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="rs.readahead.washington.mobile.views.activity.AliasiCalculator"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_i_calculator"
+            android:label="@string/settings.camo_icalculator"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="rs.readahead.washington.mobile.views.activity.AliasCalculatorPlus"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_calculator_plus"
+            android:label="@string/settings.camo_calculator_plus"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias> <!-- activity aliases -->
         <activity-alias
-            android:name=".views.activity.AliasCalculate"
+            android:name="rs.readahead.washington.mobile.views.activity.AliasCalculate"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/calculate_round"
+            android:icon="@mipmap/ic_calculate"
             android:label="@string/settings.camo_calculate"
-            android:targetActivity=".views.activity.SplashActivity">
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".views.activity.AliasCalculatorPlus"
+            android:name="rs.readahead.washington.mobile.views.activity.AliasSnapCamera"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/calculatorplus_round"
-            android:label="@string/settings.camo_calculator_plus"
-            android:targetActivity=".views.activity.SplashActivity">
+            android:icon="@mipmap/ic_snap_camera"
+            android:label="@string/settings.camo_snap_camera"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".views.activity.AliasiCalculator"
+            android:name="rs.readahead.washington.mobile.views.activity.AliasMiCamera"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/icalculator_round"
-            android:label="@string/settings.camo_icalculator"
-            android:targetActivity=".views.activity.SplashActivity">
+            android:icon="@mipmap/ic_mi_camera"
+            android:label="@string/settings.camo_micamera"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".views.activity.AliasWeather"
+            android:name="rs.readahead.washington.mobile.views.activity.AliasSelfieCam"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/weather_round"
-            android:label="@string/settings.camo_weather"
-            android:targetActivity=".views.activity.SplashActivity">
+            android:icon="@mipmap/ic_selfie_cam"
+            android:label="@string/settings.camo_selfie_cam"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".views.activity.AliasEasyWeather"
+            android:name="rs.readahead.washington.mobile.views.activity.AliasiCamera"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/easyweather_round"
-            android:label="@string/settings.camo_easyweather"
-            android:targetActivity=".views.activity.SplashActivity">
+            android:icon="@mipmap/ic_camera"
+            android:label="@string/settings.camo_icamera"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".views.activity.AliasSunnyDay"
+            android:name="rs.readahead.washington.mobile.views.activity.AliasDictionary"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/sunnyday_round"
-            android:label="@string/settings.camo_sunnyday"
-            android:targetActivity=".views.activity.SplashActivity">
+            android:icon="@mipmap/ic_dictionary"
+            android:label="@string/settings.camo_dictionary"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".views.activity.AliasGameStation"
+            android:name="rs.readahead.washington.mobile.views.activity.AliasPlantCare"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/gamestation_round"
-            android:label="@string/settings.camo_gamestation"
-            android:targetActivity=".views.activity.SplashActivity">
+            android:icon="@mipmap/ic_plant_care"
+            android:label="@string/settings.camo_plant_care"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".views.activity.AliasPlayNow"
+            android:name="rs.readahead.washington.mobile.views.activity.AliasAstrology"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/playnow_round"
-            android:label="@string/settings.camo_playnow"
-            android:targetActivity=".views.activity.SplashActivity">
+            android:icon="@mipmap/ic_astrology"
+            android:label="@string/settings.camo_astrology"
+            android:targetActivity="rs.readahead.washington.mobile.views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
-        <activity-alias
-            android:name=".views.activity.AliasJewelDash"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/jeweldash_round"
-            android:label="@string/settings.camo_jeweldash"
-            android:targetActivity=".views.activity.SplashActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-        <activity-alias
-            android:name=".views.activity.AliasClock"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/clock_round"
-            android:label="@string/settings.camo_clock"
-            android:targetActivity=".views.activity.SplashActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-        <activity-alias
-            android:name=".views.activity.AliasTime"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/time_round"
-            android:label="@string/settings.camo_time"
-            android:targetActivity=".views.activity.SplashActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-        <activity-alias
-            android:name=".views.activity.AliasStopWatch"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/stopwatch_round"
-            android:label="@string/settings.camo_stopwatch"
-            android:targetActivity=".views.activity.SplashActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-        <activity-alias
-            android:name=".views.activity.AliasCalculator"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/calculator_round"
-            android:label="@string/settings.camo_calculator2"
-            android:targetActivity=".views.activity.SplashActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
+
+
         <!-- activity aliases end -->
 
         <activity
@@ -440,6 +647,11 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".views.settings.SettingsCalculatorActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
             android:name=".views.activity.clean_insights.CleanInsightsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -456,10 +668,17 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
-            tools:node="remove">
+            android:exported="false"
+            android:multiprocess="true"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
         </provider>
 
     </application>

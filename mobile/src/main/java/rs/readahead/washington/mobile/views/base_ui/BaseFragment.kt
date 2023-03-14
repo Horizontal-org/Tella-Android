@@ -15,16 +15,14 @@ import rs.readahead.washington.mobile.R
 
 abstract class BaseFragment : Fragment() {
 
-    protected lateinit var activity: BaseActivity
-    var hasInitializedRootView = false
-    private var rootView: View? = null
+    protected lateinit var baseActivity: BaseActivity
 
     override fun onAttach(context: Context) {
         Timber.d("***** ${this.javaClass.name} onAttach")
 
         super.onAttach(context)
 
-        activity = context as BaseActivity
+        baseActivity = context as BaseActivity
     }
 
     override fun onCreateView(
@@ -53,7 +51,7 @@ abstract class BaseFragment : Fragment() {
 
     protected fun showToast(message: String) {
         if (isAdded) {
-            activity.showToast(message)
+            baseActivity.showToast(message)
         }
     }
 

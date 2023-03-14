@@ -47,19 +47,23 @@ class OnBoardLockFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as OnBoardActivityInterface).enableSwipe(
+        (baseActivity as OnBoardActivityInterface).enableSwipe(
             isSwipeable = true, isTabLayoutVisible = true)
-        (activity as OnBoardActivityInterface).showButtons(
+        (baseActivity as OnBoardActivityInterface).showButtons(
             isNextButtonVisible = false, isBackButtonVisible = true)
     }
 
     override fun initView(view: View) {
-       arguments?.let { isFromSettings=  it.getBoolean(IS_FROM_SETTINGS,false) }
+        arguments?.let { isFromSettings=  it.getBoolean(IS_FROM_SETTINGS,false) }
         lockPasswordBtn = view.findViewById(R.id.lockPasswordBtn)
         lockPINdBtn = view.findViewById(R.id.lockPINdBtn)
         lockPatternBtn = view.findViewById(R.id.lockPatternBtn)
         cancelBtn = view.findViewById(R.id.cancelBtn)
-        if (isFromSettings) cancelBtn.visibility = View.VISIBLE
+        if (isFromSettings) {
+            cancelBtn.visibility = View.VISIBLE
+            (baseActivity as OnBoardingActivity).hideViewpager()
+
+        }
         initListeners()
     }
 
@@ -79,8 +83,8 @@ class OnBoardLockFragment : BaseFragment() {
         }
 
         cancelBtn.setOnClickListener {
-            (activity as OnBoardActivityInterface).setCurrentIndicator(2)
-            activity.onBackPressed()
+            (baseActivity as OnBoardActivityInterface).setCurrentIndicator(2)
+            baseActivity.onBackPressed()
         }
     }
 
@@ -91,10 +95,10 @@ class OnBoardLockFragment : BaseFragment() {
     }
 
     private fun goUnlockingActivity(destination : Activity){
-        val intent = Intent(activity, destination::class.java)
+        val intent = Intent(baseActivity, destination::class.java)
         intent.putExtra(IS_FROM_SETTINGS,isFromSettings)
         startActivity(intent)
-        if (isFromSettings) activity.finish()
+        if (isFromSettings) baseActivity.finish()
     }
 
 }

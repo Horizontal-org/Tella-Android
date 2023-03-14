@@ -33,8 +33,8 @@ class ChangeRemoveCamouflage : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        (activity as OnFragmentSelected?)?.showAppbar()
-        (activity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_servers_hide_tella_title)
+        (baseActivity as OnFragmentSelected?)?.showAppbar()
+        (baseActivity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_servers_hide_tella_title)
 
         val fragmentTitle = view.findViewById<TextView>(R.id.title)
         fragmentTitle.text = getString(
@@ -51,11 +51,11 @@ class ChangeRemoveCamouflage : BaseFragment() {
             camoImage.getLayoutParams().width = dimension.toInt()
             camoImage.setScaleType(ImageView.ScaleType.FIT_XY);
         } else {
-            camoImage.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.ic_server))
+            camoImage.setImageDrawable(ContextCompat.getDrawable(baseActivity, R.drawable.ic_server))
         }
 
         view.findViewById<View>(R.id.change_method).setOnClickListener {
-            activity.addFragment(HideTella(), R.id.my_nav_host_fragment)
+            baseActivity.addFragment(HideTella(), R.id.my_nav_host_fragment)
         }
 
         view.findViewById<View>(R.id.remove_camouflage).setOnClickListener {
@@ -71,7 +71,7 @@ class ChangeRemoveCamouflage : BaseFragment() {
 
     private fun showRemovingCamouflage() {
         BottomSheetUtils.showWarningSheetWithImageAndTimeout(
-            activity.supportFragmentManager,
+            baseActivity.supportFragmentManager,
             getString(R.string.SettingsCamo_Dialog_RemovingCamouflage),
             getString(R.string.SettingsCamo_Dialog_TimeoutDesc),
             getCamoImage(),
@@ -84,16 +84,16 @@ class ChangeRemoveCamouflage : BaseFragment() {
     }
 
     private fun getCamoImage(): Drawable? {
-        var drawable = ContextCompat.getDrawable(activity, R.drawable.ic_server)
+        var drawable = ContextCompat.getDrawable(baseActivity, R.drawable.ic_server)
         val currentAlias = Preferences.getAppAlias()
 
-        if (currentAlias == cm.calculatorOption.alias) {
-            return ContextCompat.getDrawable(activity, cm.calculatorOption.drawableResId)
+        if (currentAlias == cm.getCalculatorOptionByTheme(Preferences.getCalculatorTheme()).alias) {
+            return ContextCompat.getDrawable(baseActivity, cm.getCalculatorOptionByTheme(Preferences.getCalculatorTheme()).drawableResId)
         }
 
         for (option in cm.options) {
             if (option.alias == currentAlias) {
-                drawable = ContextCompat.getDrawable(activity, option.drawableResId)
+                drawable = ContextCompat.getDrawable(baseActivity, option.drawableResId)
             }
         }
         return drawable

@@ -25,10 +25,10 @@ class OnBoardCameraFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as OnBoardActivityInterface).enableSwipe(
+        (baseActivity as OnBoardActivityInterface).enableSwipe(
             isSwipeable = true, isTabLayoutVisible = true
         )
-        (activity as OnBoardActivityInterface).showButtons(
+        (baseActivity as OnBoardActivityInterface).showButtons(
             isNextButtonVisible = true, isBackButtonVisible = true
         )
     }
@@ -36,11 +36,11 @@ class OnBoardCameraFragment : BaseFragment() {
     override fun initView(view: View) {
         backBtn = view.findViewById(R.id.back_btn)
         backBtn.setOnClickListener {
-            activity.onBackPressed()
+            baseActivity.onBackPressed()
         }
         nextBtn = view.findViewById(R.id.next_btn)
         nextBtn.setOnClickListener {
-            (activity as OnBoardingActivity).onNextPressed()
+            (baseActivity as OnBoardingActivity).onNextPressed()
         }
     }
 }

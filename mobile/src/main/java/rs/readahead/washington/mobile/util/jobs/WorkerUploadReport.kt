@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.util.jobs
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.hilt.work.HiltWorker
 import androidx.work.Worker
@@ -15,7 +16,6 @@ import rs.readahead.washington.mobile.bus.event.FileUploadProgressEvent
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
-import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
@@ -37,6 +37,7 @@ class WorkerUploadReport
     private var server: TellaReportServer? = null
     private lateinit var dataSource: DataSource
 
+    @SuppressLint("RestrictedApi")
     override fun doWork(): Result {
         //3 STEPS
         //First submit report with title and description

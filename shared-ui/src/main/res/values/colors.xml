@@ -32,9 +32,14 @@
     <color name="dark_purple">#2C275A</color>
     <color name="light_red">#FC4444</color>
     <color name="transparent">@android:color/transparent</color>
+    <color name="wa_light_gray">#F2F2F2</color>
+    <color name="wa_dark_green">#3C6E72</color>
+    <color name="wa_calc_gray">#A4A2A2</color>
+    <color name="wa_light_green">#E6F4F3</color>
 
     <color name="colorPrimary">@color/space_cadet</color>
     <color name="colorPrimaryDark">@color/space_cadet</color>
     <color name="colorAccent">@color/green</color>
     <color name="colorPrimaryInverse">@color/tigers_eye</color>
+
 </resources>

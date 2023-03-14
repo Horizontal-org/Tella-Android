@@ -28,7 +28,6 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
     val counterData = MutableLiveData<Int>()
 
     override fun getFiles(parent: String?, filterType: FilterType?, sort: Sort?) {
-
         MyApplication.rxVault.get(parent)
             .subscribe(
                 { vaultFile: VaultFile? ->
@@ -75,8 +74,6 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 view?.onImportError(throwable)
             })
-
-
     }
 
     override fun cancelImportVaultFiles() {

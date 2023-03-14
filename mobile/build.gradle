@@ -14,8 +14,8 @@ android {
         minSdkVersion versions.minSdk
         compileSdkVersion versions.compileSdk
         targetSdkVersion versions.targetSdk
-        versionCode 140
-        versionName "2.0.12"
+        versionCode 147
+        versionName "2.0.22"
         multiDexEnabled true
         // vectorDrawables.useSupportLibrary = true // don't care about apk size, care about crashes
     }
@@ -55,6 +55,9 @@ android {
     }
     lintOptions {
         checkReleaseBuilds false
+    }
+    hilt {
+        enableExperimentalClasspathAggregation = true
     }
 }
 

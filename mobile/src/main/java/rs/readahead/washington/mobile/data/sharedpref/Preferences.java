@@ -1,8 +1,10 @@
 package rs.readahead.washington.mobile.data.sharedpref;
 
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.hzontal.shared_ui.utils.CalculatorTheme;
 import org.joda.time.DateTime;
 
 import java.util.Date;
@@ -11,10 +13,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 public class Preferences {
-    private static SharedPrefs sharedPrefs = SharedPrefs.getInstance();
+    private static final SharedPrefs sharedPrefs = SharedPrefs.getInstance();
 
     // cache
-    private static Map<String, Boolean> bCache = new ConcurrentHashMap<>();
+    private static final Map<String, Boolean> bCache = new ConcurrentHashMap<>();
 
 
     public static boolean isSecretModeActive() {
@@ -120,6 +122,13 @@ public class Preferences {
         setString(SharedPrefs.APP_ALIAS_NAME, value);
     }
 
+    public static String getCalculatorTheme() {
+        return getString(SharedPrefs.CALCULATOR_THEME, CalculatorTheme.GREEN_SKIN.name());
+    }
+
+    public static void setCalculatorTheme(@NonNull String value) {
+        setString(SharedPrefs.CALCULATOR_THEME, value);
+    }
     @Nullable
     public static String getVideoResolution() {
         return getString(SharedPrefs.VIDEO_RESOLUTION, null);

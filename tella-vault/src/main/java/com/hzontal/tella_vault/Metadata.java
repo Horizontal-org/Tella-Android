@@ -5,6 +5,7 @@ import java.util.List;
 
 
 public final class Metadata implements Serializable {
+    public static final String VIEW_METADATA = "vm";
     private List<String> cells; // sync
     private List<String> wifis; // async
     private long timestamp; // sync, UTC millisecond timestamp

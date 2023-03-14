@@ -32,34 +32,34 @@ class DraftsUwaziFragment : BaseBindingFragment<FragmentDraftsUwaziBinding>(Frag
 
     private fun initObservers() {
         with(viewModel) {
-            draftInstances.observe(viewLifecycleOwner, {
+            draftInstances.observe(viewLifecycleOwner) {
                 if (it.isEmpty()) {
                     binding?.textViewEmpty?.isVisible = true
                     binding?.draftsRecyclerView?.isVisible = false
                     uwaziDraftsAdapter.setEntityDrafts(emptyList())
                 } else {
-                    (it as ArrayList).add(0,getString(R.string.Uwazi_Drafts_Header_Text))
+                    (it as ArrayList).add(0, getString(R.string.Uwazi_Drafts_Header_Text))
                     binding?.textViewEmpty?.isVisible = false
                     binding?.draftsRecyclerView?.isVisible = true
                     uwaziDraftsAdapter.setEntityDrafts(it)
                 }
-            })
+            }
 
-            showInstanceSheetMore.observe(viewLifecycleOwner, {
+            showInstanceSheetMore.observe(viewLifecycleOwner) {
                 showDraftsMenu(it)
-            })
+            }
 
-            openEntityInstance.observe(viewLifecycleOwner,{
+            openEntityInstance.observe(viewLifecycleOwner) {
                 openDraft(it)
-            })
+            }
 
-            onInstanceSuccess.observe(viewLifecycleOwner,{
+            onInstanceSuccess.observe(viewLifecycleOwner) {
                 editDraft(it)
-            })
+            }
 
-            instanceDeleteD.observe(viewLifecycleOwner,{
+            instanceDeleteD.observe(viewLifecycleOwner) {
                 listDrafts()
-            })
+            }
         }
     }
 
