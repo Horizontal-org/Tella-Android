@@ -500,6 +500,9 @@ object BottomSheetUtils {
                                 val statusPercent = status * 100 / totalProgress
                                 circularProgress.setProgressPercent(statusPercent, true)
                                 linearProgress.setProgressPercent(statusPercent, true)
+                                if((status == totalProgress) && (customSheetFragment.isAdded)){
+                                    customSheetFragment.dismiss()
+                                }
                             }
                             title.text = titleText
                             cancelTextView.text = cancelText
