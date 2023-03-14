@@ -56,7 +56,7 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
     @SuppressLint("CheckResult")
     override fun importVaultFiles(uris: List<Uri>, parentId: String?, deleteOriginal: Boolean) {
         if (uris.isEmpty()) return
-        counterData.postValue(0)
+        counterData.value = 0
         var counter = 1
         disposables.add(Flowable.fromIterable<Uri>(uris).flatMap { uri ->
             MediaFileHandler.importVaultFileUri(view?.getContext(), uri, parentId).toFlowable()
