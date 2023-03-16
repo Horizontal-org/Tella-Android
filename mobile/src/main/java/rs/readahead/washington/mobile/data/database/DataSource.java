@@ -1341,7 +1341,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
     private ReportInstance getLastScheduledReportFromCursor(Cursor cursor, FormMediaFile mediaFile, Long serverId) {
         List<ReportInstance> instances = new ArrayList<>();
-        ReportInstance reportInstance = null;
+        ReportInstance reportInstance;
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
             ReportInstance instance = cursorToReportFormInstance(cursor);
             instances.add(instance);
@@ -1352,6 +1352,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             if (Util.currentTimestamp() - currentInstance.getUpdated() > C.UPLOAD_SET_DURATION) {
                 currentInstance.setCurrent(0);
+                currentInstance.setStatus(EntityStatus.SUBMITTED);
                 updateTellaReportsFormInstance(currentInstance);
                 ReportInstance newReportInstance = ReportInstance.getAutoReportReportInstance(serverId, "Auto-report " + DateUtil.getDateTimeString());
                 newReportInstance.getWidgetMediaFiles().add(mediaFile);
@@ -1360,7 +1361,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 currentInstance.getWidgetMediaFiles().add(mediaFile);
                 reportInstance = updateTellaReportsFormInstance(currentInstance);
             }
-        }else {
+        } else {
             ReportInstance newReportInstance = ReportInstance.getAutoReportReportInstance(serverId, "Auto-report " + DateUtil.getDateTimeString());
             newReportInstance.getWidgetMediaFiles().add(mediaFile);
             reportInstance = updateTellaReportsFormInstance(newReportInstance);
@@ -2470,7 +2471,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             values.put(D.C_DESCRIPTION_TEXT, instance.getDescription());
             values.put(D.C_UPDATED, Util.currentTimestamp());
             values.put(D.C_CURRENT_UPLOAD, instance.getCurrent());
-            values.put(D.C_REPORT_API_ID, instance.getCurrent());
+            values.put(D.C_REPORT_API_ID, instance.getReportApiId());
             //TODO CHECK FILES IMPLEMENTATION AND ADD FILES STATUS
             values.put(D.C_FORM_PART_STATUS, instance.getFormPartStatus().ordinal());
 
@@ -2644,6 +2645,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 EntityStatus.SUBMISSION_ERROR,
                 EntityStatus.SUBMISSION_PENDING,
                 EntityStatus.SUBMISSION_PARTIAL_PARTS,
+                EntityStatus.SUBMISSION_IN_PROGRESS,
                 EntityStatus.SCHEDULED
         });
     }
@@ -2704,6 +2706,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                             cn(D.T_REPORT_FORM_INSTANCE, D.C_ID, D.A_TELLA_UPLOAD_INSTANCE_ID),
                             D.C_REPORT_SERVER_ID,
                             D.C_REPORT_API_ID,
+                            D.C_CURRENT_UPLOAD,
                             D.C_STATUS,
                             D.C_UPDATED,
                             D.C_METADATA,
