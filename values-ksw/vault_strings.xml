@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="Vault_AllFiles_Title">လံာ်တြံာ်ခဲလၢာ်</string>
+  <string name="Vault_Images_Title">တၢ်ဂီၤတဖၣ်</string>
+  <string name="Vault_Files_Title">Tella လံာ်တြံာ်တဖၣ်</string>
+  <string name="Vault_Documents_Title">လံာ်တီလံာ်မီတဖၣ်</string>
+  <string name="Vault_Audios_Title">တၢ်ကလုၢ်</string>
+  <string name="Vault_Videos_Title">တၢ်ဂီၤမူတဖၣ်</string>
+  <string name="Vault_Others_Title">အဂုၤအဂၤတဖၣ်</string>
+  <string name="Vault_Select_Title">ဃုထၢလံာ်တြံ၁်တဖၣ်</string>
+  <string name="Vault_RecentFiles">လံာ်တြံ၁်လၢအတယံ၁်ဒံးဘၣ်တဖၣ်</string>
+  <string name="Vault_PhotosAndVideos_Title">တၢ်ဂီၤဒီးတၢ်ဂီၤမူတဖၣ်</string>
+  <string name="Vault_FavoriteForms_Title">လံာ်ကွီၣ်ဒိလၢလီၤသးစဲတဖၣ်</string>
+  <string name="Vault_Empty_Msg">လံာ်ဒၢတဖျၢၣ်အံၤအိၣ်ကလီ. စံၢ်လီၤဖဲ + တၢ်ပနီၣ်အလိၤဖဲလာ်အံၤလၢတၢ်ဆှၢနုာ်လီၤလံာ်တြံာ် (မ့တမ့ၢ်) ဒုးအိၣ်ထီၣ်လံာ်ဒၢတဖျၢၣ်အဂီၢ်.</string>
+  <string name="Vault_Move_SheetDesc">သုးအလီၢ်ဆူလံာ်ဒၢအဂၤတဖျၢၣ်</string>
+  <string name="Vault_Rename_SheetAction">ယုၢ်က့ၤအမံၤလၢအသီ</string>
+  <string name="Vault_Save_SheetAction">ပာ်ကီၤ</string>
+  <string name="Vault_Delete_SheetAction">ထုးသံကွံာ်</string>
+  <string name="Vault_Share_SheetAction">ဟ့ၣ်နီၤလီၤ</string>
+  <string name="Vault_Upload_SheetAction">တီၣ်ထီၣ်</string>
+  <string name="Vault_File_SheetAction">လံ၁်တြံ၁်အတၢ်ဂ့ၢ်တၢ်ကျိၤ</string>
+  <string name="Vault_FileInfo">လံ၁်တြံ၁်အတၢ်ဂ့ၢ်တၢ်ကျိၤ</string>
+  <string name="Vault_FileSize">အဒိၣ်အလဲၢ်</string>
+  <string name="Vault_FileFormat">တၢ်မၤကျဲအဒိ</string>
+  <string name="Vault_FileCreated">ဒုးအိၣ်ထီၣ်</string>
+  <string name="Vault_FileResolution">တၢ်ဂီၤအကံၢ်အစီဆှံ</string>
+  <string name="Vault_FileLength">အထီ</string>
+  <string name="Vault_FilePath">ကျဲဖိ</string>
+  <string name="Vault_RenameFile_SheetTitle">ယုၢ်န့ၢ်က့ၤလံာ်တြံာ်အမံၤလၢအသီ</string>
+  <plurals name="Vault_DeleteFile_SheetTitle">
+    <item quantity="zero">၀း</item>
+    <item quantity="one">တၢ</item>
+    <item quantity="two">ခံ</item>
+    <item quantity="few">အစှၤ</item>
+    <item quantity="many">အအါ</item>
+    <item quantity="other">အဂုၤအဂၤ</item>
+  </plurals>
+  <plurals name="Vault_deleteFile_SheetDesc">
+    <item quantity="zero">၀း</item>
+    <item quantity="one">တၢ</item>
+    <item quantity="two">ခံ</item>
+    <item quantity="few">အစှၤ</item>
+    <item quantity="many">အအါ</item>
+    <item quantity="other">အဂုၤအဂၤ</item>
+  </plurals>
+  <string name="Vault_SortNameAsc_SheetAction">အမံၤ A &gt; Z</string>
+  <string name="Vault_SortNameDesc_SheetAction">အမံၤ Z &gt; A</string>
+  <string name="Vault_SortDateAsc_SheetAction">အသီကတၢၢ်ဆူအလီၢ်လံၤကတၢၢ်</string>
+  <string name="Vault_SortDateDesc_SheetAction">အလီၢ်လံၤကတၢၢ်ဆူအသီကတၢၢ်</string>
+  <string name="Vault_ManageFiles_SheetTitle">ရဲၣ်ကျဲၤဘၣ်လံာ်တြံ၁်တဖၣ်</string>
+  <string name="Vault_DeleteFile_SheetDesc">ဖဲနဆှၢနုာ်လီၤလံာ်တြံ၁်ဆူ Tella အပူၤဝံၤအလီၢ်ခံ, ဂံၢ်ခီၣ်ထံးလံာ်တြံ၁် ကဘၣ်တၢ်တြူာ်သံကွံာ်အီၤဖဲနတၢ်ပီးတၢ်လီအပူၤန့ၣ်လီၤ. ထဲဒၣ်လံာ်တြံ၁်လၢ တၢ်ကွဲးဒိပာ်အီၤတဘ့ၣ်ဧိၤ ကအိၣ်တ့ၢ်ဒံးဝဲဖဲ Tella အပူၤန့ၣ်လီၤ.</string>
+  <string name="Vault_TakePhotoVideo_SheetAction">ဒိတၢ်ဂီၤ/တၢ်ဂီၤမူ</string>
+  <string name="Vault_RecordAudio_SheetAction">ဖီၣ်တၢ်ကလုၢ်</string>
+  <string name="Vault_Import_SheetAction">ဆှၢနုာ်လီၤခီဖျိတၢ်ပီးတၢ်လီ</string>
+  <string name="Vault_ImportDelete_SheetAction">ဆှၢနုာ်လီၤဒီးထုးသံကွံာ်ဂံၢ်ခီၣ်ထံးလံာ်တြံ၁်</string>
+  <string name="Vault_CreateFolder_SheetTitle">တ့ထီၣ်လံာ်ဒၢအသီတဖျၢၣ်</string>
+  <string name="Vault_MoveHere">သုးကွံာ်ဖဲအံၤ</string>
+  <string name="Vault_ViewerOther_SheetDesc">လံာ်တြံ၁်သနိအံၤတၢ်အိထီၣ်အီၤလၢ Tella တန့ၢ်ဘၣ်ႋ နဘၣ်သးပာ်ကီၤဘၣ်အီၤဆူနတၢ်ပီးတၢ်လီပူၤ လၢကအိးထီၣ်ကွၢ်အီၤလၢအဲး(ပ) အဂၤဧါႋ တၢ်အံၤကထံၣ်ဘၣ်လံာ်တြံာ်အတၢ်ဂ့ၢ်တၢ်ကျိၤသ့န့ၣ်လီၤႋ</string>
+  <string name="Vault_Export_SheetAction">ပာ်ကီၤဆူတၢ်ပီးတၢ်လီအပူၤ</string>
+  <plurals name="Vault_Items">
+    <item quantity="zero">၀း</item>
+    <item quantity="one">တၢ</item>
+    <item quantity="two">ခံ</item>
+    <item quantity="few">အစှၤ</item>
+    <item quantity="many">အအါ</item>
+    <item quantity="other">အဂုအၤဂၤ</item>
+  </plurals>
+  <string name="Vault_No_Files_Title"></string>
+  <string name="Vault_FavoriteTemplates_Title"></string>
+</resources>
