@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.views.fragment.vault.attachements
 
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.R.attr.data
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
@@ -26,6 +27,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.updatePadding
+import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -43,6 +45,7 @@ import org.hzontal.shared_ui.appbar.ToolbarComponent
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.RadioOptionConsumer
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showChooseImportSheet
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showProgressImportSheet
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showRadioListOptionsSheet
@@ -303,7 +306,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
                 handleSortSheet()
             }
             R.id.fab_button -> {
-                VaultSheetUtils.showVaultManageFilesSheet(activity.supportFragmentManager, getString(R.string.Vault_TakePhotoVideo_SheetAction), getString(R.string.Vault_RecordAudio_SheetAction), getString(R.string.Vault_Import_SheetAction), getString(R.string.Vault_ImportDelete_SheetAction), getString(R.string.Vault_CreateFolder_SheetAction), getString(R.string.Vault_ManageFiles_SheetTitle), getString(R.string.Vault_DeleteFile_SheetDesc), filterType != FilterType.OTHERS, filterType == FilterType.ALL, action = object : VaultSheetUtils.IVaultManageFiles {
+                VaultSheetUtils.showVaultManageFilesSheet(activity.supportFragmentManager, getString(R.string.Vault_TakePhotoVideo_SheetAction), getString(R.string.Vault_RecordAudio_SheetAction), getString(R.string.Vault_Import_SheetAction), getString(R.string.Vault_CreateFolder_SheetAction), getString(R.string.Vault_ManageFiles_SheetTitle), filterType != FilterType.OTHERS, filterType == FilterType.ALL, action = object : VaultSheetUtils.IVaultManageFiles {
                     override fun goToCamera() {
                         val intent = Intent(activity, CameraActivity::class.java)
                         intent.putExtra(VAULT_CURRENT_ROOT_PARENT, currentRootID)
@@ -315,20 +318,24 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
                         nav().navigate(R.id.action_attachments_screen_to_micScreen, bundle)
                     }
 
-                    override fun import() {
-                        //first step in importing files
-                        importAndDelete = false
-                        activity.maybeChangeTemporaryTimeout {
-                            MediaFileHandler.startImportFiles(activity, true, getCurrentType())
-                        }
+                    override fun chooseImportAndDelete() {
+                        showChooseImportSheet(activity.supportFragmentManager, getString(R.string.Vault_ImportDelete_SheetAction), getString(R.string.Vault_deleteFileImported_SheetDesc), getString(R.string.Vault_Delete_Original), getString(R.string.Vault_Keep_Original), importConsumer = object : ActionConfirmed {
+                            override fun accept(isConfirmed: Boolean) {
+                                //first step in importing files
+                                importAndDelete = false
+                                activity.maybeChangeTemporaryTimeout {
+                                    MediaFileHandler.startImportFiles(activity, true, getCurrentType())
+                                }
+                            }
+                        }, importAndDeleteConsumer = object : ActionConfirmed {
+                            override fun accept(isConfirmed: Boolean) {
+                                importAndDelete = true
+                                activity.maybeChangeTemporaryTimeout {
+                                    MediaFileHandler.startImportFiles(activity, true, getCurrentType())
+                                }
+                            }
 
-                    }
-
-                    override fun importAndDelete() {
-                        importAndDelete = true
-                        activity.maybeChangeTemporaryTimeout {
-                            MediaFileHandler.startImportFiles(activity, true, getCurrentType())
-                        }
+                        })
                     }
 
                     override fun createFolder() {
@@ -603,12 +610,12 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
     /*TODO wafa fix this*/
     override fun onMediaImportedWithDelete(uri: Uri) {
 
-            lifecycleScope.launch {
-                uri.let {
-                    deleteFileFromExternalStorage(it)
-                    uriToDelete = it
-                }
+        lifecycleScope.launch {
+            uri.let {
+                deleteFileFromExternalStorage(it)
+                uriToDelete = it
             }
+        }
 
         attachmentsPresenter.addNewVaultFiles()
     }
@@ -900,7 +907,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
                 exportVaultFiles(isMultipleFiles = attachmentsAdapter.selectedMediaFiles.size > 0, vaultFile, treeUri)
             }
             DELETE_PERMISSION_REQUEST -> {
-             //   deleteFileFromExternalStorage()
+                //   deleteFileFromExternalStorage()
             }
         }
     }
@@ -1040,20 +1047,11 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
 
     /*TODO WAFA FIX THIS*/
     private fun deleteFileFromExternalStorage(uri: Uri) {
+        var fileToDelete = DocumentFile.fromSingleUri(context!!, uri)
         try {
-            // 1
-            activity.contentResolver.delete(uri, null, null)
-        } // 2
-        catch (securityException: SecurityException) {
-            if (SDK_INT >= Build.VERSION_CODES.Q) {
-                val recoverableSecurityException = securityException as? RecoverableSecurityException
-                        ?: throw securityException
-
-                val intentSender = recoverableSecurityException.userAction.actionIntent.intentSender
-                startIntentSenderForResult(intentSender, DELETE_PERMISSION_REQUEST, null, 0, 0, 0, null)
-            } else {
-                throw securityException
-            }
+            fileToDelete?.delete()
+        } catch (exn: java.lang.Exception) {
+            exn.printStackTrace()
         }
     }
 

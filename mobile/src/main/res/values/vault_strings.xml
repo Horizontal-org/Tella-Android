@@ -44,7 +44,7 @@
   <string name="Vault_TakePhotoVideo_SheetAction">Take photo/video</string>
   <string name="Vault_RecordAudio_SheetAction">Record audio</string>
   <string name="Vault_Import_SheetAction">Import from device</string>
-  <string name="Vault_ImportDelete_SheetAction">Import and delete original file</string>
+  <string name="Vault_ImportDelete_SheetAction">Import and delete original file?</string>
   <string name="Vault_CreateFolder_SheetTitle">Create a new folder</string>
   <string name="Vault_MoveHere">move here</string>
   <string name="Vault_ViewerOther_SheetDesc">This file format cannot be opened inside Tella. Would you like to export the file to your device to open it through a different app? This may expose the content of the file. </string>
@@ -65,4 +65,8 @@
   <string name="Vault_Confirm_delete_Description" translatable="false">Some of the selected files are currently used in your connections. Deleting may impact forms and reports that haven’t been sent yet.</string>
   <string name="Vault_Warning_Title" translatable="false">Warning</string>
   <string name="Vault_Delete_anyway">Delete anyway</string>
+  <string name="Vault_Keep_Original">KEEP ORIGINAL</string>
+  <string name="Vault_Delete_Original">DELETE ORIGINAL</string>
+  <string name="Vault_deleteFileImported_SheetDesc" > After importing the file into Tella, do you want to keep the original file on your device or delete it?\n \n If you delete it, the file imported into Tella will be the only copy left. </string>
+
 </resources>

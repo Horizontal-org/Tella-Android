@@ -479,6 +479,53 @@ object BottomSheetUtils {
     }
 
 
+    @JvmStatic
+    fun showChooseImportSheet(
+            fragmentManager: FragmentManager,
+            titleText: String?,
+            descriptionText: String?,
+            importButtonLabel: String? = null,
+            importAndDeleteButtonLabel: String? = null,
+            importConsumer: ActionConfirmed,
+            importAndDeleteConsumer: ActionConfirmed
+
+    ) {
+
+        val customSheetFragment =
+                CustomBottomSheetFragment.with(fragmentManager).page(R.layout.standar_sheet_layout)
+                        .cancellable(true).screenTag("ConfirmSheet")
+        customSheetFragment.holder(GenericSheetHolder(),
+                object : CustomBottomSheetFragment.Binder<GenericSheetHolder> {
+                    override fun onBind(holder: GenericSheetHolder) {
+                        with(holder) {
+                            title.text = titleText
+                            description.text = descriptionText
+                            importButtonLabel?.let {
+                                actionButton.text = it
+                            }
+                            importAndDeleteButtonLabel?.let {
+                                cancelButton.text = it
+                            }
+
+                            actionButton.setOnClickListener {
+                                importAndDeleteConsumer.accept(isConfirmed = true)
+                                customSheetFragment.dismiss()
+                            }
+
+                            cancelButton.setOnClickListener {
+                                importConsumer.accept(isConfirmed = true)
+                                customSheetFragment.dismiss()
+                            }
+
+
+                        }
+                    }
+                })
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
+    }
+
     fun showProgressImportSheet(
             fragmentManager: FragmentManager,
             titleText: String?,
