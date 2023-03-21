@@ -13,7 +13,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hzontal.utils.MediaFile;
 
@@ -26,16 +25,12 @@ import rs.readahead.washington.mobile.domain.entity.EntityStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance;
-import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
-import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.FileUtil;
 import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
 
 @SuppressLint("ViewConstructor")
 public class ReportsFormEndView extends FrameLayout {
-    private final RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
     LinearLayout partsListView;
     TextView titleView;
     TextView descriptionView;
@@ -46,7 +41,6 @@ public class ReportsFormEndView extends FrameLayout {
     long formSize = 0L;
     private ReportFormInstance instance;
     private boolean previewUploaded;
-
 
     public ReportsFormEndView(Context context, String title, String description) {
         super(context);
@@ -64,10 +58,6 @@ public class ReportsFormEndView extends FrameLayout {
         formSizeView = findViewById(R.id.formSize);
 
         formStatusTextView = findViewById(R.id.form_status);
-
-        MediaFileHandler mediaFileHandler = new MediaFileHandler();
-        VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
-        glide = Glide.with(getContext()).using(glideLoader);
     }
 
     public void setInstance(@NonNull ReportFormInstance instance, boolean offline, boolean previewUploaded) {
@@ -203,7 +193,8 @@ public class ReportsFormEndView extends FrameLayout {
         item.setPartSize(mediaFile.size);
 
         if (MediaFile.INSTANCE.isImageFileType(mediaFile.mimeType) || (MediaFile.INSTANCE.isVideoFileType(mediaFile.mimeType))) {
-            glide.load(new VaultFileLoaderModel(mediaFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+            Glide.with(getContext())
+                    .load(mediaFile.thumb)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(thumbView);

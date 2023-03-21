@@ -1,11 +1,12 @@
 package rs.readahead.washington.mobile.views.adapters;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
+
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,36 +23,27 @@ import java.util.Set;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.databinding.CardGalleryAttachmentMediaFileBinding;
-import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
-import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.views.interfaces.IGalleryMediaHandler;
 
 
 public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecycleViewAdapter.ViewHolder> {
     private List<VaultFile> files = new ArrayList<>();
-    private VaultFileUrlLoader glideLoader;
     private IGalleryMediaHandler galleryMediaHandler;
     private Set<VaultFile> selected;
-    private int cardLayoutId;
     private boolean selectable;
     private boolean singleSelection;
 
 
-    public GalleryRecycleViewAdapter(Context context, IGalleryMediaHandler galleryMediaHandler,
-                                     MediaFileHandler mediaFileHandler, @LayoutRes int cardLayoutId) {
-        this(context, galleryMediaHandler, mediaFileHandler, cardLayoutId, true, false);
+    public GalleryRecycleViewAdapter(IGalleryMediaHandler galleryMediaHandler) {
+        this(galleryMediaHandler,true, false);
     }
 
-    public GalleryRecycleViewAdapter(Context context, IGalleryMediaHandler galleryMediaHandler,
-                                     MediaFileHandler mediaFileHandler, @LayoutRes int cardLayoutId,
+    public GalleryRecycleViewAdapter(IGalleryMediaHandler galleryMediaHandler,
                                      boolean selectable,
                                      boolean singleSelection) {
-        this.glideLoader = new VaultFileUrlLoader(context.getApplicationContext(), mediaFileHandler);
         this.galleryMediaHandler = galleryMediaHandler;
         this.selected = new LinkedHashSet<>();
-        this.cardLayoutId = cardLayoutId;
         this.selectable = selectable;
         this.singleSelection = singleSelection;
     }
@@ -75,8 +67,7 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
         if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
             holder.showImageInfo();
             Glide.with(holder.binding.mediaView.getContext())
-                    .using(glideLoader)
-                    .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+                    .load(vaultFile.thumb)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(holder.binding.mediaView);
@@ -88,8 +79,7 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
         } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
             holder.showVideoInfo(vaultFile);
             Glide.with(holder.binding.mediaView.getContext())
-                    .using(glideLoader)
-                    .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+                    .load(vaultFile.thumb)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(holder.binding.mediaView);
@@ -159,7 +149,7 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
     }
 
     private void removeAllSelections() {
-        for (VaultFile selection: selected) {
+        for (VaultFile selection : selected) {
             deselectMediaFile(selection);
             galleryMediaHandler.onMediaDeselected(selection);
         }

@@ -10,7 +10,6 @@ import static com.hzontal.tella_locking_ui.ConstantsKt.CALC_ALIAS_BLUE_SKIN;
 import static com.hzontal.tella_locking_ui.ConstantsKt.CALC_ALIAS_GREEN_SKIN;
 import static com.hzontal.tella_locking_ui.ConstantsKt.CALC_ALIAS_ORANGE_SKIN;
 import static com.hzontal.tella_locking_ui.ConstantsKt.CALC_ALIAS_YELLOW_SKIN;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -30,7 +29,6 @@ public class CamouflageManager {
     private static CamouflageManager instance;
     private static final String defaultAlias = SplashActivity.class.getCanonicalName();
     private final List<CamouflageOption> options;
-    public static final int defaultAliasPosition = 15;
 
     public final CamouflageOption calculatorOption = new CamouflageOption(getOptionAlias(CALC_ALIAS_GREEN_SKIN), R.drawable.calc_green_skin_foreground, R.string.settings_camo_calculator2);
     final CamouflageOption defaultOption = new CamouflageOption(defaultAlias, R.drawable.tella_black, R.string.app_name);
@@ -46,18 +44,35 @@ public class CamouflageManager {
 
     private CamouflageManager() {
         options = new ArrayList<>();
-        options.add(new CamouflageOption(getOptionAlias("iCamera"), R.drawable.icamera_foreground, R.string.settings_camo_icamera));
-        options.add(new CamouflageOption(getOptionAlias("SelfieCam"), R.drawable.selfiecamera_foreground, R.string.settings_camo_selfie_cam));
-        options.add(new CamouflageOption(getOptionAlias("SnapCamera"), R.drawable.snapcamera_foreground, R.string.settings_camo_snap_camera));
-        options.add(new CamouflageOption(getOptionAlias("Weather"), R.drawable.weather_foreground, R.string.settings_camo_weather));
-        options.add(new CamouflageOption(getOptionAlias("EasyWeather"), R.drawable.easyweather_foreground, R.string.settings_camo_easyweather));
-        options.add(new CamouflageOption(getOptionAlias("SunnyDay"), R.drawable.sunnyday_foreground, R.string.settings_camo_sunnyday));
-        options.add(new CamouflageOption(getOptionAlias("GameStation"), R.drawable.gamestation_foreground, R.string.settings_camo_gamestation));
-        options.add(new CamouflageOption(getOptionAlias("PlayNow"), R.drawable.playnow_foreground, R.string.settings_camo_playnow));
-        options.add(new CamouflageOption(getOptionAlias("JewelDash"), R.drawable.jeweldash_foreground, R.string.settings_camo_jeweldash));
-        options.add(new CamouflageOption(getOptionAlias("Clock"), R.drawable.clock_foreground, R.string.settings_camo_clock));
-        options.add(new CamouflageOption(getOptionAlias("Time"), R.drawable.time_foreground, R.string.settings_camo_time));
-        options.add(new CamouflageOption(getOptionAlias("StopWatch"), R.drawable.stopwatch_foreground, R.string.settings_camo_stopwatch));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.I_CAMERA_ALIAS), R.mipmap.ic_camera_round, R.string.settings_camo_icamera));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.SELFIE_CAM_ALIAS), R.mipmap.ic_selfie_cam_round, R.string.settings_camo_selfie_cam));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.SNAP_CAMERA_ALIAS), R.mipmap.ic_snap_camera_round, R.string.settings_camo_snap_camera));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.MI_CAMERA_ALIAS), R.mipmap.ic_mi_camera_round, R.string.settings_camo_micamera));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.CALCULATE_ALIAS), R.mipmap.ic_calculate_round, R.string.settings_camo_calculate));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.CALCULATOR_PLUS_ALIAS), R.mipmap.ic_calculator_plus_round, R.string.settings_camo_calculator_plus));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.I_CALCULATOR_ALIAS), R.mipmap.ic_i_calculator_round, R.string.settings_camo_icalculator));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.CALCULATOR_ALIAS), R.mipmap.ic_calculator_round, R.string.settings_camo_calculator2));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.WEATHER_ALIAS), R.mipmap.ic_weather_round, R.string.settings_camo_weather));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.EASY_WEATHER_ALIAS), R.mipmap.ic_easy_weather_round, R.string.settings_camo_easyweather));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.SUNNY_DAY_ALIAS), R.mipmap.ic_sunny_day_round, R.string.settings_camo_sunnyday));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.FORECAST_ALIAS), R.mipmap.ic_forecast_round, R.string.settings_camo_forecast));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.GAME_STATION_ALIAS), R.mipmap.ic_game_station_round, R.string.settings_camo_gamestation));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.PLAY_NOW_ALIAS), R.mipmap.ic_play_now_round, R.string.settings_camo_playnow));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.GAME_LAUNCHER_ALIAS), R.mipmap.ic_game_launcher_round, R.string.settings_camo_game_launcher));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.CLOCK_ALIAS), R.mipmap.ic_clock_round, R.string.settings_camo_clock));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.JEWEL_DASH_ALIAS), R.mipmap.ic_jewel_dash_round, R.string.settings_camo_jeweldash));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.TIME_ALIAS), R.mipmap.ic_time_round, R.string.settings_camo_time));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.STOP_WATCH_ALIAS), R.mipmap.ic_stop_watch_round, R.string.settings_camo_stopwatch));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.WATCH_ALIAS), R.mipmap.ic_watch_round, R.string.settings_camo_watch));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.WORKOUT_ALIAS), R.mipmap.ic_workout_round, R.string.settings_camo_workout));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.FITNESS_LIFE_ALIAS), R.mipmap.ic_fitness_life_round, R.string.settings_camo_fitness_life));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.HEALTH_ALIAS), R.mipmap.ic_health_round, R.string.settings_camo_health));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.PERIOD_TRACKER_ALIAS), R.mipmap.ic_period_tracker_round, R.string.settings_camo_period_tracker));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.MUSIC_ALIAS), R.mipmap.ic_music_round, R.string.settings_camo_music));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.DICTIONARY_ALIAS), R.mipmap.ic_dictionary_round, R.string.settings_camo_dictionary));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.PLANT_CARE_ALIAS), R.mipmap.ic_plant_care_round, R.string.settings_camo_plant_care));
+        options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.ASTROLOGY_ALIAS), R.mipmap.ic_astrology_round, R.string.settings_camo_astrology));
+
 
     }
 

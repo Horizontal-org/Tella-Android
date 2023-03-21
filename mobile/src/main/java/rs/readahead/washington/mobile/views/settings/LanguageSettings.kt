@@ -37,8 +37,8 @@ class LanguageSettings : BaseFragment(), View.OnClickListener {
     }
 
     override fun initView(view: View) {
-        (activity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_lang_app_bar)
-        (activity as OnFragmentSelected?)?.setToolbarHomeIcon(R.drawable.ic_close_white_24dp)
+        (baseActivity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_lang_app_bar)
+        (baseActivity as OnFragmentSelected?)?.setToolbarHomeIcon(R.drawable.ic_close_white_24dp)
 
         LanguageList = view.findViewById(R.id.language_list)
 

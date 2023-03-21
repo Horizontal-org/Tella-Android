@@ -116,7 +116,7 @@ public class SharedPrefs {
     }*/
 
     public boolean isEraseGalleryActive() {
-        return pref.getBoolean(ERASE_GALLERY, true);
+        return pref.getBoolean(ERASE_GALLERY, false);
     }
 
     public void setEraseGalleryActive(boolean activated) {

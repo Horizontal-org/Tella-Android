@@ -15,20 +15,14 @@ import com.hzontal.utils.MediaFile.isAudioFileType
 import com.hzontal.utils.MediaFile.isImageFileType
 import com.hzontal.utils.MediaFile.isVideoFileType
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.media.MediaFileHandler
-import rs.readahead.washington.mobile.media.VaultFileUrlLoader
-import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel
 import rs.readahead.washington.mobile.views.interfaces.IReportAttachmentsHandler
 
 
 open class ReportsFilesRecyclerViewAdapter(
     private val iAttachmentsMediaHandler: IReportAttachmentsHandler,
-    context: Context,
-    mediaFileHandler: MediaFileHandler
 ) :
     RecyclerView.Adapter<ReportsFilesRecyclerViewAdapter.GridAttachmentsViewHolder>() {
     private var listAttachment: ArrayList<VaultFile> = arrayListOf()
-    private val glideLoader = VaultFileUrlLoader(context, mediaFileHandler)
 
     init {
         val file = VaultFile()
@@ -62,6 +56,7 @@ open class ReportsFilesRecyclerViewAdapter(
 
     private fun removeFile(position: Int) {
         listAttachment.removeAt(position)
+        iAttachmentsMediaHandler.removeFiles()
         notifyItemRemoved(position)
     }
 
@@ -100,36 +95,13 @@ open class ReportsFilesRecyclerViewAdapter(
                 removeBtn.setOnClickListener {
                     removeFile(position = layoutPosition)
                 }
-
                 if (isImageFileType(vaultFile.mimeType)) {
                     this.showImageInfo(vaultFile)
-                    Glide.with(context)
-                        .using(glideLoader)
-                        .load(
-                            VaultFileLoaderModel(
-                                vaultFile,
-                                VaultFileLoaderModel.LoadType.THUMBNAIL
-                            )
-                        )
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
-                        .into(filePreviewImg)
                 } else if (isAudioFileType(vaultFile.mimeType)) {
                     this.showAudioInfo()
                     fileNameTextView.text = vaultFile.name
                 } else if (isVideoFileType(vaultFile.mimeType)) {
                     this.showVideoInfo(vaultFile)
-                    Glide.with(context)
-                        .using(glideLoader)
-                        .load(
-                            VaultFileLoaderModel(
-                                vaultFile,
-                                VaultFileLoaderModel.LoadType.THUMBNAIL
-                            )
-                        )
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
-                        .into(filePreviewImg)
                 } else {
                     fileNameTextView.text = vaultFile.name
                     this.showDocInfo()
@@ -141,12 +113,7 @@ open class ReportsFilesRecyclerViewAdapter(
         }
 
         private fun showVideoInfo(vaultFile: VaultFile) {
-            Glide.with(context)
-                .using(glideLoader)
-                .load(VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(filePreviewImg)
+            filePreviewImg.loadImage(vaultFile.thumb)
             icAttachmentImg.setBackgroundResource(R.drawable.ic_play)
         }
 
@@ -159,12 +126,15 @@ open class ReportsFilesRecyclerViewAdapter(
         }
 
         private fun showImageInfo(vaultFile: VaultFile) {
-            Glide.with(filePreviewImg.context)
-                .using(glideLoader)
-                .load(VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+            filePreviewImg.loadImage(vaultFile.thumb)
+        }
+
+        fun ImageView.loadImage(thumb: ByteArray) {
+            Glide.with(this)
+                .load(thumb)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
-                .into(filePreviewImg)
+                .into(this)
         }
 
         private fun showAddLink() {

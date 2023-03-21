@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
@@ -18,11 +17,8 @@ import com.hzontal.utils.MediaFile;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.databinding.CollectAttachemntPreviewViewBinding;
-import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.mvp.contract.ICollectAttachmentMediaFilePresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CollectAttachmentMediaFilePresenter;
-import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.FileUtil;
 import rs.readahead.washington.mobile.views.activity.AudioPlayActivity;
 import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity;
@@ -35,8 +31,6 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
 
     private VaultFile vaultFile;
     private final CollectAttachmentMediaFilePresenter presenter;
-    private final RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
-
 
     public CollectAttachmentPreviewView(Context context) {
         this(context, null);
@@ -51,10 +45,6 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
 
         binding = CollectAttachemntPreviewViewBinding.inflate(LayoutInflater.from(context), this, true);
 
-        MediaFileHandler mediaFileHandler = new MediaFileHandler();
-        VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
-
-        glide = Glide.with(getContext()).using(glideLoader);
         presenter = new CollectAttachmentMediaFilePresenter(this);
     }
 
@@ -128,7 +118,8 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
     }
 
     private void loadThumbnail() {
-        glide.load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+        Glide.with(getContext())
+                .load(vaultFile.thumb)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(binding.thumbView);

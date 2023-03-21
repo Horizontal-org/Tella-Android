@@ -27,7 +27,6 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
     val counterData = MutableLiveData<Int>()
 
     override fun getFiles(parent: String?, filterType: FilterType?, sort: Sort?) {
-
         MyApplication.rxVault.get(parent)
                 .subscribe(
                         { vaultFile: VaultFile? ->
@@ -56,6 +55,7 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
     @SuppressLint("CheckResult")
     override fun importVaultFiles(uris: List<Uri>, parentId: String?, deleteOriginal: Boolean) {
         if (uris.isEmpty()) return
+        counterData.value = 0
         var counter = 1
         var currentUri: Uri? = null
         disposables.add(Flowable.fromIterable(uris).flatMap { uri ->

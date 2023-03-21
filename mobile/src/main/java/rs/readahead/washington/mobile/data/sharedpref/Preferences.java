@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.data.sharedpref;
 
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -12,10 +13,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 public class Preferences {
-    private static SharedPrefs sharedPrefs = SharedPrefs.getInstance();
+    private static final SharedPrefs sharedPrefs = SharedPrefs.getInstance();
 
     // cache
-    private static Map<String, Boolean> bCache = new ConcurrentHashMap<>();
+    private static final Map<String, Boolean> bCache = new ConcurrentHashMap<>();
 
 
     public static boolean isSecretModeActive() {

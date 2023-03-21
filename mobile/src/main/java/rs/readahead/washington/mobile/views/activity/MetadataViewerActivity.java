@@ -1,5 +1,7 @@
 package rs.readahead.washington.mobile.views.activity;
 
+import static com.hzontal.tella_vault.Metadata.VIEW_METADATA;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
@@ -29,7 +31,6 @@ import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 
 
 public class MetadataViewerActivity extends BaseLockActivity {
-    public static final String VIEW_METADATA = "vm";
 
     LinearLayout metadataList;
 

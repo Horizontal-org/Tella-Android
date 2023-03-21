@@ -22,7 +22,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hzontal.utils.MediaFile;
 
@@ -34,9 +33,6 @@ import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceS
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.javarosa.FormUtils;
-import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
-import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.FileUtil;
 
@@ -54,7 +50,6 @@ public class CollectFormEndView extends FrameLayout {
     Long submittedSize = 0L;
 
     private CollectFormInstance instance;
-    private final RequestManager.ImageModelRequest<VaultFileLoaderModel> glide;
 
     public CollectFormEndView(Context context, @StringRes int titleResId) {
         super(context);
@@ -64,10 +59,6 @@ public class CollectFormEndView extends FrameLayout {
         titleView = findViewById(R.id.title);
 
         subTitleView = findViewById(R.id.subtitle);
-
-        MediaFileHandler mediaFileHandler = new MediaFileHandler();
-        VaultFileUrlLoader glideLoader = new VaultFileUrlLoader(getContext().getApplicationContext(), mediaFileHandler);
-        glide = Glide.with(getContext()).using(glideLoader);
     }
 
     public void setInstance(@NonNull CollectFormInstance instance, boolean offline) {
@@ -221,7 +212,8 @@ public class CollectFormEndView extends FrameLayout {
         sizeView.setText(FileUtil.getFileSizeString(mediaFile.size));
 
         if (MediaFile.INSTANCE.isImageFileType(mediaFile.mimeType) || (MediaFile.INSTANCE.isVideoFileType(mediaFile.mimeType))) {
-            glide.load(new VaultFileLoaderModel(mediaFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+            Glide.with(getContext())
+                    .load(mediaFile.thumb)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(thumbView);
