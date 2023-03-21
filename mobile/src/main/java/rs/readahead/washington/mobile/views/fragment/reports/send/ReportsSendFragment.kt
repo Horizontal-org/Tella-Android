@@ -14,8 +14,8 @@ import rs.readahead.washington.mobile.util.ConnectionLiveData
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
-import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_FORM_INSTANCE
 import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
+import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_FORM_INSTANCE
 import rs.readahead.washington.mobile.views.fragment.reports.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.reports.viewpagerfragments.BUNDLE_IS_FROM_OUTBOX
 import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
@@ -98,9 +98,7 @@ class ReportsSendFragment :
             isFromOutbox = bundle.getBoolean(BUNDLE_IS_FROM_OUTBOX)
             showFormEndView()
         }
-        if (isFromOutbox) {
-            binding?.nextBtn?.hide()
-        }
+
         binding?.toolbar?.backClickListener = {
             handleBackButton()
         }
@@ -117,38 +115,27 @@ class ReportsSendFragment :
         if (!isOnline) {
             binding?.nextBtn?.text = getString(R.string.Reports_Resume)
         } else {
-            if (isFromOutbox) {
-                submitEntity()
-            } else {
-                if (reportInstance?.status == EntityStatus.PAUSED || reportInstance?.status == EntityStatus.SUBMISSION_ERROR) {
-                    binding?.nextBtn?.text = getString(R.string.Reports_Resume)
-                } else {
-                    if (reportInstance?.status != EntityStatus.SUBMITTED) {
-                        binding?.nextBtn?.text = getString(R.string.Reports_Pause)
-                        submitEntity()
-                    }
-                }
-            }
+            pauseResumeLabel(reportInstance)
         }
 
     }
 
     private fun highlightSubmitButton() {
         binding?.nextBtn?.setOnClickListener {
-            if (reportInstance?.status == EntityStatus.PAUSED || reportInstance?.status == EntityStatus.SUBMISSION_ERROR) {
-                submitEntity()
-            } else {
+            if (reportInstance?.status == EntityStatus.SUBMISSION_IN_PROGRESS) {
                 viewModel.clearDisposable()
+            } else {
+                submitEntity()
             }
         }
         pauseResumeLabel(reportInstance)
     }
 
     private fun pauseResumeLabel(reportFormInstance: ReportFormInstance?) {
-        if (reportFormInstance?.status == EntityStatus.PAUSED) {
-            binding?.nextBtn?.text = getString(R.string.Reports_Resume)
-        } else {
+        if (reportFormInstance?.status == EntityStatus.SUBMISSION_IN_PROGRESS) {
             binding?.nextBtn?.text = getString(R.string.Reports_Pause)
+        } else {
+            binding?.nextBtn?.text = getString(R.string.Reports_Resume)
         }
     }
 
@@ -184,7 +171,6 @@ class ReportsSendFragment :
             endView.clearPartsProgress(reportFormInstance)
         }
     }
-
 
     fun submitEntity() {
         reportInstance?.let { entity ->
