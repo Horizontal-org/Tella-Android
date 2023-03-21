@@ -547,7 +547,7 @@ object BottomSheetUtils {
                                 val statusPercent = status * 100 / totalProgress
                                 circularProgress.setProgressPercent(statusPercent, true)
                                 linearProgress.setProgressPercent(statusPercent, true)
-                                if((status == totalProgress) && (customSheetFragment.isAdded)){
+                                if ((status == totalProgress) && (customSheetFragment.isAdded)) {
                                     customSheetFragment.dismiss()
                                 }
                             }
@@ -811,7 +811,7 @@ object BottomSheetUtils {
             descriptionText: String?,
             actionButtonLabel: String? = null,
             cancelButtonLabel: String? = null,
-            iconView : Int = -1
+            iconView: Int = -1
     ) {
 
         val customSheetFragment2 =
@@ -855,8 +855,8 @@ object BottomSheetUtils {
                         with(holder) {
                             title.text = titleText
 
-                            if (iconView != -1){
-                                actionEdit.setCompoundDrawablesWithIntrinsicBounds(iconView,0,0,0)
+                            if (iconView != -1) {
+                                actionEdit.setCompoundDrawablesWithIntrinsicBounds(iconView, 0, 0, 0)
                             }
                             actionEditLabel?.let {
                                 actionEdit.text = it

@@ -1,13 +1,10 @@
 package org.hzontal.shared_ui.bottomsheet
 
 import android.app.Activity
-import android.view.Gravity
 import android.view.View
 import android.widget.*
-import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
-import com.tooltip.Tooltip
 import org.hzontal.shared_ui.R
 import org.hzontal.shared_ui.utils.DialogUtils
 
@@ -263,8 +260,6 @@ object VaultSheetUtils {
     interface IVaultManageFiles {
         fun goToCamera()
         fun goToRecorder()
-
-        //  fun import()
         fun chooseImportAndDelete()
         fun createFolder()
     }
