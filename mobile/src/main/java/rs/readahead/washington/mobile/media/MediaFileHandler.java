@@ -645,7 +645,7 @@ public class MediaFileHandler {
     public static void startImportFiles(Activity context, Boolean multipleFile, String type) {
         Intent intent = new Intent()
                 .setType(type)
-                .setAction(Intent.ACTION_GET_CONTENT)
+                .setAction(Intent.ACTION_OPEN_DOCUMENT)
                 .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, multipleFile);
 
         context.startActivityForResult(
