@@ -72,7 +72,7 @@ public class CollectCreateFormControllerPresenter implements
         formDef.initialize(true, new InstanceInitializationFactory());
 
         // Remove previous forms
-        ReferenceManager.__().clearSession();
+        ReferenceManager.instance().clearSession();
 
         fc.initFormChangeTracking(); // set clear form to track changes
 
