@@ -183,7 +183,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     private fun maybeShowConnections() {
-        if (serversList?.isNullOrEmpty() == false) {
+        if (serversList?.isEmpty() == false) {
             vaultAdapter.addConnectionServers(serversList!!)
         } else {
             vaultAdapter.removeConnectionServers()
