@@ -18,6 +18,7 @@ import rs.readahead.washington.mobile.util.KeyboardLiveData
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowViewModel
+import rs.readahead.washington.mobile.views.dialog.reports.step4.SuccessfulLoginFragment
 import rs.readahead.washington.mobile.views.dialog.reports.step6.SuccessfulSetServerFragment
 
 internal const val OBJECT_SLUG = "os"
@@ -77,7 +78,7 @@ class LoginReportsFragment :
 
         viewModel.authenticationSuccess.observe(baseActivity) { server ->
             baseActivity.addFragment(
-                SuccessfulSetServerFragment.newInstance(server), R.id.container
+                SuccessfulLoginFragment.newInstance(server), R.id.container
             )
         }
 
