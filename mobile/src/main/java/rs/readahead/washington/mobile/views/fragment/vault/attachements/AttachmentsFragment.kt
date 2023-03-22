@@ -935,7 +935,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
     }
 
     private fun onFileDeletedEventListener() {
-        disposables.wire(MediaFileDeletedEvent::class.java,
+        disposables.wire(
+            MediaFileDeletedEvent::class.java,
             object : EventObserver<MediaFileDeletedEvent?>() {
                 override fun onNext(event: MediaFileDeletedEvent) {
                     onMediaFilesDeleted(1)
@@ -944,7 +945,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
     }
 
     private fun onFileRenameEventListener() {
-        disposables.wire(VaultFileRenameEvent::class.java,
+        disposables.wire(
+            VaultFileRenameEvent::class.java,
             object : EventObserver<VaultFileRenameEvent?>() {
                 override fun onNext(event: VaultFileRenameEvent) {
                     onRenameFileSuccess()
@@ -1105,7 +1107,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
         toolbar.backClickListener = {
             handleBackStack()
         }
-        (activity as MainActivity).onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+        (activity as MainActivity).onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     handleBackStack()
