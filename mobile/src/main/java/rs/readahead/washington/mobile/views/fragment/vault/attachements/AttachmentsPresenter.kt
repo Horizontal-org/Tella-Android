@@ -11,7 +11,6 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.database.DataSource
@@ -189,9 +188,10 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { files : List<FormMediaFile> ->
-                    val doesFileExist =  files.any { file ->  vaultFiles.any { vaultFile -> vaultFile?.id == file.id }}
-                    view?.onConfirmDeleteFiles(vaultFiles,doesFileExist)
+                { files: List<FormMediaFile> ->
+                    val doesFileExist =
+                        files.any { file -> vaultFiles.any { vaultFile -> vaultFile?.id == file.id } }
+                    view?.onConfirmDeleteFiles(vaultFiles, doesFileExist)
                 }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)

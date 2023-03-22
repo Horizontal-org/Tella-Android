@@ -147,7 +147,8 @@ class VaultAdapter(private val onClick: VaultClickListener) :
             items =
                 connections + improveInsights + favoriteForms + favoriteTemplates + recentFiles + titles + actions
             withContext(Dispatchers.Main) {
-                submitList(items)
+                submitList(null);
+                submitList(items);
             }
         }
     }
