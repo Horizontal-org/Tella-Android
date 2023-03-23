@@ -24,7 +24,7 @@
     <TextView
         android:id="@+id/titleTv"
         style="@style/Unlock_White_Text_Bold"
-        android:text="@string/Setting_Reports_Settings_Completed"
+        android:text="@string/Settings_Reports_Connected_To_Project"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/descriptionTv"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,7 +36,7 @@
         style="@style/Unlock_White_Text_Medium"
         android:layout_marginTop="16dp"
         android:paddingHorizontal="@dimen/activity_horizontal_large_margin"
-        android:text="@string/Setting_Reports_Settings_Completed_Description"
+        android:text="@string/Connected_Successfuly_Text"
         app:layout_constraintBottom_toTopOf="@+id/ok_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
