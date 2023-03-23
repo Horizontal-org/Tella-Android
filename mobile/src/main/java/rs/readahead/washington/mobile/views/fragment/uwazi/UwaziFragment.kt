@@ -48,6 +48,8 @@ class UwaziFragment : BaseBindingFragment<FragmentUwaziBinding>(FragmentUwaziBin
             }
         })
 
+        binding?.toolbar?.backClickListener = { nav().popBackStack() }
+
     }
 
     private fun setCurrentTab(position: Int){

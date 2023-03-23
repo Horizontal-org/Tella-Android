@@ -13,9 +13,7 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentOutboxUwaziBinding
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
-import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.UwaziDraftsAdapter
 import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.UwaziSubmittedAdapter
-import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UWAZI_INSTANCE
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.SEND_ENTITY
 
 class OutboxUwaziFragment : UwaziListFragment() {
@@ -45,34 +43,34 @@ class OutboxUwaziFragment : UwaziListFragment() {
 
     private fun initObservers() {
         with(viewModel) {
-            outboxInstances.observe(viewLifecycleOwner, {
+            outboxInstances.observe(viewLifecycleOwner) {
                 if (it.isEmpty()) {
                     binding?.textViewEmpty?.isVisible = true
                     binding?.outboxRecyclerView?.isVisible = false
                     outboxAdapter.setEntities(emptyList())
                 } else {
-                    (it as ArrayList).add(0,getString(R.string.Uwazi_Outbox_Header_Text))
+                    (it as ArrayList).add(0, getString(R.string.Uwazi_Outbox_Header_Text))
                     binding?.textViewEmpty?.isVisible = false
                     binding?.outboxRecyclerView?.isVisible = true
                     outboxAdapter.setEntities(it)
                 }
-            })
+            }
 
-            instanceDeleteD.observe(viewLifecycleOwner,{
+            instanceDeleteD.observe(viewLifecycleOwner) {
                 listOutBox()
-            })
+            }
 
-            showInstanceSheetMore.observe(viewLifecycleOwner, {
+            showInstanceSheetMore.observe(viewLifecycleOwner) {
                 showDraftsMenu(it)
-            })
+            }
 
-            openEntityInstance.observe(viewLifecycleOwner,{
+            openEntityInstance.observe(viewLifecycleOwner) {
                 openEntity(it)
-            })
+            }
 
-            onInstanceSuccess.observe(viewLifecycleOwner,{
+            onInstanceSuccess.observe(viewLifecycleOwner) {
                 editEntity(it)
-            })
+            }
         }
     }
 
@@ -80,15 +78,12 @@ class OutboxUwaziFragment : UwaziListFragment() {
         BottomSheetUtils.showEditDeleteMenuSheet(
             requireActivity().supportFragmentManager,
             instance.title,
-            getString(R.string.Uwazi_Action_EditDraft),
+            getString(R.string.Uwazi_Action_ViewEntity),
             getString(R.string.Uwazi_Action_RemoveTemplate),
             object : BottomSheetUtils.ActionSeleceted {
                 override fun accept(action: BottomSheetUtils.Action) {
                     if (action === BottomSheetUtils.Action.EDIT) {
-                        /*   val gsonTemplate = Gson().toJson(template)
-                           bundle.putString(COLLECT_TEMPLATE, gsonTemplate)
-                           NavHostFragment.findNavController(this@TemplatesUwaziFragment)
-                               .navigate(R.id.action_uwaziScreen_to_uwaziEntryScreen, bundle)*/
+                        openEntity(instance)
                     }
                     if (action === BottomSheetUtils.Action.DELETE) {
                         viewModel.confirmDelete(instance)
@@ -98,15 +93,16 @@ class OutboxUwaziFragment : UwaziListFragment() {
             getString(R.string.action_delete) + " \"" + instance.title + "\"?",
             requireContext().resources.getString(R.string.Uwazi_Subtitle_RemoveDraft),
             requireContext().getString(R.string.action_remove),
-            requireContext().getString(R.string.action_cancel)
+            requireContext().getString(R.string.action_cancel),
+            iconView = R.drawable.ic_eye_white
         )
     }
 
-    private fun openEntity(entityInstance: UwaziEntityInstance){
+    private fun openEntity(entityInstance: UwaziEntityInstance) {
         viewModel.getInstanceUwaziEntity(entityInstance.id)
     }
 
-    private fun editEntity(entityInstance: UwaziEntityInstance){
+    private fun editEntity(entityInstance: UwaziEntityInstance) {
         val gsonTemplate = Gson().toJson(entityInstance)
         bundle.putString(SEND_ENTITY, gsonTemplate)
         NavHostFragment.findNavController(this)

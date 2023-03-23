@@ -9,8 +9,8 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
-import com.fasterxml.jackson.core.JsonParseException
 import com.google.gson.Gson
+import com.google.gson.JsonParseException
 import com.google.gson.reflect.TypeToken
 import org.cleaninsights.sdk.Campaign
 import org.cleaninsights.sdk.CleanInsights

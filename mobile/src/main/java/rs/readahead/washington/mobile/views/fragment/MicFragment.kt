@@ -28,7 +28,6 @@ import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePrese
 import rs.readahead.washington.mobile.mvp.presenter.AudioCapturePresenter
 import rs.readahead.washington.mobile.mvp.presenter.MetadataAttacher
 import rs.readahead.washington.mobile.util.C.RECORD_REQUEST_CODE
-import rs.readahead.washington.mobile.util.DateUtil.getDateTimeString
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.views.activity.CameraActivity.VAULT_CURRENT_ROOT_PARENT
 import rs.readahead.washington.mobile.views.activity.MainActivity
@@ -38,7 +37,6 @@ import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface
 import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface
-
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -232,7 +230,7 @@ class MicFragment : MetadataBaseLockFragment(),
     }
 
     override fun onDurationUpdate(duration: Long) {
-        activity.runOnUiThread({ mTimer.setText(timeToString(duration)) })
+        activity.runOnUiThread { mTimer.text = timeToString(duration) }
 
         if (duration > UPDATE_SPACE_TIME_MS + lastUpdateTime) {
             lastUpdateTime += UPDATE_SPACE_TIME_MS
