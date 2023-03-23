@@ -411,7 +411,6 @@ class ReportsViewModel @Inject constructor(
                                     status = FormMediaFileStatus.SUBMITTED
                                     uploadedSize = progressInfo.current
                                 }
-
                         }
                         else -> {
                             file
