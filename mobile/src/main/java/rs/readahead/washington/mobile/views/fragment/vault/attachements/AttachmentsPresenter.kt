@@ -76,7 +76,7 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
                 } else counterData.postValue(counter++)
             }.subscribe({ vaultFile ->
                 if (deleteOriginal) {
-                    currentUri?.let { view?.onMediaImportedWithDelete(it) }
+                    currentUri?.let { uri -> view?.onMediaImportedWithDelete(uri) }
                 } else {
                     view?.onMediaImported(vaultFile)
                 }
