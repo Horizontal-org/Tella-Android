@@ -76,7 +76,6 @@ import timber.log.Timber
 
 const val VAULT_FILE_ARG = "VaultFileArg"
 const val WRITE_REQUEST_CODE = 1002
-const val DELETE_PERMISSION_REQUEST = 1004
 const val PICKER_FILE_REQUEST_CODE = 100
 
 enum class SelectMode(val index: Int) {
@@ -1050,9 +1049,6 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
                     treeUri
                 )
             }
-            DELETE_PERMISSION_REQUEST -> {
-                //   deleteFileFromExternalStorage()
-            }
         }
     }
 
@@ -1207,7 +1203,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
     }
 
     private fun deleteFileFromExternalStorage(uri: Uri) {
-        var fileToDelete = DocumentFile.fromSingleUri(context!!, uri)
+        val fileToDelete = DocumentFile.fromSingleUri(baseActivity, uri)
         try {
             fileToDelete?.delete()
         } catch (exn: java.lang.Exception) {
