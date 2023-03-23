@@ -90,6 +90,7 @@
             android:id="@+id/share_verification_switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:explainText="@string/Setting_Reports_Share_Information_Description"
             app:titleText="@string/Setting_Reports_Share_Information_Title" />
 
@@ -101,6 +102,7 @@
             android:id="@+id/background_upload_switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:explainText="@string/Setting_Reports_Background_Upload_Description"
             app:titleText="@string/Setting_Reports_Background_Upload" />
     </LinearLayout>
