@@ -24,8 +24,8 @@ import rs.readahead.washington.mobile.util.jobs.WorkerUploadReport;
 
 public class TellaFileUploadSchedulePresenter implements ITellaFileUploadSchedulePresenterContract.IPresenter {
     private ITellaFileUploadSchedulePresenterContract.IView view;
-    private CompositeDisposable disposables = new CompositeDisposable();
-    private KeyDataSource keyDataSource;
+    private final CompositeDisposable disposables = new CompositeDisposable();
+    private final KeyDataSource keyDataSource;
 
 
     public TellaFileUploadSchedulePresenter(ITellaFileUploadSchedulePresenterContract.IView view) {
