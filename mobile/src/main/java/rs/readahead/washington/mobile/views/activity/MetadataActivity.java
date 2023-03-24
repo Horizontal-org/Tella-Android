@@ -364,7 +364,13 @@ public abstract class MetadataActivity extends BaseLockActivity implements
                     getString(R.string.verification_prompt_dialog_expl),
                     getString(R.string.verification_prompt_action_enable_GPS),
                     getString(R.string.verification_prompt_action_ignore),
-                    isConfirmed -> manageLocationSettings(requestCode, listener)
+                    isConfirmed -> {
+                        if (isConfirmed) {
+                            manageLocationSettings(requestCode, listener);
+                        } else {
+                            listener.onContinue();
+                        }
+                    }
             );
             return Unit.INSTANCE;
         });
