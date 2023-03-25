@@ -84,6 +84,7 @@ public class ReportsFormEndView extends FrameLayout {
         }
         setFormSizeLabel(instance, 0);
         uploadProgressVisibity(instance.getStatus(), offline);
+        setUploadProgress(instance, 0);
     }
 
     void setFormSizeLabel(@NonNull ReportInstance instance, int percent) {

@@ -226,7 +226,7 @@ class ReportsEntryFragment :
                 description = binding?.reportDescriptionEt?.text.toString(),
                 files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
                 server = selectedServer,
-                status = EntityStatus.SUBMISSION_PENDING
+                status = EntityStatus.SUBMISSION_PARTIAL_PARTS
             )
         )
     }
@@ -268,8 +268,8 @@ class ReportsEntryFragment :
                             false
                         )
                     }
-                    EntityStatus.SUBMISSION_PENDING -> {
-                        submitReport()
+                    EntityStatus.SUBMISSION_PARTIAL_PARTS -> {
+                        this@ReportsEntryFragment.submitReport(instance)
                     }
                     EntityStatus.FINALIZED -> {
                         nav().popBackStack()
@@ -409,8 +409,9 @@ class ReportsEntryFragment :
         }
     }
 
-    private fun submitReport() {
+    private fun submitReport(reportFormInstance : ReportFormInstance) {
         val bundle = Bundle()
+        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportFormInstance)
         reportInstance = viewModel.getFinalizedFormInstance(
             id = reportInstance?.id,
             title = binding?.reportTitleEt?.text.toString(),

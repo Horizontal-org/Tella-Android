@@ -100,8 +100,8 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
         formDef.initialize(true, InstanceInitializationFactory())
 
         // Remove previous forms
-        ReferenceManager.`__`().clearSession()
-
+       // ReferenceManager.`__`().clearSession()
+        ReferenceManager.instance().clearSession()
         fc.initFormChangeTracking() // set clear form to track changes
         return fc
     }

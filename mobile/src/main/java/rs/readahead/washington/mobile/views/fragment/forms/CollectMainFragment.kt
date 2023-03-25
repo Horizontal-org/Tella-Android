@@ -19,7 +19,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
-import com.google.android.material.tabs.TabLayout
 import org.hzontal.shared_ui.utils.DialogUtils
 import org.javarosa.core.model.FormDef
 import permissions.dispatcher.NeedsPermission
@@ -88,10 +87,7 @@ class CollectMainFragment :
         mViewPager?.adapter = adapter
         mViewPager?.currentItem = blankFragmentPosition
 
-        val tabLayout: TabLayout? = binding?.tabs
-        if (tabLayout != null) {
-            tabLayout.setupWithViewPager(mViewPager)
-        }
+        binding?.tabs?.setupWithViewPager(mViewPager)
 
         binding?.fab?.setOnClickListener {
             if (MyApplication.isConnectedToInternet(context)) {
@@ -202,6 +198,8 @@ class CollectMainFragment :
                     reSubmitFormInstance(event.instance)
                 }
             })
+
+        binding?.toolbar?.backClickListener = { nav().popBackStack() }
     }
 
     override fun onStart() {
@@ -274,24 +272,24 @@ class CollectMainFragment :
     }
 
     private fun initObservers() {
-        model.onError.observe(viewLifecycleOwner, Observer { error ->
+        model.onError.observe(viewLifecycleOwner, { error ->
             Timber.d(error, javaClass.name)
         })
-        model.onGetBlankFormDefSuccess.observe(viewLifecycleOwner, Observer { result ->
+        model.onGetBlankFormDefSuccess.observe(viewLifecycleOwner, { result ->
             result.let {
                 startCreateFormControllerPresenter(it.form, it.formDef)
             }
         })
-        model.onInstanceFormDefSuccess.observe(viewLifecycleOwner, Observer { instance ->
+        model.onInstanceFormDefSuccess.observe(viewLifecycleOwner, { instance ->
             startCreateInstanceFormControllerPresenter(instance)
         })
 
-        model.onFormDefError.observe(viewLifecycleOwner, Observer { error ->
+        model.onFormDefError.observe(viewLifecycleOwner, { error ->
             val errorMessage = FormUtils.getFormDefErrorMessage(baseActivity, error)
             baseActivity.showToast(errorMessage)
         })
 
-        model.onFormDefError.observe(viewLifecycleOwner, Observer { error ->
+        model.onFormDefError.observe(viewLifecycleOwner, { error ->
             val errorMessage = FormUtils.getFormDefErrorMessage(baseActivity, error)
             baseActivity.showToast(errorMessage)
         })
@@ -313,13 +311,7 @@ class CollectMainFragment :
             getBlankFormsListFragment().listBlankForms()
         })
 
-        /*model.onFormInstanceDeleteSuccess.observe(viewLifecycleOwner, Observer {
-            Toast.makeText(activity, R.string.collect_toast_form_deleted, Toast.LENGTH_SHORT).show()
-            getSubmittedFormsListFragment().listSubmittedForms()
-            getDraftFormsListFragment().listDraftForms()
-        })*/
-
-        model.onCountCollectServersEnded.observe(viewLifecycleOwner, Observer { num ->
+        model.onCountCollectServersEnded.observe(viewLifecycleOwner, { num ->
             numOfCollectServers = num
             if (numOfCollectServers < 1) {
                 binding?.tabs?.visibility = View.GONE
@@ -336,7 +328,7 @@ class CollectMainFragment :
             }
         })
 
-        model.showFab.observe(viewLifecycleOwner, Observer { show ->
+        model.showFab.observe(viewLifecycleOwner, { show ->
             binding?.fab?.isVisible = show
         })
     }

@@ -346,7 +346,11 @@ public abstract class MetadataActivity extends BaseLockActivity implements
                     }
                     break;
                 case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                    listener.onContinue();
+                    if (isAirplaneModeOn(this)) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    } else {
+                        listener.onContinue();
+                    }
                     break;
             }
         });
@@ -360,7 +364,13 @@ public abstract class MetadataActivity extends BaseLockActivity implements
                     getString(R.string.verification_prompt_dialog_expl),
                     getString(R.string.verification_prompt_action_enable_GPS),
                     getString(R.string.verification_prompt_action_ignore),
-                    isConfirmed -> manageLocationSettings(requestCode, listener)
+                    isConfirmed -> {
+                        if (isConfirmed) {
+                            manageLocationSettings(requestCode, listener);
+                        } else {
+                            listener.onContinue();
+                        }
+                    }
             );
             return Unit.INSTANCE;
         });
@@ -533,6 +543,11 @@ public abstract class MetadataActivity extends BaseLockActivity implements
             Location location = locationResult.getLastLocation();
             acceptBetterLocation(location);
         }
+    }
+
+    public static boolean isAirplaneModeOn(Context context) {
+        return Settings.Global.getInt(context.getContentResolver(),
+                Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
     }
 
     // Helper Classes

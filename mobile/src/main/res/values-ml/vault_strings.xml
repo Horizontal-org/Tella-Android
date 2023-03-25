@@ -10,4 +10,7 @@
   <string name="Vault_SortDateAsc_SheetAction">പുതിയത് മുതൽ പഴയതിലേക്ക്</string>
   <string name="Vault_SortDateDesc_SheetAction">പഴയത് മുതൽ പുതിയതിലേക്ക്</string>
   <string name="Vault_Export_SheetAction">ഉപകരണത്തിലേക്ക് സൂക്ഷിക്കുക</string>
+  <string name="Vault_Keep_Original">KEEP ORIGINAL</string>
+  <string name="Vault_Delete_Original">DELETE ORIGINAL</string>
+  <string name="Vault_deleteFileImported_SheetDesc" > After importing the file into Tella, do you want to keep the original file on your device or delete it?\n \n If you delete it, the file imported into Tella will be the only copy left. </string>
 </resources>

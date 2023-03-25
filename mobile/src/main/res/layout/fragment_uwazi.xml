@@ -21,11 +21,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
-        android:theme="@style/AppTheme.DarkNoActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
@@ -37,14 +35,27 @@
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
             app:titleTextColor="@color/wa_white">
 
-            <org.hzontal.shared_ui.appbar.ToolbarComponent
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:textStyle="bold"
-                app:bigStartTitle="@string/fragment_uwazi"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 app:layout_collapseMode="pin">
-            </org.hzontal.shared_ui.appbar.ToolbarComponent>
+
+                <org.hzontal.shared_ui.appbar.ToolbarComponent
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:textStyle="bold"
+                    app:arrowBackIcon="@drawable/ic_back_white"/>
+
+                <TextView
+                    style="@style/Tella_Main_White_Text.Bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                    android:text="@string/fragment_uwazi"
+                    />
+            </LinearLayout>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -57,6 +68,7 @@
             app:tabTextColor="@color/bottom_nav_item_color" />
 
     </com.google.android.material.appbar.AppBarLayout>
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_button"

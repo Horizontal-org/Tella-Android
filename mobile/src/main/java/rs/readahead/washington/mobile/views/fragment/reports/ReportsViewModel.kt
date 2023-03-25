@@ -306,7 +306,9 @@ class ReportsViewModel @Inject constructor(
                         if (vaultFile != null) {
                             val fileResult = FormMediaFile.fromMediaFile(vaultFile)
                             fileResult.status = formMediaFile.status
+                            fileResult.uploadedSize = formMediaFile.uploadedSize
                             filesResult.add(fileResult)
+
                         }
                     }
                     resultInstance.widgetMediaFiles = filesResult
@@ -388,7 +390,7 @@ class ReportsViewModel @Inject constructor(
                     )
                 }.doOnEach {
                     instance.apply {
-                        status = EntityStatus.UNKNOWN
+                        status = EntityStatus.SUBMISSION_IN_PROGRESS
                     }
                 }
                 .doOnTerminate {
@@ -400,7 +402,6 @@ class ReportsViewModel @Inject constructor(
                 }.doOnError {
                     instance.status = EntityStatus.SUBMISSION_ERROR
                     _entityStatus.postValue(instance)
-                    //  scheduleAutoUpload(server.isActivatedBackgroundUpload)
                 }.doOnNext { progressInfo: UploadProgressInfo ->
                     val file = instance.widgetMediaFiles.first { it.id == progressInfo.fileId }
                     when (progressInfo.status) {
@@ -417,6 +418,11 @@ class ReportsViewModel @Inject constructor(
                                     uploadedSize = progressInfo.current
                                 }
                         }
+                    }
+
+                    instance.widgetMediaFiles.first { it.id == progressInfo.fileId }.apply {
+                        status = file.status
+                        uploadedSize = file.uploadedSize
                     }
 
                 }.doAfterNext { progressInfo ->
