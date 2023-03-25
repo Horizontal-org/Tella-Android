@@ -1292,7 +1292,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
 
-    private ReportInstance scheduledReportUploadDB(FormMediaFile mediaFile, Long serverId) {
+    private void scheduledReportUploadDB(FormMediaFile mediaFile, Long serverId) {
         Cursor cursor = null;
         ReportInstance reportInstance = null;
 
@@ -1336,7 +1336,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             }
         }
 
-        return reportInstance;
     }
 
     private ReportInstance getLastScheduledReportFromCursor(Cursor cursor, FormMediaFile mediaFile, Long serverId) {
@@ -1359,6 +1358,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 reportInstance = updateTellaReportsFormInstance(newReportInstance);
             } else {
                 currentInstance.getWidgetMediaFiles().add(mediaFile);
+                currentInstance.setStatus(EntityStatus.SCHEDULED);
                 reportInstance = updateTellaReportsFormInstance(currentInstance);
             }
         } else {

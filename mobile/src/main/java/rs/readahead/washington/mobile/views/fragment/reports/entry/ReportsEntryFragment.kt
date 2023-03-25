@@ -409,7 +409,7 @@ class ReportsEntryFragment :
         }
     }
 
-    private fun submitReport(reportFormInstance : ReportFormInstance) {
+    private fun submitReport(reportFormInstance : ReportInstance) {
         val bundle = Bundle()
         bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportFormInstance)
         reportInstance = viewModel.getFinalizedFormInstance(

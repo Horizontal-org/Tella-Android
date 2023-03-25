@@ -132,18 +132,18 @@ class WorkerUploadReport
                     reportId,
                     server?.accessToken!!
                 )
-            }.doOnComplete {
-                updateReportProgress(
-                    setReportStatus(
-                        reportInstance,
-                        EntityStatus.SUBMITTED
-                    )
-                )
             }.doOnEach {
                 updateReportProgress(
                     setReportStatus(
                         reportInstance,
                         EntityStatus.SUBMISSION_IN_PROGRESS
+                    )
+                )
+            }.doOnTerminate {
+                updateReportProgress(
+                    setReportStatus(
+                        reportInstance,
+                        EntityStatus.SUBMITTED
                     )
                 )
             }
@@ -162,15 +162,7 @@ class WorkerUploadReport
         reportInstance: ReportInstance,
         status: EntityStatus
     ): ReportInstance {
-        if (status == EntityStatus.SUBMITTED) {
-            if (reportInstance.current == 1L) {
-                reportInstance.status =  EntityStatus.SCHEDULED
-            } else {
-                reportInstance.status = status
-            }
-        } else {
-            reportInstance.status = status
-        }
+        reportInstance.status = status
 
         return reportInstance
     }
@@ -192,7 +184,7 @@ class WorkerUploadReport
         postReportProgressEvent(reportInstance)
     }
 
-    private fun updateProgress(instance: ReportInstance,progressInfo: UploadProgressInfo) {
+    private fun updateProgress(instance: ReportInstance, progressInfo: UploadProgressInfo) {
         when (progressInfo.status) {
             UploadProgressInfo.Status.STARTED, UploadProgressInfo.Status.OK -> dataSource.setUploadStatus(
                 progressInfo.fileId,

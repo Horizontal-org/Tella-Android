@@ -131,7 +131,7 @@ class ReportsSendFragment :
         pauseResumeLabel(reportInstance)
     }
 
-    private fun pauseResumeLabel(reportFormInstance: ReportFormInstance?) {
+    private fun pauseResumeLabel(reportFormInstance: ReportInstance?) {
         if (reportFormInstance?.status == EntityStatus.SUBMISSION_IN_PROGRESS) {
             binding?.nextBtn?.text = getString(R.string.Reports_Pause)
         } else {
