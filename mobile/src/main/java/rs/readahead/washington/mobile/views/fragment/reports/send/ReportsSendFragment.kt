@@ -56,7 +56,7 @@ class ReportsSendFragment :
                     EntityStatus.SUBMITTED -> {
                         viewModel.saveSubmitted(entity)
                     }
-                    EntityStatus.SUBMISSION_ERROR, EntityStatus.FINALIZED -> {
+                    EntityStatus.SUBMISSION_ERROR, EntityStatus.FINALIZED, EntityStatus.SUBMISSION_PENDING -> {
                         viewModel.saveOutbox(entity)
                     }
                     EntityStatus.PAUSED -> {
@@ -75,10 +75,13 @@ class ReportsSendFragment :
                         handleBackButton()
                         SharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
                     }
-                    EntityStatus.SUBMISSION_ERROR, EntityStatus.SUBMISSION_PARTIAL_PARTS, EntityStatus.SUBMISSION_PENDING -> {
+                    EntityStatus.SUBMISSION_ERROR, EntityStatus.SUBMISSION_PARTIAL_PARTS, EntityStatus.SUBMISSION_PENDING  -> {
                         handleBackButton()
                     }
-                    else -> {}
+
+                    else -> {
+
+                    }
                 }
             }
         }
