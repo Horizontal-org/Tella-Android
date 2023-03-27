@@ -94,7 +94,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        switch (oldVersion) {
+        switch (newVersion) {
             case 1:
                 db.execSQL(alterTableCollectFormInstanceMediaFileAddStatus());
                 db.execSQL(alterTableCollectServerAddChecked());
@@ -355,6 +355,11 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_URL, D.TEXT) + " , " +
                 cddl(D.C_USERNAME, D.TEXT) + " , " +
                 cddl(D.C_PASSWORD, D.TEXT) + " , " +
+                cddl(D.C_PROJECT_NAME, D.TEXT) + " , " +
+                cddl(D.C_PROJECT_ID, D.TEXT) + " , " +
+                cddl(D.C_PROJECT_SLUG, D.TEXT) + " , " +
+                cddl(D.C_ACTIVATED_METADATA, D.INTEGER, true) + " DEFAULT 0 , " +
+                cddl(D.C_BACKGROUND_UPLOAD, D.INTEGER, true) + " DEFAULT 0 , " +
                 cddl(D.C_CHECKED, D.INTEGER, true) + " DEFAULT 0" + ");";
     }
 

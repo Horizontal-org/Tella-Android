@@ -945,7 +945,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         values.put(D.C_CHECKED, server.isChecked() ? 1 : 0);
         values.put(D.C_ACCESS_TOKEN, "Bearer " + server.getAccessToken());
         values.put(D.C_ACTIVATED_METADATA, server.isActivatedMetadata() ? 1 : 0);
-        values.put(D.C_BACKGROUND_UPLOAD, server.isActivatedMetadata() ? 1 : 0);
+        values.put(D.C_BACKGROUND_UPLOAD, server.isActivatedBackgroundUpload() ? 1 : 0);
 
         server.setId(database.insert(D.T_TELLA_UPLOAD_SERVER, null, values));
 

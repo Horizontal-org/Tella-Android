@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import dagger.hilt.android.AndroidEntryPoint;
 import kotlin.Unit;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
@@ -54,7 +53,6 @@ import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowAct
 import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
 import timber.log.Timber;
 
-@AndroidEntryPoint
 public class ServersSettingsActivity extends BaseLockActivity implements
         IServersPresenterContract.IView,
         ICollectServersPresenterContract.IView,
