@@ -72,15 +72,13 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         db.execSQL(alterTableMediaFileUploadsAddMetadata());
         db.execSQL(alterTableMediaFileUploadsAddManual());
         db.execSQL(alterTableMediaFileUploadsAddServer());
-
-        //DBV9
         db.execSQL(createTableUwaziServer());
         db.execSQL(createTableCollectEntityUwazi());
         db.execSQL(createTableCollectBlankTemplateUwazi());
         db.execSQL(createTableCollectFormInstanceVaultFile());
         db.execSQL(createTableUwaziEntityInstanceVaultFile());
 
-        //DBV10
+        //DBV9
         db.execSQL(alterTableTellaUploadServerAddAccessToken());
         db.execSQL(alterTableTellaUploadServerAddMetatData());
         db.execSQL(alterTableTellaUploadServerAddBackgourndUpload());
@@ -94,7 +92,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        switch (newVersion) {
+        switch (oldVersion) {
             case 1:
                 db.execSQL(alterTableCollectFormInstanceMediaFileAddStatus());
                 db.execSQL(alterTableCollectServerAddChecked());
