@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
@@ -22,9 +22,8 @@ import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBck
 const val SEND_ENTITY = "send_entity"
 
 class UwaziSendFragment : BaseFragment(), OnNavBckListener {
-    private val viewModel: SharedUwaziSubmissionViewModel by lazy {
-        ViewModelProvider(baseActivity)[SharedUwaziSubmissionViewModel::class.java]
-    }
+    private val viewModel by viewModels<SharedUwaziSubmissionViewModel>()
+
     private lateinit var binding: UwaziSendFragmentBinding
     private var entityInstance: UwaziEntityInstance? = null
     private var uwaziServer: UWaziUploadServer? = null
