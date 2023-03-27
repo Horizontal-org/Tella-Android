@@ -120,13 +120,13 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 db.execSQL(alterTableMediaFileUploadsAddMetadata());
 
             case 8:
+                db.execSQL(createTableUwaziServer());
+                db.execSQL(createTableCollectEntityUwazi());
+                db.execSQL(createTableCollectBlankTemplateUwazi());
                 db.execSQL(createTableCollectFormInstanceVaultFile());
+                db.execSQL(createTableUwaziEntityInstanceVaultFile());
 
             case 9:
-                db.execSQL(createTableUwaziServer());
-                db.execSQL(createTableCollectBlankTemplateUwazi());
-
-            case 10:
                 db.execSQL(alterTableTellaUploadServerAddAccessToken());
                 db.execSQL(alterTableTellaUploadServerAddMetatData());
                 db.execSQL(alterTableTellaUploadServerAddBackgourndUpload());
