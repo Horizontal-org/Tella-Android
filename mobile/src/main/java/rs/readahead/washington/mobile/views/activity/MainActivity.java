@@ -54,7 +54,7 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.send.UwaziSendFragmen
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment;
 import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface;
 import timber.log.Timber;
-@AndroidEntryPoint
+
 @RuntimePermissions
 public class MainActivity extends MetadataActivity implements
         IHomeScreenPresenterContract.IView,
