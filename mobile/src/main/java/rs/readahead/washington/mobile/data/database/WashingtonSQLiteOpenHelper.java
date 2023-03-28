@@ -353,12 +353,8 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_URL, D.TEXT) + " , " +
                 cddl(D.C_USERNAME, D.TEXT) + " , " +
                 cddl(D.C_PASSWORD, D.TEXT) + " , " +
-                cddl(D.C_PROJECT_NAME, D.TEXT) + " , " +
-                cddl(D.C_PROJECT_ID, D.TEXT) + " , " +
-                cddl(D.C_PROJECT_SLUG, D.TEXT) + " , " +
-                cddl(D.C_ACTIVATED_METADATA, D.INTEGER, true) + " DEFAULT 0 , " +
-                cddl(D.C_BACKGROUND_UPLOAD, D.INTEGER, true) + " DEFAULT 0 , " +
-                cddl(D.C_CHECKED, D.INTEGER, true) + " DEFAULT 0" + ");";
+                cddl(D.C_CHECKED, D.INTEGER, true) + " DEFAULT 0" +
+                ");";
     }
 
     private String createTableCollectBlankTemplateUwazi() {
@@ -434,5 +430,4 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 "UNIQUE(" + sq(D.C_REPORT_INSTANCE_ID) + ", " + sq(D.C_VAULT_FILE_ID) + ") ON CONFLICT IGNORE" +
                 ");";
     }
-
 }
