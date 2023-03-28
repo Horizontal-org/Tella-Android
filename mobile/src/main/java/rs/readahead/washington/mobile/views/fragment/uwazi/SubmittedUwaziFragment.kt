@@ -16,7 +16,8 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.UwaziSubmitt
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.SEND_ENTITY
 
 class SubmittedUwaziFragment : BaseBindingFragment<FragmentSubmittedUwaziBinding>(
-    FragmentSubmittedUwaziBinding::inflate) {
+    FragmentSubmittedUwaziBinding::inflate
+) {
 
     private val viewModel: SharedUwaziViewModel by viewModels()
     private val adapterSubmitted: UwaziSubmittedAdapter by lazy { UwaziSubmittedAdapter() }
@@ -83,7 +84,8 @@ class SubmittedUwaziFragment : BaseBindingFragment<FragmentSubmittedUwaziBinding
             getString(R.string.action_delete) + " \"" + instance.title + "\"?",
             requireContext().resources.getString(R.string.Uwazi_Subtitle_RemoveDraft),
             requireContext().getString(R.string.action_remove),
-            requireContext().getString(R.string.action_cancel)
+            requireContext().getString(R.string.action_cancel),
+            iconView = R.drawable.ic_eye_white
         )
     }
 

@@ -57,7 +57,6 @@
                     android:text="Reports" />
             </LinearLayout>
 
-
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         <!-- Override tabIconTint attribute of style with selector -->

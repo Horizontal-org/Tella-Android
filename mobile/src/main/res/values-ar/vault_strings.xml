@@ -52,7 +52,7 @@
   <string name="Vault_TakePhotoVideo_SheetAction">التقاط صورة/تسجيل فيديو</string>
   <string name="Vault_RecordAudio_SheetAction">تسجيل صوت</string>
   <string name="Vault_Import_SheetAction">استيراد من الجهاز</string>
-  <string name="Vault_ImportDelete_SheetAction">استيراد الملف الأصلي وحذفه</string>
+  <string name="Vault_ImportDelete_SheetAction">استيراد الملف الأصلي وحذفه؟</string>
   <string name="Vault_CreateFolder_SheetTitle">إنشاء مجلد جديد</string>
   <string name="Vault_MoveHere">النقل هنا</string>
   <string name="Vault_ViewerOther_SheetDesc">لا يمكن فتح صيغة الملف على Tella. هل ترغب في تصدير الملف على الجهاز لفتحه باستخدام تطبيق مختلف؟ يمكن أن يؤدي هذا الأمر إلى الكشف عن محتوى الملف. </string>
@@ -66,4 +66,8 @@
     <item quantity="other">من العناصر</item>
   </plurals>
   <string name="Vault_No_Files_Title">ليس لديك أي ملفات بعد في Tella.</string>
+  <string name="Vault_Keep_Original">KEEP ORIGINAL</string>
+  <string name="Vault_Delete_Original">DELETE ORIGINAL</string>
+  <string name="Vault_deleteFileImported_SheetDesc" > After importing the file into Tella, do you want to keep the original file on your device or delete it?\n \n If you delete it, the file imported into Tella will be the only copy left. </string>
+
 </resources>

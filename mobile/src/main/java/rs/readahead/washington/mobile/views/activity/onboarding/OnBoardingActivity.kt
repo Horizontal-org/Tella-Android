@@ -197,7 +197,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
                 }
 
                 override fun addTellaWebServer() {
-                    showTellaUploadServerDialog()
+                 //   showTellaUploadServerDialog()
                 }
 
                 override fun addODKServer() {

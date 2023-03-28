@@ -945,7 +945,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         values.put(D.C_CHECKED, server.isChecked() ? 1 : 0);
         values.put(D.C_ACCESS_TOKEN, "Bearer " + server.getAccessToken());
         values.put(D.C_ACTIVATED_METADATA, server.isActivatedMetadata() ? 1 : 0);
-        values.put(D.C_BACKGROUND_UPLOAD, server.isActivatedMetadata() ? 1 : 0);
+        values.put(D.C_BACKGROUND_UPLOAD, server.isActivatedBackgroundUpload() ? 1 : 0);
 
         server.setId(database.insert(D.T_TELLA_UPLOAD_SERVER, null, values));
 
@@ -2433,6 +2433,7 @@ update let 0,current wahed did 1)
             values.put(D.C_DESCRIPTION_TEXT, instance.getDescription());
             values.put(D.C_UPDATED, Util.currentTimestamp());
             values.put(D.C_REPORT_API_ID, instance.getReportApiId());
+
             //TODO CHECK FILES IMPLEMENTATION AND ADD FILES STATUS
             values.put(D.C_FORM_PART_STATUS, instance.getFormPartStatus().ordinal());
 

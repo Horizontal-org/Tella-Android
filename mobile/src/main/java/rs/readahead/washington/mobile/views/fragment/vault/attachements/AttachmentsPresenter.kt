@@ -57,10 +57,16 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
         if (uris.isEmpty()) return
         counterData.value = 0
         var counter = 1
-        disposables.add(Flowable.fromIterable<Uri>(uris).flatMap { uri ->
+        var currentUri: Uri? = null
+        disposables.add(Flowable.fromIterable(uris).flatMap { uri ->
+            currentUri = uri
             MediaFileHandler.importVaultFileUri(view?.getContext(), uri, parentId).toFlowable()
         }
-            .doOnComplete { view?.onImportEnded() }.doOnSubscribe { view?.onImportStarted() }
+            .doOnComplete {
+                view?.onImportEnded()
+            }.doOnSubscribe {
+                view?.onImportStarted()
+            }
             .observeOn(AndroidSchedulers.mainThread()).doFinally { view?.onImportEnded() }
             .subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread())
             .doOnNext {
@@ -68,12 +74,19 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
                     view?.onGetProgressPercent(counter.toDouble(), uris.size)
                     counterData.postValue(counter++)
                 } else counterData.postValue(counter++)
-            }.subscribe({ vaultFiles ->
-                view?.onMediaImported(vaultFiles)
+            }.subscribe({ vaultFile ->
+                if (deleteOriginal) {
+                    currentUri?.let { uri -> view?.onMediaImportedWithDelete(uri) }
+                } else {
+                    view?.onMediaImported(vaultFile)
+                }
+
             }) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 view?.onImportError(throwable)
             })
+
+
     }
 
     override fun cancelImportVaultFiles() {

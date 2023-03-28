@@ -25,26 +25,25 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.updatePadding
+import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.hzontal.tella_locking_ui.common.extensions.toggleVisibility
-import org.hzontal.shared_ui.pinview.ResourceUtils.getColor
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Sort
 import com.hzontal.utils.MediaFile.isAudioFileType
 import com.hzontal.utils.MediaFile.isImageFileType
 import com.hzontal.utils.MediaFile.isVideoFileType
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.hzontal.shared_ui.appbar.ToolbarComponent
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.RadioOptionConsumer
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showChooseImportSheet
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showProgressImportSheet
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showRadioListOptionsSheet
@@ -53,6 +52,7 @@ import org.hzontal.shared_ui.breadcrumb.BreadcrumbsView
 import org.hzontal.shared_ui.breadcrumb.DefaultBreadcrumbsCallback
 import org.hzontal.shared_ui.breadcrumb.model.BreadcrumbItem
 import org.hzontal.shared_ui.breadcrumb.model.Item
+import org.hzontal.shared_ui.pinview.ResourceUtils.getColor
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
@@ -86,9 +86,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
     IAttachmentsPresenter.IView, OnNavBckListener {
     private lateinit var attachmentsRecyclerView: RecyclerView
     private val attachmentsAdapter by lazy {
-        AttachmentsRecycleViewAdapter(
-            activity, this, MediaFileHandler(), gridLayoutManager
-        )
+        AttachmentsRecycleViewAdapter(activity, this, MediaFileHandler(), gridLayoutManager)
     }
     private val attachmentsPresenter by lazy { AttachmentsPresenter(this) }
     private lateinit var gridLayoutManager: GridLayoutManager
@@ -312,15 +310,13 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
                     getString(R.string.Vault_TakePhotoVideo_SheetAction),
                     getString(R.string.Vault_RecordAudio_SheetAction),
                     getString(R.string.Vault_Import_SheetAction),
-                    getString(R.string.Vault_ImportDelete_SheetAction),
                     getString(R.string.Vault_CreateFolder_SheetAction),
                     getString(R.string.Vault_ManageFiles_SheetTitle),
-                    getString(R.string.Vault_DeleteFile_SheetDesc),
                     filterType != FilterType.OTHERS,
                     filterType == FilterType.ALL,
                     action = object : VaultSheetUtils.IVaultManageFiles {
                         override fun goToCamera() {
-                            val intent = Intent(baseActivity, CameraActivity::class.java)
+                            val intent = Intent(activity, CameraActivity::class.java)
                             intent.putExtra(VAULT_CURRENT_ROOT_PARENT, currentRootID)
                             baseActivity.startActivity(intent)
                         }
@@ -330,21 +326,36 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
                             nav().navigate(R.id.action_attachments_screen_to_micScreen, bundle)
                         }
 
-                        override fun import() {
-                            //first step in importing files
-                            importAndDelete = false
-                            baseActivity.maybeChangeTemporaryTimeout {
-                                MediaFileHandler.startImportFiles(baseActivity, true, getCurrentType())
-                            }
+                        override fun chooseImportAndDelete() {
+                            showChooseImportSheet(baseActivity.supportFragmentManager,
+                                getString(R.string.Vault_ImportDelete_SheetAction),
+                                getString(R.string.Vault_deleteFileImported_SheetDesc),
+                                getString(R.string.Vault_Delete_Original),
+                                getString(R.string.Vault_Keep_Original),
+                                importConsumer = object : ActionConfirmed {
+                                    override fun accept(isConfirmed: Boolean) {
+                                        //first step in importing files
+                                        importAndDelete = false
+                                        baseActivity.maybeChangeTemporaryTimeout {
+                                            MediaFileHandler.startImportFiles(
+                                                activity, true, getCurrentType()
+                                            )
+                                        }
+                                    }
+                                },
+                                importAndDeleteConsumer = object : ActionConfirmed {
+                                    override fun accept(isConfirmed: Boolean) {
+                                        importAndDelete = true
+                                        baseActivity.maybeChangeTemporaryTimeout {
+                                            MediaFileHandler.startImportFiles(
+                                                activity, true, getCurrentType()
+                                            )
+                                        }
+                                    }
 
+                                })
                         }
 
-                        override fun importAndDelete() {
-                            importAndDelete = true
-                            baseActivity.maybeChangeTemporaryTimeout {
-                                MediaFileHandler.startImportFiles(baseActivity, true, getCurrentType())
-                            }
-                        }
 
                         override fun createFolder() {
                             VaultSheetUtils.showVaultRenameSheet(
@@ -356,9 +367,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
                                 null
                             ) {
                                 currentRootID?.let { root ->
-                                    attachmentsPresenter.createFolder(
-                                        it, root
-                                    )
+                                    attachmentsPresenter.createFolder(it, root)
                                 }
                             }
                         }
@@ -374,9 +383,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
                     null
                 ) {
                     currentRootID?.let { root ->
-                        attachmentsPresenter.createFolder(
-                            it, root
-                        )
+                        attachmentsPresenter.createFolder(it, root)
                     }
                 }
             }
@@ -591,6 +598,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
                     }
                 }
 
+
                 override fun move() {
                     currentMove = currentRootID
                     if (vaultFile != null) {
@@ -661,8 +669,10 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
 
                             }
                         })
+
                 }
             })
+
     }
 
     override fun onGetFilesStart() {
@@ -689,37 +699,35 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
 
     override fun onMediaImported(vaultFile: VaultFile) {
         attachmentsPresenter.addNewVaultFiles()
-
-
     }
 
-    override fun onMediaImportedWithDelete(vaultFile: List<VaultFile?>, uris: List<Uri?>) {
-        for (uri in uris) {
-            lifecycleScope.launch {
-                uri?.let {
-                    deleteFileFromExternalStorage(it)
-                    uriToDelete = it
-                }
+
+    override fun onMediaImportedWithDelete(uri: Uri) {
+
+        lifecycleScope.launch {
+            uri.let {
+                deleteFileFromExternalStorage(it)
+                uriToDelete = it
             }
         }
+
         attachmentsPresenter.addNewVaultFiles()
     }
 
-    override fun onConfirmDeleteFiles(
-        vaultFiles: List<VaultFile?>,
-        showConfirmDelete: Boolean
-    ) {
+    override fun onConfirmDeleteFiles(vaultFiles: List<VaultFile?>, showConfirmDelete: Boolean) {
         if (showConfirmDelete) {
             showConfirmSheet(baseActivity.supportFragmentManager,
                 getString(R.string.Vault_Warning_Title),
                 getString(R.string.Vault_Confirm_delete_Description),
                 getString(R.string.Vault_Delete_anyway),
-                getString(R.string.action_cancel), consumer = object : ActionConfirmed {
+                getString(R.string.action_cancel),
+                consumer = object : ActionConfirmed {
                     override fun accept(isConfirmed: Boolean) {
                         if (isConfirmed) {
                             deleteFiles(vaultFiles)
                         }
                     }
+
                 })
         } else {
             deleteFiles(vaultFiles)
@@ -732,7 +740,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
         if (vaultFiles.size > 1) {
             attachmentsPresenter.deleteVaultFiles(attachmentsAdapter.selectedMediaFiles)
         } else {
-            attachmentsPresenter.deleteVaultFile(vaultFiles.get(0))
+            attachmentsPresenter.deleteVaultFile(vaultFiles[0])
         }
     }
 
@@ -878,17 +886,13 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
         }
     }
 
-    private fun exportVaultFiles(
-        isMultipleFiles: Boolean, vaultFile: VaultFile?, path: Uri?
-    ) {
+    private fun exportVaultFiles(isMultipleFiles: Boolean, vaultFile: VaultFile?, path: Uri?) {
         if (isMultipleFiles) {
             val selected: List<VaultFile> = attachmentsAdapter.selectedMediaFiles
             attachmentsPresenter.exportMediaFiles(withMetadata, selected, path)
         } else {
             vaultFile?.let {
-                attachmentsPresenter.exportMediaFiles(
-                    withMetadata, arrayListOf(vaultFile), path
-                )
+                attachmentsPresenter.exportMediaFiles(withMetadata, arrayListOf(vaultFile), path)
             }
         }
     }
@@ -930,7 +934,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
     }
 
     private fun onFileDeletedEventListener() {
-        disposables.wire(MediaFileDeletedEvent::class.java,
+        disposables.wire(
+            MediaFileDeletedEvent::class.java,
             object : EventObserver<MediaFileDeletedEvent?>() {
                 override fun onNext(event: MediaFileDeletedEvent) {
                     onMediaFilesDeleted(1)
@@ -939,7 +944,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
     }
 
     private fun onFileRenameEventListener() {
-        disposables.wire(VaultFileRenameEvent::class.java,
+        disposables.wire(
+            VaultFileRenameEvent::class.java,
             object : EventObserver<VaultFileRenameEvent?>() {
                 override fun onNext(event: VaultFileRenameEvent) {
                     onRenameFileSuccess()
@@ -1062,11 +1068,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
             try {
                 val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
                 intent.addCategory("android.intent.category.DEFAULT")
-                intent.data = Uri.parse(
-                    String.format(
-                        "package:%s", baseActivity.application.packageName
-                    )
-                )
+                intent.data =
+                    Uri.parse(String.format("package:%s", baseActivity.application.packageName))
                 startActivityForResult(intent, WRITE_REQUEST_CODE)
             } catch (e: Exception) {
                 val intent = Intent()
@@ -1199,13 +1202,12 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
         }
     }
 
-    private suspend fun deleteFileFromExternalStorage(uri: Uri) {
-        withContext(Dispatchers.IO) {
-            try {
-                baseActivity.contentResolver.delete(uri, null, null)
-            } catch (e: SecurityException) {
-
-            }
+    private fun deleteFileFromExternalStorage(uri: Uri) {
+        val fileToDelete = DocumentFile.fromSingleUri(baseActivity, uri)
+        try {
+            fileToDelete?.delete()
+        } catch (exn: java.lang.Exception) {
+            exn.printStackTrace()
         }
     }
 
@@ -1239,9 +1241,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
         if (hasStoragePermissions(baseActivity)) {
             if (SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
                 val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-                intent.addFlags(
-                    Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION
-                )
+                intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 startActivityForResult(intent, PICKER_FILE_REQUEST_CODE)
             } else {
                 exportVaultFiles(isMultipleFiles, vaultFile, null)
@@ -1251,9 +1251,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
         }
     }
 
-    private fun exportVaultFilesWithMetadataCheck(
-        vaultFile: VaultFile?
-    ) {
+    private fun exportVaultFilesWithMetadataCheck(vaultFile: VaultFile?) {
         var isMultipleFiles = false
         val selected: List<VaultFile> = attachmentsAdapter.selectedMediaFiles
 
@@ -1270,9 +1268,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
         }
 
         if (withMetadata) {
-            showExportWithMetadataDialog(
-                isMultipleFiles, vaultFile
-            )
+            showExportWithMetadataDialog(isMultipleFiles, vaultFile)
         } else {
             baseActivity.maybeChangeTemporaryTimeout {
                 performFileSearch(isMultipleFiles, vaultFile)
@@ -1280,9 +1276,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
         }
     }
 
-    private fun showExportWithMetadataDialog(
-        isMultipleFiles: Boolean, vaultFile: VaultFile?
-    ) {
+    private fun showExportWithMetadataDialog(isMultipleFiles: Boolean, vaultFile: VaultFile?) {
         val options = LinkedHashMap<Int, Int>()
         options[1] = R.string.verification_share_select_media_and_verification
         options[0] = R.string.verification_share_select_only_media
