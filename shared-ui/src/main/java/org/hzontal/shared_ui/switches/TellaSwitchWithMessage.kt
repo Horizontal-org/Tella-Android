@@ -42,6 +42,7 @@ class TellaSwitchWithMessage @JvmOverloads constructor(
         messageTextView = findViewById(R.id.explainTV)
         learnMoreTextView = findViewById(R.id.learnMoreTV)
         mSwitch = findViewById(R.id.mSwitch)
+        titleTextView.labelFor = mSwitch.id
         //    background = ContextCompat.getDrawable(context, R.drawable.rounded_light_purple_background)
     }
 
