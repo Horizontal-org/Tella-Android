@@ -44,27 +44,33 @@ class ReportsSendFragment :
         }
 
         with(viewModel) {
-            progressInfo.observe(viewLifecycleOwner) { progress ->
-                val pct = progress.first
-                val instance = progress.second
-                pauseResumeLabel(instance)
-                endView.setUploadProgress(instance, pct.current.toFloat() / pct.size.toFloat())
+            reportProcess.observe(viewLifecycleOwner) { progress ->
+                if (progress.second.id == this@ReportsSendFragment.reportInstance?.id) {
+                    val pct = progress.first
+                    val instance = progress.second
+
+                    pauseResumeLabel(instance)
+                    endView.setUploadProgress(instance, pct.current.toFloat() / pct.size.toFloat())
+
+                }
             }
 
-            entityStatus.observe(viewLifecycleOwner) { entity ->
-                when (entity.status) {
-                    EntityStatus.SUBMITTED -> {
-                        viewModel.saveSubmitted(entity)
-                    }
-                    EntityStatus.SUBMISSION_ERROR, EntityStatus.FINALIZED -> {
-                        viewModel.saveOutbox(entity)
-                    }
-                    EntityStatus.PAUSED -> {
-                        pauseResumeLabel(entity)
-                        viewModel.saveOutbox(entity)
-                    }
-                    else -> {
+            instanceProgress.observe(viewLifecycleOwner) { entity ->
+                if (entity.id == this@ReportsSendFragment.reportInstance?.id) {
+                    when (entity.status) {
+                        EntityStatus.SUBMITTED -> {
+                            viewModel.saveSubmitted(entity)
+                        }
+                        EntityStatus.SUBMISSION_ERROR, EntityStatus.FINALIZED -> {
+                            viewModel.saveOutbox(entity)
+                        }
+                        EntityStatus.PAUSED -> {
+                            pauseResumeLabel(entity)
+                            viewModel.saveOutbox(entity)
+                        }
+                        else -> {
 
+                        }
                     }
                 }
             }

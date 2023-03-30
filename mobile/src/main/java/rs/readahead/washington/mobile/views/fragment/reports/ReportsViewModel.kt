@@ -12,7 +12,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.database.DataSource
-import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
@@ -68,6 +67,8 @@ class ReportsViewModel @Inject constructor(
     private val _exitAfterSave = MutableLiveData<Boolean>()
     val exitAfterSave: LiveData<Boolean> get() = _exitAfterSave
 
+    val reportProcess = reportsRepository.getReportProgress()
+    val instanceProgress = reportsRepository.geInstanceProgress()
 
     fun listServers() {
         _progress.postValue(true)
@@ -327,37 +328,12 @@ class ReportsViewModel @Inject constructor(
     }
 
     fun submitReport(instance: ReportInstance) {
-        _progress.postValue(true)
         getReportsServersUseCase.execute(onSuccess = { servers ->
             val server = servers.first { it.id == instance.serverId }
-            if (instance.reportApiId.isEmpty()) {
-                disposables.add(
-                    reportsRepository.submitReport(
-                        server,
-                        ReportBodyEntity(instance.title, instance.description)
-                    )
-                        .doOnError { throwable ->
-                            if (throwable is NoConnectivityException) {
-                                instance.status = EntityStatus.SUBMISSION_PENDING
-                            } else {
-                                instance.status = EntityStatus.SUBMISSION_ERROR
-                            }
-                            _entityStatus.postValue(instance)
-                        }
-                        .doOnDispose {
-                            instance.status = EntityStatus.PAUSED
-                            _entityStatus.postValue(instance)
-                        }
-                        .subscribe { reportPostResult ->
-                            instance.apply {
-                                reportApiId = reportPostResult.id
-                            }
-                            submitFiles(instance, server, reportPostResult.id)
-                        })
-            } else {
-                submitFiles(instance, server, instance.reportApiId)
-            }
-
+            reportsRepository.submitReport(
+                server,
+                instance
+            )
         },
             onError = { throwable ->
                 if (throwable is NoConnectivityException) {
@@ -368,7 +344,6 @@ class ReportsViewModel @Inject constructor(
                 _entityStatus.postValue(instance)
             },
             onFinished = {
-
             }
         )
 
@@ -437,7 +412,7 @@ class ReportsViewModel @Inject constructor(
     }
 
     fun clearDisposable() {
-        disposables.clear()
+        reportsRepository.getDisposable().clear()
     }
 
     override fun onCleared() {

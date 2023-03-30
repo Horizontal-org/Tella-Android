@@ -74,27 +74,26 @@ class WorkerUploadReport
             reportInstance.widgetMediaFiles =
                 dataSource.getReportMediaFiles(reportInstance).blockingGet()
 
-            if (reportInstance.reportApiId.isEmpty()) {
+         //   if (reportInstance.reportApiId.isEmpty()) {
                 //submit the report to the server without files
-                val report = reportsRepository.submitReport(
-                    server!!,
-                    ReportBodyEntity(
-                        reportInstance.title,
-                        reportInstance.description
-                    )
-                ).blockingGet()
 
-                reportInstance.reportApiId = report.id
+               // reportInstance.reportApiId = report.id
 
-                dataSource.saveInstance(reportInstance).blockingGet()
+              //  dataSource.saveInstance(reportInstance).blockingGet()
 
 
-                submitFiles(reportInstance, report.id)
+              //  submitFiles(reportInstance, report.id)
 
 
-            } else {
-                submitFiles(reportInstance, reportInstance.reportApiId)
-            }
+         //   } else {
+           //     submitFiles(reportInstance, reportInstance.reportApiId)
+         //   }
+
+
+            reportsRepository.submitReport(
+                server!!,
+                reportInstance
+            )
 
             Timber.d("*** Test worker *** widgetMediaFiles? %s", reportInstance.widgetMediaFiles)
 

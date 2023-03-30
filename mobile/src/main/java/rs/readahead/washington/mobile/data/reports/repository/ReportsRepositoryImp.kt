@@ -2,9 +2,11 @@ package rs.readahead.washington.mobile.data.reports.repository
 
 import android.text.TextUtils
 import android.webkit.MimeTypeMap
+import androidx.lifecycle.MutableLiveData
 import com.hzontal.tella_vault.VaultFile
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.data.entity.reports.LoginEntity
 import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
@@ -14,9 +16,13 @@ import rs.readahead.washington.mobile.data.reports.remote.ReportsApiService
 import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.URL_LOGIN
 import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.URL_PROJECTS
 import rs.readahead.washington.mobile.data.repository.SkippableMediaFileRequestBody
+import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
+import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
+import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.domain.entity.reports.ReportPostResult
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
+import rs.readahead.washington.mobile.domain.exception.NoConnectivityException
 import rs.readahead.washington.mobile.domain.repository.reports.ReportsRepository
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.util.Util
@@ -29,6 +35,11 @@ import javax.inject.Inject
 class ReportsRepositoryImp @Inject internal constructor(
     private val apiService: ReportsApiService
 ) : ReportsRepository {
+
+    private val reportProgress = MutableLiveData<Pair<UploadProgressInfo, ReportInstance>>()
+    private val instanceProgress = MutableLiveData<ReportInstance>()
+
+    private val disposables = CompositeDisposable()
 
     override fun login(server: TellaReportServer, slug: String): Single<TellaReportServer> {
         return apiService.login(
@@ -49,6 +60,94 @@ class ReportsRepositoryImp @Inject internal constructor(
             }
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    override fun submitReport(server: TellaReportServer, instance: ReportInstance) {
+        if (instance.reportApiId.isEmpty()) {
+            disposables.add(
+                submitReport(
+                    server,
+                    ReportBodyEntity(instance.title, instance.description)
+                )
+                    .doOnError { throwable ->
+                        if (throwable is NoConnectivityException) {
+                            instance.status = EntityStatus.SUBMISSION_PENDING
+                        } else {
+                            instance.status = EntityStatus.SUBMISSION_ERROR
+                        }
+                        instanceProgress.postValue(instance)
+                    }
+                    .doOnDispose {
+                        instance.status = EntityStatus.PAUSED
+                        instanceProgress.postValue(instance)
+                    }
+                    .subscribe { reportPostResult ->
+                        instance.apply {
+                            reportApiId = reportPostResult.id
+                        }
+                        submitFiles(instance, server, reportPostResult.id)
+                    })
+        } else {
+            submitFiles(instance, server, instance.reportApiId)
+        }
+    }
+
+    private fun submitFiles(
+        instance: ReportInstance,
+        server: TellaReportServer,
+        reportApiId: String
+    ) {
+        disposables.add(
+            Flowable.fromIterable(instance.widgetMediaFiles)
+                .flatMap { file ->
+                    upload(
+                        file,
+                        server.url,
+                        reportApiId,
+                        server.accessToken
+                    )
+                }.doOnEach {
+                    instance.apply {
+                        status = EntityStatus.SUBMISSION_IN_PROGRESS
+                    }
+                }
+                .doOnTerminate {
+                    instance.status = EntityStatus.SUBMITTED
+                    instanceProgress.postValue(instance)
+                }.doOnCancel {
+                    instance.status = EntityStatus.PAUSED
+                    instanceProgress.postValue(instance)
+                }.doOnError {
+                    instance.status = EntityStatus.SUBMISSION_ERROR
+                    instanceProgress.postValue(instance)
+                }.doOnNext { progressInfo: UploadProgressInfo ->
+                    val file = instance.widgetMediaFiles.first { it.id == progressInfo.fileId }
+                    when (progressInfo.status) {
+                        UploadProgressInfo.Status.FINISHED -> {
+                            file
+                                .apply {
+                                    status = FormMediaFileStatus.SUBMITTED
+                                    uploadedSize = progressInfo.current
+                                }
+                        }
+                        else -> {
+                            file
+                                .apply {
+                                    uploadedSize = progressInfo.current
+                                }
+                        }
+                    }
+
+                    instance.widgetMediaFiles.first { it.id == progressInfo.fileId }.apply {
+                        status = file.status
+                        uploadedSize = file.uploadedSize
+                    }
+
+                }.doAfterNext { progressInfo ->
+                    reportProgress.postValue(Pair(progressInfo, instance))
+                }.subscribe()
+        )
+
     }
 
     override fun submitReport(
@@ -123,6 +222,12 @@ class ReportsRepositoryImp @Inject internal constructor(
             }
     }
 
+    override fun getDisposable() = disposables
+
+    override fun getReportProgress() = reportProgress
+
+    override fun geInstanceProgress() = instanceProgress
+
     private fun getStatus(url: String, accessToken: String): Single<Long> {
         return apiService.getStatus(url, accessToken)
             .subscribeOn(Schedulers.io())
@@ -144,7 +249,7 @@ class ReportsRepositoryImp @Inject internal constructor(
         return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo> ->
             try {
                 val size = vaultFile.size
-                val fileName = vaultFile.name
+                //  val fileName = vaultFile.name
                 val uploadEmitter = UploadEmitter()
                 emitter.onNext(
                     UploadProgressInfo(
