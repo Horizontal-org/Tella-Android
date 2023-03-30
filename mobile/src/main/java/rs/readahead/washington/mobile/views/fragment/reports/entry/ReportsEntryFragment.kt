@@ -409,19 +409,9 @@ class ReportsEntryFragment :
         }
     }
 
-    private fun submitReport(reportFormInstance : ReportInstance) {
+    private fun submitReport(instance: ReportInstance) {
         val bundle = Bundle()
-        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportFormInstance)
-        reportInstance = viewModel.getFinalizedFormInstance(
-            id = reportInstance?.id,
-            title = binding?.reportTitleEt?.text.toString(),
-            description = binding?.reportDescriptionEt?.text.toString(),
-            files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
-            server = selectedServer
-        )
-
-        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
-        // nav().navigateUp()
+        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, instance)
         nav().navigate(R.id.action_newReport_to_reportSendScreen, bundle)
         nav().clearBackStack(R.id.action_newReport_to_reportSendScreen)
     }

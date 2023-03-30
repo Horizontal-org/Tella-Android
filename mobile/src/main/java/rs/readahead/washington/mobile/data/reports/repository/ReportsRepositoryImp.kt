@@ -112,7 +112,11 @@ class ReportsRepositoryImp @Inject internal constructor(
                     }
                 }
                 .doOnTerminate {
-                    instance.status = EntityStatus.SUBMITTED
+                    if (!instance.widgetMediaFiles.any { it.status == FormMediaFileStatus.SUBMITTED }) {
+                        instance.status = EntityStatus.SUBMISSION_PENDING
+                    } else {
+                        instance.status = EntityStatus.SUBMITTED
+                    }
                     instanceProgress.postValue(instance)
                 }.doOnCancel {
                     instance.status = EntityStatus.PAUSED
@@ -133,6 +137,7 @@ class ReportsRepositoryImp @Inject internal constructor(
                         else -> {
                             file
                                 .apply {
+                                    status = FormMediaFileStatus.NOT_SUBMITTED
                                     uploadedSize = progressInfo.current
                                 }
                         }

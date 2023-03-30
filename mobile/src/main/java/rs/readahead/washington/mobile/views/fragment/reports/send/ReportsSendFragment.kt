@@ -99,9 +99,9 @@ class ReportsSendFragment :
     }
 
     private fun initView() {
-        arguments?.let {
-            reportInstance = it.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportInstance
-            isFromOutbox = it.getBoolean(BUNDLE_IS_FROM_OUTBOX)
+        arguments?.let { bundle ->
+            reportInstance = bundle.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportInstance
+            isFromOutbox = bundle.getBoolean(BUNDLE_IS_FROM_OUTBOX)
             showFormEndView()
         }
 

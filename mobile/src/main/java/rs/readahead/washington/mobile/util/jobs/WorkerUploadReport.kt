@@ -47,11 +47,11 @@ class WorkerUploadReport
         var key: ByteArray?
         try {
             if (MyApplication.getMainKeyHolder().get().key.encoded.also { key = it } == null) {
-                return Result.Failure()
+                return Result.Retry()
             }
         } catch (e: LifecycleMainKey.MainKeyUnavailableException) {
             e.printStackTrace()
-            return Result.Failure()
+            return Result.Retry()
         }
 
         dataSource = DataSource.getInstance(context, key)
@@ -180,7 +180,7 @@ class WorkerUploadReport
             }
 
         }
-        postReportProgressEvent(reportInstance)
+        //postReportProgressEvent(reportInstance)
     }
 
     private fun updateProgress(instance: ReportInstance, progressInfo: UploadProgressInfo) {
