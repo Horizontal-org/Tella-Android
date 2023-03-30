@@ -56,6 +56,7 @@ import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface;
 import timber.log.Timber;
 
 @RuntimePermissions
+@AndroidEntryPoint
 public class MainActivity extends MetadataActivity implements
         IHomeScreenPresenterContract.IView,
         IMediaImportPresenterContract.IView,
