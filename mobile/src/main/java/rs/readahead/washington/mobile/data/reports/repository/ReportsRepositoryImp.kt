@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.data.reports.repository
 
+import android.annotation.SuppressLint
 import android.text.TextUtils
 import android.webkit.MimeTypeMap
 import androidx.lifecycle.MutableLiveData
@@ -8,6 +9,7 @@ import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.entity.reports.LoginEntity
 import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
 import rs.readahead.washington.mobile.data.entity.reports.mapper.mapToDomainModel
@@ -33,7 +35,8 @@ import javax.inject.Inject
 
 
 class ReportsRepositoryImp @Inject internal constructor(
-    private val apiService: ReportsApiService
+    private val apiService: ReportsApiService,
+    private val dataSource: DataSource
 ) : ReportsRepository {
 
     private val reportProgress = MutableLiveData<Pair<UploadProgressInfo, ReportInstance>>()
@@ -75,10 +78,14 @@ class ReportsRepositoryImp @Inject internal constructor(
                         } else {
                             instance.status = EntityStatus.SUBMISSION_ERROR
                         }
+                        dataSource.saveInstance(instance).blockingGet()
+
                         instanceProgress.postValue(instance)
                     }
                     .doOnDispose {
                         instance.status = EntityStatus.PAUSED
+                        dataSource.saveInstance(instance).blockingGet()
+
                         instanceProgress.postValue(instance)
                     }
                     .subscribe { reportPostResult ->
@@ -92,6 +99,7 @@ class ReportsRepositoryImp @Inject internal constructor(
         }
     }
 
+    @SuppressLint("CheckResult")
     private fun submitFiles(
         instance: ReportInstance,
         server: TellaReportServer,
@@ -117,12 +125,15 @@ class ReportsRepositoryImp @Inject internal constructor(
                     } else {
                         instance.status = EntityStatus.SUBMITTED
                     }
+                    dataSource.saveInstance(instance).blockingGet()
                     instanceProgress.postValue(instance)
                 }.doOnCancel {
                     instance.status = EntityStatus.PAUSED
+                    dataSource.saveInstance(instance).blockingGet()
                     instanceProgress.postValue(instance)
                 }.doOnError {
                     instance.status = EntityStatus.SUBMISSION_ERROR
+                    dataSource.saveInstance(instance).blockingGet()
                     instanceProgress.postValue(instance)
                 }.doOnNext { progressInfo: UploadProgressInfo ->
                     val file = instance.widgetMediaFiles.first { it.id == progressInfo.fileId }
@@ -147,6 +158,7 @@ class ReportsRepositoryImp @Inject internal constructor(
                         status = file.status
                         uploadedSize = file.uploadedSize
                     }
+                    dataSource.saveInstance(instance).blockingGet()
 
                 }.doAfterNext { progressInfo ->
                     reportProgress.postValue(Pair(progressInfo, instance))

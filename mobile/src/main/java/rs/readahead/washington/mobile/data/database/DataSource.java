@@ -1323,9 +1323,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             if (cursor == null || cursor.getColumnCount() == 0) {
                 ReportInstance newReportInstance = ReportInstance.getAutoReportReportInstance(serverId, "Auto-report " + DateUtil.getDateTimeString());
                 newReportInstance.getWidgetMediaFiles().add(mediaFile);
-                reportInstance = updateTellaReportsFormInstance(newReportInstance);
+                updateTellaReportsFormInstance(newReportInstance);
             } else {
-                reportInstance = getLastScheduledReportFromCursor(cursor, mediaFile, serverId);
+                getLastScheduledReportFromCursor(cursor, mediaFile, serverId);
             }
 
         } catch (Exception e) {
@@ -1354,19 +1354,25 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 currentInstance.setStatus(EntityStatus.SUBMITTED);
                 updateTellaReportsFormInstance(currentInstance);
                 ReportInstance newReportInstance = ReportInstance.getAutoReportReportInstance(serverId, "Auto-report " + DateUtil.getDateTimeString());
-                newReportInstance.getWidgetMediaFiles().add(mediaFile);
+                newReportInstance.setWidgetMediaFiles(getReportFiles(currentInstance,mediaFile));
                 reportInstance = updateTellaReportsFormInstance(newReportInstance);
             } else {
-                currentInstance.getWidgetMediaFiles().add(mediaFile);
+                currentInstance.setWidgetMediaFiles(getReportFiles(currentInstance,mediaFile));
                 currentInstance.setStatus(EntityStatus.SCHEDULED);
                 reportInstance = updateTellaReportsFormInstance(currentInstance);
             }
         } else {
             ReportInstance newReportInstance = ReportInstance.getAutoReportReportInstance(serverId, "Auto-report " + DateUtil.getDateTimeString());
-            newReportInstance.getWidgetMediaFiles().add(mediaFile);
+            newReportInstance.setWidgetMediaFiles(getReportFiles(newReportInstance,mediaFile));
             reportInstance = updateTellaReportsFormInstance(newReportInstance);
         }
         return reportInstance;
+    }
+
+    private List<FormMediaFile> getReportFiles(ReportInstance instance, FormMediaFile mediaFile){
+        List<FormMediaFile> mediaFiles = getReportMediaFilesDB(instance);
+        mediaFiles.add(mediaFile);
+        return mediaFiles;
     }
 
     private void scheduleUploadMediaFilesDb(List<VaultFile> vaultFiles) {

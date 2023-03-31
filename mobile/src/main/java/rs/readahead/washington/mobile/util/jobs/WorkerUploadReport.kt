@@ -74,21 +74,6 @@ class WorkerUploadReport
             reportInstance.widgetMediaFiles =
                 dataSource.getReportMediaFiles(reportInstance).blockingGet()
 
-         //   if (reportInstance.reportApiId.isEmpty()) {
-                //submit the report to the server without files
-
-               // reportInstance.reportApiId = report.id
-
-              //  dataSource.saveInstance(reportInstance).blockingGet()
-
-
-              //  submitFiles(reportInstance, report.id)
-
-
-         //   } else {
-           //     submitFiles(reportInstance, reportInstance.reportApiId)
-         //   }
-
 
             reportsRepository.submitReport(
                 server!!,

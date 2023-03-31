@@ -19,8 +19,11 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideProductsRepository(service: ReportsApiService): ReportsRepository {
-        return ReportsRepositoryImp(service)
+    fun provideProductsRepository(
+        service: ReportsApiService,
+        dataSource: DataSource
+    ): ReportsRepository {
+        return ReportsRepositoryImp(service, dataSource)
     }
 
     @Provides
