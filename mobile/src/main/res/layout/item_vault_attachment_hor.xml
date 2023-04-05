@@ -86,6 +86,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="@drawable/ic_more"
+        android:contentDescription="@string/action_open_bottom_sheet"
         android:padding="11dp"
         android:layout_marginEnd="11dp"
         android:visibility="gone"

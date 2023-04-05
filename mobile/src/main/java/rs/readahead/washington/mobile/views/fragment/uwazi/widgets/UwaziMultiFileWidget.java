@@ -110,6 +110,7 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
         clearButton = addButton(R.drawable.ic_cancel_rounded);
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!formEntryPrompt.isReadOnly());
+        clearButton.setContentDescription(getContext().getString(R.string.action_cancel));
         clearButton.setOnClickListener(v -> clearAnswer());
 
         infoFilePanel = view.findViewById(R.id.infoFilePanel);

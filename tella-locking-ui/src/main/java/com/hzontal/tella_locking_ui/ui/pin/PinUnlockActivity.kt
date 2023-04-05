@@ -3,6 +3,7 @@ package com.hzontal.tella_locking_ui.ui.pin
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.content.ContextCompat
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.ReturnActivity
@@ -15,7 +16,7 @@ import javax.crypto.spec.PBEKeySpec
 private const val TAG = "PinUnlockActivity"
 
 class PinUnlockActivity : BasePinActivity() {
-    private lateinit var backBtn: ImageView
+    private lateinit var backBtn: AppCompatImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

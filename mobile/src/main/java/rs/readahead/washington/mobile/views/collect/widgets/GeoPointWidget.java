@@ -170,6 +170,7 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
 
         selectButton = addButton(R.drawable.gps_fixed_icon_white);
         selectButton.setId(QuestionWidget.newUniqueId());
+        selectButton.setContentDescription(getContext().getString(R.string.action_show_location));
         selectButton.setEnabled(!isReadonly());
         selectButton.setOnClickListener(v -> {
             if (APPEARANCE_MAP.equalsIgnoreCase(appearance)) {
@@ -189,6 +190,7 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!isReadonly());
         clearButton.setOnClickListener(v -> clearAnswer());
+        clearButton.setContentDescription(getContext().getString(R.string.action_cancel));
 
         progressBar = view.findViewById(R.id.progressBar);
 

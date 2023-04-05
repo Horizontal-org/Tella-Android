@@ -22,6 +22,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            app:arrowBackIconContentDescription="@string/action_go_back"
             app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp" />
 
         <org.hzontal.shared_ui.breadcrumb.BreadcrumbsView
@@ -77,6 +78,7 @@
                 android:layout_marginHorizontal="@dimen/tella_main_vertical"
                 android:padding="5dp"
                 android:src="@drawable/ic_check"
+                android:contentDescription="@string/action_select"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/gridCheck"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -124,6 +126,7 @@
         app:fabCustomSize="50dp"
         app:layout_anchorGravity="center"
         app:maxImageSize="30dp"
+        android:contentDescription="@string/action_add"
         app:srcCompat="@drawable/ic_plus"
         app:useCompatPadding="true"
         tools:ignore="VectorDrawableCompat"
@@ -141,6 +144,7 @@
         android:layout_marginEnd="28dp"
         tools:ignore="VectorDrawableCompat"
         android:visibility="gone"
+        android:contentDescription="@string/action_move"
         style="@style/Move_Floating_Action_Button_Style" />
 
 

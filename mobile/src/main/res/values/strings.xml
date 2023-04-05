@@ -734,4 +734,17 @@ button to add a new template.</string>
     <string name="Report_Deleted_Confirmation" translatable="false"> %s has been deleted.</string>
     <string name="Report_Save_Outbox_Confirmation" translatable="false">The report was saved to your Outbox. You can submit it when you are ready.</string>
     <string name="Send_Action_Label" translatable="false">SEND</string>
+    <!-- content description -->
+    <string name="action_open_settings">open settings</string>
+    <string name="action_go_back">go back</string>
+    <string name="action_refresh">refresh</string>
+    <string name="action_check">check</string>
+    <string name="action_show_location">show location</string>
+    <string name="action_fast_rewind">fast rewind</string>
+    <string name="action_fast_forward">fast forward</string>
+    <string name="action_open_bottom_sheet">open bottom sheet</string>
+    <string name="action_select">select attachment</string>
+    <string name="action_add">add attachment</string>
+    <string name="action_go_next">go next</string>
+    <string name="action_move">move </string>
 </resources>

@@ -71,4 +71,5 @@ unlock Tella</string>
  change your camouflage   </string>
   <string name="Settings_Action_SetLock">Lock</string>
   <string name="Settings_Message_LockChanged">Your lock has been changed!</string>
+    <string name="action_show_password">show password</string>
 </resources>

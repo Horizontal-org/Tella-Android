@@ -121,6 +121,7 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
         clearButton = addButton(R.drawable.ic_cancel_rounded);
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!formEntryPrompt.isReadOnly());
+        clearButton.setContentDescription(getContext().getString(R.string.action_cancel));
         clearButton.setOnClickListener(v -> clearAnswer());
 
         attachmentPreview = view.findViewById(R.id.attachedMedia);

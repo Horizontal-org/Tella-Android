@@ -31,11 +31,13 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:arrowBackIcon="@drawable/ic_close_white"
+                app:arrowBackIconContentDescription="@string/action_go_back"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:rightIcon="@drawable/ic_save_white_24dp"
+                app:rightIconContentDescription="@string/action_save"
                 app:startTitle="@string/Reports_Title_Screen" />
 
             <TextView

@@ -4,4 +4,5 @@
     android:layout_height="match_parent"
     android:background="?android:attr/selectableItemBackgroundBorderless"
     android:paddingTop="12dp"
+    android:contentDescription="@string/action_go_to_homescreen"
     android:paddingBottom="12dp"/>

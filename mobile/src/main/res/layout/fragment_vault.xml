@@ -23,7 +23,9 @@
           android:layout_height="?attr/actionBarSize"
           app:toolbarTitle="@string/app_name"
           app:leftIcon="@drawable/ic_settings"
+          app:leftIconContentDescription="@string/action_open_settings"
           app:rightIcon="@drawable/ic_close"
+          app:rightIconContentDescription="@string/action_cancel"
           />
 
    </com.google.android.material.appbar.AppBarLayout>

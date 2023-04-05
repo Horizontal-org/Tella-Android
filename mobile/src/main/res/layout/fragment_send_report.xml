@@ -29,6 +29,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:rightIcon="@drawable/ic_delete_white_24px"
+        app:rightIconContentDescription="@string/action_delete"
         app:startTitle="@string/Reports_Title_Screen" />
 
     <androidx.appcompat.widget.AppCompatButton

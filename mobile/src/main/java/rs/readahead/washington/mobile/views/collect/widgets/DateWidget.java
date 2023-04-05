@@ -63,6 +63,7 @@ public class DateWidget extends QuestionWidget {
 
         clearButton = addButton(R.drawable.ic_cancel_rounded);
         clearButton.setId(QuestionWidget.newUniqueId());
+        clearButton.setContentDescription(context.getString(R.string.action_cancel));
         clearButton.setEnabled(!formEntryPrompt.isReadOnly());
         clearButton.setVisibility(GONE);
         clearButton.setOnClickListener(v -> clearAnswer());

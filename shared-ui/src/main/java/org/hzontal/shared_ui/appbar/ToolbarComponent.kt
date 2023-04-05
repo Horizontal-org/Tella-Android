@@ -36,6 +36,11 @@ class ToolbarComponent @JvmOverloads constructor(
     private var rightIcon : Int = -1
     private var leftIcon : Int = -1
     @StringRes
+    var rightIconContentDescription : Int = -1
+    @StringRes
+    var leftIconContentDescription : Int = -1
+    @StringRes
+    var arrowBackIconContentDescription : Int = -1
     var toolbarTitle: Int = -1
     var startTitle: Int = -1
     var bigStartTitle: Int = -1
@@ -87,12 +92,15 @@ class ToolbarComponent @JvmOverloads constructor(
                     typedArray.getResourceId(R.styleable.ToolbarComponent_toolbarTitle, -1)
                 arrowBackIcon =
                     typedArray.getResourceId(R.styleable.ToolbarComponent_arrowBackIcon, -1)
+                arrowBackIconContentDescription = typedArray.getResourceId(R.styleable.ToolbarComponent_arrowBackIconContentDescription, -1)
                 titleIcon = typedArray.getResourceId(R.styleable.ToolbarComponent_titleIcon, -1)
                 startTitle = typedArray.getResourceId(R.styleable.ToolbarComponent_startTitle, -1)
                 bigStartTitle = typedArray.getResourceId(R.styleable.ToolbarComponent_bigStartTitle, -1)
                 endTitle = typedArray.getResourceId(R.styleable.ToolbarComponent_endTitle, -1)
                 rightIcon = typedArray.getResourceId(R.styleable.ToolbarComponent_rightIcon, -1)
+                rightIconContentDescription = typedArray.getResourceId(R.styleable.ToolbarComponent_rightIconContentDescription, -1)
                 leftIcon = typedArray.getResourceId(R.styleable.ToolbarComponent_leftIcon, -1)
+                leftIconContentDescription = typedArray.getResourceId(R.styleable.ToolbarComponent_leftIconContentDescription, -1)
 
             } finally {
                 typedArray.recycle()
@@ -126,9 +134,10 @@ class ToolbarComponent @JvmOverloads constructor(
        btnBack.setBackgroundResource(icon)
     }
 
-    fun setRightIcon(icon: Int){
+    fun setRightIcon(icon: Int,contentDescription: String){
         if (icon != -1){
             rightImg.setBackgroundResource(icon)
+            rightImg.contentDescription = contentDescription
             rightImg.isVisible = true
         }else{
             rightImg.isVisible = false
@@ -139,6 +148,9 @@ class ToolbarComponent @JvmOverloads constructor(
         if (arrowBackIcon != -1) {
             btnBack.setBackgroundResource(arrowBackIcon)
             btnBack.isVisible = true
+        }
+        if (arrowBackIconContentDescription != -1) {
+            btnBack.contentDescription = context.getString(arrowBackIconContentDescription)
         }
         if (toolbarTitle != -1){
             toolbarTextView.text = context.getString(toolbarTitle)
@@ -164,6 +176,12 @@ class ToolbarComponent @JvmOverloads constructor(
         if (leftIcon != -1){
             leftImg.setBackgroundResource(leftIcon)
             leftImg.isVisible = true
+        }
+        if (rightIconContentDescription != -1){
+            rightImg.contentDescription = context.getString(rightIconContentDescription)
+        }
+        if (leftIconContentDescription != -1){
+            leftImg.contentDescription = context.getString(leftIconContentDescription)
         }
 
 

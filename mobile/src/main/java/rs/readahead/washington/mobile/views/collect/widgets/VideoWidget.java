@@ -102,6 +102,8 @@ public class VideoWidget extends MediaFileBinaryWidget {
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!formEntryPrompt.isReadOnly());
         clearButton.setOnClickListener(v -> clearAnswer());
+        clearButton.setContentDescription(getContext().getString(R.string.action_cancel));
+
 
         attachmentPreview = view.findViewById(R.id.attachedMedia);
 

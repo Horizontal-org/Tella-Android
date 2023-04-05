@@ -164,12 +164,12 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
     private fun updateAttachmentsToolbar(itemsSize: Int) {
         if (itemsSize == 0) {
             binding.toolbar.setStartTextTitle(getString(R.string.Vault_Select_Title))
-            binding.toolbar.setRightIcon(-1)
+            binding.toolbar.setRightIcon(-1,"")
         } else {
             binding.toolbar.setStartTextTitle(
                 attachmentsAdapter.selectedMediaFiles.size.toString() + " " + getString(R.string.Vault_Items)
             )
-            binding.toolbar.setRightIcon(R.drawable.ic_check_white)
+            binding.toolbar.setRightIcon(R.drawable.ic_check_white,getString(R.string.action_check))
         }
     }
 
