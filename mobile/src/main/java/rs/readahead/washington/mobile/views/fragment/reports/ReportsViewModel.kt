@@ -379,6 +379,12 @@ class ReportsViewModel @Inject constructor(
         server: TellaReportServer,
         reportApiId: String
     ) {
+
+        if (instance.widgetMediaFiles.isEmpty()){
+            instance.status = EntityStatus.SUBMITTED
+            _entityStatus.postValue(instance)
+            return
+        }
         disposables.add(
             Flowable.fromIterable(instance.widgetMediaFiles)
                 .flatMap { file ->

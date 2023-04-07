@@ -188,7 +188,7 @@ class BlankFormsListFragment :
         }
     }
 
-    fun onUpdateBlankFormDefSuccess(collectForm: CollectForm?, formDef: FormDef?) {
+    private fun onUpdateBlankFormDefSuccess(collectForm: CollectForm?, formDef: FormDef?) {
         noUpdatedForms -= 1
         showBanner()
         updateDownloadedFormList()
