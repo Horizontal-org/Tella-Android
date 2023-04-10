@@ -51,7 +51,6 @@ class ReportsSendFragment :
 
                     pauseResumeLabel(instance)
                     endView.setUploadProgress(instance, pct.current.toFloat() / pct.size.toFloat())
-
                 }
             }
 

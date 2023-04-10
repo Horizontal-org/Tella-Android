@@ -11,6 +11,7 @@ import rs.readahead.washington.mobile.data.reports.repository.ReportsRepositoryI
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadServersRepository
 import rs.readahead.washington.mobile.domain.repository.reports.ITellaReportsRepository
 import rs.readahead.washington.mobile.domain.repository.reports.ReportsRepository
+import rs.readahead.washington.mobile.util.StatusProvider
 import javax.inject.Singleton
 
 @Module
@@ -21,9 +22,10 @@ object RepositoryModule {
     @Singleton
     fun provideProductsRepository(
         service: ReportsApiService,
-        dataSource: DataSource
+        dataSource: DataSource,
+        statusProvider: StatusProvider
     ): ReportsRepository {
-        return ReportsRepositoryImp(service, dataSource)
+        return ReportsRepositoryImp(service, dataSource, statusProvider)
     }
 
     @Provides

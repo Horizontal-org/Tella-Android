@@ -26,6 +26,7 @@ import rs.readahead.washington.mobile.domain.entity.reports.ReportPostResult
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.exception.NoConnectivityException
 import rs.readahead.washington.mobile.domain.repository.reports.ReportsRepository
+import rs.readahead.washington.mobile.util.StatusProvider
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.util.Util
 import timber.log.Timber
@@ -36,7 +37,8 @@ import javax.inject.Inject
 
 class ReportsRepositoryImp @Inject internal constructor(
     private val apiService: ReportsApiService,
-    private val dataSource: DataSource
+    private val dataSource: DataSource,
+    private val statusProvider: StatusProvider
 ) : ReportsRepository {
 
     private val reportProgress = MutableLiveData<Pair<UploadProgressInfo, ReportInstance>>()
@@ -105,6 +107,18 @@ class ReportsRepositoryImp @Inject internal constructor(
         server: TellaReportServer,
         reportApiId: String
     ) {
+
+        if (instance.widgetMediaFiles.isEmpty()) {
+            instance.status = EntityStatus.SUBMITTED
+            dataSource.saveInstance(instance).blockingGet()
+            return
+        }
+
+        if (!statusProvider.isOnline()){
+            instance.status = EntityStatus.SUBMISSION_PENDING
+            dataSource.saveInstance(instance).blockingGet()
+            return
+        }
         disposables.add(
             Flowable.fromIterable(instance.widgetMediaFiles)
                 .flatMap { file ->
