@@ -341,10 +341,7 @@ public class MainActivity extends MetadataActivity implements
         // maybeShowFormsMenu(num);
         if (num > 0) {
             CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_COLLECT);
-        } else {
-            Preferences.setJavarosa3Upgraded(true);
         }
-        //homeScreenPresenter.countTUServers();
     }
 
     @Override
