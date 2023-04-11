@@ -2181,7 +2181,7 @@ update let 0,current wahed did 1)
             deleteTable(D.T_COLLECT_BLANK_FORM);
             deleteTable(D.T_COLLECT_FORM_INSTANCE);
             deleteTable(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE);
-            Preferences.setJavarosa3Upgraded(true);
+            //Preferences.setJavarosa3Upgraded(true);
 
             database.setTransactionSuccessful();
         } finally {
