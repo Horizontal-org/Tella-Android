@@ -58,7 +58,13 @@ class BlankFormsListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initObservers()
+
+        /* if (!Preferences.isJavarosa3Upgraded()) {
+             model.showFab.postValue(false)
+             showJavarosa2UpgradeSheet()
+         } else {*/
         listBlankForms()
+        //}
     }
 
     override fun onDestroy() {
