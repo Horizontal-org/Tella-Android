@@ -68,6 +68,13 @@ class ReportsRepositoryImp @Inject internal constructor(
     }
 
     override fun submitReport(server: TellaReportServer, instance: ReportInstance) {
+
+        if (!statusProvider.isOnline()) {
+            instance.status = EntityStatus.SUBMISSION_PENDING
+            dataSource.saveInstance(instance).blockingGet()
+            return
+        }
+
         if (instance.reportApiId.isEmpty()) {
             disposables.add(
                 submitReport(
@@ -114,7 +121,7 @@ class ReportsRepositoryImp @Inject internal constructor(
             return
         }
 
-        if (!statusProvider.isOnline()){
+        if (!statusProvider.isOnline()) {
             instance.status = EntityStatus.SUBMISSION_PENDING
             dataSource.saveInstance(instance).blockingGet()
             return

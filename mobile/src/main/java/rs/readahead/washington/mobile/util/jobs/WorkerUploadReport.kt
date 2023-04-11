@@ -21,6 +21,7 @@ import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository.UploadStatus
 import rs.readahead.washington.mobile.domain.repository.reports.ReportsRepository
+import rs.readahead.washington.mobile.util.StatusProvider
 import rs.readahead.washington.mobile.util.ThreadUtil
 import timber.log.Timber
 
@@ -31,7 +32,8 @@ class WorkerUploadReport
 @AssistedInject constructor(
     @Assisted val context: Context,
     @Assisted workerParams: WorkerParameters,
-    val reportsRepository: ReportsRepository
+    val reportsRepository: ReportsRepository,
+    val statusProvider: StatusProvider
 ) : Worker(context, workerParams) {
     private var server: TellaReportServer? = null
     private lateinit var dataSource: DataSource
@@ -43,6 +45,10 @@ class WorkerUploadReport
         //First upload has highest priority, we are going to upload just to that server
         //SECOND get report if response was successful
         //Third submit files with reportID
+
+        if (!statusProvider.isOnline()){
+            return Result.retry()
+        }
 
         var key: ByteArray?
         try {

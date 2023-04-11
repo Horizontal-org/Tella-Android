@@ -55,10 +55,14 @@ class ReportsSendFragment :
             }
 
             instanceProgress.observe(viewLifecycleOwner) { entity ->
+                if (entity == null) {
+                    return@observe
+                }
                 if (entity.id == this@ReportsSendFragment.reportInstance?.id) {
                     when (entity.status) {
                         EntityStatus.SUBMITTED -> {
                             viewModel.saveSubmitted(entity)
+                            instanceProgress.postValue(null)
                         }
                         EntityStatus.SUBMISSION_ERROR, EntityStatus.FINALIZED -> {
                             viewModel.saveOutbox(entity)

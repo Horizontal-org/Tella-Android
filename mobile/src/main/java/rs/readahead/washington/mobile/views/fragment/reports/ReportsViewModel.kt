@@ -61,7 +61,6 @@ class ReportsViewModel @Inject constructor(
     private val _reportInstance = MutableLiveData<ReportInstance>()
     val reportInstance: LiveData<ReportInstance> get() = _reportInstance
     private val _progressInfo = MutableLiveData<Pair<UploadProgressInfo, ReportInstance>>()
-    val progressInfo: LiveData<Pair<UploadProgressInfo, ReportInstance>> get() = _progressInfo
     private val _entityStatus = MutableLiveData<ReportInstance>()
     val entityStatus: LiveData<ReportInstance> get() = _entityStatus
     private val _exitAfterSave = MutableLiveData<Boolean>()
@@ -349,68 +348,6 @@ class ReportsViewModel @Inject constructor(
 
     }
 
-    private fun submitFiles(
-        instance: ReportInstance,
-        server: TellaReportServer,
-        reportApiId: String
-    ) {
-        disposables.add(
-            Flowable.fromIterable(instance.widgetMediaFiles)
-                .flatMap { file ->
-                    reportsRepository.upload(
-                        file,
-                        server.url,
-                        reportApiId,
-                        server.accessToken
-                    )
-                }.doOnEach {
-                    instance.apply {
-                        status = EntityStatus.SUBMISSION_IN_PROGRESS
-                    }
-                }
-                .doOnTerminate {
-                    if (!instance.widgetMediaFiles.any { it.status == FormMediaFileStatus.SUBMITTED }) {
-                        instance.status = EntityStatus.SUBMISSION_PENDING
-                    } else {
-                        instance.status = EntityStatus.SUBMITTED
-                    }
-                    _entityStatus.postValue(instance)
-                }.doOnCancel {
-                    instance.status = EntityStatus.PAUSED
-                    _entityStatus.postValue(instance)
-                }.doOnError {
-                    instance.status = EntityStatus.SUBMISSION_ERROR
-                    _entityStatus.postValue(instance)
-                }.doOnNext { progressInfo: UploadProgressInfo ->
-                    val file = instance.widgetMediaFiles.first { it.id == progressInfo.fileId }
-                    when (progressInfo.status) {
-                        UploadProgressInfo.Status.FINISHED -> {
-                            file
-                                .apply {
-                                    status = FormMediaFileStatus.SUBMITTED
-                                    uploadedSize = progressInfo.current
-                                }
-                        }
-                        else -> {
-                            file
-                                .apply {
-                                    status = FormMediaFileStatus.NOT_SUBMITTED
-                                    uploadedSize = progressInfo.current
-                                }
-                        }
-                    }
-
-                    instance.widgetMediaFiles.first { it.id == progressInfo.fileId }.apply {
-                        status = file.status
-                        uploadedSize = file.uploadedSize
-                    }
-
-                }.doAfterNext { progressInfo ->
-                    _progressInfo.postValue(Pair(progressInfo, instance))
-                }.subscribe()
-        )
-
-    }
 
     fun dispose() {
         disposables.dispose()
