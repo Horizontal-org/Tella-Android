@@ -38,6 +38,7 @@ const val UWAZI_INSTANCE = "uwazi_instance"
 const val UWAZI_TITLE = "title"
 const val UWAZI_SUPPORTING_FILES = "supporting_files"
 const val UWAZI_PRIMARY_DOCUMENTS = "primary_documents"
+const val BUNDLE_IS_FROM_UWAZI_ENTRY = "bundle_is_from_uwazi_entry"
 
 class UwaziEntryFragment :
     BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziEntryFragmentBinding::inflate),
@@ -95,19 +96,12 @@ class UwaziEntryFragment :
         onGpsPermissionsListener()
 
         if (arguments?.getString(UWAZI_INSTANCE) != null) {
-            arguments?.getString(UWAZI_INSTANCE).let {
-                if (it != null) {
-                    parseUwaziInstance(it)
-                }
-            }
-
+            arguments?.getString(UWAZI_INSTANCE)?.let { parseUwaziInstance(it) }
         }
 
         if (arguments?.getString(COLLECT_TEMPLATE) != null) {
-            arguments?.getString(COLLECT_TEMPLATE).let {
-                if (it != null) {
-                    parseUwaziTemplate(it)
-                }
+            arguments?.getString(COLLECT_TEMPLATE)?.let {
+                parseUwaziTemplate(it)
             }
         }
         binding!!.toolbar.setStartTextTitle(uwaziParser.getTemplate()?.entityRow?.translatedName.toString())
@@ -146,6 +140,7 @@ class UwaziEntryFragment :
             showValidationErrorsFieldsDialog()
         } else {
             bundle.putString(SEND_ENTITY, uwaziParser.getGsonTemplate())
+            bundle.putBoolean(BUNDLE_IS_FROM_UWAZI_ENTRY,true)
             NavHostFragment.findNavController(this@UwaziEntryFragment)
                 .navigate(R.id.action_uwaziEntryScreen_to_uwaziSendScreen, bundle)
         }

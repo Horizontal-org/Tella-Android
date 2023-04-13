@@ -15,6 +15,7 @@ import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
+import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_IS_FROM_DRAFT
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_FORM_INSTANCE
 import rs.readahead.washington.mobile.views.fragment.reports.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.reports.viewpagerfragments.BUNDLE_IS_FROM_OUTBOX
@@ -29,6 +30,7 @@ class ReportsSendFragment :
     private lateinit var endView: ReportsFormEndView
     private var reportInstance: ReportInstance? = null
     private var isFromOutbox = false
+    private var isFromDraft = false
     private lateinit var connectionLiveData: ConnectionLiveData
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,6 +44,8 @@ class ReportsSendFragment :
         connectionLiveData.observe(viewLifecycleOwner) { isOnline ->
             checkAndSubmitEntity(isOnline)
         }
+        checkAndSubmitEntity(MyApplication.isConnectedToInternet(baseActivity))
+
 
         with(viewModel) {
             reportProcess.observe(viewLifecycleOwner) { progress ->
@@ -87,7 +91,10 @@ class ReportsSendFragment :
                     EntityStatus.SUBMISSION_ERROR, EntityStatus.SUBMISSION_PARTIAL_PARTS, EntityStatus.SUBMISSION_PENDING -> {
                         handleBackButton()
                     }
-                    else -> {}
+
+                    else -> {
+
+                    }
                 }
             }
         }
@@ -105,6 +112,7 @@ class ReportsSendFragment :
         arguments?.let { bundle ->
             reportInstance = bundle.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportInstance
             isFromOutbox = bundle.getBoolean(BUNDLE_IS_FROM_OUTBOX)
+            isFromDraft = bundle.getBoolean(BUNDLE_IS_FROM_DRAFT)
             showFormEndView()
         }
 
@@ -124,7 +132,11 @@ class ReportsSendFragment :
         if (!isOnline) {
             binding?.nextBtn?.text = getString(R.string.Reports_Resume)
         } else {
-            pauseResumeLabel(reportInstance)
+            if (isFromDraft) {
+                submitEntity()
+            } else {
+                pauseResumeLabel(reportInstance)
+            }
         }
 
     }

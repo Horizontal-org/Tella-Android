@@ -44,6 +44,7 @@ import rs.readahead.washington.mobile.views.interfaces.IReportAttachmentsHandler
 const val BUNDLE_REPORT_FORM_INSTANCE = "bundle_report_form_instance"
 const val BUNDLE_REPORT_VAULT_FILE = "bundle_report_vault_file"
 const val BUNDLE_REPORT_AUDIO = "bundle_report_audio"
+const val BUNDLE_IS_FROM_DRAFT = "bundle_is_from_draft"
 
 @AndroidEntryPoint
 class ReportsEntryFragment :
@@ -409,9 +410,11 @@ class ReportsEntryFragment :
         }
     }
 
-    private fun submitReport(instance: ReportInstance) {
+    private fun submitReport(reportFormInstance: ReportFormInstance) {
         val bundle = Bundle()
-        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, instance)
+        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportFormInstance)
+        bundle.putBoolean(BUNDLE_IS_FROM_DRAFT, true)
+        // nav().navigateUp()
         nav().navigate(R.id.action_newReport_to_reportSendScreen, bundle)
         nav().clearBackStack(R.id.action_newReport_to_reportSendScreen)
     }

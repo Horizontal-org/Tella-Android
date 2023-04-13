@@ -54,8 +54,9 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.send.UwaziSendFragmen
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment;
 import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface;
 import timber.log.Timber;
-@AndroidEntryPoint
+
 @RuntimePermissions
+@AndroidEntryPoint
 public class MainActivity extends MetadataActivity implements
         IHomeScreenPresenterContract.IView,
         IMediaImportPresenterContract.IView,
@@ -341,10 +342,7 @@ public class MainActivity extends MetadataActivity implements
         // maybeShowFormsMenu(num);
         if (num > 0) {
             CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_COLLECT);
-        } else {
-            Preferences.setJavarosa3Upgraded(true);
         }
-        //homeScreenPresenter.countTUServers();
     }
 
     @Override
