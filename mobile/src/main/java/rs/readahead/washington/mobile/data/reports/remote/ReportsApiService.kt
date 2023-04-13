@@ -31,7 +31,7 @@ interface ReportsApiService {
     fun getProjectSlug(
         @Url
         url: String,
-        @Header(COOKIE) access_token: String
+        @Header(AUTHORIZATION_HEADER) access_token: String
     ): Single<ProjectSlugResponse>
 
     @POST
