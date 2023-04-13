@@ -37,7 +37,7 @@ class ReportsRepositoryImp @Inject internal constructor(
         ).flatMap { response ->
             apiService.getProjectSlug(
                 url = server.url + slug,
-                access_token = response.access_token
+                access_token = "Bearer " + response.access_token
             ).map { result ->
                 server.apply {
                     accessToken = response.access_token

@@ -410,9 +410,9 @@ class ReportsEntryFragment :
         }
     }
 
-    private fun submitReport(reportFormInstance: ReportFormInstance) {
+    private fun submitReport(reportInstance: ReportInstance) {
         val bundle = Bundle()
-        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportFormInstance)
+        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
         bundle.putBoolean(BUNDLE_IS_FROM_DRAFT, true)
         // nav().navigateUp()
         nav().navigate(R.id.action_newReport_to_reportSendScreen, bundle)
