@@ -16,7 +16,7 @@ interface ReportsRepository {
 
     fun login(server: TellaReportServer, slug: String): Single<TellaReportServer>
 
-    fun submitReport(server: TellaReportServer, instance: ReportInstance)
+    fun submitReport(server: TellaReportServer, instance: ReportInstance): Single<ReportInstance>
 
     fun submitReport(
         server: TellaReportServer,

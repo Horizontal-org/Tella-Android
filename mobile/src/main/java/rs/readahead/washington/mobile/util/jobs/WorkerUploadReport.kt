@@ -12,7 +12,6 @@ import org.hzontal.tella.keys.key.LifecycleMainKey
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.bus.event.ReportUploadProgressEvent
 import rs.readahead.washington.mobile.data.database.DataSource
-import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
@@ -46,7 +45,7 @@ class WorkerUploadReport
         //SECOND get report if response was successful
         //Third submit files with reportID
 
-        if (!statusProvider.isOnline()){
+        if (!statusProvider.isOnline()) {
             return Result.retry()
         }
 
@@ -85,6 +84,7 @@ class WorkerUploadReport
                 server!!,
                 reportInstance
             )
+                .blockingGet()
 
             Timber.d("*** Test worker *** widgetMediaFiles? %s", reportInstance.widgetMediaFiles)
 

@@ -2,17 +2,21 @@ package rs.readahead.washington.mobile.views.dialog.reports.edit
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import rs.readahead.washington.mobile.databinding.FragmentEditServerBinding
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.SharedLiveData
+import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowViewModel
 
 class EditTellaServerFragment :
     BaseBindingFragment<FragmentEditServerBinding>(FragmentEditServerBinding::inflate) {
 
     private lateinit var serverReports: TellaReportServer
+    private val viewModel: ReportsConnectFlowViewModel by viewModels()
+
 
     companion object {
         val TAG = EditTellaServerFragment::class.java.simpleName

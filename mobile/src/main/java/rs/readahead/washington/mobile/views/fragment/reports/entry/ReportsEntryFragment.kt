@@ -419,16 +419,16 @@ class ReportsEntryFragment :
         nav().clearBackStack(R.id.action_newReport_to_reportSendScreen)
     }
 
-    private fun showDeleteBottomSheet(entityInstance: ReportInstance) {
+    private fun showDeleteBottomSheet(reportInstance: ReportInstance) {
         BottomSheetUtils.showConfirmSheet(
             baseActivity.supportFragmentManager,
-            entityInstance.title,
+            reportInstance.title,
             getString(R.string.Collect_DeleteDraftForm_SheetExpl),
             getString(R.string.action_yes),
             getString(R.string.action_no), consumer = object : BottomSheetUtils.ActionConfirmed {
                 override fun accept(isConfirmed: Boolean) {
                     if (isConfirmed) {
-                        viewModel.deleteReport(entityInstance)
+                        viewModel.deleteReport(reportInstance)
                     }
                 }
             })

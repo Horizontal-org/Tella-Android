@@ -948,6 +948,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         values.put(D.C_ACCESS_TOKEN, "Bearer " + server.getAccessToken());
         values.put(D.C_ACTIVATED_METADATA, server.isActivatedMetadata() ? 1 : 0);
         values.put(D.C_BACKGROUND_UPLOAD, server.isActivatedBackgroundUpload() ? 1 : 0);
+        values.put(D.C_AUTO_DELETE, server.isAutoDelete() ? 1 : 0);
+        values.put(D.C_CURRENT_UPLOAD, server.isAutoUpload() ? 1 : 0);
 
         server.setId(database.insert(D.T_TELLA_UPLOAD_SERVER, null, values));
 
@@ -2295,6 +2297,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         server.setChecked(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_CHECKED)) > 0);
         server.setAccessToken(cursor.getString(cursor.getColumnIndexOrThrow(D.C_ACCESS_TOKEN)));
         server.setActivatedBackgroundUpload(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_BACKGROUND_UPLOAD)) > 0);
+        server.setAutoUpload(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_AUTO_UPLOAD)) > 0);
+        server.setAutoDelete(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_AUTO_DELETE)) > 0);
         server.setActivatedMetadata(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_ACTIVATED_METADATA)) > 0);
         server.setProjectSlug(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PROJECT_SLUG)));
         server.setProjectId(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PROJECT_ID)));

@@ -88,6 +88,10 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         db.execSQL(createTableReportFormInstance());
         db.execSQL(createTableReportInstanceVaultFile());
         db.execSQL(createTableReportFileUploads());
+
+        //DBV11
+        db.execSQL(alterTableTellaUploadServerAddAutoUpload());
+        db.execSQL(alterTableTellaUploadServerAddAutoDelete());
     }
 
     @Override
@@ -134,6 +138,9 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 db.execSQL(createTableReportFormInstance());
                 db.execSQL(createTableReportInstanceVaultFile());
                 db.execSQL(createTableReportFileUploads());
+            case 10:
+                db.execSQL(alterTableTellaUploadServerAddAutoUpload());
+                db.execSQL(alterTableTellaUploadServerAddAutoDelete());
         }
     }
 
@@ -314,6 +321,16 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
     private String alterTableTellaUploadServerAddBackgourndUpload() {
         return "ALTER TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " ADD COLUMN " +
                 cddl(D.C_BACKGROUND_UPLOAD, D.INTEGER, true) + " DEFAULT 0";
+    }
+
+    private String alterTableTellaUploadServerAddAutoDelete() {
+        return "ALTER TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " ADD COLUMN " +
+                cddl(D.C_AUTO_DELETE, D.INTEGER, true) + " DEFAULT 0";
+    }
+
+    private String alterTableTellaUploadServerAddAutoUpload() {
+        return "ALTER TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " ADD COLUMN " +
+                cddl(D.C_AUTO_UPLOAD, D.INTEGER, true) + " DEFAULT 0";
     }
 
     private String alterTableMediaFileUploadsAddMetadata() {

@@ -67,12 +67,13 @@ class ReportsRepositoryImp @Inject internal constructor(
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    override fun submitReport(server: TellaReportServer, instance: ReportInstance) {
+    override fun submitReport(server: TellaReportServer, instance: ReportInstance): Single<ReportInstance>
+    {
 
         if (!statusProvider.isOnline()) {
             instance.status = EntityStatus.SUBMISSION_PENDING
             dataSource.saveInstance(instance).blockingGet()
-            return
+            return Single.just(instance)
         }
 
         if (instance.reportApiId.isEmpty()) {
@@ -106,6 +107,7 @@ class ReportsRepositoryImp @Inject internal constructor(
         } else {
             submitFiles(instance, server, instance.reportApiId)
         }
+        return Single.just(instance)
     }
 
     @SuppressLint("CheckResult")
