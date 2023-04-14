@@ -22,7 +22,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:src="@drawable/ic_baseline_close_24_white"
-        tools:ignore="ContentDescription" />
+        android:contentDescription="@string/action_cancel"
+         />
 
     <TextView
         android:id="@+id/sheet_title"

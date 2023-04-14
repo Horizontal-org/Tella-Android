@@ -22,13 +22,15 @@
             android:src="@drawable/ic_close_white"
             android:clickable="true"
             android:focusable="true"
-            tools:ignore="ContentDescription" />
+            android:contentDescription="@string/action_cancel"
+            />
 
         <rs.readahead.washington.mobile.views.custom.CameraResolutionButton
             android:id="@+id/resolutionButton"
             android:background="@color/wa_black"
             android:visibility="gone"
             style="@style/CameraTopImageStyle"
+            android:contentDescription="resolution"
             android:layout_toStartOf="@id/gridButton"
             android:layout_marginStart="32dp"/>
 
@@ -36,17 +38,20 @@
             android:id="@+id/gridButton"
             style="@style/CameraTopImageStyle"
             android:layout_marginStart="32dp"
+            android:contentDescription="grid"
             android:layout_toStartOf="@id/switchButton" />
 
         <rs.readahead.washington.mobile.views.custom.CameraSwitchButton
             android:id="@+id/switchButton"
             style="@style/CameraTopImageStyle"
+            android:contentDescription="switch"
             android:layout_toStartOf="@id/flashButton"
             android:layout_marginStart="32dp"/>
 
         <rs.readahead.washington.mobile.views.custom.CameraFlashButton
             android:id="@+id/flashButton"
             style="@style/CameraTopImageStyle"
+            android:contentDescription="flash"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="32dp"
             tools:ignore="RelativeOverlap" />

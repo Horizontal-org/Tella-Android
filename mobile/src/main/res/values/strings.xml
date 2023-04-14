@@ -6,7 +6,6 @@
     <string name="collect.form_exit.unsaved_dialog.title">Exit form?</string>
     <string name="verification_prompt_dialog_title">Enable GPS?</string>
     <string name="collect_tab.title_blank">Blank</string>
-    <string name="action_cancel">Cancel</string>
     <string name="settings_menu.item_contact">Contact us</string>
     <string name="collect_dialog.text_download.progress">Downloading the form</string>
     <string name="collect_toast_download.completed">Download completed</string>
@@ -747,4 +746,11 @@ button to add a new template.</string>
     <string name="action_add">add attachment</string>
     <string name="action_go_next">go next</string>
     <string name="action_move">move </string>
+    <string name="action_favorite">favorite</string>
+    <string name="action_unfavorite">unfavorite</string>
+    <string name="action_select">select</string>
+    <string name="action_unselect">unselect</string>
+    <string name="action_show_photo">show photo</string>
+    <string name="action_help">help</string>
+    <string name="action_download">download</string>
 </resources>

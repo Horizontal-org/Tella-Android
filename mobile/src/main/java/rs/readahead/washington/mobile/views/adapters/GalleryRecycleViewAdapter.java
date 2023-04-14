@@ -159,6 +159,8 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
         boolean checked = selected.contains(mediaFile);
         holder.binding.selectionDimmer.setVisibility(checked ? View.VISIBLE : View.GONE);
         holder.binding.checkBox.setImageResource(checked ? R.drawable.ic_check_box_on : R.drawable.ic_check_box_off);
+        holder.binding.checkBox.setContentDescription(holder.binding.checkBox.getContext().getString(checked ? R.string.action_unselect : R.string.action_select));
+
     }
 
     public void setSelectedMediaFiles(@NonNull List<VaultFile> selectedMediaFiles) {

@@ -46,7 +46,8 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginTop="2dp"
                     android:src="@drawable/ic_close_white_24dp"
-                    tools:ignore="ContentDescription" />
+                    android:contentDescription="@string/action_cancel"
+                     />
 
                 <TextView
                     android:id="@+id/title"

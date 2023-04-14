@@ -7,4 +7,5 @@
     <string name="Home_BottomNav_Reports">Reports</string>
     <string name="Home_BottomNav_Uwazi">Uwazi</string>
     <string name="action_go_to_homescreen">go to homeScreen</string>
+    <string name="action_cancel">Cancel</string>
 </resources>

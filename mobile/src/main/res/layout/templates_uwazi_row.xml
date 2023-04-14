@@ -27,7 +27,6 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/small_text_margin"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@null"
             android:src="@drawable/star_border_24dp" />
 
         <ImageButton
