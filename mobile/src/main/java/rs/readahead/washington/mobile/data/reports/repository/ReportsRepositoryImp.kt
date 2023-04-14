@@ -64,7 +64,7 @@ class ReportsRepositoryImp @Inject internal constructor(
                 }
             }
         }.subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+         .observeOn(AndroidSchedulers.mainThread())
     }
 
     override fun submitReport(server: TellaReportServer, instance: ReportInstance): Single<ReportInstance>

@@ -93,6 +93,13 @@ class TellaSwitchWithMessage @JvmOverloads constructor(
         }
     }
 
+    fun setExplainText(textResource: Int) {
+        with(messageTextView) {
+            visibility = View.VISIBLE
+            text = context.getString(textResource)
+        }
+    }
+
     override fun isChecked(): Boolean {
         return mSwitch.isChecked
     }
