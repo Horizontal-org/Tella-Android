@@ -45,11 +45,12 @@ class EditTellaServerFragment :
     private fun initData() {
         viewModel.listAutoReports()
         viewModel.doesAutoUploadActivated.observe(viewLifecycleOwner, { isAutoUploadActivated ->
-            if (reportServer.isAutoUpload && isAutoUploadActivated) {
-                binding?.autoReportSwitch?.mSwitch?.isClickable = true
-                binding?.autoReportSwitch?.setExplainText(R.string.Setting_Reports_Background_Upload_Description)
-            } else {
+            if (isAutoUploadActivated && !reportServer.isAutoUpload) {
                 binding?.autoReportSwitch?.mSwitch?.isClickable = false
+                binding?.autoReportSwitch?.setExplainText(R.string.Setting_Reports_Background_Upload_Disabled_Description)
+
+            } else {
+                binding?.autoReportSwitch?.mSwitch?.isClickable = true
                 binding?.autoReportSwitch?.setExplainText(R.string.Setting_Reports_Background_Upload_Description)
             }
         })

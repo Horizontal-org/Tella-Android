@@ -14,8 +14,7 @@ import javax.inject.Inject
 class ReportsConnectFlowViewModel @Inject constructor(
     private val useCase: CheckReportsServerUseCase,
     private val getReportsServersUseCase: GetReportsServersUseCase,
-) :
-    ViewModel() {
+) : ViewModel() {
 
     private val _progress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean> get() = _progress

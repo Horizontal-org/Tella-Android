@@ -946,14 +946,13 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         values.put(D.C_PROJECT_ID, server.getProjectId());
         values.put(D.C_PROJECT_NAME, server.getProjectName());
         values.put(D.C_PROJECT_SLUG, server.getProjectSlug());
-        values.put(D.C_USERNAME, server.getUsername());
         values.put(D.C_PASSWORD, server.getPassword());
         values.put(D.C_CHECKED, server.isChecked() ? 1 : 0);
         values.put(D.C_ACCESS_TOKEN, "Bearer " + server.getAccessToken());
         values.put(D.C_ACTIVATED_METADATA, server.isActivatedMetadata() ? 1 : 0);
         values.put(D.C_BACKGROUND_UPLOAD, server.isActivatedBackgroundUpload() ? 1 : 0);
         values.put(D.C_AUTO_DELETE, server.isAutoDelete() ? 1 : 0);
-        values.put(D.C_CURRENT_UPLOAD, server.isAutoUpload() ? 1 : 0);
+        values.put(D.C_AUTO_UPLOAD, server.isAutoUpload() ? 1 : 0);
 
         server.setId(database.insert(D.T_TELLA_UPLOAD_SERVER, null, values));
 
@@ -2200,6 +2199,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         values.put(D.C_USERNAME, server.getUsername());
         values.put(D.C_PASSWORD, server.getPassword());
         values.put(D.C_CHECKED, server.isChecked() ? 1 : 0);
+        values.put(D.C_AUTO_UPLOAD, server.isAutoUpload() ? 1 : 0);
+        values.put(D.C_AUTO_DELETE, server.isAutoDelete() ? 1 : 0);
+        values.put(D.C_BACKGROUND_UPLOAD, server.isActivatedBackgroundUpload() ? 1 : 0);
+        values.put(D.C_ACTIVATED_METADATA, server.isActivatedMetadata() ? 1 : 0);
 
         database.update(D.T_TELLA_UPLOAD_SERVER, values, D.C_ID + "= ?", new String[]{Long.toString(server.getId())});
 
