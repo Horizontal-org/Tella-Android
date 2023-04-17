@@ -96,6 +96,7 @@ abstract class BasePasswordActivity : BaseActivity(), View.OnClickListener, OnVa
         isPasswordMode = !isPasswordMode
         passwordEditText.transformationMethod = if (isPasswordMode) PasswordTransformationMethod() else null
         passwordEyeImageView.background = if (isPasswordMode) ContextCompat.getDrawable(this@BasePasswordActivity, R.drawable.eye) else ContextCompat.getDrawable(this@BasePasswordActivity, R.drawable.eye_off)
+        passwordClickView.contentDescription = if (isPasswordMode) getString(R.string.action_show_password) else getString(R.string.action_hide_password)
         passwordEditText.setSelection(passwordEditText.text.length)
     }
 

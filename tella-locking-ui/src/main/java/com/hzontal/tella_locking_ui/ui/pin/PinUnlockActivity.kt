@@ -16,7 +16,7 @@ import javax.crypto.spec.PBEKeySpec
 private const val TAG = "PinUnlockActivity"
 
 class PinUnlockActivity : BasePinActivity() {
-    private lateinit var backBtn: AppCompatImageButton
+    private lateinit var backBtn: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

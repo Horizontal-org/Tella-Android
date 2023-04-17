@@ -8,4 +8,11 @@
     <string name="Home_BottomNav_Uwazi">Uwazi</string>
     <string name="action_go_to_homescreen">go to homeScreen</string>
     <string name="action_cancel">Cancel</string>
+    <string name="action_show_password">show password</string>
+    <string name="action_hide_password">hide password</string>
+    <string name="action_show_pin">show pin</string>
+    <string name="action_hide_pin">hide pin</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_go_back">go back</string>
+
 </resources>
