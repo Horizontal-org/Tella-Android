@@ -55,6 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/Vault_Filter_Name"
+                android:contentDescription="@string/gallery_subheading_sort.by"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -91,6 +92,7 @@
                 android:src="@drawable/ic_list_check"
                 android:visibility="gone"
                 android:padding="6dp"
+                android:contentDescription="@string/action_display_list"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -101,6 +103,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/grid"
                 android:padding="6dp"
+                android:contentDescription="@string/action_display_gridView"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

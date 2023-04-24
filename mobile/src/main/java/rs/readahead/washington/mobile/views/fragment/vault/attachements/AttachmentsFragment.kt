@@ -418,6 +418,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
                         baseActivity, R.drawable.ic_check
                     )
                 )
+                checkBoxList.contentDescription = getString(R.string.action_select)
+
             }
             SelectMode.ONE_SELECTION -> {
                 checkBoxList.setImageDrawable(
@@ -425,6 +427,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
                         baseActivity, R.drawable.ic_check_box_off
                     )
                 )
+                checkBoxList.contentDescription = getString(R.string.action_select)
+
             }
             SelectMode.SELECT_ALL -> {
                 checkBoxList.setImageDrawable(
@@ -432,6 +436,8 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
                         baseActivity, R.drawable.ic_check_box_on
                     )
                 )
+                checkBoxList.contentDescription = getString(R.string.action_unselect)
+
                 attachmentsAdapter.selectAll()
             }
         }

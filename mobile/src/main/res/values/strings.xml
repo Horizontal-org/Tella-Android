@@ -761,5 +761,13 @@ button to add a new template.</string>
     <string name="action_open_gallery">open gallery</string>
     <string name="action_pause">pause</string>
     <string name="action_go_to_audio_library">Go to Audio library</string>
+    <string name="action_display_gridView">display in gridView</string>
+    <string name="action_display_list">display in list</string>
+
+    <string name="orange_theme">orange theme</string>
+    <string name="blue_theme">blue theme</string>
+    <string name="green_theme">green theme</string>
+    <string name="yellow_theme">yellow theme</string>
+
 
 </resources>
