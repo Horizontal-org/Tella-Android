@@ -411,6 +411,7 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
 
         setPhotoActive();
         captureButton.displayPhotoButton();
+        captureButton.setContentDescription(getContext().getString(R.string.Uwazi_WidgetMedia_Take_Photo));
         cameraView.setMode(Mode.PICTURE);
         mode = CameraMode.PHOTO;
 
@@ -434,6 +435,7 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
         cameraView.setMode(Mode.VIDEO);
         turnFlashDown();
         captureButton.displayVideoButton();
+        captureButton.setContentDescription(getContext().getString(R.string.Uwazi_WidgetMedia_Take_Video));
         setVideoActive();
         mode = CameraMode.VIDEO;
 
@@ -445,9 +447,11 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
         if (cameraView.getGrid() == Grid.DRAW_3X3) {
             cameraView.setGrid(Grid.OFF);
             gridButton.displayGridOff();
+            gridButton.setContentDescription(getString(R.string.action_disable_gridview));
         } else {
             cameraView.setGrid(Grid.DRAW_3X3);
             gridButton.displayGridOn();
+            gridButton.setContentDescription(getString(R.string.action_enable_gridview));
         }
     }
 
@@ -455,9 +459,11 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
         if (cameraView.getFacing() == Facing.BACK) {
             cameraView.setFacing(Facing.FRONT);
             switchButton.displayFrontCamera();
+            gridButton.setContentDescription(getString(R.string.action_switch_to_front_camera));
         } else {
             cameraView.setFacing(Facing.BACK);
             switchButton.displayBackCamera();
+            gridButton.setContentDescription(getString(R.string.action_switch_to_back_camera));
         }
     }
 
@@ -502,6 +508,7 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
 
     private void showConfirmVideoView(final File video) {
         captureButton.displayVideoButton();
+        captureButton.setContentDescription(getContext().getString(R.string.Uwazi_WidgetMedia_Take_Video));
         durationView.stop();
         presenter.addMp4Video(video, currentRootParent);
     }
@@ -510,9 +517,11 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
         if (mode == CameraMode.PHOTO) {
             cameraView.setMode(Mode.PICTURE);
             captureButton.displayPhotoButton();
+            captureButton.setContentDescription(getContext().getString(R.string.Uwazi_WidgetMedia_Take_Photo));
         } else {
             cameraView.setMode(Mode.VIDEO);
             captureButton.displayVideoButton();
+            captureButton.setContentDescription(getContext().getString(R.string.Uwazi_WidgetMedia_Take_Video));
         }
 
         //cameraView.setEnabled(PermissionUtil.checkPermission(this, Manifest.permission.CAMERA));
@@ -619,8 +628,10 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
             flashButton.displayFlashAuto();
         } else if (cameraView.getFlash() == Flash.OFF) {
             flashButton.displayFlashOff();
+            flashButton.setContentDescription(getString(R.string.action_disable_flash));
         } else {
             flashButton.displayFlashOn();
+            flashButton.setContentDescription(getString(R.string.action_enable_flash) );
         }
 
         flashButton.setOnClickListener(view -> {

@@ -30,7 +30,7 @@
             android:background="@color/wa_black"
             android:visibility="gone"
             style="@style/CameraTopImageStyle"
-            android:contentDescription="resolution"
+            android:contentDescription="@string/action_choose_resolution"
             android:layout_toStartOf="@id/gridButton"
             android:layout_marginStart="32dp"/>
 
@@ -38,13 +38,11 @@
             android:id="@+id/gridButton"
             style="@style/CameraTopImageStyle"
             android:layout_marginStart="32dp"
-            android:contentDescription="grid"
             android:layout_toStartOf="@id/switchButton" />
 
         <rs.readahead.washington.mobile.views.custom.CameraSwitchButton
             android:id="@+id/switchButton"
             style="@style/CameraTopImageStyle"
-            android:contentDescription="switch"
             android:layout_toStartOf="@id/flashButton"
             android:layout_marginStart="32dp"/>
 
@@ -85,6 +83,7 @@
             android:layout_width="32dp"
             android:layout_height="250dp"
             android:layout_marginStart="40dp"
+            android:contentDescription="zoom"
             android:layout_alignParentBottom="true"
             android:orientation="vertical">
 
@@ -108,12 +107,13 @@
 
         <rs.readahead.washington.mobile.views.custom.CameraCaptureButton
             android:id="@+id/captureButton"
-            android:layout_marginTop="16dp"
             android:layout_width="@dimen/camera_capture_button"
             android:layout_height="@dimen/camera_capture_button"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/Uwazi_WidgetMedia_Take_Photo"
             android:padding="8dp"
-            android:scaleType="fitCenter"
-            android:layout_centerInParent="true"/>
+            android:scaleType="fitCenter" />
 
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/preview_image"
@@ -126,6 +126,7 @@
             android:focusable="true"
             android:padding="10dp"
             android:src="@drawable/white"
+            android:contentDescription="@string/action_open_gallery"
             app:civ_border_color="@color/wa_gray"
             app:civ_border_width="2dp" />
     </RelativeLayout>

@@ -370,6 +370,7 @@ class MicFragment : MetadataBaseLockFragment(),
         mRecord.background =
             AppCompatResources.getDrawable(requireContext(), R.drawable.red_circle_background)
         mRecord.setImageResource(R.drawable.stop_white)
+        mRecord.contentDescription = getString(R.string.action_stop)
         redDot.visibility = View.VISIBLE
         animator?.target = redDot
         animator?.start()
@@ -382,6 +383,7 @@ class MicFragment : MetadataBaseLockFragment(),
                 R.drawable.audio_record_button_background
             )
         mRecord.setImageResource(R.drawable.ic_mic_white)
+        mRecord.contentDescription = getString(R.string.action_record)
         redDot.visibility = View.GONE
         animator?.end()
     }
