@@ -11,13 +11,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/standard_sheet_title"
+        android:labelFor="@id/renameEditText"
         tools:text="Rename File"
         style="@style/Tella_Main_White_Text.MeduimbBold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        android:text="@string/Rename_name_Hint" />
 
-    <androidx.appcompat.widget.AppCompatEditText
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/Style_EditText"

@@ -6,5 +6,5 @@
     <string name="Home_BottomNav_Forms">Formularios</string>
     <string name="Home_BottomNav_Reports">Informes</string>
     <string name="Home_BottomNav_Uwazi">Uwazi</string>
-    <string name="Rename_name_Hint">New file name</string>
+    <string name="Rename_name_Hint">Name</string>
 </resources>
