@@ -1,14 +1,10 @@
 package rs.readahead.washington.mobile.data.reports.remote
 
 import io.reactivex.Single
-import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
-import rs.readahead.washington.mobile.data.ParamsNetwork.COOKIE
 import rs.readahead.washington.mobile.data.entity.reports.*
 import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.AUTHORIZATION_HEADER
-import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.URL_FILE
-import rs.readahead.washington.mobile.data.repository.MediaFileRequestBody
 import rs.readahead.washington.mobile.data.repository.SkippableMediaFileRequestBody
 
 @JvmSuppressWildcards
@@ -31,7 +27,7 @@ interface ReportsApiService {
     fun getProjectSlug(
         @Url
         url: String,
-        @Header(COOKIE) access_token: String
+        @Header(AUTHORIZATION_HEADER) access_token: String
     ): Single<ProjectSlugResponse>
 
     @POST
