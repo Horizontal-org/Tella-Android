@@ -83,7 +83,7 @@ public class ReportsFormEndView extends FrameLayout {
             formSize += mediaFile.size;
         }
         setFormSizeLabel(instance, 0);
-        uploadProgressVisibity(instance.getStatus(), offline);
+        uploadProgressVisibity(instance, offline);
         setUploadProgress(instance, 0);
     }
 
@@ -96,7 +96,7 @@ public class ReportsFormEndView extends FrameLayout {
         }
 
         if (instance.getStatus() == EntityStatus.SUBMITTED) {
-            title = getStatusLabel(instance.getStatus()) + " " + Util.getDateTimeString(instance.getUpdated()) + "\n" + getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + ", " + FileUtil.getFileSizeString(formSize);
+            title = getStatusLabel(instance.getStatus()) + "\n" + getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + ", " + FileUtil.getFileSizeString(formSize);
         } else if (instance.getStatus() == EntityStatus.PAUSED) {
             title = getStatusLabel(instance.getStatus()) + "\n" + getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + "," + getTotalUploadedSize(instance) + "/" + FileUtil.getFileSizeString(formSize);
         } else if (instance.getStatus() == EntityStatus.FINALIZED || instance.getStatus() == EntityStatus.SUBMISSION_PENDING || instance.getStatus() == EntityStatus.SUBMISSION_ERROR) {
@@ -112,7 +112,7 @@ public class ReportsFormEndView extends FrameLayout {
     String getStatusLabel(EntityStatus status) {
         String title = "";
         if (status == EntityStatus.SUBMITTED) {
-            title = getResources().getString(R.string.File_Uploaded_on);
+            title = getResources().getString(R.string.File_Uploaded_on) + " " + Util.getDateTimeString(instance.getUpdated());
         } else if (status == EntityStatus.PAUSED) {
             title = getResources().getString(R.string.Paused_Report);
         } else if (status == EntityStatus.FINALIZED || instance.getStatus() == EntityStatus.SUBMISSION_PENDING || instance.getStatus() == EntityStatus.SUBMISSION_ERROR) {
@@ -121,13 +121,13 @@ public class ReportsFormEndView extends FrameLayout {
         return title;
     }
 
-    private void uploadProgressVisibity(EntityStatus status, Boolean isOnline) {
-        if (!isOnline) {
+    private void uploadProgressVisibity(ReportInstance instance, Boolean isOnline) {
+        if (!isOnline || instance.getWidgetMediaFiles().isEmpty()) {
             totalProgress.setVisibility(GONE);
             return;
         }
 
-        if (status == EntityStatus.SUBMITTED) {
+        if (instance.getStatus() == EntityStatus.SUBMITTED) {
             totalProgress.setVisibility(GONE);
         } else {
             totalProgress.setVisibility(VISIBLE);

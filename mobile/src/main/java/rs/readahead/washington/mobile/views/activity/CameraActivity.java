@@ -707,7 +707,7 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
     }
 
     private void scheduleFileUpload(VaultFile vaultFile) {
-        if (Preferences.getAutoUploadServerId() != -1) {
+        if (Preferences.isAutoUploadEnabled()) {
             uploadPresenter.scheduleUploadReportFiles(vaultFile, Preferences.getAutoUploadServerId());
         }
     }

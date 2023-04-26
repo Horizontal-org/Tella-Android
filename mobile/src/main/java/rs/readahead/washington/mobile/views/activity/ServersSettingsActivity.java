@@ -293,10 +293,18 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         Preferences.setAutoDelete(server.isAutoDelete());
         if (i != -1) {
             servers.set(i, server);
+            Preferences.setAutoUpload(isAutoUploadEnabled(servers));
             binding.collectServersList.removeViewAt(i);
             binding.collectServersList.addView(getServerItem(server), i);
             showToast(R.string.settings_docu_toast_server_updated);
         }
+    }
+
+    private boolean isAutoUploadEnabled(List<Server> servers) {
+        return servers.stream()
+                .filter(server -> server instanceof TellaReportServer)
+                .map(server -> (TellaReportServer) server)
+                .anyMatch(TellaReportServer::isAutoUpload);
     }
 
     @Override

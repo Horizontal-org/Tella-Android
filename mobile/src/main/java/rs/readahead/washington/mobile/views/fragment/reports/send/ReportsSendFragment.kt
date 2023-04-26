@@ -70,10 +70,16 @@ class ReportsSendFragment :
                         }
                         EntityStatus.SUBMISSION_ERROR, EntityStatus.FINALIZED -> {
                             viewModel.saveOutbox(entity)
+                            instanceProgress.postValue(null)
+
                         }
                         EntityStatus.PAUSED -> {
                             pauseResumeLabel(entity)
                             viewModel.saveOutbox(entity)
+                        }
+                        EntityStatus.DELETED -> {
+                            instanceProgress.postValue(null)
+                            handleBackButton()
                         }
                         else -> {
 

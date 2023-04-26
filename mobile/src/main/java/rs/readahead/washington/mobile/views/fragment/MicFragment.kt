@@ -286,7 +286,7 @@ class MicFragment : MetadataBaseLockFragment(),
     }
 
     private fun scheduleFileUpload(vaultFile: VaultFile) {
-        if (Preferences.getAutoUploadServerId() != -1L) {
+        if (Preferences.isAutoUploadEnabled()) {
             uploadPresenter.scheduleUploadReportFiles(
                 vaultFile,
                 Preferences.getAutoUploadServerId()

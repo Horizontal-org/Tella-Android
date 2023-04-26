@@ -14,7 +14,6 @@ import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
 import rs.readahead.washington.mobile.data.entity.reports.mapper.mapToDomainModel
 import rs.readahead.washington.mobile.data.http.HttpStatus
 import rs.readahead.washington.mobile.data.reports.remote.ReportsApiService
-import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.BEARER
 import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.URL_LOGIN
 import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.URL_PROJECTS
 import rs.readahead.washington.mobile.data.repository.SkippableMediaFileRequestBody
@@ -72,7 +71,7 @@ class ReportsRepositoryImp @Inject internal constructor(
 
         if (!statusProvider.isOnline()) {
             instance.status = EntityStatus.SUBMISSION_PENDING
-            dataSource.saveInstance(instance).blockingGet()
+            dataSource.saveInstance(instance).subscribe()
         }
 
         if (instance.reportApiId.isEmpty()) {
@@ -87,13 +86,13 @@ class ReportsRepositoryImp @Inject internal constructor(
                         } else {
                             instance.status = EntityStatus.SUBMISSION_ERROR
                         }
-                        dataSource.saveInstance(instance).blockingGet()
+                        dataSource.saveInstance(instance).subscribe()
 
                         instanceProgress.postValue(instance)
                     }
                     .doOnDispose {
                         instance.status = EntityStatus.PAUSED
-                        dataSource.saveInstance(instance).blockingGet()
+                        dataSource.saveInstance(instance).subscribe()
 
                         instanceProgress.postValue(instance)
                     }
@@ -113,6 +112,12 @@ class ReportsRepositoryImp @Inject internal constructor(
         server: TellaReportServer,
         reportApiId: String
     ) {
+        if (instance.widgetMediaFiles.isEmpty()) {
+            instance.status = EntityStatus.SUBMITTED
+            dataSource.saveInstance(instance).subscribe()
+            instanceProgress.postValue(instance)
+            return
+        }
         disposables.add(
             Flowable.fromIterable(instance.widgetMediaFiles)
                 .flatMap { file ->
@@ -132,7 +137,7 @@ class ReportsRepositoryImp @Inject internal constructor(
                         instance.status = EntityStatus.SUBMISSION_PENDING
                     } else {
                         if (Preferences.isAutoDeleteEnabled() && instance.current == 1L) {
-                            dataSource.deleteReportInstance(instance.id).subscribe()
+                            dataSource.deleteReportInstance(instance.id).blockingGet()
                             instance.status = EntityStatus.DELETED
                         } else {
                             instance.status = EntityStatus.SUBMITTED
