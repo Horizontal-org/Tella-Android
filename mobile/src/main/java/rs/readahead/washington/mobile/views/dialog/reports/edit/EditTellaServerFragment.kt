@@ -8,6 +8,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentEditServerBinding
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
+import rs.readahead.washington.mobile.util.hide
+import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.SharedLiveData
@@ -48,10 +50,14 @@ class EditTellaServerFragment :
             if (isAutoUploadActivated && !reportServer.isAutoUpload) {
                 binding?.autoReportSwitch?.mSwitch?.isClickable = false
                 binding?.autoReportSwitch?.setExplainText(R.string.Setting_Reports_Background_Upload_Disabled_Description)
+                binding?.autoDeleteSwitch?.hide()
+                binding?.autoDeleteSeparator?.hide()
 
             } else {
                 binding?.autoReportSwitch?.mSwitch?.isClickable = true
                 binding?.autoReportSwitch?.setExplainText(R.string.Setting_Reports_Background_Upload_Description)
+                binding?.autoDeleteSwitch?.show()
+                binding?.autoDeleteSeparator?.show()
             }
         })
     }

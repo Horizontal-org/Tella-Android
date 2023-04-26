@@ -16,12 +16,18 @@ interface ReportsRepository {
 
     fun login(server: TellaReportServer, slug: String): Single<TellaReportServer>
 
-    fun submitReport(server: TellaReportServer, instance: ReportInstance): Single<ReportInstance>
+    fun submitReport(server: TellaReportServer, instance: ReportInstance)
 
     fun submitReport(
         server: TellaReportServer,
         reportBody: ReportBodyEntity
     ): Single<ReportPostResult>
+
+    fun submitFiles(
+        instance: ReportInstance,
+        server: TellaReportServer,
+        reportApiId: String
+    )
 
     fun upload(
         vaultFile: VaultFile,
@@ -39,7 +45,7 @@ interface ReportsRepository {
 
     fun getDisposable(): CompositeDisposable
 
-    fun getReportProgress(): LiveData<Pair<UploadProgressInfo, ReportInstance>>
+    fun getReportProgress(): MutableLiveData<Pair<UploadProgressInfo, ReportInstance>>
 
     fun geInstanceProgress(): MutableLiveData<ReportInstance>
 }

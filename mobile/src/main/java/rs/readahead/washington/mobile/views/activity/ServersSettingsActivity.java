@@ -53,6 +53,7 @@ import rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageDialogFrag
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
 import timber.log.Timber;
+
 @AndroidEntryPoint
 public class ServersSettingsActivity extends BaseLockActivity implements
         IServersPresenterContract.IView,
@@ -289,6 +290,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     public void onUpdatedTUServer(TellaReportServer server) {
         int i = servers.indexOf(server);
         saveAutoUploadServer(server);
+        Preferences.setAutoDelete(server.isAutoDelete());
         if (i != -1) {
             servers.set(i, server);
             binding.collectServersList.removeViewAt(i);
@@ -762,7 +764,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         }
     }
 
-    private void saveAutoUploadServer(TellaReportServer server){
+    private void saveAutoUploadServer(TellaReportServer server) {
         if (server.isActivatedBackgroundUpload()) {
             Preferences.setAutoUploadServerId(server.getId());
         }

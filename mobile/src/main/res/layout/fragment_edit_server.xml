@@ -109,6 +109,7 @@
 
 
         <View
+            android:id="@+id/auto_delete_separator"
             style="@style/SettingsMainShadowLine"
             android:layout_marginTop="@dimen/collect_form_padding_vertical" />
 

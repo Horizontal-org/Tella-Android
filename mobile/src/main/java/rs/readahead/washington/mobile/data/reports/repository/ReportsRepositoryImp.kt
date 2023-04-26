@@ -18,6 +18,7 @@ import rs.readahead.washington.mobile.data.reports.remote.ReportsApiService
 import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.URL_LOGIN
 import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.URL_PROJECTS
 import rs.readahead.washington.mobile.data.repository.SkippableMediaFileRequestBody
+import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
@@ -64,16 +65,14 @@ class ReportsRepositoryImp @Inject internal constructor(
                 }
             }
         }.subscribeOn(Schedulers.io())
-         .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
-    override fun submitReport(server: TellaReportServer, instance: ReportInstance): Single<ReportInstance>
-    {
+    override fun submitReport(server: TellaReportServer, instance: ReportInstance) {
 
         if (!statusProvider.isOnline()) {
             instance.status = EntityStatus.SUBMISSION_PENDING
             dataSource.saveInstance(instance).blockingGet()
-            return Single.just(instance)
         }
 
         if (instance.reportApiId.isEmpty()) {
@@ -107,11 +106,10 @@ class ReportsRepositoryImp @Inject internal constructor(
         } else {
             submitFiles(instance, server, instance.reportApiId)
         }
-        return Single.just(instance)
     }
 
     @SuppressLint("CheckResult")
-    private fun submitFiles(
+    override fun submitFiles(
         instance: ReportInstance,
         server: TellaReportServer,
         reportApiId: String
@@ -128,65 +126,68 @@ class ReportsRepositoryImp @Inject internal constructor(
             dataSource.saveInstance(instance).blockingGet()
             return
         }
-        disposables.add(
-            Flowable.fromIterable(instance.widgetMediaFiles)
-                .flatMap { file ->
-                    upload(
-                        file,
-                        server.url,
-                        reportApiId,
-                        server.accessToken
-                    )
-                }.doOnEach {
-                    instance.apply {
-                        status = EntityStatus.SUBMISSION_IN_PROGRESS
+       disposables.add(
+        Flowable.fromIterable(instance.widgetMediaFiles)
+            .flatMap { file ->
+                upload(
+                    file,
+                    server.url,
+                    reportApiId,
+                    server.accessToken
+                )
+            }.doOnEach {
+                instance.apply {
+                    status = EntityStatus.SUBMISSION_IN_PROGRESS
+                }
+            }
+            .doOnTerminate {
+                if (!instance.widgetMediaFiles.any { it.status == FormMediaFileStatus.SUBMITTED }) {
+                    instance.status = EntityStatus.SUBMISSION_PENDING
+                } else {
+                    if (Preferences.isAutoDeleteEnabled() && instance.current == 1L) {
+                        dataSource.deleteReportInstance(instance.id).blockingGet()
+                    }
+                    instance.status = EntityStatus.SUBMITTED
+                }
+                dataSource.saveInstance(instance).blockingGet()
+                instanceProgress.postValue(instance)
+            }.doOnCancel {
+                instance.status = EntityStatus.PAUSED
+                dataSource.saveInstance(instance).blockingGet()
+                instanceProgress.postValue(instance)
+            }.doOnError {
+                instance.status = EntityStatus.SUBMISSION_ERROR
+                dataSource.saveInstance(instance).blockingGet()
+                instanceProgress.postValue(instance)
+            }.doOnNext { progressInfo: UploadProgressInfo ->
+                val file = instance.widgetMediaFiles.first { it.id == progressInfo.fileId }
+                when (progressInfo.status) {
+                    UploadProgressInfo.Status.FINISHED -> {
+                        file
+                            .apply {
+                                status = FormMediaFileStatus.SUBMITTED
+                                uploadedSize = progressInfo.current
+                            }
+                    }
+                    else -> {
+                        file
+                            .apply {
+                                status = FormMediaFileStatus.NOT_SUBMITTED
+                                uploadedSize = progressInfo.current
+                            }
                     }
                 }
-                .doOnTerminate {
-                    if (!instance.widgetMediaFiles.any { it.status == FormMediaFileStatus.SUBMITTED }) {
-                        instance.status = EntityStatus.SUBMISSION_PENDING
-                    } else {
-                        instance.status = EntityStatus.SUBMITTED
-                    }
-                    dataSource.saveInstance(instance).blockingGet()
-                    instanceProgress.postValue(instance)
-                }.doOnCancel {
-                    instance.status = EntityStatus.PAUSED
-                    dataSource.saveInstance(instance).blockingGet()
-                    instanceProgress.postValue(instance)
-                }.doOnError {
-                    instance.status = EntityStatus.SUBMISSION_ERROR
-                    dataSource.saveInstance(instance).blockingGet()
-                    instanceProgress.postValue(instance)
-                }.doOnNext { progressInfo: UploadProgressInfo ->
-                    val file = instance.widgetMediaFiles.first { it.id == progressInfo.fileId }
-                    when (progressInfo.status) {
-                        UploadProgressInfo.Status.FINISHED -> {
-                            file
-                                .apply {
-                                    status = FormMediaFileStatus.SUBMITTED
-                                    uploadedSize = progressInfo.current
-                                }
-                        }
-                        else -> {
-                            file
-                                .apply {
-                                    status = FormMediaFileStatus.NOT_SUBMITTED
-                                    uploadedSize = progressInfo.current
-                                }
-                        }
-                    }
 
-                    instance.widgetMediaFiles.first { it.id == progressInfo.fileId }.apply {
-                        status = file.status
-                        uploadedSize = file.uploadedSize
-                    }
-                    dataSource.saveInstance(instance).blockingGet()
+                instance.widgetMediaFiles.first { it.id == progressInfo.fileId }.apply {
+                    status = file.status
+                    uploadedSize = file.uploadedSize
+                }
+                dataSource.saveInstance(instance).blockingGet()
 
-                }.doAfterNext { progressInfo ->
-                    reportProgress.postValue(Pair(progressInfo, instance))
-                }.subscribe()
-        )
+            }.doAfterNext { progressInfo ->
+                reportProgress.postValue(Pair(progressInfo, instance))
+            }.subscribe()
+          )
 
     }
 

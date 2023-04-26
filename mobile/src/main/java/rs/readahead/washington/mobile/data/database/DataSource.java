@@ -1357,9 +1357,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             if (Util.currentTimestamp() - currentInstance.getUpdated() > C.UPLOAD_SET_DURATION) {
                 currentInstance.setCurrent(0);
                 currentInstance.setStatus(EntityStatus.SUBMITTED);
+                currentInstance.setWidgetMediaFiles(getReportFiles(currentInstance,null));
                 updateTellaReportsFormInstance(currentInstance);
                 ReportInstance newReportInstance = ReportInstance.getAutoReportReportInstance(serverId, "Auto-report " + DateUtil.getDateTimeString());
-                newReportInstance.setWidgetMediaFiles(getReportFiles(currentInstance,mediaFile));
+                newReportInstance.getWidgetMediaFiles().add(mediaFile);
                 reportInstance = updateTellaReportsFormInstance(newReportInstance);
             } else {
                 currentInstance.setWidgetMediaFiles(getReportFiles(currentInstance,mediaFile));
@@ -1374,9 +1375,12 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return reportInstance;
     }
 
-    private List<FormMediaFile> getReportFiles(ReportInstance instance, FormMediaFile mediaFile){
+    private List<FormMediaFile> getReportFiles(ReportInstance instance,@Nullable FormMediaFile mediaFile){
         List<FormMediaFile> mediaFiles = getReportMediaFilesDB(instance);
-        mediaFiles.add(mediaFile);
+        if (mediaFile != null){
+            mediaFiles.add(mediaFile);
+        }
+
         return mediaFiles;
     }
 

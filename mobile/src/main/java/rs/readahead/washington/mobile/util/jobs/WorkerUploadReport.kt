@@ -3,19 +3,24 @@ package rs.readahead.washington.mobile.util.jobs
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.hilt.work.HiltWorker
+import androidx.work.RxWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.hzontal.tella_vault.VaultFile
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.reactivex.Flowable
+import io.reactivex.Single
 import org.hzontal.tella.keys.key.LifecycleMainKey
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.bus.event.ReportUploadProgressEvent
 import rs.readahead.washington.mobile.data.database.DataSource
+import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
+import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository.UploadStatus
@@ -60,7 +65,7 @@ class WorkerUploadReport
         }
 
         dataSource = DataSource.getInstance(context, key)
-        val reportFormInstances = dataSource.listOutboxReportInstances().blockingGet()
+        val reportFormInstances = getOutboxReportInstances()
 
         if (reportFormInstances.isEmpty()) {
             return Result.Success()
@@ -75,18 +80,29 @@ class WorkerUploadReport
         }
 
         for (reportInstance in reportFormInstances) {
+            val reportWithFiles = getReportBundle(reportInstance).blockingGet()
 
-            reportInstance.widgetMediaFiles =
-                dataSource.getReportMediaFiles(reportInstance).blockingGet()
+            if (reportWithFiles.reportApiId.isEmpty()) {
+                //submit the report to the server without files
+                val report = reportsRepository.submitReport(
+                    server!!,
+                    ReportBodyEntity(
+                        reportWithFiles.title,
+                        reportWithFiles.description
+                    )
+                ).blockingGet()
+
+                reportWithFiles.reportApiId = report.id
 
 
-            reportsRepository.submitReport(
-                server!!,
-                reportInstance
-            )
-                .blockingGet()
+               reportsRepository.submitFiles(reportWithFiles,server!!, report.id)
 
-            Timber.d("*** Test worker *** widgetMediaFiles? %s", reportInstance.widgetMediaFiles)
+
+            } else {
+                reportsRepository.submitFiles(reportWithFiles,server!!, reportWithFiles.reportApiId)
+            }
+
+            Timber.d("*** Test worker *** widgetMediaFiles? %s", reportWithFiles.widgetMediaFiles)
 
 
         }
@@ -97,118 +113,41 @@ class WorkerUploadReport
 
     private fun getServer(): TellaReportServer? {
         return dataSource.listTellaUploadServers().blockingGet()
-            .firstOrNull { server -> server.isActivatedBackgroundUpload }
+            .firstOrNull { server -> server.isAutoUpload }
     }
 
-    private fun submitFiles(reportInstance: ReportInstance, reportId: String) {
+    private fun getOutboxReportInstances(): List<ReportInstance> {
+        val reports = dataSource.listOutboxReportInstances().blockingGet().sortedByDescending { it.updated }
 
-        if (reportInstance.widgetMediaFiles.isEmpty()) {
-            updateReportProgress(
-                setReportStatus(
-                    reportInstance,
-                    EntityStatus.SUBMITTED
-                )
-            )
-
-            return
+        if (reports.isEmpty()) {
+            return emptyList()
         }
-        //Grab the server instance from the server
-        Flowable.fromIterable(reportInstance.widgetMediaFiles)
-            .flatMap { file: FormMediaFile ->
 
-                reportsRepository.upload(
-                    MyApplication.rxVault.get(file.id).blockingGet(),
-                    server?.url!!,
-                    reportId,
-                    server?.accessToken!!
-                )
-            }.doOnEach {
-                updateReportProgress(
-                    setReportStatus(
-                        reportInstance,
-                        EntityStatus.SUBMISSION_IN_PROGRESS
-                    )
-                )
-            }.doOnTerminate {
-                updateReportProgress(
-                    setReportStatus(
-                        reportInstance,
-                        EntityStatus.SUBMITTED
-                    )
-                )
-            }
-            .blockingSubscribe(
-                {
+        return reports
+    }
 
-                }
-            ) { throwable: Throwable? ->
-
-                Timber.d(throwable)
-                // FirebaseCrashlytics.getInstance().recordException(throwable!!)
+    private fun getReportBundle(reportInstance: ReportInstance): Single<ReportInstance> {
+        return dataSource.getReportMediaFiles(reportInstance)
+            .flatMap { files ->
+                MyApplication.rxVault.get(files.map { it.id }.toTypedArray())
+                    .map { vaultFiles ->
+                        val vaultFileMap = vaultFiles.associateBy { it?.id }
+                        val filesResult = files.mapNotNull { formMediaFile ->
+                            val vaultFile = vaultFileMap[formMediaFile.id]
+                            if (vaultFile != null) {
+                                FormMediaFile.fromMediaFile(vaultFile).apply {
+                                    status = formMediaFile.status
+                                    uploadedSize = formMediaFile.uploadedSize
+                                }
+                            } else {
+                                null
+                            }
+                        }.toMutableList()
+                        reportInstance.widgetMediaFiles = filesResult
+                        reportInstance
+                    }
             }
     }
 
-    private fun setReportStatus(
-        reportInstance: ReportInstance,
-        status: EntityStatus
-    ): ReportInstance {
-        reportInstance.status = status
-
-        return reportInstance
-    }
-
-    private fun updateReportProgress(reportInstance: ReportInstance) {
-        when (reportInstance.status) {
-
-            EntityStatus.SUBMITTED -> {
-                dataSource.saveInstance(reportInstance).blockingGet()
-                if (Preferences.isAutoDeleteEnabled()) {
-                    dataSource.deleteReportInstance(reportInstance.id).blockingGet()
-                }
-            }
-            else -> {
-                dataSource.saveInstance(reportInstance).blockingGet()
-            }
-
-        }
-        //postReportProgressEvent(reportInstance)
-    }
-
-    private fun updateProgress(instance: ReportInstance, progressInfo: UploadProgressInfo) {
-        when (progressInfo.status) {
-            UploadProgressInfo.Status.STARTED, UploadProgressInfo.Status.OK -> dataSource.setUploadStatus(
-                progressInfo.fileId,
-                UploadStatus.UPLOADING,
-                progressInfo.current,
-                false
-            ).blockingAwait()
-            UploadProgressInfo.Status.CONFLICT, UploadProgressInfo.Status.FINISHED -> {
-                dataSource.setUploadStatus(
-                    progressInfo.fileId,
-                    UploadStatus.UPLOADED,
-                    progressInfo.current,
-                    false
-                ).blockingAwait()
-            }
-            UploadProgressInfo.Status.ERROR -> dataSource.setUploadStatus(
-                progressInfo.fileId,
-                UploadStatus.SCHEDULED,
-                progressInfo.current,
-                true
-            ).blockingAwait()
-            else -> dataSource.setUploadStatus(
-                progressInfo.fileId,
-                UploadStatus.UNKNOWN,
-                progressInfo.current,
-                true
-            ).blockingAwait()
-        }
-    }
-
-    private fun postReportProgressEvent(reportInstance: ReportInstance) {
-        ThreadUtil.runOnMain {
-            MyApplication.bus().post(ReportUploadProgressEvent(reportInstance))
-        }
-    }
 
 }
