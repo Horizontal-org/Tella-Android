@@ -291,6 +291,9 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         int i = servers.indexOf(server);
         saveAutoUploadServer(server);
         Preferences.setAutoDelete(server.isAutoDelete());
+        if (server.isAutoUpload()) {
+            Preferences.setAutoUploadServerId(server.getId());
+        }
         if (i != -1) {
             servers.set(i, server);
             Preferences.setAutoUpload(isAutoUploadEnabled(servers));
