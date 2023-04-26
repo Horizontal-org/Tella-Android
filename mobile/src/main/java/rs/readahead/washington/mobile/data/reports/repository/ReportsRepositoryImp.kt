@@ -137,6 +137,7 @@ class ReportsRepositoryImp @Inject internal constructor(
                         instance.status = EntityStatus.SUBMISSION_PENDING
                     } else {
                         if (Preferences.isAutoDeleteEnabled() && instance.current == 1L) {
+                            instance.current = 0
                             dataSource.deleteReportInstance(instance.id).blockingGet()
                             instance.status = EntityStatus.DELETED
                         } else {
