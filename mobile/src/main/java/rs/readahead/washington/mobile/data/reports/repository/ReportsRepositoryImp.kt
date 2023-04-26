@@ -14,6 +14,7 @@ import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
 import rs.readahead.washington.mobile.data.entity.reports.mapper.mapToDomainModel
 import rs.readahead.washington.mobile.data.http.HttpStatus
 import rs.readahead.washington.mobile.data.reports.remote.ReportsApiService
+import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.BEARER
 import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.URL_LOGIN
 import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.URL_PROJECTS
 import rs.readahead.washington.mobile.data.repository.SkippableMediaFileRequestBody
