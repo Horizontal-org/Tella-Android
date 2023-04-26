@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.data.reports.repository
 
-import android.annotation.SuppressLint
 import android.text.TextUtils
 import android.webkit.MimeTypeMap
 import androidx.lifecycle.MutableLiveData
@@ -108,87 +107,67 @@ class ReportsRepositoryImp @Inject internal constructor(
         }
     }
 
-    @SuppressLint("CheckResult")
     override fun submitFiles(
         instance: ReportInstance,
         server: TellaReportServer,
         reportApiId: String
     ) {
+        disposables.add(
+            Flowable.fromIterable(instance.widgetMediaFiles)
+                .flatMap { file ->
+                    upload(
+                        file,
+                        server.url,
+                        reportApiId,
+                        server.accessToken
+                    )
+                }.doOnEach {
+                    instance.apply {
+                        status = EntityStatus.SUBMISSION_IN_PROGRESS
+                    }
+                }
+                .doOnTerminate {
+                    if (!instance.widgetMediaFiles.any { it.status == FormMediaFileStatus.SUBMITTED }) {
+                        instance.status = EntityStatus.SUBMISSION_PENDING
+                    } else {
+                        if (Preferences.isAutoDeleteEnabled() && instance.current == 1L) {
+                            dataSource.deleteReportInstance(instance.id).subscribe()
+                            instance.status = EntityStatus.DELETED
+                        } else {
+                            instance.status = EntityStatus.SUBMITTED
+                        }
+                    }
+                    dataSource.saveInstance(instance).subscribe()
+                    instanceProgress.postValue(instance)
+                }.doOnCancel {
+                    instance.status = EntityStatus.PAUSED
+                    dataSource.saveInstance(instance).subscribe()
+                    instanceProgress.postValue(instance)
+                }.doOnError {
+                    instance.status = EntityStatus.SUBMISSION_ERROR
+                    dataSource.saveInstance(instance).subscribe()
+                    instanceProgress.postValue(instance)
+                }.doOnNext { progressInfo: UploadProgressInfo ->
+                    updateFileStatus(instance, progressInfo)
 
-        if (instance.widgetMediaFiles.isEmpty()) {
-            instance.status = EntityStatus.SUBMITTED
-            dataSource.saveInstance(instance).blockingGet()
-            return
+                }.doAfterNext { progressInfo ->
+                    reportProgress.postValue(Pair(progressInfo, instance))
+                }.subscribe()
+        )
+    }
+
+    private fun updateFileStatus(instance: ReportInstance, progressInfo: UploadProgressInfo) {
+        val file = instance.widgetMediaFiles.first { it.id == progressInfo.fileId }
+        file.apply {
+            status =
+                if (progressInfo.status == UploadProgressInfo.Status.FINISHED) FormMediaFileStatus.SUBMITTED else FormMediaFileStatus.NOT_SUBMITTED
+            uploadedSize = progressInfo.current
         }
-
-        if (!statusProvider.isOnline()) {
-            instance.status = EntityStatus.SUBMISSION_PENDING
-            dataSource.saveInstance(instance).blockingGet()
-            return
+        instance.widgetMediaFiles.first { it.id == progressInfo.fileId }.apply {
+            status = file.status
+            uploadedSize = file.uploadedSize
         }
-       disposables.add(
-        Flowable.fromIterable(instance.widgetMediaFiles)
-            .flatMap { file ->
-                upload(
-                    file,
-                    server.url,
-                    reportApiId,
-                    server.accessToken
-                )
-            }.doOnEach {
-                instance.apply {
-                    status = EntityStatus.SUBMISSION_IN_PROGRESS
-                }
-            }
-            .doOnTerminate {
-                if (!instance.widgetMediaFiles.any { it.status == FormMediaFileStatus.SUBMITTED }) {
-                    instance.status = EntityStatus.SUBMISSION_PENDING
-                } else {
-                    if (Preferences.isAutoDeleteEnabled() && instance.current == 1L) {
-                        dataSource.deleteReportInstance(instance.id).blockingGet()
-                    }
-                    instance.status = EntityStatus.SUBMITTED
-                }
-                dataSource.saveInstance(instance).blockingGet()
-                instanceProgress.postValue(instance)
-            }.doOnCancel {
-                instance.status = EntityStatus.PAUSED
-                dataSource.saveInstance(instance).blockingGet()
-                instanceProgress.postValue(instance)
-            }.doOnError {
-                instance.status = EntityStatus.SUBMISSION_ERROR
-                dataSource.saveInstance(instance).blockingGet()
-                instanceProgress.postValue(instance)
-            }.doOnNext { progressInfo: UploadProgressInfo ->
-                val file = instance.widgetMediaFiles.first { it.id == progressInfo.fileId }
-                when (progressInfo.status) {
-                    UploadProgressInfo.Status.FINISHED -> {
-                        file
-                            .apply {
-                                status = FormMediaFileStatus.SUBMITTED
-                                uploadedSize = progressInfo.current
-                            }
-                    }
-                    else -> {
-                        file
-                            .apply {
-                                status = FormMediaFileStatus.NOT_SUBMITTED
-                                uploadedSize = progressInfo.current
-                            }
-                    }
-                }
-
-                instance.widgetMediaFiles.first { it.id == progressInfo.fileId }.apply {
-                    status = file.status
-                    uploadedSize = file.uploadedSize
-                }
-                dataSource.saveInstance(instance).blockingGet()
-
-            }.doAfterNext { progressInfo ->
-                reportProgress.postValue(Pair(progressInfo, instance))
-            }.subscribe()
-          )
-
+        dataSource.saveInstance(instance).subscribe()
     }
 
     override fun submitReport(
