@@ -104,6 +104,12 @@ class SecuritySettings : BaseFragment() {
             Preferences.setSecurityScreenEnabled(isChecked)
         }
 
+        val keepExifTellaSwitch = binding.keepExifSwitch
+        keepExifTellaSwitch.mSwitch.isChecked = Preferences.isKeepExif()
+        keepExifTellaSwitch.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+            Preferences.setKeepExif(isChecked)
+        }
+
         /*val bypassCensorshipTellaSwitch =
             view.findViewById<TellaSwitchWithMessage>(R.id.bypass_censorship_switch)
         bypassCensorshipTellaSwitch.mSwitch.setChecked(Preferences.isBypassCensorship())

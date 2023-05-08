@@ -62,6 +62,7 @@ import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.provider.EncryptedFileProvider;
+import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.presentation.entity.mapper.PublicMetadataMapper;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.FileUtil;
@@ -199,16 +200,24 @@ public class MediaFileHandler {
 
     public static Single<VaultFile> importPhotoUri(Context context, Uri uri, @Nullable String parentId) throws Exception {
         // Vault replacement methods
-        InputStream v_input = context.getContentResolver().openInputStream(uri); // original photo
-        Bitmap v_bm = modifyOrientation(BitmapFactory.decodeStream(v_input), v_input); // bitmap of photo
-        Bitmap v_thumb = ThumbnailUtils.extractThumbnail(v_bm, v_bm.getWidth() / 10, v_bm.getHeight() / 10); // bitmap of thumb
-
-        ByteArrayOutputStream v_thumb_jpeg_stream = new ByteArrayOutputStream();
-        v_thumb.compress(Bitmap.CompressFormat.JPEG, 100, v_thumb_jpeg_stream);
-
+        Boolean keepExif = Preferences.isKeepExif();
         ByteArrayOutputStream v_image_jpeg_stream = new ByteArrayOutputStream();
-        if (!v_bm.compress(Bitmap.CompressFormat.JPEG, 100, v_image_jpeg_stream)) {
-            throw new Exception("JPEG compression failed");
+        ByteArrayOutputStream v_thumb_jpeg_stream = new ByteArrayOutputStream();
+
+        InputStream inputStream = context.getContentResolver().openInputStream(uri); // original photo
+        Bitmap v_bm = modifyOrientation(BitmapFactory.decodeStream(inputStream), inputStream); // bitmap of photo
+        Bitmap v_thumb = ThumbnailUtils.extractThumbnail(v_bm, v_bm.getWidth() / 10, v_bm.getHeight() / 10); // bitmap of thumb
+        v_thumb.compress(Bitmap.CompressFormat.JPEG, 100, v_thumb_jpeg_stream);
+        inputStream.close();
+
+        if (keepExif) {
+            InputStream v_input = context.getContentResolver().openInputStream(uri); // copy original photo with exif info
+            copyStream(v_input, v_image_jpeg_stream);
+            v_input.close();
+        } else {
+            if (!v_bm.compress(Bitmap.CompressFormat.JPEG, 100, v_image_jpeg_stream)) {
+                throw new Exception("JPEG compression failed");
+            }
         }
 
         return MyApplication.rxVault
@@ -488,7 +497,7 @@ public class MediaFileHandler {
         }
     }
 
-    //TODO CHECJ CSV FILE
+    //TODO CHECK CSV FILE
     public static VaultFile maybeCreateMetadataMediaFile(VaultFile vaultFile) {
         VaultFile mmf = new VaultFile();
         String name = vaultFile.name.substring(0, vaultFile.name.lastIndexOf('.'));
@@ -707,5 +716,13 @@ public class MediaFileHandler {
         }
 
         return null;
+    }
+
+    private static void copyStream(InputStream source, OutputStream destination) throws IOException {
+        byte[] buf = new byte[8192];
+        int length;
+        while ((length = source.read(buf)) != -1) {
+            destination.write(buf, 0, length);
+        }
     }
 }
