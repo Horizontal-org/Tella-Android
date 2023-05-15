@@ -610,7 +610,7 @@
             android:label="@string/play.audio_app.bar"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".views.activity.VideoViewerActivity"
+            android:name=".views.activity.viewer.VideoViewerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:launchMode="singleTop"
             android:theme="@style/PlayerTheme" />
