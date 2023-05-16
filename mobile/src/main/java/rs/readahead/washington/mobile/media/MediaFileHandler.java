@@ -200,31 +200,31 @@ public class MediaFileHandler {
 
     public static Single<VaultFile> importPhotoUri(Context context, Uri uri, @Nullable String parentId) throws Exception {
         // Vault replacement methods
-        Boolean keepExif = Preferences.isKeepExif();
-        ByteArrayOutputStream v_image_jpeg_stream = new ByteArrayOutputStream();
-        ByteArrayOutputStream v_thumb_jpeg_stream = new ByteArrayOutputStream();
+        boolean keepExif = Preferences.isKeepExif();
+        ByteArrayOutputStream imageJpegStream = new ByteArrayOutputStream();
+        ByteArrayOutputStream thumbJpegStream = new ByteArrayOutputStream();
 
-        InputStream inputStream = context.getContentResolver().openInputStream(uri); // original photo
-        Bitmap v_bm = modifyOrientation(BitmapFactory.decodeStream(inputStream), inputStream); // bitmap of photo
-        Bitmap v_thumb = ThumbnailUtils.extractThumbnail(v_bm, v_bm.getWidth() / 10, v_bm.getHeight() / 10); // bitmap of thumb
-        v_thumb.compress(Bitmap.CompressFormat.JPEG, 100, v_thumb_jpeg_stream);
-        inputStream.close();
+        try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
+            Bitmap bitmap = modifyOrientation(BitmapFactory.decodeStream(inputStream), inputStream); // bitmap of photo
+            Bitmap thumb = ThumbnailUtils.extractThumbnail(bitmap, bitmap.getWidth() / 10, bitmap.getHeight() / 10); // bitmap of thumb
+            thumb.compress(Bitmap.CompressFormat.JPEG, 100, thumbJpegStream);
 
-        if (keepExif) {
-            InputStream v_input = context.getContentResolver().openInputStream(uri); // copy original photo with exif info
-            copyStream(v_input, v_image_jpeg_stream);
-            v_input.close();
-        } else {
-            if (!v_bm.compress(Bitmap.CompressFormat.JPEG, 100, v_image_jpeg_stream)) {
-                throw new Exception("JPEG compression failed");
+            if (keepExif) {
+                try (InputStream inputS = context.getContentResolver().openInputStream(uri)) {
+                    copyStream(inputS, imageJpegStream);
+                }
+            } else {
+                if (!bitmap.compress(Bitmap.CompressFormat.JPEG, 100, imageJpegStream)) {
+                    throw new Exception("JPEG compression failed");
+                }
             }
         }
 
         return MyApplication.rxVault
-                .builder(new ByteArrayInputStream(v_image_jpeg_stream.toByteArray()))
+                .builder(new ByteArrayInputStream(imageJpegStream.toByteArray()))
                 .setMimeType("image/jpeg")
                 .setType(VaultFile.Type.FILE)
-                .setThumb(v_thumb_jpeg_stream.toByteArray())
+                .setThumb(thumbJpegStream.toByteArray())
                 .build(parentId)
                 .subscribeOn(Schedulers.io());
     }
@@ -720,9 +720,9 @@ public class MediaFileHandler {
 
     private static void copyStream(InputStream source, OutputStream destination) throws IOException {
         byte[] buf = new byte[8192];
-        int length;
-        while ((length = source.read(buf)) != -1) {
-            destination.write(buf, 0, length);
+        int bytesRead;
+        while ((bytesRead = source.read(buf)) != -1) {
+            destination.write(buf, 0, bytesRead);
         }
     }
 }
