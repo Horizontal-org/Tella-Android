@@ -734,4 +734,6 @@ button to add a new template.</string>
     <string name="Report_Deleted_Confirmation" translatable="false"> %s has been deleted.</string>
     <string name="Report_Save_Outbox_Confirmation" translatable="false">The report was saved to your Outbox. You can submit it when you are ready.</string>
     <string name="Send_Action_Label" translatable="false">SEND</string>
+    <string name="settings.sec_keep.exif_switch">Preserve metadata when importing</string>
+    <string name="settings.sec_keep.exif_expl">Retain EXIF metadata when importing photos and videos into Tella. This includes data about when the image was created, camera settings, location and your device.</string>
 </resources>
