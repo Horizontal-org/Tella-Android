@@ -6,6 +6,7 @@
     <string name="Home_BottomNav_Forms">Forms</string>
     <string name="Home_BottomNav_Reports">Reports</string>
     <string name="Home_BottomNav_Uwazi">Uwazi</string>
+    <!-- content description -->
     <string name="action_go_to_homescreen">go to home screen</string>
     <string name="action_cancel">cancel</string>
     <string name="action_show_password">show password</string>
