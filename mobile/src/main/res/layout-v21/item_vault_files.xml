@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toStartOf="@id/imagesBtn"
         app:layout_constraintTop_toTopOf="parent"
         app:mainTitleText="@string/Vault_AllFiles_Title"
-        android:contentDescription="open all files"
+        android:contentDescription="@string/action_open_all_files"
         app:rightImg="@drawable/ic_myfiles"
         android:layout_marginEnd="17dp"
         android:layout_marginTop="17dp"
@@ -30,7 +30,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:mainTitleText="@string/Vault_Images_Title"
-        android:contentDescription="open images"
+        android:contentDescription="@string/action_open_images"
         app:rightImg="@drawable/ic_gallery"
         android:layout_marginTop="17dp"
         />
@@ -43,7 +43,7 @@
         app:layout_constraintEnd_toStartOf="@id/audioBtn"
         app:layout_constraintTop_toBottomOf="@id/allFilesBtn"
         app:mainTitleText="@string/Vault_Videos_Title"
-        android:contentDescription="open videos"
+        android:contentDescription="@string/action_open_videos"
         app:rightImg="@drawable/ic_video"
         android:layout_marginEnd="17dp"
         android:layout_marginTop="17dp"
@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@id/allFilesBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:mainTitleText="@string/Vault_Audios_Title"
-        android:contentDescription="open audio"
+        android:contentDescription="@string/action_open_audio"
         app:rightImg="@drawable/ic_audio"
         android:layout_marginTop="17dp"
         />
@@ -72,7 +72,7 @@
         app:layout_constraintEnd_toStartOf="@id/othersBtn"
         app:mainTitleText="@string/Vault_Documents_Title"
         app:rightImg="@drawable/ic_documents"
-        android:contentDescription="open documents"
+        android:contentDescription="@string/action_open_documents"
         android:layout_marginTop="17dp"
         android:layout_marginEnd="17dp"
         />
@@ -84,7 +84,7 @@
         app:layout_constraintStart_toEndOf="@id/documentsBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:mainTitleText="@string/Vault_Others_Title"
-        android:contentDescription="open others"
+        android:contentDescription="@string/action_open_others"
         app:rightImg="@drawable/ic_others"
         android:layout_marginTop="17dp"
         />

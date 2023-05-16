@@ -487,4 +487,10 @@ connecting to a server</string>
   <string name="action_edit_recording_name">edit recording name</string>
   <string name="action_create_new_folder">create new folder</string>
   <string name="action_quick_delete">quick delete</string>
+  <string name="action_open_documents">open documents</string>
+  <string name="action_open_others">open others</string>
+  <string name="action_open_audio">open audio</string>
+  <string name="action_open_videos">open videos</string>
+  <string name="action_open_images">open images</string>
+  <string name="action_open_all_files">open all files</string>
 </resources>
