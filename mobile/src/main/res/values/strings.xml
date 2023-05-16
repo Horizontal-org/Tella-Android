@@ -752,8 +752,8 @@ button to add a new template.</string>
     <string name="action_help">help</string>
     <string name="action_download">download</string>
     <string name="action_choose_resolution">choose resolution</string>
-    <string name="action_disable_gridview">disable grid view</string>
-    <string name="action_enable_gridview">enable grid view</string>
+    <string name="action_hide_gridview">hide grid view</string>
+    <string name="action_show_gridview">show grid view</string>
     <string name="action_switch_to_front_camera">switch to front camera</string>
     <string name="action_switch_to_back_camera">switch to back camera</string>
     <string name="action_disable_flash">disable flash</string>
@@ -768,6 +768,11 @@ button to add a new template.</string>
     <string name="blue_theme">blue theme</string>
     <string name="green_theme">green theme</string>
     <string name="yellow_theme">yellow theme</string>
+    <string name="quick_exit_action">quick exit</string>
+    <string name="action_zoom">zoom</string>
+    <string name="action_edit_recording_name">edit recording name</string>
+    <string name="action_create_new_folder">create new folder</string>
+    <string name="action_quick_delete">quick delete</string>
 
 
 </resources>

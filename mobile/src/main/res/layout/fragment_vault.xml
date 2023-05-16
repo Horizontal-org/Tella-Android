@@ -25,7 +25,7 @@
           app:leftIcon="@drawable/ic_settings"
           app:leftIconContentDescription="@string/action_open_settings"
           app:rightIcon="@drawable/ic_close"
-          app:rightIconContentDescription="@string/action_cancel"
+          app:rightIconContentDescription="@string/quick_exit_action"
           />
 
    </com.google.android.material.appbar.AppBarLayout>
@@ -48,7 +48,7 @@
        android:background="@color/space_cadet"
        android:visibility="gone"
        android:layout_marginBottom="55dp"
-       >
+       android:contentDescription="@string/action_quick_delete">
       <SeekBar
           android:id="@+id/panic_seek"
           app:layout_constraintStart_toStartOf="parent"

@@ -52,6 +52,7 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.event.CaptureEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
+import rs.readahead.washington.mobile.databinding.ActivityCameraBinding;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.mvp.contract.ICameraPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
@@ -68,7 +69,6 @@ import rs.readahead.washington.mobile.views.custom.CameraFlashButton;
 import rs.readahead.washington.mobile.views.custom.CameraGridButton;
 import rs.readahead.washington.mobile.views.custom.CameraResolutionButton;
 import rs.readahead.washington.mobile.views.custom.CameraSwitchButton;
-import rs.readahead.washington.mobile.databinding.ActivityCameraBinding;
 
 
 public class CameraActivity extends MetadataActivity implements ICameraPresenterContract.IView, ITellaFileUploadSchedulePresenterContract.IView, IMetadataAttachPresenterContract.IView {
@@ -447,11 +447,11 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
         if (cameraView.getGrid() == Grid.DRAW_3X3) {
             cameraView.setGrid(Grid.OFF);
             gridButton.displayGridOff();
-            gridButton.setContentDescription(getString(R.string.action_disable_gridview));
+            gridButton.setContentDescription(getString(R.string.action_show_gridview));
         } else {
             cameraView.setGrid(Grid.DRAW_3X3);
             gridButton.displayGridOn();
-            gridButton.setContentDescription(getString(R.string.action_enable_gridview));
+            gridButton.setContentDescription(getString(R.string.action_hide_gridview));
         }
     }
 
@@ -459,11 +459,11 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
         if (cameraView.getFacing() == Facing.BACK) {
             cameraView.setFacing(Facing.FRONT);
             switchButton.displayFrontCamera();
-            gridButton.setContentDescription(getString(R.string.action_switch_to_front_camera));
+            switchButton.setContentDescription(getString(R.string.action_switch_to_front_camera));
         } else {
             cameraView.setFacing(Facing.BACK);
             switchButton.displayBackCamera();
-            gridButton.setContentDescription(getString(R.string.action_switch_to_back_camera));
+            switchButton.setContentDescription(getString(R.string.action_switch_to_back_camera));
         }
     }
 
@@ -604,16 +604,20 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
     private void setUpCameraGridButton() {
         if (cameraView.getGrid() == Grid.DRAW_3X3) {
             gridButton.displayGridOn();
+            gridButton.setContentDescription(getString(R.string.action_hide_gridview));
         } else {
             gridButton.displayGridOff();
+            gridButton.setContentDescription(getString(R.string.action_show_gridview));
         }
     }
 
     private void setupCameraSwitchButton() {
         if (cameraView.getFacing() == Facing.FRONT) {
             switchButton.displayFrontCamera();
+            switchButton.setContentDescription(getString(R.string.action_switch_to_back_camera));
         } else {
             switchButton.displayBackCamera();
+            switchButton.setContentDescription(getString(R.string.action_switch_to_front_camera));
         }
     }
 
@@ -628,10 +632,10 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
             flashButton.displayFlashAuto();
         } else if (cameraView.getFlash() == Flash.OFF) {
             flashButton.displayFlashOff();
-            flashButton.setContentDescription(getString(R.string.action_disable_flash));
+            flashButton.setContentDescription(getString(R.string.action_enable_flash));
         } else {
             flashButton.displayFlashOn();
-            flashButton.setContentDescription(getString(R.string.action_enable_flash) );
+            flashButton.setContentDescription(getString(R.string.action_disable_flash));
         }
 
         flashButton.setOnClickListener(view -> {
@@ -732,14 +736,6 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
         cameraView.setPlaySounds(!Preferences.isShutterMute());
     }
 
-    public enum CameraMode {
-        PHOTO, VIDEO
-    }
-
-    public enum IntentMode {
-        COLLECT, RETURN, STAND, ODK
-    }
-
     private void initView() {
         cameraView = binding.camera;
         gridButton = binding.gridButton;
@@ -754,5 +750,13 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
         photoModeText = binding.photoText;
         videoModeText = binding.videoText;
         resolutionButton = binding.resolutionButton;
+    }
+
+    public enum CameraMode {
+        PHOTO, VIDEO
+    }
+
+    public enum IntentMode {
+        COLLECT, RETURN, STAND, ODK
     }
 }

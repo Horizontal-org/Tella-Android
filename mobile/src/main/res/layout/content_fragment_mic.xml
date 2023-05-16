@@ -22,6 +22,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerInParent="true"
         android:layout_marginTop="8dp"
+        android:contentDescription="@string/action_edit_recording_name"
         android:drawablePadding="8dp"
         android:ellipsize="end"
         android:gravity="center"
@@ -32,7 +33,6 @@
         android:textColor="@color/wa_orange"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:contentDescription="@string/action_open_bottom_sheet"
         app:drawableEndCompat="@drawable/ic_edit_orange_24" />
 
     <TextView
