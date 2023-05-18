@@ -89,6 +89,14 @@ public class Preferences {
         setBoolean(SharedPrefs.MUTE_CAMERA_SHUTTER, value);
     }
 
+
+    public static boolean isKeepExif() { return getBoolean(SharedPrefs.KEEP_EXIF, false); }
+
+    public static void setKeepExif(boolean value) {
+        setBoolean(SharedPrefs.KEEP_EXIF, value);
+    }
+
+
     public static boolean isDeleteServerSettingsActive() {
         return getBoolean(SharedPrefs.DELETE_SERVER_SETTINGS, true);
     }
