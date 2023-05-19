@@ -1,6 +1,7 @@
 package org.hzontal.shared_ui.appbar
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -134,11 +135,9 @@ class ToolbarComponent @JvmOverloads constructor(
        btnBack.setBackgroundResource(icon)
     }
 
-    fun setRightIcon(icon: Int,contentDescription: String?){
+    fun setRightIcon(icon: Int){
         if (icon != -1){
             rightImg.setBackgroundResource(icon)
-            if(contentDescription != null)
-            rightImg.contentDescription = contentDescription
             rightImg.isVisible = true
         }else{
             rightImg.isVisible = false
