@@ -751,4 +751,6 @@
   <string name="action_open_videos">open videos</string>
   <string name="action_open_images">open images</string>
   <string name="action_open_all_files">open all files</string>
+  <string name="settings.sec_keep.exif_switch">Preserve metadata when importing</string>
+  <string name="settings.sec_keep.exif_expl">Retain EXIF metadata when importing photos and videos into Tella. This includes data about when the image was created, camera settings, location and your device.</string>
 </resources>

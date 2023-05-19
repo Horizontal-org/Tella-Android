@@ -40,7 +40,7 @@
         android:layout_marginHorizontal="@dimen/activity_horizontal_large_margin"
         android:layout_marginBottom="18dp"
         android:background="@drawable/action_button_background"
-        android:text="@string/collect.end_action_submit"
+        android:text="@string/Reports_Pause"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

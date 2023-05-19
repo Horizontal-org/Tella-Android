@@ -72,15 +72,13 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         db.execSQL(alterTableMediaFileUploadsAddMetadata());
         db.execSQL(alterTableMediaFileUploadsAddManual());
         db.execSQL(alterTableMediaFileUploadsAddServer());
-
-        //DBV9
         db.execSQL(createTableUwaziServer());
         db.execSQL(createTableCollectEntityUwazi());
         db.execSQL(createTableCollectBlankTemplateUwazi());
         db.execSQL(createTableCollectFormInstanceVaultFile());
         db.execSQL(createTableUwaziEntityInstanceVaultFile());
 
-        //DBV10
+        //DBV9
         db.execSQL(alterTableTellaUploadServerAddAccessToken());
         db.execSQL(alterTableTellaUploadServerAddMetatData());
         db.execSQL(alterTableTellaUploadServerAddBackgourndUpload());
@@ -120,13 +118,13 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 db.execSQL(alterTableMediaFileUploadsAddMetadata());
 
             case 8:
+                db.execSQL(createTableUwaziServer());
+                db.execSQL(createTableCollectEntityUwazi());
+                db.execSQL(createTableCollectBlankTemplateUwazi());
                 db.execSQL(createTableCollectFormInstanceVaultFile());
+                db.execSQL(createTableUwaziEntityInstanceVaultFile());
 
             case 9:
-                db.execSQL(createTableUwaziServer());
-                db.execSQL(createTableCollectBlankTemplateUwazi());
-
-            case 10:
                 db.execSQL(alterTableTellaUploadServerAddAccessToken());
                 db.execSQL(alterTableTellaUploadServerAddMetatData());
                 db.execSQL(alterTableTellaUploadServerAddBackgourndUpload());
@@ -355,7 +353,8 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_URL, D.TEXT) + " , " +
                 cddl(D.C_USERNAME, D.TEXT) + " , " +
                 cddl(D.C_PASSWORD, D.TEXT) + " , " +
-                cddl(D.C_CHECKED, D.INTEGER, true) + " DEFAULT 0" + ");";
+                cddl(D.C_CHECKED, D.INTEGER, true) + " DEFAULT 0" +
+                ");";
     }
 
     private String createTableCollectBlankTemplateUwazi() {

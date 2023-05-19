@@ -430,6 +430,8 @@ connecting to a server</string>
   <string name="Timeout_Warning_Description">To perform this action, Tella will remain unlocked for 3 minutes.</string>
   <string name="settings_sec_security_screen">Screen security</string>
   <string name="settings_sec_security_screen_expl">Block screenshots and screen recordings inside Tella and screen preview in the list of recent apps</string>
+  <string name="settings.sec_keep.exif_switch">Preserve metadata when importing</string>
+  <string name="settings.sec_keep.exif_expl">Retain EXIF metadata when importing photos and videos into Tella. This includes data about when the image was created, camera settings, location and your device.</string>
   <!-- content description -->
   <string name="action_open_settings">open settings</string>
   <string name="action_refresh">refresh</string>

@@ -379,6 +379,12 @@ class ReportsViewModel @Inject constructor(
         server: TellaReportServer,
         reportApiId: String
     ) {
+
+        if (instance.widgetMediaFiles.isEmpty()){
+            instance.status = EntityStatus.SUBMITTED
+            _entityStatus.postValue(instance)
+            return
+        }
         disposables.add(
             Flowable.fromIterable(instance.widgetMediaFiles)
                 .flatMap { file ->
@@ -394,7 +400,11 @@ class ReportsViewModel @Inject constructor(
                     }
                 }
                 .doOnTerminate {
-                    instance.status = EntityStatus.SUBMITTED
+                    if (!instance.widgetMediaFiles.any { it.status == FormMediaFileStatus.SUBMITTED }) {
+                        instance.status = EntityStatus.SUBMISSION_PENDING
+                    } else {
+                        instance.status = EntityStatus.SUBMITTED
+                    }
                     _entityStatus.postValue(instance)
                 }.doOnCancel {
                     instance.status = EntityStatus.PAUSED
@@ -415,6 +425,7 @@ class ReportsViewModel @Inject constructor(
                         else -> {
                             file
                                 .apply {
+                                    status = FormMediaFileStatus.NOT_SUBMITTED
                                     uploadedSize = progressInfo.current
                                 }
                         }
