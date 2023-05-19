@@ -134,9 +134,10 @@ class ToolbarComponent @JvmOverloads constructor(
        btnBack.setBackgroundResource(icon)
     }
 
-    fun setRightIcon(icon: Int,contentDescription: String){
+    fun setRightIcon(icon: Int,contentDescription: String?){
         if (icon != -1){
             rightImg.setBackgroundResource(icon)
+            if(contentDescription != null)
             rightImg.contentDescription = contentDescription
             rightImg.isVisible = true
         }else{

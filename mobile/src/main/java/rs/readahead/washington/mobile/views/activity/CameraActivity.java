@@ -457,14 +457,16 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
 
     void onSwitchClicked() {
         if (cameraView.getFacing() == Facing.BACK) {
-            cameraView.setFacing(Facing.FRONT);
-            switchButton.displayFrontCamera();
-            switchButton.setContentDescription(getString(R.string.action_switch_to_front_camera));
+            switchCamera(Facing.FRONT, R.string.action_switch_to_back_camera);
         } else {
-            cameraView.setFacing(Facing.BACK);
-            switchButton.displayBackCamera();
-            switchButton.setContentDescription(getString(R.string.action_switch_to_back_camera));
+            switchCamera(Facing.BACK, R.string.action_switch_to_front_camera);
         }
+    }
+
+    private void switchCamera(Facing facing, int contentDescriptionResId) {
+        cameraView.setFacing(facing);
+        switchButton.displayCamera(facing);
+        switchButton.setContentDescription(getString(contentDescriptionResId));
     }
 
     void onPreviewClicked() {
@@ -507,21 +509,24 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
     }
 
     private void showConfirmVideoView(final File video) {
-        captureButton.displayVideoButton();
-        captureButton.setContentDescription(getContext().getString(R.string.Uwazi_WidgetMedia_Take_Video));
+        displayVideoCaptureButton();
         durationView.stop();
         presenter.addMp4Video(video, currentRootParent);
     }
 
+    /* handle display settings for the video capture button.*/
+    private void displayVideoCaptureButton() {
+        captureButton.displayVideoButton();
+        captureButton.setContentDescription(getContext().getString(R.string.Uwazi_WidgetMedia_Take_Video));
+    }
+
     private void setupCameraView() {
         if (mode == CameraMode.PHOTO) {
-            cameraView.setMode(Mode.PICTURE);
-            captureButton.displayPhotoButton();
-            captureButton.setContentDescription(getContext().getString(R.string.Uwazi_WidgetMedia_Take_Photo));
+            setCameraMode(Mode.PICTURE);
+            displayPhotoCaptureButton();
         } else {
-            cameraView.setMode(Mode.VIDEO);
-            captureButton.displayVideoButton();
-            captureButton.setContentDescription(getContext().getString(R.string.Uwazi_WidgetMedia_Take_Video));
+            setCameraMode(Mode.VIDEO);
+            displayVideoCaptureButton();
         }
 
         //cameraView.setEnabled(PermissionUtil.checkPermission(this, Manifest.permission.CAMERA));
@@ -593,6 +598,16 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
         });
     }
 
+    /* handle the behavior of setting the camera mode.*/
+    private void setCameraMode(Mode mode) {
+        cameraView.setMode(mode);
+    }
+
+    /* handle display settings for the photo capture button.*/
+    private void displayPhotoCaptureButton() {
+        captureButton.displayPhotoButton();
+        captureButton.setContentDescription(getContext().getString(R.string.Uwazi_WidgetMedia_Take_Photo));
+    }
     private void setupCameraModeButton() {
         if (cameraView.getMode() == Mode.PICTURE) {
             setPhotoActive();
@@ -612,12 +627,10 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
     }
 
     private void setupCameraSwitchButton() {
-        if (cameraView.getFacing() == Facing.FRONT) {
-            switchButton.displayFrontCamera();
-            switchButton.setContentDescription(getString(R.string.action_switch_to_back_camera));
+        if (cameraView.getFacing() == Facing.BACK) {
+            switchCamera(Facing.FRONT, R.string.action_switch_to_back_camera);
         } else {
-            switchButton.displayBackCamera();
-            switchButton.setContentDescription(getString(R.string.action_switch_to_front_camera));
+            switchCamera(Facing.BACK, R.string.action_switch_to_front_camera);
         }
     }
 

@@ -1,15 +1,13 @@
 package rs.readahead.washington.mobile.views.adapters;
 
 import android.graphics.drawable.Drawable;
-
-import androidx.annotation.LayoutRes;
-import androidx.annotation.NonNull;
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -36,7 +34,7 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
 
 
     public GalleryRecycleViewAdapter(IGalleryMediaHandler galleryMediaHandler) {
-        this(galleryMediaHandler,true, false);
+        this(galleryMediaHandler, true, false);
     }
 
     public GalleryRecycleViewAdapter(IGalleryMediaHandler galleryMediaHandler,
@@ -157,9 +155,11 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
 
     private void checkItemState(ViewHolder holder, VaultFile mediaFile) {
         boolean checked = selected.contains(mediaFile);
+        // Get the string resource ID based on the checked state
+        String contentDescriptionResString = holder.binding.checkBox.getContext().getString(checked ? R.string.action_unselect : R.string.action_select);
         holder.binding.selectionDimmer.setVisibility(checked ? View.VISIBLE : View.GONE);
         holder.binding.checkBox.setImageResource(checked ? R.drawable.ic_check_box_on : R.drawable.ic_check_box_off);
-        holder.binding.checkBox.setContentDescription(holder.binding.checkBox.getContext().getString(checked ? R.string.action_unselect : R.string.action_select));
+        holder.binding.checkBox.setContentDescription(contentDescriptionResString);
 
     }
 

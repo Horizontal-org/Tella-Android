@@ -6,6 +6,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.otaliastudios.cameraview.controls.Facing;
+
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.util.ViewUtil;
 
@@ -24,12 +26,12 @@ public class CameraSwitchButton extends AppCompatImageButton implements View.OnT
         setOnTouchListener(this);
     }
 
-    public void displayFrontCamera() {
-        setImageResource(R.drawable.ic_camera_front_white);
-    }
-
-    public void displayBackCamera() {
-        setImageResource(R.drawable.ic_camera_rear_white);
+    public void displayCamera(Facing facing) {
+        if (facing == Facing.BACK) {
+            setImageResource(R.drawable.ic_camera_rear_white);
+        } else {
+            setImageResource(R.drawable.ic_camera_front_white);
+        }
     }
 
     public void rotateView(int angle){
