@@ -33,15 +33,18 @@ class PinUnlockActivity : BasePinActivity() {
                 backBtn.visibility = View.VISIBLE
                 backBtn.setOnClickListener { finish() }
                 pinTopText.text = getString(R.string.LockPinSet_Settings_EnterCurrentPin)
+                pinEditText.setHint(R.string.LockPinSet_Settings_EnterCurrentPin)
             }
             ReturnActivity.CAMOUFLAGE.getActivityOrder() -> {
                 backBtn = findViewById(R.id.backBtn)
                 backBtn.visibility = View.VISIBLE
                 backBtn.setOnClickListener { finish() }
                 pinTopText.text = getString(R.string.LockPinSet_Settings_EnterCurrentPinToChangeCamouflage)
+                pinEditText.setHint(R.string.LockPinSet_Settings_EnterCurrentPinToChangeCamouflage)
             }
             else -> {
                 pinTopText.text = getString(R.string.UnlockPin_Message_EnterPin)
+                pinEditText.setHint(R.string.UnlockPin_Message_EnterPin)
             }
         }
     }
@@ -69,12 +72,20 @@ class PinUnlockActivity : BasePinActivity() {
     override fun onPinChange(pinLength: Int, intermediatePin: String?) {
         super.onPinChange(pinLength, intermediatePin)
         pinTopText.setTextColor(ContextCompat.getColor(this, R.color.wa_white))
-        pinTopText.text =  getString(
-            when (returnActivity) {
-                ReturnActivity.SETTINGS.getActivityOrder() -> R.string.LockPinSet_Settings_EnterCurrentPin
-                ReturnActivity.CAMOUFLAGE.getActivityOrder() -> R.string.LockPinSet_Settings_EnterCurrentPinToChangeCamouflage
-                else -> R.string.UnlockPin_Message_EnterPin
-            })
+        when (returnActivity) {
+            ReturnActivity.SETTINGS.getActivityOrder() -> {
+                pinTopText.text = getString(R.string.LockPinSet_Settings_EnterCurrentPin)
+                pinEditText.setHint(R.string.LockPinSet_Settings_EnterCurrentPin)
+            }
+            ReturnActivity.CAMOUFLAGE.getActivityOrder() -> {
+                pinTopText.text = getString(R.string.LockPinSet_Settings_EnterCurrentPinToChangeCamouflage)
+                pinEditText.setHint(R.string.LockPinSet_Settings_EnterCurrentPinToChangeCamouflage)
+            }
+            else -> {
+                pinTopText.text = getString(R.string.UnlockPin_Message_EnterPin)
+                pinEditText.setHint(R.string.UnlockPin_Message_EnterPin)
+            }
+        }
     }
 
 }

@@ -47,15 +47,18 @@ class PasswordUnlockActivity : BasePasswordActivity() {
                 backBtn.isVisible = true
                 backBtn.setOnClickListener { finish() }
                 passwordMsgTextView.text = getString(R.string.LockPasswordSet_Settings_EnterCurrentPassword)
+                passwordEditText.hint = getString(R.string.LockPasswordSet_Settings_EnterCurrentPassword)
             }
             ReturnActivity.CAMOUFLAGE.getActivityOrder() -> {
                 backBtn = findViewById(R.id.backBtn)
                 backBtn.isVisible = true
                 backBtn.setOnClickListener { finish() }
                 passwordMsgTextView.text = getString(R.string.LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage)
+                passwordEditText.hint = getString(R.string.LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage)
             }
             else -> {
                 passwordMsgTextView.text = getText(R.string.UnlockPassword_Message_EnterPassword)
+                passwordEditText.hint = getString(R.string.UnlockPassword_Message_EnterPassword)
                 passwordEditText.onChange {
                     passwordMsgTextView.text = getText(R.string.UnlockPassword_Message_EnterPassword)
                 }

@@ -81,6 +81,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:textColorHint="@color/dark_purple"
         app:layout_constraintBottom_toTopOf="@+id/pin_lock_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pin_msgTV"

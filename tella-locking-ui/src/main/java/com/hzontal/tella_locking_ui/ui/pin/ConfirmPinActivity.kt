@@ -18,6 +18,7 @@ class ConfirmPinActivity  : BasePinActivity() {
         super.onCreate(savedInstanceState)
         pinTopText.text = getString(R.string.LockPinSet_Message_Confirm)
         pinMsgText.text = getString(R.string.LockPinConfirm_Message_Confirm)
+        pinEditText.setHint(R.string.LockPinSet_Message_Confirm)
     }
 
     override fun onSuccessSetPin(pin: String?) {
@@ -46,5 +47,4 @@ class ConfirmPinActivity  : BasePinActivity() {
     override fun onFailureSetPin(error: String) {
         DialogUtils.showBottomMessage(this,error,false)
     }
-
 }
