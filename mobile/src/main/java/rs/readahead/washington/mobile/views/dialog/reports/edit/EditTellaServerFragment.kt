@@ -54,8 +54,10 @@ class EditTellaServerFragment :
                 binding?.autoReportSwitch?.setExplainText(R.string.Setting_Reports_Background_Upload_Description)
             }
 
-            binding?.autoDeleteSeparator?.isVisible = isAutoUploadActivated || reportServer.isAutoUpload
-            binding?.autoDeleteSwitch?.isVisible = isAutoUploadActivated || reportServer.isAutoUpload
+            binding?.autoDeleteSeparator?.isVisible =
+                isAutoUploadActivated || reportServer.isAutoUpload
+            binding?.autoDeleteSwitch?.isVisible =
+                isAutoUploadActivated || reportServer.isAutoUpload
 
         })
     }
