@@ -89,7 +89,7 @@ public class QuestionAttachmentActivity extends MetadataActivity implements
         setupFab();
 
         galleryAdapter = new GalleryRecycleViewAdapter(this,
-                true, true);
+                true, true,getContext());
         RecyclerView.LayoutManager galleryLayoutManager = new GridLayoutManager(this, 3);
         recyclerView.setLayoutManager(galleryLayoutManager);
         recyclerView.setAdapter(galleryAdapter);

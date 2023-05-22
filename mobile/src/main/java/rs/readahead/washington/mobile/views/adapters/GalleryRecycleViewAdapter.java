@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.views.adapters;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,19 +32,22 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
     private Set<VaultFile> selected;
     private boolean selectable;
     private boolean singleSelection;
+    private Context context;
 
 
-    public GalleryRecycleViewAdapter(IGalleryMediaHandler galleryMediaHandler) {
-        this(galleryMediaHandler, true, false);
+    public GalleryRecycleViewAdapter(Context context, IGalleryMediaHandler galleryMediaHandler) {
+        this(galleryMediaHandler, true, false, context);
     }
 
     public GalleryRecycleViewAdapter(IGalleryMediaHandler galleryMediaHandler,
                                      boolean selectable,
-                                     boolean singleSelection) {
+                                     boolean singleSelection,
+                                     Context context) {
         this.galleryMediaHandler = galleryMediaHandler;
         this.selected = new LinkedHashSet<>();
         this.selectable = selectable;
         this.singleSelection = singleSelection;
+        this.context = context;
     }
 
     @NonNull
@@ -156,7 +160,7 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
     private void checkItemState(ViewHolder holder, VaultFile mediaFile) {
         boolean checked = selected.contains(mediaFile);
         // Get the string resource ID based on the checked state
-        String contentDescriptionResString = holder.binding.checkBox.getContext().getString(checked ? R.string.action_unselect : R.string.action_select);
+        String contentDescriptionResString = context.getString(checked ? R.string.action_unselect : R.string.action_select);
         holder.binding.selectionDimmer.setVisibility(checked ? View.VISIBLE : View.GONE);
         holder.binding.checkBox.setImageResource(checked ? R.drawable.ic_check_box_on : R.drawable.ic_check_box_off);
         holder.binding.checkBox.setContentDescription(contentDescriptionResString);
