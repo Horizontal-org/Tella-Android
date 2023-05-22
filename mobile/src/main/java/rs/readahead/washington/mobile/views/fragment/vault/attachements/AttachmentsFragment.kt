@@ -409,33 +409,31 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
         attachmentsAdapter.enableSelectMode(isListCheckOn)
         updateAttachmentsToolbar(isListCheckOn)
 
-        when (selectMode) {
+        val checkBoxDrawable = when (selectMode) {
             SelectMode.DESELECT_ALL -> {
                 attachmentsAdapter.clearSelected()
                 enableMoveTheme(false)
-                checkBoxList.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        baseActivity, R.drawable.ic_check
-                    )
-                )
+                R.drawable.ic_check
             }
-            SelectMode.ONE_SELECTION -> {
-                checkBoxList.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        baseActivity, R.drawable.ic_check_box_off
-                    )
-                )
-            }
+            SelectMode.ONE_SELECTION -> R.drawable.ic_check_box_off
             SelectMode.SELECT_ALL -> {
-                checkBoxList.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        baseActivity, R.drawable.ic_check_box_on
-                    )
-                )
                 attachmentsAdapter.selectAll()
+                R.drawable.ic_check_box_on
             }
         }
+
+        checkBoxDrawable.let {
+            checkBoxList.setImageDrawable(ContextCompat.getDrawable(baseActivity, it))
+        }
+
+        val contentDescriptionResId = if (selectMode == SelectMode.SELECT_ALL) {
+            R.string.action_unselect
+        } else {
+            R.string.action_select
+        }
+        checkBoxList.contentDescription = getString(contentDescriptionResId)
     }
+
 
     private fun changeSelectMode() {
         when (selectMode) {

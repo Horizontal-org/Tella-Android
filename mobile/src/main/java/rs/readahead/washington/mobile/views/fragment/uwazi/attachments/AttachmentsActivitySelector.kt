@@ -170,6 +170,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                 attachmentsAdapter.selectedMediaFiles.size.toString() + " " + getString(R.string.Vault_Items)
             )
             binding.toolbar.setRightIcon(R.drawable.ic_check_white)
+            binding.toolbar.rightIconContentDescription = R.string.action_check
         }
     }
 

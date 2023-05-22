@@ -110,6 +110,7 @@
         android:layout_marginHorizontal="@dimen/tella_main_vertical"
         android:layout_marginBottom="@dimen/tella_main_vertical"
         android:background="@color/dark_orange"
+        android:contentDescription="@string/action_refresh"
         android:src="@drawable/ic_autorenew_white_24dp"
         android:visibility="gone"
         app:backgroundTint="@color/dark_orange" />

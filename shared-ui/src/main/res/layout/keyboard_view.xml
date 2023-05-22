@@ -109,6 +109,7 @@
         android:padding="20dp"
         android:scaleType="fitCenter"
         android:src="@drawable/delete_bg"
+        android:contentDescription="@string/action_delete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/zeroBtn"
         app:layout_constraintHorizontal_bias="0.5"

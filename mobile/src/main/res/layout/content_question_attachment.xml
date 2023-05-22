@@ -39,6 +39,7 @@
             android:layout_centerVertical="true"
             android:background="?selectableItemBackgroundBorderless"
             android:src="@drawable/ic_sort_dark_gray_24dp"
+            android:contentDescription="@string/action_open_bottom_sheet"
             tools:ignore="ContentDescription" />
     </RelativeLayout>
 

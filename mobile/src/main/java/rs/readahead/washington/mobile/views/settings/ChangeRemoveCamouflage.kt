@@ -47,9 +47,9 @@ class ChangeRemoveCamouflage : BaseFragment() {
             camoImage.setImageDrawable(getCamoImage())
             camoImage.requestLayout()
             val dimension = resources.displayMetrics.density * 160
-            camoImage.getLayoutParams().height = dimension.toInt()
-            camoImage.getLayoutParams().width = dimension.toInt()
-            camoImage.setScaleType(ImageView.ScaleType.FIT_XY);
+            camoImage.layoutParams.height = dimension.toInt()
+            camoImage.layoutParams.width = dimension.toInt()
+            camoImage.scaleType = ImageView.ScaleType.FIT_XY
         } else {
             camoImage.setImageDrawable(ContextCompat.getDrawable(baseActivity, R.drawable.ic_server))
         }

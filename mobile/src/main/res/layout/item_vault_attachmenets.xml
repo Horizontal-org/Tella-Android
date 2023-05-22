@@ -52,6 +52,7 @@
         app:layout_constraintBottom_toBottomOf="@id/fileNameTextView"
         app:layout_constraintTop_toTopOf="@id/fileNameTextView"
         android:background="@drawable/ic_more"
+        android:contentDescription="@string/action_open_bottom_sheet"
         android:visibility="gone"
         android:padding="11dp"
         >

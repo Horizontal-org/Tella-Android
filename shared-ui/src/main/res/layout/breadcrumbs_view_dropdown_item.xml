@@ -26,6 +26,7 @@
         android:gravity="center_vertical"
         android:textSize="14sp"
         android:fontFamily="@font/open_sans"
+        android:contentDescription="@string/action_go_to_homescreen"
         android:minHeight="?android:attr/listPreferredItemHeightSmall"
         android:paddingStart="?android:attr/listPreferredItemPaddingStart"
         android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"

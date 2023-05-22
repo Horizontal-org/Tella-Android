@@ -31,7 +31,7 @@
                 android:focusable="true"
                 android:scaleType="centerInside"
                 android:background="@color/light_purple"
-                tools:ignore="ContentDescription" />
+                android:contentDescription="@string/action_show_photo" />
         </androidx.cardview.widget.CardView>
 
         <View
