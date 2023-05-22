@@ -3,7 +3,6 @@ package com.hzontal.tella_locking_ui.ui.pin
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.content.ContextCompat
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.ReturnActivity
@@ -53,7 +52,7 @@ class PinUnlockActivity : BasePinActivity() {
     override fun onSuccessSetPin(pin: String?) {
         TellaKeysUI.getMainKeyStore().load(config.wrapper, PBEKeySpec(pin?.toCharArray()), object : MainKeyStore.IMainKeyLoadCallback {
             override fun onReady(mainKey: MainKey) {
-                TellaKeysUI.getMainKeyHolder().set(mainKey);
+                TellaKeysUI.getMainKeyHolder().set(mainKey)
                 onSuccessfulUnlock()
                 finish()
             }

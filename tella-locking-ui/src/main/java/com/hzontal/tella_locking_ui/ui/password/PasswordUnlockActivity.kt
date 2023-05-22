@@ -70,7 +70,7 @@ class PasswordUnlockActivity : BasePasswordActivity() {
         TellaKeysUI.getMainKeyStore().load(config.wrapper, PBEKeySpec(password.toCharArray()), object : MainKeyStore.IMainKeyLoadCallback {
             override fun onReady(mainKey: MainKey) {
                 Timber.d("*** MainKeyStore.IMainKeyLoadCallback.onReady")
-                TellaKeysUI.getMainKeyHolder().set(mainKey);
+                TellaKeysUI.getMainKeyHolder().set(mainKey)
                 onSuccessfulUnlock()
                 finish()
             }
@@ -85,6 +85,6 @@ class PasswordUnlockActivity : BasePasswordActivity() {
 
     override fun onFailureSetPassword(error: String) {
         passwordMsgTextView.text = error
-        passwordEditText.setTextColor(ContextCompat.getColor(this, R.color.wa_red_error));
+        passwordEditText.setTextColor(ContextCompat.getColor(this, R.color.wa_red_error))
     }
 }
