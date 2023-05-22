@@ -20,10 +20,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
@@ -39,7 +35,6 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showRadioListOptionsSh
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.IVaultActions
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultActionsSheet
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultRenameSheet
-import org.hzontal.shared_ui.utils.CalculatorTheme
 import org.hzontal.shared_ui.utils.DialogUtils
 import permissions.dispatcher.*
 import rs.readahead.washington.mobile.MyApplication
@@ -50,23 +45,18 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.databinding.ActivityVideoViewerBinding
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.media.exo.MediaFileDataSourceFactory
-import rs.readahead.washington.mobile.mvp.contract.IMediaFileViewerPresenterContract
-import rs.readahead.washington.mobile.mvp.presenter.MediaFileViewerPresenter
 import rs.readahead.washington.mobile.util.DialogsUtil
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.activity.MetadataViewerActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
-import rs.readahead.washington.mobile.views.fragment.uwazi.SharedUwaziViewModel
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.PICKER_FILE_REQUEST_CODE
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.WRITE_REQUEST_CODE
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment
 
 
 @RuntimePermissions
-class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.VisibilityListener
-  //  , IMediaFileViewerPresenterContract.IView
-{
+class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.VisibilityListener {
     private lateinit var simpleExoPlayerView: StyledPlayerView
     private lateinit var binding: ActivityVideoViewerBinding
     private lateinit var toolbar: Toolbar
@@ -79,7 +69,6 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
     private var resumePosition: Long = 0
     private var vaultFile: VaultFile? = null
     private var actionsDisabled = false
-  //  private var presenter: MediaFileViewerPresenter? = null
     private var alertDialog: AlertDialog? = null
     private var progressDialog: ProgressDialog? = null
     private var isInfoShown = false
@@ -109,14 +98,14 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
         simpleExoPlayerView = findViewById(R.id.player_view)
         simpleExoPlayerView.setControllerVisibilityListener(this)
         simpleExoPlayerView.requestFocus()
-       // presenter = MediaFileViewerPresenter(this)
+        // presenter = MediaFileViewerPresenter(this)
         initObservers()
     }
 
     private fun initObservers() {
         with(viewModel) {
             error.observe(this@VideoViewerActivity) {
-                onExportError(it)
+                onShowError(it)
             }
             onMediaFileExportStatus.observe(this@VideoViewerActivity)
             {
@@ -131,6 +120,17 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
                         onExportEnded()
                     }
                 }
+            }
+
+            onMediaFileDeleted.observe(this@VideoViewerActivity)
+            {
+                if (it)
+                    onMediaFileDeleted()
+            }
+
+            onMediaFileRenamed.observe(this@VideoViewerActivity)
+            {
+                onMediaFileRename(it)
             }
 
         }
@@ -184,15 +184,12 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
             }
         }
         hideProgressDialog()
-      /*  if (presenter != null) {
-            presenter!!.destroy()
-        }*/
         super.onDestroy()
     }
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     fun exportMediaFile() {
-        if (vaultFile != null ) {
+        if (vaultFile != null) {
             if (vaultFile?.metadata != null) {
                 showExportWithMetadataDialog()
             } else {
@@ -214,7 +211,6 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
                 startActivityForResult(intent, PICKER_FILE_REQUEST_CODE)
             } else {
                 vaultFile?.let { viewModel.exportNewMediaFile(withMetadata, it, null) }
-                //  if (presenter != null)
 
             }
         } else {
@@ -236,7 +232,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
         }
     }
 
-     fun onMediaExported() {
+    fun onMediaExported() {
         DialogUtils.showBottomMessage(
             this,
             resources.getQuantityString(R.plurals.gallery_toast_files_exported, 1, 1),
@@ -244,26 +240,26 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
         )
     }
 
-     fun onExportError(error: Throwable) {
+    fun onShowError(errorResId: Int) {
         DialogUtils.showBottomMessage(
             this,
-            getString(R.string.gallery_toast_fail_exporting_to_device),
+            getString(errorResId),
             true
         )
     }
 
-     fun onExportStarted() {
+    fun onExportStarted() {
         progressDialog = DialogsUtil.showProgressDialog(
             this, getString(R.string.gallery_save_to_device_dialog_progress_expl)
         )
     }
 
-     fun onExportEnded() {
+    fun onExportEnded() {
         hideProgressDialog()
     }
 
-   /* override fun onMediaFileDeleteConfirmation(vaultFile: VaultFile, showConfirmDelete: Boolean) {
-        if (showConfirmDelete) {
+    fun onMediaFileDeleteConfirmation(mediaFileDeleteConfirmation: MediaFileDeleteConfirmation) {
+        if (mediaFileDeleteConfirmation.showConfirmDelete) {
             showConfirmSheet(
                 supportFragmentManager,
                 getString(R.string.Vault_Warning_Title),
@@ -273,47 +269,32 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
                 object : ActionConfirmed {
                     override fun accept(isConfirmed: Boolean) {
                         if (isConfirmed) {
-                            presenter?.deleteMediaFiles(vaultFile)
+                            viewModel.deleteMediaFiles(vaultFile)
                         }
                     }
                 }
             )
         } else {
-            presenter?.deleteMediaFiles(vaultFile)
+            viewModel.deleteMediaFiles(vaultFile)
         }
     }
 
-    override fun onMediaFileDeleted() {
+    fun onMediaFileDeleted() {
         MyApplication.bus().post(MediaFileDeletedEvent())
         finish()
     }
 
-    override fun onMediaFileDeletionError(throwable: Throwable) {
-        DialogUtils.showBottomMessage(
-            this,
-            getString(R.string.gallery_toast_fail_deleting_files),
-            true
-        )
-    }
 
-    override fun onMediaFileRename(vaultFile: VaultFile) {
+    private fun onMediaFileRename(vaultFile: VaultFile) {
         toolbar.title = vaultFile.name
         this.vaultFile = vaultFile
         MyApplication.bus().post(VaultFileRenameEvent())
     }
 
-    override fun onMediaFileRenameError(throwable: Throwable) {
-        //TODO CHECK ERROR MSG WHEN RENAME
-        DialogUtils.showBottomMessage(
-            this, getString(R.string.gallery_toast_fail_deleting_files), true
-        )
-    }
 
-    override fun getContext(): Context {
+    fun getContext(): Context {
         return this
     }
-
-   */
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         // Show the controls on any key event.
@@ -483,7 +464,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
                         this@VideoViewerActivity,
                         vaultFile?.name
                     ) { name: String? ->
-                      //  presenter?.renameVaultFile(vaultFile?.id, name)
+                        viewModel.renameVaultFile(vaultFile?.id, name)
                     }
                 }
 
@@ -519,7 +500,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
                         getString(R.string.action_cancel),
                         object : ActionConfirmed {
                             override fun accept(isConfirmed: Boolean) {
-                             //   presenter?.deleteMediaFiles( vaultFile)
+                                viewModel.deleteMediaFiles(vaultFile)
                             }
                         })
                 }
@@ -606,7 +587,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == WRITE_REQUEST_CODE) {
-           // performFileSearch()
+            // performFileSearch()
             LockTimeoutManager().lockTimeout = Preferences.getLockTimeout()
         }
     }
