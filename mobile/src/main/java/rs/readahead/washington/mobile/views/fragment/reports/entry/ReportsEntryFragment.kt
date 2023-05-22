@@ -360,7 +360,8 @@ class ReportsEntryFragment :
     private fun importMedia() {
         baseActivity.maybeChangeTemporaryTimeout {
             MediaFileHandler.startSelectMediaActivity(
-                activity, "*/*", null, C.IMPORT_FILE
+                activity, "image/* video/* audio/*",
+                arrayOf("image/*", "video/*", "audio/*"), C.IMPORT_FILE
             )
         }
     }
