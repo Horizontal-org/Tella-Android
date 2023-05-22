@@ -53,7 +53,7 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        CardGalleryAttachmentMediaFileBinding itemBinding = CardGalleryAttachmentMediaFileBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        CardGalleryAttachmentMediaFileBinding itemBinding = CardGalleryAttachmentMediaFileBinding.inflate(LayoutInflater.from(context), parent, false);
         return new ViewHolder(itemBinding, this.selectable);
     }
 
@@ -68,19 +68,19 @@ public class GalleryRecycleViewAdapter extends RecyclerView.Adapter<GalleryRecyc
 
         if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
             holder.showImageInfo();
-            Glide.with(holder.binding.mediaView.getContext())
+            Glide.with(context)
                     .load(vaultFile.thumb)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(holder.binding.mediaView);
         } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
             holder.showAudioInfo(vaultFile);
-            Drawable drawable = VectorDrawableCompat.create(holder.itemView.getContext().getResources(),
+            Drawable drawable = VectorDrawableCompat.create(context.getResources(),
                     R.drawable.ic_mic_gray, null);
             holder.binding.mediaView.setImageDrawable(drawable);
         } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
             holder.showVideoInfo(vaultFile);
-            Glide.with(holder.binding.mediaView.getContext())
+            Glide.with(context)
                     .load(vaultFile.thumb)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)

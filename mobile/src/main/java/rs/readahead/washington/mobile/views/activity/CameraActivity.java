@@ -608,6 +608,7 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
         captureButton.displayPhotoButton();
         captureButton.setContentDescription(getContext().getString(R.string.Uwazi_WidgetMedia_Take_Photo));
     }
+
     private void setupCameraModeButton() {
         if (cameraView.getMode() == Mode.PICTURE) {
             setPhotoActive();
