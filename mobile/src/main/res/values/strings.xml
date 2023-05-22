@@ -704,8 +704,12 @@ button to add a new template.</string>
     <string name="Setting_Reports_Share_Information_Description" translatable="false">Include information about your device and location when sending reports, to make your files verifiable. </string>
     <string name="Setting_Reports_Background_Upload" translatable="false">Background upload</string>
     <string name="Setting_Reports_Background_Upload_Disabled_Description" translatable="false">Auto-report can only be enabled for one\nconnection. Please make sure auto-report is\ndisabled elsewhere to enable it here.</string>
-    <string name="Setting_Reports_Background_Upload_Description" translatable="false">Continue uploading reports while doing other tasks or if you exit Tella.\nWARNING: If enabled, Tella will remain unlocked until all reports are fully uploaded.</string>
+    <string name="Setting_Reports_Background_Upload_Description" translatable="false">Continue uploading reports while doing other tasks or if you exit Tella.\n\nWARNING: If enabled, Tella will remain unlocked until all reports are fully uploaded.</string>
+    <string name="Setting_Reports_Edit_Connection" translatable="false">Edit connection</string>
+    <string name="Setting_Reports_Connection_Name" translatable="false">Connection name</string>
     <string name="Setting_Reports_Auto_Report" translatable="false">Auto-report</string>
+
+
     <string name="Setting_Reports_Auto_Report_Description" translatable="false">Whenever you take a photo/video/audio\nrecording in Tella, a report will automatically be\ncreated with the file and uploaded to this project.</string>
     <string name="Setting_Reports_Auto_Delete" translatable="false">Auto-delete</string>
     <string name="Setting_Reports_Auto_Delete_Description" translatable="false">Automatically delete files from your device once\nthey are uploaded to this project as a report.</string>
