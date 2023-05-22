@@ -17,6 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:src="@drawable/icon_left"
+        android:contentDescription="@string/action_go_back"
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
         android:paddingTop="40dp"

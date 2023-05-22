@@ -34,7 +34,7 @@
                 android:layout_height="24dp"
                 android:layout_marginEnd="@dimen/small_text_margin"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@null"
+                android:contentDescription="@string/action_favorite"
                 android:src="@drawable/star_border_24dp" />
 
             <LinearLayout

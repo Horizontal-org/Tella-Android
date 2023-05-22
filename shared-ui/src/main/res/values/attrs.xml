@@ -45,9 +45,12 @@
 
     <declare-styleable name="ToolbarComponent">
         <attr name="leftIcon" format="reference" />
+        <attr name="leftIconContentDescription" format="reference|string" />
         <attr name="editIcon" format="reference" />
         <attr name="arrowBackIcon" format="reference" />
+        <attr name="arrowBackIconContentDescription" format="reference|string" />
         <attr name="rightIcon" format="reference" />
+        <attr name="rightIconContentDescription" format="reference|string" />
         <attr name="toolbarTitle" format="reference" />
         <attr name="titleIcon" format="reference" />
         <attr name="startTitle" format="reference|string" />

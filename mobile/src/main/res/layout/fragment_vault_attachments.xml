@@ -22,6 +22,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            app:arrowBackIconContentDescription="@string/action_go_back"
             app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp" />
 
         <org.hzontal.shared_ui.breadcrumb.BreadcrumbsView
@@ -54,6 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/Vault_Filter_Name"
+                android:contentDescription="@string/gallery_subheading_sort.by"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -77,6 +79,7 @@
                 android:layout_marginHorizontal="@dimen/tella_main_vertical"
                 android:padding="5dp"
                 android:src="@drawable/ic_check"
+                android:contentDescription="@string/action_select"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/gridCheck"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -89,6 +92,7 @@
                 android:src="@drawable/ic_list_check"
                 android:visibility="gone"
                 android:padding="6dp"
+                android:contentDescription="@string/action_display_list"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -99,6 +103,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/grid"
                 android:padding="6dp"
+                android:contentDescription="@string/action_display_gridView"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -124,6 +129,7 @@
         app:fabCustomSize="50dp"
         app:layout_anchorGravity="center"
         app:maxImageSize="30dp"
+        android:contentDescription="@string/action_add"
         app:srcCompat="@drawable/ic_plus"
         app:useCompatPadding="true"
         tools:ignore="VectorDrawableCompat"
@@ -141,8 +147,8 @@
         android:layout_marginEnd="28dp"
         tools:ignore="VectorDrawableCompat"
         android:visibility="gone"
+        android:contentDescription="@string/action_create_new_folder"
         style="@style/Move_Floating_Action_Button_Style" />
-
 
 
     <LinearLayout

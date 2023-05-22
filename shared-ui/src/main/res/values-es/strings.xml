@@ -6,4 +6,12 @@
     <string name="Home_BottomNav_Forms">Formularios</string>
     <string name="Home_BottomNav_Reports">Informes</string>
     <string name="Home_BottomNav_Uwazi">Uwazi</string>
+    <string name="action_go_to_homescreen">go to home screen</string>
+    <string name="action_cancel">cancel</string>
+    <string name="action_show_password">show password</string>
+    <string name="action_hide_password">hide password</string>
+    <string name="action_show_pin">show pin</string>
+    <string name="action_hide_pin">hide pin</string>
+    <string name="action_delete">delete</string>
+    <string name="action_go_back">go back</string>
 </resources>

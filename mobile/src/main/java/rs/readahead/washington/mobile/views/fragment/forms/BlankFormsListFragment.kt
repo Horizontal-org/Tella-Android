@@ -366,8 +366,10 @@ class BlankFormsListFragment :
             }
             if (collectForm.isPinned) {
                 pinnedIcon.setImageDrawable(row.context.resources.getDrawable(R.drawable.star_filled_24dp))
+                pinnedIcon.contentDescription = getString(R.string.action_unfavorite)
             } else {
                 pinnedIcon.setImageDrawable(row.context.resources.getDrawable(R.drawable.star_border_24dp))
+                pinnedIcon.contentDescription = getString(R.string.action_favorite)
             }
         }
         return item

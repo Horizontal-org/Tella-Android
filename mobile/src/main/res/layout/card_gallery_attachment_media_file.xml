@@ -42,7 +42,7 @@
             android:paddingStart="@dimen/gallery_checkbox_extender"
             android:paddingTop="@dimen/gallery_checkbox_margin"
             android:src="@drawable/ic_check_box_off"
-            tools:ignore="ContentDescription" />
+             />
 
         <ImageView
             android:id="@+id/remove_file"
@@ -52,7 +52,7 @@
             android:padding="10dp"
             android:src="@drawable/ic_delete"
             android:visibility="gone"
-            tools:ignore="ContentDescription" />
+            android:contentDescription="@string/action_remove"/>
     </FrameLayout>
 
     <RelativeLayout

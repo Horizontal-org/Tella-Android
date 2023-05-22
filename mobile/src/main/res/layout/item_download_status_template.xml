@@ -38,6 +38,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:src="@drawable/ic_more"
         android:visibility="gone"
+        android:contentDescription="@string/action_open_bottom_sheet"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
 
         />
@@ -51,6 +52,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="MissingConstraints"
         android:src="@drawable/ic_save_alt_24px"
+        android:contentDescription="@string/action_download"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         />
 
