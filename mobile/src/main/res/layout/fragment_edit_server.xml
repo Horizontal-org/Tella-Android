@@ -123,8 +123,10 @@
 
                         />
 
-                    <View
+                    <Space
                         android:id="@+id/space"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/collect_form_padding_vertical" />
 
                 </LinearLayout>
