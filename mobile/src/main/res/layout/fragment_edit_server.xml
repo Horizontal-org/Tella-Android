@@ -11,8 +11,7 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
-        >
+        android:visibility="invisible">
 
         <org.hzontal.shared_ui.appbar.ToolbarComponent
             android:id="@+id/toolbar"
@@ -67,9 +66,9 @@
                         style="@style/Tella_Main_White_Text.Meduim"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        tools:text="@string/Setting_Reports_Connection_Name"
                         android:layout_marginStart="@dimen/collect_form_padding_vertical"
-                        android:padding="2dp" />
+                        android:padding="2dp"
+                        tools:text="@string/Setting_Reports_Connection_Name" />
 
                     <View
                         style="@style/SettingsMainShadowLine"
@@ -152,7 +151,8 @@
                     <View
                         android:id="@+id/auto_delete_separator"
                         style="@style/SettingsMainShadowLine"
-                        android:layout_marginTop="@dimen/collect_form_padding_vertical" />
+                        android:layout_marginTop="@dimen/collect_form_padding_vertical"
+                         />
 
                     <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
                         android:id="@+id/auto_delete_switch"
@@ -160,6 +160,13 @@
                         android:layout_height="wrap_content"
                         app:explainText="@string/Setting_Reports_Auto_Delete_Description"
                         app:titleText="@string/Setting_Reports_Auto_Delete" />
+
+                    <androidx.constraintlayout.widget.Group
+                        android:id="@+id/auto_delete_group"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:constraint_referenced_ids="auto_delete_separator,auto_delete_switch" />
 
                     <View
                         style="@style/SettingsMainShadowLine"

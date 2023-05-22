@@ -2,14 +2,13 @@ package rs.readahead.washington.mobile.views.dialog.reports.edit
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentEditServerBinding
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
-import rs.readahead.washington.mobile.util.hide
-import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.SharedLiveData
@@ -25,15 +24,15 @@ class EditTellaServerFragment :
 
 
     companion object {
-        val TAG = EditTellaServerFragment::class.java.simpleName
+        const val TAG = "EditTellaServerFragment"
 
         @JvmStatic
         fun newInstance(server: TellaReportServer): EditTellaServerFragment {
-            val frag = EditTellaServerFragment()
+            val editTellaServerFragment = EditTellaServerFragment()
             val args = Bundle()
             args.putString(OBJECT_KEY, Gson().toJson(server))
-            frag.arguments = args
-            return frag
+            editTellaServerFragment.arguments = args
+            return editTellaServerFragment
         }
     }
 
@@ -50,15 +49,14 @@ class EditTellaServerFragment :
             if (isAutoUploadActivated && !reportServer.isAutoUpload) {
                 binding?.autoReportSwitch?.mSwitch?.isClickable = false
                 binding?.autoReportSwitch?.setExplainText(R.string.Setting_Reports_Background_Upload_Disabled_Description)
-                binding?.autoDeleteSwitch?.hide()
-                binding?.autoDeleteSeparator?.hide()
-
             } else {
                 binding?.autoReportSwitch?.mSwitch?.isClickable = true
                 binding?.autoReportSwitch?.setExplainText(R.string.Setting_Reports_Background_Upload_Description)
-                binding?.autoDeleteSwitch?.show()
-                binding?.autoDeleteSeparator?.show()
             }
+
+            binding?.autoDeleteSeparator?.isVisible = isAutoUploadActivated || reportServer.isAutoUpload
+            binding?.autoDeleteSwitch?.isVisible = isAutoUploadActivated || reportServer.isAutoUpload
+
         })
     }
 
@@ -67,13 +65,15 @@ class EditTellaServerFragment :
             reportServer = Gson().fromJson(it, TellaReportServer::class.java)
         }
         reportServer.apply {
-            binding?.serverNameTv?.text = name
-            binding?.serverUrlTv?.text = url
-            binding?.userNameTv?.text = username
-            binding?.backgroundUploadSwitch?.mSwitch?.isChecked = isActivatedBackgroundUpload
-            binding?.shareVerificationSwitch?.mSwitch?.isChecked = isActivatedMetadata
-            binding?.autoReportSwitch?.mSwitch?.isChecked = isAutoUpload
-            binding?.autoDeleteSwitch?.mSwitch?.isChecked = isAutoDelete
+            binding?.apply {
+                serverNameTv.text = name.orEmpty()
+                serverUrlTv.text = url.orEmpty()
+                userNameTv.text = username.orEmpty()
+                backgroundUploadSwitch.mSwitch.isChecked = isActivatedBackgroundUpload
+                shareVerificationSwitch.mSwitch.isChecked = isActivatedMetadata
+                autoReportSwitch.mSwitch.isChecked = isAutoUpload
+                autoDeleteSwitch.mSwitch.isChecked = isAutoDelete
+            }
         }
 
     }
@@ -87,19 +87,22 @@ class EditTellaServerFragment :
             baseActivity.finish()
         }
 
-        binding?.autoDeleteSwitch?.mSwitch?.setOnCheckedChangeListener { _, isChecked: Boolean ->
+        binding?.autoDeleteSwitch?.mSwitch?.setOnCheckedChangeListener { _, isChecked ->
             reportServer.isAutoDelete = isChecked
         }
 
-        binding?.autoReportSwitch?.mSwitch?.setOnCheckedChangeListener { _, isChecked: Boolean ->
+        binding?.autoReportSwitch?.mSwitch?.setOnCheckedChangeListener { _, isChecked ->
             reportServer.isAutoUpload = isChecked
+            binding?.autoDeleteSeparator?.isVisible = isChecked
+            binding?.autoDeleteSwitch?.isVisible = isChecked
+
         }
 
-        binding?.backgroundUploadSwitch?.mSwitch?.setOnCheckedChangeListener { _, isChecked: Boolean ->
+        binding?.backgroundUploadSwitch?.mSwitch?.setOnCheckedChangeListener { _, isChecked ->
             reportServer.isActivatedBackgroundUpload = isChecked
         }
 
-        binding?.shareVerificationSwitch?.mSwitch?.setOnCheckedChangeListener { _, isChecked: Boolean ->
+        binding?.shareVerificationSwitch?.mSwitch?.setOnCheckedChangeListener { _, isChecked ->
             reportServer.isActivatedMetadata = isChecked
         }
 
