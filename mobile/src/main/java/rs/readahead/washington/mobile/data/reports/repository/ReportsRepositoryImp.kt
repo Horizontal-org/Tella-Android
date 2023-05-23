@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.data.reports.repository
 
+import android.annotation.SuppressLint
 import android.text.TextUtils
 import android.webkit.MimeTypeMap
 import androidx.lifecycle.MutableLiveData
@@ -8,6 +9,7 @@ import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.entity.reports.LoginEntity
 import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
@@ -80,16 +82,8 @@ class ReportsRepositoryImp @Inject internal constructor(
                     server,
                     ReportBodyEntity(instance.title, instance.description)
                 )
-                    .doOnError { throwable ->
-                        if (throwable is NoConnectivityException) {
-                            instance.status = EntityStatus.SUBMISSION_PENDING
-                        } else {
-                            instance.status = EntityStatus.SUBMISSION_ERROR
-                        }
-                        dataSource.saveInstance(instance).subscribe()
+                    .doOnError { throwable -> handleSubmissionError(instance, throwable) }
 
-                        instanceProgress.postValue(instance)
-                    }
                     .doOnDispose {
                         instance.status = EntityStatus.PAUSED
                         dataSource.saveInstance(instance).subscribe()
@@ -107,60 +101,97 @@ class ReportsRepositoryImp @Inject internal constructor(
         }
     }
 
+    private fun handleSubmissionError(instance: ReportInstance, throwable: Throwable) {
+        instance.status = if (throwable is NoConnectivityException) {
+            EntityStatus.SUBMISSION_PENDING
+        } else {
+            EntityStatus.SUBMISSION_ERROR
+        }
+        dataSource.saveInstance(instance).subscribe()
+        instanceProgress.postValue(instance)
+    }
+
     override fun submitFiles(
         instance: ReportInstance,
         server: TellaReportServer,
         reportApiId: String
     ) {
         if (instance.widgetMediaFiles.isEmpty()) {
-            instance.status = EntityStatus.SUBMITTED
-            dataSource.saveInstance(instance).subscribe()
-            instanceProgress.postValue(instance)
+            handleInstanceStatus(instance, EntityStatus.SUBMITTED,null)
             return
         }
+
         disposables.add(
             Flowable.fromIterable(instance.widgetMediaFiles)
                 .flatMap { file ->
-                    upload(
-                        file,
-                        server.url,
-                        reportApiId,
-                        server.accessToken
-                    )
-                }.doOnEach {
-                    instance.apply {
-                        status = EntityStatus.SUBMISSION_IN_PROGRESS
-                    }
+                    upload(file, server.url, reportApiId, server.accessToken)
                 }
-                .doOnTerminate {
-                    if (!instance.widgetMediaFiles.any { it.status == FormMediaFileStatus.SUBMITTED }) {
-                        instance.status = EntityStatus.SUBMISSION_PENDING
-                    } else {
-                        if (Preferences.isAutoDeleteEnabled() && instance.current == 1L) {
-                            instance.current = 0
-                            dataSource.deleteReportInstance(instance.id).blockingGet()
-                            instance.status = EntityStatus.DELETED
-                        } else {
-                            instance.status = EntityStatus.SUBMITTED
-                        }
-                    }
-                    dataSource.saveInstance(instance).subscribe()
-                    instanceProgress.postValue(instance)
-                }.doOnCancel {
-                    instance.status = EntityStatus.PAUSED
-                    dataSource.saveInstance(instance).subscribe()
-                    instanceProgress.postValue(instance)
-                }.doOnError {
-                    instance.status = EntityStatus.SUBMISSION_ERROR
-                    dataSource.saveInstance(instance).subscribe()
-                    instanceProgress.postValue(instance)
-                }.doOnNext { progressInfo: UploadProgressInfo ->
+                .doOnEach {
+                    instance.status = EntityStatus.SUBMISSION_IN_PROGRESS
+                }
+                .doOnTerminate { handleInstanceOnTerminate(instance) }
+                .doOnCancel { handleInstanceStatus(instance, EntityStatus.PAUSED, null) }
+                .doOnError { error ->
+                    handleInstanceStatus(
+                        instance,
+                        EntityStatus.SUBMISSION_ERROR,
+                        error
+                    )
+                }
+                .doOnNext { progressInfo: UploadProgressInfo ->
                     updateFileStatus(instance, progressInfo)
-
-                }.doAfterNext { progressInfo ->
+                }
+                .doAfterNext { progressInfo ->
                     reportProgress.postValue(Pair(progressInfo, instance))
-                }.subscribe()
+                }
+                .subscribeOn(Schedulers.io()) // Non-blocking operation
+                .subscribe()
         )
+    }
+
+    private fun handleInstanceOnTerminate(instance: ReportInstance) {
+        if (!instance.widgetMediaFiles.any { it.status == FormMediaFileStatus.SUBMITTED }) {
+            handleInstanceStatus(instance, EntityStatus.SUBMISSION_PENDING, null)
+        } else {
+            handleAutoDeleteAndFinalStatus(instance)
+        }
+    }
+
+    @SuppressLint("CheckResult")
+    private fun handleInstanceStatus(
+        instance: ReportInstance,
+        status: EntityStatus,
+        error: Throwable?
+    ) {
+        instance.status = status
+        dataSource.saveInstance(instance)
+            .subscribeOn(Schedulers.io())
+            .subscribe({}, { throwable ->
+                throwable.printStackTrace() // handle the error, maybe show a message to the user
+            })
+        instanceProgress.postValue(instance)
+    }
+
+    @SuppressLint("CheckResult")
+    private fun handleAutoDeleteAndFinalStatus(instance: ReportInstance) {
+        if (Preferences.isAutoDeleteEnabled() && instance.current == 1L) {
+            instance.current = 0
+            dataSource.deleteReportInstance(instance.id)
+                .subscribeOn(Schedulers.io())
+                .subscribe({}, { throwable ->
+                    throwable.printStackTrace() // handle the error, maybe show a message to the user
+                })
+            instance.widgetMediaFiles.forEach { formMediaFile ->
+                MyApplication.rxVault.delete(formMediaFile.vaultFile)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({}, { throwable ->
+                        throwable.printStackTrace() // handle the error, maybe show a message to the user
+                    })
+            }
+            handleInstanceStatus(instance, EntityStatus.DELETED, null)
+        } else {
+            handleInstanceStatus(instance, EntityStatus.SUBMITTED, null)
+        }
     }
 
     private fun updateFileStatus(instance: ReportInstance, progressInfo: UploadProgressInfo) {
