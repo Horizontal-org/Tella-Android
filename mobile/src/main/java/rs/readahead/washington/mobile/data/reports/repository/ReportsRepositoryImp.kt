@@ -6,6 +6,7 @@ import android.webkit.MimeTypeMap
 import androidx.lifecycle.MutableLiveData
 import com.hzontal.tella_vault.VaultFile
 import io.reactivex.*
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -117,7 +118,7 @@ class ReportsRepositoryImp @Inject internal constructor(
         reportApiId: String
     ) {
         if (instance.widgetMediaFiles.isEmpty()) {
-            handleInstanceStatus(instance, EntityStatus.SUBMITTED,null)
+            handleInstanceStatus(instance, EntityStatus.SUBMITTED)
             return
         }
 
@@ -130,12 +131,11 @@ class ReportsRepositoryImp @Inject internal constructor(
                     instance.status = EntityStatus.SUBMISSION_IN_PROGRESS
                 }
                 .doOnTerminate { handleInstanceOnTerminate(instance) }
-                .doOnCancel { handleInstanceStatus(instance, EntityStatus.PAUSED, null) }
-                .doOnError { error ->
+                .doOnCancel { handleInstanceStatus(instance, EntityStatus.PAUSED) }
+                .doOnError {
                     handleInstanceStatus(
                         instance,
-                        EntityStatus.SUBMISSION_ERROR,
-                        error
+                        EntityStatus.SUBMISSION_ERROR
                     )
                 }
                 .doOnNext { progressInfo: UploadProgressInfo ->
@@ -151,7 +151,7 @@ class ReportsRepositoryImp @Inject internal constructor(
 
     private fun handleInstanceOnTerminate(instance: ReportInstance) {
         if (!instance.widgetMediaFiles.any { it.status == FormMediaFileStatus.SUBMITTED }) {
-            handleInstanceStatus(instance, EntityStatus.SUBMISSION_PENDING, null)
+            handleInstanceStatus(instance, EntityStatus.SUBMISSION_PENDING)
         } else {
             handleAutoDeleteAndFinalStatus(instance)
         }
@@ -160,14 +160,12 @@ class ReportsRepositoryImp @Inject internal constructor(
     @SuppressLint("CheckResult")
     private fun handleInstanceStatus(
         instance: ReportInstance,
-        status: EntityStatus,
-        error: Throwable?
-    ) {
+        status: EntityStatus) {
         instance.status = status
         dataSource.saveInstance(instance)
             .subscribeOn(Schedulers.io())
             .subscribe({}, { throwable ->
-                throwable.printStackTrace() // handle the error, maybe show a message to the user
+                throwable.printStackTrace()
             })
         instanceProgress.postValue(instance)
     }
@@ -176,21 +174,21 @@ class ReportsRepositoryImp @Inject internal constructor(
     private fun handleAutoDeleteAndFinalStatus(instance: ReportInstance) {
         if (Preferences.isAutoDeleteEnabled() && instance.current == 1L) {
             instance.current = 0
-            dataSource.deleteReportInstance(instance.id)
-                .subscribeOn(Schedulers.io())
-                .subscribe({}, { throwable ->
-                    throwable.printStackTrace() // handle the error, maybe show a message to the user
+            Observable.fromIterable(instance.widgetMediaFiles)
+                .flatMapCompletable { formMediaFile ->
+                    MyApplication.rxVault.delete(formMediaFile.vaultFile)
+                        .subscribeOn(Schedulers.io())
+                        .ignoreElement() // converts Single to Completable by ignoring the result
+                }
+                .andThen(dataSource.deleteReportInstance(instance.id).subscribeOn(Schedulers.io()))
+                .subscribe({
+
+                }, { throwable ->
+                    throwable.printStackTrace()
                 })
-            instance.widgetMediaFiles.forEach { formMediaFile ->
-                MyApplication.rxVault.delete(formMediaFile.vaultFile)
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({}, { throwable ->
-                        throwable.printStackTrace() // handle the error, maybe show a message to the user
-                    })
-            }
-            handleInstanceStatus(instance, EntityStatus.DELETED, null)
+            handleInstanceStatus(instance, EntityStatus.DELETED)
         } else {
-            handleInstanceStatus(instance, EntityStatus.SUBMITTED, null)
+            handleInstanceStatus(instance, EntityStatus.SUBMITTED)
         }
     }
 
@@ -319,7 +317,7 @@ class ReportsRepositoryImp @Inject internal constructor(
 
                 val fileToUpload = SkippableMediaFileRequestBody(
                     vaultFile, skipBytes
-                ) { current: Long, total: Long ->
+                ) { current: Long, _ : Long ->
                     uploadEmitter.emit(
                         emitter,
                         vaultFile,
