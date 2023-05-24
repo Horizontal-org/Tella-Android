@@ -47,4 +47,6 @@ interface ReportsRepository {
     fun getReportProgress(): MutableLiveData<Pair<UploadProgressInfo, ReportInstance>>
 
     fun geInstanceProgress(): MutableLiveData<ReportInstance>
+
+    fun cleanup()
 }

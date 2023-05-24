@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.data.reports.repository
 import android.annotation.SuppressLint
 import android.text.TextUtils
 import android.webkit.MimeTypeMap
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.MutableLiveData
 import com.hzontal.tella_vault.VaultFile
 import io.reactivex.*
@@ -10,6 +11,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import retrofit2.Response
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.entity.reports.LoginEntity
@@ -160,7 +162,8 @@ class ReportsRepositoryImp @Inject internal constructor(
     @SuppressLint("CheckResult")
     private fun handleInstanceStatus(
         instance: ReportInstance,
-        status: EntityStatus) {
+        status: EntityStatus
+    ) {
         instance.status = status
         dataSource.saveInstance(instance)
             .subscribeOn(Schedulers.io())
@@ -296,6 +299,16 @@ class ReportsRepositoryImp @Inject internal constructor(
             }
     }
 
+    /**
+     * Prepares and starts the file upload process.
+     *
+     * @param vaultFile The file to be uploaded.
+     * @param skipBytes The number of bytes to skip when reading the file.
+     * @param baseUrl The base URL for the API endpoint.
+     * @param accessToken The access token for authentication.
+     * @return a Flowable that emits UploadProgressInfo as the file upload progresses.
+     */
+    @VisibleForTesting
     private fun appendFile(
         vaultFile: VaultFile,
         skipBytes: Long,
@@ -303,124 +316,236 @@ class ReportsRepositoryImp @Inject internal constructor(
         accessToken: String
     ): Flowable<UploadProgressInfo> {
         return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo> ->
-            try {
-                val size = vaultFile.size
-                //  val fileName = vaultFile.name
-                val uploadEmitter = UploadEmitter()
-                emitter.onNext(
-                    UploadProgressInfo(
-                        vaultFile,
-                        skipBytes,
-                        UploadProgressInfo.Status.STARTED
-                    )
-                )
+            val size = vaultFile.size
+            val uploadEmitter = UploadEmitter()
+            val fileToUpload =
+                prepareFileToUpload(vaultFile, skipBytes, emitter, uploadEmitter, size)
 
-                val fileToUpload = SkippableMediaFileRequestBody(
-                    vaultFile, skipBytes
-                ) { current: Long, _ : Long ->
-                    uploadEmitter.emit(
-                        emitter,
-                        vaultFile,
-                        skipBytes + current,
-                        size
-                    )
-                }
+            uploadFile(fileToUpload, baseUrl, accessToken, emitter, vaultFile, size)
 
-                var response = apiService.putFile(
-                    file = fileToUpload,
-                    url = baseUrl,
-                    access_token = accessToken
-                ).blockingGet()
-
-                if (!response.isSuccessful) {
-                    emitter.onError(UploadError(response.code()))
-                    return@create
-                }
-
-                response = apiService.postFile(
-                    //   file = fileToUpload,
-                    url = baseUrl,
-                    access_token = accessToken
-                ).blockingGet()
-
-                if (!response.isSuccessful) {
-                    emitter.onError(UploadError(response.code()))
-                    return@create
-                }
-                emitter.onNext(
-                    UploadProgressInfo(
-                        vaultFile,
-                        size,
-                        UploadProgressInfo.Status.FINISHED
-                    )
-                )
-                emitter.onComplete()
-            } catch (e: Exception) {
-                emitter.onError(UploadError(e))
-            }
         }, BackpressureStrategy.LATEST)
     }
 
+    /**
+     * Prepares the file to be uploaded.
+     *
+     * @param vaultFile The file to be uploaded.
+     * @param skipBytes The number of bytes to skip when reading the file.
+     * @param emitter The FlowableEmitter to emit progress updates.
+     * @param uploadEmitter The UploadEmitter to use for emitting upload progress.
+     * @param size The size of the file.
+     * @return a SkippableMediaFileRequestBody that's ready for upload.
+     */
+    @VisibleForTesting
+    private fun prepareFileToUpload(
+        vaultFile: VaultFile,
+        skipBytes: Long,
+        emitter: FlowableEmitter<UploadProgressInfo>,
+        uploadEmitter: UploadEmitter,
+        size: Long
+    ): SkippableMediaFileRequestBody {
+        emitter.onNext(
+            UploadProgressInfo(
+                vaultFile,
+                skipBytes,
+                UploadProgressInfo.Status.STARTED
+            )
+        )
 
-    private fun mapThrowable(throwable: Throwable?, vaultFile: VaultFile): UploadProgressInfo {
-        Timber.d(throwable)
-        var status: UploadProgressInfo.Status? = UploadProgressInfo.Status.ERROR
-        if (throwable is UploadError) {
-            status = toStatus(throwable.code)
-        } else if (throwable is UnknownHostException) {
-            status = UploadProgressInfo.Status.UNKNOWN_HOST
+        return SkippableMediaFileRequestBody(
+            vaultFile, skipBytes
+        ) { current: Long, _: Long ->
+            uploadEmitter.emit(
+                emitter,
+                vaultFile,
+                skipBytes + current,
+                size
+            )
         }
+    }
+
+    /**
+     * Uploads the file to the server.
+     *
+     * @param fileToUpload The file to be uploaded.
+     * @param baseUrl The base URL for the API endpoint.
+     * @param accessToken The access token for authentication.
+     * @param emitter The FlowableEmitter to emit progress updates.
+     * @param vaultFile The file to be uploaded.
+     * @param size The size of the file.
+     */
+    @VisibleForTesting
+    private fun uploadFile(
+        fileToUpload: SkippableMediaFileRequestBody,
+        baseUrl: String,
+        accessToken: String,
+        emitter: FlowableEmitter<UploadProgressInfo>,
+        vaultFile: VaultFile,
+        size: Long
+    ) {
+        val disposable = apiService.putFile(fileToUpload, baseUrl, accessToken)
+            .flatMap { response ->
+                if (!response.isSuccessful) {
+                    Single.error(UploadError(response.code()))
+                } else {
+                    apiService.postFile(baseUrl, accessToken)
+                }
+            }
+            .subscribe({ response ->
+                handleUploadResponse(response, emitter, vaultFile, size)
+            }, { error ->
+                emitter.onError(UploadError(error))
+            })
+
+        disposables.add(disposable)
+    }
+
+    /**
+     * Handles the response from the server after file upload.
+     *
+     * @param response The response from the server.
+     * @param emitter The FlowableEmitter to emit progress updates.
+     * @param vaultFile The file that was uploaded.
+     * @param size The size of the file.
+     */
+    @VisibleForTesting
+    private fun handleUploadResponse(
+        response: Response<Void>,
+        emitter: FlowableEmitter<UploadProgressInfo>,
+        vaultFile: VaultFile,
+        size: Long
+    ) {
+        if (!response.isSuccessful) {
+            emitter.onError(UploadError(response.code()))
+        } else {
+            emitter.onNext(
+                UploadProgressInfo(
+                    vaultFile,
+                    size,
+                    UploadProgressInfo.Status.FINISHED
+                )
+            )
+            emitter.onComplete()
+        }
+    }
+
+    override fun cleanup() {
+        disposables.clear()
+    }
+
+    /**
+     * Maps the provided throwable to an appropriate UploadProgressInfo.
+     *
+     * This method is used to translate exceptions into UploadProgressInfo instances with
+     * appropriate statuses, allowing the upload process to communicate what kind of error occurred.
+     *
+     * @param throwable The exception to map.
+     * @param vaultFile The file associated with the upload attempt.
+     * @return An UploadProgressInfo instance corresponding to the provided exception.
+     */
+    private fun mapThrowable(throwable: Throwable?, vaultFile: VaultFile): UploadProgressInfo {
+        val status: UploadProgressInfo.Status = when (throwable) {
+            is UploadError -> toStatus(throwable.code)
+            is UnknownHostException -> UploadProgressInfo.Status.UNKNOWN_HOST
+            else -> UploadProgressInfo.Status.ERROR
+        }
+
+        Timber.d(throwable)
+
         return UploadProgressInfo(vaultFile, 0, status)
     }
 
+    /**
+     * Maps the HTTP status code to an appropriate UploadProgressInfo.Status.
+     *
+     * This method is used to translate HTTP status codes into UploadProgressInfo statuses,
+     * allowing the upload process to communicate the status of the upload.
+     *
+     * @param code The HTTP status code to map.
+     * @return An UploadProgressInfo.Status instance corresponding to the provided HTTP status code.
+     */
     private fun toStatus(code: Int): UploadProgressInfo.Status {
-        if (HttpStatus.isSuccess(code)) {
-            return UploadProgressInfo.Status.OK
+        return when {
+            HttpStatus.isSuccess(code) -> UploadProgressInfo.Status.OK
+            code == HttpStatus.UNAUTHORIZED_401 -> UploadProgressInfo.Status.UNAUTHORIZED
+            code == HttpStatus.CONFLICT_409 -> UploadProgressInfo.Status.CONFLICT
+            code == -1 || HttpStatus.isClientError(code) || HttpStatus.isServerError(code) -> UploadProgressInfo.Status.ERROR
+            else -> UploadProgressInfo.Status.UNKNOWN
         }
-        if (code == HttpStatus.UNAUTHORIZED_401) {
-            return UploadProgressInfo.Status.UNAUTHORIZED
-        }
-        if (code == HttpStatus.CONFLICT_409) {
-            return UploadProgressInfo.Status.CONFLICT
-        }
-        return if (code == -1 || HttpStatus.isClientError(code) || HttpStatus.isServerError(code)) {
-            UploadProgressInfo.Status.ERROR
-        } else UploadProgressInfo.Status.UNKNOWN
     }
 
-    // maybe there is a better way to emit once per 500ms?
+    /**
+     * Class responsible for emitting UploadProgressInfo updates.
+     *
+     * This class helps to control the rate of emission of upload progress updates.
+     * It only emits progress updates if more than REFRESH_TIME_MS milliseconds have passed since the last emission.
+     * This is useful to avoid flooding the observer with too many updates, which might not be necessary and could negatively impact performance.
+     */
     private class UploadEmitter {
-        private var time: Long = 0
+        private var lastEmissionTime: Long = 0
+
+        /**
+         * Emits an UploadProgressInfo update if sufficient time has passed.
+         *
+         * @param emitter The emitter to emit the progress updates to.
+         * @param file The file being uploaded.
+         * @param current The number of bytes uploaded so far.
+         * @param total The total size of the file.
+         */
         fun emit(
-            emitter: Emitter<UploadProgressInfo?>,
-            file: VaultFile?,
+            emitter: Emitter<UploadProgressInfo>,
+            file: VaultFile,
             current: Long,
             total: Long
         ) {
-            val now = Util.currentTimestamp()
-            if (now - time > REFRESH_TIME_MS) {
-                time = now
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastEmissionTime >= REFRESH_TIME_MS) {
+                lastEmissionTime = currentTime
                 emitter.onNext(UploadProgressInfo(file, current, total))
             }
         }
 
         companion object {
+            // The minimum time between emissions in milliseconds.
             private const val REFRESH_TIME_MS: Long = 500
         }
     }
 
+    /**
+     * Exception class representing an error occurred during the upload process.
+     *
+     * This class extends Exception and adds a property for an HTTP response code.
+     * It provides two constructors: one for when an HTTP response code is available, and another for when there's a
+     * Throwable that caused the error.
+     *
+     * @property code The HTTP status code associated with this error, or -1 if not applicable.
+     */
     private class UploadError : Exception {
-        var code = -1
 
-        constructor(code: Int) : super(
-            String.format(
-                Locale.ROOT, "Request failed, response code: %d", code
-            )
-        ) {
+        val code: Int
+
+        /**
+         * Creates an UploadError with the specified HTTP response code.
+         *
+         * @param code The HTTP status code that caused the error.
+         */
+        constructor(code: Int) : super("Request failed, response code: $code") {
             this.code = code
         }
 
-        constructor(cause: Throwable?) : super(cause)
+        /**
+         * Creates an UploadError with the specified cause.
+         *
+         * This constructor is used when the error is caused by another Throwable instance. In this case, the HTTP
+         * response code is not known and is set to -1.
+         *
+         * @param cause The Throwable that caused the error.
+         */
+        constructor(cause: Throwable?) : super(cause) {
+            this.code = -1
+        }
     }
+
+
 
 }

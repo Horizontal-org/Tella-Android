@@ -19,7 +19,6 @@ class EditTellaServerFragment :
     BaseBindingFragment<FragmentEditServerBinding>(FragmentEditServerBinding::inflate) {
 
     private lateinit var reportServer: TellaReportServer
-
     private val viewModel: ReportsConnectFlowViewModel by viewModels()
 
 
@@ -46,21 +45,27 @@ class EditTellaServerFragment :
     private fun initData() {
         viewModel.listAutoReports()
         viewModel.doesAutoUploadActivated.observe(viewLifecycleOwner, { isAutoUploadActivated ->
-            if (isAutoUploadActivated && !reportServer.isAutoUpload) {
-                binding?.autoReportSwitch?.mSwitch?.isClickable = false
-                binding?.autoReportSwitch?.setExplainText(R.string.Setting_Reports_Background_Upload_Disabled_Description)
-            } else {
-                binding?.autoReportSwitch?.mSwitch?.isClickable = true
-                binding?.autoReportSwitch?.setExplainText(R.string.Setting_Reports_Background_Upload_Description)
+            binding?.autoReportSwitch?.apply {
+                mSwitch.isClickable = !(isAutoUploadActivated && !reportServer.isAutoUpload)
+                val text = if (isAutoUploadActivated && !reportServer.isAutoUpload) {
+                    R.string.Setting_Reports_Background_Upload_Disabled_Description
+                } else {
+                    R.string.Setting_Reports_Background_Upload_Description
+                }
+                setExplainText(text)
             }
 
-            binding?.autoDeleteSeparator?.isVisible =
-                isAutoUploadActivated || reportServer.isAutoUpload
-            binding?.autoDeleteSwitch?.isVisible =
-                isAutoUploadActivated || reportServer.isAutoUpload
-
+            if (isAutoUploadActivated && !reportServer.isAutoUpload) {
+                binding?.autoDeleteSeparator?.isVisible = false
+                binding?.autoDeleteSwitch?.isVisible = false
+            } else {
+                val isVisible = isAutoUploadActivated || reportServer.isAutoUpload
+                binding?.autoDeleteSeparator?.isVisible = isVisible
+                binding?.autoDeleteSwitch?.isVisible = isVisible
+            }
         })
     }
+
 
     private fun initView() {
         arguments?.getString(OBJECT_KEY)?.let {
@@ -77,36 +82,35 @@ class EditTellaServerFragment :
                 autoDeleteSwitch.mSwitch.isChecked = isAutoDelete
             }
         }
-
     }
 
     private fun initListeners() {
-        binding?.cancel?.setOnClickListener {
-            baseActivity.finish()
-        }
-        binding?.next?.setOnClickListener {
-            SharedLiveData.updateReportsServer.postValue(reportServer)
-            baseActivity.finish()
-        }
+        binding?.apply {
+            cancel.setOnClickListener { baseActivity.finish() }
+            next.setOnClickListener {
+                SharedLiveData.updateReportsServer.postValue(reportServer)
+                baseActivity.finish()
+            }
 
-        binding?.autoDeleteSwitch?.mSwitch?.setOnCheckedChangeListener { _, isChecked ->
-            reportServer.isAutoDelete = isChecked
+            autoDeleteSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->
+                reportServer.isAutoDelete = isChecked
+            }
+
+            autoReportSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->
+                reportServer.isAutoUpload = isChecked
+                autoDeleteSeparator.isVisible = isChecked
+                autoDeleteSwitch.apply {
+                    isVisible = isChecked
+                    if (!isChecked) mSwitch.isChecked = false
+                }
+            }
+
+            backgroundUploadSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->
+                reportServer.isActivatedBackgroundUpload = isChecked
+            }
+
+            shareVerificationSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->
+                reportServer.isActivatedMetadata = isChecked
+            }
         }
-
-        binding?.autoReportSwitch?.mSwitch?.setOnCheckedChangeListener { _, isChecked ->
-            reportServer.isAutoUpload = isChecked
-            binding?.autoDeleteSeparator?.isVisible = isChecked
-            binding?.autoDeleteSwitch?.isVisible = isChecked
-
-        }
-
-        binding?.backgroundUploadSwitch?.mSwitch?.setOnCheckedChangeListener { _, isChecked ->
-            reportServer.isActivatedBackgroundUpload = isChecked
-        }
-
-        binding?.shareVerificationSwitch?.mSwitch?.setOnCheckedChangeListener { _, isChecked ->
-            reportServer.isActivatedMetadata = isChecked
-        }
-
-    }
-}
+    }}
