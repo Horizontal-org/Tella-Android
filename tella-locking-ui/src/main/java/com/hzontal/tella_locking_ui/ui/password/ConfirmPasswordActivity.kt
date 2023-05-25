@@ -17,8 +17,8 @@ class ConfirmPasswordActivity : BasePasswordActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTopText(getString(R.string.LockPasswordConfirm_Message_ConfirmPassword))
+        passwordEditText.hint = getString(R.string.LockPasswordConfirm_Message_ConfirmPassword)
         setMessageText(getString(R.string.LockPasswordConfirm_Message_EnterPasswordAgain))
-
     }
 
     override fun onSuccessSetPassword(password: String) {
@@ -41,12 +41,10 @@ class ConfirmPasswordActivity : BasePasswordActivity() {
             })
         } else
             onFailureSetPassword(getString(R.string.LockPasswordConfirm_Message_Error_PasswordsNotMatch))
-
     }
 
     override fun onFailureSetPassword(error: String) {
         hideKeyboard()
         DialogUtils.showBottomMessage(this, error, false)
     }
-
 }

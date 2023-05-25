@@ -53,6 +53,7 @@ public class StringWidget extends QuestionWidget {
         answer.getBackground().setColorFilter(getResources().getColor(R.color.wa_white_80),
                 PorterDuff.Mode.SRC_ATOP);
 
+        answer.setHint(prompt.getShortText());
         answer.setId(QuestionWidget.newUniqueId());
         readOnly = prompt.isReadOnly() || readOnlyOverride;
 

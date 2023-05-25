@@ -6,6 +6,7 @@
     <string name="Home_BottomNav_Forms">النماذج</string>
     <string name="Home_BottomNav_Reports">التقارير</string>
     <string name="Home_BottomNav_Uwazi">Uwazi</string>
+    <string name="Rename_name_Hint">Name</string>
     <string name="action_go_to_homescreen">go to home screen</string>
     <string name="action_cancel">cancel</string>
     <string name="action_show_password">show password</string>
