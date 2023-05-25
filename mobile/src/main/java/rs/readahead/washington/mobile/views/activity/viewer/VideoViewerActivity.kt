@@ -54,7 +54,6 @@ import rs.readahead.washington.mobile.views.fragment.vault.attachements.PICKER_F
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.WRITE_REQUEST_CODE
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment
 
-
 @RuntimePermissions
 class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.VisibilityListener {
     private lateinit var simpleExoPlayerView: StyledPlayerView
@@ -74,7 +73,6 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
     private var isInfoShown = false
     private val viewModel: SharedMediaFileViewModel by viewModels()
 
-
     companion object {
         const val VIEW_VIDEO = "vv"
         const val NO_ACTIONS = "na"
@@ -85,20 +83,19 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityVideoViewerBinding.inflate(layoutInflater)
-
         overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out)
         setContentView(binding.root)
 
-        if (intent.hasExtra(NO_ACTIONS)) {
-            actionsDisabled = true
-        }
+        actionsDisabled = intent.hasExtra(NO_ACTIONS)
+
         setupToolbar()
         shouldAutoPlay = true
         clearResumePosition()
+
         simpleExoPlayerView = findViewById(R.id.player_view)
         simpleExoPlayerView.setControllerVisibilityListener(this)
         simpleExoPlayerView.requestFocus()
-        // presenter = MediaFileViewerPresenter(this)
+
         initObservers()
     }
 
@@ -107,32 +104,19 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
             error.observe(this@VideoViewerActivity) {
                 onShowError(it)
             }
-            onMediaFileExportStatus.observe(this@VideoViewerActivity)
-            {
-                when (it) {
-                    MediaFileExportStatus.EXPORT_START -> {
-                        onExportStarted()
-                    }
-                    MediaFileExportStatus.EXPORT_PROGRESS -> {
-                        onMediaExported()
-                    }
-                    MediaFileExportStatus.EXPORT_END -> {
-                        onExportEnded()
-                    }
+            onMediaFileExportStatus.observe(this@VideoViewerActivity) { status ->
+                when (status) {
+                    MediaFileExportStatus.EXPORT_START -> onExportStarted()
+                    MediaFileExportStatus.EXPORT_PROGRESS -> onMediaExported()
+                    MediaFileExportStatus.EXPORT_END -> onExportEnded()
                 }
             }
-
-            onMediaFileDeleted.observe(this@VideoViewerActivity)
-            {
-                if (it)
-                    onMediaFileDeleted()
+            onMediaFileDeleted.observe(this@VideoViewerActivity) { deleted ->
+                if (deleted) onMediaFileDeleted()
             }
-
-            onMediaFileRenamed.observe(this@VideoViewerActivity)
-            {
-                onMediaFileRename(it)
+            onMediaFileRenamed.observe(this@VideoViewerActivity) { renamed ->
+                onMediaFileRename(renamed)
             }
-
         }
     }
 
@@ -178,29 +162,21 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
     }
 
     override fun onDestroy() {
-        if (alertDialog != null) {
-            if (alertDialog!!.isShowing) {
-                alertDialog!!.dismiss()
-            }
-        }
+        alertDialog?.takeIf { it.isShowing }?.dismiss()
         hideProgressDialog()
         super.onDestroy()
     }
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     fun exportMediaFile() {
-        if (vaultFile != null) {
-            if (vaultFile?.metadata != null) {
-                showExportWithMetadataDialog()
-            } else {
-                withMetadata = false
-                maybeChangeTemporaryTimeout {
-                    performFileSearch()
-                }
-            }
+        if (vaultFile?.metadata != null && withMetadata) {
+            showExportWithMetadataDialog()
+        } else {
+            performFileSearch()
         }
     }
 
+    // File search logic here
     private fun performFileSearch() {
         if (hasStoragePermissions(this)) {
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
@@ -218,6 +194,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
         }
     }
 
+    // Check if the app has storage permissions
     private fun hasStoragePermissions(context: Context): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             Environment.isExternalStorageManager()
@@ -234,17 +211,13 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
 
     fun onMediaExported() {
         DialogUtils.showBottomMessage(
-            this,
-            resources.getQuantityString(R.plurals.gallery_toast_files_exported, 1, 1),
-            false
+            this, resources.getQuantityString(R.plurals.gallery_toast_files_exported, 1, 1), false
         )
     }
 
-    fun onShowError(errorResId: Int) {
+    private fun onShowError(errorResId: Int) {
         DialogUtils.showBottomMessage(
-            this,
-            getString(errorResId),
-            true
+            this, getString(errorResId), true
         )
     }
 
@@ -260,8 +233,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
 
     fun onMediaFileDeleteConfirmation(mediaFileDeleteConfirmation: MediaFileDeleteConfirmation) {
         if (mediaFileDeleteConfirmation.showConfirmDelete) {
-            showConfirmSheet(
-                supportFragmentManager,
+            showConfirmSheet(supportFragmentManager,
                 getString(R.string.Vault_Warning_Title),
                 getString(R.string.Vault_Confirm_delete_Description),
                 getString(R.string.Vault_Delete_anyway),
@@ -272,8 +244,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
                             viewModel.deleteMediaFiles(vaultFile)
                         }
                     }
-                }
-            )
+                })
         } else {
             viewModel.deleteMediaFiles(vaultFile)
         }
@@ -324,39 +295,32 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
     private fun initializePlayer() {
         val needNewPlayer = player == null
         if (needNewPlayer) {
-            player = ExoPlayer.Builder(this).build()
-            player?.apply {
-                binding.playerView.player
+            player = ExoPlayer.Builder(this).build().apply {
                 playWhenReady = shouldAutoPlay
             }
-
-            simpleExoPlayerView.setPlayer(player)
+            simpleExoPlayerView.player = player
         }
-        if (needNewPlayer || needRetrySource) {
-            if (intent.hasExtra(VIEW_VIDEO) && intent.extras != null) {
-                val vaultFile = intent.extras!![VIEW_VIDEO] as VaultFile?
-                if (vaultFile != null) {
-                    this.vaultFile = vaultFile
-                    toolbar.title = vaultFile.name
-                    setupMetadataMenuItem(vaultFile.metadata != null)
-                    val mediaFileDataSourceFactory = MediaFileDataSourceFactory(
-                        this, vaultFile, null
-                    )
-                    val mediaItem =
-                        MediaItem.fromUri(MediaFileHandler.getEncryptedUri(this, vaultFile))
-                    val mediaSource: MediaSource =
-                        ProgressiveMediaSource.Factory(mediaFileDataSourceFactory)
-                            .createMediaSource(mediaItem)
 
-                    val haveResumePosition = resumeWindow != C.INDEX_UNSET
-                    if (player != null) {
-                        if (haveResumePosition) {
-                            player?.seekTo(resumeWindow, resumePosition)
-                        }
-                        player?.prepare(mediaSource, !haveResumePosition, false)
+        if (needNewPlayer || needRetrySource) {
+            val vaultFile = intent.getSerializableExtra(VIEW_VIDEO) as? VaultFile
+            if (vaultFile != null) {
+                this.vaultFile = vaultFile
+                toolbar.title = vaultFile.name
+                setupMetadataMenuItem(vaultFile.metadata != null)
+
+                val mediaFileDataSourceFactory = MediaFileDataSourceFactory(this, vaultFile, null)
+                val mediaItem = MediaItem.fromUri(MediaFileHandler.getEncryptedUri(this, vaultFile))
+                val mediaSource = ProgressiveMediaSource.Factory(mediaFileDataSourceFactory)
+                    .createMediaSource(mediaItem)
+
+                val haveResumePosition = resumeWindow != C.INDEX_UNSET
+                player?.apply {
+                    if (haveResumePosition) {
+                        seekTo(resumeWindow, resumePosition)
                     }
-                    needRetrySource = false
+                    prepare(mediaSource, !haveResumePosition, false)
                 }
+                needRetrySource = false
             }
         }
     }
@@ -378,24 +342,22 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
     }
 
     override fun onVisibilityChange(visibility: Int) {
-        if (!isInfoShown) {
-            toolbar.visibility = visibility
-        } else {
-            toolbar.show()
-        }
+        toolbar.visibility = if (!isInfoShown) visibility else View.VISIBLE
     }
 
     private fun setupToolbar() {
         toolbar = binding.playerToolbar
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
-        toolbar.setNavigationOnClickListener({ v: View? -> onBackPressed() })
+        toolbar.setNavigationOnClickListener { onBackPressed() }
+
         if (!actionsDisabled) {
             toolbar.inflateMenu(R.menu.video_view_menu)
-            if (vaultFile != null) {
-                setupMetadataMenuItem(vaultFile!!.metadata != null)
+            vaultFile?.let { file ->
+                setupMetadataMenuItem(file.metadata != null)
             }
+
             toolbar.getMenu().findItem(R.id.menu_item_more)
-                .setOnMenuItemClickListener { item: MenuItem? ->
+                .setOnMenuItemClickListener { item ->
                     showVaultActionsDialog(vaultFile)
                     false
                 }
@@ -403,18 +365,15 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
     }
 
     private fun showMetadata() {
-        val viewMetadata = Intent(
-            this, MetadataViewerActivity::class.java
-        )
-        viewMetadata.putExtra(VIEW_METADATA, vaultFile)
+        val viewMetadata = Intent(this, MetadataViewerActivity::class.java).apply {
+            putExtra(VIEW_METADATA, vaultFile)
+        }
         startActivity(viewMetadata)
     }
 
     private fun hideProgressDialog() {
-        if (progressDialog != null) {
-            progressDialog!!.dismiss()
-            progressDialog = null
-        }
+        progressDialog?.dismiss()
+        progressDialog = null
     }
 
     private fun setupMetadataMenuItem(visible: Boolean) {
@@ -422,18 +381,84 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
             return
         }
         val mdMenuItem = toolbar.menu.findItem(R.id.menu_item_metadata)
+        mdMenuItem.isVisible = visible
         if (visible) {
-            mdMenuItem.setVisible(true).setOnMenuItemClickListener { item: MenuItem? ->
+            mdMenuItem.setOnMenuItemClickListener {
                 showMetadata()
                 false
             }
-        } else {
-            mdMenuItem.isVisible = false
         }
     }
 
     private fun showVaultActionsDialog(vaultFile: VaultFile?) {
-        showVaultActionsSheet(supportFragmentManager,
+        val vaultActions = object : IVaultActions {
+            override fun upload() {}
+
+            override fun share() {
+                maybeChangeTemporaryTimeout {
+                    shareMediaFile()
+                }
+            }
+
+            override fun move() {}
+
+            override fun rename() {
+                showVaultRenameSheet(
+                    supportFragmentManager,
+                    getString(R.string.Vault_CreateFolder_SheetAction),
+                    getString(R.string.action_cancel),
+                    getString(R.string.action_ok),
+                    this@VideoViewerActivity,
+                    vaultFile?.name
+                ) { name: String? ->
+                    viewModel.renameVaultFile(vaultFile?.id, name)
+                }
+            }
+
+            override fun save() {
+                showConfirmSheet(
+                    supportFragmentManager,
+                    getString(R.string.gallery_save_to_device_dialog_title),
+                    getString(R.string.gallery_save_to_device_dialog_expl),
+                    getString(R.string.action_save),
+                    getString(R.string.action_cancel),
+                    object : ActionConfirmed {
+                        override fun accept(isConfirmed: Boolean) {
+                            exportMediaFile()
+                        }
+                    }
+                )
+            }
+
+            override fun info() {
+                isInfoShown = true
+                onVisibilityChange(View.VISIBLE)
+                toolbar.title = getString(R.string.Vault_FileInfo)
+                toolbar.menu.findItem(R.id.menu_item_more).isVisible = false
+                toolbar.menu.findItem(R.id.menu_item_metadata).isVisible = false
+                invalidateOptionsMenu()
+                vaultFile?.let { VaultInfoFragment().newInstance(it, false) }
+                    ?.let { addFragment(it, R.id.container) }
+            }
+
+            override fun delete() {
+                showConfirmSheet(
+                    supportFragmentManager,
+                    getString(R.string.Vault_DeleteFile_SheetTitle),
+                    getString(R.string.Vault_deleteFile_SheetDesc),
+                    getString(R.string.action_delete),
+                    getString(R.string.action_cancel),
+                    object : ActionConfirmed {
+                        override fun accept(isConfirmed: Boolean) {
+                            viewModel.deleteMediaFiles(vaultFile)
+                        }
+                    }
+                )
+            }
+        }
+
+        showVaultActionsSheet(
+            supportFragmentManager,
             vaultFile?.name,
             getString(R.string.Vault_Upload_SheetAction),
             getString(R.string.Vault_Share_SheetAction),
@@ -446,66 +471,10 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
             false,
             false,
             false,
-            object : IVaultActions {
-                override fun upload() {}
-                override fun share() {
-                    maybeChangeTemporaryTimeout {
-                        shareMediaFile()
-                    }
-                }
-
-                override fun move() {}
-                override fun rename() {
-                    showVaultRenameSheet(
-                        supportFragmentManager,
-                        getString(R.string.Vault_CreateFolder_SheetAction),
-                        getString(R.string.action_cancel),
-                        getString(R.string.action_ok),
-                        this@VideoViewerActivity,
-                        vaultFile?.name
-                    ) { name: String? ->
-                        viewModel.renameVaultFile(vaultFile?.id, name)
-                    }
-                }
-
-                override fun save() {
-                    showConfirmSheet(supportFragmentManager,
-                        getString(R.string.gallery_save_to_device_dialog_title),
-                        getString(R.string.gallery_save_to_device_dialog_expl),
-                        getString(R.string.action_save),
-                        getString(R.string.action_cancel),
-                        object : ActionConfirmed {
-                            override fun accept(isConfirmed: Boolean) {
-                                exportMediaFile()
-                            }
-                        })
-                }
-
-                override fun info() {
-                    isInfoShown = true
-                    onVisibilityChange(View.VISIBLE)
-                    toolbar.title = getString(R.string.Vault_FileInfo)
-                    toolbar.menu.findItem(R.id.menu_item_more).isVisible = false
-                    toolbar.menu.findItem(R.id.menu_item_metadata).isVisible = false
-                    invalidateOptionsMenu()
-                    vaultFile?.let { VaultInfoFragment().newInstance(it, false) }
-                        ?.let { addFragment(it, R.id.container) }
-                }
-
-                override fun delete() {
-                    showConfirmSheet(supportFragmentManager,
-                        getString(R.string.Vault_DeleteFile_SheetTitle),
-                        getString(R.string.Vault_deleteFile_SheetDesc),
-                        getString(R.string.action_delete),
-                        getString(R.string.action_cancel),
-                        object : ActionConfirmed {
-                            override fun accept(isConfirmed: Boolean) {
-                                viewModel.deleteMediaFiles(vaultFile)
-                            }
-                        })
-                }
-            })
+            vaultActions
+        )
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -559,22 +528,11 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
     private fun requestStoragePermissions() {
         maybeChangeTemporaryTimeout()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            try {
-                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-                intent.addCategory("android.intent.category.DEFAULT")
-                intent.data = Uri.parse(
-                    String.format(
-                        "package:%s", application.packageName
-                    )
-                )
-                startActivityForResult(intent, WRITE_REQUEST_CODE)
-            } catch (e: Exception) {
-                val intent = Intent()
-                intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
-                startActivityForResult(intent, WRITE_REQUEST_CODE)
-            }
+            val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                .addCategory(Intent.CATEGORY_DEFAULT)
+                .setData(Uri.parse("package:${application.packageName}"))
+            startActivityForResult(intent, WRITE_REQUEST_CODE)
         } else {
-            //below android 11
             ActivityCompat.requestPermissions(
                 this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_REQUEST_CODE
             )
