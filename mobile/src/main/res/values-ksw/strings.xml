@@ -500,4 +500,57 @@
   <string name="Timeout_Warning_Description">To perform this action, Tella will remain unlocked for 3 minutes.</string>
   <string name="settings_sec_security_screen">Screen security</string>
   <string name="settings_sec_security_screen_expl">Block screenshots and screen recordings inside Tella and screen preview in the list of recent apps</string>
+
+  <!-- Reports -->
+  <string name="Settings_Reports_Choose_Credentials" >Do you have a username and password?</string>
+  <string name="Server_Connect_Icon" >server connect image</string>
+  <string name="Login_To_Access_Project_Text" >Log in to access the project</string>
+  <string name="Settings_Reports_Connected_To_Project" >Connected to project</string>
+  <string name="Settings_Reports_Advanced_Success_Title" >Advanced settings complete</string>
+  <string name="Settings_Reports_Advanced_Success_Description" >Advanced settings complete</string>
+  <string name="Settings_Reports_Go_To_Reports" >GO TO REPORTS</string>
+  <string name="Settings_reports_Go_To_Advanced_Settings" >Advanced settings</string>
+  <string name="Setting_Reports_Share_Information_Title" >Share verification information</string>
+  <string name="Setting_Reports_Share_Information_Description" >Include information about your device and location when sending reports, to make your files verifiable. </string>
+  <string name="Setting_Reports_Background_Upload" >Background upload</string>
+  <string name="Setting_Reports_Background_Upload_Disabled_Description" >Auto-report cannot be enabled on more than one connection. Disable auto-report elsewhere to enable it here.</string>
+  <string name="Setting_Reports_Background_Upload_Description" >Continue uploading reports while doing other tasks or if you exit Tella.\n\nWARNING: If enabled, Tella will remain unlocked until all reports are fully uploaded.</string>
+  <string name="Setting_Reports_Edit_Connection" >Edit connection</string>
+  <string name="Setting_Reports_Connection_Name" >Connection name</string>
+  <string name="Setting_Reports_Auto_Report" >Auto-report</string>
+
+
+  <string name="Setting_Reports_Auto_Report_Description" >Whenever you take a photo/video/audio\nrecording in Tella, a report will automatically be\ncreated with the file and uploaded to this project.</string>
+  <string name="Setting_Reports_Auto_Delete" >Auto-delete</string>
+  <string name="Setting_Reports_Auto_Delete_Description" >Automatically delete files from your device once\nthey are uploaded to this project as a report.</string>
+  <string name="Setting_Reports_Settings_Completed" >Advanced settings complete</string>
+  <string name="Setting_Reports_Settings_Completed_Description" >You can always change your Reports preferences in the Tella Settings.</string>
+  <string name="Drafts_Reports_Empty_Message" >Your Drafts is currently empty. Reports that you have not submitted will appear here.</string>
+  <string name="Outbox_Reports_Empty_Message" >Your Outbox is currently empty. Reports that are ready to be sent will appear here.</string>
+  <string name="Submitted_Reports_Empty_Message" >You have no submitted reports.</string>
+  <string name="New_Reports_Text" >NEW REPORT</string>
+  <string name="Reports_Title_Screen" >REPORT</string>
+  <string name="Reports_Send_To_Text" >Send report to:</string>
+  <string name="Reports_Select_Your_Project" >Select your project</string>
+  <string name="Reports_Select_Title" >Title</string>
+  <string name="Reports_Select_Description" >Description</string>
+  <string name="Reports_Attach_files_Here" >Attach files here</string>
+  <string name="Connection_Title" >Connections</string>
+  <string name="Reports_Saved_Draft" >The report was saved as a draft</string>
+  <string name="Reports_Pause" >Pause</string>
+  <string name="Reports_Resume" >Resume</string>
+  <string name="File_Uploaded_on" >Uploaded on</string>
+  <string name="File_Uploaded" >uploaded</string>
+  <string name="Delete_Report_Confirmation" >Are you sure you want to delete this report? </string>
+  <string name="Delete_Submitted_Report_Confirmation" >Are you sure you want to delete this sent report from your records? </string>
+  <string name="View_Report" >View </string>
+  <string name="Delete_Report" >Delete </string>
+  <string name="Paused_Report" >Paused </string>
+  <string name="Report_Waiting_For_Connection" >Waiting for connection </string>
+  <string name="Project_Url_Screen_Title" >Enter project URL</string>
+  <string name="Report_Dialog_Draft_Title" >Exit report?</string>
+  <string name="Report_Server_Already_Exist_Error" >You are already connected to this project. Please enter another URL.</string>
+  <string name="Report_Deleted_Confirmation" > %s has been deleted.</string>
+  <string name="Report_Save_Outbox_Confirmation" >The report was saved to your Outbox. You can submit it when you are ready.</string>
+  <string name="Send_Action_Label" >SEND</string>
 </resources>
